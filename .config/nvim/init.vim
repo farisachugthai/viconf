@@ -35,7 +35,7 @@ endif
 
 " Vim Plug: {{{ 2
 
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -124,14 +124,9 @@ scriptencoding UTF-8            " Vint believes encoding should be done first
 set fileencoding=UTF-8
 set spelllang=en,en_us
 
-" if !has('nvim')
-"     set spelllang+=$VIMRUNTIME/spell/en.utf-8.spl
-" endif
-
 set complete+=kspell                    " Autocomplete in insert mode
 set spellsuggest=5                      " Limit the number of suggestions from 'spell suggest'
 
-" Can be set with sudo select-default-wordlist. I opted for American insane
 if filereadable('/usr/share/dict/words')
     set dictionary+=/usr/share/dict/words
     " Replace the default dictionary completion with fzf-based fuzzy completion
@@ -141,10 +136,6 @@ endif
 if filereadable('/usr/share/dict/american-english')
     set dictionary+=/usr/share/dict/american-english
 endif
-
-" if filereadable(glob('~/.config/nvim/spell/en.hun.spl'))
-"     set spelllang+=~/.config/nvim/spell/en.hun.spl
-" endif
 
 if filereadable(glob('~/.vim/autocorrect.vim'))
     source ~/.vim/autocorrect.vim
