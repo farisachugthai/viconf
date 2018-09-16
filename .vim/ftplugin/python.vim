@@ -1,19 +1,7 @@
 " python.vim
 " Maintainer: Faris Chugthai
 
-setlocal foldlevelstart=1
 " All: {{{ 1
-
-" Wait does adding this mean I block one of either the built-in or mine?
-" Guard that should be at the top of all ftplugins: {{{ 2
-" if exists('b:did_ftplugin')
-"     finish
-" endif
-
-" let b:did_ftplugin = 1
-" let s:keepcpo= &cpoptions
-" set cpoptions&vim
-" }}}
 
 " Nvim-OS: {{{ 2
 " Gonna start seriously consolidating vimrc and init.vim this is so hard
@@ -108,11 +96,6 @@ if isdirectory('~/virtualenvs')
 endif
 " }}}
 
-" }}}
-
-" Guard at the end of all ftplugins: {{{ 2
-" let &cpoptions = s:keepcpo
-" unlet s:keepcpo
 " }}}
 
 " }}}

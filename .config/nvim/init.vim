@@ -456,9 +456,14 @@ let g:gruvbox_contrast_dark = 'hard'
 " }}}
 
 " Language Client: {{{ 3
+" let g:LanguageClient_autostart = 1 \"now the default
 let g:LanguageClient_serverCommands = {
     \ 'python': [ 'pyls' ]
     \ }
+" }}}
+
+" Deoplete: {{{
+" TODO:
 " }}}
 
 " }}}
