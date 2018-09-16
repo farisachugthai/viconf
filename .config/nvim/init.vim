@@ -1,6 +1,7 @@
 " init.vim
 " Neovim configuration
 
+
 " All: {{{ 1
 
 " About: {{{ 2
@@ -9,7 +10,7 @@ let g:snips_email = 'farischugthai@gmail.com'
 let g:snips_github = 'https://github.com/farisachugthai'
 " }}}
 
-" Nvim-OS: {{{ 2
+" Nvim_OS: {{{ 2
 " Gonna start seriously consolidating vimrc and init.vim this is so hard
 " to maintain
 " Let's setup all the global vars we need
@@ -49,12 +50,13 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'ryanoasis/vim-devicons'
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',
     \ 'do': 'bash install.sh' }
-Plug 'SirVer/ultisnips'| Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'vim-airline/vim-airline'
 Plug 'mhinz/vim-startify'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 if !has('nvim')
+    Plug 'roxma/nvim-yarp'
     Plug 'roxma/vim-hug-neovim-rpc'
 endif
 
@@ -62,15 +64,20 @@ call plug#end()
 " }}}
 
 " Nvim Specific: {{{ 2
-set background=dark                     " set as early as possible
+" Yeah so we gotta do this BS again. Seriously try to keep odifications at 0
+" until the dust settles. I just wanted to note that it'd be a good enough idea to put on all 4
+" rc files to add the clipboard providor tmux thing. nvim specific.
+" made me think and realize that python3_host_prog is probably also something that should go in nvim specific
+" i mean that is if you wanna take it out of the ftplugin
+" holy shit we're moving so slow. yeah man i'm sure it's languageclient this only ever happens with that.
+set background=dark
 
-" unabashedly stolen from junegunn dude is too good.
 let s:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/init.vim.local'
 if filereadable(s:local_vimrc)
     execute 'source' s:local_vimrc
 endif
 
-set inccommand=split                    " This alone is enough to never go back
+set inccommand=split                " This alone is enough to never go back
 set termguicolors
 " }}}
 
@@ -87,15 +94,15 @@ endif
 " Pep8 Global Options: {{{ 3
 set tabstop=4
 set shiftwidth=4
-set expandtab smarttab
+set expandtab
 set softtabstop=4
 let g:python_highlight_all = 1
 " }}}
 
 " Folds: {{{ 3
 set foldenable
-set foldlevelstart=1                    " Enables most folds
-set foldnestmax=10                      " Why would anything be folded this much
+set foldlevelstart=1                " Enables most folds
+set foldnestmax=10                  " Why would anything be folded this much
 set foldmethod=marker
 " }}}
 
@@ -112,17 +119,14 @@ set splitright
 " }}}
 
 " Spell Checker: {{{ 3
-set encoding=UTF-8             " Set default encoding
-scriptencoding UTF-8           " Vint believes encoding shoild be done first
+set encoding=UTF-8              " Set default encoding
+scriptencoding UTF-8            " Vint believes encoding should be done first
 set fileencoding=UTF-8
+set spelllang=en,en_us
 
-set spelllang=en
-set spellfile=~/.config/nvim/spell/en.utf-8.add
-
-if !has('nvim')
-    set spelllang+=$VIMRUNTIME/spell/en.utf-8.spl
-endif
-
+" if !has('nvim')
+"     set spelllang+=$VIMRUNTIME/spell/en.utf-8.spl
+" endif
 
 set complete+=kspell                    " Autocomplete in insert mode
 set spellsuggest=5                      " Limit the number of suggestions from 'spell suggest'
@@ -138,9 +142,9 @@ if filereadable('/usr/share/dict/american-english')
     set dictionary+=/usr/share/dict/american-english
 endif
 
-if filereadable('~/.config/nvim/spell/en.hun.spl')
-    set spelllang+=~/.config/nvim/spell/en.hun.spl
-endif
+" if filereadable(glob('~/.config/nvim/spell/en.hun.spl'))
+"     set spelllang+=~/.config/nvim/spell/en.hun.spl
+" endif
 
 if filereadable(glob('~/.vim/autocorrect.vim'))
     source ~/.vim/autocorrect.vim
@@ -170,14 +174,13 @@ set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
 
 " Other Global Options: {{{ 3
 set tags+=./tags,./../tags,./*/tags     " usr_29
-set tags+=~/projects/tags               " consider generating a few large tag
-set tags+=~python/tags                  " files rather than recursive searches
 set mouse=a                             " Automatically enable mouse usage
 set cursorline
 set cmdheight=2
 set number
 set showmatch
-set ignorecase smartcase
+set ignorecase
+set smartcase
 set autoindent smartindent              " :he options: set with smartindent
 set noswapfile
 set fileformat=unix
@@ -186,20 +189,13 @@ if has('gui_running')
     set guifont='Fira\ Code\ Mono:11'
 endif
 
-set path+=**        			        " Recursively search dirs with :find
+set path+=**        			        " Make autocomplete for filenames work
 set autochdir
-set wildmenu                            " Show list instead of just completing
-set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
-set nojoinspaces
-set diffopt=vertical,context:3          " vertical split diffs. def cont is 6
-
-if has('persistent_undo')
-    set undodir=~/.vim/undodir
-    set undofile	" keep an undo file (undo changes after closing)
-endif
-
-set backupdir=~/.vim/undodir
+set fileformat=unix
+set whichwrap+=<,>,h,l,[,]              " Give reasonable line wrapping behaviour
 set modeline
+set undofile
+set nojoinspaces
 " }}}
 
 " }}}
@@ -208,14 +204,15 @@ set modeline
 
 " General Mappings: {{{ 3
 " Note that F7 is bound to pastetoggle so don't map it
-" Navigate windows easier
+" Navigate windows more easily
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
-" Navigate tabs easier
-nnoremap <a-Right> :tabnext<CR>
-nnoremap <a-Left> :tabprev<CR>
+" Navigate tabs more easily
+nnoremap <A-Right> :tabnext<CR>
+nnoremap <A-Left> :tabprev<CR>
+
 " T Pope
 nnoremap ]q :cnext<cr>
 nnoremap [q :cprev<cr>
@@ -230,8 +227,8 @@ nnoremap [t :tabp<cr>
 nnoremap <Leader>nt :NERDTreeToggle<CR>
 " Select all text quickly
 nnoremap <Leader>a ggVG
-" f5 to run py file
-inoremap <F5> <Esc>:w<CR>:!clear;python %<CR>
+" f5 to run *.py. currently doesn't work or at least doesn't display anything
+inoremap <F5> <Esc>:w<CR>:!clear;python %
 " It should be easier to get help
 nnoremap <leader>he :helpgrep<space>
 " It should also be easier to edit the config
@@ -273,7 +270,7 @@ cnoremap <C-N> <Down>
 " recall previous (older) command-line
 cnoremap <C-P> <Up>
 " back one word
-cnoremap <Esc><C-B> <S-Left>
+cnoremap <Esc><C-B>	<S-Left>
 " forward one word
 cnoremap <Esc><C-F> <S-Right>
 " }}}
@@ -283,7 +280,6 @@ cnoremap <Esc><C-F> <S-Right>
 tnoremap <Esc> <C-W>N
 " from he term. rewrite for fzf
 tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
-" From :he terminal
 tnoremap <A-h> <C-\><C-N><C-w>h
 tnoremap <A-j> <C-\><C-N><C-w>j
 tnoremap <A-k> <C-\><C-N><C-w>k
@@ -298,11 +294,7 @@ nnoremap <A-k> <C-w>k
 nnoremap <A-l> <C-w>l
 " }}}
 
-" Ale: {{{ 3
-" So these mappings would clobber so many things but its a good thought to
-" keep in the back of your mind
-" nnoremap <silent> <C-k> <Plug>(ale_previous_wrap)
-" nnoremap <silent> <C-j> <Plug>(ale_next_wrap)
+" ALE: {{{ 3
 nnoremap <Leader>l <Plug>(ale_toggle_buffer) <CR>
 nnoremap ]a <Plug>(ale_next_wrap)
 nnoremap [a <Plug>(ale_previous_wrap)
@@ -325,7 +317,6 @@ nnoremap <silent> <leader>gQ :Gwq!<CR>
 
 " Python Language Server: {{{ 3
 nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
 " }}}
 
@@ -338,10 +329,11 @@ if !has('nvim')
     runtime! ftplugin/man.vim
     let g:ft_man_folding_enable = 0
     setlocal keywordprg=:Man
+
+    set runtimepath+='~/.config/nvim/after'
 endif
 
 runtime! macros/matchit.vim
-
 
 " FZF: {{{ 3
 
@@ -384,13 +376,9 @@ let g:fzf_colors =
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
 
-let g:ag_command = 'ag --smart-case -u -g " " --'
-" TODO: need to look through this command because i keep getting an out of
-" index error
-command! -bang -nargs=* F call fzf#vim#grep(g:ag_command .shellescape(<q-args>), 1, <bang>0)
-
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 
+" Between this and FZF.vim you have :Ag and :grep using ag, you should be fine
 if executable('ag')
   let &grepprg = 'ag --nogroup --nocolor --column'
 else
@@ -406,21 +394,21 @@ let g:NERDTreeDirArrows = 1
 let g:NERDTreeWinPos = 'right'
 let g:NERDTreeShowHidden = 1
 let g:NERDTreeShowBookmarks = 1
-let g:NERDTreeNaturalSort = 1
-let g:NERDTreeChDirMode = 2                         " change cwd every time NT root changes
+let g:NERDTreeNaturalSort = 1               " Sorted counts go 1, 2, 3..10,11. Default is 1, 10, 11...100...2
+let g:NERDTreeChDirMode = 2                 " change cwd every time NT root changes
 let g:NERDTreeShowLineNumbers = 1
-let g:NERDTreeMouseMode = 2                         " Open dirs with 1 click files with 2
-let g:NERDTreeIgnore = ['\.pyc$', '\.pyo$', '__pycache__$']
-let g:NERDTreeRespectWildIgnore = 1                 " yeah i meant those ones too
+let g:NERDTreeMouseMode = 2                 " Open dirs with 1 click files with 2
+let g:NERDTreeIgnore = ['\.pyc$', '\.pyo$', '__pycache__$', '\.git$']
+let g:NERDTreeRespectWildIgnore = 1         " yeah i meant those ones too
 " }}}
 
 " NERDCom: {{{ 3
-let g:NERDSpaceDelims = 1                           " can we give the code some room to breathe?
-let g:NERDDefaultAlign = 'left'                     " Align line-wise comment delimiters flush left
-let g:NERDTrimTrailingWhitespace = 1                " Trim trailing whitespace when uncommenting
+let g:NERDSpaceDelims = 1                   " can we give the code some room to breathe?
+let g:NERDDefaultAlign = 'left'             " Align line-wise comment delimiters flush left
+let g:NERDTrimTrailingWhitespace = 1        " Trim trailing whitespace when uncommenting
 " }}}
 
-" Ale: {{{ 3
+" ALE: {{{ 3
 let g:ale_fixers = { '*': [ 'remove_trailing_lines', 'trim_whitespace' ] }
 let g:ale_fix_on_save = 1
 " Default: `'%code: %%s'`
@@ -441,7 +429,7 @@ let g:startify_session_sort = 1
 " }}}
 
 " Ultisnips: {{{ 3
-let g:UltiSnipsSnippetDir = [ '~/.config/nvim/Ultisnips' ]
+let g:UltiSnipsSnippetDir = [ '~/.config/nvim/UltiSnips' ]
 let g:UltiSnipsJumpForwardTrigger='<Tab>'
 let g:UltiSnipsJumpBackwardTrigger='<S-Tab>'
 let g:UltiSnips_python_quoting_style = 'GOOGLE'
@@ -456,6 +444,9 @@ let g:gruvbox_contrast_dark = 'hard'
 " }}}
 
 " Language Client: {{{ 3
+" A better way of doing this would be to check if the server is executable
+" so like if executable('pyls) | let g:pyserver = 'pyls' and then run as
+" many checks as you feel like typing and then append them all to this dict
 let g:LanguageClient_serverCommands = {
     \ 'python': [ 'pyls' ]
     \ }
@@ -523,7 +514,6 @@ function! s:scriptnames(re) abort
     echo join(filtered, "\n")
 endfunction
 
-
 function! s:helptab()
     if &buftype == 'help'
         wincmd T
@@ -553,6 +543,7 @@ function! s:hl()
   echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
 endfunction
 command! HL call <SID>hl()
+
 " }}}
 
 " }}}
