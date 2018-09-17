@@ -325,7 +325,7 @@ nnoremap <silent> <leader>gQ :Gwq!<CR>
 
 " Python Language Server: {{{ 3
 nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+"nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
 " }}}
 

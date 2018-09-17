@@ -55,6 +55,7 @@ augroup END
 " }}}
 
 " Python Executables: {{{ 2
+" should this be in a global file not exclusively a python ftplugin?
 if has('python3')
 " if we have a venv start there
     if exists('$VIRTUAL_ENV')
@@ -90,9 +91,11 @@ let g:jedi#force_py_version = 3
 " }}}
 
 " Ale: {{{ 3
-let g:ale_python_flake8_options = '--config ~/.config/flake8'
+" 1st. use b not g. 2. it automatically does this. you're ignoring project
+" co figuration files as a result
+" let g:ale_python_flake8_options = '--config ~/.config/flake8'
 if isdirectory('~/virtualenvs')
-    let g:ale_virtualenv_dir_names+='virtualenvs'
+    let b:ale_virtualenv_dir_names+='virtualenvs'
 endif
 " }}}
 
