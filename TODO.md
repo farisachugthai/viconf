@@ -33,6 +33,22 @@ omnifunc in varying filetypes are bound to.
 Because I keep hitting tab and C-N and getting inconsistent behavior and
 that needs to stop.
 
+### deoplete
+
+has a bunch of new mappings hopefully you'll find them pretty useful {i'm stoked}
+
+### jedi
+
+gonna leave it bound to C-Space to initialize autocomplete. could use C-N
+but that's kinda unclear since autocomplete doesn't need a trigger with
+deoplete and C-N is 'pick the next element'
+
+### language client
+
+currently the value of completefunc in an \*.md file.
+
+awh and the response for both if you open a \*.py file. Poor jedi.
+
 ### Current state
 
 Deoplete isn't mentioned once in init.vim
@@ -43,16 +59,3 @@ Maybe turn on logging to see what's going on?
 
 Things are setup so that they work in \*.py files but I don't know if it's
 very efficient or wildly redundant so...
-
-
-I know this sounds corny but the most important thing on this list is:
-
-**HAVE FUN DUDE**
-
-Try implementing something new just because. Test the waters.
-
-You could easily make a temp feature branch, pop all stashes,
-commit whatever's going on, and then burn and destroy that branch the next
-day if it didn't sit right.
-
-Or you could do that for new plugins! Oooo I like that.

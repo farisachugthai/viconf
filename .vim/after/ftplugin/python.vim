@@ -1,14 +1,6 @@
 " python.vim
 " Maintainer: Faris Chugthai
 "
-" Alright we got 3 things here. And honestly fix them and push it as 1 commit
-" Let's start making logical progress again
-" 1. Python executables should be in init.vim because stuff like deoplete needs a provider
-" even when ft!=python
-" 2. probably need to configure deoplete in init as well or at least in after.
-" 3. speaking of which this setup is wrong. put this dir in ~/.config/nvim/after
-" this area of dirs is made for plugins you received and other local data files
-
 " All: {{{ 1
 
 " Nvim_OS: {{{ 2
@@ -47,9 +39,11 @@ setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 " linters to react.
 set colorcolumn=79
 
-if has('python3')
-    setlocal keywordprg=pydoc3
-endif
+" This felt like such a good idea but ends up sending the whole doc
+" in a Vim message dude it's impossible to use or copy/paste things
+" if has('python3')
+"     setlocal keywordprg=pydoc3
+" endif
 " }}}
 
 " Autocommands: {{{ 2
@@ -61,27 +55,6 @@ augroup vimrc_autocmds
     autocmd FileType python match Excess /\%120v.*/
     autocmd FileType python set nowrap
 augroup END
-
-" }}}
-
-" Python Executables: {{{ 2
-
-if has('python3')
-" if we have a venv start there
-    if exists('$VIRTUAL_ENV')
-        let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
-
-    elseif exists('$CONDA_PYTHON_EXE')
-        let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
-
-    " otherwise break up termux and linux
-    elseif exists('$PREFIX')
-        " and just use the system python
-        let g:python3_host_prog = '$PREFIX/bin/python'
-    else
-        let g:python3_host_prog = '/usr/bin/python3'
-    endif
-endif
 
 " }}}
 
@@ -98,12 +71,10 @@ let g:jedi#force_py_version = 3
 " }}}
 
 " ALE: {{{ 3
-let b:ale_linters = ['flake8', 'pyls']
-let b:ale_linters_ignore = [ 'pylint' ]
-" should i check if there's a config file in the current dir or in the project
-let b:ale_python_flake8_options = '--config ~/.config/flake8'
-" Mypy is slow and we have other linters to check syntax
-let b:ale_python_mypy_ignore_invalid_syntax = 1
+" do i need to announce this to ALE or just pyls handle it?
+let b:ale_linters = ['flake8', 'pyls', 'pycodestyle', 'pydocstyle', 'yapf']
+let b:ale_linters_ignore = [ 'pylint', 'mypy' ]
+
 
 if isdirectory('$HOME/virtualenvs')
     let g:ale_virtualenv_dir_names += 'virtualenvs'
@@ -111,8 +82,13 @@ endif
 " }}}
 
 " Python Language Server: {{{ 3
-" ftplugins are supposed to be buffer local plugins right?
-let b:LanguageClient_serverCommands = { 'python': ['pyls'] }
+" useless err msg but better to have checks when we have behavior that's dependant on 3rd party tools
+if executable('pyls')
+    let b:LanguageClient_serverCommands = { 'python': ['pyls'] }
+else
+    echo 'pyls is not installed!!!'
+endif
+
 let b:LanguageClient_autoStart = 1
 let b:LanguageClient_selectionUI = 'fzf'
 " the mapping below clobbers your run *.py mapping

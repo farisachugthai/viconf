@@ -10,11 +10,8 @@ let g:snips_email = 'farischugthai@gmail.com'
 let g:snips_github = 'https://github.com/farisachugthai'
 " }}}
 
-" Nvim_OS: {{{ 2
-" Gonna start seriously consolidating vimrc and init.vim this is so hard
-" to maintain
-" Let's setup all the global vars we need
-" Wait am i assigning these vars correctly? man fuck vimscript
+" Environment: {{{ 2
+" Let's setup all the global vars we need. Will utilize to ensure consistency
 
 if has('nvim')
     let s:root = '~/.config/nvim'
@@ -31,6 +28,28 @@ else
     let s:usr_d = '/usr'
     let s:OS = 'Linux'
 endif
+
+" Python Executables: {{{ 3
+
+if has('python3')
+" if we have a venv start there
+    if exists('$VIRTUAL_ENV')
+        let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
+
+    elseif exists('$CONDA_PYTHON_EXE')
+        let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
+
+    " otherwise break up termux and linux
+    elseif exists('$PREFIX')
+        " and just use the system python
+        let g:python3_host_prog = '$PREFIX/bin/python'
+    else
+        let g:python3_host_prog = '/usr/bin/python3'
+    endif
+endif
+
+" }}}
+
 " }}}
 
 " Vim Plug: {{{ 2
@@ -69,12 +88,6 @@ call plug#end()
 " }}}
 
 " Nvim Specific: {{{ 2
-" Yeah so we gotta do this BS again. Seriously try to keep odifications at 0
-" until the dust settles. I just wanted to note that it'd be a good enough idea to put on all 4
-" rc files to add the clipboard providor tmux thing. nvim specific.
-" made me think and realize that python3_host_prog is probably also something that should go in nvim specific
-" i mean that is if you wanna take it out of the ftplugin
-" holy shit we're moving so slow. yeah man i'm sure it's languageclient this only ever happens with that.
 set background=dark
 
 let s:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/init.vim.local'
@@ -106,8 +119,8 @@ let g:python_highlight_all = 1
 
 " Folds: {{{ 3
 set foldenable
-set foldlevelstart=1                " Enables most folds
-set foldnestmax=10                  " Why would anything be folded this much
+set foldlevelstart=1                    " Enables most folds
+set foldnestmax=10
 set foldmethod=marker
 " }}}
 
@@ -124,8 +137,8 @@ set splitright
 " }}}
 
 " Spell Checker: {{{ 3
-set encoding=UTF-8              " Set default encoding
-scriptencoding UTF-8            " Vint believes encoding should be done first
+set encoding=UTF-8                      " Set default encoding
+scriptencoding UTF-8                    " Vint believes encoding should be done first
 set fileencoding=UTF-8
 set spelllang=en,en_us
 
@@ -150,7 +163,7 @@ endif
 " Fun With Clipboards: {{{ 3
 if has('unnamedplus')                   " Use the system clipboard.
   set clipboard+=unnamed,unnamedplus
-else                                    " Accomodate Termux
+else                                    " Accommodate Termux
   set clipboard+=unnamed
 endif
 
@@ -313,6 +326,9 @@ nnoremap <A-l> <C-w>l
 nnoremap <Leader>l <Plug>(ale_toggle_buffer) <CR>
 nnoremap ]a <Plug>(ale_next_wrap)
 nnoremap [a <Plug>(ale_previous_wrap)
+" TODO:
+" `:ALEInfoToFile` will write the ALE runtime information to a given filename. The filename works just like |:w|.
+
 " }}}
 
 " Fugitive: {{{ 3
@@ -455,7 +471,6 @@ let g:UltiSnipsEditSplit = 'vertical'
 " }}}
 
 " Gruvbox: {{{ 3
-" Load the colorscheme last. Noticeable startuptime improvement
 colorscheme gruvbox
 let g:gruvbox_contrast_dark = 'hard'
 " }}}
