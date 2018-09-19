@@ -6,9 +6,8 @@ so this feels like an actual problem
 
 :scriptnames
 on any filetype is indicating that the only files that are getting source from
-the dir ~/.config/nvim are:
-    init.vim, autocorrect.vim, the ftdetect dir and if the ft matches something in
-    ftplugin then that file.
+~/.config/nvim are init.vim, autocorrect.vim, the ftdetect dir and if the ft matches something in
+ftplugin then that file.
 
 however, i have a file in after/ that isn't getting sourced?
 none of my spell files.
@@ -18,21 +17,7 @@ idk i feel like this is a problem right?
 okay so ~/.config/nvim/after and ~/.config/nvim are the only dirs in rtp and
 packpath. so i guess that's cool but how do we properly use autoload?
 
-2018-09-17
 
-So config/nvim is first in rtp. So we use autoload for things we want to
-run right away. Even though Junegunn suggests local/share, config might
-be a better spot.
-.local/share is after a lot of things.
-
-That's a useful tip though because if you need final say in anything,
-putting it in ~/.local/share/nvim/site/ftplugin for example
-is a safe bet.
-
-~/.local/share/nvim/site/after/ftplugin
-is a guarantee though! So remember that too.
-
-ALSO. autoload is for functions and scripts you wrote. So I just moved the colorschemes out.
 
 ## speeding nvim up
 

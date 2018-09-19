@@ -1,5 +1,24 @@
 " Deoplete: {{{
 
+" Needs to be set manually default is infact 0
+let g:deoplete#enable_at_startup = 1
+
+" TODO:
+"				*deoplete#smart_close_popup()*
+" deoplete#smart_close_popup()
+"         Insert candidate and re-generate popup menu for deoplete.
+"         Note: It must be in |map-<expr>|.
+" >
+"         inoremap <expr><C-h>
+"         \ deoplete#smart_close_popup()."\<C-h>"
+"         inoremap <expr><BS>
+"         \ deoplete#smart_close_popup()."\<C-h>"
+" <
+"         Note: This mapping conflicts with |SuperTab| or |endwise|
+"         plugins.
+"         Note: This key mapping is for <C-h> or <BS> keymappings.
+
+"
 let g:deoplete#enable_smart_case = 1
 set completeopt+=noinsert                    " Autoselect feature
 
@@ -22,16 +41,20 @@ call deoplete#custom#source(
 
 autocmd CmdwinEnter * let b:deoplete_sources = ['buffer']
 
-" load deop and ultisnips after entering insert mode. note plugin confs for
-" loading deop after first enter. redundant?
+" load deop and ultisnips after entering insert mode.
 augroup load_us_deop
     autocmd!
     autocmd InsertEnter * call plug#load('ultisnips', 'deoplete'
                 \| autocmd! load_us_deop)
 
-    " if i enter insert mode, then we're off to the races
-    autocmd InsertEnter * call deoplete#enable()
-    call deoplete#custom#option('smart_case', v:true)
+    " line below may be the default now.
+    " autocmd InsertEnter * call deoplete#enable()
+    " keep custom option a dict so we can add as necessary
+    call deoplete#custom#option({
+    \ 'auto_complete_delay': 200,
+    \ 'smart_case': v:true,
+    \ })
+    " call deoplete#custom#option('smart_case', v:true)
 
     " Close the autocompleter when we leave insert mode
     autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif

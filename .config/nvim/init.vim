@@ -47,16 +47,18 @@ Plug 'w0rp/ale'
 Plug 'morhetz/gruvbox'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'ryanoasis/vim-devicons'
-Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',
+"Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',
     \ 'do': 'bash install.sh' }
 Plug 'SirVer/ultisnips'| Plug 'honza/vim-snippets'
 Plug 'vim-airline/vim-airline'
 Plug 'mhinz/vim-startify'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+"
+" if !has('nvim')
+"     Plug 'roxma/vim-hug-neovim-rpc'
+" endif
 
-if !has('nvim')
-    Plug 'roxma/vim-hug-neovim-rpc'
-endif
+Plug 'majutsushi/tagbar'
 
 call plug#end()
 " }}}
@@ -329,6 +331,10 @@ nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
 nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
 " }}}
 
+" Tagbar: {{{
+nnoremap <silent> <F8> :TagbarToggle<CR>
+"}}}
+
 " }}}
 
 " Plugins: {{{ 2
@@ -460,10 +466,6 @@ let g:gruvbox_contrast_dark = 'hard'
 let g:LanguageClient_serverCommands = {
     \ 'python': [ 'pyls' ]
     \ }
-" }}}
-
-" Deoplete: {{{
-" TODO:
 " }}}
 
 " }}}
