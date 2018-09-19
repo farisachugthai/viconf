@@ -50,15 +50,20 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'ryanoasis/vim-devicons'
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',
     \ 'do': 'bash install.sh' }
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+" Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'vim-airline/vim-airline'
 Plug 'mhinz/vim-startify'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-
-if !has('nvim')
+if has('nvim')
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+    Plug 'Shougo/deoplete.nvim'
     Plug 'roxma/nvim-yarp'
     Plug 'roxma/vim-hug-neovim-rpc'
 endif
+
+let g:deoplete#enable_at_startup = 1
+
+Plug 'Shougo/neosnippet.vim' | Plug 'Shougo/neosnippet-snippets'
 
 call plug#end()
 " }}}
@@ -150,6 +155,21 @@ else                                    " Accomodate Termux
 endif
 
 set pastetoggle=<F7>
+
+if exists('$TMUX')
+    let g:clipboard = {
+        \   'name': 'myClipboard',
+        \   'copy': {
+        \      '+': 'tmux load-buffer -',
+        \      '*': 'tmux load-buffer -',
+        \    },
+        \   'paste': {
+        \      '+': 'tmux save-buffer -',
+        \      '*': 'tmux save-buffer -',
+        \   },
+        \   'cache_enabled': 1,
+        \ }
+endif
 " }}}
 
 " Autocompletion: {{{ 3
@@ -194,17 +214,22 @@ set nojoinspaces
 " Mappings: {{{ 2
 
 " General Mappings: {{{ 3
+
+" From he autocmd around line 1050. This would be neat to map to something like <Leader>ed
+" autocmd BufWritePost ~/.config/nvim/init.vim   so <afile>
+
 " Note that F7 is bound to pastetoggle so don't map it
 " Navigate windows more easily
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
+
 " Navigate tabs more easily
 nnoremap <A-Right> :tabnext<CR>
 nnoremap <A-Left> :tabprev<CR>
 
-" T Pope
+" T Pope: Note that ]c and [c are also mapped by git-gutter
 nnoremap ]q :cnext<cr>
 nnoremap [q :cprev<cr>
 nnoremap ]l :lnext<cr>
@@ -243,9 +268,8 @@ nnoremap <Leader>sp :setlocal spell!<CR>
 nnoremap <Leader>s= :norm z=<CR>
 " }}}
 
-" Emacs in the Ex line: {{{ 3
+" Emacs: {{{ 3
 
-" For Emacs-style editing on the command-line:
 " start of line
 cnoremap <C-A> <Home>
 " back one character
@@ -320,7 +344,7 @@ if !has('nvim')
     runtime! ftplugin/man.vim
     let g:ft_man_folding_enable = 0
     setlocal keywordprg=:Man
-
+    " why did i do the line below? why doesn't vim use it's own after dir
     set runtimepath+='~/.config/nvim/after'
 endif
 
@@ -329,7 +353,7 @@ runtime! macros/matchit.vim
 " FZF: {{{ 3
 
 if has('nvim') || has('gui_running')
-  let $FZF_DEFAULT_OPTS .= ' --inline-info'
+  let $FZF_DEFAULT_OPTS = ' --inline-info'
 endif
 
 augroup fzf
@@ -351,6 +375,7 @@ let g:fzf_action = {
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
 
+" FZF Colors: {{{ 4
 " Customize fzf colors to match your color scheme
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
@@ -366,6 +391,7 @@ let g:fzf_colors =
   \ 'marker':  ['fg', 'Keyword'],
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
+" }}}
 
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 

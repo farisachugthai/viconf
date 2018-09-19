@@ -1,5 +1,13 @@
 " python.vim
 " Maintainer: Faris Chugthai
+"
+" Alright we got 3 things here. And honestly fix them and push it as 1 commit
+" Let's start making logical progress again
+" 1. Python executables should be in init.vim because stuff like deoplete needs a provider
+" even when ft!=python
+" 2. probably need to configure deoplete in init as well or at least in after.
+" 3. speaking of which this setup is wrong. put this dir in ~/.config/nvim/after
+" this area of dirs is made for plugins you received and other local data files
 
 " All: {{{ 1
 
