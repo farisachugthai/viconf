@@ -13,21 +13,8 @@ let g:snips_github = 'https://github.com/farisachugthai'
 " Environment: {{{ 2
 " Let's setup all the global vars we need. Will utilize to ensure consistency
 
-if has('nvim')
-    let s:root = '~/.config/nvim'
-    let s:conf = '~/.config/nvim/init.vim'
-else
-    let s:root = '~/.vim'
-    let s:conf = '~/.vim/vimrc'
-endif
-
-if exists('$PREFIX')
-    let s:usr_d = '$PREFIX'     " might need to expand on use
-    let s:OS= 'Android'
-else
-    let s:usr_d = '/usr'
-    let s:OS = 'Linux'
-endif
+let s:termux = exists('$PREFIX')
+let s:ubuntu = !exists('$PREFIX') && has('unix')  " syntax?
 
 " Python Executables: {{{ 3
 
@@ -69,7 +56,7 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'ryanoasis/vim-devicons'
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',
     \ 'do': 'bash install.sh' }
-" Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'vim-airline/vim-airline'
 Plug 'mhinz/vim-startify'
 if has('nvim')
@@ -148,13 +135,15 @@ set spellsuggest=5                      " Limit the number of suggestions from '
 if filereadable('/usr/share/dict/words')
     set dictionary+=/usr/share/dict/words
     " Replace the default dictionary completion with fzf-based fuzzy completion
-    inoremap <expr> <c-x><c-k> fzf#complete('cat /usr/share/dict/words')
+    " Courtesy of fzf <3 vim
+    inoremap <expr> <c-x><c-k> fzf#vim#complete('cat /usr/share/dict/words')
 endif
 
 if filereadable('/usr/share/dict/american-english')
     set dictionary+=/usr/share/dict/american-english
 endif
 
+" yes glob is required otherwise no tilde expansion
 if filereadable(glob('~/.vim/autocorrect.vim'))
     source ~/.vim/autocorrect.vim
 endif
@@ -271,6 +260,15 @@ nnoremap <leader>o o<esc>
 nnoremap <leader>O O<esc>
 xnoremap < <gv
 xnoremap > >gv
+
+" TODO:
+" Opens a new tab with the current buffer's path
+" Super useful when editing files in the same directory
+" map <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
+"
+" Switch CWD to the directory of the open buffer
+" map <leader>cd :cd %:p:h<cr>:pwd<cr>
+
 " }}}
 
 " Spell Checking: {{{ 3
@@ -347,6 +345,7 @@ nnoremap <silent> <leader>gQ :Gwq!<CR>
 " }}}
 
 " Python Language Server: {{{ 3
+" Hopefully not trampling all over jedi :(
 nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
 nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
 " }}}
@@ -420,9 +419,32 @@ endif
 command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
 " }}}
 
+" FZF_VIM: {{{ 3
+" If you're willing to consider it separate than the FZF plugin
+
+" Insert mode completion
+" the spell checker already implements something like this but that's why we allow remapping and not everyoone {termux} has that file
+imap <c-x><c-k> <plug>(fzf-complete-word)
+imap <c-x><c-f> <plug>(fzf-complete-path)
+imap <c-x><c-j> <plug>(fzf-complete-file-ag)
+imap <c-x><c-l> <plug>(fzf-complete-line)
+" }}}
+
 " NERDTree: {{{ 3
-" If only NERDTree is open, close Vim
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" Let's see if this works properly as a group
+augroup nerd_loader
+  autocmd!
+  autocmd VimEnter * silent! autocmd! FileExplorer
+  autocmd BufEnter,BufNew *
+        \  if isdirectory(expand('<amatch>'))
+        \|   call plug#load('nerdtree')
+        \|   execute 'autocmd! nerd_loader'
+        \| endif
+    autocmd bufenter *
+        \ if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree())
+        \| q
+        \| endif
+augroup END
 let g:NERDTreeDirArrows = 1
 let g:NERDTreeWinPos = 'right'
 let g:NERDTreeShowHidden = 1
@@ -476,31 +498,43 @@ let g:gruvbox_contrast_dark = 'hard'
 " }}}
 
 " Language Client: {{{ 3
+
 " A better way of doing this would be to check if the server is executable
 " so like if executable('pyls) | let g:pyserver = 'pyls' and then run as
 " many checks as you feel like typing and then append them all to this dict
+
+" ooo but is the best way to do this by doing it all in buf local ftplugins?
 let g:LanguageClient_serverCommands = {
     \ 'python': [ 'pyls' ]
     \ }
 " }}}
-
+"
+" **UNTESTED**: {{{
+" just a thought i had
+if has('b:Tagbar')  " or any plugin
+    let g:tagbar_sort=0
+    inoremap <F3> <esc>:TagbarToggle<cr>
+    nnoremap <F3> :TagbarToggle<cr>
+endif
+" }}}
 " }}}
 
 " Filetype Specific Options: {{{ 2
 
 augroup ftpersonal
 " IPython:
-au BufRead,BufNewFile *.ipy setlocal filetype=python
+    au BufRead,BufNewFile *.ipy setlocal filetype=python
 " Web Dev:
-au filetype javascript,html,css setlocal shiftwidth=2 softtabstop=2 tabstop=2
+    au filetype javascript,html,css setlocal shiftwidth=2 softtabstop=2 tabstop=2
 " Markdown:
-autocmd BufNewFile,BufFilePre,BufRead *.md setlocal filetype=markdown
+    autocmd BufNewFile,BufFilePre,BufRead *.md setlocal filetype=markdown
 augroup end
 " }}}
 
 " Functions: {{{ 2
 
 " Next few are from Junegunn so credit to him
+" Todo Function:
 function! s:todo() abort
     let entries = []
     for cmd in ['git grep -niI -e TODO -e todo -e FIXME -e XXX 2> /dev/null',
@@ -521,6 +555,7 @@ function! s:todo() abort
 endfunction
 command! Todo call s:todo()
 
+" Explore:
 " Heres one where he uses fzf and Explore to search a packages docs
 function! s:plug_help_sink(line)
     let dir = g:plugs[a:line].dir

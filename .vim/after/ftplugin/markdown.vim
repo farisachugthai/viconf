@@ -2,9 +2,10 @@
 " Maintainer: Faris Chugthai
 
 " TODO: Fix the way that '_' is highlighted in md
+" So that would be implemented in after/syntax/markdown.vim not here
 
-" Enable spellchecking. TODO: Need to fix spellchecking
-" setlocal spell
+" Enable spellchecking.
+setlocal spell
 
 " Automatically wrap at 79 characters after whitespace
 setlocal textwidth=79

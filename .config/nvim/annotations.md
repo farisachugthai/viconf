@@ -4,24 +4,24 @@
 ## Plugins
 =====================================================================
 
-### Languange Client
+### Language Client
 
 The only thing is the func LanguageClient_serverCommands()
 
 But it's a simple dictionary. If you want, run a whole mess of loops checking
 things you care about I.E. bash language server, pyls etc are executable.
 
-if those loops return True, add it's name to the dictionary. then have the
+If those loops return True, add it's name to the dictionary. then have the
 server run the commands we feed to it
 
 I'm not sure how I hadn't thought of this yet.
 
 
-### lightline
+### Lightline
 
-honestly keep this around because airline is pretty heavy on termux
+Honestly keep this around because airline is pretty heavy on termux.
 
-btw do the code blocks need viml or VimScript after the tick marks?
+BTW do the code blocks need viml or VimScript after the tick marks?
 
 ```viml
 " Lightline: {{{
