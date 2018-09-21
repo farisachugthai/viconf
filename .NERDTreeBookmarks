@@ -11,11 +11,11 @@ pyls ~/.local/share/nvim/plugged/LanguageClient-neovim/rplugin/python3/LanguageC
 pyroot /data/data/com.termux/files/usr/lib/python3.6
 usr-lib-pyls /data/data/com.termux/files/usr/lib/python3.6/site-packages/pyls
 vim ~/.vim
-word-freq ~/projects/word-freq
 nvim-windows /data/data/com.termux/files/usr/share/nvim/runtime/doc/windows.txt
 dotrepo ~/projects/dotfiles/unix
 root /data/data/com.termux/files/usr
 cheat /storage/emulated/0/Android/data/com.dropbox.android/files/u730416625/scratch/.cheat
 
+word-freq ~/projects/word-freq
 NERDTreeBookmarks ~/.vim/NERDTreeBookmarks
 pydocs ~/Dropbox/python/pydocs

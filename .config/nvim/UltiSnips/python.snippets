@@ -7,12 +7,21 @@ priority 70
 # Personal
 # =========
 
+snippet timestamp "Produce a timestamp"
+datetime.date.isoformat(datetime.datetime.now())
+endsnippet
+
+snippet dirname "Find the directory the script is in"
+os.path.dirname(os.path.realpath(__file__))
+endsnippet
+
 snippet pprint "Import and use pprint" b
 from pprint import pprint; pprint($1)
 endsnippet
 
 snippet pdb "Import and use pdb" b
 import pdb; pdb.set_trace()
+
 endsnippet
 
 snippet ipdb "Import and use ipdb" b

@@ -9,29 +9,6 @@ let g:snips_email = 'farischugthai@gmail.com'
 let g:snips_github = 'https://github.com/farisachugthai'
 " }}}
 
-" Nvim-OS: {{{ 2
-" Gonna start seriously consolidating vimrc and init.vim this is so hard
-" to maintain
-" Let's setup all the global vars we need
-" Wait am i assigning these vars correctly? man fuck vimscript
-
-if has('nvim')
-    let s:root = '~/.config/nvim'
-    let s:conf = '~/.config/nvim/init.vim'
-else
-    let s:root = '~/.vim'
-    let s:conf = '~/.vim/vimrc'
-endif
-
-if exists('$PREFIX')
-    let s:usr_d = '$PREFIX'     " might need to expand on use
-    let s:OS= 'Android'
-else
-    let s:usr_d = '/usr'
-    let s:OS = 'Linux'
-endif
-" }}}
-
 " Vim Plug: {{{ 2
 
 call plug#begin('~/.vim/plugged')
@@ -48,17 +25,12 @@ Plug 'morhetz/gruvbox'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'ryanoasis/vim-devicons'
 "Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',
-    \ 'do': 'bash install.sh' }
+"    \ 'do': 'bash install.sh' }
 Plug 'SirVer/ultisnips'| Plug 'honza/vim-snippets'
 Plug 'vim-airline/vim-airline'
 Plug 'mhinz/vim-startify'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-"
-" if !has('nvim')
-"     Plug 'roxma/vim-hug-neovim-rpc'
-" endif
-
-Plug 'majutsushi/tagbar'
+Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 
 call plug#end()
 " }}}
@@ -118,8 +90,10 @@ set encoding=UTF-8             " Set default encoding
 scriptencoding UTF-8           " Vint believes encoding shoild be done first
 set fileencoding=UTF-8
 
-set spelllang=en
-set spellfile=~/.config/nvim/spell/en.utf-8.add
+set spelllang=en_US
+if filereadable(glob('~/.config/nvim/spell/en_US.utf-8.add'))
+    set spellfile=~/.config/nvim/spell/en_US.utf-8.add
+endif
 
 if !has('nvim')
     set spelllang+=$VIMRUNTIME/spell/en.utf-8.spl
@@ -138,10 +112,6 @@ endif
 
 if filereadable('/usr/share/dict/american-english')
     set dictionary+=/usr/share/dict/american-english
-endif
-
-if filereadable('~/.config/nvim/spell/en.hun.spl')
-    set spelllang+=~/.config/nvim/spell/en.hun.spl
 endif
 
 if filereadable(glob('~/.vim/autocorrect.vim'))
@@ -190,7 +160,6 @@ endif
 
 set path+=**        			        " Recursively search dirs with :find
 set autochdir
-set wildmenu                            " Show list instead of just completing
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
 set diffopt=vertical,context:3          " vertical split diffs. def cont is 6
@@ -216,8 +185,8 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 " Navigate tabs easier
-nnoremap <a-Right> :tabnext<CR>
-nnoremap <a-Left> :tabprev<CR>
+nnoremap <A-Right> :tabnext<CR>
+nnoremap <A-Left> :tabprev<CR>
 " T Pope
 nnoremap ]q :cnext<cr>
 nnoremap [q :cprev<cr>
@@ -301,28 +270,25 @@ nnoremap <A-l> <C-w>l
 " }}}
 
 " Ale: {{{ 3
-" So these mappings would clobber so many things but its a good thought to
-" keep in the back of your mind
-" nnoremap <silent> <C-k> <Plug>(ale_previous_wrap)
-" nnoremap <silent> <C-j> <Plug>(ale_next_wrap)
 nnoremap <Leader>l <Plug>(ale_toggle_buffer) <CR>
 nnoremap ]a <Plug>(ale_next_wrap)
 nnoremap [a <Plug>(ale_previous_wrap)
 " }}}
 
 " Fugitive: {{{ 3
-nnoremap <silent> <leader>gs :Gstatus<CR>
+nnoremap <silent> <leader>gb :Gblame<CR>
 nnoremap <silent> <leader>gd :Gdiff<CR>
 nnoremap <silent> <leader>gc :Gcommit<CR>
-nnoremap <silent> <leader>gb :Gblame<CR>
 nnoremap <silent> <leader>ge :Gedit<CR>
 nnoremap <silent> <leader>gE :Gedit<space>
-nnoremap <silent> <leader>gr :Gread<CR>
-nnoremap <silent> <leader>gR :Gread<space>
-nnoremap <silent> <leader>gw :Gwrite<CR>
-nnoremap <silent> <leader>gW :Gwrite!<CR>
+nnoremap <silent> <leader>gl :Glog<CR>
 nnoremap <silent> <leader>gq :Gwq<CR>
 nnoremap <silent> <leader>gQ :Gwq!<CR>
+nnoremap <silent> <leader>gr :Gread<CR>
+nnoremap <silent> <leader>gR :Gread<space>
+nnoremap <silent> <leader>gs :Gstatus<CR>
+nnoremap <silent> <leader>gw :Gwrite<CR>
+nnoremap <silent> <leader>gW :Gwrite!<CR>
 " }}}
 
 " Python Language Server: {{{ 3
@@ -374,6 +340,7 @@ let g:fzf_action = {
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
 
+" FZF Colors: {{{
 " Customize fzf colors to match your color scheme
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
@@ -389,6 +356,7 @@ let g:fzf_colors =
   \ 'marker':  ['fg', 'Keyword'],
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
+" }}}
 
 let g:ag_command = 'ag --smart-case -u -g " " --'
 " TODO: need to look through this command because i keep getting an out of
@@ -402,6 +370,7 @@ if executable('ag')
 else
   let &grepprg = 'grep -rn $* *'
 endif
+
 command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
 " }}}
 

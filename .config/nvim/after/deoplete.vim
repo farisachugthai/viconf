@@ -1,34 +1,39 @@
 " Deoplete: {{{
 
-" Needs to be set manually default is infact 0
-let g:deoplete#enable_at_startup = 1
-
 " TODO:
-"				*deoplete#smart_close_popup()*
-" deoplete#smart_close_popup()
-"         Insert candidate and re-generate popup menu for deoplete.
-"         Note: It must be in |map-<expr>|.
-" >
-"         inoremap <expr><C-h>
-"         \ deoplete#smart_close_popup()."\<C-h>"
-"         inoremap <expr><BS>
-"         \ deoplete#smart_close_popup()."\<C-h>"
-" <
-"         Note: This mapping conflicts with |SuperTab| or |endwise|
-"         plugins.
-"         Note: This key mapping is for <C-h> or <BS> keymappings.
+" Set up some more fine-tuned options.
+" Or at least merge the comments thing and the dict thing.
 
+" From the docs it sounds like setting up omnifuncs might be a good idea but
+" lang client should be taking care of that.
 "
+" Wth is up with the way we have sources setup? Why is it taking up so many lines
+" can we not pass the function a dict?
+
+" setting up loggings more than likely gonna be a good idea if this ends up shitting the bed
+" or at least having something configured in case you wanna toggle it
+
+
 let g:deoplete#enable_smart_case = 1
 set completeopt+=noinsert                    " Autoselect feature
 
-"" On <CR>: close popup and save indent.
+" Delete 1 char and reload the popup menu
+inoremap <expr><C-h> deoplete#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> deoplete#smart_close_popup()."\<C-h>"
+
+" On <CR>: close popup and save indent.
 inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
 function! s:my_cr_function() abort
   return deoplete#close_popup() . "\<CR>"
 endfunction
 
-"" Disable the candidates in Comment/String syntaxes.
+" Refresh candidates. Are we clobbering anything? Wth is it set to insert tab???
+inoremap <expr><C-l> deoplete#refresh()
+
+" Undo completion
+inoremap <expr><C-g> deoplete#undo_completion()
+
+" Disable the candidates in Comment/String syntaxes.
 call deoplete#custom#source('_', 'disabled_syntaxes', ['Comment', 'String'])
 
 "" Do not complete too short words
@@ -39,37 +44,8 @@ call deoplete#custom#source(
 call deoplete#custom#source(
 \ 'file', 'enable_buffer_path', 'True')
 
-autocmd CmdwinEnter * let b:deoplete_sources = ['buffer']
-
-" load deop and ultisnips after entering insert mode.
-augroup load_us_deop
-    autocmd!
-    autocmd InsertEnter * call plug#load('ultisnips', 'deoplete'
-                \| autocmd! load_us_deop)
-
-    " line below may be the default now.
-    " autocmd InsertEnter * call deoplete#enable()
-    " keep custom option a dict so we can add as necessary
-    call deoplete#custom#option({
-    \ 'auto_complete_delay': 200,
-    \ 'smart_case': v:true,
-    \ })
-    " call deoplete#custom#option('smart_case', v:true)
-
-    " Close the autocompleter when we leave insert mode
-    autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
-augroup END
-
-" Remove this if you'd like to use fuzzy search
-"call deoplete#custom#source(
-"\ 'dictionary', 'matchers', ['matcher_head'])
-
-"" If dictionary is already sorted, no need to sort it again.
-call deoplete#custom#source(
-\ 'dictionary', 'sorters', [])
-
-" Setting up the omnifuncs
-" set omnifunc=LanguageClient#complete
+" If dictionary is already sorted, no need to sort it again.
+call deoplete#custom#source( 'dictionary', 'sorters', [])
 
 " Enable jedi source debug messages
 " call deoplete#custom#option('profile', v:true)
