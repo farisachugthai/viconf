@@ -1,1 +1,1 @@
-../.config/nvim/colors/gruvbox.vim
+../../.config/nvim/colors/gruvbox.vim

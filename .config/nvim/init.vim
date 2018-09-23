@@ -15,28 +15,6 @@ let g:snips_github = 'https://github.com/farisachugthai'
 
 let s:termux = exists('$PREFIX')
 let s:ubuntu = !exists('$PREFIX') && has('unix')  " syntax?
-
-" Python Executables: {{{ 3
-
-if has('python3')
-" if we have a venv start there
-    if exists('$VIRTUAL_ENV')
-        let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
-
-    elseif exists('$CONDA_PYTHON_EXE')
-        let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
-
-    " otherwise break up termux and linux
-    elseif exists('$PREFIX')
-        " and just use the system python
-        let g:python3_host_prog = '$PREFIX/bin/python'
-    else
-        let g:python3_host_prog = '/usr/bin/python3'
-    endif
-endif
-
-" }}}
-
 " }}}
 
 " Vim Plug: {{{ 2
@@ -84,6 +62,29 @@ endif
 
 set inccommand=split                " This alone is enough to never go back
 set termguicolors
+" }}}
+
+" Python Executables: {{{ 3
+" Genuinely not sure where the best place to put this is; however,
+" it needs to be available for all filetypes and t should probably
+" be set relatively early.
+if has('python3')
+" if we have a venv start there
+    if exists('$VIRTUAL_ENV')
+        let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
+
+    elseif exists('$CONDA_PYTHON_EXE')
+        let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
+
+    " otherwise break up termux and linux
+    elseif exists('$PREFIX')
+        " and just use the system python
+        let g:python3_host_prog = '$PREFIX/bin/python'
+    else
+        let g:python3_host_prog = '/usr/bin/python3'
+    endif
+endif
+
 " }}}
 
 " Global Options: {{{ 2

@@ -1,1 +1,1 @@
-../.config/nvim/colors/jellybeans.vim
+../../.config/nvim/colors/jellybeans.vim
