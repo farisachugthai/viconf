@@ -437,9 +437,47 @@ let g:LanguageClient_serverCommands = {
     \ }
 " }}}
 
+" Jedi: {{{ 3
+" Isn't recognized as an ftplugin so probably needs to be in global conf
+let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces
+let g:jedi#completions_command = '<C-N>'
+let g:jedi#documentation_command = '<leader>h'
+let g:jedi#usages_command = '<leader>u'
+let g:jedi#show_call_signatures_delay = 100
+let g:jedi#smart_auto_mappings = 0
+let g:jedi#force_py_version = 3
+" }}}
+
 " }}}
 
 " Filetype Specific Options: {{{ 2
+
+" For setting the python so that deoplete can use it.
+
+" Python Executables: {{{ 3
+
+if has('python3')
+" if we have a venv start there
+    if exists('$VIRTUAL_ENV')
+        let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
+
+    elseif exists('$CONDA_PYTHON_EXE')
+        let g:python3_host_prog = $CONDA_PYTHON_EXE
+
+    " otherwise break up termux and linux
+    elseif exists('$PREFIX')
+        " and just use the system python
+        if executable('~/virtualenvs/neovim/bin/python3')
+            let g:python3_host_prog = '~/virtualenvs/neovim/bin/python3'
+        endif
+    else
+        if executable('~/miniconda3/envs/neovim_vscode/bin/python')
+            let g:python3_host_prog = '~/miniconda3/envs/neovim_vscode/bin/python'
+        endif
+    endif
+endif
+
+" }}}
 
 augroup ftpersonal
 " IPython:

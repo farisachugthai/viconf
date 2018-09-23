@@ -3,29 +3,6 @@
 
 " All: {{{ 1
 
-" Nvim-OS: {{{ 2
-" Gonna start seriously consolidating vimrc and init.vim this is so hard
-" to maintain
-" Let's setup all the global vars we need
-" Wait am i assigning these vars correctly? man fuck vimscript
-
-if has('nvim')
-    let s:root = '~/.config/nvim'
-    let s:conf = '~/.config/nvim/init.vim'
-else
-    let s:root = '~/.vim'
-    let s:conf = '~/.vim/vimrc'
-endif
-
-if exists('$PREFIX')
-    let s:usr_d = '$PREFIX'     " might need to expand on use
-    let s:OS= 'Android'
-else
-    let s:usr_d = '/usr'
-    let s:OS = 'Linux'
-endif
-" }}}
-
 " Options: {{{ 2
 
 " Pep Indenting
@@ -54,41 +31,7 @@ augroup vimrc_autocmds
 augroup END
 " }}}
 
-" Python Executables: {{{ 2
-" should this be in a global file not exclusively a python ftplugin?
-if has('python3')
-" if we have a venv start there
-    if exists('$VIRTUAL_ENV')
-        let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
-
-    elseif exists('$CONDA_PYTHON_EXE')
-        let g:python3_host_prog = $CONDA_PYTHON_EXE
-
-    " otherwise break up termux and linux
-    elseif exists('$PREFIX')
-        " and just use the system python
-        if executable('~/virtualenvs/neovim/bin/python3')
-            let g:python3_host_prog = '~/virtualenvs/neovim/bin/python3'
-        endif
-    else
-        if executable('~/miniconda3/envs/neovim_vscode/bin/python')
-            let g:python3_host_prog = '~/miniconda3/envs/neovim_vscode/bin/python'
-        endif
-    endif
-endif
-" }}}
-
 " Plugins: {{{ 2
-
-" Jedi: {{{ 3
-let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces
-let g:jedi#completions_command = '<C-N>'
-let g:jedi#documentation_command = '<leader>h'
-let g:jedi#usages_command = '<leader>u'
-let g:jedi#show_call_signatures_delay = 100
-let g:jedi#smart_auto_mappings = 0
-let g:jedi#force_py_version = 3
-" }}}
 
 " Ale: {{{ 3
 " 1st. use b not g. 2. it automatically does this. you're ignoring project

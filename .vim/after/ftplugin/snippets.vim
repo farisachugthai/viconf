@@ -1,1 +1,1 @@
-../../.config/nvim/ftplugin/snippets.vim
+../../../.config/nvim/after/ftplugin/snippets.vim
