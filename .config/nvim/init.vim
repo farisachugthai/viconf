@@ -11,7 +11,7 @@ let g:snips_github = 'https://github.com/farisachugthai'
 
 " Vim Plug: {{{ 2
 
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -30,6 +30,7 @@ Plug 'SirVer/ultisnips'| Plug 'honza/vim-snippets'
 Plug 'vim-airline/vim-airline'
 Plug 'mhinz/vim-startify'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+let g:deoplete#enable_at_startup = 1
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 
 call plug#end()
@@ -46,6 +47,29 @@ endif
 
 set inccommand=split                    " This alone is enough to never go back
 set termguicolors
+" }}}
+
+" Python Executables: {{{ 2
+if has('python3')
+" if we have a virtual env start there
+    if exists('$VIRTUAL_ENV')
+        let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
+
+    elseif exists('$CONDA_PYTHON_EXE')
+        let g:python3_host_prog = $CONDA_PYTHON_EXE
+
+    " otherwise break up termux and linux
+    elseif exists('$PREFIX')
+        " and just use the system python
+        if executable('~/virtualenvs/neovim/bin/python3')
+            let g:python3_host_prog = '~/virtualenvs/neovim/bin/python3'
+        endif
+    else
+        if executable('~/miniconda3/envs/neovim_vscode/bin/python')
+            let g:python3_host_prog = '~/miniconda3/envs/neovim_vscode/bin/python'
+        endif
+    endif
+endif
 " }}}
 
 " Global Options: {{{ 2
@@ -69,7 +93,7 @@ let g:python_highlight_all = 1
 " Folds: {{{ 3
 set foldenable
 set foldlevelstart=1                    " Enables most folds
-set foldnestmax=10                      " Why would anything be folded this much
+set foldnestmax=10
 set foldmethod=marker
 " }}}
 
@@ -86,11 +110,11 @@ set splitright
 " }}}
 
 " Spell Checker: {{{ 3
-set encoding=UTF-8             " Set default encoding
-scriptencoding UTF-8           " Vint believes encoding shoild be done first
+set encoding=UTF-8                       " Set default encoding
+scriptencoding UTF-8                     " Vint believes encoding should be done first
 set fileencoding=UTF-8
 
-set spelllang=en_US
+set spelllang=en,en_US
 if filereadable(glob('~/.config/nvim/spell/en_US.utf-8.add'))
     set spellfile=~/.config/nvim/spell/en_US.utf-8.add
 endif
@@ -103,11 +127,11 @@ endif
 set complete+=kspell                    " Autocomplete in insert mode
 set spellsuggest=5                      " Limit the number of suggestions from 'spell suggest'
 
-" Can be set with sudo select-default-wordlist. I opted for American insane
 if filereadable('/usr/share/dict/words')
     set dictionary+=/usr/share/dict/words
     " Replace the default dictionary completion with fzf-based fuzzy completion
-    inoremap <expr> <c-x><c-k> fzf#complete('cat /usr/share/dict/words')
+    " Courtesy of fzf <3 vim
+    inoremap <expr> <c-x><c-k> fzf#vim#complete('cat /usr/share/dict/words')
 endif
 
 if filereadable('/usr/share/dict/american-english')
@@ -122,11 +146,26 @@ endif
 " Fun With Clipboards: {{{ 3
 if has('unnamedplus')                   " Use the system clipboard.
   set clipboard+=unnamed,unnamedplus
-else                                    " Accomodate Termux
+else                                    " Accommodate Termux
   set clipboard+=unnamed
 endif
 
 set pastetoggle=<F7>
+
+if exists('$TMUX')
+    let g:clipboard = {
+        \   'name': 'myClipboard',
+        \   'copy': {
+        \      '+': 'tmux load-buffer -',
+        \      '*': 'tmux load-buffer -',
+        \    },
+        \   'paste': {
+        \      '+': 'tmux save-buffer -',
+        \      '*': 'tmux save-buffer -',
+        \   },
+        \   'cache_enabled': 1,
+        \ }
+endif
 " }}}
 
 " Autocompletion: {{{ 3
@@ -178,7 +217,7 @@ set modeline
 " Mappings: {{{ 2
 
 " General Mappings: {{{ 3
-" Note that F7 is bound to pastetoggle so don't map it
+" Note that F7 is bound to paste toggle so don't map it
 " Navigate windows easier
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
@@ -216,11 +255,19 @@ nnoremap <leader>o o<esc>
 nnoremap <leader>O O<esc>
 xnoremap < <gv
 xnoremap > >gv
+" TODO:
+" Opens a new tab with the current buffer's path
+" Super useful when editing files in the same directory
+nnoremap <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
+"
+" Switch CWD to the directory of the open buffer
+nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
+
 " }}}
 
 " Spell Checking: {{{ 3
-" it has to wait to see if i'm gonna do s= instead of just s
-" and the delay is awful. sorry for changing one of my oldest mappings!
+" it has to wait to see if I'm going to do s= instead of just s
+" and the delay is awful. Sorry for changing one of my oldest mappings!
 nnoremap <Leader>sp :setlocal spell!<CR>
 " Based off the default value for spell suggest
 nnoremap <Leader>s= :norm z=<CR>
@@ -252,7 +299,7 @@ cnoremap <Esc><C-F> <S-Right>
 " Terminal: {{{ 3
 " If running a terminal in Vim, go into Normal mode with Esc
 tnoremap <Esc> <C-W>N
-" from he term. rewrite for fzf
+" from he term. Rewrite for FZF
 tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
 " From :he terminal
 tnoremap <A-h> <C-\><C-N><C-w>h
@@ -293,7 +340,7 @@ nnoremap <silent> <leader>gW :Gwrite!<CR>
 
 " Python Language Server: {{{ 3
 nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-"nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+" nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
 " }}}
 
@@ -340,8 +387,8 @@ let g:fzf_action = {
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
 
-" FZF Colors: {{{
-" Customize fzf colors to match your color scheme
+" FZF Colors: {{{ 4
+" Customize FZF colors to match your color scheme
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
   \ 'bg':      ['bg', 'Normal'],
@@ -415,8 +462,8 @@ let g:airline_powerline_fonts = 1
 let g:startify_session_sort = 1
 " }}}
 
-" Ultisnips: {{{ 3
-let g:UltiSnipsSnippetDir = [ '~/.config/nvim/Ultisnips' ]
+" UltiSnips: {{{ 3
+let g:UltiSnipsSnippetDir = [ '~/.config/nvim/UltiSnips' ]
 let g:UltiSnipsJumpForwardTrigger='<Tab>'
 let g:UltiSnipsJumpBackwardTrigger='<S-Tab>'
 let g:UltiSnips_python_quoting_style = 'GOOGLE'
@@ -425,7 +472,7 @@ let g:UltiSnipsEditSplit = 'vertical'
 " }}}
 
 " Gruvbox: {{{ 3
-" Load the colorscheme last. Noticeable startuptime improvement
+" Load the colorscheme last. Noticeable startup time improvement
 colorscheme gruvbox
 let g:gruvbox_contrast_dark = 'hard'
 " }}}
@@ -451,47 +498,24 @@ let g:jedi#force_py_version = 3
 " }}}
 
 " Filetype Specific Options: {{{ 2
-
-" For setting the python so that deoplete can use it.
-
-" Python Executables: {{{ 3
-
-if has('python3')
-" if we have a venv start there
-    if exists('$VIRTUAL_ENV')
-        let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
-
-    elseif exists('$CONDA_PYTHON_EXE')
-        let g:python3_host_prog = $CONDA_PYTHON_EXE
-
-    " otherwise break up termux and linux
-    elseif exists('$PREFIX')
-        " and just use the system python
-        if executable('~/virtualenvs/neovim/bin/python3')
-            let g:python3_host_prog = '~/virtualenvs/neovim/bin/python3'
-        endif
-    else
-        if executable('~/miniconda3/envs/neovim_vscode/bin/python')
-            let g:python3_host_prog = '~/miniconda3/envs/neovim_vscode/bin/python'
-        endif
-    endif
-endif
-
-" }}}
+" For setting the python so that Deoplete can use it.
 
 augroup ftpersonal
-" IPython:
-au BufRead,BufNewFile *.ipy setlocal filetype=python
-" Web Dev:
-au filetype javascript,html,css setlocal shiftwidth=2 softtabstop=2 tabstop=2
-" Markdown:
-autocmd BufNewFile,BufFilePre,BufRead *.md setlocal filetype=markdown
+
+    " IPython:
+    au BufRead,BufNewFile *.ipy setlocal filetype=python
+    " Web Dev:
+    au filetype javascript,html,css setlocal shiftwidth=2 softtabstop=2 tabstop=2
+    " Markdown:
+    autocmd BufNewFile,BufFilePre,BufRead *.md setlocal filetype=markdown
+
 augroup end
 " }}}
 
 " Functions: {{{ 2
 
 " Next few are from Junegunn so credit to him
+" Todo Function: {{{ 3
 function! s:todo() abort
     let entries = []
     for cmd in ['git grep -niI -e TODO -e todo -e FIXME -e XXX 2> /dev/null',
@@ -512,7 +536,10 @@ function! s:todo() abort
 endfunction
 command! Todo call s:todo()
 
-" Heres one where he uses fzf and Explore to search a packages docs
+" }}}
+
+" Explore: {{{
+" Here's one where he uses fzf and Explore to search a packages docs
 function! s:plug_help_sink(line)
     let dir = g:plugs[a:line].dir
     for pat in ['doc/*.txt', 'README.md']
@@ -525,6 +552,8 @@ function! s:plug_help_sink(line)
     tabnew
     execute 'Explore' dir
 endfunction
+
+" }}}
 
 "command to filter :scriptnames output by a regex
 command! -nargs=1 Scriptnames call <sid>scriptnames(<f-args>)

@@ -15,3 +15,9 @@ Because it's agitating not having feature parity.
 And after that...
 
 ## Work on getting ftplugins set up in .local not .config
+
+
+Sep 24, 2018
+
+Laptop needs to:
+Move jedi configuration from after/ftplugin to init.vim.

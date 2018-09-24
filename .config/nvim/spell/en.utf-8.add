@@ -32,8 +32,13 @@ GNOME's
 GVim
 GitHub
 Gitignore
+Google
+Gruvbox
 IPython
 Jupyter
+KeePass
+KeePassX
+KeePassXC
 Kleopatra
 MOTW
 NERDTree
@@ -87,6 +92,7 @@ chmod
 chroot
 cmd
 cmds
+cnoremap
 colorscheme
 colorschemes
 completefunc
@@ -142,6 +148,10 @@ google
 gtk
 h1
 h2
+h3
+h4
+h5
+h6
 hostname
 html
 htop
@@ -153,6 +163,7 @@ idk
 ill/!
 import
 init
+inoremap
 ipdb
 ipy
 itemgetter
@@ -171,7 +182,6 @@ konsole
 ksysguard
 libreoffice
 linux
-linux
 localhost
 localize
 lol
@@ -189,6 +199,8 @@ ndarray
 neovim
 netstat
 nltk
+noremap
+nnoremap
 nonrecursively
 npm
 nslookup
@@ -266,6 +278,7 @@ vimrc
 vimscript
 vimwiki
 vint
+vnoremap
 w3m
 wc
 webpage
@@ -281,6 +294,16 @@ xargs
 xattr
 xattrs
 xttr/!
+yapf
 youtube
 zcat
 zim
+Junegunn
+uncommenting
+UltiSnips
+Gruvbox
+Todo
+scriptnames
+BufEnter
+difftool
+autoload
