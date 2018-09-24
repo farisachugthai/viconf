@@ -6,12 +6,12 @@
 
 ### Language Client
 
-The only thing is the func LanguageClient_serverCommands()
+The only thing is the function LanguageClient_serverCommands()
 
 But it's a simple dictionary. If you want, run a whole mess of loops checking
 things you care about I.E. bash language server, pyls etc are executable.
 
-If those loops return True, add it's name to the dictionary. then have the
+If those loops return True, add it's name to the dictionary. Then have the
 server run the commands we feed to it
 
 I'm not sure how I hadn't thought of this yet.
@@ -57,12 +57,12 @@ let g:lightline = {
 
 Now out of curiosity would this go in .config/nvim/compilers?
 
-Compiler Func: {{{
+Compiler Function: {{{
 
-All in one compiler. Gonna rewrite to make my own
+All in one compiler. Going to need to rewrite to make my own.
 
 ```
-map <F5> :call CompileRunGcc()<CR>
+noremap <F5> :call CompileRunGcc()<CR>
 func! CompileRunGcc()
     exec "w"
     if &filetype == 'c'

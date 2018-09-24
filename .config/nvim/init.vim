@@ -64,7 +64,7 @@ set inccommand=split                " This alone is enough to never go back
 set termguicolors
 " }}}
 
-" Python Executables: {{{ 3
+" Python Executables: {{{ 2
 " Genuinely not sure where the best place to put this is; however,
 " it needs to be available for all filetypes and t should probably
 " be set relatively early.
@@ -509,8 +509,47 @@ let g:LanguageClient_serverCommands = {
     \ 'python': [ 'pyls' ]
     \ }
 " }}}
-"
+
+" Neosnippets: {{{
+
+" Because I've found Ultisnips quite challenging to work with.
+let g:neosnippet#snippets_directory = [ '~/.config/nvim/neosnippets', '~/.local/share/nvim/plugged/vim-snippets/snippets' ]
+
+" From the help pages:
+" Plugin key-mappings.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+" SuperTab like snippets' behavior.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+imap <expr><TAB>
+\ pumvisible() ? "\<C-n>" :
+\ neosnippet#expandable_or_jumpable() ?
+\    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+" For conceal markers.
+if has('conceal')
+  set conceallevel=2 concealcursor=niv
+endif
+
+" This errors out.
+" Expand the completed snippet trigger by <CR>.
+" imap <expr><CR>
+" \ (pumvisible() && neosnippet#expandable()) ?
+" \<Plug>(neosnippet_expand)" : "\<CR>"
+
+" Enable snipMate compatibility feature.
+let g:neosnippet#enable_snipmate_compatibility = 1
+
+" Tell Neosnippet about the other snippets
+" }}}
+
 " **UNTESTED**: {{{
+
 " just a thought i had
 if has('b:Tagbar')  " or any plugin
     let g:tagbar_sort=0
@@ -518,6 +557,7 @@ if has('b:Tagbar')  " or any plugin
     nnoremap <F3> :TagbarToggle<cr>
 endif
 " }}}
+
 " }}}
 
 " Filetype Specific Options: {{{ 2
