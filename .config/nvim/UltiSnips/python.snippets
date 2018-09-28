@@ -1,8 +1,8 @@
 # python.snippets
 priority 70
 
-# heads up go down to line ~690 ish we gotta document all those functions
-# because that's confusing and really annoying
+# we don't have a pandas ftdetect or ftplugin so extend it here
+extends pandas
 
 # Personal
 # =========
@@ -21,7 +21,6 @@ endsnippet
 
 snippet pdb "Import and use pdb" b
 import pdb; pdb.set_trace()
-
 endsnippet
 
 snippet ipdb "Import and use ipdb" b
@@ -31,69 +30,6 @@ endsnippet
 snippet home "Why isn't there a better way." b
 home = os.path.expanduser("~")
 endsnippet
-
-# So this snippet is noticeably huge beyond reason
-# How do we chip away at this into something logical?
-# Not rhetorical man I mean that literally. Are there ways to toggle the
-# options I have prewritten?
-snippet argp "description" bst
-
-import argparse
-
-def parse_argument():
-	parser = argparse.ArgumentParser()
-	group = parser.add_mutually_exclusive_group()
-	group.add_argument("-v", "--verbose", action="store_true")
-	group.add_argument("-q", "--quiet", action="store_true")
-
-	parser.add_argument('-v','--verbose', dest='verbosity', default=0, action="count",
-			help="verbose mode (-vvv for more, -vvvv to enable connection debugging)")
-
-	parser.add_argument('bar', nargs='+', help='bar positional arguments.')
-
-	parser.add_argument('-s', action='store',
-			dest='simple_value',
-			help='Store a simple value'
-			)
-
-	parser.add_argument('-c', action='store_const',
-			dest='constant_value',
-			const='value-to-store',
-			help='Store a constant value'
-			)
-
-	parser.add_argument('-t', action = 'store_true',
-			default = False,
-			dest = 'boolean_switch',
-			help = 'Set a switch to true'
-			)
-
-	parser.add_argument('-f', action = 'store_false',
-			default = False,
-			dest = 'boolean_switch',
-			help = 'Set a switch to false'
-			)
-
-	parser.add_argument('-a', action = 'append',
-			dest = 'collection',
-			default = [],
-			help = 'Set a switch to false'
-			)
-
-	parser.add_argument('--version', action = 'version',
-			version = '%(prog)s 1.0'
-			)
-
-	results = parser.parse_args()
-
-	return results
-endsnippet
-
-
-####################################################################
-#  # Snippets related to functions. Try them out and report back!  #
-####################################################################
-
 
 ###########################################################################
 #                            TEXTMATE SNIPPETS                            #
@@ -130,6 +66,7 @@ snippet from "from package import module" b
 	from ${1:package} import ${0:module}
 endsnippet
 
+# That b at the end is an option that means 'must be at the beginning of line'
 snippet moddoc "Module Docstring" b
 	"""
 	File: ${1:'foo.py'}
@@ -139,7 +76,6 @@ snippet moddoc "Module Docstring" b
 	Description: ${0}
 	"""
 endsnippet
-
 
 ####################
 # If / Else / Elif #
@@ -207,6 +143,98 @@ finally:
 	${7:pass}
 endsnippet
 
+snippet argp "description" bst
+
+import argparse
+
+def parse_argument():
+	parser = argparse.ArgumentParser()
+	group = parser.add_mutually_exclusive_group()
+	group.add_argument("-v", "--verbose", action="store_true")
+	group.add_argument("-q", "--quiet", action="store_true")
+
+	parser.add_argument('-v','--verbose', dest='verbosity', default=0, action="count",
+			help="verbose mode (-vvv for more, -vvvv to enable connection debugging)")
+
+	parser.add_argument('bar', nargs='+', help='bar positional arguments.')
+
+	parser.add_argument('-s', action='store',
+			dest='simple_value',
+			help='Store a simple value'
+			)
+
+	parser.add_argument('-c', action='store_const',
+			dest='constant_value',
+			const='value-to-store',
+			help='Store a constant value'
+			)
+
+	parser.add_argument('-t', action = 'store_true',
+			default = False,
+			dest = 'boolean_switch',
+			help = 'Set a switch to true'
+			)
+
+	parser.add_argument('-f', action = 'store_false',
+			default = False,
+			dest = 'boolean_switch',
+			help = 'Set a switch to false'
+			)
+
+	parser.add_argument('-a', action = 'append',
+			dest = 'collection',
+			default = [],
+			help = 'Set a switch to false'
+			)
+
+	parser.add_argument('--version', action = 'version',
+			version = '%(prog)s 1.0'
+			)
+
+	results = parser.parse_args()
+
+	return results
+
+	${0}
+endsnippet
+
+####################################################################
+#  Snippets related to functions. Try them out and report back!    #
+####################################################################
+
+snippet deff "function with default self arg" b
+def ${1:fname}(`!p snip.rv = vim.eval('indent(".") ? "self" : ""')`$2):
+	$0
+endsnippet
+
+snippet def "function with docstrings" b
+def ${1:function}(`!p
+if snip.indent:
+	snip.rv = 'self' + (", " if len(t[2]) else "")`${2:arg1}):
+	`!p snip.rv = triple_quotes(snip)`${4:TODO: Docstring for $1.}`!p
+write_function_docstring(t, snip) `
+	${5:${VISUAL:pass}}
+endsnippet
+
+
+snippet defc "class method with docstrings" b
+@classmethod
+def ${1:function}(`!p
+if snip.indent:
+	snip.rv = 'cls' + (", " if len(t[2]) else "")`${2:arg1}):
+	`!p snip.rv = triple_quotes(snip)`${4:TODO: Docstring for $1.}`!p
+write_function_docstring(t, snip) `
+	${5:${VISUAL:pass}}
+endsnippet
+
+
+snippet defs "static method with docstrings" b
+@staticmethod
+def ${1:function}(${2:arg1}):
+	`!p snip.rv = triple_quotes(snip)`${4:TODO: Docstring for $1.}`!p
+write_function_docstring(t, snip) `
+	${5:${VISUAL:pass}}
+endsnippet
 
 ##########
 # COMMON #
@@ -667,41 +695,6 @@ def __index__(self):
 
 def __coerce__(self, other):
 	${25:pass}
-endsnippet
-
-# TODO: This needs a description
-snippet deff
-def ${1:fname}(`!p snip.rv = vim.eval('indent(".") ? "self" : ""')`$2):
-	$0
-endsnippet
-
-snippet def "function with docstrings" b
-def ${1:function}(`!p
-if snip.indent:
-	snip.rv = 'self' + (", " if len(t[2]) else "")`${2:arg1}):
-	`!p snip.rv = triple_quotes(snip)`${4:TODO: Docstring for $1.}`!p
-write_function_docstring(t, snip) `
-	${5:${VISUAL:pass}}
-endsnippet
-
-
-snippet defc "class method with docstrings" b
-@classmethod
-def ${1:function}(`!p
-if snip.indent:
-	snip.rv = 'cls' + (", " if len(t[2]) else "")`${2:arg1}):
-	`!p snip.rv = triple_quotes(snip)`${4:TODO: Docstring for $1.}`!p
-write_function_docstring(t, snip) `
-	${5:${VISUAL:pass}}
-endsnippet
-
-
-snippet defs "static method with docstrings" b
-@staticmethod
-def ${1:function}(${2:arg1}):
-	`!p snip.rv = triple_quotes(snip)`${4:TODO: Docstring for $1.}`!p
-write_function_docstring(t, snip) `
-	${5:${VISUAL:pass}}
 endsnippet
 
 

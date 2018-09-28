@@ -9,6 +9,13 @@ let g:snips_email = 'farischugthai@gmail.com'
 let g:snips_github = 'https://github.com/farisachugthai'
 " }}}
 
+" Environment: {{{ 2
+" Let's setup all the global vars we need. Will utilize to ensure consistency
+
+let s:termux = exists('$PREFIX')
+let s:ubuntu = !exists('$PREFIX') && has('unix')  " syntax?
+" }}}
+
 " Vim Plug: {{{ 2
 
 call plug#begin('~/.local/share/nvim/plugged')
@@ -26,7 +33,7 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'ryanoasis/vim-devicons'
 "Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',
 "    \ 'do': 'bash install.sh' }
-Plug 'SirVer/ultisnips'| Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'vim-airline/vim-airline'
 Plug 'mhinz/vim-startify'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -37,7 +44,7 @@ call plug#end()
 " }}}
 
 " Nvim Specific: {{{ 2
-set background=dark                     " set as early as possible
+set background=dark
 
 " unabashedly stolen from junegunn dude is too good.
 let s:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/init.vim.local'
@@ -114,7 +121,7 @@ set encoding=UTF-8                       " Set default encoding
 scriptencoding UTF-8                     " Vint believes encoding should be done first
 set fileencoding=UTF-8
 
-set spelllang=en,en_US
+set spelllang=en,en_us
 if filereadable(glob('~/.config/nvim/spell/en_US.utf-8.add'))
     set spellfile=~/.config/nvim/spell/en_US.utf-8.add
 endif
@@ -199,6 +206,7 @@ endif
 
 set path+=**        			        " Recursively search dirs with :find
 set autochdir
+set fileformat=unix
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
 set diffopt=vertical,context:3          " vertical split diffs. def cont is 6
@@ -217,36 +225,35 @@ set modeline
 " Mappings: {{{ 2
 
 " General Mappings: {{{ 3
-" Note that F7 is bound to paste toggle so don't map it
-" Navigate windows easier
+
+" From he autocmd around line 1050. This would be neat to map to something like <Leader>ed
+" autocmd BufWritePost ~/.config/nvim/init.vim   so <afile>
+
+" Note that F7 is bound to pastetoggle so don't map it
+" Navigate windows more easily
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
-" Navigate tabs easier
+
+" Navigate tabs more easily
 nnoremap <A-Right> :tabnext<CR>
 nnoremap <A-Left> :tabprev<CR>
-" T Pope
-nnoremap ]q :cnext<cr>
-nnoremap [q :cprev<cr>
-nnoremap ]l :lnext<cr>
-nnoremap [l :lprev<cr>
-nnoremap ]b :bnext<cr>
-nnoremap [b :bprev<cr>
-nnoremap ]t :tabn<cr>
-nnoremap [t :tabp<cr>
 
 " Simple way to speed up startup
 nnoremap <Leader>nt :NERDTreeToggle<CR>
 " Select all text quickly
 nnoremap <Leader>a ggVG
-" f5 to run py file
-inoremap <F5> <Esc>:w<CR>:!clear;python %<CR>
+" f5 to run *.py. currently doesn't work or at least doesn't display anything
+inoremap <F5> <Esc>:w<CR>:!clear;python %
 " It should be easier to get help
 nnoremap <leader>he :helpgrep<space>
-" It should also be easier to edit the config
-nnoremap <F9> :e $MYVIMRC<CR>
+" It should also be easier to edit the config. Bind similarly to tmux
+nnoremap <leader>ed :e $MYVIMRC<CR>
+" Now reload it
+nnoremap <leader>re :so <afile><CR>
 
+" Escape conveniences
 inoremap jk <Esc>
 vnoremap jk <Esc>
 
@@ -255,13 +262,29 @@ nnoremap <leader>o o<esc>
 nnoremap <leader>O O<esc>
 xnoremap < <gv
 xnoremap > >gv
-" TODO:
+
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
 nnoremap <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
 "
 " Switch CWD to the directory of the open buffer
 nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
+
+" }}}
+
+" Unimpaired: {{{ 3
+
+" T Pope: Note that ]c and [c are also mapped by git-gutter
+nnoremap ]q :cnext<cr>
+nnoremap [q :cprev<cr>
+nnoremap ]Q :cfirst<cr>
+nnoremap Q[ :clast<cr>
+nnoremap ]l :lnext<cr>
+nnoremap [l :lprev<cr>
+nnoremap ]b :bnext<cr>
+nnoremap [b :bprev<cr>
+nnoremap ]t :tabn<cr>
+nnoremap [t :tabp<cr>
 
 " }}}
 
@@ -273,7 +296,7 @@ nnoremap <Leader>sp :setlocal spell!<CR>
 nnoremap <Leader>s= :norm z=<CR>
 " }}}
 
-" Emacs in the Ex line: {{{ 3
+" Emacs: {{{ 3
 
 " For Emacs-style editing on the command-line:
 " start of line
@@ -316,10 +339,13 @@ nnoremap <A-k> <C-w>k
 nnoremap <A-l> <C-w>l
 " }}}
 
-" Ale: {{{ 3
+" ALE: {{{ 3
 nnoremap <Leader>l <Plug>(ale_toggle_buffer) <CR>
 nnoremap ]a <Plug>(ale_next_wrap)
 nnoremap [a <Plug>(ale_previous_wrap)
+" TODO:
+" `:ALEInfoToFile` will write the ALE runtime information to a given filename. The filename works just like |:w|.
+
 " }}}
 
 " Fugitive: {{{ 3
@@ -360,7 +386,6 @@ if !has('nvim')
 endif
 
 runtime! macros/matchit.vim
-
 
 " FZF: {{{ 3
 
@@ -405,25 +430,98 @@ let g:fzf_colors =
   \ 'header':  ['fg', 'Comment'] }
 " }}}
 
-let g:ag_command = 'ag --smart-case -u -g " " --'
+" let g:ag_command = 'ag --smart-case -u -g " " --'
 " TODO: need to look through this command because i keep getting an out of
 " index error
-command! -bang -nargs=* F call fzf#vim#grep(g:ag_command .shellescape(<q-args>), 1, <bang>0)
+" command! -bang -nargs=* F call fzf#vim#grep(g:ag_command .shellescape(<q-args>), 1, <bang>0)
 
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 
 if executable('ag')
-  let &grepprg = 'ag --nogroup --nocolor --column'
+  let &grepprg = 'ag --nogroup --nocolor --column --vimgrep'
+    set grepformat=%f:%l:%c:%m
 else
   let &grepprg = 'grep -rn $* *'
 endif
-
 command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
 " }}}
 
+" FZF_VIM: {{{ 3
+" If you're willing to consider it separate than the FZF plugin
+
+" Insert mode completion:
+" the spell checker already implements something like this but that's why we allow remapping and not everyoone {termux} has that file
+imap <c-x><c-k> <plug>(fzf-complete-word)
+imap <c-x><c-f> <plug>(fzf-complete-path)
+imap <c-x><c-j> <plug>(fzf-complete-file-ag)
+imap <c-x><c-l> <plug>(fzf-complete-line)
+
+" Command local options:
+" [Buffers] Jump to the existing window if possible
+let g:fzf_buffers_jump = 1
+" [[B]Commits] Customize the options used by 'git log':
+let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
+" [Tags] Command to generate tags file
+let g:fzf_tags_command = 'ctags -R' "
+" [Commands] --expect expression for directly executing the command
+let g:fzf_commands_expect = 'alt-enter,ctrl-x'
+
+" Ag:
+"   :Ag  - Start fzf with hidden preview window that can be enabled with '?' key
+" :Ag! - Start fzf in fullscreen and display the preview window above
+command! -bang -nargs=* Ag
+    \ call fzf#vim#ag(<q-args>,
+    \ <bang>0 ? fzf#vim#with_preview('up:60%')
+    \ : fzf#vim#with_preview('right:50%:hidden', '?'),
+    \ <bang>0)
+
+" Similarly, we can apply it to fzf#vim#grep. To use ripgrep instead of ag:
+command! -bang -nargs=* Rg
+    \ call fzf#vim#grep(
+    \ 'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
+    \ <bang>0 ? fzf#vim#with_preview('up:60%')
+    \ : fzf#vim#with_preview('right:50%:hidden', '?'),
+    \ <bang>0)
+
+" Likewise, Files command with preview window
+command! -bang -nargs=? -complete=dir Files
+    \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+
+" Global line completion (not just open buffers. ripgrep required.)
+inoremap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
+    \ 'prefix': '^.*$',
+    \ 'source': 'rg -n ^ --color always',
+    \ 'options': '--ansi --delimiter : --nth 3..',
+    \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }}))
+
+" Custom fzf statusline
+function! s:fzf_statusline()
+    " Override statusline as you like
+    highlight fzf1 ctermfg=161 ctermbg=251
+    highlight fzf2 ctermfg=23 ctermbg=251
+    highlight fzf3 ctermfg=237 ctermbg=251
+    setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
+endfunction
+
+autocmd! User FzfStatusLine call <SID>fzf_statusline()
+
+" }}}
+
 " NERDTree: {{{ 3
-" If only NERDTree is open, close Vim
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" Let's see if this works properly as a group
+augroup nerd_loader
+  autocmd!
+  autocmd VimEnter * silent! autocmd! FileExplorer
+  autocmd BufEnter,BufNew *
+        \  if isdirectory(expand('<amatch>'))
+        \|   call plug#load('nerdtree')
+        \|   execute 'autocmd! nerd_loader'
+        \| endif
+    autocmd bufenter *
+        \ if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree())
+        \| q
+        \| endif
+augroup END
 let g:NERDTreeDirArrows = 1
 let g:NERDTreeWinPos = 'right'
 let g:NERDTreeShowHidden = 1
@@ -442,7 +540,7 @@ let g:NERDDefaultAlign = 'left'                     " Align line-wise comment de
 let g:NERDTrimTrailingWhitespace = 1                " Trim trailing whitespace when uncommenting
 " }}}
 
-" Ale: {{{ 3
+" ALE: {{{ 3
 let g:ale_fixers = { '*': [ 'remove_trailing_lines', 'trim_whitespace' ] }
 let g:ale_fix_on_save = 1
 " Default: `'%code: %%s'`
@@ -472,7 +570,6 @@ let g:UltiSnipsEditSplit = 'vertical'
 " }}}
 
 " Gruvbox: {{{ 3
-" Load the colorscheme last. Noticeable startup time improvement
 colorscheme gruvbox
 let g:gruvbox_contrast_dark = 'hard'
 " }}}
@@ -502,11 +599,11 @@ let g:jedi#force_py_version = 3
 
 augroup ftpersonal
 
-    " IPython:
+" IPython:
     au BufRead,BufNewFile *.ipy setlocal filetype=python
-    " Web Dev:
+" Web Dev:
     au filetype javascript,html,css setlocal shiftwidth=2 softtabstop=2 tabstop=2
-    " Markdown:
+" Markdown:
     autocmd BufNewFile,BufFilePre,BufRead *.md setlocal filetype=markdown
 
 augroup end
@@ -538,7 +635,7 @@ command! Todo call s:todo()
 
 " }}}
 
-" Explore: {{{
+" Explore: {{{ 3
 " Here's one where he uses fzf and Explore to search a packages docs
 function! s:plug_help_sink(line)
     let dir = g:plugs[a:line].dir
@@ -555,6 +652,7 @@ endfunction
 
 " }}}
 
+" Scriptnames: {{{
 "command to filter :scriptnames output by a regex
 command! -nargs=1 Scriptnames call <sid>scriptnames(<f-args>)
 function! s:scriptnames(re) abort
@@ -566,7 +664,9 @@ function! s:scriptnames(re) abort
     echo join(filtered, "\n")
 endfunction
 
+" }}}
 
+" Helptabs: {{{ 3
 function! s:helptab()
     if &buftype == 'help'
         wincmd T
@@ -575,6 +675,8 @@ function! s:helptab()
 endfunction
 " keeps erroring idk why.
 " autocmd vimrc BufEnter *.txt call s:helptab()
+" Let's try this.
+command! Help call <SID>helptab()
 
 function! s:autosave(enable)
   augroup autosave
@@ -596,6 +698,8 @@ function! s:hl()
   echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
 endfunction
 command! HL call <SID>hl()
+" }}}
+
 " }}}
 
 " }}}
