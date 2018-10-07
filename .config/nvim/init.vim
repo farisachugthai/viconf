@@ -27,24 +27,20 @@ call plug#begin('~/.local/share/nvim/plugged')
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
-Plug 'tpope/vim-commentary'     " hopefully more lightweight thn nerdcom
+Plug 'tpope/vim-commentary'     " hopefully more lightweight then nerdcom
 Plug 'davidhalter/jedi-vim', { 'for': ['python', 'python3'] }
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'w0rp/ale'
 Plug 'morhetz/gruvbox'
 Plug 'christoomey/vim-tmux-navigator'
-"Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',
-"    \ 'do': 'bash install.sh' }
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-Plug 'vim-airline/vim-airline'
 Plug 'mhinz/vim-startify'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 let g:deoplete#enable_at_startup = 1
 Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3'] }
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'godlygeek/tabular'
-" Plug 'arcticicestudio/nord-vim'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 
 call plug#end()
@@ -246,13 +242,17 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
 " Navigate tabs more easily
-nnoremap <M-Right> :tabnext<CR>
-nnoremap <M-Left> :tabprev<CR>
+nnoremap <A-Right> :tabnext<CR>
+nnoremap <A-Left> :tabprev<CR>
 
 " Simple way to speed up startup
 nnoremap <Leader>nt :NERDTreeToggle<CR>
+
 " Select all text quickly
-nnoremap <Leader>a ggVG
+"nnoremap <Leader>a ggVG
+" use builtin :%y
+nnoremap <Leader>a :echo('No. Use :%y')
+
 " f5 to run *.py. currently doesn't work or at least doesn't display anything
 inoremap <F5> <Esc>:w<CR>:!clear;python %
 " It should be easier to get help
@@ -571,13 +571,16 @@ let g:startify_session_sort = 1
 " }}}
 
 " UltiSnips: {{{ 3
-let g:UltiSnipsSnippetDir = [ '~/.config/nvim/UltiSnips' ]
+let g:UltiSnipsSnippetDir = ['~/.config/nvim/UltiSnips']
+" don't do this. it doesn't allow for ultisnips to iterate in the way it needs
+" to and snippets entirely stop working
+" let g:UltiSnipsSnippetDirectories = ['~/.config/nvim/UltiSnips']
 let g:UltiSnipsJumpForwardTrigger='<Tab>'
 let g:UltiSnipsJumpBackwardTrigger='<S-Tab>'
 let g:UltiSnips_python_style='sphinx'
 let g:UltiSnips_python_quoting_style = 'double'
 let g:UltiSnipsEnableSnipMate = 0
-let g:UltiSnipsEditSplit = 'vertical'
+let g:UltiSnipsEditSplit = 'tabdo'
 " }}}
 
 " Gruvbox: {{{ 3
