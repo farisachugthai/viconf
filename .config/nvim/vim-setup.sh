@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Vim: set ff=unix: 
 
 # Set up vim
 if ! [[ -d "$HOME/.vim/autoload" ]]; then
@@ -31,7 +32,7 @@ fi
 
 # Set up neovim
 
-if [[ -d "$HOME/.local/share/nvim/site/autoload" ]]; then
+if ! [[ -d "$HOME/.local/share/nvim/site/autoload" ]]; then
     mkdir -pv "$HOME/.local/share/nvim/site/autoload"
 fi
 
