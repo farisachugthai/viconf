@@ -1,3 +1,10 @@
+# Pandas.snippets
+
+priority 50
+
+extends python
+extends python3
+
 snippet pd_desc
 $1.describe(include = "all")
 $1.info()
@@ -201,7 +208,3 @@ endsnippet
 snippet pd_type_change
 $1['column_name'] = $1['column_name'].astype('category', categories=['good', 'very good', 'excellent'])
 endsnippet
-
-
-
-

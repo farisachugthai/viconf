@@ -1,7 +1,12 @@
+# Vim Snippets
+
+# Oct 06, 2018
+# Why does it say snipmate snippets this is in the UltiSnips dir in honza's repo?
 
 ###########################################################################
 #                            SnipMate Snippets                            #
 ###########################################################################
+
 snippet gvar "Global / configuration variable" b
 if !exists("g:${1:MyUltraImportantVar}")
 	let g:$1 = ${2:"${3:<tab>}"}
@@ -20,4 +25,5 @@ fun ${1:function_name}($2)
 	${3:" code}
 endf
 endsnippet
+
 # vim:ft=snippets:

@@ -2,6 +2,9 @@ This directory contains the snippets for UltiSnips.
 https://github.com/sirver/ultisnips
 
 Notes on Ultisnips
+==================
+
+
 =======================
 
 And now this file contains my UltiSnips notes. It was really overwhelming
@@ -43,6 +46,8 @@ After configuring UltiSnipsDirs and UltiSnipsDirectories as you would like,
 using the UltiSnipsEdit command should open the folder that your snippets
 are housed in.
 
+Oct 06, 2018::
+On termux it opens a directory named UltiSnips and adds a file even when I was inside my UltiSnips dir!
 
 Usage
 -----

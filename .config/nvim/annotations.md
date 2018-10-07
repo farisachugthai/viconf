@@ -1,7 +1,7 @@
 # Annotations
 
-
 ## Plugins
+
 =====================================================================
 
 ### Language Client
@@ -91,19 +91,3 @@ endfunc
 ```
 
 }}}
-
-### ALE
-
-....what the hell is this?
-{As in what does this syntax mean if you're reading feel free to create an issue and let me know}
-
-```viml
-function! LinterStatus() abort
-  let l:counts = ale#statusline#Count(bufnr(''))
-
-  let l:all_errors = l:counts.error + l:counts.style_error
-  let l:all_non_errors = l:counts.total - l:all_errors
-
-  return l:counts.total == 0 ? '' : printf( '%dW %dE', l:all_non_errors, l:all_errors )
-endfunction
-```

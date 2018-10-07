@@ -19,6 +19,14 @@ setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 " also let's know where the line needs to end visually but not invoke the
 " linters to react. AKA don't set textwidth
 setlocal colorcolumn=80,120
+
+" This may be hard on termux but feels necessary.
+if &columns < 80
+    setlocal columns=80
+endif
+
+" I feel like theres really not many commas in python
+let b:maplocalleader = ','
 " }}}
 
 " Autocommands: {{{ 2
@@ -53,13 +61,38 @@ else
 endif
 let b:LanguageClient_autoStart = 1
 let b:LanguageClient_selectionUI = 'fzf'
-" the mapping below clobbers your run *.py mapping
-" nnoremap <F5> :call LanguageClient_contextMenu()<CR>
-" this isn't pulling up docs like i want
-" nnoremap K :call LanguageClient_textDocument_hover()<CR>
-nnoremap gd :call LanguageClient_textDocument_definition()<CR>
 " }}}
 
 " }}}
 
-" }}}
+" PYUNIT COMPILER						*compiler-pyunit*
+
+" This is not actually a compiler, but a unit testing framework for the
+" Python language.  It is included into standard Python distribution
+" starting from version 2.0.  For older versions, you can get it from
+" http://pyunit.sourceforge.net.
+
+" When you run your tests with the help of the framework, possible errors
+" are parsed by Vim and presented for you in quick-fix mode.
+
+" Unfortunately, there is no standard way to run the tests.
+" The alltests.py script seems to be used quite often, that's all.
+" Useful values for the 'makeprg' options therefore are:
+"  setlocal makeprg=./alltests.py " Run a testsuite
+"  setlocal makeprg=python\ %:S   " Run a single testcase
+
+" Also see http://vim.sourceforge.net/tip_view.php?tip_id=280.
+"
+"
+" Alternatively...
+" First shot at a compiler!
+" CompilerSet makeprg=flake8\ --format=default\ %
+" CompilerSet errorformat=
+"     \%E%f:%l:\ could\ not\ compile,%-Z%p^,
+"     \%A%f:%l:%c:\ %t%n\ %m,
+"     \%A%f:%l:\ %t%n\ %m,
+"     \%-G%.%#
+
+
+
+" " }}}

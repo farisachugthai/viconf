@@ -1,7 +1,6 @@
 # python.snippets
 priority 70
 
-# we don't have a pandas ftdetect or ftplugin so extend it here
 extends pandas
 
 # Personal
@@ -143,6 +142,34 @@ finally:
 	${7:pass}
 endsnippet
 
+# TODO: Many many more to be added
+# let's try again
+# by ending in the middle we give ourselves a chance to keep going
+snippet argparse "Function that utilizes argparse" b
+
+def _parse_arguments():
+	parser = argparse.ArgumentParser(description=$1)
+	$0
+	return parser.parse_args()
+endsnippet
+
+snippet argstrpos "Argparse positional argument for a string type." b
+
+	parser.add_argument( ${VISUAL:var}, type=${1:str}, help=${2:Feed me input.})
+
+endsnippet
+
+snippet argpath "Add a pathlike object" b
+
+	parser.add_argument(${1:-s}, ${2:--long}, dest= ${3: var},
+						type=${4:pathlib.Path}, help=${5:RTFM})
+endsnippet
+
+snippet argpv "argument for %(prog)s" b
+	parser.add_argument('--version', action = 'version',
+			version = '%(prog)s 1.0'
+			)
+
 snippet argp "description" bst
 
 import argparse
@@ -185,10 +212,6 @@ def parse_argument():
 			dest = 'collection',
 			default = [],
 			help = 'Set a switch to false'
-			)
-
-	parser.add_argument('--version', action = 'version',
-			version = '%(prog)s 1.0'
 			)
 
 	results = parser.parse_args()
