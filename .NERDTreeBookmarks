@@ -9,9 +9,10 @@ plugged ~/.local/share/nvim/plugged
 prefix /data/data/com.termux/files/usr
 py_tut ~/python/tutorials
 pyroot /data/data/com.termux/files/usr/lib/python3.6
+synmd /data/data/com.termux/files/usr/share/nvim/runtime/syntax/markdown.vim
 usr-lib-pyls /data/data/com.termux/files/usr/lib/python3.6/site-packages/pyls
 vim ~/.vim
-synmd /data/data/com.termux/files/usr/share/nvim/runtime/syntax/markdown.vim
+scripts /storage/emulated/0/Android/data/com.dropbox.android/files/u730416625/scratch/python/official-python-docs/examples/scripts
 
 word-freq ~/projects/word-freq
 NERDTreeBookmarks ~/.vim/NERDTreeBookmarks

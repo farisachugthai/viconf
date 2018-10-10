@@ -34,10 +34,33 @@ endsnippet
 #                            TEXTMATE SNIPPETS                            #
 ###########################################################################
 
+# The following has been reorganized approximately in order of use.
 
 snippet #! "Shebang header for python scripts" b
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+endsnippet
+
+# That b at the end is an option that means 'must be at the beginning of line'
+snippet moddoc "Module Docstring" b
+"""${1:'Give a one sentence summary in the imperative'}
+
+${2:'Elaborate a little'}
+File: ${3:'foo.py'}
+Author: `g:snips_author`
+Email: `g:snips_email`
+Github: `g:snips_github`
+License 'MIT'
+Description: ${0}
+"""
+endsnippet
+
+snippet imp "import statement" b
+	import ${0:module}
+endsnippet
+
+snippet from "from package import module" b
+	from ${1:package} import ${0:module}
 endsnippet
 
 snippet ifmain "ifmain" b
@@ -57,24 +80,6 @@ for ${1:item} in ${2:iterable}:
 $0
 endsnippet
 
-snippet imp "import statement" b
-	import ${0:module}
-endsnippet
-
-snippet from "from package import module" b
-	from ${1:package} import ${0:module}
-endsnippet
-
-# That b at the end is an option that means 'must be at the beginning of line'
-snippet moddoc "Module Docstring" b
-	"""
-	File: ${1:'foo.py'}
-	Author: `g:snips_author`
-	Email: `g:snips_email`
-	Github: `g:snips_github`
-	Description: ${0}
-	"""
-endsnippet
 
 ####################
 # If / Else / Elif #
@@ -142,13 +147,10 @@ finally:
 	${7:pass}
 endsnippet
 
-# TODO: Many many more to be added
-# let's try again
-# by ending in the middle we give ourselves a chance to keep going
 snippet argparse "Function that utilizes argparse" b
 
 def _parse_arguments():
-	parser = argparse.ArgumentParser(description=$1)
+	parser = argparse.ArgumentParser(description=${1:__doc__})
 	$0
 	return parser.parse_args()
 endsnippet
@@ -167,8 +169,8 @@ endsnippet
 
 snippet argpv "argument for %(prog)s" b
 	parser.add_argument('--version', action = 'version',
-			version = '%(prog)s 1.0'
-			)
+			version = '%(prog)s 1.0')
+endsnippet
 
 snippet argp "description" bst
 

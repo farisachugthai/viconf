@@ -27,6 +27,17 @@ call plug#begin('~/.local/share/nvim/plugged')
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
+" Nothing happens if we open a directory to start nvim
+augroup nerd_loader
+  autocmd!
+  autocmd VimEnter * silent! autocmd! FileExplorer
+  autocmd BufEnter,BufNew *
+        \  if isdirectory(expand('<amatch>'))
+        \|   call plug#load('nerdtree')
+        \|   execute 'autocmd! nerd_loader'
+        \| endif
+augroup END
+
 Plug 'tpope/vim-commentary'     " hopefully more lightweight then nerdcom
 Plug 'davidhalter/jedi-vim', { 'for': ['python', 'python3'] }
 Plug 'airblade/vim-gitgutter'
@@ -39,6 +50,7 @@ Plug 'mhinz/vim-startify'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 let g:deoplete#enable_at_startup = 1
 Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3'] }
+Plug 'Shougo/neosnippet' | Plug 'Shougo/neosnippet-snippets'
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'godlygeek/tabular'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
@@ -62,6 +74,7 @@ set termguicolors
 " Python Executables: {{{ 2
 
 " TODO: Determine OS then check if has('win32') || has('win64')
+" axtually as long as linux defines conda_exe were good!
 if has('python3')
 " if we have a virtual env start there
     if exists('$VIRTUAL_ENV')
@@ -88,6 +101,7 @@ endif
 
 " Leader_Viminfo: {{{ 3
 let g:mapleader = "\<Space>"
+let g:maplocalleader=','
 
 if !has('nvim')
     set viminfo='100,<200,s200,n$HOME/.vim/viminfo
@@ -187,10 +201,6 @@ set wildmenu                            " Show list instead of just completing
 set wildmode=longest,list:longest       " Longest string or list alternatives
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 set fileignorecase                      " when searching for files don't use case
-
-" set completefunc here and then let b:omnifunc in ftplugins
-set completefunc=LanguageClient#complete
-set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
 " }}}
 
 " Other Global Options: {{{ 3
@@ -198,7 +208,6 @@ set tags+=./tags,./../tags,./*/tags     " usr_29
 set tags+=~/projects/tags               " consider generating a few large tag
 set tags+=~python/tags                  " files rather than recursive searches
 set mouse=a                             " Automatically enable mouse usage
-set cursorline
 set cmdheight=2
 set number
 set showmatch
@@ -214,7 +223,6 @@ endif
 
 set path+=**        			        " Recursively search dirs with :find
 set autochdir
-set fileformat=unix
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
 set diffopt=vertical,context:3          " vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
@@ -226,6 +234,8 @@ endif
 
 set backupdir=~/.vim/undodir
 set modeline
+
+set lazyredraw
 " }}}
 
 " }}}
@@ -251,10 +261,8 @@ nnoremap <Leader>nt :NERDTreeToggle<CR>
 " Select all text quickly
 "nnoremap <Leader>a ggVG
 " use builtin :%y
-nnoremap <Leader>a :echo('No. Use :%y')
+nnoremap <Leader>a :echo('No. Use :%y')<CR>
 
-" f5 to run *.py. currently doesn't work or at least doesn't display anything
-inoremap <F5> <Esc>:w<CR>:!clear;python %
 " It should be easier to get help
 nnoremap <leader>he :helpgrep<space>
 " It should also be easier to edit the config. Bind similarly to tmux
@@ -281,9 +289,7 @@ nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
 
 " }}}
 
-" Unimpaired: {{{ 3
-
-" T Pope: Note that ]c and [c are also mapped by git-gutter
+" Unimpaired: {{{ 3 Note that ]c and [c are also mapped by git-gutter
 nnoremap ]q :cnext<cr>
 nnoremap [q :cprev<cr>
 nnoremap ]Q :cfirst<cr>
@@ -301,8 +307,6 @@ nnoremap [t :tabp<cr>
 " }}}
 
 " Spell Checking: {{{ 3
-" it has to wait to see if I'm going to do s= instead of just s
-" and the delay is awful. Sorry for changing one of my oldest mappings!
 nnoremap <Leader>sp :setlocal spell!<CR>
 " Based off the default value for spell suggest
 nnoremap <Leader>s= :norm z=<CR>
@@ -338,18 +342,18 @@ tnoremap <Esc> <C-W>N
 " from he term. Rewrite for FZF
 tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
 " From :he terminal
-tnoremap <M-h> <C-\><C-N><C-w>h
-tnoremap <M-j> <C-\><C-N><C-w>j
-tnoremap <M-k> <C-\><C-N><C-w>k
-tnoremap <M-l> <C-\><C-N><C-w>l
-inoremap <M-h> <C-\><C-N><C-w>h
-inoremap <M-j> <C-\><C-N><C-w>j
-inoremap <M-k> <C-\><C-N><C-w>k
-inoremap <M-l> <C-\><C-N><C-w>l
-nnoremap <M-h> <C-w>h
-nnoremap <M-j> <C-w>j
-nnoremap <M-k> <C-w>k
-nnoremap <M-l> <C-w>l
+tnoremap <A-h> <C-\><C-N><C-w>h
+tnoremap <A-j> <C-\><C-N><C-w>j
+tnoremap <A-k> <C-\><C-N><C-w>k
+tnoremap <A-l> <C-\><C-N><C-w>l
+inoremap <A-h> <C-\><C-N><C-w>h
+inoremap <A-j> <C-\><C-N><C-w>j
+inoremap <A-k> <C-\><C-N><C-w>k
+inoremap <A-l> <C-\><C-N><C-w>l
+nnoremap <A-h> <C-w>h
+nnoremap <A-j> <C-w>j
+nnoremap <A-k> <C-w>k
+nnoremap <A-l> <C-w>l
 " }}}
 
 " ALE: {{{ 3
@@ -365,8 +369,8 @@ nnoremap <Leader>* <Plug>(ale_go_to_reference)
 
 " Fugitive: {{{ 3
 nnoremap <silent> <leader>gb :Gblame<CR>
-nnoremap <silent> <leader>gd :Gdiff<CR>
 nnoremap <silent> <leader>gc :Gcommit<CR>
+nnoremap <silent> <leader>gd :Gdiff<CR>
 nnoremap <silent> <leader>ge :Gedit<CR>
 nnoremap <silent> <leader>gE :Gedit<space>
 nnoremap <silent> <leader>gl :Glog<CR>
@@ -502,9 +506,9 @@ if !has('nvim')
     " Invoke while in Vim by putting your cursor over a word and run <Leader>k
     runtime! ftplugin/man.vim
     let g:ft_man_folding_enable = 0
-    setlocal keywordprg=:man\ -a
+    setlocal keywordprg=Man
 else
-    setl keywordprg=:man\ -a
+    setl keywordprg=man\ -k
     " g:man_default_sects="1,7,8,5"
 endif
 
@@ -538,12 +542,6 @@ let g:NERDTreeIgnore = ['\.pyc$', '\.pyo$', '__pycache__$']
 let g:NERDTreeRespectWildIgnore = 1                 " yeah i meant those ones too
 " }}}
 
-" NERDCom: {{{ 3
-let g:NERDSpaceDelims = 1                           " can we give the code some room to breathe?
-let g:NERDDefaultAlign = 'left'                     " Align line-wise comment delimiters flush left
-let g:NERDTrimTrailingWhitespace = 1                " Trim trailing whitespace when uncommenting
-" }}}
-
 " ALE: {{{ 3
 let g:ale_fixers = { '*': [ 'remove_trailing_lines', 'trim_whitespace' ] }
 let g:ale_fix_on_save = 1
@@ -567,7 +565,66 @@ endif
 " }}}
 
 " Vim_Startify: {{{ 3
+
+" What shows up in the startify list?
+
+function! s:list_commits()
+    let git = 'git -C ~/projects/viconf/'
+    let commits = systemlist(git .' log --oneline | head -n10')
+    let git = 'G'. git[1:]
+    return map(commits, '{"line": matchstr(v:val, "\\s\\zs.*"), "cmd": "'. git .' show ". matchstr(v:val, "^\\x\\+") }')
+endfunction
+
+let g:startify_lists = [
+    \ { 'header': ['   MRU'],            'type': 'files' },
+    \ { 'header': ['   MRU '. getcwd()], 'type': 'dir' },
+    \ { 'header': ['   Sessions'],       'type': 'sessions' },
+    \ { 'header': ['   Commits'],        'type': function('s:list_commits') },
+\ ]
+
+
 let g:startify_session_sort = 1
+
+let g:startify_update_oldfiles = 1
+
+" Setup devicons
+function! StartifyEntryFormat()
+    return 'WebDevIconsGetFileTypeSymbol(absolute_path) ." ". entry_path'
+endfunction
+
+" Center the header and footer
+function! s:filter_header(lines) abort
+    let longest_line   = max(map(copy(a:lines), 'strwidth(v:val)'))
+    let centered_lines = map(copy(a:lines),
+        \ 'repeat(" ", (&columns / 2) - (longest_line / 2)) . v:val')
+    return centered_lines
+endfunction
+let g:startify_custom_header = s:filter_header(startify#fortune#cowsay())
+
+" Those single key mappings are so annoying
+autocmd User Startified for key in ['b','s','t','v'] |
+    \ execute 'nunmap <buffer>' key | endfor
+" Start startify on every new tab
+if has('nvim')
+  autocmd TabNewEntered * Startify
+else
+  autocmd VimEnter * let t:startify_new_tab = 1
+  autocmd BufEnter *
+        \ if !exists('t:startify_new_tab') && empty(expand('%')) |
+        \   let t:startify_new_tab = 1 |
+        \   Startify |
+        \ endif
+endif
+
+" Don't show these files
+
+let g:startify_skiplist = [
+    \ 'COMMIT_EDITMSG',
+    \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc', ]
+    " its explained why this won't. actually great explanation of those weird,
+    " afile cfile sfile vars
+    " \ '~/.local/share/nvim/plugged/' .*/doc',
+    " \ ]
 " }}}
 
 " UltiSnips: {{{ 3
@@ -575,11 +632,15 @@ let g:UltiSnipsSnippetDir = ['~/.config/nvim/UltiSnips']
 " don't do this. it doesn't allow for ultisnips to iterate in the way it needs
 " to and snippets entirely stop working
 " let g:UltiSnipsSnippetDirectories = ['~/.config/nvim/UltiSnips']
+" the 2 below aee the defaults yet list snippets doesn't work
+let g:UltiSnipsExpandTrigger='<Tab>'
+let g:UltiSnipsListSnippets='<C-Tab>'
 let g:UltiSnipsJumpForwardTrigger='<Tab>'
 let g:UltiSnipsJumpBackwardTrigger='<S-Tab>'
+inoremap <C-Tab> * <Esc>:call UltiSnips#ListSnippets()<CR>
 let g:UltiSnips_python_style='sphinx'
 let g:UltiSnips_python_quoting_style = 'double'
-let g:UltiSnipsEnableSnipMate = 0
+let g:UltiSnipsEnableSnipMate = 1
 let g:UltiSnipsEditSplit = 'tabdo'
 " }}}
 
@@ -589,12 +650,6 @@ colorscheme gruvbox
 if g:colors_name ==# 'gruvbox'      " ==# means match case
     let g:gruvbox_contrast_dark = 'hard'
 endif
-" }}}
-
-" Language Client: {{{ 3
-let g:LanguageClient_serverCommands = {
-    \ 'python': [ 'pyls' ]
-    \ }
 " }}}
 
 " Jedi: {{{ 3

@@ -6,9 +6,10 @@
 # unicode support, an optional integrated sandboxed execution
 # environment, widely used and BSD licensed.
 
-# possible extends:
-# extends html
 
+extends html
+extends htmljinja
+extends python, python3
 
 snippet block "block" b
 {% block ${1:name} %}
