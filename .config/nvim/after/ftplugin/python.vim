@@ -44,27 +44,33 @@ augroup END
 " Ale: {{{ 3
 let b:ale_linters = [ 'pydocstyle', 'flake8', 'pycodestyle', 'yapf', 'pyls' ]
 let b:ale_linters_ignore = [ 'pylint', 'mypy' ]
+let b:ale_linters_explicit= 1
 
 if isdirectory('~/virtualenvs')
     let b:ale_virtualenv_dir_names+='virtualenvs'
 endif
 
+" This is toughvbecause what if theres a project file? hm.
 " let b:ale_python_flake8_options = '--config ~/.config/flake8'
 " }}}
 
 " Python Language Server: {{{ 3
 " useless err msg but better to have checks when we have behavior that's dependant on 3rd party tools
+" TODO: Check that lang client is loaded.
 if executable('pyls')
     let b:LanguageClient_serverCommands = { 'python': ['pyls'] }
 else
     echo 'pyls is not installed!!!'
 endif
-let b:LanguageClient_autoStart = 1
 let b:LanguageClient_selectionUI = 'fzf'
 " }}}
 
 " }}}
 
+" {{{ Compilers
+
+" Even though this didn't work I'm prett sure you can set flake8
+" to makeprg
 " PYUNIT COMPILER						*compiler-pyunit*
 
 " This is not actually a compiler, but a unit testing framework for the
@@ -92,7 +98,6 @@ let b:LanguageClient_selectionUI = 'fzf'
 "     \%A%f:%l:%c:\ %t%n\ %m,
 "     \%A%f:%l:\ %t%n\ %m,
 "     \%-G%.%#
+"}}}
 
-
-
-" " }}}
+" }}}

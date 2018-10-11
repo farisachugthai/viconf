@@ -3,8 +3,10 @@ priority 70
 
 extends pandas
 
-# Personal
-# =========
+#######################################################################
+#                             # Personal                              #
+#######################################################################
+
 
 snippet timestamp "Produce a timestamp"
 datetime.date.isoformat(datetime.datetime.now())
@@ -63,9 +65,10 @@ snippet from "from package import module" b
 	from ${1:package} import ${0:module}
 endsnippet
 
-snippet ifmain "ifmain" b
+snippet ifmain "ifmain. optionally adds in function call to argparser" b
 if __name__ == `!p snip.rv = get_quoting_style(snip)`__main__`!p snip.rv = get_quoting_style(snip)`:
-	${1:${VISUAL:main()}}
+	${1:_parse_arguments()}
+	${2:${VISUAL:main()}}
 endsnippet
 
 snippet with "with" b
@@ -151,8 +154,8 @@ snippet argparse "Function that utilizes argparse" b
 
 def _parse_arguments():
 	parser = argparse.ArgumentParser(description=${1:__doc__})
-	$0
 	return parser.parse_args()
+	$0
 endsnippet
 
 snippet argstrpos "Argparse positional argument for a string type." b
@@ -172,7 +175,7 @@ snippet argpv "argument for %(prog)s" b
 			version = '%(prog)s 1.0')
 endsnippet
 
-snippet argp "description" bst
+snippet argp "snip that needs to be fixed" bst
 
 import argparse
 

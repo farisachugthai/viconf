@@ -508,7 +508,7 @@ if !has('nvim')
     let g:ft_man_folding_enable = 0
     setlocal keywordprg=Man
 else
-    setl keywordprg=man\ -k
+    setl keywordprg=Man
     " g:man_default_sects="1,7,8,5"
 endif
 

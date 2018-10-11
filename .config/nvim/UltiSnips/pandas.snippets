@@ -5,18 +5,27 @@ priority 50
 extends python
 extends python3
 
-snippet pd_desc
+# TODO: Add descriptions for everything and review all snippets.
+
+snippet pd_import "Import pandas and numpy." b
+import numpy as np
+import pandas as pd
+endsnippet
+
+snippet pd_desc "Describe a dataframe." b
 $1.describe(include = "all")
 $1.info()
 $1.memory_user(deep = True)
 endsnippet
 
-snippet pd_dtypes
+snippet pd_dtypes "Determine the dtype." b
 $1.dtypes
 endsnippet
 
-snippet pd_csvread
-$1 = pd.read_csv($2, sep=None, engine='python', parse_dates=['fcast_date','timestamp'], dtype={'user_id': "category", 'stringa':'object'})
+snippet pd_csvread "Read a CSV file into a dataframe" b
+$1 = pd.read_csv($2, sep=None, engine='python',
+parse_dates=['fcast_date','timestamp'], dtype={${3:'user_id'}: ${4:"category"},
+${5:'stringa'}: ${6:'object'}})
 endsnippet
 
 snippet pd_csvwrite
@@ -96,7 +105,6 @@ snippet pd_count_column_values
 $1['columnname'].value_counts(dropna = False)
 endsnippet
 
-
 snippet pd_fillna
 $1['column_name'].fillna(value='not assigned', inplace = True)
 endsnippet
@@ -128,7 +136,6 @@ endsnippet
 snippet pd_duplicates_count_for_column
 $1['column_name'].duplicated().sum()
 endsnippet
-
 
 snippet pd_filter_w_conditions
 $1[($1.column1 >= 200) & ($1.column2 == 'Drama')]
@@ -174,7 +181,6 @@ snippet pd_if_else
 df['logic'] = np.where(df['AAA'] > 5,'high','low'); df
 endsnippet
 
-
 # Map applies a translation to each element of a series
 snippet pd_map
 ds['new_column'] = ds.column.name.map({'female':0, 'male':1})
@@ -184,7 +190,6 @@ endsnippet
 snippet pd_apply
 ds['new_column'] = train.col1.apply(len)
 endsnippet
-
 
 snippet pd_loc1
 ds.loc[0:4, ['column1','column2']]
@@ -208,3 +213,5 @@ endsnippet
 snippet pd_type_change
 $1['column_name'] = $1['column_name'].astype('category', categories=['good', 'very good', 'excellent'])
 endsnippet
+
+# vim:set sw=4 ts=4 ft=snippets:

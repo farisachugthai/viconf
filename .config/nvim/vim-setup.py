@@ -19,6 +19,12 @@ import os
 import sys
 
 
+def usage():
+    """Show how to use command."""
+    print("TODO")
+    sys.exit()
+
+
 def check_plug_dir():
     """Check if the directory vim-plug is downloaded to exists."""
     pass
@@ -36,6 +42,9 @@ def curl_download():
 
 if __name__ == "__main__":
     # argparse? lol I'm always going to suggest it.
+    if sys.argv[1] == '--help' or '-h' or '':
+        usage()
+
     home = os.path.expanduser("~")
     check_plug_dir()
 

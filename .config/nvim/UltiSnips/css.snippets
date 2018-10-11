@@ -1,3 +1,5 @@
+# css.snippets
+# Currently 115 snippets in this file and almost none are annotated. Sigh.
 
 snippet p "padding"
 padding: ${1:0};$0
@@ -51,9 +53,9 @@ snippet bxsh "box-shadow: color-hex x y blur (text)"
 box-shadow: ${1:${2:offset-x} ${3:offset-y} ${4:blur} ${5:spread} ${6:color}};$0
 endsnippet
 
-#
-# Colors
-#
+#######################################################################
+#                              # Colors                               #
+#######################################################################
 
 snippet rgb "color rgb"
 rgb(${1:255}, ${2:255}, ${3:255})$0
@@ -71,9 +73,10 @@ snippet hsla "color hsla"
 hsla(${1:360}, ${2:100}%, ${3:100}%, ${4:0.5})$0
 endsnippet
 
-#
-# Selectors
-#
+#######################################################################
+#                             # Selectors                             #
+#######################################################################
+
 
 snippet :fc "first-child selector"
 :first-child
@@ -95,9 +98,10 @@ snippet :oc
 :only-child
 endsnippet
 
-#
-# Pseudo-elements
-#
+#######################################################################
+#                          # Pseudo-elements                          #
+#######################################################################
+
 
 snippet :a ":a pseudo element"
 :after
@@ -118,6 +122,8 @@ endsnippet
 ###########################################################################
 #                    Most of these came from TextMate                     #
 ###########################################################################
+
+# As unintuitive as it is, having multiple triggerwords is great.
 
 snippet background "background-attachment: scroll:fixed (background)"
 background-attachment: ${1:scroll/fixed};$0

@@ -1,0 +1,10 @@
+" For windows specifically
+
+set linespace = 3
+set cmdheight = 3
+set verbose = 1
+
+" Leave these commented out in case you wanna come back to them
+" set guifont=Inconsolata:h12
+" set guifont=Hack:h11:i:cANSI:qDRAFT
+" love that gvim can handle the italics
