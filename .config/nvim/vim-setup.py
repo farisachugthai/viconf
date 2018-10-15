@@ -2,18 +2,20 @@
 # -*- coding: utf-8 -*-
 """Rewrite the basic Vim set up script using Python.
 
-:examples:
-    code
+Example:
+    Any explanation of why you find this necessary is  good.
+    In addition you can end a section with double colons::
 
-:param1 something:
-:param1 type:
+        $ python exampleofrst.py
 
-Raises:
-    whatever it raises
+Attributes:
 
-Returns:
-    Ya know.
+    module_level_variables (type): Explanation and give an inline docstring
+    immediately afterwards if possible
 
+TODO:
+    - Continue bringing this up to google style docstring conventions.
+    - Explore ``sphinx.ext.todo`` extension
 """
 import os
 import sys
