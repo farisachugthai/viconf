@@ -437,8 +437,6 @@ else
     " g:man_default_sects="1,7,8,5"
 endif
 
-endif
-
 runtime! macros/matchit.vim
 
 " To every plugin I've never used before. Stop slowing me down.
@@ -650,7 +648,7 @@ let g:startify_skiplist = [
         \ 'COMMIT_EDITMSG',
         \ glob('plugged/*/doc'),
         \ 'C:\Program Files\Vim\vim81\doc',
-        \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc', ]
+        \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc',
         \ ]
 
 let g:startify_lists = [

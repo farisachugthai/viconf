@@ -40,6 +40,26 @@ snippet code "Inline code" b
 endsnippet
 
 
+################
+#  formatting  #
+################
+
+
+snippet * "Italics"
+*${1:Emphasis}* ${0}
+endsnippet
+
+snippet ** "Bold"
+**${1:Strong emphasis}** ${0}
+endsnippet
+
+snippet bold "bold" b
+**${1:Strong emphasis}** ${0}
+endsnippet
+
+
+
+
 # There are a few different ways to do
 ###########
 #  links  #
@@ -101,19 +121,6 @@ endsnippet
 snippet para "Paragraph"
 :${1:field name}: ${0:field body}
 endsnippet
-
-snippet * "Italics"
-*${1:Emphasis}* ${0}
-endsnippet
-
-snippet ** "Bold"
-**${1:Strong emphasis}** ${0}
-endsnippet
-
-snippet bold "bold" b
-**${1:Strong emphasis}** ${0}
-endsnippet
-
 
 snippet url "External url"
 \`${1:hyperlink-name}\`_
