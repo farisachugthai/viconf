@@ -1,5 +1,5 @@
 " init.vim
-" Neovim configuration
+" Vim: set verbose=1:
 
 " All: {{{ 1
 
@@ -16,8 +16,23 @@ let g:snips_github = 'https://github.com/farisachugthai'
 " Environment: {{{ 2
 " Let's setup all the global vars we need. Will utilize to ensure consistency
 
-let s:termux = exists('$PREFIX')
-let s:ubuntu = !exists('$PREFIX') && has('unix')  " syntax?
+let s:termux = exists('$PREFIX') && has('unix')
+let s:ubuntu = !exists('$PREFIX') && has('unix')
+let s:windows = has('win32') || has('win64')
+
+" So what I think my problem was is that I have these variables but there's
+" no point at which they're initialized. Let's write a few funcs
+" function! is#termux() abort
+"     return s:termux
+" endfunction
+
+" function! is#ubuntu() abort
+"     return s:ubuntu
+" endfunction
+
+" function! is#windows() abort
+"     return s:windows
+" endfunction
 " }}}
 
 " Vim Plug: {{{ 2
@@ -28,7 +43,10 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
 " Nothing happens if we open a directory to start nvim
+<<<<<<< HEAD
 "TODO: one of the expressions in the loop needs to be prepended with silent
+=======
+>>>>>>> nt
 augroup nerd_loader
   autocmd!
   autocmd VimEnter * silent! autocmd! FileExplorer
@@ -39,6 +57,10 @@ augroup nerd_loader
         \| endif
 augroup END
 
+<<<<<<< HEAD
+=======
+Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
+>>>>>>> nt
 Plug 'davidhalter/jedi-vim', { 'for': ['python', 'python3'] }
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
@@ -48,6 +70,11 @@ Plug 'tpope/vim-unimpaired'
 Plug 'w0rp/ale'
 Plug 'morhetz/gruvbox'
 Plug 'christoomey/vim-tmux-navigator'
+<<<<<<< HEAD
+=======
+Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',
+   \ 'do': 'bash install.sh' }
+>>>>>>> nt
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'mhinz/vim-startify'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -71,9 +98,15 @@ if filereadable(s:local_vimrc)
 endif
 
 if has('nvim')
+<<<<<<< HEAD
     set inccommand=split                      " This alone is enough to never go back
 endif
 set termguicolors
+=======
+    set inccommand=split                    " This alone is enough to never go back
+    set termguicolors
+endif
+>>>>>>> nt
 " }}}
 
 " Python Executables: {{{ 2
@@ -114,9 +147,9 @@ endif
 " }}}
 
 " Pep8 Global Options: {{{ 3
-set tabstop=4
-set shiftwidth=4
-set expandtab smarttab
+set tabstop=4                           " show existing tab with 4 spaces width
+set shiftwidth=4                        " when indenting with '>', use 4 spaces width
+set expandtab smarttab                  " On pressing tab, insert 4 spaces
 set softtabstop=4
 let g:python_highlight_all = 1
 " }}}
@@ -144,6 +177,7 @@ set browsedir=buffer    " now changing directories starts from your current buf
 
 " Spell Checker: {{{ 3
 
+<<<<<<< HEAD
 if &encoding ==# 'latin1' && has('gui_running')
     set encoding=UTF-8                       " Set default encoding
     scriptencoding UTF-8                     " Vint believes encoding should be done first
@@ -152,6 +186,15 @@ endif
 
 set spelllang=en
 
+=======
+set spelllang=en
+" TODO: Probably have an OS wrap. like
+" if ($OS == 'Windows_NT') | echo 'yes' | endif
+" run that commmand to double check syntax.
+" ooo. or if you wanna make it OS agnostic we could go for the substantially
+" harder to write let g:pers_dict = fnamemodify(resolve(expand('<sfile>')),
+" whatever abbrev we need to find ./spell/en_US.utf-8.add
+>>>>>>> nt
 if filereadable(glob('~/.config/nvim/spell/en_US.utf-8.add'))
     set spellfile=~/.config/nvim/spell/en_US.utf-8.add
 endif
@@ -170,7 +213,19 @@ if filereadable('/usr/share/dict/words')
     setlocal dictionary+=/usr/share/dict/american-english
 endif
 
+<<<<<<< HEAD
 if filereadable(glob('$HOME/.vim/autocorrect.vim'))
+=======
+if filereadable('/usr/share/dict/american-english')
+    setlocal dictionary+=/usr/share/dict/american-english
+endif
+
+if filereadable('$HOME/.config/nvim/spell/en.hun.spl')
+    set spelllang+=$HOME/.config/nvim/spell/en.hun.spl
+endif
+
+if filereadable(glob('~/.vim/autocorrect.vim'))
+>>>>>>> nt
     source ~/.vim/autocorrect.vim
 endif
 " }}}
@@ -222,7 +277,7 @@ set autoindent smartindent              " :he options: set with smartindent
 set noswapfile
 
 if has('gui_running')
-    set guifont='Fira\ Code\ Mono:11'
+    set guifont=Fira_Code_Retina:h11:i:cANSI:qDRAFT
 endif
 
 " In case you wanted to see the guicursor default for gvim win64
@@ -244,8 +299,11 @@ set backupdir=~/.vim/undodir
 set modeline
 
 set lazyredraw
+<<<<<<< HEAD
 set ttimeout
 set ttimeoutlen=50
+=======
+>>>>>>> nt
 " }}}
 
 " }}}
@@ -269,9 +327,15 @@ nnoremap <A-Left> :tabprev<CR>
 nnoremap <Leader>nt :NERDTreeToggle<CR>
 
 " Select all text quickly
+<<<<<<< HEAD
 "nnoremap <Leader>a ggVG
 " use builtin :%y
 " nnoremap <Leader>a :echo('No. Use :%y')<CR>
+=======
+" nnoremap <Leader>a ggVG
+" use builtin :%y
+nnoremap <Leader>a :echo('No. Use :%y')<CR>
+>>>>>>> nt
 
 " It should be easier to get help
 nnoremap <leader>he :helpgrep<space>
@@ -303,8 +367,12 @@ nnoremap <leader>sn :Snippets<cr>
 " }}}
 
 " Unimpaired: {{{ 3
+<<<<<<< HEAD
 " Note that ]c and [c are also mapped by git-gutter
 " In addition I've mapped ]a and [a for ALE nextwrap.
+=======
+" Note that ]c and [c are mapped by git-gutter and ALE has ]a and [a
+>>>>>>> nt
 nnoremap ]q :cnext<cr>
 nnoremap [q :cprev<cr>
 nnoremap ]Q :cfirst<cr>
@@ -319,8 +387,12 @@ nnoremap ]B :blast<cr>
 nnoremap [B :bfirst<cr>
 nnoremap ]t :tabn<cr>
 nnoremap [t :tabp<cr>
+<<<<<<< HEAD
 nnoremap ]T :tfirst<cr>
 nnoremap [T :tlast<cr>
+=======
+" In addition I've mapped ]a and [a for Ale nextwrap.
+>>>>>>> nt
 " }}}
 
 " Spell Checking: {{{ 3
@@ -331,10 +403,14 @@ nnoremap <Leader>s= :norm z=<CR>
 
 " RSI: {{{ 3
 " For Emacs-style editing on the command-line:
+<<<<<<< HEAD
 " Would we consider doing this in insert mode as well?
 
 " sonuvabitch i just found out that this is basically rsi.vim
 
+=======
+" Would we consider doing this ininsert mode as well?
+>>>>>>> nt
 " start of line
 cnoremap <C-A> <Home>
 " back one character
@@ -357,7 +433,7 @@ cnoremap <Esc><C-F> <S-Right>
 
 " Terminal: {{{ 3
 " If running a terminal in Vim, go into Normal mode with Esc
-tnoremap <Esc> <C-W>N
+tnoremap <Esc> <C-\><C-n>
 " from he term. Rewrite for FZF
 tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
 " From :he terminal
@@ -381,12 +457,18 @@ nnoremap ]a <Plug>(ale_next_wrap)
 nnoremap [a <Plug>(ale_previous_wrap)
 " TODO: Implement ALEInfoToFile.
 " `:ALEInfoToFile` will write the ALE runtime information to a given filename. The filename works just like |:w|.
+<<<<<<< HEAD
 
 " This might be a good idea. * is already 'search for the cword' so let ALE
 " work in a similar manner right?
 nnoremap <Leader>* <Plug>(ale_go_to_reference)
 
 nnoremap <Leader>a :ALEInfo<cr>
+=======
+" This might be a good idea. * is already 'search for the cword' so let ALE
+" work in a similar manner right?
+nnoremap <Leader>* <Plug>(ale_go_to_reference)
+>>>>>>> nt
 " }}}
 
 " Fugitive: {{{ 3
@@ -405,9 +487,22 @@ nnoremap <silent> <leader>gw :Gwrite<CR>
 nnoremap <silent> <leader>gW :Gwrite!<CR>
 " }}}
 
+<<<<<<< HEAD
+=======
+" Python Language Server: {{{ 3
+" how do we turn on the check for a plugin again? is it
+" if loaded('Language_Client') or something?
+" nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+" nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+" nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+"
+" }}}
+
+>>>>>>> nt
 " Tagbar: {{{
 nnoremap <silent> <F8> :TagbarToggle<CR>
-"}}}
+let g:tagbar_left = 1
+" }}}
 
 " }}}
 
@@ -418,6 +513,9 @@ if !has('nvim')
     runtime! ftplugin/man.vim
     let g:ft_man_folding_enable = 0
     setlocal keywordprg=:Man
+else
+    setl keywordprg=Man
+    " g:man_default_sects="1,7,8,5"
 endif
 
 runtime! macros/matchit.vim
@@ -434,6 +532,17 @@ let g:loaded_logiPat = 1
 
 " Plugins: {{{ 2
 
+<<<<<<< HEAD
+=======
+" To every plugin I've never used before. Stop slowing me down.
+let g:loaded_vimballPlugin = 1
+let g:loaded_tutor_mode_plugin = 1
+let g:loaded_getsciptPlugin = 1
+let g:loaded_2html_plugin = 1
+let g:loaded_logiPat = 1
+" Let's see if this speeds things up because I've never used most of them
+" }}}
+>>>>>>> nt
 
 " FZF: {{{ 2
 
@@ -454,7 +563,7 @@ let g:fzf_action = {
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
 
-" FZF Colors: {{{ 4
+" FZF Colors: {{{ 3
 " Customize FZF colors to match your color scheme
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
@@ -472,7 +581,10 @@ let g:fzf_colors =
   \ 'header':  ['fg', 'Comment'] }
 " }}}
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> nt
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 
 if executable('ag')
@@ -482,7 +594,12 @@ else
   let &grepprg = 'grep -rn $* *'
 endif
 
+<<<<<<< HEAD
 command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
+=======
+" FZF_VIM: {{{ 2
+" If you're willing to consider it separate than the FZF plugin
+>>>>>>> nt
 
 " Insert mode completion:
 " the spell checker already implements something like this but that's why we allow remapping and not everyoone {termux} has that file
@@ -501,8 +618,8 @@ let g:fzf_tags_command = 'ctags -R' "
 " [Commands] --expect expression for directly executing the command
 let g:fzf_commands_expect = 'alt-enter,ctrl-x'
 
-" Ag:
-"   :Ag  - Start fzf with hidden preview window that can be enabled with '?' key
+" Ag: {{{ 3
+" :Ag  - Start fzf with hidden preview window that can be enabled with '?' key
 " :Ag! - Start fzf in fullscreen and display the preview window above
 command! -bang -nargs=* Ag
     \ call fzf#vim#ag(<q-args>,
@@ -529,6 +646,9 @@ inoremap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
     \ 'options': '--ansi --delimiter : --nth 3..',
     \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }}))
 
+" }}}
+
+" FZF_statusline: {{{
 " Custom fzf statusline
 function! s:fzf_statusline()
     " Override statusline as you like
@@ -542,6 +662,7 @@ augroup fzfstatusline
     autocmd!
     autocmd! User FzfStatusLine call <SID>fzf_statusline()
 augroup END
+<<<<<<< HEAD
 
 " }}}
 
@@ -560,6 +681,14 @@ endif
 
 runtime! macros/matchit.vim
 set matchpairs+=<:>
+=======
+
+" }}}
+
+" }}}
+
+" Plugins: {{{ 2
+>>>>>>> nt
 
 " NERDTree: {{{ 3
 " Let's see if this works properly as a group
@@ -576,6 +705,7 @@ augroup nerd_loader
         \| q
         \| endif
 augroup END
+
 let g:NERDTreeDirArrows = 1
 let g:NERDTreeWinPos = 'right'
 let g:NERDTreeShowHidden = 1
@@ -611,7 +741,13 @@ endif
 " }}}
 
 " Vim_Startify: {{{ 3
+<<<<<<< HEAD
 " What shows up in the startify list?
+=======
+
+" What shows up in the startify list?
+
+>>>>>>> nt
 function! s:list_commits()
     let git = 'git -C ~/projects/viconf/'
     let commits = systemlist(git .' log --oneline | head -n10')
@@ -627,6 +763,7 @@ let g:startify_lists = [
 \ ]
 
 let g:startify_session_sort = 1
+<<<<<<< HEAD
 let g:startify_update_oldfiles = 1
 
 " Setup devicons
@@ -652,6 +789,30 @@ let g:startify_skiplist = [
     " afile cfile sfile vars
     " \ '~/.local/share/nvim/plugged/' .*/doc',
     " \ ]
+=======
+if has('gui_win32')
+    let g:startify_session_dir = '$HOME\vimfiles\session'
+else
+    let g:startify_session_dir = '~/.vim/session'
+endif
+
+" Don't show these files
+
+let g:startify_skiplist = [
+        \ 'COMMIT_EDITMSG',
+        \ glob('plugged/*/doc'),
+        \ 'C:\Program Files\Vim\vim81\doc',
+        \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc',
+        \ ]
+
+let g:startify_lists = [
+      \ { 'type': 'files',     'header': ['   MRU']            },
+      \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
+      \ { 'type': 'sessions',  'header': ['   Sessions']       },
+      \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
+      \ { 'type': 'commands',  'header': ['   Commands']       },
+      \ ]
+>>>>>>> nt
 " }}}
 
 " UltiSnips: {{{ 3
@@ -671,12 +832,27 @@ let g:UltiSnipsEnableSnipMate = 1
 let g:UltiSnipsEditSplit = 'tabdo'
 " }}}
 
-" Gruvbox: {{{ 3
+" Colorscheme: {{{ 3
 colorscheme gruvbox
+<<<<<<< HEAD
 " can't do this because we have no let g:colors_name stmt
 if g:colors_name ==# 'gruvbox'      " ==# means match case
     let g:gruvbox_contrast_dark = 'hard'
 endif
+=======
+let g:gruvbox_contrast_dark = 'hard'
+hi NonText guifg=NONE guibg=NONE        " Massive performance difference
+" can't do this because we have no let g:colors_name stmt
+" if g:colors_name ==# 'gruvbox'      " ==# means match case
+    " let g:gruvbox_contrast_dark = 'hard'
+" endif
+" }}}
+
+" Language Client: {{{ 3
+let g:LanguageClient_serverCommands = {
+    \ 'python': [ 'pyls' ]
+    \ }
+>>>>>>> nt
 " }}}
 
 " Jedi: {{{ 3
@@ -695,24 +871,24 @@ let g:jedi#force_py_version = 3
 let g:deoplete#sources#jedi#enable_typeinfo = 0
 " }}}
 
+<<<<<<< HEAD
 " Nord: {{{ 3
 " colorscheme nord
 " }}}
 
+=======
+>>>>>>> nt
 " }}}
 
 " Filetype Specific Options: {{{ 2
-" For setting the python so that Deoplete can use it.
 
 augroup ftpersonal
-
 " IPython:
     au BufRead,BufNewFile *.ipy setlocal filetype=python
 " Web Dev:
     au filetype javascript,html,css setlocal shiftwidth=2 softtabstop=2 tabstop=2
 " Markdown:
     autocmd BufNewFile,BufFilePre,BufRead *.md setlocal filetype=markdown
-
 augroup end
 " }}}
 
@@ -775,12 +951,14 @@ endfunction
 " }}}
 
 " Helptabs: {{{ 3
+
 function! s:helptab()
     if &buftype ==# 'help'
         wincmd T
         nnoremap <buffer> q :q<cr>
     endif
 endfunction
+<<<<<<< HEAD
 " keeps erroring idk why.
 " autocmd vimrc BufEnter *.txt call s:helptab()
 " Let's try this.
@@ -789,6 +967,14 @@ command! -nargs=1 Help call <SID>helptab()
 " }}}
 
 " Autosave: {{{ 3
+=======
+command! Help call <SID>helptab()
+
+" }}}
+
+" Autosave: {{{ 3
+
+>>>>>>> nt
 function! s:autosave(enable)
   augroup autosave
     autocmd!
@@ -805,8 +991,12 @@ command! -bang Autosave call s:autosave(<bang>1)
 
 " }}}
 
+<<<<<<< HEAD
 " Highlighting: {{{ 3
 " Whats the syntax group under my cursor?
+=======
+" HL: {{{ 3
+>>>>>>> nt
 function! s:hl()
   " echo synIDattr(synID(line('.'), col('.'), 0), 'name')
   echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
@@ -827,7 +1017,11 @@ command! DiffOrig vert new | set buftype=nofile | read ++edit # | 0d_
 " }}}
 
 " EditFileComplete: {{{
+<<<<<<< HEAD
 " From he map line 1287
+=======
+" From he map line 1287. As this is a predefined function I suppose be careful?
+>>>>>>> nt
 com! -nargs=1 -bang -complete=customlist,EditFileComplete
        \ EditFile edit<bang> <args>
 fun! EditFileComplete(A,L,P)

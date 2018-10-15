@@ -1,17 +1,24 @@
 " Markdown ftplugin
 " Maintainer: Faris Chugthai
 
+<<<<<<< HEAD
+=======
+" TODO: Fix the way that '_' is highlighted in md
+" So that would be implemented in after/syntax/markdown.vim not here
+>>>>>>> nt
 
 " Enable spellchecking.
 setlocal spell
 
-" Automatically wrap at 79 characters after whitespace
-setlocal textwidth=79
+" Automatically wrap at 80 characters after whitespace
+setlocal textwidth=80
 
 setlocal colorcolumn=80
 
 " Fix tabs so that we can have ordered lists render properly
 setlocal shiftwidth=2 softtabstop=2 tabstop=2
 
-" Got rid of the guards at the top and bottom because we actually
-" need both my ftplugin and the runtime builtin to execute
+" We shouldn't need to be disabling markdown linters but if we do, make
+" markdownlint one of the ones that's whitelisted
+" https://github.com/DavidAnson/markdownlint
+" In that repo they have a doc called rules.md and we could configure that as necessary when we get tehre.

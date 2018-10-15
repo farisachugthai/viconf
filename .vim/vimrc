@@ -46,6 +46,7 @@ Plug 'w0rp/ale'
 Plug 'morhetz/gruvbox'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'ryanoasis/vim-devicons'
+<<<<<<< HEAD
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',
     \ 'do': 'bash install.sh' }
  Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
@@ -53,6 +54,20 @@ Plug 'vim-airline/vim-airline'
 Plug 'mhinz/vim-startify'
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'hzchirs/vim-material'
+=======
+"Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',
+"    \ 'do': 'bash install.sh' }
+" Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+Plug 'vim-airline/vim-airline'
+Plug 'mhinz/vim-startify'
+" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" let g:deoplete#enable_at_startup = 1
+" if !has('nvim')
+    " Plug 'roxma/nvim-yarp'
+    " Plug 'roxma/vim-hug-neovim-rpc'
+" endif
+Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
+>>>>>>> nt
 
 call plug#end()
 " }}}
@@ -651,9 +666,14 @@ let g:UltiSnipsEditSplit = 'vertical'
 " }}}
 
 " Colorscheme: {{{ 3
+<<<<<<< HEAD
 colorscheme vim-material
 " colorscheme gruvbox
 " let g:gruvbox_contrast_dark = 'hard'
+=======
+colorscheme gruvbox
+let g:gruvbox_contrast_dark = 'hard'
+>>>>>>> nt
 " }}}
 
 " Language Client: {{{ 3

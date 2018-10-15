@@ -27,6 +27,7 @@ snippet echo "Echo a statement"
 echo -e ${VISUAL:$1}
 endsnippet
 
+<<<<<<< HEAD
 snippet read "Read input from a user" b
 read ${VISUAL:$1}
 endsnippet
@@ -179,6 +180,165 @@ snippet escape_codes "A gentle reminder of all bash escape sequences. Useful for
 # \] end a sequence of non-printing characters
 endsnippet
 
+=======
+snippet ec(ho)? "Test regex" r
+echo -e ${VISUAL:$1}
+endsnippet
+
+
+snippet read "Read input from a user" b
+read ${VISUAL:$1}
+endsnippet
+
+###########
+#  Loops  #
+###########
+
+snippet if "if ... then (if)" b
+if ${3:[[ ${2:condition} ]]}; then
+	${1:expression}
+${0:possibly good time to expand elseif or else}
+fi
+endsnippet
+
+snippet elif "elif .. (elif)"
+elif ${2:[[ ${1:condition} ]]}; then
+	${0:#statements}
+endsnippet
+
+snippet else "else statement" b
+else
+	${0}
+endsnippet
+
+###############
+#  functions  #
+###############
+
+snippet termuxdeps "Check for dependencies on termux" b
+checkdeps() {
+	printf "${BLUE}\n"
+	echo -e " [*] Updating apt cache...\n"
+	pkg up -y &> /dev/null
+	echo -e " [*] Checking for all required tools...\n"
+
+	for i in ${VISUAL:pkg}; do
+		if [ -e $PREFIX/bin/$i ]; then
+			echo -e " • $i is OK\n"
+		else
+			echo -e "Installing ${i}...\n"
+			pkg install -y $i || {
+				printf "$RED"
+				echo -e " ERROR: check your internet connection or apt\n Exiting...\n"
+				printf "$reset"
+				exit 1
+			}
+		fi
+	done
+}
+endsnippet
+
+# TODO: Get more params from ~/.config/curlrc. Possibly think about making a
+# local var for curl options so you only have to type once.
+snippet curl "cURL a file" b
+getfile() {
+	printf "$BLUE [*] Getting ${1:filename}...$reset\n\n"
+	curl --progress-bar -L --fail --retry 4 -o ${1:filename} ${2:url}
+	printf "\n${BLUE} [*] Getting SHA ... $reset\n\n"
+	curl --progress-bar -L --fail --retry 4 -O "${2:url}.sha256"
+}
+endsnippet
+
+# TODO: Theres a section in man bash that explains which error codes to use for
+# What situations. Review and change `exit 1`.
+snippet sha256 "Check a cURLed file with sha256" b
+checkintegrity() {
+	printf "\n${BLUE} [*] Checking integrity of file...\n"
+	echo -e " [*] The script will immediately terminate in case of integrity failure\n"
+	sha256sum -c ${1:filename}.sha256 || {
+		printf "$RED Error: Please rerun script and ensure target site is up.\n${RESET}"
+		exit 1
+	}
+}
+endsnippet
+
+snippet printline "Print a blue line"
+printline() {
+	printf "${BLUE}\n"
+	echo -e " #------------------------------------------#\n"
+}
+endsnippet
+
+snippet credits "Shameless plug" b
+printline
+echo -e "\nEnjoy your script! If any problems arise don't hesistate to create an \
+	issue, fork the repo, or reach out.\n"
+printline
+printline
+printf "\n${BLUE} [*] Email   :${YELLOW}    farischugthaigmail.com\n"
+printf "$BLUE [*] Website :${YELLOW}    https://www.github.com\farisachugthai\n"
+printline
+printf "$RESET"
+fi
+endsnippet
+
+###############
+#  Reference  #
+###############
+
+# Quite honestly more of a personal reference than something I expect to use.
+snippet colors "A list of the ANSI escape codes for colors in scripts."
+LIGHT_RED='\033[1;31m'
+YELLOW='\033[1;33m'
+LIGHT_BLUE='\033[1;34m'
+BLACK='\033[0;30m'
+DARK_GRAY='\033[1;30m'
+Blue='\033[0;34m'
+Green 0;32
+Light_Green 1;32
+Cyan 0;36
+Light_Cyan 1;36
+Red 0;31
+Purple 0;35
+Light_Purple 1;35
+Brown 0;33
+Light_Gray 0;37
+White 1;37
+RESET='\033[0m'
+endsnippet
+
+
+
+# TODO: Ensure this works the highlighting is really messed up.
+snippet escape_codes "A gentle reminder of all bash escape sequences. Useful for prompts." b
+# \a an ASCII bell character (07)
+# \d the date in "Weekday Month Date" format (e.g., "Tue May 26")
+# \e an ASCII escape character (033)
+# \h the hostname up to the first .
+# \H the hostname
+# \j the number of jobs currently managed by the shell
+# \l the basename of the shells terminal device name
+# \n newline
+# \r carriage return
+# \s the name of the shell, the basename of \$0 (the portion following the final slash)
+# \t the current time in 24-hour HH:MM:SS format
+# \T the current time in 12-hour HH:MM:SS format
+# \@ the current time in 12-hour am/pm format
+# \u the username of the current user
+# \v the version of bash (e.g., 2.00)
+# \V the release of bash, version + patchlevel (e.g., 2.00.0)
+# \w the current working directory
+# \W the basename of the current working directory
+# \! the history number of this command
+# \# the command number of this command
+# \$ if the effective UID is 0, a #, otherwise a $
+# \nnn the character corresponding to the octal number nnn
+# \\ a backslash
+# \[ begin a sequence of non-printing characters, which could be used to embed a terminal control sequence into the prompt
+# \] end a sequence of non-printing characters
+endsnippet
+
+>>>>>>> nt
 #######################################################################
 #                             # UltiSnips                             #
 #######################################################################

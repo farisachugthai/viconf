@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 " windows vimrc
 " Vim: set ft=vim:
 " For windows specifically
@@ -10,11 +11,19 @@ set verbose=1     " for debugging until things simmer down a little
 if exists('+shellslash')
     set shellslash
 endif
+=======
+" For windows specifically
+
+set linespace = 3
+set cmdheight = 3
+set verbose = 1
+>>>>>>> nt
 
 " Leave these commented out in case you wanna come back to them
 " set guifont=Inconsolata:h12
 " set guifont=Hack:h11:i:cANSI:qDRAFT
 " love that gvim can handle the italics
+<<<<<<< HEAD
 
 " Not needed currently but I could easily imagine it becoming helpful soon.
 " g:ale_windows_node_executable_path
@@ -32,3 +41,5 @@ endif
 "   scripts with other applications, like a text editor. Therefore, these
 "   scripts are executed with whatever executable is configured with this
 "   setting.
+=======
+>>>>>>> nt

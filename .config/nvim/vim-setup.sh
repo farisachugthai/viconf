@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Vim: set ff=unix:
+# Works well enough after having tested it on Ubuntu on WSL. Ran into some errors but that's likely a product of the fact that we can't interactively work with the user
 
 # Set up vim
 if ! [[ -d "$HOME/.vim/autoload" ]]; then
@@ -31,7 +33,7 @@ fi
 
 # Set up neovim
 
-if [[ -d "$HOME/.local/share/nvim/site/autoload" ]]; then
+if ! [[ -d "$HOME/.local/share/nvim/site/autoload" ]]; then
     mkdir -pv "$HOME/.local/share/nvim/site/autoload"
 fi
 
