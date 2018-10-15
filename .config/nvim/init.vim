@@ -21,13 +21,14 @@ let s:ubuntu = !exists('$PREFIX') && has('unix')  " syntax?
 " }}}
 
 " Vim Plug: {{{ 2
-
+" TODO: Can we have plug open in a tab not a vsplit?
 call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
 " Nothing happens if we open a directory to start nvim
+"TODO: one of the expressions in the loop needs to be prepended with silent
 augroup nerd_loader
   autocmd!
   autocmd VimEnter * silent! autocmd! FileExplorer
@@ -38,10 +39,12 @@ augroup nerd_loader
         \| endif
 augroup END
 
-Plug 'tpope/vim-commentary'     " hopefully more lightweight then nerdcom
 Plug 'davidhalter/jedi-vim', { 'for': ['python', 'python3'] }
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
 Plug 'w0rp/ale'
 Plug 'morhetz/gruvbox'
 Plug 'christoomey/vim-tmux-navigator'
@@ -67,7 +70,9 @@ if filereadable(s:local_vimrc)
     execute 'source' s:local_vimrc
 endif
 
-set inccommand=split                    " This alone is enough to never go back
+if has('nvim')
+    set inccommand=split                      " This alone is enough to never go back
+endif
 set termguicolors
 " }}}
 
@@ -138,11 +143,15 @@ set browsedir=buffer    " now changing directories starts from your current buf
 " }}}
 
 " Spell Checker: {{{ 3
-set encoding=UTF-8                       " Set default encoding
-scriptencoding UTF-8                     " Vint believes encoding should be done first
-set fileencoding=UTF-8
 
-set spelllang=en,en_us
+if &encoding ==# 'latin1' && has('gui_running')
+    set encoding=UTF-8                       " Set default encoding
+    scriptencoding UTF-8                     " Vint believes encoding should be done first
+    set fileencoding=UTF-8
+endif
+
+set spelllang=en
+
 if filereadable(glob('~/.config/nvim/spell/en_US.utf-8.add'))
     set spellfile=~/.config/nvim/spell/en_US.utf-8.add
 endif
@@ -151,22 +160,17 @@ if !has('nvim')
     set spelllang+=$VIMRUNTIME/spell/en.utf-8.spl
 endif
 
-
 set complete+=kspell                    " Autocomplete in insert mode
 set spellsuggest=5                      " Limit the number of suggestions from 'spell suggest'
 
 if filereadable('/usr/share/dict/words')
-    set dictionary+=/usr/share/dict/words
-    " Replace the default dictionary completion with fzf-based fuzzy completion
-    " Courtesy of fzf <3 vim
+    setlocal dictionary+=/usr/share/dict/words
+    " Dictionary completion with fzf-based fuzzy completion
     inoremap <expr> <c-x><c-k> fzf#vim#complete('cat /usr/share/dict/words')
+    setlocal dictionary+=/usr/share/dict/american-english
 endif
 
-if filereadable('/usr/share/dict/american-english')
-    set dictionary+=/usr/share/dict/american-english
-endif
-
-if filereadable(glob('~/.vim/autocorrect.vim'))
+if filereadable(glob('$HOME/.vim/autocorrect.vim'))
     source ~/.vim/autocorrect.vim
 endif
 " }}}
@@ -201,6 +205,7 @@ set wildmenu                            " Show list instead of just completing
 set wildmode=longest,list:longest       " Longest string or list alternatives
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 set fileignorecase                      " when searching for files don't use case
+set wildignorecase                      " on the cmdline ignore case in filenames
 " }}}
 
 " Other Global Options: {{{ 3
@@ -215,14 +220,17 @@ set ignorecase smartcase
 set infercase
 set autoindent smartindent              " :he options: set with smartindent
 set noswapfile
-set fileformat=unix
 
 if has('gui_running')
     set guifont='Fira\ Code\ Mono:11'
 endif
 
+" In case you wanted to see the guicursor default for gvim win64
+" set gcr=n-v-c:block-Cursor/lCursor,ve:ver35-Cursor,o:hor50-Cursor,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor,sm:block-Cursor-blinkwait175-blinkoff150-blinkon175
+
 set path+=**        			        " Recursively search dirs with :find
 set autochdir
+set fileformat=unix
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
 set diffopt=vertical,context:3          " vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
@@ -236,6 +244,8 @@ set backupdir=~/.vim/undodir
 set modeline
 
 set lazyredraw
+set ttimeout
+set ttimeoutlen=50
 " }}}
 
 " }}}
@@ -261,12 +271,13 @@ nnoremap <Leader>nt :NERDTreeToggle<CR>
 " Select all text quickly
 "nnoremap <Leader>a ggVG
 " use builtin :%y
-nnoremap <Leader>a :echo('No. Use :%y')<CR>
+" nnoremap <Leader>a :echo('No. Use :%y')<CR>
 
 " It should be easier to get help
 nnoremap <leader>he :helpgrep<space>
 " It should also be easier to edit the config. Bind similarly to tmux
-nnoremap <leader>ed :e $MYVIMRC<CR>
+" TODO: What is vims version of realpath()? Can't find it even w/ helpgrep
+nnoremap <leader>ed :tabe $MYVIMRC<CR>
 " Now reload it
 nnoremap <leader>re :so $MYVIMRC<CR>
 
@@ -274,7 +285,7 @@ nnoremap <leader>re :so $MYVIMRC<CR>
 inoremap jk <Esc>
 vnoremap jk <Esc>
 
-" Junegunn
+" Junegunn:
 nnoremap <leader>o o<esc>
 nnoremap <leader>O O<esc>
 xnoremap < <gv
@@ -287,9 +298,13 @@ nnoremap <leader>te :tabedit <c-r>=expand("%:p:h")<cr>
 " Switch CWD to the directory of the open buffer
 nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
 
+" I use this command constantly
+nnoremap <leader>sn :Snippets<cr>
 " }}}
 
-" Unimpaired: {{{ 3 Note that ]c and [c are also mapped by git-gutter
+" Unimpaired: {{{ 3
+" Note that ]c and [c are also mapped by git-gutter
+" In addition I've mapped ]a and [a for ALE nextwrap.
 nnoremap ]q :cnext<cr>
 nnoremap [q :cprev<cr>
 nnoremap ]Q :cfirst<cr>
@@ -298,12 +313,14 @@ nnoremap ]l :lnext<cr>
 nnoremap [l :lprev<cr>
 nnoremap ]L :lfirst<CR>
 nnoremap [L :llast<CR>
-"and for everything above still haven't gotten a clist or llist
 nnoremap ]b :bnext<cr>
 nnoremap [b :bprev<cr>
+nnoremap ]B :blast<cr>
+nnoremap [B :bfirst<cr>
 nnoremap ]t :tabn<cr>
 nnoremap [t :tabp<cr>
-" In addition I've mapped ]a and [a for Ale nextwrap.
+nnoremap ]T :tfirst<cr>
+nnoremap [T :tlast<cr>
 " }}}
 
 " Spell Checking: {{{ 3
@@ -312,10 +329,12 @@ nnoremap <Leader>sp :setlocal spell!<CR>
 nnoremap <Leader>s= :norm z=<CR>
 " }}}
 
-" Emacs: {{{ 3
-
+" RSI: {{{ 3
 " For Emacs-style editing on the command-line:
-" Would we consider doing this ininsert mode as well?
+" Would we consider doing this in insert mode as well?
+
+" sonuvabitch i just found out that this is basically rsi.vim
+
 " start of line
 cnoremap <C-A> <Home>
 " back one character
@@ -326,10 +345,10 @@ cnoremap <C-D> <Del>
 cnoremap <C-E> <End>
 " forward one character
 cnoremap <C-F> <Right>
-" recall newer command-line
-cnoremap <C-N> <Down>
+" recall newer command-line (but leave C-n and C-p)
+cnoremap <A-N> <Down>
 " recall previous (older) command-line
-cnoremap <C-P> <Up>
+cnoremap <A-P> <Up>
 " back one word
 cnoremap <Esc><C-B> <S-Left>
 " forward one word
@@ -360,11 +379,14 @@ nnoremap <A-l> <C-w>l
 nnoremap <Leader>l <Plug>(ale_toggle_buffer) <CR>
 nnoremap ]a <Plug>(ale_next_wrap)
 nnoremap [a <Plug>(ale_previous_wrap)
-" TODO:
+" TODO: Implement ALEInfoToFile.
 " `:ALEInfoToFile` will write the ALE runtime information to a given filename. The filename works just like |:w|.
+
 " This might be a good idea. * is already 'search for the cword' so let ALE
 " work in a similar manner right?
 nnoremap <Leader>* <Plug>(ale_go_to_reference)
+
+nnoremap <Leader>a :ALEInfo<cr>
 " }}}
 
 " Fugitive: {{{ 3
@@ -388,6 +410,30 @@ nnoremap <silent> <F8> :TagbarToggle<CR>
 "}}}
 
 " }}}
+
+" Macros Packages: {{{ 2
+
+if !has('nvim')
+    " Invoke while in Vim by putting your cursor over a word and run <Leader>k
+    runtime! ftplugin/man.vim
+    let g:ft_man_folding_enable = 0
+    setlocal keywordprg=:Man
+endif
+
+runtime! macros/matchit.vim
+"}}}
+
+" To every plugin I've never used before. Stop slowing me down.
+let g:loaded_vimballPlugin = 1
+let g:loaded_tutor_mode_plugin = 1
+let g:loaded_getsciptPlugin = 1
+let g:loaded_2html_plugin = 1
+let g:loaded_logiPat = 1
+" Let's see if this speeds things up because I've never used most of them
+" }}}
+
+" Plugins: {{{ 2
+
 
 " FZF: {{{ 2
 
@@ -565,9 +611,7 @@ endif
 " }}}
 
 " Vim_Startify: {{{ 3
-
 " What shows up in the startify list?
-
 function! s:list_commits()
     let git = 'git -C ~/projects/viconf/'
     let commits = systemlist(git .' log --oneline | head -n10')
@@ -582,9 +626,7 @@ let g:startify_lists = [
     \ { 'header': ['   Commits'],        'type': function('s:list_commits') },
 \ ]
 
-
 let g:startify_session_sort = 1
-
 let g:startify_update_oldfiles = 1
 
 " Setup devicons
@@ -599,25 +641,10 @@ function! s:filter_header(lines) abort
         \ 'repeat(" ", (&columns / 2) - (longest_line / 2)) . v:val')
     return centered_lines
 endfunction
+
 let g:startify_custom_header = s:filter_header(startify#fortune#cowsay())
 
-" Those single key mappings are so annoying
-autocmd User Startified for key in ['b','s','t','v'] |
-    \ execute 'nunmap <buffer>' key | endfor
-" Start startify on every new tab
-if has('nvim')
-  autocmd TabNewEntered * Startify
-else
-  autocmd VimEnter * let t:startify_new_tab = 1
-  autocmd BufEnter *
-        \ if !exists('t:startify_new_tab') && empty(expand('%')) |
-        \   let t:startify_new_tab = 1 |
-        \   Startify |
-        \ endif
-endif
-
 " Don't show these files
-
 let g:startify_skiplist = [
     \ 'COMMIT_EDITMSG',
     \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc', ]

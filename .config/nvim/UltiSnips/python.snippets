@@ -7,6 +7,15 @@ extends pandas
 #                             # Personal                              #
 #######################################################################
 
+snippet doctest "Doctest fun and ifmain block" b
+def _test():
+	import doctest
+	doctest.testmod()
+
+
+if __name__ == '__main__':
+	_test()
+endsnippet
 
 snippet timestamp "Produce a timestamp"
 datetime.date.isoformat(datetime.datetime.now())
@@ -58,11 +67,11 @@ Description: ${0}
 endsnippet
 
 snippet imp "import statement" b
-	import ${0:module}
+import ${0:module}
 endsnippet
 
 snippet from "from package import module" b
-	from ${1:package} import ${0:module}
+from ${1:package} import ${0:module}
 endsnippet
 
 snippet ifmain "ifmain. optionally adds in function call to argparser" b
@@ -151,7 +160,6 @@ finally:
 endsnippet
 
 snippet argparse "Function that utilizes argparse" b
-
 def _parse_arguments():
 	parser = argparse.ArgumentParser(description=${1:__doc__})
 	return parser.parse_args()
@@ -159,13 +167,11 @@ def _parse_arguments():
 endsnippet
 
 snippet argstrpos "Argparse positional argument for a string type." b
-
 	parser.add_argument( ${VISUAL:var}, type=${1:str}, help=${2:Feed me input.})
 
 endsnippet
 
 snippet argpath "Add a pathlike object" b
-
 	parser.add_argument(${1:-s}, ${2:--long}, dest= ${3: var},
 						type=${4:pathlib.Path}, help=${5:RTFM})
 endsnippet

@@ -46,19 +46,11 @@ Plug 'w0rp/ale'
 Plug 'morhetz/gruvbox'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'ryanoasis/vim-devicons'
-"Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',
-"    \ 'do': 'bash install.sh' }
-" Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',
+    \ 'do': 'bash install.sh' }
+ Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'vim-airline/vim-airline'
 Plug 'mhinz/vim-startify'
-" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-
-" if !has('nvim')
-    " Plug 'roxma/nvim-yarp'
-    " Plug 'roxma/vim-hug-neovim-rpc'
-" endif
-
-" let g:deoplete#enable_at_startup = 1
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'hzchirs/vim-material'
 

@@ -5,7 +5,7 @@
 
 " Options: {{{ 2
 
-" Pep Indenting
+" PEP Indenting
 setlocal tabstop=4 shiftwidth=4 expandtab softtabstop=4
 let b:python_highlight_all = 1
 
@@ -41,7 +41,7 @@ augroup END
 
 " Plugins: {{{ 2
 
-" Ale: {{{ 3
+" ALE: {{{ 3
 let b:ale_linters = [ 'pydocstyle', 'flake8', 'pycodestyle', 'yapf', 'pyls' ]
 let b:ale_linters_ignore = [ 'pylint', 'mypy' ]
 let b:ale_linters_explicit= 1
@@ -57,8 +57,10 @@ endif
 " Python Language Server: {{{ 3
 " useless err msg but better to have checks when we have behavior that's dependant on 3rd party tools
 " TODO: Check that lang client is loaded.
+" i think the syntax would be close to
+" `if loaded_{plugin} | logic | endif
 if executable('pyls')
-    let b:LanguageClient_serverCommands = { 'python': ['pyls'] }
+    let b:LanguageClient_serverCommands = ['pyls']
 else
     echo 'pyls is not installed!!!'
 endif

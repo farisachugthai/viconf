@@ -1,24 +1,85 @@
-# Markdown Snippets
+#######################################################################
+#                         # Markdown Snippets                         #
+#######################################################################
 
-# Personal
+################
+#  # Personal  #
+################
 
-# Template for cheatsheets
-
+# TODO: Make a python function. Visual var should be snip.fn
 snippet cheat "Cheatsheet template"
 # ${VISUAL}
-
-#Vim: set ft=markdown :
 
 ## personal
 
 ${0:your notes}
 
-## tldr
+${1:## cheat}
 
+${2:## tldr}
+
+${3:## eg}
+
+${4:## man}
 endsnippet
 
-# UltiSnips
-# ============
+#######################################################################
+#                             # SnipMate                              #
+#######################################################################
+
+
+snippet ```
+	\`\`\`${1}
+	${0:${VISUAL}}
+	\`\`\`
+endsnippet
+
+# Language.
+snippet ```l
+	\`\`\`${1:language}
+	${2:code}
+	\`\`\`
+endsnippet
+
+snippet **
+	**${1:bold}**
+endsnippet
+
+snippet __
+	__${1:bold}__
+endsnippet
+
+snippet <
+	<https://${1:url}>
+endsnippet
+
+# wait do these work?
+
+# snippet codeblock-short
+# 	{% codeblock %}
+# 	${0:code_snippet}
+# 	{% endcodeblock %}
+
+# snippet codeblock-full
+# 	{% codeblock ${1:title} lang:${2:language} ${3:URL} ${4:link_text} %}
+# 	${0:code_snippet}
+# 	{% endcodeblock %}
+
+# snippet gist-full
+# 	{% gist ${1:gist_id} ${0:filename} %}
+
+# snippet gist-short
+# 	{% gist ${0:gist_id} %}
+
+# snippet img
+# 	{% img ${1:class} ${2:URL} ${3:width} ${4:height} ${5:title_text} ${0:alt_text} %}
+
+# snippet youtube
+# 	{% youtube ${0:video_id} %}
+
+#######################################################################
+#                             # UltiSnips                             #
+#######################################################################
 
 global !p
 def create_table(snip):
@@ -102,7 +163,7 @@ snippet ilc "Inline Code" i
 \`$1\`$0
 endsnippet
 
-snippet cbl "Codeblock" b
+snippet code "Codeblock" b
 \`\`\`
 $1
 \`\`\`
