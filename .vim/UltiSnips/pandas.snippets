@@ -1,0 +1,207 @@
+snippet pd_desc
+$1.describe(include = "all")
+$1.info()
+$1.memory_user(deep = True)
+endsnippet
+
+snippet pd_dtypes
+$1.dtypes
+endsnippet
+
+snippet pd_csvread
+$1 = pd.read_csv($2, sep=None, engine='python', parse_dates=['fcast_date','timestamp'], dtype={'user_id': "category", 'stringa':'object'})
+endsnippet
+
+snippet pd_csvwrite
+$1.to_csv($2, index = False)
+endsnippet
+
+snippet pd_colremove
+$1.drop(['column1','column2'], 1, inplace = True)
+endsnippet
+
+snippet pd_colrename
+ds.rename(columns={'fcast_date_a': 'date_fcast'}, inplace=True)
+endsnippet
+
+snippet pd_unique
+ds["ifp_id"].unique()
+endsnippet
+
+snippet pd_rowconcat
+$1 = pd.concat([df_even, df_odd], axis=1)
+endsnippet
+
+snippet pd_colnewop
+ds["days_from_start"] = ds["fcast_date_a"] - ds["date_start"]
+endsnippet
+
+snippet pd_colnewop_apply
+def compute_euclidean_distance(row):
+	a = np.array([row['value_a'], row['value_b'], row['value_c']])
+	b = np.array([row['a'], row['b'], row['c']])
+	return distance.euclidean(a, b)
+
+ds['new_distance'] = ds.apply(compute_euclidean_distance, axis=1)
+endsnippet
+
+snippet pd_colgetdummies
+one_hot_cols = pd.get_dummies(ds['outcome'], prefix='outcome')
+ds.drop('outcome', axis=1, inplace = True)
+ds = ds.join(one_hot_cols)
+endsnippet
+
+snippet pd_rowremovecond
+c = c[c.n_opts != 5]
+endsnippet
+
+snippet pd_merge
+c = pd.merge(ex1,ex2,on='ifp_id')
+endsnippet
+
+snippet pd_traintestsplit
+train = dataset.sample(frac=0.95,random_state=200)
+test = dataset.drop(train.index)
+endsnippet
+
+snippet pd_nullvaluesummary
+ds.isna().sum()
+endsnippet
+
+
+snippet pd_drop_if_any_null
+$1.dropna(how='any')
+endsnippet
+
+snippet pd_drop_if_all_null
+$1.dropna(how='all')
+endsnippet
+
+snippet pd_drop_if_any_null_w_subset
+$1.dropna(subset = ['column', 'column2'], how='any')
+endsnippet
+
+snippet pd_drop_if_all_null_w_subset
+$1.dropna(subset = ['column', 'column2'], how='all')
+endsnippet
+
+snippet pd_count_column_values
+$1['columnname'].value_counts(dropna = False)
+endsnippet
+
+
+snippet pd_fillna
+$1['column_name'].fillna(value='not assigned', inplace = True)
+endsnippet
+
+snippet pd_duplicates_count
+$1.duplicated().sum()
+endsnippet
+
+snippet pd_duplicates_view
+$1.loc[users.duplicated(keep = 'last'), :]
+endsnippet
+
+snippet pd_duplicates_drop_first
+$1.drop_duplicates(keep = 'first')
+endsnippet
+
+snippet pd_duplicates_drop_last
+$1.drop_duplicates(keep = 'last')
+endsnippet
+
+snippet pd_duplicates_drop_w_subset
+$1.drop_duplicates(subset = ['age', 'zip_code'])
+endsnippet
+
+snippet pd_duplicates_count_w_subset
+$1.duplicated(subset['age','zip_code']).sum()
+endsnippet
+
+snippet pd_duplicates_count_for_column
+$1['column_name'].duplicated().sum()
+endsnippet
+
+
+snippet pd_filter_w_conditions
+$1[($1.column1 >= 200) & ($1.column2 == 'Drama')]
+endsnippet
+
+snippet pd_mean
+$1.field_name.mean()
+endsnippet
+
+snippet pd_median
+$1.field_name.median()
+endsnippet
+
+snippet pd_percentiles
+$1.field.quantile([0.1,0.15, .9])
+endsnippet
+
+snippet pd_sort_values
+$1.sort_values(['column_1'], ascending=False)
+endsnippet
+
+snippet pd_groupby_ex1
+$1.groupby('column_name').column2.mean()
+endsnippet
+
+snippet pd_groupby_ex2
+$1.groupby('column_name').column2.max()
+endsnippet
+
+snippet pd_groupby_ex3
+$1.groupby('continent').mean()
+endsnippet
+
+snippet pd_if_then
+df.loc[df.AAA >= 5,['BBB','CCC']] = 555;
+endsnippet
+
+snippet pd_if_then
+df.loc[df.AAA >= 5,['BBB','CCC']] = 555;
+endsnippet
+
+snippet pd_if_else
+df['logic'] = np.where(df['AAA'] > 5,'high','low'); df
+endsnippet
+
+
+# Map applies a translation to each element of a series
+snippet pd_map
+ds['new_column'] = ds.column.name.map({'female':0, 'male':1})
+endsnippet
+
+# Apply applies a function to each element of a series
+snippet pd_apply
+ds['new_column'] = train.col1.apply(len)
+endsnippet
+
+
+snippet pd_loc1
+ds.loc[0:4, ['column1','column2']]
+endsnippet
+
+# This is also a way to remove column and just keep those two
+snippet pd_loc2
+ds.loc[:, ['column1','column2']]
+endsnippet
+
+snippet pd_loc3
+ds.loc[0:4, 'column1':'column2']
+endsnippet
+
+# We can use iloc if we want to select data referring to numbers for
+# columns like
+snippet pd_iloc
+$1.iloc[:, 0:4]
+endsnippet
+
+snippet pd_type_change
+$1['column_name'] = $1['column_name'].astype('category', categories=['good', 'very good', 'excellent'])
+endsnippet
+
+
+
+
