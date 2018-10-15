@@ -31,9 +31,9 @@ Plug 'w0rp/ale'
 Plug 'morhetz/gruvbox'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'ryanoasis/vim-devicons'
-"Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',
-"    \ 'do': 'bash install.sh' }
-" Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',
+   \ 'do': 'bash install.sh' }
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'vim-airline/vim-airline'
 Plug 'mhinz/vim-startify'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -60,14 +60,15 @@ endif
 " }}}
 
 " TODO: Get the python dlls for windows
+" Oh snap man I think I figured out a nice workaround to set python3 host!
 " Python Executables: {{{ 2
 if has('python3')
 " if we have a virtual env start there
     if exists('$VIRTUAL_ENV')
         let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
 
-    elseif exists('$CONDA_PYTHON_EXE')
-        let g:python3_host_prog = $CONDA_PYTHON_EXE
+    elseif exists('$CONDA_EXE')
+        let g:python3_host_prog = $CONDA_EXE
 
     " otherwise break up termux and linux
     elseif exists('$PREFIX')
