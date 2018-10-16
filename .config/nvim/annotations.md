@@ -99,8 +99,4 @@ func! CompileRunGcc()
 endfunc
 ```
 
-<<<<<<< HEAD
 }}}
-=======
-}}}
->>>>>>> nt

@@ -1,11 +1,8 @@
 " Markdown ftplugin
 " Maintainer: Faris Chugthai
 
-<<<<<<< HEAD
-=======
 " TODO: Fix the way that '_' is highlighted in md
 " So that would be implemented in after/syntax/markdown.vim not here
->>>>>>> nt
 
 " Enable spellchecking.
 setlocal spell
@@ -21,4 +18,5 @@ setlocal shiftwidth=2 softtabstop=2 tabstop=2
 " We shouldn't need to be disabling markdown linters but if we do, make
 " markdownlint one of the ones that's whitelisted
 " https://github.com/DavidAnson/markdownlint
-" In that repo they have a doc called rules.md and we could configure that as necessary when we get tehre.
+" In that repo they have a doc called rules.md and we could configure that as
+" necessary when we get tehre.

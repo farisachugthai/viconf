@@ -378,3 +378,5 @@ kubeconfig
 linters
 linter
 VimL
+unstage
+uncommit
