@@ -1,5 +1,20 @@
 # htmldjango
 
+# From the docs on using Vim and Django
+# Vim 7.1 or newer includes support for  "htmldjango" documents out of the box. With {{{filetype on}}} on your {{{~/.vimrc}}} configuration file, vim will automatically tell apart "htmldjango" documents from regular html ones. Just make sure that at least one of the first 10 lines in your html document matches the following regex from the start:
+
+# {{{
+# {%\s*\(extends\|block\|load\)\>\|{#\s\+
+# }}}
+
+# If you are not familiar with regexes, these are the possible options:
+
+# {{{
+# {% extends
+# {% block
+# {% load
+# {#
+
 extends html
 
 # Generic Tags

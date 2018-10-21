@@ -38,36 +38,44 @@ call plug#begin('~/.vim/plugged')
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
+" Nothing happens if we open a directory to start nvim
+"TODO: one of the expressions in the loop needs to be prepended with silent
+augroup nerd_loader
+  autocmd!
+  autocmd VimEnter * silent! autocmd! FileExplorer
+  autocmd BufEnter,BufNew *
+        \  if isdirectory(expand('<amatch>'))
+        \|   call plug#load('nerdtree')
+        \|   execute 'autocmd! nerd_loader'
+        \| endif
+augroup END
 Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
 Plug 'davidhalter/jedi-vim', { 'for': ['python', 'python3'] }
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
 Plug 'w0rp/ale'
 Plug 'morhetz/gruvbox'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'ryanoasis/vim-devicons'
-<<<<<<< HEAD
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',
     \ 'do': 'bash install.sh' }
- Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'vim-airline/vim-airline'
 Plug 'mhinz/vim-startify'
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
-Plug 'hzchirs/vim-material'
-=======
-"Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',
-"    \ 'do': 'bash install.sh' }
-" Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-Plug 'vim-airline/vim-airline'
-Plug 'mhinz/vim-startify'
-" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-" let g:deoplete#enable_at_startup = 1
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+let g:deoplete#enable_at_startup = 1
 " if !has('nvim')
     " Plug 'roxma/nvim-yarp'
     " Plug 'roxma/vim-hug-neovim-rpc'
 " endif
+Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3'] }
+Plug 'Shougo/neosnippet' | Plug 'Shougo/neosnippet-snippets'
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
->>>>>>> nt
+Plug 'godlygeek/tabular'
+Plug 'ryanoasis/vim-devicons'           " Keep at end!
 
 call plug#end()
 " }}}
@@ -106,12 +114,12 @@ if has('python3')
     " otherwise break up termux and linux
     elseif exists('$PREFIX')
         " and just use the system python
-        if executable('~/virtualenvs/neovim/bin/python3')
-            let g:python3_host_prog = '~/virtualenvs/neovim/bin/python3'
+        if executable('$PREFIX/bin/python')
+            let g:python3_host_prog = '$PREFIX/bin/python'
         endif
     else
-        if executable('~/miniconda3/envs/neovim_vscode/bin/python')
-            let g:python3_host_prog = '~/miniconda3/envs/neovim_vscode/bin/python'
+        if executable('/usr/bin/python')
+            let g:python3_host_prog = '/usr/bin/python'
         endif
     endif
 endif
@@ -272,6 +280,7 @@ set cmdheight=2
 set number
 set showmatch
 set ignorecase smartcase
+set infercase
 set autoindent smartindent              " :he options: set with smartindent
 set noswapfile
 set fileformat=unix
@@ -306,6 +315,8 @@ set browsedir="buffer"          " which directory is used for the file browser
 " Mappings: {{{ 2
 
 " General Mappings: {{{ 3
+
+" Note that F7 is bound to pastetoggle so don't map it
 " Navigate windows more easily
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
@@ -318,20 +329,22 @@ nnoremap <A-Left> :tabprev<CR>
 
 " Simple way to speed up startup
 nnoremap <Leader>nt :NERDTreeToggle<CR>
-" Select all text quickly
-nnoremap <Leader>a ggVG
+
+nnoremap <Leader>a :echo('No. Use :%y')<CR>
+
 " It should be easier to get help
 nnoremap <leader>he :helpgrep<space>
 " It should also be easier to edit the config. Bind similarly to tmux
-nnoremap <leader>ed :e $MYVIMRC<CR>
+" TODO: What is vims version of realpath()? Can't find it even w/ helpgrep
+nnoremap <leader>ed :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 " Now reload it
-nnoremap <leader>re :so <afile><CR>
+nnoremap <leader>re :so $MYVIMRC<CR>
 
 " Escape conveniences
 inoremap jk <Esc>
 vnoremap jk <Esc>
 
-" Junegunn
+" Junegunn:
 nnoremap <leader>o o<esc>
 nnoremap <leader>O O<esc>
 xnoremap < <gv
@@ -340,13 +353,17 @@ xnoremap > >gv
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
 nnoremap <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
-"
+
 " Switch CWD to the directory of the open buffer
 nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
 
+" I use this command constantly
+nnoremap <leader>sn :Snippets<cr>
 " }}}
 
 " Unimpaired: {{{ 3
+" Note that ]c and [c are also mapped by git-gutter
+" In addition I've mapped ]a and [a for ALE nextwrap.
 " Note that ]c and [c are mapped by git-gutter and ALE has ]a and [a
 nnoremap ]q :cnext<cr>
 nnoremap [q :cprev<cr>
@@ -358,9 +375,13 @@ nnoremap ]L :lfirst<CR>
 nnoremap [L :llast<CR>
 nnoremap ]b :bnext<cr>
 nnoremap [b :bprev<cr>
+nnoremap ]B :blast<cr>
+nnoremap [B :bfirst<cr>
 nnoremap ]t :tabn<cr>
 nnoremap [t :tabp<cr>
-
+nnoremap ]T :tfirst<cr>
+nnoremap [T :tlast<cr>
+" In addition I've mapped ]a and [a for Ale nextwrap.
 " }}}
 
 " Spell Checking: {{{ 3
@@ -369,8 +390,7 @@ nnoremap <Leader>sp :setlocal spell!<CR>
 nnoremap <Leader>s= :norm z=<CR>
 " }}}
 
-" Emacs: {{{ 3
-
+" RSI: {{{ 3
 " For Emacs-style editing on the command-line:
 " start of line
 cnoremap <C-A> <Home>
@@ -382,10 +402,10 @@ cnoremap <C-D> <Del>
 cnoremap <C-E> <End>
 " forward one character
 cnoremap <C-F> <Right>
-" recall newer command-line
-cnoremap <C-N> <Down>
+" recall newer command-line (but leave C-n and C-p)
+cnoremap <A-N> <Down>
 " recall previous (older) command-line
-cnoremap <C-P> <Up>
+cnoremap <A-P> <Up>
 " back one word
 cnoremap <Esc><C-B> <S-Left>
 " forward one word
@@ -394,7 +414,7 @@ cnoremap <Esc><C-F> <S-Right>
 
 " Terminal: {{{ 3
 " If running a terminal in Vim, go into Normal mode with Esc
-tnoremap <Esc> <C-W>N
+tnoremap <Esc> <C-\><C-n>
 " from he term. Rewrite for FZF
 tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
 " From :he terminal
@@ -416,9 +436,17 @@ nnoremap <A-l> <C-w>l
 nnoremap <Leader>l <Plug>(ale_toggle_buffer) <CR>
 nnoremap ]a <Plug>(ale_next_wrap)
 nnoremap [a <Plug>(ale_previous_wrap)
-" TODO:
+" TODO: Implement ALEInfoToFile.
 " `:ALEInfoToFile` will write the ALE runtime information to a given filename. The filename works just like |:w|.
 
+" This might be a good idea. * is already 'search for the cword' so let ALE
+" work in a similar manner right?
+nnoremap <Leader>* <Plug>(ale_go_to_reference)
+
+nnoremap <Leader>a :ALEInfo<cr>
+" This might be a good idea. * is already 'search for the cword' so let ALE
+" work in a similar manner right?
+nnoremap <Leader>* <Plug>(ale_go_to_reference)
 " }}}
 
 " Fugitive: {{{ 3
@@ -437,6 +465,15 @@ nnoremap <silent> <leader>gw :Gwrite<CR>
 nnoremap <silent> <leader>gW :Gwrite!<CR>
 " }}}
 
+" Python Language Server: {{{ 3
+" how do we turn on the check for a plugin again? is it
+" if loaded('Language_Client') or something?
+nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+
+" }}}
+
 " Tagbar: {{{
 nnoremap <silent> <F8> :TagbarToggle<CR>
 let g:tagbar_left = 1
@@ -444,29 +481,7 @@ let g:tagbar_left = 1
 
 " }}}
 
-" Macros Packages: {{{ 2
-
-if !has('nvim')
-    " Invoke while in Vim by putting your cursor over a word and run <Leader>k
-    runtime! ftplugin/man.vim
-    let g:ft_man_folding_enable = 0
-    setlocal keywordprg=:Man
-endif
-
-runtime! macros/matchit.vim
-
-" To every plugin I've never used before. Stop slowing me down.
-let g:loaded_vimballPlugin = 1
-let g:loaded_tutor_mode_plugin = 1
-let g:loaded_getsciptPlugin = 1
-let g:loaded_2html_plugin = 1
-let g:loaded_logiPat = 1
-" Let's see if this speeds things up because I've never used most of them
-" }}}
-
-" Plugins: {{{ 2
-
-" FZF: {{{ 3
+" FZF: {{{ 2
 
 if has('nvim') || has('gui_running')
   let $FZF_DEFAULT_OPTS .= ' --inline-info'
@@ -491,7 +506,7 @@ let g:fzf_action = {
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
 
-" FZF Colors: {{{ 4
+" FZF Colors: {{{ 3
 " Customize FZF colors to match your color scheme
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
@@ -508,6 +523,7 @@ let g:fzf_colors =
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
 " }}}
+
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 
 if executable('ag')
@@ -516,10 +532,12 @@ if executable('ag')
 else
   let &grepprg = 'grep -rn $* *'
 endif
+
 command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
+
 " }}}
 
-" FZF_VIM: {{{ 3
+" FZF_VIM: {{{ 2
 " If you're willing to consider it separate than the FZF plugin
 
 " Insert mode completion:
@@ -539,7 +557,7 @@ let g:fzf_tags_command = 'ctags -R' "
 " [Commands] --expect expression for directly executing the command
 let g:fzf_commands_expect = 'alt-enter,ctrl-x'
 
-" Ag:
+" Ag: {{{ 3
 " :Ag  - Start fzf with hidden preview window that can be enabled with '?' key
 " :Ag! - Start fzf in fullscreen and display the preview window above
 command! -bang -nargs=* Ag
@@ -567,6 +585,9 @@ inoremap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
     \ 'options': '--ansi --delimiter : --nth 3..',
     \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }}))
 
+" }}}
+
+" FZF_statusline: {{{ 3
 " Custom fzf statusline
 function! s:fzf_statusline()
     " Override statusline as you like
@@ -576,9 +597,42 @@ function! s:fzf_statusline()
     setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
 endfunction
 
-autocmd! User FzfStatusLine call <SID>fzf_statusline()
+augroup fzfstatusline
+    autocmd!
+    autocmd! User FzfStatusLine call <SID>fzf_statusline()
+augroup END
 
 " }}}
+
+" }}}
+
+" Macros and Plugins: {{{ 2
+
+" nvim automatically sources this
+if !has('nvim')
+    " Invoke while in Vim by putting your cursor over a word and run <Leader>k
+    runtime! ftplugin/man.vim
+    let g:ft_man_folding_enable = 0
+    setlocal keywordprg=Man
+else
+    setl keywordprg=Man
+    " g:man_default_sects="1,7,8,5"
+endif
+
+runtime! macros/matchit.vim
+set matchpairs+=<:>
+
+" To every plugin I've never used before. Stop slowing me down.
+let g:loaded_vimballPlugin = 1
+let g:loaded_tutor_mode_plugin = 1
+let g:loaded_getsciptPlugin = 1
+let g:loaded_2html_plugin = 1
+let g:loaded_logiPat = 1
+" Let's see if this speeds things up because I've never used most of them
+
+" }}}
+
+" Remaining Plugins: {{{ 2
 
 " NERDTree: {{{ 3
 " Let's see if this works properly as a group
@@ -595,6 +649,7 @@ augroup nerd_loader
         \| q
         \| endif
 augroup END
+
 let g:NERDTreeDirArrows = 1
 let g:NERDTreeWinPos = 'right'
 let g:NERDTreeShowHidden = 1
@@ -622,9 +677,62 @@ let g:webdevicons_enable = 1
 let g:webdevicons_enable_nerdtree = 1               " adding the flags to NERDTree
 let g:airline_powerline_fonts = 1
 " }}}
+" For startify
+let entry_format = "'   ['. index .']'. repeat(' ', (3 - strlen(index)))"
+
+if exists('*WebDevIconsGetFileTypeSymbol')  " support for vim-devicons
+    let entry_format .= ". WebDevIconsGetFileTypeSymbol(entry_path) .' '.  entry_path"
+else
+    let entry_format .= '. entry_path'
+endif
+
+" }}}
 
 " Vim_Startify: {{{ 3
+" What shows up in the startify list?
+
+function! s:list_commits()
+    let git = 'git -C ~/projects/viconf/'
+    let commits = systemlist(git .' log --oneline | head -n10')
+    let git = 'G'. git[1:]
+    return map(commits, '{"line": matchstr(v:val, "\\s\\zs.*"), "cmd": "'. git .' show ". matchstr(v:val, "^\\x\\+") }')
+endfunction
+
+let g:startify_lists = [
+    \ { 'header': ['   MRU'],            'type': 'files' },
+    \ { 'header': ['   MRU '. getcwd()], 'type': 'dir' },
+    \ { 'header': ['   Sessions'],       'type': 'sessions' },
+    \ { 'header': ['   Commits'],        'type': function('s:list_commits') },
+    \ { 'type': 'commands',  'header': ['   Commands']       },
+    \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
+\ ]
+
 let g:startify_session_sort = 1
+let g:startify_update_oldfiles = 1
+
+" Setup devicons
+function! StartifyEntryFormat()
+    return 'WebDevIconsGetFileTypeSymbol(absolute_path) ." ". entry_path'
+endfunction
+
+" Center the header and footer
+function! s:filter_header(lines) abort
+    let longest_line   = max(map(copy(a:lines), 'strwidth(v:val)'))
+    let centered_lines = map(copy(a:lines),
+        \ 'repeat(" ", (&columns / 2) - (longest_line / 2)) . v:val')
+    return centered_lines
+endfunction
+
+let g:startify_custom_header = s:filter_header(startify#fortune#cowsay())
+
+" Don't show these files
+let g:startify_skiplist = [
+    \ 'COMMIT_EDITMSG',
+    \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc', ]
+    " its explained why this won't. actually great explanation of those weird,
+    " afile cfile sfile vars
+    " \ '~/.local/share/nvim/plugged/' .*/doc',
+    " \ ]
 if has('gui_win32')
     let g:startify_session_dir = '$HOME\vimfiles\session'
 else
@@ -644,15 +752,8 @@ let g:startify_skiplist = [
         \ 'COMMIT_EDITMSG',
         \ glob('plugged/*/doc'),
         \ 'C:\Program Files\Vim\vim81\doc',
+        \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc',
         \ ]
-
-let g:startify_lists = [
-      \ { 'type': 'files',     'header': ['   MRU']            },
-      \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
-      \ { 'type': 'sessions',  'header': ['   Sessions']       },
-      \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
-      \ { 'type': 'commands',  'header': ['   Commands']       },
-      \ ]
 " }}}
 
 " UltiSnips: {{{ 3
@@ -660,20 +761,19 @@ let g:startify_lists = [
 let g:UltiSnipsSnippetDir = [ '~/.config/nvim/UltiSnips' ]
 let g:UltiSnipsJumpForwardTrigger='<Tab>'
 let g:UltiSnipsJumpBackwardTrigger='<S-Tab>'
-let g:UltiSnips_python_quoting_style = 'GOOGLE'
-let g:UltiSnipsEnableSnipMate = 0
-let g:UltiSnipsEditSplit = 'vertical'
+inoremap <C-Tab> * <Esc>:call UltiSnips#ListSnippets()<CR>
+let g:UltiSnips_python_style='sphinx'
+let g:UltiSnips_python_quoting_style = 'double'
+let g:UltiSnipsEnableSnipMate = 1
+let g:UltiSnipsEditSplit = 'tabdo'
 " }}}
 
 " Colorscheme: {{{ 3
-<<<<<<< HEAD
-colorscheme vim-material
-" colorscheme gruvbox
-" let g:gruvbox_contrast_dark = 'hard'
-=======
 colorscheme gruvbox
-let g:gruvbox_contrast_dark = 'hard'
->>>>>>> nt
+if g:colors_name ==# 'gruvbox'      " ==# means match case
+    let g:gruvbox_contrast_dark = 'hard'
+endif
+hi NonText guifg=NONE guibg=NONE        " Massive performance difference
 " }}}
 
 " Language Client: {{{ 3
@@ -691,6 +791,11 @@ let g:jedi#usages_command = '<leader>u'
 let g:jedi#show_call_signatures_delay = 100
 let g:jedi#smart_auto_mappings = 0
 let g:jedi#force_py_version = 3
+" }}}
+
+" Deoplete-Jedi: {{{ 3
+" speed things up
+let g:deoplete#sources#jedi#enable_typeinfo = 0
 " }}}
 
 " }}}
@@ -773,7 +878,7 @@ function! s:helptab()
         nnoremap <buffer> q :q<cr>
     endif
 endfunction
-command! Help call <SID>helptab()
+command! -nargs=1 Help call <SID>helptab()
 
 " }}}
 
@@ -796,11 +901,35 @@ command! -bang Autosave call s:autosave(<bang>1)
 " }}}
 
 " HL: {{{ 3
+" Whats the syntax group under my cursor?
 function! s:hl()
   " echo synIDattr(synID(line('.'), col('.'), 0), 'name')
   echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
 endfunction
 command! HL call <SID>hl()
+" }}}
+
+" *:DiffOrig* *diff-original-file* {{{ 3
+" Since 'diff' is a window-local option, it's possible to view the same buffer
+" in diff mode in one window and 'normal' in another window.  It is also
+" possible to view the changes you have made to a buffer since the file was
+" loaded.  Since Vim doesn't allow having two buffers for the same file, you
+" need another buffer.  This command is useful: >
+command! DiffOrig vert new | set buftype=nofile | read ++edit # | 0d_
+    \ | diffthis | wincmd p | diffthis
+" Use ':DiffOrig' to see the differences
+" between the current buffer and the file it was loaded from.
+
+" }}}
+
+" EditFileComplete: {{{ 3
+" From he map line 1287. As this is a predefined function I suppose be careful?
+com! -nargs=1 -bang -complete=customlist,EditFileComplete
+       \ EditFile edit<bang> <args>
+fun! EditFileComplete(A,L,P)
+    return split(globpath(&path, a:A), "\n")
+endfun
+
 " }}}
 
 " }}}

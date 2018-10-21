@@ -54,20 +54,22 @@ Plug 'davidhalter/jedi-vim', { 'for': ['python', 'python3'] }
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-unimpaired'
 Plug 'w0rp/ale'
 Plug 'morhetz/gruvbox'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',
-   \ 'do': 'bash install.sh' }
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'mhinz/vim-startify'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-let g:deoplete#enable_at_startup = 1
-Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3'] }
-Plug 'Shougo/neosnippet' | Plug 'Shougo/neosnippet-snippets'
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
+" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" let g:deoplete#enable_at_startup = 1
+" if !has('nvim')
+    " Plug 'roxma/nvim-yarp'
+    " Plug 'roxma/vim-hug-neovim-rpc'
+" endif
+" Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3'] }
+" Plug 'Shougo/neosnippet' | Plug 'Shougo/neosnippet-snippets'
 Plug 'godlygeek/tabular'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 
@@ -83,8 +85,15 @@ if filereadable(s:local_vimrc)
     execute 'source' s:local_vimrc
 endif
 
+" let s:winrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/winrc'
+" if call(is#windows)         " doubt this is the right syntax but we're getting close
+"     if filereadable(s:winrc)
+"         exe 'so' s:winrc
+"     endif
+" endif
+
 if has('nvim')
-    set inccommand=split                      " This alone is enough to never go back
+    set inccommand=split                    " This alone is enough to never go back
     set termguicolors
 endif
 " }}}
@@ -92,7 +101,7 @@ endif
 " Python Executables: {{{ 2
 
 " TODO: Determine OS then check if has('win32') || has('win64')
-" axtually as long as linux defines conda_exe were good!
+" actually as long as linux defines conda_exe were good!
 if has('python3')
 " if we have a virtual env start there
     if exists('$VIRTUAL_ENV')
@@ -104,12 +113,12 @@ if has('python3')
     " otherwise break up termux and linux
     elseif exists('$PREFIX')
         " and just use the system python
-        if executable("$PREFIX/bin/python")
-            let g:python3_host_prog = "$PREFIX/bin/python"
+        if executable('$PREFIX/bin/python')
+            let g:python3_host_prog = '$PREFIX/bin/python'
         endif
     else
-        if executable('~/miniconda3/envs/neovim_vscode/bin/python')
-            let g:python3_host_prog = '~/miniconda3/envs/neovim_vscode/bin/python'
+        if executable('/usr/bin/python')
+            let g:python3_host_prog = '/usr/bin/python'
         endif
     endif
 endif
@@ -151,8 +160,6 @@ endtry
 set hidden
 set splitbelow
 set splitright
-
-set browsedir=buffer    " now changing directories starts from your current buf
 " }}}
 
 " Spell Checker: {{{ 3
@@ -268,7 +275,7 @@ endif
 set backupdir=~/.vim/undodir
 set modeline
 
-set lazyredraw
+set browsedir="buffer"          " which directory is used for the file browser
 " }}}
 
 " }}}
@@ -297,7 +304,7 @@ nnoremap <Leader>a :echo('No. Use :%y')<CR>
 nnoremap <leader>he :helpgrep<space>
 " It should also be easier to edit the config. Bind similarly to tmux
 " TODO: What is vims version of realpath()? Can't find it even w/ helpgrep
-nnoremap <leader>ed :tabe "$HOME/projects/viconf/.config/nvim/init.vim"<CR>
+nnoremap <leader>ed :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 " Now reload it
 nnoremap <leader>re :so $MYVIMRC<CR>
 
@@ -432,16 +439,59 @@ nnoremap <silent> <leader>gW :Gwrite!<CR>
 " Python Language Server: {{{ 3
 " how do we turn on the check for a plugin again? is it
 " if loaded('Language_Client') or something?
-" nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-" nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-" nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
-"
+nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+
 " }}}
 
-" Tagbar: {{{
+" Tagbar: {{{ 3
 nnoremap <silent> <F8> :TagbarToggle<CR>
 let g:tagbar_left = 1
 " }}}
+
+" Airline: {{{ 3
+let g:airline#extensions#tabline#buffer_idx_mode = 1
+" originally was nmap and that mightve been better. markdown
+" headers would be perfect for leader 1
+nnoremap <leader>1 <Plug>AirlineSelectTab1
+nnoremap <leader>2 <Plug>AirlineSelectTab2
+nnoremap <leader>3 <Plug>AirlineSelectTab3
+nnoremap <leader>4 <Plug>AirlineSelectTab4
+nnoremap <leader>5 <Plug>AirlineSelectTab5
+nnoremap <leader>6 <Plug>AirlineSelectTab6
+nnoremap <leader>7 <Plug>AirlineSelectTab7
+nnoremap <leader>8 <Plug>AirlineSelectTab8
+nnoremap <leader>9 <Plug>AirlineSelectTab9
+nnoremap <leader>- <Plug>AirlineSelectPrevTab
+nnoremap <leader>+ <Plug>AirlineSelectNextTab
+" }}}
+
+" }}}
+
+" Macros and Plugins: {{{ 2
+
+" nvim automatically sources this
+if !has('nvim')
+    " Invoke while in Vim by putting your cursor over a word and run <Leader>k
+    runtime! ftplugin/man.vim
+    let g:ft_man_folding_enable = 0
+    setlocal keywordprg=Man
+else
+    setl keywordprg=Man
+    " g:man_default_sects="1,7,8,5"
+endif
+
+runtime! macros/matchit.vim
+set matchpairs+=<:>
+
+" To every plugin I've never used before. Stop slowing me down.
+let g:loaded_vimballPlugin = 1
+let g:loaded_tutor_mode_plugin = 1
+let g:loaded_getsciptPlugin = 1
+let g:loaded_2html_plugin = 1
+let g:loaded_logiPat = 1
+" Let's see if this speeds things up because I've never used most of them
 
 " }}}
 
@@ -450,6 +500,12 @@ let g:tagbar_left = 1
 if has('nvim') || has('gui_running')
   let $FZF_DEFAULT_OPTS .= ' --inline-info'
 endif
+
+augroup fzf
+autocmd! FileType fzf
+autocmd  FileType fzf set laststatus=0 noshowmode noruler
+      \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+augroup end
 
 " An action can be a reference to a function that processes selected lines
 function! s:build_quickfix_list(lines)
@@ -564,32 +620,6 @@ augroup END
 
 " }}}
 
-" Macros and Plugins: {{{ 2
-
-" nvim automatically sources this
-if !has('nvim')
-    " Invoke while in Vim by putting your cursor over a word and run <Leader>k
-    runtime! ftplugin/man.vim
-    let g:ft_man_folding_enable = 0
-    setlocal keywordprg=Man
-else
-    setl keywordprg=Man
-    " g:man_default_sects="1,7,8,5"
-endif
-
-runtime! macros/matchit.vim
-set matchpairs+=<:>
-
-" To every plugin I've never used before. Stop slowing me down.
-let g:loaded_vimballPlugin = 1
-let g:loaded_tutor_mode_plugin = 1
-let g:loaded_getsciptPlugin = 1
-let g:loaded_2html_plugin = 1
-let g:loaded_logiPat = 1
-" Let's see if this speeds things up because I've never used most of them
-
-" }}}
-
 " Remaining Plugins: {{{ 2
 
 " NERDTree: {{{ 3
@@ -631,6 +661,8 @@ let g:ale_lint_delay = 1000
 " }}}
 
 " Devicons: {{{ 3
+let g:webdevicons_enable = 1
+let g:webdevicons_enable_nerdtree = 1               " adding the flags to NERDTree
 " For startify
 let entry_format = "'   ['. index .']'. repeat(' ', (3 - strlen(index)))"
 
@@ -639,7 +671,6 @@ if exists('*WebDevIconsGetFileTypeSymbol')  " support for vim-devicons
 else
     let entry_format .= '. entry_path'
 endif
-
 " }}}
 
 " Vim_Startify: {{{ 3
@@ -692,9 +723,16 @@ if has('gui_win32')
 else
     let g:startify_session_dir = '~/.vim/session'
 endif
-
-" Don't show these files
-
+" TODO: Figure out how to set let g:startify_bookmarks = [ Contents of
+" NERDTreeBookmarks ]
+let g:startify_change_to_dir = 1
+let g:startify_fortune_use_unicode = 1
+let g:startify_update_oldfiles = 1
+let g:startify_session_persistence = 1
+" Configured correctly this could be a phenomenal way to store commands and
+" expressions on a per directory basis aka projects / workspaces!
+let g:startify_session_autoload = 1
+" Not 100% sure if the code below works but here's hoping!
 let g:startify_skiplist = [
         \ 'COMMIT_EDITMSG',
         \ glob('plugged/*/doc'),
@@ -704,13 +742,8 @@ let g:startify_skiplist = [
 " }}}
 
 " UltiSnips: {{{ 3
-let g:UltiSnipsSnippetDir = ['~/.config/nvim/UltiSnips']
-" don't do this. it doesn't allow for ultisnips to iterate in the way it needs
-" to and snippets entirely stop working
-" let g:UltiSnipsSnippetDirectories = ['~/.config/nvim/UltiSnips']
-" the 2 below aee the defaults yet list snippets doesn't work
-let g:UltiSnipsExpandTrigger='<Tab>'
-let g:UltiSnipsListSnippets='<C-Tab>'
+" TODO: Modify based on value of OS. Ugh. We're gonna start exporting this to python soon I swear.
+let g:UltiSnipsSnippetDir = [ '~/.config/nvim/UltiSnips' ]
 let g:UltiSnipsJumpForwardTrigger='<Tab>'
 let g:UltiSnipsJumpBackwardTrigger='<S-Tab>'
 inoremap <C-Tab> * <Esc>:call UltiSnips#ListSnippets()<CR>
@@ -745,9 +778,43 @@ let g:jedi#smart_auto_mappings = 0
 let g:jedi#force_py_version = 3
 " }}}
 
-" Deoplete-Jedi: {{{ 3
+" Deoplete_Jedi: {{{ 3
 " speed things up
 let g:deoplete#sources#jedi#enable_typeinfo = 0
+" }}}
+
+" Airline: {{{ 3
+let g:airline_powerline_fonts = 1
+let g:airline_highlighting_cache = 1
+let g:airline_skip_empty_sections = 1
+
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+
+" unicode symbols
+let g:airline_left_sep = '»'
+let g:airline_left_sep = '▶'
+let g:airline_right_sep = '«'
+let g:airline_right_sep = '◀'
+let g:airline_symbols.crypt = '🔒'
+let g:airline_symbols.linenr = '☰'
+let g:airline_symbols.linenr = '␊'
+let g:airline_symbols.linenr = '␤'
+let g:airline_symbols.linenr = '¶'
+let g:airline_symbols.maxlinenr = ''
+let g:airline_symbols.maxlinenr = '㏑'
+let g:airline_symbols.branch = '⎇'
+let g:airline_symbols.paste = 'ρ'
+let g:airline_symbols.paste = 'Þ'
+let g:airline_symbols.paste = '∥'
+let g:airline_symbols.spell = 'Ꞩ'
+let g:airline_symbols.notexists = 'Ɇ'
+let g:airline_symbols.whitespace = 'Ξ'
+
+let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
+
+let g:airline#extensions#tabline#enabled = 0
 " }}}
 
 " }}}
@@ -765,10 +832,9 @@ augroup end
 
 " }}}
 
-" Functions and Commands: {{{ 2
+" Functions: {{{ 2
 
 " Next few are from Junegunn so credit to him
-
 " Todo Function: {{{ 3
 function! s:todo() abort
     let entries = []
@@ -882,8 +948,6 @@ com! -nargs=1 -bang -complete=customlist,EditFileComplete
 fun! EditFileComplete(A,L,P)
     return split(globpath(&path, a:A), "\n")
 endfun
-
-" }}}
 
 " }}}
 

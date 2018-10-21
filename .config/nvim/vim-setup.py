@@ -3,7 +3,7 @@
 """Rewrite the basic Vim set up script using Python.
 
 Example:
-    Any explanation of why you find this necessary is  good.
+    Any explanation of why you find this necessary is good.
     In addition you can end a section with double colons::
 
         $ python exampleofrst.py
@@ -33,9 +33,17 @@ def check_plug_dir():
 
 
 def requests_download():
-    """Download vim-plug using requests."""
-    res = requests.get("github.com/urlyouneedtogetTODO")
+    """Download vim-plug using requests.
 
+    Quickly thrown together.
+
+    TODO:
+        Add a getter/setter style thing for a dir and os check.
+    """
+    res = requests.get("https://github.com/junegunn/vim-plug")
+    res.raise_for_status()
+    with open("~/.local/share/nvim/site/autoload/plug.vim", "xt") as f:
+        f.write(res.text)
 
 def curl_download():
     """Command to download vim-plug. Fall back for requests."""
@@ -43,7 +51,6 @@ def curl_download():
 
 
 if __name__ == "__main__":
-    # argparse? lol I'm always going to suggest it.
     if sys.argv[1] == '--help' or '-h' or '':
         usage()
 

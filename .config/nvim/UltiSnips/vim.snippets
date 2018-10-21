@@ -84,7 +84,7 @@ snippet if "if statement"
 endsnippet
 
 # TODO: Use rhis style of snippet a few timesandlet me know if ota better to put vosjal on the condktiln or the code.
-snippet elseif "elif by vim" b
+snippet elif "elif by vim" b
 	elseif ${VISUAL:1}
 		${0:body}
 endsnippet
@@ -168,7 +168,7 @@ snippet im
 endsnippet
 
 snippet exe
-	execute ${1}
+	execute('${VISUAL:1}')
 endsnippet
 
 # vim:ft=snippets:
