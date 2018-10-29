@@ -1,4 +1,5 @@
 " init.vim
+" neovim configuration
 " Vim: set verbose=1:
 
 " All: {{{ 1
@@ -59,17 +60,8 @@ Plug 'morhetz/gruvbox'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 Plug 'mhinz/vim-startify'
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
-" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-" let g:deoplete#enable_at_startup = 1
-" if !has('nvim')
-    " Plug 'roxma/nvim-yarp'
-    " Plug 'roxma/vim-hug-neovim-rpc'
-" endif
-" Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3'] }
-" Plug 'Shougo/neosnippet' | Plug 'Shougo/neosnippet-snippets'
 Plug 'godlygeek/tabular'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 
@@ -108,7 +100,7 @@ if has('python3')
         let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
 
     elseif exists('$CONDA_PYTHON_EXE')
-        let g:python3_host_prog = $CONDA_PYTHON_EXE
+        let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
 
     " otherwise break up termux and linux
     elseif exists('$PREFIX')
@@ -122,6 +114,7 @@ if has('python3')
         endif
     endif
 endif
+
 " }}}
 
 " Global Options: {{{ 2
@@ -181,7 +174,6 @@ endif
 if !has('nvim')
     set spelllang+=$VIMRUNTIME/spell/en.utf-8.spl
 endif
-
 
 set complete+=kspell                    " Autocomplete in insert mode
 set spellsuggest=5                      " Limit the number of suggestions from 'spell suggest'
@@ -251,10 +243,9 @@ set ignorecase smartcase
 set infercase
 set autoindent smartindent              " :he options: set with smartindent
 set noswapfile
-set fileformat=unix
 
 if has('gui_running')
-    set guifont=Fira_Code_Retina:h11:i:cANSI:qDRAFT
+    set guifont='Fira\ Code\ Mono:11'
 endif
 
 " In case you wanted to see the guicursor default for gvim win64
@@ -275,7 +266,7 @@ endif
 set backupdir=~/.vim/undodir
 set modeline
 
-set browsedir="buffer"          " which directory is used for the file browser
+set browsedir="buffer"                  " which directory is used for the file browser
 " }}}
 
 " }}}
@@ -305,6 +296,8 @@ nnoremap <leader>he :helpgrep<space>
 " It should also be easier to edit the config. Bind similarly to tmux
 " TODO: What is vims version of realpath()? Can't find it even w/ helpgrep
 nnoremap <leader>ed :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
+" It should also be easier to edit the config
+nnoremap <F9> :e ~/projects/viconf/.config/nvim/init.vim<CR>
 " Now reload it
 nnoremap <leader>re :so $MYVIMRC<CR>
 
@@ -415,9 +408,6 @@ nnoremap [a <Plug>(ale_previous_wrap)
 nnoremap <Leader>* <Plug>(ale_go_to_reference)
 
 nnoremap <Leader>a :ALEInfo<cr>
-" This might be a good idea. * is already 'search for the cword' so let ALE
-" work in a similar manner right?
-nnoremap <Leader>* <Plug>(ale_go_to_reference)
 " }}}
 
 " Fugitive: {{{ 3
@@ -437,12 +427,15 @@ nnoremap <silent> <leader>gW :Gwrite!<CR>
 " }}}
 
 " Python Language Server: {{{ 3
-" how do we turn on the check for a plugin again? is it
-" if loaded('Language_Client') or something?
-nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+function LC_maps()
+    if has_key(g:LanguageClient_serverCommands, &filetype)
+        nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<cr>
+        nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
+        nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+    endif
+endfunction
 
+autocmd FileType * call LC_maps()
 " }}}
 
 " Tagbar: {{{ 3
@@ -770,7 +763,6 @@ let g:LanguageClient_serverCommands = {
 " Jedi: {{{ 3
 " Isn't recognized as an ftplugin so probably needs to be in global conf
 let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces
-let g:jedi#completions_command = '<C-N>'
 let g:jedi#documentation_command = '<leader>h'
 let g:jedi#usages_command = '<leader>u'
 let g:jedi#show_call_signatures_delay = 100
