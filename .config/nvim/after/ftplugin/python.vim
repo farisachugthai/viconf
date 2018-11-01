@@ -18,7 +18,7 @@ setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 
 " also let's know where the line needs to end visually but not invoke the
 " linters to react.
-set colorcolumn=79
+setlocal colorcolumn=80,120
 " }}}
 
 " Autocommands: {{{ 2
@@ -35,24 +35,14 @@ augroup END
 
 " Plugins: {{{ 2
 
-" Jedi: {{{ 3
-let g:jedi#use_tabs_not_buffers = 1             " easy to maintain workspaces
-" let g:jedi#completions_command = '<C-N>'
-let g:jedi#documentation_command = '<leader>h'
-let g:jedi#usages_command = '<leader>u'
-let g:jedi#show_call_signatures_delay = 100     " wait 100ms instead of 500 to show CS
-let g:jedi#smart_auto_mappings = 0              " must be set
-let g:jedi#force_py_version = 3
-" }}}
 
 " ALE: {{{ 3
 " do i need to announce this to ALE or just pyls handle it?
 let b:ale_linters = ['flake8', 'pyls', 'pycodestyle', 'pydocstyle', 'yapf']
 let b:ale_linters_ignore = [ 'pylint', 'mypy' ]
 
-
-if isdirectory('$HOME/virtualenvs')
-    let g:ale_virtualenv_dir_names += 'virtualenvs'
+if isdirectory('~/virtualenvs')
+    let b:ale_virtualenv_dir_names += 'virtualenvs'
 endif
 " }}}
 

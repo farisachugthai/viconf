@@ -1,5 +1,9 @@
 " Markdown ftplugin
 " Maintainer: Faris Chugthai
+" TODO: Maybe come up with a maplocalleader or something and toggle syntax or
+" something
+" Fix the way that '_' is highlighted in md
+-
 
 " TODO: Fix the way that '_' is highlighted in md
 " So that would be implemented in after/syntax/markdown.vim not here

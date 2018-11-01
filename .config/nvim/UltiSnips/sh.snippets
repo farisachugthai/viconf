@@ -3,15 +3,25 @@
 # Your personal snippets
 # =======================
 
-snippet ifempty "If loop echoes help guide if no CLAs" b
+snippet which "Check if which is on the system and fall back to command otherwise." b
+_which() {
+	which "$1" 2>/dev/null || command -v "$1" 2>/dev/null
+}
+endsnippet
+
+
+
+
+snippet usage "If loop echoes help guide if no CLAs" b
 if [[ -z "$1" ]]; then
 	echo -e "Usage: $0 [options] commands"
 	exit 2
 fi
 endsnippet
 
+# Well done homie this works perfectly
 snippet #! "#!/usr/bin/env (!env)"
-`!p snip.rv = '#!/usr/bin/env ' + getShell() + "# Maintainer: Faris Chugthai \n" `
+`!p snip.rv = '#!/usr/bin/env ' + getShell() + "\n# Maintainer: Faris Chugthai \n" `
 # set -euo pipefail
 endsnippet
 
@@ -61,11 +71,18 @@ ${5:${6/(.+)/trap "/}${6:rm -f '$${1/.*\s//}'}${6/(.+)/" 0               # EXIT\
 
 endsnippet
 
-snippet case "case .. esac (case)"
-case ${1:word} in
-	${2:pattern} )
-		$0;;
-esac
+# jesus can we talk about the complete lack of order these loosp are in for a sec. hard af to navigate.
+
+
+#######################################################################
+#                                loops                                #
+#######################################################################
+
+
+snippet if "if ... then (if)"
+if ${2:[[ ${1:condition} ]]}; then
+	${0:#statements}
+fi
 endsnippet
 
 snippet elif "elif .. (elif)"
@@ -73,7 +90,17 @@ elif ${2:[[ ${1:condition} ]]}; then
 	${0:#statements}
 endsnippet
 
-snippet for "for ... done (for)"
+
+
+snippet case "case .. esac (case)"
+case ${1:word} in
+	${2:pattern} )
+		$0;;
+esac
+endsnippet
+
+
+snippet forc "for loop - C style" b
 for (( i = 0; i < ${1:10}; i++ )); do
 	${0:#statements}
 done
@@ -91,11 +118,6 @@ snippet here "here document (here)"
 ${1/['"`](.+)['"`]/$1/}
 endsnippet
 
-snippet if "if ... then (if)"
-if ${2:[[ ${1:condition} ]]}; then
-	${0:#statements}
-fi
-endsnippet
 
 snippet until "until ... (done)"
 until ${2:[[ ${1:condition} ]]}; do
@@ -109,4 +131,77 @@ while ${2:[[ ${1:condition} ]]}; do
 done
 endsnippet
 
+
+################
+#  # snipmate  #
+################
+# *sigh*
+
+snippet go "getopts"
+	while getopts '${1:o}' ${2:opts}
+	do
+		case $$2 in
+		${3:o0})
+			${0:#staments};;
+		esac
+	done
+endsnippet
+
+# Set SCRIPT_DIR variable to directory script is located.
+snippet dirname "get dir script is in"
+	SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+endsnippet
+
+snippet header "A full fledged header for your bash script."
+	__ScriptVersion="${1:version}"
+
+	#===  FUNCTION  ================================================================
+	#         NAME:  usage
+	#  DESCRIPTION:  Display usage information.
+	#===============================================================================
+	function usage ()
+	{
+		echo "Usage :  $${0:0} [options] [--]
+
+		Options:
+		-h|help       Display this message
+		-v|version    Display script version"
+
+	}    # ----------  end of function usage  ----------
+
+	#-----------------------------------------------------------------------
+	#  Handle command line arguments
+	#-----------------------------------------------------------------------
+
+	while getopts ":hv" opt
+	do
+		case $opt in
+
+		h|help     )  usage; exit 0   ;;
+
+		v|version  )  echo "$${0:0} -- Version $__ScriptVersion"; exit 0   ;;
+
+		* )  echo -e "\n  Option does not exist : $OPTARG\n"
+			usage; exit 1   ;;
+
+		esac    # --- end of case ---
+	done
+	shift $(($OPTIND-1))
+endsnippet
+
+snippet root
+	if [ \$(id -u) -ne 0 ]; then exec sudo \$0; fi
+endsnippet
+
+snippet fun-sh
+	${1:function_name}() {
+		${0:#function_body}
+	}
+endsnippet
+
+snippet fun
+	function ${1:function_name}() {
+		${0:#function_body}
+	}
+endsnippet
 # vim:ft=snippets:

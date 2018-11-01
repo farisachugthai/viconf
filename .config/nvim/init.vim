@@ -1,7 +1,6 @@
 " init.vim
 " Neovim configuration
 
-
 " All: {{{ 1
 
 " About: {{{ 2
@@ -60,16 +59,16 @@ if filereadable(s:local_vimrc)
     execute 'source' s:local_vimrc
 endif
 
-set inccommand=split                " This alone is enough to never go back
+set inccommand=split                    " This alone is enough to never go back
 set termguicolors
 " }}}
 
 " Python Executables: {{{ 2
 " Genuinely not sure where the best place to put this is; however,
-" it needs to be available for all filetypes and t should probably
+" it needs to be available for all file types and it should probably
 " be set relatively early.
 if has('python3')
-" if we have a venv start there
+" if we have a virtual env start there
     if exists('$VIRTUAL_ENV')
         let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
 
@@ -125,10 +124,18 @@ set splitright
 " }}}
 
 " Spell Checker: {{{ 3
-set encoding=UTF-8                      " Set default encoding
-scriptencoding UTF-8                    " Vint believes encoding should be done first
+set encoding=UTF-8                        " Set default encoding
+scriptencoding UTF-8                      " Vint believes encoding should be done first
 set fileencoding=UTF-8
 set spelllang=en,en_us
+
+if filereadable(glob('~/.config/nvim/spell/en_US.utf-8.add'))
+    set spellfile=~/.config/nvim/spell/en_US.utf-8.add
+endif
+
+if !has('nvim')
+    set spelllang+=$VIMRUNTIME/spell/en.utf-8.spl
+endif
 
 set complete+=kspell                    " Autocomplete in insert mode
 set spellsuggest=5                      " Limit the number of suggestions from 'spell suggest'
@@ -188,13 +195,14 @@ set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
 
 " Other Global Options: {{{ 3
 set tags+=./tags,./../tags,./*/tags     " usr_29
+set tags+=~/projects/tags               " consider generating a few large tag
+set tags+=~python/tags                  " files rather than recursive searches
 set mouse=a                             " Automatically enable mouse usage
 set cursorline
 set cmdheight=2
 set number
 set showmatch
-set ignorecase
-set smartcase
+set ignorecase smartcase
 set autoindent smartindent              " :he options: set with smartindent
 set noswapfile
 set fileformat=unix
@@ -203,13 +211,20 @@ if has('gui_running')
     set guifont='Fira\ Code\ Mono:11'
 endif
 
-set path+=**        			        " Make autocomplete for filenames work
+set path+=**        			        " Recursively search dirs with :find
 set autochdir
 set fileformat=unix
-set whichwrap+=<,>,h,l,[,]              " Give reasonable line wrapping behaviour
-set modeline
-set undofile
+set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
+set diffopt=vertical,context:3          " vertical spilt diffs. def cont is 6
+
+if has('persistent_undo')                " i think neovim always does
+    set undodir=~/.config/nvim/undodir
+    set undofile                        " keep an undo file
+endif
+
+set backupdir=~/.config/nvim/undodir
+set modeline
 " }}}
 
 " }}}
@@ -228,7 +243,7 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
-" Navigate tabs more easily
+" Navigate tabs easier
 nnoremap <A-Right> :tabnext<CR>
 nnoremap <A-Left> :tabprev<CR>
 
@@ -246,7 +261,7 @@ nnoremap [t :tabp<cr>
 nnoremap <Leader>nt :NERDTreeToggle<CR>
 " Select all text quickly
 nnoremap <Leader>a ggVG
-" f5 to run *.py. currently doesn't work or at least doesn't display anything
+" F5 to run *.py. Currently doesn't work or at least doesn't display anything
 inoremap <F5> <Esc>:w<CR>:!clear;python %
 " It should be easier to get help
 nnoremap <leader>he :helpgrep<space>
@@ -262,22 +277,21 @@ nnoremap <leader>O O<esc>
 xnoremap < <gv
 xnoremap > >gv
 
-" TODO:
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
-" map <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
+nnoremap <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
 "
 " Switch CWD to the directory of the open buffer
-" map <leader>cd :cd %:p:h<cr>:pwd<cr>
+nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
 
 " }}}
 
 " Spell Checking: {{{ 3
-" it has to wait to see if i'm gonna do s= instead of just s
-" and the delay is awful. sorry for changing one of my oldest mappings!
+" It has to wait to see if I'm going to do s= instead of just s
+" and the delay is awful. Sorry for changing one of my oldest mappings!
 nnoremap <Leader>sp :setlocal spell!<CR>
-" Based off the default value for spell suggest
-nnoremap <Leader>s= :norm z=<CR>
+" Based off the default value for spell suggest. Cannot end with <CR>
+nnoremap <Leader>s= :norm z=
 " }}}
 
 " Emacs: {{{ 3
@@ -305,8 +319,9 @@ cnoremap <Esc><C-F> <S-Right>
 " Terminal: {{{ 3
 " If running a terminal in Vim, go into Normal mode with Esc
 tnoremap <Esc> <C-W>N
-" from he term. rewrite for fzf
+" From he term. Rewrite for FZF
 tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
+" From :he terminal
 tnoremap <A-h> <C-\><C-N><C-w>h
 tnoremap <A-j> <C-\><C-N><C-w>j
 tnoremap <A-k> <C-\><C-N><C-w>k
@@ -331,24 +346,30 @@ nnoremap [a <Plug>(ale_previous_wrap)
 " }}}
 
 " Fugitive: {{{ 3
-nnoremap <silent> <leader>gs :Gstatus<CR>
-nnoremap <silent> <leader>gd :Gdiff<CR>
-nnoremap <silent> <leader>gc :Gcommit<CR>
 nnoremap <silent> <leader>gb :Gblame<CR>
+nnoremap <silent> <leader>gc :Gcommit<CR>
+nnoremap <silent> <leader>gd :Gdiff<CR>
 nnoremap <silent> <leader>ge :Gedit<CR>
 nnoremap <silent> <leader>gE :Gedit<space>
-nnoremap <silent> <leader>gr :Gread<CR>
-nnoremap <silent> <leader>gR :Gread<space>
-nnoremap <silent> <leader>gw :Gwrite<CR>
-nnoremap <silent> <leader>gW :Gwrite!<CR>
+nnoremap <silent> <leader>gl :Glog<CR>
 nnoremap <silent> <leader>gq :Gwq<CR>
 nnoremap <silent> <leader>gQ :Gwq!<CR>
+nnoremap <silent> <leader>gr :Gread<CR>
+nnoremap <silent> <leader>gR :Gread<space>
+nnoremap <silent> <leader>gs :Gstatus<CR>
+nnoremap <silent> <leader>gw :Gwrite<CR>
+nnoremap <silent> <leader>gW :Gwrite!<CR>
 " }}}
 
 " Python Language Server: {{{ 3
 " Hopefully not trampling all over jedi :(
 nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+" nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+" }}}
+
+" Tagbar: {{{ 3
+nnoremap <silent> <F8> :TagbarToggle<CR>
 " }}}
 
 " }}}
@@ -360,8 +381,8 @@ if !has('nvim')
     runtime! ftplugin/man.vim
     let g:ft_man_folding_enable = 0
     setlocal keywordprg=:Man
-    " why did i do the line below? why doesn't vim use it's own after dir
-    set runtimepath+='~/.config/nvim/after'
+else
+    setlocal keywordprg=man\ -a
 endif
 
 runtime! macros/matchit.vim
@@ -369,7 +390,7 @@ runtime! macros/matchit.vim
 " FZF: {{{ 3
 
 if has('nvim') || has('gui_running')
-  let $FZF_DEFAULT_OPTS = ' --inline-info'
+  let $FZF_DEFAULT_OPTS .= ' --inline-info'
 endif
 
 augroup fzf
@@ -392,7 +413,7 @@ let g:fzf_action = {
   \ 'ctrl-v': 'vsplit' }
 
 " FZF Colors: {{{ 4
-" Customize fzf colors to match your color scheme
+" Customize FZF colors to match your color scheme.
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
   \ 'bg':      ['bg', 'Normal'],
@@ -424,7 +445,8 @@ command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
 " If you're willing to consider it separate than the FZF plugin
 
 " Insert mode completion
-" the spell checker already implements something like this but that's why we allow remapping and not everyoone {termux} has that file
+" the spell checker already implements something like this but that's why we
+" allow remapping and not everyone {termux} has that file
 imap <c-x><c-k> <plug>(fzf-complete-word)
 imap <c-x><c-f> <plug>(fzf-complete-path)
 imap <c-x><c-j> <plug>(fzf-complete-file-ag)
@@ -450,18 +472,18 @@ let g:NERDTreeDirArrows = 1
 let g:NERDTreeWinPos = 'right'
 let g:NERDTreeShowHidden = 1
 let g:NERDTreeShowBookmarks = 1
-let g:NERDTreeNaturalSort = 1               " Sorted counts go 1, 2, 3..10,11. Default is 1, 10, 11...100...2
-let g:NERDTreeChDirMode = 2                 " change cwd every time NT root changes
+let g:NERDTreeNaturalSort = 1
+let g:NERDTreeChDirMode = 2
 let g:NERDTreeShowLineNumbers = 1
-let g:NERDTreeMouseMode = 2                 " Open dirs with 1 click files with 2
+let g:NERDTreeMouseMode = 2                         " Open dirs with 1 click files with 2
 let g:NERDTreeIgnore = ['\.pyc$', '\.pyo$', '__pycache__$', '\.git$']
-let g:NERDTreeRespectWildIgnore = 1         " yeah i meant those ones too
+let g:NERDTreeRespectWildIgnore = 1                 " yeah i meant those ones too
 " }}}
 
 " NERDCom: {{{ 3
-let g:NERDSpaceDelims = 1                   " can we give the code some room to breathe?
-let g:NERDDefaultAlign = 'left'             " Align line-wise comment delimiters flush left
-let g:NERDTrimTrailingWhitespace = 1        " Trim trailing whitespace when uncommenting
+let g:NERDSpaceDelims = 1                           " can we give the code some room to breathe?
+let g:NERDDefaultAlign = 'left'                     " Align line-wise comment delimiters flush left
+let g:NERDTrimTrailingWhitespace = 1                " Trim trailing whitespace when uncommenting
 " }}}
 
 " ALE: {{{ 3
@@ -484,7 +506,7 @@ let g:airline_powerline_fonts = 1
 let g:startify_session_sort = 1
 " }}}
 
-" Ultisnips: {{{ 3
+" UltiSnips: {{{ 3
 let g:UltiSnipsSnippetDir = [ '~/.config/nvim/UltiSnips' ]
 let g:UltiSnipsJumpForwardTrigger='<Tab>'
 let g:UltiSnipsJumpBackwardTrigger='<S-Tab>'
@@ -505,14 +527,30 @@ let g:gruvbox_contrast_dark = 'hard'
 " many checks as you feel like typing and then append them all to this dict
 
 " ooo but is the best way to do this by doing it all in buf local ftplugins?
-let g:LanguageClient_serverCommands = {
-    \ 'python': [ 'pyls' ]
-    \ }
+if executable('pyls')
+    let g:LanguageClient_serverCommands = {
+        \ 'python': [ 'pyls' ]
+        \ }
+endif
+
+let b:LanguageClient_autoStart = 1
+let b:LanguageClient_selectionUI = 'fzf'
+
+" }}}
+
+" Jedi: {{{ 3
+let g:jedi#use_tabs_not_buffers = 1             " easy to maintain workspaces
+" let g:jedi#completions_command = '<C-N>'
+let g:jedi#documentation_command = '<leader>h'
+let g:jedi#usages_command = '<leader>u'
+let g:jedi#show_call_signatures_delay = 100     " wait 100ms instead of 500 to show CS
+let g:jedi#smart_auto_mappings = 0              " must be set
+let g:jedi#force_py_version = 3
 " }}}
 
 " Neosnippets: {{{
 
-" Because I've found Ultisnips quite challenging to work with.
+" Because I've found UltiSnips quite challenging to work with.
 let g:neosnippet#snippets_directory = [ '~/.config/nvim/neosnippets', '~/.local/share/nvim/plugged/vim-snippets/snippets' ]
 
 " From the help pages:
