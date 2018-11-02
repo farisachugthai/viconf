@@ -115,14 +115,13 @@ if has('python3')
         endif
     endif
 endif
-
 " }}}
 
 " Global Options: {{{ 2
 
 " Leader_Viminfo: {{{ 3
 let g:mapleader = "\<Space>"
-let g:maplocalleader=','
+let g:maplocalleader = ','
 
 if !has('nvim')
     set viminfo='100,<200,s200,n$HOME/.vim/viminfo
@@ -354,9 +353,6 @@ nnoremap <Leader>s= :norm z=<CR>
 
 " RSI: {{{ 3
 " For Emacs-style editing on the command-line:
-" Would we consider doing this in insert mode as well?
-
-" sonuvabitch i just found out that this is basically rsi.vim
 " start of line
 cnoremap <C-A> <Home>
 " back one character
@@ -657,6 +653,8 @@ let g:ale_lint_delay = 1000
 " Devicons: {{{ 3
 let g:webdevicons_enable = 1
 let g:webdevicons_enable_nerdtree = 1               " adding the flags to NERDTree
+let g:airline_powerline_fonts = 1
+" }}}
 " For startify
 let entry_format = "'   ['. index .']'. repeat(' ', (3 - strlen(index)))"
 

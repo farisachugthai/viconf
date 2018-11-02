@@ -1,5 +1,6 @@
 " vimrc
-" Vim: set ft=vim:set verbose=1:
+" vim configuration
+" Vim: set verbose=1:
 
 " All: {{{ 1
 
@@ -54,27 +55,15 @@ Plug 'davidhalter/jedi-vim', { 'for': ['python', 'python3'] }
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-unimpaired'
 Plug 'w0rp/ale'
 Plug 'morhetz/gruvbox'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',
-    \ 'do': 'bash install.sh' }
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'vim-airline/vim-airline'
 Plug 'mhinz/vim-startify'
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-let g:deoplete#enable_at_startup = 1
-" if !has('nvim')
-    " Plug 'roxma/nvim-yarp'
-    " Plug 'roxma/vim-hug-neovim-rpc'
-" endif
-Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3'] }
-Plug 'Shougo/neosnippet' | Plug 'Shougo/neosnippet-snippets'
-Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'godlygeek/tabular'
+Plug 'vim-voom/voom'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 
 call plug#end()
@@ -103,13 +92,16 @@ endif
 " }}}
 
 " Python Executables: {{{ 2
+
+" TODO: Determine OS then check if has('win32') || has('win64')
+" actually as long as linux defines conda_exe were good!
 if has('python3')
 " if we have a virtual env start there
     if exists('$VIRTUAL_ENV')
         let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
 
     elseif exists('$CONDA_PYTHON_EXE')
-        let g:python3_host_prog = $CONDA_PYTHON_EXE
+        let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
 
     " otherwise break up termux and linux
     elseif exists('$PREFIX')
@@ -129,8 +121,6 @@ endif
 
 " Leader_Viminfo: {{{ 3
 let g:mapleader = "\<Space>"
-" So we can and should just put this in the main file.
-" All ftplugins have 1 unified <LocalLeader>
 let g:maplocalleader = ','
 
 if !has('nvim')
@@ -178,7 +168,6 @@ endif
 if !has('nvim')
     set spelllang+=$VIMRUNTIME/spell/en.utf-8.spl
 endif
-
 
 set complete+=kspell                    " Autocomplete in insert mode
 set spellsuggest=5                      " Limit the number of suggestions from 'spell suggest'
@@ -268,7 +257,6 @@ set wildmode=longest,list:longest       " Longest string or list alternatives
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 set fileignorecase                      " when searching for files don't use case
 set wildignorecase                      " on the cmdline ignore case in filenames
-
 " }}}
 
 " Other Global Options: {{{ 3
@@ -283,10 +271,9 @@ set ignorecase smartcase
 set infercase
 set autoindent smartindent              " :he options: set with smartindent
 set noswapfile
-set fileformat=unix
 
 if has('gui_running')
-    set guifont=Fira_Code_Retina:h11:i:cANSI:qDRAFT
+    set guifont='Fira\ Code\ Mono:11'
 endif
 
 " In case you wanted to see the guicursor default for gvim win64
@@ -297,7 +284,7 @@ set autochdir
 set fileformat=unix
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
-set diffopt=vertical,context:3          " vertical split diffs. def cont is 6
+set diffopt=vertical,context:3          " vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
 
 if has('persistent_undo')
     set undodir=~/.vim/undodir
@@ -306,8 +293,8 @@ endif
 
 set backupdir=~/.vim/undodir
 set modeline
-
-set browsedir="buffer"          " which directory is used for the file browser
+set lazyredraw
+set browsedir="buffer"                  " which directory is used for the file browser
 " }}}
 
 " }}}
@@ -337,6 +324,8 @@ nnoremap <leader>he :helpgrep<space>
 " It should also be easier to edit the config. Bind similarly to tmux
 " TODO: What is vims version of realpath()? Can't find it even w/ helpgrep
 nnoremap <leader>ed :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
+" It should also be easier to edit the config
+nnoremap <F9> :e ~/projects/viconf/.config/nvim/init.vim<CR>
 " Now reload it
 nnoremap <leader>re :so $MYVIMRC<CR>
 
@@ -352,7 +341,7 @@ xnoremap > >gv
 
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
-nnoremap <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
+nnoremap <leader>te :tabedit <c-r>=expand("%:p:h")<cr>
 
 " Switch CWD to the directory of the open buffer
 nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
@@ -444,9 +433,6 @@ nnoremap [a <Plug>(ale_previous_wrap)
 nnoremap <Leader>* <Plug>(ale_go_to_reference)
 
 nnoremap <Leader>a :ALEInfo<cr>
-" This might be a good idea. * is already 'search for the cword' so let ALE
-" work in a similar manner right?
-nnoremap <Leader>* <Plug>(ale_go_to_reference)
 " }}}
 
 " Fugitive: {{{ 3
@@ -466,18 +452,64 @@ nnoremap <silent> <leader>gW :Gwrite!<CR>
 " }}}
 
 " Python Language Server: {{{ 3
-" how do we turn on the check for a plugin again? is it
-" if loaded('Language_Client') or something?
-nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+function LC_maps()
+    if has_key(g:LanguageClient_serverCommands, &filetype)
+        nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<cr>
+        nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
+        nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+    endif
+endfunction
 
+autocmd FileType * call LC_maps()
 " }}}
 
-" Tagbar: {{{
+" Tagbar: {{{ 3
 nnoremap <silent> <F8> :TagbarToggle<CR>
 let g:tagbar_left = 1
 " }}}
+
+" Airline: {{{ 3
+let g:airline#extensions#tabline#buffer_idx_mode = 1
+" originally was nmap and that mightve been better. markdown
+" headers would be perfect for leader 1
+nnoremap <leader>1 <Plug>AirlineSelectTab1
+nnoremap <leader>2 <Plug>AirlineSelectTab2
+nnoremap <leader>3 <Plug>AirlineSelectTab3
+nnoremap <leader>4 <Plug>AirlineSelectTab4
+nnoremap <leader>5 <Plug>AirlineSelectTab5
+nnoremap <leader>6 <Plug>AirlineSelectTab6
+nnoremap <leader>7 <Plug>AirlineSelectTab7
+nnoremap <leader>8 <Plug>AirlineSelectTab8
+nnoremap <leader>9 <Plug>AirlineSelectTab9
+nnoremap <leader>- <Plug>AirlineSelectPrevTab
+nnoremap <leader>+ <Plug>AirlineSelectNextTab
+" }}}
+
+" }}}
+
+" Macros and Plugins: {{{ 2
+
+" nvim automatically sources this
+if !has('nvim')
+    " Invoke while in Vim by putting your cursor over a word and run <Leader>k
+    runtime! ftplugin/man.vim
+    let g:ft_man_folding_enable = 0
+    setlocal keywordprg=Man
+else
+    setl keywordprg=Man
+    " g:man_default_sects="1,7,8,5"
+endif
+
+runtime! macros/matchit.vim
+set matchpairs+=<:>
+
+" To every plugin I've never used before. Stop slowing me down.
+let g:loaded_vimballPlugin = 1
+let g:loaded_tutor_mode_plugin = 1
+let g:loaded_getsciptPlugin = 1
+let g:loaded_2html_plugin = 1
+let g:loaded_logiPat = 1
+" Let's see if this speeds things up because I've never used most of them
 
 " }}}
 
@@ -606,32 +638,6 @@ augroup END
 
 " }}}
 
-" Macros and Plugins: {{{ 2
-
-" nvim automatically sources this
-if !has('nvim')
-    " Invoke while in Vim by putting your cursor over a word and run <Leader>k
-    runtime! ftplugin/man.vim
-    let g:ft_man_folding_enable = 0
-    setlocal keywordprg=Man
-else
-    setl keywordprg=Man
-    " g:man_default_sects="1,7,8,5"
-endif
-
-runtime! macros/matchit.vim
-set matchpairs+=<:>
-
-" To every plugin I've never used before. Stop slowing me down.
-let g:loaded_vimballPlugin = 1
-let g:loaded_tutor_mode_plugin = 1
-let g:loaded_getsciptPlugin = 1
-let g:loaded_2html_plugin = 1
-let g:loaded_logiPat = 1
-" Let's see if this speeds things up because I've never used most of them
-
-" }}}
-
 " Remaining Plugins: {{{ 2
 
 " NERDTree: {{{ 3
@@ -685,7 +691,6 @@ if exists('*WebDevIconsGetFileTypeSymbol')  " support for vim-devicons
 else
     let entry_format .= '. entry_path'
 endif
-
 " }}}
 
 " Vim_Startify: {{{ 3
@@ -785,7 +790,6 @@ let g:LanguageClient_serverCommands = {
 " Jedi: {{{ 3
 " Isn't recognized as an ftplugin so probably needs to be in global conf
 let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces
-let g:jedi#completions_command = '<C-N>'
 let g:jedi#documentation_command = '<leader>h'
 let g:jedi#usages_command = '<leader>u'
 let g:jedi#show_call_signatures_delay = 100
@@ -793,9 +797,43 @@ let g:jedi#smart_auto_mappings = 0
 let g:jedi#force_py_version = 3
 " }}}
 
-" Deoplete-Jedi: {{{ 3
+" Deoplete_Jedi: {{{ 3
 " speed things up
 let g:deoplete#sources#jedi#enable_typeinfo = 0
+" }}}
+
+" Airline: {{{ 3
+let g:airline_powerline_fonts = 1
+let g:airline_highlighting_cache = 1
+let g:airline_skip_empty_sections = 1
+
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+
+" unicode symbols
+let g:airline_left_sep = '»'
+let g:airline_left_sep = '▶'
+let g:airline_right_sep = '«'
+let g:airline_right_sep = '◀'
+let g:airline_symbols.crypt = '🔒'
+let g:airline_symbols.linenr = '☰'
+let g:airline_symbols.linenr = '␊'
+let g:airline_symbols.linenr = '␤'
+let g:airline_symbols.linenr = '¶'
+let g:airline_symbols.maxlinenr = ''
+let g:airline_symbols.maxlinenr = '㏑'
+let g:airline_symbols.branch = '⎇'
+let g:airline_symbols.paste = 'ρ'
+let g:airline_symbols.paste = 'Þ'
+let g:airline_symbols.paste = '∥'
+let g:airline_symbols.spell = 'Ꞩ'
+let g:airline_symbols.notexists = 'Ɇ'
+let g:airline_symbols.whitespace = 'Ξ'
+
+let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
+
+let g:airline#extensions#tabline#enabled = 0
 " }}}
 
 " }}}
@@ -816,6 +854,7 @@ augroup end
 " Functions: {{{ 2
 
 " Next few are from Junegunn so credit to him
+
 " Todo Function: {{{ 3
 function! s:todo() abort
     let entries = []
@@ -876,6 +915,8 @@ function! s:helptab()
     if &buftype ==# 'help'
         wincmd T
         nnoremap <buffer> q :q<cr>
+    " need to make an else for if ft isn't help then open a help page with the
+    " first argument
     endif
 endfunction
 command! -nargs=1 Help call <SID>helptab()
