@@ -1,18 +1,11 @@
+ale-linters ~/.local/share/nvim/plugged/ale/ale_linters
 cheat /storage/emulated/0/Android/data/com.dropbox.android/files/u730416625/scratch/.cheat
 dotrepo ~/projects/dotfiles/unix
-jedi-docs ~/.local/share/nvim/plugged/jedi-vim/pythonx/jedi/docs/docs
-nvim ~/.config/nvim
 nvim-he /data/data/com.termux/files/usr/share/nvim/runtime/doc
 nvim-rtp /data/data/com.termux/files/usr/share/nvim/runtime
-nvim-windows /data/data/com.termux/files/usr/share/nvim/runtime/doc/windows.txt
 plugged ~/.local/share/nvim/plugged
 prefix /data/data/com.termux/files/usr
 py_tut ~/python/tutorials
-pyroot /data/data/com.termux/files/usr/lib/python3.6
-scripts /storage/emulated/0/Android/data/com.dropbox.android/files/u730416625/scratch/python/official-python-docs/examples/scripts
-synmd /data/data/com.termux/files/usr/share/nvim/runtime/syntax/markdown.vim
-usr-lib-pyls /data/data/com.termux/files/usr/lib/python3.6/site-packages/pyls
-vim ~/.vim
 viconf ~/projects/viconf/.config/nvim
 
 word-freq ~/projects/word-freq

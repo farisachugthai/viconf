@@ -22,7 +22,17 @@ if [[ -z "$1" ]]; then
 fi
 endsnippet
 
-snippet ec(ho) "Echo a statement" r
+snippet dirname "Save the dir the script is in" b
+if [[ -h ${VISUAL:"$source"} ]]; then
+	DIRNAME="$( cd -P "$( dirname ${VISUAL:"$source"} )" && pwd )""
+fi
+endsnippet
+
+snippet source "Var = bash source" b
+${VISUAL:source}="${BASH_SOURCE[0]}"
+endsnippet
+
+snippet echo "Echo a statement"
 echo -e ${VISUAL:$1}
 endsnippet
 
@@ -37,7 +47,7 @@ endsnippet
 snippet if "if ... then (if)" b
 if ${3:[[ ${2:condition} ]]}; then
 	${1:expression}
-${0:possibly good time to expand elseif or else}
+${0:possibly good time to expand elif or else}
 fi
 endsnippet
 
@@ -54,13 +64,21 @@ endsnippet
 ###########
 #  tests  #
 ###########
+
 snippet str0 "Test if a string is empty which in bash is equal to 0" b
 [[ -z ${0:VAR} ]]
 endsnippet
 
+# So many more TODO.
+
 ###############
 #  functions  #
 ###############
+
+# is this how you do mirrored vars?
+snippet source "Source a file if it exists" b
+[[ -f ${VISUAL:1} ]] && source $1 || echo "$1 can not be sourced."
+endsnippet
 
 snippet termuxdeps "Check for dependencies on termux" b
 checkdeps() {
@@ -154,7 +172,6 @@ White 1;37
 RESET='\033[0m'
 endsnippet
 
-# TODO: Ensure this works the highlighting is really messed up.
 snippet escape_codes "A gentle reminder of all bash escape sequences. Useful for prompts." b
 # \a an ASCII bell character (07)
 # \d the date in "Weekday Month Date" format (e.g., "Tue May 26")
@@ -185,7 +202,7 @@ endsnippet
 
 
 #######################################################################
-#                             # UltiSnips                             #
+#                             UltiSnips                               #
 #######################################################################
 
 global !p

@@ -63,6 +63,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'mhinz/vim-startify'
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'godlygeek/tabular'
+Plug 'vim-voom/voom'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 
 call plug#end()
@@ -265,7 +266,7 @@ endif
 
 set backupdir=~/.vim/undodir
 set modeline
-
+set lazyredraw
 set browsedir="buffer"                  " which directory is used for the file browser
 " }}}
 
@@ -827,6 +828,7 @@ augroup end
 " Functions: {{{ 2
 
 " Next few are from Junegunn so credit to him
+
 " Todo Function: {{{ 3
 function! s:todo() abort
     let entries = []
@@ -887,6 +889,8 @@ function! s:helptab()
     if &buftype ==# 'help'
         wincmd T
         nnoremap <buffer> q :q<cr>
+    " need to make an else for if ft isn't help then open a help page with the
+    " first argument
     endif
 endfunction
 command! -nargs=1 Help call <SID>helptab()
@@ -940,6 +944,8 @@ com! -nargs=1 -bang -complete=customlist,EditFileComplete
 fun! EditFileComplete(A,L,P)
     return split(globpath(&path, a:A), "\n")
 endfun
+
+" }}}
 
 " }}}
 

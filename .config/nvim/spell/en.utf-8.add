@@ -388,3 +388,6 @@ worktree
 Xresources
 rmdir
 neosnippets
+venv
+aff
+mkspell

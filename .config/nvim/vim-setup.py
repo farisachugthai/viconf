@@ -3,10 +3,7 @@
 """Rewrite the basic Vim set up script using Python.
 
 Example:
-    Any explanation of why you find this necessary is good.
-    In addition you can end a section with double colons (conventionally) this
-    should be something python. Otherwise specify the language.
-    TODO: How do we specify this properly?::
+    Any explanation of why you find this necessary is good.:: sh
 
         $ python exampleofrst.py
 
@@ -16,8 +13,15 @@ Attributes:
     immediately afterwards if possible
 
 TODO:
-    - Continue bringing this up to google style docstring conventions.
-    - Explore ``sphinx.ext.todo`` extension
+    - Continue bringing this up to numpy style docstring conventions.
+    - Explore ``sphinx.ext.todo`` extension.
+    - IPython extension will be necessary.
+    - Napoleon is used for testing numpy style docstrings.
+    - Either import or append a dirlinker.
+        - Newbuntu has restore_dotfiles and 00*.ipy. Forget what its called.
+    - Show usage instructions
+    - Make a package manager class. It's init may involve all platform specific
+    tests. I think that's a good way to handle things?
 """
 import os
 import subprocess
@@ -43,6 +47,10 @@ def check_plug_dir(plugd):
     """Check if the directory vim-plug is downloaded to exists.
 
     If not, create it.
+
+    TODO:
+        Figure out if TODO or params should go first haha.
+        Then determine if this docstring is correct. Run through pydocstyle.
 
     :param: plugd
     :type: str
@@ -108,20 +116,20 @@ def pip_install():
     Welllll. That's probably too forgiving. You could add a sys.version_info
     check (or platform.python_version_tuple) to see if they're using 3.7
     so you can add check=True to the arguments.
+
+    TODO:
+        Give this function a :param: pkgs.
+        Make it an argument to the script maybe? If you wanna get fancy with
+        argparse, allow a file to be specified and install the packages listed.
     """
+    cmd = [
+            "pip", "install", "-U", "pip", "neovim",
+            "python-language-server[all]", "flake8", "rstchecker", "ipython"
+        ],
     if sys.version_info > (3, 7):
-        subprocess.run([
-            "pip", "install", "-U", "pip", "neovim",
-            "python-language-server[all]"
-        ],
-                       capture_output=True,
-                       check=True)
+        subprocess.run(cmd, capture_output=True, check=True)
     else:
-        subprocess.run([
-            "pip", "install", "-U", "pip", "neovim",
-            "python-language-server[all]"
-        ],
-                       capture_output=True)
+        subprocess.run(cmd, capture_output=True)
 
 
 if __name__ == "__main__":
@@ -152,16 +160,13 @@ if __name__ == "__main__":
     else:
         requests_download()
 
-    # Alright so now this module downloads vim-plug on a Linux machine.
-    # TODO: Need to import subprocess and start running platform dependant code
-    # should use result from os.uname() again. After evaluation do something
-    # like LINUX=1 and if LINUX && platform.archeticture == "amd64": # to
-    # prevent false positives from termux,
-    # sudo apt-get install vim-gtk3. Is neovim in the ubuntu 18.04 repos?
-    # Ugh this is getting so specific.
-
+    # could also have done platform.machine. *shrugs*
     if uname.machine == 'aarch64':
         termux_packages()
-    # TODO: Every other machine you own haha.
 
+    # TODO: Unfortunately even something as simple as a bare pip install needs
+    # a todo. Check if we aren't using conda. By checking env vars? Or
+    # is it best to do::
+    # conda_check = subprocess.run(["command", "-v", "conda"])
+    # conda_check.check_returncode()
     pip_install()
