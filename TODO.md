@@ -12,6 +12,12 @@ Because it's agitating not having feature parity.
 
 ## Get spell checking set up right
 
+Honestly this is quite a difficult process. I'm struggling to correctly work
+with the spellfiles in ./hunspell/
+
+Keep in mind that if you're manually working with a .add spellfile, that you
+can run :sort and alphabetize all the words in the file!
+
 And after that...
 
 ## Get ftplugins set up a little more cleanly
