@@ -18,3 +18,9 @@ Moved the diff to the new aff. Now to try the mkspell!
 :( didn't work. Getting an invalid region error. Whatever.
 
 Way too much work to get spell checking working man.
+
+Git checked out the en-US.dic that was on laptop and they're different sizes!
+
+I also `git checkout laptop -- en-us.dic` file on laptop.
+
+Still getting invalid region errors :/

@@ -10,28 +10,6 @@ let g:snips_email = 'farischugthai@gmail.com'
 let g:snips_github = 'https://github.com/farisachugthai'
 " }}}
 
-" Environment: {{{ 2
-" Let's setup all the global vars we need. Will utilize to ensure consistency
-
-let s:termux = exists('$PREFIX') && has('unix')
-let s:ubuntu = !exists('$PREFIX') && has('unix')
-let s:windows = has('win32') || has('win64')
-
-" So what I think my problem was is that I have these variables but there's
-" no point at which they're initialized. Let's write a few funcs
-" function! is#termux() abort
-"     return s:termux
-" endfunction
-
-" function! is#ubuntu() abort
-"     return s:ubuntu
-" endfunction
-
-" function! is#windows() abort
-"     return s:windows
-" endfunction
-" }}}
-
 " Vim Plug: {{{ 2
 " TODO: Can we have plug open in a tab not a vsplit?
 call plug#begin('~/.local/share/nvim/plugged')
@@ -39,8 +17,6 @@ call plug#begin('~/.local/share/nvim/plugged')
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
-" Nothing happens if we open a directory to start nvim
-"TODO: one of the expressions in the loop needs to be prepended with silent
 augroup nerd_loader
   autocmd!
   autocmd VimEnter * silent! autocmd! FileExplorer
@@ -50,11 +26,10 @@ augroup nerd_loader
         \|   execute 'autocmd! nerd_loader'
         \| endif
 augroup END
-Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
 Plug 'davidhalter/jedi-vim', { 'for': ['python', 'python3'] }
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
 Plug 'w0rp/ale'
 Plug 'morhetz/gruvbox'
 Plug 'christoomey/vim-tmux-navigator'
@@ -476,11 +451,13 @@ runtime! macros/matchit.vim
 set matchpairs+=<:>
 
 " To every plugin I've never used before. Stop slowing me down.
-let g:loaded_vimballPlugin = 1
-let g:loaded_tutor_mode_plugin = 1
-let g:loaded_getsciptPlugin = 1
-let g:loaded_2html_plugin = 1
-let g:loaded_logiPat = 1
+let g:loaded_vimballPlugin                                                = 1
+let g:loaded_tutor_mode_plugin                                            = 1
+let g:loaded_getsciptPlugin                                               = 1
+let g:loaded_2html_plugin                                                 = 1
+let g:loaded_logiPat                                                      = 1
+" let g:loaded_netrw                                                      = 1
+" let g:loaded_netrwPlugin                                                = 1
 " Let's see if this speeds things up because I've never used most of them
 
 " }}}
@@ -654,7 +631,6 @@ let g:ale_lint_delay = 1000
 let g:webdevicons_enable = 1
 let g:webdevicons_enable_nerdtree = 1               " adding the flags to NERDTree
 let g:airline_powerline_fonts = 1
-" }}}
 " For startify
 let entry_format = "'   ['. index .']'. repeat(' ', (3 - strlen(index)))"
 
@@ -821,6 +797,17 @@ augroup ftpersonal
     autocmd BufNewFile,BufFilePre,BufRead *.md setlocal filetype=markdown
 augroup end
 
+" Noticed this bit in he syntax line 2800
+let g:is_bash = 1
+let g:sh_fold_enabled= 4  "   (enable if/do/for folding)
+let g:sh_fold_enabled= 3  "   (enables function and heredoc folding)
+"Let's hope this doesn't make things too slow.
+
+" he rst.vim or ft-rst-syntax or syntax 2600
+let rst_syntax_code_list = ['vim', 'python', 'bash', 'markdown']
+
+" highlighting readline options
+let readline_has_bash = 1
 " }}}
 
 " Functions: {{{ 2

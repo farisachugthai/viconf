@@ -161,6 +161,7 @@ if __name__ == "__main__":
         requests_download()
 
     # could also have done platform.machine. *shrugs*
+    # TODO: Download packages in a venv
     if uname.machine == 'aarch64':
         termux_packages()
 
