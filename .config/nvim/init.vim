@@ -1,5 +1,6 @@
 " init.vim
-" Neovim configuration
+" neovim configuration
+" Nvim: set verbose=1:
 
 " All: {{{ 1
 
@@ -9,13 +10,6 @@ let g:snips_email = 'farischugthai@gmail.com'
 let g:snips_github = 'https://github.com/farisachugthai'
 " }}}
 
-" Environment: {{{ 2
-" Let's setup all the global vars we need. Will utilize to ensure consistency
-
-let s:termux = exists('$PREFIX')
-let s:ubuntu = !exists('$PREFIX') && has('unix')  " syntax?
-" }}}
-
 " Vim Plug: {{{ 2
 
 call plug#begin('~/.local/share/nvim/plugged')
@@ -23,19 +17,30 @@ call plug#begin('~/.local/share/nvim/plugged')
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
-Plug 'scrooloose/nerdcommenter'
+" Nothing happens if we open a directory to start nvim
+" TODO: one of the expressions in the loop needs to be prepended with silent
+augroup nerd_loader
+  autocmd!
+  autocmd VimEnter * silent! autocmd! FileExplorer
+  autocmd BufEnter,BufNew *
+        \  if isdirectory(expand('<amatch>'))
+        \|   call plug#load('nerdtree')
+        \|   execute 'autocmd! nerd_loader'
+        \| endif
+augroup END
 Plug 'davidhalter/jedi-vim', { 'for': ['python', 'python3'] }
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
 Plug 'w0rp/ale'
 Plug 'morhetz/gruvbox'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'ryanoasis/vim-devicons'
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',
     \ 'do': 'bash install.sh' }
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'vim-airline/vim-airline'
 Plug 'mhinz/vim-startify'
+
 if has('nvim')
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 else
@@ -43,10 +48,12 @@ else
     Plug 'roxma/nvim-yarp'
     Plug 'roxma/vim-hug-neovim-rpc'
 endif
-
 let g:deoplete#enable_at_startup = 1
 
-Plug 'Shougo/neosnippet.vim' | Plug 'Shougo/neosnippet-snippets'
+Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
+Plug 'godlygeek/tabular'
+Plug 'vim-voom/voom'
+Plug 'ryanoasis/vim-devicons'           " Keep at end!
 
 call plug#end()
 " }}}
@@ -54,6 +61,7 @@ call plug#end()
 " Nvim Specific: {{{ 2
 set background=dark
 
+" unabashedly stolen from junegunn dude is too good.
 let s:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/init.vim.local'
 if filereadable(s:local_vimrc)
     execute 'source' s:local_vimrc
@@ -61,12 +69,14 @@ endif
 
 set inccommand=split                    " This alone is enough to never go back
 set termguicolors
+if has('nvim')
+    set inccommand=split                    " This alone is enough to never go back
+    set termguicolors
+endif
+set inccommand=split                    " This alone is enough to never go back
 " }}}
 
 " Python Executables: {{{ 2
-" Genuinely not sure where the best place to put this is; however,
-" it needs to be available for all file types and it should probably
-" be set relatively early.
 if has('python3')
 " if we have a virtual env start there
     if exists('$VIRTUAL_ENV')
@@ -78,9 +88,13 @@ if has('python3')
     " otherwise break up termux and linux
     elseif exists('$PREFIX')
         " and just use the system python
-        let g:python3_host_prog = '$PREFIX/bin/python'
+        if executable('$PREFIX/bin/python')
+            let g:python3_host_prog = '$PREFIX/bin/python'
+        endif
     else
-        let g:python3_host_prog = '/usr/bin/python3'
+        if executable('/usr/bin/python3')
+            let g:python3_host_prog = '/usr/bin/python3'
+        endif
     endif
 endif
 
@@ -90,6 +104,7 @@ endif
 
 " Leader_Viminfo: {{{ 3
 let g:mapleader = "\<Space>"
+let g:maplocalleader = ','
 
 if !has('nvim')
     set viminfo='100,<200,s200,n$HOME/.vim/viminfo
@@ -97,9 +112,9 @@ endif
 " }}}
 
 " Pep8 Global Options: {{{ 3
-set tabstop=4
-set shiftwidth=4
-set expandtab
+set tabstop=4                           " show existing tab with 4 spaces width
+set shiftwidth=4                        " when indenting with '>', use 4 spaces width
+set expandtab smarttab                  " On pressing tab, insert 4 spaces
 set softtabstop=4
 let g:python_highlight_all = 1
 " }}}
@@ -124,10 +139,10 @@ set splitright
 " }}}
 
 " Spell Checker: {{{ 3
-set encoding=UTF-8                        " Set default encoding
-scriptencoding UTF-8                      " Vint believes encoding should be done first
+set encoding=UTF-8                       " Set default encoding
+scriptencoding UTF-8                     " Vint believes encoding should be done first
 set fileencoding=UTF-8
-set spelllang=en,en_us
+set spelllang=en
 
 if filereadable(glob('~/.config/nvim/spell/en_US.utf-8.add'))
     set spellfile=~/.config/nvim/spell/en_US.utf-8.add
@@ -148,10 +163,13 @@ if filereadable('/usr/share/dict/words')
 endif
 
 if filereadable('/usr/share/dict/american-english')
-    set dictionary+=/usr/share/dict/american-english
+    setlocal dictionary+=/usr/share/dict/american-english
 endif
 
-" yes glob is required otherwise no tilde expansion
+if filereadable('$HOME/.config/nvim/spell/en.hun.spl')
+    set spelllang+=$HOME/.config/nvim/spell/en.hun.spl
+endif
+
 if filereadable(glob('~/.vim/autocorrect.vim'))
     source ~/.vim/autocorrect.vim
 endif
@@ -187,6 +205,7 @@ set wildmenu                            " Show list instead of just completing
 set wildmode=longest,list:longest       " Longest string or list alternatives
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 set fileignorecase                      " when searching for files don't use case
+set wildignorecase                      " on the cmdline ignore case in filenames
 
 " set completefunc here and then let b:omnifunc in ftplugins
 set completefunc=LanguageClient#complete
@@ -198,25 +217,32 @@ set tags+=./tags,./../tags,./*/tags     " usr_29
 set tags+=~/projects/tags               " consider generating a few large tag
 set tags+=~python/tags                  " files rather than recursive searches
 set mouse=a                             " Automatically enable mouse usage
-set cursorline
+set cursorline                          " Might wanna have off. Or change color
+if &textwidth!=0
+    set colorcolumn=+1
+endif
 set cmdheight=2
 set number
 set showmatch
 set ignorecase smartcase
+set infercase
 set autoindent smartindent              " :he options: set with smartindent
 set noswapfile
-set fileformat=unix
 
 if has('gui_running')
     set guifont='Fira\ Code\ Mono:11'
 endif
 
+" In case you wanted to see the guicursor default for gvim win64
+" set gcr=n-v-c:block-Cursor/lCursor,ve:ver35-Cursor,o:hor50-Cursor,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor,sm:block-Cursor-blinkwait175-blinkoff150-blinkon175
+
+ set path+=**        			        " Recursively search dirs with :find
 set path+=**        			        " Recursively search dirs with :find
 set autochdir
 set fileformat=unix
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
-set diffopt=vertical,context:3          " vertical spilt diffs. def cont is 6
+set diffopt=vertical,context:3          " vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
 
 if has('persistent_undo')                " i think neovim always does
     set undodir=~/.config/nvim/undodir
@@ -225,6 +251,8 @@ endif
 
 set backupdir=~/.config/nvim/undodir
 set modeline
+set lazyredraw
+set browsedir="buffer"                  " which directory is used for the file browser
 " }}}
 
 " }}}
@@ -233,9 +261,6 @@ set modeline
 
 " General Mappings: {{{ 3
 
-" From he autocmd around line 1050. This would be neat to map to something like <Leader>ed
-" autocmd BufWritePost ~/.config/nvim/init.vim   so <afile>
-
 " Note that F7 is bound to pastetoggle so don't map it
 " Navigate windows more easily
 nnoremap <C-h> <C-w>h
@@ -243,35 +268,26 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
-" Navigate tabs easier
+" Navigate tabs more easily
 nnoremap <A-Right> :tabnext<CR>
 nnoremap <A-Left> :tabprev<CR>
 
-" T Pope: Note that ]c and [c are also mapped by git-gutter
-nnoremap ]q :cnext<cr>
-nnoremap [q :cprev<cr>
-nnoremap ]l :lnext<cr>
-nnoremap [l :lprev<cr>
-nnoremap ]b :bnext<cr>
-nnoremap [b :bprev<cr>
-nnoremap ]t :tabn<cr>
-nnoremap [t :tabp<cr>
-
 " Simple way to speed up startup
 nnoremap <Leader>nt :NERDTreeToggle<CR>
-" Select all text quickly
-nnoremap <Leader>a ggVG
+nnoremap <Leader>a :echo('No. Use :%y')<CR>
 " F5 to run *.py. Currently doesn't work or at least doesn't display anything
 inoremap <F5> <Esc>:w<CR>:!clear;python %
 " It should be easier to get help
 nnoremap <leader>he :helpgrep<space>
 " It should also be easier to edit the config
-nnoremap <F9> :e $MYVIMRC<CR>
+nnoremap <F9> :e ~/projects/viconf/.config/nvim/init.vim<CR>
+" TODO: What is vims version of realpath()? Can't find it even w/ helpgrep
+nnoremap <leader>ed :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 
 inoremap jk <Esc>
 vnoremap jk <Esc>
 
-" Junegunn
+" Junegunn:
 nnoremap <leader>o o<esc>
 nnoremap <leader>O O<esc>
 xnoremap < <gv
@@ -279,23 +295,45 @@ xnoremap > >gv
 
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
-nnoremap <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
-"
+nnoremap <leader>te :tabedit <c-r>=expand("%:p:h")<cr>
+
 " Switch CWD to the directory of the open buffer
 nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
 
+" I use this command constantly
+nnoremap <leader>sn :Snippets<cr>
+" }}}
+
+" Unimpaired: {{{ 3
+" Note that ]c and [c are mapped by git-gutter and ALE has ]a and [a
+nnoremap ]q :cnext<cr>
+nnoremap [q :cprev<cr>
+nnoremap ]Q :cfirst<cr>
+nnoremap [Q :clast<cr>
+nnoremap ]l :lnext<cr>
+nnoremap [l :lprev<cr>
+nnoremap ]L :lfirst<CR>
+nnoremap [L :llast<CR>
+nnoremap ]b :bnext<cr>
+nnoremap [b :bprev<cr>
+nnoremap ]B :blast<cr>
+nnoremap [B :bfirst<cr>
+nnoremap ]t :tabn<cr>
+nnoremap [t :tabp<cr>
+nnoremap ]T :tfirst<cr>
+nnoremap [T :tlast<cr>
+" In addition I've mapped ]a and [a for Ale nextwrap.
 " }}}
 
 " Spell Checking: {{{ 3
-" It has to wait to see if I'm going to do s= instead of just s
-" and the delay is awful. Sorry for changing one of my oldest mappings!
 nnoremap <Leader>sp :setlocal spell!<CR>
-" Based off the default value for spell suggest. Cannot end with <CR>
-nnoremap <Leader>s= :norm z=
+" Based off the default value for spell suggest.
+nnoremap <Leader>s= :norm z=<CR>
 " }}}
 
-" Emacs: {{{ 3
-
+" RSI: {{{ 3
+" For Emacs-style editing on the command line. Also considering using these
+" insert mode as well.
 " start of line
 cnoremap <C-A> <Home>
 " back one character
@@ -307,18 +345,18 @@ cnoremap <C-E> <End>
 " forward one character
 cnoremap <C-F> <Right>
 " recall newer command-line
-cnoremap <C-N> <Down>
+cnoremap <A-N> <Down>
 " recall previous (older) command-line
-cnoremap <C-P> <Up>
+cnoremap <A-P> <Up>
 " back one word
-cnoremap <Esc><C-B>	<S-Left>
+cnoremap <Esc><C-B> <S-Left>
 " forward one word
 cnoremap <Esc><C-F> <S-Right>
 " }}}
 
 " Terminal: {{{ 3
 " If running a terminal in Vim, go into Normal mode with Esc
-tnoremap <Esc> <C-W>N
+tnoremap <Esc> <C-\><C-n>
 " From he term. Rewrite for FZF
 tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
 " From :he terminal
@@ -340,9 +378,8 @@ nnoremap <A-l> <C-w>l
 nnoremap <Leader>l <Plug>(ale_toggle_buffer) <CR>
 nnoremap ]a <Plug>(ale_next_wrap)
 nnoremap [a <Plug>(ale_previous_wrap)
-" TODO:
-" `:ALEInfoToFile` will write the ALE runtime information to a given filename. The filename works just like |:w|.
-
+" TODO: `:ALEInfoToFile` will write the ALE runtime information to a given
+" filename. The filename works just like |:w|. *what does |:w| mean?
 " }}}
 
 " Fugitive: {{{ 3
@@ -362,32 +399,57 @@ nnoremap <silent> <leader>gW :Gwrite!<CR>
 " }}}
 
 " Python Language Server: {{{ 3
-" Hopefully not trampling all over jedi :(
-nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-" nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
 " }}}
 
 " Tagbar: {{{ 3
 nnoremap <silent> <F8> :TagbarToggle<CR>
+let g:tagbar_left = 1
 " }}}
 
+" Airline: {{{ 3
+let g:airline#extensions#tabline#buffer_idx_mode = 1
+" originally was nmap and that mightve been better. markdown
+" headers would be perfect for leader 1
+nnoremap <leader>1 <Plug>AirlineSelectTab1
+nnoremap <leader>2 <Plug>AirlineSelectTab2
+nnoremap <leader>3 <Plug>AirlineSelectTab3
+nnoremap <leader>4 <Plug>AirlineSelectTab4
+nnoremap <leader>5 <Plug>AirlineSelectTab5
+nnoremap <leader>6 <Plug>AirlineSelectTab6
+nnoremap <leader>7 <Plug>AirlineSelectTab7
+nnoremap <leader>8 <Plug>AirlineSelectTab8
+nnoremap <leader>9 <Plug>AirlineSelectTab9
+nnoremap <leader>- <Plug>AirlineSelectPrevTab
+nnoremap <leader>+ <Plug>AirlineSelectNextTab
 " }}}
 
-" Plugins: {{{ 2
 
+" }}}
+
+" Macros: {{{ 2
+" nvim automatically sources this
 if !has('nvim')
-    " Invoke while in Vim by putting your cursor over a word and run <Leader>k
     runtime! ftplugin/man.vim
     let g:ft_man_folding_enable = 0
-    setlocal keywordprg=:Man
+    setlocal keywordprg=Man
 else
     setlocal keywordprg=man\ -a
 endif
 
 runtime! macros/matchit.vim
 
-" FZF: {{{ 3
+set matchpairs+=<:>
+
+" To every plugin I've never used before. Stop slowing me down.
+let g:loaded_vimballPlugin = 1
+let g:loaded_tutor_mode_plugin = 1
+let g:loaded_getsciptPlugin = 1
+let g:loaded_2html_plugin = 1
+let g:loaded_logiPat = 1
+" Let's see if this speeds things up because I've never used most of them
+" }}}
+
+" FZF: {{{ 2
 
 if has('nvim') || has('gui_running')
   let $FZF_DEFAULT_OPTS .= ' --inline-info'
@@ -412,7 +474,7 @@ let g:fzf_action = {
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
 
-" FZF Colors: {{{ 4
+" FZF Colors: {{{ 3
 " Customize FZF colors to match your color scheme.
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
@@ -434,14 +496,15 @@ let g:fzf_history_dir = '~/.local/share/fzf-history'
 
 " Between this and FZF.vim you have :Ag and :grep using ag, you should be fine
 if executable('ag')
-  let &grepprg = 'ag --nogroup --nocolor --column'
+  let &grepprg = 'ag --nogroup --nocolor --column --vimgrep'
+  set grepformat=%f%l%c%m
 else
   let &grepprg = 'grep -rn $* *'
 endif
 command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
 " }}}
 
-" FZF_VIM: {{{ 3
+" FZF_VIM: {{{ 2
 " If you're willing to consider it separate than the FZF plugin
 
 " Insert mode completion
@@ -451,10 +514,70 @@ imap <c-x><c-k> <plug>(fzf-complete-word)
 imap <c-x><c-f> <plug>(fzf-complete-path)
 imap <c-x><c-j> <plug>(fzf-complete-file-ag)
 imap <c-x><c-l> <plug>(fzf-complete-line)
+
+" command local options:
+" [buffers] jump to the existing window if possible
+let g:fzf_buffers_jump = 1
+" [[b]commits] customize the options used by 'git log':
+let g:fzf_commits_log_options = '--graph --color=always --format="%c(auto)%h%d %s %c(black)%c(bold)%cr"'
+" [tags] command to generate tags file
+let g:fzf_tags_command = 'ctags -r' "
+" [commands] --expect expression for directly executing the command
+let g:fzf_commands_expect = 'alt-enter,ctrl-x'
+
+" Ag: {{{ 3
+" **TODO**: Commented out because E183: User defined commands must start with an uppercase letter:::
+" :ag  - start fzf with hidden preview window that can be enabled with '?' key
+" :ag! - start fzf in fullscreen and display the preview window above
+" command! -bang -nargs=* ag
+"     \ call fzf#vim#ag(<q-args>,
+"     \ <bang>0 ? fzf#vim#with_preview('up:60%')
+"     \ : fzf#vim#with_preview('right:50%:hidden', '?'),
+"     \ <bang>0)
+
+" " similarly, we can apply it to fzf#vim#grep. to use ripgrep instead of ag:
+" command! -bang -nargs=* rg
+"     \ call fzf#vim#grep(
+"     \ 'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
+"     \ <bang>0 ? fzf#vim#with_preview('up:60%')
+"     \ : fzf#vim#with_preview('right:50%:hidden', '?'),
+"     \ <bang>0)
+
+" " likewise, files command with preview window
+" command! -bang -nargs=? -complete=dir files
+"     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+
+" global line completion (not just open buffers. ripgrep required.)
+inoremap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
+    \ 'prefix': '^.*$',
+    \ 'source': 'rg -n ^ --color always',
+    \ 'options': '--ansi --delimiter : --nth 3..',
+    \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }}))
+
 " }}}
 
+" FZF_Statusline: {{{ 3
+" custom fzf statusline
+function! s:fzf_statusline()
+    " override statusline as you like
+    highlight fzf1 ctermfg=161 ctermbg=251
+    highlight fzf2 ctermfg=23 ctermbg=251
+    highlight fzf3 ctermfg=237 ctermbg=251
+    setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
+endfunction
+
+augroup fzfstatusline
+    autocmd!
+    autocmd! user fzfstatusline call <sid>fzf_statusline()
+augroup end
+
+" }}}
+
+" }}}
+
+" Remaining Plugins: {{{ 2
+
 " NERDTree: {{{ 3
-" Let's see if this works properly as a group
 augroup nerd_loader
   autocmd!
   autocmd VimEnter * silent! autocmd! FileExplorer
@@ -473,17 +596,11 @@ let g:NERDTreeWinPos = 'right'
 let g:NERDTreeShowHidden = 1
 let g:NERDTreeShowBookmarks = 1
 let g:NERDTreeNaturalSort = 1
-let g:NERDTreeChDirMode = 2
+let g:NERDTreeChDirMode = 2                         " change cwd every time NT root changes
 let g:NERDTreeShowLineNumbers = 1
 let g:NERDTreeMouseMode = 2                         " Open dirs with 1 click files with 2
 let g:NERDTreeIgnore = ['\.pyc$', '\.pyo$', '__pycache__$', '\.git$']
 let g:NERDTreeRespectWildIgnore = 1                 " yeah i meant those ones too
-" }}}
-
-" NERDCom: {{{ 3
-let g:NERDSpaceDelims = 1                           " can we give the code some room to breathe?
-let g:NERDDefaultAlign = 'left'                     " Align line-wise comment delimiters flush left
-let g:NERDTrimTrailingWhitespace = 1                " Trim trailing whitespace when uncommenting
 " }}}
 
 " ALE: {{{ 3
@@ -500,35 +617,129 @@ let g:ale_lint_delay = 1000
 let g:webdevicons_enable = 1
 let g:webdevicons_enable_nerdtree = 1               " adding the flags to NERDTree
 let g:airline_powerline_fonts = 1
+" For startify
+let entry_format = "'   ['. index .']'. repeat(' ', (3 - strlen(index)))"
+
+if exists('*WebDevIconsGetFileTypeSymbol')  " support for vim-devicons
+    let entry_format .= ". WebDevIconsGetFileTypeSymbol(entry_path) .' '.  entry_path"
+else
+    let entry_format .= '. entry_path'
+endif
 " }}}
 
 " Vim_Startify: {{{ 3
+" What shows up in the startify list?
+
+function! s:list_commits()
+    let git = 'git -C ~/projects/viconf/'
+    let commits = systemlist(git .' log --oneline | head -n10')
+    let git = 'G'. git[1:]
+    return map(commits, '{"line": matchstr(v:val, "\\s\\zs.*"), "cmd": "'. git .' show ". matchstr(v:val, "^\\x\\+") }')
+endfunction
+
+let g:startify_lists = [
+    \ { 'header': ['   MRU'],            'type': 'files' },
+    \ { 'header': ['   MRU '. getcwd()], 'type': 'dir' },
+    \ { 'header': ['   Sessions'],       'type': 'sessions' },
+    \ { 'header': ['   Commits'],        'type': function('s:list_commits') },
+    \ { 'type': 'commands',  'header': ['   Commands']       },
+    \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
+\ ]
+
 let g:startify_session_sort = 1
+let g:startify_update_oldfiles = 1
+
+" Setup devicons
+function! StartifyEntryFormat()
+    return 'WebDevIconsGetFileTypeSymbol(absolute_path) ." ". entry_path'
+endfunction
+
+" Center the header and footer
+function! s:filter_header(lines) abort
+    let longest_line   = max(map(copy(a:lines), 'strwidth(v:val)'))
+    let centered_lines = map(copy(a:lines),
+        \ 'repeat(" ", (&columns / 2) - (longest_line / 2)) . v:val')
+    return centered_lines
+endfunction
+
+let g:startify_custom_header = s:filter_header(startify#fortune#cowsay())
+
+" Don't show these files
+let g:startify_skiplist = [
+    \ 'COMMIT_EDITMSG',
+    \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc', ]
+    " its explained why this won't. actually great explanation of those weird,
+    " afile cfile sfile vars
+    " \ '~/.local/share/nvim/plugged/' .*/doc',
+    " \ ]
+if has('gui_win32')
+    let g:startify_session_dir = '$HOME\vimfiles\session'
+else
+    let g:startify_session_dir = '~/.vim/session'
+endif
+" TODO: Figure out how to set let g:startify_bookmarks = [ Contents of
+" NERDTreeBookmarks ]
+let g:startify_change_to_dir = 1
+let g:startify_fortune_use_unicode = 1
+let g:startify_update_oldfiles = 1
+let g:startify_session_persistence = 1
+" Configured correctly this could be a phenomenal way to store commands and
+" expressions on a per directory basis aka projects / workspaces!
+let g:startify_session_autoload = 1
+" Not 100% sure if the code below works but here's hoping!
+let g:startify_skiplist = [
+        \ 'COMMIT_EDITMSG',
+        \ glob('plugged/*/doc'),
+        \ 'C:\Program Files\Vim\vim81\doc',
+        \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc',
+        \ ]
 " }}}
 
 " UltiSnips: {{{ 3
 let g:UltiSnipsSnippetDir = [ '~/.config/nvim/UltiSnips' ]
 let g:UltiSnipsJumpForwardTrigger='<Tab>'
 let g:UltiSnipsJumpBackwardTrigger='<S-Tab>'
+inoremap <C-Tab> * <Esc>:call ultisnips#listsnippets()<CR>
+let g:ultisnips_python_style='sphinx'
+let g:UltiSnips_python_quoting_style='double'
 let g:UltiSnips_python_quoting_style = 'GOOGLE'
 let g:UltiSnipsEnableSnipMate = 0
 let g:UltiSnipsEditSplit = 'vertical'
+
+" TODO: Come up with a mapping for it. Also what is E746
+" Go to the annotations for an explanation of this function.
+" function UltiSnips#IsExpandable()
+"     return !(
+"         \ col('.') <= 1
+"         \ || !empty(matchstr(getline('.'), '\%' . (col('.') - 1) . 'c\s'))
+"         \ || empty(UltiSnips#SnippetsInCurrentScope())
+"         \ )
+" endfunction
+
 " }}}
 
-" Gruvbox: {{{ 3
+"Colorscheme: {{{ 3
 colorscheme gruvbox
-let g:gruvbox_contrast_dark = 'hard'
+if g:colors_name ==# 'gruvbox'
+    let g:gruvbox_contrast_dark = 'hard'
+endif
+hi NonText guifg=NONE guibg=NONE
 " }}}
 
 " Language Client: {{{ 3
+" TODO: On termux take this out of mappings. And also debug it because it's erring out
+" function LC_maps()
+"     if has_key(g:LanguageClient_serverCommands, &filetype)
+"         nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<CR>
+"         nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
+"         nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+"     endif
+" endfunction
 
-" A better way of doing this would be to check if the server is executable
-" so like if executable('pyls) | let g:pyserver = 'pyls' and then run as
-" many checks as you feel like typing and then append them all to this dict
+" autocmd FileType * call LC_maps()
 
-" ooo but is the best way to do this by doing it all in buf local ftplugins?
 if executable('pyls')
-    let g:LanguageClient_serverCommands = {
+    let b:LanguageClient_serverCommands = {
         \ 'python': [ 'pyls' ]
         \ }
 endif
@@ -539,7 +750,7 @@ let b:LanguageClient_selectionUI = 'fzf'
 " }}}
 
 " Jedi: {{{ 3
-let g:jedi#use_tabs_not_buffers = 1             " easy to maintain workspaces
+let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces
 " let g:jedi#completions_command = '<C-N>'
 let g:jedi#documentation_command = '<leader>h'
 let g:jedi#usages_command = '<leader>u'
@@ -548,52 +759,55 @@ let g:jedi#smart_auto_mappings = 0              " must be set
 let g:jedi#force_py_version = 3
 " }}}
 
-" Neosnippets: {{{
-
-" Because I've found UltiSnips quite challenging to work with.
-let g:neosnippet#snippets_directory = [ '~/.config/nvim/neosnippets', '~/.local/share/nvim/plugged/vim-snippets/snippets' ]
-
-" From the help pages:
-" Plugin key-mappings.
-" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-k>     <Plug>(neosnippet_expand_target)
-
-" SuperTab like snippets' behavior.
-" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-imap <expr><TAB>
-\ pumvisible() ? "\<C-n>" :
-\ neosnippet#expandable_or_jumpable() ?
-\    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-
-" For conceal markers.
-if has('conceal')
-  set conceallevel=2 concealcursor=niv
-endif
-
-" This errors out.
-" Expand the completed snippet trigger by <CR>.
-" imap <expr><CR>
-" \ (pumvisible() && neosnippet#expandable()) ?
-" \<Plug>(neosnippet_expand)" : "\<CR>"
-
-" Enable snipMate compatibility feature.
-let g:neosnippet#enable_snipmate_compatibility = 1
-
-" Tell Neosnippet about the other snippets
+" Deoplete_Jedi: {{{ 3
+" speed things up
+let g:deoplete#sources#jedi#enable_typeinfo = 0
 " }}}
 
 " **UNTESTED**: {{{
 
-" just a thought i had
+" just a thought i had. For any normal mode remaps you have, add the same
+" thing and prefix <Esc> to the RHS and boom!
 if has('b:Tagbar')  " or any plugin
     let g:tagbar_sort=0
     inoremap <F3> <esc>:TagbarToggle<cr>
     nnoremap <F3> :TagbarToggle<cr>
 endif
+" }}}
+
+" Airline: {{{ 3
+let g:airline_powerline_fonts = 1
+let g:airline_highlighting_cache = 1
+let g:airline_skip_empty_sections = 1
+
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+
+" unicode symbols
+let g:airline_left_sep = '»'
+let g:airline_left_sep = '▶'
+let g:airline_right_sep = '«'
+let g:airline_right_sep = '◀'
+let g:airline_symbols.crypt = '🔒'
+let g:airline_symbols.linenr = '☰'
+let g:airline_symbols.linenr = '␊'
+let g:airline_symbols.linenr = '␤'
+let g:airline_symbols.linenr = '¶'
+let g:airline_symbols.maxlinenr = ''
+let g:airline_symbols.maxlinenr = '㏑'
+let g:airline_symbols.branch = '⎇'
+let g:airline_symbols.paste = 'ρ'
+let g:airline_symbols.paste = 'Þ'
+let g:airline_symbols.paste = '∥'
+let g:airline_symbols.spell = 'Ꞩ'
+let g:airline_symbols.notexists = 'Ɇ'
+let g:airline_symbols.whitespace = 'Ξ'
+
+" TODO: Need to add one for the venv nvim
+let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
+
+let g:airline#extensions#tabline#enabled = 0
 " }}}
 
 " }}}
@@ -613,7 +827,8 @@ augroup end
 " Functions: {{{ 2
 
 " Next few are from Junegunn so credit to him
-" Todo Function:
+
+" Todo Function: {{{ 3
 function! s:todo() abort
     let entries = []
     for cmd in ['git grep -niI -e TODO -e todo -e FIXME -e XXX 2> /dev/null',
@@ -633,9 +848,10 @@ function! s:todo() abort
     endif
 endfunction
 command! Todo call s:todo()
+" }}}
 
-" Explore:
-" Heres one where he uses fzf and Explore to search a packages docs
+" Explore: {{{ 3
+" Here's one where he uses FZF and Explore to search a packages docs
 function! s:plug_help_sink(line)
     let dir = g:plugs[a:line].dir
     for pat in ['doc/*.txt', 'README.md']
@@ -648,8 +864,10 @@ function! s:plug_help_sink(line)
     tabnew
     execute 'Explore' dir
 endfunction
+" }}}
 
-"command to filter :scriptnames output by a regex
+" Scriptnames: {{{ 3
+" command to filter :scriptnames output by a regex
 command! -nargs=1 Scriptnames call <sid>scriptnames(<f-args>)
 function! s:scriptnames(re) abort
     redir => scriptnames
@@ -659,7 +877,9 @@ function! s:scriptnames(re) abort
     let filtered = filter(split(scriptnames, "\n"), "v:val =~ '" . a:re . "'")
     echo join(filtered, "\n")
 endfunction
+" }}}
 
+" Helptabs: {{{ 3
 function! s:helptab()
     if &buftype == 'help'
         wincmd T
@@ -668,7 +888,9 @@ function! s:helptab()
 endfunction
 " keeps erroring idk why.
 " autocmd vimrc BufEnter *.txt call s:helptab()
+" }}}
 
+" AutoSave: {{{ 3
 function! s:autosave(enable)
   augroup autosave
     autocmd!
@@ -682,13 +904,29 @@ function! s:autosave(enable)
 endfunction
 
 command! -bang Autosave call s:autosave(<bang>1)
+" }}}
 
+" HL: {{{ 3
 " Whats the syntax group under my cursor?
 function! s:hl()
   " echo synIDattr(synID(line('.'), col('.'), 0), 'name')
   echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
 endfunction
 command! HL call <SID>hl()
+" }}}
+
+" *:DiffOrig* *diff-original-file* {{{ 3
+" Since 'diff' is a window-local option, it's possible to view the same buffer
+" in diff mode in one window and 'normal' in another window.  It is also
+" possible to view the changes you have made to a buffer since the file was
+" loaded.  Since Vim doesn't allow having two buffers for the same file, you
+" need another buffer.  This command is useful: >
+command! DiffOrig vert new | set buftype=nofile | read ++edit # | 0d_
+    \ | diffthis | wincmd p | diffthis
+" Use ':DiffOrig' to see the differences
+" between the current buffer and the file it was loaded from.
+
+" }}}
 
 " }}}
 

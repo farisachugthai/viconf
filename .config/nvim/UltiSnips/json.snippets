@@ -36,7 +36,12 @@ snippet null "Null" b
 endsnippet
 
 
+# So wait hold on. We have a json snippets file...and we don't import json?
+
 global !p
+
+import json
+
 def compB(t, opts):
 	if t:
 		opts = [m[len(t):] for m in opts if m.startswith(t)]
@@ -48,3 +53,9 @@ endglobal
 snippet b "Bool" b
 "${1:key}": $2`!p snip.rv=compB(t[2], ['true', 'false'])`,
 endsnippet
+
+snippet fixjson "Fix the entire document easily."
+vim.eval('!python3 -m json.tool' %)
+endsnippet
+
+# or something like that
