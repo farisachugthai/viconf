@@ -1,4 +1,7 @@
 " Vim syntax file
+" So I just realized theres a wildly different syntax file in
+" $VIMRUNTIME/syntax
+" TODO: Check that out.
 
 " Language:   Autohotkey from www.autohotkey.com
 " Maintainer:   Jose Quesada (quesada AT gmail DOT com)

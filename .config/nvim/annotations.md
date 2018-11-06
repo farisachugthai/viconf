@@ -12,6 +12,36 @@ Doesn't work.
 let s:termux = exists('$PREFIX')
 let s:ubuntu = !exists('$PREFIX') && has('unix')  " syntax?
 ```
+
+Just pulled this off of the vimrc. The one above is init.vim.
+Both from laptop branch not termux. Amazingly there's different
+attempts over there too.
+
+```viml
+" Nvim_OS: {{{ 2
+" Gonna start seriously consolidating vimrc and init.vim this is so hard
+" to maintain
+" Let's setup all the global vars we need
+" Wait am i assigning these vars correctly? man fuck vimscript
+
+if has('nvim')
+    let s:root = '~/.config/nvim'
+    let s:conf = '~/.config/nvim/init.vim'
+else
+    let s:root = '~/.vim'
+    let s:conf = '~/.vim/vimrc'
+endif
+
+if exists('$PREFIX')
+    let s:usr_d = '$PREFIX'     " might need to expand on use
+    let s:OS= 'Android'
+else
+    let s:usr_d = '/usr'
+    let s:OS = 'Linux'
+endif
+" }}}
+```
+
 " }}}
 
 ## Plugins
@@ -136,6 +166,9 @@ let g:lightline = {
 
 ### NerdCom
 
+TODO: Use :Glog to recover your old nerdcom code. Better do it soon if you're
+thinking about ever being able to use it again!
+
 ## functions
 
 ### compilers
@@ -176,19 +209,3 @@ endfunc
 ```
 
 }}}
-
-### ALE
-
-....what the hell is this?
-{As in what does this syntax mean if you're reading feel free to create an issue and let me know}
-
-```viml
-function! LinterStatus() abort
-  let l:counts = ale#statusline#Count(bufnr(''))
-
-  let l:all_errors = l:counts.error + l:counts.style_error
-  let l:all_non_errors = l:counts.total - l:all_errors
-
-  return l:counts.total == 0 ? '' : printf( '%dW %dE', l:all_non_errors, l:all_errors )
-endfunction
-```

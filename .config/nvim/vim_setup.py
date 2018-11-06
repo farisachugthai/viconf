@@ -39,13 +39,14 @@ def get_home():
     return home
 
 
-def check_plug_dir(plugd):
+# is specifying plugd=plugd necessary?
+def check_plug_dir(plugd=plugd):
     """Check if the directory vim-plug is downloaded to exists.
 
     If not, create it.
 
-    :param: plugd
-    :type: str
+    plugd : str
+        The directory to put vim-plug in.
 
     :returns: None
     """

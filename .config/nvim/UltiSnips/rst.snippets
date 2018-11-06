@@ -125,15 +125,22 @@ snippet url "External url"
 endsnippet
 
 snippet title= "Title underlined with ==='s" b
-${1:Title}
-=====${2:=}
-${0}
+${1:${VISUAL:Title}}
+`!p snip.rv = rst_char_len(t[1])*'='`
+$0
 endsnippet
 
 snippet title- "Title underlined with ---'s" b
-${1:Title}
------${2:-}
-${0}
+${1:${VISUAL:Title}}
+`!p snip.rv = rst_char_len(t[1])*'='`
+$0
+endsnippet
+
+# In case you forget the = ending I copied title= over
+snippet title "Title underlined with ==='s" b
+${1:${VISUAL:Title}}
+`!p snip.rv = rst_char_len(t[1])*'='`
+$0
 endsnippet
 
 # Directives

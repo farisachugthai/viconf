@@ -1,1 +1,1 @@
-../../.config/nvim/UltiSnips/README
+../../.config/nvim/UltiSnips/README.rst

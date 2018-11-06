@@ -9,11 +9,21 @@ Until I figure out how to get nvim set up as my git difftool, I have to maintain
 ## To get nvim synced up on Termux and Linux
 
 Because it's agitating not having feature parity.
+Also you're going to want to run :Glog in .config/nvim/UltiSnips/rst.snippets
+Because I'm thinking that I mindlessly checked out the version from Termux.
+The problem is that I probably added a couple good snippets in there, and by
+checking it out from a different branch I may have lost them. So look at the
+historical versions you have and make sure you didn't do that.
+
+Don't checkout sh.snippets either I have a bunch of snippets that need
+descriptions but otherwise look pretty good and need to get moved over
+to other branches as well.
+
 
 ## Get spell checking set up right
 
 Honestly this is quite a difficult process. I'm struggling to correctly work
-with the spellfiles in ./hunspell/
+with the spell files in ./hunspell/
 
 Keep in mind that if you're manually working with a .add spellfile, that you
 can run :sort and alphabetize all the words in the file!
@@ -33,7 +43,7 @@ Whether to put ftplugins in .config/nvim/ftplugin, .config/nvim/after/ftplugin
 ## Better autocomplete
 
 For your own housekeeping, think about coming up with a list of what the
-hotkeys for deoplete, jedi, lang client/pyls are, and what completefunc and
+hotkeys for deoplete, jedi, Lang Client/pyls are, and what completefunc and
 omnifunc in varying filetypes are bound to.
 
 Because I keep hitting tab and C-N and getting inconsistent behavior and
@@ -41,19 +51,19 @@ that needs to stop.
 
 ### deoplete
 
-has a bunch of new mappings hopefully you'll find them pretty useful {i'm stoked}
+Has a bunch of new mappings hopefully you'll find them pretty useful {I'm stoked}
 
 ### jedi
 
-gonna leave it bound to C-Space to initialize autocomplete. could use C-N
+Going to leave it bound to C-Space to initialize autocomplete. Could use C-N
 but that's kinda unclear since autocomplete doesn't need a trigger with
 deoplete and C-N is 'pick the next element'
 
-### language client
+### Language Client
 
-currently the value of completefunc in an \*.md file.
+Currently the value of completefunc in an \*.md file.
 
-awh and the response for both if you open a \*.py file. Poor jedi.
+Awh and the response for both if you open a \*.py file. Poor jedi.
 
 ### Current state
 

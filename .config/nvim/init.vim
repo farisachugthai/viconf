@@ -44,7 +44,6 @@ Plug 'mhinz/vim-startify'
 if has('nvim')
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 else
-    Plug 'Shougo/deoplete.nvim'
     Plug 'roxma/nvim-yarp'
     Plug 'roxma/vim-hug-neovim-rpc'
 endif
@@ -217,9 +216,9 @@ set tags+=./tags,./../tags,./*/tags     " usr_29
 set tags+=~/projects/tags               " consider generating a few large tag
 set tags+=~python/tags                  " files rather than recursive searches
 set mouse=a                             " Automatically enable mouse usage
-set cursorline                          " Might wanna have off. Or change color
+" set cursorline                          " Might wanna have off. Or change color
 if &textwidth!=0
-    set colorcolumn=+1
+    set colorcolumn=+1                  " I don't know why this didn't set
 endif
 set cmdheight=2
 set number
@@ -234,10 +233,11 @@ if has('gui_running')
 endif
 
 " In case you wanted to see the guicursor default for gvim win64
-" set gcr=n-v-c:block-Cursor/lCursor,ve:ver35-Cursor,o:hor50-Cursor,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor,sm:block-Cursor-blinkwait175-blinkoff150-blinkon175
+" set gcr=n-v-c:block-Cursor/lCursor,ve:ver35-Cursor,o:hor50-Cursor,
+" i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor,
+" sm:block-Cursor-blinkwait175-blinkoff150-blinkon175
 
  set path+=**        			        " Recursively search dirs with :find
-set path+=**        			        " Recursively search dirs with :find
 set autochdir
 set fileformat=unix
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
@@ -268,9 +268,9 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
-" Navigate tabs more easily
-nnoremap <A-Right> :tabnext<CR>
-nnoremap <A-Left> :tabprev<CR>
+" Navigate tabs more easily. Should be everywhere. Just be defensive w/ unique
+map <unique> <A-Right> :tabnext<CR>
+map <unique> <A-Left> :tabprev<CR>
 
 " Simple way to speed up startup
 nnoremap <Leader>nt :NERDTreeToggle<CR>
@@ -333,25 +333,29 @@ nnoremap <Leader>s= :norm z=<CR>
 
 " RSI: {{{ 3
 " For Emacs-style editing on the command line. Also considering using these
-" insert mode as well.
+" insert mode as well. Well i don't know why some of these maps aren't working
 " start of line
-cnoremap <C-A> <Home>
+cnoremap <C-a> <Home>
 " back one character
-cnoremap <C-B> <Left>
+cnoremap <C-b> <Left>
 " delete character under cursor
-cnoremap <C-D> <Del>
+cnoremap <C-d> <Del>
 " end of line
-cnoremap <C-E> <End>
+cnoremap <C-e> <End>
 " forward one character
-cnoremap <C-F> <Right>
-" recall newer command-line
-cnoremap <A-N> <Down>
-" recall previous (older) command-line
-cnoremap <A-P> <Up>
+cnoremap <C-f> <Right>
+" recall newer command-line. {Actually C-n and C-p on Emacs}
+map <unique> <A-n> <Down>
+" recall previous (older) command-line. {But we can't lose C-n and C-p}
+map <unique> <A-p> <Up>
 " back one word
-cnoremap <Esc><C-B> <S-Left>
+map <unique> <A-b> <S-Left>
 " forward one word
-cnoremap <Esc><C-F> <S-Right>
+map <unique> <A-f> <S-Right>
+" page down
+cnoremap <C-v> <PageDown>
+" page up
+map <unique> <A-v> <PageUp>
 " }}}
 
 " Terminal: {{{ 3
@@ -822,6 +826,12 @@ augroup ftpersonal
 " Markdown:
     autocmd BufNewFile,BufFilePre,BufRead *.md setlocal filetype=markdown
 augroup end
+
+" Diff: {{{ 3
+" It's visually noisy and setting the syntax highlighting to none speeds things
+" up to an incredible level.
+highlight DiffChanged guibg=None
+"
 " }}}
 
 " Functions: {{{ 2
@@ -925,6 +935,8 @@ command! DiffOrig vert new | set buftype=nofile | read ++edit # | 0d_
     \ | diffthis | wincmd p | diffthis
 " Use ':DiffOrig' to see the differences
 " between the current buffer and the file it was loaded from.
+
+" }}}
 
 " }}}
 

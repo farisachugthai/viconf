@@ -383,6 +383,7 @@ iab Httpl Http:
 iab Hvae Have
 iab Hvaing Having
 iab Hwich Which
+ia Id I'd
 iab Idae Idea
 iab Idaes Ideas
 iab Identofy Identify
@@ -640,6 +641,7 @@ iab Shiped Shipped
 iab Shoudl Should
 iab Shouldent Shouldn't
 iab Shouldnt Shouldn't
+ia Shouldve Should've
 iab Showinf Showing
 iab Signifacnt Significant
 iab Simalar Similar
@@ -794,9 +796,11 @@ iab Wnat Want
 iab Wohle Whole
 iab Woh Who
 iab Wokr Work
+ia Wont Won't
 iab Woudl Would
 iab Wouldbe Would Be
 iab Wouldnt Wouldn't
+ia Wouldve Would've
 iab Wriet Write
 iab Writting Writing
 iab Wrod Word
@@ -1201,6 +1205,7 @@ iab httpL http:
 iab hvae have
 iab hvaing having
 iab hwich which
+ia id I'd
 iab idae idea
 iab idaes ideas
 iab identofy identify
@@ -1458,6 +1463,7 @@ iab shiped shipped
 iab shoudl should
 iab shouldent shouldn't
 iab shouldnt shouldn't
+ia shouldve should've
 iab showinf showing
 iab signifacnt significant
 iab simalar similar
@@ -1611,10 +1617,12 @@ iab wnats wants
 iab wnat want
 iab wohle whole
 iab woh who
+ia wont won't
 iab wokr work
 iab woudl would
 iab wouldbe would be
 iab wouldnt wouldn't
+ia wouldve would've
 iab wriet write
 iab writting writing
 iab wrod word
