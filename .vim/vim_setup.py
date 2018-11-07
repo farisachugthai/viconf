@@ -1,0 +1,1 @@
+../.config/nvim/vim_setup.py

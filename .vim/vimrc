@@ -50,15 +50,14 @@ augroup nerd_loader
         \|   execute 'autocmd! nerd_loader'
         \| endif
 augroup END
-Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
 Plug 'davidhalter/jedi-vim', { 'for': ['python', 'python3'] }
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
 Plug 'w0rp/ale'
 Plug 'morhetz/gruvbox'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips'| Plug 'honza/vim-snippets'
 Plug 'vim-airline/vim-airline'
 Plug 'mhinz/vim-startify'
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
@@ -70,10 +69,9 @@ call plug#end()
 " }}}
 
 " Vim Specific: {{{ 2
-set background=dark
 
 " unabashedly stolen from junegunn dude is too good.
-let s:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/init.vim.local'
+let s:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/vimrc.local'
 if filereadable(s:local_vimrc)
     execute 'source' s:local_vimrc
 endif
@@ -156,13 +154,13 @@ set splitright
 " }}}
 
 " Spell Checker: {{{ 3
-set encoding=UTF-8                       " Set default encoding
-scriptencoding UTF-8                     " Vint believes encoding should be done first
+set encoding=UTF-8                      " Set default encoding
+scriptencoding UTF-8                    " Vint believes encoding should be done first
 set fileencoding=UTF-8
 
-set spelllang=en
-if filereadable(glob('~/.config/nvim/spell/en_US.utf-8.add'))
-    set spellfile=~/.config/nvim/spell/en_US.utf-8.add
+setlocal spelllang=en
+if filereadable(glob('~/.vim/spell/en_US.utf-8.add'))
+    set spellfile=~/.vim/spell/en_US.utf-8.add
 endif
 
 if !has('nvim')
@@ -183,8 +181,8 @@ if filereadable('/usr/share/dict/american-english')
     setlocal dictionary+=/usr/share/dict/american-english
 endif
 
-if filereadable('$HOME/.config/nvim/spell/en.hun.spl')
-    set spelllang+=$HOME/.config/nvim/spell/en.hun.spl
+if filereadable('$HOME/.vim/spell/en.hun.spl')
+    set spelllang+=$HOME/.vim/spell/en.hun.spl
 endif
 
 if filereadable(glob('~/.vim/autocorrect.vim'))
@@ -221,15 +219,17 @@ endif
 " - 'directory' defaults to ~/.local/share/nvim/swap// (|xdg|), auto-created
 " - 'fillchars' defaults (in effect) to 'vert:│,fold:·'
 " - 'formatoptions' defaults to 'tcqj'
-" - 'listchars' defaults to 'tab:> ,trail:-,nbsp:+'
+"   default in vim as of 8.1 is
+"   formatoptions=jcroql
+"   .....sooooo completely different huh?
 " - 'sidescroll' defaults to 1
 "
 " }}}
 
 " Fun With Clipboards: {{{ 3
-if has('unnamedplus')                   " Use the system clipboard.
+if has('unnamedplus')            " Use the system clipboard.
   set clipboard+=unnamed,unnamedplus
-else                                    " Accommodate Termux
+else                             " Accommodate Termux
   set clipboard+=unnamed
 endif
 
@@ -282,9 +282,9 @@ endif
 set path+=**        			        " Recursively search dirs with :find
 set autochdir
 set fileformat=unix
-set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
 set diffopt=vertical,context:3          " vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
+set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 
 if has('persistent_undo')
     set undodir=~/.vim/undodir
@@ -323,19 +323,19 @@ nnoremap <Leader>a :echo('No. Use :%y')<CR>
 nnoremap <leader>he :helpgrep<space>
 " It should also be easier to edit the config. Bind similarly to tmux
 " TODO: What is vims version of realpath()? Can't find it even w/ helpgrep
-nnoremap <leader>ed :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
+nnoremap <leader>ed :tabe ~/projects/viconf/.vim/vimrc<CR>
 " It should also be easier to edit the config
-nnoremap <F9> :e ~/projects/viconf/.config/nvim/init.vim<CR>
+nnoremap <F9> :tabe ~/projects/viconf/.vim/vimrc<CR>
 " Now reload it
 nnoremap <leader>re :so $MYVIMRC<CR>
 
-" Escape conveniences
+" Escape Conveniences
 inoremap jk <Esc>
 vnoremap jk <Esc>
 
 " Junegunn:
-nnoremap <leader>o o<esc>
-nnoremap <leader>O O<esc>
+nnoremap <leader>o o<Esc>
+nnoremap <leader>O O<Esc>
 xnoremap < <gv
 xnoremap > >gv
 
@@ -396,9 +396,17 @@ cnoremap <A-N> <Down>
 " recall previous (older) command-line
 cnoremap <A-P> <Up>
 " back one word
-cnoremap <Esc><C-B> <S-Left>
+cnoremap <A-B> <S-Left>
 " forward one word
-cnoremap <Esc><C-F> <S-Right>
+cnoremap <A-F> <S-Right>
+" But still need the functionality
+cnoremap <C-g> <Esc>
+" Its annoying everything goes away from this typo
+cmap <nop> <Esc>
+" top of buffer
+cnoremap <A\<> :norm gg
+" bottom of buffer
+cnoremap <A\>> :norm G
 " }}}
 
 " Terminal: {{{ 3
@@ -487,7 +495,7 @@ nnoremap <leader>+ <Plug>AirlineSelectNextTab
 
 " }}}
 
-" Macros and Plugins: {{{ 2
+" Macros: {{{ 2
 
 " nvim automatically sources this
 if !has('nvim')
@@ -504,11 +512,13 @@ runtime! macros/matchit.vim
 set matchpairs+=<:>
 
 " To every plugin I've never used before. Stop slowing me down.
-let g:loaded_vimballPlugin = 1
-let g:loaded_tutor_mode_plugin = 1
-let g:loaded_getsciptPlugin = 1
-let g:loaded_2html_plugin = 1
-let g:loaded_logiPat = 1
+let g:loaded_vimballPlugin                                                = 1
+let g:loaded_tutor_mode_plugin                                            = 1
+let g:loaded_getsciptPlugin                                               = 1
+let g:loaded_2html_plugin                                                 = 1
+let g:loaded_logiPat                                                      = 1
+" let g:loaded_netrw                                                      = 1
+" let g:loaded_netrwPlugin                                                = 1
 " Let's see if this speeds things up because I've never used most of them
 
 " }}}
@@ -675,14 +685,13 @@ let g:ale_fix_on_save = 1
 let g:ale_echo_msg_format = '%linter% - %code: %%s %severity%'
 let g:ale_set_signs = 1
 let g:ale_sign_column_always = 1
-let g:ale_lint_delay = 1000
+let g:ale_lint_delay = 100
 " }}}
 
 " Devicons: {{{ 3
 let g:webdevicons_enable = 1
 let g:webdevicons_enable_nerdtree = 1               " adding the flags to NERDTree
 let g:airline_powerline_fonts = 1
-" }}}
 " For startify
 let entry_format = "'   ['. index .']'. repeat(' ', (3 - strlen(index)))"
 
@@ -763,7 +772,7 @@ let g:startify_skiplist = [
 
 " UltiSnips: {{{ 3
 " TODO: Modify based on value of OS. Ugh. We're gonna start exporting this to python soon I swear.
-let g:UltiSnipsSnippetDir = [ '~/.config/nvim/UltiSnips' ]
+let g:UltiSnipsSnippetDir = [ '~/.vim/UltiSnips' ]
 let g:UltiSnipsJumpForwardTrigger='<Tab>'
 let g:UltiSnipsJumpBackwardTrigger='<S-Tab>'
 inoremap <C-Tab> * <Esc>:call UltiSnips#ListSnippets()<CR>
@@ -782,9 +791,7 @@ hi NonText guifg=NONE guibg=NONE        " Massive performance difference
 " }}}
 
 " Language Client: {{{ 3
-let g:LanguageClient_serverCommands = {
-    \ 'python': [ 'pyls' ]
-    \ }
+let g:LanguageClient_serverCommands = { 'python': [ 'pyls' ] }
 " }}}
 
 " Jedi: {{{ 3
@@ -849,6 +856,19 @@ augroup ftpersonal
     autocmd BufNewFile,BufFilePre,BufRead *.md setlocal filetype=markdown
 augroup end
 
+" Noticed this bit in he syntax line 2800
+let g:is_bash = 1
+let g:sh_fold_enabled= 4  "   (enable if/do/for folding)
+let g:sh_fold_enabled= 3  "   (enables function and heredoc folding)
+"Let's hope this doesn't make things too slow.
+
+" he rst.vim or ft-rst-syntax or syntax 2600. Don't put bash instead of sh.
+" $VIMRUNTIME/syntax/rst.vim iterates over this var and if it can't find a
+" bash.vim syntax file it will crash.
+let rst_syntax_code_list = ['vim', 'python', 'sh', 'markdown', 'lisp']
+
+" highlighting readline options
+let readline_has_bash = 1
 " }}}
 
 " Functions: {{{ 2
@@ -875,7 +895,6 @@ function! s:todo() abort
     endif
 endfunction
 command! Todo call s:todo()
-
 " }}}
 
 " Explore: {{{ 3
@@ -892,7 +911,6 @@ function! s:plug_help_sink(line)
     tabnew
     execute 'Explore' dir
 endfunction
-
 " }}}
 
 " Scriptnames: {{{ 3
@@ -906,7 +924,6 @@ function! s:scriptnames(re) abort
     let filtered = filter(split(scriptnames, "\n"), "v:val =~ '" . a:re . "'")
     echo join(filtered, "\n")
 endfunction
-
 " }}}
 
 " Helptabs: {{{ 3
@@ -920,7 +937,6 @@ function! s:helptab()
     endif
 endfunction
 command! -nargs=1 Help call <SID>helptab()
-
 " }}}
 
 " Autosave: {{{ 3
@@ -938,7 +954,6 @@ function! s:autosave(enable)
 endfunction
 
 command! -bang Autosave call s:autosave(<bang>1)
-
 " }}}
 
 " HL: {{{ 3
@@ -960,7 +975,6 @@ command! DiffOrig vert new | set buftype=nofile | read ++edit # | 0d_
     \ | diffthis | wincmd p | diffthis
 " Use ':DiffOrig' to see the differences
 " between the current buffer and the file it was loaded from.
-
 " }}}
 
 " EditFileComplete: {{{ 3
@@ -970,7 +984,6 @@ com! -nargs=1 -bang -complete=customlist,EditFileComplete
 fun! EditFileComplete(A,L,P)
     return split(globpath(&path, a:A), "\n")
 endfun
-
 " }}}
 
 " }}}

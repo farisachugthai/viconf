@@ -493,6 +493,7 @@ iab Neccessary Necessary
 iab Necesarily Necessarily
 iab Necesary Necessary
 iab Negotiaing Negotiating
+ia Ngl Not gonna lie
 iab Nkow Know
 iab Nothign Nothing
 iab Nver Never
@@ -1315,6 +1316,7 @@ iab neccessary necessary
 iab necesarily necessarily
 iab necesary necessary
 iab negotiaing negotiating
+ia ngl not gonna lie
 iab nkow know
 iab nothign nothing
 iab nver never

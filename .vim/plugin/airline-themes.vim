@@ -1,0 +1,1 @@
+../../.config/nvim/plugin/airline-themes.vim

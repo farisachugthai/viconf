@@ -31,8 +31,8 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
 Plug 'w0rp/ale'
-Plug 'morhetz/gruvbox'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'edkolev/tmuxline.vim'
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'vim-airline/vim-airline'
 Plug 'mhinz/vim-startify'
@@ -40,12 +40,11 @@ Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
-
+Plug 'KeitaNakamura/neodark.vim'
 call plug#end()
 " }}}
 
 " Nvim Specific: {{{ 2
-set background=dark
 
 " unabashedly stolen from junegunn dude is too good.
 let s:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/init.vim.local'
@@ -270,9 +269,9 @@ nnoremap <Leader>a :echo('No. Use :%y')<CR>
 nnoremap <leader>he :helpgrep<space>
 " It should also be easier to edit the config. Bind similarly to tmux
 " TODO: What is vims version of realpath()? Can't find it even w/ helpgrep
-nnoremap <leader>ed :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
+nnoremap <leader>ed :tabe ~/projects/viconf/.vim/vimrc<CR>
 " It should also be easier to edit the config
-nnoremap <F9> :e ~/projects/viconf/.config/nvim/init.vim<CR>
+nnoremap <F9> :tabe ~/projects/viconf/.vim/vimrc<CR>
 " Now reload it
 nnoremap <leader>re :so $MYVIMRC<CR>
 
@@ -343,9 +342,17 @@ cnoremap <A-N> <Down>
 " recall previous (older) command-line
 cnoremap <A-P> <Up>
 " back one word
-cnoremap <Esc><C-B> <S-Left>
+cnoremap <A-B> <S-Left>
 " forward one word
-cnoremap <Esc><C-F> <S-Right>
+cnoremap <A-F> <S-Right>
+" But still need the functionality
+cnoremap <C-g> <Esc>
+" Its annoying everything goes away from this typo
+cmap <nop> <Esc>
+" top of buffer
+cnoremap <A\<> :norm gg
+" bottom of buffer
+cnoremap <A\>> :norm G
 " }}}
 
 " Terminal: {{{ 3
@@ -469,9 +476,9 @@ if has('nvim') || has('gui_running')
 endif
 
 augroup fzf
-autocmd! FileType fzf
-autocmd  FileType fzf set laststatus=0 noshowmode noruler
-      \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+    autocmd! FileType fzf
+    autocmd  FileType fzf set laststatus=0 noshowmode noruler
+    \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 augroup end
 
 " An action can be a reference to a function that processes selected lines
@@ -625,6 +632,18 @@ let g:ale_echo_msg_format = '%linter% - %code: %%s %severity%'
 let g:ale_set_signs = 1
 let g:ale_sign_column_always = 1
 let g:ale_lint_delay = 1000
+let g:ale_set_quickfix = 1
+let g:ale_set_loclist = 0
+let g:ale_virtualenv_dir_names = [ '$HOME/virtualenvs' ]
+
+" Display progress while linting.
+let s:ale_running = 0
+" let l:stl .= '%{s:ale_running ? "[linting]" : ""}'
+augroup ALEProgress
+    autocmd!
+    autocmd User ALELintPre  let s:ale_running = 1 | redrawstatus
+    autocmd User ALELintPost let s:ale_running = 0 | redrawstatus
+augroup END
 " }}}
 
 " Devicons: {{{ 3
@@ -721,18 +740,8 @@ let g:UltiSnipsEnableSnipMate = 1
 let g:UltiSnipsEditSplit = 'tabdo'
 " }}}
 
-" Colorscheme: {{{ 3
-colorscheme gruvbox
-if g:colors_name ==# 'gruvbox'      " ==# means match case
-    let g:gruvbox_contrast_dark = 'hard'
-endif
-hi NonText guifg=NONE guibg=NONE        " Massive performance difference
-" }}}
-
 " Language Client: {{{ 3
-let g:LanguageClient_serverCommands = {
-    \ 'python': [ 'pyls' ]
-    \ }
+let g:LanguageClient_serverCommands = { 'python': [ 'pyls' ] }
 " }}}
 
 " Jedi: {{{ 3
@@ -751,6 +760,8 @@ let g:deoplete#sources#jedi#enable_typeinfo = 0
 " }}}
 
 " Airline: {{{ 3
+let g:airline#extensions#syntastic#enabled = 0
+let g:airline#extensions#csv#enabled = 0
 let g:airline_powerline_fonts = 1
 let g:airline_highlighting_cache = 1
 let g:airline_skip_empty_sections = 1
@@ -779,9 +790,13 @@ let g:airline_symbols.spell = 'Ꞩ'
 let g:airline_symbols.notexists = 'Ɇ'
 let g:airline_symbols.whitespace = 'Ξ'
 
+" way too messy as is
 let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
-
-let g:airline#extensions#tabline#enabled = 0
+let g:airline#extensions#tabline#tab_nr_type = 1 " splits and tab number
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#buffer_nr_show = 1
+let g:airline#extensions#tabline#fnametruncate = 1
+let g:airline#extensions#tmuxline#enabled = 1
 " }}}
 
 " }}}
@@ -803,8 +818,10 @@ let g:sh_fold_enabled= 4  "   (enable if/do/for folding)
 let g:sh_fold_enabled= 3  "   (enables function and heredoc folding)
 "Let's hope this doesn't make things too slow.
 
-" he rst.vim or ft-rst-syntax or syntax 2600
-let rst_syntax_code_list = ['vim', 'python', 'bash', 'markdown']
+" he rst.vim or ft-rst-syntax or syntax 2600. Don't put bash instead of sh.
+" $VIMRUNTIME/syntax/rst.vim iterates over this var and if it can't find a
+" bash.vim syntax file it will crash.
+let rst_syntax_code_list = ['vim', 'python', 'sh', 'markdown', 'lisp']
 
 " highlighting readline options
 let readline_has_bash = 1
@@ -932,6 +949,16 @@ endfun
 
 " }}}
 
+" }}}
+
+" Colorscheme: {{{ 2
+set background=dark
+colorscheme gruvbox
+if g:colors_name ==# 'gruvbox'      " ==# means match case
+    let g:gruvbox_contrast_dark = 'hard'
+    let g:gruvbox_improved_strings = 1
+endif
+hi NonText guifg=NONE guibg=#000000        " Massive performance difference
 " }}}
 
 " }}}
