@@ -16,14 +16,16 @@ Attributes:
 TODO:
     - Continue bringing this up to google style docstring conventions.
     - Explore ``sphinx.ext.todo`` extension
+
 """
 import os
 import sys
 
 
-def check_plug_dir():
+def check_plug_dir(plug_path):
     """Check if the directory vim-plug is downloaded to exists."""
-    pass
+    if os.path.isdir(plug_path):
+        os.mkdir(plug_path)
 
 
 def requests_download():

@@ -23,6 +23,21 @@ ${3:## eg}
 ${4:## man}
 endsnippet
 
+# Here's the src:
+# https://daringfireball.net/projects/markdown/syntax#link
+snippet link "A link"
+[${1:displayedtext}](${2:URL})
+endsnippet
+
+snippet linktitle "Inline link with a title" b
+[${1:displayedtext}](${2:URL} "{3:Optional title}")
+endsnippet
+
+snippet rel "Relative path in a link" b
+[${1:text}(${VISUAL:/path/to/link})
+endsnippet
+
+
 #######################################################################
 #                             # SnipMate                              #
 #######################################################################
@@ -139,8 +154,16 @@ snippet * "italics"
 *${1:${VISUAL}}*$0
 endsnippet
 
+snippet _ "italics
+_${1:${VISUAL}}_$0
+endsnippet
+
 snippet ** "bold"
 **${1:${VISUAL}}**$0
+endsnippet
+
+snippet __ "bold"
+__${1:${VISUAL}}__$0
 endsnippet
 
 snippet *** "bold italics"
@@ -151,7 +174,9 @@ endsnippet
 ################
 # Common stuff #
 ################
-snippet link "Link to something"
+
+
+snippet link "More fleshed out than my link. Link to something"
 [${1:${VISUAL:Text}}](${3:http://${2:www.url.com}})$0
 endsnippet
 
