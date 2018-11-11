@@ -34,13 +34,19 @@ Plug 'w0rp/ale'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'edkolev/tmuxline.vim'
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
 Plug 'mhinz/vim-startify'
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+let g:deoplete#enable_at_startup = 1
+if !has('nvim')
+    Plug 'roxma/nvim-yarp'
+    Plug 'roxma/vim-hug-neovim-rpc'
+endif
+Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3'] }
 Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
-Plug 'KeitaNakamura/neodark.vim'
 call plug#end()
 " }}}
 
@@ -134,7 +140,7 @@ set encoding=UTF-8                       " Set default encoding
 scriptencoding UTF-8                     " Vint believes encoding should be done first
 set fileencoding=UTF-8
 
-set spelllang=en
+setlocal spelllang=en
 " TODO: Probably have an OS wrap. like
 " if ($OS == 'Windows_NT') | echo 'yes' | endif
 " run that commmand to double check syntax.
@@ -202,7 +208,17 @@ set wildmenu                            " Show list instead of just completing
 set wildmode=longest,list:longest       " Longest string or list alternatives
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 set fileignorecase                      " when searching for files don't use case
-set wildignorecase                      " on the cmdline ignore case in filenames
+set wildignorecase
+" Set completefunc here and then let b:omnifunc in ftplugins
+" However let's check that LangClient is running
+try
+    LanguageClient#serverStart()
+    set completefunc=LanguageClient#complete
+    set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
+catch
+endtry
+" TODO: Write the above as if ! LC#sS() | LanguageClientStart() | set
+" on the cmdline ignore case in filenames
 " }}}
 
 " Other Global Options: {{{ 3
@@ -247,8 +263,7 @@ set browsedir="buffer"                  " which directory is used for the file b
 
 " Mappings: {{{ 2
 
-" General Mappings: {{{ 3
-
+" Window_Buf_Tab_Mappings: {{{ 3
 " Note that F7 is bound to pastetoggle so don't map it
 " Navigate windows more easily
 nnoremap <C-h> <C-w>h
@@ -259,7 +274,26 @@ nnoremap <C-l> <C-w>l
 " Navigate tabs more easily
 nnoremap <A-Right> :tabnext<CR>
 nnoremap <A-Left> :tabprev<CR>
-
+" It should also be easier to edit the config. Bind similarly to tmux
+" TODO: What is vims version of realpath()? Can't find it even w/ helpgrep
+nnoremap <leader>ed :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
+" It should also be easier to edit the config
+nnoremap <F9> :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
+" Now reload it
+nnoremap <leader>re :so $MYVIMRC<CR>
+" Opens a new tab with the current buffer's path
+" Super useful when editing files in the same directory
+nnoremap <leader>te :tabedit <c-r>=expand("%:p:h")<cr>
+" Switch CWD to the directory of the open buffer
+nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
+"Use mnemonenics for easier navigation
+nnoremap <Leader>bn :bnext<CR>
+nnoremap <Leader>bp :bprev<CR>
+nnoremap <Leader>tn :tabnext<CR>
+nnoremap <Leader>tp :tabprev<CR>
+" }}}
+"
+" General_Mappings: {{{ 3
 " Simple way to speed up startup
 nnoremap <Leader>nt :NERDTreeToggle<CR>
 
@@ -267,30 +301,16 @@ nnoremap <Leader>a :echo('No. Use :%y')<CR>
 
 " It should be easier to get help
 nnoremap <leader>he :helpgrep<space>
-" It should also be easier to edit the config. Bind similarly to tmux
-" TODO: What is vims version of realpath()? Can't find it even w/ helpgrep
-nnoremap <leader>ed :tabe ~/projects/viconf/.vim/vimrc<CR>
-" It should also be easier to edit the config
-nnoremap <F9> :tabe ~/projects/viconf/.vim/vimrc<CR>
-" Now reload it
-nnoremap <leader>re :so $MYVIMRC<CR>
-
-" Escape conveniences
+" Escape Conveniences
 inoremap jk <Esc>
 vnoremap jk <Esc>
 
 " Junegunn:
-nnoremap <leader>o o<esc>
-nnoremap <leader>O O<esc>
+nnoremap <Leader>o o<Esc>
+nnoremap <Leader>O O<Esc>
 xnoremap < <gv
 xnoremap > >gv
 
-" Opens a new tab with the current buffer's path
-" Super useful when editing files in the same directory
-nnoremap <leader>te :tabedit <c-r>=expand("%:p:h")<cr>
-
-" Switch CWD to the directory of the open buffer
-nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
 
 " I use this command constantly
 nnoremap <leader>sn :Snippets<cr>
@@ -337,9 +357,9 @@ cnoremap <C-D> <Del>
 cnoremap <C-E> <End>
 " forward one character
 cnoremap <C-F> <Right>
-" recall newer command-line (but leave C-n and C-p)
+" recall newer command in history
 cnoremap <A-N> <Down>
-" recall previous (older) command-line
+" recall previous command in command-line browser
 cnoremap <A-P> <Up>
 " back one word
 cnoremap <A-B> <S-Left>
@@ -441,7 +461,7 @@ nnoremap <leader>+ <Plug>AirlineSelectNextTab
 
 " }}}
 
-" Macros and Plugins: {{{ 2
+" Macros: {{{ 2
 
 " nvim automatically sources this
 if !has('nvim')
@@ -597,7 +617,6 @@ augroup END
 " Remaining Plugins: {{{ 2
 
 " NERDTree: {{{ 3
-" Let's see if this works properly as a group
 augroup nerd_loader
   autocmd!
   autocmd VimEnter * silent! autocmd! FileExplorer
@@ -752,6 +771,7 @@ let g:jedi#usages_command = '<leader>u'
 let g:jedi#show_call_signatures_delay = 100
 let g:jedi#smart_auto_mappings = 0
 let g:jedi#force_py_version = 3
+let g:jedi#enable_completions = 0
 " }}}
 
 " Deoplete_Jedi: {{{ 3
@@ -851,7 +871,6 @@ function! s:todo() abort
     endif
 endfunction
 command! Todo call s:todo()
-
 " }}}
 
 " Explore: {{{ 3
@@ -868,7 +887,6 @@ function! s:plug_help_sink(line)
     tabnew
     execute 'Explore' dir
 endfunction
-
 " }}}
 
 " Scriptnames: {{{ 3
@@ -882,11 +900,9 @@ function! s:scriptnames(re) abort
     let filtered = filter(split(scriptnames, "\n"), "v:val =~ '" . a:re . "'")
     echo join(filtered, "\n")
 endfunction
-
 " }}}
 
 " Helptabs: {{{ 3
-
 function! s:helptab()
     if &buftype ==# 'help'
         wincmd T
@@ -896,11 +912,9 @@ function! s:helptab()
     endif
 endfunction
 command! -nargs=1 Help call <SID>helptab()
-
 " }}}
 
 " Autosave: {{{ 3
-
 function! s:autosave(enable)
   augroup autosave
     autocmd!
@@ -914,7 +928,6 @@ function! s:autosave(enable)
 endfunction
 
 command! -bang Autosave call s:autosave(<bang>1)
-
 " }}}
 
 " HL: {{{ 3
@@ -936,7 +949,6 @@ command! DiffOrig vert new | set buftype=nofile | read ++edit # | 0d_
     \ | diffthis | wincmd p | diffthis
 " Use ':DiffOrig' to see the differences
 " between the current buffer and the file it was loaded from.
-
 " }}}
 
 " EditFileComplete: {{{ 3
@@ -946,14 +958,13 @@ com! -nargs=1 -bang -complete=customlist,EditFileComplete
 fun! EditFileComplete(A,L,P)
     return split(globpath(&path, a:A), "\n")
 endfun
-
 " }}}
 
 " }}}
 
 " Colorscheme: {{{ 2
 set background=dark
-colorscheme gruvbox
+colorscheme onedark
 if g:colors_name ==# 'gruvbox'      " ==# means match case
     let g:gruvbox_contrast_dark = 'hard'
     let g:gruvbox_improved_strings = 1

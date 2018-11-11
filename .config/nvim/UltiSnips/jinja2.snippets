@@ -22,15 +22,18 @@ endsnippet
 
 
 snippet ji{{ "variable" b
-{{ $1 }}
+{{ ${VISUAL:1} }}
 endsnippet
 
+snippet jivar "variable" b
+{{ ${VISUAL:1} }}
+endsnippet
 
 snippet ji{# "comment" b
-{# $1 #}
+{# ${VISUAL:1} #}
 endsnippet
 
-
+# TODO: Get junegunns com for saving and loadinf macros. These files could use it. Or make a py plugin.
 snippet ji# "comment" b
 {# $1 #}
 endsnippet

@@ -7,6 +7,7 @@ plugged ~/.local/share/nvim/plugged
 prefix /data/data/com.termux/files/usr
 py_tut ~/python/tutorials
 viconf ~/projects/viconf/.config/nvim
+vim-rtp /data/data/com.termux/files/usr/share/vim/vim81
 
 word-freq ~/projects/word-freq
 NERDTreeBookmarks ~/.vim/NERDTreeBookmarks

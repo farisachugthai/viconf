@@ -44,31 +44,21 @@ let s:windows = has('win32') || has('win64')
 
 So between FZF, ag, rg and a ton of other things I've been trying to do a ton with configuring searches correctly.
 
-Look at the command vscode gives you if you enable experimental support for rg.
-
-    `rg --files --hidden --case-sensitive -g '**/package.json' -g '!**/node_modules/**' -g '!**/.git' -g '!**/.svn' -g '!**/.hg' -g '!**/CVS' -g '!**/.DS_Store' --no-ignore-parent --follow --no-config --no-ignore-global -- '.'`
-
-I mean I guess it wouldn't hurt to try integrating that into the init right?
-
 ### Language Client
 
-The only thing is the function
+The only part of the API that was open at the time of writing was the function
 
     `LanguageClient_serverCommands()`
 
 But it's a simple dictionary. If you want, run a whole mess of loops checking
 things you care about I.E. bash language server, pyls etc are executable.
-
 If those loops return True, add it's name to the dictionary. Then have the
 server run the commands we feed to it
-
 I'm not sure how I hadn't thought of this yet.
 
 ### Lightline
 
 Honestly keep this around because airline is pretty heavy on termux.
-
-BTW do the code blocks need viml or VimScript after the tick marks?
 
 ```viml
 " Lightline: {{{

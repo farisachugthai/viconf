@@ -8,6 +8,16 @@ global !p
 from vimsnippets import foldmarker, make_box, get_comment_format
 endglobal
 
+snippet docs "Module Docstring" b
+	"""
+	File: ${1:'foo.py'}
+	Author: `g:snips_author`
+	Email: `g:snips_email`
+	Github: `g:snips_github`
+	Description: ${0}
+	"""
+endsnippet
+
 snippet box "A nice box with the current comment symbol" b
 `!p
 box = make_box(len(t[1]))

@@ -10,28 +10,6 @@ let g:snips_email = 'farischugthai@gmail.com'
 let g:snips_github = 'https://github.com/farisachugthai'
 " }}}
 
-" Environment: {{{ 2
-" Let's setup all the global vars we need. Will utilize to ensure consistency
-
-let s:termux = exists('$PREFIX') && has('unix')
-let s:ubuntu = !exists('$PREFIX') && has('unix')
-let s:windows = has('win32') || has('win64')
-
-" So what I think my problem was is that I have these variables but there's
-" no point at which they're initialized. Let's write a few funcs
-" function! is#termux() abort
-"     return s:termux
-" endfunction
-
-" function! is#ubuntu() abort
-"     return s:ubuntu
-" endfunction
-
-" function! is#windows() abort
-"     return s:windows
-" endfunction
-" }}}
-
 " Vim Plug: {{{ 2
 
 call plug#begin('~/.vim/plugged')
@@ -40,7 +18,8 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
 " Nothing happens if we open a directory to start nvim
-"TODO: one of the expressions in the loop needs to be prepended with silent
+"TODO: one of the expressions in the loop needs to be prepended with silent.
+" Oddly only true for Vim.
 augroup nerd_loader
   autocmd!
   autocmd VimEnter * silent! autocmd! FileExplorer
@@ -55,16 +34,15 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
 Plug 'w0rp/ale'
-Plug 'morhetz/gruvbox'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'SirVer/ultisnips'| Plug 'honza/vim-snippets'
-Plug 'vim-airline/vim-airline'
+Plug 'edkolev/tmuxline.vim'
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
 Plug 'mhinz/vim-startify'
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
-
 call plug#end()
 " }}}
 
@@ -87,6 +65,12 @@ if has('nvim')
     set inccommand=split                    " This alone is enough to never go back
     set termguicolors
 endif
+
+" TODO: Make sure this doesn't cause conflicts or settunfsboptions twice
+" Vim 8 defaults
+unlet! skip_defaults_vim
+silent! source $VIMRUNTIME/defaults.vim
+
 " }}}
 
 " Python Executables: {{{ 2
@@ -227,9 +211,9 @@ endif
 " }}}
 
 " Fun With Clipboards: {{{ 3
-if has('unnamedplus')            " Use the system clipboard.
+if has('unnamedplus')           " Use the system clipboard.
   set clipboard+=unnamed,unnamedplus
-else                             " Accommodate Termux
+else                            " Accomodate Termux
   set clipboard+=unnamed
 endif
 
@@ -256,7 +240,15 @@ set wildmenu                            " Show list instead of just completing
 set wildmode=longest,list:longest       " Longest string or list alternatives
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 set fileignorecase                      " when searching for files don't use case
-set wildignorecase                      " on the cmdline ignore case in filenames
+set wildignorecase
+" Set completefunc here and then let b:omnifunc in ftplugins
+" However let's check that LangClient is running
+if LanguageClient#serverStatus()
+    set completefunc=LanguageClient#complete
+    set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
+endif
+" TODO: Write the above as if ! LC#sS() | LanguageClientStart() | set
+" completefunc | else | set completefunc | endif
 " }}}
 
 " Other Global Options: {{{ 3
@@ -284,7 +276,7 @@ set autochdir
 set fileformat=unix
 set nojoinspaces
 set diffopt=vertical,context:3          " vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
-set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
+set whichwrap+=<,>,h,l,[,]
 
 if has('persistent_undo')
     set undodir=~/.vim/undodir
@@ -302,7 +294,6 @@ set browsedir="buffer"                  " which directory is used for the file b
 " Mappings: {{{ 2
 
 " General Mappings: {{{ 3
-
 " Note that F7 is bound to pastetoggle so don't map it
 " Navigate windows more easily
 nnoremap <C-h> <C-w>h
@@ -334,8 +325,8 @@ inoremap jk <Esc>
 vnoremap jk <Esc>
 
 " Junegunn:
-nnoremap <leader>o o<Esc>
-nnoremap <leader>O O<Esc>
+nnoremap <Leader>o o<Esc>
+nnoremap <Leader>O O<Esc>
 xnoremap < <gv
 xnoremap > >gv
 
@@ -391,9 +382,9 @@ cnoremap <C-D> <Del>
 cnoremap <C-E> <End>
 " forward one character
 cnoremap <C-F> <Right>
-" recall newer command-line (but leave C-n and C-p)
+" recall newer command in history
 cnoremap <A-N> <Down>
-" recall previous (older) command-line
+" recall previous command in command-line browser
 cnoremap <A-P> <Up>
 " back one word
 cnoremap <A-B> <S-Left>
@@ -651,7 +642,6 @@ augroup END
 " Remaining Plugins: {{{ 2
 
 " NERDTree: {{{ 3
-" Let's see if this works properly as a group
 augroup nerd_loader
   autocmd!
   autocmd VimEnter * silent! autocmd! FileExplorer
@@ -685,7 +675,19 @@ let g:ale_fix_on_save = 1
 let g:ale_echo_msg_format = '%linter% - %code: %%s %severity%'
 let g:ale_set_signs = 1
 let g:ale_sign_column_always = 1
-let g:ale_lint_delay = 100
+let g:ale_lint_delay = 1000
+let g:ale_set_quickfix = 1
+let g:ale_set_loclist = 0
+let g:ale_virtualenv_dir_names = [ '$HOME/virtualenvs' ]
+
+" Display progress while linting.
+let s:ale_running = 0
+" let l:stl .= '%{s:ale_running ? "[linting]" : ""}'
+augroup ALEProgress
+    autocmd!
+    autocmd User ALELintPre  let s:ale_running = 1 | redrawstatus
+    autocmd User ALELintPost let s:ale_running = 0 | redrawstatus
+augroup END
 " }}}
 
 " Devicons: {{{ 3
@@ -782,14 +784,6 @@ let g:UltiSnipsEnableSnipMate = 1
 let g:UltiSnipsEditSplit = 'tabdo'
 " }}}
 
-" Colorscheme: {{{ 3
-colorscheme gruvbox
-if g:colors_name ==# 'gruvbox'      " ==# means match case
-    let g:gruvbox_contrast_dark = 'hard'
-endif
-hi NonText guifg=NONE guibg=NONE        " Massive performance difference
-" }}}
-
 " Language Client: {{{ 3
 let g:LanguageClient_serverCommands = { 'python': [ 'pyls' ] }
 " }}}
@@ -802,6 +796,7 @@ let g:jedi#usages_command = '<leader>u'
 let g:jedi#show_call_signatures_delay = 100
 let g:jedi#smart_auto_mappings = 0
 let g:jedi#force_py_version = 3
+let g:jedi#enable_completions = 0
 " }}}
 
 " Deoplete_Jedi: {{{ 3
@@ -810,6 +805,8 @@ let g:deoplete#sources#jedi#enable_typeinfo = 0
 " }}}
 
 " Airline: {{{ 3
+let g:airline#extensions#syntastic#enabled = 0
+let g:airline#extensions#csv#enabled = 0
 let g:airline_powerline_fonts = 1
 let g:airline_highlighting_cache = 1
 let g:airline_skip_empty_sections = 1
@@ -838,9 +835,13 @@ let g:airline_symbols.spell = 'Ꞩ'
 let g:airline_symbols.notexists = 'Ɇ'
 let g:airline_symbols.whitespace = 'Ξ'
 
+" way too messy as is
 let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
-
-let g:airline#extensions#tabline#enabled = 0
+let g:airline#extensions#tabline#tab_nr_type = 1 " splits and tab number
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#buffer_nr_show = 1
+let g:airline#extensions#tabline#fnametruncate = 1
+let g:airline#extensions#tmuxline#enabled = 1
 " }}}
 
 " }}}
@@ -927,7 +928,6 @@ endfunction
 " }}}
 
 " Helptabs: {{{ 3
-
 function! s:helptab()
     if &buftype ==# 'help'
         wincmd T
@@ -940,7 +940,6 @@ command! -nargs=1 Help call <SID>helptab()
 " }}}
 
 " Autosave: {{{ 3
-
 function! s:autosave(enable)
   augroup autosave
     autocmd!
@@ -986,6 +985,16 @@ fun! EditFileComplete(A,L,P)
 endfun
 " }}}
 
+" }}}
+
+" Colorscheme: {{{ 2
+set background=dark
+colorscheme onedark
+if g:colors_name ==# 'gruvbox'      " ==# means match case
+    let g:gruvbox_contrast_dark = 'hard'
+    let g:gruvbox_improved_strings = 1
+endif
+hi NonText guifg=NONE guibg=#000000        " Massive performance difference
 " }}}
 
 " }}}
