@@ -1,19 +1,23 @@
 # rst.snippets
-# ==============
 # -*- coding: utf-8 -*-
-# vim:set ft=markdown noet sts=4 sw=4 ts=4:
+# Add ipython directives since none are here.
+# Let's treat this like a good opportunity to REALLY make sure you know RST.
+# Like honestly double check that this is what honza has because this is insane
+# also let's start practicing with this whole global p! snip.rv business
+# because my snippet for table isn't gonna be usable
+
+extends snippets
+extends python
 
 #######################################################################
-#                    # Personal Snippets                    #
+#							Personal Snippets						  #
 #######################################################################
-
 
 snippet inlink "Create an internal link"
 :ref:`${VISUAL:'link'}`
 endsnippet
 
 snippet table "table from sphinx cheatsheet"
-
 ==================   ============
 Name                 Age
 ==================   ============
@@ -23,15 +27,25 @@ And Still More       42
 ==================   ============
 endsnippet
 
-
 snippet cb "Code Block. Must have 1 blank line surrounding!" b
+
 .. code-block:: ${1:python}
 
 	${2:${VISUAL:code}}
 
 $0
+
 endsnippet
 
+snippet codeb "cb dedupe" b
+
+.. code-block:: ${1:python}
+
+	${2:${VISUAL:code}}
+
+$0
+
+endsnippet
 
 # TODO:
 # shit are the backticks gonna need to be escaped? remember to look for that
@@ -43,7 +57,6 @@ endsnippet
 ################
 #  formatting  #
 ################
-
 
 snippet * "Italics"
 *${1:Emphasis}* ${0}
@@ -57,56 +70,42 @@ snippet bold "bold" b
 **${1:Strong emphasis}** ${0}
 endsnippet
 
-
-
-
 # There are a few different ways to do
 ###########
 #  links  #
 ###########
 
-
 snippet link "External URL. A space is required between the text and URL!" b
 `Link text <https://github.com/>`
 endsnippet
 
-
 snippet link "Separated link and target." b
-
-${1:optional text leading into} ${2:`a link`_}
-
-.. _a link: https://somedomain.com
-
+.. _${1:optional text leading into}: ${2:`https://somedomain.com`}
 endsnippet
-
-
 
 #### Probably all I'm gonna keep from UltiSnips
 
+# http://docutils.sourceforge.net/docs/ref/rst/directives.html#specific-admonitions
 
-#http://docutils.sourceforge.net/docs/ref/rst/directives.html#specific-admonitions
-#SPECIFIC_ADMONITIONS = ["attention", "caution", "danger",
+# SPECIFIC_ADMONITIONS = ["attention", "caution", "danger",
 #                        "error", "hint", "important", "note",
 #                        "tip", "warning"]
-##http://docutils.sourceforge.net/docs/ref/rst/directives.html
-#DIRECTIVES = ['topic','sidebar','math','epigraph',
+# http://docutils.sourceforge.net/docs/ref/rst/directives.html
+# DIRECTIVES = ['topic','sidebar','math','epigraph',
 #              'parsed-literal','code','highlights',
 #              'pull-quote','compound','container','table','csv-table',
 #              'list-table','class','sectnum',
 #              'role','default-role','unicode',
 #              'raw']
 
-#NONE_CONTENT_DIRECTIVES = ['rubric', 'contents', 'header',
+# NONE_CONTENT_DIRECTIVES = ['rubric', 'contents', 'header',
 #                          'footer', 'date', 'include', 'title']
 
-#INCLUDABLE_DIRECTIVES = ['image', 'figure', 'include']
+# INCLUDABLE_DIRECTIVES = ['image', 'figure', 'include']
 
-
-
-################################################################################
-#                                 #  Sphinx  #                                 #
-################################################################################
-
+############
+#  Sphinx  #
+############
 
 snippet sid "SideBar" b
 .. sidebar:: ${1:SideBar Title}
@@ -114,11 +113,9 @@ snippet sid "SideBar" b
 	${2:${VISUAL:SideBar Content}}
 endsnippet
 
-################################################################################
-#                                  # Snipmate                                  #
-################################################################################
-
-
+##########
+# Snipmate
+##########
 
 snippet para "Paragraph"
 :${1:field name}: ${0:field body}
@@ -130,21 +127,28 @@ snippet url "External url"
 endsnippet
 
 snippet title= "Title underlined with ==='s" b
-${1:Title}
-=====${2:=}
-${0}
+${1:${VISUAL:Title}}
+`!p snip.rv = rst_char_len(t[1])*'='`
+$0
 endsnippet
 
 snippet title- "Title underlined with ---'s" b
-${1:Title}
------${2:-}
-${0}
+${1:${VISUAL:Title}}
+`!p snip.rv = rst_char_len(t[1])*'='`
+$0
+endsnippet
+
+# In case you forget the = ending I copied title= over
+snippet title "Title underlined with ==='s" b
+${1:${VISUAL:Title}}
+`!p snip.rv = rst_char_len(t[1])*'='`
+$0
 endsnippet
 
 # Directives
 # ------------
 
-snippet img: "image link directive"
+snippet img "image link directive"
 	.. |${0:alias}| image:: ${1:img}
 endsnippet
 
@@ -155,53 +159,53 @@ snippet fig:
 		$2
 endsnippet
 
-snippet cont:
+snippet cont "content directive"
 	.. contents::
 		${0:content}
 endsnippet
 
-snippet code:
+snippet code "Code block directive."
 	.. code:: ${1:type}
 
 		${0:write some code}
 endsnippet
 
-snippet tip:
+snippet tip "Tips or anyone in need of a directive!"
 	.. tip::
 		${0:Tip for anyone having trouble.}
 endsnippet
 
-snippet note:
+snippet note "Take note of this directive over here ;)"
 	.. note::
 		${0:Take note of the fact that}
 endsnippet
 
-snippet war:
+snippet warn "Warning directive"
 	.. warning::
 		${0:Warning:}
 endsnippet
 
-snippet imp:
+snippet important "Important directive"
 	.. important::
 		${0:Important notice:}
 endsnippet
 
-snippet att:
+snippet att "Attention directive"
 	.. attention::
 		${0:Attention!}
 endsnippet
 
-snippet dan:
+snippet dan "Danger directive"
 	.. danger::
 		${0:Danger:}
 endsnippet
 
-snippet err:
+snippet err "Error directive"
 	.. error::
 		${0:Error:}
 endsnippet
 
-snippet cau:
+snippet cau "Caution directive"
 	.. caution::
 		${0:Take precaution with:}
 endsnippet
@@ -211,14 +215,9 @@ endsnippet
 # q
 # 5@q
 
-
-
-
 ################################################################################
-#                                # neosnippets                                 #
+#                                Neosnippets                                   #
 ################################################################################
-
-
 
 snippet quickstart "Shougos RST one snippet summary" b
 ===========================
@@ -251,26 +250,16 @@ ${8:subtitle2}
 $0
 endsnippet
 
-
-snippet     toctree "directive_toctree" b
+snippet toctree "directive_toctree" b
 	.. toctree::
 		:maxdepth: ${1:2}
 
 		${2:#:FILES}
 endsnippet
 
-
-
-
-# While simpler and easier to read, these snipmate snippets are just undeniably
-# inferior. As a result UltiSnips and snipmates have been added so we'll
-# manually delete the duplicated ones.
-
-
-# Having parsed through it tue whole file is trash
 # Neosnippets didn't do a bad job though.
 ###########################################################################
-#                              UltiSnips                                    #
+#                              UltiSnips                                  #
 ###########################################################################
 
 # so can i rewrite this whole thing using neovim?
@@ -293,11 +282,28 @@ TEXT_ROLES = ['emphasis','literal','code','math',
               'strong','subscript','superscript',
               'title-reference','raw']
 TEXT_ROLES_REGEX = r'\.\.\srole::?\s(w+)'
+
+# `<http://docutils.sourceforge.net/docs/ref/rst/directives.html#specific-admonitions>`
+SPECIFIC_ADMONITIONS = ["attention", "caution", "danger",
+                        "error", "hint", "important", "note",
+                        "tip", "warning"]
+# `<http://docutils.sourceforge.net/docs/ref/rst/directives.html>`
+DIRECTIVES = ['topic','sidebar','math','epigraph',
+              'parsed-literal','code','highlights',
+              'pull-quote','compound','container','table','csv-table',
+              'list-table','class','sectnum',
+              'role','default-role','unicode',
+              'raw']
+
+NONE_CONTENT_DIRECTIVES = ['rubric', 'contents', 'header',
+                          'footer', 'date', 'include', 'title']
+
+INCLUDABLE_DIRECTIVES = ['image', 'figure', 'include']
 # CJK chars
 # http://stackoverflow.com/questions/2718196/find-all-chinese-text-in-a-string-using-python-and-regex
 CJK_RE = re.compile(u'[⺀-⺙⺛-⻳⼀-⿕々〇〡-〩〸-〺〻㐀-䶵一-鿃豈-鶴侮-頻並-龎]', re.UNICODE)
 
-#http://www.pygal.org/en/stable/documentation/types/index.html
+# http://www.pygal.org/en/stable/documentation/types/index.html
 CHART_TYPES = ["Line", "StackedLine", "HorizontalLine", "Bar", "StackedBar", "HorizontalBar", "Histogram", "XY", "DateLine", "TimeLine", "TimeDeltaLine", "DateTimeLine", "Pie", "Radar", "Box", "Dot", "Funnel", "Gauge", "SolidGauge", "Pyramid", "Treemap"]
 
 def has_cjk(s):
@@ -471,6 +477,7 @@ $0
 snip.rv = make_items(match.groupdict()['num'], 1)
 `
 endsnippet
+
 ###########################################################################
 #                         More Specialized Stuff.                         #
 ###########################################################################

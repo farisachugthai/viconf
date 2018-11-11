@@ -1,39 +1,55 @@
-snippet pd_desc
-$1.describe(include = "all")
-$1.info()
-$1.memory_user(deep = True)
+# Pandas.snippets
+
+priority 50
+
+extends python
+extends python3
+
+# TODO: Add descriptions for everything and review all snippets.
+
+snippet pd_import "Import pandas and numpy." b
+import numpy as np
+import pandas as pd
 endsnippet
 
-snippet pd_dtypes
-$1.dtypes
+snippet pd_desc "Describe a dataframe." b
+${VISUAL:1}.describe(include = "all")
+${VISUAL:1}.info()
+${VISUAL:1}.memory_user(deep = True)
 endsnippet
 
-snippet pd_csvread
-$1 = pd.read_csv($2, sep=None, engine='python', parse_dates=['fcast_date','timestamp'], dtype={'user_id': "category", 'stringa':'object'})
+snippet pd_dtypes "Determine the dtype." b
+${1:VISUAL}.dtypes
 endsnippet
 
-snippet pd_csvwrite
-$1.to_csv($2, index = False)
+snippet pd_csvread "Read a CSV file into a dataframe" b
+${VISUAL:1} = pd.read_csv($2, sep=None, engine='python',
+parse_dates=['fcast_date','timestamp'], dtype={${3:'user_id'}: ${4:"category"},
+${5:'stringa'}: ${6:'object'}})
 endsnippet
 
-snippet pd_colremove
-$1.drop(['column1','column2'], 1, inplace = True)
+snippet pd_csvwrite "Arg.to_csv"
+${1:VISUAL}.to_csv($2, index = False)
 endsnippet
 
-snippet pd_colrename
-ds.rename(columns={'fcast_date_a': 'date_fcast'}, inplace=True)
+snippet pd_colremove "Arg.drop()"
+${1:VISUAL}.drop(['column1','column2'], 1, inplace = True)
 endsnippet
 
-snippet pd_unique
-ds["ifp_id"].unique()
+snippet pd_colrename "Arg.rename()"
+${1:VISUAL}.rename(columns={'fcast_date_a': 'date_fcast'}, inplace=True)
 endsnippet
 
-snippet pd_rowconcat
-$1 = pd.concat([df_even, df_odd], axis=1)
+snippet pd_unique "Arg[i.d.].unique()"
+${1:VISUAL}["ifp_id"].unique()
 endsnippet
 
-snippet pd_colnewop
-ds["days_from_start"] = ds["fcast_date_a"] - ds["date_start"]
+snippet pd_rowconcat "Arg = pd.concat()"
+${1:VISUAL} = pd.concat([df_even, df_odd], axis=1)
+endsnippet
+
+snippet pd_colnewop "Arg[col] = Arg[col1] - Arg[col2]"
+${VISUAL:1}[${2:"days_from_start"}] = ${VISUAL:1}[${3:"fcast_date_a"}] -${VISUAL:1}[${4:"date_start"}]
 endsnippet
 
 snippet pd_colnewop_apply
@@ -42,7 +58,7 @@ def compute_euclidean_distance(row):
 	b = np.array([row['a'], row['b'], row['c']])
 	return distance.euclidean(a, b)
 
-ds['new_distance'] = ds.apply(compute_euclidean_distance, axis=1)
+${VISUAL:1}['new_distance'] =${VISUAL:1}.apply(compute_euclidean_distance, axis=1)
 endsnippet
 
 snippet pd_colgetdummies
@@ -65,143 +81,132 @@ test = dataset.drop(train.index)
 endsnippet
 
 snippet pd_nullvaluesummary
-ds.isna().sum()
+${VISUAL:1}.isna().sum()
 endsnippet
 
-
 snippet pd_drop_if_any_null
-$1.dropna(how='any')
+${VISUAL:1}.dropna(how='any')
 endsnippet
 
 snippet pd_drop_if_all_null
-$1.dropna(how='all')
+${VISUAL:1}.dropna(how='all')
 endsnippet
 
 snippet pd_drop_if_any_null_w_subset
-$1.dropna(subset = ['column', 'column2'], how='any')
+${VISUAL:1}.dropna(subset = ['column', 'column2'], how='any')
 endsnippet
 
 snippet pd_drop_if_all_null_w_subset
-$1.dropna(subset = ['column', 'column2'], how='all')
+${VISUAL:1}.dropna(subset = ['column', 'column2'], how='all')
 endsnippet
 
 snippet pd_count_column_values
-$1['columnname'].value_counts(dropna = False)
+${VISUAL:1}['columnname'].value_counts(dropna = False)
 endsnippet
 
-
 snippet pd_fillna
-$1['column_name'].fillna(value='not assigned', inplace = True)
+${VISUAL:1}['column_name'].fillna(value='not assigned', inplace = True)
 endsnippet
 
 snippet pd_duplicates_count
-$1.duplicated().sum()
+${VISUAL:1}.duplicated().sum()
 endsnippet
 
 snippet pd_duplicates_view
-$1.loc[users.duplicated(keep = 'last'), :]
+${VISUAL:1}.loc[users.duplicated(keep = 'last'), :]
 endsnippet
 
 snippet pd_duplicates_drop_first
-$1.drop_duplicates(keep = 'first')
+${VISUAL:1}.drop_duplicates(keep = 'first')
 endsnippet
 
 snippet pd_duplicates_drop_last
-$1.drop_duplicates(keep = 'last')
+${VISUAL:1}.drop_duplicates(keep = 'last')
 endsnippet
 
 snippet pd_duplicates_drop_w_subset
-$1.drop_duplicates(subset = ['age', 'zip_code'])
+${VISUAL:1}.drop_duplicates(subset = ['age', 'zip_code'])
 endsnippet
 
 snippet pd_duplicates_count_w_subset
-$1.duplicated(subset['age','zip_code']).sum()
+${VISUAL:1}.duplicated(subset['age','zip_code']).sum()
 endsnippet
 
 snippet pd_duplicates_count_for_column
-$1['column_name'].duplicated().sum()
+${VISUAL:1}['column_name'].duplicated().sum()
 endsnippet
 
-
 snippet pd_filter_w_conditions
-$1[($1.column1 >= 200) & ($1.column2 == 'Drama')]
+${VISUAL:1}[(${VISUAL:1}.column1 >= 200) & (${VISUAL:1}.column2 == 'Drama')]
 endsnippet
 
 snippet pd_mean
-$1.field_name.mean()
+${VISUAL:1}.field_name.mean()
 endsnippet
 
 snippet pd_median
-$1.field_name.median()
+${VISUAL:1}.field_name.median()
 endsnippet
 
 snippet pd_percentiles
-$1.field.quantile([0.1,0.15, .9])
+${VISUAL:1}.field.quantile([0.1,0.15, .9])
 endsnippet
 
 snippet pd_sort_values
-$1.sort_values(['column_1'], ascending=False)
+${VISUAL:1}.sort_values(['column_1'], ascending=False)
 endsnippet
 
 snippet pd_groupby_ex1
-$1.groupby('column_name').column2.mean()
+${VISUAL:1}.groupby('column_name').column2.mean()
 endsnippet
 
 snippet pd_groupby_ex2
-$1.groupby('column_name').column2.max()
+${VISUAL:1}.groupby('column_name').column2.max()
 endsnippet
 
 snippet pd_groupby_ex3
-$1.groupby('continent').mean()
+${VISUAL:1}.groupby('continent').mean()
 endsnippet
 
 snippet pd_if_then
-df.loc[df.AAA >= 5,['BBB','CCC']] = 555;
+${VISUAL:1}.loc[${VISUAL:1}.AAA >= 5,['BBB','CCC']] = 555;
 endsnippet
 
 snippet pd_if_then
-df.loc[df.AAA >= 5,['BBB','CCC']] = 555;
+${VISUAL:1}.loc[${VISUAL:1}.AAA >= 5,['BBB','CCC']] = 555;
 endsnippet
 
 snippet pd_if_else
-df['logic'] = np.where(df['AAA'] > 5,'high','low'); df
+${VISUAL:1}['logic'] = np.where(${VISUAL:1}['AAA'] > 5,'high','low');${VISUAL:1}
 endsnippet
 
-
-# Map applies a translation to each element of a series
-snippet pd_map
-ds['new_column'] = ds.column.name.map({'female':0, 'male':1})
+snippet pd_map "Map applies a translation to each element of a series"
+${VISUAL:1}['new_column'] =${VISUAL:1}.column.name.map({'female':0, 'male':1})
 endsnippet
 
-# Apply applies a function to each element of a series
-snippet pd_apply
-ds['new_column'] = train.col1.apply(len)
+snippet pd_apply "Apply applies a function to each element of a series"
+${VISUAL:1}['new_column'] = train.col1.apply(len)
 endsnippet
-
 
 snippet pd_loc1
-ds.loc[0:4, ['column1','column2']]
+${VISUAL:1}.loc[0:4, ['column1','column2']]
 endsnippet
 
 # This is also a way to remove column and just keep those two
 snippet pd_loc2
-ds.loc[:, ['column1','column2']]
+${VISUAL:1}.loc[:, ['column1','column2']]
 endsnippet
 
 snippet pd_loc3
-ds.loc[0:4, 'column1':'column2']
+${VISUAL:1}.loc[0:4, 'column1':'column2']
 endsnippet
 
-# We can use iloc if we want to select data referring to numbers for
-# columns like
-snippet pd_iloc
-$1.iloc[:, 0:4]
+snippet pd_iloc "Iloc to select data referring to numbers for columns"
+${VISUAL:1}.iloc[:, 0:4]
 endsnippet
 
 snippet pd_type_change
-$1['column_name'] = $1['column_name'].astype('category', categories=['good', 'very good', 'excellent'])
+${VISUAL:1}['column_name'] = ${VISUAL:1}['column_name'].astype('category', categories=['good', 'very good', 'excellent'])
 endsnippet
 
-
-
-
+# vim:set sw=4 ts=4 ft=snippets:

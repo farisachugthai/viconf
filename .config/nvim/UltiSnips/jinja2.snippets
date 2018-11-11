@@ -1,9 +1,13 @@
 # Jinja snippets
 
-# https://jinja.pocoo.org/
+# http://jinja.pocoo.org/
 
-extends html
-extends htmljinja
+# jinja2 is a full featured template engine for Python. It has full
+# unicode support, an optional integrated sandboxed execution
+# environment, widely used and BSD licensed.
+
+# possible extends:
+# extends html
 
 
 snippet block "block" b
@@ -183,7 +187,7 @@ endsnippet
 
 
 snippet truncate "truncate" w
-truncate(length=${1:79}, killwords=${2:False}, end=${3:'...''})
+truncate(lenght=${1:79}, killwords=${2:False}, end=${3:'...''})
 endsnippet
 
 

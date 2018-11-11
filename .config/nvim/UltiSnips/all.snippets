@@ -1,8 +1,11 @@
 # All snippets
 
-#######################################################################
-#                           # NICE BOXES #                            #
-#######################################################################
+# General use
+# ============
+
+##############
+# NICE BOXES #
+##############
 
 global !p
 from vimsnippets import foldmarker, make_box, get_comment_format
@@ -34,9 +37,10 @@ snip += box[3]`
 $0
 endsnippet
 
-#######################################################################
-#                                Dates                                #
-#######################################################################
+
+#########
+# DATES #
+#########
 
 snippet today "Use shellcode to print the day. From the help pages."
 Today is the `date +%d.%m.%y`.
@@ -51,7 +55,7 @@ snippet ddate "Month DD, YYYY" w
 endsnippet
 
 snippet diso "ISO format datetime" w
-`!v strftime("%Y-%m-%d %H:%M:%S%z")`
+`!v strftime("%Y-%m-%dT%H:%M:%S%z")`
 endsnippet
 
 snippet time "hh:mm" w
@@ -91,11 +95,11 @@ endsnippet
 #######################################################################
 
 
-snippet c) "Print copyright info and time. Based on encoding option." b
+snippet c)
 	Copyright `&enc[:2] == "utf" ? "©" : "(c)"` `strftime("%Y")` ${1:`g:snips_author`}. All Rights Reserved.
 endsnippet
 
-snippet lorem "Filler text." b
+snippet lorem
 	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 	tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 	quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
@@ -106,7 +110,7 @@ snippet lorem "Filler text." b
 endsnippet
 
 
-snippet GPL2 "Licensing" b
+snippet GPL2
 	${1:One line to give the program's name and a brief description.}
 	Copyright `&enc[:2] == "utf" ? "©" : "(c)"` `strftime("%Y")` ${2:`g:snips_author`}
 
@@ -159,10 +163,10 @@ snippet mdline "Vim modeline for markdown" b
 # Vim: set ft=markdown :
 endsnippet
 
-#######################################################################
-#                             #  Misc  #                              #
-#######################################################################
 
+##########
+#  Misc  #
+##########
 snippet uuid "Random UUID" w
 `!p if not snip.c: import uuid; snip.rv = uuid.uuid4()`
 endsnippet
