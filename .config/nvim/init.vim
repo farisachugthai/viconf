@@ -278,57 +278,58 @@ nnoremap <Leader>a :echo('No. Use :%y')<CR>
 " F5 to run *.py. Currently doesn't work or at least doesn't display anything
 inoremap <F5> <Esc>:w<CR>:!clear;python %
 " It should be easier to get help
-nnoremap <leader>he :helpgrep<space>
+nnoremap <Leader>he :helpgrep<space>
 " It should also be easier to edit the config
-nnoremap <F9> :e ~/projects/viconf/.config/nvim/init.vim<CR>
-" TODO: What is vims version of realpath()? Can't find it even w/ helpgrep
-nnoremap <leader>ed :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
+nnoremap <F9> :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
+" TODO: What is Vim's version of realpath()? Can't find it even w/ helpgrep
+nnoremap <Leader>ed :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 
 inoremap jk <Esc>
 vnoremap jk <Esc>
 
 " Junegunn:
-nnoremap <leader>o o<esc>
-nnoremap <leader>O O<esc>
+nnoremap <Leader>o o<esc>
+nnoremap <Leader>O O<esc>
 xnoremap < <gv
 xnoremap > >gv
 
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
-nnoremap <leader>te :tabedit <c-r>=expand("%:p:h")<cr>
+nnoremap <Leader>te :tabedit <c-r>=expand("%:p:h")<CR>
 
 " Switch CWD to the directory of the open buffer
-nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
+nnoremap <Leader>cd :cd %:p:h<CR>:pwd<cr>
 
 " I use this command constantly
-nnoremap <leader>sn :Snippets<cr>
+nnoremap <Leader>sn :Snippets<CR>
 " }}}
 
 " Unimpaired: {{{ 3
 " Note that ]c and [c are mapped by git-gutter and ALE has ]a and [a
-nnoremap ]q :cnext<cr>
-nnoremap [q :cprev<cr>
-nnoremap ]Q :cfirst<cr>
-nnoremap [Q :clast<cr>
-nnoremap ]l :lnext<cr>
-nnoremap [l :lprev<cr>
+nnoremap ]q :cnext<CR>
+nnoremap [q :cprev<CR>
+nnoremap ]Q :cfirst<CR>
+nnoremap [Q :clast<CR>
+nnoremap ]l :lnext<CR>
+nnoremap [l :lprev<CR>
 nnoremap ]L :lfirst<CR>
 nnoremap [L :llast<CR>
-nnoremap ]b :bnext<cr>
-nnoremap [b :bprev<cr>
-nnoremap ]B :blast<cr>
-nnoremap [B :bfirst<cr>
-nnoremap ]t :tabn<cr>
-nnoremap [t :tabp<cr>
-nnoremap ]T :tfirst<cr>
-nnoremap [T :tlast<cr>
+nnoremap ]b :bnext<CR>
+nnoremap [b :bprev<CR>
+nnoremap ]B :blast<CR>
+nnoremap [B :bfirst<CR>
+nnoremap ]t :tabn<CR>
+nnoremap [t :tabp<CR>
+nnoremap ]T :tfirst<CR>
+nnoremap [T :tlast<CR>
 " In addition I've mapped ]a and [a for Ale nextwrap.
 " }}}
 
 " Spell Checking: {{{ 3
 nnoremap <Leader>sp :setlocal spell!<CR>
 " Based off the default value for spell suggest.
-nnoremap <Leader>s= :norm z=<CR>
+" Don't end with <CR> because this an interactive command!
+nnoremap <Leader>s= z=
 " }}}
 
 " RSI: {{{ 3
@@ -344,6 +345,11 @@ cnoremap <C-d> <Del>
 cnoremap <C-e> <End>
 " forward one character
 cnoremap <C-f> <Right>
+
+" **YO! I added unique to these because I went with a general map statement
+" Error messages go flying up but they close away immediately
+" Either redirect them or do something to make them persist and fix them
+
 " recall newer command-line. {Actually C-n and C-p on Emacs}
 map <unique> <A-n> <Down>
 " recall previous (older) command-line. {But we can't lose C-n and C-p}
@@ -356,6 +362,15 @@ map <unique> <A-f> <S-Right>
 cnoremap <C-v> <PageDown>
 " page up
 map <unique> <A-v> <PageUp>
+" Let's try this with insert mode since the command mode isn't doing much
+inoremap <A-d> <Esc>ldeli
+" Well that felt very hacky so I'm going to stop
+" In case you were curious what your options were,
+" <A-BS> is delete previous word
+" C-k is kill from cursor to end of line
+" C-u is either kill from cursor to beginning of line or an indication of a
+" count with a command
+" C-y is yank.
 " }}}
 
 " Terminal: {{{ 3
@@ -384,6 +399,7 @@ nnoremap ]a <Plug>(ale_next_wrap)
 nnoremap [a <Plug>(ale_previous_wrap)
 " TODO: `:ALEInfoToFile` will write the ALE runtime information to a given
 " filename. The filename works just like |:w|. *what does |:w| mean?
+nnoremap <unique> <A-a> <Plug>(ale_detail)
 " }}}
 
 " Fugitive: {{{ 3
@@ -412,7 +428,7 @@ let g:tagbar_left = 1
 
 " Airline: {{{ 3
 let g:airline#extensions#tabline#buffer_idx_mode = 1
-" originally was nmap and that mightve been better. markdown
+" originally was nmap and that might've been better. Might clobber markdown.
 " headers would be perfect for leader 1
 nnoremap <leader>1 <Plug>AirlineSelectTab1
 nnoremap <leader>2 <Plug>AirlineSelectTab2
@@ -426,7 +442,6 @@ nnoremap <leader>9 <Plug>AirlineSelectTab9
 nnoremap <leader>- <Plug>AirlineSelectPrevTab
 nnoremap <leader>+ <Plug>AirlineSelectNextTab
 " }}}
-
 
 " }}}
 
@@ -454,7 +469,6 @@ let g:loaded_logiPat = 1
 " }}}
 
 " FZF: {{{ 2
-
 if has('nvim') || has('gui_running')
   let $FZF_DEFAULT_OPTS .= ' --inline-info'
 endif
@@ -466,6 +480,7 @@ autocmd  FileType fzf set laststatus=0 noshowmode noruler
 augroup end
 
 " An action can be a reference to a function that processes selected lines
+" is this is a default value in fzf.vim? aka can we scrap it?
 function! s:build_quickfix_list(lines)
   call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
   copen
@@ -530,33 +545,15 @@ let g:fzf_tags_command = 'ctags -r' "
 let g:fzf_commands_expect = 'alt-enter,ctrl-x'
 
 " Ag: {{{ 3
-" **TODO**: Commented out because E183: User defined commands must start with an uppercase letter:::
-" :ag  - start fzf with hidden preview window that can be enabled with '?' key
-" :ag! - start fzf in fullscreen and display the preview window above
-" command! -bang -nargs=* ag
-"     \ call fzf#vim#ag(<q-args>,
-"     \ <bang>0 ? fzf#vim#with_preview('up:60%')
-"     \ : fzf#vim#with_preview('right:50%:hidden', '?'),
-"     \ <bang>0)
-
-" " similarly, we can apply it to fzf#vim#grep. to use ripgrep instead of ag:
-" command! -bang -nargs=* rg
-"     \ call fzf#vim#grep(
-"     \ 'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
-"     \ <bang>0 ? fzf#vim#with_preview('up:60%')
-"     \ : fzf#vim#with_preview('right:50%:hidden', '?'),
-"     \ <bang>0)
-
-" " likewise, files command with preview window
-" command! -bang -nargs=? -complete=dir files
-"     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
-
 " global line completion (not just open buffers. ripgrep required.)
 inoremap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
     \ 'prefix': '^.*$',
     \ 'source': 'rg -n ^ --color always',
     \ 'options': '--ansi --delimiter : --nth 3..',
     \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }}))
+
+" Those last 2 )) are highlighted as a vimopererror and i don't know why
+" and it's annoying the fuck out of me
 
 " }}}
 
@@ -704,7 +701,7 @@ let g:UltiSnipsSnippetDir = [ '~/.config/nvim/UltiSnips' ]
 let g:UltiSnipsJumpForwardTrigger='<Tab>'
 let g:UltiSnipsJumpBackwardTrigger='<S-Tab>'
 inoremap <C-Tab> * <Esc>:call ultisnips#listsnippets()<CR>
-let g:ultisnips_python_style='sphinx'
+let g:ultisnips_python_style='numpy'
 let g:UltiSnips_python_quoting_style='double'
 let g:UltiSnips_python_quoting_style = 'GOOGLE'
 let g:UltiSnipsEnableSnipMate = 0
@@ -774,8 +771,8 @@ let g:deoplete#sources#jedi#enable_typeinfo = 0
 " thing and prefix <Esc> to the RHS and boom!
 if has('b:Tagbar')  " or any plugin
     let g:tagbar_sort=0
-    inoremap <F3> <esc>:TagbarToggle<cr>
-    nnoremap <F3> :TagbarToggle<cr>
+    inoremap <F3> <esc>:TagbarToggle<CR>
+    nnoremap <F3> :TagbarToggle<CR>
 endif
 " }}}
 
@@ -788,7 +785,7 @@ if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
 
-" unicode symbols
+" Unicode symbols
 let g:airline_left_sep = '»'
 let g:airline_left_sep = '▶'
 let g:airline_right_sep = '«'
@@ -810,7 +807,6 @@ let g:airline_symbols.whitespace = 'Ξ'
 
 " TODO: Need to add one for the venv nvim
 let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
-
 let g:airline#extensions#tabline#enabled = 0
 " }}}
 
@@ -832,6 +828,8 @@ augroup end
 " up to an incredible level.
 highlight DiffChanged guibg=None
 "
+" }}}
+
 " }}}
 
 " Functions: {{{ 2
@@ -893,7 +891,7 @@ endfunction
 function! s:helptab()
     if &buftype == 'help'
         wincmd T
-        nnoremap <buffer> q :q<cr>
+        nnoremap <buffer> q :q<CR>
     endif
 endfunction
 " keeps erroring idk why.
@@ -935,8 +933,6 @@ command! DiffOrig vert new | set buftype=nofile | read ++edit # | 0d_
     \ | diffthis | wincmd p | diffthis
 " Use ':DiffOrig' to see the differences
 " between the current buffer and the file it was loaded from.
-
-" }}}
 
 " }}}
 

@@ -1,14 +1,14 @@
+ale-linters ~/.local/share/nvim/plugged/ale/ale_linters
 cheat ~/.cheat
+deoplete ~/.local/share/nvim/plugged/deoplete.nvim/rplugin/python3/deoplete
 dotfiles ~/projects/dotfiles/unix
 jedi-docs ~/.local/share/nvim/plugged/jedi-vim/pythonx/jedi/docs/docs
+libref ~/Dropbox/python/official-python-docs/3.7.0/library
 nvim ~/.config/nvim
 nvim-rtp /usr/share/nvim/runtime
+plugged ~/.local/share/nvim/plugged
 py_tut ~/python/tutorials
+tutorials ~/Dropbox/python/tutorials
+utilities_py ~/projects/utilities/python
+viconf ~/projects/viconf/.config/nvim
 vim ~/.vim
-deoplete ~/.local/share/nvim/plugged/deoplete.nvim/rplugin/python3/deoplete
-
-tutorials ~/Dropbox/Dropbox/python/tutorials
-libref ~/Dropbox/Dropbox/python/official-python-docs/3.7.0/library
-nvim-rtpT /data/data/com.termux/files/usr/share/nvim/runtime
-prefix /data/data/com.termux/files/usr
-pyroot /data/data/com.termux/files/usr/lib/python3.6

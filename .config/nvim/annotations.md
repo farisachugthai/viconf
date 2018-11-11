@@ -1,5 +1,35 @@
 # Annotations
 
+## FZF
+
+" {{{
+
+Dropping this because FZF.vim now comes with :R and :Rg but if you wanna
+modify anything in the future here's the original code I had
+
+```viml
+" **TODO**: Commented out because E183: User defined commands must start with an uppercase letter:::
+" :ag  - start fzf with hidden preview window that can be enabled with '?' key
+" :ag! - start fzf in fullscreen and display the preview window above
+" command! -bang -nargs=* ag
+"     \ call fzf#vim#ag(<q-args>,
+"     \ <bang>0 ? fzf#vim#with_preview('up:60%')
+"     \ : fzf#vim#with_preview('right:50%:hidden', '?'),
+"     \ <bang>0)
+
+" " similarly, we can apply it to fzf#vim#grep. to use ripgrep instead of ag:
+" command! -bang -nargs=* rg
+"     \ call fzf#vim#grep(
+"     \ 'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
+"     \ <bang>0 ? fzf#vim#with_preview('up:60%')
+"     \ : fzf#vim#with_preview('right:50%:hidden', '?'),
+"     \ <bang>0)
+
+" " likewise, files command with preview window
+" command! -bang -nargs=? -complete=dir files
+"     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+```
+" }}}
 ## Environment
 
 " Environment: {{{ 2
@@ -45,6 +75,8 @@ endif
 " }}}
 
 ## Plugins
+
+" {{{
 
 ### UltiSnips
 
@@ -163,13 +195,16 @@ let g:lightline = {
 " }}}
 ```
 
-
 ### NerdCom
 
 TODO: Use :Glog to recover your old nerdcom code. Better do it soon if you're
 thinking about ever being able to use it again!
 
+" }}}
+
 ## functions
+
+" {{{
 
 ### compilers
 
@@ -209,3 +244,5 @@ endfunc
 ```
 
 }}}
+
+" }}}

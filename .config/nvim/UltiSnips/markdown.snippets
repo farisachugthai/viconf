@@ -5,15 +5,23 @@
 # Template for cheatsheets
 
 snippet cheat "Cheatsheet template"
-# ${VISUAL}
-
-#Vim: set ft=markdown :
+# ${VISUAL:1}
 
 ## personal
 
 ${0:your notes}
 
-## tldr
+## ${2:tldr}
+
+$3
+
+## ${4:cheat}
+
+$5
+
+## ${6:eg}
+
+$7
 
 endsnippet
 
@@ -45,29 +53,26 @@ endglobal
 ###########################
 # Sections and Paragraphs #
 ###########################
+
+# TODO: I thought these were header markers?
 snippet sec "Section" b
 # ${1:Section Name} #
-$0
 endsnippet
 
 snippet ssec "Sub Section" b
 ## ${1:Section Name} ##
-$0
 endsnippet
 
 snippet sssec "SubSub Section" b
 ### ${1:Section Name} ###
-$0
 endsnippet
 
 snippet par "Paragraph" b
 #### ${1:Paragraph Name} ####
-$0
 endsnippet
 
 snippet spar "Paragraph" b
 ##### ${1:Paragraph Name} #####
-$0
 endsnippet
 
 ###################
@@ -75,48 +80,63 @@ endsnippet
 ###################
 
 snippet * "italics"
-*${1:${VISUAL}}*$0
+*${1:${VISUAL}}*
+endsnippet
+
+snippet italics "italics"
+*${1:${VISUAL}}*
 endsnippet
 
 snippet ** "bold"
-**${1:${VISUAL}}**$0
+**${1:${VISUAL}}**
+endsnippet
+
+snippet bold "bold"
+**${1:${VISUAL}}**
 endsnippet
 
 snippet *** "bold italics"
-***${1:${VISUAL}}***$0
+***${1:${VISUAL}}***
 endsnippet
 
+snippet bolditalics "bold italics"
+***${1:${VISUAL}}***
+endsnippet
 
 ################
 # Common stuff #
 ################
-snippet link "Link to something"
-[${1:${VISUAL:Text}}](${3:http://${2:www.url.com}})$0
+
+snippet link "URL with descriptive text. Better for articles."
+[${1:${VISUAL:Text}}](${3:https://${2:www.url.com}})
+endsnippet
+
+snippet link "Exposed URL. Good for references or bibliographies."
+<${1:https://${VISUAL:2}}>
 endsnippet
 
 snippet img "Image"
-![${1:pic alt}](${2:path}${3/.+/ "/}${3:opt title}${3/.+/"/})$0
+![${1:pic alt}](${2:path}${3/.+/ "/}${3:opt title}${3/.+/"/})
 endsnippet
 
-snippet ilc "Inline Code" i
-\`$1\`$0
+snippet backtick "Inline code" i
+\`${VISUAL:1}\`
 endsnippet
 
-snippet cbl "Codeblock" b
+snippet fenced "Codeblock" b
 \`\`\`
-$1
+${VISUAL:1}
 \`\`\`
-$0
 endsnippet
 
 snippet refl "Reference Link"
-[${1:${VISUAL:Text}}][${2:id}]$0
+[${1:${VISUAL:Text}}][${2:id}]
 
 [$2]:${4:http://${3:www.url.com}} "${5:$4}"
 endsnippet
 
 snippet fnt "Footnote"
-[^${1:${VISUAL:Footnote}}]$0
+[^${1:${VISUAL:Footnote}}]
 
 [^$1]:${2:Text}
 endsnippet
