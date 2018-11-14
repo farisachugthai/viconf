@@ -11,9 +11,9 @@ let g:snips_github = 'https://github.com/farisachugthai'
 " }}}
 
 " Vim Plug: {{{ 2
-
 call plug#begin('~/.local/share/nvim/plugged')
 
+Plug 'junegunn/vim-plug'        " plugception
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
@@ -33,32 +33,27 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
 Plug 'w0rp/ale'
-Plug 'morhetz/gruvbox'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',
     \ 'do': 'bash install.sh' }
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'vim-airline/vim-airline'
 Plug 'mhinz/vim-startify'
-
-if has('nvim')
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
+Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+let g:deoplete#enable_at_startup = 1
+if !has('nvim')
     Plug 'roxma/nvim-yarp'
     Plug 'roxma/vim-hug-neovim-rpc'
 endif
-let g:deoplete#enable_at_startup = 1
-
-Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
+Plug 'zchee/deoplete-jedi', {'for': ['python', 'python3']}
 Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
-
 call plug#end()
 " }}}
 
 " Nvim Specific: {{{ 2
-set background=dark
 
 " unabashedly stolen from junegunn dude is too good.
 let s:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/init.vim.local'
@@ -123,6 +118,9 @@ set foldenable
 set foldlevelstart=1                    " Enables most folds
 set foldnestmax=10
 set foldmethod=marker
+" Use 1 column to inidcate fold level and whether a fold is open or closed.
+" Trade off for valuable window real estate though....
+set foldcolumn=1
 " }}}
 
 " Buffers Windows Tabs: {{{ 3
@@ -578,6 +576,16 @@ augroup end
 
 " Remaining Plugins: {{{ 2
 
+" Vim_Plug: {{{
+" I think I was at the point of just assuming this didn't exist.
+" Couldn't get the help pages because all you do is curl the file in autoload.
+" So helptags wasn't pulling it up. Then downloaded the doc/plug.txt. Found the option.
+" Set it incorrectly.
+"
+" Went back to autoload and on 
+" let g:plug_window = 'tabe'
+" }}}
+
 " NERDTree: {{{ 3
 augroup nerd_loader
   autocmd!
@@ -720,10 +728,12 @@ let g:UltiSnipsEditSplit = 'vertical'
 " }}}
 
 "Colorscheme: {{{ 3
-colorscheme gruvbox
-if g:colors_name ==# 'gruvbox'
-    let g:gruvbox_contrast_dark = 'hard'
-endif
+colorscheme onedark
+" if g:colors_name ==# 'gruvbox'
+"     let g:gruvbox_contrast_dark = 'hard'
+"     let g:gruvbox_improved_strings=1
+"     let g:gruvbox_improved_warnings=1
+" endif
 hi NonText guifg=NONE guibg=NONE
 " }}}
 

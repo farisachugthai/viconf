@@ -47,10 +47,12 @@ $0
 
 endsnippet
 
-# TODO:
-# shit are the backticks gonna need to be escaped? remember to look for that
-snippet code "Inline code" b
-``${VISUAL:1}``
+snippet code "Inline code"
+\`\`${VISUAL:1}\`\`
+endsnippet
+
+snippet inline "Inline code"
+\`\`${VISUAL:1}\`\`
 endsnippet
 
 
@@ -66,7 +68,7 @@ snippet ** "Bold"
 **${1:Strong emphasis}** ${0}
 endsnippet
 
-snippet bold "bold" b
+snippet bold "bold"
 **${1:Strong emphasis}** ${0}
 endsnippet
 
@@ -82,7 +84,6 @@ endsnippet
 snippet link "Separated link and target." b
 .. _${1:optional text leading into}: ${2:`https://somedomain.com`}
 endsnippet
-
 #### Probably all I'm gonna keep from UltiSnips
 
 # http://docutils.sourceforge.net/docs/ref/rst/directives.html#specific-admonitions
@@ -103,6 +104,7 @@ endsnippet
 
 # INCLUDABLE_DIRECTIVES = ['image', 'figure', 'include']
 
+
 ############
 #  Sphinx  #
 ############
@@ -116,10 +118,6 @@ endsnippet
 ##########
 # Snipmate
 ##########
-
-snippet para "Paragraph"
-:${1:field name}: ${0:field body}
-endsnippet
 
 snippet url "External url"
 \`${1:hyperlink-name}\`_
@@ -394,6 +392,8 @@ def get_popular_code_type():
     return popular_type
 endglobal
 
+# Am I understanding correctly if part is considered below title?
+# Like title --> part --> chapter --> section --> ssec
 snippet part "Part" b
 `!p snip.rv = rst_char_len(t[1])*'#'`
 ${1:${VISUAL:Part name}}

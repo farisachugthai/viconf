@@ -3,7 +3,6 @@ cheat ~/.cheat
 deoplete ~/.local/share/nvim/plugged/deoplete.nvim/rplugin/python3/deoplete
 dotfiles ~/projects/dotfiles/unix
 jedi-docs ~/.local/share/nvim/plugged/jedi-vim/pythonx/jedi/docs/docs
-libref ~/Dropbox/python/official-python-docs/3.7.0/library
 nvim ~/.config/nvim
 nvim-rtp /usr/share/nvim/runtime
 plugged ~/.local/share/nvim/plugged
@@ -12,3 +11,5 @@ tutorials ~/Dropbox/python/tutorials
 utilities_py ~/projects/utilities/python
 viconf ~/projects/viconf/.config/nvim
 vim ~/.vim
+
+libref ~/Dropbox/python/official-python-docs/3.7.0/library

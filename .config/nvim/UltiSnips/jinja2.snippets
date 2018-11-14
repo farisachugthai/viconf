@@ -1,65 +1,72 @@
 # Jinja snippets
 
-# http://jinja.pocoo.org/
+# URL:
+# `<https://jinja.pocoo.org/>
 
 # jinja2 is a full featured template engine for Python. It has full
 # unicode support, an optional integrated sandboxed execution
 # environment, widely used and BSD licensed.
 
-# possible extends:
-# extends html
+# ji was prepended to every snippet to more easily distinguish between, for ex,
+# a \# comment from python snippets and jinja snips.
 
+extends html
+extends htmljinja
+extends python, python3
 
-snippet block "block" b
+snippet jinjablock "Block" b
 {% block ${1:name} %}
 		$2
 {% endblock $1 %}
 endsnippet
 
 
-snippet {{ "variable" b
-{{ $1 }}
+snippet ji{{ "variable" b
+{{ ${VISUAL:1} }}
 endsnippet
 
+snippet jivar "variable" b
+{{ ${VISUAL:1} }}
+endsnippet
 
-snippet {# "comment" b
+snippet ji{# "comment" b
+{# ${VISUAL:1} #}
+endsnippet
+
+# TODO: Get junegunns com for saving and loadinf macros. These files could use it. Or make a py plugin.
+snippet ji# "comment" b
 {# $1 #}
 endsnippet
 
 
-snippet # "comment" b
-{# $1 #}
-endsnippet
-
-
-snippet raw "escaped block" b
+snippet jiraw "escaped block" b
 {% raw %}
 		$1
 {% endraw %}
 endsnippet
 
 
-snippet extends "extends" b
+snippet jiextends "extends" b
 {% extends "${1:template}" %}
 endsnippet
 
 
-snippet include "include" b
+snippet jiinclude "include" b
 {% include "${1:template}" %}
 endsnippet
 
 
-snippet import "import" b
+snippet jiimport "import" b
 {% import "${1:template}" %}
 endsnippet
 
 
-snippet from "from/import/as" b
+snippet jifrom "from/import/as" b
 {% from "${1:template}" import ${2:name}${3: as ${4:$2}} %}
 endsnippet
 
 
-snippet filter "filter" b
+snippet jifilter "filter" b
 {% filter ${1:filter} %}
 	$2
 {% endfilter %}
@@ -68,7 +75,7 @@ endsnippet
 
 # Being able to quickly remove the whole 'else' block seems faster to me than
 # choosing between 'for' and 'for/else' snippets from the menu.
-# snippet for "for" b
+# snippet jifor "for" b
 # {% for ${1:item} in ${2:sequence} %}
 #     $3${4:
 # {% else %}
@@ -77,14 +84,14 @@ endsnippet
 # endsnippet
 
 
-snippet for "for" b
+snippet jifor "for" b
 {% for ${1:item} in ${2:sequence} %}
 	$3
 {% endfor %}
 endsnippet
 
 
-snippet for "for/else" b
+snippet jifor "for/else" b
 {% for ${1:item} in ${2:sequence} %}
 	$3
 {% else %}
@@ -93,14 +100,14 @@ snippet for "for/else" b
 endsnippet
 
 
-snippet if "if" b
+snippet jiif "if" b
 {% if ${1:expr} %}
 	$2
 {% endif %}
 endsnippet
 
 
-snippet if "if/else" b
+snippet jiif "if/else" b
 {% if ${1:expr} %}
 	$2
 {% else %}
@@ -109,7 +116,7 @@ snippet if "if/else" b
 endsnippet
 
 
-snippet if "if/elif/else" b
+snippet jiif "if/elif/else" b
 {% if ${1:expr} %}
 	$2
 {% elif %}
@@ -120,39 +127,39 @@ snippet if "if/elif/else" b
 endsnippet
 
 
-snippet macro "macro" b
+snippet jimacro "macro" b
 {% macro ${1:name}(${2:args}) %}
 	$3
 {% endmacro %}
 endsnippet
 
 
-snippet call "call" b
+snippet jicall "call" b
 {% call ${1:name}(${2:args}) %}
 	$3
 {% endcall %}
 endsnippet
 
 
-snippet set "set" b
+snippet jiset "set" b
 {% set ${1:name} = ${2:'value'} %}
 endsnippet
 
 
-snippet trans "translation" b
+snippet jitrans "translation" b
 {% trans %}
 	$1
 {% endtrans %}
 endsnippet
 
 
-snippet with "with" b
+snippet jiwith "with" b
 {% with %}
 	$1
 {% endwith %}
 endsnippet
 
-snippet autoescape "autoescape" b
+snippet jiautoescape "autoescape" b
 {% autoescape ${1:true} %}
 	$2
 {% endautoescape %}
@@ -161,47 +168,47 @@ endsnippet
 # Filters
 # @todo: expand only when snippet is preceeded by a |
 
-snippet batch "batch items" w
+snippet jibatch "batch items" w
 batch(linecount=$1, fill_with=${2:None})
 endsnippet
 
 
-snippet dictsort "sort and yield (key, value) pairs" w
+snippet jidictsort "sort and yield (key, value) pairs" w
 dictsort(case_sensitive=${1:False}, by=${2:'key'})
 endsnippet
 
 
-snippet round "round number" w
+snippet jiround "round number" w
 round(precision=${1:0}, method=${2:'common|ceil|floor'})
 endsnippet
 
 
-snippet urlize "convert plain-text url to <a/>" w
+snippet jiurlize "convert plain-text url to <a/>" w
 urlize(trim_url_limit=${1:None}, nofollow=${2:False})
 endsnippet
 
 
-snippet wordwrap "wordwrap" w
+snippet jiwordwrap "wordwrap" w
 wordwrap(width=${1:79}, break_long_words=${2:True})
 endsnippet
 
 
-snippet truncate "truncate" w
-truncate(lenght=${1:79}, killwords=${2:False}, end=${3:'...''})
+snippet jitruncate "truncate" w
+truncate(length=${1:79}, killwords=${2:False}, end=${3:'...''})
 endsnippet
 
 
-snippet sum "sum of sequence of numbers + start" w
+snippet jisum "sum of sequence of numbers + start" w
 sum(attribute=${1:None}, start=${2:0})
 endsnippet
 
 
-snippet sort "sort an iterable" w
+snippet jisort "sort an iterable" w
 sort(reverse=${1:False}, case_sensitive=${2:False}, attribute=${3:None})
 endsnippet
 
 
-snippet indent "indent" w
+snippet jiindent "indent" w
 indent(width=${1:4}, indentfirst=${2:False})
 endsnippet
 

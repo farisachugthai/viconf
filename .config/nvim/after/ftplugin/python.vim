@@ -5,6 +5,27 @@
 
 " Options: {{{ 2
 
+" From /usr/share/nvim/runtime/ftplugin/python.vim
+" Here's a few options you might wanna look into:
+
+" if !exists("g:python_recommended_style") || g:python_recommended_style != 0
+"     " As suggested by PEP8.
+"     setlocal expandtab shiftwidth=4 softtabstop=4 tabstop=8
+" endif
+
+" First time: try finding 'pydoc'.
+" if !exists('g:pydoc_executable')
+"     if executable('pydoc')
+"         let g:pydoc_executable = 1
+"     else
+"         let g:pydoc_executable = 0
+"     endif
+" endif
+" If 'pydoc' was found use it for keywordprg.
+" if g:pydoc_executable
+"     setlocal keywordprg=pydoc
+" endif
+
 " Pep Indenting
 setlocal tabstop=4 shiftwidth=4 expandtab softtabstop=4
 let b:python_highlight_all = 1
@@ -48,19 +69,19 @@ endif
 
 " Python Language Server: {{{ 3
 " useless err msg but better to have checks when we have behavior that's dependant on 3rd party tools
-if executable('pyls')
-    let b:LanguageClient_serverCommands = { 'python': ['pyls'] }
-else
-    echo 'pyls is not installed!!!'
-endif
+" if executable('pyls')
+"     let b:LanguageClient_serverCommands = { 'python': ['pyls'] }
+" else
+"     echo 'pyls is not installed!!!'
+" endif
 
-let b:LanguageClient_autoStart = 1
-let b:LanguageClient_selectionUI = 'fzf'
+" let b:LanguageClient_autoStart = 1
+" let b:LanguageClient_selectionUI = 'fzf'
 " the mapping below clobbers your run *.py mapping
 " nnoremap <F5> :call LanguageClient_contextMenu()<CR>
 " this isn't pulling up docs like i want
 " nnoremap K :call LanguageClient_textDocument_hover()<CR>
-nnoremap gd :call LanguageClient_textDocument_definition()<CR>
+" nnoremap gd :call LanguageClient_textDocument_definition()<CR>
 " }}}
 
 " }}}
