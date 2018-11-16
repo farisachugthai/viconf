@@ -10,6 +10,8 @@ setlocal tabstop=4 shiftwidth=4 expandtab softtabstop=4
 let b:python_highlight_all = 1
 
 " The external program vim uses for gg=G can be configured
+" Hey you in the future. You can use :set *prg<Tab> and see all of the
+" configuration options you have.
 if executable('yapf')
     setlocal equalprg=yapf
 endif
@@ -24,9 +26,6 @@ setlocal colorcolumn=80,120
 if &columns < 80
     setlocal columns=80
 endif
-
-" I feel like theres really not many commas in python
-let b:maplocalleader = ','
 " }}}
 
 " Autocommands: {{{ 2
@@ -42,7 +41,11 @@ augroup END
 " Plugins: {{{ 2
 
 " ALE: {{{ 3
-let b:ale_linters = [ 'pydocstyle', 'flake8', 'pycodestyle', 'yapf', 'pyls' ]
+" To explain why this got trimmed, pydocstyle and yapf weren't
+" linters that could be enabled. Easy. Flake8 gets called by pyls.
+" Don't call it twice and we move faster. Pycodestyle is encapsulated
+" by flake8. Leaving only the language server.
+let b:ale_linters = [ 'pyls' ]
 let b:ale_linters_ignore = [ 'pylint', 'mypy' ]
 let b:ale_linters_explicit= 1
 
@@ -50,7 +53,7 @@ if isdirectory('~/virtualenvs')
     let b:ale_virtualenv_dir_names+='virtualenvs'
 endif
 
-" This is toughvbecause what if theres a project file? hm.
+" This is tough because what if theres a project file? hm.
 " let b:ale_python_flake8_options = '--config ~/.config/flake8'
 " }}}
 
@@ -62,7 +65,7 @@ endif
 if executable('pyls')
     let b:LanguageClient_serverCommands = ['pyls']
 else
-    echo 'pyls is not installed!!!'
+    echo 'pyls is not installed.'
 endif
 let b:LanguageClient_selectionUI = 'fzf'
 " }}}
@@ -71,8 +74,14 @@ let b:LanguageClient_selectionUI = 'fzf'
 
 " {{{ Compilers
 
-" Even though this didn't work I'm prett sure you can set flake8
+" Even though this didn't work I'm pretty sure you can set flake8
 " to makeprg
+"
+" Also setting sphinx to some value in this wouldn't be bad.
+" And settings ctags to somehow rebuild all the time would be great.
+" Probably a git hook though.
+"
+"
 " PYUNIT COMPILER						*compiler-pyunit*
 
 " This is not actually a compiler, but a unit testing framework for the
@@ -90,7 +99,6 @@ let b:LanguageClient_selectionUI = 'fzf'
 "  setlocal makeprg=python\ %:S   " Run a single testcase
 
 " Also see http://vim.sourceforge.net/tip_view.php?tip_id=280.
-"
 "
 " Alternatively...
 " First shot at a compiler!

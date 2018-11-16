@@ -1,6 +1,6 @@
 " init.vim
 " neovim configuration
-" Vim: set verbose=1:
+" Nvim: set verbose=1:
 
 " All: {{{ 1
 
@@ -11,7 +11,7 @@ let g:snips_github = 'https://github.com/farisachugthai'
 " }}}
 
 " Vim Plug: {{{ 2
-" TODO: Can we have plug open in a tab not a vsplit?
+"
 call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -34,19 +34,23 @@ Plug 'w0rp/ale'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'edkolev/tmuxline.vim'
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
+Plug 'vim-airline/vim-airline'
 Plug 'mhinz/vim-startify'
-Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-let g:deoplete#enable_at_startup = 1
-if !has('nvim')
+if has('nvim')
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+    Plug 'Shougo/deoplete.nvim'
     Plug 'roxma/nvim-yarp'
     Plug 'roxma/vim-hug-neovim-rpc'
 endif
+let g:deoplete#enable_at_startup = 1
+
+Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3'] }
 Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
+
 call plug#end()
 " }}}
 
@@ -91,7 +95,7 @@ if has('python3')
         endif
     else
         if executable('/usr/bin/python')
-            let g:python3_host_prog = '/usr/bin/python'
+            let g:python3_host_prog = '/usr/bin/python3'
         endif
     endif
 endif
@@ -139,6 +143,7 @@ set splitright
 set encoding=UTF-8                       " Set default encoding
 scriptencoding UTF-8                     " Vint believes encoding should be done first
 set fileencoding=UTF-8
+set termencoding=utf-8
 
 setlocal spelllang=en
 " TODO: Probably have an OS wrap. like
@@ -249,11 +254,11 @@ set nojoinspaces
 set diffopt=vertical,context:3          " vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
 
 if has('persistent_undo')
-    set undodir=~/.vim/undodir
+    set undodir=~/.config/nvim/undodir
     set undofile	" keep an undo file (undo changes after closing)
 endif
 
-set backupdir=~/.vim/undodir
+set backupdir=~/.config/nvim/undodir
 set modeline
 set lazyredraw
 set browsedir="buffer"                  " which directory is used for the file browser
@@ -272,8 +277,8 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
 " Navigate tabs more easily
-nnoremap <A-Right> :tabnext<CR>
-nnoremap <A-Left> :tabprev<CR>
+map <unique> <A-Right> :tabnext<CR>
+map <unique> <A-Left> :tabprev<CR>
 " It should also be easier to edit the config. Bind similarly to tmux
 " TODO: What is vims version of realpath()? Can't find it even w/ helpgrep
 nnoremap <leader>ed :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
@@ -283,9 +288,9 @@ nnoremap <F9> :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 nnoremap <leader>re :so $MYVIMRC<CR>
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
-nnoremap <leader>te :tabedit <c-r>=expand("%:p:h")<cr>
+nnoremap <leader>te :tabedit <c-r>=expand("%:p:h")<CR>
 " Switch CWD to the directory of the open buffer
-nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
+nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
 "Use mnemonenics for easier navigation
 nnoremap <Leader>bn :bnext<CR>
 nnoremap <Leader>bp :bprev<CR>
@@ -300,7 +305,8 @@ nnoremap <Leader>nt :NERDTreeToggle<CR>
 nnoremap <Leader>a :echo('No. Use :%y')<CR>
 
 " It should be easier to get help
-nnoremap <leader>he :helpgrep<space>
+nnoremap <Leader>he :helpgrep<Space>
+
 " Escape Conveniences
 inoremap jk <Esc>
 vnoremap jk <Esc>
@@ -313,36 +319,36 @@ xnoremap > >gv
 
 
 " I use this command constantly
-nnoremap <leader>sn :Snippets<cr>
+nnoremap <leader>sn :Snippets<CR>
 " }}}
 
 " Unimpaired: {{{ 3
 " Note that ]c and [c are also mapped by git-gutter
 " In addition I've mapped ]a and [a for ALE nextwrap.
 " Note that ]c and [c are mapped by git-gutter and ALE has ]a and [a
-nnoremap ]q :cnext<cr>
-nnoremap [q :cprev<cr>
-nnoremap ]Q :cfirst<cr>
-nnoremap [Q :clast<cr>
-nnoremap ]l :lnext<cr>
-nnoremap [l :lprev<cr>
+nnoremap ]q :cnext<CR>
+nnoremap [q :cprev<CR>
+nnoremap ]Q :cfirst<CR>
+nnoremap [Q :clast<CR>
+nnoremap ]l :lnext<CR>
+nnoremap [l :lprev<CR>
 nnoremap ]L :lfirst<CR>
 nnoremap [L :llast<CR>
-nnoremap ]b :bnext<cr>
-nnoremap [b :bprev<cr>
-nnoremap ]B :blast<cr>
-nnoremap [B :bfirst<cr>
-nnoremap ]t :tabn<cr>
-nnoremap [t :tabp<cr>
-nnoremap ]T :tfirst<cr>
-nnoremap [T :tlast<cr>
+nnoremap ]b :bnext<CR>
+nnoremap [b :bprev<CR>
+nnoremap ]B :blast<CR>
+nnoremap [B :bfirst<CR>
+nnoremap ]t :tabn<CR>
+nnoremap [t :tabp<CR>
+nnoremap ]T :tfirst<CR>
+nnoremap [T :tlast<CR>
 " In addition I've mapped ]a and [a for Ale nextwrap.
 " }}}
 
 " Spell Checking: {{{ 3
 nnoremap <Leader>sp :setlocal spell!<CR>
 " Based off the default value for spell suggest
-nnoremap <Leader>s= :norm z=<CR>
+nnoremap <Leader>s= z=
 " }}}
 
 " RSI: {{{ 3
@@ -368,6 +374,7 @@ cnoremap <A-F> <S-Right>
 " But still need the functionality
 cnoremap <C-g> <Esc>
 " Its annoying everything goes away from this typo
+" Alternartively, how do you open the command window from ex mode?
 cmap <nop> <Esc>
 " top of buffer
 cnoremap <A\<> :norm gg
@@ -406,7 +413,7 @@ nnoremap [a <Plug>(ale_previous_wrap)
 " work in a similar manner right?
 nnoremap <Leader>* <Plug>(ale_go_to_reference)
 
-nnoremap <Leader>a :ALEInfo<cr>
+nnoremap <Leader>a :ALEInfo<CR>
 " }}}
 
 " Fugitive: {{{ 3
@@ -414,12 +421,12 @@ nnoremap <silent> <leader>gb :Gblame<CR>
 nnoremap <silent> <leader>gc :Gcommit<CR>
 nnoremap <silent> <leader>gd :Gdiff<CR>
 nnoremap <silent> <leader>ge :Gedit<CR>
-nnoremap <silent> <leader>gE :Gedit<space>
+nnoremap <silent> <leader>gE :Gedit<Space>
 nnoremap <silent> <leader>gl :Glog<CR>
 nnoremap <silent> <leader>gq :Gwq<CR>
 nnoremap <silent> <leader>gQ :Gwq!<CR>
 nnoremap <silent> <leader>gr :Gread<CR>
-nnoremap <silent> <leader>gR :Gread<space>
+nnoremap <silent> <leader>gR :Gread<Space>
 nnoremap <silent> <leader>gs :Gstatus<CR>
 nnoremap <silent> <leader>gw :Gwrite<CR>
 nnoremap <silent> <leader>gW :Gwrite!<CR>
@@ -428,7 +435,7 @@ nnoremap <silent> <leader>gW :Gwrite!<CR>
 " Python Language Server: {{{ 3
 function LC_maps()
     if has_key(g:LanguageClient_serverCommands, &filetype)
-        nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<cr>
+        nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<CR>
         nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
         nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
     endif
@@ -595,7 +602,7 @@ inoremap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
 
 " }}}
 
-" FZF_statusline: {{{ 3
+" FZF_Statusline: {{{ 3
 " Custom fzf statusline
 function! s:fzf_statusline()
     " Override statusline as you like
@@ -639,7 +646,7 @@ let g:NERDTreeNaturalSort = 1
 let g:NERDTreeChDirMode = 2                         " change cwd every time NT root changes
 let g:NERDTreeShowLineNumbers = 1
 let g:NERDTreeMouseMode = 2                         " Open dirs with 1 click files with 2
-let g:NERDTreeIgnore = ['\.pyc$', '\.pyo$', '__pycache__$']
+let g:NERDTreeIgnore = ['\.pyc$', '\.pyo$', '__pycache__$', '\.git$']
 let g:NERDTreeRespectWildIgnore = 1                 " yeah i meant those ones too
 " }}}
 
@@ -790,7 +797,7 @@ if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
 
-" unicode symbols
+" Unicode symbols
 let g:airline_left_sep = '»'
 let g:airline_left_sep = '▶'
 let g:airline_right_sep = '«'
@@ -874,7 +881,7 @@ command! Todo call s:todo()
 " }}}
 
 " Explore: {{{ 3
-" Here's one where he uses fzf and Explore to search a packages docs
+" Here's one where he uses FZF and Explore to search a packages docs
 function! s:plug_help_sink(line)
     let dir = g:plugs[a:line].dir
     for pat in ['doc/*.txt', 'README.md']
@@ -890,7 +897,7 @@ endfunction
 " }}}
 
 " Scriptnames: {{{ 3
-"command to filter :scriptnames output by a regex
+" command to filter :scriptnames output by a regex
 command! -nargs=1 Scriptnames call <sid>scriptnames(<f-args>)
 function! s:scriptnames(re) abort
     redir => scriptnames
@@ -906,7 +913,7 @@ endfunction
 function! s:helptab()
     if &buftype ==# 'help'
         wincmd T
-        nnoremap <buffer> q :q<cr>
+        nnoremap <buffer> q :q<CR>
     " need to make an else for if ft isn't help then open a help page with the
     " first argument
     endif
@@ -914,7 +921,7 @@ endfunction
 command! -nargs=1 Help call <SID>helptab()
 " }}}
 
-" Autosave: {{{ 3
+" AutoSave: {{{ 3
 function! s:autosave(enable)
   augroup autosave
     autocmd!

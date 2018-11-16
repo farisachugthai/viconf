@@ -1,4 +1,5 @@
 Autocompletion
+Awh
 BufEnter
 BufNewFile
 BufRead
@@ -13,6 +14,7 @@ DDG
 DataFrame
 DataFrames
 Datatypes
+Devicons
 Diffs
 Discover's
 Django
@@ -20,6 +22,9 @@ Dotfiles
 Envs
 Esc
 F1
+F10
+F11
+F12
 F2
 F3
 F4
@@ -33,6 +38,7 @@ Facebook
 Faris
 Filetype
 Firefox
+Fn
 GNOME's
 GPG
 GVim
@@ -52,10 +58,13 @@ KeePassXC
 Kleopatra
 Kubernetes
 Lightline
+Lightline
 Linter
 MOTW
 NERDTree
+NerdCom
 Newbuntu
+Nvim's
 OpenSSH
 PPA
 PPAs
@@ -75,13 +84,13 @@ SCM
 SGR
 SHA
 SVG
+Shotts
 Showkey
 TLDR
 TOC
 TODO
 Tagbar
 Termux
-Todo
 Todo
 USBs
 Ubuntu
@@ -98,6 +107,8 @@ Vundle
 Win10
 X11
 XDG
+XKB
+Xorg
 Xresources
 YouTube
 aff
@@ -110,6 +121,7 @@ atomicparsley
 attr
 augroup
 autocmd
+autocomplete
 autocompletion
 autocorrect
 autoindenting
@@ -157,12 +169,15 @@ ctags
 cterm
 ctermbg
 ctermfg
+ctrl
 cursorline
 datatypes
 datetime
 deoplete
+deoplete
 dev
 diff
+difflib
 diffoff
 diffs
 diffthis
@@ -176,14 +191,18 @@ docstrings
 docutils
 dont/!
 dotfiles
+dpkg
 dropbox
 du
+duckduckgo
 eg
 elif
 emacs
+emoji's
 endblockquote
 endfunction
 env
+equalprg
 esac
 eslint
 etc
@@ -225,6 +244,8 @@ gnupg
 gonna/!
 google
 gpg
+gpg
+gruvbox
 gruvbox
 gtk
 gui
@@ -237,11 +258,17 @@ h4
 h5
 h6
 hashable
+helpgrep
 hostname
 html
 htop
+http
+https
 hunspell
+hyperlink
+idk
 ifconfig
+ill/!
 init
 inoremap
 inputrc
@@ -261,6 +288,12 @@ kanban
 kate
 kde
 kdeconnect
+keepass
+keybindings
+keymap
+keysym
+keysyms
+kio
 kmixrc
 konsole
 ksysguard
@@ -270,6 +303,7 @@ libreoffice
 linter
 linters
 linux
+localectl
 localehelper
 localhost
 localize
@@ -302,6 +336,7 @@ netrw
 netstat
 ngrep
 nltk
+nmap
 nnoremap
 nodejs
 nohup
@@ -314,7 +349,10 @@ nslookup
 nt
 numpy
 nvim
+offline
+okular
 omnifunc
+omnifuncs
 openssl
 org
 os
@@ -339,10 +377,12 @@ pushd
 py
 python3
 quickfix
+quoteplus
 rclone
 readline
 readlines
 readme
+realpath
 rebase
 rebasing
 reddit
@@ -350,6 +390,7 @@ redir
 reflogs
 regex
 relativenumber
+remappings
 remoting
 repo
 rg
@@ -358,6 +399,7 @@ rmdir
 rst
 rsync
 runtimepath
+rustup
 sbin
 scp
 scriptnames
@@ -365,6 +407,7 @@ sda1
 sdb1
 sectionauthor
 sed
+setxkbmap
 sha256
 shellcheck
 shiftwidth
@@ -380,8 +423,10 @@ spl
 src
 sshpass
 stackoverflow
+startify
 statusline
 stderr
+stdlib
 stdout
 str
 strace
@@ -392,6 +437,7 @@ sudo
 symlink
 syntime
 sys
+tabview
 tcpdump
 termux
 texting
@@ -399,6 +445,7 @@ tldr
 tmp
 tmux
 touch
+tpope's
 traceroute
 tty
 txt
@@ -414,6 +461,7 @@ unencrypted
 uninstall
 unix
 unordered
+unpushed
 unstage
 unstaged
 url
@@ -421,6 +469,7 @@ urls
 usb
 usr
 utils
+venv
 venv
 vimrc
 vimscript
@@ -450,6 +499,11 @@ x509
 xargs
 xattr
 xattrs
+xev
+xinitrc
+xkb
+xkeycaps
+xkeymaps
 xmodmap
 xttr/!
 yapf
@@ -457,3 +511,5 @@ youtube
 zcat
 zenburn
 zim
+Termux's
+sshfs

@@ -1,5 +1,6 @@
 This directory contains the snippets for UltiSnips.
-https://github.com/sirver/ultisnips
+
+.. _`UltiSnips`: https://github.com/sirver/ultisnips
 
 Notes on Ultisnips
 =======================
@@ -11,34 +12,45 @@ At the end of the line:
 
 `snippet triggerword <description> <options>`
 
+Options
+-------
+
 We have a few options to choose from. They are as follows:
 
-s   Remove whitespace immediately before the cursor at the end of a line
-    before jumping to the next tabstop.  This is useful if there is a
-    tabstop with optional text at the end of a line.
+    s   Remove whitespace immediately before the cursor at the end of a line
+        before jumping to the next tabstop.  This is useful if there is a
+        tabstop with optional text at the end of a line.
 
-t   Do not expand tabs - If a snippet definition includes leading tab
-    characters, by default UltiSnips expands the tab characters honoring
-    the Vim 'shiftwidth', 'softtabstop', 'expandtab' and 'tabstop'
-    indentation settings. (For example, if 'expandtab' is set, the tab is
-    replaced with spaces.) If this option is set, UltiSnips will ignore the
-    Vim settings and insert the tab characters as is. This option is useful
-    for snippets involved with tab delimited formats.
+    t   Do not expand tabs - If a snippet definition includes leading tab
+        characters, by default UltiSnips expands the tab characters honoring
+        the Vim 'shiftwidth', 'softtabstop', 'expandtab' and 'tabstop'
+        indentation settings. (For example, if 'expandtab' is set, the tab is
+        replaced with spaces.) If this option is set, UltiSnips will ignore the
+        Vim settings and insert the tab characters as is. This option is useful
+        for snippets involved with tab delimited formats.
 
-Important:
+    w   Word boundary - With this option, the snippet is expanded if
+       the tab trigger start matches a word boundary and the tab trigger end
+       matches a word boundary. In other words the tab trigger must be
+       preceded and followed by non-word characters. Word characters are
+       defined by the 'iskeyword' setting. Use this option, for example, to
+       permit expansion where the tab trigger follows punctuation without
+       expanding suffixes of larger words.
+
+
+**Important**:
+
     Write a good description because when there's more than one snippet
     to pick from the only help you'll get in picking is what you write
     for the description. so make it clear what the difference between
     snippets argprse and argprser are in the description!
 
-
 Configuration
----------------------------------------------------
+---------------
 
 After configuring UltiSnipsDirs and UltiSnipsDirectories as you would like,
 using the UltiSnipsEdit command should open the folder that your snippets
 are housed in.
-
 
 Usage
 -----
@@ -51,13 +63,17 @@ For persistent changes use 'extends {filetype to be added}'
 
 
 Now let's look at a snippet.
-.. how do you indicate a code block?
 
-```snippet
-snippet imp "import statement" b
-	import ${0:module}
-endsnippet
-```
+.. code block::
+
+    ```snippet
+
+    snippet imp "import statement" b
+        import ${0:module}
+    endsnippet
+
+    ```
+
 That b at the end is an option that means 'must be at the beginning of line'
 
 Standing On The Shoulders of Giants
