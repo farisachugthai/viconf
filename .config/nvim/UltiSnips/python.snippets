@@ -9,7 +9,6 @@ extends rst
 #                           Python Snippets                           #
 #######################################################################
 
-priority 70
 
 # Let's reorganize this in a similar manner to what someone would write as they're
 # starting a new module.
@@ -413,7 +412,7 @@ def ${1:fname}(`!p snip.rv = vim.eval('indent(".") ? "self" : ""')`$2):
 	$0
 endsnippet
 
-snippet def "function with docstrings" b
+snippet def "function with docstrings. utilizes numpy Parameters." b
 def ${1:function}(`!p
 if snip.indent:
 	snip.rv = 'self' + (", " if len(t[2]) else "")`${2:arg1}):

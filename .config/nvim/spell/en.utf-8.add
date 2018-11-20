@@ -526,3 +526,9 @@ uBlock
 uBO
 ack
 tty2
+nmcli
+NetworkManager
+SSID
+wifi
+uuid
+CLA

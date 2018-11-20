@@ -2,22 +2,27 @@
 # -*- coding: utf-8 -*-
 """Rewrite the basic Vim set up script using Python.
 
-Example:
-    Any explanation of why you find this necessary is good.
-    In addition you can end a section with double colons (conventionally) this
-    should be something python. Otherwise specify the language.
-    TODO: How do we specify this properly?::
-
-        $ python exampleofrst.py
-
 Attributes:
 
     module_level_variables (type): Explanation and give an inline docstring
     immediately afterwards if possible
 
+(Usually examples go after the attributes)
+
+Example:
+    Any example of how to use this module goes here:: sh
+
+        $ python exampleofrst.py
+
 TODO:
-    - Continue bringing this up to google style docstring conventions.
+    - Continue bringing this up to numpy style docstring conventions.
     - Explore ``sphinx.ext.todo`` extension
+    - IPython extension will be necessary
+    - Napoleon is used for testing numpy style docstrings
+    - Show usage instructions in :func: and in :mod: docstring.
+    - Make a package manager class. It's init may involve all platform specific tests.
+        - Or better stated as a question: What information needs to initialize
+          the state of the p.m. and where should platform specific info go?
 """
 import os
 import subprocess
@@ -31,7 +36,13 @@ def usage():
 
 
 def get_home():
-    """Get a user's home directory."""
+    """Get a user's home directory.
+
+    .. note::
+        sysconfig._getuserbase() does a similar thing; however, the end
+        directory is different in every OS case so we can't just import it and
+        walk away.
+    """
     try:
         home = os.path.expanduser("~")
     except OSError:
@@ -39,8 +50,7 @@ def get_home():
     return home
 
 
-# is specifying plugd=plugd necessary?
-def check_plug_dir(plugd=plugd):
+def check_plug_dir(plugd):
     """Check if the directory vim-plug is downloaded to exists.
 
     If not, create it.

@@ -34,19 +34,23 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
 Plug 'w0rp/ale'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'edkolev/tmuxline.vim'
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',
     \ 'do': 'bash install.sh' }
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'vim-airline/vim-airline'
 Plug 'mhinz/vim-startify'
-Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-let g:deoplete#enable_at_startup = 1
-if !has('nvim')
+if has('nvim')
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+    Plug 'Shougo/deoplete.nvim'
     Plug 'roxma/nvim-yarp'
     Plug 'roxma/vim-hug-neovim-rpc'
 endif
-Plug 'zchee/deoplete-jedi', {'for': ['python', 'python3']}
+let g:deoplete#enable_at_startup = 1
+
+Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
+Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3']}
 Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
@@ -61,16 +65,23 @@ if filereadable(s:local_vimrc)
     execute 'source' s:local_vimrc
 endif
 
-set inccommand=split                    " This alone is enough to never go back
-set termguicolors
+" let s:winrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/winrc'
+" if call(is#windows)         " doubt this is the right syntax but we're getting close
+"     if filereadable(s:winrc)
+"         exe 'so' s:winrc
+"     endif
+" endif
+
 if has('nvim')
     set inccommand=split                    " This alone is enough to never go back
     set termguicolors
 endif
-set inccommand=split                    " This alone is enough to never go back
 " }}}
 
 " Python Executables: {{{ 2
+
+" TODO: Determine OS then check if has('win32') || has('win64')
+" actually as long as linux defines conda_exe were good!
 if has('python3')
 " if we have a virtual env start there
     if exists('$VIRTUAL_ENV')
@@ -118,7 +129,7 @@ set foldenable
 set foldlevelstart=1                    " Enables most folds
 set foldnestmax=10
 set foldmethod=marker
-" Use 1 column to inidcate fold level and whether a fold is open or closed.
+" Use 1 column to indicate fold level and whether a fold is open or closed.
 " Trade off for valuable window real estate though....
 set foldcolumn=1
 " }}}
@@ -139,7 +150,9 @@ set splitright
 set encoding=UTF-8                       " Set default encoding
 scriptencoding UTF-8                     " Vint believes encoding should be done first
 set fileencoding=UTF-8
-set spelllang=en
+set termencoding=utf-8
+
+setlocal spelllang=en
 
 if filereadable(glob('~/.config/nvim/spell/en_US.utf-8.add'))
     set spellfile=~/.config/nvim/spell/en_US.utf-8.add
@@ -235,14 +248,14 @@ endif
 " i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor,
 " sm:block-Cursor-blinkwait175-blinkoff150-blinkon175
 
- set path+=**        			        " Recursively search dirs with :find
+set path+=**        			        " Recursively search dirs with :find
 set autochdir
 set fileformat=unix
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
 set diffopt=vertical,context:3          " vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
 
-if has('persistent_undo')                " i think neovim always does
+if has('persistent_undo')
     set undodir=~/.config/nvim/undodir
     set undofile                        " keep an undo file
 endif
@@ -257,7 +270,7 @@ set browsedir="buffer"                  " which directory is used for the file b
 
 " Mappings: {{{ 2
 
-" General Mappings: {{{ 3
+" Window_Buf_Tab_Mappings: {{{ 3
 
 " Note that F7 is bound to pastetoggle so don't map it
 " Navigate windows more easily
@@ -270,24 +283,36 @@ nnoremap <C-l> <C-w>l
 map <unique> <A-Right> :tabnext<CR>
 map <unique> <A-Left> :tabprev<CR>
 
+" It should also be easier to edit the config. Bind similarly to tmux
+" TODO: What is vims version of realpath()? Can't find it even w/ helpgrep
+nnoremap <leader>ed :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
+" It should also be easier to edit the config
+nnoremap <F9> :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
+" Now reload it
+nnoremap <leader>re :so $MYVIMRC<CR>
+" Opens a new tab with the current buffer's path
+" Super useful when editing files in the same directory
+nnoremap <leader>te :tabedit <c-r>=expand("%:p:h")<CR>
+" Switch CWD to the directory of the open buffer
+nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
+"Use mnemonenics for easier navigation
+nnoremap <Leader>bn :bnext<CR>
+nnoremap <Leader>bp :bprev<CR>
+nnoremap <Leader>tn :tabnext<CR>
+nnoremap <Leader>tp :tabprev<CR>
+" }}}
+"
+" General_Mappings: {{{ 3
 " Simple way to speed up startup
 nnoremap <Leader>nt :NERDTreeToggle<CR>
 nnoremap <Leader>a :echo('No. Use :%y')<CR>
-" F5 to run *.py. Currently doesn't work or at least doesn't display anything
-inoremap <F5> <Esc>:w<CR>:!clear;python %
-" It should be easier to get help
-nnoremap <Leader>he :helpgrep<space>
-" It should also be easier to edit the config
-nnoremap <F9> :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
-" TODO: What is Vim's version of realpath()? Can't find it even w/ helpgrep
-nnoremap <Leader>ed :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 
 inoremap jk <Esc>
 vnoremap jk <Esc>
 
 " Junegunn:
-nnoremap <Leader>o o<esc>
-nnoremap <Leader>O O<esc>
+nnoremap <Leader>o o<Esc>
+nnoremap <Leader>O O<Esc>
 xnoremap < <gv
 xnoremap > >gv
 
@@ -334,15 +359,15 @@ nnoremap <Leader>s= z=
 " For Emacs-style editing on the command line. Also considering using these
 " insert mode as well. Well i don't know why some of these maps aren't working
 " start of line
-cnoremap <C-a> <Home>
+cnoremap <C-A> <Home>
 " back one character
-cnoremap <C-b> <Left>
+cnoremap <C-B> <Left>
 " delete character under cursor
-cnoremap <C-d> <Del>
+cnoremap <C-D> <Del>
 " end of line
-cnoremap <C-e> <End>
+cnoremap <C-E> <End>
 " forward one character
-cnoremap <C-f> <Right>
+cnoremap <C-F> <Right>
 
 " **YO! I added unique to these because I went with a general map statement
 " Error messages go flying up but they close away immediately
@@ -405,18 +430,27 @@ nnoremap <silent> <leader>gb :Gblame<CR>
 nnoremap <silent> <leader>gc :Gcommit<CR>
 nnoremap <silent> <leader>gd :Gdiff<CR>
 nnoremap <silent> <leader>ge :Gedit<CR>
-nnoremap <silent> <leader>gE :Gedit<space>
+nnoremap <silent> <leader>gE :Gedit<Space>
 nnoremap <silent> <leader>gl :Glog<CR>
 nnoremap <silent> <leader>gq :Gwq<CR>
 nnoremap <silent> <leader>gQ :Gwq!<CR>
 nnoremap <silent> <leader>gr :Gread<CR>
-nnoremap <silent> <leader>gR :Gread<space>
+nnoremap <silent> <leader>gR :Gread<Space>
 nnoremap <silent> <leader>gs :Gstatus<CR>
 nnoremap <silent> <leader>gw :Gwrite<CR>
 nnoremap <silent> <leader>gW :Gwrite!<CR>
 " }}}
 
 " Python Language Server: {{{ 3
+" function LC_maps()
+"     if has_key(g:LanguageClient_serverCommands, &filetype)
+"         nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<CR>
+"         nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
+"        nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+"     endif
+" endfunction
+
+" autocmd FileType * call LC_maps()
 " }}}
 
 " Tagbar: {{{ 3
@@ -425,7 +459,6 @@ let g:tagbar_left = 1
 " }}}
 
 " Airline: {{{ 3
-let g:airline#extensions#tabline#buffer_idx_mode = 1
 " originally was nmap and that might've been better. Might clobber markdown.
 " headers would be perfect for leader 1
 nnoremap <leader>1 <Plug>AirlineSelectTab1
@@ -472,9 +505,9 @@ if has('nvim') || has('gui_running')
 endif
 
 augroup fzf
-autocmd! FileType fzf
-autocmd  FileType fzf set laststatus=0 noshowmode noruler
-      \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+    autocmd! FileType fzf
+    autocmd  FileType fzf set laststatus=0 noshowmode noruler
+    \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 augroup end
 
 " An action can be a reference to a function that processes selected lines
@@ -513,8 +546,8 @@ let g:fzf_history_dir = '~/.local/share/fzf-history'
 
 " Between this and FZF.vim you have :Ag and :grep using ag, you should be fine
 if executable('ag')
-  let &grepprg = 'ag --nogroup --nocolor --column --vimgrep'
-  set grepformat=%f%l%c%m
+    let &grepprg = 'ag --nogroup --nocolor --column --vimgrep'
+    set grepformat=%f%l%c%m
 else
   let &grepprg = 'grep -rn $* *'
 endif
@@ -524,7 +557,7 @@ command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
 " FZF_VIM: {{{ 2
 " If you're willing to consider it separate than the FZF plugin
 
-" Insert mode completion
+" Insert mode completion:
 " the spell checker already implements something like this but that's why we
 " allow remapping and not everyone {termux} has that file
 imap <c-x><c-k> <plug>(fzf-complete-word)
@@ -532,33 +565,50 @@ imap <c-x><c-f> <plug>(fzf-complete-path)
 imap <c-x><c-j> <plug>(fzf-complete-file-ag)
 imap <c-x><c-l> <plug>(fzf-complete-line)
 
-" command local options:
-" [buffers] jump to the existing window if possible
+" Command local options:
+" [Buffers] jump to the existing window if possible
 let g:fzf_buffers_jump = 1
-" [[b]commits] customize the options used by 'git log':
+" [[B]Commits] Customize the options used by 'git log':
 let g:fzf_commits_log_options = '--graph --color=always --format="%c(auto)%h%d %s %c(black)%c(bold)%cr"'
-" [tags] command to generate tags file
-let g:fzf_tags_command = 'ctags -r' "
-" [commands] --expect expression for directly executing the command
+" [Tags] Command to generate tags file
+let g:fzf_tags_command = 'ctags -R' "
+" [Commands] --expect expression for directly executing the command
 let g:fzf_commands_expect = 'alt-enter,ctrl-x'
 
 " Ag: {{{ 3
-" global line completion (not just open buffers. ripgrep required.)
+" :Ag  - Start fzf with hidden preview window that can be enabled with '?' key
+" :Ag! - Start fzf in fullscreen and display the preview window above
+command! -bang -nargs=* Ag
+    \ call fzf#vim#ag(<q-args>,
+    \ <bang>0 ? fzf#vim#with_preview('up:60%')
+    \ : fzf#vim#with_preview('right:50%:hidden', '?'),
+    \ <bang>0)
+
+" Similarly, we can apply it to fzf#vim#grep. To use ripgrep instead of ag:
+command! -bang -nargs=* Rg
+    \ call fzf#vim#grep(
+    \ 'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
+    \ <bang>0 ? fzf#vim#with_preview('up:60%')
+    \ : fzf#vim#with_preview('right:50%:hidden', '?'),
+    \ <bang>0)
+
+" Likewise, Files command with preview window
+command! -bang -nargs=? -complete=dir Files
+    \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+
+" Global line completion (not just open buffers. ripgrep required.)
 inoremap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
     \ 'prefix': '^.*$',
     \ 'source': 'rg -n ^ --color always',
     \ 'options': '--ansi --delimiter : --nth 3..',
     \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }}))
 
-" Those last 2 )) are highlighted as a vimopererror and i don't know why
-" and it's annoying the fuck out of me
-
 " }}}
 
 " FZF_Statusline: {{{ 3
-" custom fzf statusline
+" Custom fzf statusline
 function! s:fzf_statusline()
-    " override statusline as you like
+    " Override statusline as you like
     highlight fzf1 ctermfg=161 ctermbg=251
     highlight fzf2 ctermfg=23 ctermbg=251
     highlight fzf3 ctermfg=237 ctermbg=251
@@ -567,7 +617,7 @@ endfunction
 
 augroup fzfstatusline
     autocmd!
-    autocmd! user fzfstatusline call <sid>fzf_statusline()
+    autocmd! user Fzfstatusline call <sid>fzf_statusline()
 augroup end
 
 " }}}
@@ -577,13 +627,7 @@ augroup end
 " Remaining Plugins: {{{ 2
 
 " Vim_Plug: {{{
-" I think I was at the point of just assuming this didn't exist.
-" Couldn't get the help pages because all you do is curl the file in autoload.
-" So helptags wasn't pulling it up. Then downloaded the doc/plug.txt. Found the option.
-" Set it incorrectly.
-"
-" Went back to autoload and on 
-" let g:plug_window = 'tabe'
+let g:plug_window = 'tabe'
 " }}}
 
 " NERDTree: {{{ 3
@@ -600,6 +644,7 @@ augroup nerd_loader
         \| q
         \| endif
 augroup END
+
 let g:NERDTreeDirArrows = 1
 let g:NERDTreeWinPos = 'right'
 let g:NERDTreeShowHidden = 1
@@ -625,7 +670,6 @@ let g:ale_lint_delay = 1000
 " Devicons: {{{ 3
 let g:webdevicons_enable = 1
 let g:webdevicons_enable_nerdtree = 1               " adding the flags to NERDTree
-let g:airline_powerline_fonts = 1
 " For startify
 let entry_format = "'   ['. index .']'. repeat(' ', (3 - strlen(index)))"
 
@@ -727,15 +771,6 @@ let g:UltiSnipsEditSplit = 'vertical'
 
 " }}}
 
-"Colorscheme: {{{ 3
-colorscheme onedark
-" if g:colors_name ==# 'gruvbox'
-"     let g:gruvbox_contrast_dark = 'hard'
-"     let g:gruvbox_improved_strings=1
-"     let g:gruvbox_improved_warnings=1
-" endif
-hi NonText guifg=NONE guibg=NONE
-" }}}
 
 " Language Client: {{{ 3
 " TODO: On termux take this out of mappings. And also debug it because it's erring out
@@ -795,7 +830,7 @@ if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
 
-" Unicode symbols
+" Unicode symbols: {{{ 4
 let g:airline_left_sep = '»'
 let g:airline_left_sep = '▶'
 let g:airline_right_sep = '«'
@@ -814,10 +849,11 @@ let g:airline_symbols.paste = '∥'
 let g:airline_symbols.spell = 'Ꞩ'
 let g:airline_symbols.notexists = 'Ɇ'
 let g:airline_symbols.whitespace = 'Ξ'
+" }}}
 
 " TODO: Need to add one for the venv nvim
 let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
-let g:airline#extensions#tabline#enabled = 0
+let g:airline#extensions#tabline#buffer_idx_mode = 1
 " }}}
 
 " }}}
@@ -948,4 +984,14 @@ command! DiffOrig vert new | set buftype=nofile | read ++edit # | 0d_
 
 " }}}
 
+"Colorscheme: {{{ 2
+colorscheme onedark
+if g:colors_name ==# 'gruvbox'
+    let g:gruvbox_contrast_dark = 'hard'
+    let g:gruvbox_improved_strings=1
+    let g:gruvbox_improved_warnings=1
+endif
+
+hi NonText guifg=NONE guibg=NONE
+" }}}
 " }}}

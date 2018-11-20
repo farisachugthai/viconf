@@ -14,6 +14,7 @@ let g:snips_github = 'https://github.com/farisachugthai'
 
 call plug#begin('~/.vim/plugged')
 
+Plug 'junegunn/vim-plug'        " plugception
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
@@ -21,7 +22,7 @@ augroup nerd_loader
   autocmd!
   autocmd VimEnter * silent! autocmd! FileExplorer
   autocmd BufEnter,BufNew *
-        \  if isdirectory(expand('<amatch>'))
+        \|  if isdirectory(expand('<amatch>'))
         \|   call plug#load('nerdtree')
         \|   execute 'autocmd! nerd_loader'
         \| endif
@@ -31,21 +32,24 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
 Plug 'w0rp/ale'
-Plug 'morhetz/gruvbox'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',
     \ 'do': 'bash install.sh' }
-Plug 'SirVer/ultisnips'| Plug 'honza/vim-snippets'
+Plug 'edkolev/tmuxline.vim'
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'vim-airline/vim-airline'
 Plug 'mhinz/vim-startify'
-
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-if !has('nvim')
+if has('nvim')
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+    Plug 'Shougo/deoplete.nvim'
     Plug 'roxma/nvim-yarp'
     Plug 'roxma/vim-hug-neovim-rpc'
 endif
+let g:deoplete#enable_at_startup = 1
 
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
+Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3']}
 Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
@@ -53,13 +57,30 @@ call plug#end()
 " }}}
 
 " Vim Specific: {{{ 2
-set background=dark
 
 " unabashedly stolen from junegunn dude is too good.
 let s:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/vimrc.local'
 if filereadable(s:local_vimrc)
     execute 'source' s:local_vimrc
 endif
+
+" let s:winrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/winrc'
+" if call(is#windows)         " doubt this is the right syntax but we're getting close
+"     if filereadable(s:winrc)
+"         exe 'so' s:winrc
+"     endif
+" endif
+
+if has('nvim')
+    set inccommand=split                    " This alone is enough to never go back
+    set termguicolors
+endif
+
+" TODO: Make sure this doesn't cause conflicts or settunfsboptions twice
+" Vim 8 defaults
+unlet! skip_defaults_vim
+silent! source $VIMRUNTIME/defaults.vim
+
 " }}}
 
 " Python Executables: {{{ 2
@@ -81,8 +102,11 @@ if has('python3')
             let g:python3_host_prog = '$PREFIX/bin/python'
         endif
     else
-        if executable('/usr/bin/python')
-            let g:python3_host_prog = '/usr/bin/python'
+        if executable('/usr/bin/python3')
+            let g:python3_host_prog = '/usr/bin/python3'
+            if executable('/usr/bin/python2')       " why not
+                let g:python_host_prog = '/usr/bin/python2'
+            endif
         endif
     endif
 endif
@@ -111,7 +135,7 @@ let g:python_highlight_all = 1
 " Folds: {{{ 3
 set foldenable
 set foldlevelstart=1                    " Enables most folds
-set foldnestmax=10                      " Why would anything be folded this much
+set foldnestmax=10
 set foldmethod=marker
 " }}}
 
@@ -129,17 +153,19 @@ set splitright
 
 " Spell Checker: {{{ 3
 set encoding=UTF-8                      " Set default encoding
-set fileencoding=UTF-8                  " Vint believes encoding should be done first
+scriptencoding UTF-8                    " Vint believes encoding should be done first
+set fileencoding=UTF-8
+set termencoding=utf-8
 
 setlocal spelllang=en
-if filereadable(glob('~/.config/nvim/spell/en_US.utf-8.add'))
-    set spellfile=~/.config/nvim/spell/en_US.utf-8.add
+
+if filereadable(glob('~/.vim/spell/en_US.utf-8.add'))
+    set spellfile=~/.vim/spell/en_US.utf-8.add
 endif
 
 if !has('nvim')
     set spelllang+=$VIMRUNTIME/spell/en.utf-8.spl
 endif
-
 
 set complete+=kspell                    " Autocomplete in insert mode
 set spellsuggest=5                      " Limit the number of suggestions from 'spell suggest'
@@ -155,8 +181,8 @@ if filereadable('/usr/share/dict/american-english')
     setlocal dictionary+=/usr/share/dict/american-english
 endif
 
-if filereadable('$HOME/.config/nvim/spell/en.hun.spl')
-    set spelllang+=$HOME/.config/nvim/spell/en.hun.spl
+if filereadable('$HOME/.vim/spell/en.hun.spl')
+    set spelllang+=$HOME/.vim/spell/en.hun.spl
 endif
 
 if filereadable(glob('~/.vim/autocorrect.vim'))
@@ -195,7 +221,11 @@ endif
 " - 'directory' defaults to ~/.local/share/nvim/swap// (|xdg|), auto-created
 " - 'fillchars' defaults (in effect) to 'vert:│,fold:·'
 " - 'formatoptions' defaults to 'tcqj'
+"   default in vim as of 8.1 is
+"   formatoptions=jcroql
+"   .....sooooo completely different huh?
 " - 'sidescroll' defaults to 1
+"
 " }}}
 
 " Fun With Clipboards: {{{ 3
@@ -228,7 +258,7 @@ set wildmenu                            " Show list instead of just completing
 set wildmode=longest,list:longest       " Longest string or list alternatives
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 set fileignorecase                      " when searching for files don't use case
-
+set wildignorecase
 " Set completefunc here and then let b:omnifunc in ftplugins
 " However let's check that LangClient is running
 if LanguageClient#serverStatus()
@@ -244,7 +274,6 @@ set tags+=./tags,./../tags,./*/tags     " usr_29
 set tags+=~/projects/tags               " consider generating a few large tag
 set tags+=~python/tags                  " files rather than recursive searches
 set mouse=a                             " Automatically enable mouse usage
-set cursorline
 set cmdheight=2
 set number
 set showmatch
@@ -263,9 +292,9 @@ endif
 set path+=**        			        " Recursively search dirs with :find
 set autochdir
 set fileformat=unix
+set whichwrap+=<,>,h,l,[,]
 set nojoinspaces
 set diffopt=vertical,context:3          " vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
-set whichwrap+=<,>,h,l,[,]
 
 if has('persistent_undo')
     set undodir=~/.vim/undodir
@@ -281,7 +310,7 @@ set browsedir="buffer"                  " which directory is used for the file b
 " }}}
 
 " Mappings: {{{ 2
-"
+
 " General Mappings: {{{ 3
 " Note that F7 is bound to pastetoggle so don't map it
 " Navigate windows more easily
@@ -289,6 +318,7 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
+
 " Navigate tabs more easily
 nnoremap <A-Right> :tabnext<CR>
 nnoremap <A-Left> :tabprev<CR>
@@ -350,8 +380,6 @@ nnoremap [T :tlast<cr>
 " }}}
 
 " Spell Checking: {{{ 3
-" it has to wait to see if i'm gonna do s= instead of just s
-" and the delay is awful. sorry for changing one of my oldest mappings!
 nnoremap <Leader>sp :setlocal spell!<CR>
 " Based off the default value for spell suggest
 nnoremap <Leader>s= :norm z=<CR>
@@ -411,6 +439,8 @@ nnoremap [a <Plug>(ale_previous_wrap)
 nnoremap <Leader>* <Plug>(ale_go_to_reference)
 
 nnoremap <Leader>a :ALEInfo<cr>
+
+nnoremap <unique> <A-a> <Plug>(ale_detail)
 " }}}
 
 " Fugitive: {{{ 3
@@ -418,12 +448,13 @@ nnoremap <silent> <leader>gb :Gblame<CR>
 nnoremap <silent> <leader>gc :Gcommit<CR>
 nnoremap <silent> <leader>gd :Gdiff<CR>
 nnoremap <silent> <leader>ge :Gedit<CR>
-nnoremap <silent> <leader>gE :Gedit<space>
+" Honestly i don't understand these 2. Why the spaces?
+nnoremap <silent> <leader>gE :Gedit<Space>
 nnoremap <silent> <leader>gl :Glog<CR>
 nnoremap <silent> <leader>gq :Gwq<CR>
 nnoremap <silent> <leader>gQ :Gwq!<CR>
 nnoremap <silent> <leader>gr :Gread<CR>
-nnoremap <silent> <leader>gR :Gread<space>
+nnoremap <silent> <leader>gR :Gread<Space>
 nnoremap <silent> <leader>gs :Gstatus<CR>
 nnoremap <silent> <leader>gw :Gwrite<CR>
 nnoremap <silent> <leader>gW :Gwrite!<CR>
@@ -466,6 +497,7 @@ nnoremap <leader>+ <Plug>AirlineSelectNextTab
 " }}}
 
 " Macros: {{{ 2
+
 " nvim automatically sources this
 if !has('nvim')
     " Invoke while in Vim by putting your cursor over a word and run <Leader>k
@@ -480,11 +512,13 @@ runtime! macros/matchit.vim
 set matchpairs+=<:>
 
 " To every plugin I've never used before. Stop slowing me down.
-let g:loaded_vimballPlugin = 1
-let g:loaded_tutor_mode_plugin = 1
-let g:loaded_getsciptPlugin = 1
-let g:loaded_2html_plugin = 1
-let g:loaded_logiPat = 1
+let g:loaded_vimballPlugin                                                = 1
+let g:loaded_tutor_mode_plugin                                            = 1
+let g:loaded_getsciptPlugin                                               = 1
+let g:loaded_2html_plugin                                                 = 1
+let g:loaded_logiPat                                                      = 1
+" let g:loaded_netrw                                                      = 1
+" let g:loaded_netrwPlugin                                                = 1
 " Let's see if this speeds things up because I've never used most of them
 
 " }}}
@@ -657,7 +691,6 @@ let g:ale_lint_delay = 100
 let g:webdevicons_enable = 1
 let g:webdevicons_enable_nerdtree = 1               " adding the flags to NERDTree
 let g:airline_powerline_fonts = 1
-
 " For startify
 let entry_format = "'   ['. index .']'. repeat(' ', (3 - strlen(index)))"
 
@@ -738,23 +771,14 @@ let g:startify_skiplist = [
 
 " UltiSnips: {{{ 3
 " TODO: Modify based on value of OS. Ugh. We're gonna start exporting this to python soon I swear.
-let g:UltiSnipsSnippetDir = [ '~/.config/nvim/UltiSnips' ]
+let g:UltiSnipsSnippetDir = [ '~/.vim/UltiSnips' ]
 let g:UltiSnipsJumpForwardTrigger='<Tab>'
 let g:UltiSnipsJumpBackwardTrigger='<S-Tab>'
-inoremap <C-Tab> * <Esc>:call UltiSnips#ListSnippets()<CR>
+inoremap <C-Tab> <Esc>:call UltiSnips#ListSnippets()<CR>
 let g:UltiSnips_python_style='sphinx'
 let g:UltiSnips_python_quoting_style = 'double'
 let g:UltiSnipsEnableSnipMate = 1
 let g:UltiSnipsEditSplit = 'tabdo'
-" }}}
-
-" Colorscheme: {{{ 3
-colorscheme gruvbox
-if g:colors_name ==# 'gruvbox'      " ==# means match case
-    let g:gruvbox_contrast_dark = 'hard'
-endif
-" Massive performance difference
-hi NonText guifg=NONE guibg=NONE
 " }}}
 
 " Language Client: {{{ 3
@@ -771,6 +795,7 @@ let g:jedi#usages_command = '<leader>u'
 let g:jedi#show_call_signatures_delay = 100
 let g:jedi#smart_auto_mappings = 0
 let g:jedi#force_py_version = 3
+let g:jedi#enable_completions = 0
 " }}}
 
 " Deoplete_Jedi: {{{ 3
@@ -779,6 +804,8 @@ let g:deoplete#sources#jedi#enable_typeinfo = 0
 " }}}
 
 " Airline: {{{ 3
+let g:airline#extensions#syntastic#enabled = 0
+let g:airline#extensions#csv#enabled = 0
 let g:airline_powerline_fonts = 1
 let g:airline_highlighting_cache = 1
 let g:airline_skip_empty_sections = 1
@@ -807,9 +834,13 @@ let g:airline_symbols.spell = 'Ꞩ'
 let g:airline_symbols.notexists = 'Ɇ'
 let g:airline_symbols.whitespace = 'Ξ'
 
+" way too messy as is
 let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
-
-let g:airline#extensions#tabline#enabled = 0
+let g:airline#extensions#tabline#tab_nr_type = 1 " splits and tab number
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#buffer_nr_show = 1
+let g:airline#extensions#tabline#fnametruncate = 1
+let g:airline#extensions#tmuxline#enabled = 1
 " }}}
 
 " }}}
@@ -825,6 +856,19 @@ augroup ftpersonal
     autocmd BufNewFile,BufFilePre,BufRead *.md setlocal filetype=markdown
 augroup end
 
+" Noticed this bit in he syntax line 2800
+let g:is_bash = 1
+let g:sh_fold_enabled= 4  "   (enable if/do/for folding)
+let g:sh_fold_enabled= 3  "   (enables function and heredoc folding)
+"Let's hope this doesn't make things too slow.
+
+" he rst.vim or ft-rst-syntax or syntax 2600. Don't put bash instead of sh.
+" $VIMRUNTIME/syntax/rst.vim iterates over this var and if it can't find a
+" bash.vim syntax file it will crash.
+let rst_syntax_code_list = ['vim', 'python', 'sh', 'markdown', 'lisp']
+
+" highlighting readline options
+let readline_has_bash = 1
 " }}}
 
 " Functions: {{{ 2
@@ -883,18 +927,6 @@ function! s:scriptnames(re) abort
 endfunction
 " }}}
 
-" Helptabs: {{{ 3
-function! s:helptab()
-    if &buftype ==# 'help'
-        wincmd T
-        nnoremap <buffer> q :q<cr>
-    " need to make an else for if ft isn't help then open a help page with the
-    " first argument
-    endif
-endfunction
-command! -nargs=1 Help call <SID>helptab()
-" }}}
-
 " Autosave: {{{ 3
 function! s:autosave(enable)
   augroup autosave
@@ -941,6 +973,16 @@ fun! EditFileComplete(A,L,P)
 endfun
 " }}}
 
+" }}}
+
+" Colorscheme: {{{ 2
+colorscheme onedark
+if g:colors_name ==# 'gruvbox'      " ==# means match case
+    let g:gruvbox_contrast_dark = 'hard'
+    let g:gruvbox_improved_strings = 1
+endif
+" Massive performance difference
+hi NonText guifg=NONE guibg=NONE
 " }}}
 
 " }}}
