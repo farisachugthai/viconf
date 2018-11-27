@@ -6,9 +6,10 @@ extends numpy_stat
 extends rst
 
 #######################################################################
-#                             # Personal                              #
+#                             Python Snippets                             #
 #######################################################################
 
+#
 snippet doctest "Doctest fun and ifmain block" b
 def _test():
 	import doctest
@@ -47,11 +48,6 @@ snippet pr "Print something"
 print("${0:var}")
 endsnippet
 
-###########################################################################
-#                            TEXTMATE SNIPPETS                            #
-###########################################################################
-
-# The following has been reorganized approximately in order of use.
 
 snippet #! "Shebang header for python scripts" b
 #!/usr/bin/env python
@@ -107,6 +103,400 @@ endsnippet
 snippet with "simpler context manager" b
 with ${1:open} ${2:filename}, ${3:'xt'} as ${4:f}:
 	${0:f.write(res.text)}
+endsnippet
+
+
+##########
+# COMMON #
+##########
+
+# The smart def and smart class snippets use a global option called
+# "g:ultisnips_python_style" which, if set to "doxygen" will use doxygen
+# style comments in docstrings.
+
+global !p
+
+NORMAL  = 0x1
+DOXYGEN = 0x2
+SPHINX  = 0x3
+GOOGLE  = 0x4
+NUMPY   = 0x5
+JEDI    = 0x6
+
+SINGLE_QUOTES = "'"
+DOUBLE_QUOTES = '"'
+
+
+class Arg(object):
+	def __init__(self, arg):
+		self.arg = arg
+		self.name = arg.split('=')[0].strip()
+
+	def __str__(self):
+		return self.name
+
+	def __unicode__(self):
+		return self.name
+
+	def is_kwarg(self):
+		return '=' in self.arg
+
+
+def get_args(arglist):
+	args = [Arg(arg) for arg in arglist.split(',') if arg]
+	args = [arg for arg in args if arg.name != 'self']
+
+	return args
+
+
+def get_quoting_style(snip):
+	style = snip.opt("g:ultisnips_python_quoting_style", "double")
+	if style == 'single':
+		return SINGLE_QUOTES
+	return DOUBLE_QUOTES
+
+def triple_quotes(snip):
+	style = snip.opt("g:ultisnips_python_triple_quoting_style")
+	if not style:
+		return get_quoting_style(snip) * 3
+	return (SINGLE_QUOTES if style == 'single' else DOUBLE_QUOTES) * 3
+
+def triple_quotes_handle_trailing(snip, quoting_style):
+	"""
+	Generate triple quoted strings and handle any trailing quote char,
+	which might be there from some autoclose/autopair plugin,
+	i.e. when expanding ``"|"``.
+	"""
+	if not snip.c:
+		# Do this only once, otherwise the following error would happen:
+		# RuntimeError: The snippets content did not converge: …
+		_, col = vim.current.window.cursor
+		line = vim.current.line
+
+		# Handle already existing quote chars after the trigger.
+		_ret = quoting_style * 3
+		while True:
+			try:
+				nextc = line[col]
+			except IndexError:
+				break
+			if nextc == quoting_style and len(_ret):
+				_ret = _ret[1:]
+				col = col+1
+			else:
+				break
+		snip.rv = _ret
+	else:
+		snip.rv = snip.c
+
+def get_style(snip):
+	style = snip.opt("g:ultisnips_python_style", "normal")
+
+	if    style == "doxygen": return DOXYGEN
+	elif  style == "sphinx": return SPHINX
+	elif  style == "google": return GOOGLE
+	elif  style == "numpy": return NUMPY
+	elif  style == "jedi": return JEDI
+	else: return NORMAL
+
+
+def format_arg(arg, style):
+	if style == DOXYGEN:
+		return "@param %s TODO" % arg
+	elif style == SPHINX:
+		return ":param %s: TODO" % arg
+	elif style == NORMAL:
+		return ":%s: TODO" % arg
+	elif style == GOOGLE:
+		return "%s (TODO): TODO" % arg
+	elif style == JEDI:
+		return ":type %s: TODO" % arg
+	elif style == NUMPY:
+		return "%s : TODO" % arg
+
+
+def format_return(style):
+	if style == DOXYGEN:
+		return "@return: TODO"
+	elif style in (NORMAL, SPHINX, JEDI):
+		return ":returns: TODO"
+	elif style == GOOGLE:
+		return "Returns: TODO"
+
+
+def write_docstring_args(args, snip):
+	if not args:
+		snip.rv += ' {0}'.format(triple_quotes(snip))
+		return
+
+	snip.rv += '\n' + snip.mkline('', indent='')
+
+	style = get_style(snip)
+
+	if style == GOOGLE:
+		write_google_docstring_args(args, snip)
+	elif style == NUMPY:
+		write_numpy_docstring_args(args, snip)
+	else:
+		for arg in args:
+			snip += format_arg(arg, style)
+
+
+def write_google_docstring_args(args, snip):
+	kwargs = [arg for arg in args if arg.is_kwarg()]
+	args = [arg for arg in args if not arg.is_kwarg()]
+
+	if args:
+		snip += "Args:"
+		snip.shift()
+		for arg in args:
+			snip += format_arg(arg, GOOGLE)
+		snip.unshift()
+		snip.rv += '\n' + snip.mkline('', indent='')
+
+	if kwargs:
+		snip += "Kwargs:"
+		snip.shift()
+		for kwarg in kwargs:
+			snip += format_arg(kwarg, GOOGLE)
+		snip.unshift()
+		snip.rv += '\n' + snip.mkline('', indent='')
+
+
+def write_numpy_docstring_args(args, snip):
+	if args:
+		snip += "Parameters"
+		snip += "----------"
+
+	kwargs = [arg for arg in args if arg.is_kwarg()]
+	args = [arg for arg in args if not arg.is_kwarg()]
+
+	if args:
+		for arg in args:
+			snip += format_arg(arg, NUMPY)
+	if kwargs:
+		for kwarg in kwargs:
+			snip += format_arg(kwarg, NUMPY) + ', optional'
+	snip.rv += '\n' + snip.mkline('', indent='')
+
+
+def write_init_body(args, parents, snip):
+	parents = [p.strip() for p in parents.split(",")]
+	parents = [p for p in parents if p != 'object']
+
+	for p in parents:
+		snip += p + ".__init__(self)"
+
+	if parents:
+		snip.rv += '\n' + snip.mkline('', indent='')
+
+	for arg in args:
+		snip += "self._%s = %s" % (arg, arg)
+
+
+def write_slots_args(args, snip):
+	quote = get_quoting_style(snip)
+	arg_format = quote + '_%s' + quote
+	args = [arg_format % arg for arg in args]
+	snip += '__slots__ = (%s,)' % ', '.join(args)
+
+
+def write_function_docstring(t, snip):
+	"""
+	Writes a function docstring with the current style.
+
+	:param t: The values of the placeholders
+	:param snip: UltiSnips.TextObjects.SnippetUtil object instance
+	"""
+	snip.rv = ""
+	snip >> 1
+
+	args = get_args(t[2])
+	if args:
+		write_docstring_args(args, snip)
+
+	style = get_style(snip)
+
+	if style == NUMPY:
+		snip += 'Returns'
+		snip += '-------'
+		snip += 'TODO'
+	else:
+		snip += format_return(style)
+	snip.rv += '\n' + snip.mkline('', indent='')
+	snip += triple_quotes(snip)
+
+def get_dir_and_file_name(snip):
+	return os.getcwd().split(os.sep)[-1] + '.' + snip.basename
+
+endglobal
+
+########################################
+# Class & Special Method Name Snippets #
+########################################
+
+snippet class "class with docstrings" b
+class ${1:MyClass}(${2:object}):
+
+	`!p snip.rv = triple_quotes(snip)`${3:Docstring for $1. }`!p snip.rv = triple_quotes(snip)`
+
+	def __init__(self$4):
+		`!p snip.rv = triple_quotes(snip)`${5:TODO: to be defined1.}`!p
+snip.rv = ""
+snip >> 2
+
+args = get_args(t[4])
+
+write_docstring_args(args, snip)
+if args:
+	snip.rv += '\n' + snip.mkline('', indent='')
+	snip += '{0}'.format(triple_quotes(snip))
+
+write_init_body(args, t[2], snip)
+`
+		$0
+endsnippet
+
+
+snippet slotclass "class with slots and docstrings" b
+class ${1:MyClass}(${2:object}):
+
+	`!p snip.rv = triple_quotes(snip)`${3:Docstring for $1. }`!p snip.rv = triple_quotes(snip)`
+`!p
+snip >> 1
+args = get_args(t[4])
+write_slots_args(args, snip)
+`
+
+	def __init__(self$4):
+		`!p snip.rv = triple_quotes(snip)`${5:TODO: to be defined.}`!p
+snip.rv = ""
+snip >> 2
+
+args = get_args(t[4])
+
+write_docstring_args(args, snip)
+if args:
+	snip.rv += '\n' + snip.mkline('', indent='')
+	snip += triple_quotes(snip)
+
+write_init_body(args, t[2], snip)
+`
+		$0
+endsnippet
+
+##############
+# PROPERTIES #
+##############
+
+snippet roprop "Read Only Property" b
+@property
+def ${1:name}(self):
+	${2:return self._$1}$0
+endsnippet
+
+snippet rwprop "Read write property" b
+def ${1:name}():
+	`!p snip.rv = triple_quotes(snip) if t[2] else ''
+`${2:TODO: Docstring for $1.}`!p
+if t[2]:
+	snip >> 1
+
+	style = get_style(snip)
+	snip.rv += '\n' + snip.mkline('', indent='')
+	snip += format_return(style)
+	snip.rv += '\n' + snip.mkline('', indent='')
+	snip += triple_quotes(snip)
+else:
+	snip.rv = ""`
+	def fget(self):
+		return self._$1$0
+
+	def fset(self, value):
+		self._$1 = value
+	return locals()
+
+$1 = property(**$1(), doc=$1.__doc__)
+endsnippet
+
+
+######################
+# Assertions & Tests #
+######################
+
+snippet ae "Assert equal" b
+self.assertEqual(${1:${VISUAL:first}},${2:second})
+endsnippet
+
+snippet at "Assert True" b
+self.assertTrue(${1:${VISUAL:expression}})
+endsnippet
+
+snippet af "Assert False" b
+self.assertFalse(${1:${VISUAL:expression}})
+endsnippet
+
+snippet aae "Assert almost equal" b
+self.assertAlmostEqual(${1:${VISUAL:first}},${2:second})
+endsnippet
+
+snippet ar "Assert raises" b
+self.assertRaises(${1:exception}, ${2:${VISUAL:func}}${3/.+/, /}${3:arguments})
+endsnippet
+
+snippet an "Assert is None" b
+self.assertIsNone(${1:${VISUAL:expression}})
+endsnippet
+
+snippet ann "Assert is not None" b
+self.assertIsNotNone(${1:${VISUAL:expression}})
+endsnippet
+
+snippet testcase "pyunit testcase" b
+class Test${1:Class}(${2:unittest.TestCase}):
+
+	`!p snip.rv = triple_quotes(snip)`${3:Test case docstring.}`!p snip.rv = triple_quotes(snip)`
+
+	def setUp(self):
+		${4:pass}
+
+	def tearDown(self):
+		${5:pass}
+
+	def test_${6:name}(self):
+		${7:${VISUAL:pass}}
+endsnippet
+
+snippet " "triple quoted string (double quotes)" b
+"""
+${1:${VISUAL:doc}}
+`!p triple_quotes_handle_trailing(snip, '"')`
+endsnippet
+
+snippet ' "triple quoted string (single quotes)" b
+'''
+${1:${VISUAL:doc}}
+`!p triple_quotes_handle_trailing(snip, "'")`
+endsnippet
+
+snippet doc "doc block (triple quotes)"
+`!p snip.rv = triple_quotes(snip)`
+${1:${VISUAL:doc}}
+`!p snip.rv = triple_quotes(snip)`
+endsnippet
+
+snippet pmdoc "pocoo style module doc string" b
+# -*- coding: utf-8 -*-
+"""
+	`!p snip.rv = get_dir_and_file_name(snip)`
+	`!p snip.rv = '~' * len(get_dir_and_file_name(snip))`
+
+	${1:DESCRIPTION}
+
+	:copyright: (c) `date +%Y` by ${2:YOUR_NAME}.
+	:license: ${3:LICENSE_NAME}, see LICENSE for more details.
+"""
+$0
 endsnippet
 
 ####################
@@ -394,285 +784,6 @@ write_function_docstring(t, snip) `
 	${5:${VISUAL:pass}}
 endsnippet
 
-##########
-# COMMON #
-##########
-
-# The smart def and smart class snippets use a global option called
-# "g:ultisnips_python_style" which, if set to "doxygen" will use doxygen
-# style comments in docstrings.
-
-global !p
-
-NORMAL  = 0x1
-DOXYGEN = 0x2
-SPHINX  = 0x3
-GOOGLE  = 0x4
-NUMPY   = 0x5
-JEDI    = 0x6
-
-SINGLE_QUOTES = "'"
-DOUBLE_QUOTES = '"'
-
-
-class Arg(object):
-	def __init__(self, arg):
-		self.arg = arg
-		self.name = arg.split('=')[0].strip()
-
-	def __str__(self):
-		return self.name
-
-	def __unicode__(self):
-		return self.name
-
-	def is_kwarg(self):
-		return '=' in self.arg
-
-
-def get_args(arglist):
-	args = [Arg(arg) for arg in arglist.split(',') if arg]
-	args = [arg for arg in args if arg.name != 'self']
-
-	return args
-
-
-def get_quoting_style(snip):
-	style = snip.opt("g:ultisnips_python_quoting_style", "double")
-	if style == 'single':
-		return SINGLE_QUOTES
-	return DOUBLE_QUOTES
-
-def triple_quotes(snip):
-	style = snip.opt("g:ultisnips_python_triple_quoting_style")
-	if not style:
-		return get_quoting_style(snip) * 3
-	return (SINGLE_QUOTES if style == 'single' else DOUBLE_QUOTES) * 3
-
-def triple_quotes_handle_trailing(snip, quoting_style):
-	"""
-	Generate triple quoted strings and handle any trailing quote char,
-	which might be there from some autoclose/autopair plugin,
-	i.e. when expanding ``"|"``.
-	"""
-	if not snip.c:
-		# Do this only once, otherwise the following error would happen:
-		# RuntimeError: The snippets content did not converge: …
-		_, col = vim.current.window.cursor
-		line = vim.current.line
-
-		# Handle already existing quote chars after the trigger.
-		_ret = quoting_style * 3
-		while True:
-			try:
-				nextc = line[col]
-			except IndexError:
-				break
-			if nextc == quoting_style and len(_ret):
-				_ret = _ret[1:]
-				col = col+1
-			else:
-				break
-		snip.rv = _ret
-	else:
-		snip.rv = snip.c
-
-def get_style(snip):
-	style = snip.opt("g:ultisnips_python_style", "normal")
-
-	if    style == "doxygen": return DOXYGEN
-	elif  style == "sphinx": return SPHINX
-	elif  style == "google": return GOOGLE
-	elif  style == "numpy": return NUMPY
-	elif  style == "jedi": return JEDI
-	else: return NORMAL
-
-
-def format_arg(arg, style):
-	if style == DOXYGEN:
-		return "@param %s TODO" % arg
-	elif style == SPHINX:
-		return ":param %s: TODO" % arg
-	elif style == NORMAL:
-		return ":%s: TODO" % arg
-	elif style == GOOGLE:
-		return "%s (TODO): TODO" % arg
-	elif style == JEDI:
-		return ":type %s: TODO" % arg
-	elif style == NUMPY:
-		return "%s : TODO" % arg
-
-
-def format_return(style):
-	if style == DOXYGEN:
-		return "@return: TODO"
-	elif style in (NORMAL, SPHINX, JEDI):
-		return ":returns: TODO"
-	elif style == GOOGLE:
-		return "Returns: TODO"
-
-
-def write_docstring_args(args, snip):
-	if not args:
-		snip.rv += ' {0}'.format(triple_quotes(snip))
-		return
-
-	snip.rv += '\n' + snip.mkline('', indent='')
-
-	style = get_style(snip)
-
-	if style == GOOGLE:
-		write_google_docstring_args(args, snip)
-	elif style == NUMPY:
-		write_numpy_docstring_args(args, snip)
-	else:
-		for arg in args:
-			snip += format_arg(arg, style)
-
-
-def write_google_docstring_args(args, snip):
-	kwargs = [arg for arg in args if arg.is_kwarg()]
-	args = [arg for arg in args if not arg.is_kwarg()]
-
-	if args:
-		snip += "Args:"
-		snip.shift()
-		for arg in args:
-			snip += format_arg(arg, GOOGLE)
-		snip.unshift()
-		snip.rv += '\n' + snip.mkline('', indent='')
-
-	if kwargs:
-		snip += "Kwargs:"
-		snip.shift()
-		for kwarg in kwargs:
-			snip += format_arg(kwarg, GOOGLE)
-		snip.unshift()
-		snip.rv += '\n' + snip.mkline('', indent='')
-
-
-def write_numpy_docstring_args(args, snip):
-	if args:
-		snip += "Parameters"
-		snip += "----------"
-
-	kwargs = [arg for arg in args if arg.is_kwarg()]
-	args = [arg for arg in args if not arg.is_kwarg()]
-
-	if args:
-		for arg in args:
-			snip += format_arg(arg, NUMPY)
-	if kwargs:
-		for kwarg in kwargs:
-			snip += format_arg(kwarg, NUMPY) + ', optional'
-	snip.rv += '\n' + snip.mkline('', indent='')
-
-
-def write_init_body(args, parents, snip):
-	parents = [p.strip() for p in parents.split(",")]
-	parents = [p for p in parents if p != 'object']
-
-	for p in parents:
-		snip += p + ".__init__(self)"
-
-	if parents:
-		snip.rv += '\n' + snip.mkline('', indent='')
-
-	for arg in args:
-		snip += "self._%s = %s" % (arg, arg)
-
-
-def write_slots_args(args, snip):
-	quote = get_quoting_style(snip)
-	arg_format = quote + '_%s' + quote
-	args = [arg_format % arg for arg in args]
-	snip += '__slots__ = (%s,)' % ', '.join(args)
-
-
-def write_function_docstring(t, snip):
-	"""
-	Writes a function docstring with the current style.
-
-	:param t: The values of the placeholders
-	:param snip: UltiSnips.TextObjects.SnippetUtil object instance
-	"""
-	snip.rv = ""
-	snip >> 1
-
-	args = get_args(t[2])
-	if args:
-		write_docstring_args(args, snip)
-
-	style = get_style(snip)
-
-	if style == NUMPY:
-		snip += 'Returns'
-		snip += '-------'
-		snip += 'TODO'
-	else:
-		snip += format_return(style)
-	snip.rv += '\n' + snip.mkline('', indent='')
-	snip += triple_quotes(snip)
-
-def get_dir_and_file_name(snip):
-	return os.getcwd().split(os.sep)[-1] + '.' + snip.basename
-
-endglobal
-
-########################################
-# Class & Special Method Name Snippets #
-########################################
-
-snippet class "class with docstrings" b
-class ${1:MyClass}(${2:object}):
-
-	`!p snip.rv = triple_quotes(snip)`${3:Docstring for $1. }`!p snip.rv = triple_quotes(snip)`
-
-	def __init__(self$4):
-		`!p snip.rv = triple_quotes(snip)`${5:TODO: to be defined1.}`!p
-snip.rv = ""
-snip >> 2
-
-args = get_args(t[4])
-
-write_docstring_args(args, snip)
-if args:
-	snip.rv += '\n' + snip.mkline('', indent='')
-	snip += '{0}'.format(triple_quotes(snip))
-
-write_init_body(args, t[2], snip)
-`
-		$0
-endsnippet
-
-
-snippet slotclass "class with slots and docstrings" b
-class ${1:MyClass}(${2:object}):
-
-	`!p snip.rv = triple_quotes(snip)`${3:Docstring for $1. }`!p snip.rv = triple_quotes(snip)`
-`!p
-snip >> 1
-args = get_args(t[4])
-write_slots_args(args, snip)
-`
-
-	def __init__(self$4):
-		`!p snip.rv = triple_quotes(snip)`${5:TODO: to be defined.}`!p
-snip.rv = ""
-snip >> 2
-
-args = get_args(t[4])
-
-write_docstring_args(args, snip)
-if args:
-	snip.rv += '\n' + snip.mkline('', indent='')
-	snip += triple_quotes(snip)
-
-write_init_body(args, t[2], snip)
-`
-		$0
-endsnippet
-
 
 snippet contain "methods for emulating a container type" b
 def __len__(self):
@@ -874,119 +985,5 @@ snippet /(^|(?<=\W))\./ "self." r
 self.
 endsnippet
 
-
-##############
-# PROPERTIES #
-##############
-
-snippet roprop "Read Only Property" b
-@property
-def ${1:name}(self):
-	${2:return self._$1}$0
-endsnippet
-
-snippet rwprop "Read write property" b
-def ${1:name}():
-	`!p snip.rv = triple_quotes(snip) if t[2] else ''
-`${2:TODO: Docstring for $1.}`!p
-if t[2]:
-	snip >> 1
-
-	style = get_style(snip)
-	snip.rv += '\n' + snip.mkline('', indent='')
-	snip += format_return(style)
-	snip.rv += '\n' + snip.mkline('', indent='')
-	snip += triple_quotes(snip)
-else:
-	snip.rv = ""`
-	def fget(self):
-		return self._$1$0
-
-	def fset(self, value):
-		self._$1 = value
-	return locals()
-
-$1 = property(**$1(), doc=$1.__doc__)
-endsnippet
-
-
-######################
-# Assertions & Tests #
-######################
-
-snippet ae "Assert equal" b
-self.assertEqual(${1:${VISUAL:first}},${2:second})
-endsnippet
-
-snippet at "Assert True" b
-self.assertTrue(${1:${VISUAL:expression}})
-endsnippet
-
-snippet af "Assert False" b
-self.assertFalse(${1:${VISUAL:expression}})
-endsnippet
-
-snippet aae "Assert almost equal" b
-self.assertAlmostEqual(${1:${VISUAL:first}},${2:second})
-endsnippet
-
-snippet ar "Assert raises" b
-self.assertRaises(${1:exception}, ${2:${VISUAL:func}}${3/.+/, /}${3:arguments})
-endsnippet
-
-snippet an "Assert is None" b
-self.assertIsNone(${1:${VISUAL:expression}})
-endsnippet
-
-snippet ann "Assert is not None" b
-self.assertIsNotNone(${1:${VISUAL:expression}})
-endsnippet
-
-snippet testcase "pyunit testcase" b
-class Test${1:Class}(${2:unittest.TestCase}):
-
-	`!p snip.rv = triple_quotes(snip)`${3:Test case docstring.}`!p snip.rv = triple_quotes(snip)`
-
-	def setUp(self):
-		${4:pass}
-
-	def tearDown(self):
-		${5:pass}
-
-	def test_${6:name}(self):
-		${7:${VISUAL:pass}}
-endsnippet
-
-snippet " "triple quoted string (double quotes)" b
-"""
-${1:${VISUAL:doc}}
-`!p triple_quotes_handle_trailing(snip, '"')`
-endsnippet
-
-snippet ' "triple quoted string (single quotes)" b
-'''
-${1:${VISUAL:doc}}
-`!p triple_quotes_handle_trailing(snip, "'")`
-endsnippet
-
-snippet doc "doc block (triple quotes)"
-`!p snip.rv = triple_quotes(snip)`
-${1:${VISUAL:doc}}
-`!p snip.rv = triple_quotes(snip)`
-endsnippet
-
-snippet pmdoc "pocoo style module doc string" b
-# -*- coding: utf-8 -*-
-"""
-	`!p snip.rv = get_dir_and_file_name(snip)`
-	`!p snip.rv = '~' * len(get_dir_and_file_name(snip))`
-
-	${1:DESCRIPTION}
-
-	:copyright: (c) `date +%Y` by ${2:YOUR_NAME}.
-	:license: ${3:LICENSE_NAME}, see LICENSE for more details.
-"""
-$0
-endsnippet
 
 # vim:ft=snippets:

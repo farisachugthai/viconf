@@ -2,11 +2,17 @@
 
 ## To get nvim and vim synced up
 
-*Motivation:*
+**Motivation:**
 
 Until I figure out how to get nvim set up as my git difftool, I have to maintain vim.
 
+## colors
+
+Laptop needs to checkout colors and get terminal color update for onedark.
+
 ## To get nvim synced up on Termux and Linux
+
+Also checkout .config/nvim/after/ftplugin/markdown.vim.
 
 Because it's agitating not having feature parity.
 

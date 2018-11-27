@@ -1,3 +1,4 @@
+# Snippets.snippets
 
 # We use a little hack so that the snippet is expanded
 # and parsed correctly
@@ -16,6 +17,10 @@ ${0:${VISUAL}}
 endsnippet
 
 snippet vis "${VISUAL}" i
+\$\{VISUAL${1:${2:default}${3:/transform/}}\}
+endsnippet
+
+snippet $ "${VISUAL}" i
 \$\{VISUAL${1:${2:default}${3:/transform/}}\}
 endsnippet
 

@@ -11,17 +11,19 @@ let g:snips_github = 'https://github.com/farisachugthai'
 " }}}
 
 " Vim Plug: {{{ 2
-"
 call plug#begin('~/.local/share/nvim/plugged')
 
+Plug 'junegunn/vim-plug'        " plugception
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
+" Nothing happens if we open a directory to start nvim
+" TODO: one of the expressions in the loop needs to be prepended with silent
 augroup nerd_loader
   autocmd!
   autocmd VimEnter * silent! autocmd! FileExplorer
   autocmd BufEnter,BufNew *
-        \  if isdirectory(expand('<amatch>'))
+        \|  if isdirectory(expand('<amatch>'))
         \|   call plug#load('nerdtree')
         \|   execute 'autocmd! nerd_loader'
         \| endif
@@ -32,6 +34,8 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
 Plug 'w0rp/ale'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',
+    \ 'do': 'bash install.sh' }
 Plug 'edkolev/tmuxline.vim'
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'vim-airline/vim-airline'
@@ -62,13 +66,6 @@ if filereadable(s:local_vimrc)
     execute 'source' s:local_vimrc
 endif
 
-" let s:winrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/winrc'
-" if call(is#windows)         " doubt this is the right syntax but we're getting close
-"     if filereadable(s:winrc)
-"         exe 'so' s:winrc
-"     endif
-" endif
-
 if has('nvim')
     set inccommand=split                    " This alone is enough to never go back
     set termguicolors
@@ -76,27 +73,22 @@ endif
 " }}}
 
 " Python Executables: {{{ 2
+" If we have a virtual env start there
+if exists('$VIRTUAL_ENV')
+    let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
 
-" TODO: Determine OS then check if has('win32') || has('win64')
-" actually as long as linux defines conda_exe were good!
-if has('python3')
-" if we have a virtual env start there
-    if exists('$VIRTUAL_ENV')
-        let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
+elseif exists('$CONDA_PYTHON_EXE')
+    let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
 
-    elseif exists('$CONDA_PYTHON_EXE')
-        let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
-
-    " otherwise break up termux and linux
-    elseif exists('$PREFIX')
-        " and just use the system python
-        if executable('$PREFIX/bin/python')
-            let g:python3_host_prog = '$PREFIX/bin/python'
-        endif
-    else
-        if executable('/usr/bin/python')
-            let g:python3_host_prog = '/usr/bin/python3'
-        endif
+" Otherwise break up termux and linux.
+elseif exists('$PREFIX')
+" and just use the system python. I realize the logic is funky but vimscript
+   if exists(':python3')
+        let g:python3_host_prog = expand('$PREFIX/bin/python')
+    endif
+else
+    if executable('/usr/bin/python')
+        let g:python3_host_prog = '/usr/bin/python3'
     endif
 endif
 " }}}
@@ -251,11 +243,11 @@ set autochdir
 set fileformat=unix
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
-set diffopt=vertical,context:3          " vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
+set diffopt=vertical,context:3          " check out he diff.txt under :diffpatch
 
 if has('persistent_undo')
     set undodir=~/.config/nvim/undodir
-    set undofile	" keep an undo file (undo changes after closing)
+    set undofile
 endif
 
 set backupdir=~/.config/nvim/undodir
@@ -269,6 +261,7 @@ set browsedir="buffer"                  " which directory is used for the file b
 " Mappings: {{{ 2
 
 " Window_Buf_Tab_Mappings: {{{ 3
+
 " Note that F7 is bound to pastetoggle so don't map it
 " Navigate windows more easily
 nnoremap <C-h> <C-w>h
@@ -308,8 +301,8 @@ nnoremap <Leader>a :echo('No. Use :%y')<CR>
 nnoremap <Leader>he :helpgrep<Space>
 
 " Escape Conveniences
-inoremap jk <Esc>
-vnoremap jk <Esc>
+inoremap fd <Esc>
+vnoremap fd <Esc>
 
 " Junegunn:
 nnoremap <Leader>o o<Esc>
@@ -347,12 +340,14 @@ nnoremap [T :tlast<CR>
 
 " Spell Checking: {{{ 3
 nnoremap <Leader>sp :setlocal spell!<CR>
-" Based off the default value for spell suggest
+" Based off the default value for spell suggest.
+" Don't end with <CR> because this an interactive command!
 nnoremap <Leader>s= z=
 " }}}
 
 " RSI: {{{ 3
-" For Emacs-style editing on the command-line:
+" For Emacs-style editing on the command line. Also considering using these
+" insert mode as well. Well i don't know why some of these maps aren't working
 " start of line
 cnoremap <C-A> <Home>
 " back one character
@@ -408,7 +403,7 @@ nnoremap ]a <Plug>(ale_next_wrap)
 nnoremap [a <Plug>(ale_previous_wrap)
 " TODO: Implement ALEInfoToFile.
 " `:ALEInfoToFile` will write the ALE runtime information to a given filename. The filename works just like |:w|.
-
+nnoremap <unique> <A-a> <Plug>(ale_detail)
 " This might be a good idea. * is already 'search for the cword' so let ALE
 " work in a similar manner right?
 nnoremap <Leader>* <Plug>(ale_go_to_reference)
@@ -462,6 +457,7 @@ nnoremap <leader>6 <Plug>AirlineSelectTab6
 nnoremap <leader>7 <Plug>AirlineSelectTab7
 nnoremap <leader>8 <Plug>AirlineSelectTab8
 nnoremap <leader>9 <Plug>AirlineSelectTab9
+" I didn't realize the mappings below took counts!!!!
 nnoremap <leader>- <Plug>AirlineSelectPrevTab
 nnoremap <leader>+ <Plug>AirlineSelectNextTab
 " }}}
@@ -469,7 +465,6 @@ nnoremap <leader>+ <Plug>AirlineSelectNextTab
 " }}}
 
 " Macros: {{{ 2
-
 " nvim automatically sources this
 if !has('nvim')
     " Invoke while in Vim by putting your cursor over a word and run <Leader>k
@@ -478,7 +473,6 @@ if !has('nvim')
     setlocal keywordprg=Man
 else
     setl keywordprg=Man
-    " g:man_default_sects="1,7,8,5"
 endif
 
 runtime! macros/matchit.vim
@@ -623,6 +617,16 @@ augroup END
 
 " Remaining Plugins: {{{ 2
 
+" Vim_Plug: {{{
+" I think I was at the point of just assuming this didn't exist.
+" Couldn't get the help pages because all you do is curl the file in autoload.
+" So helptags wasn't pulling it up. Then downloaded the doc/plug.txt. Found the option.
+" Set it incorrectly.
+"
+" Went back to autoload and on
+" let g:plug_window = 'tabe'
+" }}}
+
 " NERDTree: {{{ 3
 augroup nerd_loader
   autocmd!
@@ -664,7 +668,8 @@ let g:ale_virtualenv_dir_names = [ '$HOME/virtualenvs' ]
 
 " Display progress while linting.
 let s:ale_running = 0
-" let l:stl .= '%{s:ale_running ? "[linting]" : ""}'
+" If you uncomment the below delete the escapes i added to \"
+" let l:stl .= '%{s:ale_running ? \"[linting]" :""}'
 augroup ALEProgress
     autocmd!
     autocmd User ALELintPre  let s:ale_running = 1 | redrawstatus
@@ -696,11 +701,12 @@ function! s:list_commits()
     return map(commits, '{"line": matchstr(v:val, "\\s\\zs.*"), "cmd": "'. git .' show ". matchstr(v:val, "^\\x\\+") }')
 endfunction
 
+" TODO: Would you wanna add other repos to the start list?
 let g:startify_lists = [
     \ { 'header': ['   MRU'],            'type': 'files' },
     \ { 'header': ['   MRU '. getcwd()], 'type': 'dir' },
     \ { 'header': ['   Sessions'],       'type': 'sessions' },
-    \ { 'header': ['   Commits'],        'type': function('s:list_commits') },
+    \ { 'header': ['   Viconf'],         'type': function('s:list_commits') },
     \ { 'type': 'commands',  'header': ['   Commands']       },
     \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
 \ ]
@@ -736,22 +742,16 @@ if has('gui_win32')
 else
     let g:startify_session_dir = '~/.vim/session'
 endif
+
 " TODO: Figure out how to set let g:startify_bookmarks = [ Contents of
 " NERDTreeBookmarks ]
 let g:startify_change_to_dir = 1
 let g:startify_fortune_use_unicode = 1
-let g:startify_update_oldfiles = 1
 let g:startify_session_persistence = 1
 " Configured correctly this could be a phenomenal way to store commands and
 " expressions on a per directory basis aka projects / workspaces!
 let g:startify_session_autoload = 1
 " Not 100% sure if the code below works but here's hoping!
-let g:startify_skiplist = [
-        \ 'COMMIT_EDITMSG',
-        \ glob('plugged/*/doc'),
-        \ 'C:\Program Files\Vim\vim81\doc',
-        \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc',
-        \ ]
 " }}}
 
 " UltiSnips: {{{ 3
@@ -760,9 +760,9 @@ let g:UltiSnipsSnippetDir = [ '~/.config/nvim/UltiSnips' ]
 let g:UltiSnipsJumpForwardTrigger='<Tab>'
 let g:UltiSnipsJumpBackwardTrigger='<S-Tab>'
 inoremap <C-Tab> * <Esc>:call UltiSnips#ListSnippets()<CR>
-let g:UltiSnips_python_style='sphinx'
-let g:UltiSnips_python_quoting_style = 'double'
-let g:UltiSnipsEnableSnipMate = 1
+let g:ultisnips_python_style='numpy'
+let g:ultisnips_python_quoting_style = 'double'
+let g:UltiSnipsEnableSnipMate = 0
 let g:UltiSnipsEditSplit = 'tabdo'
 " }}}
 
@@ -784,6 +784,17 @@ let g:jedi#enable_completions = 0
 " Deoplete_Jedi: {{{ 3
 " speed things up
 let g:deoplete#sources#jedi#enable_typeinfo = 0
+" }}}
+
+" **UNTESTED**: {{{
+
+" just a thought i had. For any normal mode remaps you have, add the same
+" thing and prefix <Esc> to the RHS and boom!
+if has('b:Tagbar')  " or any plugin
+    let g:tagbar_sort=0
+    inoremap <F3> <esc>:TagbarToggle<CR>
+    nnoremap <F3> :TagbarToggle<CR>
+endif
 " }}}
 
 " Airline: {{{ 3
@@ -823,7 +834,6 @@ let g:airline#extensions#tabline#tab_nr_type = 1 " splits and tab number
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline#extensions#tabline#fnametruncate = 1
-let g:airline#extensions#tmuxline#enabled = 1
 " }}}
 
 " }}}
@@ -918,7 +928,8 @@ function! s:helptab()
     " first argument
     endif
 endfunction
-command! -nargs=1 Help call <SID>helptab()
+" keeps erroring idk why.
+" autocmd vimrc BufEnter *.txt call s:helptab()
 " }}}
 
 " AutoSave: {{{ 3
@@ -970,13 +981,13 @@ endfun
 " }}}
 
 " Colorscheme: {{{ 2
-set background=dark
 colorscheme onedark
 if g:colors_name ==# 'gruvbox'      " ==# means match case
     let g:gruvbox_contrast_dark = 'hard'
     let g:gruvbox_improved_strings = 1
 endif
-hi NonText guifg=NONE guibg=#000000        " Massive performance difference
+" Massive performance difference
+hi NonText guifg=NONE guibg=NONE
 " }}}
 
 " }}}

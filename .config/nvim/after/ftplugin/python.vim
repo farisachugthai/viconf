@@ -5,6 +5,27 @@
 
 " Options: {{{ 2
 
+" From /usr/share/nvim/runtime/ftplugin/python.vim
+" Here's a few options you might wanna look into:
+
+" if !exists("g:python_recommended_style") || g:python_recommended_style != 0
+"     " As suggested by PEP8.
+"     setlocal expandtab shiftwidth=4 softtabstop=4 tabstop=8
+" endif
+
+" First time: try finding 'pydoc'.
+" if !exists('g:pydoc_executable')
+"     if executable('pydoc')
+"         let g:pydoc_executable = 1
+"     else
+"         let g:pydoc_executable = 0
+"     endif
+" endif
+" If 'pydoc' was found use it for keywordprg.
+" if g:pydoc_executable
+"     setlocal keywordprg=pydoc
+" endif
+
 " PEP Indenting
 setlocal tabstop=4 shiftwidth=4 expandtab softtabstop=4
 let b:python_highlight_all = 1
@@ -19,7 +40,7 @@ endif
 setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 
 " also let's know where the line needs to end visually but not invoke the
-" linters to react. AKA don't set textwidth
+" linters to react.
 setlocal colorcolumn=80,120
 
 " This may be hard on termux but feels necessary.
@@ -41,11 +62,7 @@ augroup END
 " Plugins: {{{ 2
 
 " ALE: {{{ 3
-" To explain why this got trimmed, pydocstyle and yapf weren't
-" linters that could be enabled. Easy. Flake8 gets called by pyls.
-" Don't call it twice and we move faster. Pycodestyle is encapsulated
-" by flake8. Leaving only the language server.
-let b:ale_linters = [ 'pyls' ]
+let b:ale_linters = [ 'pyls', 'flake8', 'pycodestyle'  ]
 let b:ale_linters_ignore = [ 'pylint', 'mypy' ]
 let b:ale_linters_explicit= 1
 
