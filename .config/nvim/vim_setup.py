@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Rewrite the basic Vim set up script using Python.
+"""Setup Neovim on Linux or on Termux.
 
 Attributes:
 
@@ -15,24 +15,44 @@ Example:
         $ python exampleofrst.py
 
 TODO:
-    - Continue bringing this up to numpy style docstring conventions.
-    - Explore ``sphinx.ext.todo`` extension
-    - IPython extension will be necessary
-    - Napoleon is used for testing numpy style docstrings
     - Show usage instructions in :func: and in :mod: docstring.
     - Make a package manager class. It's init may involve all platform specific tests.
         - Or better stated as a question: What information needs to initialize
           the state of the p.m. and where should platform specific info go?
+    - Install neovim's python packages in a venv.
+    - Expand to windows compatability
+    - Add conda compatability
+    - Finish argument parser
 """
+import argparse
 import os
 import subprocess
 import sys
 
 
-def usage():
-    """Show how to use command."""
-    print("TODO")
-    sys.exit()
+def _parse_arguments():
+    """Parsers the command line arguments given to the installer.
+
+    None should be required for a complete setup; however, if any particular
+    modifications need to be made, they would be interpreted here.
+
+    **WHAT DOES IT RETURN AGAIN**
+    :return: :class:`Response <Response>` object
+
+    .. todo::
+        - Add arguments for where they want the virtualenv to install this into
+        - Argument for what additional packages they'd like
+        - Give an option to specify a file with a listing of packages?
+    """
+    parser = argparse.ArgumentParser(
+            description='Installs and sets up neovim.'
+            )
+
+    parser.add_argument('--plug-dir',dest=plugd,help='The directory that vim-plug is downloaded to.')
+
+    args = parser.parse_args()
+
+    return args
 
 
 def get_home():
@@ -55,26 +75,33 @@ def check_plug_dir(plugd):
 
     If not, create it.
 
-    plugd : str
-        The directory to put vim-plug in.
-
+    :param plugd: The directory to put vim-plug in.
     :returns: None
     """
     if not os.path.isdir(plugd):
         os.makedirs(plugd, mode=0o755, exist_ok=True)
 
 
-def requests_download():
-    """Download vim-plug using requests."""
+def requests_download(plug):
+    """Download vim-plug using requests.
+
+    :param plug: File to download vim-plug to.
+    :returns: None
+    """
     res = requests.get(
         "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim")
     res.raise_for_status()
-    with open("~/.local/share/nvim/site/autoload/plug.vim", "xt") as f:
+
+    with open(plug, "xt") as f:
         f.write(res.text)
 
 
-def urllib_dl():
-    """Command to download vim-plug. Fall back for requests."""
+def urllib_dl(plug):
+    """Command to download vim-plug. Fall back for requests.
+
+    :param plug: File to download vim-plug to.
+    :returns: None
+    """
     from urllib.request import Request, urlopen
     from urllib.error import URLError
     req = Request(
@@ -89,37 +116,26 @@ def urllib_dl():
             print('The server couldn\'t fulfill the request.')
             print('Error code: ', e.code)
 
-    # TODO: Make this function take an argument and have that argument be the
-    # path to the desired dest for the file. Same with requests.
-    with open("~/.local/share/nvim/site/autoload/plug.vim", "wb") as f:
+    with open(plug, "wb") as f:
         f.write(response.read())
 
 
 def termux_packages():
     """Prepare all necessary packages for termux.
 
-    I regularly install a lot of stuff into the global environment even though
-    that's reasonably frowned upon.
+    .. todo::
 
-    TODO:
-        Do everything in a created virtualenv. Which means checking for a
-        virtualenv dir (and as a result rewriting check_plug_dir() to be
-        just check_dir()), ensuring virtualenv is in your path, checking that
-        there isn't already a neovim env, running venv, activating the neovim
-        env, and then pip installing. ughh. Positive note is you write that
-        once and you get to use it forever.
+        - Rewrite for a virtualenv
+        - Ensure we have write access to the virtualenv
+        - If the user doesn't give us a place to do this, where do we go?
+            - May end up a required arg although that should be avoided.
     """
     subprocess.run(["pkg", "install", "vim-python", "python-dev"],
                    capture_output=True)
 
 
 def pip_install():
-    """Run platform-independent pip install.
-
-    Welllll. That's probably too forgiving. You could add a sys.version_info
-    check (or platform.python_version_tuple) to see if they're using 3.7
-    so you can add check=True to the arguments.
-    """
+    """Run platform-independent pip install."""
     if sys.version_info > (3, 7):
         subprocess.run([
             "pip", "install", "-U", "pip", "neovim",
@@ -136,40 +152,36 @@ def pip_install():
 
 
 if __name__ == "__main__":
-    if sys.argv[1] == '--help' or '-h':
-        usage()
-
+    # Before anything check that we're on a supported system.
     home = get_home()
-
-    uname = os.uname()
+    uname = os.uname()  # store in a var for when we branch to other systems
     if uname[0] == 'Linux':
-        plugd = os.path.join(home, ".local", "share", "nvim", "site",
-                             "autoload")
-        LINUX = 1
-        check_plug_dir(plugd)
+        pass
     else:
         sys.exit("Unfortunately your platform isn't supported yet. Sorry!")
-        # TODO: Should be as simple as function call with proper windows
-        # directory. In the future add an elif os[0] == 'nt' like explicitly
-        # mention by name so we still catch everything else in this else stmnt
 
+    # now that we know we're on a supported OS parse the args
+    args = _parse_arguments()
+
+    # check that the dir we need to download vim-plug to exists.
+    if args.plugd:
+        plugd = args.plugd
+    else:
+        plugd = os.path.join(home, ".local", "share", "nvim", "site", "autoload")
+
+    check_plug_dir(plugd)
+
+    plug = os.path.join(plugd, '', 'plug.vim')
+    # download vim-plug
     try:
         import requests
     except ImportError:
         NOREQUESTS = 1
 
     if NOREQUESTS:
-        urllib_dl()
+        urllib_dl(plug)
     else:
-        requests_download()
-
-    # Alright so now this module downloads vim-plug on a Linux machine.
-    # TODO: Need to import subprocess and start running platform dependant code
-    # should use result from os.uname() again. After evaluation do something
-    # like LINUX=1 and if LINUX && platform.archeticture == "amd64": # to
-    # prevent false positives from termux,
-    # sudo apt-get install vim-gtk3. Is neovim in the ubuntu 18.04 repos?
-    # Ugh this is getting so specific.
+        requests_download(plug)
 
     if uname.machine == 'aarch64':
         termux_packages()

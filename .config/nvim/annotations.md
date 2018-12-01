@@ -30,7 +30,52 @@ modify anything in the future here's the original code I had
 "     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 ```
 " }}}
+
 ## Environment
+
+Dec 01, 2018
+
+To continue adding to this pile, I remember there being a need to configure the cursor
+for tmux and nvim differently when using konsole.
+
+```viml
+let s:konsole = exists('$KONSOLE_DBUS_SESSION') ||
+\ exists('$KONSOLE_PROFILE_NAME')
+```
+...
+
+```viml
+" 1 or 0 -> blinking block
+" 2 -> solid block
+" 3 -> blinking underscore
+" 4 -> solid underscore
+" Recent versions of xterm (282 or above) also support
+" 5 -> blinking vertical bar
+" 6 -> solid vertical bar
+let s:normal_shape = 0
+let s:insert_shape = 5
+let s:replace_shape = 3
+
+elseif s:iterm || s:konsole
+let s:start_insert = "\<Esc>]50;CursorShape=" . s:insert_shape . "\x7"
+let s:start_replace = "\<Esc>]50;CursorShape=" . s:replace_shape . "\x7"
+let s:end_insert = "\<Esc>]50;CursorShape=" . s:normal_shape . "\x7"
+else
+let s:cursor_shape_to_vte_shape = {1: 6, 2: 4, 0: 2, 5: 6, 3: 4}
+let s:insert_shape = s:cursor_shape_to_vte_shape[s:insert_shape]
+let s:replace_shape = s:cursor_shape_to_vte_shape[s:replace_shape]
+let s:normal_shape = s:cursor_shape_to_vte_shape[s:normal_shape]
+let s:start_insert = "\<Esc>[" . s:insert_shape . ' q'
+let s:start_replace = "\<Esc>[" . s:replace_shape . ' q'
+let s:end_insert = "\<Esc>[" . s:normal_shape . ' q'
+endif
+```
+
+From: <https://github.com/rafi/vim-config/blob/master/config/terminal.vim#L39>
+
+Typically don't like working with escape sequences.
+Gotta admit that's a lot smarter than what i'd come up with.
+
 
 " Environment: {{{ 2
 
@@ -47,8 +92,8 @@ Just pulled this off of the vimrc. The one above is init.vim.
 Both from laptop branch not termux. Amazingly there's different
 attempts over there too.
 
-```viml
 " Nvim_OS: {{{ 2
+```viml
 " Gonna start seriously consolidating vimrc and init.vim this is so hard
 " to maintain
 " Let's setup all the global vars we need
@@ -69,8 +114,8 @@ else
     let s:usr_d = '/usr'
     let s:OS = 'Linux'
 endif
-" }}}
 ```
+" }}}
 
 " }}}
 
@@ -199,50 +244,5 @@ let g:lightline = {
 
 TODO: Use :Glog to recover your old nerdcom code. Better do it soon if you're
 thinking about ever being able to use it again!
-
-" }}}
-
-## functions
-
-" {{{
-
-### compilers
-
-Now out of curiosity would this go in .config/nvim/compilers?
-
-Compiler Function: {{{
-
-All in one compiler. Going to need to rewrite to make my own.
-
-```
-noremap <F5> :call CompileRunGcc()<CR>
-func! CompileRunGcc()
-    exec "w"
-    if &filetype == 'c'
-        exec "!g++ % -o %<"
-        exec "!time ./%<"
-    elseif &filetype == 'cpp'
-        exec "!g++ % -o %<"
-        exec "!time ./%<"
-    elseif &filetype == 'java'
-        exec "!javac %"
-        exec "!time java %<"
-    elseif &filetype == 'sh'
-        :!time bash %
-    elseif &filetype == 'python'
-        exec "!time python2.7 %"
-    elseif &filetype == 'html'
-        exec "!firefox % &"
-    elseif &filetype == 'go'
-        exec "!go build %<"
-        exec "!time go run %"
-    elseif &filetype == 'mkd'
-        exec "!~/.vim/markdown.pl % > %.html &"
-        exec "!firefox %.html &"
-    endif
-endfunc
-```
-
-}}}
 
 " }}}

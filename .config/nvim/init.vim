@@ -17,13 +17,11 @@ Plug 'junegunn/vim-plug'        " plugception
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
-" Nothing happens if we open a directory to start nvim
-" TODO: one of the expressions in the loop needs to be prepended with silent
 augroup nerd_loader
   autocmd!
   autocmd VimEnter * silent! autocmd! FileExplorer
   autocmd BufEnter,BufNew *
-        \  if isdirectory(expand('<amatch>'))
+        \|  if isdirectory(expand('<amatch>'))
         \|   call plug#load('nerdtree')
         \|   execute 'autocmd! nerd_loader'
         \| endif
@@ -216,8 +214,6 @@ set wildmode=longest,list:longest       " Longest string or list alternatives
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 set fileignorecase                      " when searching for files don't use case
 set wildignorecase                      " on the cmdline ignore case in filenames
-
-" set completefunc here and then let b:omnifunc in ftplugins
 set completefunc=LanguageClient#complete
 set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
 " }}}
@@ -227,7 +223,6 @@ set tags+=./tags,./../tags,./*/tags     " usr_29
 set tags+=~/projects/tags               " consider generating a few large tag
 set tags+=~python/tags                  " files rather than recursive searches
 set mouse=a                             " Automatically enable mouse usage
-" set cursorline                          " Might wanna have off. Or change color
 if &textwidth!=0
     set colorcolumn=+1                  " I don't know why this didn't set
 endif
@@ -244,9 +239,7 @@ if has('gui_running')
 endif
 
 " In case you wanted to see the guicursor default for gvim win64
-" set gcr=n-v-c:block-Cursor/lCursor,ve:ver35-Cursor,o:hor50-Cursor,
-" i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor,
-" sm:block-Cursor-blinkwait175-blinkoff150-blinkon175
+" set gcr=n-v-c:block-Cursor/lCursor,ve:ver35-Cursor,o:hor50-Cursor, i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor, sm:block-Cursor-blinkwait175-blinkoff150-blinkon175
 
 set path+=**        			        " Recursively search dirs with :find
 set autochdir
@@ -307,8 +300,8 @@ nnoremap <Leader>tp :tabprev<CR>
 nnoremap <Leader>nt :NERDTreeToggle<CR>
 nnoremap <Leader>a :echo('No. Use :%y')<CR>
 
-inoremap jk <Esc>
-vnoremap jk <Esc>
+inoremap fd <Esc>
+vnoremap fd <Esc>
 
 " Junegunn:
 nnoremap <Leader>o o<Esc>
@@ -368,11 +361,6 @@ cnoremap <C-D> <Del>
 cnoremap <C-E> <End>
 " forward one character
 cnoremap <C-F> <Right>
-
-" **YO! I added unique to these because I went with a general map statement
-" Error messages go flying up but they close away immediately
-" Either redirect them or do something to make them persist and fix them
-
 " recall newer command-line. {Actually C-n and C-p on Emacs}
 map <unique> <A-n> <Down>
 " recall previous (older) command-line. {But we can't lose C-n and C-p}
@@ -477,13 +465,10 @@ nnoremap <leader>+ <Plug>AirlineSelectNextTab
 " }}}
 
 " Macros: {{{ 2
-" nvim automatically sources this
 if !has('nvim')
     runtime! ftplugin/man.vim
     let g:ft_man_folding_enable = 0
-    setlocal keywordprg=Man
-else
-    setlocal keywordprg=man\ -a
+    setlocal keywordprg=man
 endif
 
 runtime! macros/matchit.vim
@@ -602,7 +587,6 @@ inoremap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
     \ 'source': 'rg -n ^ --color always',
     \ 'options': '--ansi --delimiter : --nth 3..',
     \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }}))
-
 " }}}
 
 " FZF_Statusline: {{{ 3
@@ -619,7 +603,6 @@ augroup fzfstatusline
     autocmd!
     autocmd! user Fzfstatusline call <sid>fzf_statusline()
 augroup end
-
 " }}}
 
 " }}}
@@ -650,11 +633,11 @@ let g:NERDTreeWinPos = 'right'
 let g:NERDTreeShowHidden = 1
 let g:NERDTreeShowBookmarks = 1
 let g:NERDTreeNaturalSort = 1
-let g:NERDTreeChDirMode = 2                         " change cwd every time NT root changes
+let g:NERDTreeChDirMode = 2             " change cwd every time NT root changes
 let g:NERDTreeShowLineNumbers = 1
-let g:NERDTreeMouseMode = 2                         " Open dirs with 1 click files with 2
+let g:NERDTreeMouseMode = 2             " Open dirs with 1 click files with 2
 let g:NERDTreeIgnore = ['\.pyc$', '\.pyo$', '__pycache__$', '\.git$']
-let g:NERDTreeRespectWildIgnore = 1                 " yeah i meant those ones too
+let g:NERDTreeRespectWildIgnore = 1     " yeah i meant those ones too
 " }}}
 
 " ALE: {{{ 3
@@ -699,9 +682,6 @@ let g:startify_lists = [
     \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
 \ ]
 
-let g:startify_session_sort = 1
-let g:startify_update_oldfiles = 1
-
 " Setup devicons
 function! StartifyEntryFormat()
     return 'WebDevIconsGetFileTypeSymbol(absolute_path) ." ". entry_path'
@@ -720,6 +700,8 @@ let g:startify_custom_header = s:filter_header(startify#fortune#cowsay())
 " Don't show these files
 let g:startify_skiplist = [
     \ 'COMMIT_EDITMSG',
+    \ glob('plugged/*/doc'),
+    \ 'C:\Program Files\Vim\vim81\doc',
     \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc', ]
     " its explained why this won't. actually great explanation of those weird,
     " afile cfile sfile vars
@@ -736,26 +718,17 @@ let g:startify_change_to_dir = 1
 let g:startify_fortune_use_unicode = 1
 let g:startify_update_oldfiles = 1
 let g:startify_session_persistence = 1
-" Configured correctly this could be a phenomenal way to store commands and
-" expressions on a per directory basis aka projects / workspaces!
 let g:startify_session_autoload = 1
-" Not 100% sure if the code below works but here's hoping!
-let g:startify_skiplist = [
-        \ 'COMMIT_EDITMSG',
-        \ glob('plugged/*/doc'),
-        \ 'C:\Program Files\Vim\vim81\doc',
-        \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc',
-        \ ]
+let g:startify_session_sort = 1
 " }}}
 
 " UltiSnips: {{{ 3
 let g:UltiSnipsSnippetDir = [ '~/.config/nvim/UltiSnips' ]
-let g:UltiSnipsJumpForwardTrigger='<Tab>'
-let g:UltiSnipsJumpBackwardTrigger='<S-Tab>'
+let g:UltiSnipsJumpForwardTrigger = '<Tab>'
+let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
 inoremap <C-Tab> * <Esc>:call ultisnips#listsnippets()<CR>
-let g:ultisnips_python_style='numpy'
-let g:UltiSnips_python_quoting_style='double'
-let g:UltiSnips_python_quoting_style = 'GOOGLE'
+let g:ultisnips_python_style = 'numpy'
+let g:UltiSnips_python_quoting_style = 'double'
 let g:UltiSnipsEnableSnipMate = 0
 let g:UltiSnipsEditSplit = 'vertical'
 
@@ -798,8 +771,8 @@ let b:LanguageClient_selectionUI = 'fzf'
 " Jedi: {{{ 3
 let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces
 " let g:jedi#completions_command = '<C-N>'
-let g:jedi#documentation_command = '<leader>h'
-let g:jedi#usages_command = '<leader>u'
+let g:jedi#documentation_command = '<Leader>h'
+let g:jedi#usages_command = '<Leader>u'
 let g:jedi#show_call_signatures_delay = 100     " wait 100ms instead of 500 to show CS
 let g:jedi#smart_auto_mappings = 0              " must be set
 let g:jedi#force_py_version = 3
@@ -984,8 +957,9 @@ command! DiffOrig vert new | set buftype=nofile | read ++edit # | 0d_
 
 " }}}
 
-"Colorscheme: {{{ 2
-colorscheme onedark
+" Colorscheme: {{{ 2
+set bg=dark
+colorscheme gruvbox
 if g:colors_name ==# 'gruvbox'
     let g:gruvbox_contrast_dark = 'hard'
     let g:gruvbox_improved_strings=1
@@ -994,4 +968,5 @@ endif
 
 hi NonText guifg=NONE guibg=NONE
 " }}}
+
 " }}}

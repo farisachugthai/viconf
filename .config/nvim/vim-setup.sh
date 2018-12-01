@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
-# Vim: set ff=unix:
 # Works well enough after having tested it on Ubuntu on WSL. Ran into some errors but that's likely a product of the fact that we can't interactively work with the user
 
-# Set up vim
+# Set up vim-plug
 if ! [[ -d "$HOME/.vim/autoload" ]]; then
     mkdir -pv "$HOME/.vim/autoload"
 fi
@@ -17,15 +16,26 @@ if ! [[ -f "$HOME/.vim/autoload/plug.vim" ]]; then
     curl -sSLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 fi
 
+# TODO: Check what os and arch we have.
+
+# if ! [[ "$(command -v add-apt-repository)" ]]; then
+#     sudo apt-get update && sudo apt-get install -y add-apt-repository
+# fi
+
+# TODO: Check if they have installed software-properties-common as that's a
+# dependency for adding PPAs
+
+# Amazingly add-apt-repository autoruns apt-get update for us!
+# sudo add-apt-repository ppa:neovim-ppa/unstable
+# sudo apt-get install neovim
+
+# Refer back to script from newbuntu.
+
 # Get the python remote hosts
+# But if we run as root none of this dir specific stuff affects the user...
 if ! [[ "$(command -v pip)" ]]; then
-    if ! [[ "$EUID" == 0 ]]; then
-        echo -e 'You must install pip in the python3-pip package but you are
-        \ not a root user.'
-        exit 1
-    else
-        apt install python3-pip
-    fi
+    sudo apt install python3-pip
+    pip3 install -U pip
 fi
 
 if [[ "$(command -v conda)" ]]; then

@@ -1,19 +1,8 @@
-" Deoplete: {{{
+" Deoplete:
 
-" TODO:
-" Set up some more fine-tuned options.
-" Or at least merge the comments thing and the dict thing.
+" All: {{{ 1
 
-" From the docs it sounds like setting up omnifuncs might be a good idea but
-" lang client should be taking care of that.
-"
-" Wth is up with the way we have sources setup? Why is it taking up so many lines
-" can we not pass the function a dict?
-
-" setting up loggings more than likely gonna be a good idea if this ends up shitting the bed
-" or at least having something configured in case you wanna toggle it
-
-
+" General: {{{ 2
 let g:deoplete#enable_smart_case = 1
 set completeopt+=noinsert                    " Autoselect feature
 
@@ -47,6 +36,9 @@ call deoplete#custom#source(
 " If dictionary is already sorted, no need to sort it again.
 call deoplete#custom#source( 'dictionary', 'sorters', [])
 
+" }}}
+
+" Jedi logging: {{{ 2
 " Enable jedi source debug messages
 " call deoplete#custom#option('profile', v:true)
 " call deoplete#enable_logging('DEBUG', 'deoplete.log')
@@ -54,5 +46,7 @@ call deoplete#custom#source( 'dictionary', 'sorters', [])
 "|deoplete-source-attribute-is_debug_enabled| to debug the
 "sources.
 " call deoplete#custom#source('jedi', 'is_debug_enabled', 1)
+
+" }}}
 
 " }}}
