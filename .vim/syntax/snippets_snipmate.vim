@@ -1,0 +1,1 @@
+../../.config/nvim/syntax/snippets_snipmate.vim

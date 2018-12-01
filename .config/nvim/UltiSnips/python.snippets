@@ -1,23 +1,28 @@
+# python.snippets
+priority 70
+
+extends pandas
+extends numpy_stat
+extends rst
+
 #######################################################################
 #                           Python Snippets                           #
 #######################################################################
 
-priority 70
-
-# Personal Snippets
-# ====================
 
 # Let's reorganize this in a similar manner to what someone would write as they're
 # starting a new module.
 
+# Start out with a shebang
 snippet #! "Shebang header for python scripts" b
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 $0
 endsnippet
 
-# Quite honestly have never made a mod docstring like that but whatever.
-# That b at the end is an option that means 'must be at the beginning of line'
+# Create a module docstring. We can rewrite this to conform to different
+# docstring styles as needed
+
 snippet docs "Module Docstring" b
 	"""
 	File: ${1:'foo.py'}
@@ -28,7 +33,6 @@ snippet docs "Module Docstring" b
 	"""
 endsnippet
 
-# THERE WE GO!
 snippet pmdoc "pocoo style module doc string" b
 # -*- coding: utf-8 -*-
 """
@@ -43,6 +47,72 @@ snippet pmdoc "pocoo style module doc string" b
 $0
 endsnippet
 
+# import your modules
+snippet imp "import statement" b
+import ${0:module}
+endsnippet
+
+snippet from "from package import module" b
+from ${1:package} import ${0:module}
+endsnippet
+
+snippet ipy "Embed ipython into your application." b
+from IPython import embed; embed()
+endsnippet
+
+# Use our ifmain block to shield against stray global vars
+snippet ifmain "ifmain. optionally adds in function call to argparser" b
+if __name__ == `!p snip.rv = get_quoting_style(snip)`__main__`!p snip.rv = get_quoting_style(snip)`:
+	${1:_parse_arguments()}
+	${2:${VISUAL:main()}}
+endsnippet
+
+
+#######################
+#  personal snippets  #
+#######################
+
+# aka just more general snippets i wrote. not intended to follow the flow
+# of the previous ones above
+snippet doctest "Doctest fun and ifmain block" b
+def _test():
+	import doctest
+	doctest.testmod()
+
+
+if __name__ == '__main__':
+	_test()
+endsnippet
+
+snippet timestamp "Produce a timestamp"
+datetime.date.isoformat(datetime.datetime.now())
+endsnippet
+
+snippet dirname "Find the directory the script is in"
+os.path.dirname(os.path.realpath(__file__))
+endsnippet
+
+snippet pprint "Import and use pprint" b
+from pprint import pprint; pprint($1)
+endsnippet
+
+snippet pdb "Import and use pdb" b
+import pdb; pdb.set_trace()
+endsnippet
+
+snippet ipdb "Import and use ipdb" b
+import ipdb; ipdb.set_trace()
+endsnippet
+
+snippet home "Why isn't there a better way." b
+home = os.path.expanduser("~")
+endsnippet
+
+snippet pr "Print something"
+print("${0:var}")
+endsnippet
+
+
 ###########
 #  loops  #
 ###########
@@ -52,21 +122,25 @@ if __name__ == `!p snip.rv = get_quoting_style(snip)`__main__`!p snip.rv = get_q
 	${1:${VISUAL:main()}}
 endsnippet
 
-snippet with "with" b
+snippet with "with expr - context manager" b
 with ${1:expr}`!p snip.rv = " as " if t[2] else ""`${2:var}:
 	${3:${VISUAL:pass}}
 $0
 endsnippet
 
+# However I don't know what that says so let's simplify
+# Let's also build this snippet around my most frequent use case
+# requests.get()
+snippet with "simpler context manager" b
+with ${1:open} ${2:filename}, ${3:'xt'} as ${4:f}:
+	${0:f.write(res.text)}
+endsnippet
+
+
 snippet for "for loop" b
 for ${1:item} in ${2:iterable}:
 	${3:${VISUAL:pass}}
 endsnippet
-
-snippet imp "import statement" b
-	import ${0:module}
-endsnippet
-
 
 snippet from "from package import module" b
 	from ${1:package} import ${0:module}
@@ -95,6 +169,16 @@ elif ${3:condition}:
 	${4:pass}
 else:
 	${5:pass}
+endsnippet
+
+snippet elif "You should use ifee but just in case" b
+elif ${1:condition}:
+	${2:pass}
+endsnippet
+
+snippet else "You should use ife but just in case" b
+else:
+	${1:pass}
 endsnippet
 
 
@@ -138,7 +222,57 @@ finally:
 	${7:pass}
 endsnippet
 
-snippet argp "description" bst
+
+######################################
+#  other assorted control structures #
+######################################
+
+snippet for "for loop" b
+for ${1:item} in ${2:iterable}:
+	${3:${VISUAL:pass}}
+$0
+endsnippet
+
+snippet while "while loop" b
+while ${1:condition}:
+	${0:pass}
+endsnippet
+
+##############
+#  argparse  #
+##############
+
+# not the most loqacoious i've ever been but it's better than not knowing
+# what the hell a snippet is because the description for "with" is "with"
+snippet argparse "Initialize ArgumentParser in def _parse_arguments" b
+def _parse_arguments():
+	parser = argparse.ArgumentParser(description=${1:__doc__})
+	return parser.parse_args()
+	$0
+endsnippet
+
+# The following is a snippet to determine the type of an object.
+# Admittedly this is better suited for a REPL than vim but *shrugs*
+snippet type "Wrap a statement with a type clause"
+type(${VISUAL:1})
+endsnippet
+
+snippet argstrpos "Argparse positional argument for a string type." b
+	parser.add_argument( ${VISUAL:var}, type=${1:str}, help=${2:Feed me input.})
+
+endsnippet
+
+snippet argpath "Add a pathlike object" b
+	parser.add_argument(${1:-s}, ${2:--long}, dest= ${3: var},
+						type=${4:pathlib.Path}, help=${5:RTFM})
+endsnippet
+
+snippet argpv "argument for version = %(prog)s" b
+	parser.add_argument('--version', action = 'version',
+			version = '%(prog)s 1.0')
+endsnippet
+
+snippet argp "snip that needs to be fixed" bst
 
 import argparse
 
@@ -193,6 +327,82 @@ def parse_argument():
 	${0}
 endsnippet
 
+
+
+# Now let's try some comprehensions
+#######################################################################
+#                           Comprehensions                            #
+#######################################################################
+
+snippet lc "List comprehension" b
+[${1:value} for {2:value} in ${3:iterable}]$0
+endsnippet
+
+snippet lci "List comprehension if. Commonly referred to as a filter" b
+[${1:value} for {2:value} in ${3:iterable} if ${4:condition}]$0
+endsnippet
+
+snippet lcie "List comprehension if" b
+[${1:value} if ${2:condition} else ${3:condition} for ${4:value} in ${5:iterable}]$0
+endsnippet
+
+snippet dc "Dictionary comprehension base" b
+{${1:key}: ${2:value} for ${3:key}, ${4:value} in ${5:iterable}}$0
+endsnippet
+
+snippet dci "Dictionary comprehension if filter" b
+{${1:key}: ${2:value} for ${3:key}, ${4:value} in ${5:iterable} if ${6:condition}}$0
+endsnippet
+
+snippet sc "Set comprehension base" b
+{${1:value} for ${2:value} in ${3:iterable}}$0
+endsnippet
+
+snippet sci "Set comprehension if filter" b
+{${1:value} for ${2:value} in ${3:iterable} if ${4:condition}}$0
+endsnippet
+
+snippet gc "Generator comprehension" b
+(${1:key} for ${2:value} in ${3:iterable})$0
+endsnippet
+
+# YESSSS! If you wrap the statements you want inside the snippet
+# in visual mode, tab over, then type usnip and tab again
+# it builds your snippet almost perfectly. Just fill in the triggerword
+# and the description and you're fucking golden
+snippet gci "Generator comprehension if filter" b
+(${1:key} for ${2:value} in ${3:iterable} if ${4:condition})$0
+endsnippet
+
+
+# Well that was probably a lot to handle. Let's go through some examples.
+
+# Let's take a string and remove the vowels.
+# In the future you can easily repurpose the idea to modify an object as necessary
+
+# Admittedly this is too specific but as time passes I'll generalize
+snippet gcstr "A generator comprehension that inputs and outputs a string" b
+nonvowels = ''.join(i for i in sentence if not i in vowels)
+endsnippet
+
+
+# Search for .txt files in your current dir
+snippet lcfiles "Return a list of all of the files with a certain suffix in the cwd" b
+files = os.path.join(${1:os.cwd}) for f in os.listdir({$1}) if f.endswith(${2:'.txt'})
+endsnippet
+
+
+# Now let's read in data from a csv file and store it in a list of dictionaries
+snippet lccsv "List comprehension for csv files" b
+data = [ x for x in csv.DictReader(open(${1:tmp.csv}, ${2:'rU'}) ]
+endsnippet
+# As a reminder, r means open in read mode and U means accept universal newlines
+# \n or \r or \r\n
+
+
+
+
+
 ####################################################################
 #  Snippets related to functions. Try them out and report back!    #
 ####################################################################
@@ -202,7 +412,7 @@ def ${1:fname}(`!p snip.rv = vim.eval('indent(".") ? "self" : ""')`$2):
 	$0
 endsnippet
 
-snippet def "function with docstrings" b
+snippet def "function with docstrings. utilizes numpy Parameters." b
 def ${1:function}(`!p
 if snip.indent:
 	snip.rv = 'self' + (", " if len(t[2]) else "")`${2:arg1}):
@@ -231,22 +441,6 @@ write_function_docstring(t, snip) `
 	${5:${VISUAL:pass}}
 endsnippet
 
-
-snippet pprint "Import and use pprint" b
-from pprint import pprint; pprint($1)
-endsnippet
-
-snippet pdb "Import and use pdb" b
-import pdb; pdb.set_trace()
-endsnippet
-
-snippet ipdb "Import and use ipdb" b
-import ipdb; ipdb.set_trace()
-endsnippet
-
-snippet home "Why isn't there a better way." b
-home = os.path.expanduser("~")
-endsnippet
 ##########
 # COMMON #
 ##########
@@ -560,6 +754,8 @@ def __exit__(self, exc_type, exc_value, traceback):
 endsnippet
 
 
+# These dunder methods are good for customized classes but what happens when
+# we need to make the function call?
 snippet attr "methods for customizing attribute access" b
 def __getattr__(self, name):
 	${1:pass}
@@ -571,6 +767,17 @@ def __delattr__(self, name):
 	${3:pass}
 endsnippet
 
+snippet getattr "Get an attribute"
+getattr(${1:object}, ${2,attr})
+endsnippet
+
+snippet setattr "Set an attribute"
+setattr(${1:object}, ${2,attr}, ${3:value})
+endsnippet
+
+snippet hasattr "Show existence of an attribute"
+hasattr(${1:object}, ${2,attr})
+endsnippet
 
 snippet desc "methods implementing descriptors" b
 def __get__(self, instance, owner):
@@ -718,6 +925,7 @@ endsnippet
 ##############
 # PROPERTIES #
 ##############
+
 snippet roprop "Read Only Property" b
 @property
 def ${1:name}(self):

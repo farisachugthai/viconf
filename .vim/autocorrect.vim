@@ -383,6 +383,7 @@ iab Httpl Http:
 iab Hvae Have
 iab Hvaing Having
 iab Hwich Which
+ia Id I'd
 iab Idae Idea
 iab Idaes Ideas
 iab Identofy Identify
@@ -492,6 +493,7 @@ iab Neccessary Necessary
 iab Necesarily Necessarily
 iab Necesary Necessary
 iab Negotiaing Negotiating
+ia Ngl Not gonna lie
 iab Nkow Know
 iab Nothign Nothing
 iab Nver Never
@@ -1204,11 +1206,12 @@ iab httpL http:
 iab hvae have
 iab hvaing having
 iab hwich which
+" ia id I'd
 iab idae idea
 iab idaes ideas
 iab identofy identify
 iab ihs his
-ia ill I'll
+" ia ill I'll
 ia im I'm
 iab imediate immediate
 iab imediatly immediately
@@ -1313,6 +1316,7 @@ iab neccessary necessary
 iab necesarily necessarily
 iab necesary necessary
 iab negotiaing negotiating
+ia ngl not gonna lie
 iab nkow know
 iab nothign nothing
 iab nver never

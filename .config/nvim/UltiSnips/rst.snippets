@@ -3,267 +3,17 @@
 # Add ipython directives since none are here.
 # Let's treat this like a good opportunity to REALLY make sure you know RST.
 # Like honestly double check that this is what honza has because this is insane
-# also let's start practicing with this whole global p! snip.rv business
-# because my snippet for table isn't gonna be usable
 
 extends snippets
 extends python
 
-#######################################################################
-#							Personal Snippets						  #
-#######################################################################
-
-snippet inlink "Create an internal link"
-:ref:`${VISUAL:'link'}`
-endsnippet
-
-snippet table "table from sphinx cheatsheet"
-==================   ============
-Name                 Age
-==================   ============
-John D Hunter        40
-Cast of Thousands    41
-And Still More       42
-==================   ============
-endsnippet
-
-snippet cb "Code Block. Must have 1 blank line surrounding!" b
-
-.. code-block:: ${1:python}
-
-	${2:${VISUAL:code}}
-
-$0
-
-endsnippet
-
-snippet codeb "cb dedupe" b
-
-.. code-block:: ${1:python}
-
-	${2:${VISUAL:code}}
-
-$0
-
-endsnippet
-
-# TODO:
-# shit are the backticks gonna need to be escaped? remember to look for that
-snippet code "Inline code" b
-``${VISUAL:1}``
-endsnippet
-
-
-################
-#  formatting  #
-################
-
-snippet * "Italics"
-*${1:Emphasis}* ${0}
-endsnippet
-
-snippet ** "Bold"
-**${1:Strong emphasis}** ${0}
-endsnippet
-
-snippet bold "bold" b
-**${1:Strong emphasis}** ${0}
-endsnippet
-
-# There are a few different ways to do
-###########
-#  links  #
-###########
-
-snippet link "External URL. A space is required between the text and URL!" b
-`Link text <https://github.com/>`
-endsnippet
-
-snippet link "Separated link and target." b
-.. _${1:optional text leading into}: ${2:`https://somedomain.com`}
-endsnippet
-
-#### Probably all I'm gonna keep from UltiSnips
-
-# http://docutils.sourceforge.net/docs/ref/rst/directives.html#specific-admonitions
-
-# SPECIFIC_ADMONITIONS = ["attention", "caution", "danger",
-#                        "error", "hint", "important", "note",
-#                        "tip", "warning"]
-# http://docutils.sourceforge.net/docs/ref/rst/directives.html
-# DIRECTIVES = ['topic','sidebar','math','epigraph',
-#              'parsed-literal','code','highlights',
-#              'pull-quote','compound','container','table','csv-table',
-#              'list-table','class','sectnum',
-#              'role','default-role','unicode',
-#              'raw']
-
-# NONE_CONTENT_DIRECTIVES = ['rubric', 'contents', 'header',
-#                          'footer', 'date', 'include', 'title']
-
-# INCLUDABLE_DIRECTIVES = ['image', 'figure', 'include']
-
-############
-#  Sphinx  #
-############
-
-snippet sid "SideBar" b
-.. sidebar:: ${1:SideBar Title}
-
-	${2:${VISUAL:SideBar Content}}
-endsnippet
-
-##########
-# Snipmate
-##########
-
-snippet para "Paragraph"
-:${1:field name}: ${0:field body}
-endsnippet
-
-snippet url "External url"
-\`${1:hyperlink-name}\`_
-.. _\`$1\`: ${0:link-block}
-endsnippet
-
-snippet title= "Title underlined with ==='s" b
-${1:${VISUAL:Title}}
-`!p snip.rv = rst_char_len(t[1])*'='`
-$0
-endsnippet
-
-snippet title- "Title underlined with ---'s" b
-${1:${VISUAL:Title}}
-`!p snip.rv = rst_char_len(t[1])*'='`
-$0
-endsnippet
-
-# In case you forget the = ending I copied title= over
-snippet title "Title underlined with ==='s" b
-${1:${VISUAL:Title}}
-`!p snip.rv = rst_char_len(t[1])*'='`
-$0
-endsnippet
-
-# Directives
-# ------------
-
-snippet img "image link directive"
-	.. |${0:alias}| image:: ${1:img}
-endsnippet
-
-snippet fig:
-	.. figure:: ${1:img}
-		:alt: ${0:alter text}
-
-		$2
-endsnippet
-
-snippet cont "content directive"
-	.. contents::
-		${0:content}
-endsnippet
-
-snippet code "Code block directive."
-	.. code:: ${1:type}
-
-		${0:write some code}
-endsnippet
-
-snippet tip "Tips or anyone in need of a directive!"
-	.. tip::
-		${0:Tip for anyone having trouble.}
-endsnippet
-
-snippet note "Take note of this directive over here ;)"
-	.. note::
-		${0:Take note of the fact that}
-endsnippet
-
-snippet warn "Warning directive"
-	.. warning::
-		${0:Warning:}
-endsnippet
-
-snippet important "Important directive"
-	.. important::
-		${0:Important notice:}
-endsnippet
-
-snippet att "Attention directive"
-	.. attention::
-		${0:Attention!}
-endsnippet
-
-snippet dan "Danger directive"
-	.. danger::
-		${0:Danger:}
-endsnippet
-
-snippet err "Error directive"
-	.. error::
-		${0:Error:}
-endsnippet
-
-snippet cau "Caution directive"
-	.. caution::
-		${0:Take precaution with:}
-endsnippet
-
-# Fixed whitespace with qq
-# j<>j<<>>3j
-# q
-# 5@q
-
-################################################################################
-#                                Neosnippets                                   #
-################################################################################
-
-snippet quickstart "Shougos RST one snippet summary" b
-===========================
-${1:content_name}
-===========================
-
-.. contents:: ${1}
-
-${2:title1}
-====================================
-
-${3:subtitle1}
------------------------------------
-
-${4:subtitle2}
------------------------------------
-
-${5:subtitle3}
------------------------------------
-
-${6:title2}
-====================================
-
-${7:subtitle1}
------------------------------------
-
-${8:subtitle2}
------------------------------------
-
-$0
-endsnippet
-
-snippet toctree "directive_toctree" b
-	.. toctree::
-		:maxdepth: ${1:2}
-
-		${2:#:FILES}
-endsnippet
-
-# Neosnippets didn't do a bad job though.
 ###########################################################################
 #                              UltiSnips                                  #
 ###########################################################################
 
-# so can i rewrite this whole thing using neovim?
-# how do you import vim in the repl? are you allowed to do that?
+# Didn't write anything in this section. Quite confused at the utility of
+# a couple of the :funcs:
+
 global !p
 
 import vim
@@ -392,7 +142,28 @@ def get_popular_code_type():
         # no i just want the exception
         print(e)
     return popular_type
-endglobal
+
+#######################################################################
+#							Personal Snippets						  #
+#######################################################################
+
+snippet title "Title with =" b
+`!p snip.rv = rst_char_len(t[1])*'='`
+${1:${VISUAL:Section name}}
+`!p snip.rv = rst_char_len(t[1])*'='`
+endsnippet
+
+snippet title "Title with =" b
+`!p snip.rv = rst_char_len(t[1])*'-'`
+${1:${VISUAL:Subsection name}}
+`!p snip.rv = rst_char_len(t[1])*'-'`
+endsnippet
+
+
+#######################
+#  Back to UltiSnips  #
+#######################
+
 
 snippet part "Part" b
 `!p snip.rv = rst_char_len(t[1])*'#'`
@@ -572,4 +343,218 @@ snippet chart "Pygal chart for Nikola" b
 $0
 endsnippet
 
+endglobal
+
+
+##############
+#  SnipMate  #
+##############
+
+snippet inlink "Create an internal link"
+:ref:`${VISUAL:'link'}`
+endsnippet
+
+# This is a TODO and a half.
+snippet table "table from sphinx cheatsheet"
+==================   ============
+Name                 Age
+==================   ============
+John D Hunter        40
+Cast of Thousands    41
+And Still More       42
+==================   ============
+endsnippet
+
+snippet cb "Code Block. Must have 1 blank line surrounding!" b
+
+.. code-block:: ${1:python:shell-session}
+
+	${2:${VISUAL:code}}
+
+$0
+
+endsnippet
+
+snippet codeb "cb dedupe" b
+
+.. code-block:: ${1:python}
+
+	${2:${VISUAL:code}}
+
+$0
+
+endsnippet
+
+snippet code "Inline code"
+\`\`${VISUAL:1}\`\`
+endsnippet
+
+snippet inline "Inline code"
+\`\`${VISUAL:1}\`\`
+endsnippet
+
+
+################
+#  formatting  #
+################
+
+snippet * "Italics"
+*${1:Emphasis}* ${0}
+endsnippet
+
+snippet ** "Bold"
+**${1:Strong emphasis}** ${0}
+endsnippet
+
+snippet bold "bold" b
+**${1:Strong emphasis}** ${0}
+endsnippet
+
+# There are a few different ways to do
+###########
+#  All External Links  #
+###########
+
+snippet link "External URL. A space is required between the text and URL!" b
+`Link text <https://github.com/>_`
+endsnippet
+
+snippet link "External URL. Leading _ instead of trailing and :"
+.. _${1:optional text leading into}: ${2:`https://somedomain.com`}
+endsnippet
+
+snippet url "Separated link and target." b
+.. _${1:optional text leading into}: ${2:`https://somedomain.com`}
+endsnippet
+
+snippet url "External URL. A space is required between the text and URL!" b
+`Link text <https://github.com/>_`
+endsnippet
+
+# This could keep going if we pull up the reference guide at:
+# 
+# and add snips for anonymous links, 
+############
+#  Sphinx  #
+############
+
+snippet sid "SideBar" b
+.. sidebar:: ${1:SideBar Title}
+
+	${2:${VISUAL:SideBar Content}}
+endsnippet
+
+# Directives
+# ------------
+
+snippet img "image link directive"
+	.. |${0:alias}| image:: ${1:img}
+endsnippet
+
+snippet fig:
+	.. figure:: ${1:img}
+		:alt: ${0:alter text}
+
+		$2
+endsnippet
+
+snippet cont "content directive"
+	.. contents::
+		${0:content}
+endsnippet
+
+snippet code "Code block directive."
+	.. code:: ${1:type}
+
+		${0:write some code}
+endsnippet
+
+snippet tip "Tips or anyone in need of a directive!"
+	.. tip::
+		${0:Tip for anyone having trouble.}
+endsnippet
+
+snippet note "Take note of this directive over here ;)"
+	.. note::
+		${0:Take note of the fact that}
+endsnippet
+
+snippet warn "Warning directive"
+	.. warning::
+		${0:Warning:}
+endsnippet
+
+snippet important "Important directive"
+	.. important::
+		${0:Important notice:}
+endsnippet
+
+snippet att "Attention directive"
+	.. attention::
+		${0:Attention!}
+endsnippet
+
+snippet dan "Danger directive"
+	.. danger::
+		${0:Danger:}
+endsnippet
+
+snippet err "Error directive"
+	.. error::
+		${0:Error:}
+endsnippet
+
+snippet cau "Caution directive"
+	.. caution::
+		${0:Take precaution with:}
+endsnippet
+
+# Fixed whitespace with qq
+# j<>j<<>>3j
+# q
+# 5@q
+
+################################################################################
+#                                Neosnippets                                   #
+################################################################################
+
+snippet quickstart "Shougos RST one snippet summary" b
+===========================
+${1:content_name}
+===========================
+
+.. contents:: ${1}
+
+${2:title1}
+====================================
+
+${3:subtitle1}
+-----------------------------------
+
+${4:subtitle2}
+-----------------------------------
+
+${5:subtitle3}
+-----------------------------------
+
+${6:title2}
+====================================
+
+${7:subtitle1}
+-----------------------------------
+
+${8:subtitle2}
+-----------------------------------
+
+$0
+endsnippet
+
+snippet toctree "directive_toctree" b
+	.. toctree::
+		:maxdepth: ${1:2}
+
+		${2:#:FILES}
+endsnippet
+
+# Neosnippets didn't do a bad job though.
 # vim:ft=snippets:

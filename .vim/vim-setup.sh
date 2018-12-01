@@ -1,0 +1,1 @@
+../.config/nvim/vim-setup.sh
