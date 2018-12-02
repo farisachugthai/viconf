@@ -8,9 +8,9 @@ Notes on Ultisnips
 And now this file contains my UltiSnips notes. It was really overwhelming
 my python snippets file so I figured why not consolidate them here?
 
-At the end of the line:
+At the end of the line::
 
-`snippet triggerword <description> <options>`
+    snippet triggerword <description> <options>
 
 Options
 -------
@@ -48,7 +48,7 @@ We have a few options to choose from. They are as follows:
 Configuration
 ---------------
 
-After configuring UltiSnipsDirs and UltiSnipsDirectories as you would like,
+After configuring ``g:UltiSnipsDirs`` and ``g:UltiSnipsDirectories`` as you would like,
 using the UltiSnipsEdit command should open the folder that your snippets
 are housed in.
 
@@ -64,17 +64,17 @@ For persistent changes use 'extends {filetype to be added}'
 
 Now let's look at a snippet.
 
-.. code block::
-
-    ```snippet
+.. code block:: snippet
 
     snippet imp "import statement" b
         import ${0:module}
     endsnippet
 
-    ```
+That b at the end is an option that means 'must be at the beginning of line'.
 
-That b at the end is an option that means 'must be at the beginning of line'
+There are a few places where it's invoked in the snippets, but unnecessarily
+
+From @SirVer himself.
 
 Standing On The Shoulders of Giants
 ===================================

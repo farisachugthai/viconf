@@ -1,32 +1,7 @@
 " python.vim
 " Maintainer: Faris Chugthai
 
-" All: {{{ 1
-
-" Options: {{{ 2
-
-" From /usr/share/nvim/runtime/ftplugin/python.vim
-" Here's a few options you might wanna look into:
-
-" if !exists("g:python_recommended_style") || g:python_recommended_style != 0
-"     " As suggested by PEP8.
-"     setlocal expandtab shiftwidth=4 softtabstop=4 tabstop=8
-" endif
-
-" First time: try finding 'pydoc'.
-" if !exists('g:pydoc_executable')
-"     if executable('pydoc')
-"         let g:pydoc_executable = 1
-"     else
-"         let g:pydoc_executable = 0
-"     endif
-" endif
-" If 'pydoc' was found use it for keywordprg.
-" if g:pydoc_executable
-"     setlocal keywordprg=pydoc
-" endif
-
-" PEP Indenting
+" PEP Indenting:{{{1
 setlocal tabstop=4 shiftwidth=4 expandtab softtabstop=4
 let b:python_highlight_all = 1
 
@@ -47,9 +22,8 @@ setlocal colorcolumn=80,120
 if &columns < 80
     setlocal columns=80
 endif
-" }}}
 
-" Autocommands: {{{ 2
+" Autocommands: {{{1
 " Highlight characters after 120 chars
 augroup vimrc_autocmds
     autocmd!
@@ -57,11 +31,10 @@ augroup vimrc_autocmds
     autocmd FileType python match Excess /\%120v.*/
     autocmd FileType python set nowrap
 augroup END
-" }}}
 
-" Plugins: {{{ 2
+" Plugins: {{{1
 
-" ALE: {{{ 3
+" ALE: {{{2
 let b:ale_linters = [ 'pyls', 'flake8', 'pycodestyle'  ]
 let b:ale_linters_ignore = [ 'pylint', 'mypy' ]
 let b:ale_linters_explicit= 1
@@ -72,9 +45,8 @@ endif
 
 " This is tough because what if theres a project file? hm.
 " let b:ale_python_flake8_options = '--config ~/.config/flake8'
-" }}}
 
-" Python Language Server: {{{ 3
+" Python Language Server: {{{2
 " useless err msg but better to have checks when we have behavior that's dependant on 3rd party tools
 " TODO: Check that lang client is loaded.
 " i think the syntax would be close to
@@ -85,11 +57,7 @@ else
     echo 'pyls is not installed.'
 endif
 let b:LanguageClient_selectionUI = 'fzf'
-" }}}
-
-" }}}
-
-" {{{ Compilers
+" Compilers:{{{1
 
 " Even though this didn't work I'm pretty sure you can set flake8
 " to makeprg
@@ -97,7 +65,6 @@ let b:LanguageClient_selectionUI = 'fzf'
 " Also setting sphinx to some value in this wouldn't be bad.
 " And settings ctags to somehow rebuild all the time would be great.
 " Probably a git hook though.
-"
 "
 " PYUNIT COMPILER						*compiler-pyunit*
 
@@ -125,6 +92,3 @@ let b:LanguageClient_selectionUI = 'fzf'
 "     \%A%f:%l:%c:\ %t%n\ %m,
 "     \%A%f:%l:\ %t%n\ %m,
 "     \%-G%.%#
-"}}}
-
-" }}}

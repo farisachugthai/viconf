@@ -41,7 +41,7 @@ let s:windows = has('win32') || has('win64')
 " }}}
 ```
 
-### Sourcing configs for win32
+### Sourcing configs for Win32
 
 Also doesn't work. Still wanna continue with it later but don't want it
 cluttering my vimrc.
@@ -125,43 +125,8 @@ let g:lightline = {
 " }}}
 ```
 
-## functions
+### NERDTree
 
-### compilers
-
-Now out of curiosity would this go in .config/nvim/compilers?
-
-Compiler Function: {{{
-
-All in one compiler. Going to need to rewrite to make my own.
-
-```Viml
-noremap <F5> :call CompileRunGcc()<CR>
-func! CompileRunGcc()
-    exec "w"
-    if &filetype == 'c'
-        exec "!g++ % -o %<"
-        exec "!time ./%<"
-    elseif &filetype == 'cpp'
-        exec "!g++ % -o %<"
-        exec "!time ./%<"
-    elseif &filetype == 'java'
-        exec "!javac %"
-        exec "!time java %<"
-    elseif &filetype == 'sh'
-        :!time bash %
-    elseif &filetype == 'python'
-        exec "!time python2.7 %"
-    elseif &filetype == 'html'
-        exec "!firefox % &"
-    elseif &filetype == 'go'
-        exec "!go build %<"
-        exec "!time go run %"
-    elseif &filetype == 'mkd'
-        exec "!~/.vim/markdown.pl % > %.html &"
-        exec "!firefox %.html &"
-    endif
-endfunc
-```
-
-}}}
+Nothing happens if we open a directory to start nvim
+Or specifically netrw opens.
+TODO: one of the expressions in the loop needs to be prepended with silent
