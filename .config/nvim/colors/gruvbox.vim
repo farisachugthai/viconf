@@ -6,6 +6,9 @@
 " Last Modified: 12 Aug 2017
 " -----------------------------------------------------------------------------
 
+" The line i changed was on 579. I would put this in an after file but there are
+" so many functions that its gonna be hard
+
 " Supporting code -------------------------------------------------------------
 " Initialisation: {{{
 
@@ -574,7 +577,7 @@ endif
 
 call s:HL('Comment', s:gray, s:none, s:italicize_comments)
 call s:HL('Todo', s:vim_fg, s:vim_bg, s:bold . s:italic)
-call s:HL('Error', s:red, s:vim_bg, s:bold . s:inverse)
+call s:HL('Error', s:aqua, s:vim_bg, s:inverse)
 
 " Generic statement
 hi! link Statement GruvboxRed

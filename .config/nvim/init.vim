@@ -1,7 +1,5 @@
 " init.vim
 " neovim configuration
-" Nvim: set verbose=1:
-
 
 " About: {{{1
 let g:snips_author = 'Faris Chugthai'
@@ -15,19 +13,10 @@ Plug 'junegunn/vim-plug'        " plugception
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
-augroup nerd_loader
-  autocmd!
-  autocmd VimEnter * silent! autocmd! FileExplorer
-  autocmd BufEnter,BufNew *
-        \|  if isdirectory(expand('<amatch>'))
-        \|   call plug#load('nerdtree')
-        \|   execute 'autocmd! nerd_loader'
-        \| endif
-augroup END
 Plug 'davidhalter/jedi-vim', { 'for': ['python', 'python3'] }
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
+Plug 'tpope/vim-commentary'         " Lighter version of NERDCom
 Plug 'w0rp/ale'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'edkolev/tmuxline.vim'
@@ -52,19 +41,6 @@ Plug 'vim-voom/voom'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 
-" Nvim Specific: {{{1
-
-" Unabashedly stolen from junegunn dude is too good.
-let s:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/init.vim.local'
-if filereadable(s:local_vimrc)
-    execute 'source' s:local_vimrc
-endif
-
-if has('nvim')
-    set inccommand=split                    " This alone is enough to never go back
-    set termguicolors
-endif
-
 " Python Executables: {{{1
 " If we have a virtual env start there
 if exists('$VIRTUAL_ENV')
@@ -86,7 +62,6 @@ else
 endif
 
 " Global Options: {{{1
-
 " Leader_Viminfo: {{{2
 let g:mapleader = "\<Space>"
 let g:maplocalleader = ','
@@ -96,8 +71,12 @@ if !has('nvim')
 endif
 
 " Pep8 Global Options: {{{2
-set tabstop=4                           " show existing tab with 4 spaces width
-set shiftwidth=4                        " when indenting with '>', use 4 spaces width
+if &tabstop > 4
+    set tabstop=4                           " show existing tab with 4 spaces width
+endif
+if &shiftwidth > 4
+    set shiftwidth=4                        " when indenting with '>', use 4 spaces width
+endif
 set expandtab smarttab                  " On pressing tab, insert 4 spaces
 set softtabstop=4
 let g:python_highlight_all = 1
@@ -118,8 +97,7 @@ catch
 endtry
 
 set hidden
-set splitbelow
-set splitright
+set splitbelow splitright
 
 " Spell Checker: {{{2
 set encoding=UTF-8                       " Set default encoding
@@ -129,8 +107,8 @@ set termencoding=utf-8
 
 setlocal spelllang=en
 
-if filereadable(glob('~/.config/nvim/spell/en_US.utf-8.add'))
-    set spellfile=~/.config/nvim/spell/en_US.utf-8.add
+if filereadable(glob('~/projects/viconf/.config/nvim/spell/en.utf-8.add'))
+    set spellfile=~/projects/viconf/.config/nvim/spell/en.utf-8.add
 endif
 
 if !has('nvim')
@@ -184,7 +162,6 @@ if exists('$TMUX')
 endif
 
 " Autocompletion: {{{2
-set wildmenu                            " Show list instead of just completing
 set wildmode=longest,list:longest       " Longest string or list alternatives
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 set fileignorecase                      " when searching for files don't use case
@@ -211,8 +188,9 @@ set showmatch
 set ignorecase smartcase
 set infercase
 set autoindent smartindent              " :he options: set with smartindent
-set noswapfile
 
+" On x11 systems this doesn't do anything so chalk this up to the platform
+" specific code
 if has('gui_running')
     set guifont=Fira\ Code\ weight=450\ 10
 endif
@@ -232,13 +210,20 @@ if has('persistent_undo')
     set undofile
 endif
 
-set backupdir=~/.config/nvim/undodir
+" I love the genius that didn't enable backup though
+set backup
+set backupdir=~/.config/nvim/undodir,/tmp
+set backupext='.bak'        " like wth is that ~ nonsense?
+
+" Directory won't need to be set because it defaults to
+" xdg_data_home/nvim/swap
+set swapfile
+
 set modeline
 set lazyredraw
 set browsedir="buffer"                  " which directory is used for the file browser
 
 " Mappings: {{{1
-
 " Window_Buf_Tab_Mappings: {{{2
 
 " Navigate buffers more easily
@@ -261,6 +246,7 @@ nnoremap <Leader>te :tabedit <c-r>=expand("%:p:h")<CR>
 " For the init.vim
 nnoremap <Leader>ed :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 nnoremap <F9> :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
+inoremap <F9> <Esc>:tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 nnoremap <Leader>re :so $MYVIMRC<CR>
 
 " General_Mappings: {{{2
@@ -310,7 +296,6 @@ nnoremap <Leader>sp :setlocal spell!<CR>
 nnoremap <Leader>s= z=
 
 " RSI: {{{2
-
 " start of line
 cnoremap <C-A> <Home>
 " back one character
@@ -377,7 +362,6 @@ nnoremap <unique> <A-a> <Plug>(ale_detail)
 " This might be a good idea. * is already 'search for the cword' so let ALE
 " work in a similar manner right?
 nnoremap <Leader>* <Plug>(ale_go_to_reference)
-
 nnoremap <Leader>a :ALEInfo<CR>
 
 " Fugitive: {{{2
@@ -396,19 +380,23 @@ nnoremap <silent> <Leader>gw :Gwrite<CR>
 nnoremap <silent> <Leader>gW :Gwrite!<CR>
 
 " Python Language Server: {{{2
-function LC_maps()
+function! LC_maps()
     if has_key(g:LanguageClient_serverCommands, &filetype)
         nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<CR>
         nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
         nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+        inoremap <buffer> <silent> <F2> <Esc>:call LanguageClient#textDocument_rename()<CR>
     endif
 endfunction
 
-autocmd FileType * call LC_maps()
+augroup LangClient
+    autocmd!
+    autocmd FileType * call LC_maps()
+augroup END
 
 " Tagbar: {{{2
 nnoremap <silent> <F8> :TagbarToggle<CR>
-let g:tagbar_left = 1
+inoremap <silent> <F8> <Esc>:TagbarToggle<CR>
 
 " Airline: {{{2
 let g:airline#extensions#tabline#buffer_idx_mode = 1
@@ -436,13 +424,14 @@ runtime! macros/matchit.vim
 set matchpairs+=<:>     " Not gonna lie it's oustandingly confusing that that's here but whatever
 
 " To every plugin I've never used before. Stop slowing me down.
-let g:loaded_vimballPlugin              = 1
-let g:loaded_tutor_mode_plugin          = 1
-let g:loaded_getsciptPlugin             = 1
-let g:loaded_2html_plugin               = 1
-let g:loaded_logiPat                    = 1
-" let g:loaded_netrw                    = 1
-" let g:loaded_netrwPlugin              = 1
+let g:loaded_vimballPlugin     = 1
+let g:loaded_tutor_mode_plugin = 1
+let g:loaded_getsciptPlugin    = 1
+let g:loaded_2html_plugin      = 1
+let g:loaded_logiPat           = 1
+" let g:loaded_netrw           = 1
+" let g:loaded_netrwPlugin     = 1
+" Let's see if this speeds things up because I've never used most of them
 
 " Plugins: {{{1
 " Vim_Plug: {{{
@@ -464,16 +453,31 @@ let g:NERDTreeRespectWildIgnore = 1     " yeah i meant those ones too
 " ALE: {{{2
 let g:ale_fixers = { '*': [ 'remove_trailing_lines', 'trim_whitespace' ] }
 let g:ale_fix_on_save = 1
+" Now because you fix the trailing whitespace and trailing lines
+let g:ale_warn_about_trailing_whitespace = 0
+let g:ale_warn_about_trailing_blank_lines = 0
+
+" Modify how ale notifies us of stuff
+let g:ale_echo_cursor = 1
 " Default: `'%code: %%s'`
 let g:ale_echo_msg_format = '%linter% - %code: %%s %severity%'
+" Open up a window automatically
+let g:ale_open_list = 1
+" Do so vertically
+let g:ale_list_vertical = 1
+
+" And close it automatically when the buffer closes
+augroup CloseLoclistWindowGroup
+    autocmd!
+    autocmd QuitPre * if empty(&buftype) | lclose | endif
+augroup END
+
 let g:ale_set_signs = 1
 let g:ale_sign_column_always = 1
-let g:ale_lint_delay = 1000
+" let g:ale_lint_delay = 1000 Only set on termux
 let g:ale_virtualenv_dir_names = [ '$HOME/virtualenvs' ]
 " Display progress while linting.
 let s:ale_running = 0
-" If you uncomment the below delete the escapes i added to \"
-" let l:stl .= '%{s:ale_running ? \"[linting]" :""}'
 augroup ALEProgress
     autocmd!
     autocmd User ALELintPre  let s:ale_running = 1 | redrawstatus
@@ -494,7 +498,6 @@ else
 endif
 
 " Vim_Startify: {{{2
-
 function! s:list_commits()
     let git = 'git -C ~/projects/viconf/'
     let commits = systemlist(git .' log --oneline | head -n10')
@@ -621,14 +624,18 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline#extensions#tabline#fnametruncate = 1
 
+" Tagbar: {{{2
+let g:tagbar_left = 30
+let g:tagbar_left = 1
+let g:tagbar_show_linenumbers = 1
+
 " Filetype Specific Options: {{{1
 
 augroup ftpersonal
-" IPython:
-    au BufRead,BufNewFile *.ipy setlocal filetype=python
-" Web Dev:
-    au filetype javascript,html,css setlocal shiftwidth=2 softtabstop=2 tabstop=2
-" Markdown:
+    autocmd!
+    " IPython:
+    autocmd BufRead,BufNewFile *.ipy setlocal filetype=python
+    " Markdown:
     autocmd BufNewFile,BufFilePre,BufRead *.md setlocal filetype=markdown
 augroup end
 
@@ -646,19 +653,14 @@ let rst_syntax_code_list = ['vim', 'python', 'sh', 'markdown', 'lisp']
 " highlighting readline options
 let readline_has_bash = 1
 
-" Diff: {{{2
-" It's visually noisy and setting the syntax highlighting to none speeds things
-" up to an incredible level.
-highlight DiffChanged guibg=None
-"
+" Functions_Commands: {{{1
 
-" Functions: {{{1
 " Next few are from Junegunn so credit to him
-" Todo Function: {{{2
+" TODO Function: {{{2
 function! s:todo() abort
     let entries = []
-    for cmd in ['git grep -niI -e TODO -e todo -e FIXME -e XXX 2> /dev/null',
-                \ 'grep -rniI -e TODO -e todo -e FIXME -e XXX * 2> /dev/null']
+    for cmd in ['git grep -niI -e TODO -e todo -e FIXME -e XXX -e HACK 2> /dev/null',
+                \ 'grep -rniI -e TODO -e todo -e FIXME -e XXX -e HACK * 2> /dev/null']
         let lines = split(system(cmd), '\n')
         if v:shell_error != 0 | continue | endif
         for line in lines
@@ -673,7 +675,7 @@ function! s:todo() abort
         copen
     endif
 endfunction
-command! Todo call s:todo()
+command! TODO call s:todo()
 
 " Explore: {{{2
 " Here's one where he uses FZF and Explore to search a packages docs
@@ -702,18 +704,6 @@ function! s:scriptnames(re) abort
     echo join(filtered, "\n")
 endfunction
 
-" Helptabs: {{{2
-function! s:helptab()
-    if &buftype ==# 'help'
-        wincmd T
-        nnoremap <buffer> q :q<CR>
-    " need to make an else for if ft isn't help then open a help page with the
-    " first argument
-    endif
-endfunction
-" keeps erroring idk why.
-" autocmd vimrc BufEnter *.txt call s:helptab()
-
 " AutoSave: {{{2
 function! s:autosave(enable)
   augroup autosave
@@ -736,7 +726,6 @@ function! s:hl()
 endfunction
 command! HL call <SID>hl()
 
-
 " EditFileComplete: {{{2
 " From he map line 1287. As this is a predefined function I suppose be careful?
 com! -nargs=1 -bang -complete=customlist,EditFileComplete
@@ -745,13 +734,36 @@ fun! EditFileComplete(A,L,P)
     return split(globpath(&path, a:A), "\n")
 endfun
 
+" Rename:{{{2
+" :he map line 1454. How have i never noticed this isn't a feature???
+com -nargs=1 -bang -complete=file Rename f <args>|w<bang>
+
 " Colorscheme: {{{1
-set bg=dark
-colorscheme gruvbox
-if g:colors_name ==# 'gruvbox'
+function! s:gruvbox()
+    set background=dark
     let g:gruvbox_contrast_dark = 'hard'
     let g:gruvbox_improved_strings = 1
     let g:gruvbox_improved_warnings = 1
+    " exec 'AirlineTheme neodark'
+    " for some reason not working here but works on the ex line
+endfunction
+
+" From here I can keep making expressions to the effect of elseif colors==onedark
+" then set it up like and so forth
+colorscheme gruvbox
+if g:colors_name ==# 'gruvbox'
+    call <SID>gruvbox()
 endif
 
-hi NonText guifg=NONE guibg=NONE
+command! -nargs=0 Gruvbox call s:gruvbox()
+
+highlight! NonText guifg=NONE guibg=NONE
+
+" Here's a phenomenal autocmd for ensuring we can set nohlsearch but still
+" get highlights ONLY while searching!!
+set nohlsearch
+augroup vimrc-incsearch-highlight
+    autocmd!
+    autocmd CmdlineEnter /,\? :set hlsearch
+    autocmd CmdlineLeave /,\? :set nohlsearch
+augroup END

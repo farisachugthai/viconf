@@ -1,5 +1,11 @@
 # Vim Snippets
 
+# Personal snippets
+# Don't know how to make the first tabstop optional. Like if i tab away just leave it?
+snippet path "Refer to a file in the same dir as the script."
+${${1:'let s:local_vimrc' = }}fnamemodify(resolve(expand('<sfile>')), ':p:h').'${VISUAL:0}'
+endsnippet
+
 ##################################################################
 #                           UltiSnips                            #
 ##################################################################

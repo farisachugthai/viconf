@@ -44,19 +44,12 @@ We have a few options to choose from. They are as follows:
     ``snippet argprse`` and ``snippet argprser`` are in the description!
 
 
-Configuration
-----------------
-
-After configuring ``g:UltiSnipsDirs`` and ``g:UltiSnipsDirectories`` as you would like,
-using the UltiSnipsEdit command should open the folder that your snippets
-are housed in.
-
-
 Usage
 -----
 
 Memorizing your snippet's names is awful so make sure you have fzf.vim installed
 and run `:Snippets` to see all snippets configured for the filetype.
+
 If you need to extend the available snippets for only 1 buffer use UltiSnipsAddFileType.
 
 For persistent changes use 'extends {filetype to be added}'
@@ -70,9 +63,14 @@ Now let's look at a snippet.
         import ${0:module}
     endsnippet
 
-That b at the end is an option that means 'must be at the beginning of line'.
 
-There are a few places where it's invoked in the snippets, but unnecessarily
+
+Configuration
+----------------
+
+After configuring ``g:UltiSnipsDirs`` and ``g:UltiSnipsDirectories`` as you would like,
+using the UltiSnipsEdit command should open the folder that your snippets
+are housed in.
 
 From @SirVer himself.
 
