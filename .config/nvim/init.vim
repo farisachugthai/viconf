@@ -2,15 +2,13 @@
 " neovim configuration
 " Nvim: set verbose=1:
 
-" All: {{{ 1
 
-" About: {{{ 2
+" About: {{{1
 let g:snips_author = 'Faris Chugthai'
 let g:snips_email = 'farischugthai@gmail.com'
 let g:snips_github = 'https://github.com/farisachugthai'
-" }}}
 
-" Vim Plug: {{{ 2
+" Vim Plug: {{{1
 call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'junegunn/vim-plug'        " plugception
@@ -53,86 +51,66 @@ Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
-" }}}
 
-" Nvim Specific: {{{ 2
+" Nvim Specific: {{{1
 
-" unabashedly stolen from junegunn dude is too good.
+" Unabashedly stolen from junegunn dude is too good.
 let s:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/init.vim.local'
 if filereadable(s:local_vimrc)
     execute 'source' s:local_vimrc
 endif
 
-" let s:winrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/winrc'
-" if call(is#windows)         " doubt this is the right syntax but we're getting close
-"     if filereadable(s:winrc)
-"         exe 'so' s:winrc
-"     endif
-" endif
-
 if has('nvim')
     set inccommand=split                    " This alone is enough to never go back
     set termguicolors
 endif
-" }}}
 
-" Python Executables: {{{ 2
+" Python Executables: {{{1
+" If we have a virtual env start there
+if exists('$VIRTUAL_ENV')
+    let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
 
-" TODO: Determine OS then check if has('win32') || has('win64')
-" actually as long as linux defines conda_exe were good!
-if has('python3')
-" if we have a virtual env start there
-    if exists('$VIRTUAL_ENV')
-        let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
+elseif exists('$CONDA_PYTHON_EXE')
+    let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
 
-    elseif exists('$CONDA_PYTHON_EXE')
-        let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
-
-    " otherwise break up termux and linux
-    elseif exists('$PREFIX')
-        " and just use the system python
-        if executable('$PREFIX/bin/python')
-            let g:python3_host_prog = '$PREFIX/bin/python'
-        endif
-    else
-        if executable('/usr/bin/python3')
-            let g:python3_host_prog = '/usr/bin/python3'
-        endif
+" Otherwise break up termux and linux.
+elseif exists('$PREFIX')
+" and just use the system python
+    if exists(':python3')
+        let g:python3_host_prog = expand('$PREFIX/bin/python')
+    endif
+else
+    if executable('/usr/bin/python3')
+        let g:python3_host_prog = '/usr/bin/python3'
     endif
 endif
 
-" }}}
+" Global Options: {{{1
 
-" Global Options: {{{ 2
-
-" Leader_Viminfo: {{{ 3
+" Leader_Viminfo: {{{2
 let g:mapleader = "\<Space>"
 let g:maplocalleader = ','
 
 if !has('nvim')
     set viminfo='100,<200,s200,n$HOME/.vim/viminfo
 endif
-" }}}
 
-" Pep8 Global Options: {{{ 3
+" Pep8 Global Options: {{{2
 set tabstop=4                           " show existing tab with 4 spaces width
 set shiftwidth=4                        " when indenting with '>', use 4 spaces width
 set expandtab smarttab                  " On pressing tab, insert 4 spaces
 set softtabstop=4
 let g:python_highlight_all = 1
-" }}}
 
-" Folds: {{{ 3
+" Folds: {{{2
 set foldenable
-set foldlevelstart=1                    " Enables most folds
 set foldnestmax=10
 set foldmethod=marker
 " Use 1 column to indicate fold level and whether a fold is open or closed.
 " Trade off for valuable window real estate though....
 set foldcolumn=1
-" }}}
 
-" Buffers Windows Tabs: {{{ 3
+" Buffers Windows Tabs: {{{2
 try
   set switchbuf=useopen,usetab,newtab
   set showtabline=2
@@ -142,9 +120,8 @@ endtry
 set hidden
 set splitbelow
 set splitright
-" }}}
 
-" Spell Checker: {{{ 3
+" Spell Checker: {{{2
 set encoding=UTF-8                       " Set default encoding
 scriptencoding UTF-8                     " Vint believes encoding should be done first
 set fileencoding=UTF-8
@@ -181,9 +158,8 @@ endif
 if filereadable(glob('~/.vim/autocorrect.vim'))
     source ~/.vim/autocorrect.vim
 endif
-" }}}
 
-" Fun With Clipboards: {{{ 3
+" Fun With Clipboards: {{{2
 if has('unnamedplus')                   " Use the system clipboard.
   set clipboard+=unnamed,unnamedplus
 else                                    " Accommodate Termux
@@ -206,19 +182,22 @@ if exists('$TMUX')
         \   'cache_enabled': 1,
         \ }
 endif
-" }}}
 
-" Autocompletion: {{{ 3
+" Autocompletion: {{{2
 set wildmenu                            " Show list instead of just completing
 set wildmode=longest,list:longest       " Longest string or list alternatives
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 set fileignorecase                      " when searching for files don't use case
-set wildignorecase                      " on the cmdline ignore case in filenames
-set completefunc=LanguageClient#complete
-set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
-" }}}
+set wildignorecase
 
-" Other Global Options: {{{ 3
+try
+    LanguageClient#serverStart()
+    set completefunc=LanguageClient#complete
+    set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
+catch
+endtry
+
+" Other Global Options: {{{2
 set tags+=./tags,./../tags,./*/tags     " usr_29
 set tags+=~/projects/tags               " consider generating a few large tag
 set tags+=~python/tags                  " files rather than recursive searches
@@ -235,7 +214,7 @@ set autoindent smartindent              " :he options: set with smartindent
 set noswapfile
 
 if has('gui_running')
-    set guifont='Fira\ Code\ Mono:11'
+    set guifont=Fira\ Code\ weight=450\ 10
 endif
 
 " In case you wanted to see the guicursor default for gvim win64
@@ -250,56 +229,49 @@ set diffopt=vertical,context:3          " vertical split d: Recent modifications
 
 if has('persistent_undo')
     set undodir=~/.config/nvim/undodir
-    set undofile                        " keep an undo file
+    set undofile
 endif
 
 set backupdir=~/.config/nvim/undodir
 set modeline
 set lazyredraw
 set browsedir="buffer"                  " which directory is used for the file browser
-" }}}
 
-" }}}
+" Mappings: {{{1
 
-" Mappings: {{{ 2
+" Window_Buf_Tab_Mappings: {{{2
 
-" Window_Buf_Tab_Mappings: {{{ 3
+" Navigate buffers more easily
+nnoremap <Leader>bn :bnext<CR>
+nnoremap <Leader>bp :bprev<CR>
 
-" Note that F7 is bound to pastetoggle so don't map it
 " Navigate windows more easily
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
-" Navigate tabs more easily. Should be everywhere. Just be defensive w/ unique
+" Navigate tabs more easily.
 map <unique> <A-Right> :tabnext<CR>
 map <unique> <A-Left> :tabprev<CR>
-
-" It should also be easier to edit the config. Bind similarly to tmux
-" TODO: What is vims version of realpath()? Can't find it even w/ helpgrep
-nnoremap <leader>ed :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
-" It should also be easier to edit the config
-nnoremap <F9> :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
-" Now reload it
-nnoremap <leader>re :so $MYVIMRC<CR>
-" Opens a new tab with the current buffer's path
-" Super useful when editing files in the same directory
-nnoremap <leader>te :tabedit <c-r>=expand("%:p:h")<CR>
-" Switch CWD to the directory of the open buffer
-nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
-"Use mnemonenics for easier navigation
-nnoremap <Leader>bn :bnext<CR>
-nnoremap <Leader>bp :bprev<CR>
 nnoremap <Leader>tn :tabnext<CR>
 nnoremap <Leader>tp :tabprev<CR>
-" }}}
-"
-" General_Mappings: {{{ 3
+nnoremap <Leader>te :tabedit <c-r>=expand("%:p:h")<CR>
+
+" For the init.vim
+nnoremap <Leader>ed :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
+nnoremap <F9> :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
+nnoremap <Leader>re :so $MYVIMRC<CR>
+
+" General_Mappings: {{{2
 " Simple way to speed up startup
 nnoremap <Leader>nt :NERDTreeToggle<CR>
 nnoremap <Leader>a :echo('No. Use :%y')<CR>
 
+" It should be easier to get help
+nnoremap <Leader>he :helpgrep<Space>
+
+" Escape Conveniences:
 inoremap fd <Esc>
 vnoremap fd <Esc>
 
@@ -309,19 +281,10 @@ nnoremap <Leader>O O<Esc>
 xnoremap < <gv
 xnoremap > >gv
 
-" Opens a new tab with the current buffer's path
-" Super useful when editing files in the same directory
-nnoremap <Leader>te :tabedit <c-r>=expand("%:p:h")<CR>
-
-" Switch CWD to the directory of the open buffer
-nnoremap <Leader>cd :cd %:p:h<CR>:pwd<cr>
-
-" I use this command constantly
+" I use this command constantly. We need a mapping.
 nnoremap <Leader>sn :Snippets<CR>
-" }}}
 
-" Unimpaired: {{{ 3
-" Note that ]c and [c are mapped by git-gutter and ALE has ]a and [a
+" Unimpaired: {{{2
 nnoremap ]q :cnext<CR>
 nnoremap [q :cprev<CR>
 nnoremap ]Q :cfirst<CR>
@@ -338,19 +301,16 @@ nnoremap ]t :tabn<CR>
 nnoremap [t :tabp<CR>
 nnoremap ]T :tfirst<CR>
 nnoremap [T :tlast<CR>
-" In addition I've mapped ]a and [a for Ale nextwrap.
-" }}}
 
-" Spell Checking: {{{ 3
+" Spell Checking: {{{2
+" Toggle spell checking
 nnoremap <Leader>sp :setlocal spell!<CR>
-" Based off the default value for spell suggest.
-" Don't end with <CR> because this an interactive command!
+" Quite honestly not shorter than the original.
+" Should consider using <Leader>s* type mappings for FZF
 nnoremap <Leader>s= z=
-" }}}
 
-" RSI: {{{ 3
-" For Emacs-style editing on the command line. Also considering using these
-" insert mode as well. Well i don't know why some of these maps aren't working
+" RSI: {{{2
+
 " start of line
 cnoremap <C-A> <Home>
 " back one character
@@ -369,22 +329,26 @@ map <unique> <A-p> <Up>
 map <unique> <A-b> <S-Left>
 " forward one word
 map <unique> <A-f> <S-Right>
+" It's annoying you lose a whole command from a typo
+cmap <nop> <Esc>
+" However I still need the functionality
+cnoremap <C-g> <Esc>
 " page down
 cnoremap <C-v> <PageDown>
 " page up
 map <unique> <A-v> <PageUp>
-" Let's try this with insert mode since the command mode isn't doing much
-inoremap <A-d> <Esc>ldeli
-" Well that felt very hacky so I'm going to stop
-" In case you were curious what your options were,
+" Top of buffer
+map <unique> <A\<> :norm gg
+" Bottom of buffer
+map <unique> <A\>> :norm G
+" In case you want inspiration!
 " <A-BS> is delete previous word
 " C-k is kill from cursor to end of line
 " C-u is either kill from cursor to beginning of line or an indication of a
 " count with a command
 " C-y is yank.
-" }}}
 
-" Terminal: {{{ 3
+" Terminal: {{{2
 " If running a terminal in Vim, go into Normal mode with Esc
 tnoremap <Esc> <C-\><C-n>
 " From he term. Rewrite for FZF
@@ -402,232 +366,90 @@ nnoremap <A-h> <C-w>h
 nnoremap <A-j> <C-w>j
 nnoremap <A-k> <C-w>k
 nnoremap <A-l> <C-w>l
-" }}}
 
-" ALE: {{{ 3
+" ALE: {{{2
 nnoremap <Leader>l <Plug>(ale_toggle_buffer) <CR>
 nnoremap ]a <Plug>(ale_next_wrap)
 nnoremap [a <Plug>(ale_previous_wrap)
-" TODO: `:ALEInfoToFile` will write the ALE runtime information to a given
-" filename. The filename works just like |:w|. *what does |:w| mean?
+" TODO: Implement ALEInfoToFile.
+" `:ALEInfoToFile` will write the ALE runtime information to a given filename. The filename works just like |:w|.
 nnoremap <unique> <A-a> <Plug>(ale_detail)
-" }}}
+" This might be a good idea. * is already 'search for the cword' so let ALE
+" work in a similar manner right?
+nnoremap <Leader>* <Plug>(ale_go_to_reference)
 
-" Fugitive: {{{ 3
-nnoremap <silent> <leader>gb :Gblame<CR>
-nnoremap <silent> <leader>gc :Gcommit<CR>
-nnoremap <silent> <leader>gd :Gdiff<CR>
-nnoremap <silent> <leader>ge :Gedit<CR>
-nnoremap <silent> <leader>gE :Gedit<Space>
-nnoremap <silent> <leader>gl :Glog<CR>
-nnoremap <silent> <leader>gq :Gwq<CR>
-nnoremap <silent> <leader>gQ :Gwq!<CR>
-nnoremap <silent> <leader>gr :Gread<CR>
-nnoremap <silent> <leader>gR :Gread<Space>
-nnoremap <silent> <leader>gs :Gstatus<CR>
-nnoremap <silent> <leader>gw :Gwrite<CR>
-nnoremap <silent> <leader>gW :Gwrite!<CR>
-" }}}
+nnoremap <Leader>a :ALEInfo<CR>
 
-" Python Language Server: {{{ 3
-" function LC_maps()
-"     if has_key(g:LanguageClient_serverCommands, &filetype)
-"         nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<CR>
-"         nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
-"        nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
-"     endif
-" endfunction
+" Fugitive: {{{2
+nnoremap <silent> <Leader>gb :Gblame<CR>
+nnoremap <silent> <Leader>gc :Gcommit<CR>
+nnoremap <silent> <Leader>gd :Gdiff<CR>
+nnoremap <silent> <Leader>ge :Gedit<CR>
+nnoremap <silent> <Leader>gE :Gedit<Space>
+nnoremap <silent> <Leader>gl :Glog<CR>
+nnoremap <silent> <Leader>gq :Gwq<CR>
+nnoremap <silent> <Leader>gQ :Gwq!<CR>
+nnoremap <silent> <Leader>gr :Gread<CR>
+nnoremap <silent> <Leader>gR :Gread<Space>
+nnoremap <silent> <Leader>gs :Gstatus<CR>
+nnoremap <silent> <Leader>gw :Gwrite<CR>
+nnoremap <silent> <Leader>gW :Gwrite!<CR>
 
-" autocmd FileType * call LC_maps()
-" }}}
+" Python Language Server: {{{2
+function LC_maps()
+    if has_key(g:LanguageClient_serverCommands, &filetype)
+        nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<CR>
+        nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
+        nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+    endif
+endfunction
 
-" Tagbar: {{{ 3
+autocmd FileType * call LC_maps()
+
+" Tagbar: {{{2
 nnoremap <silent> <F8> :TagbarToggle<CR>
 let g:tagbar_left = 1
-" }}}
 
-" Airline: {{{ 3
-" originally was nmap and that might've been better. Might clobber markdown.
+" Airline: {{{2
+let g:airline#extensions#tabline#buffer_idx_mode = 1
+" originally was nmap and that mightve been better. markdown
 " headers would be perfect for leader 1
-nnoremap <leader>1 <Plug>AirlineSelectTab1
-nnoremap <leader>2 <Plug>AirlineSelectTab2
-nnoremap <leader>3 <Plug>AirlineSelectTab3
-nnoremap <leader>4 <Plug>AirlineSelectTab4
-nnoremap <leader>5 <Plug>AirlineSelectTab5
-nnoremap <leader>6 <Plug>AirlineSelectTab6
-nnoremap <leader>7 <Plug>AirlineSelectTab7
-nnoremap <leader>8 <Plug>AirlineSelectTab8
-nnoremap <leader>9 <Plug>AirlineSelectTab9
-nnoremap <leader>- <Plug>AirlineSelectPrevTab
-nnoremap <leader>+ <Plug>AirlineSelectNextTab
-" }}}
+nnoremap <Leader>1 <Plug>AirlineSelectTab1
+nnoremap <Leader>2 <Plug>AirlineSelectTab2
+nnoremap <Leader>3 <Plug>AirlineSelectTab3
+nnoremap <Leader>4 <Plug>AirlineSelectTab4
+nnoremap <Leader>5 <Plug>AirlineSelectTab5
+nnoremap <Leader>6 <Plug>AirlineSelectTab6
+nnoremap <Leader>7 <Plug>AirlineSelectTab7
+nnoremap <Leader>8 <Plug>AirlineSelectTab8
+nnoremap <Leader>9 <Plug>AirlineSelectTab9
+nnoremap <Leader>- <Plug>AirlineSelectPrevTab
+nnoremap <Leader>+ <Plug>AirlineSelectNextTab
 
-" }}}
-
-" Macros: {{{ 2
+" Macros: {{{1
 if !has('nvim')
     runtime! ftplugin/man.vim
     let g:ft_man_folding_enable = 0
-    setlocal keywordprg=man
 endif
 
 runtime! macros/matchit.vim
-
-set matchpairs+=<:>
+set matchpairs+=<:>     " Not gonna lie it's oustandingly confusing that that's here but whatever
 
 " To every plugin I've never used before. Stop slowing me down.
-let g:loaded_vimballPlugin = 1
-let g:loaded_tutor_mode_plugin = 1
-let g:loaded_getsciptPlugin = 1
-let g:loaded_2html_plugin = 1
-let g:loaded_logiPat = 1
-" Let's see if this speeds things up because I've never used most of them
-" }}}
+let g:loaded_vimballPlugin              = 1
+let g:loaded_tutor_mode_plugin          = 1
+let g:loaded_getsciptPlugin             = 1
+let g:loaded_2html_plugin               = 1
+let g:loaded_logiPat                    = 1
+" let g:loaded_netrw                    = 1
+" let g:loaded_netrwPlugin              = 1
 
-" FZF: {{{ 2
-if has('nvim') || has('gui_running')
-  let $FZF_DEFAULT_OPTS .= ' --inline-info'
-endif
-
-augroup fzf
-    autocmd! FileType fzf
-    autocmd  FileType fzf set laststatus=0 noshowmode noruler
-    \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
-augroup end
-
-" An action can be a reference to a function that processes selected lines
-" is this is a default value in fzf.vim? aka can we scrap it?
-function! s:build_quickfix_list(lines)
-  call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
-  copen
-  cc
-endfunction
-
-let g:fzf_action = {
-  \ 'ctrl-q': function('s:build_quickfix_list'),
-  \ 'ctrl-t': 'tab split',
-  \ 'ctrl-x': 'split',
-  \ 'ctrl-v': 'vsplit' }
-
-" FZF Colors: {{{ 3
-" Customize FZF colors to match your color scheme.
-let g:fzf_colors =
-\ { 'fg':      ['fg', 'Normal'],
-  \ 'bg':      ['bg', 'Normal'],
-  \ 'hl':      ['fg', 'Comment'],
-  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-  \ 'hl+':     ['fg', 'Statement'],
-  \ 'info':    ['fg', 'PreProc'],
-  \ 'border':  ['fg', 'Ignore'],
-  \ 'prompt':  ['fg', 'Conditional'],
-  \ 'pointer': ['fg', 'Exception'],
-  \ 'marker':  ['fg', 'Keyword'],
-  \ 'spinner': ['fg', 'Label'],
-  \ 'header':  ['fg', 'Comment'] }
-" }}}
-
-let g:fzf_history_dir = '~/.local/share/fzf-history'
-
-" Between this and FZF.vim you have :Ag and :grep using ag, you should be fine
-if executable('ag')
-    let &grepprg = 'ag --nogroup --nocolor --column --vimgrep'
-    set grepformat=%f%l%c%m
-else
-  let &grepprg = 'grep -rn $* *'
-endif
-command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
-" }}}
-
-" FZF_VIM: {{{ 2
-" If you're willing to consider it separate than the FZF plugin
-
-" Insert mode completion:
-" the spell checker already implements something like this but that's why we
-" allow remapping and not everyone {termux} has that file
-imap <c-x><c-k> <plug>(fzf-complete-word)
-imap <c-x><c-f> <plug>(fzf-complete-path)
-imap <c-x><c-j> <plug>(fzf-complete-file-ag)
-imap <c-x><c-l> <plug>(fzf-complete-line)
-
-" Command local options:
-" [Buffers] jump to the existing window if possible
-let g:fzf_buffers_jump = 1
-" [[B]Commits] Customize the options used by 'git log':
-let g:fzf_commits_log_options = '--graph --color=always --format="%c(auto)%h%d %s %c(black)%c(bold)%cr"'
-" [Tags] Command to generate tags file
-let g:fzf_tags_command = 'ctags -R' "
-" [Commands] --expect expression for directly executing the command
-let g:fzf_commands_expect = 'alt-enter,ctrl-x'
-
-" Ag: {{{ 3
-" :Ag  - Start fzf with hidden preview window that can be enabled with '?' key
-" :Ag! - Start fzf in fullscreen and display the preview window above
-command! -bang -nargs=* Ag
-    \ call fzf#vim#ag(<q-args>,
-    \ <bang>0 ? fzf#vim#with_preview('up:60%')
-    \ : fzf#vim#with_preview('right:50%:hidden', '?'),
-    \ <bang>0)
-
-" Similarly, we can apply it to fzf#vim#grep. To use ripgrep instead of ag:
-command! -bang -nargs=* Rg
-    \ call fzf#vim#grep(
-    \ 'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
-    \ <bang>0 ? fzf#vim#with_preview('up:60%')
-    \ : fzf#vim#with_preview('right:50%:hidden', '?'),
-    \ <bang>0)
-
-" Likewise, Files command with preview window
-command! -bang -nargs=? -complete=dir Files
-    \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
-
-" Global line completion (not just open buffers. ripgrep required.)
-inoremap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
-    \ 'prefix': '^.*$',
-    \ 'source': 'rg -n ^ --color always',
-    \ 'options': '--ansi --delimiter : --nth 3..',
-    \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }}))
-" }}}
-
-" FZF_Statusline: {{{ 3
-" Custom fzf statusline
-function! s:fzf_statusline()
-    " Override statusline as you like
-    highlight fzf1 ctermfg=161 ctermbg=251
-    highlight fzf2 ctermfg=23 ctermbg=251
-    highlight fzf3 ctermfg=237 ctermbg=251
-    setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
-endfunction
-
-augroup fzfstatusline
-    autocmd!
-    autocmd! user Fzfstatusline call <sid>fzf_statusline()
-augroup end
-" }}}
-
-" }}}
-
-" Remaining Plugins: {{{ 2
-
+" Plugins: {{{1
 " Vim_Plug: {{{
 let g:plug_window = 'tabe'
-" }}}
 
-" NERDTree: {{{ 3
-augroup nerd_loader
-  autocmd!
-  autocmd VimEnter * silent! autocmd! FileExplorer
-  autocmd BufEnter,BufNew *
-        \  if isdirectory(expand('<amatch>'))
-        \|   call plug#load('nerdtree')
-        \|   execute 'autocmd! nerd_loader'
-        \| endif
-    autocmd bufenter *
-        \ if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree())
-        \| q
-        \| endif
-augroup END
-
+" NERDTree: {{{2
+" Thanks tagbar i didn't realize i copied it twice :P
 let g:NERDTreeDirArrows = 1
 let g:NERDTreeWinPos = 'right'
 let g:NERDTreeShowHidden = 1
@@ -638,9 +460,8 @@ let g:NERDTreeShowLineNumbers = 1
 let g:NERDTreeMouseMode = 2             " Open dirs with 1 click files with 2
 let g:NERDTreeIgnore = ['\.pyc$', '\.pyo$', '__pycache__$', '\.git$']
 let g:NERDTreeRespectWildIgnore = 1     " yeah i meant those ones too
-" }}}
 
-" ALE: {{{ 3
+" ALE: {{{2
 let g:ale_fixers = { '*': [ 'remove_trailing_lines', 'trim_whitespace' ] }
 let g:ale_fix_on_save = 1
 " Default: `'%code: %%s'`
@@ -648,11 +469,21 @@ let g:ale_echo_msg_format = '%linter% - %code: %%s %severity%'
 let g:ale_set_signs = 1
 let g:ale_sign_column_always = 1
 let g:ale_lint_delay = 1000
-" }}}
+let g:ale_virtualenv_dir_names = [ '$HOME/virtualenvs' ]
+" Display progress while linting.
+let s:ale_running = 0
+" If you uncomment the below delete the escapes i added to \"
+" let l:stl .= '%{s:ale_running ? \"[linting]" :""}'
+augroup ALEProgress
+    autocmd!
+    autocmd User ALELintPre  let s:ale_running = 1 | redrawstatus
+    autocmd User ALELintPost let s:ale_running = 0 | redrawstatus
+augroup END
 
-" Devicons: {{{ 3
+" Devicons: {{{2
 let g:webdevicons_enable = 1
 let g:webdevicons_enable_nerdtree = 1               " adding the flags to NERDTree
+let g:airline_powerline_fonts = 1
 " For startify
 let entry_format = "'   ['. index .']'. repeat(' ', (3 - strlen(index)))"
 
@@ -661,10 +492,8 @@ if exists('*WebDevIconsGetFileTypeSymbol')  " support for vim-devicons
 else
     let entry_format .= '. entry_path'
 endif
-" }}}
 
-" Vim_Startify: {{{ 3
-" What shows up in the startify list?
+" Vim_Startify: {{{2
 
 function! s:list_commits()
     let git = 'git -C ~/projects/viconf/'
@@ -677,12 +506,12 @@ let g:startify_lists = [
     \ { 'header': ['   MRU'],            'type': 'files' },
     \ { 'header': ['   MRU '. getcwd()], 'type': 'dir' },
     \ { 'header': ['   Sessions'],       'type': 'sessions' },
-    \ { 'header': ['   Commits'],        'type': function('s:list_commits') },
+    \ { 'header': ['   Viconf'],         'type': function('s:list_commits') },
     \ { 'type': 'commands',  'header': ['   Commands']       },
     \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
 \ ]
 
-" Setup devicons
+" Setup_devicons:
 function! StartifyEntryFormat()
     return 'WebDevIconsGetFileTypeSymbol(absolute_path) ." ". entry_path'
 endfunction
@@ -703,15 +532,13 @@ let g:startify_skiplist = [
     \ glob('plugged/*/doc'),
     \ 'C:\Program Files\Vim\vim81\doc',
     \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc', ]
-    " its explained why this won't. actually great explanation of those weird,
-    " afile cfile sfile vars
-    " \ '~/.local/share/nvim/plugged/' .*/doc',
-    " \ ]
+
 if has('gui_win32')
     let g:startify_session_dir = '$HOME\vimfiles\session'
 else
     let g:startify_session_dir = '~/.vim/session'
 endif
+
 " TODO: Figure out how to set let g:startify_bookmarks = [ Contents of
 " NERDTreeBookmarks ]
 let g:startify_change_to_dir = 1
@@ -720,17 +547,16 @@ let g:startify_update_oldfiles = 1
 let g:startify_session_persistence = 1
 let g:startify_session_autoload = 1
 let g:startify_session_sort = 1
-" }}}
 
-" UltiSnips: {{{ 3
+" UltiSnips: {{{2
 let g:UltiSnipsSnippetDir = [ '~/.config/nvim/UltiSnips' ]
 let g:UltiSnipsJumpForwardTrigger = '<Tab>'
 let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
 inoremap <C-Tab> * <Esc>:call ultisnips#listsnippets()<CR>
 let g:ultisnips_python_style = 'numpy'
-let g:UltiSnips_python_quoting_style = 'double'
+let g:ultisnips_python_quoting_style = 'double'
 let g:UltiSnipsEnableSnipMate = 0
-let g:UltiSnipsEditSplit = 'vertical'
+let g:UltiSnipsEditSplit = 'tabdo'
 
 " TODO: Come up with a mapping for it. Also what is E746
 " Go to the annotations for an explanation of this function.
@@ -742,59 +568,24 @@ let g:UltiSnipsEditSplit = 'vertical'
 "         \ )
 " endfunction
 
-" }}}
+" Language Client: {{{2
+let g:LanguageClient_serverCommands = { 'python': [ 'pyls' ] }
 
-
-" Language Client: {{{ 3
-" TODO: On termux take this out of mappings. And also debug it because it's erring out
-" function LC_maps()
-"     if has_key(g:LanguageClient_serverCommands, &filetype)
-"         nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<CR>
-"         nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
-"         nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
-"     endif
-" endfunction
-
-" autocmd FileType * call LC_maps()
-
-if executable('pyls')
-    let b:LanguageClient_serverCommands = {
-        \ 'python': [ 'pyls' ]
-        \ }
-endif
-
-let b:LanguageClient_autoStart = 1
-let b:LanguageClient_selectionUI = 'fzf'
-
-" }}}
-
-" Jedi: {{{ 3
+" Jedi: {{{2
 let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces
-" let g:jedi#completions_command = '<C-N>'
 let g:jedi#documentation_command = '<Leader>h'
 let g:jedi#usages_command = '<Leader>u'
-let g:jedi#show_call_signatures_delay = 100     " wait 100ms instead of 500 to show CS
-let g:jedi#smart_auto_mappings = 0              " must be set
+let g:jedi#show_call_signatures_delay = 100
+let g:jedi#smart_auto_mappings = 0
 let g:jedi#force_py_version = 3
-" }}}
+let g:jedi#enable_completions = 0
 
-" Deoplete_Jedi: {{{ 3
-" speed things up
+" Deoplete_Jedi: {{{2
 let g:deoplete#sources#jedi#enable_typeinfo = 0
-" }}}
 
-" **UNTESTED**: {{{
-
-" just a thought i had. For any normal mode remaps you have, add the same
-" thing and prefix <Esc> to the RHS and boom!
-if has('b:Tagbar')  " or any plugin
-    let g:tagbar_sort=0
-    inoremap <F3> <esc>:TagbarToggle<CR>
-    nnoremap <F3> :TagbarToggle<CR>
-endif
-" }}}
-
-" Airline: {{{ 3
+" Airline: {{{2
+let g:airline#extensions#syntastic#enabled = 0
+let g:airline#extensions#csv#enabled = 0
 let g:airline_powerline_fonts = 1
 let g:airline_highlighting_cache = 1
 let g:airline_skip_empty_sections = 1
@@ -803,7 +594,7 @@ if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
 
-" Unicode symbols: {{{ 4
+" Unicode_Symbols: {{{3
 let g:airline_left_sep = '»'
 let g:airline_left_sep = '▶'
 let g:airline_right_sep = '«'
@@ -822,16 +613,15 @@ let g:airline_symbols.paste = '∥'
 let g:airline_symbols.spell = 'Ꞩ'
 let g:airline_symbols.notexists = 'Ɇ'
 let g:airline_symbols.whitespace = 'Ξ'
-" }}}
 
 " TODO: Need to add one for the venv nvim
 let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
-let g:airline#extensions#tabline#buffer_idx_mode = 1
-" }}}
+let g:airline#extensions#tabline#tab_nr_type = 1 " splits and tab number
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#buffer_nr_show = 1
+let g:airline#extensions#tabline#fnametruncate = 1
 
-" }}}
-
-" Filetype Specific Options: {{{ 2
+" Filetype Specific Options: {{{1
 
 augroup ftpersonal
 " IPython:
@@ -842,20 +632,29 @@ augroup ftpersonal
     autocmd BufNewFile,BufFilePre,BufRead *.md setlocal filetype=markdown
 augroup end
 
-" Diff: {{{ 3
+" Noticed this bit in he syntax line 2800
+let g:is_bash = 1
+let g:sh_fold_enabled= 4  "   (enable if/do/for folding)
+let g:sh_fold_enabled= 3  "   (enables function and heredoc folding)
+" Let's hope this doesn't make things too slow.
+
+" he rst.vim or ft-rst-syntax or syntax 2600. Don't put bash instead of sh.
+" $VIMRUNTIME/syntax/rst.vim iterates over this var and if it can't find a
+" bash.vim syntax file it will crash.
+let rst_syntax_code_list = ['vim', 'python', 'sh', 'markdown', 'lisp']
+
+" highlighting readline options
+let readline_has_bash = 1
+
+" Diff: {{{2
 " It's visually noisy and setting the syntax highlighting to none speeds things
 " up to an incredible level.
 highlight DiffChanged guibg=None
 "
-" }}}
 
-" }}}
-
-" Functions: {{{ 2
-
+" Functions: {{{1
 " Next few are from Junegunn so credit to him
-
-" Todo Function: {{{ 3
+" Todo Function: {{{2
 function! s:todo() abort
     let entries = []
     for cmd in ['git grep -niI -e TODO -e todo -e FIXME -e XXX 2> /dev/null',
@@ -875,9 +674,8 @@ function! s:todo() abort
     endif
 endfunction
 command! Todo call s:todo()
-" }}}
 
-" Explore: {{{ 3
+" Explore: {{{2
 " Here's one where he uses FZF and Explore to search a packages docs
 function! s:plug_help_sink(line)
     let dir = g:plugs[a:line].dir
@@ -891,9 +689,8 @@ function! s:plug_help_sink(line)
     tabnew
     execute 'Explore' dir
 endfunction
-" }}}
 
-" Scriptnames: {{{ 3
+" Scriptnames: {{{2
 " command to filter :scriptnames output by a regex
 command! -nargs=1 Scriptnames call <sid>scriptnames(<f-args>)
 function! s:scriptnames(re) abort
@@ -904,20 +701,20 @@ function! s:scriptnames(re) abort
     let filtered = filter(split(scriptnames, "\n"), "v:val =~ '" . a:re . "'")
     echo join(filtered, "\n")
 endfunction
-" }}}
 
-" Helptabs: {{{ 3
+" Helptabs: {{{2
 function! s:helptab()
-    if &buftype == 'help'
+    if &buftype ==# 'help'
         wincmd T
         nnoremap <buffer> q :q<CR>
+    " need to make an else for if ft isn't help then open a help page with the
+    " first argument
     endif
 endfunction
 " keeps erroring idk why.
 " autocmd vimrc BufEnter *.txt call s:helptab()
-" }}}
 
-" AutoSave: {{{ 3
+" AutoSave: {{{2
 function! s:autosave(enable)
   augroup autosave
     autocmd!
@@ -929,44 +726,32 @@ function! s:autosave(enable)
     endif
   augroup END
 endfunction
-
 command! -bang Autosave call s:autosave(<bang>1)
-" }}}
 
-" HL: {{{ 3
+" HL: {{{2
 " Whats the syntax group under my cursor?
 function! s:hl()
   " echo synIDattr(synID(line('.'), col('.'), 0), 'name')
   echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
 endfunction
 command! HL call <SID>hl()
-" }}}
 
-" *:DiffOrig* *diff-original-file* {{{ 3
-" Since 'diff' is a window-local option, it's possible to view the same buffer
-" in diff mode in one window and 'normal' in another window.  It is also
-" possible to view the changes you have made to a buffer since the file was
-" loaded.  Since Vim doesn't allow having two buffers for the same file, you
-" need another buffer.  This command is useful: >
-command! DiffOrig vert new | set buftype=nofile | read ++edit # | 0d_
-    \ | diffthis | wincmd p | diffthis
-" Use ':DiffOrig' to see the differences
-" between the current buffer and the file it was loaded from.
 
-" }}}
+" EditFileComplete: {{{2
+" From he map line 1287. As this is a predefined function I suppose be careful?
+com! -nargs=1 -bang -complete=customlist,EditFileComplete
+       \ EditFile edit<bang> <args>
+fun! EditFileComplete(A,L,P)
+    return split(globpath(&path, a:A), "\n")
+endfun
 
-" }}}
-
-" Colorscheme: {{{ 2
+" Colorscheme: {{{1
 set bg=dark
 colorscheme gruvbox
 if g:colors_name ==# 'gruvbox'
     let g:gruvbox_contrast_dark = 'hard'
-    let g:gruvbox_improved_strings=1
-    let g:gruvbox_improved_warnings=1
+    let g:gruvbox_improved_strings = 1
+    let g:gruvbox_improved_warnings = 1
 endif
 
 hi NonText guifg=NONE guibg=NONE
-" }}}
-
-" }}}

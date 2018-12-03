@@ -86,6 +86,16 @@ Doesn't work.
 
 let s:termux = exists('$PREFIX')
 let s:ubuntu = !exists('$PREFIX') && has('unix')  " syntax?
+
+" Dec 01, 2018: This doesn't work either
+" let s:winrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/winrc'
+" if call(is#windows)         " doubt this is the right syntax but we're getting close
+"     if filereadable(s:winrc)
+"         exe 'so' s:winrc
+"     endif
+" endif
+
+
 ```
 
 Just pulled this off of the vimrc. The one above is init.vim.
@@ -246,3 +256,14 @@ TODO: Use :Glog to recover your old nerdcom code. Better do it soon if you're
 thinking about ever being able to use it again!
 
 " }}}
+
+
+" **UNTESTED**: {{{
+
+" just a thought i had. For any normal mode remaps you have, add the same
+" thing and prefix <Esc> to the RHS and boom!
+if has('b:Tagbar')  " or any plugin
+    let g:tagbar_sort=0
+    inoremap <F3> <esc>:TagbarToggle<CR>
+    nnoremap <F3> :TagbarToggle<CR>
+endif

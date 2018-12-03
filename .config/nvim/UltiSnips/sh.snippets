@@ -9,8 +9,15 @@
 #######################################################################
 
 # Shebang. Good place to start
-snippet #! "#!/usr/bin/env (!env)"
-`!p snip.rv = '#!/usr/bin/env ' + getShell() + "# Maintainer: Faris Chugthai \n" `
+snippet #! "#!/usr/bin/env (!env)" b
+`!p snip.rv = '#!/usr/bin/env ' + getShell() + "\n# Maintainer: Faris Chugthai \n" `
+# set -euo pipefail
+endsnippet
+
+snippet # "#! accidentally gives sh so #!/usr/bin/env bash" b
+#!/usr/bin/env bash
+# Maintainer: Faris Chugthai
+
 # set -euo pipefail
 endsnippet
 

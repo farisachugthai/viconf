@@ -282,8 +282,9 @@ set infercase
 set autoindent smartindent              " :he options: set with smartindent
 set noswapfile
 
+" Had to really futz with this; however, this is finally right.
 if has('gui_running')
-    set guifont='Fira\ Code\ Mono:11'
+    set guifont=Fira\ Code\ weight=450\ 10
 endif
 
 " In case you wanted to see the guicursor default for gvim win64

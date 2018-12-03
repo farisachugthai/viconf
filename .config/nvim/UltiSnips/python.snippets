@@ -6,12 +6,13 @@ extends numpy_stat
 extends rst
 
 #######################################################################
-#                           Python Snippets                           #
+#                             Python Snippets                             #
 #######################################################################
 
 
-# Let's reorganize this in a similar manner to what someone would write as they're
-# starting a new module.
+#######################
+#  personal snippets  #
+#######################
 
 # Start out with a shebang
 snippet #! "Shebang header for python scripts" b
@@ -20,19 +21,34 @@ snippet #! "Shebang header for python scripts" b
 $0
 endsnippet
 
-# Create a module docstring. We can rewrite this to conform to different
-# docstring styles as needed
-
+# TODO Need to break this up
+# Also you should be able to easily through `snip.fn` in the filename there
 snippet docs "Module Docstring" b
-	"""
-	File: ${1:'foo.py'}
-	Author: `g:snips_author`
-	Email: `g:snips_email`
-	Github: `g:snips_github`
-	Description: ${0}
-	"""
+"""${1:'Give a one sentence summary in the imperative'}
+
+${2:'Elaborate a little'}
+File: ${1:'foo.py'}
+Author: `g:snips_author`
+Email: `g:snips_email`
+Github: `g:snips_github`
+
+Attributes:
+
+    module_level_variables (type): Explanation and give an inline docstring
+    immediately afterwards if possible
+
+(Usually examples go after the attributes)
+
+Example:
+    Any example of how to use this module goes here:: sh
+
+        $ python exampleofrst.py
+
+.. ${0:'any directives::'}
+"""
 endsnippet
 
+# and if we didn't like that module docstring how about this one?
 snippet pmdoc "pocoo style module doc string" b
 # -*- coding: utf-8 -*-
 """
@@ -67,10 +83,17 @@ if __name__ == `!p snip.rv = get_quoting_style(snip)`__main__`!p snip.rv = get_q
 	${2:${VISUAL:main()}}
 endsnippet
 
+snippet pprint "Import and use pprint" b
+from pprint import pprint; pprint($1)
+endsnippet
 
-#######################
-#  personal snippets  #
-#######################
+snippet pdb "Import and use pdb" b
+import pdb; pdb.set_trace()
+endsnippet
+
+snippet ipdb "Import and use ipdb" b
+import ipdb; ipdb.set_trace()
+endsnippet
 
 # aka just more general snippets i wrote. not intended to follow the flow
 # of the previous ones above

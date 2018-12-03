@@ -36,7 +36,8 @@ syn keyword snipTODO contained display FIXME NOTE NOTES TODO XXX
 
 " Errors {{{2
 
-syn match snipLeadingSpaces "^\t* \+" contained
+" This shouldn't be counted as an error in a snippet?
+" syn match snipLeadingSpaces "^\t* \+" contained
 
 " Extends {{{2
 
@@ -178,7 +179,7 @@ syn match snipClearKeyword "^clearsnippets" contained display
 
 hi def link snipComment          Comment
 hi def link snipTODO             Todo
-hi def snipLeadingSpaces term=reverse ctermfg=15 ctermbg=4 gui=reverse guifg=#dc322f
+" hi def snipLeadingSpaces term=reverse ctermfg=15 ctermbg=4 gui=reverse guifg=#dc322f
 
 hi def link snipKeyword          Keyword
 

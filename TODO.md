@@ -1,5 +1,12 @@
 # TODO
 
+**Suggestion**
+
+Dec 02, 2018:
+
+Figure out if you can add a git hook that checks that for every time a new
+file is committed to ./.config/nvim/ that one is also added to ./.vim
+
 ## To get nvim and vim synced up
 
 *Motivation:*
