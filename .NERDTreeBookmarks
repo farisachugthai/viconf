@@ -1,14 +1,14 @@
 ale-linters ~/.local/share/nvim/plugged/ale/ale_linters
-cheat /storage/emulated/0/Android/data/com.dropbox.android/files/u730416625/scratch/.cheat
-dotrepo ~/projects/dotfiles/unix
-nvim-he /data/data/com.termux/files/usr/share/nvim/runtime/doc
-nvim-rtp /data/data/com.termux/files/usr/share/nvim/runtime
+cheat ~/.cheat
+deoplete ~/.local/share/nvim/plugged/deoplete.nvim/rplugin/python3/deoplete
+dotfiles ~/projects/dotfiles/unix
+jedi-docs ~/.local/share/nvim/plugged/jedi-vim/pythonx/jedi/docs/docs
+nvim ~/.config/nvim
 plugged ~/.local/share/nvim/plugged
 prefix /data/data/com.termux/files/usr
 py_tut ~/python/tutorials
+tutorials ~/Dropbox/python/tutorials
+utilities_py ~/projects/utilities/python
 viconf ~/projects/viconf/.config/nvim
-vim-rtp /data/data/com.termux/files/usr/share/vim/vim81
 
-word-freq ~/projects/word-freq
-NERDTreeBookmarks ~/.vim/NERDTreeBookmarks
-pydocs ~/Dropbox/python/pydocs
+nvim-rtp /usr/share/nvim/runtime

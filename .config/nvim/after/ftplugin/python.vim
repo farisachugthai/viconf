@@ -35,60 +35,15 @@ augroup END
 " Plugins: {{{1
 
 " ALE: {{{2
-let b:ale_linters = [ 'pyls', 'flake8', 'pycodestyle'  ]
-let b:ale_linters_ignore = [ 'pylint', 'mypy' ]
+let b:ale_linters = [ 'flake8', 'pycodestyle', 'pydocstyle'  ]
 let b:ale_linters_explicit= 1
 
 if isdirectory('~/virtualenvs')
-    let b:ale_virtualenv_dir_names+='virtualenvs'
+    let b:ale_virtualenv_dir_names+='~/virtualenvs'
 endif
 
 " This is tough because what if theres a project file? hm.
-" let b:ale_python_flake8_options = '--config ~/.config/flake8'
+let b:ale_python_flake8_options = '--config ~/.config/flake8'
 
 " Python Language Server: {{{2
-" useless err msg but better to have checks when we have behavior that's dependant on 3rd party tools
-" TODO: Check that lang client is loaded.
-" i think the syntax would be close to
-" `if loaded_{plugin} | logic | endif
-if executable('pyls')
-    let b:LanguageClient_serverCommands = ['pyls']
-else
-    echo 'pyls is not installed.'
-endif
 let b:LanguageClient_selectionUI = 'fzf'
-" Compilers:{{{1
-
-" Even though this didn't work I'm pretty sure you can set flake8
-" to makeprg
-"
-" Also setting sphinx to some value in this wouldn't be bad.
-" And settings ctags to somehow rebuild all the time would be great.
-" Probably a git hook though.
-"
-" PYUNIT COMPILER						*compiler-pyunit*
-
-" This is not actually a compiler, but a unit testing framework for the
-" Python language.  It is included into standard Python distribution
-" starting from version 2.0.  For older versions, you can get it from
-" http://pyunit.sourceforge.net.
-
-" When you run your tests with the help of the framework, possible errors
-" are parsed by Vim and presented for you in quick-fix mode.
-
-" Unfortunately, there is no standard way to run the tests.
-" The alltests.py script seems to be used quite often, that's all.
-" Useful values for the 'makeprg' options therefore are:
-"  setlocal makeprg=./alltests.py " Run a testsuite
-"  setlocal makeprg=python\ %:S   " Run a single testcase
-
-" Also see http://vim.sourceforge.net/tip_view.php?tip_id=280.
-"
-" Alternatively...
-" First shot at a compiler!
-" CompilerSet makeprg=flake8\ --format=default\ %
-" CompilerSet errorformat=
-"     \%E%f:%l:\ could\ not\ compile,%-Z%p^,
-"     \%A%f:%l:%c:\ %t%n\ %m,
-"     \%A%f:%l:\ %t%n\ %m,
-"     \%-G%.%#

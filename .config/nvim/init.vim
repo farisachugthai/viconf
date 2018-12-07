@@ -1,6 +1,5 @@
 " init.vim
 " neovim configuration
-" Nvim: set verbose=1:
 
 " About: {{{1
 let g:snips_author = 'Faris Chugthai'
@@ -37,6 +36,7 @@ let g:deoplete#enable_at_startup = 1
 
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3']}
+Plug 'fszymanski/deoplete-emoji'
 Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
@@ -58,7 +58,7 @@ endif
 " Python Executables: {{{1
 " If we have a virtual env start there
 if exists('$VIRTUAL_ENV')
-    let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
+    let g:python3_host_prog = expand('$VIRTUAL_ENV') . '/bin/python'
 
 elseif exists('$CONDA_PYTHON_EXE')
     let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
@@ -223,6 +223,7 @@ set modeline
 set lazyredraw
 set browsedir="buffer"                  " which directory is used for the file browser
 
+setlocal tabstop=4 shiftwidth=4 expandtab softtabstop=4
 " Mappings: {{{1
 " Window_Buf_Tab_Mappings: {{{2
 
@@ -235,22 +236,22 @@ nnoremap <C-l> <C-w>l
 " Navigate tabs more easily
 map <unique> <A-Right> :tabnext<CR>
 map <unique> <A-Left> :tabprev<CR>
+nnoremap <Leader>tn :tabnext<CR>
+nnoremap <Leader>tp :tabprev<CR>
+" Opens a new tab with the current buffer's path
+" Super useful when editing files in the same directory
+nnoremap <Leader>te :tabedit <c-r>=expand("%:p:h")<CR>
+
 " It should also be easier to edit the config. Bind similarly to tmux
 nnoremap <Leader>ed :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 " It should also be easier to edit the config
 nnoremap <F9> :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
+inoremap <F9> <Esc>:tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 " Now reload it
 nnoremap <Leader>re :so $MYVIMRC<CR>
-" Opens a new tab with the current buffer's path
-" Super useful when editing files in the same directory
-nnoremap <Leader>te :tabedit <c-r>=expand("%:p:h")<CR>
-" Switch CWD to the directory of the open buffer
-nnoremap <Leader>cd :cd %:p:h<CR>:pwd<CR>
 "Use mnemonenics for easier navigation
 nnoremap <Leader>bn :bnext<CR>
 nnoremap <Leader>bp :bprev<CR>
-nnoremap <Leader>tn :tabnext<CR>
-nnoremap <Leader>tp :tabprev<CR>
 
 " General_Mappings: {{{2
 " Simple way to speed up startup
@@ -270,12 +271,8 @@ nnoremap <Leader>O O<Esc>
 xnoremap < <gv
 xnoremap > >gv
 
-" Opens a new tab with the current buffer's path
-" Super useful when editing files in the same directory
-nnoremap <Leader>te :tabedit <c-r>=expand("%:p:h")<CR>
-
 " Switch CWD to the directory of the open buffer
-nnoremap <Leader>cd :cd %:p:h<CR>:pwd<cr>
+nnoremap <Leader>cd :cd %:p:h<CR>:pwd<CR>
 
 " I use this command constantly
 nnoremap <Leader>sn :Snippets<CR>
@@ -371,6 +368,8 @@ nnoremap <silent> <Leader>gd :Gdiff<CR>
 nnoremap <silent> <Leader>ge :Gedit<CR>
 nnoremap <silent> <Leader>gE :Gedit<Space>
 nnoremap <silent> <Leader>gl :Glog<CR>
+" TODO:
+nnoremap <silent> <Leader>gL :Glog --pretty=oneline --graph<CR>
 nnoremap <silent> <Leader>gq :Gwq<CR>
 nnoremap <silent> <Leader>gQ :Gwq!<CR>
 nnoremap <silent> <Leader>gr :Gread<CR>
@@ -379,23 +378,23 @@ nnoremap <silent> <Leader>gs :Gstatus<CR>
 nnoremap <silent> <Leader>gw :Gwrite<CR>
 nnoremap <silent> <Leader>gW :Gwrite!<CR>
 
-
 " Python Language Server: {{{2
-function LC_maps()
+function! LC_maps()
     if has_key(g:LanguageClient_serverCommands, &filetype)
         nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<CR>
         nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
         nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+        inoremap <buffer> <silent> <F2> <Esc>:call LanguageClient#textDocument_rename()<CR>
     endif
 endfunction
 
-autocmd FileType * call LC_maps()
-
+augroup LangClient
+     autocmd!
+     autocmd FileType * call LC_maps()
+augroup END
 
 " Tagbar: {{{2
 nnoremap <silent> <F8> :TagbarToggle<CR>
-let g:tagbar_left = 1
-
 
 " Airline: {{{2
 let g:airline#extensions#tabline#buffer_idx_mode = 1
@@ -434,124 +433,6 @@ let g:loaded_logiPat           = 1
 " let g:loaded_netrw           = 1
 " let g:loaded_netrwPlugin     = 1
 " Let's see if this speeds things up because I've never used most of them
-
-" FZF: {{{1
-if has('nvim') || has('gui_running')
-  let $FZF_DEFAULT_OPTS .= ' --inline-info'
-endif
-
-augroup fzf
-    autocmd! FileType fzf
-    autocmd  FileType fzf set laststatus=0 noshowmode noruler
-    \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
-augroup end
-
-" An action can be a reference to a function that processes selected lines
-function! s:build_quickfix_list(lines)
-  call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
-  copen
-  cc
-endfunction
-
-let g:fzf_action = {
-  \ 'ctrl-q': function('s:build_quickfix_list'),
-  \ 'ctrl-t': 'tab split',
-  \ 'ctrl-x': 'split',
-  \ 'ctrl-v': 'vsplit' }
-
-" FZF Colors: {{{2
-" Customize FZF colors to match your color scheme
-let g:fzf_colors =
-\ { 'fg':      ['fg', 'Normal'],
-  \ 'bg':      ['bg', 'Normal'],
-  \ 'hl':      ['fg', 'Comment'],
-  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-  \ 'hl+':     ['fg', 'Statement'],
-  \ 'info':    ['fg', 'PreProc'],
-  \ 'border':  ['fg', 'Ignore'],
-  \ 'prompt':  ['fg', 'Conditional'],
-  \ 'pointer': ['fg', 'Exception'],
-  \ 'marker':  ['fg', 'Keyword'],
-  \ 'spinner': ['fg', 'Label'],
-  \ 'header':  ['fg', 'Comment'] }
-
-
-let g:fzf_history_dir = '~/.local/share/fzf-history'
-
-if executable('ag')
-  let &grepprg = 'ag --nogroup --nocolor --column --vimgrep'
-    set grepformat=%f:%l:%c:%m
-else
-  let &grepprg = 'grep -rn $* *'
-endif
-
-command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
-
-
-" FZF_VIM: {{{1
-" If you're willing to consider it separate than the FZF plugin
-
-" Insert mode completion:
-" the spell checker already implements something like this but that's why we
-" allow remapping and not everyone {termux} has that file
-imap <c-x><c-k> <plug>(fzf-complete-word)
-imap <c-x><c-f> <plug>(fzf-complete-path)
-imap <c-x><c-j> <plug>(fzf-complete-file-ag)
-imap <c-x><c-l> <plug>(fzf-complete-line)
-
-" Command local options:
-" [Buffers] Jump to the existing window if possible
-let g:fzf_buffers_jump = 1
-" [[B]Commits] Customize the options used by 'git log':
-let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
-" [Tags] Command to generate tags file
-let g:fzf_tags_command = 'ctags -R' "
-" [Commands] --expect expression for directly executing the command
-let g:fzf_commands_expect = 'alt-enter,ctrl-x'
-
-" Ag: {{{2
-" :Ag  - Start fzf with hidden preview window that can be enabled with '?' key
-" :Ag! - Start fzf in fullscreen and display the preview window above
-command! -bang -nargs=* Ag
-    \ call fzf#vim#ag(<q-args>,
-    \ <bang>0 ? fzf#vim#with_preview('up:60%')
-    \ : fzf#vim#with_preview('right:50%:hidden', '?'),
-    \ <bang>0)
-
-" Similarly, we can apply it to fzf#vim#grep. To use ripgrep instead of ag:
-command! -bang -nargs=* Rg
-    \ call fzf#vim#grep(
-    \ 'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
-    \ <bang>0 ? fzf#vim#with_preview('up:60%')
-    \ : fzf#vim#with_preview('right:50%:hidden', '?'),
-    \ <bang>0)
-
-" Likewise, Files command with preview window
-command! -bang -nargs=? -complete=dir Files
-    \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
-
-" Global line completion (not just open buffers. ripgrep required.)
-inoremap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
-    \ 'prefix': '^.*$',
-    \ 'source': 'rg -n ^ --color always',
-    \ 'options': '--ansi --delimiter : --nth 3..',
-    \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }}))
-
-" FZF_Statusline: {{{2
-" Custom fzf statusline
-function! s:fzf_statusline()
-    " Override statusline as you like
-    highlight fzf1 ctermfg=161 ctermbg=251
-    highlight fzf2 ctermfg=23 ctermbg=251
-    highlight fzf3 ctermfg=237 ctermbg=251
-    setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
-endfunction
-
-augroup fzfstatusline
-    autocmd!
-    autocmd! user Fzfstatusline call <SID>fzf_statusline()
-augroup end
 
 " Remaining Plugins: {{{1
 " Vim_Plug: {{{2
@@ -706,16 +587,17 @@ let g:jedi#enable_completions = 0
 " speed things up
 let g:deoplete#sources#jedi#enable_typeinfo = 0
 
-" **UNTESTED**: {{{
-
+" Tagbar: {{{2
 " just a thought i had. For any normal mode remaps you have, add the same
 " thing and prefix <Esc> to the RHS and boom!
-if has('b:Tagbar')  " or any plugin
-    let g:tagbar_sort=0
-    inoremap <F3> <esc>:TagbarToggle<CR>
-    nnoremap <F3> :TagbarToggle<CR>
-endif
+let g:tagbar_left = 1
+let g:tagbar_width = 30
 
+if has('b:Tagbar')  " or any plugin
+    let g:tagbar_sort = 0
+    imap <F3> <esc>:TagbarToggle<CR>
+    nmap <F3> :TagbarToggle<CR>
+endif
 
 " Airline: {{{2
 let g:airline#extensions#syntastic#enabled = 0
@@ -747,24 +629,20 @@ let g:airline_symbols.spell = 'Ꞩ'
 let g:airline_symbols.notexists = 'Ɇ'
 let g:airline_symbols.whitespace = 'Ξ'
 
-
 let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
 let g:airline#extensions#tabline#tab_nr_type = 1 " splits and tab number
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline#extensions#tabline#fnametruncate = 1
 
-
-
-
 " Filetype Specific Options: {{{1
-
+" Web dev deleted because this helps filetypes that wouldn't have been cast
+" correctly otherwise.
 augroup ftpersonal
-" IPython:
+    autocmd!
+    " IPython:
     au BufRead,BufNewFile *.ipy setlocal filetype=python
-" Web Dev:
-    au filetype javascript,html,css setlocal shiftwidth=2 softtabstop=2 tabstop=2
-" Markdown:
+    " Markdown:
     autocmd BufNewFile,BufFilePre,BufRead *.md setlocal filetype=markdown
 augroup end
 
@@ -774,6 +652,7 @@ let g:sh_fold_enabled= 4  "   (enable if/do/for folding)
 let g:sh_fold_enabled= 3  "   (enables function and heredoc folding)
 "Let's hope this doesn't make things too slow.
 
+" TODO: Are these supposed to be in an ftplugin or something?
 " he rst.vim or ft-rst-syntax or syntax 2600. Don't put bash instead of sh.
 " $VIMRUNTIME/syntax/rst.vim iterates over this var and if it can't find a
 " bash.vim syntax file it will crash.
@@ -787,8 +666,8 @@ let readline_has_bash = 1
 " Todo Function: {{{2
 function! s:todo() abort
     let entries = []
-    for cmd in ['git grep -niI -e TODO -e todo -e FIXME -e XXX 2> /dev/null',
-                \ 'grep -rniI -e TODO -e todo -e FIXME -e XXX * 2> /dev/null']
+    for cmd in ['git grep -niI -e TODO -e todo -e FIXME -e XXX -e HACK 2> /dev/null',
+                \ 'grep -rniI -e TODO -e todo -e FIXME -e XXX -e HACK * 2> /dev/null']
         let lines = split(system(cmd), '\n')
         if v:shell_error != 0 | continue | endif
         for line in lines
@@ -820,6 +699,10 @@ function! s:plug_help_sink(line)
     execute 'Explore' dir
 endfunction
 
+command! PlugHelp call fzf#run(fzf#wrap({
+  \ 'source': sort(keys(g:plugs)),
+  \ 'sink':   function('s:plug_help_sink')}))
+
 " Scriptnames: {{{2
 " command to filter :scriptnames output by a regex
 command! -nargs=1 Scriptnames call <sid>scriptnames(<f-args>)
@@ -833,6 +716,9 @@ function! s:scriptnames(re) abort
 endfunction
 
 " AutoSave: {{{2
+" I feel like I need to put this in a autocmd but I'm not sure what I would
+" want to trigger it.
+" Even better would be if it called :Gwrite haha!
 function! s:autosave(enable)
   augroup autosave
     autocmd!
@@ -853,16 +739,24 @@ function! s:hl()
   " echo synIDattr(synID(line('.'), col('.'), 0), 'name')
   echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
 endfunction
+
 command! HL call <SID>hl()
 
 " Colorscheme: {{{1
-set bg=dark
-colorscheme gruvbox
-if g:colors_name ==# 'gruvbox'
+" I feel like I should put this in a command or something so I can easily
+" toggle it.
+function! s:gruvbox()
+    set bg=dark
     let g:gruvbox_contrast_dark = 'hard'
-    let g:gruvbox_improved_strings=1
+    " let g:gruvbox_improved_strings=1 shockingly terrible
     let g:gruvbox_improved_warnings=1
+    syntax on
+endfunction
+
+colorscheme gruvbox
+
+if g:colors_name ==# 'gruvbox'
+     call <SID>gruvbox()
 endif
 
-hi NonText guifg=NONE guibg=NONE
-" }}}
+command! Gruvbox call <SID>gruvbox()

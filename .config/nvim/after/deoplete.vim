@@ -1,10 +1,10 @@
 " Deoplete:
 
-" All: {{{ 1
-
+" General: {{{1
 let g:deoplete#enable_smart_case = 1
 set completeopt+=noinsert                    " Autoselect feature
 
+" Mappings:{{{1
 " Delete 1 char and reload the popup menu
 inoremap <expr><C-h> deoplete#smart_close_popup()."\<C-h>"
 inoremap <expr><BS> deoplete#smart_close_popup()."\<C-h>"
@@ -21,6 +21,7 @@ inoremap <expr><C-l> deoplete#refresh()
 " Undo completion
 inoremap <expr><C-g> deoplete#undo_completion()
 
+" Deoplete Sources:{{{1
 " Disable the candidates in Comment/String syntaxes.
 call deoplete#custom#source('_', 'disabled_syntaxes', ['Comment', 'String'])
 
@@ -35,7 +36,7 @@ call deoplete#custom#source(
 " If dictionary is already sorted, no need to sort it again.
 call deoplete#custom#source( 'dictionary', 'sorters', [])
 
-" Jedi logging: {{{ 2
+" Jedi logging: {{{1
 " Enable jedi source debug messages
 " call deoplete#custom#option('profile', v:true)
 " call deoplete#enable_logging('DEBUG', 'deoplete.log')
@@ -43,7 +44,3 @@ call deoplete#custom#source( 'dictionary', 'sorters', [])
 "|deoplete-source-attribute-is_debug_enabled| to debug the
 "sources.
 " call deoplete#custom#source('jedi', 'is_debug_enabled', 1)
-
-" }}}
-
-" }}}

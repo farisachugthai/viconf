@@ -1,26 +1,84 @@
 # Annotations
 
-## Environment
----------------
+## FZF
 
-To explain what's going on here, I want to use a few environment variables to
-determine what platform I'm working on. Then we can use that to set some script
-vars, and use them for quick lookups to correctly handle platform specific code.
+" {{{
 
-However, vimscript is terrible and I'm struggling to get anything working.
-
-At a point I may embed some python but I'm concerned that that'll greatly slow
-down startup.
-
-Regardless there's no reason to scrap the entire section but none of it works.
-So here it is.
-
-### Handling platform specific code (incorrectly)
+Dropping this because FZF.vim now comes with :R and :Rg but if you wanna
+modify anything in the future here's the original code I had
 
 ```viml
-" Environment: {{{ 2
-" Let's setup all the global vars we need. Will utilize to ensure consistency
+" **TODO**: Commented out because E183: User defined commands must start with an uppercase letter:::
+" :ag  - start fzf with hidden preview window that can be enabled with '?' key
+" :ag! - start fzf in fullscreen and display the preview window above
+" command! -bang -nargs=* ag
+"     \ call fzf#vim#ag(<q-args>,
+"     \ <bang>0 ? fzf#vim#with_preview('up:60%')
+"     \ : fzf#vim#with_preview('right:50%:hidden', '?'),
+"     \ <bang>0)
 
+" " similarly, we can apply it to fzf#vim#grep. to use ripgrep instead of ag:
+" command! -bang -nargs=* rg
+"     \ call fzf#vim#grep(
+"     \ 'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
+"     \ <bang>0 ? fzf#vim#with_preview('up:60%')
+"     \ : fzf#vim#with_preview('right:50%:hidden', '?'),
+"     \ <bang>0)
+
+" " likewise, files command with preview window
+" command! -bang -nargs=? -complete=dir files
+"     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+```
+" }}}
+
+## Environment
+
+Dec 01, 2018
+
+To continue adding to this pile, I remember there being a need to configure the cursor
+for tmux and nvim differently when using konsole.
+
+```viml
+let s:konsole = exists('$KONSOLE_DBUS_SESSION') ||
+\ exists('$KONSOLE_PROFILE_NAME')
+```
+...
+
+```viml
+" 1 or 0 -> blinking block
+" 2 -> solid block
+" 3 -> blinking underscore
+" 4 -> solid underscore
+" Recent versions of xterm (282 or above) also support
+" 5 -> blinking vertical bar
+" 6 -> solid vertical bar
+let s:normal_shape = 0
+let s:insert_shape = 5
+let s:replace_shape = 3
+
+elseif s:iterm || s:konsole
+let s:start_insert = "\<Esc>]50;CursorShape=" . s:insert_shape . "\x7"
+let s:start_replace = "\<Esc>]50;CursorShape=" . s:replace_shape . "\x7"
+let s:end_insert = "\<Esc>]50;CursorShape=" . s:normal_shape . "\x7"
+else
+let s:cursor_shape_to_vte_shape = {1: 6, 2: 4, 0: 2, 5: 6, 3: 4}
+let s:insert_shape = s:cursor_shape_to_vte_shape[s:insert_shape]
+let s:replace_shape = s:cursor_shape_to_vte_shape[s:replace_shape]
+let s:normal_shape = s:cursor_shape_to_vte_shape[s:normal_shape]
+let s:start_insert = "\<Esc>[" . s:insert_shape . ' q'
+let s:start_replace = "\<Esc>[" . s:replace_shape . ' q'
+let s:end_insert = "\<Esc>[" . s:normal_shape . ' q'
+endif
+```
+
+From: <https://github.com/rafi/vim-config/blob/master/config/terminal.vim#L39>
+
+Typically don't like working with escape sequences.
+Gotta admit that's a lot smarter than what i'd come up with.
+
+Now here are some functions that don't work.
+
+```viml
 let s:termux = exists('$PREFIX') && has('unix')
 let s:ubuntu = !exists('$PREFIX') && has('unix')
 let s:windows = has('win32') || has('win64')
@@ -55,29 +113,65 @@ cluttering my vimrc.
 " endif
 ```
 
-### Expanding environment variables
+```viml
+" Gonna start seriously consolidating vimrc and init.vim this is so hard
+" to maintain
+" Let's setup all the global vars we need
+" Wait am i assigning these vars correctly? man fuck vimscript
 
-Nov 21, 2018
+if has('nvim')
+    let s:root = '~/.config/nvim'
+    let s:conf = '~/.config/nvim/init.vim'
+else
+    let s:root = '~/.vim'
+    let s:conf = '~/.vim/vimrc'
+endif
 
-So I've noticed this in the docs more than a few times. But i just ran into this
-horrible problem again. `g:python3_host_prog` wasn't setting and I wasn't sure
-if it was because of the recent name change or what.
+if exists('$PREFIX')
+    let s:usr_d = '$PREFIX'     " might need to expand on use
+    let s:OS= 'Android'
+else
+    let s:usr_d = '/usr'
+    let s:OS = 'Linux'
+endif
+```
+" }}}
 
-The logic in my python executable section is really weird now but
-Vimscript is so fucking finnicky that what I did there was the only way i
-could get it consistently working.
 
-I changed `if executable(path)` to `if exists(':python3')` because
-`echo executable('$PREFIX/bin/python')` was coming up 0. I couldn't figure out
-why. So I used the colon to test if its a command that can be run on the ex
-line.
-
-Then I remembered. You have to run expand() on all env vars!!! The problems now
-fixed and all is well. I just realized that that's an important case to need to
-know how to handle so I figured I'd mark it.
 
 ## Plugins
 ------------
+
+### UltiSnips
+
+#### Check if text is expandable
+
+
+6. FAQ                                                        *UltiSnips-FAQ*
+
+Q: Do I have to call UltiSnips#ExpandSnippet() to check if a snippet is
+   expandable? Is there instead an analog of neosnippet#expandable?
+A: Yes there is, try
+
+  function UltiSnips#IsExpandable()
+    return !empty(UltiSnips#SnippetsInCurrentScope())
+  endfunction
+
+  Consider that UltiSnips#SnippetsInCurrentScope() will return all the
+  snippets you have if you call it after a space character. If you want
+  UltiSnips#IsExpandable() to return false when you call it after a space
+  character use this a bit more complicated implementation:
+
+  function UltiSnips#IsExpandable()
+
+As notated by folds, go to All --> Remaining Plugins --> UltiSnips. Should be
+around line 700.
+
+I've copied UltiSnips#IsExpandable() there, and wanted to list the explanation
+here so as to note clutter up my init.vim.
+
+However that func needs a mapping because I'm never gonna remember it.
+
 
 ### FZF and friends
 
