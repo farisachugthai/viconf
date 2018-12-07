@@ -9,12 +9,6 @@ extends rst
 #                           Python Snippets                           #
 #######################################################################
 
-# From UltiSnips
-
-# The smart def and smart class snippets use a global option called
-# "g:ultisnips_python_style" which, if set to "doxygen" will use doxygen
-# style comments in docstrings.
-
 global !p
 
 # Don't know if this data needs to be here or in pythonx but I'm leaving it for the time being
@@ -25,18 +19,16 @@ GOOGLE  = 0x4
 NUMPY   = 0x5
 JEDI    = 0x6
 
-
 SINGLE_QUOTES = "'"
 DOUBLE_QUOTES = '"'
 
 from snippets_helper import *
 
 endglobal
-# So I'm 100% sure I'm doing this wrong but don't know how or why
-
 
 # These snippets are kinda organized in the order of beginning and creating a new python module
-# Beginning of the module: {{{ 1
+
+# Beginning of the module:
 
 # Start out with a shebang
 snippet #! "Shebang header for python scripts" b
@@ -46,15 +38,15 @@ $0
 endsnippet
 
 # TODO Need to break this up
-# Also you should be able to easily through `snip.fn` in the filename there
-snippet docs "Module Docstring" b
+# Also you should be able to easily put `snip.fn` in the filename there
+snippet moddoc "Module Docstring" b
 """${1:'Give a one sentence summary in the imperative'}
 
 ${2:'Elaborate a little'}
-File: ${1:'foo.py'}
-Author: `g:snips_author`
-Email: `g:snips_email`
-Github: `g:snips_github`
+File: ${1: `!p fn`}
+Author: `!v g:snips_author`
+Email: `!v g:snips_email`
+Github: `!v g:snips_github`
 
 Attributes:
 
@@ -74,15 +66,14 @@ endsnippet
 
 # and if we didn't like that module docstring how about this one?
 snippet pmdoc "pocoo style module doc string" b
-# -*- coding: utf-8 -*-
 """
 	`!p snip.rv = get_dir_and_file_name(snip)`
 	`!p snip.rv = '~' * len(get_dir_and_file_name(snip))`
 
 	${1:DESCRIPTION}
 
-	:copyright: (c) `date +%Y` by ${2:YOUR_NAME}.
-	:license: ${3:LICENSE_NAME}, see LICENSE for more details.
+	:copyright: (c) `date +%Y` by `!v g:snips_author`
+	:license: ${3:LICENSE_NAME}, see ${3} for more details.
 """
 $0
 endsnippet

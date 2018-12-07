@@ -48,7 +48,7 @@ def _parse_arguments():
             description='Installs and sets up neovim.'
             )
 
-    parser.add_argument('--plug-dir',dest=plugd,help='The directory that vim-plug is downloaded to.')
+    parser.add_argument('--plug-dir', dest=plugd, help='The directory that vim-plug is downloaded to.')
 
     args = parser.parse_args()
 
@@ -135,18 +135,18 @@ def termux_packages():
 
 
 def pip_install():
-    """Run platform-independent pip install."""
+    """Run platform-independent pip install. Install both pynvim and neovim."""
     if sys.version_info > (3, 7):
         subprocess.run([
             "pip", "install", "-U", "pip", "neovim",
-            "python-language-server[all]"
+            "python-language-server[all]", "pynvim"
         ],
                        capture_output=True,
                        check=True)
     else:
         subprocess.run([
             "pip", "install", "-U", "pip", "neovim",
-            "python-language-server[all]"
+            "python-language-server[all]", "pynvim"
         ],
                        capture_output=True)
 
@@ -183,6 +183,9 @@ if __name__ == "__main__":
     else:
         requests_download(plug)
 
+    # could also have done platform.machine. *shrugs*
+    # TODO: Download packages in a venv. Interestingly enough the PEP that
+    # introduced virtual environments might be your best bet here.
     if uname.machine == 'aarch64':
         termux_packages()
     # TODO: Every other machine you own haha.

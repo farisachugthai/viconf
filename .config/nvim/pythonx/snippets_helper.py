@@ -4,7 +4,11 @@
 
 A useful combination with UltiSnips.
 """
-import string, vim
+import string
+import vim
+import os
+import re
+import sys
 
 def complete(tab, opts):
     """
@@ -36,8 +40,8 @@ def _parse_comments(s):
             if len(flags) == 0:
                 rv.append(('OTHER', text, text, text, ""))
             # parse 3-part comment, but ignore those with O flag
-        elif 's' in flags and 'O' not in flags:
-            ctriple = ["TRIPLE"]
+            elif 's' in flags and 'O' not in flags:
+                ctriple = ["TRIPLE"]
                 indent = ""
 
                 if flags[-1] in string.digits:

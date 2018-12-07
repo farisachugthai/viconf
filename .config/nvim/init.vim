@@ -12,18 +12,19 @@ call plug#begin('~/.local/share/nvim/plugged')
 Plug 'junegunn/vim-plug'        " plugception
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'junegunn/vim-peekaboo'
 Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
-Plug 'davidhalter/jedi-vim', { 'for': ['python', 'python3'] }
+Plug 'davidhalter/jedi-vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'         " Lighter version of NERDCom
 Plug 'w0rp/ale'
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'edkolev/tmuxline.vim'
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',
     \ 'do': 'bash install.sh' }
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'vim-airline/vim-airline'
+Plug 'edkolev/tmuxline.vim'
+Plug 'christoomey/vim-tmux-navigator'
 Plug 'mhinz/vim-startify'
 if has('nvim')
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -34,8 +35,8 @@ else
 endif
 let g:deoplete#enable_at_startup = 1
 
-Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3']}
+Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
@@ -83,6 +84,7 @@ let g:python_highlight_all = 1
 
 " Folds: {{{2
 set foldenable
+set foldlevelstart=1        " I'm fine with this level of folding to start
 set foldnestmax=10
 set foldmethod=marker
 " Use 1 column to indicate fold level and whether a fold is open or closed.
@@ -175,6 +177,7 @@ catch
 endtry
 
 " Other Global Options: {{{2
+set title
 set tags+=./tags,./../tags,./*/tags     " usr_29
 set tags+=~/projects/tags               " consider generating a few large tag
 set tags+=~python/tags                  " files rather than recursive searches
@@ -461,8 +464,8 @@ let g:ale_warn_about_trailing_blank_lines = 0
 let g:ale_echo_cursor = 1
 " Default: `'%code: %%s'`
 let g:ale_echo_msg_format = '%linter% - %code: %%s %severity%'
-" Open up a window automatically
-let g:ale_open_list = 1
+" Open up a window automatically. NO. Felt so innocuous. So invasive.
+" let g:ale_open_list = 1
 " Do so vertically
 let g:ale_list_vertical = 1
 
@@ -635,8 +638,6 @@ augroup ftpersonal
     autocmd!
     " IPython:
     autocmd BufRead,BufNewFile *.ipy setlocal filetype=python
-    " Markdown:
-    autocmd BufNewFile,BufFilePre,BufRead *.md setlocal filetype=markdown
 augroup end
 
 " Noticed this bit in he syntax line 2800
@@ -726,14 +727,6 @@ function! s:hl()
 endfunction
 command! HL call <SID>hl()
 
-" EditFileComplete: {{{2
-" From he map line 1287. As this is a predefined function I suppose be careful?
-com! -nargs=1 -bang -complete=customlist,EditFileComplete
-       \ EditFile edit<bang> <args>
-fun! EditFileComplete(A,L,P)
-    return split(globpath(&path, a:A), "\n")
-endfun
-
 " Rename:{{{2
 " :he map line 1454. How have i never noticed this isn't a feature???
 com -nargs=1 -bang -complete=file Rename f <args>|w<bang>
@@ -756,8 +749,6 @@ if g:colors_name ==# 'gruvbox'
 endif
 
 command! -nargs=0 Gruvbox call s:gruvbox()
-
-highlight! NonText guifg=NONE guibg=NONE
 
 " Here's a phenomenal autocmd for ensuring we can set nohlsearch but still
 " get highlights ONLY while searching!!

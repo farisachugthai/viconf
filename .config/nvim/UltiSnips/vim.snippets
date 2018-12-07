@@ -1,14 +1,13 @@
 # Vim Snippets
 
 # Personal snippets
-# Don't know how to make the first tabstop optional. Like if i tab away just leave it?
+
 snippet path "Refer to a file in the same dir as the script."
 ${${1:'let s:local_vimrc' = }}fnamemodify(resolve(expand('<sfile>')), ':p:h').'${VISUAL:0}'
 endsnippet
 
-##################################################################
-#                           UltiSnips                            #
-##################################################################
+# I've changed enough about these to officially take away credit from honza some of these
+# were outstandingly sloppy
 
 snippet gvar "Global / configuration variable" b
 if !exists("g:${1:MyUltraImportantVar}")
@@ -17,7 +16,7 @@ endif
 endsnippet
 
 snippet guard "script reload guard" b
-if exists('${1:did_`!p snip.rv = snip.fn.replace('.','_')`}') || &cp${2: || version < 700}
+if exists('${1:did_`!p snip.rv = snip.fn.replace('.','_')`}') || &cp${2:'|| version < 700'}
 	finish
 endif
 let $1 = $3
@@ -25,28 +24,30 @@ endsnippet
 
 snippet function "function with simple tabstops" b
 function! ${1:function_name}($2) abort
-	${3:" code}
-endf
+	${3:"code"}
+endfunction
 endsnippet
 
-#######################################################################
-#                              Snipmate                               #
-#######################################################################
-
+# THIS HEADER WORKS THE EXACT WAY YOU'D WANT WHOO
 snippet header "standard Vim script file header" b
-	" File: ${1:`expand('%:t')`}
-	" Author: ${2:`g:snips_author`}
-	" Description: ${3}
-	${0:" Last Modified: `strftime("%B %d, %Y")`}
-snippet guard script reload guard
+" ============================================================================
+	" File: ${1:`!v expand('%:t')`}
+	" Author: ${2:`!v g:snips_author`}
+	" Description: ${3:"A description of the file below"}
+	${0:" Last Modified: `!v strftime("%B %d, %Y")`}
+" ============================================================================
+endsnippet
+
+# TODO There should be an ftplugin guard as well
+snippet guard "script reload guard"
 	if exists('${1:did_`vim_snippets#Filename()`}') || &cp${2: || version < 700}
 		finish
 	endif
-	let $1 = 1${0}
+	let ${1:loaded_`!p snip.fn`} = ${0:'1'}
 
 endsnippet
 
-snippet func "Autocompletes funxction name based on filename...I think"
+snippet func "Autocompletes function name based on filename"
 function! ${1:`expand('%') =~ 'autoload' ? substitute(matchstr(expand('%:p'),'autoload/\zs.*\ze.vim'),'[/\\]','#','g').'#' : ''`}${2:function_name}(${3}) abort
 		${0}
 endif
@@ -64,13 +65,15 @@ endsnippet
 #  loops  #
 ###########
 
+# TODO What's up with the indenting? There's definitely a snip attribute that
+# figures out how to indent things correctly for you
 snippet for "for ... in loop"
 	for ${1} in ${2}
 		${0:${VISUAL}}
 	endfor
 endsnippet
 
-snippet forkv "for [key, value] in loop"
+snippet for "for [key, value] in loop"
 	for [${1},${2}] in items(${3})
 		${0}
 		unlet $1 $2
@@ -89,7 +92,8 @@ snippet if "if statement"
 	endif
 endsnippet
 
-# TODO: Use rhis style of snippet a few timesandlet me know if ota better to put vosjal on the condktiln or the code.
+# **TODO**: Use this style of snippet a few times and let me know if it's better to
+# put $VISUAL on the condition or the code.
 snippet elif "elif by vim" b
 	elseif ${VISUAL:1}
 		${0:body}
@@ -109,33 +113,41 @@ snippet au "augroup ... autocmd block"
 	augroup end
 endsnippet
 
+#####################
+#  plugin managers  #
+#####################
+
 snippet bun "Vundle.vim Plugin definition"
-	Plugin '${0}'
+Plugin '${0}'
 endsnippet
 
 snippet plug "vim-plug Plugin definition"
-	Plug '${0}'
+Plug '${0}'
 endsnippet
 
 snippet plugdo "vim-plug Plugin definition with { 'do': '' }"
-	Plug '${1}', { 'do': '${0}' }
+Plug '${1}', { 'do': '${0}' }
 endsnippet
 
 snippet plugon "vim-plug Plugin definition with { 'on': '' }"
-	Plug '${1}', { 'on': '${0}' }
+Plug '${1}', { 'on': '${0}' }
 endsnippet
 
 snippet plugfor "vim-plug Plugin definition with { 'for': '' }"
-	Plug '${1}', { 'for': '${0}' }
+Plug '${1}', { 'for': '${0}' }
 endsnippet
 
 snippet plugbr "vim-plug Plugin definition with { 'branch': '' }"
-	Plug '${1}', { 'branch': '${0}' }
+Plug '${1}', { 'branch': '${0}' }
 endsnippet
 
 snippet plugtag "vim-plug Plugin definition with { 'tag': '' }"
-	Plug '${1}', { 'tag': '${0}' }
+Plug '${1}', { 'tag': '${0}' }
 endsnippet
+
+#############
+#  options  #
+#############
 
 snippet letg
 	let g:${1:variable} = ${0: value}
@@ -156,6 +168,10 @@ endsnippet
 snippet setl
 	setlocal ${1:setting}=${0:value}
 endsnippet
+
+#############
+#  mapping  #
+#############
 
 snippet nno
 	nnoremap ${1} ${2}<CR>
