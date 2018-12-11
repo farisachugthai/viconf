@@ -10,6 +10,7 @@ CTRL
 Chainmap
 Chugthai
 ColorColumn
+Compiler
 Conda
 Ctrl
 DDG
@@ -87,12 +88,10 @@ SCM
 SGR
 SHA
 SHAs
-SHAs
 SSID
 SVG
 Shotts
 Showkey
-SpaceMacs
 SpaceMacs
 TLDR
 TOC
@@ -100,6 +99,7 @@ TODO
 Tagbar
 Termux
 Termux's
+TestCase
 Todo
 USBs
 Ubuntu
@@ -114,6 +114,7 @@ Vimrc
 Vimwiki's
 Vundle
 Win10
+Win32
 X11
 XDG
 XKB
@@ -479,6 +480,7 @@ tabview
 tcp
 tcpdump
 termux
+testcase
 texting
 tldr
 tmp
@@ -561,5 +563,3 @@ youtube
 zcat
 zenburn
 zim
-Win32
-Compiler
