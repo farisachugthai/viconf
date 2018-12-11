@@ -1,5 +1,6 @@
 " Syntax highlighting for snippet files (used for UltiSnips.vim)
 " Revision: 26/03/11 19:53:33
+" Vim: set foldmethod=marker:
 
 if exists("b:current_syntax")
   finish
@@ -32,7 +33,7 @@ endtry
 " Comments {{{2
 
 syn match snipComment "^#.*" contains=snipTODO display
-syn keyword snipTODO contained display FIXME NOTE NOTES TODO XXX
+syn keyword snipTODO contained display FIXME NOTE NOTES TODO XXX HACK TODO:
 
 " Errors {{{2
 
@@ -59,7 +60,7 @@ syn match snipSnippetFooterKeyword "^endsnippet" contained
 "   snippet foo"bar"
 " it treats `foo"bar"` as the trigger. But with this:
 "   snippet foo"bar baz"
-" it treats `foo` as the trigger and "bar baz" as the description.
+" it treats `foo` as the trigger and \"bar baz" as the description.
 " I think this is an accident. Instead, we'll assume the description must
 " be surrounded by spaces. That means we'll treat
 "   snippet foo"bar"

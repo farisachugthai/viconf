@@ -27,7 +27,7 @@ let g:fzf_action = {
   \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit' }
 
-" FZF Colors: {{{2
+" FZF Colors:
 " What are the default colors if you don't specify this?
 " **I think fzf.vim specifies this for us**
 let g:fzf_colors =
@@ -64,7 +64,7 @@ command! -nargs=1 -bang -bar Grep execute 'silent! grep! <q-args>' | redraw! | c
 " FZF_VIM: {{{1
 " Specifically from that repo so I don't get stuff mixed up if I ever take one
 " off or something
-" Insert mode completion:{{{2
+" Insert mode completion:
 imap <c-x><c-k> <plug>(fzf-complete-word)
 imap <c-x><c-f> <plug>(fzf-complete-path)
 imap <c-x><c-j> <plug>(fzf-complete-file-ag)
@@ -80,7 +80,7 @@ let g:fzf_tags_command = 'ctags -R ./** && ctags -R --append ./.*'
 " Wait what happens if we hit those though?
 let g:fzf_commands_expect = 'alt-enter,ctrl-x'
 
-" Ag: {{{2
+" Ag: {{{1
 " :Ag  - Start fzf with hidden preview window that can be enabled with '?' key
 " :Ag! - Start fzf in fullscreen and display the preview window above
 command! -bang -nargs=* Ag
@@ -101,7 +101,7 @@ command! -bang -nargs=* Rg
 command! -bang -nargs=? -complete=dir Files
     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
-" Filtering:{{{2
+" Filtering: {{{1
 " Global line completion (not just open buffers. ripgrep required.)
 inoremap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
     \ 'prefix': '^.*$',
@@ -109,7 +109,7 @@ inoremap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
     \ 'options': '--ansi --delimiter : --nth 3..',
     \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }}))
 
-" FZF_Statusline: {{{2
+" FZF_Statusline: {{{1
 " Custom fzf statusline
 function! s:fzf_statusline()
     " Override statusline as you like

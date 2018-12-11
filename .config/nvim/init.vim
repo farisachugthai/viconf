@@ -177,7 +177,6 @@ catch
 endtry
 
 " Other Global Options: {{{2
-set title
 set tags+=./tags,./../tags,./*/tags     " usr_29
 set tags+=~/projects/tags               " consider generating a few large tag
 set tags+=~python/tags                  " files rather than recursive searches
@@ -192,8 +191,6 @@ set ignorecase smartcase
 set infercase
 set autoindent smartindent              " :he options: set with smartindent
 
-" On x11 systems this doesn't do anything so chalk this up to the platform
-" specific code
 if has('gui_running')
     set guifont=Fira\ Code\ weight=450\ 10
 endif
@@ -298,49 +295,12 @@ nnoremap <Leader>sp :setlocal spell!<CR>
 " Should consider using <Leader>s* type mappings for FZF
 nnoremap <Leader>s= z=
 
-" RSI: {{{2
-" start of line
-cnoremap <C-A> <Home>
-" back one character
-cnoremap <C-B> <Left>
-" delete character under cursor
-cnoremap <C-D> <Del>
-" end of line
-cnoremap <C-E> <End>
-" forward one character
-cnoremap <C-F> <Right>
-" recall newer command-line. {Actually C-n and C-p on Emacs}
-map <unique> <A-n> <Down>
-" recall previous (older) command-line. {But we can't lose C-n and C-p}
-map <unique> <A-p> <Up>
-" back one word
-map <unique> <A-b> <S-Left>
-" forward one word
-map <unique> <A-f> <S-Right>
-" It's annoying you lose a whole command from a typo
-cmap <nop> <Esc>
-" However I still need the functionality
-cnoremap <C-g> <Esc>
-" page down
-cnoremap <C-v> <PageDown>
-" page up
-map <unique> <A-v> <PageUp>
-" Top of buffer
-map <unique> <A\<> :norm gg
-" Bottom of buffer
-map <unique> <A\>> :norm G
-" In case you want inspiration!
-" <A-BS> is delete previous word
-" C-k is kill from cursor to end of line
-" C-u is either kill from cursor to beginning of line or an indication of a
-" count with a command
-" C-y is yank.
-
 " Terminal: {{{2
 " If running a terminal in Vim, go into Normal mode with Esc
 tnoremap <Esc> <C-\><C-n>
-" From he term. Rewrite for FZF
-tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
+" From he term. Alt-R is better because this causes us to lose C-r in every
+" command we run from nvim
+tnoremap <expr> <A-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
 " From :he terminal
 tnoremap <A-h> <C-\><C-N><C-w>h
 tnoremap <A-j> <C-\><C-N><C-w>j
@@ -563,23 +523,12 @@ let g:ultisnips_python_style = 'numpy'
 let g:ultisnips_python_quoting_style = 'double'
 let g:UltiSnipsEnableSnipMate = 0
 let g:UltiSnipsEditSplit = 'tabdo'
-
-" TODO: Come up with a mapping for it. Also what is E746
-" Go to the annotations for an explanation of this function.
-" function UltiSnips#IsExpandable()
-"     return !(
-"         \ col('.') <= 1
-"         \ || !empty(matchstr(getline('.'), '\%' . (col('.') - 1) . 'c\s'))
-"         \ || empty(UltiSnips#SnippetsInCurrentScope())
-"         \ )
-" endfunction
-
-" Language Client: {{{2
-let g:LanguageClient_serverCommands = { 'python': [ 'pyls' ] }
+" Definining it in this way means that UltiSnips doesn't iterate
+" through every dir in &rtp which should save a lot of time
+let g:UltiSnipsSnippetDirectories=[$HOME.'/.config/nvim/UltiSnips']
 
 " Jedi: {{{2
 let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces
-let g:jedi#documentation_command = '<Leader>h'
 let g:jedi#usages_command = '<Leader>u'
 let g:jedi#show_call_signatures_delay = 100
 let g:jedi#smart_auto_mappings = 0
@@ -626,6 +575,7 @@ let g:airline#extensions#tabline#tab_nr_type = 1 " splits and tab number
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline#extensions#tabline#fnametruncate = 1
+
 
 " Tagbar: {{{2
 let g:tagbar_left = 30
@@ -730,6 +680,36 @@ command! HL call <SID>hl()
 " Rename:{{{2
 " :he map line 1454. How have i never noticed this isn't a feature???
 com -nargs=1 -bang -complete=file Rename f <args>|w<bang>
+
+" UltiSnips: {{{2
+
+" GetAllSnippets:{{{3
+" Definitely a TODO
+function! GetAllSnippets()
+  call UltiSnips#SnippetsInCurrentScope(1)
+  let list = []
+  for [key, info] in items(g:current_ulti_dict_info)
+    let parts = split(info.location, ':')
+    call add(list, {
+      \"key": key,
+      \"path": parts[0],
+      \"linenr": parts[1],
+      \"description": info.description,
+      \})
+  endfor
+  return list
+endfunction
+
+" Expandable:{{{3
+" TODO: Come up with a mapping for it. Also what is E746
+" Go to the annotations for an explanation of this function.
+" function UltiSnips#IsExpandable()
+"     return !(
+"         \ col('.') <= 1
+"         \ || !empty(matchstr(getline('.'), '\%' . (col('.') - 1) . 'c\s'))
+"         \ || empty(UltiSnips#SnippetsInCurrentScope())
+"         \ )
+" endfunction
 
 " Colorscheme: {{{1
 function! s:gruvbox()

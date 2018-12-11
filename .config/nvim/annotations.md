@@ -17,7 +17,7 @@ modify anything in the future here's the original code I had
 "     \ : fzf#vim#with_preview('right:50%:hidden', '?'),
 "     \ <bang>0)
 
-" " similarly, we can apply it to fzf#vim#grep. to use ripgrep instead of ag:
+" similarly, we can apply it to fzf#vim#grep. to use ripgrep instead of ag:
 " command! -bang -nargs=* rg
 "     \ call fzf#vim#grep(
 "     \ 'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
@@ -25,7 +25,7 @@ modify anything in the future here's the original code I had
 "     \ : fzf#vim#with_preview('right:50%:hidden', '?'),
 "     \ <bang>0)
 
-" " likewise, files command with preview window
+" likewise, files command with preview window
 " command! -bang -nargs=? -complete=dir files
 "     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 ```
@@ -74,7 +74,7 @@ endif
 From: <https://github.com/rafi/vim-config/blob/master/config/terminal.vim#L39>
 
 Typically don't like working with escape sequences.
-Gotta admit that's a lot smarter than what i'd come up with.
+Gotta admit that's a lot smarter than what I'd come up with.
 
 
 " Environment: {{{ 2
@@ -102,7 +102,7 @@ Just pulled this off of the vimrc. The one above is init.vim.
 Both from laptop branch not termux. Amazingly there's different
 attempts over there too.
 
-" Nvim_OS: {{{ 2
+
 ```viml
 " Gonna start seriously consolidating vimrc and init.vim this is so hard
 " to maintain
@@ -125,13 +125,10 @@ else
     let s:OS = 'Linux'
 endif
 ```
-" }}}
 
 " }}}
 
 ## Plugins
-
-" {{{
 
 ### UltiSnips
 
@@ -143,16 +140,17 @@ Q: Do I have to call UltiSnips#ExpandSnippet() to check if a snippet is
    expandable? Is there instead an analog of neosnippet#expandable?
 A: Yes there is, try
 
+```vim
   function UltiSnips#IsExpandable()
     return !empty(UltiSnips#SnippetsInCurrentScope())
   endfunction
-
+```
   Consider that UltiSnips#SnippetsInCurrentScope() will return all the
   snippets you have if you call it after a space character. If you want
   UltiSnips#IsExpandable() to return false when you call it after a space
   character use this a bit more complicated implementation:
 
-  function UltiSnips#IsExpandable()
+  `function UltiSnips#IsExpandable()`
 
 As notated by folds, go to All --> Remaining Plugins --> UltiSnips. Should be
 around line 700.
@@ -161,18 +159,6 @@ I've copied UltiSnips#IsExpandable() there, and wanted to list the explanation
 here so as to note clutter up my init.vim.
 
 However that func needs a mapping because I'm never gonna remember it.
-
-### Language Client
-
-The only thing is the function LanguageClient_serverCommands()
-
-But it's a simple dictionary. If you want, run a whole mess of loops checking
-things you care about I.E. bash language server, pyls etc are executable.
-
-If those loops return True, add it's name to the dictionary. Then have the
-server run the commands we feed to it
-
-I'm not sure how I hadn't thought of this yet.
 
 ### Neosnippets
 
@@ -255,15 +241,15 @@ let g:lightline = {
 TODO: Use :Glog to recover your old nerdcom code. Better do it soon if you're
 thinking about ever being able to use it again!
 
-" }}}
-
-
-" **UNTESTED**: {{{
+" **UNTESTED**:
 
 " just a thought i had. For any normal mode remaps you have, add the same
 " thing and prefix <Esc> to the RHS and boom!
+
+```vim
 if has('b:Tagbar')  " or any plugin
     let g:tagbar_sort=0
     inoremap <F3> <esc>:TagbarToggle<CR>
     nnoremap <F3> :TagbarToggle<CR>
 endif
+```

@@ -1,3 +1,6 @@
+README
+======
+
 This directory contains the snippets for UltiSnips.
 
 .. _`UltiSnips`: https://github.com/sirver/ultisnips
@@ -81,7 +84,7 @@ For persistent changes use 'extends {filetype to be added}'
 
 Now let's look at a snippet.
 
-.. code-block:: python
+.. code-block:: snippet
 
     snippet imp "import statement" b
         import ${0:module}

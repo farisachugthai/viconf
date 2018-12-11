@@ -1,4 +1,5 @@
 # python.snippets
+# Vim: set foldmethod=marker:
 priority 70
 
 extends pandas
@@ -9,6 +10,7 @@ extends rst
 #                           Python Snippets                           #
 #######################################################################
 
+# UltiSnips Imports:{{{1
 global !p
 
 # Don't know if this data needs to be here or in pythonx but I'm leaving it for the time being
@@ -28,7 +30,7 @@ endglobal
 
 # These snippets are kinda organized in the order of beginning and creating a new python module
 
-# Beginning of the module:
+# Beginning of the module:{{{1
 
 # Start out with a shebang
 snippet #! "Shebang header for python scripts" b
@@ -450,6 +452,9 @@ endsnippet
 
 # Class & Special Method Name Snippets:{{{1
 
+# A lot of these could easily be broken up into a lot more sections and there
+# would be no damage done
+
 snippet class "class with docstrings" b
 class ${1:MyClass}(${2:object}):
 
@@ -777,4 +782,13 @@ class Test${1:Class}(${2:unittest.TestCase}):
 	def test_${6:name}(self):
 		${7:${VISUAL:pass}}
 endsnippet
+
+
+# Return Snippets: {{{1
+# Found in the help docs. Say you forget to write return? Use this and you can
+# add it after the fact!!
+snippet "([^\s].*)\.return" "Return (postfix)" r
+return `!p snip.rv = match.group(1)`$0
+endsnippet
+
 # vim:ft=snippets:

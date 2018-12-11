@@ -5,7 +5,7 @@ extends snippets
 extends python
 
 #######################################################################
-#							Personal Snippets						  #
+#                           Personal Snippets                         #
 #######################################################################
 
 global !p
@@ -168,7 +168,7 @@ snippet cb "Code Block. Must have 1 blank line surrounding!" b
 
 .. code-block:: ${1:python:shell-session}
 
-	${2:${VISUAL:code}}
+    ${2:${VISUAL:code}}
 endsnippet
 
 # TODO you'll probably need to add the option for erasing whitespace if a tabstop
@@ -177,7 +177,7 @@ snippet codeb "code block duplicated" b
 
 .. code-block:: ${1:python}
 
-	${2:${VISUAL:code}}
+    ${2:${VISUAL:code}}
 endsnippet
 
 # shit are the backticks gonna need to be escaped? remember to look for that
@@ -231,72 +231,72 @@ endsnippet
 snippet sid "SideBar" b
 .. sidebar:: ${1:SideBar Title}
 
-	${2:${VISUAL:SideBar Content}}
+    ${2:${VISUAL:SideBar Content}}
 endsnippet
 
 # Directives
 # ------------
 
 snippet img "image link directive" b
-	.. |${0:alias}| image:: ${1:img}
+    .. |${0:alias}| image:: ${1:img}
 endsnippet
 
 snippet fig: "Figure directive" b
-	.. figure:: ${1:img}
-		:alt: ${0:alter text}
+.. figure:: ${1:img}
+    :alt: ${2:alter text}
 
-		$2
+$0
 endsnippet
 
 snippet cont "content directive" b
-	.. contents::
-		${0:content}
+.. contents::
+    ${0:content}
 endsnippet
 
 snippet coded "Code block directive." b
-	.. code:: ${1:type}
+.. code:: ${1:type}
 
-		${0:write some code}
+    ${0:write some code}
 endsnippet
 
 snippet tip "Tips or anyone in need of a directive!" b
-	.. tip::
-		${0:Tip for anyone having trouble.}
+.. tip::
+    ${0:Tip for anyone having trouble.}
 endsnippet
 
 snippet note "Take note of this directive over here ;)" b
-	.. note::
-		${0:Take note of the fact that}
+.. note::
+    ${0:Take note of the fact that}
 endsnippet
 
 snippet warn "Warning directive" b
-	.. warning::
-		${0:Warning:}
+.. warning::
+    ${0:Warning:}
 endsnippet
 
 snippet important "Important directive" b
-	.. important::
-		${0:Important notice:}
+.. important::
+    ${0:Important notice:}
 endsnippet
 
 snippet att "Attention directive" b
-	.. attention::
-		${0:Attention!}
+.. attention::
+    ${0:Attention!}
 endsnippet
 
 snippet dan "Danger directive" b
-	.. danger::
-		${0:Danger:}
+.. danger::
+    ${0:Danger:}
 endsnippet
 
 snippet err "Error directive" b
-	.. error::
-		${0:Error:}
+.. error::
+    ${0:Error:}
 endsnippet
 
 snippet cau "Caution directive" b
-	.. caution::
-		${0:Take precaution with:}
+.. caution::
+    ${0:Take precaution with:}
 endsnippet
 
 # Fixed whitespace with qq
@@ -340,10 +340,10 @@ $0
 endsnippet
 
 snippet toctree "directive_toctree" b
-	.. toctree::
-		:maxdepth: ${1:2}
+    .. toctree::
+        :maxdepth: ${1:2}
 
-		${2:#:FILES}
+        ${2:#:FILES}
 endsnippet
 
 snippet part "Part" b
@@ -470,7 +470,7 @@ endsnippet
 snippet di "Directives" b
 .. $1`!p snip.rv=complete(t[1], DIRECTIVES)`:: $2
 
-	${3:${VISUAL:Content}}
+    ${3:${VISUAL:Content}}
 $0
 endsnippet
 
@@ -482,7 +482,7 @@ endsnippet
 snippet sa "Specific Admonitions" b
 .. $1`!p snip.rv =complete(t[1], SPECIFIC_ADMONITIONS)`::
 
-	${2:${VISUAL:Content}}
+    ${2:${VISUAL:Content}}
 
 $0
 endsnippet
@@ -514,13 +514,13 @@ endsnippet
 # Only for Nikola — Static Site Generator
 snippet chart "Pygal chart for Nikola" b
 .. chart:: $1`!p snip.rv=complete(t[1], CHART_TYPES)`
-	:title: '${2:Browser usage evolution (in %)}'
-	:x_labels: [${3:"2002", "2003", "2004", "2005", "2006", "2007"}]
+    :title: '${2:Browser usage evolution (in %)}'
+    :x_labels: [${3:"2002", "2003", "2004", "2005", "2006", "2007"}]
 
-	'Firefox', [None, None, 0, 16.6, 25, 31]
-	'Chrome',  [None, None, None, None, None, None]
-	'IE',      [85.8, 84.6, 84.7, 74.5, 66, 58.6]
-	'Others',  [14.2, 15.4, 15.3, 8.9, 9, 10.4]
+    'Firefox', [None, None, 0, 16.6, 25, 31]
+    'Chrome',  [None, None, None, None, None, None]
+    'IE',      [85.8, 84.6, 84.7, 74.5, 66, 58.6]
+    'Others',  [14.2, 15.4, 15.3, 8.9, 9, 10.4]
 $0
 endsnippet
 
