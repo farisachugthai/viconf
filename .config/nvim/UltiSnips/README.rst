@@ -1,3 +1,6 @@
+README
+======
+
 This directory contains the snippets for UltiSnips.
 
 .. _`UltiSnips`: https://github.com/sirver/ultisnips
@@ -44,35 +47,88 @@ We have a few options to choose from. They are as follows:
     ``snippet argprse`` and ``snippet argprser`` are in the description!
 
 
+Usage
+-----
+
+I want to go over a few things that initially confused me about UltiSnips, and
+how I managed to solve any problems I had with the plugin.
+
+Finding Your Snippets
+^^^^^^^^^^^^^^^^^^^^^
+
+Memorizing your snippet's names is awful. The vim-snippets repository has literally
+thousands of snippets in it, and the difference between expanding ``def`` and
+``deff`` can regularly be collosal. Therefore finding available snippets relatively
+quickly while not getting pulled out of a steady workflow is imperative.
+
+**FZF!**
+
+Make sure you have fzf.vim installed. I absolutely love this plugin and it's
+endless configurability.
+
+If you run `:Snippets` on the ex cmdline, FZF will create a window with a
+terminal that greps all snippets configured for the filetype.
+
+.. note::
+
+   I personally use Ag, the Silver-Searcher for the backend of FZF. It's substantially
+   faster and I've generally found it much more accessible than GNU Grep.
+
+FZF can also be configured to display a preview window peer at the exact snippet; in
+addition to the fact that it allows you to write a header! I'd advise throwing reminders
+to yourself for useful keybindings.
+
+If you need to extend the available snippets only one time, use ``UltiSnipsAddFileType``.
+
+For persistent changes use 'extends {filetype to be added}'
+
+Now let's look at a snippet.
+
+.. code-block:: snippet
+
+    snippet imp "import statement" b
+        import ${0:module}
+    endsnippet
+
+After typing imp<Tab>, our code will expand to the import expression. Straight
+forward enough right? Most editors offer snippet functionality so to avoid
+repeating anything that's already in the UltiSnips documentation, I'll gloss
+over this part.
+
+The API for UltiSnips is quite interesting, as it exposes
+:func:`UltiSnips#ListSnippets()`.
+
+This function displays what snippets you could expand to using a greedy
+search through your snippet files. As in, typing "doc" and then running
+:func:`UltiSnips#ListSnippets()` will display doc, docs, docstring if
+you have them defined. If you've defined the same word in different
+snippet files, (I.E. I have doc defined in most snippet files), then
+it will display:
+
+   1. (doc) description <File-Location>
+
+Which will indicate to you exactly which filetype it came from.
+
+Vim has spotty handling of the Alt or Meta key; however Neovim handles
+it quite gracefully. This leaves a full modifier key that has almost nothing
+bound to it, and as a result, I'd recommend binding it in your init.vim
+somewhat like this.
+
+.. code:: vimscript
+
+   inoremap <M-u> call UltiSnips#ListSnippets()<CR>
+
+M-u isn't bound to anything in insert mode; however,
+it is bound to delete a fairly large amount of text in normal mode.
+
+Be careful of that, and possibly disable it by remapping it to <nop>.
+
 Configuration
 ----------------
 
 After configuring ``g:UltiSnipsDirs`` and ``g:UltiSnipsDirectories`` as you would like,
 using the UltiSnipsEdit command should open the folder that your snippets
 are housed in.
-
-
-Usage
------
-
-Memorizing your snippet's names is awful so make sure you have fzf.vim installed
-and run `:Snippets` to see all snippets configured for the filetype.
-If you need to extend the available snippets for only 1 buffer use UltiSnipsAddFileType.
-
-For persistent changes use 'extends {filetype to be added}'
-
-Now let's look at a snippet.
-
-
-.. code-block:: python
-
-    snippet imp "import statement" b
-        import ${0:module}
-    endsnippet
-
-That b at the end is an option that means 'must be at the beginning of line'.
-
-There are a few places where it's invoked in the snippets, but unnecessarily
 
 From @SirVer himself.
 

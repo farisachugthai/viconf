@@ -1,10 +1,4 @@
-" Markdown.vim
+" markdown.vim
 "
-" Dude I just noticed this in the spacevim repo:
-" https://github.com/SpaceVim/vim-markdown/blob/master/syntax/markdown.vim
-"
-" Line 130:
-" syn match markdownError "\w\@<=_\w\@="
-" That's probably a pretty standard LOC AND it's defines _ as an error!!!!! Dude we need to disable
-" that because it drives me FUCKING NUTS. Idk what we need to do to check it {whether we run
-" syn match or what we have to do. But we'll figure it out because it's driving me crazy.
+" because markdown syntax file calls something_like_this an error and it drives me crazy
+highlight! link markdownError markdownText

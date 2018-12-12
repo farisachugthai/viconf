@@ -1,3 +1,4 @@
+Atlassian
 Autocompletion
 Awh
 BufEnter
@@ -9,6 +10,7 @@ CTRL
 Chainmap
 Chugthai
 ColorColumn
+Compiler
 Conda
 Ctrl
 DDG
@@ -47,6 +49,7 @@ GitHub
 Gitignore
 Google
 Gruvbox
+HMAC
 Hettinger
 IPython
 IPython's
@@ -96,6 +99,7 @@ TODO
 Tagbar
 Termux
 Termux's
+TestCase
 Todo
 USBs
 Ubuntu
@@ -110,6 +114,7 @@ Vimrc
 Vimwiki's
 Vundle
 Win10
+Win32
 X11
 XDG
 XKB
@@ -475,6 +480,7 @@ tabview
 tcp
 tcpdump
 termux
+testcase
 texting
 tldr
 tmp
@@ -557,3 +563,4 @@ youtube
 zcat
 zenburn
 zim
+tabstop

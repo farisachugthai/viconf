@@ -1,32 +1,100 @@
-# Markdown Snippets
+#######################################################################
+#                         # Markdown Snippets                         #
+#######################################################################
 
-# Personal
+################
+#  # Personal  #
+################
 
-# Template for cheatsheets
-
+# TODO: Make a python function. Visual var should be snip.fn
 snippet cheat "Cheatsheet template"
-# ${VISUAL:1}
+# ${VISUAL}
 
 ## personal
 
 ${0:your notes}
 
-## ${2:tldr}
+${1:## cheat}
 
-$3
+${2:## tldr}
 
-## ${4:cheat}
+${3:## eg}
 
-$5
-
-## ${6:eg}
-
-$7
-
+${4:## man}
 endsnippet
 
-# UltiSnips
-# ============
+# Here's the src:
+# https://daringfireball.net/projects/markdown/syntax#link
+snippet link "A link"
+[${1:displayedtext}](${2:URL})
+endsnippet
+
+snippet linktitle "Inline link with a title" b
+[${1:displayedtext}](${2:URL} "{3:Optional title}")
+endsnippet
+
+snippet rel "Relative path in a link" b
+[${1:text}(${VISUAL:/path/to/link})
+endsnippet
+
+
+#######################################################################
+#                             # SnipMate                              #
+#######################################################################
+
+
+snippet ```
+	\`\`\`${1}
+	${0:${VISUAL}}
+	\`\`\`
+endsnippet
+
+# Language.
+snippet ```l
+	\`\`\`${1:language}
+	${2:code}
+	\`\`\`
+endsnippet
+
+snippet **
+	**${1:bold}**
+endsnippet
+
+snippet __
+	__${1:bold}__
+endsnippet
+
+snippet <
+	<https://${1:url}>
+endsnippet
+
+# wait do these work?
+
+# snippet codeblock-short
+# 	{% codeblock %}
+# 	${0:code_snippet}
+# 	{% endcodeblock %}
+
+# snippet codeblock-full
+# 	{% codeblock ${1:title} lang:${2:language} ${3:URL} ${4:link_text} %}
+# 	${0:code_snippet}
+# 	{% endcodeblock %}
+
+# snippet gist-full
+# 	{% gist ${1:gist_id} ${0:filename} %}
+
+# snippet gist-short
+# 	{% gist ${0:gist_id} %}
+
+# snippet img
+# 	{% img ${1:class} ${2:URL} ${3:width} ${4:height} ${5:title_text} ${0:alt_text} %}
+
+# snippet youtube
+# 	{% youtube ${0:video_id} %}
+
+#######################################################################
+#                             # UltiSnips                             #
+#######################################################################
 
 global !p
 def create_table(snip):
@@ -55,26 +123,29 @@ endglobal
 ###########################
 
 # TODO: I thought these were header markers?
-snippet sec "Section" b
+snippet h1 "ATX Section" b
 # ${1:Section Name} #
 endsnippet
 
-snippet ssec "Sub Section" b
+snippet h2 "ATX Sub Section" b
 ## ${1:Section Name} ##
 endsnippet
 
-snippet sssec "SubSub Section" b
+snippet h3 "ATX SubSub Section" b
 ### ${1:Section Name} ###
 endsnippet
 
-snippet par "Paragraph" b
+snippet h4 "ATX h4: Paragraph" b
 #### ${1:Paragraph Name} ####
 endsnippet
 
-snippet spar "Paragraph" b
+snippet h5 "ATX h5: paragraph" b
 ##### ${1:Paragraph Name} #####
 endsnippet
 
+snippet h6 "ATX h6: paragraph" b
+###### ${1:Paragraph Name} ######
+endsnippet
 ###################
 # Text formatting #
 ###################
@@ -87,6 +158,10 @@ snippet italics "italics"
 *${1:${VISUAL}}*
 endsnippet
 
+snippet _ "italics"
+_${1:${VISUAL}}_$0
+endsnippet
+
 snippet ** "bold"
 **${1:${VISUAL}}**
 endsnippet
@@ -95,28 +170,63 @@ snippet bold "bold"
 **${1:${VISUAL}}**
 endsnippet
 
-snippet *** "bold italics"
-***${1:${VISUAL}}***
+snippet __ "bold"
+__${1:${VISUAL}}__$0
 endsnippet
 
-snippet bolditalics "bold italics"
-***${1:${VISUAL}}***
+snippet *** "bold italics"
+***${1:${VISUAL}}***$0
 endsnippet
+
+###########
+#  Links  #
+###########
+
+snippet link "More fleshed out than my link. Link to something"
+[${1:${VISUAL:Text}}](${3:http://${2:www.url.com}})$0
+endsnippet
+
+snippet < "Links"
+<${1:https://${VISUAL:2}}>
+endsnippet
+
+
+snippet linktitle "Inline link with a title" b
+[${1:displayedtext}](${2:URL} "{3:Optional title}")
+endsnippet
+
+snippet rel "Relative path in a link" b
+[${1:text}(${VISUAL:/path/to/link})
+endsnippet
+
 
 ################
 # Common stuff #
 ################
 
-snippet link "URL with descriptive text. Better for articles."
-[${1:${VISUAL:Text}}](${3:https://${2:www.url.com}})
-endsnippet
-
-snippet link "Exposed URL. Good for references or bibliographies."
-<${1:https://${VISUAL:2}}>
-endsnippet
-
 snippet img "Image"
 ![${1:pic alt}](${2:path}${3/.+/ "/}${3:opt title}${3/.+/"/})
+endsnippet
+
+# So alledgedly according to:
+# <https://help.github.com/articles/adding-images-to-wikis/#linking-to-images-in-a-repository>
+# You can link to an image in a repository on GitHub by copying the URL in your
+# browser and using that as the path to the image. For example, embedding an
+# image in your wiki using Markdown might look like this:
+snippet imgGH "Embed an image using GitHub flavored Markdown."
+[[${VISUAL:${1:'https://github.com/username/repository/blob/master/img/octocat.png'}}|alt=${2:'octocat'}]]
+$0
+endsnippet
+
+snippet ilc "Inline Code" i
+\`$1\`$0
+endsnippet
+
+snippet code "Codeblock" b
+\`\`\`
+$1
+\`\`\`
+$0
 endsnippet
 
 snippet backtick "Inline code" i

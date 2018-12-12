@@ -1,8 +1,15 @@
 # TODO
 
-## To get nvim and vim synced up
+**Suggestion**
 
-*Motivation:*
+Dec 02, 2018:
+
+Figure out if you can add a git hook that checks that for every time a new
+file is committed to ./.config/nvim/ that one is also added to ./.vim
+
+Until I figure out how to get nvim set up as my git difftool, I have to maintain vim.
+
+## colors
 
 1. Unfortunately, nvim periodically crashes. I'm not 100% sure why that is
    but until that's completely resolved, I need to have a comfortable fallback
@@ -19,11 +26,6 @@ Generally these are non-trivial differences as well.
 
 Also you're going to want to run :Glog in .config/nvim/UltiSnips/rst.snippets
 Because I'm thinking that I mindlessly checked out the version from Termux.
-
-Dec 01, 2018: dude i don't know what you did but i think you probably
-really boinked the rst.snippets.
-
-
 The problem is that I probably added a couple good snippets in there, and by
 checking it out from a different branch I may have lost them. So look at the
 historical versions you have and make sure you didn't do that.
@@ -31,7 +33,6 @@ historical versions you have and make sure you didn't do that.
 Don't checkout sh.snippets either I have a bunch of snippets that need
 descriptions but otherwise look pretty good and need to get moved over
 to other branches as well.
-
 
 ## Get spell checking set up right
 

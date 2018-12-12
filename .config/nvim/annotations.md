@@ -76,23 +76,43 @@ From: <https://github.com/rafi/vim-config/blob/master/config/terminal.vim#L39>
 Typically don't like working with escape sequences.
 Gotta admit that's a lot smarter than what i'd come up with.
 
-
-" Environment: {{{ 2
-
-Doesn't work.
+Now here are some functions that don't work.
 
 ```viml
-" Let's setup all the global vars we need. Will utilize to ensure consistency
+let s:termux = exists('$PREFIX') && has('unix')
+let s:ubuntu = !exists('$PREFIX') && has('unix')
+let s:windows = has('win32') || has('win64')
 
-let s:termux = exists('$PREFIX')
-let s:ubuntu = !exists('$PREFIX') && has('unix')  " syntax?
+" So what I think my problem was is that I have these variables but there's
+" no point at which they're initialized. Let's write a few funcs
+" function! is#termux() abort
+"     return s:termux
+" endfunction
+
+" function! is#ubuntu() abort
+"     return s:ubuntu
+" endfunction
+
+" function! is#windows() abort
+"     return s:windows
+" endfunction
+" }}}
 ```
 
-Just pulled this off of the vimrc. The one above is init.vim.
-Both from laptop branch not termux. Amazingly there's different
-attempts over there too.
+### Sourcing configs for Win32
 
-" Nvim_OS: {{{ 2
+Also doesn't work. Still wanna continue with it later but don't want it
+cluttering my vimrc.
+
+```viml
+" let s:winrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/winrc'
+" if call(is#windows)         " doubt this is the right syntax but we're getting close
+"     if filereadable(s:winrc)
+"         exe 'so' s:winrc
+"     endif
+" endif
+```
+
 ```viml
 " Gonna start seriously consolidating vimrc and init.vim this is so hard
 " to maintain
@@ -117,15 +137,15 @@ endif
 ```
 " }}}
 
-" }}}
+
 
 ## Plugins
-
-" {{{
+------------
 
 ### UltiSnips
 
 #### Check if text is expandable
+
 
 6. FAQ                                                        *UltiSnips-FAQ*
 
@@ -152,65 +172,26 @@ here so as to note clutter up my init.vim.
 
 However that func needs a mapping because I'm never gonna remember it.
 
+
+### FZF and friends
+
+So between FZF, ag, rg and a ton of other things I've been trying to do a ton with configuring searches correctly.
+
 ### Language Client
 
-The only thing is the function LanguageClient_serverCommands()
+The only part of the API that was open at the time of writing was the function
+
+    `LanguageClient_serverCommands()`
 
 But it's a simple dictionary. If you want, run a whole mess of loops checking
 things you care about I.E. bash language server, pyls etc are executable.
-
 If those loops return True, add it's name to the dictionary. Then have the
 server run the commands we feed to it
-
 I'm not sure how I hadn't thought of this yet.
-
-### Neosnippets
-
-```viml
-" Neosnippets: {{{
-
-" Because I've found UltiSnips quite challenging to work with.
-let g:neosnippet#snippets_directory = [ '~/.config/nvim/neosnippets', '~/.local/share/nvim/plugged/vim-snippets/snippets' ]
-
-" From the help pages:
-" Plugin key-mappings.
-" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-k>     <Plug>(neosnippet_expand_target)
-
-" SuperTab like snippets' behavior.
-" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-imap <expr><TAB>
-\ pumvisible() ? "\<C-n>" :
-\ neosnippet#expandable_or_jumpable() ?
-\    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-
-" For conceal markers.
-if has('conceal')
-  set conceallevel=2 concealcursor=niv
-endif
-
-" This errors out.
-" Expand the completed snippet trigger by <CR>.
-" imap <expr><CR>
-" \ (pumvisible() && neosnippet#expandable()) ?
-" \<Plug>(neosnippet_expand)" : "\<CR>"
-
-" Enable snipMate compatibility feature.
-let g:neosnippet#enable_snipmate_compatibility = 1
-
-" Tell Neosnippet about the other snippets
-" }}}
-```
 
 ### Lightline
 
 Honestly keep this around because airline is pretty heavy on termux.
-
-BTW do the code blocks need viml or VimScript after the tick marks?
 
 ```viml
 " Lightline: {{{
@@ -226,11 +207,9 @@ let g:lightline = {
     \ },
     \ }
 
-
 " function! MyFiletype()
 "     return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
 " endfunction
-
 
 " function! MyFileformat()
 "     return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
@@ -240,9 +219,8 @@ let g:lightline = {
 " }}}
 ```
 
-### NerdCom
+### NERDTree
 
-TODO: Use :Glog to recover your old nerdcom code. Better do it soon if you're
-thinking about ever being able to use it again!
-
-" }}}
+Nothing happens if we open a directory to start nvim
+Or specifically netrw opens.
+TODO: one of the expressions in the loop needs to be prepended with silent

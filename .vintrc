@@ -1,8 +1,19 @@
+# Vint:
+
 cmdargs:
 # Checking more strictly
 severity: style_problem
-# Enable coloring 
+# Enable coloring
 color: true
-# Enable Neovim syntax
+
 env:
-neovim: true
+# Enable Neovim syntax
+    neovim: true
+
+policies:
+    ProhibitImplicitScopeVariable:
+        enabled: false
+    ProhibitAbbreviationOption:
+        enabled: false
+    ProhibitSetNoCompatible:
+        enabled: false
