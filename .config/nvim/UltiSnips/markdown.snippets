@@ -121,37 +121,41 @@ endglobal
 ###########################
 # Sections and Paragraphs #
 ###########################
-snippet sec "Section" b
+
+# TODO: I thought these were header markers?
+snippet h1 "ATX Section" b
 # ${1:Section Name} #
-$0
 endsnippet
 
-snippet ssec "Sub Section" b
+snippet h2 "ATX Sub Section" b
 ## ${1:Section Name} ##
-$0
 endsnippet
 
-snippet sssec "SubSub Section" b
+snippet h3 "ATX SubSub Section" b
 ### ${1:Section Name} ###
-$0
 endsnippet
 
-snippet par "Paragraph" b
+snippet h4 "ATX h4: Paragraph" b
 #### ${1:Paragraph Name} ####
-$0
 endsnippet
 
-snippet spar "Paragraph" b
+snippet h5 "ATX h5: paragraph" b
 ##### ${1:Paragraph Name} #####
-$0
 endsnippet
 
+snippet h6 "ATX h6: paragraph" b
+###### ${1:Paragraph Name} ######
+endsnippet
 ###################
 # Text formatting #
 ###################
 
 snippet * "italics"
-*${1:${VISUAL}}*$0
+*${1:${VISUAL}}*
+endsnippet
+
+snippet italics "italics"
+*${1:${VISUAL}}*
 endsnippet
 
 snippet _ "italics"
@@ -159,7 +163,11 @@ _${1:${VISUAL}}_$0
 endsnippet
 
 snippet ** "bold"
-**${1:${VISUAL}}**$0
+**${1:${VISUAL}}**
+endsnippet
+
+snippet bold "bold"
+**${1:${VISUAL}}**
 endsnippet
 
 snippet __ "bold"
@@ -170,18 +178,44 @@ snippet *** "bold italics"
 ***${1:${VISUAL}}***$0
 endsnippet
 
-
-################
-# Common stuff #
-################
-
+###########
+#  Links  #
+###########
 
 snippet link "More fleshed out than my link. Link to something"
 [${1:${VISUAL:Text}}](${3:http://${2:www.url.com}})$0
 endsnippet
 
+snippet < "Links"
+<${1:https://${VISUAL:2}}>
+endsnippet
+
+
+snippet linktitle "Inline link with a title" b
+[${1:displayedtext}](${2:URL} "{3:Optional title}")
+endsnippet
+
+snippet rel "Relative path in a link" b
+[${1:text}(${VISUAL:/path/to/link})
+endsnippet
+
+
+################
+# Common stuff #
+################
+
 snippet img "Image"
-![${1:pic alt}](${2:path}${3/.+/ "/}${3:opt title}${3/.+/"/})$0
+![${1:pic alt}](${2:path}${3/.+/ "/}${3:opt title}${3/.+/"/})
+endsnippet
+
+# So alledgedly according to:
+# <https://help.github.com/articles/adding-images-to-wikis/#linking-to-images-in-a-repository>
+# You can link to an image in a repository on GitHub by copying the URL in your
+# browser and using that as the path to the image. For example, embedding an
+# image in your wiki using Markdown might look like this:
+snippet imgGH "Embed an image using GitHub flavored Markdown."
+[[${VISUAL:${1:'https://github.com/username/repository/blob/master/img/octocat.png'}}|alt=${2:'octocat'}]]
+$0
 endsnippet
 
 snippet ilc "Inline Code" i
@@ -195,14 +229,24 @@ $1
 $0
 endsnippet
 
+snippet backtick "Inline code" i
+\`${VISUAL:1}\`
+endsnippet
+
+snippet fenced "Codeblock" b
+\`\`\`
+${VISUAL:1}
+\`\`\`
+endsnippet
+
 snippet refl "Reference Link"
-[${1:${VISUAL:Text}}][${2:id}]$0
+[${1:${VISUAL:Text}}][${2:id}]
 
 [$2]:${4:http://${3:www.url.com}} "${5:$4}"
 endsnippet
 
 snippet fnt "Footnote"
-[^${1:${VISUAL:Footnote}}]$0
+[^${1:${VISUAL:Footnote}}]
 
 [^$1]:${2:Text}
 endsnippet

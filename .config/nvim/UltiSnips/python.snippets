@@ -1,4 +1,5 @@
 # python.snippets
+# Vim: set foldmethod=marker:
 priority 70
 
 extends pandas
@@ -9,12 +10,7 @@ extends rst
 #                           Python Snippets                           #
 #######################################################################
 
-# From UltiSnips
-
-# The smart def and smart class snippets use a global option called
-# "g:ultisnips_python_style" which, if set to "doxygen" will use doxygen
-# style comments in docstrings.
-
+# UltiSnips Imports:{{{1
 global !p
 
 NORMAL  = 0x1
@@ -31,9 +27,10 @@ DOUBLE_QUOTES = '"'
 from snippets_helper import *
 
 endglobal
-# So I'm 100% sure I'm doing this wrong but don't know how or why
+
 # These snippets are kinda organized in the order of beginning and creating a new python module
-# Beginning of the module: {{{ 1
+
+# Beginning of the module:{{{1
 
 # Start out with a shebang
 snippet #! "Shebang header for python scripts" b
@@ -43,14 +40,15 @@ $0
 endsnippet
 
 # TODO Need to break this up
-# Also you should be able to easily through `snip.fn` in the filename there
-snippet docs "Module Docstring" b
+# Also you should be able to easily put `snip.fn` in the filename there
+snippet moddoc "Module Docstring" b
 """${1:'Give a one sentence summary in the imperative'}
+
 ${2:'Elaborate a little'}
-File: ${1:'foo.py'}
-Author: `g:snips_author`
-Email: `g:snips_email`
-Github: `g:snips_github`
+File: ${1: `!p fn`}
+Author: `!v g:snips_author`
+Email: `!v g:snips_email`
+Github: `!v g:snips_github`
 
 Attributes:
 
@@ -77,8 +75,8 @@ snippet pmdoc "pocoo style module doc string" b
 
 	${1:DESCRIPTION}
 
-	:copyright: (c) `date +%Y` by ${2:YOUR_NAME}.
-	:license: ${3:LICENSE_NAME}, see LICENSE for more details.
+	:copyright: (c) `date +%Y` by `!v g:snips_author`
+	:license: ${3:LICENSE_NAME}, see ${3} for more details.
 """
 $0
 endsnippet
@@ -101,119 +99,87 @@ ${1:${VISUAL:doc}}
 `!p snip.rv = triple_quotes(snip)`
 endsnippet
 
+# Imports:{{{1
+snippet imp "import statement" b
+import ${0:module}
+endsnippet
 
+snippet from "from package import module" b
+from ${1:package} import ${0:module}
+endsnippet
 
-########################################
-# Class & Special Method Name Snippets #
-########################################
+snippet ipy "Embed ipython into your application." b
+from IPython import embed; embed()
+endsnippet
 
-snippet class "class with docstrings" b
-class ${1:MyClass}(${2:object}):
+snippet pprint "Import and use pprint" b
+from pprint import pprint; pprint($1)
+endsnippet
 
-	`!p snip.rv = triple_quotes(snip)`${3:Docstring for $1. }`!p snip.rv = triple_quotes(snip)`
+snippet pdb "Import and use pdb" b
+import pdb; pdb.set_trace()
+endsnippet
 
-	def __init__(self$4):
-		`!p snip.rv = triple_quotes(snip)`${5:TODO: to be defined1.}`!p
-snip.rv = ""
-snip >> 2
+snippet ipdb "Import and use ipdb" b
+import ipdb; ipdb.set_trace()
+endsnippet
 
-args = get_args(t[4])
+# ifmain guards:{{{1
+# aka just more general snippets i wrote. not intended to follow the flow
+# of the previous ones above
+snippet doctest "Doctest fun and ifmain block" b
+def _test():
+	import doctest
+	doctest.testmod()
 
 write_docstring_args(args, snip)
 if args:
 	snip.rv += '\n' + snip.mkline('', indent='')
 	snip += '{0}'.format(triple_quotes(snip))
 
-write_init_body(args, t[2], snip)
-`
-		$0
+if __name__ == '__main__':
+	_test()
+endsnippet
+
+# Use our ifmain block to shield against stray global vars
+snippet ifmain "ifmain. optionally adds in function call to argparser" b
+if __name__ == `!p snip.rv = get_quoting_style(snip)`__main__`!p snip.rv = get_quoting_style(snip)`:
+	${1:_parse_arguments()}
+	${2:${VISUAL:main()}}
+endsnippet
+
+# Commonly used modules:{{{1
+snippet timestamp "Produce a timestamp"
+datetime.date.isoformat(datetime.datetime.now())
+endsnippet
+
+snippet dirname "Find the directory the script is in"
+os.path.dirname(os.path.realpath(__file__))
 endsnippet
 
 
-snippet slotclass "class with slots and docstrings" b
-class ${1:MyClass}(${2:object}):
-
-	`!p snip.rv = triple_quotes(snip)`${3:Docstring for $1. }`!p snip.rv = triple_quotes(snip)`
-`!p
-snip >> 1
-args = get_args(t[4])
-write_slots_args(args, snip)
-`
-
-	def __init__(self$4):
-		`!p snip.rv = triple_quotes(snip)`${5:TODO: to be defined.}`!p
-snip.rv = ""
-snip >> 2
-
-args = get_args(t[4])
-
-write_docstring_args(args, snip)
-if args:
-	snip.rv += '\n' + snip.mkline('', indent='')
-	snip += triple_quotes(snip)
-
-write_init_body(args, t[2], snip)
-`
-		$0
+snippet home "Why isn't there a better way." b
+home = os.path.expanduser("~")
 endsnippet
 
-##############
-# PROPERTIES #
-##############
-
-snippet roprop "Read Only Property" b
-@property
-def ${1:name}(self):
-	${2:return self._$1}$0
+snippet pr "Print something"
+print("${0:var}")
 endsnippet
 
-snippet rwprop "Read write property" b
-def ${1:name}():
-	`!p snip.rv = triple_quotes(snip) if t[2] else ''
-`${2:TODO: Docstring for $1.}`!p
-if t[2]:
-	snip >> 1
+# Loops:{{{1
 
-	style = get_style(snip)
-	snip.rv += '\n' + snip.mkline('', indent='')
-	snip += format_return(style)
-	snip.rv += '\n' + snip.mkline('', indent='')
-	snip += triple_quotes(snip)
-else:
-	snip.rv = ""`
-	def fget(self):
-		return self._$1$0
-
-	def fset(self, value):
-		self._$1 = value
-	return locals()
-
-$1 = property(**$1(), doc=$1.__doc__)
+snippet with "with expr - context manager" b
+with ${1:expr}`!p snip.rv = " as " if t[2] else ""`${2:var}:
+	${3:${VISUAL:pass}}
+$0
 endsnippet
 
-
-######################
-# Assertions & Tests #
-######################
-
-snippet ae "Assert equal" b
-self.assertEqual(${1:${VISUAL:first}},${2:second})
-endsnippet
-
-snippet at "Assert True" b
-self.assertTrue(${1:${VISUAL:expression}})
-endsnippet
-
-snippet af "Assert False" b
-self.assertFalse(${1:${VISUAL:expression}})
-endsnippet
-
-snippet aae "Assert almost equal" b
-self.assertAlmostEqual(${1:${VISUAL:first}},${2:second})
-endsnippet
-
-snippet ar "Assert raises" b
-self.assertRaises(${1:exception}, ${2:${VISUAL:func}}${3/.+/, /}${3:arguments})
+# However I don't know what that says so let's simplify
+# Let's also build this snippet around my most frequent use case
+# requests.get()
+snippet with "simpler context manager" b
+with ${1:open} ${2:filename}, ${3:'xt'} as ${4:f}:
+	${0:f.write(res.text)}
 endsnippet
 
 snippet an "Assert is None" b
@@ -239,10 +205,7 @@ class Test${1:Class}(${2:unittest.TestCase}):
 		${7:${VISUAL:pass}}
 endsnippet
 
-####################
-# If / Else / Elif #
-####################
-
+# if/elif/else:{{{2
 snippet if "If" b
 if ${1:condition}:
 	${2:${VISUAL:pass}}
@@ -264,7 +227,6 @@ else:
 	${5:pass}
 endsnippet
 
-
 snippet elif "You should use ifee but just in case" b
 elif ${1:condition}:
 	${2:pass}
@@ -275,10 +237,7 @@ else:
 	${1:pass}
 endsnippet
 
-##########################
-# Try / Except / Finally #
-##########################
-
+# try/except/finally:{{{2
 snippet try "Try / Except" b
 try:
 	${1:${VISUAL:pass}}
@@ -315,11 +274,6 @@ finally:
 	${7:pass}
 endsnippet
 
-
-######################################
-#  other assorted control structures #
-######################################
-
 snippet for "for loop" b
 for ${1:item} in ${2:iterable}:
 	${3:${VISUAL:pass}}
@@ -331,10 +285,7 @@ while ${1:condition}:
 	${0:pass}
 endsnippet
 
-##############
-#  argparse  #
-##############
-
+# argparse:{{{1
 
 snippet argparse "Function that utilizes argparse" b
 def _parse_arguments():
@@ -408,6 +359,10 @@ def parse_argument():
 			help = 'Set a switch to false'
 			)
 
+	parser.add_argument('--version', action = 'version',
+			version = '%(prog)s 1.0'
+			)
+
 	results = parser.parse_args()
 
 	return results
@@ -415,11 +370,7 @@ def parse_argument():
 	${0}
 endsnippet
 
-# Now let's try some comprehensions
-#######################################################################
-#                           Comprehensions                            #
-#######################################################################
-
+# Comprehensions:{{{1
 snippet lc "List comprehension" b
 [${1:value} for {2:value} in ${3:iterable}]$0
 endsnippet
@@ -456,6 +407,7 @@ endsnippet
 # in visual mode, tab over, then type usnip and tab again
 # it builds your snippet almost perfectly. Just fill in the triggerword
 # and the description and you're fucking golden
+
 snippet gci "Generator comprehension if filter" b
 (${1:key} for ${2:value} in ${3:iterable} if ${4:condition})$0
 endsnippet
@@ -486,16 +438,13 @@ endsnippet
 # \n or \r or \r\n
 
 
-####################################################################
-#  Snippets related to functions. Try them out and report back!    #
-####################################################################
-
+# Functions:{{{1
 snippet deff "function with default self arg" b
 def ${1:fname}(`!p snip.rv = vim.eval('indent(".") ? "self" : ""')`$2):
 	$0
 endsnippet
 
-snippet def "function with docstrings" b
+snippet def "function with docstrings. utilizes numpy Parameters." b
 def ${1:function}(`!p
 if snip.indent:
 	snip.rv = 'self' + (", " if len(t[2]) else "")`${2:arg1}):
@@ -522,6 +471,61 @@ def ${1:function}(${2:arg1}):
 	`!p snip.rv = triple_quotes(snip)`${4:TODO: Docstring for $1.}`!p
 write_function_docstring(t, snip) `
 	${5:${VISUAL:pass}}
+endsnippet
+
+# Class & Special Method Name Snippets:{{{1
+
+# A lot of these could easily be broken up into a lot more sections and there
+# would be no damage done
+
+snippet class "class with docstrings" b
+class ${1:MyClass}(${2:object}):
+
+	`!p snip.rv = triple_quotes(snip)`${3:Docstring for $1. }`!p snip.rv = triple_quotes(snip)`
+
+	def __init__(self$4):
+		`!p snip.rv = triple_quotes(snip)`${5:TODO: to be defined1.}`!p
+snip.rv = ""
+snip >> 2
+
+args = get_args(t[4])
+
+write_docstring_args(args, snip)
+if args:
+	snip.rv += '\n' + snip.mkline('', indent='')
+	snip += '{0}'.format(triple_quotes(snip))
+
+write_init_body(args, t[2], snip)
+`
+		$0
+endsnippet
+
+
+snippet slotclass "class with slots and docstrings" b
+class ${1:MyClass}(${2:object}):
+
+	`!p snip.rv = triple_quotes(snip)`${3:Docstring for $1. }`!p snip.rv = triple_quotes(snip)`
+`!p
+snip >> 1
+args = get_args(t[4])
+write_slots_args(args, snip)
+`
+
+	def __init__(self$4):
+		`!p snip.rv = triple_quotes(snip)`${5:TODO: to be defined.}`!p
+snip.rv = ""
+snip >> 2
+
+args = get_args(t[4])
+
+write_docstring_args(args, snip)
+if args:
+	snip.rv += '\n' + snip.mkline('', indent='')
+	snip += triple_quotes(snip)
+
+write_init_body(args, t[2], snip)
+`
+		$0
 endsnippet
 
 
@@ -725,5 +729,89 @@ snippet /(^|(?<=\W))\./ "self." r
 self.
 endsnippet
 
+# properties:{{{1
+
+snippet roprop "Read Only Property" b
+@property
+def ${1:name}(self):
+	${2:return self._$1}$0
+endsnippet
+
+snippet rwprop "Read write property" b
+def ${1:name}():
+	`!p snip.rv = triple_quotes(snip) if t[2] else ''
+`${2:TODO: Docstring for $1.}`!p
+if t[2]:
+	snip >> 1
+
+	style = get_style(snip)
+	snip.rv += '\n' + snip.mkline('', indent='')
+	snip += format_return(style)
+	snip.rv += '\n' + snip.mkline('', indent='')
+	snip += triple_quotes(snip)
+else:
+	snip.rv = ""`
+	def fget(self):
+		return self._$1$0
+
+	def fset(self, value):
+		self._$1 = value
+	return locals()
+
+$1 = property(**$1(), doc=$1.__doc__)
+endsnippet
+
+# Assertions & Tests:{{{1
+
+snippet ae "Assert equal" b
+self.assertEqual(${1:${VISUAL:first}},${2:second})
+endsnippet
+
+snippet at "Assert True" b
+self.assertTrue(${1:${VISUAL:expression}})
+endsnippet
+
+snippet af "Assert False" b
+self.assertFalse(${1:${VISUAL:expression}})
+endsnippet
+
+snippet aae "Assert almost equal" b
+self.assertAlmostEqual(${1:${VISUAL:first}},${2:second})
+endsnippet
+
+snippet ar "Assert raises" b
+self.assertRaises(${1:exception}, ${2:${VISUAL:func}}${3/.+/, /}${3:arguments})
+endsnippet
+
+snippet an "Assert is None" b
+self.assertIsNone(${1:${VISUAL:expression}})
+endsnippet
+
+snippet ann "Assert is not None" b
+self.assertIsNotNone(${1:${VISUAL:expression}})
+endsnippet
+
+snippet testcase "pyunit testcase" b
+class Test${1:Class}(${2:unittest.TestCase}):
+
+	`!p snip.rv = triple_quotes(snip)`${3:Test case docstring.}`!p snip.rv = triple_quotes(snip)`
+
+	def setUp(self):
+		${4:pass}
+
+	def tearDown(self):
+		${5:pass}
+
+	def test_${6:name}(self):
+		${7:${VISUAL:pass}}
+endsnippet
+
+
+# Return Snippets: {{{1
+# Found in the help docs. Say you forget to write return? Use this and you can
+# add it after the fact!!
+snippet "([^\s].*)\.return" "Return (postfix)" r
+return `!p snip.rv = match.group(1)`$0
+endsnippet
 
 # vim:ft=snippets:

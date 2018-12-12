@@ -1,11 +1,13 @@
 # rst.snippets
 # -*- coding: utf-8 -*-
+# vim:ft=rst:
+# Necessary because otherwise we don't handle tabs right.
 
 extends snippets
 extends python
 
 #######################################################################
-#							Personal Snippets						  #
+#                           Personal Snippets                         #
 #######################################################################
 
 global !p
@@ -138,13 +140,19 @@ def get_popular_code_type():
     return popular_type
 
 endglobal
+
 snippet title "Title with =" b
+${1:${VISUAL:Section name}}
+`!p snip.rv = rst_char_len(t[1])*'='`
+endsnippet
+
+snippet title= "Title with =" b
 `!p snip.rv = rst_char_len(t[1])*'='`
 ${1:${VISUAL:Section name}}
 `!p snip.rv = rst_char_len(t[1])*'='`
 endsnippet
 
-snippet title "Title with =" b
+snippet title- "Title with -" b
 `!p snip.rv = rst_char_len(t[1])*'-'`
 ${1:${VISUAL:Subsection name}}
 `!p snip.rv = rst_char_len(t[1])*'-'`
@@ -168,26 +176,21 @@ snippet cb "Code Block. Must have 1 blank line surrounding!" b
 
 .. code-block:: ${1:python:shell-session}
 
-	${2:${VISUAL:code}}
+   ${2:${VISUAL:code}}
 
 $0
 
 endsnippet
 
-snippet codeb "cb dedupe" b
+snippet codeb "cb duplicated" b
 
 .. code-block:: ${1:python}
 
 	${2:${VISUAL:code}}
-
-$0
-
 endsnippet
 
-# TODO:
-# shit are the backticks gonna need to be escaped? remember to look for that
 snippet code "Inline code" b
-``${VISUAL:1}``
+\`\`${VISUAL:1}\`\`
 endsnippet
 
 
@@ -245,11 +248,11 @@ snippet img "image link directive"
 	.. |${0:alias}| image:: ${1:img}
 endsnippet
 
-snippet fig:
-	.. figure:: ${1:img}
-		:alt: ${0:alter text}
+snippet fig: "Figure directive" b
+.. figure:: ${1:img}
+   :alt: ${2:alter text}
 
-		$2
+$0
 endsnippet
 
 snippet cont "content directive"
@@ -349,14 +352,6 @@ snippet toctree "directive_toctree" b
 
 		${2:#:FILES}
 endsnippet
-
-# Neosnippets didn't do a bad job though.
-###########################################################################
-#                              UltiSnips                                  #
-###########################################################################
-
-# so can i rewrite this whole thing using neovim?
-# how do you import vim in the repl? are you allowed to do that?
 
 snippet part "Part" b
 `!p snip.rv = rst_char_len(t[1])*'#'`
@@ -535,5 +530,3 @@ snippet chart "Pygal chart for Nikola" b
 	'Others',  [14.2, 15.4, 15.3, 8.9, 9, 10.4]
 $0
 endsnippet
-
-# vim:ft=snippets:

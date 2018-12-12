@@ -1,6 +1,11 @@
 " python.vim
 " Maintainer: Faris Chugthai
 
+" Options:{{{1
+
+setl linebreak
+setl textwidth=120
+
 " PEP Indenting:{{{1
 setlocal tabstop=4 shiftwidth=4 expandtab softtabstop=4
 let b:python_highlight_all = 1
@@ -39,11 +44,12 @@ let b:ale_linters = [ 'flake8', 'pycodestyle', 'pydocstyle'  ]
 let b:ale_linters_explicit= 1
 
 if isdirectory('~/virtualenvs')
-    let b:ale_virtualenv_dir_names+='~/virtualenvs'
+    let b:ale_virtualenv_dir_names += '~/virtualenvs'
 endif
 
 " This is tough because what if theres a project file? hm.
 let b:ale_python_flake8_options = '--config ~/.config/flake8'
+let b:ale_python_pycodestyle_options = '--config ~/.config/pycodestyle'
 
 " Python Language Server: {{{2
 let b:LanguageClient_selectionUI = 'fzf'

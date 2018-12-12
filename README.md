@@ -58,7 +58,6 @@ repository
 
 ## TODO
 
-
 - Modify syntax highlighting of markdown files.
   Underscores are in the SpellBad highlight group.
 - Review snippets and effectively use them while learning new languages
@@ -66,7 +65,7 @@ repository
 On the horizon, a 'nice to have' would be workspace/project integration.
 
 In addition, a more cleanly embedded IPython terminal would be phenomenal.
-An active Jupyter kernel and a notebook would be great
+An active Jupyter kernel and a notebook would be great.
 
 TODO:
 Add a screenshot section. Definitely one from Termux.
@@ -79,7 +78,7 @@ Many of the snippets were not authored by me. That credit goes to
 
 ## License
 
-This project is licensed under the MIT License. {Should we have more here?}
+This project is licensed under the MIT License.
 
 ## Acknowledgments
 

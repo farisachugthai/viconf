@@ -36,7 +36,7 @@ call deoplete#custom#source(
 " If dictionary is already sorted, no need to sort it again.
 call deoplete#custom#source( 'dictionary', 'sorters', [])
 
-" Jedi logging: {{{1
+" Jedi Logging: {{{1
 " Enable jedi source debug messages
 " call deoplete#custom#option('profile', v:true)
 " call deoplete#enable_logging('DEBUG', 'deoplete.log')

@@ -27,7 +27,7 @@ let g:fzf_action = {
   \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit' }
 
-" FZF Colors: {{{2
+" FZF Colors: {{{1
 " Customize FZF colors to match your color scheme
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
@@ -68,7 +68,7 @@ imap <c-x><c-f> <plug>(fzf-complete-path)
 imap <c-x><c-j> <plug>(fzf-complete-file-ag)
 imap <c-x><c-l> <plug>(fzf-complete-line)
 
-" Command local options:{{{2
+" Command Local Options: {{{2
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1
 " [[B]Commits] Customize the options used by 'git log':
@@ -79,7 +79,7 @@ let g:fzf_tags_command = 'ctags -R ./** && ctags -R --append ./.*'
 " Wait what happens if we hit those though?
 let g:fzf_commands_expect = 'alt-enter,ctrl-x'
 
-" Ag: {{{2
+" Ag: {{{1
 " :Ag  - Start fzf with hidden preview window that can be enabled with '?' key
 " :Ag! - Start fzf in fullscreen and display the preview window above
 command! -bang -nargs=* Ag
@@ -100,7 +100,7 @@ command! -bang -nargs=* Rg
 command! -bang -nargs=? -complete=dir Files
     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
-" Filtering:{{{2
+" Filtering: {{{2
 " Global line completion (not just open buffers. ripgrep required.)
 inoremap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
     \ 'prefix': '^.*$',
@@ -108,7 +108,7 @@ inoremap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
     \ 'options': '--ansi --delimiter : --nth 3..',
     \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }}))
 
-" FZF_Statusline: {{{2
+" FZF_Statusline: {{{1
 " Custom fzf statusline
 function! s:fzf_statusline()
     " Override statusline as you like
