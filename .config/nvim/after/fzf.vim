@@ -1,4 +1,4 @@
-" fzf.vim:
+" FZF Configuration:
 
 " FZF: {{{1
 if has('nvim') || has('gui_running')
@@ -27,7 +27,23 @@ let g:fzf_action = {
   \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit' }
 
-" FZF Colors:
+let g:fzf_history_dir = '~/.local/share/fzf-history'
+
+" TODO: Awh so many alernatives to just grep. if executable('rg') man!
+if executable('ag')
+    let &grepprg = 'ag --nogroup --nocolor --column --vimgrep'
+    set grepformat=%f%l%c%m
+elseif executable('rg')
+    let &grepprg = 'rg --vimgrep'
+    set grepformat=%f%l%c%m
+else
+  let &grepprg = 'grep -rn $* *'
+endif
+
+" Unfortunately the bang doesn't move to a new window. TODO
+command! -nargs=1 -bang -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
+
+" FZF Colors:{{{2
 " What are the default colors if you don't specify this?
 " **I think fzf.vim specifies this for us**
 let g:fzf_colors =
@@ -44,22 +60,6 @@ let g:fzf_colors =
   \ 'marker':  ['fg', 'Keyword'],
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
-
-let g:fzf_history_dir = '~/.local/share/fzf-history'
-
-" TODO: Awh so many alernatives to just grep. if executable('rg') man!
-if executable('ag')
-    let &grepprg = 'ag --nogroup --nocolor --column --vimgrep'
-    set grepformat=%f%l%c%m
-elseif executable('rg')
-    let &grepprg = 'rg --vimgrep'
-    set grepformat=%f%l%c%m
-else
-  let &grepprg = 'grep -rn $* *'
-endif
-
-" Unfortunately the bang doesn't move to a new window. TODO
-command! -nargs=1 -bang -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
 
 " FZF_VIM: {{{1
 " Specifically from that repo so I don't get stuff mixed up if I ever take one
@@ -101,7 +101,7 @@ command! -bang -nargs=* Rg
 command! -bang -nargs=? -complete=dir Files
     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
-" Filtering: {{{1
+" Global Line Completion: {{{2
 " Global line completion (not just open buffers. ripgrep required.)
 inoremap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
     \ 'prefix': '^.*$',

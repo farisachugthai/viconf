@@ -1,5 +1,13 @@
 # TODO
 
+- Review snippets and effectively use them while learning new languages
+
+On the horizon, a 'nice to have' would be workspace/project integration.
+
+In addition, a more cleanly embedded IPython terminal would be phenomenal.
+An active Jupyter kernel and a notebook would be great.
+
+
 **Suggestion**
 
 Dec 02, 2018:
@@ -48,48 +56,6 @@ with the spell files in ./hunspell/
 Keep in mind that if you're manually working with a .add spellfile, that you
 can run :sort and alphabetize all the words in the file!
 
-And after that...
-
-## Get ftplugins set up a little more cleanly
-
-Largely a product of still struggling with optimizing settings with respect to
-the sequence of elements in 'runtimepath'.
-
-Distinguishing what goes in your ftplugins and your general files.
-
-Whether to put ftplugins in .config/nvim/ftplugin, .config/nvim/after/ftplugin
-.local/share/nvim/site/ftplugin or .local/share/nvim/site/after/ftplugin
-
-### Nov 21, 2018
-
-Well I figured at least part of that question out. The site dirs are for packages,
-meaning groups of plugins. Don't worry about those.
-
-Ftplugin should be used to totally override the built-in ftplugin. You either
-have to be THAT discontent with it, or simply copy and paste it and then
-add your own modifications in.
-
-However after/ftplugin works better for that. As a result, we won't put the
-usual ftplugin guard in there. However, we should do something to ensure
-that buffers of a different filetype don't source everything in after/ftplugin.
-
-For example, let's say we were in after/ftplugin/gitcommit.vim
-
-Something like this pseudo code would be perfect:
-
-`if ft != None && ft != gitcommit | finish | endif`
-
-Then put that in everything in that dir.
-
-Similar thing with after/syntax. We also have a fair number of files in syntax/
-
-We should probably set up some kind of guard so that it doesn't source a dozen
-times.
-
-And how does sourcing ftdetect work? Because everything in my ftdetect always
-shows up in `:scriptnames`.
-
-Need to see how $VIMRUNTIME implements this.
 
 ## Better autocomplete
 

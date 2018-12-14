@@ -7,6 +7,23 @@ let g:snips_email = 'farischugthai@gmail.com'
 let g:snips_github = 'https://github.com/farisachugthai'
 
 " Vim Plug: {{{1
+"
+" Plug Check:{{{2
+" Shout out Justinmk! Never wanted to go through a full check for vim-plug
+" since it's there 99% of the time but this is a real smart workaround
+" https://github.com/justinmk/config/blob/291ec0ae12b0b4b35b4cf9315f1878db00b780ec/.config/nvim/init.vim#L12
+let s:plugins = filereadable(expand("~/.config/nvim/autoload/plug.vim", 1))
+let s:plugins_extra = s:plugins
+
+if !s:plugins
+  fun! InstallPlug() "bootstrap plug.vim on new systems
+    silent call mkdir(expand('~/.config/nvim/autoload', 1), 'p')
+    exe '!curl -fLo '.expand("~/.config/nvim/autoload/plug.vim", 1)
+      \ .' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  endfun
+endif
+
+" General Plugins: {{{2
 call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'junegunn/vim-plug'        " plugception
@@ -21,7 +38,7 @@ Plug 'tpope/vim-commentary'         " Lighter version of NERDCom
 Plug 'w0rp/ale'
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',
     \ 'do': 'bash install.sh' }
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips'
 Plug 'vim-airline/vim-airline'
 Plug 'edkolev/tmuxline.vim'
 Plug 'christoomey/vim-tmux-navigator'
@@ -328,19 +345,22 @@ nnoremap <Leader>* <Plug>(ale_go_to_reference)
 nnoremap <Leader>a :ALEInfo<CR>
 
 " Fugitive: {{{2
-nnoremap <silent> <Leader>gb :Gblame<CR>
-nnoremap <silent> <Leader>gc :Gcommit<CR>
-nnoremap <silent> <Leader>gd :Gdiff<CR>
-nnoremap <silent> <Leader>ge :Gedit<CR>
-nnoremap <silent> <Leader>gE :Gedit<Space>
-nnoremap <silent> <Leader>gl :Glog<CR>
-nnoremap <silent> <Leader>gq :Gwq<CR>
-nnoremap <silent> <Leader>gQ :Gwq!<CR>
-nnoremap <silent> <Leader>gr :Gread<CR>
-nnoremap <silent> <Leader>gR :Gread<Space>
-nnoremap <silent> <Leader>gs :Gstatus<CR>
-nnoremap <silent> <Leader>gw :Gwrite<CR>
-nnoremap <silent> <Leader>gW :Gwrite!<CR>
+nnoremap <silent> <Leader>gb   :Gblame<CR>
+nnoremap <silent> <Leader>gc   :Gcommit<CR>
+" Curious if this is gonna work or not
+cnoremap <silent> gch Git checkout<Space>
+nnoremap <silent> <Leader>gd   :Gdiff<CR>
+nnoremap <silent> <Leader>ge   :Gedit<CR>
+nnoremap <silent> <Leader>gE   :Gedit<Space>
+nnoremap <silent> <Leader>gl   :Glog<CR>
+nnoremap <silent> <Leader>gq   :Gwq<CR>
+nnoremap <silent> <Leader>gQ   :Gwq!<CR>
+nnoremap <silent> <Leader>gr   :Gread<CR>
+nnoremap <silent> <Leader>gR   :Gread<Space>
+nnoremap <silent> <Leader>gs   :Gstatus<CR>
+nnoremap <silent> <Leader>gst  :Git diff --stat<CR>
+nnoremap <silent> <Leader>gw   :Gwrite<CR>
+nnoremap <silent> <Leader>gW   :Gwrite!<CR>
 
 " Python Language Server: {{{2
 function! LC_maps()
@@ -397,6 +417,7 @@ let g:loaded_logiPat           = 1
 " Let's see if this speeds things up because I've never used most of them
 
 " Plugins: {{{1
+
 " Vim_Plug: {{{
 let g:plug_window = 'tabe'
 
@@ -679,7 +700,7 @@ command! HL call <SID>hl()
 
 " Rename:{{{2
 " :he map line 1454. How have i never noticed this isn't a feature???
-com -nargs=1 -bang -complete=file Rename f <args>|w<bang>
+command -nargs=1 -bang -complete=file Rename f <args>|w<bang>
 
 " UltiSnips: {{{2
 
@@ -699,8 +720,8 @@ function! GetAllSnippets()
   endfor
   return list
 endfunction
-
 " Expandable:{{{3
+
 " TODO: Come up with a mapping for it. Also what is E746
 " Go to the annotations for an explanation of this function.
 " function UltiSnips#IsExpandable()
@@ -711,7 +732,16 @@ endfunction
 "         \ )
 " endfunction
 
+" LanguageClient Check:{{{2
+" Check if the LanguageClient is running.
+function! s:lc_check()
+  let s:lc_Check = LanguageClient#serverStatus()
+  echo s:lc_Check
+endfunction
+command! LCS call <SID>lc_check()
+
 " Colorscheme: {{{1
+
 function! s:gruvbox()
     set background=dark
     let g:gruvbox_contrast_dark = 'hard'
