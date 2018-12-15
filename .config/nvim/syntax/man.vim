@@ -16,11 +16,6 @@ if exists("b:current_syntax")
   finish
 endif
 
-let s:cpo_save = &cpo
-set cpo&vim
-
-highlight manSectionHeading guifg='LightCyan'
-
 " However I'm seriously considering reading in the vimruntime one and
 " rewriting it. Actually
 
@@ -100,6 +95,3 @@ endif
 execute 'syntax match manFooter display "^\%'.line('$').'l.*$"'
 
 let b:current_syntax = 'man'
-
-let &cpo = s:save_cpo
-unlet s:save_cpo

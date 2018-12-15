@@ -23,20 +23,6 @@ ${3:## eg}
 ${4:## man}
 endsnippet
 
-# Here's the src:
-# https://daringfireball.net/projects/markdown/syntax#link
-snippet link "A link"
-[${1:displayedtext}](${2:URL})
-endsnippet
-
-snippet linktitle "Inline link with a title" b
-[${1:displayedtext}](${2:URL} "{3:Optional title}")
-endsnippet
-
-snippet rel "Relative path in a link" b
-[${1:text}(${VISUAL:/path/to/link})
-endsnippet
-
 
 #######################################################################
 #                             # SnipMate                              #
@@ -146,6 +132,7 @@ endsnippet
 snippet h6 "ATX h6: paragraph" b
 ###### ${1:Paragraph Name} ######
 endsnippet
+
 ###################
 # Text formatting #
 ###################
@@ -196,6 +183,20 @@ snippet linktitle "Inline link with a title" b
 endsnippet
 
 snippet rel "Relative path in a link" b
+[${1:text}(${VISUAL:/path/to/link})
+endsnippet
+
+# Here's the src:
+# https://daringfireball.net/projects/markdown/syntax#link
+snippet link "A link"
+[${1:displayedtext}](${2:URL})
+endsnippet
+
+snippet linktitle "Inline link with a title" b
+[${1:displayedtext}](${2:URL} "${3:Optional title}")
+endsnippet
+
+snippet rel "Relative path in a link. Can be used to link to a file in a repo" b
 [${1:text}(${VISUAL:/path/to/link})
 endsnippet
 

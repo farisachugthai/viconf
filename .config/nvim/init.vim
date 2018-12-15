@@ -39,6 +39,9 @@ Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3']}
 Plug 'fszymanski/deoplete-emoji'
 Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
+
+Plug 'gu-fan/riv.vim'
+Plug 'Rykka/InstantRst'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 
@@ -224,7 +227,9 @@ set lazyredraw
 set browsedir="buffer"                  " which directory is used for the file browser
 
 setlocal tabstop=4 shiftwidth=4 expandtab softtabstop=4
+
 " Mappings: {{{1
+
 " Window_Buf_Tab_Mappings: {{{2
 
 " Navigate windows more easily
@@ -273,6 +278,9 @@ xnoremap > >gv
 
 " Switch CWD to the directory of the open buffer
 nnoremap <Leader>cd :cd %:p:h<CR>:pwd<CR>
+
+" Switch NERDTree root to dir of currently focused window.
+nnoremap <Leader>ncd :NERDTreeCWD
 
 " I use this command constantly
 nnoremap <Leader>sn :Snippets<CR>
@@ -407,6 +415,7 @@ let g:loaded_logiPat           = 1
 
 " Remaining Plugins: {{{1
 " Vim_Plug: {{{2
+" Don't forget to access the dict plugs by evaluating
 let g:plug_window = 'tabe'
 
 " NERDTree: {{{2
