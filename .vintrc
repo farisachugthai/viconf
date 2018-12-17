@@ -1,13 +1,19 @@
-# Vint:
+" ============================================================================
+    " File: .vintrc
+    " Author: Faris Chugthai
+    " Description: Linter for vimscript. Written in python
+    " URL: https://github.com/Kuniwak/vint
+    " Last Modified: December 14, 2018
+" ============================================================================
 
 cmdargs:
-# Checking more strictly
-severity: style_problem
-# Enable coloring
-color: true
+    # Checking more strictly
+    severity: style_problem
+    # Enable coloring
+    color: true
 
 env:
-# Enable Neovim syntax
+    # Enable Neovim syntax
     neovim: true
 
 policies:

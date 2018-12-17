@@ -1,1 +1,1 @@
-../.config/nvim/pythonx/snippets_helper.py
+../../.config/nvim/pythonx/snippets_helper.py

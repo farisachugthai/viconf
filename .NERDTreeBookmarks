@@ -4,11 +4,12 @@ deoplete ~/.local/share/nvim/plugged/deoplete.nvim/rplugin/python3/deoplete
 dotfiles ~/projects/dotfiles/unix
 jedi-docs ~/.local/share/nvim/plugged/jedi-vim/pythonx/jedi/docs/docs
 nvim ~/.config/nvim
+nvim-rtp /usr/share/nvim/runtime
 plugged ~/.local/share/nvim/plugged
-prefix /data/data/com.termux/files/usr
 py_tut ~/python/tutorials
 tutorials ~/Dropbox/python/tutorials
 utilities_py ~/projects/utilities/python
 viconf ~/projects/viconf/.config/nvim
+vim ~/.vim
 
-nvim-rtp /usr/share/nvim/runtime
+libref ~/Dropbox/python/official-python-docs/3.7.0/library
