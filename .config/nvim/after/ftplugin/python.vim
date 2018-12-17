@@ -2,7 +2,6 @@
 " Maintainer: Faris Chugthai
 
 " Options:{{{1
-
 setl linebreak
 setl textwidth=120
 
@@ -22,13 +21,9 @@ setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 " also let's know where the line needs to end visually but not invoke the
 " linters to react.
 setlocal colorcolumn=80,120
+" Dude the columns line was destroying nvim's redraw when you split tmux panes
 
-" This may be hard on termux but feels necessary.
-if &columns < 80
-    setlocal columns=80
-endif
-
-" Autocommands: {{{1
+" Autocommands:{{{1
 " Highlight characters after 120 chars
 augroup vimrc_autocmds
     autocmd!
@@ -37,11 +32,11 @@ augroup vimrc_autocmds
     autocmd FileType python set nowrap
 augroup END
 
-" Plugins: {{{1
+" Plugins:{{{1
 
-" ALE: {{{2
-let b:ale_linters = [ 'flake8', 'pycodestyle', 'pydocstyle'  ]
-let b:ale_linters_explicit= 1
+" ALE:{{{2
+let b:ale_linters = [ 'flake8', 'pycodestyle', 'pydocstyle' ]
+let b:ale_linters_explicit = 1
 
 if isdirectory('~/virtualenvs')
     let b:ale_virtualenv_dir_names += '~/virtualenvs'
@@ -51,5 +46,14 @@ endif
 let b:ale_python_flake8_options = '--config ~/.config/flake8'
 let b:ale_python_pycodestyle_options = '--config ~/.config/pycodestyle'
 
-" Python Language Server: {{{2
+" Python Language Server:{{{2
+" So don't kill the LangClient plugin just don't use pyls for now. way too
+" slow
+
+let b:LanguageClient_autoStart = 1
 let b:LanguageClient_selectionUI = 'fzf'
+" the mapping below clobbers your run *.py mapping
+nnoremap <F5> :call LanguageClient_contextMenu()<CR>
+" this isn't pulling up docs like i want
+nnoremap K :call LanguageClient_textDocument_hover()<CR>
+nnoremap gd :call LanguageClient_textDocument_definition()<CR>

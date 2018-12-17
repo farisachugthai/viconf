@@ -1,4 +1,4 @@
-" fzf.vim:
+" FZF Configuration:
 
 " FZF: {{{1
 if has('nvim') || has('gui_running')
@@ -27,8 +27,25 @@ let g:fzf_action = {
   \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit' }
 
-" FZF Colors: {{{1
-" Customize FZF colors to match your color scheme
+let g:fzf_history_dir = '~/.local/share/fzf-history'
+
+" TODO: Awh so many alernatives to just grep. if executable('rg') man!
+if executable('ag')
+    let &grepprg = 'ag --nogroup --nocolor --column --vimgrep'
+    set grepformat=%f%l%c%m
+elseif executable('rg')
+    let &grepprg = 'rg --vimgrep'
+    set grepformat=%f%l%c%m
+else
+  let &grepprg = 'grep -rn $* *'
+endif
+
+" Unfortunately the bang doesn't move to a new window. TODO
+command! -nargs=1 -bang -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
+
+" FZF Colors:{{{2
+" What are the default colors if you don't specify this?
+" **I think fzf.vim specifies this for us**
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
   \ 'bg':      ['bg', 'Normal'],
@@ -44,35 +61,19 @@ let g:fzf_colors =
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
 
-let g:fzf_history_dir = '~/.local/share/fzf-history'
-
-" TODO: So many things could be put here.
-if executable('ag')
-    let &grepprg = 'ag --nogroup --nocolor --column --vimgrep'
-    set grepformat=%f%l%c%m
-elseif executable('rg')
-    let &grepprg = 'rg --vimgrep'
-    set grepformat=%f%l%c%m
-else
-  let &grepprg = 'grep -rn $* *'
-endif
-
-" Opens matches in a split. Appending ! gives an error.
-" How do we fix that?
-command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
-
 " FZF_VIM: {{{1
+" Specifically from that repo so I don't get stuff mixed up if I ever take one
+" off or something
 " Insert mode completion:
 imap <c-x><c-k> <plug>(fzf-complete-word)
 imap <c-x><c-f> <plug>(fzf-complete-path)
 imap <c-x><c-j> <plug>(fzf-complete-file-ag)
-imap <c-x><c-l> <plug>(fzf-complete-line)
 
-" Command Local Options: {{{2
+" Command local options:
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1
 " [[B]Commits] Customize the options used by 'git log':
-let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
+let g:fzf_commits_log_options = '--graph --color=always --format="%c(auto)%h%d %s %c(black)%c(bold)%cr"'
 " [Tags] Command to generate tags file
 let g:fzf_tags_command = 'ctags -R ./** && ctags -R --append ./.*'
 " [Commands] --expect expression for directly executing the command
@@ -100,7 +101,7 @@ command! -bang -nargs=* Rg
 command! -bang -nargs=? -complete=dir Files
     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
-" Filtering: {{{2
+" Global Line Completion: {{{2
 " Global line completion (not just open buffers. ripgrep required.)
 inoremap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
     \ 'prefix': '^.*$',

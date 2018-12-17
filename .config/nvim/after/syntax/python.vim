@@ -6,33 +6,17 @@
 " Filenames:    *.py
 " Version:      3.3.6
 "
+"
+" Dec 02, 2018:
+" I don't remember why I thought to drop this here, but it's wildly different
+" than the standard nvim syntax file.
+"
+" However, I actually really enjoy
+"   A) the rst formatting. nice touch
+"   B)
 " Based on python.vim (from Vim 6.1 distribution)
 " by Neil Schemenauer <nas at python dot ca>
 "
-" Please use the following channels for reporting bugs, offering suggestions or
-" feedback:
-
-" - python.vim issue tracker: https://github.com/hdima/python-syntax/issues
-" - Email: Dmitry Vasiliev (dima at hlabs.org)
-" - Send a message or follow me for updates on Twitter: `@hdima
-"   <https://twitter.com/hdima>`__
-"
-" Contributors
-" ============
-"
-" List of the contributors in alphabetical order:
-"
-"   Andrea Riciputi
-"   Anton Butanaev
-"   Caleb Adamantine
-"   Elizabeth Myers
-"   Jeroen Ruigrok van der Werven
-"   John Eikenberry
-"   Marc Weber
-"   Pedro Algarvio
-"   pydave at GitHub
-"   Will Gray
-"   Yuri Habrusiev
 "
 " Options
 " =======
@@ -550,3 +534,4 @@ if version >= 508 || !exists("did_python_syn_inits")
 endif
 
 let b:current_syntax = "python"
+" vim:set sw=2 sts=2 ts=8 noet:

@@ -20,7 +20,6 @@ GOOGLE  = 0x4
 NUMPY   = 0x5
 JEDI    = 0x6
 
-
 SINGLE_QUOTES = "'"
 DOUBLE_QUOTES = '"'
 
@@ -42,33 +41,52 @@ endsnippet
 # TODO Need to break this up
 # Also you should be able to easily put `snip.fn` in the filename there
 snippet moddoc "Module Docstring" b
-"""${1:'Give a one sentence summary in the imperative'}
+"""${1:Give a one sentence summary in the imperative}
 
-${2:'Elaborate a little'}
-File: ${1: `!p fn`}
+${2:Elaborate a little}
+File: ${3:`!p snip.fn`}
 Author: `!v g:snips_author`
 Email: `!v g:snips_email`
 Github: `!v g:snips_github`
 
 Attributes:
 
-	module_level_variables (type): Explanation and give an inline docstring
-	immediately afterwards if possible
-
-(Usually examples go after the attributes)
+	${4:module_level_variables} (${5:type}): ${6:Explanation and give an inline docstring
+	immediately afterwards if possible}
 
 Example:
-	Any example of how to use this module goes here:: sh
 
-		$ python exampleofrst.py
+	${7:Any example of how to use this module goes here}:: ${8:sh}
 
-.. ${0:'any directives::'}
+		${9:$ python exampleofrst.py}
+
+.. ${10:'any directives::'}
+
+	${11:example text}
+
+$0
 """
+endsnippet
+
+snippet modattr "Expand only the attributes section of the module docstring snippet." b
+Attributes:
+
+	${1:module_level_variables} (${2:type}): ${3:Explanation and give an inline docstring
+	immediately afterwards if possible}
+$0
+endsnippet
+
+snippet modex "Expand only the examples section of the module docstring snippet." b
+Example:
+
+	${1:Any example of how to use this module goes here}:: ${2:sh}
+
+		${3:$ python exampleofrst.py}
+$0
 endsnippet
 
 # and if we didn't like that module docstring how about this one?
 snippet pmdoc "pocoo style module doc string" b
-# -*- coding: utf-8 -*-
 """
 	`!p snip.rv = get_dir_and_file_name(snip)`
 	`!p snip.rv = '~' * len(get_dir_and_file_name(snip))`
@@ -132,10 +150,6 @@ def _test():
 	import doctest
 	doctest.testmod()
 
-write_docstring_args(args, snip)
-if args:
-	snip.rv += '\n' + snip.mkline('', indent='')
-	snip += '{0}'.format(triple_quotes(snip))
 
 if __name__ == '__main__':
 	_test()
@@ -182,27 +196,18 @@ with ${1:open} ${2:filename}, ${3:'xt'} as ${4:f}:
 	${0:f.write(res.text)}
 endsnippet
 
-snippet an "Assert is None" b
-self.assertIsNone(${1:${VISUAL:expression}})
+snippet while "while loop" b
+while ${1:condition}:
+	${0:pass}
 endsnippet
 
-snippet ann "Assert is not None" b
-self.assertIsNotNone(${1:${VISUAL:expression}})
+snippet for "for loop" b
+for ${1:item} in ${2:iterable}:
+	${3:${VISUAL:pass}}
 endsnippet
 
-snippet testcase "pyunit testcase" b
-class Test${1:Class}(${2:unittest.TestCase}):
-
-	`!p snip.rv = triple_quotes(snip)`${3:Test case docstring.}`!p snip.rv = triple_quotes(snip)`
-
-	def setUp(self):
-		${4:pass}
-
-	def tearDown(self):
-		${5:pass}
-
-	def test_${6:name}(self):
-		${7:${VISUAL:pass}}
+snippet from "from package import module" b
+	from ${1:package} import ${0:module}
 endsnippet
 
 # if/elif/else:{{{2
@@ -274,20 +279,11 @@ finally:
 	${7:pass}
 endsnippet
 
-snippet for "for loop" b
-for ${1:item} in ${2:iterable}:
-	${3:${VISUAL:pass}}
-$0
-endsnippet
-
-snippet while "while loop" b
-while ${1:condition}:
-	${0:pass}
-endsnippet
-
 # argparse:{{{1
 
-snippet argparse "Function that utilizes argparse" b
+# not the most loqacoious i've ever been but it's better than not knowing
+# what the hell a snippet is because the description for "with" is "with"
+snippet argparse "Initialize ArgumentParser in def _parse_arguments" b
 def _parse_arguments():
 	parser = argparse.ArgumentParser(description=${1:__doc__})
 	return parser.parse_args()
@@ -310,7 +306,7 @@ snippet argpath "Add a pathlike object" b
 						type=${4:pathlib.Path}, help=${5:RTFM})
 endsnippet
 
-snippet argpv "argument for %(prog)s" b
+snippet argpv "argument for version = %(prog)s" b
 	parser.add_argument('--version', action = 'version',
 			version = '%(prog)s 1.0')
 endsnippet
@@ -484,7 +480,7 @@ class ${1:MyClass}(${2:object}):
 	`!p snip.rv = triple_quotes(snip)`${3:Docstring for $1. }`!p snip.rv = triple_quotes(snip)`
 
 	def __init__(self$4):
-		`!p snip.rv = triple_quotes(snip)`${5:TODO: to be defined1.}`!p
+		`!p snip.rv = triple_quotes(snip)`${5: {to be defined:$1.}}`!p
 snip.rv = ""
 snip >> 2
 

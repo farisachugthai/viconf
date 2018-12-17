@@ -17,7 +17,7 @@ modify anything in the future here's the original code I had
 "     \ : fzf#vim#with_preview('right:50%:hidden', '?'),
 "     \ <bang>0)
 
-" " similarly, we can apply it to fzf#vim#grep. to use ripgrep instead of ag:
+" similarly, we can apply it to fzf#vim#grep. to use ripgrep instead of ag:
 " command! -bang -nargs=* rg
 "     \ call fzf#vim#grep(
 "     \ 'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
@@ -25,7 +25,7 @@ modify anything in the future here's the original code I had
 "     \ : fzf#vim#with_preview('right:50%:hidden', '?'),
 "     \ <bang>0)
 
-" " likewise, files command with preview window
+" likewise, files command with preview window
 " command! -bang -nargs=? -complete=dir files
 "     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 ```
@@ -74,44 +74,34 @@ endif
 From: <https://github.com/rafi/vim-config/blob/master/config/terminal.vim#L39>
 
 Typically don't like working with escape sequences.
-Gotta admit that's a lot smarter than what i'd come up with.
+Gotta admit that's a lot smarter than what I'd come up with.
 
-Now here are some functions that don't work.
 
-```viml
-let s:termux = exists('$PREFIX') && has('unix')
-let s:ubuntu = !exists('$PREFIX') && has('unix')
-let s:windows = has('win32') || has('win64')
+" Environment: {{{ 2
 
-" So what I think my problem was is that I have these variables but there's
-" no point at which they're initialized. Let's write a few funcs
-" function! is#termux() abort
-"     return s:termux
-" endfunction
-
-" function! is#ubuntu() abort
-"     return s:ubuntu
-" endfunction
-
-" function! is#windows() abort
-"     return s:windows
-" endfunction
-" }}}
-```
-
-### Sourcing configs for Win32
-
-Also doesn't work. Still wanna continue with it later but don't want it
-cluttering my vimrc.
+Doesn't work.
 
 ```viml
+" Let's setup all the global vars we need. Will utilize to ensure consistency
+
+let s:termux = exists('$PREFIX')
+let s:ubuntu = !exists('$PREFIX') && has('unix')  " syntax?
+
+" Dec 01, 2018: This doesn't work either
 " let s:winrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/winrc'
 " if call(is#windows)         " doubt this is the right syntax but we're getting close
 "     if filereadable(s:winrc)
 "         exe 'so' s:winrc
 "     endif
 " endif
+
+
 ```
+
+Just pulled this off of the vimrc. The one above is init.vim.
+Both from laptop branch not termux. Amazingly there's different
+attempts over there too.
+
 
 ```viml
 " Gonna start seriously consolidating vimrc and init.vim this is so hard
@@ -135,17 +125,14 @@ else
     let s:OS = 'Linux'
 endif
 ```
+
 " }}}
 
-
-
 ## Plugins
-------------
 
 ### UltiSnips
 
 #### Check if text is expandable
-
 
 6. FAQ                                                        *UltiSnips-FAQ*
 
@@ -153,16 +140,17 @@ Q: Do I have to call UltiSnips#ExpandSnippet() to check if a snippet is
    expandable? Is there instead an analog of neosnippet#expandable?
 A: Yes there is, try
 
+```vim
   function UltiSnips#IsExpandable()
     return !empty(UltiSnips#SnippetsInCurrentScope())
   endfunction
-
+```
   Consider that UltiSnips#SnippetsInCurrentScope() will return all the
   snippets you have if you call it after a space character. If you want
   UltiSnips#IsExpandable() to return false when you call it after a space
   character use this a bit more complicated implementation:
 
-  function UltiSnips#IsExpandable()
+  `function UltiSnips#IsExpandable()`
 
 As notated by folds, go to All --> Remaining Plugins --> UltiSnips. Should be
 around line 700.
@@ -172,26 +160,53 @@ here so as to note clutter up my init.vim.
 
 However that func needs a mapping because I'm never gonna remember it.
 
+### Neosnippets
 
-### FZF and friends
+```viml
+" Neosnippets: {{{
 
-So between FZF, ag, rg and a ton of other things I've been trying to do a ton with configuring searches correctly.
+" Because I've found UltiSnips quite challenging to work with.
+let g:neosnippet#snippets_directory = [ '~/.config/nvim/neosnippets', '~/.local/share/nvim/plugged/vim-snippets/snippets' ]
 
-### Language Client
+" From the help pages:
+" Plugin key-mappings.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
 
-The only part of the API that was open at the time of writing was the function
+" SuperTab like snippets' behavior.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+imap <expr><TAB>
+\ pumvisible() ? "\<C-n>" :
+\ neosnippet#expandable_or_jumpable() ?
+\    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 
-    `LanguageClient_serverCommands()`
+" For conceal markers.
+if has('conceal')
+  set conceallevel=2 concealcursor=niv
+endif
 
-But it's a simple dictionary. If you want, run a whole mess of loops checking
-things you care about I.E. bash language server, pyls etc are executable.
-If those loops return True, add it's name to the dictionary. Then have the
-server run the commands we feed to it
-I'm not sure how I hadn't thought of this yet.
+" This errors out.
+" Expand the completed snippet trigger by <CR>.
+" imap <expr><CR>
+" \ (pumvisible() && neosnippet#expandable()) ?
+" \<Plug>(neosnippet_expand)" : "\<CR>"
+
+" Enable snipMate compatibility feature.
+let g:neosnippet#enable_snipmate_compatibility = 1
+
+" Tell Neosnippet about the other snippets
+" }}}
+```
 
 ### Lightline
 
 Honestly keep this around because airline is pretty heavy on termux.
+
+BTW do the code blocks need viml or VimScript after the tick marks?
 
 ```viml
 " Lightline: {{{
@@ -207,9 +222,11 @@ let g:lightline = {
     \ },
     \ }
 
+
 " function! MyFiletype()
 "     return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
 " endfunction
+
 
 " function! MyFileformat()
 "     return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
@@ -219,8 +236,20 @@ let g:lightline = {
 " }}}
 ```
 
-### NERDTree
+### NerdCom
 
-Nothing happens if we open a directory to start nvim
-Or specifically netrw opens.
-TODO: one of the expressions in the loop needs to be prepended with silent
+TODO: Use :Glog to recover your old nerdcom code. Better do it soon if you're
+thinking about ever being able to use it again!
+
+" **UNTESTED**:
+
+" just a thought i had. For any normal mode remaps you have, add the same
+" thing and prefix <Esc> to the RHS and boom!
+
+```vim
+if has('b:Tagbar')  " or any plugin
+    let g:tagbar_sort=0
+    inoremap <F3> <esc>:TagbarToggle<CR>
+    nnoremap <F3> :TagbarToggle<CR>
+endif
+```

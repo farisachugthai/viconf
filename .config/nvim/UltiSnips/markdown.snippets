@@ -37,11 +37,8 @@ snippet rel "Relative path in a link" b
 [${1:text}(${VISUAL:/path/to/link})
 endsnippet
 
-
-#######################################################################
-#                             # SnipMate                              #
-#######################################################################
-
+# SnipMate
+# -----------
 
 snippet ```
 	\`\`\`${1}
@@ -92,9 +89,8 @@ endsnippet
 # snippet youtube
 # 	{% youtube ${0:video_id} %}
 
-#######################################################################
-#                             # UltiSnips                             #
-#######################################################################
+# UltiSnips
+# ============
 
 global !p
 def create_table(snip):
@@ -146,6 +142,7 @@ endsnippet
 snippet h6 "ATX h6: paragraph" b
 ###### ${1:Paragraph Name} ######
 endsnippet
+
 ###################
 # Text formatting #
 ###################
@@ -178,18 +175,31 @@ snippet *** "bold italics"
 ***${1:${VISUAL}}***$0
 endsnippet
 
+snippet bolditalics "bold italics"
+***${1:${VISUAL}}***
+endsnippet
+
 ###########
 #  Links  #
 ###########
 
-snippet link "More fleshed out than my link. Link to something"
-[${1:${VISUAL:Text}}](${3:http://${2:www.url.com}})$0
+snippet link "URL with descriptive text. Better for articles."
+[${1:${VISUAL:Text}}](${3:https://${2:www.url.com}})
+endsnippet
+
+snippet link "Exposed URL. Good for references or bibliographies."
+<${1:https://${VISUAL:2}}>
 endsnippet
 
 snippet < "Links"
 <${1:https://${VISUAL:2}}>
 endsnippet
 
+# Here's the markdown "spec":
+# https://daringfireball.net/projects/markdown/syntax#link
+snippet link "A link"
+[${1:displayedtext}](${2:URL})
+endsnippet
 
 snippet linktitle "Inline link with a title" b
 [${1:displayedtext}](${2:URL} "{3:Optional title}")
@@ -198,7 +208,6 @@ endsnippet
 snippet rel "Relative path in a link" b
 [${1:text}(${VISUAL:/path/to/link})
 endsnippet
-
 
 ################
 # Common stuff #
@@ -228,7 +237,6 @@ $1
 \`\`\`
 $0
 endsnippet
-
 snippet backtick "Inline code" i
 \`${VISUAL:1}\`
 endsnippet

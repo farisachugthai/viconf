@@ -159,9 +159,6 @@ if __name__ == "__main__":
         pass
     else:
         sys.exit("Unfortunately your platform isn't supported yet. Sorry!")
-        # TODO: Should be as simple as function call with proper windows
-        # directory. In the future add an elif os[0] == 'nt' like explicitly
-        # mention by name so we still catch everything else in this else stmnt
 
     # now that we know we're on a supported OS parse the args
     args = _parse_arguments()
@@ -187,14 +184,10 @@ if __name__ == "__main__":
         requests_download(plug)
 
     # could also have done platform.machine. *shrugs*
-    # TODO: Download packages in a venv
+    # TODO: Download packages in a venv. Interestingly enough the PEP that
+    # introduced virtual environments might be your best bet here.
     if uname.machine == 'aarch64':
         termux_packages()
     # TODO: Every other machine you own haha.
 
-    # TODO: Unfortunately even something as simple as a bare pip install needs
-    # a todo. Check if we aren't using conda. By checking env vars? Or
-    # is it best to do::
-    # conda_check = subprocess.run(["command", "-v", "conda"])
-    # conda_check.check_returncode()
     pip_install()
