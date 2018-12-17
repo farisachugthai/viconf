@@ -23,6 +23,71 @@ ${3:## eg}
 ${4:## man}
 endsnippet
 
+# Here's the src:
+# https://daringfireball.net/projects/markdown/syntax#link
+snippet link "A link"
+[${1:displayedtext}](${2:URL})
+endsnippet
+
+snippet linktitle "Inline link with a title" b
+[${1:displayedtext}](${2:URL} "{3:Optional title}")
+endsnippet
+
+snippet rel "Relative path in a link" b
+[${1:text}(${VISUAL:/path/to/link})
+endsnippet
+
+# SnipMate
+# -----------
+
+snippet ```
+	\`\`\`${1}
+	${0:${VISUAL}}
+	\`\`\`
+endsnippet
+
+# Language.
+snippet ```l
+	\`\`\`${1:language}
+	${2:code}
+	\`\`\`
+endsnippet
+
+snippet **
+	**${1:bold}**
+endsnippet
+
+snippet __
+	__${1:bold}__
+endsnippet
+
+snippet <
+	<https://${1:url}>
+endsnippet
+
+# wait do these work?
+
+# snippet codeblock-short
+# 	{% codeblock %}
+# 	${0:code_snippet}
+# 	{% endcodeblock %}
+
+# snippet codeblock-full
+# 	{% codeblock ${1:title} lang:${2:language} ${3:URL} ${4:link_text} %}
+# 	${0:code_snippet}
+# 	{% endcodeblock %}
+
+# snippet gist-full
+# 	{% gist ${1:gist_id} ${0:filename} %}
+
+# snippet gist-short
+# 	{% gist ${0:gist_id} %}
+
+# snippet img
+# 	{% img ${1:class} ${2:URL} ${3:width} ${4:height} ${5:title_text} ${0:alt_text} %}
+
+# snippet youtube
+# 	{% youtube ${0:video_id} %}
 
 # UltiSnips
 # ============
@@ -54,24 +119,28 @@ endglobal
 ###########################
 
 # TODO: I thought these were header markers?
-snippet h1 "Section" b
+snippet h1 "ATX Section" b
 # ${1:Section Name} #
 endsnippet
 
-snippet h2 "Sub Section" b
+snippet h2 "ATX Sub Section" b
 ## ${1:Section Name} ##
 endsnippet
 
-snippet h3 "SubSub Section" b
+snippet h3 "ATX SubSub Section" b
 ### ${1:Section Name} ###
 endsnippet
 
-snippet h4 "Paragraph" b
+snippet h4 "ATX h4: Paragraph" b
 #### ${1:Paragraph Name} ####
 endsnippet
 
-snippet h5 "Paragraph" b
+snippet h5 "ATX h5: paragraph" b
 ##### ${1:Paragraph Name} #####
+endsnippet
+
+snippet h6 "ATX h6: paragraph" b
+###### ${1:Paragraph Name} ######
 endsnippet
 
 ###################
@@ -90,7 +159,6 @@ snippet _ "italics"
 _${1:${VISUAL}}_$0
 endsnippet
 
-
 snippet ** "bold"
 **${1:${VISUAL}}**
 endsnippet
@@ -104,7 +172,7 @@ __${1:${VISUAL}}__$0
 endsnippet
 
 snippet *** "bold italics"
-***${1:${VISUAL}}***
+***${1:${VISUAL}}***$0
 endsnippet
 
 snippet bolditalics "bold italics"

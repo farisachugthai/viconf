@@ -1,5 +1,7 @@
 # README
 
+![Screenshot](./images/neodark_statuslines.png)
+
 While still a work-in-progress, this repository houses a collection of
 initialization files I use to run Neovim and Vim on Linux, Windows 10, and
 [Termux](https://www.github.com/termux/termuxapp) on Android.
@@ -9,20 +11,26 @@ into as much of my workflow as possible.
 
 As a result of personal modifications, this setup currently has:
 
-- Automatic autocompletion for any filetype Vim supported filetype
+- Real time interactive displays for reStructured Text files.
+- Improved syntax highlighting for man pages over the defaults provided by
+  either neovim or vim.
+- Automatic autocompletion for any filetype Vim supports via [Deoplete](https://www.github.com/Shougo/deoplete.nvim)
 - Snippet integration/expansion for 24 different filetypes. Well over 1000
   snippets are included.
   - Vim's python integration is utilized to expand some snippets. Over 20
     functions are imported and used throughout the varying snippet files.
 - Git integration with aliases via Tim Pope's plugin [Fugitive](https://www.github.com/tpope/vim-fugitive)
-- Lightly configured embedded terminal
+- Lightly configured embedded terminal. 20+ convenience mappings are provided
+  to ease navigation between vim windows.
 - Seamless tmux integration.
-  - The keybindings for both vim and tmux correspond so that jumping from one Vim window to another Tmux pane uses the same keys
+  - Keybindings for both vim and tmux correspond so that jumping from one Vim window to another Tmux pane uses the same keys.
+  - The configuration for tmux is displayed at [dotfiles](https://www.github.com/farisachugthai/dotfiles)
   - The statuslines not only correspond, but they're synchronized so that when
   one changes, the other does as to match.
 - Asynchronous linters that are configured in my [dotfiles](https://www.github.com/farisachugthai/dotfiles)
   - Supports flake8, pydocstyle, the python-language-server and others
-- Syntax highlighting for files from Zim wiki
+- Syntax highlighting for files from [Zim
+  wiki](https://github.com/jaap-karssenberg/zim-desktop-wiki)
 - Spell-checking with dictionaries that have been personally compiled and reviewed
 - Multiple colorschemes that support xterm-256 or 24 bit terminals.
 
@@ -31,6 +39,11 @@ As a result of personal modifications, this setup currently has:
 Many of the snippets were not authored by me. That credit goes to
 [honza](https://www.github.com/honza) in his [vim-snippets](https://www.github.com/honza/vim-snippets)
 repository
+
+## Usage
+
+Further explanations for how nvim is configured can be found in the
+ [Neovim README](./.config/nvim/README.rst).
 
 ## Plugins Used
 

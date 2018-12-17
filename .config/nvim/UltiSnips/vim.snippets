@@ -19,6 +19,7 @@ endif
 let $1 = ${4:1}
 endsnippet
 
+# I feel like this is implemented wrong.
 snippet cpo "compatability options"
 let s:cpo_save = &cpo
 set cpo&vim
@@ -46,8 +47,19 @@ snippet header "standard Vim script file header" b
 endsnippet
 
 snippet ft "Ftplugin guard" b
-if exists(${1:"b:current_syntax"})
-  finish
+if version < 600
+	syntax clear
+elseif exists(${1:"b:current_syntax"})
+	finish
+endif
+$0
+endsnippet
+
+snippet syn "Syntax file guard" b
+if version < 600
+	syntax clear
+elseif exists(${1:"b:current_syntax"})
+	finish
 endif
 $0
 endsnippet
@@ -56,10 +68,10 @@ endsnippet
 # Btw this snippet is really wonky. Doesn't really execute right.
 # However I've definitely seen plugins with the did_plugin thing idiom so hold
 # onto it for a lil
-# 	if exists('${1:did_`vim_snippets#Filename()`}') || &cp${2: || version < 700}
-# 		finish
-# 	endif
-# 	let ${1:loaded_`!p snip.fn`} = ${0:'1'}
+#	if exists('${1:did_`vim_snippets#Filename()`}') || &cp${2: || version < 700}
+#		finish
+#	endif
+#	let ${1:loaded_`!p snip.fn`} = ${0:'1'}
 # endsnippet
 
 
@@ -70,11 +82,11 @@ endif
 endsnippet
 
 snippet try "try ... catch statement"
-	try
-		${1:${VISUAL}}
-	catch ${2}
-		${0}
-	endtry
+try
+	${1:${VISUAL}}
+catch ${2}
+	${0}
+endtry
 endsnippet
 
 ###############
@@ -248,5 +260,3 @@ endsnippet
 snippet exe
 execute('${VISUAL:1}')
 endsnippet
-
-# vim:ft=snippets:

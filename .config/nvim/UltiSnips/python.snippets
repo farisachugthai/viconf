@@ -13,7 +13,6 @@ extends rst
 # UltiSnips Imports:{{{1
 global !p
 
-# Don't know if this data needs to be here or in pythonx but I'm leaving it for the time being
 NORMAL  = 0x1
 DOXYGEN = 0x2
 SPHINX  = 0x3
@@ -42,28 +41,48 @@ endsnippet
 # TODO Need to break this up
 # Also you should be able to easily put `snip.fn` in the filename there
 snippet moddoc "Module Docstring" b
-"""${1:'Give a one sentence summary in the imperative'}
+"""${1:Give a one sentence summary in the imperative}
 
-${2:'Elaborate a little'}
-File: ${1: `!p fn`}
+${2:Elaborate a little}
+File: ${3:`!p snip.fn`}
 Author: `!v g:snips_author`
 Email: `!v g:snips_email`
 Github: `!v g:snips_github`
 
 Attributes:
 
-	module_level_variables (type): Explanation and give an inline docstring
-	immediately afterwards if possible
-
-(Usually examples go after the attributes)
+	${4:module_level_variables} (${5:type}): ${6:Explanation and give an inline docstring
+	immediately afterwards if possible}
 
 Example:
-	Any example of how to use this module goes here:: sh
 
-		$ python exampleofrst.py
+	${7:Any example of how to use this module goes here}:: ${8:sh}
 
-.. ${0:'any directives::'}
+		${9:$ python exampleofrst.py}
+
+.. ${10:'any directives::'}
+
+	${11:example text}
+
+$0
 """
+endsnippet
+
+snippet modattr "Expand only the attributes section of the module docstring snippet." b
+Attributes:
+
+	${1:module_level_variables} (${2:type}): ${3:Explanation and give an inline docstring
+	immediately afterwards if possible}
+$0
+endsnippet
+
+snippet modex "Expand only the examples section of the module docstring snippet." b
+Example:
+
+	${1:Any example of how to use this module goes here}:: ${2:sh}
+
+		${3:$ python exampleofrst.py}
+$0
 endsnippet
 
 # and if we didn't like that module docstring how about this one?
@@ -461,7 +480,7 @@ class ${1:MyClass}(${2:object}):
 	`!p snip.rv = triple_quotes(snip)`${3:Docstring for $1. }`!p snip.rv = triple_quotes(snip)`
 
 	def __init__(self$4):
-		`!p snip.rv = triple_quotes(snip)`${5:TODO: to be defined1.}`!p
+		`!p snip.rv = triple_quotes(snip)`${5: {to be defined:$1.}}`!p
 snip.rv = ""
 snip >> 2
 

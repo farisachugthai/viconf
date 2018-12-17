@@ -1,5 +1,5 @@
-" init.vim
-" neovim configuration
+" Init:
+" Neovim Configuration:
 
 " About: {{{1
 let g:snips_author = 'Faris Chugthai'
@@ -7,7 +7,6 @@ let g:snips_email = 'farischugthai@gmail.com'
 let g:snips_github = 'https://github.com/farisachugthai'
 
 " Vim Plug: {{{1
-"
 " Plug Check:{{{2
 " Shout out Justinmk! Never wanted to go through a full check for vim-plug
 " since it's there 99% of the time but this is a real smart workaround
@@ -34,7 +33,7 @@ Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
 Plug 'davidhalter/jedi-vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-commentary'         " Lighter version of NERDCom
+Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
 Plug 'w0rp/ale'
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',
     \ 'do': 'bash install.sh' }
@@ -52,17 +51,36 @@ else
 endif
 let g:deoplete#enable_at_startup = 1
 
-Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3']}
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
+Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3']}
+Plug 'fszymanski/deoplete-emoji'
 Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
+Plug 'Rykka/InstantRst'
+Plug 'gu-fan/riv.vim'
+Plug 'jakykong/vim-zim'
+Plug 'HerringtonDarkholme/yats.vim'
+Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
+
+" Nvim Specific: {{{1
+
+" unabashedly stolen from junegunn dude is too good.
+let s:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/init.vim.local'
+if filereadable(s:local_vimrc)
+    execute 'source' s:local_vimrc
+endif
+
+if has('nvim')
+    set inccommand=split                    " This alone is enough to never go back
+    set termguicolors
+endif
 
 " Python Executables: {{{1
 " If we have a virtual env start there
 if exists('$VIRTUAL_ENV')
-    let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
+    let g:python3_host_prog = expand('$VIRTUAL_ENV') . '/bin/python'
 
 elseif exists('$CONDA_PYTHON_EXE')
     let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
@@ -181,6 +199,7 @@ if exists('$TMUX')
 endif
 
 " Autocompletion: {{{2
+set wildmenu
 set wildmode=longest,list:longest       " Longest string or list alternatives
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 set fileignorecase                      " when searching for files don't use case
@@ -253,17 +272,20 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
-" Navigate tabs more easily.
+" Navigate tabs more easily
 map <unique> <A-Right> :tabnext<CR>
 map <unique> <A-Left> :tabprev<CR>
 nnoremap <Leader>tn :tabnext<CR>
 nnoremap <Leader>tp :tabprev<CR>
+" Opens a new tab with the current buffer's path
+" Super useful when editing files in the same directory
 nnoremap <Leader>te :tabedit <c-r>=expand("%:p:h")<CR>
 
-" For the init.vim
+" It should also be easier to edit the config. Bind similarly to tmux
 nnoremap <Leader>ed :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 nnoremap <F9> :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 inoremap <F9> <Esc>:tabe ~/projects/viconf/.config/nvim/init.vim<CR>
+" Now reload it
 nnoremap <Leader>re :so $MYVIMRC<CR>
 
 " General_Mappings: {{{2
@@ -284,10 +306,14 @@ nnoremap <Leader>O O<Esc>
 xnoremap < <gv
 xnoremap > >gv
 
-" I use this command constantly. We need a mapping.
+" Switch CWD to the directory of the open buffer
+nnoremap <Leader>cd :cd %:p:h<CR>:pwd<CR>
+
+" I use this command constantly
 nnoremap <Leader>sn :Snippets<CR>
 
 " Unimpaired: {{{2
+" Note that ]c and [c are mapped by git-gutter and ALE has ]a and [a
 nnoremap ]q :cnext<CR>
 nnoremap [q :cprev<CR>
 nnoremap ]Q :cfirst<CR>
@@ -304,12 +330,10 @@ nnoremap ]t :tabn<CR>
 nnoremap [t :tabp<CR>
 nnoremap ]T :tfirst<CR>
 nnoremap [T :tlast<CR>
+" In addition I've mapped ]a and [a for Ale nextwrap.
 
 " Spell Checking: {{{2
-" Toggle spell checking
 nnoremap <Leader>sp :setlocal spell!<CR>
-" Quite honestly not shorter than the original.
-" Should consider using <Leader>s* type mappings for FZF
 nnoremap <Leader>s= z=
 
 " Terminal: {{{2
@@ -347,12 +371,14 @@ nnoremap <Leader>a :ALEInfo<CR>
 " Fugitive: {{{2
 nnoremap <silent> <Leader>gb   :Gblame<CR>
 nnoremap <silent> <Leader>gc   :Gcommit<CR>
-" Curious if this is gonna work or not
-cnoremap <silent> gch Git checkout<Space>
+" Curious if this is gonna work or not. Now it does!
+ca <silent> gch Git checkout<Space>
 nnoremap <silent> <Leader>gd   :Gdiff<CR>
 nnoremap <silent> <Leader>ge   :Gedit<CR>
 nnoremap <silent> <Leader>gE   :Gedit<Space>
 nnoremap <silent> <Leader>gl   :Glog<CR>
+" TODO:
+nnoremap <silent> <Leader>gL :Glog --pretty=oneline --graph<CR>
 nnoremap <silent> <Leader>gq   :Gwq<CR>
 nnoremap <silent> <Leader>gQ   :Gwq!<CR>
 nnoremap <silent> <Leader>gr   :Gread<CR>
@@ -404,7 +430,8 @@ if !has('nvim')
 endif
 
 runtime! macros/matchit.vim
-set matchpairs+=<:>     " Not gonna lie it's oustandingly confusing that that's here but whatever
+
+set matchpairs+=<:>
 
 " To every plugin I've never used before. Stop slowing me down.
 let g:loaded_vimballPlugin     = 1
@@ -416,13 +443,25 @@ let g:loaded_logiPat           = 1
 " let g:loaded_netrwPlugin     = 1
 " Let's see if this speeds things up because I've never used most of them
 
-" Plugins: {{{1
-
-" Vim_Plug: {{{
+" Remaining Plugins: {{{1
+" Vim_Plug: {{{2
 let g:plug_window = 'tabe'
 
 " NERDTree: {{{2
-" Thanks tagbar i didn't realize i copied it twice :P
+augroup nerd_loader
+  autocmd!
+  autocmd VimEnter * silent! autocmd! FileExplorer
+  autocmd BufEnter,BufNew *
+        \  if isdirectory(expand('<amatch>'))
+        \|   call plug#load('nerdtree')
+        \|   execute 'autocmd! nerd_loader'
+        \| endif
+    autocmd bufenter *
+        \ if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree())
+        \| q
+        \| endif
+augroup END
+
 let g:NERDTreeDirArrows = 1
 let g:NERDTreeWinPos = 'right'
 let g:NERDTreeShowHidden = 1
@@ -482,6 +521,8 @@ else
 endif
 
 " Vim_Startify: {{{2
+" What shows up in the startify list?
+
 function! s:list_commits()
     let git = 'git -C ~/projects/viconf/'
     let commits = systemlist(git .' log --oneline | head -n10')
@@ -489,6 +530,7 @@ function! s:list_commits()
     return map(commits, '{"line": matchstr(v:val, "\\s\\zs.*"), "cmd": "'. git .' show ". matchstr(v:val, "^\\x\\+") }')
 endfunction
 
+" TODO: Would you wanna add other repos to the start list?
 let g:startify_lists = [
     \ { 'header': ['   MRU'],            'type': 'files' },
     \ { 'header': ['   MRU '. getcwd()], 'type': 'dir' },
@@ -532,6 +574,9 @@ let g:startify_change_to_dir = 1
 let g:startify_fortune_use_unicode = 1
 let g:startify_update_oldfiles = 1
 let g:startify_session_persistence = 1
+let g:startify_session_sort = 1
+" Configured correctly this could be a phenomenal way to store commands and
+" expressions on a per directory basis aka projects / workspaces!
 let g:startify_session_autoload = 1
 let g:startify_session_sort = 1
 
@@ -558,6 +603,18 @@ let g:jedi#enable_completions = 0
 
 " Deoplete_Jedi: {{{2
 let g:deoplete#sources#jedi#enable_typeinfo = 0
+
+" Tagbar: {{{2
+" just a thought i had. For any normal mode remaps you have, add the same
+" thing and prefix <Esc> to the RHS and boom!
+let g:tagbar_left = 1
+let g:tagbar_width = 30
+
+if has('b:Tagbar')  " or any plugin
+    let g:tagbar_sort = 0
+    imap <F3> <esc>:TagbarToggle<CR>
+    nmap <F3> :TagbarToggle<CR>
+endif
 
 " Airline: {{{2
 let g:airline#extensions#syntastic#enabled = 0
@@ -597,14 +654,7 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline#extensions#tabline#fnametruncate = 1
 
-
-" Tagbar: {{{2
-let g:tagbar_left = 30
-let g:tagbar_left = 1
-let g:tagbar_show_linenumbers = 1
-
 " Filetype Specific Options: {{{1
-
 augroup ftpersonal
     autocmd!
     " IPython:
@@ -626,9 +676,8 @@ let rst_syntax_code_list = ['vim', 'python', 'sh', 'markdown', 'lisp']
 let readline_has_bash = 1
 
 " Functions_Commands: {{{1
-
-" Next few are from Junegunn so credit to him
-" TODO Function: {{{2
+" Up until Rename are from Junegunn so credit to him
+" Todo Function: {{{2
 function! s:todo() abort
     let entries = []
     for cmd in ['git grep -niI -e TODO -e todo -e FIXME -e XXX -e HACK 2> /dev/null',
@@ -647,7 +696,7 @@ function! s:todo() abort
         copen
     endif
 endfunction
-command! TODO call s:todo()
+command! Todo call s:todo()
 
 " Explore: {{{2
 " Here's one where he uses FZF and Explore to search a packages docs
@@ -664,6 +713,10 @@ function! s:plug_help_sink(line)
     execute 'Explore' dir
 endfunction
 
+command! PlugHelp call fzf#run(fzf#wrap({
+  \ 'source': sort(keys(g:plugs)),
+  \ 'sink':   function('s:plug_help_sink')}))
+
 " Scriptnames: {{{2
 " command to filter :scriptnames output by a regex
 command! -nargs=1 Scriptnames call <sid>scriptnames(<f-args>)
@@ -677,6 +730,9 @@ function! s:scriptnames(re) abort
 endfunction
 
 " AutoSave: {{{2
+" I feel like I need to put this in a autocmd but I'm not sure what I would
+" want to trigger it.
+" Even better would be if it called :Gwrite haha!
 function! s:autosave(enable)
   augroup autosave
     autocmd!
@@ -688,6 +744,7 @@ function! s:autosave(enable)
     endif
   augroup END
 endfunction
+
 command! -bang Autosave call s:autosave(<bang>1)
 
 " HL: {{{2
@@ -696,14 +753,14 @@ function! s:hl()
   " echo synIDattr(synID(line('.'), col('.'), 0), 'name')
   echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
 endfunction
+
 command! HL call <SID>hl()
 
 " Rename:{{{2
 " :he map line 1454. How have i never noticed this isn't a feature???
-command -nargs=1 -bang -complete=file Rename f <args>|w<bang>
+command! -nargs=1 -bang -complete=file Rename f <args>|w<bang>
 
 " UltiSnips: {{{2
-
 " GetAllSnippets:{{{3
 " Definitely a TODO
 function! GetAllSnippets()
@@ -741,19 +798,20 @@ endfunction
 command! LCS call <SID>lc_check()
 
 " Colorscheme: {{{1
-
+" I feel like I should put this in a command or something so I can easily
+" toggle it.
 function! s:gruvbox()
-    set background=dark
+    set bg=dark
     let g:gruvbox_contrast_dark = 'hard'
-    let g:gruvbox_improved_strings = 1
-    let g:gruvbox_improved_warnings = 1
-    " exec 'AirlineTheme neodark'
-    " for some reason not working here but works on the ex line
+    " let g:gruvbox_improved_strings=1 shockingly terrible
+    let g:gruvbox_improved_warnings=1
+    syntax on
 endfunction
 
 " From here I can keep making expressions to the effect of elseif colors==onedark
 " then set it up like and so forth
 colorscheme gruvbox
+
 if g:colors_name ==# 'gruvbox'
     call <SID>gruvbox()
 endif

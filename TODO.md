@@ -1,5 +1,31 @@
 # TODO
 
+## Improve docs
+
+It'll make this repo (and all of my repos) much more palatable if we document
+things. A good one would be a table with all important keybindings you have
+shown. Plus GitHub Flavored Markdown supports that easily!
+
+Picture something like this:
+
+| Key | Description |
+| --- | ----------- |
+| <kbd>1</kbd>| List |
+| <kbd>2</kbd>| List |
+| <kbd>3</kbd>| List |
+| <kbd>4</kbd>| List |
+| <kbd>6</kbd>| List |
+| <kbd>8</kbd>| Visualizer |
+| <kbd>space</kbd>| Change visualizer |
+| <kbd>=</kbd>| Clock |
+| <kbd>z</kbd>| Random Music |
+| <kbd>p</kbd>| Pause/Play |
+| <kbd>r</kbd>| Repeat mode on/off |
+| <kbd>enter</kbd>| Play Music |
+
+Would definitely make this easier to use than forcing another poor soul to
+learn Vimscript.
+
 - Review snippets and effectively use them while learning new languages
 
 On the horizon, a 'nice to have' would be workspace/project integration.
@@ -27,7 +53,7 @@ file is committed to ./.config/nvim/ that one is also added to ./.vim
 
 Because it's agitating not having feature parity.
 
-It's not uncommon for the 2 init.vim files to have diffstats of over 400+ lines,
+It's not uncommon for the 2 init.vim files to have diff-stats of over 400+ lines,
 and the repository in total regularly has over 1000 additions and 1000 deletions.
 
 Generally these are non-trivial differences as well.
@@ -92,5 +118,5 @@ Awh and the response for both if you open a \*.py file. Poor jedi.
 
 
 Dec 01, 2018:
-Never thought about this. nvim enables showmode automatically {i think?} and
-so does airline. disable one for sure.
+Never thought about this. Nvim enables `&showmode` automatically {i think?} and
+so does airline. Disable one for sure.

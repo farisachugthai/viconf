@@ -4,6 +4,7 @@ extends all, rst, markdown, python
 
 # We use a little hack so that the snippet is expanded
 # and parsed correctly
+
 snippet usnip "Ultisnips snippet definition" b
 `!p snip.rv = "snippet"` ${1:Tab_trigger} "${2:Description}" ${3:b}
 ${0:${VISUAL}}
@@ -17,6 +18,10 @@ ${0:${VISUAL}}
 endsnippet
 
 snippet vis "${VISUAL}" i
+\$\{VISUAL${1:${2:default}${3:/transform/}}\}
+endsnippet
+
+snippet $ "${VISUAL}" i
 \$\{VISUAL${1:${2:default}${3:/transform/}}\}
 endsnippet
 
