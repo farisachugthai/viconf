@@ -235,6 +235,7 @@ endif
 " set gcr=n-v-c:block-Cursor/lCursor,ve:ver35-Cursor,o:hor50-Cursor, i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor, sm:block-Cursor-blinkwait175-blinkoff150-blinkon175
 
 set path+=**        			        " Recursively search dirs with :find
+set path+=/usr/include/libcs50          " Also I want those headers
 set autochdir
 set fileformat=unix
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
@@ -388,19 +389,29 @@ nnoremap <silent> <Leader>gst  :Git diff --stat<CR>
 nnoremap <silent> <Leader>gw   :Gwrite<CR>
 nnoremap <silent> <Leader>gW   :Gwrite!<CR>
 
-" Python Language Server: {{{2
+" Language Server: {{{2
+" This is a good way to give LangClient the necessary bindings it needs;
+" while, first ensuring that the plugin loaded and that it only applies for
+" relevant filetypes.
 function! LC_maps()
     if has_key(g:LanguageClient_serverCommands, &filetype)
-        nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<CR>
-        nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
-        nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
-        inoremap <buffer> <silent> <F2> <Esc>:call LanguageClient#textDocument_rename()<CR>
+        nnoremap <buffer> <Leader>lh :call LanguageClient#textDocument_hover()<CR>
+        inoremap <buffer> <Leader><F2> <Esc>:call LanguageClient#textDocument_rename()<CR>
+        nnoremap <buffer> <Leader>ld :call LanguageClient#textDocument_definition()<CR>
+        nnoremap <buffer> <Leader>lr :call LanguageClient#textDocument_rename()<CR>
+        nnoremap <buffer> <Leader>lf :call LanguageClient#textDocument_formatting()<CR>
+        nnoremap <buffer> <Leader>lt :call LanguageClient#textDocument_typeDefinition()<CR>
+        nnoremap <buffer> <Leader>lx :call LanguageClient#textDocument_references()<CR>
+        nnoremap <buffer> <Leader>la :call LanguageClient_workspace_applyEdit()<CR>
+        nnoremap <buffer> <Leader>lc :call LanguageClient#textDocument_completion()<CR>
+        nnoremap <buffer> <Leader>ls :call LanguageClient_textDocument_documentSymbol()<CR>
+        nnoremap <buffer> <Leader>lm :call LanguageClient_contextMenu()<CR>
     endif
 endfunction
 
 augroup LangClient
     autocmd!
-    autocmd FileType * call LC_maps()
+    autocmd FileType cpp,c,python,python3,ts,tsx call LC_maps()
 augroup END
 
 " Tagbar: {{{2
@@ -593,6 +604,21 @@ let g:UltiSnipsEditSplit = 'tabdo'
 " through every dir in &rtp which should save a lot of time
 let g:UltiSnipsSnippetDirectories=[$HOME.'/.config/nvim/UltiSnips']
 
+" Language Client: {{{2
+let g:LanguageClient_serverCommands = { 'python': [ 'pyls' ],
+            \ 'c': ['clangd'],
+            \ 'cpp': ['clangd'],
+            \ 'js': ['tsserver'],
+            \ 'ts': ['tsserver'],
+            \ 'css': ['css-languageserver'],
+            \ 'html': ['html-languageserver'],
+            \ 'tsx': ['tsserver']}
+
+let g:LanguageClient_autoStart = 1
+let g:LanguageClient_selectionUI = 'fzf'
+let g:LanguageClient_settingsPath = expand("~/.config/nvim/settings.json")
+let g:LanguageClient_loggingFile = "~/.local/share/nvim/LC.log"
+
 " Jedi: {{{2
 let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces
 let g:jedi#usages_command = '<Leader>u'
@@ -659,6 +685,9 @@ augroup ftpersonal
     autocmd!
     " IPython:
     autocmd BufRead,BufNewFile *.ipy setlocal filetype=python
+    if &ft == 'c'
+        set makeprg=make\ %<.o
+    endif
 augroup end
 
 " Noticed this bit in he syntax line 2800
@@ -777,6 +806,7 @@ function! GetAllSnippets()
   endfor
   return list
 endfunction
+
 " Expandable:{{{3
 
 " TODO: Come up with a mapping for it. Also what is E746
@@ -788,6 +818,20 @@ endfunction
 "         \ || empty(UltiSnips#SnippetsInCurrentScope())
 "         \ )
 " endfunction
+
+" ExpandPossibleShorterSnippet:{{{2
+
+function! ExpandPossibleShorterSnippet()
+  if len(UltiSnips#SnippetsInCurrentScope()) == 1 "only one candidate...
+    let curr_key = keys(UltiSnips#SnippetsInCurrentScope())[0]
+    normal diw
+    exe "normal a" . curr_key
+    exe "normal a "
+    return 1
+  endif
+  return 0
+endfunction
+inoremap <silent> <C-L> <C-R>=(ExpandPossibleShorterSnippet() == 0? '': UltiSnips#ExpandSnippet())<CR>
 
 " LanguageClient Check:{{{2
 " Check if the LanguageClient is running.

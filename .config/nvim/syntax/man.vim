@@ -16,12 +16,6 @@ if exists("b:current_syntax")
   finish
 endif
 
-highlight manSectionHeading guifg='LightCyan'
-
-" However I'm seriously considering reading in the vimruntime one and
-" rewriting it. Actually
-
-" Let's do it.
 " Get the CTRL-H syntax to handle backspaced text
 runtime! syntax/ctrlh.vim
 
@@ -80,7 +74,7 @@ highlight default manItalic    cterm=italic    gui=italic
 " endif
 
 " below syntax elements valid for manpages 2 & 3 only
-" TODO: Some groups are defied 2 times.
+" TODO: Some groups are defined 2 times.
 if !exists('b:man_sect')
   call man#init_pager()
 endif
@@ -116,5 +110,7 @@ endif
 
 " Prevent everything else from matching the last line
 execute 'syntax match manFooter display "^\%'.line('$').'l.*$"'
+" Wait why. Usually those include links to other man pages,
+" not only do I want those highlighted I want extra funcs for them
 
 let b:current_syntax = 'man'

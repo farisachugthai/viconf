@@ -57,3 +57,9 @@ nnoremap <F5> :call LanguageClient_contextMenu()<CR>
 " this isn't pulling up docs like i want
 nnoremap K :call LanguageClient_textDocument_hover()<CR>
 nnoremap gd :call LanguageClient_textDocument_definition()<CR>
+
+" Riv:{{{2
+" Riv is a plugin for reStructuredText in Vim.
+" The following setting allows docstrings in python files
+" to be properly highlighted. I'm inordinately excited.
+let b:riv_python_rst_hl = 1

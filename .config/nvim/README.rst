@@ -1,7 +1,26 @@
 README
 ========
 
-Here's a follow up explanation that goes into more of the details 
+How are the folders and files in a neovim directory tree supposed to be laid out?
+
+Well each directory serves a specific purpose, and depending on use case, not all
+need to be employed.
+
+The first and most obvious file is the :mod:`init.vim`. We can setup the base
+options like so:
+
+" Options
+" =======
+"
+"    :let OPTION_NAME = 1                   Enable option
+"    :let OPTION_NAME = 0                   Disable option
+"
+"
+" Continuation of settings
+" -------------------------------
+
+
+Here's a follow up explanation that goes into more of the details
 
 Ftplugin should be used to totally override the built-in ftplugin. You either
 have to be THAT discontent with it, or simply copy and paste it and then
