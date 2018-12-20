@@ -1,7 +1,6 @@
 # rst.snippets
 # -*- coding: utf-8 -*-
-# vim:sts=3:sw=3:ts=3:
-# Necessary because otherwise we don't handle tabs right.
+# Vim: set ts=3:set expandtab:set shiftwidth=3:
 
 extends snippets
 extends python
@@ -19,142 +18,133 @@ from string import Template
 import re
 from collections import Counter
 
-from vimsnippets import complete
-
 # `<http://docutils.sourceforge.net/docs/ref/rst/roles.html>`
 
 TEXT_ROLES = ['emphasis','literal','code','math',
-			  'pep-reference','rfc-reference',
-			  'strong','subscript','superscript',
-			  'title-reference','raw']
-			  TEXT_ROLES_REGEX = r'\.\.\srole::?\s(w+)'
+              'pep-reference','rfc-reference',
+              'strong','subscript','superscript',
+              'title-reference','raw']
+TEXT_ROLES_REGEX = r'\.\.\srole::?\s(w+)'
 
 # `<http://docutils.sourceforge.net/docs/ref/rst/directives.html#specific-admonitions>`
-			  SPECIFIC_ADMONITIONS = ["attention", "caution", "danger",
-			  "error", "hint", "important", "note",
-			  "tip", "warning"]
+SPECIFIC_ADMONITIONS = ["attention", "caution", "danger",
+                        "error", "hint", "important", "note",
+                        "tip", "warning"]
 # `<http://docutils.sourceforge.net/docs/ref/rst/directives.html>`
-			  DIRECTIVES = ['topic','sidebar','math','epigraph',
-			  'parsed-literal','code','highlights',
-			  'pull-quote','compound','container','table','csv-table',
-			  'list-table','class','sectnum',
-			  'role','default-role','unicode',
-			  'raw']
+DIRECTIVES = ['topic','sidebar','math','epigraph',
+              'parsed-literal','code','highlights',
+              'pull-quote','compound','container','table','csv-table',
+              'list-table','class','sectnum',
+              'role','default-role','unicode',
+              'raw']
 
-			  NONE_CONTENT_DIRECTIVES = ['rubric', 'contents', 'header',
-			  'footer', 'date', 'include', 'title']
+NONE_CONTENT_DIRECTIVES = ['rubric', 'contents', 'header',
+                          'footer', 'date', 'include', 'title']
 
-			  INCLUDABLE_DIRECTIVES = ['image', 'figure', 'include']
+INCLUDABLE_DIRECTIVES = ['image', 'figure', 'include']
 # CJK chars
 # http://stackoverflow.com/questions/2718196/find-all-chinese-text-in-a-string-using-python-and-regex
-			  CJK_RE = re.compile(u'[⺀-⺙⺛-⻳⼀-⿕々〇〡-〩〸-〺〻㐀-䶵一-鿃豈-鶴侮-頻並-龎]', re.UNICODE)
+CJK_RE = re.compile(u'[⺀-⺙⺛-⻳⼀-⿕々〇〡-〩〸-〺〻㐀-䶵一-鿃豈-鶴侮-頻並-龎]', re.UNICODE)
 
 # http://www.pygal.org/en/stable/documentation/types/index.html
-			  CHART_TYPES = ["Line", "StackedLine", "HorizontalLine", "Bar", "StackedBar", "HorizontalBar", "Histogram", "XY", "DateLine", "TimeLine", "TimeDeltaLine", "DateTimeLine", "Pie", "Radar", "Box", "Dot", "Funnel", "Gauge", "SolidGauge", "Pyramid", "Treemap"]
+CHART_TYPES = ["Line", "StackedLine", "HorizontalLine", "Bar", "StackedBar", "HorizontalBar", "Histogram", "XY", "DateLine", "TimeLine", "TimeDeltaLine", "DateTimeLine", "Pie", "Radar", "Box", "Dot", "Funnel", "Gauge", "SolidGauge", "Pyramid", "Treemap"]
 
 def has_cjk(s):
-"""Detect if s contains CJK characters."""
-  return CJK_RE.search(s) is not None
+    """Detect if s contains CJK characters."""
+    return CJK_RE.search(s) is not None
 
 
 def real_filename(filename):
-"""peel extension name off if possible
-# i.e. "foo.bar.png will return "foo.bar"
-"""
-return ospath.splitext(filename)[0]
+    """peel extension name off if possible
+    # i.e. "foo.bar.png will return "foo.bar"
+    """
+    return ospath.splitext(filename)[0]
 
 
 def check_file_exist(rst_path, relative_path):
-"""For RST file, it can just include files as relative path.
+    """For RST file, it can just include files as relative path.
 
-  :param rst_path: absolute path to rst file
-  :param relative_path: path related to rst file
-  :return: relative file's absolute path if file exist
-"""
-abs_path = ospath.join(ospath.dirname(rst_path), relative_path)
-if ospath.isfile(abs_path):
-return abs_path
+    :param rst_path: absolute path to rst file
+    :param relative_path: path related to rst file
+    :return: relative file's absolute path if file exist
+    """
+    abs_path = ospath.join(ospath.dirname(rst_path), relative_path)
+    if ospath.isfile(abs_path):
+        return abs_path
 
 
 try:
-rst_char_len = vim.strwidth  # Requires Vim 7.3+
+    rst_char_len = vim.strwidth  # Requires Vim 7.3+
 except AttributeError:
-from unicodedata import east_asian_width
-
-
-def rst_char_len(s):
-"""Return the required over-/underline length for s."""
-result = 0
-for c in s:
-result += 2 if east_asian_width(c) in ('W', 'F') else 1
-return result
+    from unicodedata import east_asian_width
+    def rst_char_len(s):
+        """Return the required over-/underline length for s."""
+        result = 0
+        for c in s:
+            result += 2 if east_asian_width(c) in ('W', 'F') else 1
+        return result
 
 
 def make_items(times, leading='+'):
-"""Make lines with leading char multiple times.
+    """Make lines with leading char multiple times.
 
-	:param: times, how many times you need
-	:param: leading, leading character
-"""
-times = int(times)
-if leading == 1:
-msg = ""
-for x in range(1, times+1):
-msg += "%s. Item\n" % x
-return msg
-else:
-return ("%s Item\n" % leading) * times
+    :param: times, how many times you need
+    :param: leading, leading character
+    """
+    times = int(times)
+    if leading == 1:
+        msg = ""
+        for x in range(1, times+1):
+            msg += "%s. Item\n" % x
+        return msg
+    else:
+        return ("%s Item\n" % leading) * times
 
 
 def look_up_directives(regex, fpath):
-"""Find all directive args in given file
-:param: regex, the regex that needs to match
-:param: path, to path to rst file
+    """Find all directive args in given file
+    :param: regex, the regex that needs to match
+    :param: path, to path to rst file
 
-:return: list, empty list if nothing matches
-"""
-try:
-with open(fpath) as source:
-match = re.findall(regex, source.read())
-	except IOError:
-	match = []
-	return match
+    :return: list, empty list if nothing matches
+    """
+    try:
+        with open(fpath) as source:
+            match = re.findall(regex, source.read())
+    except IOError:
+        match = []
+    return match
 
 
 # so what the fuck? def doesn't take an arg, the docstring says path
 # and its to determine embedded syntaxes in a file.
 def get_popular_code_type():
-"""Find most frequent filetype in the file
+    """Find most frequent filetype in the file
 
-:param path: file to detect
+    :param path: file to detect
 
-:return: string, most popular code type in file
-"""
-buf = "".join(vim.current.buffer)
-types = re.findall(r'[:|\.\.\s]code::?\s(\w+)', buf)
-try:
-popular_type = Counter(types).most_common()[0][0]
-except IndexError as e:
-# what the hell is this?!?
-# popular_type = "lua" # Don't break default
-# no i just want the exception
-print(e)
-return popular_type
+    :return: string, most popular code type in file
+    """
+    buf = "".join(vim.current.buffer)
+    types = re.findall(r'[:|\.\.\s]code::?\s(\w+)', buf)
+    try:
+        popular_type = Counter(types).most_common()[0][0]
+    except IndexError as e:
+        # what the hell is this?!?
+        # popular_type = "lua" # Don't break default
+        # no i just want the exception
+        print(e)
+    return popular_type
 
 endglobal
-
-
 snippet title "Title with =" b
-${1:${VISUAL:Section name}}
 `!p snip.rv = rst_char_len(t[1])*'='`
-endsnippet
-
-snippet title= "Title with =" b
 ${1:${VISUAL:Section name}}
 `!p snip.rv = rst_char_len(t[1])*'='`
 endsnippet
 
 snippet title- "Title with -" b
+`!p snip.rv = rst_char_len(t[1])*'-'`
 ${1:${VISUAL:Subsection name}}
 `!p snip.rv = rst_char_len(t[1])*'-'`
 endsnippet
@@ -174,22 +164,22 @@ And Still More       42
 endsnippet
 
 snippet cb "Code Block. Must have 1 blank line surrounding!" b
+
 .. code-block:: ${1:python:shell-session}
 
-${2:${VISUAL:code}}
-
-$0
-
+    ${2:${VISUAL:code}}
 endsnippet
 
-snippet codeb "cb duplicated" b
+# TODO you'll probably need to add the option for erasing whitespace if a tabstop
+# is skipped over because the python block is optional
+snippet codeb "code block duplicated" b
 .. code-block:: ${1:python}
 
-${2:${VISUAL:code}}
+   ${2:${VISUAL:code}}
 endsnippet
 
-snippet code "Inline code" b
-\`\`${VISUAL:1}\`\`
+snippet code "Inline code. Needs to be visually highlighted first." b
+\`\`${VISUAL:0}\`\`
 endsnippet
 
 
@@ -209,7 +199,6 @@ snippet bold "bold" b
 **${1:Strong emphasis}** ${0}
 endsnippet
 
-# There are a few different ways to do
 ###########
 #  links  #
 ###########
@@ -237,72 +226,81 @@ endsnippet
 snippet sid "SideBar" b
 .. sidebar:: ${1:SideBar Title}
 
-${2:${VISUAL:SideBar Content}}
+   ${2:${VISUAL:SideBar Content}}
 endsnippet
 
 # Directives
 # ------------
 
 snippet img "image link directive"
-.. |${0:alias}| image:: ${1:img}
+   .. |${0:alias}| image:: ${1:img}
 endsnippet
 
 snippet fig: "Figure directive" b
 .. figure:: ${1:img}
-:alt: ${2:alter text}
+   :alt: ${2:alter text}
 
 $0
 endsnippet
 
-snippet cont "content directive"
+snippet cont "content directive" b
 .. contents::
-${0:content}
+
+   ${0:content}
 endsnippet
 
-snippet code "Code block directive."
+snippet coded "Code block directive." b
 .. code:: ${1:type}
 
-${0:write some code}
+   ${0:write some code}
 endsnippet
 
-snippet tip "Tips or anyone in need of a directive!"
+snippet tip "Tips or anyone in need of a directive!" b
 .. tip::
-${0:Tip for anyone having trouble.}
+
+   ${0:Tip for anyone having trouble.}
 endsnippet
 
-snippet note "Take note of this directive over here ;)"
+snippet note "Take note of this directive over here ;)" b
 .. note::
-${0:Take note of the fact that}
+
+   ${0:Take note of the fact that}
 endsnippet
 
-snippet warn "Warning directive"
+snippet warn "Warning directive" b
 .. warning::
-${0:Warning:}
+
+   ${0:Warning:}
 endsnippet
 
-snippet important "Important directive"
+snippet important "Important directive" b
 .. important::
-${0:Important notice:}
+
+   ${0:Important notice:}
 endsnippet
 
-snippet att "Attention directive"
+snippet att "Attention directive" b
 .. attention::
-${0:Attention!}
+
+   ${0:Attention!}
 endsnippet
 
-snippet dan "Danger directive"
+snippet dan "Danger directive" b
 .. danger::
-${0:Danger:}
+
+   ${0:Danger:}
 endsnippet
 
-snippet err "Error directive"
+snippet err "Error directive" b
 .. error::
-${0:Error:}
+
+   ${0:Error:}
 endsnippet
 
-snippet cau "Caution directive"
+snippet cau "Caution directive" b
 .. caution::
-${0:Take precaution with:}
+
+   ${0:Take precaution with:}
 endsnippet
 
 # Fixed whitespace with qq
@@ -347,41 +345,36 @@ endsnippet
 
 snippet toctree "directive_toctree" b
 .. toctree::
-:maxdepth: ${1:2}
+	:maxdepth: ${1:2}
 
-${2:#:FILES}
+	${2:#:FILES}
 endsnippet
 
 snippet part "Part" b
 `!p snip.rv = rst_char_len(t[1])*'#'`
 ${1:${VISUAL:Part name}}
 `!p snip.rv = rst_char_len(t[1])*'#'`
-$0
 endsnippet
 
 snippet chap "Chapter" b
 `!p snip.rv = rst_char_len(t[1])*'*'`
 ${1:${VISUAL:Chapter name}}
 `!p snip.rv = rst_char_len(t[1])*'*'`
-$0
 endsnippet
 
 snippet sec "Section" b
 ${1:${VISUAL:Section name}}
 `!p snip.rv = rst_char_len(t[1])*'='`
-$0
 endsnippet
 
 snippet ssec "Subsection" b
 ${1:${VISUAL:Subsection name}}
 `!p snip.rv = rst_char_len(t[1])*'-'`
-$0
 endsnippet
 
 snippet sssec "Subsubsection" b
 ${1:${VISUAL:Subsubsection name}}
 `!p snip.rv = rst_char_len(t[1])*'^'`
-$0
 endsnippet
 
 snippet para "Paragraph" b
@@ -395,11 +388,11 @@ snippet em "Emphasize string" i
 `!p
 # dirty but works with CJK character detection
 if has_cjk(vim.current.line):
-snip.rv ="\ "`*${1:${VISUAL:Em}}*`!p
+    snip.rv ="\ "`*${1:${VISUAL:Em}}*`!p
 if has_cjk(vim.current.line):
-snip.rv ="\ "
+    snip.rv ="\ "
 else:
-snip.rv = " "
+    snip.rv = " "
 `$0
 endsnippet
 
@@ -407,11 +400,11 @@ endsnippet
 snippet st "Strong string" i
 `!p
 if has_cjk(vim.current.line):
-snip.rv ="\ "`**${1:${VISUAL:Strong}}**`!p
+    snip.rv ="\ "`**${1:${VISUAL:Strong}}**`!p
 if has_cjk(vim.current.line):
-snip.rv ="\ "
+    snip.rv ="\ "
 else:
-snip.rv = " "
+    snip.rv = " "
 `$0
 endsnippet
 
@@ -451,32 +444,32 @@ link=""
 content=""
 
 if di == 'im':
-link = "|{0}|".format(real_name)
+    link = "|{0}|".format(real_name)
 
 if di == 'fi':
-content="""
-:alt: {0}
+    content="""
+    :alt: {0}
 
-{0}""".format(real_name)
+    {0}""".format(real_name)
 `
 ..`!p snip.rv = " %s" % link if link else ""` $1`!p
 snip.rv=complete(t[1], INCLUDABLE_DIRECTIVES)
 `:: ${2:${VISUAL:file}}`!p
 if content:
-snip.rv +="    "+content`
+    snip.rv +="    "+content`
 `!p
 # Tip of whether file is exist in comment type
 if not check_file_exist(path, t[2]):
-snip.rv='.. FILE {0} does not exist'.format(t[2])
+    snip.rv='.. FILE {0} does not exist'.format(t[2])
 else:
-snip.rv=""
+    snip.rv=""
 `$0
 endsnippet
 
 snippet di "Directives" b
 .. $1`!p snip.rv=complete(t[1], DIRECTIVES)`:: $2
 
-${3:${VISUAL:Content}}
+   ${3:${VISUAL:Content}}
 $0
 endsnippet
 
@@ -488,7 +481,7 @@ endsnippet
 snippet sa "Specific Admonitions" b
 .. $1`!p snip.rv =complete(t[1], SPECIFIC_ADMONITIONS)`::
 
-${2:${VISUAL:Content}}
+   ${2:${VISUAL:Content}}
 
 $0
 endsnippet
@@ -496,18 +489,18 @@ endsnippet
 #it will be trigger at start of line or after a word
 snippet ro "Text Roles" w
 \ :$1`!p snip.rv=complete(t[1],
-TEXT_ROLES+look_up_directives(TEXT_ROLES_REGEX,
-path))`:\`$2\`\
+                          TEXT_ROLES+look_up_directives(TEXT_ROLES_REGEX,
+                                                        path))`:\`$2\`\
 endsnippet
 
 snippet eu "Embedded URI" i
 `!p
 if has_cjk(vim.current.line):
-snip.rv = "\ "`\`${1:${VISUAL:Text}} <${2:URI}>\`_`!p
+    snip.rv = "\ "`\`${1:${VISUAL:Text}} <${2:URI}>\`_`!p
 if has_cjk(vim.current.line):
-snip.rv ="\ "
+    snip.rv ="\ "
 else:
-snip.rv = ""
+    snip.rv = ""
 `$0
 endsnippet
 
@@ -520,12 +513,12 @@ endsnippet
 # Only for Nikola — Static Site Generator
 snippet chart "Pygal chart for Nikola" b
 .. chart:: $1`!p snip.rv=complete(t[1], CHART_TYPES)`
-:title: '${2:Browser usage evolution (in %)}'
-:x_labels: [${3:"2002", "2003", "2004", "2005", "2006", "2007"}]
+   :title: '${2:Browser usage evolution (in %)}'
+   :x_labels: [${3:"2002", "2003", "2004", "2005", "2006", "2007"}]
 
-'Firefox', [None, None, 0, 16.6, 25, 31]
-'Chrome',  [None, None, None, None, None, None]
-'IE',      [85.8, 84.6, 84.7, 74.5, 66, 58.6]
-'Others',  [14.2, 15.4, 15.3, 8.9, 9, 10.4]
+   'Firefox', [None, None, 0, 16.6, 25, 31]
+   'Chrome',  [None, None, None, None, None, None]
+   'IE',      [85.8, 84.6, 84.7, 74.5, 66, 58.6]
+   'Others',  [14.2, 15.4, 15.3, 8.9, 9, 10.4]
 $0
 endsnippet

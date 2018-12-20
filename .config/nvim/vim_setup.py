@@ -2,19 +2,8 @@
 # -*- coding: utf-8 -*-
 """Setup Neovim on Linux or on Termux.
 
-Attributes:
+.. todo::
 
-    module_level_variables (type): Explanation and give an inline docstring
-    immediately afterwards if possible
-
-(Usually examples go after the attributes)
-
-Example:
-    Any example of how to use this module goes here:: sh
-
-        $ python exampleofrst.py
-
-TODO:
     - Show usage instructions in :func: and in :mod: docstring.
     - Make a package manager class. It's init may involve all platform specific tests.
         - Or better stated as a question: What information needs to initialize

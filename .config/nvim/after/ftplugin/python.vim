@@ -1,11 +1,11 @@
 " python.vim
 " Maintainer: Faris Chugthai
 
-" Options:{{{1
+" Options: {{{1
 setl linebreak
 setl textwidth=120
 
-" PEP Indenting:{{{1
+" PEP Indenting: {{{1
 setlocal tabstop=4 shiftwidth=4 expandtab softtabstop=4
 let b:python_highlight_all = 1
 
@@ -22,7 +22,6 @@ setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 " linters to react.
 setlocal colorcolumn=80,120
 
-
 " Autocommands: {{{1
 " Highlight characters after 120 chars
 augroup vimrc_autocmds
@@ -33,6 +32,7 @@ augroup vimrc_autocmds
 augroup END
 
 " Plugins: {{{1
+
 " ALE: {{{2
 let b:ale_linters = [ 'flake8', 'pycodestyle', 'pydocstyle' ]
 let b:ale_linters_explicit = 1
@@ -60,3 +60,8 @@ if has_key(plugs, 'LanguageClient-neovim')
     nnoremap K :call LanguageClient_textDocument_hover()<CR>
     nnoremap gd :call LanguageClient_textDocument_definition()<CR>
 endif
+
+" Riv:{{{2
+" Riv is a plugin for reStructuredText in Vim.
+" This setting allows docstrings in python files to be properly highlighted.
+let b:riv_python_rst_hl = 1

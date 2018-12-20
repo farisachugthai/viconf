@@ -2,9 +2,17 @@
 # -*- coding: utf-8 -*-
 """Short description of the module. Keep 1 sentence long.
 
+:Author: Faris Chugthai
+:Copyright: (c) 2018 Faris Chugthai
+:License: MIT
+:Description:
+
 Here is an appropriate place to give more detail for the module.
 This module is a template for a python file that adheres to Google style
 docstrings.
+
+Section breaks are created by resuming unindented text. Section breaks
+are also implicitly created anytime a new section starts.
 
 Depends:
     requests
@@ -12,18 +20,17 @@ Depends:
 
 Example:
     Before you use the double colon to indicate a code block, give a quick
-    synopsis of what the reader is seeing. Use rst formatting.
+    synopsis of what the reader is seeing. Use rst formatting.::
 
         >>> hopefully_functional_code()
         >>> print("Ensure you leave one space above and below."
                   "Don't leave any spaces between lines if you print output.")
 
-Section breaks are created by resuming unindented text. Section breaks
-are also implicitly created anytime a new section starts.
-
 Attributes:
 
-    module_level_variable1 (int): Module level variables may be documented in
+    module_level_variable1 (type): Explanation and give an inline docstring:
+
+        Module level variables may be documented in
         either the ``Attributes`` section of the module docstring, or in an
         inline docstring immediately following the variable.
 
@@ -31,7 +38,8 @@ Attributes:
         one convention to document module level variables and be consistent
         with it.
 
-Todo:
+.. todo::
+
     * For mod TODOs
     * The ``sphinx.ext.todo`` extension is required.
     * Mod functions come before classes so reorganize.
@@ -45,11 +53,10 @@ See Also:
     and the class ExampleClass is listed below.
 
 .. _Original Source:
+
     `<http://www.sphinx-doc.org/en/master/usage/extensions/example_google.html#example-google>`
 
 Around here would be an appropriate place to put:
-    :copyright: (c) 2018 Faris Chugthai
-    :license: MIT
 
 """
 import this
@@ -57,13 +64,6 @@ import this
 import numpy as np  # separate library and 3rd party modules
 
 import vim_setup  # your own stuff comes last
-
-__author__ = 'Faris Chugthai'
-__copyright__ = 'Copyright (C) 2018 Faris Chugthai'
-__email__ = 'farischugthai@gmail.com'
-__license__ = 'MIT'
-__requires__ = 'flake8==3.5.0'
-__url__ = 'https://github.com/farisachugthai'
 
 module_level_variable2 = 98765
 """int: Module level variable documented inline.
@@ -200,7 +200,7 @@ class MainClass1(object):
             https://www.python.org/dev/peps/pep-0484/
 
         """
-
+        pass
 
     def function_with_pep484_type_annotations(param1: int, param2: str) -> bool:
         """Example function with PEP 484 type annotations.

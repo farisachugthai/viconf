@@ -10,5 +10,6 @@ py_tut ~/python/tutorials
 tutorials ~/Dropbox/python/tutorials
 utilities_py ~/projects/utilities/python
 viconf ~/projects/viconf/.config/nvim
+riv ~/.local/share/nvim/plugged/riv.vim/doc/riv_instruction.rst
 
 nvim-rtp /usr/share/nvim/runtime
