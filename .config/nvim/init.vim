@@ -1,8 +1,6 @@
 " init.vim
 " Vim: set verbose=1:
 
-" All: {{{ 1
-
 " About: {{{ 2
 let g:snips_author = 'Faris Chugthai'
 let g:snips_email = 'farischugthai@gmail.com'
@@ -38,16 +36,6 @@ call plug#begin('~/.local/share/nvim/plugged')
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
-augroup nerd_loader
-  autocmd!
-  autocmd VimEnter * silent! autocmd! FileExplorer
-  autocmd BufEnter,BufNew *
-        \  if isdirectory(expand('<amatch>'))
-        \|   call plug#load('nerdtree')
-        \|   execute 'autocmd! nerd_loader'
-        \| endif
-augroup END
-
 Plug 'davidhalter/jedi-vim', { 'for': ['python', 'python3'] }
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
@@ -68,7 +56,6 @@ if !has('nvim')
 endif
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3'] }
-Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'godlygeek/tabular'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 
@@ -99,8 +86,6 @@ endif
 
 " Python Executables: {{{ 2
 
-" TODO: Determine OS then check if has('win32') || has('win64')
-" actually as long as linux defines conda_exe were good!
 if has('python3')
 " if we have a virtual env start there
     if exists('$VIRTUAL_ENV')
@@ -115,6 +100,10 @@ if has('python3')
         if executable('~/virtualenvs/neovim/bin/python3')
             let g:python3_host_prog = '~/virtualenvs/neovim/bin/python3'
         endif
+
+    elseif expand('$OS') ==# 'Windows_NT'       " no reason to split this loop based on that as a first check yet
+        let g:python3_host_prog = '~/Miniconda3/python.exe'
+
     else
         if executable('~/miniconda3/envs/neovim_vscode/bin/python')
             let g:python3_host_prog = '~/miniconda3/envs/neovim_vscode/bin/python'
@@ -285,13 +274,18 @@ set ttimeoutlen=400
 
 " General Mappings: {{{ 3
 
-" Note that F7 is bound to pastetoggle so don't map it
 " Navigate windows more easily
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
+" Wanna navigate windows more easily?
+" |CTRL-W_gF|	CTRL-W g F	   edit file name under the cursor in a new
+" 				   tab page and jump to the line number
+" 				   following the file name.
+"
+" Rebind that to C-w t and we can open the filename in a new tab.
 " Navigate tabs more easily
 nnoremap <A-Right> :tabnext<CR>
 nnoremap <A-Left> :tabprev<CR>
@@ -384,6 +378,23 @@ cnoremap <A-P> <Up>
 cnoremap <Esc><C-B> <S-Left>
 " forward one word
 cnoremap <Esc><C-F> <S-Right>
+
+" Here's some stuff about emacs
+"
+" <A-BS> is delete previous word
+" C-k is kill from cursor to end of line
+" C-u is either kill from cursor to beginning of line or an indication of a
+" count with a command
+" C-y is yank.
+"
+" Here's vim equivalents
+" |c_CTRL-W|	CTRL-W		delete the word in front of the cursor
+" The below didn't work in the command window but did while searching
+" |c_CTRL-U|	CTRL-U		remove all characters
+" Speaking of searching, did you know that to search for the next match while
+" still typing, you use C-g and C-t instead of C-n and C-p????
+" Dude go to the index they have fucking everything there. Like literally it's
+" the index of all tags I think.
 " }}}
 
 " Terminal: {{{ 3
@@ -447,7 +458,6 @@ nnoremap <silent> <leader>gW :Gwrite!<CR>
 
 " Tagbar: {{{
 nnoremap <silent> <F8> :TagbarToggle<CR>
-let g:tagbar_left = 1
 " }}}
 
 " }}}
@@ -458,9 +468,7 @@ if !has('nvim')
     " Invoke while in Vim by putting your cursor over a word and run <Leader>k
     runtime! ftplugin/man.vim
     let g:ft_man_folding_enable = 0
-    setlocal keywordprg=:Man
 else
-    setl keywordprg=Man
     " g:man_default_sects="1,7,8,5"
 endif
 
@@ -488,10 +496,18 @@ function! s:build_quickfix_list(lines)
   cc
 endfunction
 
+" Change these mappings to be more consistent with NERDTree?
+" Idk. C-w P means go to preview window so if we used a function that
+" creates a preview window like Ag does below, maybe C-P could be open that
+" file? Idk C-P is always gonnna mean up to me tho
+" Fuck yeah use C-s. C-w s means split window. UGH but why does NERDTree
+" implement it as vert split? Change that mapping so horiz split is s
+" Currently i is horiz split.
+" C-w z is close preview window so we could add that too.
 let g:fzf_action = {
   \ 'ctrl-q': function('s:build_quickfix_list'),
   \ 'ctrl-t': 'tab split',
-  \ 'ctrl-x': 'split',
+  \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit' }
 
 " FZF Colors: {{{ 3
@@ -754,11 +770,15 @@ let g:jedi#force_py_version = 3
 let g:deoplete#sources#jedi#enable_typeinfo = 0
 " }}}
 
+" Tagbar:{{{3
+let g:tagbar_left = 1
+let g:tagbar_width = 30
 " }}}
 
 " Filetype Specific Options: {{{ 2
 
 augroup ftpersonal
+    autocmd!
 " IPython:
     au BufRead,BufNewFile *.ipy setlocal filetype=python
 " Web Dev:

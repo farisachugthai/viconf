@@ -1,5 +1,30 @@
 # Annotations
 
+## Windows
+
+" Environment: {{{ 2
+" Let's setup all the global vars we need. Will utilize to ensure consistency
+
+let s:termux = exists('$PREFIX') && has('unix')
+let s:ubuntu = !exists('$PREFIX') && has('unix')
+let s:windows = has('win32') || has('win64')
+
+" So what I think my problem was is that I have these variables but there's
+" no point at which they're initialized. Let's write a few funcs
+" function! is#termux() abort
+"     return s:termux
+" endfunction
+
+" function! is#ubuntu() abort
+"     return s:ubuntu
+" endfunction
+
+" function! is#windows() abort
+"     return s:windows
+" endfunction
+" }}}
+
+
 ## Plugins
 
 =====================================================================
@@ -59,44 +84,3 @@ let g:lightline = {
 " let g:lightline.colorscheme = 'seoul256'
 " }}}
 ```
-
-## functions
-
-### compilers
-
-Now out of curiosity would this go in .config/nvim/compilers?
-
-Compiler Function: {{{
-
-All in one compiler. Going to need to rewrite to make my own.
-
-```Viml
-noremap <F5> :call CompileRunGcc()<CR>
-func! CompileRunGcc()
-    exec "w"
-    if &filetype == 'c'
-        exec "!g++ % -o %<"
-        exec "!time ./%<"
-    elseif &filetype == 'cpp'
-        exec "!g++ % -o %<"
-        exec "!time ./%<"
-    elseif &filetype == 'java'
-        exec "!javac %"
-        exec "!time java %<"
-    elseif &filetype == 'sh'
-        :!time bash %
-    elseif &filetype == 'python'
-        exec "!time python2.7 %"
-    elseif &filetype == 'html'
-        exec "!firefox % &"
-    elseif &filetype == 'go'
-        exec "!go build %<"
-        exec "!time go run %"
-    elseif &filetype == 'mkd'
-        exec "!~/.vim/markdown.pl % > %.html &"
-        exec "!firefox %.html &"
-    endif
-endfunc
-```
-
-}}}

@@ -1,7 +1,11 @@
+# Vim Snippets
 
-###########################################################################
-#                            SnipMate Snippets                            #
-###########################################################################
+# Personal snippets
+
+snippet path "Refer to a file in the same dir as the script."
+${${1:'let s:local_vimrc' = }}fnamemodify(resolve(expand('<sfile>')), ':p:h').'${VISUAL:0}'
+endsnippet
+
 snippet gvar "Global / configuration variable" b
 if !exists("g:${1:MyUltraImportantVar}")
 	let g:$1 = ${2:"${3:<tab>}"}
@@ -9,15 +13,250 @@ endif
 endsnippet
 
 snippet guard "script reload guard" b
-if exists('${1:did_`!p snip.rv = snip.fn.replace('.','_')`}') || &cp${2: || version < 700}
+if exists('${1:did_`!p snip.rv = snip.fn.replace('.','_')`}') || ${2:&cp} || ${3:v:version < 700}
 	finish
 endif
-let $1 = 1$3
+let $1 = ${4:1}
 endsnippet
 
-snippet f "function" b
-fun ${1:function_name}($2)
-	${3:" code}
-endf
+# I feel like this is implemented wrong.
+snippet cpo "compatability options"
+let s:cpo_save = &cpo
+set cpo&vim
+
+
+
+let &cpo = s:cpo_save
+unlet s:cpo_save
 endsnippet
-# vim:ft=snippets:
+
+snippet function "function with simple tabstops" b
+function! ${1:function_name}($2) abort
+	${3:"code"}
+endfunction
+endsnippet
+
+# THIS HEADER WORKS THE EXACT WAY YOU'D WANT WHOO
+snippet header "standard Vim script file header" b
+" ============================================================================
+	" File: ${1:`!v expand('%:t')`}
+	" Author: ${2:`!v g:snips_author`}
+	" Description: ${3:"A description of the file below"}
+	${0:" Last Modified: `!v strftime("%B %d, %Y")`}
+" ============================================================================
+endsnippet
+
+snippet ft "Ftplugin guard" b
+if version < 600
+	syntax clear
+elseif exists(${1:"b:current_syntax"})
+	finish
+endif
+$0
+endsnippet
+
+snippet syn "Syntax file guard" b
+if version < 600
+	syntax clear
+elseif exists(${1:"b:current_syntax"})
+	finish
+endif
+$0
+endsnippet
+
+# snippet guard "script reload guard"
+# Btw this snippet is really wonky. Doesn't really execute right.
+# However I've definitely seen plugins with the did_plugin thing idiom so hold
+# onto it for a lil
+#	if exists('${1:did_`vim_snippets#Filename()`}') || &cp${2: || version < 700}
+#		finish
+#	endif
+#	let ${1:loaded_`!p snip.fn`} = ${0:'1'}
+# endsnippet
+
+
+snippet func "Autocompletes function name based on filename"
+function! ${1:`expand('%') =~ 'autoload' ? substitute(matchstr(expand('%:p'),'autoload/\zs.*\ze.vim'),'[/\\]','#','g').'#' : ''`}${2:function_name}(${3}) abort
+		${0}
+endif
+endsnippet
+
+snippet try "try ... catch statement"
+try
+	${1:${VISUAL}}
+catch ${2}
+	${0}
+endtry
+endsnippet
+
+###############
+#  Help Docs  #
+###############
+
+global !p
+def sec_title(snip, t):
+	file_start = snip.fn.split('.')[0]
+	sec_name = t[1].strip("1234567890. ").lower().replace(' ', '-')
+	return ("*%s-%s*" % (file_start, sec_name)).rjust(78-len(t[1]))
+endglobal
+
+snippet sec "Section marker" b
+==============================================================================
+${1:SECTION}`!p snip.rv = sec_title(snip, t)`
+
+$0
+endsnippet
+
+snippet ssec "Sub section marker" b
+${1:Subsection}`!p snip.rv = sec_title(snip, t)
+snip += "-"*len(t[1])`
+
+$0
+endsnippet
+
+snippet sssec "Subsub Section marker" b
+${1:SubSubsection}:`!p snip.rv = sec_title(snip, t)`
+
+$0
+endsnippet
+
+# For vim help, follow the same settings as the official docs.
+snippet helpline "Vim help modeline"
+`!v 'vim'`:tw=78:ts=8:ft=help:norl:
+endsnippet
+
+snippet modeline "Vim help modeline"
+`!v 'vim'`:tw=78:ts=8:ft=help:norl:
+endsnippet
+
+###########
+#  loops  #
+###########
+
+# TODO What's up with the indenting? There's definitely a snip attribute that
+# figures out how to indent things correctly for you
+snippet for "for ... in loop"
+for ${1} in ${2}
+${0:${VISUAL}}
+endfor
+endsnippet
+
+snippet for "for [key, value] in loop"
+for [${1},${2}] in items(${3})
+	${0}
+	unlet $1 $2
+endfor
+endsnippet
+
+snippet wh "while loop"
+while ${1}
+	${0:${VISUAL}}
+endw
+endsnippet
+
+snippet if "if statement"
+if ${1}
+	${0:${VISUAL}}
+endif
+endsnippet
+
+# **TODO**: Use this style of snippet a few times and let me know if it's better to
+# put $VISUAL on the condition or the code.
+snippet elif "elif by vim" b
+elseif ${VISUAL:1}
+	${0:body}
+endsnippet
+
+snippet ife "if ... else statement"
+if ${1}
+	${2:${VISUAL}}
+else
+	${0}
+endif
+endsnippet
+
+snippet au "augroup ... autocmd block"
+augroup ${1:AU_NAME}
+	autocmd ${2:BufRead,BufNewFile} ${3:*.ext,*.ext3|<buffer[=N]>} ${0}
+augroup end
+endsnippet
+
+#####################
+#  plugin managers  #
+#####################
+
+snippet bun "Vundle.vim Plugin definition"
+Plugin '${0}'
+endsnippet
+
+snippet plug "vim-plug Plugin definition"
+Plug '${0}'
+endsnippet
+
+snippet plugdo "vim-plug Plugin definition with { 'do': '' }"
+Plug '${1}', { 'do': '${0}' }
+endsnippet
+
+snippet plugon "vim-plug Plugin definition with { 'on': '' }"
+Plug '${1}', { 'on': '${0}' }
+endsnippet
+
+snippet plugfor "vim-plug Plugin definition with { 'for': '' }"
+Plug '${1}', { 'for': '${0}' }
+endsnippet
+
+snippet plugbr "vim-plug Plugin definition with { 'branch': '' }"
+Plug '${1}', { 'branch': '${0}' }
+endsnippet
+
+snippet plugtag "vim-plug Plugin definition with { 'tag': '' }"
+Plug '${1}', { 'tag': '${0}' }
+endsnippet
+
+#############
+#  options  #
+#############
+
+snippet letg
+let g:${1:variable} = ${0: value}
+endsnippet
+
+snippet letb
+let b:${1:variable} = ${0: value}
+endsnippet
+
+snippet se
+set ${1:setting};
+endsnippet
+
+snippet set
+set ${1:setting}=${0:value}
+endsnippet
+
+snippet setl
+setlocal ${1:setting}=${0:value}
+endsnippet
+
+#############
+#  mapping  #
+#############
+
+snippet nno
+nnoremap ${1} ${2}<CR>
+endsnippet
+
+snippet no
+noremap ${1} ${2}
+endsnippet
+
+snippet vm
+vnoremap ${1} ${2}
+endsnippet
+
+snippet im
+inoremap ${1} ${2}
+endsnippet
+
+snippet exe
+execute('${VISUAL:1}')
+endsnippet

@@ -1,3 +1,6 @@
+# html.snippets
+# TODO: the snipmate folder has 860 more lines if this already wasn't
+# plenty to go through hahahaha
 
 ###########################################################################
 #                            TextMate Snippets                            #
@@ -58,6 +61,10 @@ endsnippet
 #############
 # HTML TAGS #
 #############
+
+# Since we haven't run into these before.
+
+# Check the README for the explanation of w as "word boundary"
 snippet a "Link" w
 <a href="${1:http://www.${2:url.com}}"${3: target="_blank"}>${4:Anchor Text}</a>
 endsnippet
@@ -122,6 +129,14 @@ endsnippet
 
 snippet class "class global attribute"
 class="$1"
+endsnippet
+
+snippet comment "comments"
+<!--${1:VISUAL}-->
+endsnippet
+
+snippet <! "comments"
+<!--${1:VISUAL}-->
 endsnippet
 
 snippet code "<code>" w

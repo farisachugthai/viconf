@@ -1,8 +1,9 @@
 " For windows specifically
+"wow dude everything single one of these had spaces around them
 
-set linespace = 3
-set cmdheight = 3
-set verbose = 1
+set linespace=3
+set cmdheight=3
+set verbose=1
 
 " Leave these commented out in case you wanna come back to them
 " set guifont=Inconsolata:h12
