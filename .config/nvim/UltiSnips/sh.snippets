@@ -9,8 +9,15 @@
 #######################################################################
 
 # Shebang. Good place to start
-snippet #! "#!/usr/bin/env (!env)"
-`!p snip.rv = '#!/usr/bin/env ' + getShell() + "# Maintainer: Faris Chugthai \n" `
+snippet #! "#!/usr/bin/env (!env)" b
+`!p snip.rv = '#!/usr/bin/env ' + getShell() + "\n# Maintainer: Faris Chugthai \n" `
+# set -euo pipefail
+endsnippet
+
+snippet # "#! accidentally gives sh so #!/usr/bin/env bash" b
+#!/usr/bin/env bash
+# Maintainer: Faris Chugthai
+
 # set -euo pipefail
 endsnippet
 
@@ -22,15 +29,19 @@ if [[ -z "$1" ]]; then
 fi
 endsnippet
 
-# Do regexes work? No i just tried ec(ho)? and it didn't work
+snippet dirname "Save the dir the script is in" b
+if [[ -h ${VISUAL:"$source"} ]]; then
+	DIRNAME="$( cd -P "$( dirname ${VISUAL:"$source"} )" && pwd )""
+fi
+endsnippet
+
+snippet source "Var = bash source" b
+${VISUAL:source}="${BASH_SOURCE[0]}"
+endsnippet
+
 snippet echo "Echo a statement"
 echo -e ${VISUAL:$1}
 endsnippet
-
-snippet ec(ho)? "Test regex" r
-echo -e ${VISUAL:$1}
-endsnippet
-
 
 snippet read "Read input from a user" b
 read ${VISUAL:$1}
@@ -43,7 +54,7 @@ endsnippet
 snippet if "if ... then (if)" b
 if ${3:[[ ${2:condition} ]]}; then
 	${1:expression}
-${0:possibly good time to expand elseif or else}
+${0:possibly good time to expand elif or else}
 fi
 endsnippet
 
@@ -57,23 +68,52 @@ else
 	${0}
 endsnippet
 
+###########
+#  tests  #
+###########
+
+snippet str0 "Test if a string is empty which in bash is equal to 0" b
+[[ -z ${0:VAR} ]]
+endsnippet
+
+# So many more TODO.
+
+snippet usage "If loop echoes help guide if no CLAs" b
+if [[ -z "$1" ]]; then
+	echo -e "Usage: $0 [options] commands"
+	exit 2
+fi
+endsnippet
+
 ###############
 #  functions  #
 ###############
 
+snippet which "Check if which is on the system and fall back to command otherwise." b
+_which() {
+	which "$1" 2>/dev/null || command -v "$1" 2>/dev/null
+}
+endsnippet
+
+
+# is this how you do mirrored vars?
+snippet source "Source a file if it exists" b
+[[ -f ${VISUAL:1} ]] && source $1 || echo "$1 can not be sourced."
+endsnippet
+
 snippet termuxdeps "Check for dependencies on termux" b
 checkdeps() {
-	printf "${BLUE}\n"
+	printf "${1:BLUE}\n"
 	echo -e " [*] Updating apt cache...\n"
 	pkg up -y &> /dev/null
 	echo -e " [*] Checking for all required tools...\n"
 
-	for i in ${VISUAL:pkg}; do
+	for ${VISUAL:3} in ${2:pkg}; do
 		if [ -e $PREFIX/bin/$i ]; then
-			echo -e " • $i is OK\n"
+			echo -e " • \$$3 is OK\n"
 		else
-			echo -e "Installing ${i}...\n"
-			pkg install -y $i || {
+			echo -e "Installing \$$3...\n"
+			pkg install -y \$$3 || {
 				printf "$RED"
 				echo -e " ERROR: check your internet connection or apt\n Exiting...\n"
 				printf "$reset"
@@ -153,9 +193,6 @@ White 1;37
 RESET='\033[0m'
 endsnippet
 
-
-
-# TODO: Ensure this works the highlighting is really messed up.
 snippet escape_codes "A gentle reminder of all bash escape sequences. Useful for prompts." b
 # \a an ASCII bell character (07)
 # \d the date in "Weekday Month Date" format (e.g., "Tue May 26")
@@ -184,8 +221,9 @@ snippet escape_codes "A gentle reminder of all bash escape sequences. Useful for
 # \] end a sequence of non-printing characters
 endsnippet
 
+
 #######################################################################
-#                             # UltiSnips                             #
+#                             UltiSnips                               #
 #######################################################################
 
 global !p
@@ -210,6 +248,13 @@ def getShell():
 	return "sh"
 endglobal
 
+###########################################################################
+#                            TextMate Snippets                            #
+###########################################################################
+# snippet #!
+# `!p snip.rv = '#!/bin/' + getShell() + "\n\n" `
+# endsnippet
+
 snippet sbash "safe bash options"
 #!/usr/bin/env bash
 set -euo pipefail
@@ -232,7 +277,8 @@ case ${1:word} in
 esac
 endsnippet
 
-snippet for "for ... done (for)"
+
+snippet forc "for loop - C style" b
 for (( i = 0; i < ${1:10}; i++ )); do
 	${0:#statements}
 done
@@ -260,6 +306,80 @@ snippet while "while ... (done)"
 while ${2:[[ ${1:condition} ]]}; do
 	${0:#statements}
 done
+endsnippet
+
+
+################
+#  # snipmate  #
+################
+# *sigh*
+
+snippet go "getopts"
+	while getopts '${1:o}' ${2:opts}
+	do
+		case $$2 in
+		${3:o0})
+			${0:#staments};;
+		esac
+	done
+endsnippet
+
+# Set SCRIPT_DIR variable to directory script is located.
+snippet dirname "get dir script is in"
+	SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+endsnippet
+
+snippet header "A full fledged header for your bash script."
+	__ScriptVersion="${1:version}"
+
+	#===  FUNCTION  ================================================================
+	#         NAME:  usage
+	#  DESCRIPTION:  Display usage information.
+	#===============================================================================
+	function usage ()
+	{
+		echo "Usage :  $${0:0} [options] [--]
+
+		Options:
+		-h|help       Display this message
+		-v|version    Display script version"
+
+	}    # ----------  end of function usage  ----------
+
+	#-----------------------------------------------------------------------
+	#  Handle command line arguments
+	#-----------------------------------------------------------------------
+
+	while getopts ":hv" opt
+	do
+		case $opt in
+
+		h|help     )  usage; exit 0   ;;
+
+		v|version  )  echo "$${0:0} -- Version $__ScriptVersion"; exit 0   ;;
+
+		* )  echo -e "\n  Option does not exist : $OPTARG\n"
+			usage; exit 1   ;;
+
+		esac    # --- end of case ---
+	done
+	shift $(($OPTIND-1))
+endsnippet
+
+snippet root
+	if [ \$(id -u) -ne 0 ]; then exec sudo \$0; fi
+endsnippet
+
+snippet fun-sh
+	${1:function_name}() {
+		${0:#function_body}
+	}
+endsnippet
+
+snippet fun
+	function ${1:function_name}() {
+		${0:#function_body}
+	}
 endsnippet
 
 # vim:ft=snippets:

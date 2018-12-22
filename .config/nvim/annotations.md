@@ -5,6 +5,7 @@
 " Environment: {{{ 2
 " Let's setup all the global vars we need. Will utilize to ensure consistency
 
+```vim
 let s:termux = exists('$PREFIX') && has('unix')
 let s:ubuntu = !exists('$PREFIX') && has('unix')
 let s:windows = has('win32') || has('win64')
@@ -23,35 +24,120 @@ let s:windows = has('win32') || has('win64')
 "     return s:windows
 " endfunction
 " }}}
+```
 
+Dec 01, 2018: This doesn't work either
+
+```vim
+" let s:winrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/winrc'
+" if call(is#windows)         " doubt this is the right syntax but we're getting close
+"     if filereadable(s:winrc)
+"         exe 'so' s:winrc
+"     endif
+" endif
+```
+
+Just pulled this off of the vimrc. The one above is init.vim.
+Both from laptop branch not termux. Amazingly there's different
+attempts over there too.
+
+
+```vim
+" Gonna start seriously consolidating vimrc and init.vim this is so hard
+" to maintain
+" Let's setup all the global vars we need
+" Wait am i assigning these vars correctly? man fuck vimscript
+
+if has('nvim')
+    let s:root = '~/.config/nvim'
+    let s:conf = '~/.config/nvim/init.vim'
+else
+    let s:root = '~/.vim'
+    let s:conf = '~/.vim/vimrc'
+endif
+
+if exists('$PREFIX')
+    let s:usr_d = '$PREFIX'     " might need to expand on use
+    let s:OS= 'Android'
+else
+    let s:usr_d = '/usr'
+    let s:OS = 'Linux'
+endif
+```
 
 ## Plugins
 
-=====================================================================
+### UltiSnips
 
-### FZF and friends
+From the help pages.
 
-So between fzf, ag, rg and a ton of other things I"ve been trying to do a ton with configuring searches correctly.
+#### Check if text is expandable
 
-Look at the command vscode gives you if you enable experimental support for rg.
+    6. FAQ   *UltiSnips-FAQ*
 
-    `rg --files --hidden --case-sensitive -g '**/package.json' -g '!**/node_modules/**' -g '!**/.git' -g '!**/.svn' -g '!**/.hg' -g '!**/CVS' -g '!**/.DS_Store' --no-ignore-parent --follow --no-config --no-ignore-global -- '.'`
 
-I mean I guess it wouldn't hurt to try integrating that into the init right?
+    Q: Do I have to call UltiSnips#ExpandSnippet() to check if a snippet is
+    expandable? Is there instead an analog of neosnippet#expandable?
+    A: Yes there is, try
 
-### Language Client
+    ```vim
+    function UltiSnips#IsExpandable()
+        return !empty(UltiSnips#SnippetsInCurrentScope())
+    endfunction
+    ```
+    Consider that UltiSnips#SnippetsInCurrentScope() will return all the
+    snippets you have if you call it after a space character. If you want
+    UltiSnips#IsExpandable() to return false when you call it after a space
+    character use this a bit more complicated implementation:
 
-The only thing is the function
+    `function UltiSnips#IsExpandable()`
 
-    `LanguageClient_serverCommands()`
+As notated by folds, go to All --> Remaining Plugins --> UltiSnips. Should be
+around line 700.
 
-But it's a simple dictionary. If you want, run a whole mess of loops checking
-things you care about I.E. bash language server, pyls etc are executable.
+I've copied `UltiSnips#IsExpandable()` there, and wanted to list the explanation
+here so as to note clutter up my init.vim.
 
-If those loops return True, add it's name to the dictionary. Then have the
-server run the commands we feed to it
+However that func needs a mapping because I'm never gonna remember it.
 
-I'm not sure how I hadn't thought of this yet.
+### Neosnippets
+
+```vim
+" Because I've found UltiSnips quite challenging to work with.
+let g:neosnippet#snippets_directory = [ '~/.config/nvim/neosnippets', '~/.local/share/nvim/plugged/vim-snippets/snippets' ]
+
+" From the help pages:
+" Plugin key-mappings.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+" SuperTab like snippets' behavior.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+imap <expr><TAB>
+\ pumvisible() ? "\<C-n>" :
+\ neosnippet#expandable_or_jumpable() ?
+\    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+" For conceal markers.
+if has('conceal')
+  set conceallevel=2 concealcursor=niv
+endif
+
+" This errors out.
+" Expand the completed snippet trigger by <CR>.
+" imap <expr><CR>
+" \ (pumvisible() && neosnippet#expandable()) ?
+" \<Plug>(neosnippet_expand)" : "\<CR>"
+
+" Enable snipMate compatibility feature.
+let g:neosnippet#enable_snipmate_compatibility = 1
+
+" Tell Neosnippet about the other snippets
+```
 
 ### Lightline
 
@@ -73,9 +159,11 @@ let g:lightline = {
     \ },
     \ }
 
+
 " function! MyFiletype()
 "     return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
 " endfunction
+
 
 " function! MyFileformat()
 "     return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
@@ -83,4 +171,22 @@ let g:lightline = {
 
 " let g:lightline.colorscheme = 'seoul256'
 " }}}
+```
+
+### NerdCom
+
+TODO: Use :Glog to recover your old nerdcom code. Better do it soon if you're
+thinking about ever being able to use it again!
+
+" **UNTESTED**:
+
+" just a thought i had. For any normal mode remaps you have, add the same
+" thing and prefix <Esc> to the RHS and boom!
+
+```vim
+if has('b:Tagbar')  " or any plugin
+    let g:tagbar_sort=0
+    inoremap <F3> <esc>:TagbarToggle<CR>
+    nnoremap <F3> :TagbarToggle<CR>
+endif
 ```

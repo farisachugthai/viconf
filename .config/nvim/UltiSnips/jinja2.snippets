@@ -1,12 +1,17 @@
 # Jinja snippets
 
-# https://jinja.pocoo.org/
+# URL:
+# `<https://jinja.pocoo.org/>
+
+# jinja2 is a full featured template engine for Python. It has full
+# unicode support, an optional integrated sandboxed execution
+# environment, widely used and BSD licensed.
 
 extends html
 extends htmljinja
+extends python, python3
 
-
-snippet block "block" b
+snippet jinjablock "Block" b
 {% block ${1:name} %}
 		$2
 {% endblock $1 %}
@@ -14,15 +19,18 @@ endsnippet
 
 
 snippet {{ "variable" b
-{{ $1 }}
+{{ ${VISUAL:1} }}
 endsnippet
 
+snippet var "variable" b
+{{ ${VISUAL:1} }}
+endsnippet
 
 snippet {# "comment" b
-{# $1 #}
+{# ${VISUAL:1} #}
 endsnippet
 
-
+# TODO: Get junegunns com for saving and loadinf macros. These files could use it. Or make a py plugin.
 snippet # "comment" b
 {# $1 #}
 endsnippet

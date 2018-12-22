@@ -1,12 +1,15 @@
 # All snippets
 
-#######################################################################
-#                           # NICE BOXES #                            #
-#######################################################################
-
 global !p
-from vimsnippets import foldmarker, make_box, get_comment_format
+from snippets_helper import foldmarker, make_box, get_comment_format
 endglobal
+
+# Hey check out what I just found in the help docs
+snippet "(\w+).par" "Parenthesis (postfix)" r
+(`!p snip.rv = match.group(1)`$1)$0
+endsnippet
+# So if you're writing some md or py files and forget the (), you can add
+# it on after the fact!
 
 snippet box "A nice box with the current comment symbol" b
 `!p
@@ -106,7 +109,7 @@ snippet lorem "Filler text." b
 endsnippet
 
 
-snippet GPL2 "Licensing" b
+snippet GPL2 "GPL2 licensing" b
 	${1:One line to give the program's name and a brief description.}
 	Copyright `&enc[:2] == "utf" ? "©" : "(c)"` `strftime("%Y")` ${2:`g:snips_author`}
 

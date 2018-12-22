@@ -18,7 +18,14 @@ At the end of the line::
 Options
 --------
 
-We have a few options to choose from. They are as follows:
+**TODO**: Get rid of these I never use them.
+
+The following are options to modify the way that snippets behave. My most
+commonly used options are::
+
+    b Only expand a snippet if it is the only text on the line
+    ...
+
 
    s  Remove whitespace immediately before the cursor at the end of a line
       before jumping to the next tabstop.  This is useful if there is a
@@ -41,11 +48,20 @@ We have a few options to choose from. They are as follows:
 
 
 **Important tip!**:
-    Write a good description for each snippet. When there are multiple to choose
-    from the only help you'll get is what you write the description you make.
-    So make it clear what the difference between
+
+    Write a clear description for every single snippet. Whlie this may sound
+    tedious, it pays massive dividends. When there are multiple snippets to
+    choose from the only help you'll get is what you write the description you
+    make. So make it clear what the difference between
     ``snippet argprse`` and ``snippet argprser`` are in the description!
 
+Important Considerations
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Do not use the 'b' option for snippets that could be expanded after a comment
+For example, in :ref:`vim.snippets`, the header snippet is regularly text
+that has already been written and is commented out. With the `b` option, a
+commented out header will not expand.
 
 Usage
 -----
@@ -54,14 +70,17 @@ I want to go over a few things that initially confused me about UltiSnips, and
 how I managed to solve any problems I had with the plugin.
 
 Finding Your Snippets
-^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^
 
-Memorizing your snippet's names is awful. The vim-snippets repository has literally
+Memorizing your snippet's names is awful. The vim-snippets repository has
 thousands of snippets in it, and the difference between expanding ``def`` and
-``deff`` can regularly be collosal. Therefore finding available snippets relatively
-quickly while not getting pulled out of a steady workflow is imperative.
+``deff`` can produce huge differences in output.
 
-**FZF!**
+Therefore finding available snippets relatively quickly while not getting
+bogged down searching for them is imperative.
+
+FZF
+^^^^
 
 Make sure you have fzf.vim installed. I absolutely love this plugin and it's
 endless configurability.
@@ -74,17 +93,18 @@ terminal that greps all snippets configured for the filetype.
    I personally use Ag, the Silver-Searcher for the backend of FZF. It's substantially
    faster and I've generally found it much more accessible than GNU Grep.
 
-FZF can also be configured to display a preview window peer at the exact snippet; in
-addition to the fact that it allows you to write a header! I'd advise throwing reminders
-to yourself for useful keybindings.
+FZF can also be configured to display a preview window peer at the exact
+snippet; in addition to the fact that it allows you to write a header! I'd
+advise throwing reminders to yourself for useful keybindings.
 
-If you need to extend the available snippets only one time, use ``UltiSnipsAddFileType``.
+If you need to extend the available snippets only one time, use
+``UltiSnipsAddFileType``.
 
 For persistent changes use 'extends {filetype to be added}'
 
 Now let's look at a snippet.
 
-.. code-block:: snippet
+.. code-block::
 
     snippet imp "import statement" b
         import ${0:module}
@@ -114,7 +134,7 @@ it quite gracefully. This leaves a full modifier key that has almost nothing
 bound to it, and as a result, I'd recommend binding it in your init.vim
 somewhat like this.
 
-.. code:: vimscript
+.. code:: vim
 
    inoremap <M-u> call UltiSnips#ListSnippets()<CR>
 
@@ -126,9 +146,9 @@ Be careful of that, and possibly disable it by remapping it to <nop>.
 Configuration
 ----------------
 
-After configuring ``g:UltiSnipsDirs`` and ``g:UltiSnipsDirectories`` as you would like,
-using the UltiSnipsEdit command should open the folder that your snippets
-are housed in.
+After configuring ``g:UltiSnipsDirs`` and ``g:UltiSnipsDirectories``
+as you would like, using the UltiSnipsEdit command should open the folder that
+your snippets are housed in.
 
 From @SirVer himself.
 

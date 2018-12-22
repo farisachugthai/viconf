@@ -7,5 +7,9 @@
 			"path": "C:\\Users\\faris\\python\\vsstudio-snips"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"files.eol": "\n",
+		"files.trimTrailingWhitespace": true,
+		"files.useExperimentalFileWatcher": true
+	}
 }
