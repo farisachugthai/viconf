@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "C:\\Users\\faris\\.conda\\envs\\pydata\\python.exe"
+    "python.pythonPath": "C:\\Users\\faris\\.conda\\envs\\pydata\\python.exe",
+    "restructuredtext.confPath": ""
 }

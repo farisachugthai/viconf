@@ -30,7 +30,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
 Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
-Plug 'davidhalter/jedi-vim'
+Plug 'davidhalter/jedi-vim', { 'for': ['python', 'python3'] }
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
@@ -51,8 +51,8 @@ else
 endif
 let g:deoplete#enable_at_startup = 1
 
+Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3'] }
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
-Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3']}
 Plug 'fszymanski/deoplete-emoji'
 Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
@@ -82,8 +82,49 @@ endif
 if exists('$VIRTUAL_ENV')
     let g:python3_host_prog = expand('$VIRTUAL_ENV') . '/bin/python'
 
+if has('python3')
+" if we have a virtual env start there
+    if exists('$VIRTUAL_ENV')
+        let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
+" TODO: Determine OS then check if has('win32') || has('win64')
+" actually as long as linux defines conda_exe were good!
+if has('python3')
+" if we have a virtual env start there
+    if exists('$VIRTUAL_ENV')
+        let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
 elseif exists('$CONDA_PYTHON_EXE')
     let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
+
+    elseif exists('$CONDA_PYTHON_EXE')
+        let g:python3_host_prog = $CONDA_PYTHON_EXE
+
+    " otherwise break up termux and linux
+    elseif exists('$PREFIX')
+        " and just use the system python
+        if executable('~/virtualenvs/neovim/bin/python3')
+            let g:python3_host_prog = '~/virtualenvs/neovim/bin/python3'
+        endif
+
+    elseif expand('$OS') ==# 'Windows_NT'       " no reason to split this loop based on that as a first check yet
+        let g:python3_host_prog = '~/Miniconda3/python.exe'
+
+    else
+        if executable('~/miniconda3/envs/neovim_vscode/bin/python')
+            let g:python3_host_prog = '~/miniconda3/envs/neovim_vscode/bin/python'
+        endif
+    elseif exists('$CONDA_PYTHON_EXE')
+        let g:python3_host_prog = $CONDA_PYTHON_EXE
+
+    " otherwise break up termux and linux
+    elseif exists('$PREFIX')
+        " and just use the system python
+        if executable('~/virtualenvs/neovim/bin/python3')
+            let g:python3_host_prog = '~/virtualenvs/neovim/bin/python3'
+        endif
+    else
+        if executable('~/miniconda3/envs/neovim_vscode/bin/python')
+            let g:python3_host_prog = '~/miniconda3/envs/neovim_vscode/bin/python'
+        endif
 
 " Otherwise break up termux and linux.
 elseif exists('$PREFIX')
@@ -272,6 +313,12 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
+" Wanna navigate windows more easily?
+" |CTRL-W_gF|	CTRL-W g F	   edit file name under the cursor in a new
+" 				   tab page and jump to the line number
+" 				   following the file name.
+"
+" Rebind that to C-w t and we can open the filename in a new tab.
 " Navigate tabs more easily
 map <unique> <A-Right> :tabnext<CR>
 map <unique> <A-Left> :tabprev<CR>
@@ -398,6 +445,11 @@ function! LC_maps()
     endif
 endfunction
 
+" Tagbar: {{{
+nnoremap <silent> <F8> :TagbarToggle<CR>
+let g:tagbar_left = 1
+
+" Macros Packages: {{{ 2
 augroup LangClient
     autocmd!
     autocmd FileType * call LC_maps()
@@ -444,8 +496,15 @@ let g:loaded_logiPat           = 1
 " Let's see if this speeds things up because I've never used most of them
 
 " Remaining Plugins: {{{1
+
 " Vim_Plug: {{{2
 let g:plug_window = 'tabe'
+
+" Plugins: {{{ 2
+
+" NERDTree: {{{ 3
+" Let's see if this works properly as a group
+" Plugins: {{{ 2
 
 " NERDTree: {{{2
 augroup nerd_loader
@@ -761,6 +820,7 @@ command! HL call <SID>hl()
 command! -nargs=1 -bang -complete=file Rename f <args>|w<bang>
 
 " UltiSnips: {{{2
+
 " GetAllSnippets:{{{3
 " Definitely a TODO
 function! GetAllSnippets()
@@ -777,6 +837,7 @@ function! GetAllSnippets()
   endfor
   return list
 endfunction
+
 " Expandable:{{{3
 
 " TODO: Come up with a mapping for it. Also what is E746
