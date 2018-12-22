@@ -1,10 +1,9 @@
 # html.snippets
-# TODO: the snipmate folder has 860 more lines if this already wasn't
-# plenty to go through hahahaha
 
-###########################################################################
-#                            TextMate Snippets                            #
-###########################################################################
+extends jinja
+extends htmljinja
+extends htmlminimal
+extends htmldjango
 
 global !p
 def x(snip):
@@ -16,12 +15,13 @@ endglobal
 
 snippet doctype "HTML - 5.0 (doctype)" b
 <!DOCTYPE html>
-
+$0
 endsnippet
 
 #############
 # Shortcuts #
 #############
+
 snippet down "Down (down)"
 &#x2193;
 endsnippet
@@ -66,11 +66,11 @@ endsnippet
 
 # Check the README for the explanation of w as "word boundary"
 snippet a "Link" w
-<a href="${1:http://www.${2:url.com}}"${3: target="_blank"}>${4:Anchor Text}</a>
+<a href="${1:http://www.${2:url.com}}"${3: target="_blank"}>${4:Anchor Text}</a>$0
 endsnippet
 
 snippet abbr "<abbr>" w
-<abbr title="$2">$1</abbr>
+<abbr title="$2">${VISUAL:1}/abbr>
 endsnippet
 
 snippet access "accesskey global attribute"
@@ -83,7 +83,7 @@ endsnippet
 
 snippet article "<article>"
 <article>
-	${1:article content}
+	${VISUAL:{1:article content}}
 </article>
 endsnippet
 
@@ -94,7 +94,7 @@ snippet aside "<aside>"
 endsnippet
 
 snippet b "<b>" w
-<b>$1</b>
+<b>${VISUAL:1}</b>
 endsnippet
 
 snippet base "HTML <base>" w

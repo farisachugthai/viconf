@@ -7,19 +7,11 @@
 # unicode support, an optional integrated sandboxed execution
 # environment, widely used and BSD licensed.
 
-# ji was prepended to every snippet to more easily distinguish between, for ex,
-# a \# comment from python snippets and jinja snips.
-
-extends html
-extends htmljinja
-extends python, python3
-
 snippet jinjablock "Block" b
 {% block ${1:name} %}
 		$2
 {% endblock $1 %}
 endsnippet
-
 
 snippet {{ "variable" b
 {{ ${VISUAL:1} }}
@@ -71,7 +63,6 @@ snippet filter "filter" b
 	$2
 {% endfilter %}
 endsnippet
-
 
 # Being able to quickly remove the whole 'else' block seems faster to me than
 # choosing between 'for' and 'for/else' snippets from the menu.
@@ -152,7 +143,6 @@ snippet trans "translation" b
 {% endtrans %}
 endsnippet
 
-
 snippet with "with" b
 {% with %}
 	$1
@@ -172,11 +162,9 @@ snippet batch "batch items" w
 batch(linecount=$1, fill_with=${2:None})
 endsnippet
 
-
 snippet dictsort "sort and yield (key, value) pairs" w
 dictsort(case_sensitive=${1:False}, by=${2:'key'})
 endsnippet
-
 
 snippet round "round number" w
 round(precision=${1:0}, method=${2:'common|ceil|floor'})

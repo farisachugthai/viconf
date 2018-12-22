@@ -211,9 +211,9 @@ try
     set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
 catch
 endtry
-" TODO: Write the above as if ! LC#sS() | LanguageClientStart() | set
-" on the cmdline ignore case in filenames
 
+" FOOBAR=~/<CTRL-><CTRL-F> will now autocomplete!
+set isfname-==
 " Other Global Options: {{{2
 set tags+=./tags,./../tags,./*/tags     " usr_29
 set tags+=~/projects/tags               " consider generating a few large tag
@@ -291,7 +291,7 @@ inoremap <F9> <Esc>:tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 " Now reload it
 nnoremap <Leader>re :so $MYVIMRC<CR>
 
-" Ease Dropbox uploads
+" Ease Dropbox uploads. Should probably turn into a func and command
 cnoremap termux-share termux-share -a send<Space>%
 
 " General_Mappings: {{{2
@@ -303,6 +303,7 @@ nnoremap <Leader>a :echo('No. Use :%y')<CR>
 nnoremap <Leader>he :helpgrep<Space>
 
 " Escape Conveniences:
+" f d clobbers the command though...
 inoremap fd <Esc>
 vnoremap fd <Esc>
 
@@ -318,11 +319,19 @@ nnoremap <Leader>cd :cd %:p:h<CR>:pwd<CR>
 " Switch NERDTree root to dir of currently focused window.
 nnoremap <Leader>ncd :NERDTreeCWD
 
+" Save a file as root
+noremap <leader>W :w !sudo tee % > /dev/null<CR>
+
+" UltiSnips: {{{2
+
 " I use this command constantly
 nnoremap <Leader>sn :Snippets<CR>
 
-" Save a file as root
-noremap <leader>W :w !sudo tee % > /dev/null<CR>
+nnoremap <Leader>se :UltiSnipsEdit<CR>
+
+inoremap <F6> <Esc>:UltiSnipsEdit<CR>
+nnoremap <F6> :UltiSnipsEdit<CR>
+
 " Unimpaired: {{{2
 " Note that ]c and [c are mapped by git-gutter and ALE has ]a and [a
 nnoremap ]q :cnext<CR>
@@ -527,7 +536,7 @@ endif
 let g:UltiSnipsSnippetDir = [ '~/.config/nvim/UltiSnips' ]
 let g:UltiSnipsJumpForwardTrigger = '<Tab>'
 let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
-inoremap <C-Tab> * <Esc>:call ultisnips#listsnippets()<CR>
+" inoremap <C-Tab> * <Esc>:call ultisnips#listsnippets()<CR>
 let g:ultisnips_python_style = 'numpy'
 let g:ultisnips_python_quoting_style = 'double'
 let g:UltiSnipsEnableSnipMate = 0

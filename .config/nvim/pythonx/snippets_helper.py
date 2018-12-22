@@ -4,7 +4,10 @@
 
 A useful combination with UltiSnips.
 """
-import string, vim
+import string
+import vim
+import os
+
 
 def complete(tab, opts):
     """
@@ -23,6 +26,7 @@ def complete(tab, opts):
         msg = "{0}"
     return msg.format("|".join(opts))
 
+
 def _parse_comments(s):
     """ Parses vim's comments option to extract comment format """
     i = iter(s.split(","))
@@ -36,8 +40,8 @@ def _parse_comments(s):
             if len(flags) == 0:
                 rv.append(('OTHER', text, text, text, ""))
             # parse 3-part comment, but ignore those with O flag
-        elif 's' in flags and 'O' not in flags:
-            ctriple = ["TRIPLE"]
+            elif 's' in flags and 'O' not in flags:
+                ctriple = ["TRIPLE"]
                 indent = ""
 
                 if flags[-1] in string.digits:
@@ -59,6 +63,7 @@ def _parse_comments(s):
                     rv.insert(0, ("SINGLE_CHAR", text, text, text, ""))
     except StopIteration:
         return rv
+
 
 def get_comment_format():
     """ Returns a 4-element tuple (first_line, middle_lines, end_line, indent)
@@ -93,12 +98,12 @@ def foldmarker():
     return vim.eval("&foldmarker").split(",")
 
 
-NORMAL  = 0x1
+NORMAL = 0x1
 DOXYGEN = 0x2
-SPHINX  = 0x3
-GOOGLE  = 0x4
-NUMPY   = 0x5
-JEDI    = 0x6
+SPHINX = 0x3
+GOOGLE = 0x4
+NUMPY = 0x5
+JEDI = 0x6
 
 SINGLE_QUOTES = "'"
 DOUBLE_QUOTES = '"'
@@ -165,6 +170,7 @@ def triple_quotes_handle_trailing(snip, quoting_style):
         snip.rv = _ret
     else:
         snip.rv = snip.c
+
 
 def get_style(snip):
     style = snip.opt("g:ultisnips_python_style", "normal")
@@ -302,6 +308,7 @@ def write_function_docstring(t, snip):
         snip += format_return(style)
     snip.rv += '\n' + snip.mkline('', indent='')
     snip += triple_quotes(snip)
+
 
 def get_dir_and_file_name(snip):
     return os.getcwd().split(os.sep)[-1] + '.' + snip.basename

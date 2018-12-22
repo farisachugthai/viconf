@@ -8,12 +8,6 @@ if has('nvim') || has('gui_running')
     endif
 endif
 
-augroup fzf
-    autocmd! FileType fzf
-    autocmd FileType fzf set laststatus=0 noshowmode noruler
-    \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
-augroup end
-
 " An action can be a reference to a function that processes selected lines
 function! s:build_quickfix_list(lines)
   call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
@@ -61,20 +55,31 @@ let g:fzf_colors =
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
 
-" FZF_VIM: {{{1
-" Insert mode completion:
+" Insert Mode Copletion: {{{1
 imap <c-x><c-k> <plug>(fzf-complete-word)
 imap <c-x><c-f> <plug>(fzf-complete-path)
 imap <c-x><c-j> <plug>(fzf-complete-file-ag)
-imap <c-x><c-l> <plug>(fzf-complete-line)
+imap <c-x><c-l> <plug>(fzf-complete-line
+
+nnoremap <silent> <expr> <Leader><Leader> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
+nnoremap <silent> <Leader>C        :Colors<CR>
+nnoremap <silent> <Leader><Enter>  :Buffers<CR>
+
+nmap <leader><tab> <plug>(fzf-maps-n)
+xmap <leader><tab> <plug>(fzf-maps-x)
+omap <leader><tab> <plug>(fzf-maps-o)
 
 " Command Local Options: {{{2
+
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1
+
 " [[B]Commits] Customize the options used by 'git log':
 let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
+
 " [Tags] Command to generate tags file
 let g:fzf_tags_command = 'ctags -R ./** && ctags -R --append ./.*'
+
 " [Commands] --expect expression for directly executing the command
 " Wait what happens if we hit those though?
 let g:fzf_commands_expect = 'alt-enter,ctrl-x'
@@ -109,6 +114,7 @@ inoremap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
     \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }}))
 
 " FZF_Statusline: {{{1
+
 " Custom fzf statusline
 function! s:fzf_statusline()
     " Override statusline as you like
@@ -120,5 +126,7 @@ endfunction
 
 augroup fzfstatusline
     autocmd! FileType fzf
+    autocmd FileType fzf set laststatus=0 noshowmode noruler
+    \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
     autocmd! user Fzfstatusline call <SID>fzf_statusline()
 augroup end

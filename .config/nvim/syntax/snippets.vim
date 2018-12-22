@@ -1,5 +1,6 @@
 " Syntax highlighting for snippet files (used for UltiSnips.vim)
 " Revision: 26/03/11 19:53:33
+" Vim: set foldmethod=marker:
 
 if exists("b:current_syntax")
   finish
@@ -16,6 +17,10 @@ endif
 
 " Embedded Syntaxes {{{1
 
+" This feels like a weird way of doing this. Like can we do something more
+" like fname - suffix = snipsyn; syntax include @snipsyn etc etc
+" so rst.vim gets highlighted like rst. because thatd be great for the
+" ftplugins as well so we can get proper indentation
 try
    syntax include @Python syntax/python.vim
    unlet b:current_syntax
@@ -32,10 +37,11 @@ endtry
 " Comments {{{2
 
 syn match snipComment "^#.*" contains=snipTODO display
-syn keyword snipTODO contained display FIXME NOTE NOTES TODO XXX
+syn keyword snipTODO contained display FIXME NOTE NOTES TODO XXX HACK TODO:
 
 " Errors {{{2
 
+" This shouldn't be counted as an error in a snippet?
 " syn match snipLeadingSpaces "^\t* \+" contained
 
 " Extends {{{2
@@ -169,7 +175,7 @@ syn match snipActionKeyword "\%(pre_expand\|post_expand\|post_jump\)" contained 
 syn match snipActionValue '"[^"]*"' contained contains=snipActionValueP
 syn region snipActionValueP start=,"\@<=., end=,\ze", contained contains=@Python skipwhite keepend
 
-" Snippt Clearing {{{2
+" Snippet Clearing {{{2
 
 syn match snipClear "^clearsnippets\%(\s.*\|$\)" contains=snipClearKeyword display
 syn match snipClearKeyword "^clearsnippets" contained display

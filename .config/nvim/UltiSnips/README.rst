@@ -31,8 +31,10 @@ are housed in.
 Options
 --------
 
-We have a few options to choose from. I've summarized, reformatted and
-rephrased their descriptions from the help page. They are as follows:
+We have a few options to choose from when defining snippets. They are as follows:
+
+Snippets Options
+^^^^^^^^^^^^^^^^^^
 
    s  Remove whitespace immediately before the cursor at the end of a line
       before jumping to the next tabstop. This is useful if there is a
@@ -54,14 +56,13 @@ rephrased their descriptions from the help page. They are as follows:
       permit expansion where the tab trigger follows punctuation without
       expanding suffixes of larger words.
 
-
-**Important tip!**:
+Important Considerations:
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Write a good description for each snippet. When there are multiple to choose
     from the only help you'll get is what you write the description you make.
     So make it clear what the difference between
     ``snippet argprse`` and ``snippet argprser`` are in the description!
-
 
 Usage
 -----

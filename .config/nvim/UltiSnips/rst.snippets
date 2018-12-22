@@ -1,4 +1,4 @@
-# rst.snippets
+# Rst.snippets:
 # -*- coding: utf-8 -*-
 # Vim: set ts=3:set expandtab:set shiftwidth=3:
 
@@ -103,6 +103,7 @@ def make_items(times, leading='+'):
 
 def look_up_directives(regex, fpath):
     """Find all directive args in given file
+
     :param: regex, the regex that needs to match
     :param: path, to path to rst file
 
@@ -137,6 +138,7 @@ def get_popular_code_type():
     return popular_type
 
 endglobal
+
 snippet title "Title with =" b
 `!p snip.rv = rst_char_len(t[1])*'='`
 ${1:${VISUAL:Section name}}
@@ -164,7 +166,6 @@ And Still More       42
 endsnippet
 
 snippet cb "Code Block. Must have 1 blank line surrounding!" b
-
 .. code-block:: ${1:python:shell-session}
 
     ${2:${VISUAL:code}}
@@ -181,7 +182,6 @@ endsnippet
 snippet code "Inline code. Needs to be visually highlighted first." b
 \`\`${VISUAL:0}\`\`
 endsnippet
-
 
 ################
 #  formatting  #
@@ -350,34 +350,34 @@ snippet toctree "directive_toctree" b
 	${2:#:FILES}
 endsnippet
 
-snippet part "Part" b
+snippet part "Part"
 `!p snip.rv = rst_char_len(t[1])*'#'`
 ${1:${VISUAL:Part name}}
 `!p snip.rv = rst_char_len(t[1])*'#'`
 endsnippet
 
-snippet chap "Chapter" b
+snippet chap "Chapter"
 `!p snip.rv = rst_char_len(t[1])*'*'`
 ${1:${VISUAL:Chapter name}}
 `!p snip.rv = rst_char_len(t[1])*'*'`
 endsnippet
 
-snippet sec "Section" b
+snippet sec "Section"
 ${1:${VISUAL:Section name}}
 `!p snip.rv = rst_char_len(t[1])*'='`
 endsnippet
 
-snippet ssec "Subsection" b
+snippet ssec "Subsection"
 ${1:${VISUAL:Subsection name}}
 `!p snip.rv = rst_char_len(t[1])*'-'`
 endsnippet
 
-snippet sssec "Subsubsection" b
+snippet sssec "Subsubsection"
 ${1:${VISUAL:Subsubsection name}}
 `!p snip.rv = rst_char_len(t[1])*'^'`
 endsnippet
 
-snippet para "Paragraph" b
+snippet para "Paragraph"
 ${1:${VISUAL:Paragraph name}}
 `!p snip.rv = rst_char_len(t[1])*'"'`
 $0

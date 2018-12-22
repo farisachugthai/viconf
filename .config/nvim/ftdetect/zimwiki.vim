@@ -8,10 +8,18 @@
 "
 " or maybe say all files that end with .txt in this dir tree are zim files.
 
+if exists('b:current_syntax')
+  finish
+endif
+
 function! s:DetectZimWiki()
-    if getline(1) =~ 'Content-Type: text/x-zim-wiki'
+    if getline(1) =~# 'Content-Type: text/x-zim-wiki'
         set filetype=zimwiki
     endif
 endfunction
 
-autocmd BufNewFile,BufRead * call s:DetectZimWiki()
+augroup zimwiki
+    autocmd BufRead,BufNewFile *.txt  call s:DetectZimWiki()
+augroup end
+
+let b:current_syntax = 1

@@ -16,6 +16,7 @@ if exists("b:current_syntax")
   finish
 endif
 
+" Get the CTRL-H syntax to handle backspaced text
 runtime! syntax/ctrlh.vim
 
 syntax case  ignore
@@ -50,7 +51,6 @@ if getline(1) =~ '^[a-zA-Z_]\+([23])'
   syn region manSynopsis start="^SYNOPSIS"hs=s+8 end="^\u\+\s*$"me=e-12 keepend contains=manSectionHeading,@cCode,manCFuncDefinition
 endif
 
-
 " Nvim's highlighting pattern with longopt and CFunc from Vim.
 " Defines the default highlighting only when that item doesn't already have
 " a highlighting group.
@@ -73,7 +73,8 @@ highlight default manItalic    cterm=italic    gui=italic
 " endif
 
 " below syntax elements valid for manpages 2 & 3 only
-" TODO: Some groups are defied 2 times.
+" TODO: Some groups are defined 2 times.
+" Actually a lot of redundancies. Really gotta sort this out.
 if !exists('b:man_sect')
   call man#init_pager()
 endif
@@ -109,5 +110,7 @@ endif
 
 " Prevent everything else from matching the last line
 execute 'syntax match manFooter display "^\%'.line('$').'l.*$"'
+" Wait why. Usually those include links to other man pages,
+" not only do I want those highlighted I want extra funcs for them
 
 let b:current_syntax = 'man'

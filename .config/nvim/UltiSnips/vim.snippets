@@ -24,8 +24,6 @@ snippet cpo "compatability options"
 let s:cpo_save = &cpo
 set cpo&vim
 
-
-
 let &cpo = s:cpo_save
 unlet s:cpo_save
 endsnippet
@@ -38,7 +36,7 @@ $0
 endsnippet
 
 # THIS HEADER WORKS THE EXACT WAY YOU'D WANT WHOO
-snippet header "standard Vim script file header" b
+snippet header "standard Vim script file header"
 " ============================================================================
 	" File: ${1:`!v expand('%:t')`}
 	" Author: ${2:`!v g:snips_author`}
@@ -47,10 +45,14 @@ snippet header "standard Vim script file header" b
 " ============================================================================
 endsnippet
 
+# how do I put a line at the end of a doc? the let statement can stay there
+# but it would be nice
 snippet ft "Ftplugin guard" b
-if exists(${1:"b:current_syntax"})
+if exists(${1:'b:current_syntax'})
   finish
 endif
+
+let b:current_syntax = 1
 $0
 endsnippet
 
@@ -123,11 +125,9 @@ endsnippet
 #  loops  #
 ###########
 
-# TODO What's up with the indenting? There's definitely a snip attribute that
-# figures out how to indent things correctly for you
 snippet for "for ... in loop"
 for ${1} in ${2}
-${0:${VISUAL}}
+	${0:${VISUAL}}
 endfor
 endsnippet
 
@@ -144,6 +144,7 @@ while ${1}
 endw
 endsnippet
 
+# does it need to be nested like that? test and come back.
 snippet if "if statement"
 if ${1}
 	${0:${VISUAL}}
@@ -161,14 +162,19 @@ snippet ife "if ... else statement"
 if ${1}
 	${2:${VISUAL}}
 else
-	${0}
+	$0
 endif
 endsnippet
 
-snippet au "augroup ... autocmd block"
+snippet aug "augroup ... autocmd block" bs
 augroup ${1:AU_NAME}
-	autocmd ${2:BufRead,BufNewFile} ${3:*.ext,*.ext3|<buffer[=N]>} ${0}
+	autocmd!
+	autocmd ${2:BufRead,BufNewFile} ${3:*.ext,*.ext3|<buffer[=N]>} $0
 augroup end
+endsnippet
+
+snippet au "bare autocmd" bs
+autocmd ${2:BufRead,BufNewFile} ${3:*.ext,*.ext3|<buffer[=N]>} ${0}
 endsnippet
 
 #####################
@@ -176,54 +182,54 @@ endsnippet
 #####################
 
 snippet bun "Vundle.vim Plugin definition"
-Plugin '${0}'
+Plugin '${VISUAL:0}'
 endsnippet
 
-snippet plug "vim-plug Plugin definition"
-Plug '${0}'
+snippet plug "vim-plug Plugin definition" bs
+Plug '${VISUAL:0}'
 endsnippet
 
-snippet plugdo "vim-plug Plugin definition with { 'do': '' }"
-Plug '${1}', { 'do': '${0}' }
+snippet plugdo "vim-plug Plugin definition with { 'do': '' }" bs
+Plug '${VISUAL:1}', { 'do': '${0}' }
 endsnippet
 
-snippet plugon "vim-plug Plugin definition with { 'on': '' }"
-Plug '${1}', { 'on': '${0}' }
+snippet plugon "vim-plug Plugin definition with { 'on': '' }" bs
+Plug '${VISUAL:1}', { 'on': '${0}' }
 endsnippet
 
-snippet plugfor "vim-plug Plugin definition with { 'for': '' }"
-Plug '${1}', { 'for': '${0}' }
+snippet plugfor "vim-plug Plugin definition with { 'for': '' }" bs
+Plug '${VISUAL:1}', { 'for': '${0}' }
 endsnippet
 
-snippet plugbr "vim-plug Plugin definition with { 'branch': '' }"
-Plug '${1}', { 'branch': '${0}' }
+snippet plugbr "vim-plug Plugin definition with { 'branch': '' }" bs
+Plug '${VISUAL:1}', { 'branch': '${0}' }
 endsnippet
 
-snippet plugtag "vim-plug Plugin definition with { 'tag': '' }"
-Plug '${1}', { 'tag': '${0}' }
+snippet plugtag "vim-plug Plugin definition with { 'tag': '' }" bs
+Plug '${VISUAL:1}', { 'tag': '${0}' }
 endsnippet
 
 #############
 #  options  #
 #############
 
-snippet letg
+snippet letg "let buffer local var = val"
 let g:${1:variable} = ${0: value}
 endsnippet
 
-snippet letb
+snippet letb "let buffer local var = val"
 let b:${1:variable} = ${0: value}
 endsnippet
 
-snippet se
-set ${1:setting};
+snippet se "set a var"
+set ${1:setting}
 endsnippet
 
-snippet set
+snippet set "set a var=value"
 set ${1:setting}=${0:value}
 endsnippet
 
-snippet setl
+snippet setl "setlocal var=value"
 setlocal ${1:setting}=${0:value}
 endsnippet
 
@@ -231,23 +237,43 @@ endsnippet
 #  mapping  #
 #############
 
-snippet nno
-nnoremap ${1} ${2}<CR>
+snippet m "map var var CR" bs
+map ${<Leader>${1}} ${2}${3:<CR>}
 endsnippet
 
-snippet no
-noremap ${1} ${2}
+snippet no "noremap var var CR" bs
+noremap ${1} ${2}${3:<CR>}
 endsnippet
 
-snippet vm
-vnoremap ${1} ${2}
+snippet nno "nnoremap var var CR" bs
+nnoremap ${1} ${2}${3:<CR>}
 endsnippet
 
-snippet im
-inoremap ${1} ${2}
+snippet vm "noremap var var CR" bs
+vmap ${1} ${2}${3:<CR>}
 endsnippet
 
-snippet exe
+snippet vno "vnoremap var var CR" bs
+vnoremap ${1} ${2}${3:<CR>}
+endsnippet
+
+snippet im "imap var var CR" bs
+imap ${1} ${2}${3:<CR>}
+endsnippet
+
+snippet ino "inoremap var var CR" bs
+inoremap ${1} ${2}${3:<CR>}
+endsnippet
+
+snippet cm "cmap var var CR" bs
+cmap ${1} ${2}${3:<CR>}
+endsnippet
+
+snippet cnm "cnoremap var var CR" bs
+cnoremap ${1} ${2}${3:<CR>}
+endsnippet
+
+snippet exe "execute(var)" b
 execute('${VISUAL:1}')
 endsnippet
 

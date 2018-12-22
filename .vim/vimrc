@@ -8,7 +8,7 @@ let g:snips_github = 'https://github.com/farisachugthai'
 
 " Vim Plug:{{{1
 
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
