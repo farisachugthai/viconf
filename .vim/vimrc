@@ -1,15 +1,17 @@
-" vimrc
+" Vimrc:
 " vim configuration
 
-" About:{{{1
+" About: {{{1
 let g:snips_author = 'Faris Chugthai'
 let g:snips_email = 'farischugthai@gmail.com'
 let g:snips_github = 'https://github.com/farisachugthai'
+
 
 " Vim Plug:{{{1
 
 call plug#begin('~/.local/share/nvim/plugged')
 
+Plug 'junegunn/vim-plug'        " plugception
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
@@ -19,16 +21,27 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
 Plug 'w0rp/ale'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',
+    \ 'do': 'bash install.sh' }
 Plug 'edkolev/tmuxline.vim'
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
 Plug 'mhinz/vim-startify'
+if has('nvim')
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+    Plug 'Shougo/deoplete.nvim'
+    Plug 'roxma/nvim-yarp'
+    Plug 'roxma/vim-hug-neovim-rpc'
+endif
+let g:deoplete#enable_at_startup = 1
+
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
+Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3']}
 Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
-" }}}
 
 " Vim Specific:{{{1
 
@@ -63,8 +76,11 @@ if has('python3')
             let g:python3_host_prog = '$PREFIX/bin/python'
         endif
     else
-        if executable('/usr/bin/python')
-            let g:python3_host_prog = '/usr/bin/python'
+        if executable('/usr/bin/python3')
+            let g:python3_host_prog = '/usr/bin/python3'
+            if executable('/usr/bin/python2')       " why not
+                let g:python_host_prog = '/usr/bin/python2'
+            endif
         endif
     endif
 endif
@@ -107,8 +123,10 @@ set splitright
 set encoding=UTF-8                      " Set default encoding
 scriptencoding UTF-8                    " Vint believes encoding should be done first
 set fileencoding=UTF-8
+set termencoding=utf-8
 
 setlocal spelllang=en
+
 if filereadable(glob('~/.vim/spell/en_US.utf-8.add'))
     set spellfile=~/.vim/spell/en_US.utf-8.add
 endif
@@ -160,6 +178,8 @@ if !has('nvim')
     set tabpagemax=50
     set ttyfast         "insert/delete line commands. this makes Vim seem smoother
     set nrformats-='octal'
+    " Line below is giving me an error for some reason.
+    " set listchars='tab:> ,trail:-,nbsp:+'
 endif
 
 " - 'backupdir' defaults to .,~/.local/share/nvim/backup (|xdg|)
@@ -172,6 +192,7 @@ endif
 "   formatoptions=jcroql
 "   .....sooooo completely different huh?
 " - 'sidescroll' defaults to 1
+"
 
 " Fun With Clipboards:{{{2
 if has('unnamedplus')           " Use the system clipboard.
@@ -250,6 +271,7 @@ set browsedir="buffer"                  " which directory is used for the file b
 " Mappings:{{{1
 
 " General Mappings:{{{2
+
 " Navigate windows more easily
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
@@ -354,6 +376,8 @@ nnoremap <Leader>* <Plug>(ale_go_to_reference)
 
 nnoremap <Leader>a :ALEInfo<cr>
 
+nnoremap <unique> <A-a> <Plug>(ale_detail)
+
 " Fugitive:{{{2
 nnoremap <silent> <leader>gb :Gblame<CR>
 nnoremap <silent> <leader>gc :Gcommit<CR>
@@ -369,8 +393,8 @@ nnoremap <silent> <leader>gs :Gstatus<CR>
 nnoremap <silent> <leader>gw :Gwrite<CR>
 nnoremap <silent> <leader>gW :Gwrite!<CR>
 
-" Python Language Server:{{{2
-function LC_maps()
+" Python Language Server: {{{2
+function! LC_maps()
     if has_key(g:LanguageClient_serverCommands, &filetype)
         nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<cr>
         nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
@@ -418,15 +442,13 @@ let g:loaded_tutor_mode_plugin                                            = 1
 let g:loaded_getsciptPlugin                                               = 1
 let g:loaded_2html_plugin                                                 = 1
 let g:loaded_logiPat                                                      = 1
-" let g:loaded_netrw                                                      = 1
-" let g:loaded_netrwPlugin                                                = 1
+let g:loaded_netrw                                                      = 1
+let g:loaded_netrwPlugin                                                = 1
 " Let's see if this speeds things up because I've never used most of them
 
-" }}}
+" Remaining Plugins: {{{1
 
-" Remaining Plugins:{{{1
-
-" NERDTree:{{{2
+" NERDTree: {{{2
 augroup nerd_loader
   autocmd!
   autocmd VimEnter * silent! autocmd! FileExplorer
@@ -451,29 +473,6 @@ let g:NERDTreeShowLineNumbers = 1
 let g:NERDTreeMouseMode = 2                         " Open dirs with 1 click files with 2
 let g:NERDTreeIgnore = ['\.pyc$', '\.pyo$', '__pycache__$']
 let g:NERDTreeRespectWildIgnore = 1                 " yeah i meant those ones too
-" }}}
-
-" ALE:{{{2
-let g:ale_fixers = { '*': [ 'remove_trailing_lines', 'trim_whitespace' ] }
-let g:ale_fix_on_save = 1
-" Default: `'%code: %%s'`
-let g:ale_echo_msg_format = '%linter% - %code: %%s %severity%'
-let g:ale_set_signs = 1
-let g:ale_sign_column_always = 1
-let g:ale_lint_delay = 1000
-let g:ale_set_quickfix = 1
-let g:ale_set_loclist = 0
-let g:ale_virtualenv_dir_names = [ '$HOME/virtualenvs' ]
-
-" Display progress while linting.
-let s:ale_running = 0
-" let l:stl .= '%{s:ale_running ? "[linting]" : ""}'
-augroup ALEProgress
-    autocmd!
-    autocmd User ALELintPre  let s:ale_running = 1 | redrawstatus
-    autocmd User ALELintPost let s:ale_running = 0 | redrawstatus
-augroup END
-
 " Devicons:{{{2
 let g:webdevicons_enable = 1
 let g:webdevicons_enable_nerdtree = 1               " adding the flags to NERDTree
@@ -487,73 +486,6 @@ else
     let entry_format .= '. entry_path'
 endif
 
-" Vim_Startify:{{{2
-" What shows up in the startify list?
-
-function! s:list_commits()
-    let git = 'git -C ~/projects/viconf/'
-    let commits = systemlist(git .' log --oneline | head -n10')
-    let git = 'G'. git[1:]
-    return map(commits, '{"line": matchstr(v:val, "\\s\\zs.*"), "cmd": "'. git .' show ". matchstr(v:val, "^\\x\\+") }')
-endfunction
-
-let g:startify_lists = [
-    \ { 'header': ['   MRU'],            'type': 'files' },
-    \ { 'header': ['   MRU '. getcwd()], 'type': 'dir' },
-    \ { 'header': ['   Sessions'],       'type': 'sessions' },
-    \ { 'header': ['   Commits'],        'type': function('s:list_commits') },
-    \ { 'type': 'commands',  'header': ['   Commands']       },
-    \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
-\ ]
-
-let g:startify_session_sort = 1
-let g:startify_update_oldfiles = 1
-
-" Setup devicons
-function! StartifyEntryFormat()
-    return 'WebDevIconsGetFileTypeSymbol(absolute_path) ." ". entry_path'
-endfunction
-
-" Center the header and footer
-function! s:filter_header(lines) abort
-    let longest_line   = max(map(copy(a:lines), 'strwidth(v:val)'))
-    let centered_lines = map(copy(a:lines),
-        \ 'repeat(" ", (&columns / 2) - (longest_line / 2)) . v:val')
-    return centered_lines
-endfunction
-
-let g:startify_custom_header = s:filter_header(startify#fortune#cowsay())
-
-" Don't show these files
-let g:startify_skiplist = [
-    \ 'COMMIT_EDITMSG',
-    \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc', ]
-    " its explained why this won't. actually great explanation of those weird,
-    " afile cfile sfile vars
-    " \ '~/.local/share/nvim/plugged/' .*/doc',
-    " \ ]
-if has('gui_win32')
-    let g:startify_session_dir = '$HOME\vimfiles\session'
-else
-    let g:startify_session_dir = '~/.vim/session'
-endif
-" TODO: Figure out how to set let g:startify_bookmarks = [ Contents of
-" NERDTreeBookmarks ]
-let g:startify_change_to_dir = 1
-let g:startify_fortune_use_unicode = 1
-let g:startify_update_oldfiles = 1
-let g:startify_session_persistence = 1
-" Configured correctly this could be a phenomenal way to store commands and
-" expressions on a per directory basis aka projects / workspaces!
-let g:startify_session_autoload = 1
-" Not 100% sure if the code below works but here's hoping!
-let g:startify_skiplist = [
-        \ 'COMMIT_EDITMSG',
-        \ glob('plugged/*/doc'),
-        \ 'C:\Program Files\Vim\vim81\doc',
-        \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc',
-        \ ]
-
 " UltiSnips:{{{2
 let g:UltiSnipsSnippetDir = [ '~/.vim/UltiSnips' ]
 let g:UltiSnipsJumpForwardTrigger='<Tab>'
@@ -564,7 +496,6 @@ let g:UltiSnips_python_quoting_style = 'double'
 let g:UltiSnipsEnableSnipMate = 1
 let g:UltiSnipsEditSplit = 'tabdo'
 " }}}
-
 " Language Client:{{{2
 let g:LanguageClient_serverCommands = { 'python': [ 'pyls' ] }
 
@@ -621,15 +552,6 @@ let g:airline#extensions#tmuxline#enabled = 1
 
 " Filetype Specific Options:{{{1
 
-augroup ftpersonal
-" IPython:
-    au BufRead,BufNewFile *.ipy setlocal filetype=python
-" Web Dev:
-    au filetype javascript,html,css setlocal shiftwidth=2 softtabstop=2 tabstop=2
-" Markdown:
-    autocmd BufNewFile,BufFilePre,BufRead *.md setlocal filetype=markdown
-augroup end
-
 " Noticed this bit in he syntax line 2800
 let g:is_bash = 1
 let g:sh_fold_enabled= 4  "   (enable if/do/for folding)
@@ -643,12 +565,11 @@ let rst_syntax_code_list = ['vim', 'python', 'sh', 'markdown', 'lisp']
 
 " highlighting readline options
 let readline_has_bash = 1
-" }}}
 
-" Functions:{{{1
+" Functions: {{{1
 
 " Next few are from Junegunn so credit to him
-" Todo Function:{{{2
+" Todo Function: {{{2
 function! s:todo() abort
     let entries = []
     for cmd in ['git grep -niI -e TODO -e todo -e FIXME -e XXX 2> /dev/null',
@@ -670,7 +591,7 @@ endfunction
 command! Todo call s:todo()
 " }}}
 
-" Explore:{{{2
+" Explore: {{{2
 " Here's one where he uses fzf and Explore to search a packages docs
 function! s:plug_help_sink(line)
     let dir = g:plugs[a:line].dir
@@ -685,7 +606,7 @@ function! s:plug_help_sink(line)
     execute 'Explore' dir
 endfunction
 
-" Scriptnames:{{{2
+" Scriptnames: {{{2
 "command to filter :scriptnames output by a regex
 command! -nargs=1 Scriptnames call <sid>scriptnames(<f-args>)
 function! s:scriptnames(re) abort
@@ -697,7 +618,7 @@ function! s:scriptnames(re) abort
     echo join(filtered, "\n")
 endfunction
 
-" Helptabs:{{{2
+" Helptabs: {{{2
 function! s:helptab()
     if &buftype ==# 'help'
         wincmd T
@@ -708,7 +629,7 @@ function! s:helptab()
 endfunction
 command! -nargs=1 Help call <SID>helptab()
 
-" Autosave:{{{2
+" Autosave: {{{2
 function! s:autosave(enable)
   augroup autosave
     autocmd!
@@ -723,7 +644,7 @@ endfunction
 
 command! -bang Autosave call s:autosave(<bang>1)
 
-" HL:{{{2
+" HL: {{{2
 " Whats the syntax group under my cursor?
 function! s:hl()
   " echo synIDattr(synID(line('.'), col('.'), 0), 'name')
@@ -739,7 +660,7 @@ fun! EditFileComplete(A,L,P)
     return split(globpath(&path, a:A), "\n")
 endfun
 
-" Colorscheme:{{{1
+" Colorscheme: {{{1
 set background=dark
 colorscheme onedark
 if g:colors_name ==# 'gruvbox'      " ==# means match case
@@ -747,6 +668,3 @@ if g:colors_name ==# 'gruvbox'      " ==# means match case
     let g:gruvbox_improved_strings = 1
 endif
 hi NonText guifg=NONE guibg=#000000        " Massive performance difference
-" }}}
-
-" }}}

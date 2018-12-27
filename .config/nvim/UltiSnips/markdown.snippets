@@ -2,32 +2,31 @@
 #                         # Markdown Snippets                         #
 #######################################################################
 
+extends html
+
 ################
 #  # Personal  #
 ################
 
 # TODO: Make a python function. Visual var should be snip.fn
 snippet cheat "Cheatsheet template"
-# ${VISUAL}
+# `!p snip.fn`
 
-## personal
+${2:## personal}
 
-${0:your notes}
+${3:## cheat}
 
-${1:## cheat}
+${4:## tldr}
 
-${2:## tldr}
+${5:## eg}
 
-${3:## eg}
-
-${4:## man}
+${6:## man}
+$0
 endsnippet
-
 
 #######################################################################
 #                             # SnipMate                              #
 #######################################################################
-
 
 snippet ```
 	\`\`\`${1}
@@ -108,7 +107,6 @@ endglobal
 # Sections and Paragraphs #
 ###########################
 
-# TODO: I thought these were header markers?
 snippet h1 "ATX Section" b
 # ${1:Section Name} #
 endsnippet
@@ -169,6 +167,8 @@ endsnippet
 #  Links  #
 ###########
 
+# Here's the src:
+# https://daringfireball.net/projects/markdown/syntax#link
 snippet link "More fleshed out than my link. Link to something"
 [${1:${VISUAL:Text}}](${3:http://${2:www.url.com}})$0
 endsnippet
@@ -177,29 +177,13 @@ snippet < "Links"
 <${1:https://${VISUAL:2}}>
 endsnippet
 
-
 snippet linktitle "Inline link with a title" b
-[${1:displayedtext}](${2:URL} "{3:Optional title}")
+[${1:displayedtext}](${2:URL} ${3:Optional title}) $0
 endsnippet
 
-snippet rel "Relative path in a link" b
-[${1:text}(${VISUAL:/path/to/link})
+snippet rel "Relative path in a link. Can be used to link to a file in a repo" w
+[${1:text}](${2:URL${VISUAL}}) $0
 endsnippet
-
-# Here's the src:
-# https://daringfireball.net/projects/markdown/syntax#link
-snippet link "A link"
-[${1:displayedtext}](${2:URL})
-endsnippet
-
-snippet linktitle "Inline link with a title" b
-[${1:displayedtext}](${2:URL} "${3:Optional title}")
-endsnippet
-
-snippet rel "Relative path in a link. Can be used to link to a file in a repo" b
-[${1:text}(${VISUAL:/path/to/link})
-endsnippet
-
 
 ################
 # Common stuff #
@@ -220,7 +204,7 @@ $0
 endsnippet
 
 snippet ilc "Inline Code" i
-\`$1\`$0
+\`${VISUAL:1}\` $0
 endsnippet
 
 snippet code "Codeblock" b
@@ -255,5 +239,3 @@ endsnippet
 pre_expand "create_table(snip)"
 snippet "tb(\d+x\d+)" "Customizable table" br
 endsnippet
-
-# vim:ft=snippets:

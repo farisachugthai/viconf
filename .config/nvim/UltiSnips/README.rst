@@ -24,6 +24,7 @@ and ``g:UltiSnipsDirectories`` as they tell UltiSnips where to look for
 your snippets.
 
 .. todo Mention that usp can't be snippets and explain why usps is set to 0
+
 After configuring ``g:UltiSnipsDirs`` and ``g:UltiSnipsDirectories`` as you would like,
 using the UltiSnipsEdit command should open the folder that your snippets
 are housed in.
@@ -64,6 +65,14 @@ Important Considerations:
     So make it clear what the difference between
     ``snippet argprse`` and ``snippet argprser`` are in the description!
 
+
+Important Considerations
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Do not use the 'b' option for snippets that could be expanded after a comment
+For example, in :ref:`vim.snippets`, the header snippet is regularly text
+that has already been written and is commented out. With the `b` option, a
+
 Usage
 -----
 
@@ -71,14 +80,15 @@ I want to go over a few things that initially confused me about UltiSnips, and
 how I managed to solve any problems I had with the plugin.
 
 Finding Your Snippets
-^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^
 
 Memorizing your snippet's names is awful. The vim-snippets repository has literally
 thousands of snippets in it, and the difference between expanding ``def`` and
 ``deff`` can regularly be collosal. Therefore finding available snippets relatively
 quickly while not getting pulled out of a steady workflow is imperative.
 
-**FZF!**
+FZF
+^^^^
 
 Make sure you have fzf.vim installed. I absolutely love this plugin and it's
 endless configurability.
@@ -101,7 +111,7 @@ For persistent changes use 'extends {filetype to be added}'
 
 Now let's look at a snippet.
 
-.. code-block:: snippet
+.. code-block::
 
    snippet imp "import statement" b
        import ${0:module}
@@ -131,7 +141,7 @@ it quite gracefully. This leaves a full modifier key that has almost nothing
 bound to it, and as a result, I'd recommend binding it in your init.vim
 somewhat like this.
 
-.. code:: vimscript
+.. code:: vim
 
    inoremap <M-u> call UltiSnips#ListSnippets()<CR>
 

@@ -8,7 +8,7 @@ ${${1:'let s:local_vimrc' = }}fnamemodify(resolve(expand('<sfile>')), ':p:h').'$
 endsnippet
 
 snippet gvar "Global / configuration variable" b
-if !exists("g:${1:MyUltraImportantVar}")
+if !exists('g:${1:MyUltraImportantVar}')
 	let g:$1 = ${2:"${3:<tab>}"}
 endif
 endsnippet
@@ -125,42 +125,42 @@ endsnippet
 #  loops  #
 ###########
 
-snippet for "for ... in loop"
+snippet for "for ... in loop" s
 for ${1} in ${2}
 	${0:${VISUAL}}
 endfor
 endsnippet
 
-snippet for "for [key, value] in loop"
+snippet for "for [key, value] in loop" s
 for [${1},${2}] in items(${3})
 	${0}
 	unlet $1 $2
 endfor
 endsnippet
 
-snippet wh "while loop"
+snippet wh "while loop" s
 while ${1}
-	${0:${VISUAL}}
+	${0:${VISUAL:body}}
 endw
 endsnippet
 
 # does it need to be nested like that? test and come back.
-snippet if "if statement"
+snippet if "if statement" s
 if ${1}
-	${0:${VISUAL}}
+	${0:${VISUAL:body}}
 endif
 endsnippet
 
 # **TODO**: Use this style of snippet a few times and let me know if it's better to
 # put $VISUAL on the condition or the code.
-snippet elif "elif by vim" b
-elseif ${VISUAL:1}
-	${0:body}
+snippet elif "elif by vim" bs
+elseif ${1}
+	${0:${VISUAL:body}}
 endsnippet
 
-snippet ife "if ... else statement"
+snippet ife "if ... else statement" s
 if ${1}
-	${2:${VISUAL}}
+	${2:${VISUAL:body}}
 else
 	$0
 endif

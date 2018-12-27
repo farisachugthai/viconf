@@ -1,24 +1,31 @@
 README
 ========
+:Author: Faris Chugthai <farischugthai.gmail.com>
+:Date: 12/21/2018
 
-How are the folders and files in a neovim directory tree supposed to be laid out?
+Directory Layout
+-----------------
 
-Well each directory serves a specific purpose, and depending on use case, not all
+How are the folders in a neovim directory tree supposed to be laid out?
+
+While each directory serves a specific purpose, depending on use case, not all
 need to be employed.
 
-The first and most obvious file is the :mod:`init.vim`. We can setup the base
+The first and most obvious file is the :module:`init.vim`. We can setup the base
 options like so:
 
-" Options
-" =======
-"
-"    :let OPTION_NAME = 1                   Enable option
-"    :let OPTION_NAME = 0                   Disable option
-"
-"
-" Continuation of settings
-" -------------------------------
-
++-----------------------------+----------------+
+| " Options                   |                |
+| " ========================= |                |
+|                             |                |
+| .. code-block:: vim         |                |
+|                             |                |
+|    :let OPTION_NAME = 1     | Enable option  |
+|    :let OPTION_NAME = 0     | Disable option |
+|                             |                |
+|                             |                |
+| " Continuation of settings  |                |
++-----------------------------+----------------+
 
 Here's a follow up explanation that goes into more of the details
 
@@ -32,9 +39,9 @@ that buffers of a different filetype don't source everything in after/ftplugin.
 
 For example, let's say we were in after/ftplugin/gitcommit.vim
 
-Something like this pseudo code would be perfect:
+Something like this pseudo code would be perfect::
 
-`if ft != None && ft != gitcommit | finish | endif`
+    ``if ft != None && ft != gitcommit | finish | endif``
 
 Then put that in everything in that dir.
 
@@ -46,4 +53,4 @@ times.
 And how does sourcing ftdetect work? Because everything in my ftdetect always
 shows up in `:scriptnames`.
 
-Need to see how $VIMRUNTIME implements this.
+Need to see how :var:`$VIMRUNTIME` implements this.

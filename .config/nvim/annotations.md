@@ -1,50 +1,21 @@
 # Annotations
 
-## FZF
-
-" {{{
-
-Dropping this because FZF.vim now comes with :R and :Rg but if you wanna
-modify anything in the future here's the original code I had
-
-```viml
-" **TODO**: Commented out because E183: User defined commands must start with an uppercase letter:::
-" :ag  - start fzf with hidden preview window that can be enabled with '?' key
-" :ag! - start fzf in fullscreen and display the preview window above
-" command! -bang -nargs=* ag
-"     \ call fzf#vim#ag(<q-args>,
-"     \ <bang>0 ? fzf#vim#with_preview('up:60%')
-"     \ : fzf#vim#with_preview('right:50%:hidden', '?'),
-"     \ <bang>0)
-
-" " similarly, we can apply it to fzf#vim#grep. to use ripgrep instead of ag:
-" command! -bang -nargs=* rg
-"     \ call fzf#vim#grep(
-"     \ 'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
-"     \ <bang>0 ? fzf#vim#with_preview('up:60%')
-"     \ : fzf#vim#with_preview('right:50%:hidden', '?'),
-"     \ <bang>0)
-
-" " likewise, files command with preview window
-" command! -bang -nargs=? -complete=dir files
-"     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
-```
-" }}}
-
 ## Environment
+
+### Windows
 
 Dec 01, 2018
 
 To continue adding to this pile, I remember there being a need to configure the cursor
 for tmux and nvim differently when using konsole.
 
-```viml
+```vim
 let s:konsole = exists('$KONSOLE_DBUS_SESSION') ||
 \ exists('$KONSOLE_PROFILE_NAME')
 ```
 ...
 
-```viml
+```vim
 " 1 or 0 -> blinking block
 " 2 -> solid block
 " 3 -> blinking underscore
@@ -78,7 +49,7 @@ Gotta admit that's a lot smarter than what i'd come up with.
 
 Now here are some functions that don't work.
 
-```viml
+```vim
 let s:termux = exists('$PREFIX') && has('unix')
 let s:ubuntu = !exists('$PREFIX') && has('unix')
 let s:windows = has('win32') || has('win64')
@@ -96,7 +67,6 @@ let s:windows = has('win32') || has('win64')
 " function! is#windows() abort
 "     return s:windows
 " endfunction
-" }}}
 ```
 
 ### Sourcing configs for Win32
@@ -135,39 +105,38 @@ else
     let s:OS = 'Linux'
 endif
 ```
-" }}}
-
-
 
 ## Plugins
-------------
 
 ### UltiSnips
 
+From the help pages.
+
 #### Check if text is expandable
 
+    6. FAQ   *UltiSnips-FAQ*
 
-6. FAQ                                                        *UltiSnips-FAQ*
 
-Q: Do I have to call UltiSnips#ExpandSnippet() to check if a snippet is
-   expandable? Is there instead an analog of neosnippet#expandable?
-A: Yes there is, try
+    Q: Do I have to call UltiSnips#ExpandSnippet() to check if a snippet is
+    expandable? Is there instead an analog of neosnippet#expandable?
+    A: Yes there is, try
 
-  function UltiSnips#IsExpandable()
-    return !empty(UltiSnips#SnippetsInCurrentScope())
-  endfunction
+    ```vim
+    function UltiSnips#IsExpandable()
+        return !empty(UltiSnips#SnippetsInCurrentScope())
+    endfunction
+    ```
+    Consider that UltiSnips#SnippetsInCurrentScope() will return all the
+    snippets you have if you call it after a space character. If you want
+    UltiSnips#IsExpandable() to return false when you call it after a space
+    character use this a bit more complicated implementation:
 
-  Consider that UltiSnips#SnippetsInCurrentScope() will return all the
-  snippets you have if you call it after a space character. If you want
-  UltiSnips#IsExpandable() to return false when you call it after a space
-  character use this a bit more complicated implementation:
-
-  function UltiSnips#IsExpandable()
+    `function UltiSnips#IsExpandable()`
 
 As notated by folds, go to All --> Remaining Plugins --> UltiSnips. Should be
 around line 700.
 
-I've copied UltiSnips#IsExpandable() there, and wanted to list the explanation
+I've copied `UltiSnips#IsExpandable()` there, and wanted to list the explanation
 here so as to note clutter up my init.vim.
 
 However that func needs a mapping because I'm never gonna remember it.
@@ -224,3 +193,49 @@ let g:lightline = {
 Nothing happens if we open a directory to start nvim
 Or specifically netrw opens.
 TODO: one of the expressions in the loop needs to be prepended with silent
+
+### FZF
+
+Dropping this because FZF.vim now comes with :R and :Rg but if you wanna
+modify anything in the future here's the original code I had
+
+```vim
+" **TODO**: Commented out because E183: User defined commands must start with an uppercase letter:::
+" :ag  - start fzf with hidden preview window that can be enabled with '?' key
+" :ag! - start fzf in fullscreen and display the preview window above
+" command! -bang -nargs=* ag
+"     \ call fzf#vim#ag(<q-args>,
+"     \ <bang>0 ? fzf#vim#with_preview('up:60%')
+"     \ : fzf#vim#with_preview('right:50%:hidden', '?'),
+"     \ <bang>0)
+
+" " similarly, we can apply it to fzf#vim#grep. to use ripgrep instead of ag:
+" command! -bang -nargs=* rg
+"     \ call fzf#vim#grep(
+"     \ 'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
+"     \ <bang>0 ? fzf#vim#with_preview('up:60%')
+"     \ : fzf#vim#with_preview('right:50%:hidden', '?'),
+"     \ <bang>0)
+
+" " likewise, files command with preview window
+" command! -bang -nargs=? -complete=dir files
+"     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+```
+
+### NerdCom
+
+TODO: Use :Glog to recover your old nerdcom code. Better do it soon if you're
+thinking about ever being able to use it again!
+
+" **UNTESTED**:
+
+" just a thought i had. For any normal mode remaps you have, add the same
+" thing and prefix <Esc> to the RHS and boom!
+
+```vim
+if has('b:Tagbar')  " or any plugin
+    let g:tagbar_sort=0
+    inoremap <F3> <esc>:TagbarToggle<CR>
+    nnoremap <F3> :TagbarToggle<CR>
+endif
+```

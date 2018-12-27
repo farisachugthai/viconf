@@ -11,13 +11,13 @@ let g:snips_github = 'https://github.com/farisachugthai'
 " Shout out Justinmk! Never wanted to go through a full check for vim-plug
 " since it's there 99% of the time but this is a real smart workaround
 " https://github.com/justinmk/config/blob/291ec0ae12b0b4b35b4cf9315f1878db00b780ec/.config/nvim/init.vim#L12
-let s:plugins = filereadable(expand("~/.config/nvim/autoload/plug.vim", 1))
+let s:plugins = filereadable(expand('~/.config/nvim/autoload/plug.vim', 1))
 let s:plugins_extra = s:plugins
 
 if !s:plugins
   fun! InstallPlug() "bootstrap plug.vim on new systems
     silent call mkdir(expand('~/.config/nvim/autoload', 1), 'p')
-    exe '!curl -fLo '.expand("~/.config/nvim/autoload/plug.vim", 1)
+    exe '!curl -fLo '.expand('~/.config/nvim/autoload/plug.vim', 1)
       \ .' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   endfun
 endif
@@ -30,7 +30,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
 Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
-Plug 'davidhalter/jedi-vim', { 'for': ['python', 'python3'] }
+Plug 'davidhalter/jedi-vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
@@ -52,7 +52,7 @@ endif
 let g:deoplete#enable_at_startup = 1
 
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
-Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3']}
+Plug 'zchee/deoplete-jedi'
 Plug 'fszymanski/deoplete-emoji'
 Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
@@ -291,10 +291,17 @@ inoremap <F9> <Esc>:tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 " Now reload it
 nnoremap <Leader>re :so $MYVIMRC<CR>
 
-" Ease Dropbox uploads. Should probably turn into a func and command
-cnoremap termux-share termux-share -a send<Space>%
-
 " General_Mappings: {{{2
+" Ease Dropbox uploads. Should probably turn into a func and command
+" cnoremap termux-share termux-share -a send<Space>%
+
+						" *<Cmd>* *:map-cmd*
+" The <Cmd> pseudokey may be used to define a 'command mapping', which executes
+" the command directly (without changing modes, etc.).  Where you might use
+":...<CR>" in the {lhs} of a mapping, you can instead use '<Cmd>...<CR>'.
+
+map <silent> <Leader>ts <Cmd>!termux-share -a send %<CR>
+
 " Simple way to speed up startup
 nnoremap <Leader>nt :NERDTreeToggle<CR>
 nnoremap <Leader>a :echo('No. Use :%y')<CR>
@@ -322,8 +329,14 @@ nnoremap <Leader>ncd :NERDTreeCWD
 " Save a file as root
 noremap <leader>W :w !sudo tee % > /dev/null<CR>
 
+" Jedi uses <C-Space> for completions but that's only
+" for py files. Otherwise <C-Space> reinserts everything you added the
+" last time you were in insert mode. Getting that confused is annoying.
+inoremap
+
 " UltiSnips: {{{2
 
+" TODO: Is it better to put <Cmd> here? For the insert mode ones maybe.
 " I use this command constantly
 nnoremap <Leader>sn :Snippets<CR>
 
@@ -392,8 +405,9 @@ nnoremap <Leader>a :ALEInfo<CR>
 nnoremap <silent> <Leader>gb   :Gblame<CR>
 nnoremap <silent> <Leader>gc   :Gcommit<CR>
 " Curious if this is gonna work or not. Now it does!
-ca <silent> gch Git checkout<Space>
+cmap <silent> gch Git checkout<Space>
 nnoremap <silent> <Leader>gd   :Gdiff<CR>
+nnoremap <silent> <Leader>gds2 :Git diff --stat --staged<CR>
 nnoremap <silent> <Leader>ge   :Gedit<CR>
 nnoremap <silent> <Leader>gE   :Gedit<Space>
 nnoremap <silent> <Leader>gl   :Glog<CR>
@@ -408,19 +422,29 @@ nnoremap <silent> <Leader>gst  :Git diff --stat<CR>
 nnoremap <silent> <Leader>gw   :Gwrite<CR>
 nnoremap <silent> <Leader>gW   :Gwrite!<CR>
 
-" Python Language Server: {{{2
+" Language Server: {{{2
+" This is a good way to give LangClient the necessary bindings it needs;
+" while, first ensuring that the plugin loaded and that it only applies for
+" relevant filetypes.
 function! LC_maps()
     if has_key(g:LanguageClient_serverCommands, &filetype)
-        nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<CR>
-        nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
-        nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
-        inoremap <buffer> <silent> <F2> <Esc>:call LanguageClient#textDocument_rename()<CR>
+        nnoremap <buffer> <Leader>lh :call LanguageClient#textDocument_hover()<CR>
+        inoremap <buffer> <Leader><F2> <Esc>:call LanguageClient#textDocument_rename()<CR>
+        nnoremap <buffer> <Leader>ld :call LanguageClient#textDocument_definition()<CR>
+        nnoremap <buffer> <Leader>lr :call LanguageClient#textDocument_rename()<CR>
+        nnoremap <buffer> <Leader>lf :call LanguageClient#textDocument_formatting()<CR>
+        nnoremap <buffer> <Leader>lt :call LanguageClient#textDocument_typeDefinition()<CR>
+        nnoremap <buffer> <Leader>lx :call LanguageClient#textDocument_references()<CR>
+        nnoremap <buffer> <Leader>la :call LanguageClient_workspace_applyEdit()<CR>
+        nnoremap <buffer> <Leader>lc :call LanguageClient#textDocument_completion()<CR>
+        nnoremap <buffer> <Leader>ls :call LanguageClient_textDocument_documentSymbol()<CR>
+        nnoremap <buffer> <Leader>lm :call LanguageClient_contextMenu()<CR>
     endif
 endfunction
 
 augroup LangClient
     autocmd!
-    autocmd FileType * call LC_maps()
+    autocmd FileType cpp,c,python,python3,ts,tsx call LC_maps()
 augroup END
 
 " Tagbar: {{{2
@@ -459,8 +483,8 @@ let g:loaded_tutor_mode_plugin = 1
 let g:loaded_getsciptPlugin    = 1
 let g:loaded_2html_plugin      = 1
 let g:loaded_logiPat           = 1
-" let g:loaded_netrw           = 1
-" let g:loaded_netrwPlugin     = 1
+let g:loaded_netrw           = 1
+let g:loaded_netrwPlugin     = 1
 " Let's see if this speeds things up because I've never used most of them
 
 " Remaining Plugins: {{{1
@@ -534,18 +558,33 @@ endif
 
 " UltiSnips: {{{2
 let g:UltiSnipsSnippetDir = [ '~/.config/nvim/UltiSnips' ]
-let g:UltiSnipsJumpForwardTrigger = '<Tab>'
-let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
+let g:UltiSnipsExpandTrigger = '<Tab>'
+let g:UltiSnipsListSnippets = '<C-Tab>'
+let g:UltiSnipsJumpForwardTrigger = '<C-j>'
+let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
 " inoremap <C-Tab> * <Esc>:call ultisnips#listsnippets()<CR>
 let g:ultisnips_python_style = 'numpy'
 let g:ultisnips_python_quoting_style = 'double'
 let g:UltiSnipsEnableSnipMate = 0
 let g:UltiSnipsEditSplit = 'tabdo'
+" Definining it in this way means that UltiSnips doesn't iterate
+" through every dir in &rtp which should save a lot of time
+let g:UltiSnipsSnippetDirectories=[$HOME.'/.config/nvim/UltiSnips']
 
 " Language Client: {{{2
-let g:LanguageClient_serverCommands = { 'python': [ 'pyls' ] }
-let b:LanguageClient_autoStart = 1
-let b:LanguageClient_selectionUI = 'fzf'
+let g:LanguageClient_serverCommands = { 'python': [ 'pyls' ],
+            \ 'c': ['clangd'],
+            \ 'cpp': ['clangd'],
+            \ 'js': ['tsserver'],
+            \ 'ts': ['tsserver'],
+            \ 'css': ['css-languageserver'],
+            \ 'html': ['html-languageserver'],
+            \ 'tsx': ['tsserver']}
+
+let g:LanguageClient_autoStart = 1
+let g:LanguageClient_selectionUI = 'fzf'
+let g:LanguageClient_settingsPath = expand('~/.config/nvim/settings.json')
+let g:LanguageClient_loggingFile = '~/.local/share/nvim/LC.log'
 
 " Jedi: {{{2
 " Isn't recognized as an ftplugin so probably needs to be in global conf
@@ -609,11 +648,6 @@ let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline#extensions#tabline#fnametruncate = 1
 
 " Filetype Specific Options: {{{1
-augroup ftpersonal
-    autocmd!
-    " IPython:
-    autocmd BufRead,BufNewFile *.ipy setlocal filetype=python
-augroup end
 
 " Noticed this bit in he syntax line 2800
 let g:is_bash = 1
@@ -631,8 +665,13 @@ let rst_syntax_code_list = ['vim', 'python', 'sh', 'markdown', 'lisp']
 let readline_has_bash = 1
 
 " Functions_Commands: {{{1
+
 " Up until Rename are from Junegunn so credit to him
+
 " Todo Function: {{{2
+" Grep for todos in the current repo and populate the quickfix list with them.
+" You could run an if then to check you're in a git repo.
+" Also could use ag/rg/fd and fzf instead of grep to supercharge this.
 function! s:todo() abort
     let entries = []
     for cmd in ['git grep -niI -e TODO -e todo -e FIXME -e XXX -e HACK 2> /dev/null',
@@ -653,25 +692,6 @@ function! s:todo() abort
 endfunction
 command! Todo call s:todo()
 
-" Explore: {{{2
-" Here's one where he uses FZF and Explore to search a packages docs
-function! s:plug_help_sink(line)
-    let dir = g:plugs[a:line].dir
-    for pat in ['doc/*.txt', 'README.md']
-        let match = get(split(globpath(dir, pat), "\n"), 0, '')
-        if len(match)
-            execute 'tabedit' match
-            return
-        endif
-    endfor
-    tabnew
-    execute 'Explore' dir
-endfunction
-
-command! PlugHelp call fzf#run(fzf#wrap({
-  \ 'source': sort(keys(g:plugs)),
-  \ 'sink':   function('s:plug_help_sink')}))
-
 " Scriptnames: {{{2
 " command to filter :scriptnames output by a regex
 command! -nargs=1 Scriptnames call <sid>scriptnames(<f-args>)
@@ -681,7 +701,7 @@ function! s:scriptnames(re) abort
     redir END
 
     let filtered = filter(split(scriptnames, "\n"), "v:val =~ '" . a:re . "'")
-    echo join(filtered, "\n")
+    echo join(filtered, '\n')
 endfunction
 
 " AutoSave: {{{2
@@ -705,17 +725,40 @@ command! -bang Autosave call s:autosave(<bang>1)
 " HL: {{{2
 " Whats the syntax group under my cursor?
 function! s:hl()
-  " echo synIDattr(synID(line('.'), col('.'), 0), 'name')
   echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
 endfunction
 
 command! HL call <SID>hl()
+
+" PlugHelp: {{{2
+" Call :PlugHelp to use fzf to open a window with all of the plugins
+" you have installed listed and upon pressing enter open the help
+" docs. That's not a great explanation but honestly easier to explain
+" with a picture.
+" TODO: Screenshot usage.
+function! s:plug_help_sink(line)
+  let dir = g:plugs[a:line].dir
+  for pat in ['doc/*.txt', 'README.md']
+    let match = get(split(globpath(dir, pat), "\n"), 0, '')
+    if len(match)
+      execute 'tabedit' match
+      return
+    endif
+  endfor
+  tabnew
+  execute 'Explore' dir
+endfunction
+
+command! PlugHelp call fzf#run(fzf#wrap({
+  \ 'source': sort(keys(g:plugs)),
+  \ 'sink':   function('s:plug_help_sink')}))
 
 " Rename:{{{2
 " :he map line 1454. How have i never noticed this isn't a feature???
 command! -nargs=1 -bang -complete=file Rename f <args>|w<bang>
 
 " UltiSnips: {{{2
+
 " GetAllSnippets:{{{3
 " Definitely a TODO
 function! GetAllSnippets()
@@ -724,14 +767,15 @@ function! GetAllSnippets()
   for [key, info] in items(g:current_ulti_dict_info)
     let parts = split(info.location, ':')
     call add(list, {
-      \"key": key,
-      \"path": parts[0],
-      \"linenr": parts[1],
-      \"description": info.description,
+      \'key': key,
+      \'path': parts[0],
+      \'linenr': parts[1],
+      \'description': info.description,
       \})
   endfor
   return list
 endfunction
+
 " Expandable:{{{3
 
 " TODO: Come up with a mapping for it. Also what is E746
@@ -743,6 +787,19 @@ endfunction
 "         \ || empty(UltiSnips#SnippetsInCurrentScope())
 "         \ )
 " endfunction
+
+" ExpandPossibleShorterSnippet:{{{3
+function! ExpandPossibleShorterSnippet()
+  if len(UltiSnips#SnippetsInCurrentScope()) == 1 "only one candidate...
+    let curr_key = keys(UltiSnips#SnippetsInCurrentScope())[0]
+    normal diw
+    exe 'normal a' . curr_key
+    exe 'normal a '
+    return 1
+  endif
+  return 0
+endfunction
+inoremap <silent> <C-L> <C-R>=(ExpandPossibleShorterSnippet() == 0? '': UltiSnips#ExpandSnippet())<CR>
 
 " LanguageClient Check:{{{2
 " Check if the LanguageClient is running.
