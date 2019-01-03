@@ -1,13 +1,22 @@
-# Vint:
+# ============================================================================
+    # File: .vintrc
+    # Vim: set ft=yaml:
+    # Author: Faris Chugthai
+    # Description: Linter for vimscript. Written in python
+    # URL: https://github.com/Kuniwak/vint
+    # Last Modified: January 02, 2019
+# ============================================================================
+
+# Vint follows yaml formatting so no more " comments
 
 cmdargs:
-# Checking more strictly
-severity: style_problem
-# Enable coloring
-color: true
+    # Checking more strictly
+    severity: style_problem
+    # Enable coloring
+    color: true
 
 env:
-# Enable Neovim syntax
+    # Enable Neovim syntax
     neovim: true
 
 policies:

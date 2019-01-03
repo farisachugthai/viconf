@@ -10,9 +10,10 @@ extends python
 #######################################################################
 
 global !p
-from rst_helper import *
-endglobal
 
+from rst_helper import *
+
+endglobal
 snippet title "Title with =" b
 ${1:${VISUAL:Section name}}
 `!p snip.rv = rst_char_len(t[1])*'='`
@@ -47,7 +48,7 @@ endsnippet
 snippet codeb "code block duplicated" bs
 .. code-block:: ${1:python}
 
-   ${2:${VISUAL:code}}
+    ${2:${VISUAL:code}}
 endsnippet
 
 snippet code "Inline code. Needs to be visually highlighted first." b
@@ -59,35 +60,36 @@ endsnippet
 ################
 
 snippet * "Italics" s
-*${1:${VISUAL:Emphasis}}* ${0}
+*${1:${VISUAL:Emphasis}}* $0
 endsnippet
 
 snippet ** "Bold" s
-**${1:${VISUAL:Strong emphasis}}** ${0}
+**${1:${VISUAL:Strong emphasis}}** $0
 endsnippet
 
 snippet bold "bold" s
-**${1:${VISUAL:Strong emphasis}}** ${0}
+**${1:${VISUAL:Strong emphasis}}** $0
 endsnippet
 
 ###########
 #  links  #
 ###########
 
+# Make sure this works!
 snippet link "External URL. A space is required between the text and URL!" b
-`Link text <https://github.com/>`
+\`${1:Link text} ${3:<${VISUAL:https://github.com/}$0>}\`
 endsnippet
 
 snippet link "Separated link and target." b
-.. _${1:optional text leading into}: ${2:`https://somedomain.com`}
+.. _${1:optional text leading into}: ${2:\`https://somedomain.com\`}
 endsnippet
 
 snippet url "Separated link and target." b
-.. _${1:optional text leading into}: ${2:`https://somedomain.com`}
+.. _${1:optional text leading into}: ${2:\`https://somedomain.com\`}
 endsnippet
 
-snippet url "Separated link and target." b
-.. _${1:optional text leading into}: ${2:`https://somedomain.com`}
+snippet http "Separated link and target." bs
+.. _${1:${VISUAL:text}}: ${2:\`https://somedomain.com\`}
 endsnippet
 
 ############
@@ -117,19 +119,25 @@ endsnippet
 snippet cont "content directive" bs
 .. contents::
 
-   ${0:${VISUAL:contet}}
+   ${0:${VISUAL:content}}
 endsnippet
 
 snippet coded "Code block directive." bs
 .. code:: ${1:type}
 
-   ${0:${VISUALwrite some :code}}
+   ${0:${VISUAL:code}}
 endsnippet
 
 snippet tip "Tips or anyone in need of a directive!" bs
 .. tip::
 
    ${0:${VISUAL:Tip for anyone having trouble.}}
+endsnippet
+
+snippet coded "Code block directive." b
+.. code:: ${1:type}
+
+   ${0:write some code}
 endsnippet
 
 snippet note "Take note of this directive over here ;)" b
@@ -218,17 +226,15 @@ snippet toctree "directive_toctree" b
 .. toctree::
    :maxdepth: ${1:2}
 
-   ${2:#:FILES}
+   ${2:FILES}
 endsnippet
 
 snippet part "Part"
-`!p snip.rv = rst_char_len(t[1])*'#'`
 ${1:${VISUAL:Part name}}
 `!p snip.rv = rst_char_len(t[1])*'#'`
 endsnippet
 
 snippet chap "Chapter"
-`!p snip.rv = rst_char_len(t[1])*'*'`
 ${1:${VISUAL:Chapter name}}
 `!p snip.rv = rst_char_len(t[1])*'*'`
 endsnippet

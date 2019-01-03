@@ -3,11 +3,26 @@
 """Move all python functions into a dedicated file and import them.
 
 A useful combination with UltiSnips.
+
+.. todo::
+
+    * Find out if we can do the following.
+
+    .. code::
+
+        try:
+            import nvim as vim
+        except ImportError:
+            import vim
+
+    * Add docstrings to everything. Kinda forces your hand to learn how
+    everything works
+        * Admittedly good start though!
+        * May want to add which snippets depend on it. If not simple examples
+        for the return value will be more than plenty.
 """
 import os
-import re
 import string
-import sys
 
 import vim
 

@@ -12,6 +12,5 @@ endif
 augroup i3
     autocmd!
     autocmd BufNewFile,BufRead ~/.config/i3* set filetype=i3
+    let b:current_syntax = 1
 augroup end
-
-let b:current_syntax = 1

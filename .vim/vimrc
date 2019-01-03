@@ -1,11 +1,11 @@
 " Vimrc:
 " vim configuration
+" Vim: set ft=vim:set verbose=1:
 
 " About: {{{1
 let g:snips_author = 'Faris Chugthai'
 let g:snips_email = 'farischugthai@gmail.com'
 let g:snips_github = 'https://github.com/farisachugthai'
-
 
 " Vim Plug:{{{1
 
@@ -23,9 +23,9 @@ Plug 'w0rp/ale'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',
     \ 'do': 'bash install.sh' }
+Plug 'SirVer/ultisnips'
 Plug 'edkolev/tmuxline.vim'
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
+Plug 'vim-airline/vim-airline'
 Plug 'mhinz/vim-startify'
 if has('nvim')
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -35,20 +35,26 @@ else
     Plug 'roxma/vim-hug-neovim-rpc'
 endif
 let g:deoplete#enable_at_startup = 1
-
-Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3']}
+Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 
-" Vim Specific:{{{1
+" Vim Specific: {{{1
 
 " unabashedly stolen from junegunn dude is too good.
 let s:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/vimrc.local'
 if filereadable(s:local_vimrc)
     execute 'source' s:local_vimrc
+endif
+
+let s:winrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/winrc'
+if expand('$OS') ==# 'Windows_NT'
+    if filereadable(s:winrc)
+        exe 'so' s:winrc
+    endif
 endif
 
 if has('nvim')
@@ -62,7 +68,8 @@ silent! source $VIMRUNTIME/defaults.vim
 " Python Executables:{{{1
 
 if has('python3')
-" if we have a virtual env start there
+
+    " if we have a virtual env start there
     if exists('$VIRTUAL_ENV')
         let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
 
@@ -75,6 +82,10 @@ if has('python3')
         if executable('$PREFIX/bin/python')
             let g:python3_host_prog = '$PREFIX/bin/python'
         endif
+
+    elseif expand('$OS') ==# 'Windows_NT'       " no reason to split this loop based on that as a first check yet
+        let g:python3_host_prog = '~/Miniconda3/python.exe'
+
     else
         if executable('/usr/bin/python3')
             let g:python3_host_prog = '/usr/bin/python3'
@@ -85,9 +96,9 @@ if has('python3')
     endif
 endif
 
-" Global Options:{{{1
+" Global Options: {{{1
 
-" Leader_Viminfo:{{{2
+" Leader_Viminfo: {{{2
 let g:mapleader = "\<Space>"
 let g:maplocalleader = ','
 
@@ -95,20 +106,20 @@ if !has('nvim')
     set viminfo='100,<200,s200,n$HOME/.vim/viminfo
 endif
 
-" Pep8 Global Options:{{{2
+" TODO: Put in python ftplugin
+" Pep8 Global Options: {{{2
 set tabstop=4                           " show existing tab with 4 spaces width
 set shiftwidth=4                        " when indenting with '>', use 4 spaces width
 set expandtab smarttab                  " On pressing tab, insert 4 spaces
 set softtabstop=4
 let g:python_highlight_all = 1
 
-" Folds:{{{2
+" Folds: {{{2
 set foldenable
-set foldlevelstart=1                    " Enables most folds
 set foldnestmax=10
 set foldmethod=marker
 
-" Buffers Windows Tabs:{{{2
+" Buffers Windows Tabs: {{{2
 try
   set switchbuf=useopen,usetab,newtab
   set showtabline=2
@@ -127,8 +138,15 @@ set termencoding=utf-8
 
 setlocal spelllang=en
 
-if filereadable(glob('~/.vim/spell/en_US.utf-8.add'))
-    set spellfile=~/.vim/spell/en_US.utf-8.add
+" This is is definitely one of the things that needs to get ported over to nvim
+if filereadable(glob('~/.config/nvim/spell/en_US.utf-8.add'))
+    set spellfile=~/.config/nvim/spell/en_US.utf-8.add
+elseif filereadable(glob('~/projects/viconf/.vim/spell/en_US.utf-8.add'))
+    set spellfile=~/projects/viconf/.vim/spell/en_US.utf-8.add
+else
+    " ngl didn't know echoerr was a command until now
+    echoerr 'Spell file not found.'
+
 endif
 
 if !has('nvim')
@@ -149,15 +167,15 @@ if filereadable('/usr/share/dict/american-english')
     setlocal dictionary+=/usr/share/dict/american-english
 endif
 
-if filereadable('$HOME/.vim/spell/en.hun.spl')
-    set spelllang+=$HOME/.vim/spell/en.hun.spl
+if filereadable(glob('~/.vim/spell/en.hun.spl'))
+    set spelllang+=~/.vim/spell/en.hun.spl
 endif
 
 if filereadable(glob('~/.vim/autocorrect.vim'))
     source ~/.vim/autocorrect.vim
 endif
 
-" all the nonsense nvim freed you of:{{{2
+" all the nonsense nvim freed you of: {{{2
 if !has('nvim')
     set autoread
     set autoindent
@@ -194,17 +212,8 @@ endif
 " - 'sidescroll' defaults to 1
 "
 
-" Fun With Clipboards:{{{2
-if has('unnamedplus')           " Use the system clipboard.
-  set clipboard+=unnamed,unnamedplus
-else                            " Accomodate Termux
-  set clipboard+=unnamed
-endif
-
-set pastetoggle=<F7>
-
+" Fun with Clipboards: {{{2
 if exists('$TMUX')
-    let g:clipboard = {
         \   'name': 'myClipboard',
         \   'copy': {
         \      '+': 'tmux load-buffer -',
@@ -218,7 +227,7 @@ if exists('$TMUX')
         \ }
 endif
 
-" Autocompletion:{{{2
+" Autocompletion: {{{2
 set wildmenu                            " Show list instead of just completing
 set wildmode=longest,list:longest       " Longest string or list alternatives
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
@@ -244,8 +253,9 @@ set infercase
 set autoindent smartindent              " :he options: set with smartindent
 set noswapfile
 
+" Had to really futz with this; however, this is finally right.
 if has('gui_running')
-    set guifont='Fira\ Code\ Mono:11'
+    set guifont=Fira\ Code\ weight=450\ 10
 endif
 
 " In case you wanted to see the guicursor default for gvim win64
@@ -254,9 +264,9 @@ endif
 set path+=**        			        " Recursively search dirs with :find
 set autochdir
 set fileformat=unix
+set whichwrap+=<,>,h,l,[,]
 set nojoinspaces
 set diffopt=vertical,context:3          " vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
-set whichwrap+=<,>,h,l,[,]
 
 if has('persistent_undo')
     set undodir=~/.vim/undodir
@@ -268,11 +278,15 @@ set modeline
 set lazyredraw
 set browsedir="buffer"                  " which directory is used for the file browser
 
-" Mappings:{{{1
-
 " General Mappings:{{{2
 
 " Navigate windows more easily
+" Wanna navigate windows more easily?
+" |CTRL-W_gF|	CTRL-W g F	   edit file name under the cursor in a new
+" 				   tab page and jump to the line number
+" 				   following the file name.
+"
+" Rebind that to C-w t and we can open the filename in a new tab.
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
@@ -289,9 +303,6 @@ nnoremap <Leader>a :echo('No. Use :%y')<CR>
 
 " It should be easier to get help
 nnoremap <leader>he :helpgrep<space>
-" It should also be easier to edit the config. Bind similarly to tmux
-" TODO: What is vims version of realpath()? Can't find it even w/ helpgrep
-nnoremap <leader>ed :tabe ~/projects/viconf/.vim/vimrc<CR>
 " It should also be easier to edit the config
 nnoremap <F9> :tabe ~/projects/viconf/.vim/vimrc<CR>
 " Now reload it
@@ -312,10 +323,15 @@ xnoremap > >gv
 nnoremap <leader>te :tabedit <c-r>=expand("%:p:h")<cr>
 
 " Switch CWD to the directory of the open buffer
-nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
+nnoremap <Leader>cd :cd %:p:h<cr>:pwd<cr>
 
 " I use this command constantly
 nnoremap <leader>sn :Snippets<cr>
+
+map <ScrollWheelUp> <C-Y>
+map <S-ScrollWheelUp> <C-U>
+map <ScrollWheelDown> <C-E>
+map <S-ScrollWheelDown> <C-D>
 
 " Unimpaired:{{{2
 " Note that ]c and [c are also mapped by git-gutter
@@ -344,7 +360,8 @@ nnoremap <Leader>sp :setlocal spell!<CR>
 " Based off the default value for spell suggest
 nnoremap <Leader>s= :norm z=<CR>
 
-" Terminal:{{{2
+
+" Terminal: {{{2
 " If running a terminal in Vim, go into Normal mode with Esc
 tnoremap <Esc> <C-\><C-n>
 " from he term. Rewrite for FZF
@@ -383,17 +400,21 @@ nnoremap <silent> <leader>gb :Gblame<CR>
 nnoremap <silent> <leader>gc :Gcommit<CR>
 nnoremap <silent> <leader>gd :Gdiff<CR>
 nnoremap <silent> <leader>ge :Gedit<CR>
-nnoremap <silent> <leader>gE :Gedit<space>
+" Honestly i don't understand these 2. Why the spaces?
+nnoremap <silent> <leader>gE :Gedit<Space>
 nnoremap <silent> <leader>gl :Glog<CR>
 nnoremap <silent> <leader>gq :Gwq<CR>
 nnoremap <silent> <leader>gQ :Gwq!<CR>
 nnoremap <silent> <leader>gr :Gread<CR>
-nnoremap <silent> <leader>gR :Gread<space>
+nnoremap <silent> <leader>gR :Gread<Space>
 nnoremap <silent> <leader>gs :Gstatus<CR>
 nnoremap <silent> <leader>gw :Gwrite<CR>
 nnoremap <silent> <leader>gW :Gwrite!<CR>
 
-" Python Language Server: {{{2
+" Tagbar: {{{2
+nnoremap <silent> <F8> :TagbarToggle<CR>
+
+" Python Language Server:{{{2
 function! LC_maps()
     if has_key(g:LanguageClient_serverCommands, &filetype)
         nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<cr>
@@ -401,12 +422,7 @@ function! LC_maps()
         nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
     endif
 endfunction
-
 autocmd FileType * call LC_maps()
-
-" Tagbar:{{{2
-nnoremap <silent> <F8> :TagbarToggle<CR>
-let g:tagbar_left = 1
 
 " Airline:{{{2
 let g:airline#extensions#tabline#buffer_idx_mode = 1
@@ -437,18 +453,18 @@ runtime! macros/matchit.vim
 set matchpairs+=<:>
 
 " To every plugin I've never used before. Stop slowing me down.
-let g:loaded_vimballPlugin                                                = 1
-let g:loaded_tutor_mode_plugin                                            = 1
-let g:loaded_getsciptPlugin                                               = 1
-let g:loaded_2html_plugin                                                 = 1
-let g:loaded_logiPat                                                      = 1
-let g:loaded_netrw                                                      = 1
-let g:loaded_netrwPlugin                                                = 1
+let g:loaded_vimballPlugin      = 1
+let g:loaded_tutor_mode_plugin  = 1
+let g:loaded_getsciptPlugin     = 1
+let g:loaded_2html_plugin       = 1
+let g:loaded_logiPat            = 1
+let g:loaded_netrw              = 1
+let g:loaded_netrwPlugin        = 1
 " Let's see if this speeds things up because I've never used most of them
 
 " Remaining Plugins: {{{1
 
-" NERDTree: {{{2
+" NERDTree:{{{2
 augroup nerd_loader
   autocmd!
   autocmd VimEnter * silent! autocmd! FileExplorer
@@ -473,10 +489,21 @@ let g:NERDTreeShowLineNumbers = 1
 let g:NERDTreeMouseMode = 2                         " Open dirs with 1 click files with 2
 let g:NERDTreeIgnore = ['\.pyc$', '\.pyo$', '__pycache__$']
 let g:NERDTreeRespectWildIgnore = 1                 " yeah i meant those ones too
-" Devicons:{{{2
+
+" ALE: {{{2
+let g:ale_fixers = { '*': [ 'remove_trailing_lines', 'trim_whitespace' ] }
+let g:ale_fix_on_save = 1
+" Default: `'%code: %%s'`
+let g:ale_echo_msg_format = '%linter% - %code: %%s %severity%'
+let g:ale_set_signs = 1
+let g:ale_sign_column_always = 1
+let g:ale_lint_delay = 100
+
+" Devicons: {{{2
 let g:webdevicons_enable = 1
 let g:webdevicons_enable_nerdtree = 1               " adding the flags to NERDTree
 let g:airline_powerline_fonts = 1
+
 " For startify
 let entry_format = "'   ['. index .']'. repeat(' ', (3 - strlen(index)))"
 
@@ -490,29 +517,34 @@ endif
 let g:UltiSnipsSnippetDir = [ '~/.vim/UltiSnips' ]
 let g:UltiSnipsJumpForwardTrigger='<Tab>'
 let g:UltiSnipsJumpBackwardTrigger='<S-Tab>'
-inoremap <C-Tab> * <Esc>:call UltiSnips#ListSnippets()<CR>
-let g:UltiSnips_python_style='sphinx'
+let g:UltiSnipsEnableSnipMate = 0
+let g:UltiSnips_python_quoting_style = 'numpy'
 let g:UltiSnips_python_quoting_style = 'double'
 let g:UltiSnipsEnableSnipMate = 1
 let g:UltiSnipsEditSplit = 'tabdo'
-" }}}
-" Language Client:{{{2
+
+" Language Client: {{{2
 let g:LanguageClient_serverCommands = { 'python': [ 'pyls' ] }
 
-" Jedi:{{{2
+" Jedi: {{{2
 " Isn't recognized as an ftplugin so probably needs to be in global conf
 let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces
+let g:jedi#usages_command = '<Leader>u'
 let g:jedi#documentation_command = '<leader>h'
-let g:jedi#usages_command = '<leader>u'
 let g:jedi#show_call_signatures_delay = 100
 let g:jedi#smart_auto_mappings = 0
 let g:jedi#force_py_version = 3
 let g:jedi#enable_completions = 0
 
-" Deoplete_Jedi:{{{2
+" Tagbar: {{{2
+let g:tagbar_left = 1
+let g:tagbar_width = 30
+
+" Deoplete_Jedi: {{{2
+" speed things up
 let g:deoplete#sources#jedi#enable_typeinfo = 0
 
-" Airline:{{{2
+" Airline: {{{2
 let g:airline#extensions#syntastic#enabled = 0
 let g:airline#extensions#csv#enabled = 0
 let g:airline_powerline_fonts = 1
@@ -523,7 +555,7 @@ if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
 
-" Unicode_Symbols:{{{3
+" Unicode: {{{3
 let g:airline_left_sep = '»'
 let g:airline_left_sep = '▶'
 let g:airline_right_sep = '«'
@@ -550,7 +582,7 @@ let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline#extensions#tabline#fnametruncate = 1
 let g:airline#extensions#tmuxline#enabled = 1
 
-" Filetype Specific Options:{{{1
+" Filetype Specific Options: {{{1
 
 " Noticed this bit in he syntax line 2800
 let g:is_bash = 1
@@ -567,8 +599,6 @@ let rst_syntax_code_list = ['vim', 'python', 'sh', 'markdown', 'lisp']
 let readline_has_bash = 1
 
 " Functions: {{{1
-
-" Next few are from Junegunn so credit to him
 " Todo Function: {{{2
 function! s:todo() abort
     let entries = []
@@ -589,7 +619,6 @@ function! s:todo() abort
     endif
 endfunction
 command! Todo call s:todo()
-" }}}
 
 " Explore: {{{2
 " Here's one where he uses fzf and Explore to search a packages docs
@@ -661,10 +690,12 @@ fun! EditFileComplete(A,L,P)
 endfun
 
 " Colorscheme: {{{1
-set background=dark
-colorscheme onedark
+set background=dark " So this apparently has to be here. Better before or after colo?
+colorscheme gruvbox
 if g:colors_name ==# 'gruvbox'      " ==# means match case
     let g:gruvbox_contrast_dark = 'hard'
     let g:gruvbox_improved_strings = 1
 endif
-hi NonText guifg=NONE guibg=#000000        " Massive performance difference
+
+hi NonText guifg=NONE guibg=#000000
+" Massive performance difference

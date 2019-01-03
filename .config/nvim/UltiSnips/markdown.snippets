@@ -2,6 +2,8 @@
 #                         # Markdown Snippets                         #
 #######################################################################
 
+# TODO: Refactor the python out. Fix indentation. Change ${1:foo} to ${0:${VISUAL:foo}}
+
 extends html
 
 ################
@@ -24,9 +26,8 @@ ${6:## man}
 $0
 endsnippet
 
-#######################################################################
-#                             # SnipMate                              #
-#######################################################################
+# SnipMate
+# -----------
 
 snippet ```
 	\`\`\`${1}
@@ -77,9 +78,8 @@ endsnippet
 # snippet youtube
 # 	{% youtube ${0:video_id} %}
 
-#######################################################################
-#                             # UltiSnips                             #
-#######################################################################
+# UltiSnips
+# ============
 
 global !p
 def create_table(snip):
@@ -163,21 +163,35 @@ snippet *** "bold italics"
 ***${1:${VISUAL}}***$0
 endsnippet
 
+snippet bolditalics "bold italics"
+***${1:${VISUAL}}***
+endsnippet
+
 ###########
 #  Links  #
 ###########
 
 # Here's the src:
 # https://daringfireball.net/projects/markdown/syntax#link
-snippet link "More fleshed out than my link. Link to something"
+snippet link "URL with descriptive text. Better for articles."
 [${1:${VISUAL:Text}}](${3:http://${2:www.url.com}})$0
+endsnippet
+
+snippet blink "Bracket URL. Good for references or bibliographies."
+<${1:https://${VISUAL:text}}> $0
 endsnippet
 
 snippet < "Links"
 <${1:https://${VISUAL:2}}>
 endsnippet
 
-snippet linktitle "Inline link with a title" b
+# Here's the markdown "spec":
+# https://daringfireball.net/projects/markdown/syntax#link
+snippet link "A link"
+[${1:displayedtext}](${2:URL})
+endsnippet
+
+snippet linktitle "Inline link with a title" bs
 [${1:displayedtext}](${2:URL} ${3:Optional title}) $0
 endsnippet
 
@@ -213,7 +227,6 @@ $1
 \`\`\`
 $0
 endsnippet
-
 snippet backtick "Inline code" i
 \`${VISUAL:1}\`
 endsnippet

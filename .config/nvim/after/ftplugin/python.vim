@@ -2,6 +2,7 @@
 " Maintainer: Faris Chugthai
 
 " Options: {{{1
+" Options:{{{1
 setl linebreak
 setl textwidth=120
 
@@ -21,6 +22,7 @@ setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 " also let's know where the line needs to end visually but not invoke the
 " linters to react.
 setlocal colorcolumn=80,120
+" Dude the columns line was destroying nvim's redraw when you split tmux panes
 
 " Autocommands: {{{1
 " Highlight characters after 120 chars
@@ -31,7 +33,7 @@ augroup vimrc_autocmds
     autocmd FileType python set nowrap
 augroup END
 
-" Plugins: {{{1
+" Plugins:{{{1
 
 " ALE: {{{2
 let b:ale_linters = [ 'flake8', 'pycodestyle', 'pydocstyle' ]
@@ -61,7 +63,7 @@ if has_key(plugs, 'LanguageClient-neovim')
     nnoremap gd :call LanguageClient_textDocument_definition()<CR>
 endif
 
-" Riv:{{{2
+" Riv: {{{2
 " Riv is a plugin for reStructuredText in Vim.
 " This setting allows docstrings in python files to be properly highlighted.
 let b:riv_python_rst_hl = 1

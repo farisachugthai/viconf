@@ -5,11 +5,8 @@ dotfiles ~/projects/dotfiles/unix
 jedi-docs ~/.local/share/nvim/plugged/jedi-vim/pythonx/jedi/docs/docs
 nvim ~/.config/nvim
 plugged ~/.local/share/nvim/plugged
-prefix /data/data/com.termux/files/usr
 py_tut ~/python/tutorials
 tutorials ~/Dropbox/python/tutorials
-utilities_py ~/projects/utilities/python
 viconf ~/projects/viconf/.config/nvim
 riv ~/.local/share/nvim/plugged/riv.vim/doc/riv_instruction.rst
-
-nvim-rtp /usr/share/nvim/runtime
+vim ~/.vim

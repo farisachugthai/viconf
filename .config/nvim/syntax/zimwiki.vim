@@ -3,7 +3,7 @@
 " URL: https://github.com/joanrivera/vim-zimwiki-syntax
 " License: MIT
 
-if exists('b:current_syntax') && b:current_syntax ==# 'zimwiki'
+if exists('b:current_syntax') && b:current_syntax == 'zimwiki'
   finish
 endif
 

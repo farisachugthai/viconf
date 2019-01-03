@@ -55,7 +55,7 @@ syn match snipSnippetFooterKeyword "^endsnippet" contained
 "   snippet foo"bar"
 " it treats `foo"bar"` as the trigger. But with this:
 "   snippet foo"bar baz"
-" it treats `foo` as the trigger and "bar baz" as the description.
+" it treats `foo` as the trigger and \"bar baz" as the description.
 " I think this is an accident. Instead, we'll assume the description must
 " be surrounded by spaces. That means we'll treat
 "   snippet foo"bar"

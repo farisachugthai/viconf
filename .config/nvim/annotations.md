@@ -45,9 +45,12 @@ endif
 From: <https://github.com/rafi/vim-config/blob/master/config/terminal.vim#L39>
 
 Typically don't like working with escape sequences.
-Gotta admit that's a lot smarter than what i'd come up with.
+Gotta admit that's a lot smarter than what I'd come up with.
 
 Now here are some functions that don't work.
+
+" Environment: {{{ 2
+" Let's setup all the global vars we need. Will utilize to ensure consistency
 
 ```vim
 let s:termux = exists('$PREFIX') && has('unix')
@@ -69,12 +72,9 @@ let s:windows = has('win32') || has('win64')
 " endfunction
 ```
 
-### Sourcing configs for Win32
+Dec 01, 2018: This doesn't work either
 
-Also doesn't work. Still wanna continue with it later but don't want it
-cluttering my vimrc.
-
-```viml
+```vim
 " let s:winrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/winrc'
 " if call(is#windows)         " doubt this is the right syntax but we're getting close
 "     if filereadable(s:winrc)
@@ -83,7 +83,12 @@ cluttering my vimrc.
 " endif
 ```
 
-```viml
+Just pulled this off of the vimrc. The one above is init.vim.
+Both from laptop branch not termux. Amazingly there's different
+attempts over there too.
+
+
+```vim
 " Gonna start seriously consolidating vimrc and init.vim this is so hard
 " to maintain
 " Let's setup all the global vars we need
@@ -107,6 +112,11 @@ endif
 ```
 
 ## Plugins
+
+### LanguageClient
+
+Just ran this doozy to setup the build for termux.
+%s/\/tmp/\/data\/data\/com.termux\/files\/usr\/tmp
 
 ### UltiSnips
 
@@ -141,26 +151,50 @@ here so as to note clutter up my init.vim.
 
 However that func needs a mapping because I'm never gonna remember it.
 
+### Neosnippets
 
-### FZF and friends
+```vim
+" Because I've found UltiSnips quite challenging to work with.
+let g:neosnippet#snippets_directory = [ '~/.config/nvim/neosnippets', '~/.local/share/nvim/plugged/vim-snippets/snippets' ]
 
-So between FZF, ag, rg and a ton of other things I've been trying to do a ton with configuring searches correctly.
+" From the help pages:
+" Plugin key-mappings.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
 
-### Language Client
+" SuperTab like snippets' behavior.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+imap <expr><TAB>
+\ pumvisible() ? "\<C-n>" :
+\ neosnippet#expandable_or_jumpable() ?
+\    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 
-The only part of the API that was open at the time of writing was the function
+" For conceal markers.
+if has('conceal')
+  set conceallevel=2 concealcursor=niv
+endif
 
-    `LanguageClient_serverCommands()`
+" This errors out.
+" Expand the completed snippet trigger by <CR>.
+" imap <expr><CR>
+" \ (pumvisible() && neosnippet#expandable()) ?
+" \<Plug>(neosnippet_expand)" : "\<CR>"
 
-But it's a simple dictionary. If you want, run a whole mess of loops checking
-things you care about I.E. bash language server, pyls etc are executable.
-If those loops return True, add it's name to the dictionary. Then have the
-server run the commands we feed to it
-I'm not sure how I hadn't thought of this yet.
+" Enable snipMate compatibility feature.
+let g:neosnippet#enable_snipmate_compatibility = 1
+
+" Tell Neosnippet about the other snippets
+```
 
 ### Lightline
 
 Honestly keep this around because airline is pretty heavy on termux.
+
+BTW do the code blocks need viml or VimScript after the tick marks?
 
 ```viml
 " Lightline: {{{
@@ -176,9 +210,11 @@ let g:lightline = {
     \ },
     \ }
 
+
 " function! MyFiletype()
 "     return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
 " endfunction
+
 
 " function! MyFileformat()
 "     return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
@@ -187,12 +223,6 @@ let g:lightline = {
 " let g:lightline.colorscheme = 'seoul256'
 " }}}
 ```
-
-### NERDTree
-
-Nothing happens if we open a directory to start nvim
-Or specifically netrw opens.
-TODO: one of the expressions in the loop needs to be prepended with silent
 
 ### FZF
 

@@ -51,16 +51,16 @@ else
 endif
 let g:deoplete#enable_at_startup = 1
 
+Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3'] }
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
-Plug 'zchee/deoplete-jedi'
 Plug 'fszymanski/deoplete-emoji'
 Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
 Plug 'Rykka/InstantRst'
 Plug 'gu-fan/riv.vim'
-Plug 'jakykong/vim-zim'
-Plug 'HerringtonDarkholme/yats.vim'
-Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
+Plug 'jakykong/vim-zim', {'for': 'zimwiki'}
+Plug 'HerringtonDarkholme/yats.vim', {'for': ['jsx', 'tsx']}
+Plug 'mhartington/nvim-typescript', {'do': './install.sh', 'for': ['jsx', 'tsx']}
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 
@@ -78,22 +78,34 @@ if has('nvim')
 endif
 
 " Python Executables: {{{1
-" If we have a virtual env start there
-if exists('$VIRTUAL_ENV')
-    let g:python3_host_prog = expand('$VIRTUAL_ENV') . '/bin/python'
 
-elseif exists('$CONDA_PYTHON_EXE')
-    let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
+if has('python3')
 
-" Otherwise break up termux and linux.
-elseif exists('$PREFIX')
-" and just use the system python
-    if exists(':python3')
-        let g:python3_host_prog = expand('$PREFIX/bin/python')
-    endif
-else
-    if executable('/usr/bin/python3')
-        let g:python3_host_prog = '/usr/bin/python3'
+    " if we have a virtual env start there
+    if exists('$VIRTUAL_ENV')
+        let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
+
+    " or a conda env.
+    elseif exists('$CONDA_PYTHON_EXE')
+        let g:python3_host_prog = $CONDA_PYTHON_EXE
+
+    " otherwise break up termux and linux
+    elseif exists('$PREFIX')
+
+        " and just use the system python
+	let g:python3_host_prog = expand('$PREFIX/bin/python')
+
+    elseif expand('$OS') ==# 'Windows_NT'       " no reason to split this loop based on that as a first check yet
+	" shouldve gotten caught by conda env var right?
+        let g:python3_host_prog = expand('~/Miniconda3/python.exe')
+
+    else
+        if executable('/usr/bin/python3')
+            let g:python3_host_prog = '/usr/bin/python3'
+            if executable('/usr/bin/python2')       " why not
+                let g:python_host_prog = '/usr/bin/python2'
+            endif
+        endif
     endif
 endif
 
@@ -108,12 +120,12 @@ endif
 
 " Pep8 Global Options: {{{2
 if &tabstop > 4
-    set tabstop=4                           " show existing tab with 4 spaces width
+    set tabstop=4           " show existing tab with 4 spaces width
 endif
 if &shiftwidth > 4
-    set shiftwidth=4                        " when indenting with '>', use 4 spaces width
+    set shiftwidth=4        " when indenting with '>', use 4 spaces width
 endif
-set expandtab smarttab                  " On pressing tab, insert 4 spaces
+set expandtab smarttab      " On pressing tab, insert 4 spaces
 set softtabstop=4
 let g:python_highlight_all = 1
 
@@ -230,18 +242,18 @@ set infercase
 set autoindent smartindent              " :he options: set with smartindent
 
 if has('gui_running')
-    set guifont='Fira\ Code\ Mono:11'
+    set guifont=Fira\ Code\ weight=450\ 10
 endif
 
 " In case you wanted to see the guicursor default for gvim win64
-" set gcr=n-v-c:block-Cursor/lCursor,ve:ver35-Cursor,o:hor50-Cursor,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor,sm:block-Cursor-blinkwait175-blinkoff150-blinkon175
+" set gcr=n-v-c:block-Cursor/lCursor,ve:ver35-Cursor,o:hor50-Cursor, i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor, sm:block-Cursor-blinkwait175-blinkoff150-blinkon175
 
 set path+=**        			        " Recursively search dirs with :find
 set autochdir
 set fileformat=unix
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
-set diffopt=vertical,context:3          " check out he diff.txt under :diffpatch
+set diffopt=vertical,context:3          " vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
 
 if has('persistent_undo')
     set undodir=~/.config/nvim/undodir
@@ -274,6 +286,12 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
+" Wanna navigate windows more easily?
+" |CTRL-W_gF|	CTRL-W g F	   edit file name under the cursor in a new
+" 				   tab page and jump to the line number
+" 				   following the file name.
+"
+" Rebind that to C-w t and we can open the filename in a new tab.
 " Navigate tabs more easily
 map <unique> <A-Right> :tabnext<CR>
 map <unique> <A-Left> :tabprev<CR>
@@ -285,7 +303,6 @@ nnoremap <Leader>te :tabedit <c-r>=expand("%:p:h")<CR>
 
 " It should also be easier to edit the config. Bind similarly to tmux
 nnoremap <Leader>ed :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
-" It should also be easier to edit the config
 nnoremap <F9> :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 inoremap <F9> <Esc>:tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 " Now reload it
@@ -329,10 +346,10 @@ nnoremap <Leader>ncd :NERDTreeCWD
 " Save a file as root
 noremap <leader>W :w !sudo tee % > /dev/null<CR>
 
+" TODO:
 " Jedi uses <C-Space> for completions but that's only
 " for py files. Otherwise <C-Space> reinserts everything you added the
 " last time you were in insert mode. Getting that confused is annoying.
-inoremap
 
 " UltiSnips: {{{2
 
@@ -404,14 +421,12 @@ nnoremap <Leader>a :ALEInfo<CR>
 " Fugitive: {{{2
 nnoremap <silent> <Leader>gb   :Gblame<CR>
 nnoremap <silent> <Leader>gc   :Gcommit<CR>
-" Curious if this is gonna work or not. Now it does!
 cmap <silent> gch Git checkout<Space>
 nnoremap <silent> <Leader>gd   :Gdiff<CR>
 nnoremap <silent> <Leader>gds2 :Git diff --stat --staged<CR>
 nnoremap <silent> <Leader>ge   :Gedit<CR>
 nnoremap <silent> <Leader>gE   :Gedit<Space>
 nnoremap <silent> <Leader>gl   :Glog<CR>
-" TODO:
 nnoremap <silent> <Leader>gL :Glog --pretty=oneline --graph<CR>
 nnoremap <silent> <Leader>gq   :Gwq<CR>
 nnoremap <silent> <Leader>gQ   :Gwq!<CR>
@@ -442,14 +457,13 @@ function! LC_maps()
     endif
 endfunction
 
-augroup LangClient
-    autocmd!
-    autocmd FileType cpp,c,python,python3,ts,tsx call LC_maps()
-augroup END
-
 " Tagbar: {{{2
 nnoremap <silent> <F8> :TagbarToggle<CR>
-inoremap <silent> <F8> <Esc>:TagbarToggle<CR>
+
+if has('b:Tagbar')  " or any plugin
+    imap <F3> <esc>:TagbarToggle<CR>
+    nmap <F3> :TagbarToggle<CR>
+endif
 
 " Airline: {{{2
 let g:airline#extensions#tabline#buffer_idx_mode = 1
@@ -483,11 +497,12 @@ let g:loaded_tutor_mode_plugin = 1
 let g:loaded_getsciptPlugin    = 1
 let g:loaded_2html_plugin      = 1
 let g:loaded_logiPat           = 1
-let g:loaded_netrw           = 1
-let g:loaded_netrwPlugin     = 1
+let g:loaded_netrw             = 1
+let g:loaded_netrwPlugin       = 1
 " Let's see if this speeds things up because I've never used most of them
 
 " Remaining Plugins: {{{1
+
 " Vim_Plug: {{{2
 let g:plug_window = 'tabe'
 
@@ -528,15 +543,23 @@ let g:ale_warn_about_trailing_blank_lines = 0
 let g:ale_echo_cursor = 1
 " Default: `'%code: %%s'`
 let g:ale_echo_msg_format = '%linter% - %code: %%s %severity%'
+" Open up a window automatically. NO. Felt so innocuous. So invasive.
+" let g:ale_open_list = 1
+" Do so vertically
+let g:ale_list_vertical = 1
+
+" And close it automatically when the buffer closes
+augroup CloseLoclistWindowGroup
+    autocmd!
+    autocmd QuitPre * if empty(&buftype) | lclose | endif
+augroup END
+
 let g:ale_set_signs = 1
 let g:ale_sign_column_always = 1
-let g:ale_lint_delay = 1000
+" let g:ale_lint_delay = 1000 Only set on termux
 let g:ale_virtualenv_dir_names = [ '$HOME/virtualenvs' ]
-
 " Display progress while linting.
 let s:ale_running = 0
-" If you uncomment the below delete the escapes i added to \"
-" let l:stl .= '%{s:ale_running ? \"[linting]" :""}'
 augroup ALEProgress
     autocmd!
     autocmd User ALELintPre  let s:ale_running = 1 | redrawstatus
@@ -567,7 +590,7 @@ let g:ultisnips_python_style = 'numpy'
 let g:ultisnips_python_quoting_style = 'double'
 let g:UltiSnipsEnableSnipMate = 0
 let g:UltiSnipsEditSplit = 'tabdo'
-" Definining it in this way means that UltiSnips doesn't iterate
+" Defining it in this way means that UltiSnips doesn't iterate
 " through every dir in &rtp which should save a lot of time
 let g:UltiSnipsSnippetDirectories=[$HOME.'/.config/nvim/UltiSnips']
 
@@ -587,10 +610,9 @@ let g:LanguageClient_settingsPath = expand('~/.config/nvim/settings.json')
 let g:LanguageClient_loggingFile = '~/.local/share/nvim/LC.log'
 
 " Jedi: {{{2
-" Isn't recognized as an ftplugin so probably needs to be in global conf
 let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces
 let g:jedi#usages_command = '<Leader>u'
-let g:jedi#show_call_signatures_delay = 100
+let g:jedi#show_call_signatures_delay = 1000
 let g:jedi#smart_auto_mappings = 0
 let g:jedi#force_py_version = 3
 let g:jedi#enable_completions = 0
@@ -603,12 +625,7 @@ let g:deoplete#sources#jedi#enable_typeinfo = 0
 " thing and prefix <Esc> to the RHS and boom!
 let g:tagbar_left = 1
 let g:tagbar_width = 30
-
-if has('b:Tagbar')  " or any plugin
-    let g:tagbar_sort = 0
-    imap <F3> <esc>:TagbarToggle<CR>
-    nmap <F3> :TagbarToggle<CR>
-endif
+let g:tagbar_sort = 0
 
 " Airline: {{{2
 let g:airline#extensions#syntastic#enabled = 0
@@ -641,6 +658,7 @@ let g:airline_symbols.spell = 'Ꞩ'
 let g:airline_symbols.notexists = 'Ɇ'
 let g:airline_symbols.whitespace = 'Ξ'
 
+" TODO: Need to add one for the venv nvim
 let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
 let g:airline#extensions#tabline#tab_nr_type = 1 " splits and tab number
 let g:airline#extensions#tabline#enabled = 1
@@ -655,7 +673,6 @@ let g:sh_fold_enabled= 4  "   (enable if/do/for folding)
 let g:sh_fold_enabled= 3  "   (enables function and heredoc folding)
 " Let's hope this doesn't make things too slow.
 
-" TODO: Are these supposed to be in an ftplugin or something?
 " he rst.vim or ft-rst-syntax or syntax 2600. Don't put bash instead of sh.
 " $VIMRUNTIME/syntax/rst.vim iterates over this var and if it can't find a
 " bash.vim syntax file it will crash.
@@ -667,7 +684,6 @@ let readline_has_bash = 1
 " Functions_Commands: {{{1
 
 " Up until Rename are from Junegunn so credit to him
-
 " Todo Function: {{{2
 " Grep for todos in the current repo and populate the quickfix list with them.
 " You could run an if then to check you're in a git repo.

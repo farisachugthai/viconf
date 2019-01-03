@@ -31,11 +31,11 @@ inoremap <expr><C-g> deoplete#undo_completion()
 " \ deoplete#mappings#manual_complete()
 
 " function! s:check_back_space() abort
-
 "     let col = col('.') - 1
-
 "     return !col || getline('.')[col - 1]  =~? '\s'
 " endfunction
+" Manually trigger completion. Unsure of how it works  now but it just stopped
+" working
 
 " Deoplete Sources: {{{1
 " Disable the candidates in Comment/String syntaxes.
@@ -44,16 +44,16 @@ call deoplete#custom#source('_', 'disabled_syntaxes', ['Comment', 'String'])
 " Do not complete too short words
 call deoplete#custom#source('dictionary', 'min_pattern_length', 3)
 
+" If dictionary is already sorted, no need to sort it again.
+call deoplete#custom#source( 'dictionary', 'sorters', [])
+
 " Also same thing if they come from LangClient
 " Check out *deoplete-source-attribute-min_pattern_length* I think 2 is
 " actually the default
-call deoplete#custom#source('LanguageClient', 'min_pattern_length', 2)
+call deoplete#custom#source('LanguageClient', 'min_pattern_length', 3)
 
 " Collect keywords from buffer path not directory Nvim was launched from
 call deoplete#custom#source( 'file', 'enable_buffer_path', 'True')
-
-" If dictionary is already sorted, no need to sort it again.
-call deoplete#custom#source( 'dictionary', 'sorters', [])
 
 " I want UltiSnips suggestions to appear first.
 call deoplete#custom#source('UltiSnips', 'rank', '1')
@@ -68,8 +68,11 @@ call deoplete#enable_logging('INFO', expand('~/.local/share/nvim/deoplete.log'))
 " Print time information to the log file
 call deoplete#custom#option('profile', v:true)
 
-" Enable jedi source debug messages
-call deoplete#custom#source('jedi', 'is_debug_enabled', 1)
-
 " UltiSnips randomly acting weird.
 call deoplete#custom#source('ultisnips', 'is_debug_enabled', 1)
+
+" Enable jedi source debug messages
+" Note: You must enable
+"|deoplete-source-attribute-is_debug_enabled| to debug the
+"sources.
+call deoplete#custom#source('jedi', 'is_debug_enabled', 1)
