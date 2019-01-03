@@ -138,13 +138,11 @@ def get_popular_code_type():
 
 endglobal
 snippet title "Title with =" b
-`!p snip.rv = rst_char_len(t[1])*'='`
 ${1:${VISUAL:Section name}}
 `!p snip.rv = rst_char_len(t[1])*'='`
 endsnippet
 
 snippet title- "Title with -" b
-`!p snip.rv = rst_char_len(t[1])*'-'`
 ${1:${VISUAL:Subsection name}}
 `!p snip.rv = rst_char_len(t[1])*'-'`
 endsnippet

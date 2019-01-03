@@ -228,7 +228,7 @@ set infercase
 set autoindent smartindent              " :he options: set with smartindent
 
 if has('gui_running')
-    set guifont=Fira\ Code\ weight=450\ 10
+    set guifont='Fira\ Code\ Mono:11'
 endif
 
 " In case you wanted to see the guicursor default for gvim win64
@@ -284,10 +284,14 @@ nnoremap <Leader>te :tabedit <c-r>=expand("%:p:h")<CR>
 
 " It should also be easier to edit the config. Bind similarly to tmux
 nnoremap <Leader>ed :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
+" It should also be easier to edit the config
 nnoremap <F9> :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 inoremap <F9> <Esc>:tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 " Now reload it
 nnoremap <Leader>re :so $MYVIMRC<CR>
+
+" Ease Dropbox uploads
+cnoremap termux-share termux-share -a send<Space>%
 
 " General_Mappings: {{{2
 " Simple way to speed up startup
@@ -310,9 +314,14 @@ xnoremap > >gv
 " Switch CWD to the directory of the open buffer
 nnoremap <Leader>cd :cd %:p:h<CR>:pwd<CR>
 
+" Switch NERDTree root to dir of currently focused window.
+nnoremap <Leader>ncd :NERDTreeCWD
+
 " I use this command constantly
 nnoremap <Leader>sn :Snippets<CR>
 
+" Save a file as root
+noremap <leader>W :w !sudo tee % > /dev/null<CR>
 " Unimpaired: {{{2
 " Note that ]c and [c are mapped by git-gutter and ALE has ]a and [a
 nnoremap ]q :cnext<CR>
@@ -435,10 +444,10 @@ nnoremap <Leader>- <Plug>AirlineSelectPrevTab
 nnoremap <Leader>+ <Plug>AirlineSelectNextTab
 
 " Macros: {{{1
-if !has('nvim')
-    runtime! ftplugin/man.vim
-    let g:ft_man_folding_enable = 0
-endif
+" if !has('nvim')
+"     runtime! ftplugin/man.vim
+"     let g:ft_man_folding_enable = 0
+" endif
 
 runtime! macros/matchit.vim
 
@@ -508,8 +517,8 @@ augroup END
 
 let g:ale_set_signs = 1
 let g:ale_sign_column_always = 1
-" let g:ale_lint_delay = 1000 Only set on termux
 let g:ale_virtualenv_dir_names = [ '$HOME/virtualenvs' ]
+
 " Display progress while linting.
 let s:ale_running = 0
 augroup ALEProgress
@@ -531,71 +540,13 @@ else
     let entry_format .= '. entry_path'
 endif
 
-" Vim_Startify: {{{2
-" What shows up in the startify list?
-
-function! s:list_commits()
-    let git = 'git -C ~/projects/viconf/'
-    let commits = systemlist(git .' log --oneline | head -n10')
-    let git = 'G'. git[1:]
-    return map(commits, '{"line": matchstr(v:val, "\\s\\zs.*"), "cmd": "'. git .' show ". matchstr(v:val, "^\\x\\+") }')
-endfunction
-
-" TODO: Would you wanna add other repos to the start list?
-let g:startify_lists = [
-    \ { 'header': ['   MRU'],            'type': 'files' },
-    \ { 'header': ['   MRU '. getcwd()], 'type': 'dir' },
-    \ { 'header': ['   Sessions'],       'type': 'sessions' },
-    \ { 'header': ['   Viconf'],         'type': function('s:list_commits') },
-    \ { 'type': 'commands',  'header': ['   Commands']       },
-    \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
-\ ]
-
-" Setup_devicons:
-function! StartifyEntryFormat()
-    return 'WebDevIconsGetFileTypeSymbol(absolute_path) ." ". entry_path'
-endfunction
-
-" Center the header and footer
-function! s:filter_header(lines) abort
-    let longest_line   = max(map(copy(a:lines), 'strwidth(v:val)'))
-    let centered_lines = map(copy(a:lines),
-        \ 'repeat(" ", (&columns / 2) - (longest_line / 2)) . v:val')
-    return centered_lines
-endfunction
-
-let g:startify_custom_header = s:filter_header(startify#fortune#cowsay())
-
-" Don't show these files
-let g:startify_skiplist = [
-    \ 'COMMIT_EDITMSG',
-    \ glob('plugged/*/doc'),
-    \ 'C:\Program Files\Vim\vim81\doc',
-    \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc', ]
-
-if has('gui_win32')
-    let g:startify_session_dir = '$HOME\vimfiles\session'
-else
-    let g:startify_session_dir = '~/.vim/session'
-endif
-
-" TODO: Figure out how to set let g:startify_bookmarks = [ Contents of
-" NERDTreeBookmarks ]
-let g:startify_change_to_dir = 1
-let g:startify_fortune_use_unicode = 1
-let g:startify_update_oldfiles = 1
-let g:startify_session_persistence = 1
-let g:startify_session_sort = 1
-" Configured correctly this could be a phenomenal way to store commands and
-" expressions on a per directory basis aka projects / workspaces!
-let g:startify_session_autoload = 1
-let g:startify_session_sort = 1
-
 " UltiSnips: {{{2
 let g:UltiSnipsSnippetDir = [ '~/.config/nvim/UltiSnips' ]
-let g:UltiSnipsJumpForwardTrigger = '<Tab>'
-let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
-inoremap <C-Tab> * <Esc>:call ultisnips#listsnippets()<CR>
+let g:UltiSnipsExpandTrigger = '<Tab>'
+let g:UltiSnipsListSnippets = '<C-Tab>'
+let g:UltiSnipsJumpForwardTrigger = '<C-j>'
+let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
+" inoremap <C-Tab> * <Esc>:call ultisnips#listsnippets()<CR>
 let g:ultisnips_python_style = 'numpy'
 let g:ultisnips_python_quoting_style = 'double'
 let g:UltiSnipsEnableSnipMate = 0
@@ -680,16 +631,14 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline#extensions#tabline#fnametruncate = 1
 
-" Filetype Specific Options: {{{1
-augroup ftpersonal
-    autocmd!
-    " IPython:
-    autocmd BufRead,BufNewFile *.ipy setlocal filetype=python
-    if &ft == 'c'
-        set makeprg=make\ %<.o
-    endif
-augroup end
+" Zim: {{{2
+let g:zim_notebooks_dir = '~/Notebooks.git'
 
+" Filetype Specific Options: {{{1
+
+if &ft == 'c'
+    set makeprg=make\ %<.o
+endif
 " Noticed this bit in he syntax line 2800
 let g:is_bash = 1
 let g:sh_fold_enabled= 4  "   (enable if/do/for folding)
