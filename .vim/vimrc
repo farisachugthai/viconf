@@ -1,13 +1,6 @@
 " Vimrc:
+" vim configuration
 " Vim: set ft=vim:set verbose=1:
-
-" please take note of the fact that :Ag terminates with C-d.
-" To open the preview window use ?
-map <ScrollWheelUp> <C-Y>
-map <S-ScrollWheelUp> <C-U>
-map <ScrollWheelDown> <C-E>
-map <S-ScrollWheelDown> <C-D>
-
 
 " About: {{{1
 let g:snips_author = 'Faris Chugthai'
@@ -16,7 +9,7 @@ let g:snips_github = 'https://github.com/farisachugthai'
 
 " Vim Plug:{{{1
 
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'junegunn/vim-plug'        " plugception
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -28,24 +21,23 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
 Plug 'w0rp/ale'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'ryanoasis/vim-devicons'
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',
-"    \ 'do': 'bash install.sh' }
+    \ 'do': 'bash install.sh' }
 Plug 'SirVer/ultisnips'
 Plug 'edkolev/tmuxline.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'mhinz/vim-startify'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-let g:deoplete#enable_at_startup = 1
-if !has('nvim')
+if has('nvim')
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+    Plug 'Shougo/deoplete.nvim'
     Plug 'roxma/nvim-yarp'
     Plug 'roxma/vim-hug-neovim-rpc'
 endif
+let g:deoplete#enable_at_startup = 1
+Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3']}
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
-Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3'] }
 Plug 'godlygeek/tabular'
-Plug 'ryanoasis/vim-devicons'           " Keep at end!
-Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'vim-voom/voom'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
@@ -146,8 +138,7 @@ set termencoding=utf-8
 
 setlocal spelllang=en
 
-set spelllang=en
-
+" This is is definitely one of the things that needs to get ported over to nvim
 if filereadable(glob('~/.config/nvim/spell/en_US.utf-8.add'))
     set spellfile=~/.config/nvim/spell/en_US.utf-8.add
 elseif filereadable(glob('~/projects/viconf/.vim/spell/en_US.utf-8.add'))
@@ -155,6 +146,7 @@ elseif filereadable(glob('~/projects/viconf/.vim/spell/en_US.utf-8.add'))
 else
     " ngl didn't know echoerr was a command until now
     echoerr 'Spell file not found.'
+
 endif
 
 if !has('nvim')
@@ -336,6 +328,11 @@ nnoremap <Leader>cd :cd %:p:h<cr>:pwd<cr>
 " I use this command constantly
 nnoremap <leader>sn :Snippets<cr>
 
+map <ScrollWheelUp> <C-Y>
+map <S-ScrollWheelUp> <C-U>
+map <ScrollWheelDown> <C-E>
+map <S-ScrollWheelDown> <C-D>
+
 " Unimpaired:{{{2
 " Note that ]c and [c are also mapped by git-gutter
 " In addition I've mapped ]a and [a for ALE nextwrap.
@@ -363,42 +360,6 @@ nnoremap <Leader>sp :setlocal spell!<CR>
 " Based off the default value for spell suggest
 nnoremap <Leader>s= :norm z=<CR>
 
-" RSI:{{{2
-" start of line
-cnoremap <C-A> <Home>
-" back one character
-cnoremap <C-B> <Left>
-" delete character under cursor
-cnoremap <C-D> <Del>
-" end of line
-cnoremap <C-E> <End>
-" forward one character
-cnoremap <C-F> <Right>
-" recall newer command in history
-cnoremap <A-N> <Down>
-" recall previous command in command-line browser
-cnoremap <A-P> <Up>
-" back one word
-cnoremap <C-B> <S-Left>
-" forward one word
-cnoremap <Esc><C-F> <S-Right>
-
-" Here's some stuff about emacs
-"
-" <A-BS> is delete previous word
-" C-k is kill from cursor to end of line
-" C-u is either kill from cursor to beginning of line or an indication of a
-" count with a command
-" C-y is yank.
-"
-" Here's vim equivalents
-" |c_CTRL-W|	CTRL-W		delete the word in front of the cursor
-" The below didn't work in the command window but did while searching
-" |c_CTRL-U|	CTRL-U		remove all characters
-" Speaking of searching, did you know that to search for the next match while
-" still typing, you use C-g and C-t instead of C-n and C-p????
-" Dude go to the index they have fucking everything there. Like literally it's
-" the index of all tags I think.
 
 " Terminal: {{{2
 " If running a terminal in Vim, go into Normal mode with Esc
@@ -450,15 +411,9 @@ nnoremap <silent> <leader>gs :Gstatus<CR>
 nnoremap <silent> <leader>gw :Gwrite<CR>
 nnoremap <silent> <leader>gW :Gwrite!<CR>
 
-<<<<<<< HEAD
-" Tagbar: {{{
+" Tagbar: {{{2
 nnoremap <silent> <F8> :TagbarToggle<CR>
-||||||| merged common ancestors
-" Tagbar: {{{
-nnoremap <silent> <F8> :TagbarToggle<CR>
-let g:tagbar_left = 1
-" }}}
-=======
+
 " Python Language Server:{{{2
 function! LC_maps()
     if has_key(g:LanguageClient_serverCommands, &filetype)
@@ -467,21 +422,7 @@ function! LC_maps()
         nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
     endif
 endfunction
->>>>>>> master
-
-<<<<<<< HEAD
-" Macros Packages: {{{1
-||||||| merged common ancestors
-" }}}
-
-" Macros Packages: {{{ 2
-=======
 autocmd FileType * call LC_maps()
-
-" Tagbar:{{{2
-nnoremap <silent> <F8> :TagbarToggle<CR>
-let g:tagbar_left = 1
->>>>>>> master
 
 " Airline:{{{2
 let g:airline#extensions#tabline#buffer_idx_mode = 1
@@ -512,23 +453,17 @@ runtime! macros/matchit.vim
 set matchpairs+=<:>
 
 " To every plugin I've never used before. Stop slowing me down.
-let g:loaded_vimballPlugin                                                = 1
-let g:loaded_tutor_mode_plugin                                            = 1
-let g:loaded_getsciptPlugin                                               = 1
-let g:loaded_2html_plugin                                                 = 1
-let g:loaded_logiPat                                                      = 1
-" let g:loaded_netrw                                                      = 1
-" let g:loaded_netrwPlugin                                                = 1
+let g:loaded_vimballPlugin      = 1
+let g:loaded_tutor_mode_plugin  = 1
+let g:loaded_getsciptPlugin     = 1
+let g:loaded_2html_plugin       = 1
+let g:loaded_logiPat            = 1
+let g:loaded_netrw              = 1
+let g:loaded_netrwPlugin        = 1
 " Let's see if this speeds things up because I've never used most of them
 
-" Remaining Plugins:{{{1
+" Remaining Plugins: {{{1
 
-" Global line completion (not just open buffers. ripgrep required.)
-inoremap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
-    \ 'prefix': '^.*$',
-    \ 'source': 'rg -n ^ --color always',
-    \ 'options': '--ansi --delimiter : --nth 3..',
-    \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }}))
 " NERDTree:{{{2
 augroup nerd_loader
   autocmd!
@@ -578,66 +513,6 @@ else
     let entry_format .= '. entry_path'
 endif
 
-" Vim_Startify:{{{2
-" What shows up in the startify list?
-
-function! s:list_commits()
-    let git = 'git -C ~/projects/viconf/'
-    let commits = systemlist(git .' log --oneline | head -n10')
-    let git = 'G'. git[1:]
-    return map(commits, '{"line": matchstr(v:val, "\\s\\zs.*"), "cmd": "'. git .' show ". matchstr(v:val, "^\\x\\+") }')
-endfunction
-
-" Setup devicons
-function! StartifyEntryFormat()
-    return 'WebDevIconsGetFileTypeSymbol(absolute_path) ." ". entry_path'
-endfunction
-
-" Center the header and footer
-function! s:filter_header(lines) abort
-    let longest_line   = max(map(copy(a:lines), 'strwidth(v:val)'))
-    let centered_lines = map(copy(a:lines),
-        \ 'repeat(" ", (&columns / 2) - (longest_line / 2)) . v:val')
-    return centered_lines
-endfunction
-
-let g:startify_custom_header = s:filter_header(startify#fortune#cowsay())
-
-if has('gui_win32')
-    let g:startify_session_dir = '$HOME\vimfiles\session'
-else
-    let g:startify_session_dir = '~/.vim/session'
-endif
-" TODO: Figure out how to set let g:startify_bookmarks = [ Contents of
-" NERDTreeBookmarks ]
-let g:startify_change_to_dir = 1
-let g:startify_fortune_use_unicode = 1
-let g:startify_update_oldfiles = 1
-let g:startify_session_persistence = 1
-" Configured correctly this could be a phenomenal way to store commands and
-" expressions on a per directory basis aka projects / workspaces!
-let g:startify_session_autoload = 1
-
-let g:startify_session_sort = 1
-let g:startify_update_oldfiles = 1
-
-
-let g:startify_skiplist = [
-        \ 'COMMIT_EDITMSG',
-        \ glob('plugged/*/doc'),
-        \ 'C:\Program Files\Vim\vim81\doc',
-        \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc',
-        \ ]
-
-let g:startify_lists = [
-      \ { 'type': 'files',     'header': ['   MRU']            },
-      \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
-      \ { 'type': 'sessions',  'header': ['   Sessions']       },
-      \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
-      \ { 'type': 'commands',  'header': ['   Commands']       },
-      \ { 'type': function('s:list_commits'), 'header': ['Commits']},
-      \ ]
-
 " UltiSnips:{{{2
 let g:UltiSnipsSnippetDir = [ '~/.vim/UltiSnips' ]
 let g:UltiSnipsJumpForwardTrigger='<Tab>'
@@ -648,10 +523,10 @@ let g:UltiSnips_python_quoting_style = 'double'
 let g:UltiSnipsEnableSnipMate = 1
 let g:UltiSnipsEditSplit = 'tabdo'
 
-" Language Client:{{{2
+" Language Client: {{{2
 let g:LanguageClient_serverCommands = { 'python': [ 'pyls' ] }
 
-" Jedi:{{{2
+" Jedi: {{{2
 " Isn't recognized as an ftplugin so probably needs to be in global conf
 let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces
 let g:jedi#usages_command = '<Leader>u'
@@ -661,7 +536,7 @@ let g:jedi#smart_auto_mappings = 0
 let g:jedi#force_py_version = 3
 let g:jedi#enable_completions = 0
 
-" Tagbar: {{{3
+" Tagbar: {{{2
 let g:tagbar_left = 1
 let g:tagbar_width = 30
 
@@ -724,8 +599,6 @@ let rst_syntax_code_list = ['vim', 'python', 'sh', 'markdown', 'lisp']
 let readline_has_bash = 1
 
 " Functions: {{{1
-" Next few are from Junegunn so credit to him
-
 " Todo Function: {{{2
 function! s:todo() abort
     let entries = []
@@ -747,7 +620,7 @@ function! s:todo() abort
 endfunction
 command! Todo call s:todo()
 
-" Explore:{{{2
+" Explore: {{{2
 " Here's one where he uses fzf and Explore to search a packages docs
 function! s:plug_help_sink(line)
     let dir = g:plugs[a:line].dir
@@ -774,6 +647,17 @@ function! s:scriptnames(re) abort
     echo join(filtered, "\n")
 endfunction
 
+" Helptabs: {{{2
+function! s:helptab()
+    if &buftype ==# 'help'
+        wincmd T
+        nnoremap <buffer> q :q<cr>
+    " need to make an else for if ft isn't help then open a help page with the
+    " first argument
+    endif
+endfunction
+command! -nargs=1 Help call <SID>helptab()
+
 " Autosave: {{{2
 function! s:autosave(enable)
   augroup autosave
@@ -797,11 +681,21 @@ function! s:hl()
 endfunction
 command! HL call <SID>hl()
 
+" EditFileComplete:{{{2
+" From he map line 1287. As this is a predefined function I suppose be careful?
+com! -nargs=1 -bang -complete=customlist,EditFileComplete
+       \ EditFile edit<bang> <args>
+fun! EditFileComplete(A,L,P)
+    return split(globpath(&path, a:A), "\n")
+endfun
+
 " Colorscheme: {{{1
-colorscheme onedark
+set background=dark " So this apparently has to be here. Better before or after colo?
+colorscheme gruvbox
 if g:colors_name ==# 'gruvbox'      " ==# means match case
     let g:gruvbox_contrast_dark = 'hard'
     let g:gruvbox_improved_strings = 1
 endif
+
+hi NonText guifg=NONE guibg=#000000
 " Massive performance difference
-hi NonText guifg=NONE guibg=NONE

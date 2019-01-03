@@ -3,16 +3,33 @@
 """Move all python functions into a dedicated file and import them.
 
 A useful combination with UltiSnips.
+
+.. todo::
+
+    * Find out if we can do the following.
+
+    .. code::
+
+        try:
+            import nvim as vim
+        except ImportError:
+            import vim
+
+    * Add docstrings to everything. Kinda forces your hand to learn how
+    everything works
+        * Admittedly good start though!
+        * May want to add which snippets depend on it. If not simple examples
+        for the return value will be more than plenty.
 """
-import string
-import vim
 import os
-import re
-import sys
+import string
+
+import vim
+
 
 def complete(tab, opts):
-    """
-    get options that start with tab
+    """Get options that start with tab.
+
     :param tab: query string
     :param opts: list that needs to be completed
     :return: a string that start with tab
@@ -27,8 +44,9 @@ def complete(tab, opts):
         msg = "{0}"
     return msg.format("|".join(opts))
 
+
 def _parse_comments(s):
-    """ Parses vim's comments option to extract comment format """
+    """Parses vim's comments option to extract comment format """
     i = iter(s.split(","))
 
     rv = []
@@ -64,12 +82,17 @@ def _parse_comments(s):
     except StopIteration:
         return rv
 
+
 def get_comment_format():
-    """ Returns a 4-element tuple (first_line, middle_lines, end_line, indent)
-    representing the comment format for the current file.
-    It first looks at the 'commentstring', if that ends with %s, it uses that.
-    Otherwise it parses '&comments' and prefers single character comment
+    """Determine what format a parsed file utilizes.
+
+    It first looks at `v:commentstring`, if that ends with `%s`, it uses that.
+    Otherwise it parses `&comments` and prefers single character comment
     markers if there are any.
+
+    :returns: (first_line, middle_lines, end_line, indent)
+               representing the comment format for the current file.
+    :rtype:    Returns a 4-element tuple
     """
     commentstring = vim.eval("&commentstring")
     if commentstring.endswith("%s"):
@@ -83,6 +106,14 @@ def get_comment_format():
 
 
 def make_box(twidth, bwidth=None):
+    """Make a box using the specific comment characters set for a filetype.
+
+    Determined by `v:commentstring`.
+
+    .. see also::
+
+        :func:`get_comment_format`
+    """
     b, m, e, i = (s.strip() for s in get_comment_format())
     bwidth_inner = bwidth - 3 - max(len(b), len(i + e)) if bwidth else twidth + 2
     sline = b + m + bwidth_inner * m[0] + 2 * m[0]
@@ -92,17 +123,18 @@ def make_box(twidth, bwidth=None):
     eline = i + m + bwidth_inner * m[0] + 2 * m[0] + e
     return sline, mlines, mlinee, eline
 
+
 def foldmarker():
     "Return a tuple of (open fold marker, close fold marker)"
     return vim.eval("&foldmarker").split(",")
 
 
-NORMAL  = 0x1
+NORMAL = 0x1
 DOXYGEN = 0x2
-SPHINX  = 0x3
-GOOGLE  = 0x4
-NUMPY   = 0x5
-JEDI    = 0x6
+SPHINX = 0x3
+GOOGLE = 0x4
+NUMPY = 0x5
+JEDI = 0x6
 
 SINGLE_QUOTES = "'"
 DOUBLE_QUOTES = '"'
@@ -136,11 +168,13 @@ def get_quoting_style(snip):
         return SINGLE_QUOTES
     return DOUBLE_QUOTES
 
+
 def triple_quotes(snip):
     style = snip.opt("g:ultisnips_python_triple_quoting_style")
     if not style:
         return get_quoting_style(snip) * 3
     return (SINGLE_QUOTES if style == 'single' else DOUBLE_QUOTES) * 3
+
 
 def triple_quotes_handle_trailing(snip, quoting_style):
     """
@@ -170,15 +204,22 @@ def triple_quotes_handle_trailing(snip, quoting_style):
     else:
         snip.rv = snip.c
 
+
 def get_style(snip):
     style = snip.opt("g:ultisnips_python_style", "normal")
 
-    if    style == "doxygen": return DOXYGEN
-    elif  style == "sphinx": return SPHINX
-    elif  style == "google": return GOOGLE
-    elif  style == "numpy": return NUMPY
-    elif  style == "jedi": return JEDI
-    else: return NORMAL
+    if    style == "doxygen":
+        return DOXYGEN
+    elif  style == "sphinx":
+        return SPHINX
+    elif  style == "google":
+        return GOOGLE
+    elif  style == "numpy":
+        return NUMPY
+    elif  style == "jedi":
+        return JEDI
+    else:
+        return NORMAL
 
 
 def format_arg(arg, style):
@@ -283,8 +324,7 @@ def write_slots_args(args, snip):
 
 
 def write_function_docstring(t, snip):
-    """
-    Writes a function docstring with the current style.
+    """Writes a function docstring with the current style.
 
     :param t: The values of the placeholders
     :param snip: UltiSnips.TextObjects.SnippetUtil object instance
@@ -306,6 +346,7 @@ def write_function_docstring(t, snip):
         snip += format_return(style)
     snip.rv += '\n' + snip.mkline('', indent='')
     snip += triple_quotes(snip)
+
 
 def get_dir_and_file_name(snip):
     return os.getcwd().split(os.sep)[-1] + '.' + snip.basename

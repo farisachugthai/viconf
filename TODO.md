@@ -79,6 +79,43 @@ with the spell files in ./hunspell/
 Keep in mind that if you're manually working with a .add spellfile, that you
 can run :sort and alphabetize all the words in the file!
 
+## Better autocomplete
+
+For your own housekeeping, think about coming up with a list of what the
+hotkeys for deoplete, jedi, Lang Client/pyls are, and what completefunc and
+omnifunc in varying filetypes are bound to.
+
+Because I keep hitting tab and C-N and getting inconsistent behavior and
+that needs to stop.
+
+Nov 21, 2018:
+
+This is so true. In your vim_setup.py file add a section for getting that cheat40
+cheatsheet back in here.
+
+Then add sections explaining the above. That was such a nice but underutilized
+tool you had there.
+
+### deoplete
+
+Has a bunch of new mappings hopefully you'll find them pretty useful {I'm stoked}
+
+### jedi
+
+Going to leave it bound to C-Space to initialize autocomplete. Could use C-N
+but that's kinda unclear since autocomplete doesn't need a trigger with
+deoplete and C-N is 'pick the next element'
+
+### Language Client
+
+Currently the value of completefunc in an \*.md file.
+
+Awh and the response for both if you open a \*.py file. Poor jedi.
+
+Dec 01, 2018:
+Never thought about this. Nvim enables `&showmode` automatically {i think?} and
+so does airline. Disable one for sure.
+
 In your (./vim_setup.py) file add a section for getting that cheat40
 cheatsheet back in here.
 

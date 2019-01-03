@@ -1,6 +1,53 @@
 # Annotations
 
-## Windows
+## Environment
+
+### Windows
+
+Dec 01, 2018
+
+To continue adding to this pile, I remember there being a need to configure the cursor
+for tmux and nvim differently when using konsole.
+
+```vim
+let s:konsole = exists('$KONSOLE_DBUS_SESSION') ||
+\ exists('$KONSOLE_PROFILE_NAME')
+```
+...
+
+```vim
+" 1 or 0 -> blinking block
+" 2 -> solid block
+" 3 -> blinking underscore
+" 4 -> solid underscore
+" Recent versions of xterm (282 or above) also support
+" 5 -> blinking vertical bar
+" 6 -> solid vertical bar
+let s:normal_shape = 0
+let s:insert_shape = 5
+let s:replace_shape = 3
+
+elseif s:iterm || s:konsole
+let s:start_insert = "\<Esc>]50;CursorShape=" . s:insert_shape . "\x7"
+let s:start_replace = "\<Esc>]50;CursorShape=" . s:replace_shape . "\x7"
+let s:end_insert = "\<Esc>]50;CursorShape=" . s:normal_shape . "\x7"
+else
+let s:cursor_shape_to_vte_shape = {1: 6, 2: 4, 0: 2, 5: 6, 3: 4}
+let s:insert_shape = s:cursor_shape_to_vte_shape[s:insert_shape]
+let s:replace_shape = s:cursor_shape_to_vte_shape[s:replace_shape]
+let s:normal_shape = s:cursor_shape_to_vte_shape[s:normal_shape]
+let s:start_insert = "\<Esc>[" . s:insert_shape . ' q'
+let s:start_replace = "\<Esc>[" . s:replace_shape . ' q'
+let s:end_insert = "\<Esc>[" . s:normal_shape . ' q'
+endif
+```
+
+From: <https://github.com/rafi/vim-config/blob/master/config/terminal.vim#L39>
+
+Typically don't like working with escape sequences.
+Gotta admit that's a lot smarter than what I'd come up with.
+
+Now here are some functions that don't work.
 
 " Environment: {{{ 2
 " Let's setup all the global vars we need. Will utilize to ensure consistency
@@ -23,7 +70,6 @@ let s:windows = has('win32') || has('win64')
 " function! is#windows() abort
 "     return s:windows
 " endfunction
-" }}}
 ```
 
 Dec 01, 2018: This doesn't work either
@@ -66,6 +112,11 @@ endif
 ```
 
 ## Plugins
+
+### LanguageClient
+
+Just ran this doozy to setup the build for termux.
+%s/\/tmp/\/data\/data\/com.termux\/files\/usr\/tmp
 
 ### UltiSnips
 
@@ -171,6 +222,34 @@ let g:lightline = {
 
 " let g:lightline.colorscheme = 'seoul256'
 " }}}
+```
+
+### FZF
+
+Dropping this because FZF.vim now comes with :R and :Rg but if you wanna
+modify anything in the future here's the original code I had
+
+```vim
+" **TODO**: Commented out because E183: User defined commands must start with an uppercase letter:::
+" :ag  - start fzf with hidden preview window that can be enabled with '?' key
+" :ag! - start fzf in fullscreen and display the preview window above
+" command! -bang -nargs=* ag
+"     \ call fzf#vim#ag(<q-args>,
+"     \ <bang>0 ? fzf#vim#with_preview('up:60%')
+"     \ : fzf#vim#with_preview('right:50%:hidden', '?'),
+"     \ <bang>0)
+
+" " similarly, we can apply it to fzf#vim#grep. to use ripgrep instead of ag:
+" command! -bang -nargs=* rg
+"     \ call fzf#vim#grep(
+"     \ 'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
+"     \ <bang>0 ? fzf#vim#with_preview('up:60%')
+"     \ : fzf#vim#with_preview('right:50%:hidden', '?'),
+"     \ <bang>0)
+
+" " likewise, files command with preview window
+" command! -bang -nargs=? -complete=dir files
+"     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 ```
 
 ### NerdCom

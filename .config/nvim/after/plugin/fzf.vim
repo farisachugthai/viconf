@@ -40,12 +40,19 @@ else
   let &grepprg = 'grep -rn $* *'
 endif
 
+command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
+
+" FZF Colors: {{{1
+" Customize FZF colors to match your color scheme
 " Unfortunately the bang doesn't move to a new window. TODO
+" Opens matches in a split. Appending ! gives an error.
+" How do we fix that?
 command! -nargs=1 -bang -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
 
 " FZF Colors:{{{2
 " What are the default colors if you don't specify this?
 " **I think fzf.vim specifies this for us**
+
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
   \ 'bg':      ['bg', 'Normal'],
@@ -61,7 +68,7 @@ let g:fzf_colors =
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
 
-" FZF_VIM: {{{1
+" Insert Mode Copletion: {{{1
 " Specifically from that repo so I don't get stuff mixed up if I ever take one
 " off or something
 " Insert mode completion:
@@ -69,6 +76,11 @@ imap <c-x><c-k> <plug>(fzf-complete-word)
 imap <c-x><c-f> <plug>(fzf-complete-path)
 imap <c-x><c-j> <plug>(fzf-complete-file-ag)
 
+nnoremap <silent> <expr> <Leader><Leader> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
+nnoremap <silent> <Leader>C        :Colors<CR>
+nnoremap <silent> <Leader><Enter>  :Buffers<CR>
+
+nmap <leader><tab> <plug>(fzf-maps-n)
 " Command local options:
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1
@@ -76,6 +88,7 @@ let g:fzf_buffers_jump = 1
 let g:fzf_commits_log_options = '--graph --color=always --format="%c(auto)%h%d %s %c(black)%c(bold)%cr"'
 " [Tags] Command to generate tags file
 let g:fzf_tags_command = 'ctags -R ./** && ctags -R --append ./.*'
+
 " [Commands] --expect expression for directly executing the command
 " Wait what happens if we hit those though?
 let g:fzf_commands_expect = 'alt-enter,ctrl-x'
@@ -110,6 +123,7 @@ inoremap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
     \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }}))
 
 " FZF_Statusline: {{{1
+
 " Custom fzf statusline
 function! s:fzf_statusline()
     " Override statusline as you like
@@ -121,5 +135,7 @@ endfunction
 
 augroup fzfstatusline
     autocmd! FileType fzf
+    autocmd FileType fzf set laststatus=0 noshowmode noruler
+    \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
     autocmd! user Fzfstatusline call <SID>fzf_statusline()
 augroup end

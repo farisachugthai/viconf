@@ -16,65 +16,63 @@ function! s:my_cr_function() abort
   return deoplete#close_popup() . "\<CR>"
 endfunction
 
-" Refresh candidates. Are we clobbering anything? Wth is it set to insert tab???
+" Refresh candidates. Are we clobbering anything? What is it usually set to
+" in insert mode.
 inoremap <expr><C-l> deoplete#refresh()
 
 " Undo completion
 inoremap <expr><C-g> deoplete#undo_completion()
 
+" Manually trigger completion.
+" ...but if autocomplete hasn't been turned off is this doing anything?
+" inoremap <silent><expr> <TAB>
+" \ pumvisible() ? "\<C-n>" :
+" \ <SID>check_back_space() ? "\<TAB>" :
+" \ deoplete#mappings#manual_complete()
+
+" function! s:check_back_space() abort
+"     let col = col('.') - 1
+"     return !col || getline('.')[col - 1]  =~? '\s'
+" endfunction
 " Manually trigger completion. Unsure of how it works  now but it just stopped
 " working
-
-inoremap <silent><expr> <TAB>
-\ pumvisible() ? "\<C-n>" :
-\ <SID>check_back_space() ? "\<TAB>" :
-\ deoplete#mappings#manual_complete()
-function! s:check_back_space() abort "{{{
-let col = col('.') - 1
-return !col || getline('.')[col - 1]  =~ '\s'
-endfunction"}}}
-
 
 " Deoplete Sources: {{{1
 " Disable the candidates in Comment/String syntaxes.
 call deoplete#custom#source('_', 'disabled_syntaxes', ['Comment', 'String'])
 
 " Do not complete too short words
-call deoplete#custom#source('dictionary',
-    \ 'min_pattern_length',
-    \ 3)
-
-" Also same thing if they come from LangClient
-call deoplete#custom#source('LanguageClient',
-    \ 'min_pattern_length',
-    \ 2)
-
-" Collect keywords from buffer path not directory Nvim was launched from
-call deoplete#custom#source( 'file',
-    \ 'enable_buffer_path',
-    \ 'True')
+call deoplete#custom#source('dictionary', 'min_pattern_length', 3)
 
 " If dictionary is already sorted, no need to sort it again.
 call deoplete#custom#source( 'dictionary', 'sorters', [])
 
+" Also same thing if they come from LangClient
+" Check out *deoplete-source-attribute-min_pattern_length* I think 2 is
+" actually the default
+call deoplete#custom#source('LanguageClient', 'min_pattern_length', 3)
+
+" Collect keywords from buffer path not directory Nvim was launched from
+call deoplete#custom#source( 'file', 'enable_buffer_path', 'True')
+
 " I want UltiSnips suggestions to appear first.
-call deoplete#custom#source('UltiSnips', 'rank', '9999')
+call deoplete#custom#source('UltiSnips', 'rank', '1')
 
 " Logging: {{{1
-" Let's start logging stuff about deoplete a little
-call deoplete#enable_logging('INFO', '~/.local/share/nvim/deoplete.log')
+
+" Let's start logging stuff about deoplete a little.
+" Also remember that you can jump to a file with <kbd>gf</kbd>
+" Any way we can make this call silent?
+call deoplete#enable_logging('INFO', expand('~/.local/share/nvim/deoplete.log'))
+
+" Print time information to the log file
+call deoplete#custom#option('profile', v:true)
+
+" UltiSnips randomly acting weird.
+call deoplete#custom#source('ultisnips', 'is_debug_enabled', 1)
 
 " Enable jedi source debug messages
-call deoplete#custom#option('profile', v:true)
-call deoplete#enable_logging('DEBUG', 'deoplete.log')
-call deoplete#custom#source('jedi', 'is_debug_enabled', 1)
-"
-" Don't know if the below is still true
 " Note: You must enable
 "|deoplete-source-attribute-is_debug_enabled| to debug the
 "sources.
 call deoplete#custom#source('jedi', 'is_debug_enabled', 1)
-
-" call deoplete#custom#option('profile', v:true)
-" call deoplete-source-attribute-is_debug_enabled(v:True)
-

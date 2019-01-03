@@ -1,10 +1,9 @@
 # html.snippets
-# TODO: the snipmate folder has 860 more lines if this already wasn't
-# plenty to go through hahahaha
 
-###########################################################################
-#                            TextMate Snippets                            #
-###########################################################################
+extends jinja
+extends htmljinja
+extends htmlminimal
+extends htmldjango
 
 global !p
 def x(snip):
@@ -16,12 +15,13 @@ endglobal
 
 snippet doctype "HTML - 5.0 (doctype)" b
 <!DOCTYPE html>
-
+$0
 endsnippet
 
 #############
 # Shortcuts #
 #############
+
 snippet down "Down (down)"
 &#x2193;
 endsnippet
@@ -66,11 +66,11 @@ endsnippet
 
 # Check the README for the explanation of w as "word boundary"
 snippet a "Link" w
-<a href="${1:http://www.${2:url.com}}"${3: target="_blank"}>${4:Anchor Text}</a>
+<a href="${1:http://www.${2:url.com}}"${3: target="_blank"}>${4:Anchor Text}</a>$0
 endsnippet
 
 snippet abbr "<abbr>" w
-<abbr title="$2">$1</abbr>
+<abbr title="$2">${VISUAL:1}/abbr>
 endsnippet
 
 snippet access "accesskey global attribute"
@@ -78,12 +78,12 @@ accesskey="$1"
 endsnippet
 
 snippet address "<address>" w
-<address>$1</address>
+<address>${1:text${VISUAL}}/address>
 endsnippet
 
 snippet article "<article>"
 <article>
-	${1:article content}
+	${VISUAL:{1:article content}}
 </article>
 endsnippet
 
@@ -93,8 +93,9 @@ snippet aside "<aside>"
 </aside>
 endsnippet
 
+# TODO: Can we make a regex so that anything from b, bo, bol to bold expands?
 snippet b "<b>" w
-<b>$1</b>
+<b>${1:text${VISUAL}}</b>
 endsnippet
 
 snippet base "HTML <base>" w
@@ -102,7 +103,7 @@ snippet base "HTML <base>" w
 endsnippet
 
 snippet blockquote "<blockquote>"
-<blockquote>$1</blockquote>
+<blockquote>${1:text${VISUAL}}/blockquote>
 endsnippet
 
 snippet body "<body>"
@@ -112,19 +113,19 @@ snippet body "<body>"
 endsnippet
 
 snippet br "<br>" w
-<br>$1</br>
+<br>${1:text${VISUAL}}/br>
 endsnippet
 
 snippet button "<button>"
-<button>$1</button>
+<button>${1:text${VISUAL}}/button>
 endsnippet
 
 snippet caption "<caption>"
-<caption>$1</caption>
+<caption>${1:text${VISUAL}}/caption>
 endsnippet
 
 snippet cite "<cite>" w
-<cite>$1</cite>
+<cite>${1:text${VISUAL}}/cite>
 endsnippet
 
 snippet class "class global attribute"
@@ -140,11 +141,11 @@ snippet <! "comments"
 endsnippet
 
 snippet code "<code>" w
-<code>$1</code>
+<code>${1:text${VISUAL}}/code>
 endsnippet
 
 snippet data "<data>"
-<data value="$2">$1</data>
+<data value="$2">${1:text${VISUAL}}/data>
 endsnippet
 
 snippet datalist "<datalist>"
@@ -154,15 +155,15 @@ snippet datalist "<datalist>"
 endsnippet
 
 snippet dd "<dd>"
-<dd>$1</dd>
+<dd>${1:text${VISUAL}}/dd>
 endsnippet
 
 snippet del "<del>" w
-<del cite="$2" datetime="${3:`date '+%Y-%m-%dT%H:%M:%S%:z'`}">$1</del>
+<del cite="$2" datetime="${3:`date '+%Y-%m-%dT%H:%M:%S%:z'`}">${1:text${VISUAL}}/del>
 endsnippet
 
 snippet dfn "<dfn>" w
-<dfn>$1</dfn>
+<dfn>${1:text${VISUAL}}/dfn>
 endsnippet
 
 snippet div "<div>" w
@@ -190,16 +191,16 @@ snippet dl "<dl>"
 endsnippet
 
 snippet dt "<dt>"
-<dt>$1</dt>
+<dt>${1:text${VISUAL}}/dt>
 endsnippet
 
 snippet em "<em>" w
-<em>$1</em>
+<em>${1:text${VISUAL}}/em>
 endsnippet
 
 snippet fieldset "Fieldset" w
 <fieldset id="${1/[\w\d]+|( )/(?1:_:\L$0\E)/g}" ${2:class="${3:}"}>
-	<legend>$1</legend>
+	<legend>${1:text${VISUAL}}/legend>
 	${0:${VISUAL}}
 </fieldset>
 endsnippet
@@ -212,7 +213,7 @@ $1
 endsnippet
 
 snippet figcaption "<figcaption>"
-<figcaption>$1</figcaption>
+<figcaption>${1:text${VISUAL}}/figcaption>
 endsnippet
 
 snippet footer "<footer>"
@@ -300,7 +301,7 @@ snippet htmll "HTML basic structure with the lang attribute" b
 endsnippet
 
 snippet i "<i>" w
-<i>$1</i>
+<i>${1:text${VISUAL}}/i>
 endsnippet
 
 snippet id "id global attribute"
@@ -312,7 +313,7 @@ snippet img "<img>"
 endsnippet
 
 snippet input "Input with Label" w
-<label for="${2:${1/[[:alpha:]]+|( )/(?1:_:\L$0)/g}}">$1</label><input type="${3:text/submit/hidden/button}" name="${4:$2}" value="$5"${6: id="${7:$2}"}`!p x(snip)`>
+<label for="${2:${1/[[:alpha:]]+|( )/(?1:_:\L$0)/g}}">${1:text${VISUAL}}/label><input type="${3:text/submit/hidden/button}" name="${4:$2}" value="$5"${6: id="${7:$2}"}`!p x(snip)`>
 endsnippet
 
 snippet input "HTML <input>" w
@@ -320,19 +321,19 @@ snippet input "HTML <input>" w
 endsnippet
 
 snippet ins "<ins>" w
-<ins cite="$2" datetime="${3:`date '+%Y-%m-%dT%H:%M:%S%:z'`}">$1</ins>
+<ins cite="$2" datetime="${3:`date '+%Y-%m-%dT%H:%M:%S%:z'`}">${1:text${VISUAL}}/ins>
 endsnippet
 
 snippet kbd "<kbd>" w
-<kbd>$1</kbd>
+<kbd>${VISUAL:0}</kbd>
 endsnippet
 
 snippet label "<label>"
-<label>$1</label>
+<label>${VISUAL:0}</label>
 endsnippet
 
 snippet legend "<legend>"
-<legend>$1</legend>
+<legend>${VISUAL:0}</legend>
 endsnippet
 
 snippet li "list item" w
@@ -354,7 +355,7 @@ snippet main "<main>"
 endsnippet
 
 snippet mark "<mark>"
-<mark>$1</mark>
+<mark>${1:text${VISUAL}}/mark>
 endsnippet
 
 snippet meta "HTML <meta>" w
@@ -362,7 +363,7 @@ snippet meta "HTML <meta>" w
 endsnippet
 
 snippet meter "<meter>"
-<meter>$1</meter>
+<meter>${1:text${VISUAL}}/meter>
 endsnippet
 
 snippet nav "<nav>"
@@ -372,12 +373,12 @@ snippet nav "<nav>"
 endsnippet
 
 snippet noscript "<noscript>"
-<noscript>$1</noscript>
+<noscript>${1:text${VISUAL}}/noscript>
 endsnippet
 
 snippet ol "<ol>"
 <ol>
-	<li>$1</li>
+	<li>${1:text${VISUAL}}/li>
 </ol>
 endsnippet
 
@@ -406,23 +407,23 @@ snippet picture "<picture>"
 endsnippet
 
 snippet pre "<pre>"
-<pre>$1</pre>
+<pre>${1:text${VISUAL}}/pre>
 endsnippet
 
 snippet progress "<progress>"
-<progress>$1</progress>
+<progress>${1:text${VISUAL}}/progress>
 endsnippet
 
 snippet q "<q>" w
-<q>$1</q>
+<q>${1:text${VISUAL}}/q>
 endsnippet
 
 snippet s "<s>" w
-<s>$1</s>
+<s>${1:text${VISUAL}}/s>
 endsnippet
 
 snippet samp "<samp>" w
-<samp>$1</samp>
+<samp>${1:text${VISUAL}}/samp>
 endsnippet
 
 snippet script "HTML <script>" w
@@ -442,7 +443,7 @@ snippet select "Select Box" w
 endsnippet
 
 snippet small "<small>" w
-<small>$1</small>
+<small>${1:text${VISUAL}}/small>
 endsnippet
 
 snippet span "<span>" w
@@ -458,7 +459,7 @@ snippet span. "<span> with class" w
 endsnippet
 
 snippet strong "<strong>" w
-<strong>$1</strong>
+<strong>${1:text${VISUAL}}/strong>
 endsnippet
 
 snippet style "HTML <style>" w
@@ -468,11 +469,11 @@ snippet style "HTML <style>" w
 endsnippet
 
 snippet sub "<sub>" w
-<sub>$1</sub>
+<sub>${1:text${VISUAL}}/sub>
 endsnippet
 
 snippet sup "<sup>" w
-<sup>$1</sup>
+<sup>${1:text${VISUAL}}/sup>
 endsnippet
 
 snippet table "HTML <table>" w
@@ -482,7 +483,7 @@ snippet table "HTML <table>" w
 endsnippet
 
 snippet tbody "<tbody>"
-<tbody>$1</tbody>
+<tbody>${1:text${VISUAL}}/tbody>
 endsnippet
 
 snippet td "table cell" w
@@ -500,7 +501,7 @@ snippet textarea "HTML <textarea>" w
 endsnippet
 
 snippet tfoot "<tfoot>"
-<tfoot>$1</tfoot>
+<tfoot>${1:text${VISUAL}}/tfoot>
 endsnippet
 
 snippet th "table header" w
@@ -508,11 +509,11 @@ snippet th "table header" w
 endsnippet
 
 snippet thead "<thead>"
-<thead>$1</thead>
+<thead>${1:text${VISUAL}}/thead>
 endsnippet
 
 snippet time "<time>" w
-<time datetime="$2">$1</time>
+<time datetime="$2">${1:text${VISUAL}}/time>
 endsnippet
 
 snippet title "HTML <title>" w
@@ -530,7 +531,7 @@ snippet ul "unordered list" w
 endsnippet
 
 snippet var "<var>" w
-<var>$1</var>
+<var>${1:text${VISUAL}}/var>
 endsnippet
 
 snippet viewport "Responsive viewport meta" w
@@ -538,7 +539,5 @@ snippet viewport "Responsive viewport meta" w
 endsnippet
 
 snippet wbr "<wbr>" w
-<wbr>$1</wbr>
+<wbr>${1:text${VISUAL}}/wbr>
 endsnippet
-
-# vim:ft=snippets:

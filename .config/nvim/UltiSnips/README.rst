@@ -15,10 +15,27 @@ At the end of the line::
 
    snippet triggerword <description> <options>
 
+Configuration
+----------------
+
+First things first, UltiSnips needs to be configured for snippets to work
+correctly. The 2 most important variables to set are ``g:UltiSnipsDirs``
+and ``g:UltiSnipsDirectories`` as they tell UltiSnips where to look for
+your snippets.
+
+.. todo Mention that usp can't be snippets and explain why usps is set to 0
+
+After configuring ``g:UltiSnipsDirs`` and ``g:UltiSnipsDirectories`` as you would like,
+using the UltiSnipsEdit command should open the folder that your snippets
+are housed in.
+
 Options
 --------
 
-**TODO**: Get rid of these I never use them.
+We have a few options to choose from when defining snippets. They are as follows:
+
+Snippets Options
+^^^^^^^^^^^^^^^^^^
 
 The following are options to modify the way that snippets behave. My most
 commonly used options are::
@@ -27,8 +44,8 @@ commonly used options are::
     ...
 
 
-   s  Remove whitespace immediately before the cursor at the end of a line
-      before jumping to the next tabstop.  This is useful if there is a
+   s  Remove whitespace immediately at the end of a line after skipping over a
+      tabstop. This is useful if there is a
       tabstop with optional text at the end of a line.
 
    t  Do not expand tabs - If a snippet definition includes leading tab
@@ -38,6 +55,7 @@ commonly used options are::
       replaced with spaces.) If this option is set, UltiSnips will ignore the
       Vim settings and insert the tab characters as is. This option is useful
       for snippets involved with tab delimited formats.
+
    w  Word boundary - With this option, the snippet is expanded if
       the tab trigger start matches a word boundary and the tab trigger end
       matches a word boundary. In other words the tab trigger must be
@@ -46,17 +64,14 @@ commonly used options are::
       permit expansion where the tab trigger follows punctuation without
       expanding suffixes of larger words.
 
+Important Considerations:
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**Important tip!**:
-
-    Write a clear description for every single snippet. Whlie this may sound
-    tedious, it pays massive dividends. When there are multiple snippets to
-    choose from the only help you'll get is what you write the description you
-    make. So make it clear what the difference between
-    ``snippet argprse`` and ``snippet argprser`` are in the description!
-
-Important Considerations
-^^^^^^^^^^^^^^^^^^^^^^^^^
+ Write a clear description for every single snippet. Whlie this may sound
+ tedious, it pays massive dividends. When there are multiple snippets to
+ choose from the only help you'll get is what you write the description you
+ make. So make it clear what the difference between
+ ``snippet argprse`` and ``snippet argprser`` are in the description!
 
 Do not use the 'b' option for snippets that could be expanded after a comment
 For example, in :ref:`vim.snippets`, the header snippet is regularly text
@@ -82,7 +97,7 @@ bogged down searching for them is imperative.
 FZF
 ^^^^
 
-Make sure you have fzf.vim installed. I absolutely love this plugin and it's
+Make sure you have `https://www.github.com/junegunn/fzf.vim`_ installed. I absolutely love this plugin and it's
 endless configurability.
 
 If you run `:Snippets` on the ex cmdline, FZF will create a window with a
@@ -106,9 +121,9 @@ Now let's look at a snippet.
 
 .. code-block::
 
-    snippet imp "import statement" b
-        import ${0:module}
-    endsnippet
+   snippet imp "import statement" b
+       import ${0:module}
+   endsnippet
 
 After typing imp<Tab>, our code will expand to the import expression. Straight
 forward enough right? Most editors offer snippet functionality so to avoid
@@ -138,7 +153,9 @@ somewhat like this.
 
    inoremap <M-u> call UltiSnips#ListSnippets()<CR>
 
-M-u isn't bound to anything in insert mode; however,
+.. note did the keyboard trick work?
+
+<kbd>M-u</kbd> isn't bound to anything in insert mode; however,
 it is bound to delete a fairly large amount of text in normal mode.
 
 Be careful of that, and possibly disable it by remapping it to <nop>.
@@ -166,3 +183,6 @@ UltiSnips has seen contributions by many individuals. Those contributions have
 been merged into this collection seamlessly and without further comments.
 
 -- vim:ft=rst:nospell:
+
+.. _fae65af0: fae65af0eb834af7201bc928a662e768ed3cfdb8
+.. _`https://www.github.com/junegunn/fzf.vim`: https://www.github.com/junegunn/fzf.vim
