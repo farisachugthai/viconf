@@ -43,6 +43,7 @@ let g:startify_skiplist = [
     \ 'C:\Program Files\Vim\vim81\doc',
     \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc', ]
 
+" Session Dir: {{{1
 if has('gui_win32')
     let g:startify_session_dir = '$HOME\vimfiles\session'
 else

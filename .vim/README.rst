@@ -1,0 +1,1 @@
+../.config/nvim/README.rst

@@ -2,19 +2,8 @@
 # -*- coding: utf-8 -*-
 """Setup Neovim on Linux or on Termux.
 
-Attributes:
+.. todo::
 
-    module_level_variables (type): Explanation and give an inline docstring
-    immediately afterwards if possible
-
-(Usually examples go after the attributes)
-
-Example:
-    Any example of how to use this module goes here:: sh
-
-        $ python exampleofrst.py
-
-TODO:
     - Show usage instructions in :func: and in :mod: docstring.
     - Make a package manager class. It's init may involve all platform specific tests.
         - Or better stated as a question: What information needs to initialize
@@ -45,10 +34,12 @@ def _parse_arguments():
         - Give an option to specify a file with a listing of packages?
     """
     parser = argparse.ArgumentParser(
-            description='Installs and sets up neovim.'
-            )
+        description='Installs and sets up neovim.')
 
-    parser.add_argument('--plug-dir', dest=plugd, help='The directory that vim-plug is downloaded to.')
+    parser.add_argument(
+        '--plug-dir',
+        dest=plugd,
+        help='The directory that vim-plug is downloaded to.')
 
     args = parser.parse_args()
 
@@ -167,7 +158,8 @@ if __name__ == "__main__":
     if args.plugd:
         plugd = args.plugd
     else:
-        plugd = os.path.join(home, ".local", "share", "nvim", "site", "autoload")
+        plugd = os.path.join(home, ".local", "share", "nvim", "site",
+                             "autoload")
 
     check_plug_dir(plugd)
 
@@ -190,4 +182,6 @@ if __name__ == "__main__":
         termux_packages()
     # TODO: Every other machine you own haha.
 
+    # conda_check = subprocess.run(["command", "-v", "conda"])
+    # conda_check.check_returncode()
     pip_install()

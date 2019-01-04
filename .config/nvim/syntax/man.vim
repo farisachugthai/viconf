@@ -16,6 +16,13 @@ if exists("b:current_syntax")
   finish
 endif
 
+highlight manSectionHeading guifg='LightCyan'
+
+" However I'm seriously considering reading in the vimruntime one and
+" rewriting it. Actually
+
+" Let's do it.
+
 " Get the CTRL-H syntax to handle backspaced text
 runtime! syntax/ctrlh.vim
 
@@ -29,13 +36,13 @@ syntax match manEmail           '<\?[a-zA-Z0-9_.+-]\+@[a-zA-Z0-9-]\+\.[a-zA-Z0-9
 syntax match manHighlight       +`.\{-}''\?+
 
 " So here are the group Vim has and how they defined them
-" syn match  manReference       "\f\+([1-9][a-z]\=)"
-" syn match  manTitle	      "^\f\+([0-9]\+[a-z]\=).*"
-" syn match  manSectionHeading  "^[a-z][a-z -]*[a-z]$"
-" syn match  manSubHeading      "^\s\{3\}[a-z][a-z -]*[a-z]$"
-" syn match  manOptionDesc      "^\s*[+-][a-z0-9]\S*"
-" syn match  manLongOptionDesc  "^\s*--[a-z0-9-]\S*"
-" syn match  manHistory		"^[a-z].*last change.*$"
+" syn match  manReference       '\f\+([1-9][a-z]\=)'
+" syn match  manTitle	      '^\f\+([0-9]\+[a-z]\=).*'
+" syn match  manSectionHeading  '^[a-z][a-z -]*[a-z]$'
+" syn match  manSubHeading      '^\s\{3\}[a-z][a-z -]*[a-z]$'
+" syn match  manOptionDesc      '^\s*[+-][a-z0-9]\S*'
+" syn match  manLongOptionDesc  '^\s*--[a-z0-9-]\S*'
+" syn match  manHistory		'^[a-z].*last change.*$'
 
 syntax match manFile       display '\s\zs\~\?\/[0-9A-Za-z_*/$.{}<>-]*' contained
 syntax match manEnvVarFile display '\s\zs\$[0-9A-Za-z_{}]\+\/[0-9A-Za-z_*/$.{}<>-]*' contained
@@ -51,30 +58,6 @@ if getline(1) =~ '^[a-zA-Z_]\+([23])'
   syn region manSynopsis start="^SYNOPSIS"hs=s+8 end="^\u\+\s*$"me=e-12 keepend contains=manSectionHeading,@cCode,manCFuncDefinition
 endif
 
-
-" Nvim's highlighting pattern with longopt and CFunc from Vim.
-" Defines the default highlighting only when that item doesn't already have
-" a highlighting group.
-highlight default link manTitle          Title
-highlight default link manSectionHeading Statement
-highlight default link manOptionDesc     Constant
-highlight default link manLongOptionDesc Constant
-highlight default link manReference      PreProc
-highlight default link manSubHeading     Function
-highlight default link manCFuncDefinition Function
-
-highlight default manUnderline cterm=underline gui=underline
-highlight default manBold      cterm=bold      gui=bold
-highlight default manItalic    cterm=italic    gui=italic
-
-" why would you do this???
-" if &filetype != 'man'
-"   " May have been included by some other filetype.
-"   finish
-" endif
-
-" below syntax elements valid for manpages 2 & 3 only
-" TODO: Some groups are defined 2 times.
 if !exists('b:man_sect')
   call man#init_pager()
 endif
@@ -108,6 +91,20 @@ if b:man_sect =~# '^[023]'
   syntax region manErrors   start='^ERRORS'hs=s+6 end='^\u[A-Z ]*$'me=e-30 keepend contains=manSignal,manReference,manSectionHeading,manHeaderFile,manCError
 endif
 
+" Nvim's highlighting pattern with longopt and CFunc from Vim.
+" Defines the default highlighting only when that item doesn't already have
+" a highlighting group.
+highlight default link manTitle          Title
+highlight default link manSectionHeading Statement
+highlight default link manOptionDesc     Constant
+highlight default link manLongOptionDesc Constant
+highlight default link manReference      PreProc
+highlight default link manSubHeading     Function
+highlight default link manCFuncDefinition Function
+
+highlight default manUnderline cterm=underline gui=underline
+highlight default manBold      cterm=bold      gui=bold
+highlight default manItalic    cterm=italic    gui=italic
 " Prevent everything else from matching the last line
 execute 'syntax match manFooter display "^\%'.line('$').'l.*$"'
 " Wait why. Usually those include links to other man pages,

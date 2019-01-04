@@ -33,10 +33,9 @@ On the horizon, a 'nice to have' would be workspace/project integration.
 In addition, a more cleanly embedded IPython terminal would be phenomenal.
 An active Jupyter kernel and a notebook would be great.
 
+## Suggestion
 
-**Suggestion**
-
-Dec 02, 2018:
+**Dec 02, 2018:**
 
 Figure out if you can add a git hook that checks that for every time a new
 file is committed to ./.config/nvim/ that one is also added to ./.vim
@@ -64,7 +63,6 @@ Because I'm thinking that I mindlessly checked out the version from Termux.
 Dec 01, 2018: dude i don't know what you did but i think you probably
 really boinked the rst.snippets.
 
-
 The problem is that I probably added a couple good snippets in there, and by
 checking it out from a different branch I may have lost them. So look at the
 historical versions you have and make sure you didn't do that.
@@ -73,7 +71,6 @@ Don't checkout sh.snippets either I have a bunch of snippets that need
 descriptions but otherwise look pretty good and need to get moved over
 to other branches as well.
 
-
 ## Get spell checking set up right
 
 Honestly this is quite a difficult process. I'm struggling to correctly work
@@ -81,7 +78,6 @@ with the spell files in ./hunspell/
 
 Keep in mind that if you're manually working with a .add spellfile, that you
 can run :sort and alphabetize all the words in the file!
-
 
 ## Better autocomplete
 
@@ -116,7 +112,12 @@ Currently the value of completefunc in an \*.md file.
 
 Awh and the response for both if you open a \*.py file. Poor jedi.
 
-
 Dec 01, 2018:
 Never thought about this. Nvim enables `&showmode` automatically {i think?} and
 so does airline. Disable one for sure.
+
+In your (./vim_setup.py) file add a section for getting that cheat40
+cheatsheet back in here.
+
+Then add sections explaining the above. That was such a nice but underutilized
+tool you had there.

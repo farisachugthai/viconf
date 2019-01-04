@@ -5,10 +5,11 @@
 		},
 		{
 			"path": "C:\\Users\\faris\\python\\vsstudio-snips"
-		},
-		{
-			"path": "C:\\Users\\faris\\AppData\\Local\\nvim"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"files.eol": "\n",
+		"files.trimTrailingWhitespace": true,
+		"files.useExperimentalFileWatcher": true
+	}
 }

@@ -6,17 +6,12 @@ if exists("b:current_syntax")
   finish
 endif
 
-if expand("%:p:h") =~ "snippets" && search("^endsnippet", "nw") == 0
-            \ && !exists("b:ultisnips_override_snipmate")
-    " this appears to be a snipmate file
-    " It's in a directory called snippets/ and there's no endsnippet keyword
-    " anywhere in the file.
-    source <sfile>:h/snippets_snipmate.vim
-    finish
-endif
-
 " Embedded Syntaxes {{{1
 
+" This feels like a weird way of doing this. Like can we do something more
+" like fname - suffix = snipsyn; syntax include @snipsyn etc etc
+" so rst.vim gets highlighted like rst. because thatd be great for the
+" ftplugins as well so we can get proper indentation
 try
    syntax include @Python syntax/python.vim
    unlet b:current_syntax
@@ -171,7 +166,7 @@ syn match snipActionKeyword "\%(pre_expand\|post_expand\|post_jump\)" contained 
 syn match snipActionValue '"[^"]*"' contained contains=snipActionValueP
 syn region snipActionValueP start=,"\@<=., end=,\ze", contained contains=@Python skipwhite keepend
 
-" Snippt Clearing {{{2
+" Snippet Clearing {{{2
 
 syn match snipClear "^clearsnippets\%(\s.*\|$\)" contains=snipClearKeyword display
 syn match snipClearKeyword "^clearsnippets" contained display
@@ -231,6 +226,5 @@ hi def link snipActionKeyword  Keyword
 
 hi def link snipClearKeyword     Keyword
 
-" }}}1
-
+" let b:current_syntax: {{{1
 let b:current_syntax = "snippets"

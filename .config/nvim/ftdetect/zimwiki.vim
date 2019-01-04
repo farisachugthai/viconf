@@ -10,15 +10,22 @@
 "         Without {end} the result is a String, which is line {lnum}
 "         from the current buffer.  Example: >
 "             getline(1)
-" And if we run :echo getline(1) on a zim filetype, we get the top line. Yes
+" And if we run :echo getline(1) on a zim filetype, we get the top line.
+
+" Yes
 " Vim is not 0 indexed :(
 
-" And while that's frustrating, this is a very weak way to determine whether we
-" have a zimwiki file or not.
+if exists('b:current_syntax')
+  finish
+endif
+
 function! s:DetectZimWiki()
-    if getline(1) =~ 'Content-Type: text/x-zim-wiki'
+    if getline(1) =~# 'Content-Type: text/x-zim-wiki'
         set filetype=zimwiki
+        let b:current_syntax = 1
     endif
 endfunction
 
-autocmd BufNewFile,BufRead * call s:DetectZimWiki()
+augroup zimwiki
+    autocmd BufRead,BufNewFile *.txt  call s:DetectZimWiki()
+augroup end

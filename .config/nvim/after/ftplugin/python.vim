@@ -35,7 +35,7 @@ augroup END
 " Plugins: {{{1
 
 " ALE: {{{2
-let b:ale_linters = [ 'flake8', 'pycodestyle', 'pydocstyle', 'pyls' ]
+let b:ale_linters = [ 'flake8', 'pycodestyle', 'pydocstyle' , 'pyls' ]
 let b:ale_linters_explicit = 1
 
 if isdirectory('~/virtualenvs')

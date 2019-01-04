@@ -11,13 +11,13 @@ let g:snips_github = 'https://github.com/farisachugthai'
 " Shout out Justinmk! Never wanted to go through a full check for vim-plug
 " since it's there 99% of the time but this is a real smart workaround
 " https://github.com/justinmk/config/blob/291ec0ae12b0b4b35b4cf9315f1878db00b780ec/.config/nvim/init.vim#L12
-let s:plugins = filereadable(expand("~/.config/nvim/autoload/plug.vim", 1))
+let s:plugins = filereadable(expand('~/.config/nvim/autoload/plug.vim', 1))
 let s:plugins_extra = s:plugins
 
 if !s:plugins
   fun! InstallPlug() "bootstrap plug.vim on new systems
     silent call mkdir(expand('~/.config/nvim/autoload', 1), 'p')
-    exe '!curl -fLo '.expand("~/.config/nvim/autoload/plug.vim", 1)
+    exe '!curl -fLo '.expand('~/.config/nvim/autoload/plug.vim', 1)
       \ .' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   endfun
 endif
@@ -51,16 +51,16 @@ else
 endif
 let g:deoplete#enable_at_startup = 1
 
+Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3'] }
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
-Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3']}
 Plug 'fszymanski/deoplete-emoji'
 Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
 Plug 'Rykka/InstantRst'
 Plug 'gu-fan/riv.vim'
-Plug 'jakykong/vim-zim'
-Plug 'HerringtonDarkholme/yats.vim'
-Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
+Plug 'jakykong/vim-zim', {'for': 'zimwiki'}
+Plug 'HerringtonDarkholme/yats.vim', {'for': ['jsx', 'tsx']}
+Plug 'mhartington/nvim-typescript', {'do': './install.sh', 'for': ['jsx', 'tsx']}
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 
@@ -78,22 +78,34 @@ if has('nvim')
 endif
 
 " Python Executables: {{{1
-" If we have a virtual env start there
-if exists('$VIRTUAL_ENV')
-    let g:python3_host_prog = expand('$VIRTUAL_ENV') . '/bin/python'
 
-elseif exists('$CONDA_PYTHON_EXE')
-    let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
+if has('python3')
 
-" Otherwise break up termux and linux.
-elseif exists('$PREFIX')
-" and just use the system python
-    if exists(':python3')
-        let g:python3_host_prog = expand('$PREFIX/bin/python')
-    endif
-else
-    if executable('/usr/bin/python3')
-        let g:python3_host_prog = '/usr/bin/python3'
+    " if we have a virtual env start there
+    if exists('$VIRTUAL_ENV')
+        let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
+
+    " or a conda env.
+    elseif exists('$CONDA_PYTHON_EXE')
+        let g:python3_host_prog = $CONDA_PYTHON_EXE
+
+    " otherwise break up termux and linux
+    elseif exists('$PREFIX')
+
+        " and just use the system python
+    let g:python3_host_prog = expand('$PREFIX/bin/python')
+
+    elseif expand('$OS') ==# 'Windows_NT'       " no reason to split this loop based on that as a first check yet
+    " shouldve gotten caught by conda env var right?
+        let g:python3_host_prog = expand('~/Miniconda3/python.exe')
+
+    else
+        if executable('/usr/bin/python3')
+            let g:python3_host_prog = '/usr/bin/python3'
+            if executable('/usr/bin/python2')       " why not
+                let g:python_host_prog = '/usr/bin/python2'
+            endif
+        endif
     endif
 endif
 
@@ -108,12 +120,12 @@ endif
 
 " Pep8 Global Options: {{{2
 if &tabstop > 4
-    set tabstop=4                           " show existing tab with 4 spaces width
+    set tabstop=4           " show existing tab with 4 spaces width
 endif
 if &shiftwidth > 4
-    set shiftwidth=4                        " when indenting with '>', use 4 spaces width
+    set shiftwidth=4        " when indenting with '>', use 4 spaces width
 endif
-set expandtab smarttab                  " On pressing tab, insert 4 spaces
+set expandtab smarttab      " On pressing tab, insert 4 spaces
 set softtabstop=4
 let g:python_highlight_all = 1
 
@@ -212,6 +224,8 @@ try
 catch
 endtry
 
+" FOOBAR=~/<CTRL-><CTRL-F> will now autocomplete!
+set isfname-==
 " Other Global Options: {{{2
 set tags+=./tags,./../tags,./*/tags     " usr_29
 set tags+=~/projects/tags               " consider generating a few large tag
@@ -234,7 +248,7 @@ endif
 " In case you wanted to see the guicursor default for gvim win64
 " set gcr=n-v-c:block-Cursor/lCursor,ve:ver35-Cursor,o:hor50-Cursor, i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor, sm:block-Cursor-blinkwait175-blinkoff150-blinkon175
 
-set path+=**        			        " Recursively search dirs with :find
+set path+=**                            " Recursively search dirs with :find
 set path+=/usr/include/libcs50          " Also I want those headers
 set autochdir
 set fileformat=unix
@@ -273,6 +287,12 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
+" Wanna navigate windows more easily?
+" |CTRL-W_gF|   CTRL-W g F     edit file name under the cursor in a new
+"                  tab page and jump to the line number
+"                  following the file name.
+"
+" Rebind that to C-w t and we can open the filename in a new tab.
 " Navigate tabs more easily
 map <unique> <A-Right> :tabnext<CR>
 map <unique> <A-Left> :tabprev<CR>
@@ -294,6 +314,16 @@ nnoremap <Leader>re :so $MYVIMRC<CR>
 cnoremap termux-share termux-share -a send<Space>%
 
 " General_Mappings: {{{2
+" Ease Dropbox uploads. Should probably turn into a func and command
+" cnoremap termux-share termux-share -a send<Space>%
+
+                        " *<Cmd>* *:map-cmd*
+" The <Cmd> pseudokey may be used to define a 'command mapping', which executes
+" the command directly (without changing modes, etc.).  Where you might use
+":...<CR>" in the {lhs} of a mapping, you can instead use '<Cmd>...<CR>'.
+
+map <silent> <Leader>ts <Cmd>!termux-share -a send %<CR>
+
 " Simple way to speed up startup
 nnoremap <Leader>nt :NERDTreeToggle<CR>
 nnoremap <Leader>a :echo('No. Use :%y')<CR>
@@ -302,6 +332,7 @@ nnoremap <Leader>a :echo('No. Use :%y')<CR>
 nnoremap <Leader>he :helpgrep<Space>
 
 " Escape Conveniences:
+" f d clobbers the command though...
 inoremap fd <Esc>
 vnoremap fd <Esc>
 
@@ -317,11 +348,23 @@ nnoremap <Leader>cd :cd %:p:h<CR>:pwd<CR>
 " Switch NERDTree root to dir of currently focused window.
 nnoremap <Leader>ncd :NERDTreeCWD
 
+" Save a file as root
+noremap <leader>W :w !sudo tee % > /dev/null<CR>
+
+" UltiSnips: {{{2
+
+" TODO: Is it better to put <Cmd> here? For the insert mode ones maybe.
 " I use this command constantly
 nnoremap <Leader>sn :Snippets<CR>
 
 " Save a file as root
 noremap <leader>W :w !sudo tee % > /dev/null<CR>
+nnoremap <Leader>se :UltiSnipsEdit<CR>
+
+" TODO: Is C-o better than Esc?
+inoremap <F6> <C-o>:UltiSnipsEdit<CR>
+nnoremap <F6> :UltiSnipsEdit<CR>
+
 " Unimpaired: {{{2
 " Note that ]c and [c are mapped by git-gutter and ALE has ]a and [a
 nnoremap ]q :cnext<CR>
@@ -381,13 +424,12 @@ nnoremap <Leader>a :ALEInfo<CR>
 " Fugitive: {{{2
 nnoremap <silent> <Leader>gb   :Gblame<CR>
 nnoremap <silent> <Leader>gc   :Gcommit<CR>
-" Curious if this is gonna work or not. Now it does!
-ca <silent> gch Git checkout<Space>
+cmap <silent> gch Git checkout<Space>
 nnoremap <silent> <Leader>gd   :Gdiff<CR>
+nnoremap <silent> <Leader>gds2 :Git diff --stat --staged<CR>
 nnoremap <silent> <Leader>ge   :Gedit<CR>
 nnoremap <silent> <Leader>gE   :Gedit<Space>
 nnoremap <silent> <Leader>gl   :Glog<CR>
-" TODO:
 nnoremap <silent> <Leader>gL :Glog --pretty=oneline --graph<CR>
 nnoremap <silent> <Leader>gq   :Gwq<CR>
 nnoremap <silent> <Leader>gQ   :Gwq!<CR>
@@ -425,7 +467,11 @@ augroup END
 
 " Tagbar: {{{2
 nnoremap <silent> <F8> :TagbarToggle<CR>
-inoremap <silent> <F8> <Esc>:TagbarToggle<CR>
+
+if has('b:Tagbar')  " or any plugin
+    imap <F3> <esc>:TagbarToggle<CR>
+    nmap <F3> :TagbarToggle<CR>
+endif
 
 " Airline: {{{2
 let g:airline#extensions#tabline#buffer_idx_mode = 1
@@ -459,8 +505,8 @@ let g:loaded_tutor_mode_plugin = 1
 let g:loaded_getsciptPlugin    = 1
 let g:loaded_2html_plugin      = 1
 let g:loaded_logiPat           = 1
-" let g:loaded_netrw           = 1
-" let g:loaded_netrwPlugin     = 1
+let g:loaded_netrw             = 1
+let g:loaded_netrwPlugin       = 1
 " Let's see if this speeds things up because I've never used most of them
 
 " Remaining Plugins: {{{1
@@ -551,7 +597,7 @@ let g:ultisnips_python_style = 'numpy'
 let g:ultisnips_python_quoting_style = 'double'
 let g:UltiSnipsEnableSnipMate = 0
 let g:UltiSnipsEditSplit = 'tabdo'
-" Definining it in this way means that UltiSnips doesn't iterate
+" Defining it in this way means that UltiSnips doesn't iterate
 " through every dir in &rtp which should save a lot of time
 let g:UltiSnipsSnippetDirectories=[$HOME.'/.config/nvim/UltiSnips']
 
@@ -573,7 +619,7 @@ let g:LanguageClient_loggingFile = "~/.local/share/nvim/LC.log"
 " Jedi: {{{2
 let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces
 let g:jedi#usages_command = '<Leader>u'
-let g:jedi#show_call_signatures_delay = 100
+let g:jedi#show_call_signatures_delay = 1000
 let g:jedi#smart_auto_mappings = 0
 let g:jedi#force_py_version = 3
 let g:jedi#enable_completions = 0
@@ -586,12 +632,7 @@ let g:deoplete#sources#jedi#enable_typeinfo = 0
 " thing and prefix <Esc> to the RHS and boom!
 let g:tagbar_left = 1
 let g:tagbar_width = 30
-
-if has('b:Tagbar')  " or any plugin
-    let g:tagbar_sort = 0
-    imap <F3> <esc>:TagbarToggle<CR>
-    nmap <F3> :TagbarToggle<CR>
-endif
+let g:tagbar_sort = 0
 
 " Airline: {{{2
 let g:airline#extensions#syntastic#enabled = 0
@@ -636,7 +677,7 @@ let g:zim_notebooks_dir = '~/Notebooks.git'
 
 " Filetype Specific Options: {{{1
 
-if &ft == 'c'
+if &ft ==# 'c'
     set makeprg=make\ %<.o
 endif
 " Noticed this bit in he syntax line 2800
@@ -654,8 +695,12 @@ let rst_syntax_code_list = ['vim', 'python', 'sh', 'markdown', 'lisp']
 let readline_has_bash = 1
 
 " Functions_Commands: {{{1
+
 " Up until Rename are from Junegunn so credit to him
 " Todo Function: {{{2
+" Grep for todos in the current repo and populate the quickfix list with them.
+" You could run an if then to check you're in a git repo.
+" Also could use ag/rg/fd and fzf instead of grep to supercharge this.
 function! s:todo() abort
     let entries = []
     for cmd in ['git grep -niI -e TODO -e todo -e FIXME -e XXX -e HACK 2> /dev/null',
@@ -676,25 +721,6 @@ function! s:todo() abort
 endfunction
 command! Todo call s:todo()
 
-" Explore: {{{2
-" Here's one where he uses FZF and Explore to search a packages docs
-function! s:plug_help_sink(line)
-    let dir = g:plugs[a:line].dir
-    for pat in ['doc/*.txt', 'README.md']
-        let match = get(split(globpath(dir, pat), "\n"), 0, '')
-        if len(match)
-            execute 'tabedit' match
-            return
-        endif
-    endfor
-    tabnew
-    execute 'Explore' dir
-endfunction
-
-command! PlugHelp call fzf#run(fzf#wrap({
-  \ 'source': sort(keys(g:plugs)),
-  \ 'sink':   function('s:plug_help_sink')}))
-
 " Scriptnames: {{{2
 " command to filter :scriptnames output by a regex
 command! -nargs=1 Scriptnames call <sid>scriptnames(<f-args>)
@@ -704,7 +730,7 @@ function! s:scriptnames(re) abort
     redir END
 
     let filtered = filter(split(scriptnames, "\n"), "v:val =~ '" . a:re . "'")
-    echo join(filtered, "\n")
+    echo join(filtered, '\n')
 endfunction
 
 " AutoSave: {{{2
@@ -728,17 +754,40 @@ command! -bang Autosave call s:autosave(<bang>1)
 " HL: {{{2
 " Whats the syntax group under my cursor?
 function! s:hl()
-  " echo synIDattr(synID(line('.'), col('.'), 0), 'name')
   echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
 endfunction
 
 command! HL call <SID>hl()
+
+" PlugHelp: {{{2
+" Call :PlugHelp to use fzf to open a window with all of the plugins
+" you have installed listed and upon pressing enter open the help
+" docs. That's not a great explanation but honestly easier to explain
+" with a picture.
+" TODO: Screenshot usage.
+function! s:plug_help_sink(line)
+  let dir = g:plugs[a:line].dir
+  for pat in ['doc/*.txt', 'README.md']
+    let match = get(split(globpath(dir, pat), "\n"), 0, '')
+    if len(match)
+      execute 'tabedit' match
+      return
+    endif
+  endfor
+  tabnew
+  execute 'Explore' dir
+endfunction
+
+command! PlugHelp call fzf#run(fzf#wrap({
+  \ 'source': sort(keys(g:plugs)),
+  \ 'sink':   function('s:plug_help_sink')}))
 
 " Rename:{{{2
 " :he map line 1454. How have i never noticed this isn't a feature???
 command! -nargs=1 -bang -complete=file Rename f <args>|w<bang>
 
 " UltiSnips: {{{2
+
 " GetAllSnippets:{{{3
 " Definitely a TODO
 function! GetAllSnippets()
@@ -747,10 +796,10 @@ function! GetAllSnippets()
   for [key, info] in items(g:current_ulti_dict_info)
     let parts = split(info.location, ':')
     call add(list, {
-      \"key": key,
-      \"path": parts[0],
-      \"linenr": parts[1],
-      \"description": info.description,
+      \'key': key,
+      \'path': parts[0],
+      \'linenr': parts[1],
+      \'description': info.description,
       \})
   endfor
   return list
@@ -769,7 +818,6 @@ endfunction
 " endfunction
 
 " ExpandPossibleShorterSnippet:{{{2
-
 function! ExpandPossibleShorterSnippet()
   if len(UltiSnips#SnippetsInCurrentScope()) == 1 "only one candidate...
     let curr_key = keys(UltiSnips#SnippetsInCurrentScope())[0]
@@ -781,6 +829,7 @@ function! ExpandPossibleShorterSnippet()
   return 0
 endfunction
 inoremap <silent> <C-L> <C-R>=(ExpandPossibleShorterSnippet() == 0? '': UltiSnips#ExpandSnippet())<CR>
+
 
 " LanguageClient Check:{{{2
 " Check if the LanguageClient is running.

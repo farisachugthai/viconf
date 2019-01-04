@@ -1,26 +1,45 @@
 README
 ========
 
-How are the folders and files in a neovim directory tree supposed to be laid out?
+:Author: Faris Chugthai
+:Email: farischugthai.gmail.com
+:Date: 01/02/2019
 
-Well each directory serves a specific purpose, and depending on use case, not all
+Directory Layout and Runtimepath
+---------------------------------
+
+How are the folders in a neovim directory tree supposed to be laid out?
+
+While each directory serves a specific purpose, depending on use case, not all
 need to be employed.
 
-The first and most obvious file is the :mod:`init.vim`. We can setup the base
+The first and most obvious file is the :module:`init.vim`. We can setup the base
 options like so:
 
-" Options
-" =======
-"
-"    :let OPTION_NAME = 1                   Enable option
-"    :let OPTION_NAME = 0                   Disable option
-"
-"
-" Continuation of settings
-" -------------------------------
++--------------------------+----------------+
+| Options                  |                |
+|                          |                |
+| .. code-block:: vim      |                |
+|                          |                |
+|    :let OPTION_NAME = 1  | Enable option  |
+|    :let OPTION_NAME = 0  | Disable option |
+|                          |                |
+|                          |                |
+| Continuation of settings |                |
++--------------------------+----------------+
 
+Here's a follow up explanation that goes into more of the details.
 
-Here's a follow up explanation that goes into more of the details
+The variable of importance is ``runtimepath``. The varying directories all
+affect how different settings are recorded and in what order the code is ran.
+
+Ftdetect
+~~~~~~~~
+
+How does sourcing ftdetect work?
+
+Ftplugin
+~~~~~~~~
 
 Ftplugin should be used to totally override the built-in ftplugin. You either
 have to be THAT discontent with it, or simply copy and paste it and then
@@ -32,18 +51,16 @@ that buffers of a different filetype don't source everything in after/ftplugin.
 
 For example, let's say we were in after/ftplugin/gitcommit.vim
 
-Something like this pseudo code would be perfect:
+Something like this pseudo code would be perfect::
 
-`if ft != None && ft != gitcommit | finish | endif`
+    ``if ft != None && ft != gitcommit | finish | endif``
 
 Then put that in everything in that dir.
+
+Syntax
+~~~~~~
 
 Similar thing with after/syntax. We also have a fair number of files in syntax/
 
 We should probably set up some kind of guard so that it doesn't source a dozen
 times.
-
-And how does sourcing ftdetect work? Because everything in my ftdetect always
-shows up in `:scriptnames`.
-
-Need to see how $VIMRUNTIME implements this.

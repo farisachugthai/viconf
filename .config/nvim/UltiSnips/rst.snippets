@@ -1,4 +1,4 @@
-# rst.snippets
+# Rst.snippets:
 # -*- coding: utf-8 -*-
 # Vim: set ts=3:set expandtab:set shiftwidth=3:
 
@@ -11,130 +11,7 @@ extends python
 
 global !p
 
-import vim
-from os import path as ospath
-from string import Template
-# I swear the snip option has a few of these ready to go
-import re
-from collections import Counter
-
-# `<http://docutils.sourceforge.net/docs/ref/rst/roles.html>`
-
-TEXT_ROLES = ['emphasis','literal','code','math',
-              'pep-reference','rfc-reference',
-              'strong','subscript','superscript',
-              'title-reference','raw']
-TEXT_ROLES_REGEX = r'\.\.\srole::?\s(w+)'
-
-# `<http://docutils.sourceforge.net/docs/ref/rst/directives.html#specific-admonitions>`
-SPECIFIC_ADMONITIONS = ["attention", "caution", "danger",
-                        "error", "hint", "important", "note",
-                        "tip", "warning"]
-# `<http://docutils.sourceforge.net/docs/ref/rst/directives.html>`
-DIRECTIVES = ['topic','sidebar','math','epigraph',
-              'parsed-literal','code','highlights',
-              'pull-quote','compound','container','table','csv-table',
-              'list-table','class','sectnum',
-              'role','default-role','unicode',
-              'raw']
-
-NONE_CONTENT_DIRECTIVES = ['rubric', 'contents', 'header',
-                          'footer', 'date', 'include', 'title']
-
-INCLUDABLE_DIRECTIVES = ['image', 'figure', 'include']
-# CJK chars
-# http://stackoverflow.com/questions/2718196/find-all-chinese-text-in-a-string-using-python-and-regex
-CJK_RE = re.compile(u'[⺀-⺙⺛-⻳⼀-⿕々〇〡-〩〸-〺〻㐀-䶵一-鿃豈-鶴侮-頻並-龎]', re.UNICODE)
-
-# http://www.pygal.org/en/stable/documentation/types/index.html
-CHART_TYPES = ["Line", "StackedLine", "HorizontalLine", "Bar", "StackedBar", "HorizontalBar", "Histogram", "XY", "DateLine", "TimeLine", "TimeDeltaLine", "DateTimeLine", "Pie", "Radar", "Box", "Dot", "Funnel", "Gauge", "SolidGauge", "Pyramid", "Treemap"]
-
-def has_cjk(s):
-    """Detect if s contains CJK characters."""
-    return CJK_RE.search(s) is not None
-
-
-def real_filename(filename):
-    """peel extension name off if possible
-    # i.e. "foo.bar.png will return "foo.bar"
-    """
-    return ospath.splitext(filename)[0]
-
-
-def check_file_exist(rst_path, relative_path):
-    """For RST file, it can just include files as relative path.
-
-    :param rst_path: absolute path to rst file
-    :param relative_path: path related to rst file
-    :return: relative file's absolute path if file exist
-    """
-    abs_path = ospath.join(ospath.dirname(rst_path), relative_path)
-    if ospath.isfile(abs_path):
-        return abs_path
-
-
-try:
-    rst_char_len = vim.strwidth  # Requires Vim 7.3+
-except AttributeError:
-    from unicodedata import east_asian_width
-    def rst_char_len(s):
-        """Return the required over-/underline length for s."""
-        result = 0
-        for c in s:
-            result += 2 if east_asian_width(c) in ('W', 'F') else 1
-        return result
-
-
-def make_items(times, leading='+'):
-    """Make lines with leading char multiple times.
-
-    :param: times, how many times you need
-    :param: leading, leading character
-    """
-    times = int(times)
-    if leading == 1:
-        msg = ""
-        for x in range(1, times+1):
-            msg += "%s. Item\n" % x
-        return msg
-    else:
-        return ("%s Item\n" % leading) * times
-
-
-def look_up_directives(regex, fpath):
-    """Find all directive args in given file
-    :param: regex, the regex that needs to match
-    :param: path, to path to rst file
-
-    :return: list, empty list if nothing matches
-    """
-    try:
-        with open(fpath) as source:
-            match = re.findall(regex, source.read())
-    except IOError:
-        match = []
-    return match
-
-
-# so what the fuck? def doesn't take an arg, the docstring says path
-# and its to determine embedded syntaxes in a file.
-def get_popular_code_type():
-    """Find most frequent filetype in the file
-
-    :param path: file to detect
-
-    :return: string, most popular code type in file
-    """
-    buf = "".join(vim.current.buffer)
-    types = re.findall(r'[:|\.\.\s]code::?\s(\w+)', buf)
-    try:
-        popular_type = Counter(types).most_common()[0][0]
-    except IndexError as e:
-        # what the hell is this?!?
-        # popular_type = "lua" # Don't break default
-        # no i just want the exception
-        print(e)
-    return popular_type
+from rst_helper import *
 
 endglobal
 snippet title "Title with =" b
@@ -148,7 +25,7 @@ ${1:${VISUAL:Subsection name}}
 endsnippet
 
 snippet inlink "Create an internal link"
-:ref:`${VISUAL:'link'}`
+:ref:\`${1:${VISUAL:link}}\` $0
 endsnippet
 
 snippet table "table from sphinx cheatsheet"
@@ -161,60 +38,58 @@ And Still More       42
 ==================   ============
 endsnippet
 
-snippet cb "Code Block. Must have 1 blank line surrounding!" b
+snippet cb "Code Block. Must have 1 blank line surrounding!" bs
+.. code-block:: ${1:python}
 
-.. code-block:: ${1:python:shell-session}
+    ${2:${VISUAL:code}}$0
+endsnippet
+
+# Added s option to remove 'python' if you skip over it
+snippet codeb "code block duplicated" bs
+.. code-block:: ${1:python}
 
     ${2:${VISUAL:code}}
 endsnippet
 
-# TODO you'll probably need to add the option for erasing whitespace if a tabstop
-# is skipped over because the python block is optional
-snippet codeb "code block duplicated" b
-.. code-block:: ${1:python}
-
-   ${2:${VISUAL:code}}
-endsnippet
-
 snippet code "Inline code. Needs to be visually highlighted first." b
-\`\`${VISUAL:0}\`\`
+\`\`${0:${VISUAL:text}}\`\`
 endsnippet
-
 
 ################
 #  formatting  #
 ################
 
-snippet * "Italics"
-*${1:Emphasis}* ${0}
+snippet * "Italics" s
+*${1:${VISUAL:Emphasis}}* $0
 endsnippet
 
-snippet ** "Bold"
-**${1:Strong emphasis}** ${0}
+snippet ** "Bold" s
+**${1:${VISUAL:Strong emphasis}}** $0
 endsnippet
 
-snippet bold "bold" b
-**${1:Strong emphasis}** ${0}
+snippet bold "bold" s
+**${1:${VISUAL:Strong emphasis}}** $0
 endsnippet
 
 ###########
 #  links  #
 ###########
 
+# Make sure this works!
 snippet link "External URL. A space is required between the text and URL!" b
-`Link text <https://github.com/>`
+\`${1:Link text} ${3:<${VISUAL:https://github.com/}$0>}\`
 endsnippet
 
 snippet link "Separated link and target." b
-.. _${1:optional text leading into}: ${2:`https://somedomain.com`}
+.. _${1:optional text leading into}: ${2:\`https://somedomain.com\`}
 endsnippet
 
 snippet url "Separated link and target." b
-.. _${1:optional text leading into}: ${2:`https://somedomain.com`}
+.. _${1:optional text leading into}: ${2:\`https://somedomain.com\`}
 endsnippet
 
-snippet url "Separated link and target." b
-.. _${1:optional text leading into}: ${2:`https://somedomain.com`}
+snippet http "Separated link and target." bs
+.. _${1:${VISUAL:text}}: ${2:\`https://somedomain.com\`}
 endsnippet
 
 ############
@@ -241,22 +116,28 @@ snippet fig: "Figure directive" b
 $0
 endsnippet
 
-snippet cont "content directive" b
+snippet cont "content directive" bs
 .. contents::
 
-   ${0:content}
+   ${0:${VISUAL:content}}
+endsnippet
+
+snippet coded "Code block directive." bs
+.. code:: ${1:type}
+
+   ${0:${VISUAL:code}}
+endsnippet
+
+snippet tip "Tips or anyone in need of a directive!" bs
+.. tip::
+
+   ${0:${VISUAL:Tip for anyone having trouble.}}
 endsnippet
 
 snippet coded "Code block directive." b
 .. code:: ${1:type}
 
    ${0:write some code}
-endsnippet
-
-snippet tip "Tips or anyone in need of a directive!" b
-.. tip::
-
-   ${0:Tip for anyone having trouble.}
 endsnippet
 
 snippet note "Take note of this directive over here ;)" b
@@ -343,39 +224,37 @@ endsnippet
 
 snippet toctree "directive_toctree" b
 .. toctree::
-	:maxdepth: ${1:2}
+   :maxdepth: ${1:2}
 
-	${2:#:FILES}
+   ${2:FILES}
 endsnippet
 
-snippet part "Part" b
-`!p snip.rv = rst_char_len(t[1])*'#'`
+snippet part "Part"
 ${1:${VISUAL:Part name}}
 `!p snip.rv = rst_char_len(t[1])*'#'`
 endsnippet
 
-snippet chap "Chapter" b
-`!p snip.rv = rst_char_len(t[1])*'*'`
+snippet chap "Chapter"
 ${1:${VISUAL:Chapter name}}
 `!p snip.rv = rst_char_len(t[1])*'*'`
 endsnippet
 
-snippet sec "Section" b
+snippet sec "Section"
 ${1:${VISUAL:Section name}}
 `!p snip.rv = rst_char_len(t[1])*'='`
 endsnippet
 
-snippet ssec "Subsection" b
+snippet ssec "Subsection"
 ${1:${VISUAL:Subsection name}}
 `!p snip.rv = rst_char_len(t[1])*'-'`
 endsnippet
 
-snippet sssec "Subsubsection" b
+snippet sssec "Subsubsection"
 ${1:${VISUAL:Subsubsection name}}
 `!p snip.rv = rst_char_len(t[1])*'^'`
 endsnippet
 
-snippet para "Paragraph" b
+snippet para "Paragraph"
 ${1:${VISUAL:Paragraph name}}
 `!p snip.rv = rst_char_len(t[1])*'"'`
 $0
