@@ -25,7 +25,7 @@ function! StartifyEntryFormat()
     return 'WebDevIconsGetFileTypeSymbol(absolute_path) ." ". entry_path'
 endfunction
 
-" Center The Header And Footer: {{{1
+" Center the header and footer
 function! s:filter_header(lines) abort
     let longest_line   = max(map(copy(a:lines), 'strwidth(v:val)'))
     let centered_lines = map(copy(a:lines),
@@ -36,11 +36,12 @@ endfunction
 let g:startify_custom_header = s:filter_header(startify#fortune#cowsay())
 
 " Skiplist: {{{1
+" Don't show these files
 let g:startify_skiplist = [
     \ 'COMMIT_EDITMSG',
     \ glob('plugged/*/doc'),
     \ 'C:\Program Files\Vim\vim81\doc',
-    \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc', ] " \ ]
+    \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc', ]
 
 " Session Dir: {{{1
 if has('gui_win32')
@@ -49,7 +50,7 @@ else
     let g:startify_session_dir = '~/.vim/session'
 endif
 
-" Options: {{{1
+" General Options: {{{1
 " TODO: Figure out how to set let g:startify_bookmarks = [ Contents of
 " NERDTreeBookmarks ]
 let g:startify_change_to_dir = 1

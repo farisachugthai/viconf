@@ -1,8 +1,7 @@
-" python.vim
+" Python:
 " Maintainer: Faris Chugthai
 
 " Options: {{{1
-" Options:{{{1
 setl linebreak
 setl textwidth=120
 
@@ -33,10 +32,10 @@ augroup vimrc_autocmds
     autocmd FileType python set nowrap
 augroup END
 
-" Plugins:{{{1
+" Plugins: {{{1
 
 " ALE: {{{2
-let b:ale_linters = [ 'flake8', 'pycodestyle', 'pydocstyle' ]
+let b:ale_linters = [ 'flake8', 'pycodestyle', 'pydocstyle' , 'pyls' ]
 let b:ale_linters_explicit = 1
 
 if isdirectory('~/virtualenvs')
@@ -48,22 +47,12 @@ let b:ale_python_flake8_options = '--config ~/.config/flake8'
 let b:ale_python_pycodestyle_options = '--config ~/.config/pycodestyle'
 
 " Python Language Server: {{{2
-" So don't kill the LangClient plugin just don't use pyls for now. way too
-" slow
-
-" Vim-plug exports a dictionary with all of the info it gathers about your
-" plugins!
-if has_key(plugs, 'LanguageClient-neovim')
-    let b:LanguageClient_autoStart = 1
-    let b:LanguageClient_selectionUI = 'fzf'
-    " the mapping below clobbers your run *.py mapping
-    nnoremap <F5> :call LanguageClient_contextMenu()<CR>
-    " this isn't pulling up docs like i want
-    nnoremap K :call LanguageClient_textDocument_hover()<CR>
-    nnoremap gd :call LanguageClient_textDocument_definition()<CR>
-endif
+" Delete the mappings off of here since they're defined in init.vim
+let b:LanguageClient_autoStart = 1
+let b:LanguageClient_selectionUI = 'fzf'
 
 " Riv: {{{2
 " Riv is a plugin for reStructuredText in Vim.
-" This setting allows docstrings in python files to be properly highlighted.
+" The following setting allows docstrings in python files
+" to be properly highlighted. I'm inordinately excited.
 let b:riv_python_rst_hl = 1

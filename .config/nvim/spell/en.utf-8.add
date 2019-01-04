@@ -1,3 +1,4 @@
+Atlassian
 Autocompletion
 Awh
 BufEnter
@@ -48,7 +49,9 @@ GitHub
 Gitignore
 Google
 Gruvbox
+HMAC
 Hettinger
+I'll
 I'll
 I'll
 IPython
@@ -103,6 +106,7 @@ TODO
 Tagbar
 Termux
 Termux's
+TestCase
 Todo
 USBs
 Ubuntu
@@ -586,6 +590,8 @@ tcsh
 termcap
 terminfo
 termux
+testcase
+tex
 tex
 texting
 tldr

@@ -18,6 +18,11 @@ endif
 
 highlight manSectionHeading guifg='LightCyan'
 
+" However I'm seriously considering reading in the vimruntime one and
+" rewriting it. Actually
+
+" Let's do it.
+
 " Get the CTRL-H syntax to handle backspaced text
 runtime! syntax/ctrlh.vim
 
@@ -53,10 +58,6 @@ if getline(1) =~ '^[a-zA-Z_]\+([23])'
   syn region manSynopsis start="^SYNOPSIS"hs=s+8 end="^\u\+\s*$"me=e-12 keepend contains=manSectionHeading,@cCode,manCFuncDefinition
 endif
 
-" TODO:***************
-" FIXME
-" below syntax elements valid for manpages 2 & 3 only
-" TODO: Some groups are defined 2 times.
 if !exists('b:man_sect')
   call man#init_pager()
 endif
@@ -89,13 +90,6 @@ if b:man_sect =~# '^[023]'
   syntax region manSynopsis start='^\(LEGACY \)\?SYNOPSIS'hs=s+8 end='^\u[A-Z ]*$'me=e-30 keepend contains=manSectionHeading,@cCode,manCFuncDefinition,manHeaderFile
   syntax region manErrors   start='^ERRORS'hs=s+6 end='^\u[A-Z ]*$'me=e-30 keepend contains=manSignal,manReference,manSectionHeading,manHeaderFile,manCError
 endif
-
-" Prevent everything else from matching the last line
-execute 'syntax match manFooter display "^\%'.line('$').'l.*$"'
-" Wait why. Usually those include links to other man pages,
-" not only do I want those highlighted I want extra funcs for them
-
-let b:current_syntax = 'man'
 
 " Nvim's highlighting pattern with longopt and CFunc from Vim.
 " Defines the default highlighting only when that item doesn't already have
@@ -111,45 +105,9 @@ highlight default link manCFuncDefinition Function
 highlight default manUnderline cterm=underline gui=underline
 highlight default manBold      cterm=bold      gui=bold
 highlight default manItalic    cterm=italic    gui=italic
+" Prevent everything else from matching the last line
+execute 'syntax match manFooter display "^\%'.line('$').'l.*$"'
+" Wait why. Usually those include links to other man pages,
+" not only do I want those highlighted I want extra funcs for them
 
-" why would you do this???
-" if &filetype != 'man'
-"   " May have been included by some other filetype.
-"   finish
-" endif
-
-" below syntax elements valid for manpages 2 & 3 only
-" TODO: Some groups are defined 2 times.
-" Actually a lot of redundancies. Really gotta sort this out.
-if !exists('b:man_sect')
-  call man#init_pager()
-endif
-if b:man_sect =~# '^[023]'
-  syntax case match
-  syntax include @c $VIMRUNTIME/syntax/c.vim
-  syntax match manCFuncDefinition display '\<\h\w*\>\ze\(\s\|\n\)*(' contained
-  syntax match manSentence display '\%(^ \{3,7}\u\|\.  \u\)\_.\{-}
-        \\%(-$\|\.$\|:$\)\|
-        \ \{3,7}\a.*\%(\.\|:\)$' contained contains=manReference
-  syntax region manSynopsis start='^\%(
-        \SYNOPSIS\|
-        \SYNTAX\|
-        \SINTASSI\|
-        \SKŁADNIA\|
-        \СИНТАКСИС\|
-        \書式\)$' end='^\%(\S.*\)\=\S$' keepend contains=manSentence,manSectionHeading,@c,manCFuncDefinition
-  highlight default link manCFuncDefinition Function
-
-  syntax region manExample start='^EXAMPLES\=$' end='^\%(\S.*\)\=\S$' keepend contains=manSentence,manSectionHeading,manSubHeading,@c,manCFuncDefinition
-
-  " XXX: groupthere doesn't seem to work
-  syntax sync minlines=500
-  "syntax sync match manSyncExample groupthere manExample '^EXAMPLES\=$'
-  "syntax sync match manSyncExample groupthere NONE '^\%(EXAMPLES\=\)\@!\%(\S.*\)\=\S$'
-
-  syntax match manCFuncDefinition  display '\<\h\w*\>\s*('me=e-1 contained
-  syntax match manCError           display '^\s\+\[E\(\u\|\d\)\+\]' contained
-  syntax match manSignal           display '\C\<\zs\(SIG\|SIG_\|SA_\)\(\d\|\u\)\+\ze\(\W\|$\)'
-  syntax region manSynopsis start='^\(LEGACY \)\?SYNOPSIS'hs=s+8 end='^\u[A-Z ]*$'me=e-30 keepend contains=manSectionHeading,@cCode,manCFuncDefinition,manHeaderFile
-  syntax region manErrors   start='^ERRORS'hs=s+6 end='^\u[A-Z ]*$'me=e-30 keepend contains=manSignal,manReference,manSectionHeading,manHeaderFile,manCError
-endif
+let b:current_syntax = 'man'

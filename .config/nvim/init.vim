@@ -93,10 +93,10 @@ if has('python3')
     elseif exists('$PREFIX')
 
         " and just use the system python
-	let g:python3_host_prog = expand('$PREFIX/bin/python')
+    let g:python3_host_prog = expand('$PREFIX/bin/python')
 
     elseif expand('$OS') ==# 'Windows_NT'       " no reason to split this loop based on that as a first check yet
-	" shouldve gotten caught by conda env var right?
+    " shouldve gotten caught by conda env var right?
         let g:python3_host_prog = expand('~/Miniconda3/python.exe')
 
     else
@@ -242,13 +242,14 @@ set infercase
 set autoindent smartindent              " :he options: set with smartindent
 
 if has('gui_running')
-    set guifont=Fira\ Code\ weight=450\ 10
+    set guifont='Fira\ Code\ Mono:11'
 endif
 
 " In case you wanted to see the guicursor default for gvim win64
 " set gcr=n-v-c:block-Cursor/lCursor,ve:ver35-Cursor,o:hor50-Cursor, i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor, sm:block-Cursor-blinkwait175-blinkoff150-blinkon175
 
-set path+=**        			        " Recursively search dirs with :find
+set path+=**                            " Recursively search dirs with :find
+set path+=/usr/include/libcs50          " Also I want those headers
 set autochdir
 set fileformat=unix
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
@@ -287,9 +288,9 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
 " Wanna navigate windows more easily?
-" |CTRL-W_gF|	CTRL-W g F	   edit file name under the cursor in a new
-" 				   tab page and jump to the line number
-" 				   following the file name.
+" |CTRL-W_gF|   CTRL-W g F     edit file name under the cursor in a new
+"                  tab page and jump to the line number
+"                  following the file name.
 "
 " Rebind that to C-w t and we can open the filename in a new tab.
 " Navigate tabs more easily
@@ -303,16 +304,20 @@ nnoremap <Leader>te :tabedit <c-r>=expand("%:p:h")<CR>
 
 " It should also be easier to edit the config. Bind similarly to tmux
 nnoremap <Leader>ed :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
+" It should also be easier to edit the config
 nnoremap <F9> :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 inoremap <F9> <Esc>:tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 " Now reload it
 nnoremap <Leader>re :so $MYVIMRC<CR>
 
+" Ease Dropbox uploads
+cnoremap termux-share termux-share -a send<Space>%
+
 " General_Mappings: {{{2
 " Ease Dropbox uploads. Should probably turn into a func and command
 " cnoremap termux-share termux-share -a send<Space>%
 
-						" *<Cmd>* *:map-cmd*
+                        " *<Cmd>* *:map-cmd*
 " The <Cmd> pseudokey may be used to define a 'command mapping', which executes
 " the command directly (without changing modes, etc.).  Where you might use
 ":...<CR>" in the {lhs} of a mapping, you can instead use '<Cmd>...<CR>'.
@@ -346,20 +351,18 @@ nnoremap <Leader>ncd :NERDTreeCWD
 " Save a file as root
 noremap <leader>W :w !sudo tee % > /dev/null<CR>
 
-" TODO:
-" Jedi uses <C-Space> for completions but that's only
-" for py files. Otherwise <C-Space> reinserts everything you added the
-" last time you were in insert mode. Getting that confused is annoying.
-
 " UltiSnips: {{{2
 
 " TODO: Is it better to put <Cmd> here? For the insert mode ones maybe.
 " I use this command constantly
 nnoremap <Leader>sn :Snippets<CR>
 
+" Save a file as root
+noremap <leader>W :w !sudo tee % > /dev/null<CR>
 nnoremap <Leader>se :UltiSnipsEdit<CR>
 
-inoremap <F6> <Esc>:UltiSnipsEdit<CR>
+" TODO: Is C-o better than Esc?
+inoremap <F6> <C-o>:UltiSnipsEdit<CR>
 nnoremap <F6> :UltiSnipsEdit<CR>
 
 " Unimpaired: {{{2
@@ -457,6 +460,11 @@ function! LC_maps()
     endif
 endfunction
 
+augroup LangClient
+    autocmd!
+    autocmd FileType cpp,c,python,python3,ts,tsx call LC_maps()
+augroup END
+
 " Tagbar: {{{2
 nnoremap <silent> <F8> :TagbarToggle<CR>
 
@@ -482,10 +490,10 @@ nnoremap <Leader>- <Plug>AirlineSelectPrevTab
 nnoremap <Leader>+ <Plug>AirlineSelectNextTab
 
 " Macros: {{{1
-if !has('nvim')
-    runtime! ftplugin/man.vim
-    let g:ft_man_folding_enable = 0
-endif
+" if !has('nvim')
+"     runtime! ftplugin/man.vim
+"     let g:ft_man_folding_enable = 0
+" endif
 
 runtime! macros/matchit.vim
 
@@ -502,7 +510,6 @@ let g:loaded_netrwPlugin       = 1
 " Let's see if this speeds things up because I've never used most of them
 
 " Remaining Plugins: {{{1
-
 " Vim_Plug: {{{2
 let g:plug_window = 'tabe'
 
@@ -556,8 +563,8 @@ augroup END
 
 let g:ale_set_signs = 1
 let g:ale_sign_column_always = 1
-" let g:ale_lint_delay = 1000 Only set on termux
 let g:ale_virtualenv_dir_names = [ '$HOME/virtualenvs' ]
+
 " Display progress while linting.
 let s:ale_running = 0
 augroup ALEProgress
@@ -606,8 +613,8 @@ let g:LanguageClient_serverCommands = { 'python': [ 'pyls' ],
 
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_selectionUI = 'fzf'
-let g:LanguageClient_settingsPath = expand('~/.config/nvim/settings.json')
-let g:LanguageClient_loggingFile = '~/.local/share/nvim/LC.log'
+let g:LanguageClient_settingsPath = expand("~/.config/nvim/settings.json")
+let g:LanguageClient_loggingFile = "~/.local/share/nvim/LC.log"
 
 " Jedi: {{{2
 let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces
@@ -665,8 +672,14 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline#extensions#tabline#fnametruncate = 1
 
+" Zim: {{{2
+let g:zim_notebooks_dir = '~/Notebooks.git'
+
 " Filetype Specific Options: {{{1
 
+if &ft ==# 'c'
+    set makeprg=make\ %<.o
+endif
 " Noticed this bit in he syntax line 2800
 let g:is_bash = 1
 let g:sh_fold_enabled= 4  "   (enable if/do/for folding)
@@ -804,18 +817,19 @@ endfunction
 "         \ )
 " endfunction
 
-" ExpandPossibleShorterSnippet:{{{3
+" ExpandPossibleShorterSnippet:{{{2
 function! ExpandPossibleShorterSnippet()
   if len(UltiSnips#SnippetsInCurrentScope()) == 1 "only one candidate...
     let curr_key = keys(UltiSnips#SnippetsInCurrentScope())[0]
     normal diw
-    exe 'normal a' . curr_key
-    exe 'normal a '
+    exe "normal a" . curr_key
+    exe "normal a "
     return 1
   endif
   return 0
 endfunction
 inoremap <silent> <C-L> <C-R>=(ExpandPossibleShorterSnippet() == 0? '': UltiSnips#ExpandSnippet())<CR>
+
 
 " LanguageClient Check:{{{2
 " Check if the LanguageClient is running.
