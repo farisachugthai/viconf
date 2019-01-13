@@ -35,6 +35,7 @@ augroup END
 " Plugins: {{{1
 
 " ALE: {{{2
+
 let b:ale_linters = [ 'flake8', 'pycodestyle', 'pydocstyle' , 'pyls' ]
 let b:ale_linters_explicit = 1
 
@@ -46,6 +47,11 @@ endif
 let b:ale_python_flake8_options = '--config ~/.config/flake8'
 let b:ale_python_pycodestyle_options = '--config ~/.config/pycodestyle'
 
+" TODO:
+" Here's a suggestion. Write your own buffer fixer using ALE and yapf.
+" You do it anyway so why not nnoremap <Leader>bf <expr> py3do % or %yapf or
+" set makeprg=unittest.TestRunner()...or even sphinx build or something. lots
+" of choices.
 " Python Language Server: {{{2
 " Delete the mappings off of here since they're defined in init.vim
 let b:LanguageClient_autoStart = 1

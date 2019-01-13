@@ -3,6 +3,8 @@
 #######################################################################
 
 # TODO: Refactor the python out. Fix indentation. Change ${1:foo} to ${0:${VISUAL:foo}}
+# TODO: A nice to have would be a way to take a VISUAL highlight, and change it so that it was the
+# URL section of a [text](url) snippet.
 
 extends html
 
@@ -82,25 +84,7 @@ endsnippet
 # ============
 
 global !p
-def create_table(snip):
-    # retrieving single line from current string and treat it like tabstops count
-    placeholders_string = snip.buffer[snip.line].strip()[2:].split("x",1)
-    rows_amount = int(placeholders_string[0])
-    columns_amount = int(placeholders_string[1])
-
-    # erase current line
-    snip.buffer[snip.line] = ''
-
-    # create anonymous snippet with expected content and number of tabstops
-    anon_snippet_title = ' | '.join(['$' + str(col) for col in range(1,columns_amount+1)]) + "\n"
-    anon_snippet_delimiter = ':-|' * (columns_amount-1) + ":-\n"
-    anon_snippet_body = ""
-    for row in range(1,rows_amount+1):
-        anon_snippet_body += ' | '.join(['$' + str(row*columns_amount+col) for col in range(1,columns_amount+1)]) + "\n"
-    anon_snippet_table = anon_snippet_title + anon_snippet_delimiter + anon_snippet_body
-
-    # expand anonymous snippet
-    snip.expand_anon(anon_snippet_table)
+from markdown_table import *
 endglobal
 
 ###########################
@@ -185,10 +169,8 @@ snippet < "Links"
 <${1:https://${VISUAL:2}}>
 endsnippet
 
-# Here's the markdown "spec":
-# https://daringfireball.net/projects/markdown/syntax#link
-snippet link "A link"
-[${1:displayedtext}](${2:URL})
+snippet path "Filepath link with VISUAL placeholder" s
+[${1:displayedtext}](${2:${VISUAL:URL}}) $0
 endsnippet
 
 snippet linktitle "Inline link with a title" bs

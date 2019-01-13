@@ -93,7 +93,9 @@ if has('python3')
     elseif exists('$PREFIX')
 
         " and just use the system python
-    let g:python3_host_prog = expand('$PREFIX/bin/python')
+        if executable('$PREFIX/bin/python')
+            let g:python3_host_prog = '$PREFIX/bin/python'
+        endif
 
     elseif expand('$OS') ==# 'Windows_NT'       " no reason to split this loop based on that as a first check yet
     " shouldve gotten caught by conda env var right?
@@ -109,10 +111,21 @@ if has('python3')
     endif
 endif
 
+" OS Setup: {{{1
+
+let s:termux = exists('$PREFIX') && has('unix')
+let s:ubuntu = !exists('$PREFIX') && has('unix')
+let s:windows = has('win32') || has('win64')
+
+let s:winrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/winrc'
+if s:windows && filereadable(s:winrc)
+    source s:winrc
+endif
+
 " Global Options: {{{1
 " Leader_Viminfo: {{{2
-let g:mapleader = "\<Space>"
-let g:maplocalleader = ','
+let g:mapleader = '\<Space>'
+let g:maplocalleader = "\,"
 
 if !has('nvim')
     set viminfo='100,<200,s200,n$HOME/.vim/viminfo
@@ -156,8 +169,13 @@ set termencoding=utf-8
 
 setlocal spelllang=en
 
-if filereadable(glob('~/projects/viconf/.config/nvim/spell/en.utf-8.add'))
-    set spellfile=~/projects/viconf/.config/nvim/spell/en.utf-8.add
+" This is is definitely one of the things that needs to get ported over to nvim
+if filereadable('~/.config/nvim/spell/en.utf-8.add')
+    set spellfile=~/.config/nvim/spell/en.utf-8.add
+elseif filereadable(glob('~/projects/viconf/.vim/spell/en.utf-8.add'))
+    set spellfile=~/projects/viconf/.vim/spell/en.utf-8.add
+else
+    echoerr 'Spell file not found.'
 endif
 
 if !has('nvim')
@@ -224,8 +242,6 @@ try
 catch
 endtry
 
-" FOOBAR=~/<CTRL-><CTRL-F> will now autocomplete!
-set isfname-==
 " Other Global Options: {{{2
 set tags+=./tags,./../tags,./*/tags     " usr_29
 set tags+=~/projects/tags               " consider generating a few large tag
@@ -240,16 +256,21 @@ set showmatch
 set ignorecase smartcase
 set infercase
 set autoindent smartindent              " :he options: set with smartindent
+" FOOBAR=~/<CTRL-><CTRL-F> will now autocomplete!
+set isfname-==
 
+" Had to really futz with this; however, this is finally right.
 if has('gui_running')
-    set guifont='Fira\ Code\ Mono:11'
+    set guifont=Fira\ Code\ weight=450\ 10
 endif
 
 " In case you wanted to see the guicursor default for gvim win64
 " set gcr=n-v-c:block-Cursor/lCursor,ve:ver35-Cursor,o:hor50-Cursor, i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor, sm:block-Cursor-blinkwait175-blinkoff150-blinkon175
 
 set path+=**                            " Recursively search dirs with :find
-set path+=/usr/include/libcs50          " Also I want those headers
+if isdirectory('/usr/include/libcs50')
+    set path+=/usr/include/libcs50          " Also I want those headers
+endif
 set autochdir
 set fileformat=unix
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
@@ -261,7 +282,6 @@ if has('persistent_undo')
     set undofile
 endif
 
-" I love the genius that didn't enable backup though
 set backup
 set backupdir=~/.config/nvim/undodir,/tmp
 set backupext='.bak'        " like wth is that ~ nonsense?
@@ -304,14 +324,10 @@ nnoremap <Leader>te :tabedit <c-r>=expand("%:p:h")<CR>
 
 " It should also be easier to edit the config. Bind similarly to tmux
 nnoremap <Leader>ed :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
-" It should also be easier to edit the config
 nnoremap <F9> :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 inoremap <F9> <Esc>:tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 " Now reload it
 nnoremap <Leader>re :so $MYVIMRC<CR>
-
-" Ease Dropbox uploads
-cnoremap termux-share termux-share -a send<Space>%
 
 " General_Mappings: {{{2
 " Ease Dropbox uploads. Should probably turn into a func and command
@@ -348,17 +364,19 @@ nnoremap <Leader>cd :cd %:p:h<CR>:pwd<CR>
 " Switch NERDTree root to dir of currently focused window.
 nnoremap <Leader>ncd :NERDTreeCWD
 
+map <ScrollWheelUp> <C-Y>
+map <S-ScrollWheelUp> <C-U>
+map <ScrollWheelDown> <C-E>
+map <S-ScrollWheelDown> <C-D>
+
 " Save a file as root
 noremap <leader>W :w !sudo tee % > /dev/null<CR>
 
 " UltiSnips: {{{2
-
 " TODO: Is it better to put <Cmd> here? For the insert mode ones maybe.
 " I use this command constantly
 nnoremap <Leader>sn :Snippets<CR>
 
-" Save a file as root
-noremap <leader>W :w !sudo tee % > /dev/null<CR>
 nnoremap <Leader>se :UltiSnipsEdit<CR>
 
 " TODO: Is C-o better than Esc?
@@ -367,6 +385,7 @@ nnoremap <F6> :UltiSnipsEdit<CR>
 
 " Unimpaired: {{{2
 " Note that ]c and [c are mapped by git-gutter and ALE has ]a and [a
+" In addition I've mapped ]a and [a for ALE nextwrap.
 nnoremap ]q :cnext<CR>
 nnoremap [q :cprev<CR>
 nnoremap ]Q :cfirst<CR>
@@ -387,7 +406,9 @@ nnoremap [T :tlast<CR>
 
 " Spell Checking: {{{2
 nnoremap <Leader>sp :setlocal spell!<CR>
-nnoremap <Leader>s= z=
+" Based off the default value for spell suggest
+nnoremap <Leader>s= :norm z=<CR>
+
 
 " Terminal: {{{2
 " If running a terminal in Vim, go into Normal mode with Esc
@@ -410,12 +431,17 @@ nnoremap <A-k> <C-w>k
 nnoremap <A-l> <C-w>l
 
 " ALE: {{{2
-nnoremap <Leader>l <Plug>(ale_toggle_buffer) <CR>
+
+nnoremap <Leader>l <Plug>(ale_toggle_buffer)<CR>
 nnoremap ]a <Plug>(ale_next_wrap)
 nnoremap [a <Plug>(ale_previous_wrap)
+
 " TODO: Implement ALEInfoToFile.
 " `:ALEInfoToFile` will write the ALE runtime information to a given filename. The filename works just like |:w|.
-nnoremap <unique> <A-a> <Plug>(ale_detail)
+
+" <Meta-a> now gives detailed messages about what the linters have sent to ALE
+map <unique> <A-a> <Plug>(ale_detail)
+
 " This might be a good idea. * is already 'search for the cword' so let ALE
 " work in a similar manner right?
 nnoremap <Leader>* <Plug>(ale_go_to_reference)
@@ -473,43 +499,28 @@ if has('b:Tagbar')  " or any plugin
     nmap <F3> :TagbarToggle<CR>
 endif
 
-" Airline: {{{2
-let g:airline#extensions#tabline#buffer_idx_mode = 1
-" originally was nmap and that mightve been better. markdown
-" headers would be perfect for leader 1
-nnoremap <Leader>1 <Plug>AirlineSelectTab1
-nnoremap <Leader>2 <Plug>AirlineSelectTab2
-nnoremap <Leader>3 <Plug>AirlineSelectTab3
-nnoremap <Leader>4 <Plug>AirlineSelectTab4
-nnoremap <Leader>5 <Plug>AirlineSelectTab5
-nnoremap <Leader>6 <Plug>AirlineSelectTab6
-nnoremap <Leader>7 <Plug>AirlineSelectTab7
-nnoremap <Leader>8 <Plug>AirlineSelectTab8
-nnoremap <Leader>9 <Plug>AirlineSelectTab9
-nnoremap <Leader>- <Plug>AirlineSelectPrevTab
-nnoremap <Leader>+ <Plug>AirlineSelectNextTab
-
 " Macros: {{{1
-" if !has('nvim')
-"     runtime! ftplugin/man.vim
-"     let g:ft_man_folding_enable = 0
-" endif
+if !has('nvim')
+    runtime! ftplugin/man.vim
+    let g:ft_man_folding_enable = 0
+endif
 
 runtime! macros/matchit.vim
 
 set matchpairs+=<:>
 
 " To every plugin I've never used before. Stop slowing me down.
-let g:loaded_vimballPlugin     = 1
-let g:loaded_tutor_mode_plugin = 1
-let g:loaded_getsciptPlugin    = 1
-let g:loaded_2html_plugin      = 1
-let g:loaded_logiPat           = 1
-let g:loaded_netrw             = 1
-let g:loaded_netrwPlugin       = 1
+let g:loaded_vimballPlugin      = 1
+let g:loaded_tutor_mode_plugin  = 1
+let g:loaded_getsciptPlugin     = 1
+let g:loaded_2html_plugin       = 1
+let g:loaded_logiPat            = 1
+let g:loaded_netrw              = 1
+let g:loaded_netrwPlugin        = 1
 " Let's see if this speeds things up because I've never used most of them
 
 " Remaining Plugins: {{{1
+
 " Vim_Plug: {{{2
 let g:plug_window = 'tabe'
 
@@ -564,7 +575,6 @@ augroup END
 let g:ale_set_signs = 1
 let g:ale_sign_column_always = 1
 let g:ale_virtualenv_dir_names = [ '$HOME/virtualenvs' ]
-
 " Display progress while linting.
 let s:ale_running = 0
 augroup ALEProgress
@@ -613,8 +623,8 @@ let g:LanguageClient_serverCommands = { 'python': [ 'pyls' ],
 
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_selectionUI = 'fzf'
-let g:LanguageClient_settingsPath = expand("~/.config/nvim/settings.json")
-let g:LanguageClient_loggingFile = "~/.local/share/nvim/LC.log"
+let g:LanguageClient_settingsPath = expand('~/.config/nvim/settings.json')
+let g:LanguageClient_loggingFile = '~/.local/share/nvim/LC.log'
 
 " Jedi: {{{2
 let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces
@@ -625,7 +635,15 @@ let g:jedi#force_py_version = 3
 let g:jedi#enable_completions = 0
 
 " Deoplete_Jedi: {{{2
-let g:deoplete#sources#jedi#enable_typeinfo = 0
+
+" Setting things up with the `if ubuntu` phrase was oddly a lot easier than
+" i expected it to be...
+if s:ubuntu
+    let g:deoplete#sources#jedi#enable_typeinfo = 1
+    let g:deoplete#sources#jedi#show_docstring = 1
+elseif s:termux
+    let g:deoplete#sources#jedi#enable_typeinfo = 0
+endif
 
 " Tagbar: {{{2
 " just a thought i had. For any normal mode remaps you have, add the same
@@ -634,46 +652,33 @@ let g:tagbar_left = 1
 let g:tagbar_width = 30
 let g:tagbar_sort = 0
 
-" Airline: {{{2
-let g:airline#extensions#syntastic#enabled = 0
-let g:airline#extensions#csv#enabled = 0
-let g:airline_powerline_fonts = 1
-let g:airline_highlighting_cache = 1
-let g:airline_skip_empty_sections = 1
-
-if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
-endif
-
-" Unicode_Symbols: {{{3
-let g:airline_left_sep = '»'
-let g:airline_left_sep = '▶'
-let g:airline_right_sep = '«'
-let g:airline_right_sep = '◀'
-let g:airline_symbols.crypt = '🔒'
-let g:airline_symbols.linenr = '☰'
-let g:airline_symbols.linenr = '␊'
-let g:airline_symbols.linenr = '␤'
-let g:airline_symbols.linenr = '¶'
-let g:airline_symbols.maxlinenr = ''
-let g:airline_symbols.maxlinenr = '㏑'
-let g:airline_symbols.branch = '⎇'
-let g:airline_symbols.paste = 'ρ'
-let g:airline_symbols.paste = 'Þ'
-let g:airline_symbols.paste = '∥'
-let g:airline_symbols.spell = 'Ꞩ'
-let g:airline_symbols.notexists = 'Ɇ'
-let g:airline_symbols.whitespace = 'Ξ'
-
-" TODO: Need to add one for the venv nvim
-let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
-let g:airline#extensions#tabline#tab_nr_type = 1 " splits and tab number
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#buffer_nr_show = 1
-let g:airline#extensions#tabline#fnametruncate = 1
-
 " Zim: {{{2
 let g:zim_notebooks_dir = '~/Notebooks.git'
+
+" Voom: {{{ 2
+
+"g:voom_ft_modes" is a Vim dictionary: keys are filetypes (|ft|), values are
+" corresponding markup modes (|voom-markup-modes|). Example:
+    " let g:voom_ft_modes = {'markdown': 'markdown', 'tex': 'latex'}
+" This option allows automatic selection of markup mode according to the filetype
+" of the source buffer. If 'g:voom_ft_modes' is defined as above, and 'filetype'
+" of the current buffer is 'tex', then the command
+    " :Voom
+" is identical to the command
+    " :Voom latex
+
+" g:voom_default_mode" is a string with the name of the default markup mode.
+" For example, if there is this in .vimrc:
+    " let g:voom_default_mode = 'asciidoc'
+" then, the command
+    " :Voom
+" is identical to
+    " :Voom asciidoc
+" unless 'g:voom_ft_modes' is also defined and has an entry for the current
+" filetype.
+
+let g:voom_ft_modes = {'markdown': 'markdown', 'rst': 'rst', 'zimwiki': 'dokuwiki'}
+let g:voom_default_mode = 'rst'
 
 " Filetype Specific Options: {{{1
 
@@ -733,6 +738,17 @@ function! s:scriptnames(re) abort
     echo join(filtered, '\n')
 endfunction
 
+" Helptabs: {{{2
+function! s:helptab()
+    if &buftype ==# 'help'
+        wincmd T
+        nnoremap <buffer> q :q<cr>
+    " need to make an else for if ft isn't help then open a help page with the
+    " first argument
+    endif
+endfunction
+command! -nargs=1 Help call <SID>helptab()
+
 " AutoSave: {{{2
 " I feel like I need to put this in a autocmd but I'm not sure what I would
 " want to trigger it.
@@ -788,7 +804,7 @@ command! -nargs=1 -bang -complete=file Rename f <args>|w<bang>
 
 " UltiSnips: {{{2
 
-" GetAllSnippets:{{{3
+" GetAllSnippets: {{{3
 " Definitely a TODO
 function! GetAllSnippets()
   call UltiSnips#SnippetsInCurrentScope(1)
@@ -817,19 +833,19 @@ endfunction
 "         \ )
 " endfunction
 
-" ExpandPossibleShorterSnippet:{{{2
+" ExpandPossibleShorterSnippet: {{{3
+
 function! ExpandPossibleShorterSnippet()
   if len(UltiSnips#SnippetsInCurrentScope()) == 1 "only one candidate...
     let curr_key = keys(UltiSnips#SnippetsInCurrentScope())[0]
     normal diw
-    exe "normal a" . curr_key
-    exe "normal a "
+    exe 'normal a' . curr_key
+    exe 'normal a '
     return 1
   endif
   return 0
 endfunction
 inoremap <silent> <C-L> <C-R>=(ExpandPossibleShorterSnippet() == 0? '': UltiSnips#ExpandSnippet())<CR>
-
 
 " LanguageClient Check:{{{2
 " Check if the LanguageClient is running.
