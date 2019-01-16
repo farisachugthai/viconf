@@ -106,7 +106,6 @@ if !has('nvim')
     set viminfo='100,<200,s200,n$HOME/.vim/viminfo
 endif
 
-" TODO: Put in python ftplugin
 " Pep8 Global Options: {{{2
 set tabstop=4                           " show existing tab with 4 spaces width
 set shiftwidth=4                        " when indenting with '>', use 4 spaces width
@@ -144,9 +143,7 @@ if filereadable(glob('~/.config/nvim/spell/en_US.utf-8.add'))
 elseif filereadable(glob('~/projects/viconf/.vim/spell/en_US.utf-8.add'))
     set spellfile=~/projects/viconf/.vim/spell/en_US.utf-8.add
 else
-    " ngl didn't know echoerr was a command until now
     echoerr 'Spell file not found.'
-
 endif
 
 if !has('nvim')
@@ -161,10 +158,6 @@ if filereadable('/usr/share/dict/words')
     " Replace the default dictionary completion with fzf-based fuzzy completion
     " Courtesy of fzf <3 vim
     inoremap <expr> <c-x><c-k> fzf#vim#complete('cat /usr/share/dict/words')
-endif
-
-if filereadable('/usr/share/dict/american-english')
-    setlocal dictionary+=/usr/share/dict/american-english
 endif
 
 if filereadable(glob('~/.vim/spell/en.hun.spl'))
@@ -212,8 +205,17 @@ endif
 " - 'sidescroll' defaults to 1
 "
 
-" Fun with Clipboards: {{{2
-if exists('$TMUX')
+" Fun With Clipboards: {{{2
+if has('unnamedplus')                   " Use the system clipboard.
+  set clipboard+=unnamed,unnamedplus
+else                                    " Accommodate Termux
+  set clipboard+=unnamed
+endif
+
+set pastetoggle=<F7>
+
+if exists($TMUX)
+    let g:clipboard = {
         \   'name': 'myClipboard',
         \   'copy': {
         \      '+': 'tmux load-buffer -',
@@ -417,12 +419,19 @@ nnoremap <silent> <F8> :TagbarToggle<CR>
 " Python Language Server:{{{2
 function! LC_maps()
     if has_key(g:LanguageClient_serverCommands, &filetype)
-        nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<cr>
-        nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
-        nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+        nnoremap <buffer> <Leader>lh :call LanguageClient#textDocument_hover()<CR>
+        inoremap <buffer> <Leader><F2> <Esc>:call LanguageClient#textDocument_rename()<CR>
+        nnoremap <buffer> <Leader>ld :call LanguageClient#textDocument_definition()<CR>
+        nnoremap <buffer> <Leader>lr :call LanguageClient#textDocument_rename()<CR>
+        nnoremap <buffer> <Leader>lf :call LanguageClient#textDocument_formatting()<CR>
+        nnoremap <buffer> <Leader>lt :call LanguageClient#textDocument_typeDefinition()<CR>
+        nnoremap <buffer> <Leader>lx :call LanguageClient#textDocument_references()<CR>
+        nnoremap <buffer> <Leader>la :call LanguageClient_workspace_applyEdit()<CR>
+        nnoremap <buffer> <Leader>lc :call LanguageClient#textDocument_completion()<CR>
+        nnoremap <buffer> <Leader>ls :call LanguageClient_textDocument_documentSymbol()<CR>
+        nnoremap <buffer> <Leader>lm :call LanguageClient_contextMenu()<CR>
     endif
 endfunction
-autocmd FileType * call LC_maps()
 
 " Airline:{{{2
 let g:airline#extensions#tabline#buffer_idx_mode = 1
@@ -694,8 +703,4 @@ set background=dark " So this apparently has to be here. Better before or after 
 colorscheme gruvbox
 if g:colors_name ==# 'gruvbox'      " ==# means match case
     let g:gruvbox_contrast_dark = 'hard'
-    let g:gruvbox_improved_strings = 1
 endif
-
-hi NonText guifg=NONE guibg=#000000
-" Massive performance difference

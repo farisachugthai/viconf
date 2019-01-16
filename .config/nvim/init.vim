@@ -78,8 +78,8 @@ if has('nvim')
 endif
 
 " Python Executables: {{{1
-
-if has('python3')
+" Why is the below returning 0???
+" if has('python3')
 
     " if we have a virtual env start there
     if exists('$VIRTUAL_ENV')
@@ -93,10 +93,10 @@ if has('python3')
     elseif exists('$PREFIX')
 
         " and just use the system python
-	let g:python3_host_prog = expand('$PREFIX/bin/python')
+    let g:python3_host_prog = expand('$PREFIX/bin/python')
 
     elseif expand('$OS') ==# 'Windows_NT'       " no reason to split this loop based on that as a first check yet
-	" shouldve gotten caught by conda env var right?
+    " shouldve gotten caught by conda env var right?
         let g:python3_host_prog = expand('~/Miniconda3/python.exe')
 
     else
@@ -107,13 +107,15 @@ if has('python3')
             endif
         endif
     endif
-endif
+"endif
 
 " Global Options: {{{1
+
 " Leader_Viminfo: {{{2
 let g:mapleader = "\<Space>"
 let g:maplocalleader = ','
 
+" Forgot that nvim won't correctly use this option
 if !has('nvim')
     set viminfo='100,<200,s200,n$HOME/.vim/viminfo
 endif
@@ -158,6 +160,10 @@ setlocal spelllang=en
 
 if filereadable(glob('~/projects/viconf/.config/nvim/spell/en.utf-8.add'))
     set spellfile=~/projects/viconf/.config/nvim/spell/en.utf-8.add
+elseif filereadable(glob('~/projects/viconf/.vim/spell/en_US.utf-8.add'))
+    set spellfile=~/projects/viconf/.vim/spell/en_US.utf-8.add
+else
+    echoerr 'Spell file not found.'
 endif
 
 if !has('nvim')
@@ -172,10 +178,6 @@ if filereadable('/usr/share/dict/words')
     " Replace the default dictionary completion with fzf-based fuzzy completion
     " Courtesy of fzf <3 vim
     inoremap <expr> <c-x><c-k> fzf#vim#complete('cat /usr/share/dict/words')
-endif
-
-if filereadable('/usr/share/dict/american-english')
-    setlocal dictionary+=/usr/share/dict/american-english
 endif
 
 if filereadable('$HOME/.config/nvim/spell/en.hun.spl')
@@ -195,19 +197,21 @@ endif
 
 set pastetoggle=<F7>
 
-if exists('$TMUX')
-    let g:clipboard = {
-        \   'name': 'myClipboard',
-        \   'copy': {
-        \      '+': 'tmux load-buffer -',
-        \      '*': 'tmux load-buffer -',
-        \    },
-        \   'paste': {
-        \      '+': 'tmux save-buffer -',
-        \      '*': 'tmux save-buffer -',
-        \   },
-        \   'cache_enabled': 1,
-        \ }
+if has('nvim')
+    if exists('$TMUX')
+        let g:clipboard = {
+            \   'name': 'myClipboard',
+            \   'copy': {
+            \      '+': 'tmux load-buffer -',
+            \      '*': 'tmux load-buffer -',
+            \    },
+            \   'paste': {
+            \      '+': 'tmux save-buffer -',
+            \      '*': 'tmux save-buffer -',
+            \   },
+            \   'cache_enabled': 1,
+            \ }
+    endif
 endif
 
 " Autocompletion: {{{2
@@ -248,7 +252,7 @@ endif
 " In case you wanted to see the guicursor default for gvim win64
 " set gcr=n-v-c:block-Cursor/lCursor,ve:ver35-Cursor,o:hor50-Cursor, i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor, sm:block-Cursor-blinkwait175-blinkoff150-blinkon175
 
-set path+=**        			        " Recursively search dirs with :find
+set path+=**                            " Recursively search dirs with :find
 set autochdir
 set fileformat=unix
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
@@ -287,9 +291,9 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
 " Wanna navigate windows more easily?
-" |CTRL-W_gF|	CTRL-W g F	   edit file name under the cursor in a new
-" 				   tab page and jump to the line number
-" 				   following the file name.
+" |CTRL-W_gF|   CTRL-W g F     edit file name under the cursor in a new
+"                  tab page and jump to the line number
+"                  following the file name.
 "
 " Rebind that to C-w t and we can open the filename in a new tab.
 " Navigate tabs more easily
@@ -308,15 +312,20 @@ inoremap <F9> <Esc>:tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 " Now reload it
 nnoremap <Leader>re :so $MYVIMRC<CR>
 
-" General_Mappings: {{{2
-" Ease Dropbox uploads. Should probably turn into a func and command
-" cnoremap termux-share termux-share -a send<Space>%
+map <ScrollWheelUp> <C-Y>
+map <S-ScrollWheelUp> <C-U>
+map <ScrollWheelDown> <C-E>
+map <S-ScrollWheelDown> <C-D>
 
-						" *<Cmd>* *:map-cmd*
+" General_Mappings: {{{2
+
+" :map-cmd
+                        " *<Cmd>* *:map-cmd*
 " The <Cmd> pseudokey may be used to define a 'command mapping', which executes
 " the command directly (without changing modes, etc.).  Where you might use
 ":...<CR>" in the {lhs} of a mapping, you can instead use '<Cmd>...<CR>'.
 
+" This actually works! I'm shocked.
 map <silent> <Leader>ts <Cmd>!termux-share -a send %<CR>
 
 " Simple way to speed up startup
@@ -346,17 +355,14 @@ nnoremap <Leader>ncd :NERDTreeCWD
 " Save a file as root
 noremap <leader>W :w !sudo tee % > /dev/null<CR>
 
-" TODO:
-" Jedi uses <C-Space> for completions but that's only
-" for py files. Otherwise <C-Space> reinserts everything you added the
-" last time you were in insert mode. Getting that confused is annoying.
-
 " UltiSnips: {{{2
 
 " TODO: Is it better to put <Cmd> here? For the insert mode ones maybe.
 " I use this command constantly
 nnoremap <Leader>sn :Snippets<CR>
 
+" Save a file as root
+noremap <leader>W :w !sudo tee % > /dev/null<CR>
 nnoremap <Leader>se :UltiSnipsEdit<CR>
 
 inoremap <F6> <Esc>:UltiSnipsEdit<CR>
@@ -628,8 +634,7 @@ let g:tagbar_width = 30
 let g:tagbar_sort = 0
 
 " Airline: {{{2
-let g:airline#extensions#syntastic#enabled = 0
-let g:airline#extensions#csv#enabled = 0
+" let g:airline_extensions = ['branch', 'tabline']
 let g:airline_powerline_fonts = 1
 let g:airline_highlighting_cache = 1
 let g:airline_skip_empty_sections = 1
@@ -660,13 +665,26 @@ let g:airline_symbols.whitespace = 'Ξ'
 
 " TODO: Need to add one for the venv nvim
 let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
-let g:airline#extensions#tabline#tab_nr_type = 1 " splits and tab number
+let g:airline#extensions#tabline#tab_nr_type = 2 " splits and tab number
 let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#buffer_nr_show = 1
+let g:airline#extensions#tabline#buffer_nr_show = 0
 let g:airline#extensions#tabline#fnametruncate = 1
+
+" Riv: {{{2
+" Highlight py docstrings with rst highlighting
+let g:riv_python_rst_hl = 1
+
+" Voom: {{{2
+let g:voom_python_versions = [3]
+
+" Zim: {{{2
+let g:zim_notebooks_dir = '~/Notebooks.git'
 
 " Filetype Specific Options: {{{1
 
+if &ft ==# 'c'
+    set makeprg=make\ %<.o
+endif
 " Noticed this bit in he syntax line 2800
 let g:is_bash = 1
 let g:sh_fold_enabled= 4  "   (enable if/do/for folding)

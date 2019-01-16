@@ -14,6 +14,7 @@ global !p
 from rst_helper import *
 
 endglobal
+
 snippet title "Title with =" b
 ${1:${VISUAL:Section name}}
 `!p snip.rv = rst_char_len(t[1])*'='`
@@ -80,16 +81,26 @@ snippet link "External URL. A space is required between the text and URL!" b
 \`${1:Link text} ${3:<${VISUAL:https://github.com/}$0>}\`
 endsnippet
 
-snippet link "Separated link and target." b
+snippet link "Separated link and target." bs
 .. _${1:optional text leading into}: ${2:\`https://somedomain.com\`}
 endsnippet
 
-snippet url "Separated link and target." b
+snippet url "Separated link and target." bs
 .. _${1:optional text leading into}: ${2:\`https://somedomain.com\`}
 endsnippet
 
 snippet http "Separated link and target." bs
 .. _${1:${VISUAL:text}}: ${2:\`https://somedomain.com\`}
+endsnippet
+
+snippet path "Link to a local file" s
+${1:rel path}: ${2:${VISUAL:link}}_.
+
+.. _${2}: ${3:path/to/file} $0
+endsnippet
+
+snippet ref  "URLs that will follow a sphinx directive for URLs."
+:ref:\`${1:${VISUAL:path/to/file}}\`_
 endsnippet
 
 ############

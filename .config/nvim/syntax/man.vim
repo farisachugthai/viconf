@@ -19,7 +19,7 @@ endif
 highlight manSectionHeading guifg='LightCyan'
 
 " Get the CTRL-H syntax to handle backspaced text
-runtime! syntax/ctrlh.vim
+runtime! $VIMRUNTIME/syntax/ctrlh.vim
 
 syntax case  ignore
 syntax match manReference       '\<\zs\(\f\|:\)\+(\([nlpo]\|\d[a-z]*\)\?)\ze\(\W\|$\)'
@@ -126,7 +126,7 @@ if !exists('b:man_sect')
 endif
 if b:man_sect =~# '^[023]'
   syntax case match
-  syntax include @c $VIMRUNTIME/syntax/c.vim
+  syntax include $VIMRUNTIME/syntax/c.vim
   syntax match manCFuncDefinition display '\<\h\w*\>\ze\(\s\|\n\)*(' contained
   syntax match manSentence display '\%(^ \{3,7}\u\|\.  \u\)\_.\{-}
         \\%(-$\|\.$\|:$\)\|

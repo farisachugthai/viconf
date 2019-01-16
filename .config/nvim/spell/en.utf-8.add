@@ -103,6 +103,7 @@ TODO
 Tagbar
 Termux
 Termux's
+TestCase
 Todo
 USBs
 Ubuntu
@@ -541,6 +542,7 @@ sdc1
 sdc2
 sectionauthor
 sed
+setUp
 setxkbmap
 sha256
 sha384
@@ -583,9 +585,11 @@ tcl
 tcp
 tcpdump
 tcsh
+tearDown
 termcap
 terminfo
 termux
+testcase
 tex
 texting
 tldr
@@ -683,3 +687,5 @@ zcat
 zenburn
 zim
 zsh
+CentOS
+RHEL

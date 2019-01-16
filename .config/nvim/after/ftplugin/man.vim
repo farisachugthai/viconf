@@ -8,6 +8,7 @@ set number
 
 " Helptabs:
 function! s:helptab()
+    " This needs to be conditional on there being 2 windows.
     wincmd T
     nnoremap <buffer> q :q<cr>
     " need to make an else for if ft isn't help then open a help page with the

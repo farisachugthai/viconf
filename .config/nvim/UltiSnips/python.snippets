@@ -41,11 +41,11 @@ endsnippet
 
 # TODO Need to break this up
 # Also you should be able to easily put `snip.fn` in the filename there
-snippet moddoc "Module Docstring" b
-"""${1:Give a one sentence summary in the imperative}
+snippet moddoc "Module Docstring. Has 11 tabstops!!!" bs
+"""${1:${VISUAL: Give a one sentence summary in the imperative}}
 
 ${2:Elaborate a little}
-File: ${3:`!p snip.fn`}
+File: `!p snip.rv = snip.fname`
 Author: `!v g:snips_author`
 Email: `!v g:snips_email`
 Github: `!v g:snips_github`
@@ -61,15 +61,14 @@ Example:
 
 		${9:$ python exampleofrst.py}
 
-.. ${10:'any directives::'}
+.. ${10:any directives::}
 
 	${11:example text}
 
-$0
 """
 endsnippet
 
-snippet modattr "Expand only the attributes section of the module docstring snippet." b
+snippet modattr "Expand only the attributes section of the module docstring snippet." bs
 Attributes:
 
 	${1:module_level_variables} (${2:type}): ${3:Explanation and give an inline docstring
@@ -159,8 +158,7 @@ endsnippet
 # Use our ifmain block to shield against stray global vars
 snippet ifmain "ifmain. optionally adds in function call to argparser" b
 if __name__ == `!p snip.rv = get_quoting_style(snip)`__main__`!p snip.rv = get_quoting_style(snip)`:
-	${1:_parse_arguments()}
-	${2:${VISUAL:main()}}
+	${1:${VISUAL:main()}}
 endsnippet
 
 # Commonly used modules:{{{1

@@ -1,7 +1,7 @@
 README
 ======
 
-This directory contains the snippets for UltiSnips.
+This directory contains the snippets for `UltiSnips`_.
 
 .. _`UltiSnips`: https://github.com/sirver/ultisnips
 
@@ -26,7 +26,7 @@ your snippets.
 .. todo Mention that usp can't be snippets and explain why usps is set to 0
 
 After configuring ``g:UltiSnipsDirs`` and ``g:UltiSnipsDirectories`` as you would like,
-using the UltiSnipsEdit command should open the folder that your snippets
+using the `UltiSnipsEdit` command should open the folder that your snippets
 are housed in.
 
 Options
@@ -74,7 +74,7 @@ Important Considerations:
  ``snippet argprse`` and ``snippet argprser`` are in the description!
 
 Do not use the 'b' option for snippets that could be expanded after a comment
-For example, in :ref:`vim.snippets`, the header snippet is regularly text
+For example, in :ref:`vim.snippets`_, the header snippet is regularly text
 that has already been written and is commented out. With the `b` option, a
 commented out header will not expand.
 
@@ -97,8 +97,8 @@ bogged down searching for them is imperative.
 FZF
 ^^^^
 
-Make sure you have `https://www.github.com/junegunn/fzf.vim`_ installed. I absolutely love this plugin and it's
-endless configurability.
+Make sure you have `https://www.github.com/junegunn/fzf.vim`_ installed.
+I absolutely love this plugin and it's endless configurability.
 
 If you run `:Snippets` on the ex cmdline, FZF will create a window with a
 terminal that greps all snippets configured for the filetype.
@@ -113,9 +113,10 @@ snippet; in addition to the fact that it allows you to write a header! I'd
 advise throwing reminders to yourself for useful keybindings.
 
 If you need to extend the available snippets only one time, use
-``UltiSnipsAddFileType``.
+`UltiSnipsAddFileType`.
 
-For persistent changes use 'extends {filetype to be added}'
+For persistent changes use `extends {filetype to be added}` at the top of the
+snippets file you would like extending the target.
 
 Now let's look at a snippet.
 
@@ -182,7 +183,7 @@ two projects:
 UltiSnips has seen contributions by many individuals. Those contributions have
 been merged into this collection seamlessly and without further comments.
 
--- vim:ft=rst:nospell:
 
 .. _fae65af0: fae65af0eb834af7201bc928a662e768ed3cfdb8
 .. _`https://www.github.com/junegunn/fzf.vim`: https://www.github.com/junegunn/fzf.vim
+-- vim:ft=rst:nospell:

@@ -16,113 +16,113 @@ class ${1:MODELNAME}Form(forms.ModelForm):
 endsnippet
 
 snippet fbool "BooleanField" b
-${1:FIELDNAME} = forms.BooleanField($2)
+${1:${VISUAL:FIELDNAME}} = forms.BooleanField($2)
 endsnippet
 
 snippet fchar "CharField" b
-${1:FIELDNAME} = forms.CharField($2)
+${1:${VISUAL:FIELDNAME}} = forms.CharField($2)
 endsnippet
 
 snippet fchoice "ChoiceField" b
-${1:FIELDNAME} = forms.ChoiceField($2)
+${1:${VISUAL:FIELDNAME}} = forms.ChoiceField($2)
 endsnippet
 
 snippet fcombo "ComboField" b
-${1:FIELDNAME} = forms.ComboField($2)
+${1:${VISUAL:FIELDNAME}} = forms.ComboField($2)
 endsnippet
 
 snippet fdate "DateField" b
-${1:FIELDNAME} = forms.DateField($2)
+${1:${VISUAL:FIELDNAME}} = forms.DateField($2)
 endsnippet
 
 snippet fdatetime "DateTimeField" b
-${1:FIELDNAME} = forms.DateTimeField($2)
+${1:${VISUAL:FIELDNAME}} = forms.DateTimeField($2)
 endsnippet
 
 snippet fdecimal "DecimalField" b
-${1:FIELDNAME} = forms.DecimalField($2)
+${1:${VISUAL:FIELDNAME}} = forms.DecimalField($2)
 endsnippet
 
 snippet fmail "EmailField" b
-${1:FIELDNAME} = forms.EmailField($2)
+${1:${VISUAL:FIELDNAME}} = forms.EmailField($2)
 endsnippet
 
-snippet ffile "FileField" b
-${1:FIELDNAME} = forms.FileField($2)
+snippet ffile "forms FileField" b
+${1:${VISUAL:${VISUAL:FIELDNAME}}} = forms.FileField($2)
 endsnippet
 
 snippet ffilepath "FilePathField" b
-${1:FIELDNAME} = forms.FilePathField($2)
+${1:${VISUAL:FIELDNAME}} = forms.FilePathField($2)
 endsnippet
 
 snippet ffloat "FloatField" b
-${1:FIELDNAME} = forms.FloatField($2)
+${1:${VISUAL:FIELDNAME}} = forms.FloatField($2)
 endsnippet
 
 snippet fip "IPAddressField" b
-${1:FIELDNAME} = forms.IPAddressField($2)
+${1:${VISUAL:FIELDNAME}} = forms.IPAddressField($2)
 endsnippet
 
 snippet fimg "ImageField" b
-${1:FIELDNAME} = forms.ImageField($2)
+${1:${VISUAL:FIELDNAME}} = forms.ImageField($2)
 endsnippet
 
 snippet fint "IntegerField" b
-${1:FIELDNAME} = forms.IntegerField($2)
+${1:${VISUAL:FIELDNAME}} = forms.IntegerField($2)
 endsnippet
 
 snippet fmochoice "ModelChoiceField" b
-${1:FIELDNAME} = forms.ModelChoiceField($2)
+${1:${VISUAL:FIELDNAME}} = forms.ModelChoiceField($2)
 endsnippet
 
 snippet fmomuchoice "ModelMultipleChoiceField" b
-${1:FIELDNAME} = forms.ModelMultipleChoiceField($2)
+${1:${VISUAL:FIELDNAME}} = forms.ModelMultipleChoiceField($2)
 endsnippet
 
 snippet fmuval "MultiValueField" b
-${1:FIELDNAME} = forms.MultiValueField($2)
+${1:${VISUAL:FIELDNAME}} = forms.MultiValueField($2)
 endsnippet
 
 snippet fmuchoice "MultipleChoiceField" b
-${1:FIELDNAME} = forms.MultipleChoiceField($2)
+${1:${VISUAL:FIELDNAME}} = forms.MultipleChoiceField($2)
 endsnippet
 
 snippet fnullbool "NullBooleanField" b
-${1:FIELDNAME} = forms.NullBooleanField($2)
+${1:${VISUAL:FIELDNAME}} = forms.NullBooleanField($2)
 endsnippet
 
 snippet freg "RegexField" b
-${1:FIELDNAME} = forms.RegexField($2)
+${1:${VISUAL:FIELDNAME}} = forms.RegexField($2)
 endsnippet
 
 snippet fslug "SlugField" b
-${1:FIELDNAME} = forms.SlugField($2)
+${1:${VISUAL:FIELDNAME}} = forms.SlugField($2)
 endsnippet
 
 snippet fsdatetime "SplitDateTimeField" b
-${1:FIELDNAME} = forms.SplitDateTimeField($2)
+${1:${VISUAL:FIELDNAME}} = forms.SplitDateTimeField($2)
 endsnippet
 
 snippet ftime "TimeField" b
-${1:FIELDNAME} = forms.TimeField($2)
+${1:${VISUAL:FIELDNAME}} = forms.TimeField($2)
 endsnippet
 
 snippet ftchoice "TypedChoiceField" b
-${1:FIELDNAME} = forms.TypedChoiceField($2)
+${1:${VISUAL:FIELDNAME}} = forms.TypedChoiceField($2)
 endsnippet
 
 snippet ftmuchoice "TypedMultipleChoiceField" b
-${1:FIELDNAME} = forms.TypedMultipleChoiceField($2)
+${1:${VISUAL:FIELDNAME}} = forms.TypedMultipleChoiceField($2)
 endsnippet
 
 snippet furl "URLField" b
-${1:FIELDNAME} = forms.URLField($2)
+${1:${VISUAL:FIELDNAME}} = forms.URLField($2)
 endsnippet
 
 # MODELS SNIPPETS
 
-snippet model "Model" b
-class ${1:MODELNAME}(models.Model):
+snippet model "Model class. Could be heavily refactored." b
+class ${1:${VISUAL:MODELNAME}}(models.Model):
 	$0
 	class Meta:
 		verbose_name = "$1"
@@ -134,8 +134,8 @@ class ${1:MODELNAME}(models.Model):
 endsnippet
 
 snippet modelfull "Model" b
-class ${1:MODELNAME}(models.Model):
-	${2:# TODO: Define fields here}
+class ${1:${VISUAL:MODELNAME}}(models.Model):
+	${2:# TODO: Define fields here}}
 
 	class Meta:
 		verbose_name = "$1"
@@ -151,124 +151,124 @@ class ${1:MODELNAME}(models.Model):
 	def get_absolute_url(self):
 		return ('')
 
-	${3:# TODO: Define custom methods here}
+	${3:# TODO: Define custom methods here}}
 
 endsnippet
 
 snippet mauto "AutoField" b
-${1:FIELDNAME} = models.AutoField($2)
+${1:${VISUAL:FIELDNAME}} = models.AutoField($2)
 endsnippet
 
 snippet mbigint "BigIntegerField" b
-${1:FIELDNAME} = models.BigIntegerField($2)
+${1:${VISUAL:FIELDNAME}} = models.BigIntegerField($2)
 endsnippet
 
 snippet mbool "BooleanField" b
-${1:FIELDNAME} = models.BooleanField($2)
+${1:${VISUAL:FIELDNAME}} = models.BooleanField($2)
 endsnippet
 
 snippet mchar "CharField" b
-${1:FIELDNAME} = models.CharField($2, max_length=${3:50})
+${1:${VISUAL:FIELDNAME}} = models.CharField($2, max_length=${3:50})
 endsnippet
 
 snippet mcoseint "CommaSeparatedIntegerField" b
-${1:FIELDNAME} = models.CommaSeparatedIntegerField($2)
+${1:${VISUAL:FIELDNAME}} = models.CommaSeparatedIntegerField($2)
 endsnippet
 
 snippet mdate "DateField" b
-${1:FIELDNAME} = models.DateField($2)
+${1:${VISUAL:FIELDNAME}} = models.DateField($2)
 endsnippet
 
 snippet mdatetime "DateTimeField" b
-${1:FIELDNAME} = models.DateTimeField($2)
+${1:${VISUAL:FIELDNAME}} = models.DateTimeField($2)
 endsnippet
 
 snippet mdecimal "DecimalField" b
-${1:FIELDNAME} = models.DecimalField(max_digits=${2:10}, decimal_places=${3:2})
+${1:${VISUAL:FIELDNAME}} = models.DecimalField(max_digits=${2:10}, decimal_places=${3:2})
 endsnippet
 
 snippet memail "EmailField" b
-${1:FIELDNAME} = models.EmailField($2)
+${1:${VISUAL:FIELDNAME}} = models.EmailField($2)
 endsnippet
 
 snippet mfile "FileField" b
-${1:FIELDNAME} = models.FileField($2)
+${1:${VISUAL:FIELDNAME}} = models.FileField($2)
 endsnippet
 
 snippet mfilepath "FilePathField" b
-${1:FIELDNAME} = models.FilePathField($2)
+${1:${VISUAL:FIELDNAME}} = models.FilePathField($2)
 endsnippet
 
 snippet mfloat "FloatField" b
-${1:FIELDNAME} = models.FloatField($2)
+${1:${VISUAL:FIELDNAME}} = models.FloatField($2)
 endsnippet
 
 snippet fk "ForeignKey" b
-${1:FIELDNAME} = models.ForeignKey($2)
+${1:${VISUAL:FIELDNAME}} = models.ForeignKey($2)
 endsnippet
 
 snippet mip "IPAddressField" b
-${1:FIELDNAME} = models.IPAddressField($2)
+${1:${VISUAL:FIELDNAME}} = models.IPAddressField($2)
 endsnippet
 
 snippet mimg "ImageField" b
-${1:FIELDNAME} = models.ImageField($2)
+${1:${VISUAL:FIELDNAME}} = models.ImageField($2)
 endsnippet
 
 snippet mint "IntegerField" b
-${1:FIELDNAME} = models.IntegerField($2)
+${1:${VISUAL:FIELDNAME}} = models.IntegerField($2)
 endsnippet
 
 snippet m2m "ManyToManyField" b
-${1:FIELDNAME} = models.ManyToManyField($2)
+${1:${VISUAL:FIELDNAME}} = models.ManyToManyField($2)
 endsnippet
 
 snippet mnullbool "NullBooleanField" b
-${1:FIELDNAME} = models.NullBooleanField($2)
+${1:${VISUAL:FIELDNAME}} = models.NullBooleanField($2)
 endsnippet
 
 snippet o2o "OneToOneField" b
-${1:FIELDNAME} = models.OneToOneField($2)
+${1:${VISUAL:FIELDNAME}} = models.OneToOneField($2)
 endsnippet
 
 snippet mphone "PhoneNumberField" b
-${1:FIELDNAME} = models.PhoneNumberField($2)
+${1:${VISUAL:FIELDNAME}} = models.PhoneNumberField($2)
 endsnippet
 
 snippet mposint "PositiveIntegerField" b
-${1:FIELDNAME} = models.PositiveIntegerField($2)
+${1:${VISUAL:FIELDNAME}} = models.PositiveIntegerField($2)
 endsnippet
 
 snippet mpossmallint "PositiveSmallIntegerField" b
-${1:FIELDNAME} = models.PositiveSmallIntegerField($2)
+${1:${VISUAL:FIELDNAME}} = models.PositiveSmallIntegerField($2)
 endsnippet
 
 snippet mslug "SlugField" b
-${1:FIELDNAME} = models.SlugField($2)
+${1:${VISUAL:FIELDNAME}} = models.SlugField($2)
 endsnippet
 
 snippet msmallint "SmallIntegerField" b
-${1:FIELDNAME} = models.SmallIntegerField($2)
+${1:${VISUAL:FIELDNAME}} = models.SmallIntegerField($2)
 endsnippet
 
 snippet mtext "TextField" b
-${1:FIELDNAME} = models.TextField($2)
+${1:${VISUAL:FIELDNAME}} = models.TextField($2)
 endsnippet
 
 snippet mtime "TimeField" b
-${1:FIELDNAME} = models.TimeField($2)
+${1:${VISUAL:FIELDNAME}} = models.TimeField($2)
 endsnippet
 
 snippet murl "URLField" b
-${1:FIELDNAME} = models.URLField($2)
+${1:${VISUAL:FIELDNAME}} = models.URLField($2)
 endsnippet
 
 snippet musstate "USStateField" b
-${1:FIELDNAME} = models.USStateField($2)
+${1:${VISUAL:FIELDNAME}} = models.USStateField($2)
 endsnippet
 
 snippet mxml "XMLField" b
-${1:FIELDNAME} = models.XMLField($2)
+${1:${VISUAL:FIELDNAME}} = models.XMLField($2)
 endsnippet
 
 # VIEWS SNIPPETS
@@ -372,166 +372,167 @@ endsnippet
 # Note: Optional arguments that are booleans will use the opposite since you
 # can either not specify them, or override them, e.g. auto_now_add=False.
 
-snippet auto
-	${1:FIELDNAME} = models.AutoField(${0})
-endsnippet
+# Commenting out until they all have comments
+# snippet auto
+# 	${1:FIELDNAME} = models.AutoField(${0})
+# endsnippet
 
-snippet bigint
-	${1:FIELDNAME} = models.BigIntegerField(${0})
-endsnippet
+# snippet bigint
+# 	${1:FIELDNAME} = models.BigIntegerField(${0})
+# endsnippet
 
-snippet binary
-	${1:FIELDNAME} = models.BinaryField(${0})
-endsnippet
+# snippet binary
+# 	${1:FIELDNAME} = models.BinaryField(${0})
+# endsnippet
 
-snippet bool
-	${1:FIELDNAME} = models.BooleanField(${0:default=True})
-endsnippet
+# snippet bool
+# 	${1:FIELDNAME} = models.BooleanField(${0:default=True})
+# endsnippet
 
-snippet char
-	${1:FIELDNAME} = models.CharField(max_length=${2}${0:, blank=True})
-endsnippet
+# snippet char
+# 	${1:FIELDNAME} = models.CharField(max_length=${2}${0:, blank=True})
+# endsnippet
 
-snippet comma
-	${1:FIELDNAME} = models.CommaSeparatedIntegerField(max_length=${2}${0:, blank=True})
-endsnippet
+# snippet comma
+# 	${1:FIELDNAME} = models.CommaSeparatedIntegerField(max_length=${2}${0:, blank=True})
+# endsnippet
 
-snippet date
-	${1:FIELDNAME} = models.DateField(${2:auto_now_add=True, auto_now=True}${0:, blank=True, null=True})
-endsnippet
+# snippet date
+# 	${1:FIELDNAME} = models.DateField(${2:auto_now_add=True, auto_now=True}${0:, blank=True, null=True})
+# endsnippet
 
-snippet datetime
-	${1:FIELDNAME} = models.DateTimeField(${2:auto_now_add=True, auto_now=True}${0:, blank=True, null=True})
-endsnippet
+# snippet datetime
+# 	${1:FIELDNAME} = models.DateTimeField(${2:auto_now_add=True, auto_now=True}${0:, blank=True, null=True})
+# endsnippet
 
-snippet decimal
-	${1:FIELDNAME} = models.DecimalField(max_digits=${2}, decimal_places=${0})
-endsnippet
+# snippet decimal
+# 	${1:FIELDNAME} = models.DecimalField(max_digits=${2}, decimal_places=${0})
+# endsnippet
 
-snippet email
-	${1:FIELDNAME} = models.EmailField(max_length=${2:75}${0:, blank=True})
-endsnippet
+# snippet email
+# 	${1:FIELDNAME} = models.EmailField(max_length=${2:75}${0:, blank=True})
+# endsnippet
 
-snippet file
-	${1:FIELDNAME} = models.FileField(upload_to=${2:path/for/upload}${0:, max_length=100})
-endsnippet
+# snippet file
+# 	${1:FIELDNAME} = models.FileField(upload_to=${2:path/for/upload}${0:, max_length=100})
+# endsnippet
 
-snippet filepath
-	${1:FIELDNAME} = models.FilePathField(path=${2:"/abs/path/to/dir"}${3:, max_length=100}${4:, match="*.ext"}${5:, recursive=True}${0:, blank=True, })
-endsnippet
+# snippet filepath
+# 	${1:FIELDNAME} = models.FilePathField(path=${2:"/abs/path/to/dir"}${3:, max_length=100}${4:, match="*.ext"}${5:, recursive=True}${0:, blank=True, })
+# endsnippet
 
-snippet float
-	${1:FIELDNAME} = models.FloatField(${0})
-endsnippet
+# snippet float
+# 	${1:FIELDNAME} = models.FloatField(${0})
+# endsnippet
 
-snippet image
-	${1:FIELDNAME} = models.ImageField(upload_to=${2:path/for/upload}${3:, height_field=height, width_field=width}${0:, max_length=100})
-endsnippet
+# snippet image
+# 	${1:FIELDNAME} = models.ImageField(upload_to=${2:path/for/upload}${3:, height_field=height, width_field=width}${0:, max_length=100})
+# endsnippet
 
-snippet int
-	${1:FIELDNAME} = models.IntegerField(${0})
-endsnippet
+# snippet int
+# 	${1:FIELDNAME} = models.IntegerField(${0})
+# endsnippet
 
-snippet ip
-	${1:FIELDNAME} = models.IPAddressField(${0})
-endsnippet
+# snippet ip
+# 	${1:FIELDNAME} = models.IPAddressField(${0})
+# endsnippet
 
-snippet nullbool
-	${1:FIELDNAME} = models.NullBooleanField(${0})
-endsnippet
+# snippet nullbool
+# 	${1:FIELDNAME} = models.NullBooleanField(${0})
+# endsnippet
 
-snippet posint
-	${1:FIELDNAME} = models.PositiveIntegerField(${0})
-endsnippet
+# snippet posint
+# 	${1:FIELDNAME} = models.PositiveIntegerField(${0})
+# endsnippet
 
-snippet possmallint
-	${1:FIELDNAME} = models.PositiveSmallIntegerField(${0})
-endsnippet
+# snippet possmallint
+# 	${1:FIELDNAME} = models.PositiveSmallIntegerField(${0})
+# endsnippet
 
-snippet slug
-	${1:FIELDNAME} = models.SlugField(max_length=${2:50}${0:, blank=True})
-endsnippet
+# snippet slug
+# 	${1:FIELDNAME} = models.SlugField(max_length=${2:50}${0:, blank=True})
+# endsnippet
 
-snippet smallint
-	${1:FIELDNAME} = models.SmallIntegerField(${0})
-endsnippet
+# snippet smallint
+# 	${1:FIELDNAME} = models.SmallIntegerField(${0})
+# endsnippet
 
-snippet text
-	${1:FIELDNAME} = models.TextField(${0:blank=True})
-endsnippet
+# snippet text
+# 	${1:FIELDNAME} = models.TextField(${0:blank=True})
+# endsnippet
 
-snippet time
-	${1:FIELDNAME} = models.TimeField(${2:auto_now_add=True, auto_now=True}${0:, blank=True, null=True})
-endsnippet
+# snippet time
+# 	${1:FIELDNAME} = models.TimeField(${2:auto_now_add=True, auto_now=True}${0:, blank=True, null=True})
+# endsnippet
 
-snippet url
-	${1:FIELDNAME} = models.URLField(${2:verify_exists=False}${3:, max_length=200}${0:, blank=True})
-endsnippet
+# snippet url
+# 	${1:FIELDNAME} = models.URLField(${2:verify_exists=False}${3:, max_length=200}${0:, blank=True})
+# endsnippet
 
-snippet xml
-	${1:FIELDNAME} = models.XMLField(schema_path=${2:None}${0:, blank=True})
-endsnippet
+# snippet xml
+# 	${1:FIELDNAME} = models.XMLField(schema_path=${2:None}${0:, blank=True})
+# endsnippet
 
-# Relational Fields
-snippet fk
-	${1:FIELDNAME} = models.ForeignKey(${2:OtherModel}${3:, related_name=''}${4:, limit_choices_to=}${0:, to_field=''})
-endsnippet
+# # Relational Fields
+# snippet fk
+# 	${1:FIELDNAME} = models.ForeignKey(${2:OtherModel}${3:, related_name=''}${4:, limit_choices_to=}${0:, to_field=''})
+# endsnippet
 
-snippet m2m
-	${1:FIELDNAME} = models.ManyToManyField(${2:OtherModel}${3:, related_name=''}${4:, limit_choices_to=}${5:, symmetrical=False}${6:, through=''}${0:, db_table=''})
-endsnippet
+# snippet m2m
+# 	${1:FIELDNAME} = models.ManyToManyField(${2:OtherModel}${3:, related_name=''}${4:, limit_choices_to=}${5:, symmetrical=False}${6:, through=''}${0:, db_table=''})
+# endsnippet
 
-snippet o2o
-	${1:FIELDNAME} = models.OneToOneField(${2:OtherModel}${3:, parent_link=True}${4:, related_name=''}${5:, limit_choices_to=}${0:, to_field=''})
-endsnippet
+# snippet o2o
+# 	${1:FIELDNAME} = models.OneToOneField(${2:OtherModel}${3:, parent_link=True}${4:, related_name=''}${5:, limit_choices_to=}${0:, to_field=''})
+# endsnippet
 
-# Code Skeletons
+# # Code Skeletons
 
-snippet form
-	class ${1:FormName}(forms.Form):
-		"""${2:docstring}"""
-		${0}
-endsnippet
+# snippet form
+# 	class ${1:FormName}(forms.Form):
+# 		"""${2:docstring}"""
+# 		${0}
+# endsnippet
 
-snippet model
-	class ${1:ModelName}(models.Model):
-		"""${2:docstring}"""
-		${3}
+# snippet model
+# 	class ${1:ModelName}(models.Model):
+# 		"""${2:docstring}"""
+# 		${3}
 
-		class Meta:
-			${4}
+# 		class Meta:
+# 			${4}
 
-		def __unicode__(self):
-			${5}
+# 		def __unicode__(self):
+# 			${5}
 
-		def save(self, *args, **kwargs):
-			${6}
+# 		def save(self, *args, **kwargs):
+# 			${6}
 
-		@models.permalink
-		def get_absolute_url(self):
-			return ('${7:view_or_url_name}' ${0})
-endsnippet
+# 		@models.permalink
+# 		def get_absolute_url(self):
+# 			return ('${7:view_or_url_name}' ${0})
+# endsnippet
 
-snippet modeladmin
-	class ${1:ModelName}Admin(admin.ModelAdmin):
-		${0}
+# snippet modeladmin
+# 	class ${1:ModelName}Admin(admin.ModelAdmin):
+# 		${0}
 
-	admin.site.register($1, $1Admin)
-endsnippet
+# 	admin.site.register($1, $1Admin)
+# endsnippet
 
-snippet tabularinline
-	class ${0:ModelName}Inline(admin.TabularInline):
-		model = $1
-endsnippet
+# snippet tabularinline
+# 	class ${0:ModelName}Inline(admin.TabularInline):
+# 		model = $1
+# endsnippet
 
-snippet stackedinline
-	class ${0:ModelName}Inline(admin.StackedInline):
-		model = $1
-endsnippet
+# snippet stackedinline
+# 	class ${0:ModelName}Inline(admin.StackedInline):
+# 		model = $1
+# endsnippet
 
-snippet r2r
-	return render_to_response('${1:template.html}', {
-			${2}
-		}${0:, context_instance=RequestContext(request)}
-	)
-endsnippet
+# snippet r2r
+# 	return render_to_response('${1:template.html}', {
+# 			${2}
+# 		}${0:, context_instance=RequestContext(request)}
+# 	)
+# endsnippet

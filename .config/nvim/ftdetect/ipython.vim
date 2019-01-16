@@ -1,9 +1,7 @@
-" IPython ftdetect. Needs a lot of work.
-
+" IPython:
 if exists('b:current_syntax')
   finish
 endif
-
 
 augroup ftpersonal
     autocmd!

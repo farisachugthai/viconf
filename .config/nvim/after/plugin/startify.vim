@@ -16,8 +16,8 @@ let g:startify_lists = [
     \ { 'header': ['   MRU '. getcwd()], 'type': 'dir' },
     \ { 'header': ['   Sessions'],       'type': 'sessions' },
     \ { 'header': ['   Viconf'],         'type': function('s:list_commits') },
-    \ { 'type': 'commands',  'header': ['   Commands']       },
-    \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
+    \ { 'header': ['   Commands'],       'type': 'commands',       },
+    \ { 'header': ['   Bookmarks'],      'type': 'bookmarks',  },
 \ ]
 
 " Setup_devicons: {{{1
