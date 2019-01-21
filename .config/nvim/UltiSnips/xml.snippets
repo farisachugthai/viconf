@@ -1,3 +1,4 @@
+# XML Snippets
 
 snippet xml "XML declaration" b
 <?xml version="1.0"?>
@@ -12,4 +13,10 @@ endsnippet
 
 snippet ti "Inline tag" b
 <${1:tag}>${2:${VISUAL}}</${1/([\w:._-]+).*/$1/}>
+endsnippet
+
+snippet template "Starting point for a new xml file." bw
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties/>
 endsnippet

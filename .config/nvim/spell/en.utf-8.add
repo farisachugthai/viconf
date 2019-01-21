@@ -52,8 +52,6 @@ Gruvbox
 HMAC
 Hettinger
 I'll
-I'll
-I'll
 IPython
 IPython's
 ISO9660
@@ -545,6 +543,7 @@ sdc1
 sdc2
 sectionauthor
 sed
+setUp
 setxkbmap
 sha256
 sha384
@@ -587,11 +586,11 @@ tcl
 tcp
 tcpdump
 tcsh
+tearDown
 termcap
 terminfo
 termux
 testcase
-tex
 tex
 texting
 tldr
@@ -689,3 +688,5 @@ zcat
 zenburn
 zim
 zsh
+CentOS
+RHEL

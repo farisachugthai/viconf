@@ -13,20 +13,22 @@ How are the folders in a neovim directory tree supposed to be laid out?
 While each directory serves a specific purpose, depending on use case, not all
 need to be employed.
 
-The first and most obvious file is the :module:`init.vim`. We can setup the base
+The first and most obvious file is the :ref:`init.vim`. We can setup the base
 options like so:
 
-+--------------------------+----------------+
-| Options                  |                |
-|                          |                |
-| .. code-block:: vim      |                |
-|                          |                |
++---------------------+--+
+| Options             |  |
+|                     |  |
+| .. code-block:: vim |  |
++---------------------+--+
+|                          |                +
 |    :let OPTION_NAME = 1  | Enable option  |
-|    :let OPTION_NAME = 0  | Disable option |
-|                          |                |
-|                          |                |
-| Continuation of settings |                |
 +--------------------------+----------------+
+|    :let OPTION_NAME = 0  | Disable option |
++--------------------------+----------------+
+
+
+
 
 Here's a follow up explanation that goes into more of the details.
 

@@ -1,5 +1,6 @@
 " Init:
 " Neovim Configuration:
+" Vim: set foldlevel=0:
 
 " About: {{{1
 let g:snips_author = 'Faris Chugthai'
@@ -58,6 +59,7 @@ Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
 Plug 'Rykka/InstantRst'
 Plug 'gu-fan/riv.vim'
+Plug 'greyblake/vim-preview'
 Plug 'jakykong/vim-zim', {'for': 'zimwiki'}
 Plug 'HerringtonDarkholme/yats.vim', {'for': ['jsx', 'tsx']}
 Plug 'mhartington/nvim-typescript', {'do': './install.sh', 'for': ['jsx', 'tsx']}
@@ -66,47 +68,41 @@ call plug#end()
 
 " Nvim Specific: {{{1
 
-" unabashedly stolen from junegunn dude is too good.
-let s:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/init.vim.local'
-if filereadable(s:local_vimrc)
-    execute 'source' s:local_vimrc
-endif
-
 if has('nvim')
     set inccommand=split                    " This alone is enough to never go back
     set termguicolors
 endif
 
+unlet! skip_defaults_vim
+silent! source $VIMRUNTIME/defaults.vim
+
 " Python Executables: {{{1
 
-if has('python3')
+" if we have a virtual env start there
+if exists('$VIRTUAL_ENV')
+    let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
 
-    " if we have a virtual env start there
-    if exists('$VIRTUAL_ENV')
-        let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
+" or a conda env.
+elseif exists('$CONDA_PYTHON_EXE')
+    let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
 
-    " or a conda env.
-    elseif exists('$CONDA_PYTHON_EXE')
-        let g:python3_host_prog = $CONDA_PYTHON_EXE
+" otherwise break up termux and linux
+elseif exists('$PREFIX')
 
-    " otherwise break up termux and linux
-    elseif exists('$PREFIX')
+    " and just use the system python
+    if executable(expand('$PREFIX/bin/python'))
+        let g:python3_host_prog = expand('$PREFIX/bin/python')
+    endif
 
-        " and just use the system python
-        if executable('$PREFIX/bin/python')
-            let g:python3_host_prog = '$PREFIX/bin/python'
-        endif
-
-    elseif expand('$OS') ==# 'Windows_NT'       " no reason to split this loop based on that as a first check yet
+elseif expand('$OS') ==# 'Windows_NT'       " no reason to split this loop based on that as a first check yet
     " shouldve gotten caught by conda env var right?
-        let g:python3_host_prog = expand('~/Miniconda3/python.exe')
+    let g:python3_host_prog = expand('~/Miniconda3/python.exe')
 
-    else
-        if executable('/usr/bin/python3')
-            let g:python3_host_prog = '/usr/bin/python3'
-            if executable('/usr/bin/python2')       " why not
-                let g:python_host_prog = '/usr/bin/python2'
-            endif
+else
+    if executable('/usr/bin/python3')
+        let g:python3_host_prog = '/usr/bin/python3'
+        if executable('/usr/bin/python2')       " why not
+            let g:python_host_prog = '/usr/bin/python2'
         endif
     endif
 endif
@@ -119,12 +115,22 @@ let s:windows = has('win32') || has('win64')
 
 let s:winrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/winrc'
 if s:windows && filereadable(s:winrc)
-    source s:winrc
+    execute 'source' s:winrc
 endif
 
+" unabashedly stolen from junegunn dude is too good.
+let s:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/init.vim.local'
+if filereadable(s:local_vimrc)
+    execute 'source' s:local_vimrc
+endif
+
+
 " Global Options: {{{1
+
 " Leader_Viminfo: {{{2
-let g:mapleader = '\<Space>'
+" let g:mapleader = '\<Space>'
+noremap <Space> <nop>
+map <Space> <Leader>
 let g:maplocalleader = "\,"
 
 if !has('nvim')
@@ -145,6 +151,7 @@ let g:python_highlight_all = 1
 " Folds: {{{2
 set foldenable
 set foldlevelstart=1        " I'm fine with this level of folding to start
+set foldlevel=0
 set foldnestmax=10
 set foldmethod=marker
 " Use 1 column to indicate fold level and whether a fold is open or closed.
@@ -170,7 +177,7 @@ set termencoding=utf-8
 setlocal spelllang=en
 
 " This is is definitely one of the things that needs to get ported over to nvim
-if filereadable('~/.config/nvim/spell/en.utf-8.add')
+if filereadable(expand('~/.config/nvim/spell/en.utf-8.add'))
     set spellfile=~/.config/nvim/spell/en.utf-8.add
 elseif filereadable(glob('~/projects/viconf/.vim/spell/en.utf-8.add'))
     set spellfile=~/projects/viconf/.vim/spell/en.utf-8.add
@@ -235,14 +242,8 @@ set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 set fileignorecase                      " when searching for files don't use case
 set wildignorecase
 
-try
-    LanguageClient#serverStart()
-    set completefunc=LanguageClient#complete
-    set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
-catch
-endtry
-
 " Other Global Options: {{{2
+
 set tags+=./tags,./../tags,./*/tags     " usr_29
 set tags+=~/projects/tags               " consider generating a few large tag
 set tags+=~python/tags                  " files rather than recursive searches
@@ -259,7 +260,6 @@ set autoindent smartindent              " :he options: set with smartindent
 " FOOBAR=~/<CTRL-><CTRL-F> will now autocomplete!
 set isfname-==
 
-" Had to really futz with this; however, this is finally right.
 if has('gui_running')
     set guifont=Fira\ Code\ weight=450\ 10
 endif
@@ -313,9 +313,10 @@ nnoremap <C-l> <C-w>l
 "                  following the file name.
 "
 " Rebind that to C-w t and we can open the filename in a new tab.
+
 " Navigate tabs more easily
-map <unique> <A-Right> :tabnext<CR>
-map <unique> <A-Left> :tabprev<CR>
+map  <A-Right> :tabnext<CR>
+map  <A-Left> :tabprev<CR>
 nnoremap <Leader>tn :tabnext<CR>
 nnoremap <Leader>tp :tabprev<CR>
 " Opens a new tab with the current buffer's path
@@ -326,13 +327,13 @@ nnoremap <Leader>te :tabedit <c-r>=expand("%:p:h")<CR>
 nnoremap <Leader>ed :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 nnoremap <F9> :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 inoremap <F9> <Esc>:tabe ~/projects/viconf/.config/nvim/init.vim<CR>
+
 " Now reload it
 nnoremap <Leader>re :so $MYVIMRC<CR>
 
 " General_Mappings: {{{2
-" Ease Dropbox uploads. Should probably turn into a func and command
-" cnoremap termux-share termux-share -a send<Space>%
 
+" :map-cmd
                         " *<Cmd>* *:map-cmd*
 " The <Cmd> pseudokey may be used to define a 'command mapping', which executes
 " the command directly (without changing modes, etc.).  Where you might use
@@ -342,21 +343,14 @@ map <silent> <Leader>ts <Cmd>!termux-share -a send %<CR>
 
 " Simple way to speed up startup
 nnoremap <Leader>nt :NERDTreeToggle<CR>
-nnoremap <Leader>a :echo('No. Use :%y')<CR>
-
-" It should be easier to get help
-nnoremap <Leader>he :helpgrep<Space>
-
-" Escape Conveniences:
-" f d clobbers the command though...
-inoremap fd <Esc>
-vnoremap fd <Esc>
 
 " Junegunn:
 nnoremap <Leader>o o<Esc>
 nnoremap <Leader>O O<Esc>
 xnoremap < <gv
 xnoremap > >gv
+nnoremap j gj
+nnoremap k gk
 
 " Switch CWD to the directory of the open buffer
 nnoremap <Leader>cd :cd %:p:h<CR>:pwd<CR>
@@ -385,7 +379,6 @@ nnoremap <F6> :UltiSnipsEdit<CR>
 
 " Unimpaired: {{{2
 " Note that ]c and [c are mapped by git-gutter and ALE has ]a and [a
-" In addition I've mapped ]a and [a for ALE nextwrap.
 nnoremap ]q :cnext<CR>
 nnoremap [q :cprev<CR>
 nnoremap ]Q :cfirst<CR>
@@ -402,13 +395,10 @@ nnoremap ]t :tabn<CR>
 nnoremap [t :tabp<CR>
 nnoremap ]T :tfirst<CR>
 nnoremap [T :tlast<CR>
-" In addition I've mapped ]a and [a for Ale nextwrap.
 
 " Spell Checking: {{{2
 nnoremap <Leader>sp :setlocal spell!<CR>
-" Based off the default value for spell suggest
-nnoremap <Leader>s= :norm z=<CR>
-
+nnoremap <Leader>s= z=
 
 " Terminal: {{{2
 " If running a terminal in Vim, go into Normal mode with Esc
@@ -436,15 +426,16 @@ nnoremap <Leader>l <Plug>(ale_toggle_buffer)<CR>
 nnoremap ]a <Plug>(ale_next_wrap)
 nnoremap [a <Plug>(ale_previous_wrap)
 
-" TODO: Implement ALEInfoToFile.
-" `:ALEInfoToFile` will write the ALE runtime information to a given filename. The filename works just like |:w|.
+" `:ALEInfoToFile` will write the ALE runtime information to a given filename.
+" The filename works just like |:w|.
 
 " <Meta-a> now gives detailed messages about what the linters have sent to ALE
-map <unique> <A-a> <Plug>(ale_detail)
+map <A-a> <Plug>(ale_detail)
 
 " This might be a good idea. * is already 'search for the cword' so let ALE
 " work in a similar manner right?
 nnoremap <Leader>* <Plug>(ale_go_to_reference)
+
 nnoremap <Leader>a :ALEInfo<CR>
 
 " Fugitive: {{{2
@@ -452,14 +443,16 @@ nnoremap <silent> <Leader>gb   :Gblame<CR>
 nnoremap <silent> <Leader>gc   :Gcommit<CR>
 cmap <silent> gch Git checkout<Space>
 nnoremap <silent> <Leader>gd   :Gdiff<CR>
+nnoremap <silent> <Leader>gds  :Gdiff --staged<CR>
 nnoremap <silent> <Leader>gds2 :Git diff --stat --staged<CR>
-nnoremap <silent> <Leader>ge   :Gedit<CR>
-nnoremap <silent> <Leader>gE   :Gedit<Space>
-nnoremap <silent> <Leader>gl   :Glog<CR>
-nnoremap <silent> <Leader>gL :Glog --pretty=oneline --graph<CR>
+nnoremap <silent> <Leader>ge   :Gedit<Space>
+nnoremap <silent> <Leader>gf   :Gfetch<CR>
+nnoremap <silent> <Leader>gg   :Ggrep<CR>
+nnoremap <silent> <Leader>gl   :0Glog<CR>
+nnoremap <silent> <Leader>gL   :0Glog --pretty=oneline --graph<CR>
+nnoremap <silent> <Leader>gm   :Gmerge<CR>
 nnoremap <silent> <Leader>gq   :Gwq<CR>
 nnoremap <silent> <Leader>gQ   :Gwq!<CR>
-nnoremap <silent> <Leader>gr   :Gread<CR>
 nnoremap <silent> <Leader>gR   :Gread<Space>
 nnoremap <silent> <Leader>gs   :Gstatus<CR>
 nnoremap <silent> <Leader>gst  :Git diff --stat<CR>
@@ -483,12 +476,16 @@ function! LC_maps()
         nnoremap <buffer> <Leader>lc :call LanguageClient#textDocument_completion()<CR>
         nnoremap <buffer> <Leader>ls :call LanguageClient_textDocument_documentSymbol()<CR>
         nnoremap <buffer> <Leader>lm :call LanguageClient_contextMenu()<CR>
+        set completefunc=LanguageClient#complete
+        set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
     endif
 endfunction
 
+" Yes use the wildcard. I originally specified filetype but that's what the
+" if/else above is for.
 augroup LangClient
     autocmd!
-    autocmd FileType cpp,c,python,python3,ts,tsx call LC_maps()
+    autocmd FileType * call LC_maps()
 augroup END
 
 " Tagbar: {{{2
@@ -510,13 +507,13 @@ runtime! macros/matchit.vim
 set matchpairs+=<:>
 
 " To every plugin I've never used before. Stop slowing me down.
-let g:loaded_vimballPlugin      = 1
-let g:loaded_tutor_mode_plugin  = 1
-let g:loaded_getsciptPlugin     = 1
-let g:loaded_2html_plugin       = 1
-let g:loaded_logiPat            = 1
-let g:loaded_netrw              = 1
-let g:loaded_netrwPlugin        = 1
+let g:loaded_vimballPlugin     = 1
+let g:loaded_tutor_mode_plugin = 1
+let g:loaded_getsciptPlugin    = 1
+let g:loaded_2html_plugin      = 1
+let g:loaded_logiPat           = 1
+let g:loaded_netrw             = 1
+let g:loaded_netrwPlugin       = 1
 " Let's see if this speeds things up because I've never used most of them
 
 " Remaining Plugins: {{{1
@@ -561,16 +558,7 @@ let g:ale_warn_about_trailing_blank_lines = 0
 let g:ale_echo_cursor = 1
 " Default: `'%code: %%s'`
 let g:ale_echo_msg_format = '%linter% - %code: %%s %severity%'
-" Open up a window automatically. NO. Felt so innocuous. So invasive.
-" let g:ale_open_list = 1
-" Do so vertically
 let g:ale_list_vertical = 1
-
-" And close it automatically when the buffer closes
-augroup CloseLoclistWindowGroup
-    autocmd!
-    autocmd QuitPre * if empty(&buftype) | lclose | endif
-augroup END
 
 let g:ale_set_signs = 1
 let g:ale_sign_column_always = 1
@@ -587,6 +575,7 @@ augroup END
 let g:webdevicons_enable = 1
 let g:webdevicons_enable_nerdtree = 1               " adding the flags to NERDTree
 let g:airline_powerline_fonts = 1
+
 " For startify
 let entry_format = "'   ['. index .']'. repeat(' ', (3 - strlen(index)))"
 
@@ -602,7 +591,7 @@ let g:UltiSnipsExpandTrigger = '<Tab>'
 let g:UltiSnipsListSnippets = '<C-Tab>'
 let g:UltiSnipsJumpForwardTrigger = '<C-j>'
 let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
-" inoremap <C-Tab> * <Esc>:call ultisnips#listsnippets()<CR>
+inoremap <C-Tab> * <Esc>:call ultisnips#listsnippets()<CR>
 let g:ultisnips_python_style = 'numpy'
 let g:ultisnips_python_quoting_style = 'double'
 let g:UltiSnipsEnableSnipMate = 0
@@ -629,7 +618,7 @@ let g:LanguageClient_loggingFile = '~/.local/share/nvim/LC.log'
 " Jedi: {{{2
 let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces
 let g:jedi#usages_command = '<Leader>u'
-let g:jedi#show_call_signatures_delay = 1000
+let g:jedi#show_call_signatures_delay = 100
 let g:jedi#smart_auto_mappings = 0
 let g:jedi#force_py_version = 3
 let g:jedi#enable_completions = 0
@@ -655,6 +644,10 @@ let g:tagbar_sort = 0
 " Zim: {{{2
 let g:zim_notebooks_dir = '~/Notebooks.git'
 
+" Riv: {{{2
+" Highlight py docstrings with rst highlighting
+let g:riv_python_rst_hl = 1
+
 " Voom: {{{ 2
 
 "g:voom_ft_modes" is a Vim dictionary: keys are filetypes (|ft|), values are
@@ -679,6 +672,7 @@ let g:zim_notebooks_dir = '~/Notebooks.git'
 
 let g:voom_ft_modes = {'markdown': 'markdown', 'rst': 'rst', 'zimwiki': 'dokuwiki'}
 let g:voom_default_mode = 'rst'
+let g:voom_python_versions = [3]
 
 " Filetype Specific Options: {{{1
 
@@ -725,6 +719,21 @@ function! s:todo() abort
     endif
 endfunction
 command! Todo call s:todo()
+
+" Explore: {{{2
+" Here's one where he uses fzf and Explore to search a packages docs
+function! s:plug_help_sink(line)
+    let dir = g:plugs[a:line].dir
+    for pat in ['doc/*.txt', 'README.md']
+        let match = get(split(globpath(dir, pat), "\n"), 0, '')
+        if len(match)
+            execute 'tabedit' match
+            return
+        endif
+    endfor
+    tabnew
+    execute 'Explore' dir
+endfunction
 
 " Scriptnames: {{{2
 " command to filter :scriptnames output by a regex
