@@ -41,16 +41,16 @@ endsnippet
 
 # TODO Need to break this up
 # Also you should be able to easily put `snip.fn` in the filename there
-snippet moddoc "Module Docstring. Has 11 tabstops!!!" bs
-"""${1:${VISUAL: Give a one sentence summary in the imperative}}
+snippet moddoc "Module Docstring" bs
+"""${1:${VISUAL}Quick description.}
 
-${2:Elaborate a little}
-File: `!p snip.rv = snip.fname`
-Author: `!v g:snips_author`
-Email: `!v g:snips_email`
-Github: `!v g:snips_github`
+$2
+:File: `!p snip.rv = snip.fn`
+:Author: `!v g:snips_author`
+:Email: `!v g:snips_email`
+:Github: `!v g:snips_github`
 
-Attributes:
+${3:Attributes:
 
 	${4:module_level_variables} (${5:type}): ${6:Explanation and give an inline docstring
 	immediately afterwards if possible}
@@ -65,6 +65,7 @@ Example:
 
 	${11:example text}
 
+}
 """
 endsnippet
 
@@ -73,16 +74,14 @@ Attributes:
 
 	${1:module_level_variables} (${2:type}): ${3:Explanation and give an inline docstring
 	immediately afterwards if possible}
-$0
 endsnippet
 
-snippet modex "Expand only the examples section of the module docstring snippet." b
+snippet modex "Expand only the examples section of the module docstring snippet." bs
 Example:
 
 	${1:Any example of how to use this module goes here}:: ${2:sh}
 
 		${3:$ python exampleofrst.py}
-$0
 endsnippet
 
 # and if we didn't like that module docstring how about this one?
@@ -100,38 +99,44 @@ $0
 endsnippet
 
 snippet " "triple quoted string (double quotes)" b
-"""
-${1:${VISUAL:doc}}
+`!p triple_quotes_handle_trailing(snip, '"')`
+${1:${VISUAL}}
 `!p triple_quotes_handle_trailing(snip, '"')`
 endsnippet
 
 snippet ' "triple quoted string (single quotes)" b
-'''
-${1:${VISUAL:doc}}
+`!p triple_quotes_handle_trailing(snip, "'")`
+${1:${VISUAL}}
 `!p triple_quotes_handle_trailing(snip, "'")`
 endsnippet
 
 snippet doc "doc block (triple quotes)"
 `!p snip.rv = triple_quotes(snip)`
-${1:${VISUAL:doc}}
+${1:${VISUAL}}
 `!p snip.rv = triple_quotes(snip)`
 endsnippet
 
 # Imports:{{{1
 snippet imp "import statement" b
-import ${0:module}
+import ${0:${VISUAL}}
 endsnippet
 
 snippet from "from package import module" b
 from ${1:package} import ${0:module}
 endsnippet
 
-snippet ipy "Embed ipython into your application." b
-from IPython import embed; embed()
+snippet ipy "Generic IPython import" bs
+from IPython import ${1:${VISUAL}} $0
 endsnippet
 
-snippet pprint "Import and use pprint" b
-from pprint import pprint; pprint($1)
+snippet ipyemb "Embed IPython into your application." bs
+from IPython import ${1:embed; embed()} $0
+endsnippet
+
+snippet pp "Import and use pprint" bsw
+from pprint import ${1:pprint}
+
+pprint($1)
 endsnippet
 
 snippet pdb "Import and use pdb" b
@@ -156,27 +161,27 @@ if __name__ == '__main__':
 endsnippet
 
 # Use our ifmain block to shield against stray global vars
-snippet ifmain "ifmain. optionally adds in function call to argparser" b
+snippet ifmain "ifmain. optionally adds in function call to argparser" bs
 if __name__ == `!p snip.rv = get_quoting_style(snip)`__main__`!p snip.rv = get_quoting_style(snip)`:
 	${1:${VISUAL:main()}}
 endsnippet
 
 # Commonly used modules:{{{1
-snippet timestamp "Produce a timestamp"
-datetime.date.isoformat(datetime.datetime.now())
+snippet timestamp "Produce a timestamp" s
+datetime.date.isoformat(${1:${VISUAL:datetime.datetime.now()}}) $0
 endsnippet
 
-snippet dirname "Find the directory the script is in"
-os.path.dirname(os.path.realpath(__file__))
+snippet dirname "Find the directory the script is in" s
+os.path.dirname(os.path.realpath(${1:${VISUAL:__file__}})) $0
 endsnippet
 
 
-snippet home "Why isn't there a better way." b
+snippet home "Why isn't there a better way." s
 home = os.path.expanduser("~")
 endsnippet
 
 snippet pr "Print something"
-print("${0:var}")
+print("${0:${VISUAL:var}}")
 endsnippet
 
 # Loops:{{{1
@@ -190,7 +195,7 @@ endsnippet
 # However I don't know what that says so let's simplify
 # Let's also build this snippet around my most frequent use case
 # requests.get()
-snippet with "simpler context manager" b
+snippet with "simpler context manager" bws
 with ${1:open} ${2:filename}, ${3:'xt'} as ${4:f}:
 	${0:f.write(res.text)}
 endsnippet
@@ -205,11 +210,12 @@ for ${1:item} in ${2:iterable}:
 	${3:${VISUAL:pass}}
 endsnippet
 
-snippet from "from package import module" b
-	from ${1:package} import ${0:module}
+snippet from "from package import module" sw
+from ${1:{$VISUAL:package}} import ${0:module}
 endsnippet
 
-# if/elif/else:{{{2
+# if/elif/else: {{{2
+
 snippet if "If" b
 if ${1:condition}:
 	${2:${VISUAL:pass}}
@@ -289,25 +295,18 @@ def _parse_arguments():
 	$0
 endsnippet
 
-# The following is a snippet to determine the type of an object.
-# Admittedly this is better suited for a REPL than vim but *shrugs*
-snippet type "Wrap a statement with a type clause"
-type(${VISUAL:1})
-endsnippet
-
-snippet argstrpos "Argparse positional argument for a string type." b
-	parser.add_argument( ${VISUAL:var}, type=${1:str}, help=${2:Feed me input.})
-
+snippet argstrpos "Argparse positional argument for a string type." bs
+parser.add_argument(${1:${VISUAL}}, type=${1:str}, help=${2:Feed me input.})
 endsnippet
 
 snippet argpath "Add a pathlike object" b
-	parser.add_argument(${1:-s}, ${2:--long}, dest= ${3: var},
-						type=${4:pathlib.Path}, help=${5:RTFM})
+parser.add_argument(${1:-s}, ${2:--long}, dest= ${3: var},
+					type=${4:pathlib.Path}, help=${5:RTFM})
 endsnippet
 
 snippet argpv "argument for version = %(prog)s" b
-	parser.add_argument('--version', action = 'version',
-			version = '%(prog)s 1.0')
+parser.add_argument('--version', action = 'version',
+		version = '%(prog)s 1.0')
 endsnippet
 
 snippet argp "snip that needs to be fixed" bst
@@ -473,7 +472,7 @@ endsnippet
 # A lot of these could easily be broken up into a lot more sections and there
 # would be no damage done
 
-snippet class "class with docstrings" b
+snippet class "class with docstrings" sw
 class ${1:MyClass}(${2:object}):
 
 	`!p snip.rv = triple_quotes(snip)`${3:Docstring for $1. }`!p snip.rv = triple_quotes(snip)`
@@ -496,7 +495,7 @@ write_init_body(args, t[2], snip)
 endsnippet
 
 
-snippet slotclass "class with slots and docstrings" b
+snippet slotclass "class with slots and docstrings" sw
 class ${1:MyClass}(${2:object}):
 
 	`!p snip.rv = triple_quotes(snip)`${3:Docstring for $1. }`!p snip.rv = triple_quotes(snip)`
@@ -560,60 +559,60 @@ endsnippet
 # These dunder methods are good for customized classes but what happens when
 # we need to make the function call?
 snippet attr "methods for customizing attribute access" b
-def __getattr__(self, name):
+def __getattr__(self, ${0}):
 	${1:pass}
 
-def __setattr__(self, name, value):
+def __setattr__(self, ${0}, value):
 	${2:pass}
 
-def __delattr__(self, name):
+def __delattr__(self, ${0}):
 	${3:pass}
 endsnippet
 
-snippet getattr "Get an attribute"
-getattr(${1:object}, ${2,attr})
+snippet getattr "Get an attribute" sw
+getattr(${1:object}, ${2:attr})
 endsnippet
 
-snippet setattr "Set an attribute"
-setattr(${1:object}, ${2,attr}, ${3:value})
+snippet setattr "Set an attribute" sw
+setattr(${1:object}, ${2:attr}, ${3:value})
 endsnippet
 
-snippet hasattr "Show existence of an attribute"
-hasattr(${1:object}, ${2,attr})
+snippet hasattr "Show existence of an attribute" sw
+hasattr(${1:object}, ${2:attr})
 endsnippet
 
 snippet desc "methods implementing descriptors" b
-def __get__(self, instance, owner):
+def __get__(self, ${4}, owner):
 	${1:pass}
 
-def __set__(self, instance, value):
+def __set__(self, ${4}, value):
 	${2:pass}
 
-def __delete__(self, instance):
+def __delete__(self, ${4}):
 	${3:pass}
 endsnippet
 
 
 snippet cmp "methods implementing rich comparison"
-def __eq__(self, other):
+def __eq__(self, ${0}):
 	${1:pass}
 
-def __ne__(self, other):
+def __ne__(self, ${0}):
 	${2:pass}
 
-def __lt__(self, other):
+def __lt__(self, ${0}):
 	${3:pass}
 
-def __le__(self, other):
+def __le__(self, ${0}):
 	${4:pass}
 
-def __gt__(self, other):
+def __gt__(self, ${0}):
 	${5:pass}
 
-def __ge__(self, other):
+def __ge__(self, ${0}):
 	${6:pass}
 
-def __cmp__(self, other):
+def __cmp__(self, ${0}):
 	${7:pass}
 endsnippet
 
@@ -786,9 +785,8 @@ snippet ann "Assert is not None" b
 self.assertIsNotNone(${1:${VISUAL:expression}})
 endsnippet
 
-snippet testcase "pyunit testcase" b
-class Test${1:Class}(${2:unittest.TestCase}):
-
+snippet test "pyunit testcase" b
+class Test${1:ModName}(${2:unittest.TestCase}):
 	`!p snip.rv = triple_quotes(snip)`${3:Test case docstring.}`!p snip.rv = triple_quotes(snip)`
 
 	def setUp(self):
@@ -798,15 +796,15 @@ class Test${1:Class}(${2:unittest.TestCase}):
 		${5:pass}
 
 	def test_${6:name}(self):
+		`!p snip.rv = triple_quotes(snip)`${8:Test mod docstring.}`!p snip.rv = triple_quotes(snip)`
 		${7:${VISUAL:pass}}
 endsnippet
 
 
 # Return Snippets: {{{1
+
 # Found in the help docs. Say you forget to write return? Use this and you can
 # add it after the fact!!
 snippet "([^\s].*)\.return" "Return (postfix)" r
 return `!p snip.rv = match.group(1)`$0
 endsnippet
-
-# vim:ft=snippets:

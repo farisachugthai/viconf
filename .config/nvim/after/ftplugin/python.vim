@@ -24,6 +24,10 @@ setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 setlocal colorcolumn=80,120
 " Dude the columns line was destroying nvim's redraw when you split tmux panes
 
+" This is QUITE the mapping. Let's see I guess.
+" 
+imap <silent> <expr> <buffer> <CR> pumvisible() ? "<CR><C-R>=(col('.')-1&&match(getline(line('.')), '\\.', \ col('.')-2) == col('.')-2)?\"\<lt>C-X>\<lt>C-O>\":\"\"<CR>" \ : "<CR>" 
+
 " Autocommands: {{{1
 " Highlight characters after 120 chars
 augroup vimrc_autocmds

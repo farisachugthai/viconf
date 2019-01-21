@@ -50,15 +50,12 @@ Gotta admit that's a lot smarter than what I'd come up with.
 Now here are some functions that don't work.
 
 " Environment: {{{ 2
-" Let's setup all the global vars we need. Will utilize to ensure consistency
 
 ```vim
 let s:termux = exists('$PREFIX') && has('unix')
 let s:ubuntu = !exists('$PREFIX') && has('unix')
 let s:windows = has('win32') || has('win64')
 
-" So what I think my problem was is that I have these variables but there's
-" no point at which they're initialized. Let's write a few funcs
 " function! is#termux() abort
 "     return s:termux
 " endfunction
@@ -71,21 +68,6 @@ let s:windows = has('win32') || has('win64')
 "     return s:windows
 " endfunction
 ```
-
-Dec 01, 2018: This doesn't work either
-
-```vim
-" let s:winrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/winrc'
-" if call(is#windows)         " doubt this is the right syntax but we're getting close
-"     if filereadable(s:winrc)
-"         exe 'so' s:winrc
-"     endif
-" endif
-```
-
-Just pulled this off of the vimrc. The one above is init.vim.
-Both from laptop branch not termux. Amazingly there's different
-attempts over there too.
 
 
 ```vim
@@ -194,9 +176,21 @@ let g:neosnippet#enable_snipmate_compatibility = 1
 
 Honestly keep this around because airline is pretty heavy on termux.
 
-BTW do the code blocks need viml or VimScript after the tick marks?
+TODO: What I need to do is write a function that works as a guard for plugins.
 
-```viml
+```vim
+if !haskey('plugs', 'lightline')
+    break
+elseif loaded_lightline
+    break
+else
+    let g:loaded_lightline = 1
+```
+
+Then just pad every plugin file you have like [FZF](./after/plugin/fzf.vim)
+with one of those and you'll be set.
+
+```vim
 " Lightline: {{{
 let g:lightline = {
     \ 'active': {
@@ -222,50 +216,4 @@ let g:lightline = {
 
 " let g:lightline.colorscheme = 'seoul256'
 " }}}
-```
-
-### FZF
-
-Dropping this because FZF.vim now comes with :R and :Rg but if you wanna
-modify anything in the future here's the original code I had
-
-```vim
-" **TODO**: Commented out because E183: User defined commands must start with an uppercase letter:::
-" :ag  - start fzf with hidden preview window that can be enabled with '?' key
-" :ag! - start fzf in fullscreen and display the preview window above
-" command! -bang -nargs=* ag
-"     \ call fzf#vim#ag(<q-args>,
-"     \ <bang>0 ? fzf#vim#with_preview('up:60%')
-"     \ : fzf#vim#with_preview('right:50%:hidden', '?'),
-"     \ <bang>0)
-
-" " similarly, we can apply it to fzf#vim#grep. to use ripgrep instead of ag:
-" command! -bang -nargs=* rg
-"     \ call fzf#vim#grep(
-"     \ 'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
-"     \ <bang>0 ? fzf#vim#with_preview('up:60%')
-"     \ : fzf#vim#with_preview('right:50%:hidden', '?'),
-"     \ <bang>0)
-
-" " likewise, files command with preview window
-" command! -bang -nargs=? -complete=dir files
-"     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
-```
-
-### NerdCom
-
-TODO: Use :Glog to recover your old nerdcom code. Better do it soon if you're
-thinking about ever being able to use it again!
-
-" **UNTESTED**:
-
-" just a thought i had. For any normal mode remaps you have, add the same
-" thing and prefix <Esc> to the RHS and boom!
-
-```vim
-if has('b:Tagbar')  " or any plugin
-    let g:tagbar_sort=0
-    inoremap <F3> <esc>:TagbarToggle<CR>
-    nnoremap <F3> :TagbarToggle<CR>
-endif
 ```

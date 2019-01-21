@@ -6,6 +6,7 @@ BufRead
 BufWritePost
 CLA
 CTRL
+CentOS
 Chainmap
 Chugthai
 ColorColumn
@@ -63,6 +64,7 @@ Kleopatra
 Kubernetes
 Lightline
 Linter
+Losh's
 MOTW
 NERDTree
 NerdCom
@@ -84,6 +86,7 @@ Quickstart
 README
 REPL
 RET
+RHEL
 Reitz
 Rewatched
 SCM
@@ -113,9 +116,11 @@ Uninstallation
 VIMRUNTIME
 VimL
 VimScript
+Vimcasts
 Viminfo
 Vimrc
 Vimwiki's
+Voom
 Vundle
 Win10
 Win32
@@ -236,6 +241,7 @@ django
 dockerfile
 docstring
 docstrings
+doctests
 docutils
 dont/!
 dosbatch
@@ -287,6 +293,7 @@ fullscreen
 funcional/!
 function
 fzf
+gbt
 gcc
 gcloud
 gdrive
@@ -354,6 +361,7 @@ jinja
 jpeg
 js
 json
+junegunn
 jupyter
 kanban
 kate
@@ -489,16 +497,19 @@ pushd
 py
 py3
 pycon
+pydocstyle
 pygmentize
 pynvim
 pypy
 pyrex
 python3
+pyutil
 qml
 quickfix
 quoteplus
 rb
 rclone
+reStructured
 readline
 readlines
 readme
@@ -566,6 +577,7 @@ sshpass
 stackoverflow
 startify
 statusline
+statuslines
 stderr
 stdlib
 stdout
@@ -586,6 +598,7 @@ tcp
 tcpdump
 tcsh
 tearDown
+tempfile
 termcap
 terminfo
 termux
@@ -616,6 +629,7 @@ uncommit
 unencrypted
 uninstall
 unittest
+unittests
 unix
 unordered
 unpushed
@@ -687,5 +701,8 @@ zcat
 zenburn
 zim
 zsh
-CentOS
-RHEL
+fnmatch
+Keycode
+Keymappings
+keycodes
+QuickStart

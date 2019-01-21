@@ -1,8 +1,15 @@
 # Git Attributes
 # From man 5 gitattributes line 551:
 
-#  The system knows a built-in macro attribute, binary:
+# The system knows a built-in macro attribute, binary:
+# Setting the "binary" attribute also unsets the "text" and "diff" attributes as above.
 
+# And under 'Defining Macro Attributes':
+#  The built-in macro attribute "binary" is equivalent to:
+# [attr]binary -diff -merge -text
 *.spl binary
 
 text=auto
+
+*.jpg binary
+*.png binary

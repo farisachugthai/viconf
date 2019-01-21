@@ -1,5 +1,6 @@
 " Init:
 " Neovim Configuration:
+" Vim: set foldlevel=0:
 
 " About: {{{1
 let g:snips_author = 'Faris Chugthai'
@@ -58,7 +59,7 @@ Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
 Plug 'Rykka/InstantRst'
 Plug 'gu-fan/riv.vim'
-Plug 'jakykong/vim-zim', {'for': 'zimwiki'}
+Plug 'jakykong/vim-zim'
 Plug 'HerringtonDarkholme/yats.vim', {'for': ['jsx', 'tsx']}
 Plug 'mhartington/nvim-typescript', {'do': './install.sh', 'for': ['jsx', 'tsx']}
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
@@ -78,44 +79,53 @@ if has('nvim')
 endif
 
 " Python Executables: {{{1
-" Why is the below returning 0???
-" if has('python3')
 
-    " if we have a virtual env start there
-    if exists('$VIRTUAL_ENV')
-        let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
+" if we have a virtual env start there
+if exists('$VIRTUAL_ENV')
+    let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
 
-    " or a conda env.
-    elseif exists('$CONDA_PYTHON_EXE')
-        let g:python3_host_prog = $CONDA_PYTHON_EXE
+" or a conda env.
+elseif exists('$CONDA_PYTHON_EXE')
+    let g:python3_host_prog = $CONDA_PYTHON_EXE
 
-    " otherwise break up termux and linux
-    elseif exists('$PREFIX')
+" otherwise break up termux and linux
+elseif exists('$PREFIX')
 
-        " and just use the system python
-    let g:python3_host_prog = expand('$PREFIX/bin/python')
+    " and just use the system python
+    if executable(expand('$PREFIX/bin/python'))
+        let g:python3_host_prog = expand('$PREFIX/bin/python')
+    endif
 
-    elseif expand('$OS') ==# 'Windows_NT'       " no reason to split this loop based on that as a first check yet
+elseif expand('$OS') ==# 'Windows_NT'
     " shouldve gotten caught by conda env var right?
-        let g:python3_host_prog = expand('~/Miniconda3/python.exe')
+    let g:python3_host_prog = expand('~/Miniconda3/python.exe')
 
-    else
-        if executable('/usr/bin/python3')
-            let g:python3_host_prog = '/usr/bin/python3'
-            if executable('/usr/bin/python2')       " why not
-                let g:python_host_prog = '/usr/bin/python2'
-            endif
+else
+    if executable('/usr/bin/python3')
+        let g:python3_host_prog = '/usr/bin/python3'
+
+        if executable('/usr/bin/python2')       " why not
+            let g:python_host_prog = '/usr/bin/python2'
         endif
     endif
-"endif
+endif
 
+" OS Setup: {{{1
+
+let s:termux = exists('$PREFIX') && has('unix')
+let s:ubuntu = !exists('$PREFIX') && has('unix')
+let s:windows = has('win32') || has('win64')
+
+let s:winrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/winrc'
+if s:windows && filereadable(s:winrc)
+    source s:winrc
+endif
 " Global Options: {{{1
 
 " Leader_Viminfo: {{{2
-let g:mapleader = "\<Space>"
+let g:mapleader = '\<Space>'
 let g:maplocalleader = ','
 
-" Forgot that nvim won't correctly use this option
 if !has('nvim')
     set viminfo='100,<200,s200,n$HOME/.vim/viminfo
 endif
@@ -151,6 +161,7 @@ set hidden
 set splitbelow splitright
 
 " Spell Checker: {{{2
+
 set encoding=UTF-8                       " Set default encoding
 scriptencoding UTF-8                     " Vint believes encoding should be done first
 set fileencoding=UTF-8
@@ -180,6 +191,10 @@ if filereadable('/usr/share/dict/words')
     inoremap <expr> <c-x><c-k> fzf#vim#complete('cat /usr/share/dict/words')
 endif
 
+if filereadable('/usr/share/dict/american-english')
+    setlocal dictionary+=/usr/share/dict/american-english
+endif
+
 if filereadable('$HOME/.config/nvim/spell/en.hun.spl')
     set spelllang+=$HOME/.config/nvim/spell/en.hun.spl
 endif
@@ -197,21 +212,19 @@ endif
 
 set pastetoggle=<F7>
 
-if has('nvim')
-    if exists('$TMUX')
-        let g:clipboard = {
-            \   'name': 'myClipboard',
-            \   'copy': {
-            \      '+': 'tmux load-buffer -',
-            \      '*': 'tmux load-buffer -',
-            \    },
-            \   'paste': {
-            \      '+': 'tmux save-buffer -',
-            \      '*': 'tmux save-buffer -',
-            \   },
-            \   'cache_enabled': 1,
-            \ }
-    endif
+if exists('$TMUX')
+    let g:clipboard = {
+        \   'name': 'myClipboard',
+        \   'copy': {
+        \      '+': 'tmux load-buffer -',
+        \      '*': 'tmux load-buffer -',
+        \    },
+        \   'paste': {
+        \      '+': 'tmux save-buffer -',
+        \      '*': 'tmux save-buffer -',
+        \   },
+        \   'cache_enabled': 1,
+        \ }
 endif
 
 " Autocompletion: {{{2
@@ -228,8 +241,6 @@ try
 catch
 endtry
 
-" FOOBAR=~/<CTRL-><CTRL-F> will now autocomplete!
-set isfname-==
 " Other Global Options: {{{2
 set tags+=./tags,./../tags,./*/tags     " usr_29
 set tags+=~/projects/tags               " consider generating a few large tag
@@ -244,6 +255,8 @@ set showmatch
 set ignorecase smartcase
 set infercase
 set autoindent smartindent              " :he options: set with smartindent
+" FOOBAR=~/<CTRL-><CTRL-F> will now autocomplete!
+set isfname-==
 
 if has('gui_running')
     set guifont=Fira\ Code\ weight=450\ 10
@@ -264,7 +277,6 @@ if has('persistent_undo')
     set undofile
 endif
 
-" I love the genius that didn't enable backup though
 set backup
 set backupdir=~/.config/nvim/undodir,/tmp
 set backupext='.bak'        " like wth is that ~ nonsense?
@@ -297,8 +309,8 @@ nnoremap <C-l> <C-w>l
 "
 " Rebind that to C-w t and we can open the filename in a new tab.
 " Navigate tabs more easily
-map <unique> <A-Right> :tabnext<CR>
-map <unique> <A-Left> :tabprev<CR>
+map <A-Right> :tabnext<CR>
+map <A-Left> :tabprev<CR>
 nnoremap <Leader>tn :tabnext<CR>
 nnoremap <Leader>tp :tabprev<CR>
 " Opens a new tab with the current buffer's path
@@ -312,10 +324,6 @@ inoremap <F9> <Esc>:tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 " Now reload it
 nnoremap <Leader>re :so $MYVIMRC<CR>
 
-map <ScrollWheelUp> <C-Y>
-map <S-ScrollWheelUp> <C-U>
-map <ScrollWheelDown> <C-E>
-map <S-ScrollWheelDown> <C-D>
 
 " General_Mappings: {{{2
 
@@ -352,6 +360,12 @@ nnoremap <Leader>cd :cd %:p:h<CR>:pwd<CR>
 " Switch NERDTree root to dir of currently focused window.
 nnoremap <Leader>ncd :NERDTreeCWD
 
+" Utilize the mouse!
+map <ScrollWheelUp> <C-Y>
+map <S-ScrollWheelUp> <C-U>
+map <ScrollWheelDown> <C-E>
+map <S-ScrollWheelDown> <C-D>
+
 " Save a file as root
 noremap <leader>W :w !sudo tee % > /dev/null<CR>
 
@@ -361,15 +375,14 @@ noremap <leader>W :w !sudo tee % > /dev/null<CR>
 " I use this command constantly
 nnoremap <Leader>sn :Snippets<CR>
 
-" Save a file as root
-noremap <leader>W :w !sudo tee % > /dev/null<CR>
 nnoremap <Leader>se :UltiSnipsEdit<CR>
 
 inoremap <F6> <Esc>:UltiSnipsEdit<CR>
 nnoremap <F6> :UltiSnipsEdit<CR>
 
 " Unimpaired: {{{2
-" Note that ]c and [c are mapped by git-gutter and ALE has ]a and [a
+" Note that ]c and [c are mapped by git-gutter
+" ALE has ]a and [a bound to ALEwrap
 nnoremap ]q :cnext<CR>
 nnoremap [q :cprev<CR>
 nnoremap ]Q :cfirst<CR>
@@ -386,7 +399,6 @@ nnoremap ]t :tabn<CR>
 nnoremap [t :tabp<CR>
 nnoremap ]T :tfirst<CR>
 nnoremap [T :tlast<CR>
-" In addition I've mapped ]a and [a for Ale nextwrap.
 
 " Spell Checking: {{{2
 nnoremap <Leader>sp :setlocal spell!<CR>
@@ -413,12 +425,13 @@ nnoremap <A-k> <C-w>k
 nnoremap <A-l> <C-w>l
 
 " ALE: {{{2
-nnoremap <Leader>l <Plug>(ale_toggle_buffer) <CR>
+nnoremap <Leader>l <Plug>(ale_toggle_buffer)<CR>
 nnoremap ]a <Plug>(ale_next_wrap)
 nnoremap [a <Plug>(ale_previous_wrap)
-" TODO: Implement ALEInfoToFile.
-" `:ALEInfoToFile` will write the ALE runtime information to a given filename. The filename works just like |:w|.
-nnoremap <unique> <A-a> <Plug>(ale_detail)
+
+" <Meta-a> now gives detailed messages about what the linters have sent to ALE
+nnoremap <A-a> <Plug>(ale_detail)
+
 " This might be a good idea. * is already 'search for the cword' so let ALE
 " work in a similar manner right?
 nnoremap <Leader>* <Plug>(ale_go_to_reference)
@@ -675,10 +688,34 @@ let g:airline#extensions#tabline#fnametruncate = 1
 let g:riv_python_rst_hl = 1
 
 " Voom: {{{2
+"g:voom_ft_modes" is a Vim dictionary: keys are filetypes (|ft|), values are
+" corresponding markup modes (|voom-markup-modes|). Example:
+    " let g:voom_ft_modes = {'markdown': 'markdown', 'tex': 'latex'}
+" This option allows automatic selection of markup mode according to the filetype
+" of the source buffer. If 'g:voom_ft_modes' is defined as above, and 'filetype'
+" of the current buffer is 'tex', then the command
+    " :Voom
+" is identical to the command
+    " :Voom latex
+
+" g:voom_default_mode" is a string with the name of the default markup mode.
+" For example, if there is this in .vimrc:
+    " let g:voom_default_mode = 'asciidoc'
+" then, the command
+    " :Voom
+" is identical to
+    " :Voom asciidoc
+" unless 'g:voom_ft_modes' is also defined and has an entry for the current
+" filetype.
+
+let g:voom_ft_modes = {'markdown': 'markdown', 'rst': 'rst', 'zimwiki': 'dokuwiki'}
+let g:voom_default_mode = 'rst'
 let g:voom_python_versions = [3]
 
+
+
 " Zim: {{{2
-let g:zim_notebooks_dir = '~/Notebooks.git'
+let g:zim_notebooks_dir = '~/Notebooks'
 
 " Filetype Specific Options: {{{1
 

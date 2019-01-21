@@ -26,6 +26,7 @@ function! s:DetectZimWiki()
     endif
 endfunction
 
-augroup zimwiki
-    autocmd BufRead,BufNewFile *.txt  call s:DetectZimWiki()
+augroup zimwikidetect
+
+	autocmd BufNewFile,BufRead ~/Notebooks/*.txt call s:DetectZimWiki()
 augroup end
