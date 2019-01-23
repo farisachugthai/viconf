@@ -2,8 +2,23 @@
 
 " General: {{{1
 let g:deoplete#enable_smart_case = 1
-set completeopt+=noinsert                    " Autoselect featur
+set completeopt+=noinsert                    " Autoselect feature
+
+" Options: {{{1
 call deoplete#custom#option('max_list', 25)                 " Default is 500 like dude i can't see that
+
+" - range_above = Search for words N lines above.
+" - range_below = Search for words N lines below.
+" - mark_above = Mark shown for words N lines above.
+" - mark_below = Mark shown for words N lines below.
+" - mark_changes = Mark shown for words in the changelist.
+call deoplete#custom#var('around', {
+\   'range_above': 15,
+\   'range_below': 15,
+\   'mark_above': '[↑]',
+\   'mark_below': '[↓]',
+\   'mark_changes': '[*]',
+\})
 
 " Mappings: {{{1
 " Delete 1 char and reload the popup menu
@@ -12,30 +27,16 @@ inoremap <expr><BS> deoplete#smart_close_popup()."\<C-h>"
 
 " On <CR>: close popup and save indent.
 inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+
 function! s:my_cr_function() abort
-  return deoplete#close_popup() . "\<CR>"
+    return deoplete#close_popup()
 endfunction
 
-" Refresh candidates. Are we clobbering anything? What is it usually set to
-" in insert mode.
+" Refresh candidates. Are we clobbering anything? Wth is it set to insert tab???
 inoremap <expr><C-l> deoplete#refresh()
 
 " Undo completion
 inoremap <expr><C-g> deoplete#undo_completion()
-
-" Manually trigger completion.
-" ...but if autocomplete hasn't been turned off is this doing anything?
-" inoremap <silent><expr> <TAB>
-" \ pumvisible() ? "\<C-n>" :
-" \ <SID>check_back_space() ? "\<TAB>" :
-" \ deoplete#mappings#manual_complete()
-
-" function! s:check_back_space() abort
-"     let col = col('.') - 1
-"     return !col || getline('.')[col - 1]  =~? '\s'
-" endfunction
-" Manually trigger completion. Unsure of how it works  now but it just stopped
-" working
 
 " Deoplete Sources: {{{1
 " Disable the candidates in Comment/String syntaxes.
@@ -59,20 +60,13 @@ call deoplete#custom#source( 'file', 'enable_buffer_path', 'True')
 call deoplete#custom#source('UltiSnips', 'rank', '1')
 
 " Logging: {{{1
-
-" Let's start logging stuff about deoplete a little.
+" Let's start logging stuff about deoplete a little
 " Also remember that you can jump to a file with <kbd>gf</kbd>
 " Any way we can make this call silent?
 call deoplete#enable_logging('INFO', expand('~/.local/share/nvim/deoplete.log'))
 
-" Print time information to the log file
+" Enable jedi source debug messages
 call deoplete#custom#option('profile', v:true)
-
+call deoplete#custom#source('jedi', 'is_debug_enabled', 1)
 " UltiSnips randomly acting weird.
 call deoplete#custom#source('ultisnips', 'is_debug_enabled', 1)
-
-" Enable jedi source debug messages
-" Note: You must enable
-"|deoplete-source-attribute-is_debug_enabled| to debug the
-"sources.
-call deoplete#custom#source('jedi', 'is_debug_enabled', 1)

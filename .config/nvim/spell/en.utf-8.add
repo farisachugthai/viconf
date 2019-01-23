@@ -1,3 +1,4 @@
+Atlassian
 Autocompletion
 Awh
 BufEnter
@@ -49,7 +50,9 @@ GitHub
 Gitignore
 Google
 Gruvbox
+HMAC
 Hettinger
+I'll
 I'll
 I'll
 IPython
@@ -60,6 +63,8 @@ Jupyter
 KeePass
 KeePassX
 KeePassXC
+Keycode
+Keymappings
 Kleopatra
 Kubernetes
 Lightline
@@ -82,6 +87,7 @@ PyCon
 Pydoc
 Pygments
 Python3
+QuickStart
 Quickstart
 README
 REPL
@@ -281,6 +287,7 @@ filetypes
 findutils
 fishshell
 flake8
+fnmatch
 fortran
 from
 fsharp
@@ -370,6 +377,7 @@ kde
 kdeconnect
 keepass
 keybindings
+keycodes
 keymap
 keysym
 keysyms
@@ -603,6 +611,8 @@ termcap
 terminfo
 termux
 testcase
+testcase
+tex
 tex
 texting
 tldr
@@ -701,8 +711,3 @@ zcat
 zenburn
 zim
 zsh
-fnmatch
-Keycode
-Keymappings
-keycodes
-QuickStart

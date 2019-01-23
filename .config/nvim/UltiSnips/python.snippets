@@ -1,5 +1,5 @@
 # python.snippets
-# Vim: set foldmethod=marker:
+# Vim: set foldmethod=marker:foldlevelstart=0:foldlevel=0:
 priority 70
 
 extends pandas
@@ -61,7 +61,7 @@ Example:
 
 		${9:$ python exampleofrst.py}
 
-.. ${10:any directives::}
+.. ${10:'any directives::'}
 
 	${11:example text}
 
@@ -163,8 +163,11 @@ endsnippet
 # Use our ifmain block to shield against stray global vars
 snippet ifmain "ifmain. optionally adds in function call to argparser" bs
 if __name__ == `!p snip.rv = get_quoting_style(snip)`__main__`!p snip.rv = get_quoting_style(snip)`:
-	${1:${VISUAL:main()}}
+	${1:${VISUAL:main()}}$0
 endsnippet
+
+# This is one that goes in my ifmain blocks all the time
+snippet args "Copy sys.argv into a variable." w
 
 # Commonly used modules:{{{1
 snippet timestamp "Produce a timestamp" s
@@ -186,6 +189,7 @@ endsnippet
 
 # Loops:{{{1
 
+# TODO
 snippet with "with expr - context manager" b
 with ${1:expr}`!p snip.rv = " as " if t[2] else ""`${2:var}:
 	${3:${VISUAL:pass}}
@@ -195,7 +199,7 @@ endsnippet
 # However I don't know what that says so let's simplify
 # Let's also build this snippet around my most frequent use case
 # requests.get()
-snippet with "simpler context manager" bws
+snippet with "simpler context manager" b
 with ${1:open} ${2:filename}, ${3:'xt'} as ${4:f}:
 	${0:f.write(res.text)}
 endsnippet
@@ -365,35 +369,39 @@ def parse_argument():
 endsnippet
 
 # Comprehensions:{{{1
-snippet lc "List comprehension" b
+
+# All of these has the 'b' option but none these snippets only expand the right
+# hand side of a snippet. Why would they ever be at the beginning of a line??
+
+snippet lc "List comprehension" wsm
 [${1:value} for {2:value} in ${3:iterable}]$0
 endsnippet
 
-snippet lci "List comprehension if. Commonly referred to as a filter" b
+snippet lci "List comprehension if. Commonly referred to as a filter" wsm
 [${1:value} for {2:value} in ${3:iterable} if ${4:condition}]$0
 endsnippet
 
-snippet lcie "List comprehension if" b
+snippet lcie "List comprehension if" wsm
 [${1:value} if ${2:condition} else ${3:condition} for ${4:value} in ${5:iterable}]$0
 endsnippet
 
-snippet dc "Dictionary comprehension base" b
+snippet dc "Dictionary comprehension base" wsm
 {${1:key}: ${2:value} for ${3:key}, ${4:value} in ${5:iterable}}$0
 endsnippet
 
-snippet dci "Dictionary comprehension if filter" b
+snippet dci "Dictionary comprehension if filter" wsm
 {${1:key}: ${2:value} for ${3:key}, ${4:value} in ${5:iterable} if ${6:condition}}$0
 endsnippet
 
-snippet sc "Set comprehension base" b
+snippet sc "Set comprehension base" wsm
 {${1:value} for ${2:value} in ${3:iterable}}$0
 endsnippet
 
-snippet sci "Set comprehension if filter" b
+snippet sci "Set comprehension if filter" wsm
 {${1:value} for ${2:value} in ${3:iterable} if ${4:condition}}$0
 endsnippet
 
-snippet gc "Generator comprehension" b
+snippet gc "Generator comprehension" wsm
 (${1:key} for ${2:value} in ${3:iterable})$0
 endsnippet
 
@@ -402,7 +410,7 @@ endsnippet
 # it builds your snippet almost perfectly. Just fill in the triggerword
 # and the description and you're fucking golden
 
-snippet gci "Generator comprehension if filter" b
+snippet gci "Generator comprehension if filter" wsm
 (${1:key} for ${2:value} in ${3:iterable} if ${4:condition})$0
 endsnippet
 
@@ -472,7 +480,7 @@ endsnippet
 # A lot of these could easily be broken up into a lot more sections and there
 # would be no damage done
 
-snippet class "class with docstrings" sw
+snippet class "class with docstrings" b
 class ${1:MyClass}(${2:object}):
 
 	`!p snip.rv = triple_quotes(snip)`${3:Docstring for $1. }`!p snip.rv = triple_quotes(snip)`
@@ -495,7 +503,7 @@ write_init_body(args, t[2], snip)
 endsnippet
 
 
-snippet slotclass "class with slots and docstrings" sw
+snippet slotclass "class with slots and docstrings" b
 class ${1:MyClass}(${2:object}):
 
 	`!p snip.rv = triple_quotes(snip)`${3:Docstring for $1. }`!p snip.rv = triple_quotes(snip)`
@@ -559,60 +567,60 @@ endsnippet
 # These dunder methods are good for customized classes but what happens when
 # we need to make the function call?
 snippet attr "methods for customizing attribute access" b
-def __getattr__(self, ${0}):
+def __getattr__(self, name):
 	${1:pass}
 
-def __setattr__(self, ${0}, value):
+def __setattr__(self, name, value):
 	${2:pass}
 
-def __delattr__(self, ${0}):
+def __delattr__(self, name):
 	${3:pass}
 endsnippet
 
-snippet getattr "Get an attribute" sw
-getattr(${1:object}, ${2:attr})
+snippet getattr "Get an attribute"
+getattr(${1:object}, ${2,attr})
 endsnippet
 
-snippet setattr "Set an attribute" sw
-setattr(${1:object}, ${2:attr}, ${3:value})
+snippet setattr "Set an attribute"
+setattr(${1:object}, ${2,attr}, ${3:value})
 endsnippet
 
-snippet hasattr "Show existence of an attribute" sw
-hasattr(${1:object}, ${2:attr})
+snippet hasattr "Show existence of an attribute"
+hasattr(${1:object}, ${2,attr})
 endsnippet
 
 snippet desc "methods implementing descriptors" b
-def __get__(self, ${4}, owner):
+def __get__(self, instance, owner):
 	${1:pass}
 
-def __set__(self, ${4}, value):
+def __set__(self, instance, value):
 	${2:pass}
 
-def __delete__(self, ${4}):
+def __delete__(self, instance):
 	${3:pass}
 endsnippet
 
 
 snippet cmp "methods implementing rich comparison"
-def __eq__(self, ${0}):
+def __eq__(self, other):
 	${1:pass}
 
-def __ne__(self, ${0}):
+def __ne__(self, other):
 	${2:pass}
 
-def __lt__(self, ${0}):
+def __lt__(self, other):
 	${3:pass}
 
-def __le__(self, ${0}):
+def __le__(self, other):
 	${4:pass}
 
-def __gt__(self, ${0}):
+def __gt__(self, other):
 	${5:pass}
 
-def __ge__(self, ${0}):
+def __ge__(self, other):
 	${6:pass}
 
-def __cmp__(self, ${0}):
+def __cmp__(self, other):
 	${7:pass}
 endsnippet
 
@@ -785,8 +793,8 @@ snippet ann "Assert is not None" b
 self.assertIsNotNone(${1:${VISUAL:expression}})
 endsnippet
 
-snippet test "pyunit testcase" b
-class Test${1:ModName}(${2:unittest.TestCase}):
+snippet testcase "pyunit testcase" b
+class Test${1:Class}(${2:unittest.TestCase}):
 	`!p snip.rv = triple_quotes(snip)`${3:Test case docstring.}`!p snip.rv = triple_quotes(snip)`
 
 	def setUp(self):
@@ -805,6 +813,21 @@ endsnippet
 
 # Found in the help docs. Say you forget to write return? Use this and you can
 # add it after the fact!!
+
+# Here's an example:
+# value.return<tab> ->
+# return value
+
 snippet "([^\s].*)\.return" "Return (postfix)" r
 return `!p snip.rv = match.group(1)`$0
+endsnippet
+
+# Somehow missed this one too! On lines 1012 of UltiSnips.txt
+# Can you use that in a sentence please?
+
+# something.par<tab> ->
+# (something)
+
+snippet "(\w+).par" "Parenthesis (postfix)" r
+(`!p snip.rv = match.group(1)`$1)$0
 endsnippet
