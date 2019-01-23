@@ -1,0 +1,1 @@
+../../../.config/nvim/after/plugin/airline.vim

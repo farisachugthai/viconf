@@ -2,17 +2,20 @@
 #                         # Markdown Snippets                         #
 #######################################################################
 
-# TODO: Refactor the python out. Fix indentation. Change ${1:foo} to ${0:${VISUAL:foo}}
+# TODO: A nice to have would be a way to take a VISUAL highlight, and change it so that it was the
+# URL section of a [text](url) snippet.
 
 extends html
 
-################
-#  # Personal  #
-################
+# UltiSnips
+# ============
 
-# TODO: Make a python function. Visual var should be snip.fn
+global !p
+from markdown_table import *
+endglobal
+
 snippet cheat "Cheatsheet template"
-# `!p snip.fn`
+# `!p snip.rv = snip.fn`
 
 ${2:## personal}
 
@@ -26,32 +29,10 @@ ${6:## man}
 $0
 endsnippet
 
-# SnipMate
-# -----------
-
-snippet ```
-	\`\`\`${1}
-	${0:${VISUAL}}
-	\`\`\`
-endsnippet
-
-# Language.
-snippet ```l
-	\`\`\`${1:language}
-	${2:code}
-	\`\`\`
-endsnippet
-
-snippet **
-	**${1:bold}**
-endsnippet
-
-snippet __
-	__${1:bold}__
-endsnippet
-
-snippet <
-	<https://${1:url}>
+snippet ``` "Code block with optional text for languge." sm
+\`\`\`${1:python}
+${0:${VISUAL}}
+\`\`\`
 endsnippet
 
 # wait do these work?
@@ -78,57 +59,32 @@ endsnippet
 # snippet youtube
 # 	{% youtube ${0:video_id} %}
 
-# UltiSnips
-# ============
-
-global !p
-def create_table(snip):
-    # retrieving single line from current string and treat it like tabstops count
-    placeholders_string = snip.buffer[snip.line].strip()[2:].split("x",1)
-    rows_amount = int(placeholders_string[0])
-    columns_amount = int(placeholders_string[1])
-
-    # erase current line
-    snip.buffer[snip.line] = ''
-
-    # create anonymous snippet with expected content and number of tabstops
-    anon_snippet_title = ' | '.join(['$' + str(col) for col in range(1,columns_amount+1)]) + "\n"
-    anon_snippet_delimiter = ':-|' * (columns_amount-1) + ":-\n"
-    anon_snippet_body = ""
-    for row in range(1,rows_amount+1):
-        anon_snippet_body += ' | '.join(['$' + str(row*columns_amount+col) for col in range(1,columns_amount+1)]) + "\n"
-    anon_snippet_table = anon_snippet_title + anon_snippet_delimiter + anon_snippet_body
-
-    # expand anonymous snippet
-    snip.expand_anon(anon_snippet_table)
-endglobal
-
 ###########################
 # Sections and Paragraphs #
 ###########################
 
-snippet h1 "ATX Section" b
-# ${1:Section Name} #
+snippet h1 "ATX Section" sw
+# ${0:${VISUAL:Section Name}}
 endsnippet
 
-snippet h2 "ATX Sub Section" b
-## ${1:Section Name} ##
+snippet h2 "ATX Sub Section" sw
+## ${0:${VISUAL:Section Name}}
 endsnippet
 
-snippet h3 "ATX SubSub Section" b
-### ${1:Section Name} ###
+snippet h3 "ATX SubSub Section" sw
+### ${0:${VISUAL:Section Name}}
 endsnippet
 
-snippet h4 "ATX h4: Paragraph" b
-#### ${1:Paragraph Name} ####
+snippet h4 "ATX h4: Paragraph" sw
+#### ${0:${VISUAL:Paragraph Name}}
 endsnippet
 
-snippet h5 "ATX h5: paragraph" b
-##### ${1:Paragraph Name} #####
+snippet h5 "ATX h5: paragraph" sw
+##### ${0:${VISUAL:Paragraph Name}}
 endsnippet
 
-snippet h6 "ATX h6: paragraph" b
-###### ${1:Paragraph Name} ######
+snippet h6 "ATX h6: paragraph" sw
+###### ${0:${VISUAL:Paragraph Name}}
 endsnippet
 
 ###################
@@ -136,31 +92,31 @@ endsnippet
 ###################
 
 snippet * "italics"
-*${1:${VISUAL}}*
+*${0:${VISUAL}}*
 endsnippet
 
 snippet italics "italics"
-*${1:${VISUAL}}*
+*${0:${VISUAL}}*
 endsnippet
 
 snippet _ "italics"
-_${1:${VISUAL}}_$0
+_${0:${VISUAL}}_
 endsnippet
 
-snippet ** "bold"
-**${1:${VISUAL}}**
+snippet ** "Bold text"
+**${0:${VISUAL}}**
 endsnippet
 
 snippet bold "bold"
-**${1:${VISUAL}}**
+**${0:${VISUAL}}**
 endsnippet
 
-snippet __ "bold"
-__${1:${VISUAL}}__$0
+snippet __ "Bold text"
+__${0:${VISUAL}}__
 endsnippet
 
 snippet *** "bold italics"
-***${1:${VISUAL}}***$0
+***${1:${VISUAL}}***
 endsnippet
 
 snippet bolditalics "bold italics"
@@ -185,10 +141,8 @@ snippet < "Links"
 <${1:https://${VISUAL:2}}>
 endsnippet
 
-# Here's the markdown "spec":
-# https://daringfireball.net/projects/markdown/syntax#link
-snippet link "A link"
-[${1:displayedtext}](${2:URL})
+snippet path "Filepath link with VISUAL placeholder" s
+[${VISUAL}](${VISUAL})
 endsnippet
 
 snippet linktitle "Inline link with a title" bs
@@ -196,7 +150,15 @@ snippet linktitle "Inline link with a title" bs
 endsnippet
 
 snippet rel "Relative path in a link. Can be used to link to a file in a repo" w
-[${1:text}](${2:URL${VISUAL}}) $0
+[${1:text}](${2:${VISUAL:url}}) $0
+endsnippet
+
+snippet a "a href="
+<a href="${1:http://www.${2:example.com}}"</a>
+endsnippet
+
+snippet id "a id="
+<a id="#${1:${VISUAL:header}}"</a>
 endsnippet
 
 ################
@@ -217,23 +179,24 @@ snippet imgGH "Embed an image using GitHub flavored Markdown."
 $0
 endsnippet
 
-snippet ilc "Inline Code" i
-\`${VISUAL:1}\` $0
+snippet ilc "Inline Code" smw
+\`${0:${VISUAL:code}}\`
 endsnippet
 
-snippet code "Codeblock" b
-\`\`\`
-$1
+snippet code "Codeblock" smw
+\`\`\`${1:language}
+${2:${VISUAL}}
 \`\`\`
 $0
 endsnippet
+
 snippet backtick "Inline code" i
-\`${VISUAL:1}\`
+\`{$0:${VISUAL:code}}\`
 endsnippet
 
 snippet fenced "Codeblock" b
-\`\`\`
-${VISUAL:1}
+\`\`\`${2:language}
+{$1:${VISUAL:code}}
 \`\`\`
 endsnippet
 

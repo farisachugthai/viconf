@@ -1,0 +1,1 @@
+../../../.config/nvim/after/compiler/rst.vim

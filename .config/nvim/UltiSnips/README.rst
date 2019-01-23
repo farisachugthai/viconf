@@ -161,11 +161,104 @@ it is bound to delete a fairly large amount of text in normal mode.
 
 Be careful of that, and possibly disable it by remapping it to <nop>.
 
+Programmatic Editing
+--------------------
+
+Vim's Search and Replace
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Frequently I ran into the problem of snippets having the 'b' option
+unnecessarily and sometimes to a detrimental effect.
+
+As a result, I determined that a relatively quick way to fix those options was
+to utilize Vim's built in "search and replace" functions.
+
+First, one must visually select the snippets of interest.
+Pressing <kbd>Shift</kbd><kbd>v</kbd> and then using <kbd>j</kbd><kbd>k</kbd>
+as necessary will suffice.
+
+
+.. code:: vim
+   '<,'>s/ b$/sw/gc
+
+The command above limits the search to the visually selected area as indicated by
+'<,'>. `s` is the search command. Then we move to the text to find.
+
+/<Space>b$
+
+This indicates that if there is one preceding whitespace, the letter b, and an end of line character, find it and delete it.
+
+/sw
+
+Replace the text with sw. You may choose any option you find useful.
+
+/gc
+
+`g` simply indicates to Vim to replace all instances of `<Space>b$`. It's not
+necessary here; however, it's a good habit to get into.
+
+`c` means "require confirmation. Once again, not necessary but a good habit to get into.
+
+UltiSnips Patterns
+~~~~~~~~~~~~~~~~~~
+
+One of the more useful idioms I've stumbled upon is the snippet
+
+.. code:: vim
+
+   snippet foo
+   ${0:{$VISUAL:placeholder text}}
+   endsnippet
+
+This allows one to either select text in visual mode and then expand the
+snippet, or simply expand the snippet and fill in the tabstop.
+
+If the placeholder text is sufficiently helpful, then this'll greatly
+aide any writing one is doing.
+
+The following 2 commands allow for quick substitutions in order to
+more closely resemble the desired snippets.
+
+.. code:: vim
+
+   :'<,'>s/${1/${0:${VISUAL/
+   :'<,'>s/}$/}}/
+
+Roadmap
+-------
+
+That feels a lot nicer than **THE WALL OF TODOS** doesn't it?
+
+In the file `python.snippets`_, the last snippet is a postfix.
+
+Here's an example snippet for you to hack away at.
+
+.. code::
+
+   if:
+      # pre-expand
+      var.if<Tab>
+
+      # post-expand
+      if(var):
+
+So if you get to the end of the expression, then insert
+
+.. code:: html
+
+   :kbd:.if:kbd:<Tab>
+
+.. I'm only trying the :kbd: directive one time right there before changing all
+   of them.
+
+It'll expand to a regular if statement. You could make similar expressions with
+`ifn` and `ifnn` expanding to ``if var is None`` or ``if var is not None``.
+
 Configuration
 ----------------
 
 After configuring ``g:UltiSnipsDirs`` and ``g:UltiSnipsDirectories``
-as you would like, using the UltiSnipsEdit command should open the folder that
+as you would like, using the ``UltiSnipsEdit`` command should open the folder that
 your snippets are housed in.
 
 From @SirVer himself.
@@ -183,7 +276,4 @@ two projects:
 UltiSnips has seen contributions by many individuals. Those contributions have
 been merged into this collection seamlessly and without further comments.
 
-
-.. _fae65af0: fae65af0eb834af7201bc928a662e768ed3cfdb8
 .. _`https://www.github.com/junegunn/fzf.vim`: https://www.github.com/junegunn/fzf.vim
--- vim:ft=rst:nospell:
