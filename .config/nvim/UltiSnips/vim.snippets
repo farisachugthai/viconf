@@ -4,7 +4,7 @@
 # Personal snippets
 
 snippet path "Refer to a file in the same dir as the script."
-${${1:'let s:local_vimrc' = }}fnamemodify(resolve(expand('<sfile>')), ':p:h').'${VISUAL:0}'
+${1:'let ${2:${VISUAL:s:local_vimrc}}' = }}fnamemodify(resolve(expand('${3:<sfile>}')), '${4::p:h}')
 endsnippet
 
 snippet gvar "Global / configuration variable" b
@@ -13,12 +13,18 @@ if !exists('g:${1:MyUltraImportantVar}')
 endif
 endsnippet
 
-snippet guard "script reload guard" b
+snippet guard "Script reload guard. Good to put directly under the header snippet." b
 if exists('${1:did_`!p snip.rv = snip.fn.replace('.','_')`}') || ${2:&cp} || ${3:v:version < 700}
 	finish
 endif
 let $1 = ${4:1}
 endsnippet
+
+snippet plugin "Plugin reload guard. Newly minted so be observant of bugs." s
+if !has_key(plugs, ${1:${VISUAL}`!p snip.rv = snip.fn.replace('.', '_')`})
+	finish 
+endif
+endsnippet 
 
 # I feel like this is implemented wrong.
 snippet cpo "compatability options"
@@ -31,7 +37,7 @@ endsnippet
 
 snippet function "function with simple tabstops" b
 function! ${1:function_name}($2) abort
-	${3:"code"}
+	${3:'code'}
 endfunction
 $0
 endsnippet
@@ -41,17 +47,15 @@ snippet header "standard Vim script file header"
 " ============================================================================
 	" File: ${1:`!v expand('%:t')`}
 	" Author: ${2:`!v g:snips_author`}
-	" Description: ${3:"A description of the file below"}
+	" Description: ${3:A description of the file below'}
 	${0:" Last Modified: `!v strftime("%B %d, %Y")`}
 " ============================================================================
 endsnippet
 
-# how do I put a line at the end of a doc? the let statement can stay there
-# but it would be nice
-snippet ft "Ftplugin guard" b
-if version < 600
+snippet ft "Ftplugin guard" bs
+if v:version < 600
 	syntax clear
-elseif exists(${1:"b:current_syntax"})
+elseif exists(${1:'b:current_syntax'})
 	finish
 endif
 $0
@@ -60,7 +64,7 @@ endsnippet
 snippet syn "Syntax file guard" b
 if version < 600
 	syntax clear
-elseif exists(${1:"b:current_syntax"})
+elseif exists(${1:'b:current_syntax'})
 	finish
 endif
 
@@ -104,24 +108,18 @@ def sec_title(snip, t):
 	return ("*%s-%s*" % (file_start, sec_name)).rjust(78-len(t[1]))
 endglobal
 
-snippet sec "Section marker" b
+snippet sec "Section marker" sb
 ==============================================================================
 ${1:SECTION}`!p snip.rv = sec_title(snip, t)`
-
-$0
 endsnippet
 
-snippet ssec "Sub section marker" b
+snippet ssec "Sub section marker" sb
 ${1:Subsection}`!p snip.rv = sec_title(snip, t)
 snip += "-"*len(t[1])`
-
-$0
 endsnippet
 
-snippet sssec "Subsub Section marker" b
+snippet sssec "Subsub Section marker" sb
 ${1:SubSubsection}:`!p snip.rv = sec_title(snip, t)`
-
-$0
 endsnippet
 
 # For vim help, follow the same settings as the official docs.

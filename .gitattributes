@@ -3,6 +3,17 @@
 
 #  The system knows a built-in macro attribute, binary:
 
-*.spl binary
+*.spl   binary
 
 text=auto
+*.txt   text
+*.md    text
+*.rst   text
+
+*.png   binary
+*.jpg   binary
+
+*.py diff=python
+*.ipy diff=python
+
+*.sh    text eol=lf

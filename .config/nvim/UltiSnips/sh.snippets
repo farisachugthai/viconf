@@ -1,5 +1,4 @@
 # sh.snippets
-
 #######################################################################
 #                      # Your personal snippets                       #
 #######################################################################
@@ -10,7 +9,7 @@ snippet #! "#!/usr/bin/env (!env)" b
 # set -euo pipefail
 endsnippet
 
-snippet # "#! accidentally gives sh so #!/usr/bin/env bash" b
+snippet # "dupe" b
 #!/usr/bin/env bash
 # Maintainer: Faris Chugthai
 
@@ -314,40 +313,40 @@ endsnippet
 # todo could write a func to increment version on every BufWritePre.
 # there should be one at the top of `:he eval`
 snippet header "A full fledged header for your bash script."
-	__`!p snip.fn`="${1:version X.x}"
+__`!p snip.rv = snip.fn`="${1:version X.x}"
 
-	#===  FUNCTION  ================================================================
-	#         NAME:  ${VISUAL:1}
-	#  DESCRIPTION:  Display usage information.
-	#===============================================================================
-	function usage ()
-	{
-		echo "Usage :  $${0:0} [options] [--]
+#===  FUNCTION  ================================================================
+#         NAME:  `!p snip.rv = snip.fn`
+#  DESCRIPTION:  Display usage information.
+#===============================================================================
+function usage ()
+{
+	echo "Usage :  ${2} [options] [--]
 
-		Options:
-		-h|help       Display this message
-		-v|version    Display script version"
+	Options:
+	-h|help       Display this message
+	-v|version    Display script version"
 
-	}    # ----------  end of function usage  ----------
+}    # ----------  end of function usage  ----------
 
-	#-----------------------------------------------------------------------
-	#  Handle command line arguments
-	#-----------------------------------------------------------------------
+#-----------------------------------------------------------------------
+#  Handle command line arguments
+#-----------------------------------------------------------------------
 
-	while getopts ":hv" opt
-	do
-		case $opt in
+while getopts ":hv" opt
+do
+	case $opt in
 
-		h|help     )  usage; exit 0   ;;
+	h|help     )  usage; exit 0   ;;
 
-		v|version  )  echo "$${0:0} -- Version $__ScriptVersion"; exit 0   ;;
+	v|version  )  echo "${3} -- Version ${4:ScriptVersion}; exit 0   ;;
 
-		* )  echo -e "\n  Option does not exist : $OPTARG\n"
-			usage; exit 1   ;;
+	* )  echo -e "\n  Option does not exist : $OPTARG\n"
+		usage; exit 1   ;;
 
-		esac    # --- end of case ---
-	done
-	shift $(($OPTIND-1))
+	esac    # --- end of case ---
+done
+shift $(($OPTIND-1))
 endsnippet
 
 snippet root "Check if a user's ID is equal to 0 and exec sudo"

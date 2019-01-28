@@ -1,1 +1,1 @@
-../../.config/nvim/after/deoplete.vim
+../../../.config/nvim/after/plugin/deoplete.vim

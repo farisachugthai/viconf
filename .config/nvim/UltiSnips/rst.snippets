@@ -14,6 +14,7 @@ global !p
 from rst_helper import *
 
 endglobal
+
 snippet title "Title with =" b
 ${1:${VISUAL:Section name}}
 `!p snip.rv = rst_char_len(t[1])*'='`
@@ -75,9 +76,13 @@ endsnippet
 #  links  #
 ###########
 
-# Make sure this works!
+snippet local "link to a local file. Simpler." sw
+\`${1:Optional Link text} <${2:Link destination}>\`_
+endsnippet
+
+# This should work even though the tabstops are excessively complicated
 snippet link "External URL. A space is required between the text and URL!" b
-\`${1:Link text} ${3:<${VISUAL:https://github.com/}$0>}\`
+\`${1:Link text} ${3:<${VISUAL:https://github.com/}$0>}\`_
 endsnippet
 
 snippet link "Separated link and target." b
@@ -92,6 +97,16 @@ snippet http "Separated link and target." bs
 .. _${1:${VISUAL:text}}: ${2:\`https://somedomain.com\`}
 endsnippet
 
+snippet path "Link to a local file" s
+${1:rel path}: ${2:${VISUAL:link}}_.
+
+.. _${2}: ${3:path/to/file} $0
+endsnippet
+
+snippet ref  "URLs that will follow a sphinx directive for URLs." w
+:ref:\`${1:${VISUAL:path}}\`_
+endsnippet
+
 ############
 #  Sphinx  #
 ############
@@ -102,11 +117,32 @@ snippet sid "SideBar" b
    ${2:${VISUAL:SideBar Content}}
 endsnippet
 
+# TODO: Figure out what snippet method to invoke to get proper indentation.
+snippet :func: "Inclass function directive" w
+:func:\`${0:${VISUAL}}()\`
+endsnippet
+
+snippet :class: "Inline class directive" w
+:class:\`${0:${VISUAL}}()\`
+endsnippet
+
+snippet function "function directive" w
+.. func:: ${1:${VISUAL:call signature}}
+
+   ${2:Describe the func}
+endsnippet
+
+snippet class "Class directive" w
+.. class:: ${1:${VISUAL:call signature}}
+
+   ${2:Describe the class}
+endsnippet
+
 # Directives
 # ------------
 
 snippet img "image link directive"
-   .. |${0:alias}| image:: ${1:img}
+.. |${1:alias}| image:: ${2:img}
 endsnippet
 
 snippet fig: "Figure directive" b
@@ -137,49 +173,49 @@ endsnippet
 snippet coded "Code block directive." b
 .. code:: ${1:type}
 
-   ${0:write some code}
+   ${0:${VISUAL:write some code}}
 endsnippet
 
-snippet note "Take note of this directive over here ;)" b
+snippet note "Take note of this directive over here ;)" wms
 .. note::
 
-   ${0:Take note of the fact that}
+   ${0:${VISUAL:Take note of the fact that}}
 endsnippet
 
-snippet warn "Warning directive" b
+snippet warn "Warning directive" wms
 .. warning::
 
-   ${0:Warning:}
+   ${0:${VISUAL:Warning:}}
 endsnippet
 
-snippet important "Important directive" b
+snippet important "Important directive" wms
 .. important::
 
-   ${0:Important notice:}
+   ${0:${VISUAL:Important notice:}}
 endsnippet
 
-snippet att "Attention directive" b
+snippet att "Attention directive" wms
 .. attention::
 
-   ${0:Attention!}
+   ${0:${VISUAL:Attention!}}
 endsnippet
 
-snippet dan "Danger directive" b
+snippet dan "Danger directive" wms
 .. danger::
 
-   ${0:Danger:}
+   ${0:${VISUAL:Danger:}}
 endsnippet
 
-snippet err "Error directive" b
+snippet err "Error directive" wms
 .. error::
 
-   ${0:Error:}
+   ${0:${VISUAL:Error:}}
 endsnippet
 
-snippet cau "Caution directive" b
+snippet cau "Caution directive" wms
 .. caution::
 
-   ${0:Take precaution with:}
+   ${0:${VISUAL:Take precaution with:}}
 endsnippet
 
 # Fixed whitespace with qq
@@ -285,23 +321,16 @@ else:
 `$0
 endsnippet
 
-# usage: li 4<tab>
-# which will extand into a unordered list contains 4 items
-# NICE --------^
-# wait who typed those notes. because that clearly indicates that you can use
-# regexes as trigger words what the fuck
-snippet "li(st)? (?P<num>\d+)" "List" br
+snippet "li(st)? (?P<num>\d+)" "List usage: li 4<tab> which will extand into a unordered list contains 4 items" br
 $0
 `!p
 snip.rv = make_items(match.groupdict()['num'])
 `
 endsnippet
 
-snippet "ol(st)? (?P<num>\d+)" "Order List" br
+snippet "ol(st)? (?P<num>\d+)" "Order List ol 4<tab> which will extand into a ordered list contains 4 items" br
 $0
 `!p
-# usage: ol 4<tab>
-# which will extand into a ordered list contains 4 items
 snip.rv = make_items(match.groupdict()['num'], 1)
 `
 endsnippet

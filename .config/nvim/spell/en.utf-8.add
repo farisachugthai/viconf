@@ -7,6 +7,7 @@ BufRead
 BufWritePost
 CLA
 CTRL
+CentOS
 Chainmap
 Chugthai
 ColorColumn
@@ -62,10 +63,13 @@ Jupyter
 KeePass
 KeePassX
 KeePassXC
+Keycode
+Keymappings
 Kleopatra
 Kubernetes
 Lightline
 Linter
+Losh's
 MOTW
 NERDTree
 NerdCom
@@ -83,10 +87,12 @@ PyCon
 Pydoc
 Pygments
 Python3
+QuickStart
 Quickstart
 README
 REPL
 RET
+RHEL
 Reitz
 Rewatched
 SCM
@@ -116,9 +122,11 @@ Uninstallation
 VIMRUNTIME
 VimL
 VimScript
+Vimcasts
 Viminfo
 Vimrc
 Vimwiki's
+Voom
 Vundle
 Win10
 Win32
@@ -239,6 +247,7 @@ django
 dockerfile
 docstring
 docstrings
+doctests
 docutils
 dont/!
 dosbatch
@@ -278,6 +287,7 @@ filetypes
 findutils
 fishshell
 flake8
+fnmatch
 fortran
 from
 fsharp
@@ -290,6 +300,7 @@ fullscreen
 funcional/!
 function
 fzf
+gbt
 gcc
 gcloud
 gdrive
@@ -357,6 +368,7 @@ jinja
 jpeg
 js
 json
+junegunn
 jupyter
 kanban
 kate
@@ -365,6 +377,7 @@ kde
 kdeconnect
 keepass
 keybindings
+keycodes
 keymap
 keysym
 keysyms
@@ -492,16 +505,19 @@ pushd
 py
 py3
 pycon
+pydocstyle
 pygmentize
 pynvim
 pypy
 pyrex
 python3
+pyutil
 qml
 quickfix
 quoteplus
 rb
 rclone
+reStructured
 readline
 readlines
 readme
@@ -545,6 +561,7 @@ sdc1
 sdc2
 sectionauthor
 sed
+setUp
 setxkbmap
 sha256
 sha384
@@ -568,6 +585,7 @@ sshpass
 stackoverflow
 startify
 statusline
+statuslines
 stderr
 stdlib
 stdout
@@ -587,9 +605,12 @@ tcl
 tcp
 tcpdump
 tcsh
+tearDown
+tempfile
 termcap
 terminfo
 termux
+testcase
 testcase
 tex
 tex
@@ -618,6 +639,7 @@ uncommit
 unencrypted
 uninstall
 unittest
+unittests
 unix
 unordered
 unpushed
