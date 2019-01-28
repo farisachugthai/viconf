@@ -11,3 +11,6 @@ setlocal softtabstop=3
 setlocal shiftwidth=3  " and expandtab is already set so that should set that
 setlocal colorcolumn=80
 setlocal linebreak
+
+" I want Sphinx to work inside of Vim.
+setlocal makeprg='make html'

@@ -41,10 +41,30 @@ augroup END
 " Plugins: {{{1
 
 " ALE: {{{2
+
 " Jan 07, 2019: Got rid of pycodestyle. Not listening to configs and emitting
 " noise and a large number of false positives. also flake8 is pycodestyle so..
-let b:ale_linters = [ 'flake8', 'pydocstyle' , 'pyls' ]
+
+" Jan 24, 2019: pyls went because A) it doesn't output an error message B) it
+" uses flake8 and jedi anyway and C) its slow
+" Ugh! But flake8 isn't returning any message to ALE so i suppose enable it.
+let b:ale_linters = [ 'flake8', 'pydocstyle', 'pyls' ]
 let b:ale_linters_explicit = 1
+
+" Alright let's just do this manually
+"
+let b:ale_python_pyls_options = {
+      \   'pyls': {
+      \     'plugins': {
+      \       'pycodestyle': {
+      \         'enabled': v:false
+      \       },
+      \       'flake8': {
+      \         'enabled': v:true 
+      \       }
+      \     }
+      \   },
+      \ }
 
 " This is tough because what if theres a project file? hm.
 " Theres one in pyutils.

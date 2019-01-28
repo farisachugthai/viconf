@@ -2,8 +2,8 @@
 #                         # Markdown Snippets                         #
 #######################################################################
 
-# TODO: A nice to have would be a way to take a VISUAL highlight, and change it so that it was the
-# URL section of a [text](url) snippet.
+# TODO: Write a postfix that takes a VISUAL highlight, and change it so that it
+# was the URL section of a [text](url) snippet.
 
 extends html
 
@@ -14,19 +14,18 @@ global !p
 from markdown_table import *
 endglobal
 
-snippet cheat "Cheatsheet template"
+snippet cheat "Cheatsheet template" b
 # `!p snip.rv = snip.fn`
 
-${2:## personal}
+## ${2:personal}
 
-${3:## cheat}
+## ${3:cheat}
 
-${4:## tldr}
+## ${4:tldr}
 
-${5:## eg}
+## ${5:eg}
 
-${6:## man}
-$0
+## ${6:man}
 endsnippet
 
 snippet ``` "Code block with optional text for languge." sm

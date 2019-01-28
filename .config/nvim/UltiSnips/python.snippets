@@ -41,14 +41,14 @@ endsnippet
 
 # TODO Need to break this up
 # Also you should be able to easily put `snip.fn` in the filename there
-snippet moddoc "Module Docstring" bs
+snippet moddoc "Module Docstring" mbs
 """${1:${VISUAL}Quick description.}
 
 $2
 :File: `!p snip.rv = snip.fn`
 :Author: `!v g:snips_author`
 :Email: `!v g:snips_email`
-:Github: `!v g:snips_github`
+:Github: \``!v g:snips_github`\`_
 
 ${3:Attributes:
 
