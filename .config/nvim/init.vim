@@ -1,6 +1,5 @@
 " Init:
 " Neovim Configuration:
-" Vim: set foldlevel=0:
 
 " About: {{{1
 let g:snips_author = 'Faris Chugthai'
@@ -29,7 +28,6 @@ call plug#begin('~/.local/share/nvim/plugged')
 Plug 'junegunn/vim-plug'        " plugception
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'junegunn/vim-peekaboo'
 Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
 Plug 'davidhalter/jedi-vim'
 Plug 'airblade/vim-gitgutter'
@@ -60,9 +58,6 @@ Plug 'vim-voom/voom'
 Plug 'Rykka/InstantRst'
 Plug 'gu-fan/riv.vim'
 Plug 'greyblake/vim-preview'
-Plug 'jakykong/vim-zim', {'for': 'zimwiki'}
-Plug 'HerringtonDarkholme/yats.vim', {'for': ['jsx', 'tsx']}
-Plug 'mhartington/nvim-typescript', {'do': './install.sh', 'for': ['jsx', 'tsx']}
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 
@@ -124,6 +119,21 @@ if filereadable(s:local_vimrc)
     execute 'source' s:local_vimrc
 endif
 
+" Here's a nice little setting to encourage interoperability
+" UNIX AND MS-WINDOWS
+
+" Some people have to do work on MS-Windows systems one day and on Unix another
+" day.  If you are one of them, consider adding 'slash' and 'unix' to
+" 'sessionoptions'.  The session files will then be written in a format that can
+" be used on both systems.  This is the command to put in your |init.vim| file:
+set sessionoptions+=unix,slash
+" Vim will use the Unix format then, because the MS-Windows Vim can read and
+" write Unix files, but Unix Vim can't read MS-Windows format session files.
+" Similarly, MS-Windows Vim understands file names with / to separate names, but
+" Unix Vim doesn't understand \.
+
+" Not related but I wanted to strike these down because they're annoying.
+set sessionoptions-=blank,folds
 
 " Global Options: {{{1
 
@@ -642,12 +652,18 @@ let g:tagbar_width = 30
 let g:tagbar_sort = 0
 
 " Zim: {{{2
-let g:zim_notebooks_dir = '~/Notebooks.git'
+let g:zim_notebooks_dir = expand('~/Notebooks.git')
+let g:zim_notebook = expand('~/Notebooks.git')
+let g:zim_dev = 1
 
+" Here's an exciting little note about Zim. Ignoring how ...odd this plugin is
+" Voom actually gets pretty close to handling Zimwiki if you recognize it as
+" as dokuwiki!
 " Riv: {{{2
+
 " Highlight py docstrings with rst highlighting
 let g:riv_python_rst_hl = 1
-
+let g:riv_file_link_style = 2  " Add support for :doc:`something` directive.
 " Voom: {{{ 2
 
 "g:voom_ft_modes" is a Vim dictionary: keys are filetypes (|ft|), values are

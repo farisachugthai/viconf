@@ -1,18 +1,9 @@
-<<<<<<< HEAD
-" IPython:
-
-augroup ftpersonal
-    autocmd!
-    autocmd BufRead,BufNewFile *.ipy setlocal filetype=python
-augroup end
-||||||| merged common ancestors
-=======
 " IPython ftdetect. Needs a lot of work.
 
 if exists('b:current_syntax')
   finish
 endif
-
+let b:did_ftplugin = 1
 
 augroup ftpersonal
     autocmd!
@@ -22,4 +13,3 @@ augroup ftpersonal
     " that expression be conditional?
     let b:current_syntax = 1
 augroup end
->>>>>>> master

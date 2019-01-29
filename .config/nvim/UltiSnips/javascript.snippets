@@ -111,7 +111,7 @@ try {
 }
 endsnippet
 
-snippet terr 'throw Error'
+snippet terr "throw Error"
 throw new Error('${1:error message}')
 endsnippet
 
@@ -242,13 +242,15 @@ snippet /**
 	/**
 	 * ${0:description}
 	 *
-endsnippet
 	 */
-snippet @par
 endsnippet
-	@param {${1:type}} ${2:name} ${0:description}
+
+snippet @par
+@param {${1:type}} ${2:name} ${0:description}
+endsnippet
+
 snippet @ret
-	@return {${1:type}} ${0:description}
+@return {${1:type}} ${0:description}
 endsnippet
 
 
@@ -290,70 +292,85 @@ snippet qsa
 endsnippet
 # Debugging
 snippet de
-endsnippet
 	debugger;
+endsnippet
+
 snippet cl "console.log"
-endsnippet
 	console.log(${0});
+endsnippet
+
 snippet cd "console.debug"
-endsnippet
 	console.debug(${0});
+endsnippet
+
 snippet ce "console.error"
-endsnippet
 	console.error(${0});
+endsnippet
+
 snippet cw "console.warn"
-endsnippet
 	console.warn(${0});
+endsnippet
+
 snippet ci "console.info"
-endsnippet
 	console.info(${0});
-snippet ct "console.trace"
 endsnippet
+
+snippet ct "console.trace"
 	console.trace(${0:label});
+endsnippet
+
 snippet ctime "console.time ... console.timeEnd"
 	console.time("${1:label}");
 	${0:${VISUAL}}
 endsnippet
 	console.timeEnd("$1");
+
 snippet ctimestamp "console.timeStamp"
+console.timeStamp("${1:label}");
 endsnippet
-	console.timeStamp("${1:label}");
+
 snippet ca "console.assert"
+console.assert(${1:expression}, ${0:obj});
 endsnippet
-	console.assert(${1:expression}, ${0:obj});
+
 snippet cclear "console.clear"
+console.clear();
 endsnippet
-	console.clear();
+
 snippet cdir "console.dir"
+console.dir(${0:obj});
 endsnippet
-	console.dir(${0:obj});
+
 snippet cdirx "console.dirxml"
+console.dirxml(${1:object});
 endsnippet
-	console.dirxml(${1:object});
+
 snippet cgroup "console.group"
-	console.group("${1:label}");
-	${0:${VISUAL}}
+console.group("${1:label}");
+${0:${VISUAL}}
+console.groupEnd();
 endsnippet
-	console.groupEnd();
+
 snippet cgroupc "console.groupCollapsed"
-	console.groupCollapsed("${1:label}");
-	${0:${VISUAL}}
+console.groupCollapsed("${1:label}");
+${0:${VISUAL}}
+console.groupEnd();
 endsnippet
-	console.groupEnd();
+
 snippet cprof "console.profile"
-	console.profile("${1:label}");
-	${0:${VISUAL}}
+console.profile("${1:label}");
+${0:${VISUAL}}
+console.profileEnd();
 endsnippet
-	console.profileEnd();
+
 snippet ctable "console.table"
-	console.table(${1:"${2:value}"});
+console.table(${1:"${2:value}"});
 # Misc
 endsnippet
-# 'use strict';
-snippet us
-	'use strict';
-endsnippet
-# setTimeout function
-snippet timeout
+#
+snippet us "use strict"
+'use strict'; endsnippet
+
+snippet timeout "setTimeout function"
 	setTimeout(function () {${0}}${2}, ${1:10});
 endsnippet

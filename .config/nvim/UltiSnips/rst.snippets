@@ -118,12 +118,14 @@ snippet sid "SideBar" b
 endsnippet
 
 # TODO: Figure out what snippet method to invoke to get proper indentation.
+# Helpful hint: Definitely use the $0 thing when the last thing that you want
+# to type isn't at the end of the line.
 snippet :func: "Inclass function directive" w
-:func:\`${0:${VISUAL}}()\`
+:func:\`${1:${VISUAL}}()\`$0
 endsnippet
 
 snippet :class: "Inline class directive" w
-:class:\`${0:${VISUAL}}()\`
+:class:\`${0:${VISUAL}}()\`$0
 endsnippet
 
 snippet function "function directive" w

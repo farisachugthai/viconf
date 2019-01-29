@@ -8,12 +8,15 @@ README
 Directory Layout and Runtimepath
 ---------------------------------
 
-How are the folders in a neovim directory tree supposed to be laid out?
+How are the folders in a :mod:`pynvim`/neovim directory tree supposed to be
+laid out?
+
+There are a few time tested design patterns that we can learn here.
 
 While each directory serves a specific purpose, depending on use case, not all
 need to be employed.
 
-The first and most obvious file is the :ref:`init.vim`. We can setup the base
+The first and most obvious file is the :mod:`init.vim`. We can setup the base
 options like so:
 
 +---------------------+--+
@@ -26,9 +29,6 @@ options like so:
 +--------------------------+----------------+
 |    :let OPTION_NAME = 0  | Disable option |
 +--------------------------+----------------+
-
-
-
 
 Here's a follow up explanation that goes into more of the details.
 
@@ -55,7 +55,7 @@ For example, let's say we were in after/ftplugin/gitcommit.vim
 
 Something like this pseudo code would be perfect::
 
-    ``if ft != None && ft != gitcommit | finish | endif``
+    if ft != None && ft != gitcommit | finish | endif
 
 Then put that in everything in that dir.
 
@@ -66,3 +66,14 @@ Similar thing with after/syntax. We also have a fair number of files in syntax/
 
 We should probably set up some kind of guard so that it doesn't source a dozen
 times.
+
+Working with Plugins
+~~~~~~~~~~~~~~~~~~~~~~
+
+Vim Plug is a highly recommended plugin manager, and it has an API that exports
+the command ``plug``. This command returns a dictionary with a JSON encoded list
+of all of your currently loaded plugins.
+
+This feature proves phenomenally useful in situations where you may have
+different configuration files, and would like to check whether a plugin was
+loaded or not.

@@ -19,13 +19,15 @@ if exists('b:current_syntax')
   finish
 endif
 
-function! s:DetectZimWiki()
-    if getline(1) =~# 'Content-Type: text/x-zim-wiki'
-        set filetype=zimwiki
-        let b:current_syntax = 1
-    endif
-endfunction
+" function! s:DetectZimWiki()
+"     if getline(1) =~# 'Content-Type: text/x-zim-wiki'
+"         set filetype=zimwiki
+"         let b:current_syntax = 1
+"     endif
+" endfunction
 
-augroup zimwiki
-    autocmd BufRead,BufNewFile *.txt  call s:DetectZimWiki()
+augroup zimwiki_ftd
+    autocmd!
+    autocmd BufRead,BufNewFile ~/Notebooks.git/*.txt set ft=zimwiki
+    let b:current_syntax = 1
 augroup end

@@ -7,6 +7,7 @@ BufRead
 BufWritePost
 CLA
 CTRL
+CentOS
 Chainmap
 Chugthai
 ColorColumn
@@ -42,6 +43,7 @@ Faris
 Filetype
 Firefox
 Fn
+Frontend
 GNOME's
 GPG
 GVim
@@ -60,10 +62,13 @@ Jupyter
 KeePass
 KeePassX
 KeePassXC
+Keycode
+Keymappings
 Kleopatra
 Kubernetes
 Lightline
 Linter
+Losh's
 MOTW
 NERDTree
 NerdCom
@@ -81,10 +86,12 @@ PyCon
 Pydoc
 Pygments
 Python3
+QuickStart
 Quickstart
 README
 REPL
 RET
+RHEL
 Reitz
 Rewatched
 SCM
@@ -105,6 +112,7 @@ Tagbar
 Termux
 Termux's
 TestCase
+ToC
 Todo
 USBs
 Ubuntu
@@ -114,9 +122,11 @@ Uninstallation
 VIMRUNTIME
 VimL
 VimScript
+Vimcasts
 Viminfo
 Vimrc
 Vimwiki's
+Voom
 Vundle
 Win10
 Win32
@@ -132,6 +142,7 @@ ack
 actionscript
 ada
 ada95
+adduser
 aff
 ag
 ahk
@@ -163,6 +174,7 @@ backlinking
 backlinks
 baloo
 baloorc
+barebones
 basemake
 bashrc
 bibtex
@@ -340,6 +352,7 @@ inoremap
 inputrc
 ip
 ipdb
+iptables
 ipy
 ipynb
 ipython
@@ -355,6 +368,7 @@ jinja
 jpeg
 js
 json
+jinja
 jupyter
 kanban
 kate
@@ -363,6 +377,7 @@ kde
 kdeconnect
 keepass
 keybindings
+kde
 keymap
 keysym
 keysyms
@@ -490,16 +505,19 @@ pushd
 py
 py3
 pycon
+pushd
 pygmentize
 pynvim
 pypy
 pyrex
 python3
+pynvim
 qml
 quickfix
 quoteplus
 rb
 rclone
+reStructured
 readline
 readlines
 readme
@@ -567,6 +585,7 @@ sshpass
 stackoverflow
 startify
 statusline
+sshpass
 stderr
 stdlib
 stdout
@@ -587,10 +606,13 @@ tcp
 tcpdump
 tcsh
 tearDown
+tcp
 termcap
 terminfo
 termux
 testcase
+termcap
+terminfo
 tex
 texting
 tldr
@@ -617,6 +639,7 @@ uncommit
 unencrypted
 uninstall
 unittest
+uncommit
 unix
 unordered
 unpushed
@@ -625,6 +648,7 @@ unstaged
 url
 urls
 usb
+useradd
 username
 usr
 utils
@@ -688,5 +712,7 @@ zcat
 zenburn
 zim
 zsh
-CentOS
-RHEL
+zcat
+zenburn
+zim
+zsh

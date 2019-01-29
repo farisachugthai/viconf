@@ -1,30 +1,31 @@
-# Vim Snippets
+# Vim Snippets:
+
 # TODO Use this funcs as snips and you'll be set for help files
 # https://github.com/google/vimdoc/blob/master/vimdoc/output.py
-# Personal snippets
+
+#########################
+#  # Personal snippets  #
+#########################
+
 
 snippet path "Refer to a file in the same dir as the script."
-${1:'let ${2:${VISUAL:s:local_vimrc}}' = }}fnamemodify(resolve(expand('${3:<sfile>}')), '${4::p:h}')
+${${1:'let s:local_vimrc' = }}fnamemodify(resolve(expand('<sfile>')), ':p:h').'${VISUAL:0}'
 endsnippet
 
-snippet gvar "Global / configuration variable" b
+# Eh i don't even wanna todo this but isn't the idiom
+# let g:var = (funcref_that_it_exists, 0) or something like that
+snippet gvar "Global / configuration variable" bm
 if !exists('g:${1:MyUltraImportantVar}')
 	let g:$1 = ${2:"${3:<tab>}"}
 endif
 endsnippet
 
-snippet guard "Script reload guard. Good to put directly under the header snippet." b
+snippet guard "script reload guard" bm
 if exists('${1:did_`!p snip.rv = snip.fn.replace('.','_')`}') || ${2:&cp} || ${3:v:version < 700}
 	finish
 endif
-let $1 = ${4:1}
+let $1 = ${4}
 endsnippet
-
-snippet plugin "Plugin reload guard. Newly minted so be observant of bugs." s
-if !has_key(plugs, ${1:${VISUAL}`!p snip.rv = snip.fn.replace('.', '_')`})
-	finish 
-endif
-endsnippet 
 
 # I feel like this is implemented wrong.
 snippet cpo "compatability options"
@@ -52,7 +53,9 @@ snippet header "standard Vim script file header"
 " ============================================================================
 endsnippet
 
-snippet ft "Ftplugin guard" bs
+# how do I put a line at the end of a doc? the let statement can stay there
+# but it would be nice
+snippet ft "Ftplugin guard" bm
 if v:version < 600
 	syntax clear
 elseif exists(${1:'b:current_syntax'})
@@ -61,7 +64,7 @@ endif
 $0
 endsnippet
 
-snippet syn "Syntax file guard" b
+snippet syn "Syntax file guard" bm
 if version < 600
 	syntax clear
 elseif exists(${1:'b:current_syntax'})
@@ -108,18 +111,24 @@ def sec_title(snip, t):
 	return ("*%s-%s*" % (file_start, sec_name)).rjust(78-len(t[1]))
 endglobal
 
-snippet sec "Section marker" sb
+snippet sec "Section marker" b
 ==============================================================================
 ${1:SECTION}`!p snip.rv = sec_title(snip, t)`
+
+$0
 endsnippet
 
-snippet ssec "Sub section marker" sb
+snippet ssec "Sub section marker" b
 ${1:Subsection}`!p snip.rv = sec_title(snip, t)
 snip += "-"*len(t[1])`
+
+$0
 endsnippet
 
-snippet sssec "Subsub Section marker" sb
+snippet sssec "Subsub Section marker" b
 ${1:SubSubsection}:`!p snip.rv = sec_title(snip, t)`
+
+$0
 endsnippet
 
 # For vim help, follow the same settings as the official docs.

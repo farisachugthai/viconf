@@ -1,10 +1,16 @@
 # TODO
 
+Jan 21, 2019:
+
+  Riv clobbers insert mode <kbd>Tab</kbd> which basically disables UltiSnips
+  and really messes with Deoplete. *sigh*.
+
 Jan 16, 2019:
 
-Fix fzf I just remembered that I added a hook to enter nvim every time
-I hit enter in FZF. That's causing some weird errors when I use <C-x><C-f>
-to get FZF to complete file paths, and as a result, it's not doing anything.
+- Fix FZF:
+  I just remembered that I added a hook to enter nvim every time
+  I hit enter in FZF. That's causing some weird errors when I use <C-x><C-f>
+  to get FZF to complete file paths, and as a result, it's not doing anything.
 
 ## Improve Docs
 
