@@ -26,11 +26,11 @@ inoremap <expr><C-h> deoplete#smart_close_popup()."\<C-h>"
 inoremap <expr><BS> deoplete#smart_close_popup()."\<C-h>"
 
 " On <CR>: close popup and save indent.
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+" inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
 
-function! s:my_cr_function() abort
-    return deoplete#close_popup()
-endfunction
+" function! s:my_cr_function() abort
+"     return deoplete#close_popup()
+" endfunction
 
 " Refresh candidates. Are we clobbering anything? Wth is it set to insert tab???
 inoremap <expr><C-l> deoplete#refresh()

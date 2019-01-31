@@ -11,8 +11,9 @@ endif
 let did_rsi_vim = 1
 
 " RSI: {{{1
-"
+
 " Readline_Basics:{{{2
+
 " start of line
 cnoremap <C-A> <Home>
 " back one character
@@ -39,17 +40,24 @@ cmap <A\<> :norm gg
 cmap <A\>> :norm G
 
 " History:{{{2
+
 " recall newer command-line. {Actually C-n and C-p on Emacs}
 cmap <A-n> <Down>
 " recall previous (older) command-line. {But we can't lose C-n and C-p}
 cmap <A-p> <Up>
 
 " Other:{{{2
+
 " How did I do this backwards??
 " It's annoying you lose a whole command from a typo
-cnoremap <Esc> <nop>
+cmap <Esc> <nop>
+
 " However I still need the functionality
 cnoremap <C-g> <Esc>
+
+" From he cedit. Open the command window with Esc so it at least does
+" something.
+exe "set cedit=\<Esc>"
 
 " In case you want inspiration!
 " <A-BS> is delete previous word
@@ -57,3 +65,6 @@ cnoremap <C-g> <Esc>
 " C-u is either kill from cursor to beginning of line or an indication of a
 " count with a command
 " C-y is yank.
+
+" Idk if this would only work in the command window but <C-v> and <M-v> would
+" be page forward and page back. Think Vim C-f and C-b.
