@@ -1,9 +1,10 @@
+.. _nvim-readme:
+
 README
 ========
 
 :Author: Faris Chugthai
-:Email: farischugthai.gmail.com
-:Date: 01/02/2019
+:Date: 02/03/2019
 
 Directory Layout and Runtimepath
 ---------------------------------
@@ -45,13 +46,16 @@ Ftplugin should be used to totally override the built-in ftplugin. You either
 have to be THAT discontent with it, or simply copy and paste it and then
 add your own modifications in.
 
-However after/ftplugin works better for that. As a result, we won't put the
+However `after/ftplugin`_ works better for that. As a result, we won't put the
 usual ftplugin guard in there. However, we should do something to ensure
-that buffers of a different filetype don't source everything in after/ftplugin.
+that buffers of a different filetype don't source everything in
+`after/ftplugin`_.
 
-For example, let's say we were in after/ftplugin/gitcommit.vim
+For example, let's say we were in `after/ftplugin/gitcommit.vim`_
 
-Something like this pseudo code would be perfect::
+Something like this pseudo code would be perfect.
+
+.. code-block:: vim
 
     ``if ft != None && ft != gitcommit | finish | endif``
 
@@ -60,7 +64,12 @@ Then put that in everything in that dir.
 Syntax
 ~~~~~~
 
-Similar thing with after/syntax. We also have a fair number of files in syntax/
+Similar thing with `after/syntax`_. We also have a fair number of files in `syntax`_
 
 We should probably set up some kind of guard so that it doesn't source a dozen
 times.
+
+.. _`after/ftplugin/gitcommit.vim`: after/ftplugin/gitcommit.vim
+.. _`after/ftplugin/`: after/ftplugin/
+.. _`after/syntax/`: after/syntax/
+.. _`syntax/`: syntax/

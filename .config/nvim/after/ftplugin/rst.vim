@@ -11,6 +11,11 @@ setlocal softtabstop=3
 setlocal shiftwidth=3  " and expandtab is already set so that should set that
 setlocal colorcolumn=80
 setlocal linebreak
+setlocal foldlevel=1
+setlocal foldlevelstart=1
+setlocal spell!
 
-" I want Sphinx to work inside of Vim.
-setlocal makeprg='make html'
+" TODO: Need to set an undo ftplugin.
+
+" I want Sphinx to work inside of Vim. Use the compiler file.
+" setlocal makeprg=make\ html

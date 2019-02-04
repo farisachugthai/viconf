@@ -1,3 +1,5 @@
+.. _ultisnips-readme:
+
 README
 ======
 
@@ -11,7 +13,9 @@ Notes on Ultisnips
 And now this file contains my UltiSnips notes. It was really overwhelming
 my python snippets file so I figured why not consolidate them here?
 
-At the end of the line::
+At the end of the line
+
+.. code-block:: vim
 
    snippet triggerword <description> <options>
 
@@ -23,7 +27,7 @@ correctly. The 2 most important variables to set are ``g:UltiSnipsDirs``
 and ``g:UltiSnipsDirectories`` as they tell UltiSnips where to look for
 your snippets.
 
-.. todo Mention that usp can't be snippets and explain why usps is set to 0
+.. TODO Mention that usp can't be snippets and explain why usps is set to 0
 
 After configuring ``g:UltiSnipsDirs`` and ``g:UltiSnipsDirectories`` as you would like,
 using the `UltiSnipsEdit` command should open the folder that your snippets
@@ -120,7 +124,7 @@ snippets file you would like extending the target.
 
 Now let's look at a snippet.
 
-.. code-block::
+.. code-block:: vim
 
    snippet imp "import statement" b
        import ${0:module}
@@ -132,11 +136,11 @@ repeating anything that's already in the UltiSnips documentation, I'll gloss
 over this part.
 
 The API for UltiSnips is quite interesting, as it exposes
-:func:`UltiSnips#ListSnippets()`.
+:vim:func:`UltiSnips#ListSnippets()`.
 
 This function displays what snippets you could expand to using a greedy
 search through your snippet files. As in, typing "doc" and then running
-:func:`UltiSnips#ListSnippets()` will display doc, docs, docstring if
+:vim:func:`UltiSnips#ListSnippets()` will display doc, docs, docstring if
 you have them defined. If you've defined the same word in different
 snippet files, (I.E. I have doc defined in most snippet files), then
 it will display:
@@ -154,10 +158,12 @@ somewhat like this.
 
    inoremap <M-u> call UltiSnips#ListSnippets()<CR>
 
-.. note did the keyboard trick work?
 
-<kbd>M-u</kbd> isn't bound to anything in insert mode; however,
-it is bound to delete a fairly large amount of text in normal mode.
+.. code-block:: html
+
+   <kbd>M-u</kbd>
+isn't bound to anything in insert mode; however, it is bound to delete a
+fairly large amount of text in normal mode.
 
 Be careful of that, and possibly disable it by remapping it to <nop>.
 
@@ -174,7 +180,12 @@ As a result, I determined that a relatively quick way to fix those options was
 to utilize Vim's built in "search and replace" functions.
 
 First, one must visually select the snippets of interest.
-Pressing <kbd>Shift</kbd><kbd>v</kbd> and then using <kbd>j</kbd><kbd>k</kbd>
+Pressing
+
+.. code-block:: html
+
+   <kbd>Shift</kbd><kbd>v</kbd>and then using <kbd>j</kbd><kbd>k</kbd>
+
 as necessary will suffice.
 
 
@@ -246,20 +257,11 @@ So if you get to the end of the expression, then insert
 
 .. code:: html
 
-   :kbd:.if:kbd:<Tab>
+   <kbd>.if</kbd><kbd><Tab></kbd>
 
-.. I'm only trying the :kbd: directive one time right there before changing all
-   of them.
 
 It'll expand to a regular if statement. You could make similar expressions with
 `ifn` and `ifnn` expanding to ``if var is None`` or ``if var is not None``.
-
-Configuration
-----------------
-
-After configuring ``g:UltiSnipsDirs`` and ``g:UltiSnipsDirectories``
-as you would like, using the ``UltiSnipsEdit`` command should open the folder that
-your snippets are housed in.
 
 From @SirVer himself.
 
@@ -277,3 +279,4 @@ UltiSnips has seen contributions by many individuals. Those contributions have
 been merged into this collection seamlessly and without further comments.
 
 .. _`https://www.github.com/junegunn/fzf.vim`: https://www.github.com/junegunn/fzf.vim
+.. _`python.snippets`: ./python.snippets

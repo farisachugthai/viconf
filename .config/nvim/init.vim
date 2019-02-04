@@ -3,7 +3,6 @@
 
 " About: {{{1
 let g:snips_author = 'Faris Chugthai'
-let g:snips_email = 'farischugthai@gmail.com'
 let g:snips_github = 'https://github.com/farisachugthai'
 
 " Vim Plug: {{{1
@@ -14,12 +13,14 @@ let g:snips_github = 'https://github.com/farisachugthai'
 let s:plugins = filereadable(expand('~/.config/nvim/autoload/plug.vim', 1))
 let s:plugins_extra = s:plugins
 
-if !s:plugins
-  fun! InstallPlug() "bootstrap plug.vim on new systems
-    silent call mkdir(expand('~/.config/nvim/autoload', 1), 'p')
-    exe '!curl -fLo '.expand('~/.config/nvim/autoload/plug.vim', 1)
-      \ .' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  endfun
+if expand('OS') !=# 'Windows_NT'
+    if !s:plugins
+        fun! InstallPlug() "bootstrap plug.vim on new systems
+            silent call mkdir(expand('~/.config/nvim/autoload', 1), 'p')
+            exe '!curl -fLo '.expand('~/.config/nvim/autoload/plug.vim', 1)
+            \ .' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+        endfun
+    endif
 endif
 
 " General Plugins: {{{2
@@ -610,6 +611,7 @@ let g:LanguageClient_loggingFile = '~/.local/share/nvim/LC.log'
 " Jedi: {{{2
 let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces
 let g:jedi#usages_command = '<Leader>u'
+let g:jedi#rename_command = '<F2>'
 let g:jedi#show_call_signatures_delay = 1000
 let g:jedi#smart_auto_mappings = 0
 let g:jedi#force_py_version = 3

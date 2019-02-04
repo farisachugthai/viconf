@@ -76,13 +76,23 @@ endsnippet
 #  links  #
 ###########
 
-snippet local "link to a local file. Simpler." sw
-\`${1:Optional Link text} <${2:Link destination}>\`_
+snippet external "link to an external URL. Simpler." smw
+\`${1:Optional Link text} <${2:${VISUAL:Link destination}>}\`_ $0
 endsnippet
 
 # This should work even though the tabstops are excessively complicated
-snippet link "External URL. A space is required between the text and URL!" b
-\`${1:Link text} ${3:<${VISUAL:https://github.com/}$0>}\`_
+snippet link "External URL. A space is required between the text and URL!" smw
+\`${1:Link text} <${2:${VISUAL:https://github.com/}>}\`_ $0
+endsnippet
+
+snippet lab "Marks all headers as the destination for links" smw
+.. _${0:${VISUAL}}:
+endsnippet
+
+snippet labhe "Label and header tied together." smw
+.. _${1}:
+
+${1:${VISUAL}}
 endsnippet
 
 snippet link "Separated link and target." b
@@ -103,7 +113,7 @@ ${1:rel path}: ${2:${VISUAL:link}}_.
 .. _${2}: ${3:path/to/file} $0
 endsnippet
 
-snippet ref  "URLs that will follow a sphinx directive for URLs." w
+snippet ref  "Links that follow labelled objects. Expand 'lab or labhe'" mw
 :ref:\`${1:${VISUAL:path}}\`_
 endsnippet
 
@@ -118,14 +128,15 @@ snippet sid "SideBar" b
 endsnippet
 
 # TODO: Figure out what snippet method to invoke to get proper indentation.
-snippet :func: "Inclass function directive" w
-:func:\`${0:${VISUAL}}()\`
+snippet func: "Inclass function directive" w
+:function:\`${0:${VISUAL}}()\`
 endsnippet
 
-snippet :class: "Inline class directive" w
+snippet class: "Inline class directive" w
 :class:\`${0:${VISUAL}}()\`
 endsnippet
 
+# Is this a real directive?
 snippet function "function directive" w
 .. func:: ${1:${VISUAL:call signature}}
 
@@ -280,12 +291,27 @@ ${1:${VISUAL:Section name}}
 `!p snip.rv = rst_char_len(t[1])*'='`
 endsnippet
 
+snippet h1 "Header 1" mwb
+${1:${VISUAL:Section name}}
+`!p snip.rv = rst_char_len(t[1])*'='`
+endsnippet
+
 snippet ssec "Subsection"
 ${1:${VISUAL:Subsection name}}
 `!p snip.rv = rst_char_len(t[1])*'-'`
 endsnippet
 
+snippet h2 "Header 2" bwm
+${1:${VISUAL:Subsection name}}
+`!p snip.rv = rst_char_len(t[1])*'-'`
+endsnippet
+
 snippet sssec "Subsubsection"
+${1:${VISUAL:Subsubsection name}}
+`!p snip.rv = rst_char_len(t[1])*'^'`
+endsnippet
+
+snippet h3 "Header three" bmw
 ${1:${VISUAL:Subsubsection name}}
 `!p snip.rv = rst_char_len(t[1])*'^'`
 endsnippet
