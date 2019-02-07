@@ -6,7 +6,8 @@ jedi-docs ~/.local/share/nvim/plugged/jedi-vim/pythonx/jedi/docs/docs
 nvim ~/.config/nvim
 plugged ~/.local/share/nvim/plugged
 py_tut ~/python/tutorials
+riv ~/.local/share/nvim/plugged/riv.vim/doc/riv_instruction.rst
 tutorials ~/Dropbox/python/tutorials
 viconf ~/projects/viconf/.config/nvim
-riv ~/.local/share/nvim/plugged/riv.vim/doc/riv_instruction.rst
 vim ~/.vim
+

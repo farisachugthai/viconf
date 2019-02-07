@@ -8,12 +8,17 @@ This directory contains the snippets for `UltiSnips`_.
 Notes on Ultisnips
 =======================
 
-And now this file contains my UltiSnips notes. It was really overwhelming
-my python snippets file so I figured why not consolidate them here?
+Changelog
+---------
 
-At the end of the line::
+Jan 29, 2019:
+Just added the `m` option to a bunch of these to eliminate
+trailing whitespace. Also adding ``$0`` to a couple. I've noticed that if you
+press `UltiSnipsNextTrigger` on the last one that it deletes the word.
 
-   snippet triggerword <description> <options>
+Adding a bare ``$0`` on the last line of the snippet ensures that we can tab all
+the way over and not delete anything. Then the `m` option ensures we don't
+have trailing whitespace.
 
 Configuration
 ----------------
@@ -23,7 +28,7 @@ correctly. The 2 most important variables to set are ``g:UltiSnipsDirs``
 and ``g:UltiSnipsDirectories`` as they tell UltiSnips where to look for
 your snippets.
 
-.. todo Mention that usp can't be snippets and explain why usps is set to 0
+.. todo:: Mention that usp can't be snippets and explain why usps is set to 0
 
 After configuring ``g:UltiSnipsDirs`` and ``g:UltiSnipsDirectories`` as you
 would like, using the `UltiSnipsEdit` command should open the folder that your
@@ -81,6 +86,12 @@ commented out header will not expand.
 Usage
 -----
 
+Here's an example of the generalized syntax of an UltiSnips snippet
+
+.. code-block:: vim
+
+   snippet triggerword <description> <options>
+
 I want to go over a few things that initially confused me about UltiSnips, and
 how I managed to solve any problems I had with the plugin.
 
@@ -115,12 +126,12 @@ advise throwing reminders to yourself for useful keybindings.
 If you need to extend the available snippets only one time, use
 ``UltiSnipsAddFileType``.
 
-For persistent changes use 'extends {filetype to be added}' at the top of the
+For persistent changes use `extends {filetype to be added}` at the top of the
 snippets file you would like extending the target.
 
 Now let's look at a snippet.
 
-.. code-block::
+.. code-block:: vim
 
    snippet imp "import statement" b
        import ${0:module}
@@ -132,11 +143,11 @@ repeating anything that's already in the UltiSnips documentation, I'll gloss
 over this part.
 
 The API for UltiSnips is quite interesting, as it exposes
-:func:`UltiSnips#ListSnippets()`.
+:vim:func:`UltiSnips#ListSnippets()`.
 
 This function displays what snippets you could expand to using a greedy
 search through your snippet files. As in, typing "doc" and then running
-:func:`UltiSnips#ListSnippets()` will display doc, docs, docstring if
+:vim:func:`UltiSnips#ListSnippets()` will display doc, docs, docstring if
 you have them defined. If you've defined the same word in different
 snippet files, (I.E. I have doc defined in most snippet files), then
 it will display:
@@ -154,12 +165,23 @@ somewhat like this.
 
    inoremap <M-u> call UltiSnips#ListSnippets()<CR>
 
-.. note did the keyboard trick work?
 
-<kbd>M-u</kbd> isn't bound to anything in insert mode; however,
+.. code-block:: html
+   <kbd>M-u</kbd>
+
+isn't bound to anything in insert mode; however,
 it is bound to delete a fairly large amount of text in normal mode.
 
-Be careful of that, and possibly disable it by remapping it to <nop>.
+Be careful of that, and possibly disable it by remapping it to **<nop>**.
+
+Just added the `m` option to a bunch of these to eliminate
+trailing whitespace. Also adding $0 to a couple. I've noticed that if you
+press UltiSnipsNextTrigger on the last one that it deletes the word.
+
+Adding a bare $0 on the last line of the snippet ensures that we can tab all
+the way over and not delete anything. Then the `m` option ensures we don't
+have trailing whitespace.
+
 
 Programmatic Editing
 --------------------
@@ -174,7 +196,12 @@ As a result, I determined that a relatively quick way to fix those options was
 to utilize Vim's built in "search and replace" functions.
 
 First, one must visually select the snippets of interest.
-Pressing <kbd>Shift</kbd><kbd>v</kbd> and then using <kbd>j</kbd><kbd>k</kbd>
+Pressing
+
+.. code-block:: html
+
+   <kbd>Shift</kbd><kbd>v</kbd>and then using <kbd>j</kbd><kbd>k</kbd>
+
 as necessary will suffice.
 
 
@@ -248,11 +275,11 @@ So if you get to the end of the expression, then insert
 
 .. code:: html
 
-   <kbd>.</kbd>if<kbd><Tab></kbd>
+   <kbd>.if</kbd><kbd><Tab></kbd>
+
 
 It'll expand to a regular if statement. You could make similar expressions with
-`ifn` and `ifnn` expanding to `if var is None` or `if var is not None`.
-
+`ifn` and `ifnn` expanding to ``if var is None`` or ``if var is not None``.
 
 From @SirVer himself.
 
@@ -269,6 +296,5 @@ two projects:
 UltiSnips has seen contributions by many individuals. Those contributions have
 been merged into this collection seamlessly and without further comments.
 
--- vim:ft=rst:nospell:
-
 .. _`https://www.github.com/junegunn/fzf.vim`: https://www.github.com/junegunn/fzf.vim
+.. _`python.snippets`: ./python.snippets

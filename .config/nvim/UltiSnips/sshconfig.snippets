@@ -1,7 +1,8 @@
 # sshconfig.snippets
 
-snippet Host "Setup defaults for new SSH host" b
-Host ${1:name}
-	HostName $1.${2:domain}
+snippet Host "Setup defaults for new SSH host" w
+Host ${VISUAL:$1}
+	HostName ${2:domain}
 	Port ${3}
-	${4:User }
+	${4:User}
+endsnippet

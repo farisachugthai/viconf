@@ -6,7 +6,7 @@
 
 " Uhhh this guy wrote all this but never defined a makeprg??
 
-if exists(":CompilerSet") != 2
+if exists(':CompilerSet') != 2
   command -nargs=* CompilerSet setlocal <args>
 endif
 

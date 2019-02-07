@@ -12,8 +12,10 @@ setl textwidth=120
 " The external program vim uses for gg=G can be configured
 " Hey you in the future. You can use :set *prg<Tab> and see all of the
 " configuration options you have.
+" Now you can also use gq for yapf
 if executable('yapf')
     setlocal equalprg=yapf
+    setlocal formatprg=yapf
 endif
 
 " TODO: Should set makeprg to something that could execute tests
@@ -37,20 +39,36 @@ augroup END
 
 " ALE: {{{2
 
-let b:ale_linters = [ 'flake8', 'pydocstyle' , 'pyls' ]
+" Jan 07, 2019: Got rid of pycodestyle. Not listening to configs and emitting
+" noise and a large number of false positives. also flake8 is pycodestyle so..
+
+" Jan 24, 2019: pyls went because A) it doesn't output an error message B) it
+" uses flake8 and jedi anyway and C) its slow
+" Ugh! But flake8 isn't returning any message to ALE so i suppose enable it.
+let b:ale_linters = [ 'flake8', 'pydocstyle', 'pyls' ]
 let b:ale_linters_explicit = 1
 
-" This is tough because what if theres a project file? hm.
-let b:ale_python_flake8_options = '--config ~/.config/flake8'
+" Alright let's just do this manually
+
+let b:ale_python_pyls_options = {
+      \   'pyls': {
+      \     'plugins': {
+      \       'pycodestyle': {
+      \         'enabled': v:false
+      \       },
+      \       'flake8': {
+      \         'enabled': v:true
+      \       }
+      \     }
+      \   },
+      \ }
 
 " Now that linters are set, add fixers
-let b:ale_fixers = ['remove_trailing_lines', 'trim_whitespace', 'yapf']
-
-" TODO:
-" Here's a suggestion. Write your own buffer fixer using ALE and yapf.
-" You do it anyway so why not nnoremap <Leader>bf <expr> py3do % or %yapf or
-" set makeprg=unittest.TestRunner()...or even sphinx build or something. lots
-" of choices.
+" I LEARNED HOW LIST CONCATENATION WORKS
+let b:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
+if executable('yapf')
+    let b:ale_fixers += ['yapf']
+endif
 
 " Virtualenvs: {{{3
 if isdirectory('~/virtualenvs')
@@ -59,10 +77,17 @@ endif
 
 " Python Language Server: {{{2
 " Delete the mappings off of here since they're defined in init.vim
-let b:LanguageClient_autoStart = 1
-let b:LanguageClient_selectionUI = 'fzf'
+
+" Vim-plug exports a dictionary with all of the info it gathers about your
+" plugins!
+if has_key(plugs, 'LanguageClient-neovim')
+    let b:LanguageClient_autoStart = 1
+    let b:LanguageClient_selectionUI = 'fzf'
+endif
 
 " Riv: {{{2
+
 " Riv is a plugin for reStructuredText in Vim.
-" This setting allows docstrings in python files to be properly highlighted.
+" The following setting allows docstrings in python files
+" to be properly highlighted. I'm inordinately excited.
 let b:riv_python_rst_hl = 1
