@@ -1,10 +1,17 @@
 " ============================================================================
-	" File: rst.vim
-	" Author: Faris Chugthai
-	" Description: rst ftplugin
-	" Last Modified: Jan 05, 2019
+    " File: rst.vim
+    " Author: Faris Chugthai
+    " Description: rst ftplugin
+    " Last Modified: Feb 04, 2019
 " ============================================================================
 " The header snippet works phenomenally.
+
+if v:version < 600
+    syntax clear
+elseif exists('b:current_personal_syntax')
+    finish
+endif
+let b:current_personal_syntax = 1
 
 setlocal tabstop=3
 setlocal softtabstop=3
@@ -16,6 +23,3 @@ setlocal foldlevelstart=1
 setlocal spell!
 
 " TODO: Need to set an undo ftplugin.
-
-" I want Sphinx to work inside of Vim. Use the compiler file.
-" setlocal makeprg=make\ html

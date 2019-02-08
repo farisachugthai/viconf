@@ -60,7 +60,7 @@ let b:ale_python_pyls_options = {
       \         'enabled': v:false
       \       },
       \       'flake8': {
-      \         'enabled': v:true 
+      \         'enabled': v:true
       \       }
       \     }
       \   },
@@ -78,7 +78,13 @@ if executable('yapf')
     let b:ale_fixers += ['yapf']
 endif
 
-" Virtualenvs:
+" TODO:
+" Here's a suggestion. Write your own buffer fixer using ALE and yapf.
+" You do it anyway so why not nnoremap <Leader>bf <expr> py3do % or %yapf or
+" set makeprg=unittest.TestRunner()...or even sphinx build or something. lots
+" of choices.
+
+" Virtualenvs: {{{3
 if isdirectory('~/virtualenvs')
     let b:ale_virtualenv_dir_names += '~/virtualenvs'
 endif

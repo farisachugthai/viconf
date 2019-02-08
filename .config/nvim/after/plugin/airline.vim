@@ -64,5 +64,4 @@ let g:airline#extensions#tabline#tab_nr_type = 1 " splits and tab number
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 0
 let g:airline#extensions#tabline#fnametruncate = 1
-
-" Vim: set foldlevel=0:
+let g:airline#extensions#ale#enabled = 1

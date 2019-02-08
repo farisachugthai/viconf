@@ -10,14 +10,14 @@ let g:snips_github = 'https://github.com/farisachugthai'
 " Shout out Justinmk! Never wanted to go through a full check for vim-plug
 " since it's there 99% of the time but this is a real smart workaround
 " https://github.com/justinmk/config/blob/291ec0ae12b0b4b35b4cf9315f1878db00b780ec/.config/nvim/init.vim#L12
-let s:plugins = filereadable(expand('~/.config/nvim/autoload/plug.vim', 1))
+let s:plugins = filereadable(expand('~/.local/share/nvim/site/autoload/plug.vim', 1))
 let s:plugins_extra = s:plugins
 
 if expand('OS') !=# 'Windows_NT'
     if !s:plugins
         fun! InstallPlug() "bootstrap plug.vim on new systems
-            silent call mkdir(expand('~/.config/nvim/autoload', 1), 'p')
-            exe '!curl -fLo '.expand('~/.config/nvim/autoload/plug.vim', 1)
+            silent call mkdir(expand('~/.local/share/nvim/site/autoload', 1), 'p')
+            exe '!curl -fLo '.expand('~/.local/share/nvim/site/autoload/plug.vim', 1)
             \ .' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
         endfun
     endif
@@ -51,8 +51,8 @@ endif
 let g:deoplete#enable_at_startup = 1
 
 Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3'] }
-Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'fszymanski/deoplete-emoji'
+Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
 Plug 'Rykka/InstantRst'
@@ -61,6 +61,7 @@ Plug 'greyblake/vim-preview'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 
+" Its weird to me that I have to do this but plug prepends itself!
 " Nvim Specific: {{{1
 
 if has('nvim')
@@ -124,18 +125,18 @@ endif
 " let g:mapleader = '\<Space>'
 noremap <Space> <nop>
 map <Space> <Leader>
-let g:maplocalleader = "\,"
+let g:maplocalleader = '\,'
 
 if !has('nvim')
-set viminfo='100,<200,s200,n$HOME/.vim/viminfo
+    set viminfo='100,<200,s200,n$HOME/.vim/viminfo
 endif
 
 " Pep8 Global Options: {{{2
 if &tabstop > 4
-set tabstop=4           " show existing tab with 4 spaces width
+    set tabstop=4           " show existing tab with 4 spaces width
 endif
 if &shiftwidth > 4
-set shiftwidth=4        " when indenting with '>', use 4 spaces width
+    set shiftwidth=4        " when indenting with '>', use 4 spaces width
 endif
 set expandtab smarttab      " On pressing tab, insert 4 spaces
 set softtabstop=4
@@ -153,8 +154,8 @@ set foldcolumn=1
 
 " Buffers Windows Tabs: {{{2
 try
-set switchbuf=useopen,usetab,newtab
-set showtabline=2
+    set switchbuf=useopen,usetab,newtab
+    set showtabline=2
 catch
 endtry
 
@@ -172,61 +173,61 @@ setlocal spelllang=en
 
 " This is is definitely one of the things that needs to get ported over to nvim
 if filereadable(expand('~/.config/nvim/spell/en.utf-8.add'))
-set spellfile=~/.config/nvim/spell/en.utf-8.add
+    set spellfile=~/.config/nvim/spell/en.utf-8.add
 elseif filereadable(glob('~/projects/viconf/.vim/spell/en.utf-8.add'))
-set spellfile=~/projects/viconf/.vim/spell/en.utf-8.add
+    set spellfile=~/projects/viconf/.vim/spell/en.utf-8.add
 else
-echoerr 'Spell file not found.'
+    echoerr 'Spell file not found.'
 endif
 
 if !has('nvim')
-set spelllang+=$VIMRUNTIME/spell/en.utf-8.spl
+    set spelllang+=$VIMRUNTIME/spell/en.utf-8.spl
 endif
 
 set complete+=kspell                    " Autocomplete in insert mode
 set spellsuggest=5                      " Limit the number of suggestions from 'spell suggest'
 
 if filereadable('/usr/share/dict/words')
-set dictionary+=/usr/share/dict/words
-" Replace the default dictionary completion with fzf-based fuzzy completion
-" Courtesy of fzf <3 vim
-inoremap <expr> <c-x><c-k> fzf#vim#complete('cat /usr/share/dict/words')
+    set dictionary+=/usr/share/dict/words
+    " Replace the default dictionary completion with fzf-based fuzzy completion
+    " Courtesy of fzf <3 vim
+    inoremap <expr> <c-x><c-k> fzf#vim#complete('cat /usr/share/dict/words')
 endif
 
 if filereadable('/usr/share/dict/american-english')
-setlocal dictionary+=/usr/share/dict/american-english
+    setlocal dictionary+=/usr/share/dict/american-english
 endif
 
 if filereadable('$HOME/.config/nvim/spell/en.hun.spl')
-set spelllang+=$HOME/.config/nvim/spell/en.hun.spl
+    set spelllang+=$HOME/.config/nvim/spell/en.hun.spl
 endif
 
 if filereadable(glob('~/.vim/autocorrect.vim'))
-source ~/.vim/autocorrect.vim
+    source ~/.vim/autocorrect.vim
 endif
 
 " Fun With Clipboards: {{{2
 if has('unnamedplus')                   " Use the system clipboard.
-set clipboard+=unnamed,unnamedplus
+    set clipboard+=unnamed,unnamedplus
 else                                    " Accommodate Termux
-set clipboard+=unnamed
+    set clipboard+=unnamed
 endif
 
 set pastetoggle=<F7>
 
 if exists('$TMUX')
-let g:clipboard = {
-    \   'name': 'myClipboard',
-    \   'copy': {
-    \      '+': 'tmux load-buffer -',
-    \      '*': 'tmux load-buffer -',
-    \    },
-    \   'paste': {
-    \      '+': 'tmux save-buffer -',
-    \      '*': 'tmux save-buffer -',
-    \   },
-    \   'cache_enabled': 1,
-    \ }
+    let g:clipboard = {
+        \   'name': 'myClipboard',
+        \   'copy': {
+        \      '+': 'tmux load-buffer -',
+        \      '*': 'tmux load-buffer -',
+        \    },
+        \   'paste': {
+        \      '+': 'tmux save-buffer -',
+        \      '*': 'tmux save-buffer -',
+        \   },
+        \   'cache_enabled': 1,
+        \ }
 endif
 
 " Autocompletion: {{{2
@@ -243,7 +244,7 @@ set tags+=~/projects/tags               " consider generating a few large tag
 set tags+=~python/tags                  " files rather than recursive searches
 set mouse=a                             " Automatically enable mouse usage
 if &textwidth!=0
-set colorcolumn=+1                  " I don't know why this didn't set
+    set colorcolumn=+1                  " I don't know why this didn't set
 endif
 set cmdheight=2
 set number
@@ -255,7 +256,7 @@ set autoindent smartindent              " :he options: set with smartindent
 set isfname-==
 
 if has('gui_running')
-set guifont=Fira\ Code\ weight=450\ 10
+    set guifont=Fira\ Code\ weight=450\ 10
 endif
 
 " In case you wanted to see the guicursor default for gvim win64
@@ -263,8 +264,13 @@ endif
 
 set path+=**                            " Recursively search dirs with :find
 if isdirectory('/usr/include/libcs50')
-set path+=/usr/include/libcs50          " Also I want those headers
+    set path+=/usr/include/libcs50          " Also I want those headers
 endif
+
+if isdirectory(expand('$_ROOT/lib/python3'))
+    set path=+=expand('$_ROOT) . 'lib/python3'
+endif
+
 set autochdir
 set fileformat=unix
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
@@ -272,8 +278,8 @@ set nojoinspaces
 set diffopt=vertical,context:3          " vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
 
 if has('persistent_undo')
-set undodir=~/.config/nvim/undodir
-set undofile
+    set undodir=~/.config/nvim/undodir
+    set undofile
 endif
 
 set backup
@@ -687,6 +693,8 @@ let rst_syntax_code_list = ['vim', 'python', 'sh', 'markdown', 'lisp']
 " highlighting readline options
 let readline_has_bash = 1
 
+" from runtime/ftplugin/html.vim
+let g:ft_html_autocomment = 1
 " Functions_Commands: {{{1
 
 " Up until Rename are from Junegunn so credit to him

@@ -5,7 +5,19 @@ let g:deoplete#enable_smart_case = 1
 set completeopt+=noinsert                    " Autoselect feature
 
 " Options: {{{1
-call deoplete#custom#option('max_list', 25)                 " Default is 500 like dude i can't see that
+
+" Default is 500 like dude i can't see that
+call deoplete#custom#option('max_list', 25)
+
+" refresh_always
+" 		Deoplete refreshes the candidates automatically if this value
+" 		is True.
+" 		Note: It increases the screen flicker.
+
+" 		Default value: v:true
+
+" If you decrease updatetime it flickers like crazy
+call deoplete#custom#option('refresh_always', 'v:false')
 
 " - range_above = Search for words N lines above.
 " - range_below = Search for words N lines below.
@@ -26,19 +38,22 @@ inoremap <expr><C-h> deoplete#smart_close_popup()."\<C-h>"
 inoremap <expr><BS> deoplete#smart_close_popup()."\<C-h>"
 
 " On <CR>: close popup and save indent.
-" inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function() abort
+    return deoplete#close_popup() . "\<CR>"
+endfunction
 
-" function! s:my_cr_function() abort
-"     return deoplete#close_popup()
-" endfunction
-
-" Refresh candidates. Are we clobbering anything? Wth is it set to insert tab???
+" Refresh candidates.
 inoremap <expr><C-l> deoplete#refresh()
 
 " Undo completion
 inoremap <expr><C-g> deoplete#undo_completion()
 
 " Deoplete Sources: {{{1
+
+" Use head matcher instead of fuzzy matcher
+call deoplete#custom#source('_', 'matchers', ['matcher_head'])
+
 " Disable the candidates in Comment/String syntaxes.
 call deoplete#custom#source('_', 'disabled_syntaxes', ['Comment', 'String'])
 
@@ -60,13 +75,20 @@ call deoplete#custom#source( 'file', 'enable_buffer_path', 'True')
 call deoplete#custom#source('UltiSnips', 'rank', '1')
 
 " Logging: {{{1
-" Let's start logging stuff about deoplete a little
+
+" Let's start logging stuff about deoplete a little.
 " Also remember that you can jump to a file with <kbd>gf</kbd>
 " Any way we can make this call silent?
 call deoplete#enable_logging('INFO', expand('~/.local/share/nvim/deoplete.log'))
 
-" Enable jedi source debug messages
+" Print time information to the log file
 call deoplete#custom#option('profile', v:true)
-call deoplete#custom#source('jedi', 'is_debug_enabled', 1)
+
 " UltiSnips randomly acting weird.
 call deoplete#custom#source('ultisnips', 'is_debug_enabled', 1)
+
+" Enable jedi source debug messages
+" Note: You must enable
+"|deoplete-source-attribute-is_debug_enabled| to debug the
+"sources.
+call deoplete#custom#source('jedi', 'is_debug_enabled', 1)

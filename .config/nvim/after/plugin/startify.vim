@@ -25,7 +25,7 @@ function! StartifyEntryFormat()
     return 'WebDevIconsGetFileTypeSymbol(absolute_path) ." ". entry_path'
 endfunction
 
-" Center the header and footer
+" Center The Header And Footer: {{{1
 function! s:filter_header(lines) abort
     let longest_line   = max(map(copy(a:lines), 'strwidth(v:val)'))
     let centered_lines = map(copy(a:lines),

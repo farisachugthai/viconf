@@ -1,4 +1,12 @@
-# Vim Snippets
+# Vim Snippets:
+
+# TODO Use this funcs as snips and you'll be set for help files
+# https://github.com/google/vimdoc/blob/master/vimdoc/output.py
+
+#########################
+#  # Personal snippets  #
+#########################
+
 
 snippet path "Refer to a file in the same dir as the script."
 ${1:'let ${2:${VISUAL:s:local_vimrc}}' = }}fnamemodify(resolve(expand('${3:<sfile>}')), '${4::p:h}')
@@ -48,14 +56,21 @@ snippet header "standard Vim script file header"
 endsnippet
 
 snippet ft "Ftplugin guard" bs
-if v:version < 600
-	syntax clear
-elseif exists(${1:'b:current_syntax'})
-	finish
-endif
+if exists('b:did_ftplugin') | finish | endif
 let b:did_ftplugin = 1
 
-let b:undo_ftplugin = "${2:setl cms< com< fo<}" $0
+" Make sure the continuation lines below do not cause problems in
+" compatibility mode.
+let s:save_cpo = &cpo
+set cpo-=C
+
+let b:did_ftplugin = 1
+
+let b:undo_ftplugin = '${2:setl cms< com< fo<}' $0
+
+" Restore the saved compatibility options.
+let &cpo = s:save_cpo
+unlet s:save_cpo
 endsnippet
 
 snippet syn "Syntax file guard" b
