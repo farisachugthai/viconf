@@ -87,10 +87,6 @@ elseif exists('$PREFIX')
         let g:python3_host_prog = expand('$PREFIX/bin/python')
     endif
 
-elseif expand('$OS') ==# 'Windows_NT'
-    " shouldve gotten caught by conda env var right?
-    let g:python3_host_prog = expand('~/Miniconda3/python.exe')
-
 else
     if executable('/usr/bin/python3')
         let g:python3_host_prog = '/usr/bin/python3'
@@ -118,6 +114,21 @@ if filereadable(s:local_vimrc)
     execute 'source' s:local_vimrc
 endif
 
+" Here's a nice little setting to encourage interoperability
+" UNIX AND MS-WINDOWS
+
+" Some people have to do work on MS-Windows systems one day and on Unix another
+" day.  If you are one of them, consider adding 'slash' and 'unix' to
+" 'sessionoptions'.  The session files will then be written in a format that can
+" be used on both systems.  This is the command to put in your |init.vim| file:
+set sessionoptions+=unix,slash
+" Vim will use the Unix format then, because the MS-Windows Vim can read and
+" write Unix files, but Unix Vim can't read MS-Windows format session files.
+" Similarly, MS-Windows Vim understands file names with / to separate names, but
+" Unix Vim doesn't understand \.
+
+" Not related but I wanted to strike these down because they're annoying.
+set sessionoptions-=blank,folds
 
 " Global Options: {{{1
 
@@ -242,7 +253,7 @@ set wildignorecase
 set tags+=./tags,./../tags,./*/tags     " usr_29
 set tags+=~/projects/tags               " consider generating a few large tag
 set tags+=~python/tags                  " files rather than recursive searches
-set mouse=a                             " Automatically enable mouse usage
+set mouse=a                             " atically enable mouse usage
 if &textwidth!=0
     set colorcolumn=+1                  " I don't know why this didn't set
 endif
@@ -295,6 +306,7 @@ set lazyredraw
 set browsedir="buffer"                  " which directory is used for the file browser
 
 " Mappings: {{{1
+
 " Window_Buf_Tab_Mappings: {{{2
 
 " Navigate buffers more easily
@@ -344,11 +356,6 @@ map <silent> <Leader>ts <Cmd>!termux-share -a send %<CR>
 " Simple way to speed up startup
 nnoremap <Leader>nt :NERDTreeToggle<CR>
 
-" Escape Conveniences:
-" f d clobbers the command though...
-inoremap jk <Esc>
-vnoremap jk <Esc>
-
 " Junegunn:
 nnoremap <Leader>o o<Esc>
 nnoremap <Leader>O O<Esc>
@@ -380,11 +387,12 @@ nnoremap <Leader>sn :Snippets<CR>
 
 nnoremap <Leader>se :UltiSnipsEdit<CR>
 
-inoremap <F6> <Esc>:UltiSnipsEdit<CR>
+" TODO: Is C-o better than Esc?
+inoremap <F6> <C-o>:UltiSnipsEdit<CR>
 nnoremap <F6> :UltiSnipsEdit<CR>
 
 " Unimpaired: {{{2
-" Note that ]c and [c are mapped by git-gutter
+" Note that ]c and [c are mapped by git-gutter and ALE has ]a and [a
 nnoremap ]q :cnext<CR>
 nnoremap [q :cprev<CR>
 nnoremap ]Q :cfirst<CR>
@@ -441,6 +449,7 @@ nnoremap <A-a> <Plug>(ale_detail)
 " This might be a good idea. * is already 'search for the cword' so let ALE
 " work in a similar manner right?
 nnoremap <Leader>* <Plug>(ale_go_to_reference)
+
 nnoremap <Leader>a :ALEInfo<CR>
 
 " Fugitive: {{{2
@@ -643,12 +652,20 @@ let g:tagbar_sort = 0
 
 " Zim: {{{2
 let g:zim_notebooks_dir = '~/Notebooks'
+let g:zim_notebooks_dir = expand('~/Notebooks.git')
+let g:zim_notebook = expand('~/Notebooks.git')
+let g:zim_dev = 1
+let g:zim_notebooks_dir = '~/Notebooks'
 
+" Here's an exciting little note about Zim. Ignoring how ...odd this plugin is
+" Voom actually gets pretty close to handling Zimwiki if you recognize it as
+" as dokuwiki!
 " Riv: {{{2
+
 " Highlight py docstrings with rst highlighting
 let g:riv_python_rst_hl = 1
-
-" Voom: {{{2
+let g:riv_file_link_style = 2  " Add support for :doc:`something` directive.
+" Voom: {{{ 2
 
 "g:voom_ft_modes" is a Vim dictionary: keys are filetypes (|ft|), values are
 " corresponding markup modes (|voom-markup-modes|). Example:
