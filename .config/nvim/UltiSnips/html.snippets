@@ -62,7 +62,7 @@ endsnippet
 # Since we haven't run into these before.
 
 # Check the README for the explanation of w as "word boundary"
-snippet a "Link" w
+snippet a "HTML link" w
 <a href="${1:http://www.${2:url.com}}"${3: target="_blank"}>${4:Anchor Text}</a>$0
 endsnippet
 
@@ -265,6 +265,7 @@ snippet header "<header>"
 </header>
 endsnippet
 
+# TODO: ????
 snippet hr "<hr>"
 <hr>
 endsnippet
@@ -322,15 +323,15 @@ snippet ins "<ins>" w
 endsnippet
 
 snippet kbd "<kbd>" w
-<kbd>${VISUAL:0}</kbd>
+<kbd>${0:${VISUAL}}</kbd>
 endsnippet
 
 snippet label "<label>"
-<label>${VISUAL:0}</label>
+<label>${0:${VISUAL}}</label>
 endsnippet
 
 snippet legend "<legend>"
-<legend>${VISUAL:0}</legend>
+<legend>${0:${VISUAL}}</legend>
 endsnippet
 
 snippet li "list item" w

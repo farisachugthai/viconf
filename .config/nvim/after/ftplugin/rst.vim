@@ -1,10 +1,18 @@
 " ============================================================================
-	" File: rst.vim
-	" Author: Faris Chugthai
-	" Description: rst ftplugin
-	" Last Modified: Jan 05, 2019
+    " File: rst.vim
+    " Author: Faris Chugthai
+    " Description: rst ftplugin
+    " Last Modified: Feb 04, 2019
 " ============================================================================
 " The header snippet works phenomenally.
+
+" Don't know if this is needed. From the help docs for ftdetect.
+" if exists("did_load_filetypes")
+"   finish
+" endif
+" augroup filetypedetect
+"   au! BufRead,BufNewFile *.rst        setfiletype rst
+" augroup END
 
 if v:version < 600
     syntax clear
@@ -13,16 +21,22 @@ elseif exists('b:current_personal_syntax')
 endif
 let b:current_personal_syntax = 1
 
+" At first I saw that sphinx recommends 3 space tabstops, but it makes things
+" really inconsistent with the source code. Python files will automatically
+" create 4 space tabstops and the rst files documenting them use 3 and it gets
+" messy very quickly.
 setlocal tabstop=4
 setlocal softtabstop=4
-setlocal shiftwidth=4  " and expandtab is already set so that should set that
+setlocal shiftwidth=4
+
 setlocal colorcolumn=80
 setlocal linebreak
+setlocal foldlevel=0
+setlocal foldlevelstart=0
+setlocal spell!
 
-" riv!!! BTW adding <silent> doesn't mute errors if Tab isn't mapped
-" if hasmapto('<Tab>')
-" wrong function to use but close, usr_41 has a section on hasmapto and its for the func
-" not for the mapping.
-unmap '<Tab>'
-let g:UltiSnipsExpandTrigger = '<Tab>'
-inoremap <C-Tab> * <Esc>:call ultisnips#listsnippets()<CR>
+" Assuming the rst is a python related file
+" TODO: How do we modify so that `K` reads the help docs into a buffer?
+setlocal keywordprg=pydoc
+
+" TODO: Need to set an undo ftplugin.

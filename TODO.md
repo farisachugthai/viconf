@@ -1,5 +1,17 @@
 # TODO
 
+Feb 04, 2019:
+
+1) Startify doesn't display any MRU's even though it's explicitly stated to list
+in my plugin conf.
+
+Is this a problem with the main.shada file or startify being configured
+incorrectly? `:StartifyDebug` isn't giving me too much.
+
+2) Do I have ftplugin guards on all my ftplugins? Is the snippet that I have
+for ftplugins correct? And do I have guards on all my plugin files?
+  - Very seriously thinking about dropping deoplete it's getting on my nerves.
+
 Jan 21, 2019:
 
   Riv clobbers insert mode <kbd>Tab</kbd> which basically disables UltiSnips
