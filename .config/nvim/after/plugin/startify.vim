@@ -11,14 +11,15 @@ endfunction
 
 " Startify Lists: {{{1
 " TODO: Would you wanna add other repos to the start list?
+
 let g:startify_lists = [
-    \ { 'header': ['   MRU'],            'type': 'files' },
-    \ { 'header': ['   MRU '. getcwd()], 'type': 'dir' },
-    \ { 'header': ['   Sessions'],       'type': 'sessions' },
-    \ { 'header': ['   Viconf'],         'type': function('s:list_commits') },
-    \ { 'header': ['   Commands'],       'type': 'commands',       },
-    \ { 'header': ['   Bookmarks'],      'type': 'bookmarks',  },
-\ ]
+    \ { 'type': 'files',     'header': ['   MRU']            },
+    \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
+    \ { 'type': 'sessions',  'header': ['   Sessions']       },
+    \ { 'type': function('s:list_commits'),  'header': ['   Viconf']},
+    \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
+    \ { 'type': 'commands',  'header': ['   Commands']       },
+    \ ]
 
 " Setup_devicons: {{{1
 function! StartifyEntryFormat()
@@ -45,9 +46,9 @@ let g:startify_skiplist = [
 
 " Session Dir: {{{1
 if has('gui_win32')
-    let g:startify_session_dir = '$HOME\vimfiles\session'
+    let g:startify_session_dir = expand('$HOME\vimfiles\session')
 else
-    let g:startify_session_dir = '~/.vim/session'
+    let g:startify_session_dir = expand('~/.vim/session')
 endif
 
 " General Options: {{{1

@@ -17,9 +17,9 @@ if expand('OS') !=# 'Windows_NT'
     if !s:plugins
         fun! InstallPlug() "bootstrap plug.vim on new systems
             silent call mkdir(expand('~/.local/share/nvim/site/autoload', 1), 'p')
-            exe '!curl -fLo '.expand('~/.local/share/nvim/site/autoload/plug.vim', 1)
-            \ .' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-        endfun
+            execute '!curl -fLo '.expand('~/.local/share/nvim/site/autoload/plug.vim', 1)
+          \ .' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+      endfun
     endif
 endif
 
@@ -69,6 +69,9 @@ if has('nvim')
     set termguicolors
 endif
 
+unlet! skip_defaults_vim
+silent! source $VIMRUNTIME/defaults.vim
+
 " Python Executables: {{{1
 
 " if we have a virtual env start there
@@ -103,7 +106,7 @@ let s:termux = exists('$PREFIX') && has('unix')
 let s:ubuntu = !exists('$PREFIX') && has('unix')
 let s:windows = has('win32') || has('win64')
 
-let s:winrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/winrc'
+let s:winrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/winrc.vim'
 if s:windows && filereadable(s:winrc)
     execute 'source' s:winrc
 endif
@@ -175,9 +178,9 @@ set splitbelow splitright
 
 " Spell Checker: {{{2
 
-set encoding=UTF-8                       " Set default encoding
-scriptencoding UTF-8                     " Vint believes encoding should be done first
-set fileencoding=UTF-8
+set encoding=utf-8                       " Set default encoding
+scriptencoding utf-8                     " Vint believes encoding should be done first
+set fileencoding=utf-8
 set termencoding=utf-8
 
 setlocal spelllang=en
@@ -253,7 +256,7 @@ set wildignorecase
 set tags+=./tags,./../tags,./*/tags     " usr_29
 set tags+=~/projects/tags               " consider generating a few large tag
 set tags+=~python/tags                  " files rather than recursive searches
-set mouse=a                             " atically enable mouse usage
+set mouse=a                             " Automatically enable mouse usage
 if &textwidth!=0
     set colorcolumn=+1                  " I don't know why this didn't set
 endif
@@ -313,12 +316,6 @@ set browsedir="buffer"                  " which directory is used for the file b
 nnoremap <Leader>bn :bnext<CR>
 nnoremap <Leader>bp :bprev<CR>
 
-" Navigate windows more easily
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
-
 " Wanna navigate windows more easily?
 " |CTRL-W_gF|   CTRL-W g F     edit file name under the cursor in a new
 "                  tab page and jump to the line number
@@ -327,8 +324,8 @@ nnoremap <C-l> <C-w>l
 " Rebind that to C-w t and we can open the filename in a new tab.
 
 " Navigate tabs more easily
-map <A-Right> :tabnext<CR>
-map <A-Left> :tabprev<CR>
+nnoremap <A-Right> :tabnext<CR>
+nnoremap <A-Left> :tabprev<CR>
 nnoremap <Leader>tn :tabnext<CR>
 nnoremap <Leader>tp :tabprev<CR>
 " Opens a new tab with the current buffer's path
@@ -345,13 +342,7 @@ nnoremap <Leader>re :so $MYVIMRC<CR>
 
 " General_Mappings: {{{2
 
-" :map-cmd
-                        " *<Cmd>* *:map-cmd*
-" The <Cmd> pseudokey may be used to define a 'command mapping', which executes
-" the command directly (without changing modes, etc.).  Where you might use
-":...<CR>" in the {lhs} of a mapping, you can instead use '<Cmd>...<CR>'.
-
-map <silent> <Leader>ts <Cmd>!termux-share -a send %<CR>
+noremap <silent> <Leader>ts <Cmd>!termux-share -a send %<CR>
 
 " Simple way to speed up startup
 nnoremap <Leader>nt :NERDTreeToggle<CR>
@@ -383,13 +374,13 @@ noremap <leader>W :w !sudo tee % > /dev/null<CR>
 
 " TODO: Is it better to put <Cmd> here? For the insert mode ones maybe.
 " I use this command constantly
-nnoremap <Leader>sn :Snippets<CR>
+nnoremap <Leader>se <Cmd>UltiSnipsEdit<CR>
+nnoremap <Leader>sn <Cmd>UltiSnipsEdit<CR>
 
-nnoremap <Leader>se :UltiSnipsEdit<CR>
-
-" TODO: Is C-o better than Esc?
-inoremap <F6> <C-o>:UltiSnipsEdit<CR>
-nnoremap <F6> :UltiSnipsEdit<CR>
+" TODO: Is C-o better than Esc? Also add a check that if has_key(plug['fzf'])
+" then and only then make these mappings. should just move to fzf plugin
+inoremap <F6> <C-o>:Snippets<CR>
+nnoremap <F6> :Snippets<CR>
 
 " Unimpaired: {{{2
 " Note that ]c and [c are mapped by git-gutter and ALE has ]a and [a
@@ -463,8 +454,11 @@ nnoremap <silent> <Leader>ge   :Gedit<Space>
 nnoremap <silent> <Leader>gf   :Gfetch<CR>
 nnoremap <silent> <Leader>gg   :Ggrep<CR>
 nnoremap <silent> <Leader>gl   :0Glog<CR>
-nnoremap <silent> <Leader>gL   :0Glog --pretty=oneline --graph<CR>
+nnoremap <silent> <Leader>gL   :0Glog --pretty=oneline --graph --decorate --abbrev --all --branches<CR>
 nnoremap <silent> <Leader>gm   :Gmerge<CR>
+" Make the mapping longer but clear as to whether gp would pull or push
+nnoremap <silent> <Leader>gpl  :Gpull<CR>
+nnoremap <silent> <Leader>gps  :Gpush<CR>
 nnoremap <silent> <Leader>gq   :Gwq<CR>
 nnoremap <silent> <Leader>gQ   :Gwq!<CR>
 nnoremap <silent> <Leader>gR   :Gread<Space>
@@ -665,7 +659,10 @@ let g:zim_notebooks_dir = '~/Notebooks'
 " Highlight py docstrings with rst highlighting
 let g:riv_python_rst_hl = 1
 let g:riv_file_link_style = 2  " Add support for :doc:`something` directive.
-" Voom: {{{ 2
+let g:riv_ignored_maps = '<Tab>'
+let g:riv_ignored_nmaps = '<Tab>'
+let g:riv_i_tab_pum_next = 0
+" Voom: {{{2
 
 "g:voom_ft_modes" is a Vim dictionary: keys are filetypes (|ft|), values are
 " corresponding markup modes (|voom-markup-modes|). Example:
@@ -874,6 +871,20 @@ function! ExpandPossibleShorterSnippet()
   return 0
 endfunction
 inoremap <silent> <C-L> <C-R>=(ExpandPossibleShorterSnippet() == 0? '': UltiSnips#ExpandSnippet())<CR>
+
+" Expand Snippet Or CR: {{{3
+" Hopefully will expand snippets or CR. Or it'll destroy deoplete's
+" ability to close the pum. *shrugs*
+function! ExpandSnippetOrCarriageReturn() abort
+  let snippet = UltiSnips#ExpandSnippetOrJump()
+    if g:ulti_expand_or_jump_res > 0
+      return snippet
+    else
+      return "\<CR>"
+    endif
+endfunction
+
+inoremap <expr> <CR> pumvisible() ? "<C-R>=ExpandSnippetOrCarriageReturn()<CR>" : "\<CR>"
 
 " LanguageClient Check:{{{2
 " Check if the LanguageClient is running.

@@ -6,6 +6,14 @@
 " ============================================================================
 " The header snippet works phenomenally.
 
+" Don't know if this is needed. From the help docs for ftdetect.
+" if exists("did_load_filetypes")
+"   finish
+" endif
+" augroup filetypedetect
+"   au! BufRead,BufNewFile *.rst        setfiletype rst
+" augroup END
+
 if v:version < 600
     syntax clear
 elseif exists('b:current_personal_syntax')
@@ -13,9 +21,9 @@ elseif exists('b:current_personal_syntax')
 endif
 let b:current_personal_syntax = 1
 
-setlocal tabstop=3
-setlocal softtabstop=3
-setlocal shiftwidth=3  " and expandtab is already set so that should set that
+setlocal tabstop=4
+setlocal softtabstop=4
+setlocal shiftwidth=4  " and expandtab is already set so that should set that
 setlocal colorcolumn=80
 setlocal linebreak
 setlocal foldlevel=1

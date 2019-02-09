@@ -14,6 +14,7 @@ setl textwidth=120
 " configuration options you have.
 if executable('yapf')
     setlocal equalprg=yapf
+    let b:ale_fixers += ['yapf']
 endif
 
 " TODO: Should set makeprg to something that could execute tests
@@ -29,9 +30,15 @@ setlocal colorcolumn=80,120
 " imap <silent> <expr> <buffer> <CR> pumvisible() ? "<CR><C-R>=(col('.')-1&&match(getline(line('.')), '\\.', \ col('.')-2) == col('.')-2)?\"\<lt>C-X>\<lt>C-O>\":\"\"<CR>" \ : "<CR>"
 " something somewhere in it is wrong.
 
+" Completions: {{{2
+" Idk if this is right.
+if &omnifunc==?''
+   set omnifunc=python3#completer
+endif
+
 " Autocommands: {{{1
 " Highlight characters after 120 chars
-augroup vimrc_autocmds
+augroup pythonchars
     autocmd!
     autocmd FileType python highlight Excess ctermbg=DarkGrey guibg=Black
     autocmd FileType python match Excess /\%120v.*/
@@ -73,10 +80,7 @@ let b:ale_python_pyls_options = {
 
 " Now that linters are set, add fixers
 " I LEARNED HOW LIST CONCATENATION WORKS
-let b:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
-if executable('yapf')
-    let b:ale_fixers += ['yapf']
-endif
+let b:ale_fixers += ['remove_trailing_lines', 'trim_whitespace']
 
 " TODO:
 " Here's a suggestion. Write your own buffer fixer using ALE and yapf.
