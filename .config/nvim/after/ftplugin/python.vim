@@ -16,6 +16,7 @@ setl textwidth=120
 if executable('yapf')
     setlocal equalprg=yapf
     setlocal formatprg=yapf
+    let b:ale_fixers += ['yapf']
 endif
 
 " TODO: Should set makeprg to something that could execute tests
@@ -26,9 +27,17 @@ setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 setlocal colorcolumn=80,120
 " Dude the columns line was destroying nvim's redraw when you split tmux panes
 
+
+" Completions: {{{2
+" Idk if this is right.
+if &omnifunc==?''
+   set omnifunc=python3#completer
+endif
+
+
 " Autocommands: {{{1
 " Highlight characters after 120 chars
-augroup vimrc_autocmds
+augroup pythonchars
     autocmd!
     autocmd FileType python highlight Excess ctermbg=DarkGrey guibg=Black
     autocmd FileType python match Excess /\%120v.*/
@@ -65,10 +74,13 @@ let b:ale_python_pyls_options = {
 
 " Now that linters are set, add fixers
 " I LEARNED HOW LIST CONCATENATION WORKS
+let b:ale_fixers += ['remove_trailing_lines', 'trim_whitespace']
+
+" TODO:
+" Here's a suggestion. Write your own buffer fixer using ALE and yapf.
+" You do it anyway so why not nnoremap <Leader>bf <expr> py3do % or %yapf or
+" set makeprg=unittest.TestRunner()...or even sphinx build or something. lots
 let b:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
-if executable('yapf')
-    let b:ale_fixers += ['yapf']
-endif
 
 " Virtualenvs: {{{3
 if isdirectory('~/virtualenvs')

@@ -1,4 +1,12 @@
-# Vim Snippets
+# Vim Snippets:
+
+# TODO Use this funcs as snips and you'll be set for help files
+# https://github.com/google/vimdoc/blob/master/vimdoc/output.py
+
+#########################
+#  # Personal snippets  #
+#########################
+
 
 snippet path "Refer to a file in the same dir as the script."
 ${1:'let ${2:${VISUAL:s:local_vimrc}}' = }}fnamemodify(resolve(expand('${3:<sfile>}')), '${4::p:h}')
@@ -42,20 +50,18 @@ snippet header "standard Vim script file header"
 " ============================================================================
 	" File: ${1:`!v expand('%:t')`}
 	" Author: ${2:`!v g:snips_author`}
-	" Description: ${3:A description of the file below'}
+	" Description: ${3:A description of the file below}
 	${0:" Last Modified: `!v strftime("%B %d, %Y")`}
 " ============================================================================
 endsnippet
 
 snippet ft "Ftplugin guard" bs
-if v:version < 600
-	syntax clear
-elseif exists(${1:'b:current_syntax'})
-	finish
-endif
+if exists('b:did_ftplugin') | finish | endif
 let b:did_ftplugin = 1
 
-let b:undo_ftplugin = "${2:setl cms< com< fo<}" $0
+$1
+
+let b:undo_ftplugin = '${2:setl cms< com< fo<}' $0
 endsnippet
 
 snippet syn "Syntax file guard" b

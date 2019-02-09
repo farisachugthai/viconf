@@ -5,13 +5,16 @@ This directory contains the snippets for `UltiSnips`_.
 
 .. _`UltiSnips`: https://github.com/sirver/ultisnips
 
+
 Notes on Ultisnips
 =======================
+
 
 Changelog
 ---------
 
 Jan 29, 2019:
+
 Just added the `m` option to a bunch of these to eliminate
 trailing whitespace. Also adding ``$0`` to a couple. I've noticed that if you
 press `UltiSnipsNextTrigger` on the last one that it deletes the word.
@@ -19,6 +22,7 @@ press `UltiSnipsNextTrigger` on the last one that it deletes the word.
 Adding a bare ``$0`` on the last line of the snippet ensures that we can tab all
 the way over and not delete anything. Then the `m` option ensures we don't
 have trailing whitespace.
+
 
 Configuration
 ----------------
@@ -34,10 +38,12 @@ After configuring ``g:UltiSnipsDirs`` and ``g:UltiSnipsDirectories`` as you
 would like, using the `UltiSnipsEdit` command should open the folder that your
 snippets are housed in.
 
+
 Options
 --------
 
 We have a few options to choose from when defining snippets. They are as follows:
+
 
 Snippets Options
 ^^^^^^^^^^^^^^^^^^
@@ -45,29 +51,26 @@ Snippets Options
 The following are options to modify the way that snippets behave. My most
 commonly used options are::
 
-    b Only expand a snippet if it is the only text on the line
-    ...
+    b  Only expand a snippet if it is the only text on the line
+       ...
+    s  Remove whitespace immediately at the end of a line after skipping over a
+       tabstop. This is useful if there is a
+       tabstop with optional text at the end of a line.
+    t  Do not expand tabs - If a snippet definition includes leading tab
+       characters, by default UltiSnips expands the tab characters honoring
+       the Vim 'shiftwidth', 'softtabstop', 'expandtab' and 'tabstop'
+       indentation settings. (For example, if 'expandtab' is set, the tab is
+       replaced with spaces.) If this option is set, UltiSnips will ignore the
+       Vim settings and insert the tab characters as is. This option is useful
+       for snippets involved with tab delimited formats.
+    w  Word boundary - With this option, the snippet is expanded if
+       the tab trigger start matches a word boundary and the tab trigger end
+       matches a word boundary. In other words the tab trigger must be
+       preceded and followed by non-word characters. Word characters are
+       defined by the 'iskeyword' setting. Use this option, for example, to
+       permit expansion where the tab trigger follows punctuation without
+       expanding suffixes of larger words.
 
-
-   s  Remove whitespace immediately at the end of a line after skipping over a
-      tabstop. This is useful if there is a
-      tabstop with optional text at the end of a line.
-
-   t  Do not expand tabs - If a snippet definition includes leading tab
-      characters, by default UltiSnips expands the tab characters honoring
-      the Vim 'shiftwidth', 'softtabstop', 'expandtab' and 'tabstop'
-      indentation settings. (For example, if 'expandtab' is set, the tab is
-      replaced with spaces.) If this option is set, UltiSnips will ignore the
-      Vim settings and insert the tab characters as is. This option is useful
-      for snippets involved with tab delimited formats.
-
-   w  Word boundary - With this option, the snippet is expanded if
-      the tab trigger start matches a word boundary and the tab trigger end
-      matches a word boundary. In other words the tab trigger must be
-      preceded and followed by non-word characters. Word characters are
-      defined by the 'iskeyword' setting. Use this option, for example, to
-      permit expansion where the tab trigger follows punctuation without
-      expanding suffixes of larger words.
 
 Important Considerations:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -83,6 +86,7 @@ For example, in :ref:`vim.snippets`, the header snippet is regularly text
 that has already been written and is commented out. With the ``b`` option, a
 commented out header will not expand.
 
+
 Usage
 -----
 
@@ -95,6 +99,7 @@ Here's an example of the generalized syntax of an UltiSnips snippet
 I want to go over a few things that initially confused me about UltiSnips, and
 how I managed to solve any problems I had with the plugin.
 
+
 Finding Your Snippets
 ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -104,6 +109,7 @@ thousands of snippets in it, and the difference between expanding ``def`` and
 
 Therefore finding available snippets relatively quickly while not getting
 bogged down searching for them is imperative.
+
 
 FZF
 ^^^^
@@ -169,14 +175,14 @@ somewhat like this.
 .. code-block:: html
    <kbd>M-u</kbd>
 
-isn't bound to anything in insert mode; however,
+Isn't bound to anything in insert mode; however,
 it is bound to delete a fairly large amount of text in normal mode.
 
 Be careful of that, and possibly disable it by remapping it to **<nop>**.
 
 Just added the `m` option to a bunch of these to eliminate
 trailing whitespace. Also adding $0 to a couple. I've noticed that if you
-press UltiSnipsNextTrigger on the last one that it deletes the word.
+press `UltiSnipsNextTrigger` on the last one that it deletes the word.
 
 Adding a bare $0 on the last line of the snippet ensures that we can tab all
 the way over and not delete anything. Then the `m` option ensures we don't
@@ -185,6 +191,7 @@ have trailing whitespace.
 
 Programmatic Editing
 --------------------
+
 
 Vim's Search and Replace
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -228,6 +235,7 @@ necessary here; however, it's a good habit to get into.
 `c` means "require confirmation. Once again, not necessary but a good habit to
 get into.
 
+
 UltiSnips Patterns
 ~~~~~~~~~~~~~~~~~~
 
@@ -252,6 +260,7 @@ more closely resemble the desired snippets.
 
    :'<,'>s/${1/${0:${VISUAL/
    :'<,'>s/}$/}}/
+
 
 Roadmap
 -------
@@ -281,7 +290,9 @@ So if you get to the end of the expression, then insert
 It'll expand to a regular if statement. You could make similar expressions with
 `ifn` and `ifnn` expanding to ``if var is None`` or ``if var is not None``.
 
+
 From @SirVer himself.
+
 
 Standing On The Shoulders of Giants
 ===================================

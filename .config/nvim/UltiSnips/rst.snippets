@@ -42,7 +42,7 @@ endsnippet
 snippet cb "Code Block. Must have 1 blank line surrounding!" bs
 .. code-block:: ${1:python}
 
-    ${2:${VISUAL:code}}$0
+	 ${2:${VISUAL:code}} $0
 endsnippet
 
 # Added s option to remove 'python' if you skip over it
@@ -136,6 +136,7 @@ snippet class: "Inline class directive" w
 :class:\`${0:${VISUAL}}()\`
 endsnippet
 
+# TODO: Is this a real directive?
 snippet function "function directive" w
 .. func:: ${1:${VISUAL:call signature}}
 
@@ -316,9 +317,8 @@ ${1:${VISUAL:Subsubsection name}}
 endsnippet
 
 snippet para "Paragraph"
-${1:${VISUAL:Paragraph name}}
+${1:${VISUAL:Paragraph name}} $0
 `!p snip.rv = rst_char_len(t[1])*'"'`
-$0
 endsnippet
 
 # WHAT ARE THESE DOUBLE IF'S!

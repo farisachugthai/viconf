@@ -15,19 +15,21 @@
 " Yes
 " Vim is not 0 indexed :(
 
-if exists('b:current_syntax')
+if exists('b:did_ftplugin')
   finish
 endif
+let b:did_ftplugin = 1
 
-" function! s:DetectZimWiki()
-"     if getline(1) =~# 'Content-Type: text/x-zim-wiki'
-"         set filetype=zimwiki
-"         let b:current_syntax = 1
-"     endif
-" endfunction
+function! s:DetectZimWiki()
+    if getline(1) =~# 'Content-Type: text/x-zim-wiki'
+        setlocal filetype=zimwiki
+        let b:current_syntax = 1
+    endif
+endfunction
 
-augroup zimwiki_ftd
+augroup zimwikidetect
     autocmd!
-    autocmd BufRead,BufNewFile ~/Notebooks.git/*.txt set ft=zimwiki
-    let b:current_syntax = 1
+    " autocmd BufRead,BufNewFile ~/Notebooks.git/*.txt call s:DetectZimWiki()
+    " Honestly though if it's in that directory it IS a zimwiki note
+    autocmd BufRead, BufNewFile ~/Notebooks* set ft=zimwiki
 augroup end

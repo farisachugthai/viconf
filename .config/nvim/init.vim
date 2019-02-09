@@ -3,18 +3,16 @@
 
 " About: {{{1
 let g:snips_author = 'Faris Chugthai'
-let g:snips_email = 'farischugthai@gmail.com'
 let g:snips_github = 'https://github.com/farisachugthai'
 
 " Vim Plug: {{{1
-" Plug Check:{{{2
+" Plug Check: {{{2
 " Shout out Justinmk! Never wanted to go through a full check for vim-plug
 " since it's there 99% of the time but this is a real smart workaround
 " https://github.com/justinmk/config/blob/291ec0ae12b0b4b35b4cf9315f1878db00b780ec/.config/nvim/init.vim#L12
-let s:plugins = filereadable(expand('~/.config/nvim/autoload/plug.vim', 1))
+let s:plugins = filereadable(expand('~/.local/share/nvim/site/autoload/plug.vim', 1))
 let s:plugins_extra = s:plugins
 
-" TODO: Drop the windows check and change to xdg_config and xdg_data.
 if expand('OS') !=# 'Windows_NT'
     if !s:plugins
         fun! InstallPlug() "bootstrap plug.vim on new systems
@@ -107,7 +105,7 @@ let s:termux = exists('$PREFIX') && has('unix')
 let s:ubuntu = !exists('$PREFIX') && has('unix')
 let s:windows = has('win32') || has('win64')
 
-let s:winrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/winrc'
+let s:winrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/winrc.vim'
 if s:windows && filereadable(s:winrc)
     execute 'source' s:winrc
 endif
@@ -178,9 +176,10 @@ set hidden
 set splitbelow splitright
 
 " Spell Checker: {{{2
-set encoding=UTF-8                       " Set default encoding
-scriptencoding UTF-8                     " Vint believes encoding should be done first
-set fileencoding=UTF-8
+
+set encoding=utf-8                       " Set default encoding
+scriptencoding utf-8                     " Vint believes encoding should be done first
+set fileencoding=utf-8
 set termencoding=utf-8
 
 setlocal spelllang=en
@@ -280,6 +279,11 @@ set path+=**                            " Recursively search dirs with :find
 if isdirectory('/usr/include/libcs50')
     set path+=/usr/include/libcs50          " Also I want those headers
 endif
+
+if isdirectory(expand('$_ROOT/lib/python3'))
+    set path=+=expand('$_ROOT) . 'lib/python3'
+endif
+
 set autochdir
 set fileformat=unix
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
@@ -304,17 +308,12 @@ set lazyredraw
 set browsedir="buffer"                  " which directory is used for the file browser
 
 " Mappings: {{{1
+
 " Window_Buf_Tab_Mappings: {{{2
 
 " Navigate buffers more easily
 nnoremap <Leader>bn :bnext<CR>
 nnoremap <Leader>bp :bprev<CR>
-
-" Navigate windows more easily
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
 
 " Wanna navigate windows more easily?
 " |CTRL-W_gF|   CTRL-W g F     edit file name under the cursor in a new
@@ -324,8 +323,8 @@ nnoremap <C-l> <C-w>l
 " Rebind that to C-w t and we can open the filename in a new tab.
 
 " Navigate tabs more easily
-map <A-Right> :tabnext<CR>
-map <A-Left> :tabprev<CR>
+nnoremap <A-Right> :tabnext<CR>
+nnoremap <A-Left> :tabprev<CR>
 nnoremap <Leader>tn :tabnext<CR>
 nnoremap <Leader>tp :tabprev<CR>
 " Opens a new tab with the current buffer's path
@@ -342,13 +341,7 @@ nnoremap <Leader>re :so $MYVIMRC<CR>
 
 " General_Mappings: {{{2
 
-" :map-cmd
-                        " *<Cmd>* *:map-cmd*
-" The <Cmd> pseudokey may be used to define a 'command mapping', which executes
-" the command directly (without changing modes, etc.).  Where you might use
-":...<CR>" in the {lhs} of a mapping, you can instead use '<Cmd>...<CR>'.
-
-map <silent> <Leader>ts <Cmd>!termux-share -a send %<CR>
+noremap <silent> <Leader>ts <Cmd>!termux-share -a send %<CR>
 
 " Simple way to speed up startup
 nnoremap <Leader>nt :NERDTreeToggle<CR>
@@ -367,6 +360,7 @@ nnoremap <Leader>cd :cd %:p:h<CR>:pwd<CR>
 " Switch NERDTree root to dir of currently focused window.
 nnoremap <Leader>ncd :NERDTreeCWD
 
+" Utilize the mouse!
 map <ScrollWheelUp> <C-Y>
 map <S-ScrollWheelUp> <C-U>
 map <ScrollWheelDown> <C-E>
@@ -377,10 +371,10 @@ noremap <leader>W :w !sudo tee % > /dev/null<CR>
 
 " UltiSnips: {{{2
 
-" Not a good HACK to get around `:Snippets` not working but it'll do
-nnoremap <Leader>sn call UltiSnips#ListSnippets()
-
-nnoremap <Leader>se :UltiSnipsEdit<CR>
+" TODO: Is it better to put <Cmd> here? For the insert mode ones maybe.
+" I use this command constantly
+nnoremap <Leader>se <Cmd>UltiSnipsEdit<CR>
+nnoremap <Leader>sn <Cmd>UltiSnipsEdit<CR>
 
 " TODO: Is C-o better than Esc? Also add a check that if has_key(plug['fzf'])
 " then and only then make these mappings. should just move to fzf plugin
@@ -607,7 +601,8 @@ let g:UltiSnipsEditSplit = 'tabdo'
 let g:UltiSnipsSnippetDirectories=[$HOME.'/.config/nvim/UltiSnips']
 
 " Language Client: {{{2
-let g:LanguageClient_serverCommands = { 'python': [ 'pyls' ],
+let g:LanguageClient_serverCommands = {
+            \ 'python': [ 'pyls' ],
             \ 'c': ['clangd'],
             \ 'cpp': ['clangd'],
             \ 'js': ['tsserver'],
@@ -664,6 +659,10 @@ let g:riv_file_link_style = 2  " Add support for :doc:`something` directive.
 let g:riv_ignored_maps = '<Tab>'
 let g:riv_ignored_nmaps = '<Tab>'
 let g:riv_i_tab_pum_next = 0
+
+" From he riv-instructions. **THIS IS THE ONE!!** UltiSnips finally works again
+let g:riv_i_tab_user_cmd = "\<c-g>u\<c-r>=UltiSnips#ExpandSnippet()\<cr>"
+
 " Voom: {{{2
 
 "g:voom_ft_modes" is a Vim dictionary: keys are filetypes (|ft|), values are
@@ -708,6 +707,15 @@ let rst_syntax_code_list = ['vim', 'python', 'sh', 'markdown', 'lisp']
 
 " highlighting readline options
 let readline_has_bash = 1
+
+" from runtime/ftplugin/html.vim
+let g:ft_html_autocomment = 1
+
+" I'm gonna round buftype to filetype here.
+augroup helpnumber
+    autocmd!
+    autocmd BufEnter, BufNew buftype=help set number
+augroup END
 
 " Functions_Commands: {{{1
 
@@ -875,7 +883,7 @@ inoremap <silent> <C-L> <C-R>=(ExpandPossibleShorterSnippet() == 0? '': UltiSnip
 " Expand Snippet Or CR: {{{3
 " Hopefully will expand snippets or CR. Or it'll destroy deoplete's
 " ability to close the pum. *shrugs*
-function ExpandSnippetOrCarriageReturn()
+function! ExpandSnippetOrCarriageReturn() abort
   let snippet = UltiSnips#ExpandSnippetOrJump()
     if g:ulti_expand_or_jump_res > 0
       return snippet
