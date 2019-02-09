@@ -61,7 +61,6 @@ Plug 'greyblake/vim-preview'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 
-" Its weird to me that I have to do this but plug prepends itself!
 " Nvim Specific: {{{1
 
 if has('nvim')
@@ -621,7 +620,7 @@ let g:LanguageClient_loggingFile = '~/.local/share/nvim/LC.log'
 let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces
 let g:jedi#usages_command = '<Leader>u'
 let g:jedi#rename_command = '<F2>'
-let g:jedi#show_call_signatures_delay = 1000
+let g:jedi#show_call_signatures_delay = 100
 let g:jedi#smart_auto_mappings = 0
 let g:jedi#force_py_version = 3
 let g:jedi#enable_completions = 0
@@ -645,11 +644,9 @@ let g:tagbar_width = 30
 let g:tagbar_sort = 0
 
 " Zim: {{{2
-let g:zim_notebooks_dir = '~/Notebooks'
 let g:zim_notebooks_dir = expand('~/Notebooks.git')
 let g:zim_notebook = expand('~/Notebooks.git')
 let g:zim_dev = 1
-let g:zim_notebooks_dir = '~/Notebooks'
 
 " Here's an exciting little note about Zim. Ignoring how ...odd this plugin is
 " Voom actually gets pretty close to handling Zimwiki if you recognize it as
@@ -662,6 +659,10 @@ let g:riv_file_link_style = 2  " Add support for :doc:`something` directive.
 let g:riv_ignored_maps = '<Tab>'
 let g:riv_ignored_nmaps = '<Tab>'
 let g:riv_i_tab_pum_next = 0
+
+" From he riv-instructions. **THIS IS THE ONE!!** UltiSnips finally works again
+let g:riv_i_tab_user_cmd = "\<c-g>u\<c-r>=UltiSnips#ExpandSnippet()\<cr>"
+
 " Voom: {{{2
 
 "g:voom_ft_modes" is a Vim dictionary: keys are filetypes (|ft|), values are
@@ -709,6 +710,13 @@ let readline_has_bash = 1
 
 " from runtime/ftplugin/html.vim
 let g:ft_html_autocomment = 1
+
+" I'm gonna round buftype to filetype here.
+augroup helpnumber
+    autocmd!
+    autocmd BufEnter, BufNew buftype=help set number
+augroup END
+
 " Functions_Commands: {{{1
 
 " Up until Rename are from Junegunn so credit to him
@@ -913,11 +921,16 @@ if g:colors_name ==# 'gruvbox'
     call <SID>gruvbox()
 endif
 
-" Command should also include `colo gruvbox`
 command! -nargs=0 Gruvbox call s:gruvbox()
 
-" Here's a phenomenal autocmd for ensuring we can set nohlsearch but still
-" get highlights ONLY while searching!!
+" 12/17/18: Here's a phenomenal autocmd for ensuring we can set nohlsearch but
+" still get highlights ONLY while searching!!
+"
+" Jan 30, 2019:
+" A) Fugitive is seriously amazing. `:Gblame` to get revision dates is such a useful feature.
+" TODO: Also this exits and clears the highlighting
+" pattern as soon as you hit enter. So if you type a word, it'll highlight all
+" matches. But once you hit enter to find the next one it clears. Hmmm.
 set nohlsearch
 augroup vimrc-incsearch-highlight
     autocmd!

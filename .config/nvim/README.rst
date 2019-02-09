@@ -1,5 +1,3 @@
-.. _nvim-readme:
-
 README
 ========
 
@@ -27,7 +25,9 @@ options like so:
 | .. code-block:: vim      |                |
 |                          |                |
 |    :let OPTION_NAME = 1  | Enable option  |
++--------------------------+----------------+
 |    :let OPTION_NAME = 0  | Disable option |
++--------------------------+----------------+
 |                          |                |
 |                          |                |
 | Continuation of settings |                |

@@ -1,5 +1,3 @@
-.. _ultisnips_readme:
-
 README
 ======
 
@@ -177,7 +175,7 @@ somewhat like this.
 .. code-block:: html
    <kbd>M-u</kbd>
 
-isn't bound to anything in insert mode; however,
+Isn't bound to anything in insert mode; however,
 it is bound to delete a fairly large amount of text in normal mode.
 
 Be careful of that, and possibly disable it by remapping it to **<nop>**.
@@ -212,6 +210,7 @@ Pressing
    <kbd>Shift</kbd><kbd>v</kbd>and then using <kbd>j</kbd><kbd>k</kbd>
 
 as necessary will suffice.
+
 
 .. code:: vim
    '<,'>s/ b$/sw/gc

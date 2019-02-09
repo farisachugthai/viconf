@@ -65,3 +65,5 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 0
 let g:airline#extensions#tabline#fnametruncate = 1
 let g:airline#extensions#ale#enabled = 1
+
+" Vim: set foldlevel=0:

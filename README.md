@@ -6,10 +6,6 @@ While still a work-in-progress, this repository houses a collection of
 initialization files I use to run Neovim and Vim on Linux, Windows 10, and
 [Termux](https://www.github.com/termux/termuxapp) on Android.
 
-Here's a screenshot of me editing some python in Termux.
-
-![Termux](./images/Screenshot_20181120-202639.jpg)
-
 Neovim is my primary text editor and as a result, I've attempted integrating it
 into as much of my workflow as possible.
 
