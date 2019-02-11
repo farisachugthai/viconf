@@ -2,7 +2,7 @@
     " File: rsi.vim
     " Author: Faris Chugthai
     " Description: A reimplementation of rsi.vim
-    " Last Modified: Jan 29, 2019
+    " Last Modified: February 01, 2019
 " ============================================================================
 
 if exists('did_rsi_vim') || &cp|| v:version < 700
@@ -41,10 +41,12 @@ cmap <A\>> :norm G
 
 " History:{{{2
 
+" Remove these mappings as there isn't really a point to map it to Alt.
+" Vim already moves up or down from C-n and C-p.
 " recall newer command-line. {Actually C-n and C-p on Emacs}
-cmap <A-n> <Down>
+" cmap <A-n> <Down>
 " recall previous (older) command-line. {But we can't lose C-n and C-p}
-cmap <A-p> <Up>
+" cmap <A-p> <Up>
 
 " Other:{{{2
 
@@ -56,14 +58,23 @@ cnoremap <C-g> <Esc>
 
 " From he cedit. Open the command window with Esc so it at least does
 " something.
-exe "set cedit=\<Esc>"
+execute "set cedit=\<Esc>"
 
-" In case you want inspiration!
+" In case you want inspiration! Here are some Emacs keybindings: {{{1
+
 " <A-BS> is delete previous word
 " C-k is kill from cursor to end of line
-" C-u is either kill from cursor to beginning of line or an indication of a
-" count with a command
+
 " C-y is yank.
 
-" Idk if this would only work in the command window but <C-v> and <M-v> would
-" be page forward and page back. Think Vim C-f and C-b.
+" Here's one you get for free!
+" C-u is either kill from cursor to beginning of line or an indication of a
+" count with a command
+" Vim already has this functionality built into that key!
+
+
+							" *c_CTRL-W*
+" CTRL-W		Delete the |word| before the cursor.  This depends on the
+		" 'iskeyword' option.
+        "
+" I think that's what Emacs does too right?

@@ -1,5 +1,16 @@
 " Git_Commit:
 
+" TPope To The Rescue: {{{1
+" Dude I was just looking at the gitrebase.vim ftplugin. There's no way
+" you knew these were commands
+"
+" command! -buffer -bar Pick   :call s:choose('pick')
+" command! -buffer -bar Squash :call s:choose('squash')
+" command! -buffer -bar Edit   :call s:choose('edit')
+" command! -buffer -bar Reword :call s:choose('reword')
+" command! -buffer -bar Fixup  :call s:choose('fixup')
+" command! -buffer -bar Cycle  :call s:cycle()
+
 " Thoughtbot: {{{1
 " Taken from:
 " <https://github.com/thoughtbot/dotfiles/blob/master/vim/ftplugin/gitcommit.vim>

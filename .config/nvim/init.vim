@@ -264,6 +264,7 @@ set number
 set showmatch
 set ignorecase smartcase
 set infercase
+" smartindent's kinda terrible. removes indentation from comments
 set autoindent smartindent              " :he options: set with smartindent
 " FOOBAR=~/<CTRL-><CTRL-F> will now autocomplete!
 set isfname-==
@@ -285,7 +286,6 @@ if isdirectory(expand('$_ROOT/lib/python3'))
 endif
 
 set autochdir
-set fileformat=unix
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
 set diffopt=vertical,context:3          " vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
@@ -325,6 +325,7 @@ nnoremap <Leader>bp :bprev<CR>
 " Navigate tabs more easily
 nnoremap <A-Right> :tabnext<CR>
 nnoremap <A-Left> :tabprev<CR>
+
 nnoremap <Leader>tn :tabnext<CR>
 nnoremap <Leader>tp :tabprev<CR>
 " Opens a new tab with the current buffer's path
@@ -338,6 +339,7 @@ inoremap <F9> <Esc>:tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 
 " Now reload it
 nnoremap <Leader>re :so $MYVIMRC<CR>
+
 
 " General_Mappings: {{{2
 

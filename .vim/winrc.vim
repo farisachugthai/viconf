@@ -2,12 +2,14 @@
 " Vim: set ft=vim:set verbose=1:
 
 set linespace=3
-set cmdheight=3
+set cmdheight=2
 
 " Its basically impossible to describe how excited this option makes me.
 if exists('+shellslash')
     set shellslash
 endif
+
+set fileformat=dos
 
 " Leave these commented out in case you wanna come back to them
 " set guifont=Inconsolata:h12
