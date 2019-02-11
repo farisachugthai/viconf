@@ -1,10 +1,28 @@
 # TODO
 
+Feb 04, 2019:
+
+1) Startify doesn't display any MRU's even though it's explicitly stated to list
+in my plugin conf.
+
+Is this a problem with the main.shada file or startify being configured
+incorrectly? `:StartifyDebug` isn't giving me too much.
+
+2) Do I have ftplugin guards on all my ftplugins? Is the snippet that I have
+for ftplugins correct? And do I have guards on all my plugin files?
+  - Very seriously thinking about dropping deoplete it's getting on my nerves.
+
+Jan 21, 2019:
+
+  Riv clobbers insert mode <kbd>Tab</kbd> which basically disables UltiSnips
+  and really messes with Deoplete. *sigh*.
+
 Jan 16, 2019:
 
-Fix fzf I just remembered that I added a hook to enter nvim every time
-I hit enter in FZF. That's causing some weird errors when I use <C-x><C-f>
-to get FZF to complete file paths, and as a result, it's not doing anything.
+- Fix FZF:
+  I just remembered that I added a hook to enter nvim every time
+  I hit enter in FZF. That's causing some weird errors when I use <C-x><C-f>
+  to get FZF to complete file paths, and as a result, it's not doing anything.
 
 ## Improve Docs
 

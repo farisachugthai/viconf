@@ -12,8 +12,11 @@ setl textwidth=120
 " The external program vim uses for gg=G can be configured
 " Hey you in the future. You can use :set *prg<Tab> and see all of the
 " configuration options you have.
+" Now you can also use gq for yapf
 if executable('yapf')
     setlocal equalprg=yapf
+    setlocal formatprg=yapf
+    let b:ale_fixers += ['yapf']
 endif
 
 " TODO: Should set makeprg to something that could execute tests
@@ -24,14 +27,17 @@ setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 setlocal colorcolumn=80,120
 " Dude the columns line was destroying nvim's redraw when you split tmux panes
 
-" This is QUITE the mapping. Let's see I guess.
 
-" imap <silent> <expr> <buffer> <CR> pumvisible() ? "<CR><C-R>=(col('.')-1&&match(getline(line('.')), '\\.', \ col('.')-2) == col('.')-2)?\"\<lt>C-X>\<lt>C-O>\":\"\"<CR>" \ : "<CR>"
-" something somewhere in it is wrong.
+" Completions: {{{2
+" Idk if this is right.
+if &omnifunc==?''
+   set omnifunc=python3#completer
+endif
+
 
 " Autocommands: {{{1
 " Highlight characters after 120 chars
-augroup vimrc_autocmds
+augroup pythonchars
     autocmd!
     autocmd FileType python highlight Excess ctermbg=DarkGrey guibg=Black
     autocmd FileType python match Excess /\%120v.*/
@@ -52,7 +58,7 @@ let b:ale_linters = [ 'flake8', 'pydocstyle', 'pyls' ]
 let b:ale_linters_explicit = 1
 
 " Alright let's just do this manually
-"
+
 let b:ale_python_pyls_options = {
       \   'pyls': {
       \     'plugins': {
@@ -60,25 +66,23 @@ let b:ale_python_pyls_options = {
       \         'enabled': v:false
       \       },
       \       'flake8': {
-      \         'enabled': v:true 
+      \         'enabled': v:true
       \       }
       \     }
       \   },
       \ }
 
-" This is tough because what if theres a project file? hm.
-" Theres one in pyutils.
-" let b:ale_python_flake8_options = '--config ~/.config/flake8'
-" let b:ale_python_pycodestyle_options = '--config ~/.config/pycodestyle'
-
 " Now that linters are set, add fixers
 " I LEARNED HOW LIST CONCATENATION WORKS
-let b:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
-if executable('yapf')
-    let b:ale_fixers += ['yapf']
-endif
+let b:ale_fixers += ['remove_trailing_lines', 'trim_whitespace']
 
-" Virtualenvs:
+" TODO:
+" Here's a suggestion. Write your own buffer fixer using ALE and yapf.
+" You do it anyway so why not nnoremap <Leader>bf <expr> py3do % or %yapf or
+" set makeprg=unittest.TestRunner()...or even sphinx build or something. lots
+let b:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
+
+" Virtualenvs: {{{3
 if isdirectory('~/virtualenvs')
     let b:ale_virtualenv_dir_names += '~/virtualenvs'
 endif
@@ -94,6 +98,7 @@ if has_key(plugs, 'LanguageClient-neovim')
 endif
 
 " Riv: {{{2
+
 " Riv is a plugin for reStructuredText in Vim.
 " The following setting allows docstrings in python files
 " to be properly highlighted. I'm inordinately excited.

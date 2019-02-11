@@ -2,7 +2,7 @@
     " File: rsi.vim
     " Author: Faris Chugthai
     " Description: A reimplementation of rsi.vim
-    " Last Modified: December 08, 2018
+    " Last Modified: Jan 29, 2019
 " ============================================================================
 
 if exists('did_rsi_vim') || &cp|| v:version < 700
@@ -50,8 +50,7 @@ cmap <A-p> <Up>
 
 " How did I do this backwards??
 " It's annoying you lose a whole command from a typo
-cmap <Esc> <nop>
-
+cnoremap <Esc> <nop>
 " However I still need the functionality
 cnoremap <C-g> <Esc>
 

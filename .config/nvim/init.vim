@@ -3,7 +3,6 @@
 
 " About: {{{1
 let g:snips_author = 'Faris Chugthai'
-let g:snips_email = 'farischugthai@gmail.com'
 let g:snips_github = 'https://github.com/farisachugthai'
 
 " Vim Plug: {{{1
@@ -11,15 +10,17 @@ let g:snips_github = 'https://github.com/farisachugthai'
 " Shout out Justinmk! Never wanted to go through a full check for vim-plug
 " since it's there 99% of the time but this is a real smart workaround
 " https://github.com/justinmk/config/blob/291ec0ae12b0b4b35b4cf9315f1878db00b780ec/.config/nvim/init.vim#L12
-let s:plugins = filereadable(expand('~/.config/nvim/autoload/plug.vim', 1))
+let s:plugins = filereadable(expand('~/.local/share/nvim/site/autoload/plug.vim', 1))
 let s:plugins_extra = s:plugins
 
-if !s:plugins
-  fun! InstallPlug() "bootstrap plug.vim on new systems
-    silent call mkdir(expand('~/.config/nvim/autoload', 1), 'p')
-    exe '!curl -fLo '.expand('~/.config/nvim/autoload/plug.vim', 1)
-      \ .' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  endfun
+if expand('OS') !=# 'Windows_NT'
+    if !s:plugins
+        fun! InstallPlug() "bootstrap plug.vim on new systems
+            silent call mkdir(expand('~/.local/share/nvim/site/autoload', 1), 'p')
+            execute '!curl -fLo '.expand('~/.local/share/nvim/site/autoload/plug.vim', 1)
+          \ .' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+      endfun
+    endif
 endif
 
 " General Plugins: {{{2
@@ -50,8 +51,8 @@ endif
 let g:deoplete#enable_at_startup = 1
 
 Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3'] }
-Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'fszymanski/deoplete-emoji'
+Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
 Plug 'Rykka/InstantRst'
@@ -66,6 +67,9 @@ if has('nvim')
     set inccommand=split                    " This alone is enough to never go back
     set termguicolors
 endif
+
+unlet! skip_defaults_vim
+silent! source $VIMRUNTIME/defaults.vim
 
 " Python Executables: {{{1
 
@@ -85,10 +89,6 @@ elseif exists('$PREFIX')
         let g:python3_host_prog = expand('$PREFIX/bin/python')
     endif
 
-elseif expand('$OS') ==# 'Windows_NT'
-    " shouldve gotten caught by conda env var right?
-    let g:python3_host_prog = expand('~/Miniconda3/python.exe')
-
 else
     if executable('/usr/bin/python3')
         let g:python3_host_prog = '/usr/bin/python3'
@@ -105,7 +105,7 @@ let s:termux = exists('$PREFIX') && has('unix')
 let s:ubuntu = !exists('$PREFIX') && has('unix')
 let s:windows = has('win32') || has('win64')
 
-let s:winrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/winrc'
+let s:winrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/winrc.vim'
 if s:windows && filereadable(s:winrc)
     execute 'source' s:winrc
 endif
@@ -116,6 +116,21 @@ if filereadable(s:local_vimrc)
     execute 'source' s:local_vimrc
 endif
 
+" Here's a nice little setting to encourage interoperability
+" UNIX AND MS-WINDOWS
+
+" Some people have to do work on MS-Windows systems one day and on Unix another
+" day.  If you are one of them, consider adding 'slash' and 'unix' to
+" 'sessionoptions'.  The session files will then be written in a format that can
+" be used on both systems.  This is the command to put in your |init.vim| file:
+set sessionoptions+=unix,slash
+" Vim will use the Unix format then, because the MS-Windows Vim can read and
+" write Unix files, but Unix Vim can't read MS-Windows format session files.
+" Similarly, MS-Windows Vim understands file names with / to separate names, but
+" Unix Vim doesn't understand \.
+
+" Not related but I wanted to strike these down because they're annoying.
+set sessionoptions-=blank,folds
 
 " Global Options: {{{1
 
@@ -123,18 +138,18 @@ endif
 " let g:mapleader = '\<Space>'
 noremap <Space> <nop>
 map <Space> <Leader>
-let g:maplocalleader = "\,"
+let g:maplocalleader = '\,'
 
 if !has('nvim')
-set viminfo='100,<200,s200,n$HOME/.vim/viminfo
+    set viminfo='100,<200,s200,n$HOME/.vim/viminfo
 endif
 
 " Pep8 Global Options: {{{2
 if &tabstop > 4
-set tabstop=4           " show existing tab with 4 spaces width
+    set tabstop=4           " show existing tab with 4 spaces width
 endif
 if &shiftwidth > 4
-set shiftwidth=4        " when indenting with '>', use 4 spaces width
+    set shiftwidth=4        " when indenting with '>', use 4 spaces width
 endif
 set expandtab smarttab      " On pressing tab, insert 4 spaces
 set softtabstop=4
@@ -152,8 +167,8 @@ set foldcolumn=1
 
 " Buffers Windows Tabs: {{{2
 try
-set switchbuf=useopen,usetab,newtab
-set showtabline=2
+    set switchbuf=useopen,usetab,newtab
+    set showtabline=2
 catch
 endtry
 
@@ -162,70 +177,70 @@ set splitbelow splitright
 
 " Spell Checker: {{{2
 
-set encoding=UTF-8                       " Set default encoding
-scriptencoding UTF-8                     " Vint believes encoding should be done first
-set fileencoding=UTF-8
+set encoding=utf-8                       " Set default encoding
+scriptencoding utf-8                     " Vint believes encoding should be done first
+set fileencoding=utf-8
 set termencoding=utf-8
 
 setlocal spelllang=en
 
 " This is is definitely one of the things that needs to get ported over to nvim
 if filereadable(expand('~/.config/nvim/spell/en.utf-8.add'))
-set spellfile=~/.config/nvim/spell/en.utf-8.add
+    set spellfile=~/.config/nvim/spell/en.utf-8.add
 elseif filereadable(glob('~/projects/viconf/.vim/spell/en.utf-8.add'))
-set spellfile=~/projects/viconf/.vim/spell/en.utf-8.add
+    set spellfile=~/projects/viconf/.vim/spell/en.utf-8.add
 else
-echoerr 'Spell file not found.'
+    echoerr 'Spell file not found.'
 endif
 
 if !has('nvim')
-set spelllang+=$VIMRUNTIME/spell/en.utf-8.spl
+    set spelllang+=$VIMRUNTIME/spell/en.utf-8.spl
 endif
 
 set complete+=kspell                    " Autocomplete in insert mode
 set spellsuggest=5                      " Limit the number of suggestions from 'spell suggest'
 
 if filereadable('/usr/share/dict/words')
-set dictionary+=/usr/share/dict/words
-" Replace the default dictionary completion with fzf-based fuzzy completion
-" Courtesy of fzf <3 vim
-inoremap <expr> <c-x><c-k> fzf#vim#complete('cat /usr/share/dict/words')
+    set dictionary+=/usr/share/dict/words
+    " Replace the default dictionary completion with fzf-based fuzzy completion
+    " Courtesy of fzf <3 vim
+    inoremap <expr> <c-x><c-k> fzf#vim#complete('cat /usr/share/dict/words')
 endif
 
 if filereadable('/usr/share/dict/american-english')
-setlocal dictionary+=/usr/share/dict/american-english
+    setlocal dictionary+=/usr/share/dict/american-english
 endif
 
 if filereadable('$HOME/.config/nvim/spell/en.hun.spl')
-set spelllang+=$HOME/.config/nvim/spell/en.hun.spl
+    set spelllang+=$HOME/.config/nvim/spell/en.hun.spl
 endif
 
 if filereadable(glob('~/.vim/autocorrect.vim'))
-source ~/.vim/autocorrect.vim
+    source ~/.vim/autocorrect.vim
 endif
 
 " Fun With Clipboards: {{{2
 if has('unnamedplus')                   " Use the system clipboard.
-set clipboard+=unnamed,unnamedplus
+    set clipboard+=unnamed,unnamedplus
 else                                    " Accommodate Termux
-set clipboard+=unnamed
+    set clipboard+=unnamed
 endif
 
 set pastetoggle=<F7>
 
 if exists('$TMUX')
-let g:clipboard = {
-    \   'name': 'myClipboard',
-    \   'copy': {
-    \      '+': 'tmux load-buffer -',
-    \      '*': 'tmux load-buffer -',
-    \    },
-    \   'paste': {
-    \      '+': 'tmux save-buffer -',
-    \      '*': 'tmux save-buffer -',
-    \   },
-    \   'cache_enabled': 1,
-    \ }
+    let g:clipboard = {
+        \   'name': 'myClipboard',
+        \   'copy': {
+        \      '+': 'tmux load-buffer -',
+        \      '*': 'tmux load-buffer -',
+        \    },
+        \   'paste': {
+        \      '+': 'tmux save-buffer -',
+        \      '*': 'tmux save-buffer -',
+        \   },
+        \   'cache_enabled': 1,
+        \ }
 endif
 
 " Autocompletion: {{{2
@@ -242,7 +257,7 @@ set tags+=~/projects/tags               " consider generating a few large tag
 set tags+=~python/tags                  " files rather than recursive searches
 set mouse=a                             " Automatically enable mouse usage
 if &textwidth!=0
-set colorcolumn=+1                  " I don't know why this didn't set
+    set colorcolumn=+1                  " I don't know why this didn't set
 endif
 set cmdheight=2
 set number
@@ -254,7 +269,7 @@ set autoindent smartindent              " :he options: set with smartindent
 set isfname-==
 
 if has('gui_running')
-set guifont=Fira\ Code\ weight=450\ 10
+    set guifont=Fira\ Code\ weight=450\ 10
 endif
 
 " In case you wanted to see the guicursor default for gvim win64
@@ -262,8 +277,13 @@ endif
 
 set path+=**                            " Recursively search dirs with :find
 if isdirectory('/usr/include/libcs50')
-set path+=/usr/include/libcs50          " Also I want those headers
+    set path+=/usr/include/libcs50          " Also I want those headers
 endif
+
+if isdirectory(expand('$_ROOT/lib/python3'))
+    set path=+=expand('$_ROOT) . 'lib/python3'
+endif
+
 set autochdir
 set fileformat=unix
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
@@ -271,8 +291,8 @@ set nojoinspaces
 set diffopt=vertical,context:3          " vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
 
 if has('persistent_undo')
-set undodir=~/.config/nvim/undodir
-set undofile
+    set undodir=~/.config/nvim/undodir
+    set undofile
 endif
 
 set backup
@@ -288,17 +308,12 @@ set lazyredraw
 set browsedir="buffer"                  " which directory is used for the file browser
 
 " Mappings: {{{1
+
 " Window_Buf_Tab_Mappings: {{{2
 
 " Navigate buffers more easily
 nnoremap <Leader>bn :bnext<CR>
 nnoremap <Leader>bp :bprev<CR>
-
-" Navigate windows more easily
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
 
 " Wanna navigate windows more easily?
 " |CTRL-W_gF|   CTRL-W g F     edit file name under the cursor in a new
@@ -308,8 +323,8 @@ nnoremap <C-l> <C-w>l
 " Rebind that to C-w t and we can open the filename in a new tab.
 
 " Navigate tabs more easily
-map <A-Right> :tabnext<CR>
-map <A-Left> :tabprev<CR>
+nnoremap <A-Right> :tabnext<CR>
+nnoremap <A-Left> :tabprev<CR>
 nnoremap <Leader>tn :tabnext<CR>
 nnoremap <Leader>tp :tabprev<CR>
 " Opens a new tab with the current buffer's path
@@ -326,21 +341,10 @@ nnoremap <Leader>re :so $MYVIMRC<CR>
 
 " General_Mappings: {{{2
 
-" :map-cmd
-                        " *<Cmd>* *:map-cmd*
-" The <Cmd> pseudokey may be used to define a 'command mapping', which executes
-" the command directly (without changing modes, etc.).  Where you might use
-":...<CR>" in the {lhs} of a mapping, you can instead use '<Cmd>...<CR>'.
-
-map <silent> <Leader>ts <Cmd>!termux-share -a send %<CR>
+noremap <silent> <Leader>ts <Cmd>!termux-share -a send %<CR>
 
 " Simple way to speed up startup
 nnoremap <Leader>nt :NERDTreeToggle<CR>
-
-" Escape Conveniences:
-" f d clobbers the command though...
-inoremap jk <Esc>
-vnoremap jk <Esc>
 
 " Junegunn:
 nnoremap <Leader>o o<Esc>
@@ -369,15 +373,16 @@ noremap <leader>W :w !sudo tee % > /dev/null<CR>
 
 " TODO: Is it better to put <Cmd> here? For the insert mode ones maybe.
 " I use this command constantly
-nnoremap <Leader>sn :Snippets<CR>
+nnoremap <Leader>se <Cmd>UltiSnipsEdit<CR>
+nnoremap <Leader>sn <Cmd>UltiSnipsEdit<CR>
 
-nnoremap <Leader>se :UltiSnipsEdit<CR>
-
-inoremap <F6> <Esc>:UltiSnipsEdit<CR>
-nnoremap <F6> :UltiSnipsEdit<CR>
+" TODO: Is C-o better than Esc? Also add a check that if has_key(plug['fzf'])
+" then and only then make these mappings. should just move to fzf plugin
+inoremap <F6> <C-o>:Snippets<CR>
+nnoremap <F6> :Snippets<CR>
 
 " Unimpaired: {{{2
-" Note that ]c and [c are mapped by git-gutter
+" Note that ]c and [c are mapped by git-gutter and ALE has ]a and [a
 nnoremap ]q :cnext<CR>
 nnoremap [q :cprev<CR>
 nnoremap ]Q :cfirst<CR>
@@ -434,6 +439,7 @@ nnoremap <A-a> <Plug>(ale_detail)
 " This might be a good idea. * is already 'search for the cword' so let ALE
 " work in a similar manner right?
 nnoremap <Leader>* <Plug>(ale_go_to_reference)
+
 nnoremap <Leader>a :ALEInfo<CR>
 
 " Fugitive: {{{2
@@ -447,8 +453,11 @@ nnoremap <silent> <Leader>ge   :Gedit<Space>
 nnoremap <silent> <Leader>gf   :Gfetch<CR>
 nnoremap <silent> <Leader>gg   :Ggrep<CR>
 nnoremap <silent> <Leader>gl   :0Glog<CR>
-nnoremap <silent> <Leader>gL   :0Glog --pretty=oneline --graph<CR>
+nnoremap <silent> <Leader>gL   :0Glog --pretty=oneline --graph --decorate --abbrev --all --branches<CR>
 nnoremap <silent> <Leader>gm   :Gmerge<CR>
+" Make the mapping longer but clear as to whether gp would pull or push
+nnoremap <silent> <Leader>gpl  :Gpull<CR>
+nnoremap <silent> <Leader>gps  :Gpush<CR>
 nnoremap <silent> <Leader>gq   :Gwq<CR>
 nnoremap <silent> <Leader>gQ   :Gwq!<CR>
 nnoremap <silent> <Leader>gR   :Gread<Space>
@@ -610,7 +619,8 @@ let g:LanguageClient_loggingFile = '~/.local/share/nvim/LC.log'
 " Jedi: {{{2
 let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces
 let g:jedi#usages_command = '<Leader>u'
-let g:jedi#show_call_signatures_delay = 1000
+let g:jedi#rename_command = '<F2>'
+let g:jedi#show_call_signatures_delay = 100
 let g:jedi#smart_auto_mappings = 0
 let g:jedi#force_py_version = 3
 let g:jedi#enable_completions = 0
@@ -634,11 +644,24 @@ let g:tagbar_width = 30
 let g:tagbar_sort = 0
 
 " Zim: {{{2
-let g:zim_notebooks_dir = '~/Notebooks'
+let g:zim_notebooks_dir = expand('~/Notebooks.git')
+let g:zim_notebook = expand('~/Notebooks.git')
+let g:zim_dev = 1
 
+" Here's an exciting little note about Zim. Ignoring how ...odd this plugin is
+" Voom actually gets pretty close to handling Zimwiki if you recognize it as
+" as dokuwiki!
 " Riv: {{{2
+
 " Highlight py docstrings with rst highlighting
 let g:riv_python_rst_hl = 1
+let g:riv_file_link_style = 2  " Add support for :doc:`something` directive.
+let g:riv_ignored_maps = '<Tab>'
+let g:riv_ignored_nmaps = '<Tab>'
+let g:riv_i_tab_pum_next = 0
+
+" From he riv-instructions. **THIS IS THE ONE!!** UltiSnips finally works again
+let g:riv_i_tab_user_cmd = "\<c-g>u\<c-r>=UltiSnips#ExpandSnippet()\<cr>"
 
 " Voom: {{{2
 
@@ -684,6 +707,15 @@ let rst_syntax_code_list = ['vim', 'python', 'sh', 'markdown', 'lisp']
 
 " highlighting readline options
 let readline_has_bash = 1
+
+" from runtime/ftplugin/html.vim
+let g:ft_html_autocomment = 1
+
+" I'm gonna round buftype to filetype here.
+augroup helpnumber
+    autocmd!
+    autocmd BufEnter, BufNew buftype=help set number
+augroup END
 
 " Functions_Commands: {{{1
 
@@ -848,6 +880,20 @@ function! ExpandPossibleShorterSnippet()
 endfunction
 inoremap <silent> <C-L> <C-R>=(ExpandPossibleShorterSnippet() == 0? '': UltiSnips#ExpandSnippet())<CR>
 
+" Expand Snippet Or CR: {{{3
+" Hopefully will expand snippets or CR. Or it'll destroy deoplete's
+" ability to close the pum. *shrugs*
+function! ExpandSnippetOrCarriageReturn() abort
+  let snippet = UltiSnips#ExpandSnippetOrJump()
+    if g:ulti_expand_or_jump_res > 0
+      return snippet
+    else
+      return "\<CR>"
+    endif
+endfunction
+
+inoremap <expr> <CR> pumvisible() ? "<C-R>=ExpandSnippetOrCarriageReturn()<CR>" : "\<CR>"
+
 " LanguageClient Check:{{{2
 " Check if the LanguageClient is running.
 function! s:lc_check()
@@ -875,11 +921,16 @@ if g:colors_name ==# 'gruvbox'
     call <SID>gruvbox()
 endif
 
-" Command should also include `colo gruvbox`
 command! -nargs=0 Gruvbox call s:gruvbox()
 
-" Here's a phenomenal autocmd for ensuring we can set nohlsearch but still
-" get highlights ONLY while searching!!
+" 12/17/18: Here's a phenomenal autocmd for ensuring we can set nohlsearch but
+" still get highlights ONLY while searching!!
+"
+" Jan 30, 2019:
+" A) Fugitive is seriously amazing. `:Gblame` to get revision dates is such a useful feature.
+" TODO: Also this exits and clears the highlighting
+" pattern as soon as you hit enter. So if you type a word, it'll highlight all
+" matches. But once you hit enter to find the next one it clears. Hmmm.
 set nohlsearch
 augroup vimrc-incsearch-highlight
     autocmd!

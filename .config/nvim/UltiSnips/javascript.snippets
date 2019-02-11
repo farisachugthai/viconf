@@ -308,60 +308,74 @@ snippet ce "console.error"
 endsnippet
 
 snippet cw "console.warn"
-	console.warn(${0});
+console.warn(${0});
 endsnippet
 
 snippet ci "console.info"
-	console.info(${0});
+console.info(${0});
 endsnippet
 
 snippet ct "console.trace"
-	console.trace(${0:label});
+console.trace(${0:label});
 endsnippet
+
 snippet ctime "console.time ... console.timeEnd"
-	console.time("${1:label}");
-	${0:${VISUAL}}
+console.time("${1:label}");
+${0:${VISUAL}}
+console.timeEnd("$1");
 endsnippet
-	console.timeEnd("$1");
+
 snippet ctimestamp "console.timeStamp"
+console.timeStamp("${1:label}");
 endsnippet
-	console.timeStamp("${1:label}");
+
 snippet ca "console.assert"
+console.assert(${1:expression}, ${0:obj});
 endsnippet
-	console.assert(${1:expression}, ${0:obj});
+
 snippet cclear "console.clear"
+console.clear();
 endsnippet
-	console.clear();
+
 snippet cdir "console.dir"
+console.dir(${0:obj});
 endsnippet
-	console.dir(${0:obj});
+
 snippet cdirx "console.dirxml"
+console.dirxml(${1:object});
 endsnippet
-	console.dirxml(${1:object});
+
 snippet cgroup "console.group"
-	console.group("${1:label}");
-	${0:${VISUAL}}
+console.group("${1:label}");
+${0:${VISUAL}}
+console.groupEnd();
 endsnippet
-	console.groupEnd();
+
 snippet cgroupc "console.groupCollapsed"
-	console.groupCollapsed("${1:label}");
-	${0:${VISUAL}}
+console.groupCollapsed("${1:label}");
+${0:${VISUAL}}
+console.groupEnd();
 endsnippet
-	console.groupEnd();
+
 snippet cprof "console.profile"
-	console.profile("${1:label}");
-	${0:${VISUAL}}
+console.profile("${1:label}");
+${0:${VISUAL}}
+console.profileEnd();
 endsnippet
-	console.profileEnd();
+
 snippet ctable "console.table"
-	console.table(${1:"${2:value}"});
-# Misc
+console.table(${1:"${2:value}"});
 endsnippet
-# 'use strict';
-snippet us
-	'use strict';
+
+############
+#  Misc    #
+############
+
+
+snippet us "use strict"
+'use strict'; endsnippet
 endsnippet
-# setTimeout function
-snippet timeout
+
+snippet timeout "setTimeout function"
 	setTimeout(function () {${0}}${2}, ${1:10});
 endsnippet

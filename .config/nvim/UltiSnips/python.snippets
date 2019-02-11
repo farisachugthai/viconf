@@ -47,8 +47,8 @@ snippet moddoc "Module Docstring" mbs
 $2
 :File: `!p snip.rv = snip.fn`
 :Author: `!v g:snips_author`
-:Email: `!v g:snips_email`
 :Github: \``!v g:snips_github`\`_
+:Date: |date|
 
 ${3:Attributes:
 
@@ -69,14 +69,14 @@ Example:
 """
 endsnippet
 
-snippet modattr "Expand only the attributes section of the module docstring snippet." bs
+snippet modattr "Expand only the attributes section of the module docstring snippet." bms
 Attributes:
 
 	${1:module_level_variables} (${2:type}): ${3:Explanation and give an inline docstring
 	immediately afterwards if possible}
 endsnippet
 
-snippet modex "Expand only the examples section of the module docstring snippet." bs
+snippet modex "Expand only the examples section of the module docstring snippet." bms
 Example:
 
 	${1:Any example of how to use this module goes here}:: ${2:sh}
@@ -85,7 +85,7 @@ Example:
 endsnippet
 
 # and if we didn't like that module docstring how about this one?
-snippet pmdoc "pocoo style module doc string" b
+snippet pmdoc "pocoo style module doc string" mb
 """
 	`!p snip.rv = get_dir_and_file_name(snip)`
 	`!p snip.rv = '~' * len(get_dir_and_file_name(snip))`
@@ -100,19 +100,19 @@ endsnippet
 
 snippet " "triple quoted string (double quotes)" b
 `!p triple_quotes_handle_trailing(snip, '"')`
-${1:${VISUAL}}
+${1:${VISUAL}} $0
 `!p triple_quotes_handle_trailing(snip, '"')`
 endsnippet
 
 snippet ' "triple quoted string (single quotes)" b
 `!p triple_quotes_handle_trailing(snip, "'")`
-${1:${VISUAL}}
+${1:${VISUAL}} $0
 `!p triple_quotes_handle_trailing(snip, "'")`
 endsnippet
 
 snippet doc "doc block (triple quotes)"
 `!p snip.rv = triple_quotes(snip)`
-${1:${VISUAL}}
+${1:${VISUAL}} $0
 `!p snip.rv = triple_quotes(snip)`
 endsnippet
 
@@ -121,7 +121,7 @@ snippet imp "import statement" b
 import ${0:${VISUAL}}
 endsnippet
 
-snippet from "from package import module" b
+snippet from "from package import module" mb
 from ${1:package} import ${0:module}
 endsnippet
 
