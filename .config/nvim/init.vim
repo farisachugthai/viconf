@@ -58,6 +58,9 @@ Plug 'vim-voom/voom'
 Plug 'Rykka/InstantRst'
 Plug 'gu-fan/riv.vim'
 Plug 'greyblake/vim-preview'
+Plug 'SidOfc/mkdx'  " This plugin has an almost comically long readme. Check it:
+" https://github.com/SidOfc/mkdx
+Plug 'lifepillar/vim-cheat40'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 
@@ -281,7 +284,7 @@ if isdirectory('/usr/include/libcs50')
 endif
 
 if isdirectory(expand('$_ROOT/lib/python3'))
-    set path=+=expand('$_ROOT) . 'lib/python3'
+    set path=+=expand('$_ROOT) . '/lib/python3'
 endif
 
 set autochdir
@@ -521,31 +524,6 @@ let g:loaded_netrwPlugin       = 1
 " Vim_Plug: {{{2
 let g:plug_window = 'tabe'
 
-" NERDTree: {{{2
-augroup nerd_loader
-  autocmd!
-  autocmd VimEnter * silent! autocmd! FileExplorer
-  autocmd BufEnter,BufNew *
-        \  if isdirectory(expand('<amatch>'))
-        \|   call plug#load('nerdtree')
-        \|   execute 'autocmd! nerd_loader'
-        \| endif
-    autocmd bufenter *
-        \ if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree())
-        \| q
-        \| endif
-augroup END
-
-let g:NERDTreeDirArrows = 1
-let g:NERDTreeWinPos = 'right'
-let g:NERDTreeShowHidden = 1
-let g:NERDTreeShowBookmarks = 1
-let g:NERDTreeNaturalSort = 1
-let g:NERDTreeChDirMode = 2             " change cwd every time NT root changes
-let g:NERDTreeShowLineNumbers = 1
-let g:NERDTreeMouseMode = 2             " Open dir with 1 keys, files with 2
-let g:NERDTreeIgnore = ['\.pyc$', '\.pyo$', '__pycache__$', '\.git$', '\.mypy*']
-let g:NERDTreeRespectWildIgnore = 1     " yeah i meant those ones too
 
 " ALE: {{{2
 let g:ale_fixers = { '*': [ 'remove_trailing_lines', 'trim_whitespace' ] }
@@ -662,7 +640,15 @@ let g:riv_i_tab_pum_next = 0
 
 " From he riv-instructions. **THIS IS THE ONE!!** UltiSnips finally works again
 let g:riv_i_tab_user_cmd = "\<c-g>u\<c-r>=UltiSnips#ExpandSnippet()\<cr>"
+let g:riv_fuzzy_help = 1
 
+" Mkdx: {{{2
+" Similar to Riv, this is for working with Markdown documents
+let g:mkdx#settings     = { 'highlight': { 'enable': 1 },
+                        \ 'enter': { 'shift': 1 },
+                        \ 'links': { 'external': { 'enable': 1 } },
+                        \ 'toc': { 'text': 'Table of Contents', 'update_on_write': 1 },
+                        \ 'fold': { 'enable': 1 } }
 " Voom: {{{2
 
 "g:voom_ft_modes" is a Vim dictionary: keys are filetypes (|ft|), values are
@@ -689,6 +675,11 @@ let g:voom_ft_modes = {'markdown': 'markdown', 'rst': 'rst', 'zimwiki': 'dokuwik
 let g:voom_default_mode = 'rst'
 let g:voom_python_versions = [3]
 
+" Cheat40: {{{2
+
+" I can already tell I'm going to end up making too many modifications to it
+let g:cheat40_use_default = 0
+
 " Filetype Specific Options: {{{1
 
 if &ft ==# 'c'
@@ -710,12 +701,6 @@ let readline_has_bash = 1
 
 " from runtime/ftplugin/html.vim
 let g:ft_html_autocomment = 1
-
-" I'm gonna round buftype to filetype here.
-augroup helpnumber
-    autocmd!
-    autocmd BufEnter, BufNew buftype=help set number
-augroup END
 
 " Functions_Commands: {{{1
 

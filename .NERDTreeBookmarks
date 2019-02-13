@@ -7,6 +7,7 @@ nvim ~/.config/nvim
 plugged ~/.local/share/nvim/plugged
 py_tut ~/python/tutorials
 riv ~/.local/share/nvim/plugged/riv.vim/doc/riv_instruction.rst
+sphinx ~/miniconda3/envs/flask/lib/python3.7/site-packages/sphinx
 tutorials ~/Dropbox/python/tutorials
 viconf ~/projects/viconf/.config/nvim
 vim ~/.vim

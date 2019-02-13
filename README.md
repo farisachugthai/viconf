@@ -9,63 +9,60 @@ initialization files I use to run Neovim and Vim on Linux, Windows 10, and
 Neovim is my primary text editor and as a result, I've attempted integrating it
 into as much of my workflow as possible.
 
+## Features
+
 As a result of personal modifications, this setup currently has:
 
 - Real time interactive displays for reStructured Text files.
-- Improved syntax highlighting for man pages over the defaults provided by
-  either neovim or vim.
-- Automatic autocompletion for any filetype Vim supports via [Deoplete](https://www.github.com/Shougo/deoplete.nvim)
+- Personally configured filetype plugins and improved syntax highlighting for
+  man pages over the defaults provided by either Neovim or Vim.
+- Automatic autocompletion for any filetype Vim supports via
+  [Deoplete](https://www.github.com/Shougo/deoplete.nvim).
 - Snippet integration/expansion for 24 different filetypes. Well over 1000
   snippets are included.
   - Vim's python integration is utilized to expand some snippets. Over 20
     functions are imported and used throughout the varying snippet files.
-- Git integration with aliases via Tim Pope's plugin [Fugitive](https://www.github.com/tpope/vim-fugitive)
-- Lightly configured embedded terminal. 20+ convenience mappings are provided
-  to ease navigation between vim windows.
-- Seamless tmux integration.
-  - Keybindings for both vim and tmux correspond so that jumping from one
-  Vim window to another Tmux pane uses the same keys.
-  - The configuration for tmux is displayed at [dotfiles](https://www.github.com/farisachugthai/dotfiles)
+- Git integration with aliases via Tim Pope's plugin
+  [Fugitive](https://www.github.com/tpope/vim-fugitive).
+- Lightly configured embedded terminal. 20+ convenience mappings are provided to
+  ease navigation between Vim windows.
+- Seamless Tmux integration.
+  - Keybindings for both vim and tmux correspond so that jumping from one Vim
+    window to another Tmux pane uses the same keys.
+  - The configuration for Tmux is displayed at
+    [dotfiles](https://www.github.com/farisachugthai/dotfiles).
   - The statuslines not only correspond, but they're synchronized so that when
-  one changes, the other does so as to match.
-- Asynchronous linters that are configured in my [dotfiles](https://www.github.com/farisachugthai/dotfiles)
-  - Supports flake8, pydocstyle, the python-language-server and others
+    one changes, the other does so as to match.<F16>
+- Asynchronous linters that are configured in my
+  [dotfiles](https://www.github.com/farisachugthai/dotfiles).
+  - Supports flake8, pydocstyle, the python-language-server and others.
 - Syntax highlighting for files from [Zim
   wiki](https://github.com/jaap-karssenberg/zim-desktop-wiki)
-- Spell-checking with dictionaries that have been personally compiled
-  and reviewed
+- Spell-checking with dictionaries that have been personally compiled and
+  reviewed.
 - Multiple colorschemes that support xterm-256 or 24 bit terminals.
-
-**Disclaimer**
-
-Approximately half of the snippets were not authored by me.
-That credit goes to[honza](https://www.github.com/honza)
-in his [vim-snippets](https://www.github.com/honza/vim-snippets) repository
 
 ## Usage
 
-*TODO: Wrap keycodes with <kbd></kbd>. Either make a macro or a postfix
-snippet?*
-
 ### Basics Keymappings
 
-| Keycode | Mode  | [Command]Description                              |
-| :---:   | :---: | :---                                              |
-| h       | Norm     | Move cursor one char left                      |
-| j       | Norm     | Move cursor one char down                      |
-| k       | Norm     | Move cursor one char up                        |
-| l       | Norm     | Move cursor one char right                     |
-| w       | Norm     | Move cursor to the beginning of the next word  |
-| b       | Norm     | Move cursor to the beginning of the prev word  |
-| M       | Norm     | Move cursor to vertical center                 |
-| gg      | Norm     | Move to the first line                         |
-| G       | Norm     | Move to the last line                          |
-| :w      | Cmd      | Save the current buffer                        |
-| :q      | Cmd      |                                                |
++------------------------------------------------------------------------------+
+| Keycode | Mode  | [Command]Description                                       |
+| :---:   | :---: | :---                                                       |
+| <kbd>h</kbd>       | Norm     | Move cursor one char left                    |
+| <kbd>j</kbd>       | Norm     | Move cursor one char down                    |
+| <kbd>k</kbd>       | Norm     | Move cursor one char up                      |
+| <kbd>l</kbd>       | Norm     | Move cursor one char right                   |
+| <kbd>w</kbd>       | Norm     | Move cursor to the beginning of the next word|
+| <kbd>b</kbd>       | Norm     | Move cursor to the beginning of the prev word|
+| <kbd>M</kbd>       | Norm     | Move cursor to vertical center               |
+| <kbd>gg</kbd>      | Norm     | Move to the first line                       |
+| <kbd>G</kbd>       | Norm     | Move to the last line                        |
+| <kbd>:</kbd><kbd>w</kbd>      | Cmd      | Save the current buffer           |
+| <kbd>:</kbd><kbd>q</kbd>      | Cmd      | Close the buffer without saving   |
++------------------------------------------------------------------------------+
 
 ### Remappings
-
-TODO
 
 Further explanations for how nvim is configured can be found in the
  [Neovim README](./.config/nvim/README.rst).

@@ -1,1 +1,0 @@
-../../.config/nvim/colors/molokai.vim
