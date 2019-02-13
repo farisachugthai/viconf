@@ -39,7 +39,7 @@ As a result of personal modifications, this setup currently has:
 **Disclaimer**
 
 Approximately half of the snippets were not authored by me.
-That credit goes to[honza](https://www.github.com/honza)
+That credit goes to [honza](https://www.github.com/honza)
 in his [vim-snippets](https://www.github.com/honza/vim-snippets) repository
 
 ## Usage

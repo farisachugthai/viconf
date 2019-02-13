@@ -35,7 +35,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
 Plug 'w0rp/ale'
-Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next' }
+" Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next' }
 Plug 'SirVer/ultisnips'
 Plug 'vim-airline/vim-airline'
 Plug 'edkolev/tmuxline.vim'
@@ -280,8 +280,8 @@ if isdirectory('/usr/include/libcs50')
     set path+=/usr/include/libcs50          " Also I want those headers
 endif
 
-if isdirectory(expand('$_ROOT/lib/python3'))
-    set path=+=expand('$_ROOT) . 'lib/python3'
+if isdirectory(expand($_ROOT) . '/lib/python3')
+    let &path += expand($_ROOT) . '/lib/python3'
 endif
 
 set autochdir
@@ -311,6 +311,7 @@ set browsedir="buffer"                  " which directory is used for the file b
 
 " Window_Buf_Tab_Mappings: {{{2
 
+" TODO: Should I replace all colons with <Cmd>?
 " Navigate buffers more easily
 nnoremap <Leader>bn :bnext<CR>
 nnoremap <Leader>bp :bprev<CR>
@@ -368,37 +369,6 @@ map <S-ScrollWheelDown> <C-D>
 
 " Save a file as root
 noremap <leader>W :w !sudo tee % > /dev/null<CR>
-
-" UltiSnips: {{{2
-
-" TODO: Is it better to put <Cmd> here? For the insert mode ones maybe.
-" I use this command constantly
-nnoremap <Leader>se <Cmd>UltiSnipsEdit<CR>
-nnoremap <Leader>sn <Cmd>UltiSnipsEdit<CR>
-
-" TODO: Is C-o better than Esc? Also add a check that if has_key(plug['fzf'])
-" then and only then make these mappings. should just move to fzf plugin
-inoremap <F6> <C-o>:Snippets<CR>
-nnoremap <F6> :Snippets<CR>
-
-" Unimpaired: {{{2
-" Note that ]c and [c are mapped by git-gutter and ALE has ]a and [a
-nnoremap ]q :cnext<CR>
-nnoremap [q :cprev<CR>
-nnoremap ]Q :cfirst<CR>
-nnoremap [Q :clast<CR>
-nnoremap ]l :lnext<CR>
-nnoremap [l :lprev<CR>
-nnoremap ]L :lfirst<CR>
-nnoremap [L :llast<CR>
-nnoremap ]b :bnext<CR>
-nnoremap [b :bprev<CR>
-nnoremap ]B :blast<CR>
-nnoremap [B :bfirst<CR>
-nnoremap ]t :tabn<CR>
-nnoremap [t :tabp<CR>
-nnoremap ]T :tfirst<CR>
-nnoremap [T :tlast<CR>
 
 " Spell Checking: {{{2
 nnoremap <Leader>sp :setlocal spell!<CR>
@@ -489,13 +459,12 @@ function! LC_maps()
 endfunction
 
 " Tagbar: {{{2
-nnoremap <silent> <F8> :TagbarToggle<CR>
-
-if has('b:Tagbar')  " or any plugin
-    imap <F3> <esc>:TagbarToggle<CR>
-    nmap <F3> :TagbarToggle<CR>
+" This works perfectly and should be how you handle all plugins and their
+" mappings !!!!!
+if has_key(plugs, 'tagbar')
+    nnoremap <silent> <F8> <Cmd>TagbarToggle<CR>
+    inoremap <silent> <F8> <Cmd>TagbarToggle<CR>
 endif
-
 " Macros: {{{1
 if !has('nvim')
     runtime! ftplugin/man.vim
@@ -585,21 +554,6 @@ else
     let entry_format .= '. entry_path'
 endif
 
-" UltiSnips: {{{2
-let g:UltiSnipsSnippetDir = [ '~/.config/nvim/UltiSnips' ]
-let g:UltiSnipsExpandTrigger = '<Tab>'
-let g:UltiSnipsListSnippets = '<C-Tab>'
-let g:UltiSnipsJumpForwardTrigger = '<C-j>'
-let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
-inoremap <C-Tab> * <Esc>:call ultisnips#listsnippets()<CR>
-let g:ultisnips_python_style = 'numpy'
-let g:ultisnips_python_quoting_style = 'double'
-let g:UltiSnipsEnableSnipMate = 0
-let g:UltiSnipsEditSplit = 'tabdo'
-" Defining it in this way means that UltiSnips doesn't iterate
-" through every dir in &rtp which should save a lot of time
-let g:UltiSnipsSnippetDirectories=[$HOME.'/.config/nvim/UltiSnips']
-
 " Language Client: {{{2
 let g:LanguageClient_serverCommands = {
             \ 'python': [ 'pyls' ],
@@ -609,12 +563,13 @@ let g:LanguageClient_serverCommands = {
             \ 'ts': ['tsserver'],
             \ 'css': ['css-languageserver'],
             \ 'html': ['html-languageserver'],
-            \ 'tsx': ['tsserver']}
+            \ 'tsx': ['tsserver']
+            \ }
 
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_selectionUI = 'fzf'
 let g:LanguageClient_settingsPath = expand('~/.config/nvim/settings.json')
-let g:LanguageClient_loggingFile = '~/.local/share/nvim/LC.log'
+let g:LanguageClient_loggingFile = expand('~/.local/share/nvim/LC.log')
 
 " Jedi: {{{2
 let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces
@@ -659,6 +614,8 @@ let g:riv_file_link_style = 2  " Add support for :doc:`something` directive.
 let g:riv_ignored_maps = '<Tab>'
 let g:riv_ignored_nmaps = '<Tab>'
 let g:riv_i_tab_pum_next = 0
+
+let g:riv_global_leader=','
 
 " From he riv-instructions. **THIS IS THE ONE!!** UltiSnips finally works again
 let g:riv_i_tab_user_cmd = "\<c-g>u\<c-r>=UltiSnips#ExpandSnippet()\<cr>"
@@ -720,6 +677,21 @@ augroup END
 " Functions_Commands: {{{1
 
 " Up until Rename are from Junegunn so credit to him
+
+" Grep: {{{ 2
+
+if executable('ag')
+    let &grepprg = 'ag --nogroup --nocolor --column --vimgrep $*'
+    set grepformat=%f:%l:%c:%m
+elseif executable('rg')
+    let &grepprg = 'rg --vimgrep'
+    set grepformat=%f:%l:%c:%m
+else
+  let &grepprg = 'grep -rn $* *'
+endif
+
+command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
+
 " Todo Function: {{{2
 " Grep for todos in the current repo and populate the quickfix list with them.
 " You could run an if then to check you're in a git repo.
@@ -743,21 +715,6 @@ function! s:todo() abort
     endif
 endfunction
 command! Todo call s:todo()
-
-" Explore: {{{2
-" Here's one where he uses fzf and Explore to search a packages docs
-function! s:plug_help_sink(line)
-    let dir = g:plugs[a:line].dir
-    for pat in ['doc/*.txt', 'README.md']
-        let match = get(split(globpath(dir, pat), "\n"), 0, '')
-        if len(match)
-            execute 'tabedit' match
-            return
-        endif
-    endfor
-    tabnew
-    execute 'Explore' dir
-endfunction
 
 " Scriptnames: {{{2
 " command to filter :scriptnames output by a regex
@@ -808,7 +765,7 @@ endfunction
 
 command! HL call <SID>hl()
 
-" PlugHelp: {{{2
+" Explore PlugHelp: {{{2
 " Call :PlugHelp to use fzf to open a window with all of the plugins
 " you have installed listed and upon pressing enter open the help
 " docs. That's not a great explanation but honestly easier to explain
@@ -834,65 +791,6 @@ command! PlugHelp call fzf#run(fzf#wrap({
 " Rename: {{{2
 " :he map line 1454. How have i never noticed this isn't a feature???
 command! -nargs=1 -bang -complete=file Rename f <args>|w<bang>
-
-" UltiSnips: {{{2
-
-" GetAllSnippets: {{{3
-" Definitely a TODO
-function! GetAllSnippets()
-  call UltiSnips#SnippetsInCurrentScope(1)
-  let list = []
-  for [key, info] in items(g:current_ulti_dict_info)
-    let parts = split(info.location, ':')
-    call add(list, {
-      \'key': key,
-      \'path': parts[0],
-      \'linenr': parts[1],
-      \'description': info.description,
-      \})
-  endfor
-  return list
-endfunction
-
-" Expandable:{{{3
-
-" TODO: Come up with a mapping for it. Also what is E746
-" Go to the annotations for an explanation of this function.
-" function UltiSnips#IsExpandable()
-"     return !(
-"         \ col('.') <= 1
-"         \ || !empty(matchstr(getline('.'), '\%' . (col('.') - 1) . 'c\s'))
-"         \ || empty(UltiSnips#SnippetsInCurrentScope())
-"         \ )
-" endfunction
-
-" ExpandPossibleShorterSnippet: {{{3
-
-function! ExpandPossibleShorterSnippet()
-  if len(UltiSnips#SnippetsInCurrentScope()) == 1 "only one candidate...
-    let curr_key = keys(UltiSnips#SnippetsInCurrentScope())[0]
-    normal diw
-    exe 'normal a' . curr_key
-    exe 'normal a '
-    return 1
-  endif
-  return 0
-endfunction
-inoremap <silent> <C-L> <C-R>=(ExpandPossibleShorterSnippet() == 0? '': UltiSnips#ExpandSnippet())<CR>
-
-" Expand Snippet Or CR: {{{3
-" Hopefully will expand snippets or CR. Or it'll destroy deoplete's
-" ability to close the pum. *shrugs*
-function! ExpandSnippetOrCarriageReturn() abort
-  let snippet = UltiSnips#ExpandSnippetOrJump()
-    if g:ulti_expand_or_jump_res > 0
-      return snippet
-    else
-      return "\<CR>"
-    endif
-endfunction
-
-inoremap <expr> <CR> pumvisible() ? "<C-R>=ExpandSnippetOrCarriageReturn()<CR>" : "\<CR>"
 
 " LanguageClient Check:{{{2
 " Check if the LanguageClient is running.
