@@ -9,15 +9,6 @@ let b:python_highlight_all = 1
 setl linebreak
 setl textwidth=120
 
-" The external program vim uses for gg=G can be configured
-" Hey you in the future. You can use :set *prg<Tab> and see all of the
-" configuration options you have.
-" Now you can also use gq for yapf
-if executable('yapf')
-    setlocal equalprg=yapf
-    setlocal formatprg=yapf
-    let b:ale_fixers += ['yapf']
-endif
 
 " TODO: Should set makeprg to something that could execute tests
 setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
@@ -27,12 +18,14 @@ setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 setlocal colorcolumn=80,120
 " Dude the columns line was destroying nvim's redraw when you split tmux panes
 
+" Feb 16, 2019: How did this get set wrong???
+setl commentstring=#\ %s
 
 " Completions: {{{2
-" Idk if this is right.
-if &omnifunc==?''
-   set omnifunc=python3#completer
-endif
+" Todo:
+" if &omnifunc==?''
+"    set omnifunc=python3#completer
+" endif
 
 
 " Autocommands: {{{1
@@ -72,15 +65,30 @@ let b:ale_python_pyls_options = {
       \   },
       \ }
 
-" Now that linters are set, add fixers
-" I LEARNED HOW LIST CONCATENATION WORKS
-let b:ale_fixers += ['remove_trailing_lines', 'trim_whitespace']
+" The external program vim uses for gg=G can be configured
+" Hey you in the future. You can use :set *prg<Tab> and see all of the
+" configuration options you have.
+" Now you can also use gq for yapf
+let b:ale_fixers = ['add_blank_lines_for_python_control_statements', 'remove_trailing_lines', 'trim_whitespace']
+
+if executable('yapf')
+    setlocal equalprg=yapf
+    setlocal formatprg=yapf
+    let b:ale_fixers += ['yapf']
+else
+    if executable('autopep8')
+        setlocal equalprg=autopep8
+        setlocal formatprg=autopep8
+        let b:ale_fixers += ['autopep8']
+    endif
+endif
 
 " TODO:
 " Here's a suggestion. Write your own buffer fixer using ALE and yapf.
 " You do it anyway so why not nnoremap <Leader>bf <expr> py3do % or %yapf or
-" set makeprg=unittest.TestRunner()...or even sphinx build or something. lots
-let b:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
+" set makeprg=unittest.TestRunner()...or even sphinx build or something.
+" Todo: #2: Map something so that it does "run this line with the py3 host
+
 
 " Virtualenvs: {{{3
 if isdirectory('~/virtualenvs')

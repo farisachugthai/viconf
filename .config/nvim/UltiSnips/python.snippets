@@ -170,6 +170,7 @@ endsnippet
 snippet args "Copy sys.argv into a variable." w
 
 # Commonly used modules:{{{1
+
 snippet timestamp "Produce a timestamp" s
 datetime.date.isoformat(${1:${VISUAL:datetime.datetime.now()}}) $0
 endsnippet
@@ -209,7 +210,7 @@ while ${1:condition}:
 	${0:pass}
 endsnippet
 
-snippet for "for loop" b
+snippet for "for loop" w
 for ${1:item} in ${2:iterable}:
 	${3:${VISUAL:pass}}
 endsnippet
@@ -220,12 +221,13 @@ endsnippet
 
 # if/elif/else: {{{2
 
-snippet if "If" b
+snippet if "If" w
 if ${1:condition}:
-	${2:${VISUAL:pass}}
+	${2:${VISUAL:pass}} $0
 endsnippet
 
-snippet ife "If / Else" b
+# TODO: How to make it so that we can just tab past the else condition if we don't need it? i suppose just use if
+snippet ife "If / Else" w
 if ${1:condition}:
 	${2:${VISUAL:pass}}
 else:
@@ -292,7 +294,7 @@ endsnippet
 
 # not the most loqacoious i've ever been but it's better than not knowing
 # what the hell a snippet is because the description for "with" is "with"
-snippet argparse "Initialize ArgumentParser in def _parse_arguments" b
+snippet parser "Initialize ArgumentParser in def _parse_arguments" b
 def _parse_arguments():
 	parser = argparse.ArgumentParser(description=${1:__doc__})
 	return parser.parse_args()
@@ -311,61 +313,6 @@ endsnippet
 snippet argpv "argument for version = %(prog)s" b
 parser.add_argument('--version', action = 'version',
 		version = '%(prog)s 1.0')
-endsnippet
-
-snippet argp "snip that needs to be fixed" bst
-
-import argparse
-
-def parse_argument():
-	parser = argparse.ArgumentParser()
-	group = parser.add_mutually_exclusive_group()
-	group.add_argument("-v", "--verbose", action="store_true")
-	group.add_argument("-q", "--quiet", action="store_true")
-
-	parser.add_argument('-v','--verbose', dest='verbosity', default=0, action="count",
-			help="verbose mode (-vvv for more, -vvvv to enable connection debugging)")
-
-	parser.add_argument('bar', nargs='+', help='bar positional arguments.')
-
-	parser.add_argument('-s', action='store',
-			dest='simple_value',
-			help='Store a simple value'
-			)
-
-	parser.add_argument('-c', action='store_const',
-			dest='constant_value',
-			const='value-to-store',
-			help='Store a constant value'
-			)
-
-	parser.add_argument('-t', action = 'store_true',
-			default = False,
-			dest = 'boolean_switch',
-			help = 'Set a switch to true'
-			)
-
-	parser.add_argument('-f', action = 'store_false',
-			default = False,
-			dest = 'boolean_switch',
-			help = 'Set a switch to false'
-			)
-
-	parser.add_argument('-a', action = 'append',
-			dest = 'collection',
-			default = [],
-			help = 'Set a switch to false'
-			)
-
-	parser.add_argument('--version', action = 'version',
-			version = '%(prog)s 1.0'
-			)
-
-	results = parser.parse_args()
-
-	return results
-
-	${0}
 endsnippet
 
 # Comprehensions:{{{1

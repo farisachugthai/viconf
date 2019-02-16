@@ -58,6 +58,9 @@ Plug 'vim-voom/voom'
 Plug 'Rykka/InstantRst'
 Plug 'gu-fan/riv.vim'
 Plug 'greyblake/vim-preview'
+Plug 'SidOfc/mkdx'  " This plugin has an almost comically long readme. Check it:
+" https://github.com/SidOfc/mkdx
+Plug 'lifepillar/vim-cheat40'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 
@@ -203,8 +206,8 @@ set spellsuggest=5                      " Limit the number of suggestions from '
 if filereadable('/usr/share/dict/words')
     set dictionary+=/usr/share/dict/words
     " Replace the default dictionary completion with fzf-based fuzzy completion
-    " Courtesy of fzf <3 vim
-    inoremap <expr> <c-x><c-k> fzf#vim#complete('cat /usr/share/dict/words')
+    " Courtesy of fzf <3 vim. But make it shorter
+    inoremap <expr> <c-x><k> fzf#vim#complete('cat /usr/share/dict/words')
 endif
 
 if filereadable('/usr/share/dict/american-english')
@@ -213,10 +216,6 @@ endif
 
 if filereadable('$HOME/.config/nvim/spell/en.hun.spl')
     set spelllang+=$HOME/.config/nvim/spell/en.hun.spl
-endif
-
-if filereadable(glob('~/.vim/autocorrect.vim'))
-    source ~/.vim/autocorrect.vim
 endif
 
 " Fun With Clipboards: {{{2
@@ -280,8 +279,8 @@ if isdirectory('/usr/include/libcs50')
     set path+=/usr/include/libcs50          " Also I want those headers
 endif
 
-if isdirectory(expand($_ROOT) . '/lib/python3')
-    let &path += expand($_ROOT) . '/lib/python3'
+if isdirectory(expand('$_ROOT/lib/python3'))
+    set path=+=expand('$_ROOT) . '/lib/python3'
 endif
 
 set autochdir
@@ -301,8 +300,6 @@ set backupext='.bak'        " like wth is that ~ nonsense?
 
 " Directory won't need to be set because it defaults to
 " xdg_data_home/nvim/swap
-set swapfile
-
 set modeline
 set lazyredraw
 set browsedir="buffer"                  " which directory is used for the file browser
@@ -313,8 +310,8 @@ set browsedir="buffer"                  " which directory is used for the file b
 
 " TODO: Should I replace all colons with <Cmd>?
 " Navigate buffers more easily
-nnoremap <Leader>bn :bnext<CR>
-nnoremap <Leader>bp :bprev<CR>
+nnoremap <Leader>bn <Cmd>bnext<CR>
+nnoremap <Leader>bp <Cmd>bprev<CR>
 
 " Wanna navigate windows more easily?
 " |CTRL-W_gF|   CTRL-W g F     edit file name under the cursor in a new
@@ -324,21 +321,26 @@ nnoremap <Leader>bp :bprev<CR>
 " Rebind that to C-w t and we can open the filename in a new tab.
 
 " Navigate tabs more easily
-nnoremap <A-Right> :tabnext<CR>
-nnoremap <A-Left> :tabprev<CR>
-nnoremap <Leader>tn :tabnext<CR>
-nnoremap <Leader>tp :tabprev<CR>
+nnoremap <A-Right> <Cmd>tabnext<CR>
+nnoremap <A-Left> <Cmd>tabprev<CR>
+nnoremap <Leader>tn <Cmd>tabnext<CR>
+nnoremap <Leader>tp <Cmd>tabprev<CR>
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
-nnoremap <Leader>te :tabedit <c-r>=expand("%:p:h")<CR>
+nnoremap <Leader>te <Cmd>tabedit <c-r>=expand("%:p:h")<CR>
 
 " It should also be easier to edit the config. Bind similarly to tmux
-nnoremap <Leader>ed :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
-nnoremap <F9> :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
-inoremap <F9> <Esc>:tabe ~/projects/viconf/.config/nvim/init.vim<CR>
+nnoremap <Leader>ed <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
+nnoremap <F9> <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
+inoremap <F9> <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 
 " Now reload it
 nnoremap <Leader>re :so $MYVIMRC<CR>
+
+" I feel really slick for this one. Modify ftplugin
+let g:ftplug=$MYVIMRC.'/after/ftplugin/'.&filetype.'.vim'
+" Goddamnit it opens a buffernnamed g:ftplug
+" map <F10> <Cmd>e g:ftplug<CR>
 
 " General_Mappings: {{{2
 
@@ -410,31 +412,32 @@ nnoremap <A-a> <Plug>(ale_detail)
 " work in a similar manner right?
 nnoremap <Leader>* <Plug>(ale_go_to_reference)
 
-nnoremap <Leader>a :ALEInfo<CR>
+nnoremap <Leader>a <Cmd>ALEInfo<CR>
 
 " Fugitive: {{{2
-nnoremap <silent> <Leader>gb   :Gblame<CR>
-nnoremap <silent> <Leader>gc   :Gcommit<CR>
-cmap <silent> gch Git checkout<Space>
-nnoremap <silent> <Leader>gd   :Gdiff<CR>
-nnoremap <silent> <Leader>gds  :Gdiff --staged<CR>
-nnoremap <silent> <Leader>gds2 :Git diff --stat --staged<CR>
+nnoremap <silent> <Leader>gb   <Cmd>Gblame<CR>
+nnoremap <silent> <Leader>gc   <Cmd>Gcommit<CR>
+cmap <silent> gch <Cmd>Git checkout<Space>
+nnoremap <silent> <Leader>gd   <Cmd>Gdiff<CR>
+nnoremap <silent> <Leader>gds  <Cmd>Gdiff --staged<CR>
+nnoremap <silent> <Leader>gds2 <Cmd>Git diff --stat --staged<CR>
 nnoremap <silent> <Leader>ge   :Gedit<Space>
-nnoremap <silent> <Leader>gf   :Gfetch<CR>
-nnoremap <silent> <Leader>gg   :Ggrep<CR>
-nnoremap <silent> <Leader>gl   :0Glog<CR>
-nnoremap <silent> <Leader>gL   :0Glog --pretty=oneline --graph --decorate --abbrev --all --branches<CR>
-nnoremap <silent> <Leader>gm   :Gmerge<CR>
+nnoremap <silent> <Leader>gf   <Cmd>Gfetch<CR>
+nnoremap <silent> <Leader>gg   <Cmd>Ggrep<CR>
+nnoremap <silent> <Leader>gl   <Cmd>0Glog<CR>
+nnoremap <silent> <Leader>gL   <Cmd>0Glog --pretty=oneline --graph --decorate --abbrev --all --branches<CR>
+nnoremap <silent> <Leader>gm   <Cmd>Gmerge<CR>
 " Make the mapping longer but clear as to whether gp would pull or push
-nnoremap <silent> <Leader>gpl  :Gpull<CR>
-nnoremap <silent> <Leader>gps  :Gpush<CR>
-nnoremap <silent> <Leader>gq   :Gwq<CR>
-nnoremap <silent> <Leader>gQ   :Gwq!<CR>
+nnoremap <silent> <Leader>gpl  <Cmd>Gpull<CR>
+nnoremap <silent> <Leader>gps  <Cmd>Gpush<CR>
+nnoremap <silent> <Leader>gq   <Cmd>Gwq<CR>
+nnoremap <silent> <Leader>gQ   <Cmd>Gwq!<CR>
 nnoremap <silent> <Leader>gR   :Gread<Space>
-nnoremap <silent> <Leader>gs   :Gstatus<CR>
-nnoremap <silent> <Leader>gst  :Git diff --stat<CR>
-nnoremap <silent> <Leader>gw   :Gwrite<CR>
-nnoremap <silent> <Leader>gW   :Gwrite!<CR>
+" FZF took it. Check ./after/plugin/fzf.vim {btw i love the gf binding}
+" nnoremap <silent> <Leader>gs   <Cmd>Gstatus<CR>
+nnoremap <silent> <Leader>gst  <Cmd>Git diff --stat<CR>
+nnoremap <silent> <Leader>gw   <Cmd>Gwrite<CR>
+nnoremap <silent> <Leader>gW   <Cmd>Gwrite!<CR>
 
 " Language Server: {{{2
 " This is a good way to give LangClient the necessary bindings it needs;
@@ -481,8 +484,8 @@ let g:loaded_tutor_mode_plugin = 1
 let g:loaded_getsciptPlugin    = 1
 let g:loaded_2html_plugin      = 1
 let g:loaded_logiPat           = 1
-let g:loaded_netrw             = 1
-let g:loaded_netrwPlugin       = 1
+" let g:loaded_netrw             = 1
+" let g:loaded_netrwPlugin       = 1
 " Let's see if this speeds things up because I've never used most of them
 
 " Remaining Plugins: {{{1
@@ -490,31 +493,6 @@ let g:loaded_netrwPlugin       = 1
 " Vim_Plug: {{{2
 let g:plug_window = 'tabe'
 
-" NERDTree: {{{2
-augroup nerd_loader
-  autocmd!
-  autocmd VimEnter * silent! autocmd! FileExplorer
-  autocmd BufEnter,BufNew *
-        \  if isdirectory(expand('<amatch>'))
-        \|   call plug#load('nerdtree')
-        \|   execute 'autocmd! nerd_loader'
-        \| endif
-    autocmd bufenter *
-        \ if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree())
-        \| q
-        \| endif
-augroup END
-
-let g:NERDTreeDirArrows = 1
-let g:NERDTreeWinPos = 'right'
-let g:NERDTreeShowHidden = 1
-let g:NERDTreeShowBookmarks = 1
-let g:NERDTreeNaturalSort = 1
-let g:NERDTreeChDirMode = 2             " change cwd every time NT root changes
-let g:NERDTreeShowLineNumbers = 1
-let g:NERDTreeMouseMode = 2             " Open dir with 1 keys, files with 2
-let g:NERDTreeIgnore = ['\.pyc$', '\.pyo$', '__pycache__$', '\.git$', '\.mypy*']
-let g:NERDTreeRespectWildIgnore = 1     " yeah i meant those ones too
 
 " ALE: {{{2
 let g:ale_fixers = { '*': [ 'remove_trailing_lines', 'trim_whitespace' ] }
@@ -553,6 +531,21 @@ if exists('*WebDevIconsGetFileTypeSymbol')  " support for vim-devicons
 else
     let entry_format .= '. entry_path'
 endif
+
+" UltiSnips: {{{2
+let g:UltiSnipsSnippetDir = [ '~/.config/nvim/UltiSnips' ]
+let g:UltiSnipsExpandTrigger = '<Tab>'
+let g:UltiSnipsListSnippets = '<C-Tab>'
+let g:UltiSnipsJumpForwardTrigger = '<C-j>'
+let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
+inoremap <C-Tab> * <Esc>:call ultisnips#listsnippets()<CR>
+let g:ultisnips_python_style = 'numpy'
+let g:ultisnips_python_quoting_style = 'double'
+let g:UltiSnipsEnableSnipMate = 0
+let g:UltiSnipsEditSplit = 'tabdo'
+" Defining it in this way means that UltiSnips doesn't iterate
+" through every dir in &rtp which should save a lot of time
+let g:UltiSnipsSnippetDirectories=[$HOME.'/.config/nvim/UltiSnips']
 
 " Language Client: {{{2
 let g:LanguageClient_serverCommands = {
@@ -619,7 +612,15 @@ let g:riv_global_leader=','
 
 " From he riv-instructions. **THIS IS THE ONE!!** UltiSnips finally works again
 let g:riv_i_tab_user_cmd = "\<c-g>u\<c-r>=UltiSnips#ExpandSnippet()\<cr>"
+let g:riv_fuzzy_help = 1
 
+" Mkdx: {{{2
+" Similar to Riv, this is for working with Markdown documents
+let g:mkdx#settings     = { 'highlight': { 'enable': 1 },
+                        \ 'enter': { 'shift': 1 },
+                        \ 'links': { 'external': { 'enable': 1 } },
+                        \ 'toc': { 'text': 'Table of Contents', 'update_on_write': 1 },
+                        \ 'fold': { 'enable': 1 } }
 " Voom: {{{2
 
 "g:voom_ft_modes" is a Vim dictionary: keys are filetypes (|ft|), values are
@@ -645,6 +646,11 @@ let g:riv_i_tab_user_cmd = "\<c-g>u\<c-r>=UltiSnips#ExpandSnippet()\<cr>"
 let g:voom_ft_modes = {'markdown': 'markdown', 'rst': 'rst', 'zimwiki': 'dokuwiki'}
 let g:voom_default_mode = 'rst'
 let g:voom_python_versions = [3]
+
+" Cheat40: {{{2
+
+" I can already tell I'm going to end up making too many modifications to it
+let g:cheat40_use_default = 0
 
 " Filetype Specific Options: {{{1
 
@@ -760,6 +766,7 @@ command! -bang Autosave call s:autosave(<bang>1)
 " HL: {{{2
 " Whats the syntax group under my cursor?
 function! s:hl()
+  echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
   echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
 endfunction
 
