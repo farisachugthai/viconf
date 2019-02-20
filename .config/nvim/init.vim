@@ -41,26 +41,25 @@ Plug 'vim-airline/vim-airline'
 Plug 'edkolev/tmuxline.vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'mhinz/vim-startify'
-if has('nvim')
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-    Plug 'Shougo/deoplete.nvim'
-    Plug 'roxma/nvim-yarp'
-    Plug 'roxma/vim-hug-neovim-rpc'
-endif
-let g:deoplete#enable_at_startup = 1
+" if has('nvim')
+"     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" else
+"     Plug 'Shougo/deoplete.nvim'
+    " Plug 'roxma/nvim-yarp'
+    " Plug 'roxma/vim-hug-neovim-rpc'
+" endif
+" let g:deoplete#enable_at_startup = 1
 
-Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3'] }
-Plug 'fszymanski/deoplete-emoji'
+" Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3'] }
+" Plug 'fszymanski/deoplete-emoji'
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
 Plug 'Rykka/InstantRst'
-Plug 'gu-fan/riv.vim'
+Plug 'gu-fan/riv.vim', { 'for': ['python', 'python3', 'rst'] }
 Plug 'greyblake/vim-preview'
-Plug 'SidOfc/mkdx'  " This plugin has an almost comically long readme. Check it:
-" https://github.com/SidOfc/mkdx
 Plug 'lifepillar/vim-cheat40'
+Plug 'neoclide/coc.nvim'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 
@@ -371,37 +370,6 @@ map <S-ScrollWheelDown> <C-D>
 " Save a file as root
 noremap <leader>W :w !sudo tee % > /dev/null<CR>
 
-" UltiSnips: {{{2
-
-" TODO: Is it better to put <Cmd> here? For the insert mode ones maybe.
-" I use this command constantly
-nnoremap <Leader>se <Cmd>UltiSnipsEdit<CR>
-nnoremap <Leader>sn <Cmd>UltiSnipsEdit<CR>
-
-" TODO: Is C-o better than Esc? Also add a check that if has_key(plug['fzf'])
-" then and only then make these mappings. should just move to fzf plugin
-inoremap <F6> <C-o>:Snippets<CR>
-nnoremap <F6> :Snippets<CR>
-
-" Unimpaired: {{{2
-" Note that ]c and [c are mapped by git-gutter and ALE has ]a and [a
-nnoremap ]q :cnext<CR>
-nnoremap [q :cprev<CR>
-nnoremap ]Q :cfirst<CR>
-nnoremap [Q :clast<CR>
-nnoremap ]l :lnext<CR>
-nnoremap [l :lprev<CR>
-nnoremap ]L :lfirst<CR>
-nnoremap [L :llast<CR>
-nnoremap ]b :bnext<CR>
-nnoremap [b :bprev<CR>
-nnoremap ]B :blast<CR>
-nnoremap [B :bfirst<CR>
-nnoremap ]t :tabn<CR>
-nnoremap [t :tabp<CR>
-nnoremap ]T :tfirst<CR>
-nnoremap [T :tlast<CR>
-
 " Spell Checking: {{{2
 nnoremap <Leader>sp :setlocal spell!<CR>
 nnoremap <Leader>s= z=
@@ -428,7 +396,9 @@ nnoremap <A-l> <C-w>l
 
 " ALE: {{{2
 
+" This isn't working idk why
 nnoremap <Leader>l <Plug>(ale_toggle_buffer)<CR>
+
 nnoremap ]a <Plug>(ale_next_wrap)
 nnoremap [a <Plug>(ale_previous_wrap)
 
@@ -442,7 +412,7 @@ nnoremap <A-a> <Plug>(ale_detail)
 " work in a similar manner right?
 nnoremap <Leader>* <Plug>(ale_go_to_reference)
 
-nnoremap <Leader>a :ALEInfo<CR>
+nnoremap <Leader>a <Cmd>ALEInfo<CR>
 
 " Fugitive: {{{2
 nnoremap <silent> <Leader>gb   <Cmd>Gblame<CR>
@@ -500,14 +470,19 @@ if has_key(plugs, 'tagbar')
 endif
 
 " Macros: {{{1
-if !has('nvim')
-    runtime! ftplugin/man.vim
-    let g:ft_man_folding_enable = 0
-endif
+" Here are some mods for files found in $VIMRUNTIME/macros
+" Wait why do we run this on every file??
+" if !has('nvim')
+"     runtime! ftplugin/man.vim
+"     let g:ft_man_folding_enable = 0
+" endif
 
 runtime! macros/matchit.vim
 
+set showmatch
 set matchpairs+=<:>
+" Show the matching pair for 2 seconds
+set matchtime=20
 
 " To every plugin I've never used before. Stop slowing me down.
 let g:loaded_vimballPlugin     = 1
@@ -705,6 +680,18 @@ let readline_has_bash = 1
 " from runtime/ftplugin/html.vim
 let g:ft_html_autocomment = 1
 
+" I'm gonna round buftype to filetype here.
+" Also have this set in man.vim. But I realized manpage implementation (or
+" highlighting at least is implemented by lua).
+" augroup helpnumber
+"     autocmd!
+"     autocmd BufEnter, BufNew buftype=help set number
+" augroup END
+
+autocmd Filetype *
+        \	if &omnifunc == "" |
+        \		setlocal omnifunc=syntaxcomplete#Complete |
+        \	endif
 " Functions_Commands: {{{1
 
 " Up until Rename are from Junegunn so credit to him
@@ -792,7 +779,6 @@ command! -bang Autosave call s:autosave(<bang>1)
 " Whats the syntax group under my cursor?
 function! s:hl()
   echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
-  echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
 endfunction
 
 command! HL call <SID>hl()
@@ -823,65 +809,6 @@ command! PlugHelp call fzf#run(fzf#wrap({
 " Rename: {{{2
 " :he map line 1454. How have i never noticed this isn't a feature???
 command! -nargs=1 -bang -complete=file Rename f <args>|w<bang>
-
-" UltiSnips: {{{2
-
-" GetAllSnippets: {{{3
-" Definitely a TODO
-function! GetAllSnippets()
-  call UltiSnips#SnippetsInCurrentScope(1)
-  let list = []
-  for [key, info] in items(g:current_ulti_dict_info)
-    let parts = split(info.location, ':')
-    call add(list, {
-      \'key': key,
-      \'path': parts[0],
-      \'linenr': parts[1],
-      \'description': info.description,
-      \})
-  endfor
-  return list
-endfunction
-
-" Expandable:{{{3
-
-" TODO: Come up with a mapping for it. Also what is E746
-" Go to the annotations for an explanation of this function.
-" function UltiSnips#IsExpandable()
-"     return !(
-"         \ col('.') <= 1
-"         \ || !empty(matchstr(getline('.'), '\%' . (col('.') - 1) . 'c\s'))
-"         \ || empty(UltiSnips#SnippetsInCurrentScope())
-"         \ )
-" endfunction
-
-" ExpandPossibleShorterSnippet: {{{3
-
-function! ExpandPossibleShorterSnippet()
-  if len(UltiSnips#SnippetsInCurrentScope()) == 1 "only one candidate...
-    let curr_key = keys(UltiSnips#SnippetsInCurrentScope())[0]
-    normal diw
-    exe 'normal a' . curr_key
-    exe 'normal a '
-    return 1
-  endif
-  return 0
-endfunction
-inoremap <silent> <C-L> <C-R>=(ExpandPossibleShorterSnippet() == 0? '': UltiSnips#ExpandSnippet())<CR>
-
-" Expand Snippet Or CR: {{{3
-" Hopefully will expand snippets or CR. Or it'll destroy deoplete's
-" ability to close the pum. *shrugs*
-function! ExpandSnippetOrCarriageReturn() abort
-  let snippet = UltiSnips#ExpandSnippetOrJump()
-    if g:ulti_expand_or_jump_res > 0
-      return snippet
-    else
-      return "\<CR>"
-    endif
-endfunction
-
-inoremap <expr> <CR> pumvisible() ? "<C-R>=ExpandSnippetOrCarriageReturn()<CR>" : "\<CR>"
 
 " LanguageClient Check:{{{2
 " Check if the LanguageClient is running.
@@ -921,7 +848,7 @@ command! -nargs=0 Gruvbox call s:gruvbox()
 " pattern as soon as you hit enter. So if you type a word, it'll highlight all
 " matches. But once you hit enter to find the next one it clears. Hmmm.
 set nohlsearch
-augroup vimrc-incsearch-highlight
+augroup vimrc_incsearch_highlight
     autocmd!
     autocmd CmdlineEnter /,\? :set hlsearch
     autocmd CmdlineLeave /,\? :set nohlsearch

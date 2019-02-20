@@ -67,13 +67,14 @@ let b:ale_python_pyls_options = {
 
 " Now that linters are set, add fixers
 " I LEARNED HOW LIST CONCATENATION WORKS
-let b:ale_fixers = ['remove_trailing_lines', 'trim_whitespace', 'add_blank_lines_for_python_control_statements']
+
+" Feb 18, 2019: DUDE DON'T USE THE BLANK LINES THING IT ADDS THEM AFTER DOCSTRINGS IN MODULE LEVEL FUNCTIONS
+let b:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
 
 " The external program vim uses for gg=G can be configured
 " Hey you in the future. You can use :set *prg<Tab> and see all of the
 " configuration options you have.
 " Now you can also use gq for yapf
-
 if executable('yapf')
     setlocal equalprg=yapf
     setlocal formatprg=yapf

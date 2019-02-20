@@ -57,7 +57,7 @@ snippet moddoc "Module Docstring" mbs
 :Author: `!v g:snips_author`
 :Github: \`<`!v g:snips_github`\`>_
 
-${3:Attributes
+${3:Attributes:
 ---------------
 
 	${4:\`\`module_level_variables\`\`} (${5:type}): ${6:Explanation and give an inline docstring
@@ -88,20 +88,17 @@ snippet header "The beginning of moddoc" bms
 :File: `!p snip.rv = snip.fn`
 :Author: `!v g:snips_author`
 :Github: \``!v g:snips_github`\`_
-:Date: |date|
 endsnippet
 
 snippet attr "Expand only the attributes section of the module docstring snippet." bms
 Attributes:
-`!p triple_quotes_handle_trailing(snip, "'")`
 
 	${1:module_level_variables} (${2:type}): ${3:Explanation and give an inline docstring
 	immediately afterwards if possible}
 endsnippet
 
-snippet ex "Expand only the examples section of the module docstring snippet." bms
+snippet modex "Expand only the examples section of the module docstring snippet." bms
 Example:
-`!p triple_quotes_handle_trailing(snip, "'")`
 
 	${1:Any example of how to use this module goes here}:: ${2:sh}
 
@@ -320,7 +317,7 @@ endsnippet
 
 # not the most loqacoious i've ever been but it's better than not knowing
 # what the hell a snippet is because the description for "with" is "with"
-snippet argparse "Initialize ArgumentParser in def _parse_arguments" b
+snippet parser "Initialize ArgumentParser in def _parse_arguments" b
 def _parse_arguments():
 	parser = argparse.ArgumentParser(description=${1:__doc__})
 	return parser.parse_args()

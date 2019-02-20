@@ -10,10 +10,13 @@ if exists('did_rsi_vim') || &cp|| v:version < 700
 endif
 let did_rsi_vim = 1
 
-" RSI: {{{1
+" Readline_Basics:{{{1
 
-" Readline_Basics:{{{2
-
+" But wait can I get that cmdline completion behavior back?
+" cnoremap <Tab> <C-a>
+" This still ends up recursively binding where Tab inputs every completion suggestion it can
+" Tab maps to C-a so it brings up completion suggestions then home binds it tot he beginning of the
+" line after inserting. Shits retarded.
 " start of line
 cnoremap <C-A> <Home>
 " back one character
@@ -39,14 +42,14 @@ cmap <A\<> :norm gg
 " Bottom of buffer
 cmap <A\>> :norm G
 
-" History:{{{2
+" History: {{{1
 
 " recall newer command-line. {Actually C-n and C-p on Emacs}
 cmap <A-n> <Down>
 " recall previous (older) command-line. {But we can't lose C-n and C-p}
 cmap <A-p> <Up>
 
-" Other:{{{2
+" Other: {{{1
 
 " How did I do this backwards??
 " It's annoying you lose a whole command from a typo
@@ -54,15 +57,18 @@ cnoremap <Esc> <nop>
 " However I still need the functionality
 cnoremap <C-g> <Esc>
 
-" From he cedit. Open the command window with Esc so it at least does
-" something.
-exe "set cedit=\<Esc>"
+" From he cedit. Open the command window with F1 because it being bound to
+" help is SO annoying.
+execute 'set cedit=<F1>'
 
 " In case you want inspiration!
 " <A-BS> is delete previous word
 " C-k is kill from cursor to end of line
+
+" Already default Vim behavior!
 " C-u is either kill from cursor to beginning of line or an indication of a
 " count with a command
+
 " C-y is yank.
 
 " Idk if this would only work in the command window but <C-v> and <M-v> would

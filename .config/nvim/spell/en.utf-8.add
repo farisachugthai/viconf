@@ -444,6 +444,7 @@ datetime
 delphi
 deoplete
 dev
+devnul
 diff
 difflib
 diffoff
@@ -453,6 +454,7 @@ diffthis
 difftool
 diffupdate
 dir
+dirname
 dirs
 dirstat
 django
@@ -493,6 +495,7 @@ ethernet
 etree
 eval
 exe
+exitcode
 expandtab
 ext2
 fallback
@@ -589,6 +592,8 @@ ipynb
 ipython
 ipython2
 ipython3
+ipywidget
+ipywidgets
 irc
 iskeyword
 itemgetter
@@ -623,6 +628,7 @@ ksh
 ksysguard
 kubeconfig
 kubectl
+kwarg
 libreoffice
 lighttpd
 linter
@@ -680,6 +686,7 @@ mypy
 mysql
 namespace
 namespacing
+nano
 nbconvert
 ncmpcpp
 ndarray
@@ -780,6 +787,7 @@ pwgen
 py
 py3
 py3do
+pycache
 pycharm
 pyclbr
 pycodestyle
