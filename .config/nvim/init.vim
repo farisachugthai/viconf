@@ -34,6 +34,7 @@ Plug 'davidhalter/jedi-vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
+Plug 'tpope/vim-unimpaired'
 Plug 'w0rp/ale'
 " Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next' }
 Plug 'SirVer/ultisnips'
@@ -41,25 +42,24 @@ Plug 'vim-airline/vim-airline'
 Plug 'edkolev/tmuxline.vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'mhinz/vim-startify'
-if has('nvim')
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-    Plug 'Shougo/deoplete.nvim'
-    Plug 'roxma/nvim-yarp'
-    Plug 'roxma/vim-hug-neovim-rpc'
-endif
-let g:deoplete#enable_at_startup = 1
+" if has('nvim')
+"     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" else
+"     Plug 'Shougo/deoplete.nvim'
+    " Plug 'roxma/nvim-yarp'
+    " Plug 'roxma/vim-hug-neovim-rpc'
+" endif
+" let g:deoplete#enable_at_startup = 1
 
-Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3'] }
-Plug 'fszymanski/deoplete-emoji'
+" Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3'] }
+" Plug 'fszymanski/deoplete-emoji'
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': 'yarn install'}
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
 Plug 'Rykka/InstantRst'
-Plug 'gu-fan/riv.vim'
+Plug 'gu-fan/riv.vim', { 'for': ['python', 'python3', 'rst'] }
 Plug 'greyblake/vim-preview'
-Plug 'SidOfc/mkdx'  " This plugin has an almost comically long readme. Check it:
-" https://github.com/SidOfc/mkdx
 Plug 'lifepillar/vim-cheat40'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
@@ -260,7 +260,6 @@ if &textwidth!=0
 endif
 set cmdheight=2
 set number
-set showmatch
 set ignorecase smartcase
 set infercase
 set autoindent smartindent              " :he options: set with smartindent
@@ -280,14 +279,14 @@ if isdirectory('/usr/include/libcs50')
 endif
 
 if isdirectory(expand('$_ROOT/lib/python3'))
-    set path=+=expand('$_ROOT) . '/lib/python3'
+    set path+=expand('$_ROOT')./lib/python3'
 endif
 
 set autochdir
 set fileformat=unix
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
-set diffopt=vertical,context:3          " vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
+set diffopt=filler,context:3          " vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
 
 if has('persistent_undo')
     set undodir=~/.config/nvim/undodir
@@ -398,7 +397,9 @@ nnoremap <A-l> <C-w>l
 
 " ALE: {{{2
 
+" This isn't working idk why
 nnoremap <Leader>l <Plug>(ale_toggle_buffer)<CR>
+
 nnoremap ]a <Plug>(ale_next_wrap)
 nnoremap [a <Plug>(ale_previous_wrap)
 
@@ -468,15 +469,21 @@ if has_key(plugs, 'tagbar')
     nnoremap <silent> <F8> <Cmd>TagbarToggle<CR>
     inoremap <silent> <F8> <Cmd>TagbarToggle<CR>
 endif
+
 " Macros: {{{1
-if !has('nvim')
-    runtime! ftplugin/man.vim
-    let g:ft_man_folding_enable = 0
-endif
+" Here are some mods for files found in $VIMRUNTIME/macros
+" Wait why do we run this on every file??
+" if !has('nvim')
+"     runtime! ftplugin/man.vim
+"     let g:ft_man_folding_enable = 0
+" endif
 
 runtime! macros/matchit.vim
 
+set showmatch
 set matchpairs+=<:>
+" Show the matching pair for 2 seconds
+set matchtime=20
 
 " To every plugin I've never used before. Stop slowing me down.
 let g:loaded_vimballPlugin     = 1
@@ -675,11 +682,17 @@ let readline_has_bash = 1
 let g:ft_html_autocomment = 1
 
 " I'm gonna round buftype to filetype here.
-augroup helpnumber
-    autocmd!
-    autocmd BufEnter, BufNew buftype=help set number
-augroup END
+" Also have this set in man.vim. But I realized manpage implementation (or
+" highlighting at least is implemented by lua).
+" augroup helpnumber
+"     autocmd!
+"     autocmd BufEnter, BufNew buftype=help set number
+" augroup END
 
+autocmd Filetype *
+        \	if &omnifunc == "" |
+        \		setlocal omnifunc=syntaxcomplete#Complete |
+        \	endif
 " Functions_Commands: {{{1
 
 " Up until Rename are from Junegunn so credit to him
@@ -695,8 +708,6 @@ elseif executable('rg')
 else
   let &grepprg = 'grep -rn $* *'
 endif
-
-command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
 
 " Todo Function: {{{2
 " Grep for todos in the current repo and populate the quickfix list with them.
@@ -767,7 +778,6 @@ command! -bang Autosave call s:autosave(<bang>1)
 " Whats the syntax group under my cursor?
 function! s:hl()
   echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
-  echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
 endfunction
 
 command! HL call <SID>hl()
@@ -837,7 +847,7 @@ command! -nargs=0 Gruvbox call s:gruvbox()
 " pattern as soon as you hit enter. So if you type a word, it'll highlight all
 " matches. But once you hit enter to find the next one it clears. Hmmm.
 set nohlsearch
-augroup vimrc-incsearch-highlight
+augroup vimrc_incsearch_highlight
     autocmd!
     autocmd CmdlineEnter /,\? :set hlsearch
     autocmd CmdlineLeave /,\? :set nohlsearch

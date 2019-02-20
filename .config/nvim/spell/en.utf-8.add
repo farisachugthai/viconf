@@ -33,6 +33,7 @@ CTRL
 CalledProcessError
 CentOS
 Chainmap
+Cheat40
 ChemE
 Choi
 Chugthai
@@ -113,7 +114,6 @@ HMAC
 Hettinger
 I'll
 IPython
-IPython
 IPython's
 ISO9660
 Junegunn
@@ -144,6 +144,7 @@ NetworkManager
 Newbuntu
 NodeJS
 NumLock
+NumPy
 Nvidia
 Nvim's
 OSError
@@ -166,7 +167,6 @@ Pep8
 PluginInstall
 PluginSearch
 Pluma
-Popen
 Popen
 PostgreSQL
 Pottstown
@@ -203,6 +203,7 @@ README
 REPL
 RET
 RHEL
+ReStructuredText
 ReadTheDocs
 Reitz
 Rewatched
@@ -373,6 +374,7 @@ bdist
 bibtex
 blockquote
 blockquotes
+blockquoting
 bool
 brainfuck
 branch
@@ -391,6 +393,7 @@ cd
 cd
 cdrom
 chainmap
+cheat40
 cheatsheet
 cheatsheets
 chmod
@@ -415,7 +418,6 @@ conda
 condarc
 conf
 config
-config
 configs
 configurables
 cp
@@ -435,7 +437,6 @@ ctags
 cterm
 ctermbg
 ctermfg
-ctrl
 ctrl
 cuda
 cursorline
@@ -463,6 +464,7 @@ django
 dockerfile
 docstring
 docstrings
+doctest
 doctests
 docutils
 docutils
@@ -486,7 +488,6 @@ endblockquote
 endfunction
 endif
 env
-env
 equalprg
 erlang
 esac
@@ -502,11 +503,9 @@ expandtab
 ext2
 fallback
 faris
-faris
 fd
 ffmpeg
 filename
-filesystem
 filesystem
 filesystems
 filetype
@@ -581,7 +580,6 @@ https
 hunspell
 hyperlink
 i'll/!
-idk
 ifconfig
 img
 init
@@ -595,7 +593,6 @@ iptables
 ipy
 ipynb
 ipython
-ipython
 ipython2
 ipython3
 ipywidget
@@ -603,11 +600,11 @@ ipywidgets
 irc
 iskeyword
 itemgetter
+iterable
 iw
 iwconfig
 javascript
 jedi
-jeff
 jinja
 jpeg
 js
@@ -654,6 +651,7 @@ lol
 lsblk
 lscpu
 lua
+lune/!
 lxml
 lzma
 makes
@@ -707,6 +705,7 @@ nixos
 nltk
 nmap
 nmcli
+nmtui
 nnoremap
 noarch
 nobackup
@@ -723,6 +722,7 @@ npmrc
 nslookup
 nt
 numpy
+numpydoc
 nvim
 nvm
 objc
@@ -737,13 +737,11 @@ onedark
 openssl
 org
 os
-os
 outfile
 p7zip
+pandoc
 param
 pathlib
-pathlib
-pdb
 pdb
 pdf
 pdfinfo
@@ -790,11 +788,11 @@ protonmail
 ps1
 pstree
 psutil
+ptpython's
 pushd
 pushd
 pwd
 pwgen
-py
 py
 py3
 py3do
@@ -807,6 +805,7 @@ pydocstyle
 pygmentize
 pynvim
 pypi
+pyplot
 pypy
 pyqt5
 pyrex
@@ -816,6 +815,7 @@ python3
 pythonanywhere
 pythonistas
 pyutil
+pyutils
 qBitTorrent
 qml
 quickfix
@@ -828,6 +828,7 @@ quotestar
 rb
 rc
 rclone
+reST
 reStructured
 reStructuredText
 readline
@@ -845,7 +846,6 @@ regex
 relativenumber
 remappings
 remoting
-repo
 repo
 restructuredtext
 rg
@@ -865,6 +865,7 @@ sas
 sbin
 scala
 scikit
+scikits
 scipy
 scp
 scrapy
@@ -895,7 +896,6 @@ sed
 segwit
 setUp
 setuptools
-setuptools
 setxkbmap
 sha256
 sha384
@@ -906,7 +906,6 @@ shellcode
 shellslash
 shiftwidth
 shopt
-shutil
 shutil
 smalltalk
 snapchat
@@ -958,17 +957,15 @@ subshell
 subshells
 sudo
 surrogateescape
-surrogateescape
-symlink
 symlink
 syncthing
 syntime
 sys
-sys
 tabstop
 tabview
-tcl
 tc
+tcl
+tcp
 tcpdump
 tcsh
 tearDown
@@ -977,7 +974,7 @@ tensorflow
 termcap
 terminfo
 termux
-termux
+termux's
 tesla
 testcase
 testcase
@@ -994,6 +991,7 @@ tnoremap
 toctree
 todo
 todotxt
+toolchain
 touch
 tpope
 tpope's
@@ -1011,7 +1009,7 @@ ufw
 umask
 umasks
 uname
-uncommentin
+uncommenting
 uncommit
 unencrypted
 uninstall
@@ -1099,6 +1097,8 @@ xkb
 xkeycaps
 xkeymaps
 xml
+xml
+xmodmap
 xmodmap
 xonsh
 xquery
@@ -1115,8 +1115,6 @@ youtube
 zcat
 zenburn
 zim
-zim
 zlib
 zsh
 µTorrent
-Cheat40

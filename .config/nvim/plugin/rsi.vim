@@ -52,9 +52,9 @@ cnoremap <Esc> <nop>
 " However I still need the functionality
 cnoremap <C-g> <Esc>
 
-" From he cedit. Open the command window with Esc so it at least does
-" something.
-exe "set cedit=\<Esc>"
+" From he cedit. Open the command window with F1 because it being bound to
+" help is SO annoying.
+execute 'set cedit=<F1>'
 
 " In case you want inspiration!
 " <A-BS> is delete previous word

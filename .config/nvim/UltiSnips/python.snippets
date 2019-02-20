@@ -39,29 +39,38 @@ snippet #! "Shebang header for python scripts" b
 $0
 endsnippet
 
-# TODO Need to break this up
-# Also you should be able to easily put `snip.fn` in the filename there
+# So before we break this up we have to get at least part of it working. So what I want to do is
+# create a line the length of the previous tabstop. So we should be able to do
+# `!p snip.rv = len(t{1}) * =`
+# if we were trying to make a line of literal '=' signs underneath the first tabstop.
+# The current function I'm calling right now only makes 3 so we're not there yet.
+# Sorry but I'm copping out for the time being.
 snippet moddoc "Module Docstring" mbs
-"""${1:${VISUAL}Quick description.}
+"""
 
-$2
+:mod:\``!p snip.rv = snip.basename`\`
+
+	.. currentmodule:: `!p snip.rv = snip.basename`
+		:synopsis: ${1: One sentence description.}
+
 :File: `!p snip.rv = snip.fn`
 :Author: `!v g:snips_author`
-:Github: \``!v g:snips_github`\`_
-:Date: |date|
+:Github: \`<`!v g:snips_github`\`>_
 
 ${3:Attributes:
+---------------
 
-	${4:module_level_variables} (${5:type}): ${6:Explanation and give an inline docstring
+	${4:\`\`module_level_variables\`\`} (${5:type}): ${6:Explanation and give an inline docstring
 	immediately afterwards if possible}
 
 Example:
+---------
 
-	${7:Any example of how to use this module goes here}:: ${8:sh}
+	${7:Any example of how to use this module goes here}:: ${8:shell}
 
 		${9:$ python exampleofrst.py}
 
-.. ${10:'any directives::'}
+.. ${10:any directives::}
 
 	${11:example text}
 
@@ -69,7 +78,19 @@ Example:
 """
 endsnippet
 
-snippet modattr "Expand only the attributes section of the module docstring snippet." bms
+snippet header "The beginning of moddoc" bms
+"""
+
+:mod:\``!p snip.rv = snip.fn`\`
+	:synopsis: ${1: One sentence description.}
+`!p triple_quotes_handle_trailing(snip, '"')`
+
+:File: `!p snip.rv = snip.fn`
+:Author: `!v g:snips_author`
+:Github: \``!v g:snips_github`\`_
+endsnippet
+
+snippet attr "Expand only the attributes section of the module docstring snippet." bms
 Attributes:
 
 	${1:module_level_variables} (${2:type}): ${3:Explanation and give an inline docstring
@@ -168,6 +189,8 @@ endsnippet
 
 # This is one that goes in my ifmain blocks all the time
 snippet args "Copy sys.argv into a variable." w
+args = sys.argv[:]
+endsnippet
 
 # Commonly used modules:{{{1
 

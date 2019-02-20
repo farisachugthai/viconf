@@ -14,32 +14,23 @@ into as much of my workflow as possible.
 As a result of personal modifications, this setup currently has:
 
 - Real time interactive displays for reStructured Text files.
-- Personally configured filetype plugins and improved syntax highlighting for
-  man pages over the defaults provided by either Neovim or Vim.
-- Automatic autocompletion for any filetype Vim supports via
-  [Deoplete](https://www.github.com/Shougo/deoplete.nvim).
-- Snippet integration/expansion for 24 different filetypes. Well over 1000
-  snippets are included.
-  - Vim's python integration is utilized to expand some snippets. Over 20
-    functions are imported and used throughout the varying snippet files.
-- Git integration with aliases via Tim Pope's plugin
-  [Fugitive](https://www.github.com/tpope/vim-fugitive).
+- [Personally configured](./.config/nvim/after/ftplugin/) filetype plugins and
+  [improved syntax highlighting](./.config/nvim/after/ftplugin/man.vim) for man pages over the defaults provided by either Neovim or Vim.
+- Automatic autocompletion for any filetype Vim supports via [Deoplete](https://www.github.com/Shougo/deoplete.nvim).
+- Snippet integration/expansion for 24 different filetypes. Well over [1000
+  snippets](./.config/nvim/UltiSnips) are included.
+  - Vim's Python integration is utilized to expand some snippets. Over [20 functions](./.config/nvim/pythonx/snippets_helper.py) are imported and used throughout the varying snippet files.
+- Git integration with aliases via Tim Pope's plugin [Fugitive](https://www.github.com/tpope/vim-fugitive)
 - Lightly configured embedded terminal. 20+ convenience mappings are provided to
   ease navigation between Vim windows.
 - Seamless Tmux integration.
-  - Keybindings for both vim and tmux correspond so that jumping from one Vim
-    window to another Tmux pane uses the same keys.
-  - The configuration for Tmux is displayed at
-    [dotfiles](https://www.github.com/farisachugthai/dotfiles).
-  - The statuslines not only correspond, but they're synchronized so that when
-  one changes, the other does so as to match.
-- Asynchronous linters that are configured in my
-  [dotfiles](https://www.github.com/farisachugthai/dotfiles).
+  - Keybindings for both vim and tmux correspond so that jumping from one Vim window to another Tmux pane uses the same keys.
+  - The configuration for Tmux is displayed at [dotfiles](https://www.github.com/farisachugthai/dotfiles).
+  - The statuslines not only correspond, but they're synchronized so that when one changes, the other does so as to match.<F16>
+- Asynchronous linters that are configured in my [dotfiles](https://www.github.com/farisachugthai/dotfiles).
   - Supports flake8, pydocstyle, the python-language-server and others.
-- Syntax highlighting for files from [Zim
-  wiki](https://github.com/jaap-karssenberg/zim-desktop-wiki)
-- Spell-checking with dictionaries that have been personally compiled and
-  reviewed.
+- Syntax highlighting for files from [Zim wiki](https://github.com/jaap-karssenberg/zim-desktop-wiki)
+- Spell-checking with dictionaries that have been personally compiled and reviewed.
 - Multiple colorschemes that support xterm-256 or 24 bit terminals.
 
 ## Usage
@@ -64,8 +55,7 @@ As a result of personal modifications, this setup currently has:
 
 ### Remappings
 
-Further explanations for how nvim is configured can be found in the
- [Neovim README](./.config/nvim/README.rst).
+Further explanations for how nvim is configured can be found in the [Neovim README](./.config/nvim/README.rst).
 
 ### Diffs
 
@@ -94,12 +84,16 @@ on my personal customizations.
 - [NERDTree](https://www.github.com/scrooloose/nerdTree)
 
 NERDTree is a file explorer plugin that provides "project drawer"
+
+NERDTree is a file explorer plugin that provides "project drawer"
 functionality to your vim editing.  You can learn more about it with
 `:help NERDTree`.
 
 #### QuickStart
 
 Launch using `<Leader>nt`.
+
+#### Sources for all plugins
 
 - [Jedi-Vim](https://www.github.com/davidhalter/jedi-vim)
 - [Git-Gutter](https://www.github.com/airblade/vim-gitgutter)

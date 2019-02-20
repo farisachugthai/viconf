@@ -9,6 +9,8 @@ let b:python_highlight_all = 1
 setl linebreak
 setl textwidth=120
 
+set commentstring=#\ %s
+
 
 " TODO: Should set makeprg to something that could execute tests
 setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
@@ -18,17 +20,18 @@ setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 setlocal colorcolumn=80,120
 " Dude the columns line was destroying nvim's redraw when you split tmux panes
 
-" Feb 16, 2019: How did this get set wrong???
-setl commentstring=#\ %s
-
+if isdirectory('/usr/lib/python3/')
+    setl path+=/usr/lib/python3*
+endif
 " Completions: {{{2
-" Todo:
-" if &omnifunc==?''
-"    set omnifunc=python3#completer
-" endif
+" Idk if this is right.
+if &omnifunc==?''
+   set omnifunc=python3#completer
+endif
 
 
 " Autocommands: {{{1
+
 " Highlight characters after 120 chars
 augroup pythonchars
     autocmd!
@@ -40,9 +43,6 @@ augroup END
 " Plugins: {{{1
 
 " ALE: {{{2
-
-" Jan 07, 2019: Got rid of pycodestyle. Not listening to configs and emitting
-" noise and a large number of false positives. also flake8 is pycodestyle so..
 
 " Jan 24, 2019: pyls went because A) it doesn't output an error message B) it
 " uses flake8 and jedi anyway and C) its slow
@@ -69,7 +69,7 @@ let b:ale_python_pyls_options = {
 " Hey you in the future. You can use :set *prg<Tab> and see all of the
 " configuration options you have.
 " Now you can also use gq for yapf
-let b:ale_fixers = ['add_blank_lines_for_python_control_statements', 'remove_trailing_lines', 'trim_whitespace']
+let b:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
 
 if executable('yapf')
     setlocal equalprg=yapf
@@ -105,7 +105,7 @@ if has_key(plugs, 'LanguageClient-neovim')
     let b:LanguageClient_selectionUI = 'fzf'
 endif
 
-" Riv: {{{2
+" Riv:
 
 " Riv is a plugin for reStructuredText in Vim.
 " The following setting allows docstrings in python files

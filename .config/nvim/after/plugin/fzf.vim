@@ -47,7 +47,8 @@ let g:fzf_colors =
 " Specifically from that repo so I don't get stuff mixed up if I ever take one
 " off or something
 
-" Exported fzf <plug> commands.
+" Exported fzf <plug> commands. Also shorten default mappings for ease of use
+" but allow the vim defaults to exist.
 imap <c-x><k> <Plug>(fzf-complete-word)
 imap <c-x><f> <Plug>(fzf-complete-path)
 imap <c-x><j> <Plug>(fzf-complete-file-ag)
@@ -61,39 +62,19 @@ nmap <leader><tab>  <Plug>(fzf-maps-n)
 omap <leader><tab>  <Plug>(fzf-maps-o)
 xmap <leader><tab>  <Plug>(fzf-maps-x)
 
-" Command Local Options: {{{2
+" Advanced customization using autoload functions
+inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'left': '15%'})
 
-" [Buffers] Jump to the existing window if possible
-let g:fzf_buffers_jump = 1
-" [[B]Commits] Customize the options used by 'git log':
-let g:fzf_commits_log_options = '--graph --color=always --format="h%d %s %c(black)%c(bold)%cr"'
-" [Tags] Command to generate tags file
-let g:fzf_tags_command = 'ctags -R ./**'
+" Map vim defaults to fzf history commands
+nnoremap <silent> q: :History:<CR>
+nnoremap <silent> q/ :History/<CR>
 
-" [Commands] --expect expression for directly executing the command
-" Wait what happens if we hit those though?
-let g:fzf_commands_expect = 'alt-enter,ctrl-x'
-
-" Ag: {{{1
-" :Ag  - Start fzf with hidden preview window that can be enabled with '?' key
-" :Ag! - Start fzf in fullscreen and display the preview window above
-command! -bang -nargs=* Ag
-    \ call fzf#vim#ag(<q-args>,
-    \ <bang>0 ? fzf#vim#with_preview('up:60%')
-    \ : fzf#vim#with_preview('right:50%:hidden', '?'),
-    \ <bang>0)
-
-" Similarly, we can apply it to fzf#vim#grep. To use ripgrep instead of ag:
-command! -bang -nargs=* Rg
-    \ call fzf#vim#grep(
-    \ 'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
-    \ <bang>0 ? fzf#vim#with_preview('up:60%')
-    \ : fzf#vim#with_preview('right:50%:hidden', '?'),
-    \ <bang>0)
-
-" Likewise, Files command with preview window
-command! -bang -nargs=? -complete=dir Files
-    \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+" And get the rest of the fzf.vim commands involved.
+nnoremap <silent> <Leader>L        :Lines<CR>
+nnoremap <silent> <Leader>ag       :Ag <C-R><C-W><CR>
+nnoremap <silent> <Leader>AG       :Ag <C-R><C-A><CR>
+xnoremap <silent> <Leader>ag       y:Ag <C-R>"<CR>
+nnoremap <silent> <Leader>`        :Marks<CR>
 
 " Global Line Completion: {{{2
 " Global line completion (not just open buffers. ripgrep required.)
@@ -102,6 +83,20 @@ inoremap <expr> <c-x><l> fzf#vim#complete(fzf#wrap({
     \ 'source': 'rg -n ^ --color always',
     \ 'options': '--ansi --delimiter : --nth 3..',
     \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }}))
+
+" Command Local Options: {{{2
+
+" [Buffers] Jump to the existing window if possible
+let g:fzf_buffers_jump = 1
+" [[B]Commits] Customize the options used by 'git log':
+let g:fzf_commits_log_options = '--graph --color=always --format="h%d %s %c(black)%c(bold)%cr"'
+" [Tags] Command to generate tags file
+let g:fzf_tags_command = 'ctags -R ./** && ctags -R --append ./.*'
+
+" [Commands] --expect expression for directly executing the command
+" Wait what happens if we hit those though?
+let g:fzf_commands_expect = 'alt-enter,ctrl-x'
+
 
 " FZF_Statusline: {{{1
 
@@ -126,3 +121,35 @@ augroup end
 " Opens matches in a split. Appending ! gives an error.
 " How do we fix that?
 command! -nargs=1 -bang -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
+
+" From fzf-vim.txt
+" fzf-vim-advanced-customization
+" Command for git grep
+" - fzf#vim#grep(command, with_column, [options], [fullscreen])
+command! -bang -nargs=* GGrep
+  \ call fzf#vim#grep(
+  \   'git grep --line-number '.shellescape(<q-args>), 0,
+  \   {'dir': systemlist('git rev-parse --show-toplevel')[0] }, <bang>0)
+
+" Ag: {{{2
+" :Ag  - Start fzf with hidden preview window that can be enabled with '?' key
+" :Ag! - Start fzf in fullscreen and display the preview window above
+command! -bang -nargs=* Ag
+    \ call fzf#vim#ag(<q-args>,
+    \ <bang>0 ? fzf#vim#with_preview('up:60%')
+    \ : fzf#vim#with_preview('right:50%:hidden', '?'),
+    \ <bang>0)
+
+" Rg: {{{2
+" Similarly, we can apply it to fzf#vim#grep. To use ripgrep instead of ag:
+command! -bang -nargs=* Rg
+    \ call fzf#vim#grep(
+    \ 'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
+    \ <bang>0 ? fzf#vim#with_preview('up:60%')
+    \ : fzf#vim#with_preview('right:50%:hidden', '?'),
+    \ <bang>0)
+
+" Files: {{{2
+" Likewise, Files command with preview window
+command! -bang -nargs=? -complete=dir Files
+    \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)

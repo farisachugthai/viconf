@@ -2,7 +2,7 @@ README
 ========
 
 :Author: Faris Chugthai
-:Date: 02/09/2019
+:Date: 02/19/2019
 
 To say vim has a lot of options, associated files and directories is an
 understatement. But these can be broken down piece by piece to be more
@@ -80,6 +80,7 @@ Ftdetect
 How does writing an ftdetect file work?
 What necessary guards are there?
 
+
 Ftplugin
 ^^^^^^^^^^
 Ftplugin files should be used to totally override the configuration
@@ -113,6 +114,7 @@ Something like this pseudo code would be perfect.
 
     ``if ft != None && ft != gitcommit | finish | endif``
 
+
 Then put that in everything in that dir.
 
 
@@ -134,13 +136,27 @@ Vim Plug is a highly recommended plugin manager, and the one that I myself use.
 Written by Junegunn Choi (also the author of FZF), vim-plug creates a simple way of interacting with plugins.
 
 Beyond the basic commands you can read about in his README, vim-plug has
-an API that exports the command ``plug``. This command returns a
-dict with a JSON encoded list of all of your currently loaded plugins.
+an API that exports the command ``plug``. This command utilizes vimscript to
+return a dictionary with all of your currently loaded plugins.
 
-This feature proves phenomenally useful in situations where you may have
+This dict maintains the order that the plugins were loaded into the buffer and
+can be accessed with
+
+.. code-block:: vim
+
+   echo keys(plugs)
+
+This feature proves phenomenally useful in a handful of situations.
+
+For example, one may want to check whether a ftplugin was lazily loaded.
+
+In addition, one could be in the situation where they may have
 different configuration files on different devices, and would like to
 check whether a plugin was installed. It's also good for debugging and
-seeing when a plugin loads.
+seeing in what order a plugin loads.
+
+For plugins that are dependent on each other, like how deoplete-jedi depends on
+Jedi, this can help startup times and remedy unexpected behavior.
 
 
 Spell Files
