@@ -34,6 +34,7 @@ Plug 'davidhalter/jedi-vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
+Plug 'tpope/vim-unimpaired'
 Plug 'w0rp/ale'
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next' }
 Plug 'SirVer/ultisnips'
@@ -41,17 +42,6 @@ Plug 'vim-airline/vim-airline'
 Plug 'edkolev/tmuxline.vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'mhinz/vim-startify'
-" if has('nvim')
-"     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-" else
-"     Plug 'Shougo/deoplete.nvim'
-    " Plug 'roxma/nvim-yarp'
-    " Plug 'roxma/vim-hug-neovim-rpc'
-" endif
-" let g:deoplete#enable_at_startup = 1
-
-" Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3'] }
-" Plug 'fszymanski/deoplete-emoji'
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
@@ -59,7 +49,7 @@ Plug 'Rykka/InstantRst'
 Plug 'gu-fan/riv.vim', { 'for': ['python', 'python3', 'rst'] }
 Plug 'greyblake/vim-preview'
 Plug 'lifepillar/vim-cheat40'
-Plug 'neoclide/coc.nvim'
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': 'yarn install'}
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 
@@ -159,8 +149,8 @@ let g:python_highlight_all = 1
 
 " Folds: {{{2
 set foldenable
-set foldlevelstart=0        " I'm fine with this level of folding to start
-set foldlevel=0
+set foldlevelstart=1
+set foldlevel=1
 set foldnestmax=10
 set foldmethod=marker
 " Use 1 column to indicate fold level and whether a fold is open or closed.
@@ -259,10 +249,9 @@ if &textwidth!=0
 endif
 set cmdheight=2
 set number
-set showmatch
 set ignorecase smartcase
 set infercase
-set autoindent smartindent              " :he options: set with smartindent
+set autoindent                          " Smart indent fucks up indenting comments
 " FOOBAR=~/<CTRL-><CTRL-F> will now autocomplete!
 set isfname-==
 
@@ -614,7 +603,7 @@ let g:riv_ignored_maps = '<Tab>'
 let g:riv_ignored_nmaps = '<Tab>'
 let g:riv_i_tab_pum_next = 0
 
-let g:riv_global_leader=','
+let g:riv_global_leader = ','
 
 " From he riv-instructions. **THIS IS THE ONE!!** UltiSnips finally works again
 let g:riv_i_tab_user_cmd = "\<c-g>u\<c-r>=UltiSnips#ExpandSnippet()\<cr>"
@@ -707,8 +696,6 @@ elseif executable('rg')
 else
   let &grepprg = 'grep -rn $* *'
 endif
-
-command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
 
 " Todo Function: {{{2
 " Grep for todos in the current repo and populate the quickfix list with them.

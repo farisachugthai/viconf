@@ -6,13 +6,12 @@ setlocal tabstop=4 shiftwidth=4 expandtab softtabstop=4
 let b:python_highlight_all = 1
 
 " Options: {{{1
-setl linebreak
-setl textwidth=120
+setlocal linebreak
+setlocal textwidth=120
 
-set commentstring=#\ %s
+setlocal commentstring=#\ %s
+set comments="
 
-
-" TODO: Should set makeprg to something that could execute tests
 setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 
 " also let's know where the line needs to end visually but not invoke the
@@ -65,16 +64,12 @@ let b:ale_python_pyls_options = {
       \   },
       \ }
 
-" Now that linters are set, add fixers
-" I LEARNED HOW LIST CONCATENATION WORKS
-
-" Feb 18, 2019: DUDE DON'T USE THE BLANK LINES THING IT ADDS THEM AFTER DOCSTRINGS IN MODULE LEVEL FUNCTIONS
-let b:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
-
 " The external program vim uses for gg=G can be configured
 " Hey you in the future. You can use :set *prg<Tab> and see all of the
 " configuration options you have.
 " Now you can also use gq for yapf
+let b:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
+
 if executable('yapf')
     setlocal equalprg=yapf
     setlocal formatprg=yapf
@@ -90,7 +85,9 @@ endif
 " TODO:
 " Here's a suggestion. Write your own buffer fixer using ALE and yapf.
 " You do it anyway so why not nnoremap <Leader>bf <expr> py3do % or %yapf or
-" set makeprg=unittest.TestRunner()...or even sphinx build or something. lots
+" set makeprg=unittest.TestRunner()...or even sphinx build or something.
+" Todo: #2: Map something so that it does "run this line with the py3 host
+
 
 " Virtualenvs: {{{3
 if isdirectory('~/virtualenvs')
@@ -106,24 +103,6 @@ if has_key(plugs, 'LanguageClient-neovim')
     let b:LanguageClient_autoStart = 1
     let b:LanguageClient_selectionUI = 'fzf'
 endif
-
-" function! LC_maps() abort
-"     if has_key(g:LanguageClient_serverCommands, 'python')
-"         nnoremap <buffer> <Leader>lh :call LanguageClient#textDocument_hover()<CR>
-"         inoremap <buffer> <Leader><F2> <Esc>:call LanguageClient#textDocument_rename()<CR>
-"         nnoremap <buffer> <Leader>ld :call LanguageClient#textDocument_definition()<CR>
-"         nnoremap <buffer> <Leader>lr :call LanguageClient#textDocument_rename()<CR>
-"         nnoremap <buffer> <Leader>lf :call LanguageClient#textDocument_formatting()<CR>
-"         nnoremap <buffer> <Leader>lt :call LanguageClient#textDocument_typeDefinition()<CR>
-"         nnoremap <buffer> <Leader>lx :call LanguageClient#textDocument_references()<CR>
-"         nnoremap <buffer> <Leader>la :call LanguageClient_workspace_applyEdit()<CR>
-"         nnoremap <buffer> <Leader>lc :call LanguageClient#textDocument_completion()<CR>
-"         nnoremap <buffer> <Leader>ls :call LanguageClient_textDocument_documentSymbol()<CR>
-"         nnoremap <buffer> <Leader>lm :call LanguageClient_contextMenu()<CR>
-"         set completefunc=LanguageClient#complete
-"         set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
-"     endif
-" endfunction
 
 " Riv: {{{2
 
