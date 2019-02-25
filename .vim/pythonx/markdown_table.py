@@ -1,1 +1,0 @@
-../../.config/nvim/pythonx/markdown_table.py

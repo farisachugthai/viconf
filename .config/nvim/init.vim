@@ -24,8 +24,8 @@ if expand('OS') !=# 'Windows_NT'
 endif
 
 " General Plugins: {{{2
-call plug#begin('~/.local/share/nvim/plugged')
-
+" TODO: Should set up so that it reads in XDG_CONFIG_HOME or something
+call plug#begin('~\AppData\Local\nvim\plugged')
 Plug 'junegunn/vim-plug'        " plugception
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -41,17 +41,6 @@ Plug 'vim-airline/vim-airline'
 Plug 'edkolev/tmuxline.vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'mhinz/vim-startify'
-if has('nvim')
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-    Plug 'Shougo/deoplete.nvim'
-    Plug 'roxma/nvim-yarp'
-    Plug 'roxma/vim-hug-neovim-rpc'
-endif
-let g:deoplete#enable_at_startup = 1
-
-Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3'] }
-Plug 'fszymanski/deoplete-emoji'
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
@@ -88,6 +77,14 @@ elseif exists('$PREFIX')
     if executable(expand('$PREFIX/bin/python'))
         let g:python3_host_prog = expand('$PREFIX/bin/python')
     endif
+
+elseif expand('$OS') ==# 'Windows_NT'
+    " shouldve gotten caught by conda env var right?
+    " means that A) we're in powershell and conda is having a weird time
+    " initializing or that it didn't automatically set. Maybe we should just
+    " modify our conemu tasks because native powershell loads fine but not
+    " when its a powershell task from cmder
+    let g:python3_host_prog = expand('~/Miniconda3/python.exe')
 
 else
     if executable('/usr/bin/python3')
@@ -138,7 +135,7 @@ set sessionoptions-=blank,folds
 " let g:mapleader = '\<Space>'
 noremap <Space> <nop>
 map <Space> <Leader>
-let g:maplocalleader = '\,'
+let g:maplocalleader = '<Space>'
 
 if !has('nvim')
     set viminfo='100,<200,s200,n$HOME/.vim/viminfo
@@ -157,8 +154,8 @@ let g:python_highlight_all = 1
 
 " Folds: {{{2
 set foldenable
-set foldlevelstart=0        " I'm fine with this level of folding to start
-set foldlevel=0
+set foldlevelstart=1
+set foldlevel=1
 set foldnestmax=10
 set foldmethod=marker
 " Use 1 column to indicate fold level and whether a fold is open or closed.
@@ -168,7 +165,6 @@ set foldcolumn=1
 " Buffers Windows Tabs: {{{2
 try
     set switchbuf=useopen,usetab,newtab
-    set showtabline=2
 catch
 endtry
 
@@ -177,25 +173,19 @@ set splitbelow splitright
 
 " Spell Checker: {{{2
 
-set encoding=utf-8                       " Set default encoding
-scriptencoding utf-8                     " Vint believes encoding should be done first
-set fileencoding=utf-8
-set termencoding=utf-8
+" setlocal spelllang=en
 
-setlocal spelllang=en
+" if filereadable(expand('~/.config/nvim/spell/en.utf-8.add'))
+    " set spellfile=~/.config/nvim/spell/en.utf-8.add
+" elseif filereadable(glob('~/projects/viconf/.vim/spell/en.utf-8.add'))
+    " set spellfile=~/projects/viconf/.vim/spell/en.utf-8.add
+" else
+    " echoerr 'Spell file not found.'
+" endif
 
-" This is is definitely one of the things that needs to get ported over to nvim
-if filereadable(expand('~/.config/nvim/spell/en.utf-8.add'))
-    set spellfile=~/.config/nvim/spell/en.utf-8.add
-elseif filereadable(glob('~/projects/viconf/.vim/spell/en.utf-8.add'))
-    set spellfile=~/projects/viconf/.vim/spell/en.utf-8.add
-else
-    echoerr 'Spell file not found.'
-endif
-
-if !has('nvim')
-    set spelllang+=$VIMRUNTIME/spell/en.utf-8.spl
-endif
+" if !has('nvim')
+    " set spelllang+=$VIMRUNTIME/spell/en.utf-8.spl
+" endif
 
 set complete+=kspell                    " Autocomplete in insert mode
 set spellsuggest=5                      " Limit the number of suggestions from 'spell suggest'
@@ -207,13 +197,14 @@ if filereadable('/usr/share/dict/words')
     inoremap <expr> <c-x><c-k> fzf#vim#complete('cat /usr/share/dict/words')
 endif
 
-if filereadable('/usr/share/dict/american-english')
-    setlocal dictionary+=/usr/share/dict/american-english
-endif
+" if filereadable('/usr/share/dict/american-english')
+    " setlocal dictionary+=/usr/share/dict/american-english
+" endif
 
-if filereadable('$HOME/.config/nvim/spell/en.hun.spl')
-    set spelllang+=$HOME/.config/nvim/spell/en.hun.spl
-endif
+" if filereadable('$HOME/.config/nvim/spell/en.hun.spl')
+    " set spelllang+=$HOME/.config/nvim/spell/en.hun.spl
+" endif
+
 
 if filereadable(glob('~/.vim/autocorrect.vim'))
     source ~/.vim/autocorrect.vim
@@ -228,19 +219,21 @@ endif
 
 set pastetoggle=<F7>
 
-if exists('$TMUX')
-    let g:clipboard = {
-        \   'name': 'myClipboard',
-        \   'copy': {
-        \      '+': 'tmux load-buffer -',
-        \      '*': 'tmux load-buffer -',
-        \    },
-        \   'paste': {
-        \      '+': 'tmux save-buffer -',
-        \      '*': 'tmux save-buffer -',
-        \   },
-        \   'cache_enabled': 1,
-        \ }
+if has('nvim')
+    if exists('$TMUX')
+        let g:clipboard = {
+            \   'name': 'myClipboard',
+            \   'copy': {
+            \      '+': 'tmux load-buffer -',
+            \      '*': 'tmux load-buffer -',
+            \    },
+            \   'paste': {
+            \      '+': 'tmux save-buffer -',
+            \      '*': 'tmux save-buffer -',
+            \   },
+            \   'cache_enabled': 1,
+            \ }
+    endif
 endif
 
 " Autocompletion: {{{2
@@ -264,8 +257,8 @@ set number
 set showmatch
 set ignorecase smartcase
 set infercase
+set autoindent                          " Smart indent fucks up indenting comments
 " smartindent's kinda terrible. removes indentation from comments
-set autoindent smartindent              " :he options: set with smartindent
 " FOOBAR=~/<CTRL-><CTRL-F> will now autocomplete!
 set isfname-==
 
@@ -282,21 +275,26 @@ if isdirectory('/usr/include/libcs50')
 endif
 
 if isdirectory(expand('$_ROOT/lib/python3'))
-    set path=+=expand('$_ROOT) . 'lib/python3'
+    " Double check globbing in vim
+    set path+=expand('$_ROOT/lib/python**')
+endif
+
+if isdirectory(expand('$_ROOT/lib/python3'))
+    set path+=expand('$_ROOT')./lib/python3'
 endif
 
 set autochdir
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
-set diffopt=vertical,context:3          " vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
+set diffopt=filler,context:3          " vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
 
 if has('persistent_undo')
-    set undodir=~/.config/nvim/undodir
+    set undodir=expand($XDG_CONFIG_HOME).'/nvim/undodir'
     set undofile
 endif
 
 set backup
-set backupdir=~/.config/nvim/undodir,/tmp
+set backupdir=expand($XDG_CONFIG_HOME).'/nvim/undodir'
 set backupext='.bak'        " like wth is that ~ nonsense?
 
 " Directory won't need to be set because it defaults to
@@ -304,11 +302,9 @@ set backupext='.bak'        " like wth is that ~ nonsense?
 set swapfile
 
 set modeline
-set lazyredraw
 set browsedir="buffer"                  " which directory is used for the file browser
 
 " Mappings: {{{1
-
 " Window_Buf_Tab_Mappings: {{{2
 
 " Navigate buffers more easily
@@ -340,13 +336,14 @@ inoremap <F9> <Esc>:tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 " Now reload it
 nnoremap <Leader>re :so $MYVIMRC<CR>
 
+" I feel really slick for this one. Modify ftplugin
+let g:ftplug=expand($MYVIMRC).'/after/ftplugin/'.&filetype.'.vim'
+" Goddamnit it opens a buffernnamed g:ftplug
+" map <F10> <Cmd>e g:ftplug<CR>
 
 " General_Mappings: {{{2
 
 noremap <silent> <Leader>ts <Cmd>!termux-share -a send %<CR>
-
-" Simple way to speed up startup
-nnoremap <Leader>nt :NERDTreeToggle<CR>
 
 " Junegunn:
 nnoremap <Leader>o o<Esc>
@@ -359,9 +356,6 @@ nnoremap k gk
 " Switch CWD to the directory of the open buffer
 nnoremap <Leader>cd :cd %:p:h<CR>:pwd<CR>
 
-" Switch NERDTree root to dir of currently focused window.
-nnoremap <Leader>ncd :NERDTreeCWD
-
 " Utilize the mouse!
 map <ScrollWheelUp> <C-Y>
 map <S-ScrollWheelUp> <C-U>
@@ -371,36 +365,6 @@ map <S-ScrollWheelDown> <C-D>
 " Save a file as root
 noremap <leader>W :w !sudo tee % > /dev/null<CR>
 
-" UltiSnips: {{{2
-
-" TODO: Is it better to put <Cmd> here? For the insert mode ones maybe.
-" I use this command constantly
-nnoremap <Leader>se <Cmd>UltiSnipsEdit<CR>
-nnoremap <Leader>sn <Cmd>UltiSnipsEdit<CR>
-
-" TODO: Is C-o better than Esc? Also add a check that if has_key(plug['fzf'])
-" then and only then make these mappings. should just move to fzf plugin
-inoremap <F6> <C-o>:Snippets<CR>
-nnoremap <F6> :Snippets<CR>
-
-" Unimpaired: {{{2
-" Note that ]c and [c are mapped by git-gutter and ALE has ]a and [a
-nnoremap ]q :cnext<CR>
-nnoremap [q :cprev<CR>
-nnoremap ]Q :cfirst<CR>
-nnoremap [Q :clast<CR>
-nnoremap ]l :lnext<CR>
-nnoremap [l :lprev<CR>
-nnoremap ]L :lfirst<CR>
-nnoremap [L :llast<CR>
-nnoremap ]b :bnext<CR>
-nnoremap [b :bprev<CR>
-nnoremap ]B :blast<CR>
-nnoremap [B :bfirst<CR>
-nnoremap ]t :tabn<CR>
-nnoremap [t :tabp<CR>
-nnoremap ]T :tfirst<CR>
-nnoremap [T :tlast<CR>
 
 " Spell Checking: {{{2
 nnoremap <Leader>sp :setlocal spell!<CR>
@@ -427,7 +391,6 @@ nnoremap <A-k> <C-w>k
 nnoremap <A-l> <C-w>l
 
 " ALE: {{{2
-
 nnoremap <Leader>l <Plug>(ale_toggle_buffer)<CR>
 nnoremap ]a <Plug>(ale_next_wrap)
 nnoremap [a <Plug>(ale_previous_wrap)
@@ -499,11 +462,6 @@ if has('b:Tagbar')  " or any plugin
 endif
 
 " Macros: {{{1
-if !has('nvim')
-    runtime! ftplugin/man.vim
-    let g:ft_man_folding_enable = 0
-endif
-
 runtime! macros/matchit.vim
 
 set matchpairs+=<:>
@@ -514,40 +472,12 @@ let g:loaded_tutor_mode_plugin = 1
 let g:loaded_getsciptPlugin    = 1
 let g:loaded_2html_plugin      = 1
 let g:loaded_logiPat           = 1
-let g:loaded_netrw             = 1
-let g:loaded_netrwPlugin       = 1
-" Let's see if this speeds things up because I've never used most of them
 
 " Remaining Plugins: {{{1
 
 " Vim_Plug: {{{2
 let g:plug_window = 'tabe'
 
-" NERDTree: {{{2
-augroup nerd_loader
-  autocmd!
-  autocmd VimEnter * silent! autocmd! FileExplorer
-  autocmd BufEnter,BufNew *
-        \  if isdirectory(expand('<amatch>'))
-        \|   call plug#load('nerdtree')
-        \|   execute 'autocmd! nerd_loader'
-        \| endif
-    autocmd bufenter *
-        \ if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree())
-        \| q
-        \| endif
-augroup END
-
-let g:NERDTreeDirArrows = 1
-let g:NERDTreeWinPos = 'right'
-let g:NERDTreeShowHidden = 1
-let g:NERDTreeShowBookmarks = 1
-let g:NERDTreeNaturalSort = 1
-let g:NERDTreeChDirMode = 2             " change cwd every time NT root changes
-let g:NERDTreeShowLineNumbers = 1
-let g:NERDTreeMouseMode = 2             " Open dir with 1 keys, files with 2
-let g:NERDTreeIgnore = ['\.pyc$', '\.pyo$', '__pycache__$', '\.git$', '\.mypy*']
-let g:NERDTreeRespectWildIgnore = 1     " yeah i meant those ones too
 
 " ALE: {{{2
 let g:ale_fixers = { '*': [ 'remove_trailing_lines', 'trim_whitespace' ] }
@@ -587,20 +517,6 @@ else
     let entry_format .= '. entry_path'
 endif
 
-" UltiSnips: {{{2
-let g:UltiSnipsSnippetDir = [ '~/.config/nvim/UltiSnips' ]
-let g:UltiSnipsExpandTrigger = '<Tab>'
-let g:UltiSnipsListSnippets = '<C-Tab>'
-let g:UltiSnipsJumpForwardTrigger = '<C-j>'
-let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
-inoremap <C-Tab> * <Esc>:call ultisnips#listsnippets()<CR>
-let g:ultisnips_python_style = 'numpy'
-let g:ultisnips_python_quoting_style = 'double'
-let g:UltiSnipsEnableSnipMate = 0
-let g:UltiSnipsEditSplit = 'tabdo'
-" Defining it in this way means that UltiSnips doesn't iterate
-" through every dir in &rtp which should save a lot of time
-let g:UltiSnipsSnippetDirectories=[$HOME.'/.config/nvim/UltiSnips']
 
 " Language Client: {{{2
 let g:LanguageClient_serverCommands = {
@@ -646,8 +562,8 @@ let g:tagbar_width = 30
 let g:tagbar_sort = 0
 
 " Zim: {{{2
-let g:zim_notebooks_dir = expand('~/Notebooks.git')
-let g:zim_notebook = expand('~/Notebooks.git')
+let g:zim_notebooks_dir = expand('~/Notebooks')
+let g:zim_notebook = expand('~/Notebooks')
 let g:zim_dev = 1
 
 " Here's an exciting little note about Zim. Ignoring how ...odd this plugin is
@@ -925,11 +841,6 @@ endif
 
 command! -nargs=0 Gruvbox call s:gruvbox()
 
-" 12/17/18: Here's a phenomenal autocmd for ensuring we can set nohlsearch but
-" still get highlights ONLY while searching!!
-"
-" Jan 30, 2019:
-" A) Fugitive is seriously amazing. `:Gblame` to get revision dates is such a useful feature.
 " TODO: Also this exits and clears the highlighting
 " pattern as soon as you hit enter. So if you type a word, it'll highlight all
 " matches. But once you hit enter to find the next one it clears. Hmmm.

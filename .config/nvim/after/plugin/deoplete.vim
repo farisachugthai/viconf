@@ -1,4 +1,16 @@
 " Deoplete:
+" Vim: scriptencoding=utf-8:
+" Trying to shut vint up but can't. Don't know what's wrong with the modeline.
+" But deoplete is probably gonna get canned because so far coc is lovely
+
+if !has_key(plugs, 'deoplete.nvim')
+    finish
+endif
+
+if exists('b:did_deoplete_nvim') || &cp || v:version < 700
+    finish
+endif
+let b:did_deoplete_nvim = 1
 
 " General: {{{1
 let g:deoplete#enable_smart_case = 1
