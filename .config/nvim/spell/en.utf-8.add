@@ -13,6 +13,7 @@ Anisa
 Ansi
 Antonopoulos
 AppArmor
+AppData
 AppleWebKit
 ArchWiki
 Argparse
@@ -38,6 +39,8 @@ ChemE
 Choi
 Chugthai
 ColorColumn
+CommonMark
+Commonmark
 Compiler
 CompletedProcess
 ConEmu
@@ -390,7 +393,6 @@ bztar
 cURL
 cant/!
 cd
-cd
 cdrom
 chainmap
 cheat40
@@ -481,6 +483,7 @@ du
 duckduckgo
 eg
 elif
+elinks
 elisp
 emacs
 emoji's
@@ -651,7 +654,6 @@ lol
 lsblk
 lscpu
 lua
-lune/!
 lxml
 lzma
 makes
@@ -770,7 +772,6 @@ plymouth
 png
 png
 popd
-popd
 popen
 poppler
 posix
@@ -789,7 +790,6 @@ ps1
 pstree
 psutil
 ptpython's
-pushd
 pushd
 pwd
 pwgen
@@ -1027,6 +1027,7 @@ urls
 usb
 useradd
 username
+userprofile
 using
 usr
 utils

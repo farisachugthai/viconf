@@ -98,6 +98,9 @@ let s:gb.dark3       = ['#665c54', 241]     " 102-92-84
 let s:gb.dark4       = ['#7c6f64', 243]     " 124-111-100
 let s:gb.dark4_256   = ['#7c6f64', 243]     " 124-111-100
 
+" These 2 are comment string colors. If you wanna see a variation
+" on how bright or dark that colors is go here and check it out
+" http://www.0to255.com/928374
 let s:gb.gray_245    = ['#928374', 245]     " 146-131-116
 let s:gb.gray_244    = ['#928374', 244]     " 146-131-116
 

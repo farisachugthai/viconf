@@ -6,13 +6,12 @@ setlocal tabstop=4 shiftwidth=4 expandtab softtabstop=4
 let b:python_highlight_all = 1
 
 " Options: {{{1
-setl linebreak
-setl textwidth=120
+setlocal linebreak
+setlocal textwidth=120
 
-set commentstring=#\ %s
+setlocal commentstring=#\ %s
+set comments="
 
-
-" TODO: Should set makeprg to something that could execute tests
 setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 
 " also let's know where the line needs to end visually but not invoke the
@@ -105,7 +104,7 @@ if has_key(plugs, 'LanguageClient-neovim')
     let b:LanguageClient_selectionUI = 'fzf'
 endif
 
-" Riv:
+" Riv: {{{2
 
 " Riv is a plugin for reStructuredText in Vim.
 " The following setting allows docstrings in python files

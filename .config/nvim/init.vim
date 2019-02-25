@@ -36,23 +36,11 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
 Plug 'tpope/vim-unimpaired'
 Plug 'w0rp/ale'
-" Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next' }
 Plug 'SirVer/ultisnips'
-Plug 'vim-airline/vim-airline'
+" Plug 'vim-airline/vim-airline'
 Plug 'edkolev/tmuxline.vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'mhinz/vim-startify'
-" if has('nvim')
-"     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-" else
-"     Plug 'Shougo/deoplete.nvim'
-    " Plug 'roxma/nvim-yarp'
-    " Plug 'roxma/vim-hug-neovim-rpc'
-" endif
-" let g:deoplete#enable_at_startup = 1
-
-" Plug 'zchee/deoplete-jedi', { 'for': ['python', 'python3'] }
-" Plug 'fszymanski/deoplete-emoji'
 Plug 'neoclide/coc.nvim', {'tag': '*', 'do': 'yarn install'}
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'godlygeek/tabular'
@@ -102,6 +90,11 @@ else
     endif
 endif
 
+" We're not loading python2 and 3 at the same time
+" TODO: how to check py3 is loaded and only enable this then? Or if its empty
+" check if we can load py2?
+let g:loaded_python_provider = 1
+
 " OS Setup: {{{1
 
 let s:termux = exists('$PREFIX') && has('unix')
@@ -135,16 +128,25 @@ set sessionoptions+=unix,slash
 " Not related but I wanted to strike these down because they're annoying.
 set sessionoptions-=blank,folds
 
+if s:termux
+    " holy fuck that was a doozy to find
+    let g:node_host_prog = expand('~').'/.local/share/yarn/global/node_modules/neovim/.bin/neovim-node-host'
+    let g:ruby_host_prog = expand($_ROOT).'/bin/neovim-ruby-host'
+endif
+
 " Global Options: {{{1
 
 " Leader_Viminfo: {{{2
 " let g:mapleader = '\<Space>'
 noremap <Space> <nop>
 map <Space> <Leader>
-let g:maplocalleader = '\,'
+let g:maplocalleader = '<Space>'
 
 if !has('nvim')
     set viminfo='100,<200,s200,n$HOME/.vim/viminfo
+else
+    " Default on termux nvim 0.3.4, pynvim 0.3.2 Feb 24, 2019
+    " shada=!,'100,<50,s10,h
 endif
 
 " Pep8 Global Options: {{{2
@@ -273,17 +275,17 @@ endif
 " In case you wanted to see the guicursor default for gvim win64
 " set gcr=n-v-c:block-Cursor/lCursor,ve:ver35-Cursor,o:hor50-Cursor, i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor, sm:block-Cursor-blinkwait175-blinkoff150-blinkon175
 
+" The if loops STILL don't work :/
 set path+=**                            " Recursively search dirs with :find
-if isdirectory('/usr/include/libcs50')
-    set path+=/usr/include/libcs50          " Also I want those headers
+if isdirectory(expand('$_ROOT').'/include/libcs50')
+    set path+=expand('$_ROOT').'/include/libcs50'         " Also I want those headers
 endif
 
-if isdirectory(expand('$_ROOT/lib/python3'))
-    set path+=expand('$_ROOT')./lib/python3'
+if isdirectory(expand('$_ROOT').'/lib/python3')
+    set path+=expand('$_ROOT').'/lib/python3'
 endif
 
 set autochdir
-set fileformat=unix
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
 set diffopt=filler,context:3          " vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
@@ -294,7 +296,7 @@ if has('persistent_undo')
 endif
 
 set backup
-set backupdir=~/.config/nvim/undodir,/tmp
+set backupdir=~/.config/nvim/undodir
 set backupext='.bak'        " like wth is that ~ nonsense?
 
 " Directory won't need to be set because it defaults to
@@ -689,10 +691,15 @@ let g:ft_html_autocomment = 1
 "     autocmd BufEnter, BufNew buftype=help set number
 " augroup END
 
-autocmd Filetype *
+augroup filetypes
+    autocmd Filetype *
         \	if &omnifunc == "" |
         \		setlocal omnifunc=syntaxcomplete#Complete |
         \	endif
+            " This is probably a terrible idea but idk whats fucking up my com
+            let &commentstring = '# %s'
+            set comments="
+augroup END
 " Functions_Commands: {{{1
 
 " Up until Rename are from Junegunn so credit to him
