@@ -313,29 +313,33 @@ finally:
 	${7:pass}
 endsnippet
 
-# argparse:{{{1
+# Argparse: {{{1
 
-# not the most loqacoious i've ever been but it's better than not knowing
-# what the hell a snippet is because the description for "with" is "with"
-snippet parser "Initialize ArgumentParser in def _parse_arguments" b
+# Don't use a $0 at the end it ends up adding blank white space. Or read UltiSnips-snippet-option
+snippet argparser "Initialize ArgumentParser in def _parse_arguments" bms
 def _parse_arguments():
 	parser = argparse.ArgumentParser(description=${1:__doc__})
 	return parser.parse_args()
-	$0
 endsnippet
 
-snippet argstrpos "Argparse positional argument for a string type." bs
+snippet argpos "Add argument - positional argument for a string type." bs
 parser.add_argument(${1:${VISUAL}}, type=${1:str}, help=${2:Feed me input.})
 endsnippet
 
-snippet argpath "Add a pathlike object" b
+snippet argpath "Add argument for a pathlike object" b
 parser.add_argument(${1:-s}, ${2:--long}, dest= ${3: var},
 					type=${4:pathlib.Path}, help=${5:RTFM})
 endsnippet
 
-snippet argpv "argument for version = %(prog)s" b
+snippet argpv "add argument for version = %(prog)s" b
 parser.add_argument('--version', action = 'version',
 		version = '%(prog)s 1.0')
+endsnippet
+
+# TODO: Figure out how to account for whitespace
+snippet argpfile "add arg - file" bms
+parser.add_argument('$1', required=$2, type=argparse.FileType('$3')
+					help="$4")
 endsnippet
 
 # Comprehensions:{{{1

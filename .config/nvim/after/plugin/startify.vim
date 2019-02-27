@@ -1,4 +1,15 @@
 " Vim_Startify:
+
+" Plugin Guard: {{{1
+if !has_key(plugs, 'startify')
+    finish
+endif
+
+if exists('b:did_startify') || &cp || v:version < 700
+    finish
+endif
+let b:did_startify = 1
+
 " What shows up in the startify list?
 
 " List Commits: {{{1
