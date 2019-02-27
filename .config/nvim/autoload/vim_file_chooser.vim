@@ -7,7 +7,7 @@
 " files, press enter and ranger will quit again and vim will open the selected
 " files.
 
-function! RangeChooser()
+function! vim_file_chooser#RangeChooser()
     let temp = tempname()
     " The option "--choosefiles" was added in ranger 1.5.1. Use the next line
     " with ranger 1.4.2 through 1.5.0 instead.
@@ -36,5 +36,5 @@ function! RangeChooser()
     endfor
     redraw!
 endfunction
-command! -bar RangerChooser call RangeChooser()
+command! -bar RangerChooser call vim_file_chooser#RangeChooser()
 nnoremap <leader>r :<C-U>RangerChooser<CR>

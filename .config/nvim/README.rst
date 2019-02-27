@@ -2,7 +2,7 @@ README
 ========
 
 :Author: Faris Chugthai
-:Date: 02/09/2019
+:Date: 02/19/2019
 
 To say vim has a lot of options, associated files and directories is an
 understatement. But these can be broken down piece by piece to be more
@@ -80,6 +80,7 @@ Ftdetect
 How does writing an ftdetect file work?
 What necessary guards are there?
 
+
 Ftplugin
 ^^^^^^^^^^
 Ftplugin files should be used to totally override the configuration
@@ -112,6 +113,7 @@ Something like this pseudo code would be perfect.
 .. code-block:: vim
 
     ``if ft != None && ft != gitcommit | finish | endif``
+
 
 Then put that in everything in that dir.
 
@@ -154,7 +156,7 @@ check whether a plugin was installed. It's also good for debugging and
 seeing in what order a plugin loads.
 
 For plugins that are dependent on each other, like how deoplete-jedi depends on
-Jedi, this can help startuptimes and remedy unexpected behavior.
+Jedi, this can help startup times and remedy unexpected behavior.
 
 
 Spell Files

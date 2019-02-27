@@ -24,7 +24,7 @@ if expand('OS') !=# 'Windows_NT'
 endif
 
 " General Plugins: {{{2
-call plug#begin('~/.local/share/nvim/plugged')
+call plug#begin(expand($XDG_DATA_HOME).'/nvim/plugged')
 
 Plug 'junegunn/vim-plug'        " plugception
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -38,7 +38,6 @@ Plug 'tpope/vim-unimpaired'
 Plug 'w0rp/ale'
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next' }
 Plug 'SirVer/ultisnips'
-Plug 'vim-airline/vim-airline'
 Plug 'edkolev/tmuxline.vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'mhinz/vim-startify'
@@ -81,6 +80,14 @@ elseif exists('$PREFIX')
         let g:python3_host_prog = expand('$PREFIX/bin/python')
     endif
 
+elseif expand('$OS') ==# 'Windows_NT'
+    " shouldve gotten caught by conda env var right?
+    " means that A) we're in powershell and conda is having a weird time
+    " initializing or that it didn't automatically set. Maybe we should just
+    " modify our conemu tasks because native powershell loads fine but not
+    " when its a powershell task from cmder
+    let g:python3_host_prog = expand('~/Miniconda3/python.exe')
+
 else
     if executable('/usr/bin/python3')
         let g:python3_host_prog = '/usr/bin/python3'
@@ -90,6 +97,11 @@ else
         endif
     endif
 endif
+
+" We're not loading python2 and 3 at the same time
+" TODO: how to check py3 is loaded and only enable this then? Or if its empty
+" check if we can load py2?
+let g:loaded_python_provider = 1
 
 " OS Setup: {{{1
 
@@ -124,16 +136,30 @@ set sessionoptions+=unix,slash
 " Not related but I wanted to strike these down because they're annoying.
 set sessionoptions-=blank,folds
 
+if s:termux
+    " holy fuck that was a doozy to find
+    let g:node_host_prog = expand('~').'/.local/share/yarn/global/node_modules/neovim/.bin/neovim-node-host'
+    let g:ruby_host_prog = expand($_ROOT).'/bin/neovim-ruby-host'
+
+elseif s:ubuntu:
+
+    let g:node_host_prog = expand($XDG_DATA_HOME)/share/yarn/global/node_modules/neovim/.bin/neovim-node-host.js
+
+endif
+
 " Global Options: {{{1
 
 " Leader_Viminfo: {{{2
 " let g:mapleader = '\<Space>'
 noremap <Space> <nop>
 map <Space> <Leader>
-let g:maplocalleader = '\,'
+let g:maplocalleader = '<Space>'
 
 if !has('nvim')
     set viminfo='100,<200,s200,n$HOME/.vim/viminfo
+else
+    " Default on termux nvim 0.3.4, pynvim 0.3.2 Feb 24, 2019
+    " shada=!,'100,<50,s10,h
 endif
 
 " Pep8 Global Options: {{{2
@@ -160,7 +186,6 @@ set foldcolumn=1
 " Buffers Windows Tabs: {{{2
 try
     set switchbuf=useopen,usetab,newtab
-    set showtabline=2
 catch
 endtry
 
@@ -168,15 +193,8 @@ set hidden
 set splitbelow splitright
 
 " Spell Checker: {{{2
-
-set encoding=utf-8                       " Set default encoding
-scriptencoding utf-8                     " Vint believes encoding should be done first
-set fileencoding=utf-8
-set termencoding=utf-8
-
 setlocal spelllang=en
 
-" This is is definitely one of the things that needs to get ported over to nvim
 if filereadable(expand('~/.config/nvim/spell/en.utf-8.add'))
     set spellfile=~/.config/nvim/spell/en.utf-8.add
 elseif filereadable(glob('~/projects/viconf/.vim/spell/en.utf-8.add'))
@@ -203,10 +221,6 @@ if filereadable('/usr/share/dict/american-english')
     setlocal dictionary+=/usr/share/dict/american-english
 endif
 
-if filereadable('$HOME/.config/nvim/spell/en.hun.spl')
-    set spelllang+=$HOME/.config/nvim/spell/en.hun.spl
-endif
-
 " Fun With Clipboards: {{{2
 if has('unnamedplus')                   " Use the system clipboard.
     set clipboard+=unnamed,unnamedplus
@@ -216,19 +230,21 @@ endif
 
 set pastetoggle=<F7>
 
-if exists('$TMUX')
-    let g:clipboard = {
-        \   'name': 'myClipboard',
-        \   'copy': {
-        \      '+': 'tmux load-buffer -',
-        \      '*': 'tmux load-buffer -',
-        \    },
-        \   'paste': {
-        \      '+': 'tmux save-buffer -',
-        \      '*': 'tmux save-buffer -',
-        \   },
-        \   'cache_enabled': 1,
-        \ }
+if has('nvim')
+    if exists('$TMUX')
+        let g:clipboard = {
+            \   'name': 'myClipboard',
+            \   'copy': {
+            \      '+': 'tmux load-buffer -',
+            \      '*': 'tmux load-buffer -',
+            \    },
+            \   'paste': {
+            \      '+': 'tmux save-buffer -',
+            \      '*': 'tmux save-buffer -',
+            \   },
+            \   'cache_enabled': 1,
+            \ }
+    endif
 endif
 
 " Autocompletion: {{{2
@@ -268,11 +284,15 @@ if isdirectory('/usr/include/libcs50')
 endif
 
 if isdirectory(expand('$_ROOT/lib/python3'))
+    " Double check globbing in vim
+    set path+=expand('$_ROOT/lib/python**')
+endif
+
+if isdirectory(expand('$_ROOT/lib/python3'))
     set path+=expand('$_ROOT')./lib/python3'
 endif
 
 set autochdir
-set fileformat=unix
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
 set diffopt=filler,context:3          " vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
@@ -330,11 +350,7 @@ let g:ftplug=$MYVIMRC.'/after/ftplugin/'.&filetype.'.vim'
 " map <F10> <Cmd>e g:ftplug<CR>
 
 " General_Mappings: {{{2
-
 noremap <silent> <Leader>ts <Cmd>!termux-share -a send %<CR>
-
-" Simple way to speed up startup
-nnoremap <Leader>nt :NERDTreeToggle<CR>
 
 " Junegunn:
 nnoremap <Leader>o o<Esc>
@@ -346,9 +362,6 @@ nnoremap k gk
 
 " Switch CWD to the directory of the open buffer
 nnoremap <Leader>cd :cd %:p:h<CR>:pwd<CR>
-
-" Switch NERDTree root to dir of currently focused window.
-nnoremap <Leader>ncd :NERDTreeCWD
 
 " Utilize the mouse!
 map <ScrollWheelUp> <C-Y>
@@ -459,12 +472,6 @@ if has_key(plugs, 'tagbar')
 endif
 
 " Macros: {{{1
-" Here are some mods for files found in $VIMRUNTIME/macros
-" Wait why do we run this on every file??
-" if !has('nvim')
-"     runtime! ftplugin/man.vim
-"     let g:ft_man_folding_enable = 0
-" endif
 
 runtime! macros/matchit.vim
 
@@ -479,9 +486,6 @@ let g:loaded_tutor_mode_plugin = 1
 let g:loaded_getsciptPlugin    = 1
 let g:loaded_2html_plugin      = 1
 let g:loaded_logiPat           = 1
-" let g:loaded_netrw             = 1
-" let g:loaded_netrwPlugin       = 1
-" Let's see if this speeds things up because I've never used most of them
 
 " Remaining Plugins: {{{1
 
@@ -526,21 +530,6 @@ if exists('*WebDevIconsGetFileTypeSymbol')  " support for vim-devicons
 else
     let entry_format .= '. entry_path'
 endif
-
-" UltiSnips: {{{2
-let g:UltiSnipsSnippetDir = [ '~/.config/nvim/UltiSnips' ]
-let g:UltiSnipsExpandTrigger = '<Tab>'
-let g:UltiSnipsListSnippets = '<C-Tab>'
-let g:UltiSnipsJumpForwardTrigger = '<C-j>'
-let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
-inoremap <C-Tab> * <Esc>:call ultisnips#listsnippets()<CR>
-let g:ultisnips_python_style = 'numpy'
-let g:ultisnips_python_quoting_style = 'double'
-let g:UltiSnipsEnableSnipMate = 0
-let g:UltiSnipsEditSplit = 'tabdo'
-" Defining it in this way means that UltiSnips doesn't iterate
-" through every dir in &rtp which should save a lot of time
-let g:UltiSnipsSnippetDirectories=[$HOME.'/.config/nvim/UltiSnips']
 
 " Language Client: {{{2
 let g:LanguageClient_serverCommands = {
@@ -603,7 +592,7 @@ let g:riv_ignored_maps = '<Tab>'
 let g:riv_ignored_nmaps = '<Tab>'
 let g:riv_i_tab_pum_next = 0
 
-let g:riv_global_leader = ','
+let g:riv_global_leader='<Space>'
 
 " From he riv-instructions. **THIS IS THE ONE!!** UltiSnips finally works again
 let g:riv_i_tab_user_cmd = "\<c-g>u\<c-r>=UltiSnips#ExpandSnippet()\<cr>"
@@ -645,7 +634,12 @@ let g:voom_python_versions = [3]
 " Cheat40: {{{2
 
 " I can already tell I'm going to end up making too many modifications to it
-let g:cheat40_use_default = 0
+" let g:cheat40_use_default = 1
+
+" Coc.nvim: {{{2
+inoremap <silent><expr> <c-space> coc#refresh()
+
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
 
 " Filetype Specific Options: {{{1
 
@@ -669,33 +663,19 @@ let readline_has_bash = 1
 " from runtime/ftplugin/html.vim
 let g:ft_html_autocomment = 1
 
-" I'm gonna round buftype to filetype here.
-" Also have this set in man.vim. But I realized manpage implementation (or
-" highlighting at least is implemented by lua).
-" augroup helpnumber
-"     autocmd!
-"     autocmd BufEnter, BufNew buftype=help set number
-" augroup END
-
-autocmd Filetype *
+augroup filetypes
+    autocmd Filetype *
         \	if &omnifunc == "" |
         \		setlocal omnifunc=syntaxcomplete#Complete |
         \	endif
+            " This is probably a terrible idea but idk whats fucking up my com
+            let &commentstring = '# %s'
+            set comments="
+augroup END
+
 " Functions_Commands: {{{1
 
 " Up until Rename are from Junegunn so credit to him
-
-" Grep: {{{ 2
-
-if executable('ag')
-    let &grepprg = 'ag --nogroup --nocolor --column --vimgrep $*'
-    set grepformat=%f:%l:%c:%m
-elseif executable('rg')
-    let &grepprg = 'rg --vimgrep'
-    set grepformat=%f:%l:%c:%m
-else
-  let &grepprg = 'grep -rn $* *'
-endif
 
 " Todo Function: {{{2
 " Grep for todos in the current repo and populate the quickfix list with them.
@@ -748,6 +728,7 @@ command! -nargs=1 Help call <SID>helptab()
 " I feel like I need to put this in a autocmd but I'm not sure what I would
 " want to trigger it.
 " Even better would be if it called :Gwrite haha!
+" Actually it's called `:set autowrite`....
 function! s:autosave(enable)
   augroup autosave
     autocmd!
@@ -826,11 +807,6 @@ endif
 
 command! -nargs=0 Gruvbox call s:gruvbox()
 
-" 12/17/18: Here's a phenomenal autocmd for ensuring we can set nohlsearch but
-" still get highlights ONLY while searching!!
-"
-" Jan 30, 2019:
-" A) Fugitive is seriously amazing. `:Gblame` to get revision dates is such a useful feature.
 " TODO: Also this exits and clears the highlighting
 " pattern as soon as you hit enter. So if you type a word, it'll highlight all
 " matches. But once you hit enter to find the next one it clears. Hmmm.

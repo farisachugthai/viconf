@@ -5,7 +5,7 @@
     " Last Modified: February 10, 2019
 " ============================================================================
 
-" NERDTree: {{{1
+" Autocommands: {{{1
 augroup nerd_loader
   autocmd!
   autocmd VimEnter * silent! autocmd! FileExplorer
@@ -19,6 +19,16 @@ augroup nerd_loader
         \| q
         \| endif
 augroup END
+
+" Mappings: {{{1
+
+" Simple way to speed up startup
+nnoremap <Leader>nt :NERDTreeToggle<CR>
+" Switch NERDTree root to dir of currently focused window.
+nnoremap <Leader>ncd :NERDTreeCWD
+
+
+" Options: {{{1
 
 let g:NERDTreeDirArrows = 1
 let g:NERDTreeWinPos = 'right'

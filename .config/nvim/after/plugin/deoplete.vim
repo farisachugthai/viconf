@@ -7,6 +7,10 @@ if !has_key(plugs, 'deoplete.nvim')
     finish
 endif
 
+if exists('b:did_deoplete_nvim') || &cp || v:version < 700
+    finish
+endif
+let b:did_deoplete_nvim = 1
 
 " General: {{{1
 let g:deoplete#enable_smart_case = 1

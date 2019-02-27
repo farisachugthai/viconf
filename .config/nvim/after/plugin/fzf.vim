@@ -49,6 +49,7 @@ let g:fzf_colors =
 
 " Exported fzf <plug> commands. Also shorten default mappings for ease of use
 " but allow the vim defaults to exist.
+" For this first one go down to the advanced functions
 imap <c-x><k> <Plug>(fzf-complete-word)
 imap <c-x><f> <Plug>(fzf-complete-path)
 imap <c-x><j> <Plug>(fzf-complete-file-ag)
@@ -116,7 +117,16 @@ augroup fzfstatusline
     autocmd! user Fzfstatusline call <SID>fzf_statusline()
 augroup end
 
-" Extra Commands: {{{1
+" Advanced Functions And Commands: {{{1
+
+" This was an autoloaded funcref so name needs to match path
+" FZF complete word with prefix added for termux
+" function! fzf#vim#complete#word(...)
+"   return fzf#vim#complete(s:extend({
+"     \ 'source': 'cat $_ROOT/share/dict/words'},
+"     \ get(a:000, 0, fzf#wrap())))
+" endfunction
+
 " Unfortunately the bang doesn't move to a new window. TODO
 " Opens matches in a split. Appending ! gives an error.
 " How do we fix that?
