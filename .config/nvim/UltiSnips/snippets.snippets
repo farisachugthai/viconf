@@ -1,12 +1,12 @@
 # Snippet files to configure how your snippets configure your files.
 
-extends all, rst, markdown, python
+extends all
 
 # We use a little hack so that the snippet is expanded
 # and parsed correctly
 
-snippet usnip "Ultisnips snippet definition" b
-`!p snip.rv = "snippet"` ${1:Tab_trigger} "${2:Description}" ${3:b}
+snippet usnip "Ultisnips snippet definition" w
+`!p snip.rv = "snippet"` ${1:Tab_trigger} "${2:Description}" ${3:ms}
 ${0:${VISUAL}}
 `!p snip.rv = "endsnippet"`
 endsnippet

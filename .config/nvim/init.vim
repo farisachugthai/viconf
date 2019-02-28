@@ -41,7 +41,6 @@ Plug 'SirVer/ultisnips'
 Plug 'edkolev/tmuxline.vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'mhinz/vim-startify'
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': 'yarn install'}
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
@@ -49,6 +48,7 @@ Plug 'Rykka/InstantRst'
 Plug 'gu-fan/riv.vim', { 'for': ['python', 'python3', 'rst'] }
 Plug 'greyblake/vim-preview'
 Plug 'lifepillar/vim-cheat40'
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': 'yarn install'}
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 
@@ -140,6 +140,11 @@ if s:termux
     " holy fuck that was a doozy to find
     let g:node_host_prog = expand('~').'/.local/share/yarn/global/node_modules/neovim/.bin/neovim-node-host'
     let g:ruby_host_prog = expand($_ROOT).'/bin/neovim-ruby-host'
+
+elseif s:ubuntu:
+
+    let g:node_host_prog = expand($XDG_DATA_HOME)/share/yarn/global/node_modules/neovim/.bin/neovim-node-host.js
+
 endif
 
 " Global Options: {{{1
@@ -212,14 +217,9 @@ if filereadable('/usr/share/dict/words')
     inoremap <expr> <c-x><k> fzf#vim#complete('cat /usr/share/dict/words')
 endif
 
-" if filereadable('/usr/share/dict/american-english')
-    " setlocal dictionary+=/usr/share/dict/american-english
-" endif
-
-" if filereadable('$HOME/.config/nvim/spell/en.hun.spl')
-    " set spelllang+=$HOME/.config/nvim/spell/en.hun.spl
-" endif
-
+if filereadable('/usr/share/dict/american-english')
+    setlocal dictionary+=/usr/share/dict/american-english
+endif
 
 " Fun With Clipboards: {{{2
 if has('unnamedplus')                   " Use the system clipboard.
@@ -268,7 +268,6 @@ set number
 set ignorecase smartcase
 set infercase
 set autoindent                          " Smart indent fucks up indenting comments
-" smartindent's kinda terrible. removes indentation from comments
 " FOOBAR=~/<CTRL-><CTRL-F> will now autocomplete!
 set isfname-==
 
@@ -298,23 +297,22 @@ set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
 set diffopt=filler,context:3          " vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
 
-" if has('persistent_undo')
-"     set undodir=expand('$XDG_CONFIG_HOME').'/nvim/undodir'
-"     set undofile
-" endif
+if has('persistent_undo')
+    set undodir=~/.config/nvim/undodir
+    set undofile
+endif
 
-" set backup
-" set backupdir=expand($XDG_CONFIG_HOME).'/nvim/undodir'
-" set backupext='.bak'        " like wth is that ~ nonsense?
+set backup
+set backupdir=~/.config/nvim/undodir,/tmp
+set backupext='.bak'        " like wth is that ~ nonsense?
 
 " Directory won't need to be set because it defaults to
 " xdg_data_home/nvim/swap
-" set swapfile
-
 set modeline
 set browsedir="buffer"                  " which directory is used for the file browser
 
 " Mappings: {{{1
+
 " Window_Buf_Tab_Mappings: {{{2
 
 " Navigate buffers more easily
@@ -399,6 +397,8 @@ nnoremap <A-k> <C-w>k
 nnoremap <A-l> <C-w>l
 
 " ALE: {{{2
+
+" This isn't working idk why
 nnoremap <Leader>l <Plug>(ale_toggle_buffer)<CR>
 
 nnoremap ]a <Plug>(ale_next_wrap)
@@ -472,6 +472,7 @@ if has_key(plugs, 'tagbar')
 endif
 
 " Macros: {{{1
+
 runtime! macros/matchit.vim
 
 set showmatch

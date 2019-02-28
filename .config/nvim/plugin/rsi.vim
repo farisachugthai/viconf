@@ -12,6 +12,11 @@ let did_rsi_vim = 1
 
 " Readline_Basics:{{{1
 
+" But wait can I get that cmdline completion behavior back?
+" cnoremap <Tab> <C-a>
+" This still ends up recursively binding where Tab inputs every completion suggestion it can
+" Tab maps to C-a so it brings up completion suggestions then home binds it tot he beginning of the
+" line after inserting. Shits retarded.
 " start of line
 cnoremap <C-A> <Home>
 " back one character
