@@ -54,6 +54,7 @@ imap <c-x><k> <Plug>(fzf-complete-word)
 imap <c-x><f> <Plug>(fzf-complete-path)
 imap <c-x><j> <Plug>(fzf-complete-file-ag)
 
+" The way I remapped Leader, this actually only works if you do <Space>\
 nnoremap <silent> <expr> <Leader><Leader> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
 nnoremap <silent> <Leader>C        :Colors<CR>
 nnoremap <silent> <Leader><Enter>  :Buffers<CR>
@@ -77,6 +78,9 @@ nnoremap <silent> <Leader>AG       :Ag <C-R><C-A><CR>
 xnoremap <silent> <Leader>ag       y:Ag <C-R>"<CR>
 nnoremap <silent> <Leader>`        :Marks<CR>
 
+" Feb 28, 2019: I unmapped <Leader>gs away from fugitive because FZF has :GFiles?
+" If you want help with that, remember that :he fzf and :he fzf-vim give 2
+" different docs
 " Global Line Completion: {{{2
 " Global line completion (not just open buffers. ripgrep required.)
 inoremap <expr> <c-x><l> fzf#vim#complete(fzf#wrap({
@@ -122,9 +126,9 @@ augroup end
 " This was an autoloaded funcref so name needs to match path
 " FZF complete word with prefix added for termux
 " function! fzf#vim#complete#word(...)
-"   return fzf#vim#complete(s:extend({
-"     \ 'source': 'cat $_ROOT/share/dict/words'},
-"     \ get(a:000, 0, fzf#wrap())))
+"     return fzf#vim#complete(s:extend){
+"         \ 'source': 'cat $_ROOT/share/dict/words'},
+"         \ get(a:000, 0, fzf#wrap())))
 " endfunction
 
 " Unfortunately the bang doesn't move to a new window. TODO
@@ -163,3 +167,17 @@ command! -bang -nargs=* Rg
 " Likewise, Files command with preview window
 command! -bang -nargs=? -complete=dir Files
     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+
+" Make Sentence: {{{2
+
+" *fzf-vim-reducer-example*
+
+    function! s:make_sentence(lines)
+        return substitute(join(a:lines), '^.', '\=toupper(submatch(0))', '').'.'
+    endfunction
+
+    inoremap <expr> <c-x><c-s> fzf#vim#complete({
+        \ 'source':  'cat /usr/share/dict/words',
+        \ 'reducer': function('<sid>make_sentence'),
+        \ 'options': '--multi --reverse --margin 15%,0',
+        \ 'left':    20})
