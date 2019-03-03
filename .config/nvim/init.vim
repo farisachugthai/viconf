@@ -37,7 +37,6 @@ Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't u
 Plug 'tpope/vim-unimpaired'
 Plug 'w0rp/ale'
 Plug 'SirVer/ultisnips'
-" Plug 'vim-airline/vim-airline'
 Plug 'edkolev/tmuxline.vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'mhinz/vim-startify'
@@ -52,7 +51,9 @@ Plug 'neoclide/coc.nvim', {'tag': '*', 'do': 'yarn install'}
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 
-" Nvim Specific: {{{1
+" Preliminaries: {{{1
+
+" Nvim Specific: {{{2
 
 if has('nvim')
     set inccommand=split                    " This alone is enough to never go back
@@ -62,49 +63,35 @@ endif
 unlet! skip_defaults_vim
 silent! source $VIMRUNTIME/defaults.vim
 
-" Python Executables: {{{1
+" Python Executables: {{{2
 
 " if we have a virtual env start there
 if exists('$VIRTUAL_ENV')
     let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
+    let &path = &path . ',' . expand('$VIRTUAL_ENV') . '/bin/python'
 
 " or a conda env.
 elseif exists('$CONDA_PYTHON_EXE')
     let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
-
-" otherwise break up termux and linux
-elseif exists('$PREFIX')
-
-    " and just use the system python
-    if executable(expand('$PREFIX/bin/python'))
-        let g:python3_host_prog = expand('$PREFIX/bin/python')
-    endif
-
-elseif expand('$OS') ==# 'Windows_NT'
-    " shouldve gotten caught by conda env var right?
-    " means that A) we're in powershell and conda is having a weird time
-    " initializing or that it didn't automatically set. Maybe we should just
-    " modify our conemu tasks because native powershell loads fine but not
-    " when its a powershell task from cmder
-    let g:python3_host_prog = expand('~/Miniconda3/python.exe')
+    let &path = &path . ',' . expand('$CONDA_PYTHON_EXE')
 
 else
-    if executable('/usr/bin/python3')
-        let g:python3_host_prog = '/usr/bin/python3'
-
-        if executable('/usr/bin/python2')       " why not
-            let g:python_host_prog = '/usr/bin/python2'
-        endif
+" If not then just use the system python
+    if executable(expand('$_ROOT').'bin/python3')
+        let g:python3_host_prog = expand('$_ROOT').'bin/python3'
     endif
 endif
 
-" We're not loading python2 and 3 at the same time
-" TODO: how to check py3 is loaded and only enable this then? Or if its empty
-" check if we can load py2?
-let g:loaded_python_provider = 1
+" Also add a python2 remote host
+if executable(expand('$_ROOT').'bin/python2')
+    let g:python_host_prog = expand('$_ROOT').'bin/python2'
+else
+    let g:loaded_python_provider = 1
+endif
 
 " OS Setup: {{{1
 
+" Platforms: {{{2
 let s:termux = exists('$PREFIX') && has('unix')
 let s:ubuntu = !exists('$PREFIX') && has('unix')
 let s:windows = has('win32') || has('win64')
@@ -120,6 +107,7 @@ if filereadable(s:local_vimrc)
     execute 'source' s:local_vimrc
 endif
 
+" Session options: {{{2
 " Here's a nice little setting to encourage interoperability
 " UNIX AND MS-WINDOWS
 
@@ -138,27 +126,35 @@ set sessionoptions-=blank,folds
 
 if s:termux
     " holy fuck that was a doozy to find
-    let g:node_host_prog = expand('~').'/.local/share/yarn/global/node_modules/neovim/.bin/neovim-node-host'
+    let g:node_host_prog = expand('~').'/.local/share/yarn/global/node_modules/.bin/neovim-node-host'
     let g:ruby_host_prog = expand($_ROOT).'/bin/neovim-ruby-host'
 
-elseif s:ubuntu:
-
-    let g:node_host_prog = expand($XDG_DATA_HOME)/share/yarn/global/node_modules/neovim/.bin/neovim-node-host.js
+elseif s:ubuntu
+    let g:node_host_prog = expand($XDG_DATA_HOME).'/yarn/global/node_modules/.bin/neovim-node-host'
+    " So the one above could very easily be merged. No idea how to do the
+    " below unless I just leave it up to the system.
+    try
+        let g:ruby_host_prog = '~/.rvm/gems/default/bin/neovim-ruby-host'
+    catch
+        let g:ruby_host_prog = expand($_ROOT).'/local/bin/neovim-ruby-host'
+    endtry
 
 endif
 
 " Global Options: {{{1
 
-" Leader_Viminfo: {{{2
+" Leader And Viminfo: {{{2
 " let g:mapleader = '\<Space>'
 noremap <Space> <nop>
 map <Space> <Leader>
 let g:maplocalleader = '<Space>'
 
+" Should deprecate the below and just state I don't use Vim anymore
 if !has('nvim')
     set viminfo='100,<200,s200,n$HOME/.vim/viminfo
 else
     " Default on termux nvim 0.3.4, pynvim 0.3.2 Feb 24, 2019
+    " Same as on KDE Neon
     " shada=!,'100,<50,s10,h
 endif
 
@@ -195,16 +191,12 @@ set splitbelow splitright
 " Spell Checker: {{{2
 setlocal spelllang=en
 
-if filereadable(expand('~/.config/nvim/spell/en.utf-8.add'))
-    set spellfile=~/.config/nvim/spell/en.utf-8.add
-elseif filereadable(glob('~/projects/viconf/.vim/spell/en.utf-8.add'))
-    set spellfile=~/projects/viconf/.vim/spell/en.utf-8.add
+if filereadable(expand('$XDG_CONFIG_HOME').'/nvim/spell/en.utf-8.add')
+    let &spellfile=expand('$XDG_CONFIG_HOME').'/nvim/spell/en.utf-8.add'
+elseif filereadable(expand('~/projects/viconf/.vim/spell/en.utf-8.add'))
+    let &spellfile=expand('$HOME').'/projects/viconf/.vim/spell/en.utf-8.add'
 else
     echoerr 'Spell file not found.'
-endif
-
-if !has('nvim')
-    set spelllang+=$VIMRUNTIME/spell/en.utf-8.spl
 endif
 
 set complete+=kspell                    " Autocomplete in insert mode
@@ -230,21 +222,19 @@ endif
 
 set pastetoggle=<F7>
 
-if has('nvim')
-    if exists('$TMUX')
-        let g:clipboard = {
-            \   'name': 'myClipboard',
-            \   'copy': {
-            \      '+': 'tmux load-buffer -',
-            \      '*': 'tmux load-buffer -',
-            \    },
-            \   'paste': {
-            \      '+': 'tmux save-buffer -',
-            \      '*': 'tmux save-buffer -',
-            \   },
-            \   'cache_enabled': 1,
-            \ }
-    endif
+if exists('$TMUX')
+    let g:clipboard = {
+        \   'name': 'myClipboard',
+        \   'copy': {
+        \      '+': 'tmux load-buffer -',
+        \      '*': 'tmux load-buffer -',
+        \    },
+        \   'paste': {
+        \      '+': 'tmux save-buffer -',
+        \      '*': 'tmux save-buffer -',
+        \   },
+        \   'cache_enabled': 1,
+        \ }
 endif
 
 " Autocompletion: {{{2
@@ -254,6 +244,36 @@ set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 set fileignorecase                      " when searching for files don't use case
 set wildignorecase
 
+" Path: {{{2
+
+" :let &{option-name} = {expr1}         *:let-option* *:let-&*
+"           Set option {option-name} to the result of the
+"           expression {expr1}.  A String or Number value is
+"           always converted to the type of the option.
+"           For an option local to a window or buffer the effect
+"           is just like using the |:set| command: both the local
+"           value and the global value are changed.
+"           Example: >
+"               :let &path = &path . ',/usr/local/include'
+
+" DON'T USE LET. LET ALLOWS FOR EXPRESSION EVALUATION. MUST BE DONE WITH SET
+" OR THE ** WILL EXPAND {rendering it as nothing}
+set path+=**                            " Recursively search dirs with :find
+
+if isdirectory('/usr/include/libcs50')
+    let &path = &path . ',/usr/include/libcs50'
+endif
+
+if isdirectory(expand('$_ROOT/lib/python3'))
+    " Double check globbing in vim
+    let &path = &path . ',' . expand('$_ROOT/lib/python3')
+endif
+
+" TODO: How do we glob in vimscript? There's some weird thing about using * and ** right?
+" if isdirectory(expand('$_ROOT/lib/python3'))
+
+" endif
+
 " Other Global Options: {{{2
 
 set tags+=./tags,./../tags,./*/tags     " usr_29
@@ -261,10 +281,10 @@ set tags+=~/projects/tags               " consider generating a few large tag
 set tags+=~python/tags                  " files rather than recursive searches
 set mouse=a                             " Automatically enable mouse usage
 if &textwidth!=0
-    set colorcolumn=+1                  " I don't know why this didn't set
+    setl colorcolumn=+1                  " I don't know why this didn't set
 endif
 set cmdheight=2
-set number
+set relativenumber
 set ignorecase smartcase
 set infercase
 set autoindent                          " Smart indent fucks up indenting comments
@@ -277,20 +297,6 @@ endif
 
 " In case you wanted to see the guicursor default for gvim win64
 " set gcr=n-v-c:block-Cursor/lCursor,ve:ver35-Cursor,o:hor50-Cursor, i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor, sm:block-Cursor-blinkwait175-blinkoff150-blinkon175
-
-set path+=**                            " Recursively search dirs with :find
-if isdirectory('/usr/include/libcs50')
-    set path+=/usr/include/libcs50          " Also I want those headers
-endif
-
-if isdirectory(expand('$_ROOT/lib/python3'))
-    " Double check globbing in vim
-    set path+=expand('$_ROOT/lib/python**')
-endif
-
-if isdirectory(expand('$_ROOT/lib/python3'))
-    set path+=expand('$_ROOT')./lib/python3'
-endif
 
 set autochdir
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
@@ -471,22 +477,6 @@ if has_key(plugs, 'tagbar')
     inoremap <silent> <F8> <Cmd>TagbarToggle<CR>
 endif
 
-" Macros: {{{1
-
-runtime! macros/matchit.vim
-
-set showmatch
-set matchpairs+=<:>
-" Show the matching pair for 2 seconds
-set matchtime=20
-
-" To every plugin I've never used before. Stop slowing me down.
-let g:loaded_vimballPlugin     = 1
-let g:loaded_tutor_mode_plugin = 1
-let g:loaded_getsciptPlugin    = 1
-let g:loaded_2html_plugin      = 1
-let g:loaded_logiPat           = 1
-
 " Remaining Plugins: {{{1
 
 " Vim_Plug: {{{2
@@ -500,10 +490,6 @@ let g:ale_fix_on_save = 1
 let g:ale_warn_about_trailing_whitespace = 0
 let g:ale_warn_about_trailing_blank_lines = 0
 
-" Modify how ale notifies us of stuff
-let g:ale_echo_cursor = 1
-" Default: `'%code: %%s'`
-let g:ale_echo_msg_format = '%linter% - %code: %%s %severity%'
 let g:ale_list_vertical = 1
 
 let g:ale_set_signs = 1
@@ -576,8 +562,8 @@ let g:tagbar_width = 30
 let g:tagbar_sort = 0
 
 " Zim: {{{2
-let g:zim_notebooks_dir = expand('~/Notebooks')
-let g:zim_notebook = expand('~/Notebooks')
+let g:zim_notebooks_dir = expand('~/Notebooks/Notes')
+let g:zim_notebook = expand('~/Notebooks/Notes')
 let g:zim_dev = 1
 
 " Here's an exciting little note about Zim. Ignoring how ...odd this plugin is
@@ -632,25 +618,41 @@ let g:voom_default_mode = 'rst'
 let g:voom_python_versions = [3]
 
 " Cheat40: {{{2
-
-" I can already tell I'm going to end up making too many modifications to it
 " let g:cheat40_use_default = 1
 
-" Coc.nvim: {{{2
+" Coc: {{{2
 inoremap <silent><expr> <c-space> coc#refresh()
 
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
 
-" Filetype Specific Options: {{{1
+" Runtime: {{{1
+
+" Macros: {{{2
+
+runtime! macros/matchit.vim
+
+set showmatch
+set matchpairs+=<:>
+" Show the matching pair for 2 seconds
+set matchtime=20
+
+" To every plugin I've never used before. Stop slowing me down.
+let g:loaded_vimballPlugin     = 1
+let g:loaded_tutor_mode_plugin = 1
+let g:loaded_getsciptPlugin    = 1
+let g:loaded_2html_plugin      = 1
+let g:loaded_logiPat           = 1
+
+" Filetype Specific Options: {{{2
 
 if &ft ==# 'c'
     set makeprg=make\ %<.o
 endif
+
 " Noticed this bit in he syntax line 2800
 let g:is_bash = 1
 let g:sh_fold_enabled= 4  "   (enable if/do/for folding)
 let g:sh_fold_enabled= 3  "   (enables function and heredoc folding)
-" Let's hope this doesn't make things too slow.
 
 " he rst.vim or ft-rst-syntax or syntax 2600. Don't put bash instead of sh.
 " $VIMRUNTIME/syntax/rst.vim iterates over this var and if it can't find a
@@ -663,11 +665,14 @@ let readline_has_bash = 1
 " from runtime/ftplugin/html.vim
 let g:ft_html_autocomment = 1
 
+" From `:he ft-lisp-syntax. Color parentheses differently up to 10 levels deep
+let g:lisp_rainbow = 1
+
 augroup filetypes
     autocmd Filetype *
-        \	if &omnifunc == "" |
-        \		setlocal omnifunc=syntaxcomplete#Complete |
-        \	endif
+        \   if &omnifunc == "" |
+        \       setlocal omnifunc=syntaxcomplete#Complete |
+        \   endif
             " This is probably a terrible idea but idk whats fucking up my com
             let &commentstring = '# %s'
             set comments="
@@ -772,6 +777,22 @@ endfunction
 command! PlugHelp call fzf#run(fzf#wrap({
   \ 'source': sort(keys(g:plugs)),
   \ 'sink':   function('s:plug_help_sink')}))
+
+" Statusline: {{{2
+"
+" Yeah junegunn gets this one too.
+function! s:statusline_expr()
+  let mod = "%{&modified ? '[+] ' : !&modifiable ? '[x] ' : ''}"
+  let ro  = "%{&readonly ? '[RO] ' : ''}"
+  let ft  = "%{len(&filetype) ? '['.&filetype.'] ' : ''}"
+  let fug = "%{exists('g:loaded_fugitive') ? fugitive#statusline() : ''}"
+  let sep = ' %= '
+  let pos = ' %-12(%l : %c%V%) '
+  let pct = ' %P'
+
+  return '[%n] %F %<'.mod.ro.ft.fug.sep.pos.'%*'.pct
+endfunction
+let &statusline = s:statusline_expr()
 
 " Rename: {{{2
 " :he map line 1454. How have i never noticed this isn't a feature???

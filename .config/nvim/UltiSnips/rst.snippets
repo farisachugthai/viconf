@@ -1,6 +1,5 @@
 # Rst.snippets:
 # -*- coding: utf-8 -*-
-# Vim: set ts=3:set expandtab:set shiftwidth=3:
 
 extends snippets
 extends python
@@ -40,7 +39,7 @@ And Still More       42
 endsnippet
 
 snippet cb "Code Block. Must have 1 blank line surrounding!" bs
-.. code-block:: ${1:python}
+.. code-block:: ${1:python3}
 
 	 ${2:${VISUAL:code}} $0
 endsnippet
@@ -54,6 +53,16 @@ endsnippet
 
 snippet code "Inline code. Needs to be visually highlighted first." b
 \`\`${0:${VISUAL:text}}\`\`
+endsnippet
+
+# If writing python3 after everything .. code-block:: gets annoying you can add
+snippet hi "Set a highlight directive to establish the base for code block directives" ms
+.. highlight::
+	 ${1::linenos:}
+	 ${2::linenothreshold:}
+	 ${3::emphasize-lines: 1,2,3}
+
+${0:Optional arguments above}
 endsnippet
 
 ################

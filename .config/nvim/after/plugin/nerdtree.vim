@@ -6,9 +6,11 @@
 " ============================================================================
 
 " Plugin Guard: {{{1
-if !has_key(plugs, 'nerdtree')
-    finish
-endif
+
+" Don't do this with a lazy loaded plugin!!!!
+" if !has_key(plugs, 'nerdtree')
+"     finish
+" endif
 
 if exists('b:did_nerdtree') || &cp || v:version < 700
     finish
