@@ -2,10 +2,23 @@
     " File: nerdtree.vim
     " Author: Faris Chugthai
     " Description: NERDTree Configuration File
-    " Last Modified: February 10, 2019
+    " Last Modified: February 27, 2019
 " ============================================================================
 
-" Autocommands: {{{1
+" Plugin Guard: {{{1
+
+" Don't do this with a lazy loaded plugin!!!!
+" if !has_key(plugs, 'nerdtree')
+"     finish
+" endif
+
+if exists('b:did_nerdtree') || &cp || v:version < 700
+    finish
+endif
+let b:did_nerdtree = 1
+
+
+" nerd_loader: {{{1
 augroup nerd_loader
   autocmd!
   autocmd VimEnter * silent! autocmd! FileExplorer

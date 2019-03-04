@@ -76,14 +76,6 @@ elseif exists('$CONDA_PYTHON_EXE')
     let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
     let &path = &path . ',' . expand('$CONDA_PYTHON_EXE')
 
-" elseif expand('$OS') ==# 'Windows_NT'
-    " shouldve gotten caught by conda env var right?
-    " means that A) we're in powershell and conda is having a weird time
-    " initializing or that it didn't automatically set. Maybe we should just
-    " modify our conemu tasks because native powershell loads fine but not
-    " when its a powershell task from cmder
-    " let g:python3_host_prog = expand('~/Miniconda3/python.exe')
-
 else
 " If not then just use the system python
     if executable(expand('$_ROOT').'bin/python3')
@@ -327,6 +319,7 @@ set modeline
 set browsedir="buffer"                  " which directory is used for the file browser
 
 " Mappings: {{{1
+
 " Window_Buf_Tab_Mappings: {{{2
 
 " Navigate buffers more easily
@@ -363,6 +356,7 @@ let g:ftplug=$MYVIMRC.'/after/ftplugin/'.&filetype.'.vim'
 " map <F10> <Cmd>e g:ftplug<CR>
 
 " General_Mappings: {{{2
+
 noremap <silent> <Leader>ts <Cmd>!termux-share -a send %<CR>
 
 " Junegunn:
@@ -740,7 +734,6 @@ command! -nargs=1 Help call <SID>helptab()
 " I feel like I need to put this in a autocmd but I'm not sure what I would
 " want to trigger it.
 " Even better would be if it called :Gwrite haha!
-" Actually it's called `:set autowrite`....
 function! s:autosave(enable)
   augroup autosave
     autocmd!
@@ -786,7 +779,10 @@ command! PlugHelp call fzf#run(fzf#wrap({
   \ 'source': sort(keys(g:plugs)),
   \ 'sink':   function('s:plug_help_sink')}))
 
-function! s:statusline_expr()  " {{{2 Junegunn statusline expression
+" Statusline: {{{2
+"
+" Yeah junegunn gets this one too.
+function! s:statusline_expr()
   let mod = "%{&modified ? '[+] ' : !&modifiable ? '[x] ' : ''}"
   let ro  = "%{&readonly ? '[RO] ' : ''}"
   let ft  = "%{len(&filetype) ? '['.&filetype.'] ' : ''}"

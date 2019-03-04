@@ -78,9 +78,11 @@ nnoremap <silent> <Leader>AG       :Ag <C-R><C-A><CR>
 xnoremap <silent> <Leader>ag       y:Ag <C-R>"<CR>
 nnoremap <silent> <Leader>`        :Marks<CR>
 
-" Feb 28, 2019: I unmapped <Leader>gs away from fugitive because FZF has :GFiles?
 " If you want help with that, remember that :he fzf and :he fzf-vim give 2
 " different docs
+" FZF beat fugitive out on this one. Might take git log too.
+nnoremap <Leader>gs <Cmd>GFiles?<CR>
+
 " Global Line Completion: {{{2
 " Global line completion (not just open buffers. ripgrep required.)
 inoremap <expr> <c-x><l> fzf#vim#complete(fzf#wrap({
