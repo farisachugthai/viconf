@@ -26,7 +26,7 @@ for ftplugins correct? And do I have guards on all my plugin files?
   - An absolutely perfect plugin guard is now in your init.vim on the Termux
   branch so make sure to diff what you need to and get that over here.
 
-## Making tables for README's
+## Making tables for README's 
 
 *Thanks Tabularize! Pulled that one off with:*
 `:Tabularize /|`!

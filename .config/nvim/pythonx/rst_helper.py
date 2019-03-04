@@ -38,7 +38,7 @@ DIRECTIVES = ['topic','sidebar','math','epigraph',
               'raw']
 
 NONE_CONTENT_DIRECTIVES\ = ['rubric', 'contents', 'header',
-                            'footer', 'date', 'include', 'title']
+                          'footer', 'date', 'include', 'title']
 
 INCLUDABLE_DIRECTIVES = ['image', 'figure', 'include']
 # CJK chars
@@ -76,7 +76,6 @@ try:
     rst_char_len = vim.strwidth  # Requires Vim 7.3+
 except AttributeError:
     from unicodedata import east_asian_width
-
     def rst_char_len(s):
         """Return the required over-/underline length for s."""
         result = 0

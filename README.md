@@ -83,7 +83,6 @@ on my personal customizations.
 
 - [NERDTree](https://www.github.com/scrooloose/nerdTree)
 
-NERDTree is a file explorer plugin that provides "project drawer"
 
 NERDTree is a file explorer plugin that provides "project drawer"
 functionality to your vim editing.  You can learn more about it with

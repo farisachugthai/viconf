@@ -10,4 +10,4 @@ tutorials ~/Dropbox/python/tutorials
 viconf ~/projects/viconf/.config/nvim
 
 vim ~/.vim
-deoplete ~/.local/share/nvim/plugged/deoplete.nvim/rplugin/python3/deoplete
+sphinx ~/miniconda3/envs/flask/lib/python3.7/site-packages/sphinx
