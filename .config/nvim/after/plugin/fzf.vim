@@ -1,15 +1,5 @@
 " FZF Configuration:
 
-" Plugin Guard: {{{1
-if !has_key(plugs, 'fzf.vim')
-    finish
-endif
-
-if exists('b:did_fzf_vim') || &cp || v:version < 700
-    finish
-endif
-let b:did_fzf_vim = 1
-
 " FZF: {{{1
 if has('nvim') || has('gui_running')
     " Wait hold on...if we already set it, then use my bashrc!
@@ -59,10 +49,12 @@ let g:fzf_colors =
 
 " Exported fzf <plug> commands. Also shorten default mappings for ease of use
 " but allow the vim defaults to exist.
+" For this first one go down to the advanced functions
 imap <c-x><k> <Plug>(fzf-complete-word)
 imap <c-x><f> <Plug>(fzf-complete-path)
 imap <c-x><j> <Plug>(fzf-complete-file-ag)
 
+" The way I remapped Leader, this actually only works if you do <Space>\
 nnoremap <silent> <expr> <Leader><Leader> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
 nnoremap <silent> <Leader>C        :Colors<CR>
 nnoremap <silent> <Leader><Enter>  :Buffers<CR>
@@ -85,6 +77,11 @@ nnoremap <silent> <Leader>ag       :Ag <C-R><C-W><CR>
 nnoremap <silent> <Leader>AG       :Ag <C-R><C-A><CR>
 xnoremap <silent> <Leader>ag       y:Ag <C-R>"<CR>
 nnoremap <silent> <Leader>`        :Marks<CR>
+
+" If you want help with that, remember that :he fzf and :he fzf-vim give 2
+" different docs
+" FZF beat fugitive out on this one. Might take git log too.
+nnoremap <Leader>gs <Cmd>GFiles?<CR>
 
 " Global Line Completion: {{{2
 " Global line completion (not just open buffers. ripgrep required.)
@@ -126,7 +123,16 @@ augroup fzfstatusline
     autocmd! user Fzfstatusline call <SID>fzf_statusline()
 augroup end
 
-" Extra Commands: {{{1
+" Advanced Functions And Commands: {{{1
+
+" This was an autoloaded funcref so name needs to match path
+" FZF complete word with prefix added for termux
+" function! fzf#vim#complete#word(...)
+"     return fzf#vim#complete(s:extend){
+"         \ 'source': 'cat $_ROOT/share/dict/words'},
+"         \ get(a:000, 0, fzf#wrap())))
+" endfunction
+
 " Unfortunately the bang doesn't move to a new window. TODO
 " Opens matches in a split. Appending ! gives an error.
 " How do we fix that?
@@ -163,3 +169,17 @@ command! -bang -nargs=* Rg
 " Likewise, Files command with preview window
 command! -bang -nargs=? -complete=dir Files
     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+
+" Make Sentence: {{{2
+
+" *fzf-vim-reducer-example*
+
+    function! s:make_sentence(lines)
+        return substitute(join(a:lines), '^.', '\=toupper(submatch(0))', '').'.'
+    endfunction
+
+    inoremap <expr> <c-x><c-s> fzf#vim#complete({
+        \ 'source':  'cat /usr/share/dict/words',
+        \ 'reducer': function('<sid>make_sentence'),
+        \ 'options': '--multi --reverse --margin 15%,0',
+        \ 'left':    20})

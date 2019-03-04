@@ -37,7 +37,6 @@ setlocal spell!
 
 " Assuming the rst is a python related file
 " TODO: How do we modify so that `K` reads the help docs into a buffer?
-" ...By mapping it so?
 setlocal keywordprg=pydoc
 
 " TODO: Need to set an undo ftplugin.

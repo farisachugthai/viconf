@@ -24,8 +24,8 @@ if expand('OS') !=# 'Windows_NT'
 endif
 
 " General Plugins: {{{2
-" TODO: Should set up so that it reads in XDG_CONFIG_HOME or something
-call plug#begin('~\AppData\Local\nvim\plugged')
+call plug#begin(expand($XDG_DATA_HOME).'/nvim/plugged')
+
 Plug 'junegunn/vim-plug'        " plugception
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -34,10 +34,9 @@ Plug 'davidhalter/jedi-vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
+Plug 'tpope/vim-unimpaired'
 Plug 'w0rp/ale'
-Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next' }
 Plug 'SirVer/ultisnips'
-Plug 'vim-airline/vim-airline'
 Plug 'edkolev/tmuxline.vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'mhinz/vim-startify'
@@ -45,12 +44,16 @@ Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
 Plug 'Rykka/InstantRst'
-Plug 'gu-fan/riv.vim'
+Plug 'gu-fan/riv.vim', { 'for': ['python', 'python3', 'rst'] }
 Plug 'greyblake/vim-preview'
+Plug 'lifepillar/vim-cheat40'
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': 'yarn install'}
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 
-" Nvim Specific: {{{1
+" Preliminaries: {{{1
+
+" Nvim Specific: {{{2
 
 if has('nvim')
     set inccommand=split                    " This alone is enough to never go back
@@ -60,44 +63,35 @@ endif
 unlet! skip_defaults_vim
 silent! source $VIMRUNTIME/defaults.vim
 
-" Python Executables: {{{1
+" Python Executables: {{{2
 
 " if we have a virtual env start there
 if exists('$VIRTUAL_ENV')
     let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
+    let &path = &path . ',' . expand('$VIRTUAL_ENV') . '/bin/python'
 
 " or a conda env.
 elseif exists('$CONDA_PYTHON_EXE')
     let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
-
-" otherwise break up termux and linux
-elseif exists('$PREFIX')
-
-    " and just use the system python
-    if executable(expand('$PREFIX/bin/python'))
-        let g:python3_host_prog = expand('$PREFIX/bin/python')
-    endif
-
-elseif expand('$OS') ==# 'Windows_NT'
-    " shouldve gotten caught by conda env var right?
-    " means that A) we're in powershell and conda is having a weird time
-    " initializing or that it didn't automatically set. Maybe we should just
-    " modify our conemu tasks because native powershell loads fine but not
-    " when its a powershell task from cmder
-    let g:python3_host_prog = expand('~/Miniconda3/python.exe')
+    let &path = &path . ',' . expand('$CONDA_PYTHON_EXE')
 
 else
-    if executable('/usr/bin/python3')
-        let g:python3_host_prog = '/usr/bin/python3'
-
-        if executable('/usr/bin/python2')       " why not
-            let g:python_host_prog = '/usr/bin/python2'
-        endif
+" If not then just use the system python
+    if executable(expand('$_ROOT').'bin/python3')
+        let g:python3_host_prog = expand('$_ROOT').'bin/python3'
     endif
+endif
+
+" Also add a python2 remote host
+if executable(expand('$_ROOT').'bin/python2')
+    let g:python_host_prog = expand('$_ROOT').'bin/python2'
+else
+    let g:loaded_python_provider = 1
 endif
 
 " OS Setup: {{{1
 
+" Platforms: {{{2
 let s:termux = exists('$PREFIX') && has('unix')
 let s:ubuntu = !exists('$PREFIX') && has('unix')
 let s:windows = has('win32') || has('win64')
@@ -113,6 +107,7 @@ if filereadable(s:local_vimrc)
     execute 'source' s:local_vimrc
 endif
 
+" Session options: {{{2
 " Here's a nice little setting to encourage interoperability
 " UNIX AND MS-WINDOWS
 
@@ -129,16 +124,38 @@ set sessionoptions+=unix,slash
 " Not related but I wanted to strike these down because they're annoying.
 set sessionoptions-=blank,folds
 
+if s:termux
+    " holy fuck that was a doozy to find
+    let g:node_host_prog = expand('~').'/.local/share/yarn/global/node_modules/.bin/neovim-node-host'
+    let g:ruby_host_prog = expand($_ROOT).'/bin/neovim-ruby-host'
+
+elseif s:ubuntu
+    let g:node_host_prog = expand($XDG_DATA_HOME).'/yarn/global/node_modules/.bin/neovim-node-host'
+    " So the one above could very easily be merged. No idea how to do the
+    " below unless I just leave it up to the system.
+    try
+        let g:ruby_host_prog = '~/.rvm/gems/default/bin/neovim-ruby-host'
+    catch
+        let g:ruby_host_prog = expand($_ROOT).'/local/bin/neovim-ruby-host'
+    endtry
+
+endif
+
 " Global Options: {{{1
 
-" Leader_Viminfo: {{{2
+" Leader And Viminfo: {{{2
 " let g:mapleader = '\<Space>'
 noremap <Space> <nop>
 map <Space> <Leader>
 let g:maplocalleader = '<Space>'
 
+" Should deprecate the below and just state I don't use Vim anymore
 if !has('nvim')
     set viminfo='100,<200,s200,n$HOME/.vim/viminfo
+else
+    " Default on termux nvim 0.3.4, pynvim 0.3.2 Feb 24, 2019
+    " Same as on KDE Neon
+    " shada=!,'100,<50,s10,h
 endif
 
 " Pep8 Global Options: {{{2
@@ -172,20 +189,15 @@ set hidden
 set splitbelow splitright
 
 " Spell Checker: {{{2
+setlocal spelllang=en
 
-" setlocal spelllang=en
-
-" if filereadable(expand('~/.config/nvim/spell/en.utf-8.add'))
-    " set spellfile=~/.config/nvim/spell/en.utf-8.add
-" elseif filereadable(glob('~/projects/viconf/.vim/spell/en.utf-8.add'))
-    " set spellfile=~/projects/viconf/.vim/spell/en.utf-8.add
-" else
-    " echoerr 'Spell file not found.'
-" endif
-
-" if !has('nvim')
-    " set spelllang+=$VIMRUNTIME/spell/en.utf-8.spl
-" endif
+if filereadable(expand('$XDG_CONFIG_HOME').'/nvim/spell/en.utf-8.add')
+    let &spellfile=expand('$XDG_CONFIG_HOME').'/nvim/spell/en.utf-8.add'
+elseif filereadable(expand('~/projects/viconf/.vim/spell/en.utf-8.add'))
+    let &spellfile=expand('$HOME').'/projects/viconf/.vim/spell/en.utf-8.add'
+else
+    echoerr 'Spell file not found.'
+endif
 
 set complete+=kspell                    " Autocomplete in insert mode
 set spellsuggest=5                      " Limit the number of suggestions from 'spell suggest'
@@ -193,21 +205,12 @@ set spellsuggest=5                      " Limit the number of suggestions from '
 if filereadable('/usr/share/dict/words')
     set dictionary+=/usr/share/dict/words
     " Replace the default dictionary completion with fzf-based fuzzy completion
-    " Courtesy of fzf <3 vim
-    inoremap <expr> <c-x><c-k> fzf#vim#complete('cat /usr/share/dict/words')
+    " Courtesy of fzf <3 vim. But make it shorter
+    inoremap <expr> <c-x><k> fzf#vim#complete('cat /usr/share/dict/words')
 endif
 
-" if filereadable('/usr/share/dict/american-english')
-    " setlocal dictionary+=/usr/share/dict/american-english
-" endif
-
-" if filereadable('$HOME/.config/nvim/spell/en.hun.spl')
-    " set spelllang+=$HOME/.config/nvim/spell/en.hun.spl
-" endif
-
-
-if filereadable(glob('~/.vim/autocorrect.vim'))
-    source ~/.vim/autocorrect.vim
+if filereadable('/usr/share/dict/american-english')
+    setlocal dictionary+=/usr/share/dict/american-english
 endif
 
 " Fun With Clipboards: {{{2
@@ -219,21 +222,19 @@ endif
 
 set pastetoggle=<F7>
 
-if has('nvim')
-    if exists('$TMUX')
-        let g:clipboard = {
-            \   'name': 'myClipboard',
-            \   'copy': {
-            \      '+': 'tmux load-buffer -',
-            \      '*': 'tmux load-buffer -',
-            \    },
-            \   'paste': {
-            \      '+': 'tmux save-buffer -',
-            \      '*': 'tmux save-buffer -',
-            \   },
-            \   'cache_enabled': 1,
-            \ }
-    endif
+if exists('$TMUX')
+    let g:clipboard = {
+        \   'name': 'myClipboard',
+        \   'copy': {
+        \      '+': 'tmux load-buffer -',
+        \      '*': 'tmux load-buffer -',
+        \    },
+        \   'paste': {
+        \      '+': 'tmux save-buffer -',
+        \      '*': 'tmux save-buffer -',
+        \   },
+        \   'cache_enabled': 1,
+        \ }
 endif
 
 " Autocompletion: {{{2
@@ -243,6 +244,36 @@ set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 set fileignorecase                      " when searching for files don't use case
 set wildignorecase
 
+" Path: {{{2
+
+" :let &{option-name} = {expr1}         *:let-option* *:let-&*
+"           Set option {option-name} to the result of the
+"           expression {expr1}.  A String or Number value is
+"           always converted to the type of the option.
+"           For an option local to a window or buffer the effect
+"           is just like using the |:set| command: both the local
+"           value and the global value are changed.
+"           Example: >
+"               :let &path = &path . ',/usr/local/include'
+
+" DON'T USE LET. LET ALLOWS FOR EXPRESSION EVALUATION. MUST BE DONE WITH SET
+" OR THE ** WILL EXPAND {rendering it as nothing}
+set path+=**                            " Recursively search dirs with :find
+
+if isdirectory('/usr/include/libcs50')
+    let &path = &path . ',/usr/include/libcs50'
+endif
+
+if isdirectory(expand('$_ROOT/lib/python3'))
+    " Double check globbing in vim
+    let &path = &path . ',' . expand('$_ROOT/lib/python3')
+endif
+
+" TODO: How do we glob in vimscript? There's some weird thing about using * and ** right?
+" if isdirectory(expand('$_ROOT/lib/python3'))
+
+" endif
+
 " Other Global Options: {{{2
 
 set tags+=./tags,./../tags,./*/tags     " usr_29
@@ -250,15 +281,13 @@ set tags+=~/projects/tags               " consider generating a few large tag
 set tags+=~python/tags                  " files rather than recursive searches
 set mouse=a                             " Automatically enable mouse usage
 if &textwidth!=0
-    set colorcolumn=+1                  " I don't know why this didn't set
+    setl colorcolumn=+1                  " I don't know why this didn't set
 endif
 set cmdheight=2
-set number
-set showmatch
+set relativenumber
 set ignorecase smartcase
 set infercase
 set autoindent                          " Smart indent fucks up indenting comments
-" smartindent's kinda terrible. removes indentation from comments
 " FOOBAR=~/<CTRL-><CTRL-F> will now autocomplete!
 set isfname-==
 
@@ -269,47 +298,32 @@ endif
 " In case you wanted to see the guicursor default for gvim win64
 " set gcr=n-v-c:block-Cursor/lCursor,ve:ver35-Cursor,o:hor50-Cursor, i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor, sm:block-Cursor-blinkwait175-blinkoff150-blinkon175
 
-set path+=**                            " Recursively search dirs with :find
-if isdirectory('/usr/include/libcs50')
-    set path+=/usr/include/libcs50          " Also I want those headers
-endif
-
-if isdirectory(expand('$_ROOT/lib/python3'))
-    " Double check globbing in vim
-    set path+=expand('$_ROOT/lib/python**')
-endif
-
-if isdirectory(expand('$_ROOT/lib/python3'))
-    set path+=expand('$_ROOT')./lib/python3'
-endif
-
 set autochdir
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
 set diffopt=filler,context:3          " vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
 
 if has('persistent_undo')
-    set undodir=expand($XDG_CONFIG_HOME).'/nvim/undodir'
+    set undodir=~/.config/nvim/undodir
     set undofile
 endif
 
 set backup
-set backupdir=expand($XDG_CONFIG_HOME).'/nvim/undodir'
+set backupdir=~/.config/nvim/undodir,/tmp
 set backupext='.bak'        " like wth is that ~ nonsense?
 
 " Directory won't need to be set because it defaults to
 " xdg_data_home/nvim/swap
-set swapfile
-
 set modeline
 set browsedir="buffer"                  " which directory is used for the file browser
 
 " Mappings: {{{1
+
 " Window_Buf_Tab_Mappings: {{{2
 
 " Navigate buffers more easily
-nnoremap <Leader>bn :bnext<CR>
-nnoremap <Leader>bp :bprev<CR>
+nnoremap <Leader>bn <Cmd>bnext<CR>
+nnoremap <Leader>bp <Cmd>bprev<CR>
 
 " Wanna navigate windows more easily?
 " |CTRL-W_gF|   CTRL-W g F     edit file name under the cursor in a new
@@ -319,25 +333,24 @@ nnoremap <Leader>bp :bprev<CR>
 " Rebind that to C-w t and we can open the filename in a new tab.
 
 " Navigate tabs more easily
-nnoremap <A-Right> :tabnext<CR>
-nnoremap <A-Left> :tabprev<CR>
-
-nnoremap <Leader>tn :tabnext<CR>
-nnoremap <Leader>tp :tabprev<CR>
+nnoremap <A-Right> <Cmd>tabnext<CR>
+nnoremap <A-Left> <Cmd>tabprev<CR>
+nnoremap <Leader>tn <Cmd>tabnext<CR>
+nnoremap <Leader>tp <Cmd>tabprev<CR>
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
-nnoremap <Leader>te :tabedit <c-r>=expand("%:p:h")<CR>
+nnoremap <Leader>te <Cmd>tabedit <c-r>=expand("%:p:h")<CR>
 
 " It should also be easier to edit the config. Bind similarly to tmux
-nnoremap <Leader>ed :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
-nnoremap <F9> :tabe ~/projects/viconf/.config/nvim/init.vim<CR>
-inoremap <F9> <Esc>:tabe ~/projects/viconf/.config/nvim/init.vim<CR>
+nnoremap <Leader>ed <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
+nnoremap <F9> <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
+inoremap <F9> <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 
 " Now reload it
 nnoremap <Leader>re :so $MYVIMRC<CR>
 
 " I feel really slick for this one. Modify ftplugin
-let g:ftplug=expand($MYVIMRC).'/after/ftplugin/'.&filetype.'.vim'
+let g:ftplug=$MYVIMRC.'/after/ftplugin/'.&filetype.'.vim'
 " Goddamnit it opens a buffernnamed g:ftplug
 " map <F10> <Cmd>e g:ftplug<CR>
 
@@ -365,7 +378,6 @@ map <S-ScrollWheelDown> <C-D>
 " Save a file as root
 noremap <leader>W :w !sudo tee % > /dev/null<CR>
 
-
 " Spell Checking: {{{2
 nnoremap <Leader>sp :setlocal spell!<CR>
 nnoremap <Leader>s= z=
@@ -391,7 +403,10 @@ nnoremap <A-k> <C-w>k
 nnoremap <A-l> <C-w>l
 
 " ALE: {{{2
+
+" This isn't working idk why
 nnoremap <Leader>l <Plug>(ale_toggle_buffer)<CR>
+
 nnoremap ]a <Plug>(ale_next_wrap)
 nnoremap [a <Plug>(ale_previous_wrap)
 
@@ -405,31 +420,32 @@ nnoremap <A-a> <Plug>(ale_detail)
 " work in a similar manner right?
 nnoremap <Leader>* <Plug>(ale_go_to_reference)
 
-nnoremap <Leader>a :ALEInfo<CR>
+nnoremap <Leader>a <Cmd>ALEInfo<CR>
 
 " Fugitive: {{{2
-nnoremap <silent> <Leader>gb   :Gblame<CR>
-nnoremap <silent> <Leader>gc   :Gcommit<CR>
-cmap <silent> gch Git checkout<Space>
-nnoremap <silent> <Leader>gd   :Gdiff<CR>
-nnoremap <silent> <Leader>gds  :Gdiff --staged<CR>
-nnoremap <silent> <Leader>gds2 :Git diff --stat --staged<CR>
+nnoremap <silent> <Leader>gb   <Cmd>Gblame<CR>
+nnoremap <silent> <Leader>gc   <Cmd>Gcommit<CR>
+cmap <silent> gch <Cmd>Git checkout<Space>
+nnoremap <silent> <Leader>gd   <Cmd>Gdiff<CR>
+nnoremap <silent> <Leader>gds  <Cmd>Gdiff --staged<CR>
+nnoremap <silent> <Leader>gds2 <Cmd>Git diff --stat --staged<CR>
 nnoremap <silent> <Leader>ge   :Gedit<Space>
-nnoremap <silent> <Leader>gf   :Gfetch<CR>
-nnoremap <silent> <Leader>gg   :Ggrep<CR>
-nnoremap <silent> <Leader>gl   :0Glog<CR>
-nnoremap <silent> <Leader>gL   :0Glog --pretty=oneline --graph --decorate --abbrev --all --branches<CR>
-nnoremap <silent> <Leader>gm   :Gmerge<CR>
+nnoremap <silent> <Leader>gf   <Cmd>Gfetch<CR>
+nnoremap <silent> <Leader>gg   <Cmd>Ggrep<CR>
+nnoremap <silent> <Leader>gl   <Cmd>0Glog<CR>
+nnoremap <silent> <Leader>gL   <Cmd>0Glog --pretty=oneline --graph --decorate --abbrev --all --branches<CR>
+nnoremap <silent> <Leader>gm   <Cmd>Gmerge<CR>
 " Make the mapping longer but clear as to whether gp would pull or push
-nnoremap <silent> <Leader>gpl  :Gpull<CR>
-nnoremap <silent> <Leader>gps  :Gpush<CR>
-nnoremap <silent> <Leader>gq   :Gwq<CR>
-nnoremap <silent> <Leader>gQ   :Gwq!<CR>
+nnoremap <silent> <Leader>gpl  <Cmd>Gpull<CR>
+nnoremap <silent> <Leader>gps  <Cmd>Gpush<CR>
+nnoremap <silent> <Leader>gq   <Cmd>Gwq<CR>
+nnoremap <silent> <Leader>gQ   <Cmd>Gwq!<CR>
 nnoremap <silent> <Leader>gR   :Gread<Space>
-nnoremap <silent> <Leader>gs   :Gstatus<CR>
-nnoremap <silent> <Leader>gst  :Git diff --stat<CR>
-nnoremap <silent> <Leader>gw   :Gwrite<CR>
-nnoremap <silent> <Leader>gW   :Gwrite!<CR>
+" FZF took it. Check ./after/plugin/fzf.vim {btw i love the gf binding}
+" nnoremap <silent> <Leader>gs   <Cmd>Gstatus<CR>
+nnoremap <silent> <Leader>gst  <Cmd>Git diff --stat<CR>
+nnoremap <silent> <Leader>gw   <Cmd>Gwrite<CR>
+nnoremap <silent> <Leader>gW   <Cmd>Gwrite!<CR>
 
 " Language Server: {{{2
 " This is a good way to give LangClient the necessary bindings it needs;
@@ -454,24 +470,12 @@ function! LC_maps()
 endfunction
 
 " Tagbar: {{{2
-nnoremap <silent> <F8> :TagbarToggle<CR>
-
-if has('b:Tagbar')  " or any plugin
-    imap <F3> <esc>:TagbarToggle<CR>
-    nmap <F3> :TagbarToggle<CR>
+" This works perfectly and should be how you handle all plugins and their
+" mappings !!!!!
+if has_key(plugs, 'tagbar')
+    nnoremap <silent> <F8> <Cmd>TagbarToggle<CR>
+    inoremap <silent> <F8> <Cmd>TagbarToggle<CR>
 endif
-
-" Macros: {{{1
-runtime! macros/matchit.vim
-
-set matchpairs+=<:>
-
-" To every plugin I've never used before. Stop slowing me down.
-let g:loaded_vimballPlugin     = 1
-let g:loaded_tutor_mode_plugin = 1
-let g:loaded_getsciptPlugin    = 1
-let g:loaded_2html_plugin      = 1
-let g:loaded_logiPat           = 1
 
 " Remaining Plugins: {{{1
 
@@ -486,10 +490,6 @@ let g:ale_fix_on_save = 1
 let g:ale_warn_about_trailing_whitespace = 0
 let g:ale_warn_about_trailing_blank_lines = 0
 
-" Modify how ale notifies us of stuff
-let g:ale_echo_cursor = 1
-" Default: `'%code: %%s'`
-let g:ale_echo_msg_format = '%linter% - %code: %%s %severity%'
 let g:ale_list_vertical = 1
 
 let g:ale_set_signs = 1
@@ -517,7 +517,6 @@ else
     let entry_format .= '. entry_path'
 endif
 
-
 " Language Client: {{{2
 let g:LanguageClient_serverCommands = {
             \ 'python': [ 'pyls' ],
@@ -527,12 +526,13 @@ let g:LanguageClient_serverCommands = {
             \ 'ts': ['tsserver'],
             \ 'css': ['css-languageserver'],
             \ 'html': ['html-languageserver'],
-            \ 'tsx': ['tsserver']}
+            \ 'tsx': ['tsserver']
+            \ }
 
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_selectionUI = 'fzf'
 let g:LanguageClient_settingsPath = expand('~/.config/nvim/settings.json')
-let g:LanguageClient_loggingFile = '~/.local/share/nvim/LC.log'
+let g:LanguageClient_loggingFile = expand('~/.local/share/nvim/LC.log')
 
 " Jedi: {{{2
 let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces
@@ -562,8 +562,8 @@ let g:tagbar_width = 30
 let g:tagbar_sort = 0
 
 " Zim: {{{2
-let g:zim_notebooks_dir = expand('~/Notebooks')
-let g:zim_notebook = expand('~/Notebooks')
+let g:zim_notebooks_dir = expand('~/Notebooks/Notes')
+let g:zim_notebook = expand('~/Notebooks/Notes')
 let g:zim_dev = 1
 
 " Here's an exciting little note about Zim. Ignoring how ...odd this plugin is
@@ -578,9 +578,19 @@ let g:riv_ignored_maps = '<Tab>'
 let g:riv_ignored_nmaps = '<Tab>'
 let g:riv_i_tab_pum_next = 0
 
+let g:riv_global_leader='<Space>'
+
 " From he riv-instructions. **THIS IS THE ONE!!** UltiSnips finally works again
 let g:riv_i_tab_user_cmd = "\<c-g>u\<c-r>=UltiSnips#ExpandSnippet()\<cr>"
+let g:riv_fuzzy_help = 1
 
+" Mkdx: {{{2
+" Similar to Riv, this is for working with Markdown documents
+let g:mkdx#settings     = { 'highlight': { 'enable': 1 },
+                        \ 'enter': { 'shift': 1 },
+                        \ 'links': { 'external': { 'enable': 1 } },
+                        \ 'toc': { 'text': 'Table of Contents', 'update_on_write': 1 },
+                        \ 'fold': { 'enable': 1 } }
 " Voom: {{{2
 
 "g:voom_ft_modes" is a Vim dictionary: keys are filetypes (|ft|), values are
@@ -607,16 +617,42 @@ let g:voom_ft_modes = {'markdown': 'markdown', 'rst': 'rst', 'zimwiki': 'dokuwik
 let g:voom_default_mode = 'rst'
 let g:voom_python_versions = [3]
 
-" Filetype Specific Options: {{{1
+" Cheat40: {{{2
+" let g:cheat40_use_default = 1
+
+" Coc: {{{2
+inoremap <silent><expr> <c-space> coc#refresh()
+
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
+
+" Runtime: {{{1
+
+" Macros: {{{2
+
+runtime! macros/matchit.vim
+
+set showmatch
+set matchpairs+=<:>
+" Show the matching pair for 2 seconds
+set matchtime=20
+
+" To every plugin I've never used before. Stop slowing me down.
+let g:loaded_vimballPlugin     = 1
+let g:loaded_tutor_mode_plugin = 1
+let g:loaded_getsciptPlugin    = 1
+let g:loaded_2html_plugin      = 1
+let g:loaded_logiPat           = 1
+
+" Filetype Specific Options: {{{2
 
 if &ft ==# 'c'
     set makeprg=make\ %<.o
 endif
+
 " Noticed this bit in he syntax line 2800
 let g:is_bash = 1
 let g:sh_fold_enabled= 4  "   (enable if/do/for folding)
 let g:sh_fold_enabled= 3  "   (enables function and heredoc folding)
-" Let's hope this doesn't make things too slow.
 
 " he rst.vim or ft-rst-syntax or syntax 2600. Don't put bash instead of sh.
 " $VIMRUNTIME/syntax/rst.vim iterates over this var and if it can't find a
@@ -629,15 +665,23 @@ let readline_has_bash = 1
 " from runtime/ftplugin/html.vim
 let g:ft_html_autocomment = 1
 
-" I'm gonna round buftype to filetype here.
-augroup helpnumber
-    autocmd!
-    autocmd BufEnter, BufNew buftype=help set number
+" From `:he ft-lisp-syntax. Color parentheses differently up to 10 levels deep
+let g:lisp_rainbow = 1
+
+augroup filetypes
+    autocmd Filetype *
+        \   if &omnifunc == "" |
+        \       setlocal omnifunc=syntaxcomplete#Complete |
+        \   endif
+            " This is probably a terrible idea but idk whats fucking up my com
+            let &commentstring = '# %s'
+            set comments="
 augroup END
 
 " Functions_Commands: {{{1
 
 " Up until Rename are from Junegunn so credit to him
+
 " Todo Function: {{{2
 " Grep for todos in the current repo and populate the quickfix list with them.
 " You could run an if then to check you're in a git repo.
@@ -661,21 +705,6 @@ function! s:todo() abort
     endif
 endfunction
 command! Todo call s:todo()
-
-" Explore: {{{2
-" Here's one where he uses fzf and Explore to search a packages docs
-function! s:plug_help_sink(line)
-    let dir = g:plugs[a:line].dir
-    for pat in ['doc/*.txt', 'README.md']
-        let match = get(split(globpath(dir, pat), "\n"), 0, '')
-        if len(match)
-            execute 'tabedit' match
-            return
-        endif
-    endfor
-    tabnew
-    execute 'Explore' dir
-endfunction
 
 " Scriptnames: {{{2
 " command to filter :scriptnames output by a regex
@@ -726,7 +755,7 @@ endfunction
 
 command! HL call <SID>hl()
 
-" PlugHelp: {{{2
+" Explore PlugHelp: {{{2
 " Call :PlugHelp to use fzf to open a window with all of the plugins
 " you have installed listed and upon pressing enter open the help
 " docs. That's not a great explanation but honestly easier to explain
@@ -749,68 +778,25 @@ command! PlugHelp call fzf#run(fzf#wrap({
   \ 'source': sort(keys(g:plugs)),
   \ 'sink':   function('s:plug_help_sink')}))
 
+" Statusline: {{{2
+"
+" Yeah junegunn gets this one too.
+function! s:statusline_expr()
+  let mod = "%{&modified ? '[+] ' : !&modifiable ? '[x] ' : ''}"
+  let ro  = "%{&readonly ? '[RO] ' : ''}"
+  let ft  = "%{len(&filetype) ? '['.&filetype.'] ' : ''}"
+  let fug = "%{exists('g:loaded_fugitive') ? fugitive#statusline() : ''}"
+  let sep = ' %= '
+  let pos = ' %-12(%l : %c%V%) '
+  let pct = ' %P'
+
+  return '[%n] %F %<'.mod.ro.ft.fug.sep.pos.'%*'.pct
+endfunction
+let &statusline = s:statusline_expr()
+
 " Rename: {{{2
 " :he map line 1454. How have i never noticed this isn't a feature???
 command! -nargs=1 -bang -complete=file Rename f <args>|w<bang>
-
-" UltiSnips: {{{2
-
-" GetAllSnippets: {{{3
-" Definitely a TODO
-function! GetAllSnippets()
-  call UltiSnips#SnippetsInCurrentScope(1)
-  let list = []
-  for [key, info] in items(g:current_ulti_dict_info)
-    let parts = split(info.location, ':')
-    call add(list, {
-      \'key': key,
-      \'path': parts[0],
-      \'linenr': parts[1],
-      \'description': info.description,
-      \})
-  endfor
-  return list
-endfunction
-
-" Expandable:{{{3
-
-" TODO: Come up with a mapping for it. Also what is E746
-" Go to the annotations for an explanation of this function.
-" function UltiSnips#IsExpandable()
-"     return !(
-"         \ col('.') <= 1
-"         \ || !empty(matchstr(getline('.'), '\%' . (col('.') - 1) . 'c\s'))
-"         \ || empty(UltiSnips#SnippetsInCurrentScope())
-"         \ )
-" endfunction
-
-" ExpandPossibleShorterSnippet: {{{3
-
-function! ExpandPossibleShorterSnippet()
-  if len(UltiSnips#SnippetsInCurrentScope()) == 1 "only one candidate...
-    let curr_key = keys(UltiSnips#SnippetsInCurrentScope())[0]
-    normal diw
-    exe 'normal a' . curr_key
-    exe 'normal a '
-    return 1
-  endif
-  return 0
-endfunction
-inoremap <silent> <C-L> <C-R>=(ExpandPossibleShorterSnippet() == 0? '': UltiSnips#ExpandSnippet())<CR>
-
-" Expand Snippet Or CR: {{{3
-" Hopefully will expand snippets or CR. Or it'll destroy deoplete's
-" ability to close the pum. *shrugs*
-function! ExpandSnippetOrCarriageReturn() abort
-  let snippet = UltiSnips#ExpandSnippetOrJump()
-    if g:ulti_expand_or_jump_res > 0
-      return snippet
-    else
-      return "\<CR>"
-    endif
-endfunction
-
-inoremap <expr> <CR> pumvisible() ? "<C-R>=ExpandSnippetOrCarriageReturn()<CR>" : "\<CR>"
 
 " LanguageClient Check:{{{2
 " Check if the LanguageClient is running.
@@ -845,7 +831,7 @@ command! -nargs=0 Gruvbox call s:gruvbox()
 " pattern as soon as you hit enter. So if you type a word, it'll highlight all
 " matches. But once you hit enter to find the next one it clears. Hmmm.
 set nohlsearch
-augroup vimrc-incsearch-highlight
+augroup vimrc_incsearch_highlight
     autocmd!
     autocmd CmdlineEnter /,\? :set hlsearch
     autocmd CmdlineLeave /,\? :set nohlsearch

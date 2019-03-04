@@ -1,10 +1,9 @@
-
 " UltiSnips:
 " 90% sure i need to rename these to use them.
 
-" GetAllSnippets: {{{3
+" ultisnips#GetAllSnippets: {{{1
 " Definitely a TODO
-function! GetAllSnippets()
+function! ultisnips#GetAllSnippets()
   call UltiSnips#SnippetsInCurrentScope(1)
   let list = []
   for [key, info] in items(g:current_ulti_dict_info)
@@ -19,7 +18,7 @@ function! GetAllSnippets()
   return list
 endfunction
 
-" Expandable:{{{3
+" ultisnips#Expandable: {{{1
 
 " TODO: Come up with a mapping for it. Also what is E746
 " Go to the annotations for an explanation of this function.
@@ -31,9 +30,9 @@ endfunction
 "         \ )
 " endfunction
 
-" ExpandPossibleShorterSnippet: {{{3
+" ultisnips#ExpandPossibleShorterSnippet: {{{1
 
-function! ExpandPossibleShorterSnippet()
+function! ultisnips#ExpandPossibleShorterSnippet()
   if len(UltiSnips#SnippetsInCurrentScope()) == 1 "only one candidate...
     let curr_key = keys(UltiSnips#SnippetsInCurrentScope())[0]
     normal diw
@@ -43,12 +42,12 @@ function! ExpandPossibleShorterSnippet()
   endif
   return 0
 endfunction
-inoremap <silent> <C-L> <C-R>=(ExpandPossibleShorterSnippet() == 0? '': UltiSnips#ExpandSnippet())<CR>
+inoremap <silent> <C-L> <C-R>=(ultisnips#ExpandPossibleShorterSnippet() == 0? '': UltiSnips#ExpandSnippet())<CR>
 
 " Expand Snippet Or CR: {{{3
 " Hopefully will expand snippets or CR. Or it'll destroy deoplete's
 " ability to close the pum. *shrugs*
-function! ExpandSnippetOrCarriageReturn() abort
+function! ultisnips#ExpandSnippetOrCarriageReturn() abort
   let snippet = UltiSnips#ExpandSnippetOrJump()
     if g:ulti_expand_or_jump_res > 0
       return snippet
@@ -57,4 +56,4 @@ function! ExpandSnippetOrCarriageReturn() abort
     endif
 endfunction
 
-inoremap <expr> <CR> pumvisible() ? "<C-R>=ExpandSnippetOrCarriageReturn()<CR>" : "\<CR>"
+inoremap <expr> <CR> pumvisible() ? "<C-R>=ultisnips#ExpandSnippetOrCarriageReturn()<CR>" : "\<CR>"

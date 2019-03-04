@@ -7,12 +7,12 @@
 setlocal number
 
 " Helptabs:
+
 function! s:helptab()
-    " This needs to be conditional on there being 2 windows.
+  if &buftype ==# 'help'
     wincmd T
     nnoremap <buffer> q :q<cr>
-    " need to make an else for if ft isn't help then open a help page with the
-    " first argument
+  endif
 endfunction
 
 augroup mantabs

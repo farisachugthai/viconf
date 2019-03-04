@@ -480,3 +480,37 @@ Current directory        :pwd          N
 Change directory         :cd …         N
 Show the value of ‹Var›  :echo ‹Var›   N
 Show value of option     :set ‹Var›?   N
+
+VimScript: {{{1
+===============
+*Q_ex*		Special Ex characters
+
+|:bar|      |		separates two commands (not for ":global" and ":!")
+|:quote|    "		begins comment
+
+|:_%|       %		current file name (only where a file name is expected)
+|:_#|       #[num]	alternate file name [num] (only where a file name is
+			   expected)
+	Note: The next seven are typed literally; these are not special keys!
+|:<abuf>|   <abuf>	buffer number, for use in an autocommand (only where a
+			   file name is expected)
+|:<afile>|  <afile>	file name, for use in an autocommand (only where a
+			   file name is expected)
+|:<amatch>| <amatch>	what matched with the pattern, for use in an
+			   autocommand (only where a file name is expected)
+|:<cword>|  <cword>	word under the cursor (only where a file name is
+			   expected)
+|:<cWORD>|  <cWORD>	WORD under the cursor (only where a file name is
+			   expected) (see |WORD|)
+|:<cfile>|  <cfile>	file name under the cursor (only where a file name is
+			   expected)
+|:<sfile>|  <sfile>	file name of a ":source"d file, within that file (only
+			   where a file name is expected)
+
+		After "%", "#", "<cfile>", "<sfile>" or "<afile>"
+		|::p|	    :p		full path
+		|::h|	    :h		head (file name removed)
+		|::t|	    :t		tail (file name only)
+		|::r|	    :r		root (extension removed)
+		|::e|	    :e		extension
+		|::s|	    :s/{pat}/{repl}/	substitute {pat} with {repl}

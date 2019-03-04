@@ -1,13 +1,9 @@
-" UltiSnips:
+
+" UltiSnips: {{{2
 
 if !has_key(plugs, 'ultisnips')
     finish
 endif
-
-if exists('b:did_ultisnips') || &cp || v:version < 700
-    finish
-endif
-let b:did_ultisnips = 1
 
 " TODO: Is it better to put <Cmd> here? For the insert mode ones maybe.
 " I use this command constantly
@@ -20,6 +16,7 @@ inoremap <F6> <C-o>:Snippets<CR>
 nnoremap <F6> :Snippets<CR>
 
 
+" UltiSnips: {{{2
 let g:UltiSnipsSnippetDir = [ '~/.config/nvim/UltiSnips' ]
 let g:UltiSnipsExpandTrigger = '<Tab>'
 let g:UltiSnipsListSnippets = '<C-Tab>'

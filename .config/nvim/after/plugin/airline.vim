@@ -1,19 +1,14 @@
 " ============================================================================
     " File: airline.vim
     " Author: Faris Chugthai
-    " Description: Modifications to the airline.vim plugin.
-    " Last Modified: February 24, 2019
+    " Description:
+    " Last Modified: January 13, 2019
 " ============================================================================
 
-" Plugin Guard: {{{1
-if !has_key(plugs, 'airline')
+if exists('did_airline_vim') || &cp || v:version < 700
     finish
 endif
-
-if exists('b:did_airline_vim') || &cp || v:version < 700
-    finish
-endif
-let b:did_airline_vim = 1
+let did_airline_vim = 1
 
 " Mappings: {{{1
 let g:airline#extensions#tabline#buffer_idx_mode = 1

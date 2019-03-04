@@ -2,13 +2,15 @@
     " File: nerdtree.vim
     " Author: Faris Chugthai
     " Description: NERDTree Configuration File
-    " Last Modified: February 10, 2019
+    " Last Modified: February 27, 2019
 " ============================================================================
 
 " Plugin Guard: {{{1
-if !has_key(plugs, 'nerdtree')
-    finish
-endif
+
+" Don't do this with a lazy loaded plugin!!!!
+" if !has_key(plugs, 'nerdtree')
+"     finish
+" endif
 
 if exists('b:did_nerdtree') || &cp || v:version < 700
     finish
@@ -31,7 +33,16 @@ augroup nerd_loader
         \| endif
 augroup END
 
+" Mappings: {{{1
+
+" Simple way to speed up startup
+nnoremap <Leader>nt :NERDTreeToggle<CR>
+" Switch NERDTree root to dir of currently focused window.
+nnoremap <Leader>ncd :NERDTreeCWD
+
+
 " Options: {{{1
+
 let g:NERDTreeDirArrows = 1
 let g:NERDTreeWinPos = 'right'
 let g:NERDTreeShowHidden = 1
@@ -42,11 +53,3 @@ let g:NERDTreeShowLineNumbers = 1
 let g:NERDTreeMouseMode = 2             " Open dir with 1 keys, files with 2
 let g:NERDTreeIgnore = ['\.pyc$', '\.pyo$', '__pycache__$', '\.git$', '\.mypy*']
 let g:NERDTreeRespectWildIgnore = 1     " yeah i meant those ones too
-
-" Mappings: {{{1
-
-" Simple way to speed up startup
-nnoremap <Leader>nt :NERDTreeToggle<CR>
-
-" Switch NERDTree root to dir of currently focused window.
-nnoremap <Leader>ncd :NERDTreeCWD

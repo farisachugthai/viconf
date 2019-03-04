@@ -2,10 +2,7 @@
 # Vim: set foldmethod=marker:foldlevelstart=0:foldlevel=0:
 priority 70
 
-extends pandas
-extends numpy_stat
 extends rst
-extends django
 
 #######################################################################
 #                           Python Snippets                           #
@@ -39,29 +36,38 @@ snippet #! "Shebang header for python scripts" b
 $0
 endsnippet
 
-# TODO Need to break this up
-# Also you should be able to easily put `snip.fn` in the filename there
+# So before we break this up we have to get at least part of it working. So what I want to do is
+# create a line the length of the previous tabstop. So we should be able to do
+# `!p snip.rv = len(t{1}) * =`
+# if we were trying to make a line of literal '=' signs underneath the first tabstop.
+# The current function I'm calling right now only makes 3 so we're not there yet.
+# Sorry but I'm copping out for the time being.
 snippet moddoc "Module Docstring" mbs
-"""${1:${VISUAL}Quick description.}
+"""
 
-$2
+:mod:\``!p snip.rv = snip.basename`\`
+
+	.. currentmodule:: `!p snip.rv = snip.basename`
+		:synopsis: ${1: One sentence description.}
+
 :File: `!p snip.rv = snip.fn`
 :Author: `!v g:snips_author`
-:Github: \``!v g:snips_github`\`_
-:Date: |date|
+:Github: \`<`!v g:snips_github`\`>_
 
 ${3:Attributes:
+---------------
 
-	${4:module_level_variables} (${5:type}): ${6:Explanation and give an inline docstring
+	${4:\`\`module_level_variables\`\`} (${5:type}): ${6:Explanation and give an inline docstring
 	immediately afterwards if possible}
 
 Example:
+---------
 
-	${7:Any example of how to use this module goes here}:: ${8:sh}
+	${7:Any example of how to use this module goes here}:: ${8:shell}
 
 		${9:$ python exampleofrst.py}
 
-.. ${10:'any directives::'}
+.. ${10:any directives::}
 
 	${11:example text}
 
@@ -69,7 +75,19 @@ Example:
 """
 endsnippet
 
-snippet modattr "Expand only the attributes section of the module docstring snippet." bms
+snippet header "The beginning of moddoc" bms
+"""
+
+:mod:\``!p snip.rv = snip.fn`\`
+	:synopsis: ${1: One sentence description.}
+`!p triple_quotes_handle_trailing(snip, '"')`
+
+:File: `!p snip.rv = snip.fn`
+:Author: `!v g:snips_author`
+:Github: \``!v g:snips_github`\`_
+endsnippet
+
+snippet attr "Expand only the attributes section of the module docstring snippet." bms
 Attributes:
 
 	${1:module_level_variables} (${2:type}): ${3:Explanation and give an inline docstring
@@ -168,8 +186,32 @@ endsnippet
 
 # This is one that goes in my ifmain blocks all the time
 snippet args "Copy sys.argv into a variable." w
+args = sys.argv[:]
+endsnippet
+
+################ {{{1
+#  Docstrings  #
+################
+
+snippet Par "Parameters section for docstrings." ms
+${1:${VISUAL:Parameters}}
+`!p snip.rv = len(t[1])*'-'`
+${2:todo} : ${3:type}
+	${4:description}
+$0
+endsnippet
+
+snippet Ret "Return section for docstrings." ms
+${1:${VISUAL:Parameters}}
+`!p snip.rv = len(t[1])*'-'`
+${2:todo} : ${3:type}
+	${4:description}
+$0
+endsnippet
+
 
 # Commonly used modules:{{{1
+
 snippet timestamp "Produce a timestamp" s
 datetime.date.isoformat(${1:${VISUAL:datetime.datetime.now()}}) $0
 endsnippet
@@ -209,7 +251,7 @@ while ${1:condition}:
 	${0:pass}
 endsnippet
 
-snippet for "for loop" b
+snippet for "for loop" w
 for ${1:item} in ${2:iterable}:
 	${3:${VISUAL:pass}}
 endsnippet
@@ -220,12 +262,13 @@ endsnippet
 
 # if/elif/else: {{{2
 
-snippet if "If" b
+snippet if "If" w
 if ${1:condition}:
-	${2:${VISUAL:pass}}
+	${2:${VISUAL:pass}} $0
 endsnippet
 
-snippet ife "If / Else" b
+# TODO: How to make it so that we can just tab past the else condition if we don't need it? i suppose just use if
+snippet ife "If / Else" w
 if ${1:condition}:
 	${2:${VISUAL:pass}}
 else:
@@ -288,84 +331,33 @@ finally:
 	${7:pass}
 endsnippet
 
-# argparse:{{{1
+# Argparse: {{{1
 
-# not the most loqacoious i've ever been but it's better than not knowing
-# what the hell a snippet is because the description for "with" is "with"
-snippet argparse "Initialize ArgumentParser in def _parse_arguments" b
+# Don't use a $0 at the end it ends up adding blank white space. Or read UltiSnips-snippet-option
+snippet argparser "Initialize ArgumentParser in def _parse_arguments" bms
 def _parse_arguments():
 	parser = argparse.ArgumentParser(description=${1:__doc__})
 	return parser.parse_args()
-	$0
 endsnippet
 
-snippet argstrpos "Argparse positional argument for a string type." bs
+snippet argpos "Add argument - positional argument for a string type." bs
 parser.add_argument(${1:${VISUAL}}, type=${1:str}, help=${2:Feed me input.})
 endsnippet
 
-snippet argpath "Add a pathlike object" b
+snippet argpath "Add argument for a pathlike object" b
 parser.add_argument(${1:-s}, ${2:--long}, dest= ${3: var},
 					type=${4:pathlib.Path}, help=${5:RTFM})
 endsnippet
 
-snippet argpv "argument for version = %(prog)s" b
+snippet argpv "add argument for version = %(prog)s" b
 parser.add_argument('--version', action = 'version',
 		version = '%(prog)s 1.0')
 endsnippet
 
-snippet argp "snip that needs to be fixed" bst
-
-import argparse
-
-def parse_argument():
-	parser = argparse.ArgumentParser()
-	group = parser.add_mutually_exclusive_group()
-	group.add_argument("-v", "--verbose", action="store_true")
-	group.add_argument("-q", "--quiet", action="store_true")
-
-	parser.add_argument('-v','--verbose', dest='verbosity', default=0, action="count",
-			help="verbose mode (-vvv for more, -vvvv to enable connection debugging)")
-
-	parser.add_argument('bar', nargs='+', help='bar positional arguments.')
-
-	parser.add_argument('-s', action='store',
-			dest='simple_value',
-			help='Store a simple value'
-			)
-
-	parser.add_argument('-c', action='store_const',
-			dest='constant_value',
-			const='value-to-store',
-			help='Store a constant value'
-			)
-
-	parser.add_argument('-t', action = 'store_true',
-			default = False,
-			dest = 'boolean_switch',
-			help = 'Set a switch to true'
-			)
-
-	parser.add_argument('-f', action = 'store_false',
-			default = False,
-			dest = 'boolean_switch',
-			help = 'Set a switch to false'
-			)
-
-	parser.add_argument('-a', action = 'append',
-			dest = 'collection',
-			default = [],
-			help = 'Set a switch to false'
-			)
-
-	parser.add_argument('--version', action = 'version',
-			version = '%(prog)s 1.0'
-			)
-
-	results = parser.parse_args()
-
-	return results
-
-	${0}
+# TODO: Figure out how to account for whitespace
+snippet argpfile "add arg - file" bms
+parser.add_argument('${1:${VISUAL}}', required=$2, type=argparse.FileType('$3'),
+					help="$4")
 endsnippet
 
 # Comprehensions:{{{1
@@ -480,6 +472,7 @@ endsnippet
 # A lot of these could easily be broken up into a lot more sections and there
 # would be no damage done
 
+# class {{{2
 snippet class "class with docstrings" b
 class ${1:MyClass}(${2:object}):
 
@@ -502,7 +495,7 @@ write_init_body(args, t[2], snip)
 		$0
 endsnippet
 
-
+# slotclass {{{2
 snippet slotclass "class with slots and docstrings" b
 class ${1:MyClass}(${2:object}):
 
@@ -530,7 +523,7 @@ write_init_body(args, t[2], snip)
 		$0
 endsnippet
 
-
+# {{{2
 snippet contain "methods for emulating a container type" b
 def __len__(self):
 	${1:pass}
@@ -600,7 +593,7 @@ def __delete__(self, instance):
 	${3:pass}
 endsnippet
 
-
+# cmp: {{{2
 snippet cmp "methods implementing rich comparison"
 def __eq__(self, other):
 	${1:pass}
@@ -639,6 +632,7 @@ endsnippet
 
 # note: reflected operands and augmented arithmeitc assignements have been
 # intentionally ommited to reduce verbosity.
+# numeric {{{2
 snippet numeric "methods for emulating a numeric type" b
 def __add__(self, other):
 	${1:pass}
@@ -808,8 +802,10 @@ class Test${1:Class}(${2:unittest.TestCase}):
 		${7:${VISUAL:pass}}
 endsnippet
 
+################ {{{1
+#  Postfixes:  #
+################
 
-# Return Snippets: {{{1
 
 # Found in the help docs. Say you forget to write return? Use this and you can
 # add it after the fact!!
