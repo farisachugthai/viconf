@@ -1,10 +1,23 @@
+" ============================================================================
+    " File: ultisnips.vim
+    " Author: Faris Chugthai
+    " Description: ultisnips mods
+    " Last Modified: March 09, 2019
+" ============================================================================
 
-" UltiSnips: {{{2
+" UltiSnips: {{{1
+
+" Guards: {{{2
+if exists('did_ultisnips') || &cp || v:version < 700
+    finish
+endif
+let did_ultisnips = 1
 
 if !has_key(plugs, 'ultisnips')
     finish
 endif
 
+" Mappings: {{{2
 " TODO: Is it better to put <Cmd> here? For the insert mode ones maybe.
 " I use this command constantly
 nnoremap <Leader>se <Cmd>UltiSnipsEdit<CR>
@@ -16,7 +29,7 @@ inoremap <F6> <C-o>:Snippets<CR>
 nnoremap <F6> :Snippets<CR>
 
 
-" UltiSnips: {{{2
+" Options: {{{2
 let g:UltiSnipsSnippetDir = [ '~/.config/nvim/UltiSnips' ]
 let g:UltiSnipsExpandTrigger = '<Tab>'
 let g:UltiSnipsListSnippets = '<C-Tab>'

@@ -42,36 +42,34 @@ endsnippet
 # if we were trying to make a line of literal '=' signs underneath the first tabstop.
 # The current function I'm calling right now only makes 3 so we're not there yet.
 # Sorry but I'm copping out for the time being.
+
+# TODO: Need to add label for the mod name so it doesn't conflict with autodoc.
 snippet moddoc "Module Docstring" mbs
 """
 
-:mod:\``!p snip.rv = snip.basename`\`
+.. :mod:\``!p snip.rv = snip.basename`\`
 
 	.. currentmodule:: `!p snip.rv = snip.basename`
 		:synopsis: ${1: One sentence description.}
 
 :File: `!p snip.rv = snip.fn`
 :Author: `!v g:snips_author`
-:Github: \`<`!v g:snips_github`\`>_
 
-${3:Attributes:
----------------
+${3:Attributes:}
+snip.rv = len(t[3]
+	${4:\`\`mod_variables\`\`} (${5:type}): ${6:Explanation and give an inline docstring.}
 
-	${4:\`\`module_level_variables\`\`} (${5:type}): ${6:Explanation and give an inline docstring
-	immediately afterwards if possible}
+${7:Example:}
+snip.rv = len(t[3]
+	${8:Any example of how to use this module goes here}:: ${9:python3}
 
-Example:
----------
+		${10:$ python exampleofrst.py}
 
-	${7:Any example of how to use this module goes here}:: ${8:shell}
-
-		${9:$ python exampleofrst.py}
-
-.. ${10:any directives::}
+.. ${11:any directives::}
 
 	${11:example text}
 
-}
+
 """
 endsnippet
 
@@ -337,7 +335,11 @@ endsnippet
 snippet argparser "Initialize ArgumentParser in def _parse_arguments" bms
 def _parse_arguments():
 	parser = argparse.ArgumentParser(description=${1:__doc__})
-	return parser.parse_args()
+
+	args = parser.parse_args()
+
+	$0
+	return args
 endsnippet
 
 snippet argpos "Add argument - positional argument for a string type." bs
@@ -350,15 +352,25 @@ parser.add_argument(${1:-s}, ${2:--long}, dest= ${3: var},
 endsnippet
 
 snippet argpv "add argument for version = %(prog)s" b
-parser.add_argument('--version', action = 'version',
-		version = '%(prog)s 1.0')
+parser.add_argument('--version', action='version',
+					version='%(prog)s 1.0')
 endsnippet
 
 # TODO: Figure out how to account for whitespace
 snippet argpfile "add arg - file" bms
 parser.add_argument('${1:${VISUAL}}', required=$2, type=argparse.FileType('$3'),
-					help="$4")
+					help='$4')
 endsnippet
+
+snippet parlog "Logging argument" b
+    parser.add_argument(
+        '${1:-l}',
+        '${2:--log}',
+        default=${3:sys.stdout},
+        type=${4:argparse.FileType('w')},
+        help='${0:File to write logging messages to.}')
+endsnippet
+
 
 # Comprehensions:{{{1
 

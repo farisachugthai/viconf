@@ -9,10 +9,18 @@
 " The line i changed was on 579. I would put this in an after file but there are
 " so many functions that its gonna be hard
 
+" Guards: {{{
+if exists('did_gruvbox') || &cp || v:version < 700
+    finish
+endif
+let did_gruvbox= 1
+
+" }}}
+
 " Supporting code -------------------------------------------------------------
 " Initialisation: {{{
 
-if version > 580
+if v:version > 580
   hi clear
   if exists("syntax_on")
     syntax reset
@@ -32,7 +40,7 @@ if !exists('g:gruvbox_bold')
   let g:gruvbox_bold=1
 endif
 if !exists('g:gruvbox_italic')
-  if has('gui_running') || $TERM_ITALICS == 'true'
+  if has('gui_running') || $TERM_ITALICS ==? 'true'
     let g:gruvbox_italic=1
   else
     let g:gruvbox_italic=0
@@ -80,7 +88,7 @@ if !exists('g:gruvbox_contrast_light')
   let g:gruvbox_contrast_light='medium'
 endif
 
-let s:is_dark=(&background == 'dark')
+let s:is_dark=(&background ==? 'dark')
 
 " }}}
 " Palette: {{{
@@ -90,7 +98,7 @@ let s:gb = {}
 
 " fill it with absolute colors
 let s:gb.dark0_hard  = ['#1d2021', 234]     " 29-32-33
-let s:gb.dark0       = ['#282828', 235]     " 40-40-40
+let s:gb.dark0       = ['#1d2021', 234]     " 40-40-40
 let s:gb.dark0_soft  = ['#32302f', 236]     " 50-48-47
 let s:gb.dark1       = ['#3c3836', 237]     " 60-56-54
 let s:gb.dark2       = ['#504945', 239]     " 80-73-69
