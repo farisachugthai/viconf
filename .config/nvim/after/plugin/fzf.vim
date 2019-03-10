@@ -1,6 +1,19 @@
 " FZF Configuration:
 
 " FZF: {{{1
+
+" Guards: {{{2
+if !has_key(plugs, 'fzf.vim')
+    finish
+endif
+
+if exists('b:did_fzf') || &cp || v:version < 700
+    finish
+endif
+let did_fzf = 1
+
+
+" General Setup: {{{2
 if has('nvim') || has('gui_running')
     " Wait hold on...if we already set it, then use my bashrc!
     if exists('$FZF_DEFAULT_OPTS') == 0
@@ -21,9 +34,11 @@ let g:fzf_action = {
   \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit' }
 
-let g:fzf_history_dir = expand('~/.local/share/fzf-history')
+let g:fzf_history_dir = expand('$XDG_DATA_HOME') . '/fzf-history'
 
 " FZF Colors: {{{1
+
+" g:fzf_colors: {{{2
 " Customize FZF colors to match your color scheme
 " What are the default colors if you don't specify this?
 " **I think fzf.vim specifies this for us**
@@ -125,6 +140,8 @@ augroup end
 
 " Advanced Functions And Commands: {{{1
 
+" Complete Word: {{{2
+
 " This was an autoloaded funcref so name needs to match path
 " FZF complete word with prefix added for termux
 " function! fzf#vim#complete#word(...)
@@ -133,11 +150,13 @@ augroup end
 "         \ get(a:000, 0, fzf#wrap())))
 " endfunction
 
+" Grep: {{{2
 " Unfortunately the bang doesn't move to a new window. TODO
 " Opens matches in a split. Appending ! gives an error.
 " How do we fix that?
 command! -nargs=1 -bang -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
 
+" GGrep: {{{2
 " From fzf-vim.txt
 " fzf-vim-advanced-customization
 " Command for git grep

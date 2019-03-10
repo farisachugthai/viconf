@@ -61,13 +61,13 @@ Further explanations for how nvim is configured can be found in the [Neovim READ
 
 +---------------------------------+
 |next change         |         ]c |
-|previous change     |         \[c |
+|previous change     |        \[c |
 |diff obtain         |         do |
 |diff put            |         dp |
 |fold open           |         zo |
 |fold close          |         zc |
-|rescan files        |         :diffupdate |
-+------------------------------------------+
+|rescan files        |:diffupdate |
++---------------------------------+
 
 
 ## Plugins Used
@@ -82,7 +82,6 @@ on my personal customizations.
 ### NERDTree
 
 - [NERDTree](https://www.github.com/scrooloose/nerdTree)
-
 
 NERDTree is a file explorer plugin that provides "project drawer"
 functionality to your vim editing.  You can learn more about it with

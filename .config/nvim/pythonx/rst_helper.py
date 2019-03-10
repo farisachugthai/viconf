@@ -4,7 +4,7 @@
 
 :File: rst_helper.py
 :Author: Faris Chugthai
-:Email: farischugthai@gmail.com
+
 :Github: https://github.com/farisachugthai
 
 Default file from vim-snippet's repo. Modified docstrings but still much more
@@ -12,33 +12,33 @@ work to do.
 """
 import vim
 from os import path as ospath
-from string import Template
 # I swear the snip option has a few of these ready to go
 import re
 from collections import Counter
 
 # `<http://docutils.sourceforge.net/docs/ref/rst/roles.html>`
 
-TEXT_ROLES = ['emphasis','literal','code','math',
-              'pep-reference','rfc-reference',
-              'strong','subscript','superscript',
-              'title-reference','raw']
+TEXT_ROLES = [
+    'emphasis', 'literal', 'code', 'math', 'pep-reference', 'rfc-reference',
+    'strong', 'subscript', 'superscript', 'title-reference', 'raw'
+]
 TEXT_ROLES_REGEX = r'\.\.\srole::?\s(w+)'
 
 # `<http://docutils.sourceforge.net/docs/ref/rst/directives.html#specific-admonitions>`
-SPECIFIC_ADMONITIONS = ["attention", "caution", "danger",
-                        "error", "hint", "important", "note",
-                        "tip", "warning"]
+SPECIFIC_ADMONITIONS = [
+    "attention", "caution", "danger", "error", "hint", "important", "note",
+    "tip", "warning"
+]
 # `<http://docutils.sourceforge.net/docs/ref/rst/directives.html>`
-DIRECTIVES = ['topic','sidebar','math','epigraph',
-              'parsed-literal','code','highlights',
-              'pull-quote','compound','container','table','csv-table',
-              'list-table','class','sectnum',
-              'role','default-role','unicode',
-              'raw']
+DIRECTIVES = [
+    'topic', 'sidebar', 'math', 'epigraph', 'parsed-literal', 'code',
+    'highlights', 'pull-quote', 'compound', 'container', 'table', 'csv-table',
+    'list-table', 'class', 'sectnum', 'role', 'default-role', 'unicode', 'raw'
+]
 
-NONE_CONTENT_DIRECTIVES\ = ['rubric', 'contents', 'header',
-                          'footer', 'date', 'include', 'title']
+NONE_CONTENT_DIRECTIVES = [
+    'rubric', 'contents', 'header', 'footer', 'date', 'include', 'title'
+]
 
 INCLUDABLE_DIRECTIVES = ['image', 'figure', 'include']
 # CJK chars
@@ -46,7 +46,13 @@ INCLUDABLE_DIRECTIVES = ['image', 'figure', 'include']
 CJK_RE = re.compile(u'[⺀-⺙⺛-⻳⼀-⿕々〇〡-〩〸-〺〻㐀-䶵一-鿃豈-鶴侮-頻並-龎]', re.UNICODE)
 
 # http://www.pygal.org/en/stable/documentation/types/index.html
-CHART_TYPES = ["Line", "StackedLine", "HorizontalLine", "Bar", "StackedBar", "HorizontalBar", "Histogram", "XY", "DateLine", "TimeLine", "TimeDeltaLine", "DateTimeLine", "Pie", "Radar", "Box", "Dot", "Funnel", "Gauge", "SolidGauge", "Pyramid", "Treemap"]
+CHART_TYPES = [
+    "Line", "StackedLine", "HorizontalLine", "Bar", "StackedBar",
+    "HorizontalBar", "Histogram", "XY", "DateLine", "TimeLine",
+    "TimeDeltaLine", "DateTimeLine", "Pie", "Radar", "Box", "Dot", "Funnel",
+    "Gauge", "SolidGauge", "Pyramid", "Treemap"
+]
+
 
 def has_cjk(s):
     """Detect if s contains CJK characters."""
@@ -54,8 +60,9 @@ def has_cjk(s):
 
 
 def real_filename(filename):
-    """peel extension name off if possible
-    # i.e. "foo.bar.png will return "foo.bar"
+    """Peel extension name off if possible.
+
+    i.e. "foo.bar.png will return "foo.bar"
     """
     return ospath.splitext(filename)[0]
 
@@ -76,6 +83,7 @@ try:
     rst_char_len = vim.strwidth  # Requires Vim 7.3+
 except AttributeError:
     from unicodedata import east_asian_width
+
     def rst_char_len(s):
         """Return the required over-/underline length for s."""
         result = 0
@@ -93,7 +101,7 @@ def make_items(times, leading='+'):
     times = int(times)
     if leading == 1:
         msg = ""
-        for x in range(1, times+1):
+        for x in range(1, times + 1):
             msg += "%s. Item\n" % x
         return msg
     else:

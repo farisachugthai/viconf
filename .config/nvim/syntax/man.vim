@@ -110,4 +110,31 @@ execute 'syntax match manFooter display "^\%'.line('$').'l.*$"'
 " Wait why. Usually those include links to other man pages,
 " not only do I want those highlighted I want extra funcs for them
 
+" Mar 09, 2019:
+" Should fix all the cleared ones.
+"manReference   xxx links to PreProc
+"manTitle       xxx links to Title
+" manHeaderFile  xxx cleared
+" manURL         xxx cleared
+" manEmail       xxx cleared
+" manHighlight   xxx cleared
+" manFile        xxx cleared
+" manEnvVarFile  xxx cleared
+" manFiles       xxx cleared
+" manEnvVar      xxx cleared
+" manCFuncDefinition xxx links to Function
+" manSentence    xxx cleared
+" manSubHeading  xxx links to Function
+" manSignal      xxx cleared
+" manCError      xxx cleared
+" manOptionDesc  xxx links to Constant
+" manLongOptionDesc xxx links to Constant        
+" manItalic      xxx cterm=italic gui=italic  
+" manFooter      xxx cleared
+
+
+if g:colors_name ==# 'gruvbox'
+    hi! link manSectionHeading GruvboxOrangeBold
+endif
+
 let b:current_syntax = 'man'
