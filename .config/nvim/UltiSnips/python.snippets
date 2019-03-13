@@ -183,7 +183,7 @@ if __name__ == `!p snip.rv = get_quoting_style(snip)`__main__`!p snip.rv = get_q
 endsnippet
 
 # This is one that goes in my ifmain blocks all the time
-snippet args "Copy sys.argv into a variable." w
+snippet sysa "Copy sys.argv into a variable." w
 args = sys.argv[:]
 endsnippet
 
@@ -191,20 +191,18 @@ endsnippet
 #  Docstrings  #
 ################
 
-snippet Par "Parameters section for docstrings." ms
+snippet par "Parameters section for docstrings." ms
 ${1:${VISUAL:Parameters}}
 `!p snip.rv = len(t[1])*'-'`
 ${2:todo} : ${3:type}
 	${4:description}
-$0
 endsnippet
 
-snippet Ret "Return section for docstrings." ms
-${1:${VISUAL:Parameters}}
+snippet ret "Return section for docstrings." ms
+${1:${VISUAL:Returns}}
 `!p snip.rv = len(t[1])*'-'`
 ${2:todo} : ${3:type}
 	${4:description}
-$0
 endsnippet
 
 
@@ -332,43 +330,48 @@ endsnippet
 # Argparse: {{{1
 
 # Don't use a $0 at the end it ends up adding blank white space. Or read UltiSnips-snippet-option
-snippet argparser "Initialize ArgumentParser in def _parse_arguments" bms
+snippet argfunc "Initialize ArgumentParser in def _parse_arguments" bms
 def _parse_arguments():
-	parser = argparse.ArgumentParser(description=${1:__doc__})
+	parser = argparse.ArgumentParser(description=__doc__)
+
+	${1:Not a bad time to invoke snippets argpos or argopt.}
 
 	args = parser.parse_args()
 
-	$0
 	return args
 endsnippet
 
 snippet argpos "Add argument - positional argument for a string type." bs
-parser.add_argument(${1:${VISUAL}}, type=${1:str}, help=${2:Feed me input.})
+parser.add_argument(${1:${VISUAL}},
+	type=${1:str},
+	nargs=${2:"+"},
+	help=${3:Feed me input.}
+)
 endsnippet
 
-snippet argpath "Add argument for a pathlike object" b
+snippet argopt "Add argument for an optional argument." b
 parser.add_argument(${1:-s}, ${2:--long}, dest= ${3: var},
 					type=${4:pathlib.Path}, help=${5:RTFM})
 endsnippet
 
-snippet argpv "add argument for version = %(prog)s" b
-parser.add_argument('--version', action='version',
-					version='%(prog)s 1.0')
+snippet argv "add argument for version = %(prog)s" b
+parser.add_argument('-V', '--version', action='version',
+					version='%(prog)s' + pyutil.__about__['version'])
 endsnippet
 
 # TODO: Figure out how to account for whitespace
-snippet argpfile "add arg - file" bms
+snippet argfile "add arg - file" bms
 parser.add_argument('${1:${VISUAL}}', required=$2, type=argparse.FileType('$3'),
 					help='$4')
 endsnippet
 
-snippet parlog "Logging argument" b
-    parser.add_argument(
-        '${1:-l}',
-        '${2:--log}',
-        default=${3:sys.stdout},
-        type=${4:argparse.FileType('w')},
-        help='${0:File to write logging messages to.}')
+snippet arglog "Logging argument" b
+parser.add_argument(
+	'${1:-l}',
+	'${2:--log}',
+	default=${3:sys.stdout},
+	type=${4:argparse.FileType('w')},
+	help='${0:File to write logging messages to.}')
 endsnippet
 
 

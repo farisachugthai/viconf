@@ -37,8 +37,17 @@ For anything but the most basic commands, let is always preferable.
 some corresponding ``let`` statements, but it only allows one to
 define a variable to one literal value.
 
+The set keyword in vim is best used when setting an option to a well defined
+string.
+
 ``let`` allows for scoping variables, and as Vim has an incredibly unintuitive
 system for coercing types, this will frequently come in handy.
+
+In addition, let is best used when an  expression requires evaluating a variable
+of some sort.
+
+.. todo::  Show the example of setting python_prog_host based on the
+   VIRTUAL_ENV env var.
 
 Whitespace in Options
 ~~~~~~~~~~~~~~~~~~~~~
@@ -58,6 +67,17 @@ By prepending `&` to the variable, Vim knows we're modifying the value of
 a variable it recognizes and not defining our own. The single quotes are
 still required; however I find this more manageable than adding a `\\``
 before every single space.
+
+Environment Variables
+---------------------
+Do not ever redefine VIMRUNTIME! If set in your .profile or .bashrc, this will
+mess up compatability between nvim and vim as nvim defines the same variable,
+but instead of the expected /usr/share/vim/runtime/ definition, $VIMRUNTIME is
+set to /usr/share/nvim/runtime.
+
+Therefore, defining VIMRUNTIME as /usr/share/vim/runtime in a startup file will
+cause unexpected behavior when starting nvim.
+
 
 Directory Layout and Runtimepath
 ---------------------------------

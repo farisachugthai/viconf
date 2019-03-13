@@ -6,22 +6,23 @@ let g:snips_author = 'Faris Chugthai'
 let g:snips_github = 'https://github.com/farisachugthai'
 
 " Vim Plug: {{{1
-" " Plug Check: {{{2
-" " Shout out Justinmk! Never wanted to go through a full check for vim-plug
-" " since it's there 99% of the time but this is a real smart workaround
-" " https://github.com/justinmk/config/blob/291ec0ae12b0b4b35b4cf9315f1878db00b780ec/.config/nvim/init.vim#L12
-" let s:plugins = filereadable(expand('$XDG_DATA_HOME') . 'nvim/site/autoload/plug.vim', 1)
-" let s:plugins_extra = s:plugins
 
-" if expand('OS') !=# 'Windows_NT'
-"     if !s:plugins
-"         fun! InstallPlug() "bootstrap plug.vim on new systems
-"             silent call mkdir(expand('$XDG_DATA_HOME') . 'nvim/site/autoload', 1, 'p')
-"             execute '!curl -fLo '.expand('$XDG_DATA_HOME') . 'nvim/site/autoload/plug.vim', 1)
-"           \ .' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-"       endfun
-"     endif
-" endif
+" Plug Check: {{{2
+" Shout out Justinmk! Never wanted to go through a full check for vim-plug
+" since it's there 99% of the time but this is a real smart workaround
+" https://github.com/justinmk/config/blob/291ec0ae12b0b4b35b4cf9315f1878db00b780ec/.config/nvim/init.vim#L12
+" I think the 1 is the 2nd argument is expand and returns either a 1 or 0
+let s:plugins = filereadable(expand('~/.local/share/nvim/site/autoload/plug.vim', 1))
+
+if expand('OS') !=# 'Windows_NT'
+    if !s:plugins
+        fun! InstallPlug() "bootstrap plug.vim on new systems
+            silent call mkdir(expand('~/.local/share/nvim/site/autoload', 1), 'p')
+            execute '!curl -fLo '.expand('~/.local/share/nvim/site/autoload/plug.vim', 1)
+          \ .' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+      endfun
+    endif
+endif
 
 " General Plugins: {{{2
 call plug#begin(expand($XDG_DATA_HOME) . '/nvim/plugged')
@@ -66,8 +67,8 @@ silent! source $VIMRUNTIME/defaults.vim
 
 " if we have a virtual env start there
 if exists('$VIRTUAL_ENV')
-    let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
-    let &path = &path . ',' . expand('$VIRTUAL_ENV') . '/bin/python'
+    let g:python3_host_prog = expand('$VIRTUAL_ENV') . '/bin/python'
+    let &path = &path . ',' . expand('$VIRTUAL_ENV') . '/lib/python3.7/site-packages'
 
 " or a conda env.
 elseif exists('$CONDA_PYTHON_EXE')
@@ -194,8 +195,8 @@ setlocal spelllang=en
 
 if filereadable(expand('$XDG_CONFIG_HOME') . '/nvim/spell/en.utf-8.add')
     let &spellfile=expand('$XDG_CONFIG_HOME') . '/nvim/spell/en.utf-8.add'
-elseif filereadable(expand('~/projects/viconf/.vim/spell/en.utf-8.add'))
-    let &spellfile=expand('$HOME') . '/projects/viconf/.vim/spell/en.utf-8.add'
+elseif filereadable(expand('~/projects/viconf/.config/nvim/spell/en.utf-8.add'))
+    let &spellfile=expand('$HOME') . '/projects/viconf/.config/nvim/spell/en.utf-8.add'
 else
     echoerr 'Spell file not found.'
 endif
@@ -211,7 +212,7 @@ if filereadable('/usr/share/dict/words')
 endif
 
 if filereadable('/usr/share/dict/american-english')
-    setlocal dictionary+=/usr/share/dict/american-english
+    set dictionary+=/usr/share/dict/american-english
 endif
 
 " Fun With Clipboards: {{{2
@@ -266,7 +267,7 @@ if isdirectory(expand('$_ROOT/local/include/'))
 endif
 
 if isdirectory(expand('$_ROOT') . '/include/libcs50')
-    let &path = &path .','. expand('$_ROOT') . 'include/libcs50'
+    let &path = &path .','. expand('$_ROOT') . '/include/libcs50'
 endif
 
 if isdirectory(expand('$_ROOT') . '/lib/python3')
@@ -542,8 +543,8 @@ let g:LanguageClient_serverCommands = {
 
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_selectionUI = 'fzf'
-let g:LanguageClient_settingsPath = expand('$XDG_CONFIG_HOME') . 'nvim/settings.json'
-let g:LanguageClient_loggingFile = expand('$XDG_DATA_HOME') . 'nvim/LC.log'
+let g:LanguageClient_settingsPath = expand('$XDG_CONFIG_HOME') . '/nvim/settings.json'
+let g:LanguageClient_loggingFile = expand('$XDG_DATA_HOME') . '/nvim/LC.log'
 
 " Jedi: {{{2
 let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces

@@ -8,6 +8,6 @@ py_tut ~/python/tutorials
 riv ~/.local/share/nvim/plugged/riv.vim/doc/riv_instruction.rst
 tutorials ~/Dropbox/python/tutorials
 viconf ~/projects/viconf/.config/nvim
-
 vim ~/.vim
+
 sphinx ~/miniconda3/envs/flask/lib/python3.7/site-packages/sphinx
