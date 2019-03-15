@@ -1,17 +1,16 @@
 " Init:
 " Neovim Configuration:
 
-" About: {{{1
+" About:
 let g:snips_author = 'Faris Chugthai'
 let g:snips_github = 'https://github.com/farisachugthai'
 
-" Vim Plug: {{{1
+" Vim Plug:
 
-" Plug Check: {{{2
+" Plug Check:
 " Shout out Justinmk! Never wanted to go through a full check for vim-plug
 " since it's there 99% of the time but this is a real smart workaround
 " https://github.com/justinmk/config/blob/291ec0ae12b0b4b35b4cf9315f1878db00b780ec/.config/nvim/init.vim#L12
-" I think the 1 is the 2nd argument is expand and returns either a 1 or 0
 let s:plugins = filereadable(expand('~/.local/share/nvim/site/autoload/plug.vim', 1))
 
 if expand('OS') !=# 'Windows_NT'
@@ -24,7 +23,7 @@ if expand('OS') !=# 'Windows_NT'
     endif
 endif
 
-" General Plugins: {{{2
+" General Plugins:
 call plug#begin(expand($XDG_DATA_HOME) . '/nvim/plugged')
 
 Plug 'junegunn/vim-plug'        " plugception
@@ -51,9 +50,9 @@ Plug 'neoclide/coc.nvim', {'tag': '*', 'do': 'yarn install'}
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 
-" Preliminaries: {{{1
+" Preliminaries:
 
-" Nvim Specific: {{{2
+" Nvim Specific:
 
 if has('nvim')
     set inccommand=split                    " This alone is enough to never go back
@@ -63,7 +62,7 @@ endif
 unlet! skip_defaults_vim
 silent! source $VIMRUNTIME/defaults.vim
 
-" Python Executables: {{{2
+" Python Executables:
 
 " if we have a virtual env start there
 if exists('$VIRTUAL_ENV')
@@ -90,9 +89,9 @@ else
     let g:loaded_python_provider = 1
 endif
 
-" OS Setup: {{{1
+" OS Setup:
 
-" Platforms: {{{2
+" Platforms:
 let s:termux = exists('$PREFIX') && has('unix')
 let s:ubuntu = !exists('$PREFIX') && has('unix')
 let s:windows = has('win32') || has('win64')
@@ -108,7 +107,7 @@ if filereadable(s:local_vimrc)
     execute 'source' s:local_vimrc
 endif
 
-" Session options: {{{2
+" Session options:
 " Here's a nice little setting to encourage interoperability
 " UNIX AND MS-WINDOWS
 
@@ -125,7 +124,7 @@ set sessionoptions+=unix,slash
 " Not related but I wanted to strike these down because they're annoying.
 set sessionoptions-=blank,folds
 
-" Remote hosts: {{{2
+" Remote hosts:
 if s:termux
     " holy fuck that was a doozy to find
     let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
@@ -143,9 +142,9 @@ elseif s:ubuntu
 
 endif
 
-" Global Options: {{{1
+" Global Options:
 
-" Leader And Viminfo: {{{2
+" Leader And Viminfo:
 " let g:mapleader = '\<Space>'
 noremap <Space> <nop>
 map <Space> <Leader>
@@ -160,7 +159,7 @@ else
     " shada=!,'100,<50,s10,h
 endif
 
-" Pep8 Global Options: {{{2
+" Pep8 Global Options:
 if &tabstop > 4
     set tabstop=4           " show existing tab with 4 spaces width
 endif
@@ -171,7 +170,7 @@ set expandtab smarttab      " On pressing tab, insert 4 spaces
 set softtabstop=4
 let g:python_highlight_all = 1
 
-" Folds: {{{2
+" Folds:
 set foldenable
 set foldlevelstart=0
 set foldlevel=0
@@ -181,7 +180,7 @@ set foldmethod=marker
 " Trade off for valuable window real estate though....
 set foldcolumn=1
 
-" Buffers Windows Tabs: {{{2
+" Buffers Windows Tabs:
 try
     set switchbuf=useopen,usetab,newtab
 catch
@@ -190,7 +189,7 @@ endtry
 set hidden
 set splitbelow splitright
 
-" Spell Checker: {{{2
+" Spell Checker:
 setlocal spelllang=en
 
 if filereadable(expand('$XDG_CONFIG_HOME') . '/nvim/spell/en.utf-8.add')
@@ -215,7 +214,7 @@ if filereadable('/usr/share/dict/american-english')
     set dictionary+=/usr/share/dict/american-english
 endif
 
-" Fun With Clipboards: {{{2
+" Fun With Clipboards:
 if has('unnamedplus')                   " Use the system clipboard.
     set clipboard+=unnamed,unnamedplus
 else                                    " Accommodate Termux
@@ -239,14 +238,14 @@ if exists('$TMUX')
         \ }
 endif
 
-" Autocompletion: {{{2
+" Autocompletion:
 set wildmenu
 set wildmode=longest,list:longest       " Longest string or list alternatives
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 set fileignorecase                      " when searching for files don't use case
 set wildignorecase
 
-" Path: {{{2
+" Path:
 
 " :let &{option-name} = {expr1}         *:let-option* *:let-&*
 "           Set option {option-name} to the result of the
@@ -285,7 +284,7 @@ endif
 
 " endif
 
-" Other Global Options: {{{2
+" Other Global Options:
 
 set tags+=./tags,./../tags,./*/tags     " usr_29
 set tags+=~/projects/tags               " consider generating a few large tag
@@ -329,9 +328,9 @@ set backupext='.bak'        " like wth is that ~ nonsense?
 set modeline
 set browsedir="buffer"                  " which directory is used for the file browser
 
-" Mappings: {{{1
+" Mappings:
 
-" Window_Buf_Tab_Mappings: {{{2
+" Window_Buf_Tab_Mappings:
 
 " Navigate buffers more easily
 nnoremap <Leader>bn <Cmd>bnext<CR>
@@ -366,7 +365,7 @@ let g:ftplug=$MYVIMRC.'/after/ftplugin/'.&filetype.'.vim'
 " Goddamnit it opens a buffernnamed g:ftplug
 " map <F10> <Cmd>e g:ftplug<CR>
 
-" General_Mappings: {{{2
+" General_Mappings:
 
 noremap <silent> <Leader>ts <Cmd>!termux-share -a send %<CR>
 
@@ -390,11 +389,11 @@ map <S-ScrollWheelDown> <C-D>
 " Save a file as root
 noremap <leader>W :w !sudo tee % > /dev/null<CR>
 
-" Spell Checking: {{{2
+" Spell Checking:
 nnoremap <Leader>sp :setlocal spell!<CR>
 nnoremap <Leader>s= z=
 
-" Terminal: {{{2
+" Terminal:
 " If running a terminal in Vim, go into Normal mode with Esc
 tnoremap <Esc> <C-\><C-n>
 " From he term. Alt-R is better because this causes us to lose C-r in every
@@ -414,7 +413,7 @@ nnoremap <A-j> <C-w>j
 nnoremap <A-k> <C-w>k
 nnoremap <A-l> <C-w>l
 
-" ALE: {{{2
+" ALE:
 
 " This isn't working idk why
 nnoremap <Leader>l <Plug>(ale_toggle_buffer)<CR>
@@ -434,7 +433,7 @@ nnoremap <Leader>* <Plug>(ale_go_to_reference)
 
 nnoremap <Leader>a <Cmd>ALEInfo<CR>
 
-" Fugitive: {{{2
+" Fugitive:
 nnoremap <silent> <Leader>gb   <Cmd>Gblame<CR>
 nnoremap <silent> <Leader>gc   <Cmd>Gcommit<CR>
 cmap <silent> gch <Cmd>Git checkout<Space>
@@ -459,29 +458,7 @@ nnoremap <silent> <Leader>gst  <Cmd>Git diff --stat<CR>
 nnoremap <silent> <Leader>gw   <Cmd>Gwrite<CR>
 nnoremap <silent> <Leader>gW   <Cmd>Gwrite!<CR>
 
-" Language Server: {{{2
-" This is a good way to give LangClient the necessary bindings it needs;
-" while, first ensuring that the plugin loaded and that it only applies for
-" relevant filetypes.
-function! LC_maps()
-    if has_key(g:LanguageClient_serverCommands, &filetype)
-        nnoremap <buffer> <Leader>lh :call LanguageClient#textDocument_hover()<CR>
-        inoremap <buffer> <Leader><F2> <Esc>:call LanguageClient#textDocument_rename()<CR>
-        nnoremap <buffer> <Leader>ld :call LanguageClient#textDocument_definition()<CR>
-        nnoremap <buffer> <Leader>lr :call LanguageClient#textDocument_rename()<CR>
-        nnoremap <buffer> <Leader>lf :call LanguageClient#textDocument_formatting()<CR>
-        nnoremap <buffer> <Leader>lt :call LanguageClient#textDocument_typeDefinition()<CR>
-        nnoremap <buffer> <Leader>lx :call LanguageClient#textDocument_references()<CR>
-        nnoremap <buffer> <Leader>la :call LanguageClient_workspace_applyEdit()<CR>
-        nnoremap <buffer> <Leader>lc :call LanguageClient#textDocument_completion()<CR>
-        nnoremap <buffer> <Leader>ls :call LanguageClient_textDocument_documentSymbol()<CR>
-        nnoremap <buffer> <Leader>lm :call LanguageClient_contextMenu()<CR>
-        set completefunc=LanguageClient#complete
-        set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
-    endif
-endfunction
-
-" Tagbar: {{{2
+" Tagbar:
 " This works perfectly and should be how you handle all plugins and their
 " mappings !!!!!
 if has_key(plugs, 'tagbar')
@@ -489,13 +466,13 @@ if has_key(plugs, 'tagbar')
     inoremap <silent> <F8> <Cmd>TagbarToggle<CR>
 endif
 
-" Remaining Plugins: {{{1
+" Remaining Plugins:
 
-" Vim_Plug: {{{2
+" Vim_Plug:
 let g:plug_window = 'tabe'
 
 
-" ALE: {{{2
+" ALE:
 let g:ale_fixers = { '*': [ 'remove_trailing_lines', 'trim_whitespace' ] }
 let g:ale_fix_on_save = 1
 " Now because you fix the trailing whitespace and trailing lines
@@ -515,7 +492,7 @@ augroup ALEProgress
     autocmd User ALELintPost let s:ale_running = 0 | redrawstatus
 augroup END
 
-" Devicons: {{{2
+" Devicons:
 let g:webdevicons_enable = 1
 let g:webdevicons_enable_nerdtree = 1               " adding the flags to NERDTree
 let g:airline_powerline_fonts = 1
@@ -529,24 +506,7 @@ else
     let entry_format .= '. entry_path'
 endif
 
-" Language Client: {{{2
-let g:LanguageClient_serverCommands = {
-            \ 'python': [ 'pyls' ],
-            \ 'c': ['clangd'],
-            \ 'cpp': ['clangd'],
-            \ 'js': ['tsserver'],
-            \ 'ts': ['tsserver'],
-            \ 'css': ['css-languageserver'],
-            \ 'html': ['html-languageserver'],
-            \ 'tsx': ['tsserver']
-            \ }
-
-let g:LanguageClient_autoStart = 1
-let g:LanguageClient_selectionUI = 'fzf'
-let g:LanguageClient_settingsPath = expand('$XDG_CONFIG_HOME') . '/nvim/settings.json'
-let g:LanguageClient_loggingFile = expand('$XDG_DATA_HOME') . '/nvim/LC.log'
-
-" Jedi: {{{2
+" Jedi:
 let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces
 let g:jedi#usages_command = '<Leader>u'
 let g:jedi#rename_command = '<F2>'
@@ -555,7 +515,7 @@ let g:jedi#smart_auto_mappings = 0
 let g:jedi#force_py_version = 3
 let g:jedi#enable_completions = 0
 
-" Deoplete_Jedi: {{{2
+" Deoplete_Jedi:
 
 " Setting things up with the `if ubuntu` phrase was oddly a lot easier than
 " i expected it to be...
@@ -566,14 +526,14 @@ elseif s:termux
     let g:deoplete#sources#jedi#enable_typeinfo = 0
 endif
 
-" Tagbar: {{{2
+" Tagbar:
 " just a thought i had. For any normal mode remaps you have, add the same
 " thing and prefix <Esc> to the RHS and boom!
 let g:tagbar_left = 1
 let g:tagbar_width = 30
 let g:tagbar_sort = 0
 
-" Zim: {{{2
+" Zim:
 let g:zim_notebooks_dir = expand('~/Notebooks/Notes')
 let g:zim_notebook = expand('~/Notebooks/Notes')
 let g:zim_dev = 1
@@ -581,29 +541,13 @@ let g:zim_dev = 1
 " Here's an exciting little note about Zim. Ignoring how ...odd this plugin is
 " Voom actually gets pretty close to handling Zimwiki if you recognize it as
 " as dokuwiki!
-" Riv: {{{2
-
-" Highlight py docstrings with rst highlighting
-let g:riv_python_rst_hl = 1
-let g:riv_file_link_style = 2  " Add support for :doc:`something` directive.
-let g:riv_ignored_maps = '<Tab>'
-let g:riv_ignored_nmaps = '<Tab>'
-let g:riv_i_tab_pum_next = 0
-
-let g:riv_global_leader='<Space>'
-
-" From he riv-instructions. **THIS IS THE ONE!!** UltiSnips finally works again
-let g:riv_i_tab_user_cmd = "\<c-g>u\<c-r>=UltiSnips#ExpandSnippet()\<cr>"
-let g:riv_fuzzy_help = 1
-
-" Mkdx: {{{2
 " Similar to Riv, this is for working with Markdown documents
 let g:mkdx#settings     = { 'highlight': { 'enable': 1 },
                         \ 'enter': { 'shift': 1 },
                         \ 'links': { 'external': { 'enable': 1 } },
                         \ 'toc': { 'text': 'Table of Contents', 'update_on_write': 1 },
                         \ 'fold': { 'enable': 1 } }
-" Voom: {{{2
+" Voom:
 
 "g:voom_ft_modes" is a Vim dictionary: keys are filetypes (|ft|), values are
 " corresponding markup modes (|voom-markup-modes|). Example:
@@ -629,17 +573,17 @@ let g:voom_ft_modes = {'markdown': 'markdown', 'rst': 'rst', 'zimwiki': 'dokuwik
 let g:voom_default_mode = 'rst'
 let g:voom_python_versions = [3]
 
-" Cheat40: {{{2
+" Cheat40:
 " let g:cheat40_use_default = 1
 
-" Coc: {{{2
+" Coc:
 inoremap <silent><expr> <c-space> coc#refresh()
 
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
 
-" Runtime: {{{1
+" Runtime:
 
-" Matching Parenthesis: {{{2
+" Matching Parenthesis:
 
 runtime! macros/matchit.vim
 
@@ -665,7 +609,7 @@ let g:loaded_getsciptPlugin    = 1
 let g:loaded_2html_plugin      = 1
 let g:loaded_logiPat           = 1
 
-" Filetype Specific Options: {{{2
+" Filetype Specific Options:
 
 if &ft ==# 'c'
     set makeprg=make\ %<.o
@@ -700,11 +644,11 @@ augroup filetypes
             set comments="
 augroup END
 
-" Functions_Commands: {{{1
+" Functions_Commands:
 
 " Up until Rename are from Junegunn so credit to him
 
-" Todo Function: {{{2
+" Todo Function:
 " Grep for todos in the current repo and populate the quickfix list with them.
 " You could run an if then to check you're in a git repo.
 " Also could use ag/rg/fd and fzf instead of grep to supercharge this.
@@ -728,7 +672,7 @@ function! s:todo() abort
 endfunction
 command! Todo call s:todo()
 
-" Scriptnames: {{{2
+" Scriptnames:
 " command to filter :scriptnames output by a regex
 command! -nargs=1 Scriptnames call <sid>scriptnames(<f-args>)
 function! s:scriptnames(re) abort
@@ -740,7 +684,7 @@ function! s:scriptnames(re) abort
     echo join(filtered, '\n')
 endfunction
 
-" Helptabs: {{{2
+" Helptabs:
 function! s:helptab()
     if &buftype ==# 'help'
         wincmd T
@@ -751,7 +695,7 @@ function! s:helptab()
 endfunction
 command! -nargs=1 Help call <SID>helptab()
 
-" AutoSave: {{{2
+" AutoSave:
 " I feel like I need to put this in a autocmd but I'm not sure what I would
 " want to trigger it.
 " Even better would be if it called :Gwrite haha!
@@ -769,7 +713,7 @@ endfunction
 
 command! -bang Autosave call s:autosave(<bang>1)
 
-" HL: {{{2
+" HL:
 " Whats the syntax group under my cursor?
 function! s:hl()
   echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
@@ -777,7 +721,7 @@ endfunction
 
 command! HL call <SID>hl()
 
-" Explore PlugHelp: {{{2
+" Explore PlugHelp:
 " Call :PlugHelp to use fzf to open a window with all of the plugins
 " you have installed listed and upon pressing enter open the help
 " docs. That's not a great explanation but honestly easier to explain
@@ -800,7 +744,7 @@ command! PlugHelp call fzf#run(fzf#wrap({
   \ 'source': sort(keys(g:plugs)),
   \ 'sink':   function('s:plug_help_sink')}))
 
-" Statusline: {{{2
+" Statusline:
 "
 " Yeah junegunn gets this one too.
 function! s:statusline_expr()
@@ -811,30 +755,24 @@ function! s:statusline_expr()
   let sep = ' %= '
   let pos = ' %-12(%l : %c%V%) '
   let pct = ' %P'
+  let dicons = ' %{WebDevIconsGetFileTypeSymbol()} '
 
-  return '[%n] %F %<'.mod.ro.ft.fug.sep.pos.'%*'.pct
+
+  return '[%n] %F %<'.mod.ro.ft.fug.sep.pos.'%*'.pct .dicons
 endfunction
 let &statusline = s:statusline_expr()
 
-" Rename: {{{2
+" Rename:
 " :he map line 1454. How have i never noticed this isn't a feature???
 command! -nargs=1 -bang -complete=file Rename f <args>|w<bang>
 
-" LanguageClient Check:{{{2
-" Check if the LanguageClient is running.
-function! s:lc_check()
-  let s:lc_Check = LanguageClient#serverStatus()
-  echo s:lc_Check
-endfunction
-command! LCS call <SID>lc_check()
+" Colorscheme:
 
-" Colorscheme: {{{1
-
-" Gruvbox: {{{2
+" Gruvbox:
 " I feel like I should put this in a command or something so I can easily
 " toggle it.
 function! s:gruvbox()
-    set bg=dark
+    set background=dark
     let g:gruvbox_contrast_dark = 'hard'
     " let g:gruvbox_improved_strings=1 shockingly terrible
     let g:gruvbox_improved_warnings=1
@@ -851,7 +789,7 @@ endif
 
 command! -nargs=0 Gruvbox call s:gruvbox()
 
-" Clear hlsearch: {{{2
+" Clear hlsearch:
 " TODO: Also this exits and clears the highlighting
 " pattern as soon as you hit enter. So if you type a word, it'll highlight all
 " matches. But once you hit enter to find the next one it clears. Hmmm.

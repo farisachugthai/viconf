@@ -27,7 +27,7 @@ endglobal
 
 # These snippets are kinda organized in the order of beginning and creating a new python module
 
-# Beginning of the module:{{{1
+# Beginning of the module: {{{1
 
 # Start out with a shebang
 snippet #! "Shebang header for python scripts" b
@@ -36,69 +36,83 @@ snippet #! "Shebang header for python scripts" b
 $0
 endsnippet
 
-# So before we break this up we have to get at least part of it working. So what I want to do is
-# create a line the length of the previous tabstop. So we should be able to do
-# `!p snip.rv = len(t{1}) * =`
-# if we were trying to make a line of literal '=' signs underneath the first tabstop.
-# The current function I'm calling right now only makes 3 so we're not there yet.
-# Sorry but I'm copping out for the time being.
 
-# TODO: Need to add label for the mod name so it doesn't conflict with autodoc.
+# Docstrings: {{{2
+
 snippet moddoc "Module Docstring" mbs
-"""
+"""${1:${VISUAL:One sentence module summary.}}
 
 .. :mod:\``!p snip.rv = snip.basename`\`
-
-	.. currentmodule:: `!p snip.rv = snip.basename`
-		:synopsis: ${1: One sentence description.}
+    :synopsis: $1
 
 :File: `!p snip.rv = snip.fn`
 :Author: `!v g:snips_author`
 
-${3:Attributes:}
-snip.rv = len(t[3]
-	${4:\`\`mod_variables\`\`} (${5:type}): ${6:Explanation and give an inline docstring.}
+${3:Parameters}
+`!p snip.rv = len(t[1])*'-'`
+${4:mod_variables} : ${5:type}
+    ${6:Explanation and give an inline docstring.}
 
-${7:Example:}
-snip.rv = len(t[3]
-	${8:Any example of how to use this module goes here}:: ${9:python3}
+${7:Example}
+`!p snip.rv = len(t[1])*'-'`
+${8:code-block}:: ${9:python3}
 
-		${10:$ python exampleofrst.py}
-
-.. ${11:any directives::}
-
-	${11:example text}
+    ${10:TODO}
 
 
 """
 endsnippet
 
 snippet header "The beginning of moddoc" bms
-"""
+"""${1:${VISUAL:One sentence module summary.}}
 
-:mod:\``!p snip.rv = snip.fn`\`
-	:synopsis: ${1: One sentence description.}
-`!p triple_quotes_handle_trailing(snip, '"')`
+.. :mod:\``!p snip.rv = snip.basename`\`
+	:synopsis: $1
+
 
 :File: `!p snip.rv = snip.fn`
 :Author: `!v g:snips_author`
-:Github: \``!v g:snips_github`\`_
+
+"""
 endsnippet
 
-snippet attr "Expand only the attributes section of the module docstring snippet." bms
-Attributes:
-
-	${1:module_level_variables} (${2:type}): ${3:Explanation and give an inline docstring
-	immediately afterwards if possible}
+snippet Attr "Expand only the attributes section of the module docstring snippet." bms
+${1:${VISUAL:Attributes}}
+`!p snip.rv = len(t[1])*'-'`
+${2:mod_variables} : ${3:type}
+    ${4:Explanation and give an inline docstring.}
 endsnippet
 
-snippet modex "Expand only the examples section of the module docstring snippet." bms
-Example:
+snippet Example "Expand only the examples section of the module docstring snippet." bms
+${1:${VISUAL:Examples}}
+`!p snip.rv = len(t[1])*'-'`
 
-	${1:Any example of how to use this module goes here}:: ${2:sh}
+${2:code-block}:: ${3:python3}
 
-		${3:$ python exampleofrst.py}
+    ${4:TODO}
 endsnippet
+
+snippet Param "Parameters section for docstrings." msb
+${1:${VISUAL:Parameters}}
+`!p snip.rv = len(t[1])*'-'`
+${2:todo} : ${3:type}
+	${4:description}
+endsnippet
+
+snippet Returns "Return section for docstrings." msb
+${1:${VISUAL:Returns}}
+`!p snip.rv = len(t[1])*'-'`
+${2:todo} : ${3:type}
+	${4:description}
+endsnippet
+
+snippet Yields "Return section for docstrings." msb
+${1:${VISUAL:Yields}}
+`!p snip.rv = len(t[1])*'-'`
+${2:todo} : ${3:type}
+	${4:description}
+endsnippet
+
 
 # and if we didn't like that module docstring how about this one?
 snippet pmdoc "pocoo style module doc string" mb
@@ -186,25 +200,6 @@ endsnippet
 snippet sysa "Copy sys.argv into a variable." w
 args = sys.argv[:]
 endsnippet
-
-################ {{{1
-#  Docstrings  #
-################
-
-snippet par "Parameters section for docstrings." ms
-${1:${VISUAL:Parameters}}
-`!p snip.rv = len(t[1])*'-'`
-${2:todo} : ${3:type}
-	${4:description}
-endsnippet
-
-snippet ret "Return section for docstrings." ms
-${1:${VISUAL:Returns}}
-`!p snip.rv = len(t[1])*'-'`
-${2:todo} : ${3:type}
-	${4:description}
-endsnippet
-
 
 # Commonly used modules:{{{1
 

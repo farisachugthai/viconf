@@ -20,9 +20,9 @@ env:
     neovim: true
 
 policies:
-    ProhibitImplicitScopeVariable:
-        enabled: false
-    ProhibitAbbreviationOption:
-        enabled: false
+    # ProhibitImplicitScopeVariable:
+    #     enabled: false
+    # ProhibitAbbreviationOption:
+    #     enabled: false
     ProhibitSetNoCompatible:
         enabled: false
