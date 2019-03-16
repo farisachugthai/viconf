@@ -23,6 +23,19 @@ if expand('OS') !=# 'Windows_NT'
     endif
 endif
 
+" XDG Check: {{{1
+" The whole file is now predicated on these existing. Need to add checks in.
+
+if exists('$XDG_DATA_HOME') == 0
+    echoerr 'XDG_DATA_HOME not set. Exiting'
+    finish
+endif
+
+if exists('$XDG_CONFIG_HOME') == 0
+    echoerr 'XDG_CONFIG_HOME not set. Exiting.'
+    finish
+endif
+
 " General Plugins: {{{2
 call plug#begin(expand($XDG_DATA_HOME) . '/nvim/plugged')
 
@@ -47,6 +60,7 @@ Plug 'gu-fan/riv.vim', { 'for': ['python', 'python3', 'rst'] }
 Plug 'greyblake/vim-preview'
 Plug 'lifepillar/vim-cheat40'
 Plug 'neoclide/coc.nvim', {'tag': '*', 'do': 'yarn install'}
+Plug 'autozimu/LanguageClient-neovim'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 
@@ -72,7 +86,8 @@ if exists('$VIRTUAL_ENV')
 " or a conda env.
 elseif exists('$CONDA_PYTHON_EXE')
     let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
-    let &path = &path . ',' . expand('$CONDA_PYTHON_EXE')
+    " Let's hope I don't break things for Windows
+    let &path = &path . ',' . expand('$CONDA_PREFIX/lib/python3.*')
 
 else
 " If not then just use the system python

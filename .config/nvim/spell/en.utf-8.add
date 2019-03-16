@@ -252,11 +252,13 @@ QuickStart
 Quickstart
 Quora
 Qutebrowser
+RDoc
 README
 REPL
 RET
 RFID
 RHEL
+ReStructured
 ReStructuredText
 ReadTheDocs
 Reitz
@@ -294,6 +296,7 @@ SirVer
 SnipMate
 SoHo
 SocketServer
+Solarized
 Sophos
 SpaceMacs
 Spc
@@ -414,6 +417,7 @@ apache
 apacheconf
 api
 applescript
+apt
 arduino
 argparse
 args
@@ -425,6 +429,8 @@ attr
 atwood
 augroup
 autocmd
+autocommand
+autocommand
 autocommands
 autocomplete
 autocompletion
@@ -628,6 +634,7 @@ gdrive
 geany
 gedit
 gem
+gem
 getenv
 getenvb
 getfilesystemencoding
@@ -735,6 +742,7 @@ keepassxc
 keybindings
 keycodes
 keymap
+keystore
 keysym
 keysyms
 keywordcase
@@ -750,6 +758,7 @@ kubeconfig
 kubectl
 kwallet
 kwarg
+kwin
 kwrite
 libreoffice
 libvirtd
@@ -990,6 +999,7 @@ ruby
 rufus
 runtimepath
 rustup
+rvm
 rw
 samsung
 sas
@@ -1260,10 +1270,3 @@ zim
 zlib
 zsh
 µTorrent
-kwin
-autocommand
-keystore
-apt
-gem
-rvm
-RDoc

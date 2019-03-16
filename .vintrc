@@ -3,8 +3,7 @@
     # Vim: set ft=yaml:
     # Author: Faris Chugthai
     # Description: Linter for vimscript. Written in python
-    # URL: https://github.com/Kuniwak/vint
-    # Last Modified: January 02, 2019
+    # Last Modified: Mar 15, 2019
 # ============================================================================
 
 # Vint follows yaml formatting so no more " comments
