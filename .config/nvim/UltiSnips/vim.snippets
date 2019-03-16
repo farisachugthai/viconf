@@ -26,11 +26,11 @@ let $1 = ${4:1}
 endsnippet
 
 snippet plugin "Plugin reload guard. Newly minted so be observant of bugs." s
-if !has_key(plugs, ${1:${VISUAL}`!p snip.rv = snip.basename.replace('.', '_')`})
+if !has_key(plugs, '${1:${VISUAL}`!p snip.rv = snip.basename.replace('.', '_')`}')
 	finish
 endif
 
-if exists('g:loaded_`!p snip.rv = snip.basename.replace('.', '_')`') || &cp || v:version < 700
+if exists('g:loaded_`!p snip.rv = snip.basename.replace('.', '_')`') || &compatible || v:version < 700
 	finish
 endif
 let g:loaded_`!p snip.rv = snip.basename.replace('.', '_')` = 1
@@ -38,10 +38,10 @@ let g:loaded_`!p snip.rv = snip.basename.replace('.', '_')` = 1
 endsnippet
 
 snippet cpo "compatability options"
-let s:cpo_save = &cpo
-set cpo&vim
+let s:cpo_save = &cpoptions
+set cpoptions&vim
 
-let &cpo = s:cpo_save
+let &cpoptions = s:cpo_save
 unlet s:cpo_save
 endsnippet
 
@@ -56,7 +56,7 @@ snippet header "standard Vim script file header"
 " ============================================================================
 	" File: ${1:`!v expand('%:t')`}
 	" Author: ${2:`!v g:snips_author`}
-	" Description: ${3:A description of the file below}
+	" Description: ${3:${VISUAL:A description of the file below}}
 	${0:" Last Modified: `!v strftime("%B %d, %Y")`}
 " ============================================================================
 endsnippet
@@ -236,8 +236,10 @@ snippet set "set a var=value"
 set ${1:setting}=${0:value}
 endsnippet
 
-snippet setl "setlocal var=value"
-setlocal ${1:setting}=${0:value}
+# Mar 07, 2019: Shortened to sl because setl is barely shorter than actually typing setlocal
+# Also the equal needed to be moved over so I could tab over it.
+snippet sl "setlocal var=value" w
+setlocal ${1:setting}${2:=value}$0
 endsnippet
 
 #############

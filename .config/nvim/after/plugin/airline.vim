@@ -2,13 +2,19 @@
     " File: airline.vim
     " Author: Faris Chugthai
     " Description:
-    " Last Modified: January 13, 2019
+    " Last Modified: Mar 09, 2019
 " ============================================================================
 
+" Guards: {{{1
 if exists('did_airline_vim') || &cp || v:version < 700
     finish
 endif
 let did_airline_vim = 1
+
+
+if !has_key(plugs, 'airline')
+    finish
+endif
 
 " Mappings: {{{1
 let g:airline#extensions#tabline#buffer_idx_mode = 1
@@ -56,6 +62,7 @@ let g:airline_symbols.notexists = 'Ɇ'
 let g:airline_symbols.whitespace = 'Ξ'
 
 " Extensions: {{{1
+
 " TODO: Need to add one for the venv nvim
 let g:airline#extensions#syntastic#enabled = 0
 let g:airline#extensions#csv#enabled = 0

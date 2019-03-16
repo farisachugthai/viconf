@@ -1,3 +1,15 @@
+" ============================================================================
+    " File: autocorrect.vim
+    " Author: Faris Chugthai
+    " Description: Autocorrect
+    " Last Modified: March 14, 2019
+" ============================================================================
+
+if exists('g:loaded_autocorrect') || &cp || v:version < 700
+    finish
+endif
+let g:loaded_autocorrect = 1
+
 iab abbout about
 iab Abbout About
 iab Abotu About

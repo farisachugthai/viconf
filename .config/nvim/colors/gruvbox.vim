@@ -9,12 +9,20 @@
 " The line i changed was on 579. I would put this in an after file but there are
 " so many functions that its gonna be hard
 
+" Guards: {{{
+if exists('did_gruvbox') || &cp || v:version < 700
+    finish
+endif
+let did_gruvbox= 1
+
+" }}}
+
 " Supporting code -------------------------------------------------------------
 " Initialisation: {{{
 
-if version > 580
+if v:version > 580
   hi clear
-  if exists("syntax_on")
+  if exists('syntax_on')
     syntax reset
   endif
 endif
@@ -32,7 +40,7 @@ if !exists('g:gruvbox_bold')
   let g:gruvbox_bold=1
 endif
 if !exists('g:gruvbox_italic')
-  if has('gui_running') || $TERM_ITALICS == 'true'
+  if has('gui_running') || $TERM_ITALICS ==? 'true'
     let g:gruvbox_italic=1
   else
     let g:gruvbox_italic=0
@@ -80,7 +88,7 @@ if !exists('g:gruvbox_contrast_light')
   let g:gruvbox_contrast_light='medium'
 endif
 
-let s:is_dark=(&background == 'dark')
+let s:is_dark=(&background ==? 'dark')
 
 " }}}
 " Palette: {{{
@@ -90,7 +98,7 @@ let s:gb = {}
 
 " fill it with absolute colors
 let s:gb.dark0_hard  = ['#1d2021', 234]     " 29-32-33
-let s:gb.dark0       = ['#282828', 235]     " 40-40-40
+let s:gb.dark0       = ['#1d2021', 234]     " 40-40-40
 let s:gb.dark0_soft  = ['#32302f', 236]     " 50-48-47
 let s:gb.dark1       = ['#3c3836', 237]     " 60-56-54
 let s:gb.dark2       = ['#504945', 239]     " 80-73-69
@@ -399,12 +407,12 @@ function! s:HL(group, fg, ...)
 
   " special fallback
   if a:0 >= 3
-    if g:gruvbox_guisp_fallback != 'NONE'
+    if g:gruvbox_guisp_fallback !=? 'NONE'
       let fg = a:3
     endif
 
     " bg fallback mode should invert higlighting
-    if g:gruvbox_guisp_fallback == 'bg'
+    if g:gruvbox_guisp_fallback ==? 'bg'
       let emstr .= 'inverse,'
     endif
   endif
@@ -478,7 +486,7 @@ else
   set background=light
 endif
 
-if version >= 700
+if v:version >= 700
   " Screen line that the cursor is
   call s:HL('CursorLine',   s:none, s:bg1)
   " Screen column that the cursor is
@@ -495,7 +503,7 @@ if version >= 700
   call s:HL('MatchParen', s:none, s:bg3, s:bold)
 endif
 
-if version >= 703
+if v:version >= 703
   " Highlighted screen columns
   call s:HL('ColorColumn',  s:none, s:color_column)
 
@@ -642,7 +650,7 @@ hi! link Typedef GruvboxYellow
 " }}}
 " Completion Menu: {{{
 
-if version >= 700
+if v:version >= 700
   " Popup menu: normal item
   call s:HL('Pmenu', s:fg1, s:bg2)
   " Popup menu: selected item

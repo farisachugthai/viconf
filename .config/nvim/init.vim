@@ -6,12 +6,12 @@ let g:snips_author = 'Faris Chugthai'
 let g:snips_github = 'https://github.com/farisachugthai'
 
 " Vim Plug: {{{1
+
 " Plug Check: {{{2
 " Shout out Justinmk! Never wanted to go through a full check for vim-plug
 " since it's there 99% of the time but this is a real smart workaround
 " https://github.com/justinmk/config/blob/291ec0ae12b0b4b35b4cf9315f1878db00b780ec/.config/nvim/init.vim#L12
 let s:plugins = filereadable(expand('~/.local/share/nvim/site/autoload/plug.vim', 1))
-let s:plugins_extra = s:plugins
 
 if expand('OS') !=# 'Windows_NT'
     if !s:plugins
@@ -23,8 +23,21 @@ if expand('OS') !=# 'Windows_NT'
     endif
 endif
 
+" XDG Check: {{{1
+" The whole file is now predicated on these existing. Need to add checks in.
+
+if exists('$XDG_DATA_HOME') == 0
+    echoerr 'XDG_DATA_HOME not set. Exiting'
+    finish
+endif
+
+if exists('$XDG_CONFIG_HOME') == 0
+    echoerr 'XDG_CONFIG_HOME not set. Exiting.'
+    finish
+endif
+
 " General Plugins: {{{2
-call plug#begin(expand($XDG_DATA_HOME).'/nvim/plugged')
+call plug#begin(expand($XDG_DATA_HOME) . '/nvim/plugged')
 
 Plug 'junegunn/vim-plug'        " plugception
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -36,9 +49,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
 Plug 'tpope/vim-unimpaired'
 Plug 'w0rp/ale'
-Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next' }
 Plug 'SirVer/ultisnips'
-Plug 'edkolev/tmuxline.vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'mhinz/vim-startify'
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
@@ -49,6 +60,7 @@ Plug 'gu-fan/riv.vim', { 'for': ['python', 'python3', 'rst'] }
 Plug 'greyblake/vim-preview'
 Plug 'lifepillar/vim-cheat40'
 Plug 'neoclide/coc.nvim', {'tag': '*', 'do': 'yarn install'}
+Plug 'autozimu/LanguageClient-neovim'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 
@@ -68,24 +80,26 @@ silent! source $VIMRUNTIME/defaults.vim
 
 " if we have a virtual env start there
 if exists('$VIRTUAL_ENV')
-    let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
-    let &path = &path . ',' . expand('$VIRTUAL_ENV') . '/bin/python'
+    let g:python3_host_prog = expand('$VIRTUAL_ENV') . '/bin/python'
+    let &path = &path . ',' . expand('$VIRTUAL_ENV') . '/lib/python3.7/site-packages'
 
 " or a conda env.
 elseif exists('$CONDA_PYTHON_EXE')
     let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
-    let &path = &path . ',' . expand('$CONDA_PYTHON_EXE')
+    " Let's hope I don't break things for Windows
+    let &path = &path . ',' . expand('$CONDA_PREFIX/lib/python3.*')
 
 else
 " If not then just use the system python
-    if executable(expand('$_ROOT').'bin/python3')
-        let g:python3_host_prog = expand('$_ROOT').'bin/python3'
+    if executable(expand('$_ROOT') . '/bin/python3')
+        let g:python3_host_prog = expand('$_ROOT') . '/bin/python3'
+        let &path = &path . ',' . expand('$_ROOT') . '/lib/python3**'
     endif
 endif
 
 " Also add a python2 remote host
-if executable(expand('$_ROOT').'bin/python2')
-    let g:python_host_prog = expand('$_ROOT').'bin/python2'
+if executable(expand('$_ROOT') . '/bin/python2')
+    let g:python_host_prog = expand('$_ROOT') . '/bin/python2'
 else
     let g:loaded_python_provider = 1
 endif
@@ -97,13 +111,13 @@ let s:termux = exists('$PREFIX') && has('unix')
 let s:ubuntu = !exists('$PREFIX') && has('unix')
 let s:windows = has('win32') || has('win64')
 
-let s:winrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/winrc.vim'
+let s:winrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/winrc.vim'
 if s:windows && filereadable(s:winrc)
     execute 'source' s:winrc
 endif
 
 " unabashedly stolen from junegunn dude is too good.
-let s:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/init.vim.local'
+let s:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/init.vim.local'
 if filereadable(s:local_vimrc)
     execute 'source' s:local_vimrc
 endif
@@ -125,19 +139,20 @@ set sessionoptions+=unix,slash
 " Not related but I wanted to strike these down because they're annoying.
 set sessionoptions-=blank,folds
 
+" Remote hosts: {{{2
 if s:termux
     " holy fuck that was a doozy to find
-    let g:node_host_prog = expand('~').'/.local/share/yarn/global/node_modules/.bin/neovim-node-host'
-    let g:ruby_host_prog = expand($_ROOT).'/bin/neovim-ruby-host'
+    let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
+    let g:ruby_host_prog = expand($_ROOT) . '/bin/neovim-ruby-host'
 
 elseif s:ubuntu
-    let g:node_host_prog = expand($XDG_DATA_HOME).'/yarn/global/node_modules/.bin/neovim-node-host'
+    let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
     " So the one above could very easily be merged. No idea how to do the
     " below unless I just leave it up to the system.
     try
-        let g:ruby_host_prog = '~/.rvm/gems/default/bin/neovim-ruby-host'
+        let g:ruby_host_prog = expand('~') . '/.rvm/gems/default/bin/neovim-ruby-host'
     catch
-        let g:ruby_host_prog = expand($_ROOT).'/local/bin/neovim-ruby-host'
+        let g:ruby_host_prog = expand('$_ROOT') . '/local/bin/neovim-ruby-host'
     endtry
 
 endif
@@ -172,8 +187,8 @@ let g:python_highlight_all = 1
 
 " Folds: {{{2
 set foldenable
-set foldlevelstart=1
-set foldlevel=1
+set foldlevelstart=0
+set foldlevel=0
 set foldnestmax=10
 set foldmethod=marker
 " Use 1 column to indicate fold level and whether a fold is open or closed.
@@ -192,10 +207,10 @@ set splitbelow splitright
 " Spell Checker: {{{2
 setlocal spelllang=en
 
-if filereadable(expand('$XDG_CONFIG_HOME').'/nvim/spell/en.utf-8.add')
-    let &spellfile=expand('$XDG_CONFIG_HOME').'/nvim/spell/en.utf-8.add'
-elseif filereadable(expand('~/projects/viconf/.vim/spell/en.utf-8.add'))
-    let &spellfile=expand('$HOME').'/projects/viconf/.vim/spell/en.utf-8.add'
+if filereadable(expand('$XDG_CONFIG_HOME') . '/nvim/spell/en.utf-8.add')
+    let &spellfile=expand('$XDG_CONFIG_HOME') . '/nvim/spell/en.utf-8.add'
+elseif filereadable(expand('~/projects/viconf/.config/nvim/spell/en.utf-8.add'))
+    let &spellfile=expand('$HOME') . '/projects/viconf/.config/nvim/spell/en.utf-8.add'
 else
     echoerr 'Spell file not found.'
 endif
@@ -211,7 +226,7 @@ if filereadable('/usr/share/dict/words')
 endif
 
 if filereadable('/usr/share/dict/american-english')
-    setlocal dictionary+=/usr/share/dict/american-english
+    set dictionary+=/usr/share/dict/american-english
 endif
 
 " Fun With Clipboards: {{{2
@@ -261,13 +276,22 @@ set wildignorecase
 " OR THE ** WILL EXPAND {rendering it as nothing}
 set path+=**                            " Recursively search dirs with :find
 
-if isdirectory('/usr/include/libcs50')
-    let &path = &path . ',/usr/include/libcs50'
+if isdirectory(expand('$_ROOT/local/include/'))
+    let &path = &path . ',' . expand('$_ROOT/local/include')
 endif
 
-if isdirectory(expand('$_ROOT/lib/python3'))
+if isdirectory(expand('$_ROOT') . '/include/libcs50')
+    let &path = &path .','. expand('$_ROOT') . '/include/libcs50'
+endif
+
+if isdirectory(expand('$_ROOT') . '/lib/python3')
     " Double check globbing in vim
-    let &path = &path . ',' . expand('$_ROOT/lib/python3')
+    let &path = &path . ',' . expand('$_ROOT') . '/lib/python3'
+endif
+
+if isdirectory(expand('~/.local/lib/python3.7'))
+    " Double check globbing in vim
+    let &path = &path . ',' . expand('~/.local/lib/python3.7/site-packages')
 endif
 
 " TODO: How do we glob in vimscript? There's some weird thing about using * and ** right?
@@ -279,19 +303,20 @@ endif
 
 set tags+=./tags,./../tags,./*/tags     " usr_29
 set tags+=~/projects/tags               " consider generating a few large tag
-set tags+=~python/tags                  " files rather than recursive searches
+set tags+=~/python/tags                 " files rather than recursive searches
 set mouse=a                             " Automatically enable mouse usage
 if &textwidth!=0
-    setl colorcolumn=+1                  " I don't know why this didn't set
+    setl colorcolumn=+1                 " I don't know why this didn't set
 endif
 set cmdheight=2
-set relativenumber
+set number relativenumber
 set ignorecase smartcase
 set infercase
 set autoindent                          " Smart indent fucks up indenting comments
 " FOOBAR=~/<CTRL-><CTRL-F> will now autocomplete!
 set isfname-==
 
+" TODO: nvim will never eval this to 1. Need to update for nvim-qt.
 if has('gui_running')
     set guifont=Fira\ Code\ weight=450\ 10
 endif
@@ -305,18 +330,22 @@ set nojoinspaces
 set diffopt=filler,context:3          " vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
 
 if has('persistent_undo')
-    set undodir=~/.config/nvim/undodir
+    let &undodir = expand('$XDG_CONFIG_HOME') . '/nvim/undodir'
     set undofile
 endif
 
 set backup
-set backupdir=~/.config/nvim/undodir,/tmp
+let &backupdir=expand('$XDG_CONFIG_HOME') . '/nvim/undodir'
 set backupext='.bak'        " like wth is that ~ nonsense?
 
 " Directory won't need to be set because it defaults to
 " xdg_data_home/nvim/swap
 set modeline
 set browsedir="buffer"                  " which directory is used for the file browser
+
+let &showbreak = '↳ '                   " Indent wrapped lines correctly
+set breakindent
+set breakindentopt=sbr
 
 " Mappings: {{{1
 
@@ -448,28 +477,6 @@ nnoremap <silent> <Leader>gst  <Cmd>Git diff --stat<CR>
 nnoremap <silent> <Leader>gw   <Cmd>Gwrite<CR>
 nnoremap <silent> <Leader>gW   <Cmd>Gwrite!<CR>
 
-" Language Server: {{{2
-" This is a good way to give LangClient the necessary bindings it needs;
-" while, first ensuring that the plugin loaded and that it only applies for
-" relevant filetypes.
-function! LC_maps()
-    if has_key(g:LanguageClient_serverCommands, &filetype)
-        nnoremap <buffer> <Leader>lh :call LanguageClient#textDocument_hover()<CR>
-        inoremap <buffer> <Leader><F2> <Esc>:call LanguageClient#textDocument_rename()<CR>
-        nnoremap <buffer> <Leader>ld :call LanguageClient#textDocument_definition()<CR>
-        nnoremap <buffer> <Leader>lr :call LanguageClient#textDocument_rename()<CR>
-        nnoremap <buffer> <Leader>lf :call LanguageClient#textDocument_formatting()<CR>
-        nnoremap <buffer> <Leader>lt :call LanguageClient#textDocument_typeDefinition()<CR>
-        nnoremap <buffer> <Leader>lx :call LanguageClient#textDocument_references()<CR>
-        nnoremap <buffer> <Leader>la :call LanguageClient_workspace_applyEdit()<CR>
-        nnoremap <buffer> <Leader>lc :call LanguageClient#textDocument_completion()<CR>
-        nnoremap <buffer> <Leader>ls :call LanguageClient_textDocument_documentSymbol()<CR>
-        nnoremap <buffer> <Leader>lm :call LanguageClient_contextMenu()<CR>
-        set completefunc=LanguageClient#complete
-        set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
-    endif
-endfunction
-
 " Tagbar: {{{2
 " This works perfectly and should be how you handle all plugins and their
 " mappings !!!!!
@@ -518,23 +525,6 @@ else
     let entry_format .= '. entry_path'
 endif
 
-" Language Client: {{{2
-let g:LanguageClient_serverCommands = {
-            \ 'python': [ 'pyls' ],
-            \ 'c': ['clangd'],
-            \ 'cpp': ['clangd'],
-            \ 'js': ['tsserver'],
-            \ 'ts': ['tsserver'],
-            \ 'css': ['css-languageserver'],
-            \ 'html': ['html-languageserver'],
-            \ 'tsx': ['tsserver']
-            \ }
-
-let g:LanguageClient_autoStart = 1
-let g:LanguageClient_selectionUI = 'fzf'
-let g:LanguageClient_settingsPath = expand('~/.config/nvim/settings.json')
-let g:LanguageClient_loggingFile = expand('~/.local/share/nvim/LC.log')
-
 " Jedi: {{{2
 let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces
 let g:jedi#usages_command = '<Leader>u'
@@ -570,28 +560,7 @@ let g:zim_dev = 1
 " Here's an exciting little note about Zim. Ignoring how ...odd this plugin is
 " Voom actually gets pretty close to handling Zimwiki if you recognize it as
 " as dokuwiki!
-" Riv: {{{2
 
-" Highlight py docstrings with rst highlighting
-let g:riv_python_rst_hl = 1
-let g:riv_file_link_style = 2  " Add support for :doc:`something` directive.
-let g:riv_ignored_maps = '<Tab>'
-let g:riv_ignored_nmaps = '<Tab>'
-let g:riv_i_tab_pum_next = 0
-
-let g:riv_global_leader='<Space>'
-
-" From he riv-instructions. **THIS IS THE ONE!!** UltiSnips finally works again
-let g:riv_i_tab_user_cmd = "\<c-g>u\<c-r>=UltiSnips#ExpandSnippet()\<cr>"
-let g:riv_fuzzy_help = 1
-
-" Mkdx: {{{2
-" Similar to Riv, this is for working with Markdown documents
-let g:mkdx#settings     = { 'highlight': { 'enable': 1 },
-                        \ 'enter': { 'shift': 1 },
-                        \ 'links': { 'external': { 'enable': 1 } },
-                        \ 'toc': { 'text': 'Table of Contents', 'update_on_write': 1 },
-                        \ 'fold': { 'enable': 1 } }
 " Voom: {{{2
 
 "g:voom_ft_modes" is a Vim dictionary: keys are filetypes (|ft|), values are
@@ -628,7 +597,7 @@ inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
 
 " Runtime: {{{1
 
-" Macros: {{{2
+" Matching Parenthesis: {{{2
 
 runtime! macros/matchit.vim
 
@@ -637,16 +606,23 @@ set matchpairs+=<:>
 " Show the matching pair for 2 seconds
 set matchtime=20
 
+" From pi_paren.txt
+" Matching parenthesises are highlighted A timeout of 300 msec (60 msec in Insert mode). This can be changed with the
+let g:matchparen_timeout = 500
+" and
+let g:matchparen_insert_timeout = 300
+" variables and their buffer-local equivalents b:matchparen_timeout and b:matchparen_insert_timeout.
+
+" Builtin Plugins: {{{2
 " To every plugin I've never used before. Stop slowing me down.
 let g:loaded_vimballPlugin     = 1
-let g:loaded_tutor_mode_plugin = 1
 let g:loaded_getsciptPlugin    = 1
 let g:loaded_2html_plugin      = 1
 let g:loaded_logiPat           = 1
 
 " Filetype Specific Options: {{{2
 
-if &ft ==# 'c'
+if &filetype ==# 'c'
     set makeprg=make\ %<.o
 endif
 
@@ -705,11 +681,13 @@ function! s:todo() abort
         copen
     endif
 endfunction
+
 command! Todo call s:todo()
 
 " Scriptnames: {{{2
 " command to filter :scriptnames output by a regex
 command! -nargs=1 Scriptnames call <sid>scriptnames(<f-args>)
+
 function! s:scriptnames(re) abort
     redir => scriptnames
     silent scriptnames
@@ -720,14 +698,17 @@ function! s:scriptnames(re) abort
 endfunction
 
 " Helptabs: {{{2
+
 function! s:helptab()
     if &buftype ==# 'help'
+        setlocal number relativenumber
         wincmd T
         nnoremap <buffer> q :q<cr>
     " need to make an else for if ft isn't help then open a help page with the
     " first argument
     endif
 endfunction
+
 command! -nargs=1 Help call <SID>helptab()
 
 " AutoSave: {{{2
@@ -777,7 +758,7 @@ endfunction
 
 command! PlugHelp call fzf#run(fzf#wrap({
   \ 'source': sort(keys(g:plugs)),
-  \ 'sink':   function('s:plug_help_sink')}))
+  \ 'sink'  :   function('s:plug_help_sink')}))
 
 " Statusline: {{{2
 "
@@ -790,43 +771,49 @@ function! s:statusline_expr()
   let sep = ' %= '
   let pos = ' %-12(%l : %c%V%) '
   let pct = ' %P'
+  let dicons = ' %{WebDevIconsGetFileTypeSymbol()} '
 
-  return '[%n] %F %<'.mod.ro.ft.fug.sep.pos.'%*'.pct
+
+  return '[%n] %F '.dicons.mod.ro.ft.fug.sep.pos.'%*'.pct
 endfunction
+
 let &statusline = s:statusline_expr()
 
 " Rename: {{{2
 " :he map line 1454. How have i never noticed this isn't a feature???
 command! -nargs=1 -bang -complete=file Rename f <args>|w<bang>
 
-" LanguageClient Check:{{{2
-" Check if the LanguageClient is running.
-function! s:lc_check()
-  let s:lc_Check = LanguageClient#serverStatus()
-  echo s:lc_Check
-endfunction
-command! LCS call <SID>lc_check()
-
 " Colorscheme: {{{1
+
+" Gruvbox: {{{2
 " I feel like I should put this in a command or something so I can easily
 " toggle it.
 function! s:gruvbox()
-    set bg=dark
+    set background=dark
     let g:gruvbox_contrast_dark = 'hard'
     " let g:gruvbox_improved_strings=1 shockingly terrible
     let g:gruvbox_improved_warnings=1
-    syntax on
 endfunction
 
 " From here I can keep making expressions to the effect of elseif colors==onedark
 " then set it up like and so forth
 colorscheme gruvbox
 
+" Lower max syntax highlighting
+set synmaxcol=400
+
+syntax sync minlines=500
+syntax sync fromstart
+syntax on
+
+
 if g:colors_name ==# 'gruvbox'
     call <SID>gruvbox()
 endif
 
 command! -nargs=0 Gruvbox call s:gruvbox()
+
+" Clear hlsearch: {{{2
 
 " TODO: Also this exits and clears the highlighting
 " pattern as soon as you hit enter. So if you type a word, it'll highlight all
