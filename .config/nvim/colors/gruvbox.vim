@@ -22,7 +22,7 @@ let did_gruvbox= 1
 
 if v:version > 580
   hi clear
-  if exists("syntax_on")
+  if exists('syntax_on')
     syntax reset
   endif
 endif
@@ -407,12 +407,12 @@ function! s:HL(group, fg, ...)
 
   " special fallback
   if a:0 >= 3
-    if g:gruvbox_guisp_fallback != 'NONE'
+    if g:gruvbox_guisp_fallback !=? 'NONE'
       let fg = a:3
     endif
 
     " bg fallback mode should invert higlighting
-    if g:gruvbox_guisp_fallback == 'bg'
+    if g:gruvbox_guisp_fallback ==? 'bg'
       let emstr .= 'inverse,'
     endif
   endif
@@ -486,7 +486,7 @@ else
   set background=light
 endif
 
-if version >= 700
+if v:version >= 700
   " Screen line that the cursor is
   call s:HL('CursorLine',   s:none, s:bg1)
   " Screen column that the cursor is
@@ -503,7 +503,7 @@ if version >= 700
   call s:HL('MatchParen', s:none, s:bg3, s:bold)
 endif
 
-if version >= 703
+if v:version >= 703
   " Highlighted screen columns
   call s:HL('ColorColumn',  s:none, s:color_column)
 
@@ -650,7 +650,7 @@ hi! link Typedef GruvboxYellow
 " }}}
 " Completion Menu: {{{
 
-if version >= 700
+if v:version >= 700
   " Popup menu: normal item
   call s:HL('Pmenu', s:fg1, s:bg2)
   " Popup menu: selected item

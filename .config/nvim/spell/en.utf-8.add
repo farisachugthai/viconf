@@ -528,7 +528,7 @@ debian
 delphi
 deoplete
 dev
-devnul
+devnull
 diff
 difflib
 diffoff
@@ -1241,8 +1241,6 @@ xkb
 xkeycaps
 xkeymaps
 xml
-xml
-xmodmap
 xmodmap
 xonsh
 xquery
@@ -1264,3 +1262,8 @@ zsh
 µTorrent
 kwin
 autocommand
+keystore
+apt
+gem
+rvm
+RDoc

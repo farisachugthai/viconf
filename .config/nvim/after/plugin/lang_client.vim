@@ -5,8 +5,7 @@
     " Last Modified: March 15, 2019
 " ============================================================================
 
-" TODO: Double check this is what the plugins called.
-if !has_key(plugs, 'LanguageClient.vim')
+if !has_key(plugs, 'LanguageClient-neovim')
     finish
 endif
 

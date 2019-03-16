@@ -7,13 +7,13 @@
 
 " Unimpaired:
 " Note that ]c and [c are mapped by git-gutter and ALE has ]a and [a
-if exists('g:loaded_unimpaired') || &cp || v:version < 700
+if exists('g:loaded_unimpaired') || &compatible || v:version < 700
     finish
 endif
 let g:loaded_unimpaired = 1
 
-let s:cpo_save = &cpo
-set cpo&vim
+let s:cpo_save = &cpoptions
+set cpoptions&vim
 
 nnoremap ]q :cnext<CR>
 nnoremap [q :cprev<CR>
@@ -29,8 +29,8 @@ nnoremap ]B :blast<CR>
 nnoremap [B :bfirst<CR>
 nnoremap ]t :tabn<CR>
 nnoremap [t :tabp<CR>
-nnoremap ]T :tlast<CR>
-nnoremap [T :tfirst<CR>
+nnoremap ]T :tablast<CR>
+nnoremap [T :tabfirst<CR>
 
-let &cpo = s:cpo_save
+let &cpoptions = s:cpo_save
 unlet s:cpo_save

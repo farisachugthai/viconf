@@ -288,13 +288,13 @@ endif
 
 set tags+=./tags,./../tags,./*/tags     " usr_29
 set tags+=~/projects/tags               " consider generating a few large tag
-set tags+=~python/tags                  " files rather than recursive searches
+set tags+=~/python/tags                 " files rather than recursive searches
 set mouse=a                             " Automatically enable mouse usage
 if &textwidth!=0
-    setl colorcolumn=+1                  " I don't know why this didn't set
+    setl colorcolumn=+1                 " I don't know why this didn't set
 endif
 set cmdheight=2
-set relativenumber
+set number relativenumber
 set ignorecase smartcase
 set infercase
 set autoindent                          " Smart indent fucks up indenting comments
@@ -327,6 +327,10 @@ set backupext='.bak'        " like wth is that ~ nonsense?
 " xdg_data_home/nvim/swap
 set modeline
 set browsedir="buffer"                  " which directory is used for the file browser
+
+let &showbreak = '↳ '                   " Indent wrapped lines correctly
+set breakindent
+set breakindentopt=sbr
 
 " Mappings: {{{1
 
@@ -594,10 +598,7 @@ let g:matchparen_timeout = 500
 let g:matchparen_insert_timeout = 300
 " variables and their buffer-local equivalents b:matchparen_timeout and b:matchparen_insert_timeout.
 
-" Lower max syntax highlighting
-set synmaxcol=400
-
-
+" Builtin Plugins: {{{2
 " To every plugin I've never used before. Stop slowing me down.
 let g:loaded_vimballPlugin     = 1
 let g:loaded_getsciptPlugin    = 1
@@ -606,7 +607,7 @@ let g:loaded_logiPat           = 1
 
 " Filetype Specific Options: {{{2
 
-if &ft ==# 'c'
+if &filetype ==# 'c'
     set makeprg=make\ %<.o
 endif
 
@@ -665,11 +666,13 @@ function! s:todo() abort
         copen
     endif
 endfunction
+
 command! Todo call s:todo()
 
 " Scriptnames: {{{2
 " command to filter :scriptnames output by a regex
 command! -nargs=1 Scriptnames call <sid>scriptnames(<f-args>)
+
 function! s:scriptnames(re) abort
     redir => scriptnames
     silent scriptnames
@@ -680,14 +683,17 @@ function! s:scriptnames(re) abort
 endfunction
 
 " Helptabs: {{{2
+
 function! s:helptab()
     if &buftype ==# 'help'
+        setlocal number relativenumber
         wincmd T
         nnoremap <buffer> q :q<cr>
     " need to make an else for if ft isn't help then open a help page with the
     " first argument
     endif
 endfunction
+
 command! -nargs=1 Help call <SID>helptab()
 
 " AutoSave: {{{2
@@ -737,7 +743,7 @@ endfunction
 
 command! PlugHelp call fzf#run(fzf#wrap({
   \ 'source': sort(keys(g:plugs)),
-  \ 'sink':   function('s:plug_help_sink')}))
+  \ 'sink'  :   function('s:plug_help_sink')}))
 
 " Statusline: {{{2
 "
@@ -753,8 +759,9 @@ function! s:statusline_expr()
   let dicons = ' %{WebDevIconsGetFileTypeSymbol()} '
 
 
-  return '[%n] %F %<'.mod.ro.ft.fug.sep.pos.'%*'.pct .dicons
+  return '[%n] %F '.dicons.mod.ro.ft.fug.sep.pos.'%*'.pct
 endfunction
+
 let &statusline = s:statusline_expr()
 
 " Rename: {{{2
@@ -771,12 +778,19 @@ function! s:gruvbox()
     let g:gruvbox_contrast_dark = 'hard'
     " let g:gruvbox_improved_strings=1 shockingly terrible
     let g:gruvbox_improved_warnings=1
-    syntax on
 endfunction
 
 " From here I can keep making expressions to the effect of elseif colors==onedark
 " then set it up like and so forth
 colorscheme gruvbox
+
+" Lower max syntax highlighting
+set synmaxcol=400
+
+syntax sync minlines=500
+syntax sync fromstart
+syntax on
+
 
 if g:colors_name ==# 'gruvbox'
     call <SID>gruvbox()
@@ -785,6 +799,7 @@ endif
 command! -nargs=0 Gruvbox call s:gruvbox()
 
 " Clear hlsearch: {{{2
+
 " TODO: Also this exits and clears the highlighting
 " pattern as soon as you hit enter. So if you type a word, it'll highlight all
 " matches. But once you hit enter to find the next one it clears. Hmmm.

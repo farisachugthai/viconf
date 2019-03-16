@@ -1,11 +1,12 @@
 " ============================================================================
     " File: make.vim
     " Author: Faris Chugthai
-    " Description: Mods to ensure makefiles work
-    " Last Modified: March 04, 2019
+    " Description: Set correct filetype settings for makefiles.
+    " Last Modified: Mar 09, 2019
 " ============================================================================
 
+" Otherwise your make commands won't work.
 setlocal noexpandtab
-setl tabstop=8
-setl softtabstop=8
-setl shiftwidth=8
+setlocal tabstop=8
+setlocal softtabstop=8
+setlocal shiftwidth=8
