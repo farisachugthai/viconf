@@ -12,7 +12,6 @@ let g:snips_github = 'https://github.com/farisachugthai'
 " since it's there 99% of the time but this is a real smart workaround
 " https://github.com/justinmk/config/blob/291ec0ae12b0b4b35b4cf9315f1878db00b780ec/.config/nvim/init.vim#L12
 let s:plugins = filereadable(expand('~/.local/share/nvim/site/autoload/plug.vim', 1))
-let s:plugins_extra = s:plugins
 
 if expand('OS') !=# 'Windows_NT'
     if !s:plugins
@@ -48,6 +47,7 @@ Plug 'gu-fan/riv.vim', { 'for': ['python', 'python3', 'rst'] }
 Plug 'greyblake/vim-preview'
 Plug 'lifepillar/vim-cheat40'
 Plug 'neoclide/coc.nvim', {'tag': '*', 'do': 'yarn install'}
+Plug 'autozimu/LanguageClient-neovim'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 
@@ -67,13 +67,14 @@ silent! source $VIMRUNTIME/defaults.vim
 
 " if we have a virtual env start there
 if exists('$VIRTUAL_ENV')
-    let g:python3_host_prog = $VIRTUAL_ENV . '/bin/python'
-    let &path = &path . ',' . expand('$VIRTUAL_ENV') . '/bin/python'
+    let g:python3_host_prog = expand('$VIRTUAL_ENV') . '/bin/python'
+    let &path = &path . ',' . expand('$VIRTUAL_ENV') . '/lib/python3.7/site-packages'
 
 " or a conda env.
 elseif exists('$CONDA_PYTHON_EXE')
     let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
-    let &path = &path . ',' . expand('$CONDA_PYTHON_EXE')
+    " Let's hope I don't break things for Windows
+    let &path = &path . ',' . expand('$CONDA_PREFIX/lib/python3.*')
 
 else
 " If not then just use the system python
@@ -195,8 +196,8 @@ setlocal spelllang=en
 
 if filereadable(expand('$XDG_CONFIG_HOME') . '/nvim/spell/en.utf-8.add')
     let &spellfile=expand('$XDG_CONFIG_HOME') . '/nvim/spell/en.utf-8.add'
-elseif filereadable(expand('~/projects/viconf/.vim/spell/en.utf-8.add'))
-    let &spellfile=expand('$HOME') . '/projects/viconf/.vim/spell/en.utf-8.add'
+elseif filereadable(expand('~/projects/viconf/.config/nvim/spell/en.utf-8.add'))
+    let &spellfile=expand('$HOME') . '/projects/viconf/.config/nvim/spell/en.utf-8.add'
 else
     echoerr 'Spell file not found.'
 endif
@@ -212,7 +213,7 @@ if filereadable('/usr/share/dict/words')
 endif
 
 if filereadable('/usr/share/dict/american-english')
-    setlocal dictionary+=/usr/share/dict/american-english
+    set dictionary+=/usr/share/dict/american-english
 endif
 
 " Fun With Clipboards: {{{2
@@ -267,7 +268,7 @@ if isdirectory(expand('$_ROOT/local/include/'))
 endif
 
 if isdirectory(expand('$_ROOT') . '/include/libcs50')
-    let &path = &path .','. expand('$_ROOT') . 'include/libcs50'
+    let &path = &path .','. expand('$_ROOT') . '/include/libcs50'
 endif
 
 if isdirectory(expand('$_ROOT') . '/lib/python3')
@@ -459,28 +460,6 @@ nnoremap <silent> <Leader>gst  <Cmd>Git diff --stat<CR>
 nnoremap <silent> <Leader>gw   <Cmd>Gwrite<CR>
 nnoremap <silent> <Leader>gW   <Cmd>Gwrite!<CR>
 
-" Language Server: {{{2
-" This is a good way to give LangClient the necessary bindings it needs;
-" while, first ensuring that the plugin loaded and that it only applies for
-" relevant filetypes.
-function! LC_maps()
-    if has_key(g:LanguageClient_serverCommands, &filetype)
-        nnoremap <buffer> <Leader>lh :call LanguageClient#textDocument_hover()<CR>
-        inoremap <buffer> <Leader><F2> <Esc>:call LanguageClient#textDocument_rename()<CR>
-        nnoremap <buffer> <Leader>ld :call LanguageClient#textDocument_definition()<CR>
-        nnoremap <buffer> <Leader>lr :call LanguageClient#textDocument_rename()<CR>
-        nnoremap <buffer> <Leader>lf :call LanguageClient#textDocument_formatting()<CR>
-        nnoremap <buffer> <Leader>lt :call LanguageClient#textDocument_typeDefinition()<CR>
-        nnoremap <buffer> <Leader>lx :call LanguageClient#textDocument_references()<CR>
-        nnoremap <buffer> <Leader>la :call LanguageClient_workspace_applyEdit()<CR>
-        nnoremap <buffer> <Leader>lc :call LanguageClient#textDocument_completion()<CR>
-        nnoremap <buffer> <Leader>ls :call LanguageClient_textDocument_documentSymbol()<CR>
-        nnoremap <buffer> <Leader>lm :call LanguageClient_contextMenu()<CR>
-        set completefunc=LanguageClient#complete
-        set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
-    endif
-endfunction
-
 " Tagbar: {{{2
 " This works perfectly and should be how you handle all plugins and their
 " mappings !!!!!
@@ -529,23 +508,6 @@ else
     let entry_format .= '. entry_path'
 endif
 
-" Language Client: {{{2
-let g:LanguageClient_serverCommands = {
-            \ 'python': [ 'pyls' ],
-            \ 'c': ['clangd'],
-            \ 'cpp': ['clangd'],
-            \ 'js': ['tsserver'],
-            \ 'ts': ['tsserver'],
-            \ 'css': ['css-languageserver'],
-            \ 'html': ['html-languageserver'],
-            \ 'tsx': ['tsserver']
-            \ }
-
-let g:LanguageClient_autoStart = 1
-let g:LanguageClient_selectionUI = 'fzf'
-let g:LanguageClient_settingsPath = expand('$XDG_CONFIG_HOME') . 'nvim/settings.json'
-let g:LanguageClient_loggingFile = expand('$XDG_DATA_HOME') . 'nvim/LC.log'
-
 " Jedi: {{{2
 let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces
 let g:jedi#usages_command = '<Leader>u'
@@ -581,28 +543,7 @@ let g:zim_dev = 1
 " Here's an exciting little note about Zim. Ignoring how ...odd this plugin is
 " Voom actually gets pretty close to handling Zimwiki if you recognize it as
 " as dokuwiki!
-" Riv: {{{2
 
-" Highlight py docstrings with rst highlighting
-let g:riv_python_rst_hl = 1
-let g:riv_file_link_style = 2  " Add support for :doc:`something` directive.
-let g:riv_ignored_maps = '<Tab>'
-let g:riv_ignored_nmaps = '<Tab>'
-let g:riv_i_tab_pum_next = 0
-
-let g:riv_global_leader='<Space>'
-
-" From he riv-instructions. **THIS IS THE ONE!!** UltiSnips finally works again
-let g:riv_i_tab_user_cmd = "\<c-g>u\<c-r>=UltiSnips#ExpandSnippet()\<cr>"
-let g:riv_fuzzy_help = 1
-
-" Mkdx: {{{2
-" Similar to Riv, this is for working with Markdown documents
-let g:mkdx#settings     = { 'highlight': { 'enable': 1 },
-                        \ 'enter': { 'shift': 1 },
-                        \ 'links': { 'external': { 'enable': 1 } },
-                        \ 'toc': { 'text': 'Table of Contents', 'update_on_write': 1 },
-                        \ 'fold': { 'enable': 1 } }
 " Voom: {{{2
 
 "g:voom_ft_modes" is a Vim dictionary: keys are filetypes (|ft|), values are
@@ -811,8 +752,10 @@ function! s:statusline_expr()
   let sep = ' %= '
   let pos = ' %-12(%l : %c%V%) '
   let pct = ' %P'
+  let dicons = ' %{WebDevIconsGetFileTypeSymbol()} '
 
-  return '[%n] %F %<'.mod.ro.ft.fug.sep.pos.'%*'.pct
+
+  return '[%n] %F %<'.mod.ro.ft.fug.sep.pos.'%*'.pct .dicons
 endfunction
 let &statusline = s:statusline_expr()
 
@@ -820,21 +763,13 @@ let &statusline = s:statusline_expr()
 " :he map line 1454. How have i never noticed this isn't a feature???
 command! -nargs=1 -bang -complete=file Rename f <args>|w<bang>
 
-" LanguageClient Check:{{{2
-" Check if the LanguageClient is running.
-function! s:lc_check()
-  let s:lc_Check = LanguageClient#serverStatus()
-  echo s:lc_Check
-endfunction
-command! LCS call <SID>lc_check()
-
 " Colorscheme: {{{1
 
 " Gruvbox: {{{2
 " I feel like I should put this in a command or something so I can easily
 " toggle it.
 function! s:gruvbox()
-    set bg=dark
+    set background=dark
     let g:gruvbox_contrast_dark = 'hard'
     " let g:gruvbox_improved_strings=1 shockingly terrible
     let g:gruvbox_improved_warnings=1

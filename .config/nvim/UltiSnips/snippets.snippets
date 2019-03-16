@@ -4,6 +4,14 @@ extends all
 
 # We use a little hack so that the snippet is expanded
 # and parsed correctly
+snippet header "standard Vim script file header"
+# ============================================================================
+	# File: ${1:`!v expand('%:t')`}
+	# Author: ${2:`!v g:snips_author`}
+	# Description: ${3:${VISUAL:A description of the file below}}
+	${0:# Last Modified: `!v strftime("%B %d, %Y")`}
+# ============================================================================
+endsnippet
 
 snippet usnip "Ultisnips snippet definition" w
 `!p snip.rv = "snippet"` ${1:Tab_trigger} "${2:Description}" ${3:ms}

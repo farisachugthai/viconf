@@ -141,7 +141,7 @@ snippet < "Links"
 endsnippet
 
 snippet path "Filepath link with VISUAL placeholder" s
-[${VISUAL}](${VISUAL})
+[${0:${VISUAL}}](${0:${VISUAL}})
 endsnippet
 
 snippet linktitle "Inline link with a title" bs
@@ -156,8 +156,10 @@ snippet a "a href="
 <a href="${1:http://www.${2:example.com}}"</a>
 endsnippet
 
+# TODO should make a python function that changes $1 wih str.lower() and
+# str.replace(' ', '_') and then change the last tabstop to $0
 snippet id "a id="
-<a id="#${1:${VISUAL:header}}"</a>
+<a id=${1:${VISUAL:header}}></a>$1
 endsnippet
 
 ################

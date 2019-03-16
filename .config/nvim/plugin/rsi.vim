@@ -23,7 +23,7 @@ cnoremap <C-A> <Home>
 cnoremap <C-B> <Left>
 " delete character under cursor
 cnoremap <C-D> <Del>
-" end of line
+" end of line. I think Vim's default behavior
 cnoremap <C-E> <End>
 " forward one character
 cnoremap <C-F> <Right>
