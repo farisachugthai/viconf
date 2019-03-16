@@ -23,6 +23,7 @@ syntax match manReference       '\<\zs\(\f\|:\)\+(\([nlpo]\|\d[a-z]*\)\?)\ze\(\W
 syntax match manTitle           '^\(\f\|:\)\+([0-9nlpo][a-z]*).*'
 syntax match manSectionHeading  '^[a-z][a-z0-9& ,.-]*[a-z]$'
 syntax match manHeaderFile      '\s\zs<\f\+\.h>\ze\(\W\|$\)'
+" Needs fixing. Vint says syntax error and urls don't highlight if >1 line.
 syntax match manURL             `\v<(((https?|ftp|gopher)://|(mailto|file|news):)[^' 	<>"]+|(www|web|w3)[a-z0-9_-]*\.[a-z0-9._-]+\.[^' 	<>"]+)[a-zA-Z0-9/]`
 syntax match manEmail           '<\?[a-zA-Z0-9_.+-]\+@[a-zA-Z0-9-]\+\.[a-zA-Z0-9-.]\+>\?'
 syntax match manHighlight       +`.\{-}''\?+
@@ -101,18 +102,20 @@ if b:man_sect =~# '^[023]'
   syntax match manSignal           display '\C\<\zs\(SIG\|SIG_\|SA_\)\(\d\|\u\)\+\ze\(\W\|$\)'
 
 
-  highlight! default link manCFuncDefinition Function
+  hi! link manCFuncDefinition Function
   hi! link manCError Error
   hi! link manErrors Error
-  hi! link manSynopsis String
+  hi! link manLowerSentence String
+  hi! link manSignal Type
+  hi! link manSynopsis Title
 
 endif
 
 " Nvim's highlighting pattern with longopt and CFunc from Vim.
 " Defines the default highlighting only when that item doesn't already have
 " a highlighting group.
-highlight! default link manLongOptionDesc Constant
-hi! link manSentence                      String
+hi! link manLongOptionDesc Constant
+hi! link manSentence       String
 
 " Prevent everything else from matching the last line
 execute 'syntax match manFooter display "^\%'.line('$').'l.*$"'
@@ -120,27 +123,23 @@ execute 'syntax match manFooter display "^\%'.line('$').'l.*$"'
 " not only do I want those highlighted I want extra funcs for them
 
 if g:colors_name ==# 'gruvbox'
-    hi! link manSectionHeading GruvboxOrangeBold
-
-    " Highlights a totally different section than whar I thought
-    " hi! link manFiles GruvboxBlue
-    hi! link manFiles GruvboxFg2
-
-    hi! link manSentence GruvboxFg0
     hi! link manCError GruvboxRed
-    hi! link manFile GruvboxYellow
-    hi! link manFiles GruvboxYellow
-    hi! link manURL GruvboxGreen
     hi! link manEmail GruvboxAquaSign
-    hi! link manHighlight GruvboxYellow
-    hi! link manHeaderFile GruvboxYellow
-    hi! link manEnvVarFile GruvboxPurpleSign
+    hi! link manEnvVar GruvboxBlue
+    hi! link manEnvVarFile GruvboxBlue
+    hi! link manFile GruvboxYellow
+    hi! link manFiles GruvboxFg0
     hi! link manFooter GruvboxPurple
+    hi! link manHighlight GruvboxYellow
+    hi! link manHistory GruvboxYellow
+    hi! link manHeaderFile GruvboxYellow
+    hi! link manSectionHeading GruvboxOrangeBold
+    hi! link manSentence GruvboxFg2
+    hi! link manSignal GruvboxPurpleSign
+    hi! link manURL GruvboxGreen
 endif
 
 " Mar 14, 2019
-" manHistory     xxx cleared
-" manEnvVar      xxx cleared
 " manCFuncDefinition xxx cleared
 " manSignal      xxx cleared
 
