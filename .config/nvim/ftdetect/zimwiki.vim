@@ -1,6 +1,4 @@
 " Language: ZimWiki
-" Maintainer: Joan Rivera <joan.manuel.rivera+dev@gmail.com>
-" URL: https://github.com/joanrivera/vim-zimwiki-syntax
 " License: MIT
 
 " My Vimscript is quite weak so excuse me.
@@ -15,15 +13,15 @@
 " Yes
 " Vim is not 0 indexed :(
 
-if exists('b:did_ftplugin')
-  finish
-endif
-let b:did_ftplugin = 1
+
+" ####################
+" #  " Mar 13, 2019  #
+" ####################
+" Got it. it detects text before zimwiki so we can't use the usual filetype guard. sweet!
 
 function! s:DetectZimWiki()
     if getline(1) =~# 'Content-Type: text/x-zim-wiki'
         setlocal filetype=zimwiki
-        let b:current_syntax = 1
     endif
 endfunction
 
@@ -31,5 +29,12 @@ augroup zimwikidetect
     autocmd!
     " autocmd BufRead,BufNewFile ~/Notebooks.git/*.txt call s:DetectZimWiki()
     " Honestly though if it's in that directory it IS a zimwiki note
-    autocmd BufRead, BufNewFile ~/Notebooks* set ft=zimwiki
+    autocmd BufRead,BufNewFile ~/Notebooks/** setlocal filetype=zimwiki
+
+    " Alternatively we can check all textfiles which oddly works better
+
+    " autocmd BufRead,BufNewFile *.txt  call s:DetectZimWiki()
 augroup end
+
+
+let b:did_ftplugin = 1

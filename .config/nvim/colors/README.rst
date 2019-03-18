@@ -4,12 +4,11 @@
 README.txt for color scheme files
 =================================
 
+.. _colors_quick_start:
+
 Quick Start
 ------------
-
-**02-01-19**
-
-Found this file in `$VIMRUNTIME/colors/README.txt`
+Found this file in `$VIMRUNTIME/colors/README.txt`_
 
 Formatted it to reStructured text formatting but figured it'd be nice to have.
 
@@ -29,7 +28,7 @@ There are two basic ways to define a color scheme.
 	highlight Normal ...
 	...
 
-2. Use the default Normal color and automatically adjust to the
+2. Use the default `Normal` color and automatically adjust to the
    value of `background`.
 
 .. code-block:: vim
@@ -45,18 +44,18 @@ There are two basic ways to define a color scheme.
 	  ...
 	endif
 
-You can use `:highlight clear` to reset everything to the defaults, and then
+You can use ``:highlight clear`` to reset everything to the defaults, and then
 change the groups that you want differently.  This also will work for groups
 that are added in later versions of Vim.
 
-Note that `:highlight clear` uses the value of `background`, thus set it
+Note that ``:highlight clear`` uses the value of `background`, thus set it
 before this command.
 
-Some attributes (e.g., bold) might be set in the defaults that you want
+Some attributes (e.g., `bold`) might be set in the defaults that you want
 removed in your color scheme.  Use something like `gui=NONE` to remove the
 attributes.
 
-In case you want to set 'background' depending on the colorscheme selected,
+In case you want to set `background` depending on the colorscheme selected,
 this autocmd might be useful
 
 .. code-block:: vim
@@ -66,9 +65,9 @@ this autocmd might be useful
      " Replace "blue_sky" with the name of the colorscheme.
 
 In case you want to tweak a colorscheme after it was loaded, check out the
-``ColorScheme`` autocommand event.
+`ColorScheme` autocommand event.
 
-To clean up just before loading another colorscheme, use the ColorSchemePre
+To clean up just before loading another colorscheme, use the `ColorSchemePre`
 autocommand event.  For example:
 
 .. code-block:: vim
@@ -80,7 +79,7 @@ autocommand event.  For example:
       au ColorSchemePre * au! MyColorscheme
    augroup END
 
-To customize a colorscheme use another name, e.g.  "~/.vim/colors/mine.vim",
+To customize a colorscheme use another name, e.g.  `~/.vim/colors/mine.vim`_,
 and use ``:runtime`` to load the original colorscheme
 
 .. code-block:: vim
@@ -91,14 +90,14 @@ and use ``:runtime`` to load the original colorscheme
    hi Statement ctermfg=Blue guifg=Blue
 
 To see which highlight group is used where, find the help for
-"highlight-groups" and "group-name".
+`highlight-groups` and `group-name`.
 
-You can use `:highlight` to find out the current colors.  Exception: the
-ctermfg and ctermbg values are numbers, which are only valid for the current
-terminal.  Use the color names instead.  See `:help cterm-colors`.
+You can use ``:highlight`` to find out the current colors.  Exception: the
+`ctermfg` and `ctermbg` values are numbers, which are only valid for the current
+terminal.  Use the color names instead.  See ``:help cterm-colors``.
 
-The default color settings can be found in the source file src/syntax.c.
-Search for "highlight_init".
+The default color settings can be found in the source file `src/syntax.c`_.
+Search for `highlight_init`.
 
 Checklist
 ----------
@@ -108,14 +107,15 @@ please check the following items:
 - Source the `<$VIMRUNTIME/colors/tools/check_colors.vim>`_ script to check for
   common mistakes.
 - Does it work in a color terminal as well as in the GUI?
-- Is "g:colors_name" set to a meaningful value?  In case of doubt you can do it this way.
+- Is ``g:colors_name`` set to a meaningful value?  In case of doubt you can do it this way.
 
-  .. code-block:: vim
+.. code-block:: vim
 
     let g:colors_name = expand('<sfile>:t:r')
 
+
 - Is `background` either used or appropriately set to "light" or "dark"?
 - Try setting `hlsearch` and searching for a pattern, is the match easy to spot?
-- Split a window with ":split" and ":vsplit".  Are the status lines and vertical separators clearly visible?
+- Split a window with `:split` and `:vsplit`.  Are the status lines and vertical separators clearly visible?
 - In the GUI, is it easy to find the cursor, also in a file with lots of syntax highlighting?
 - Do not use hard coded escape sequences, these will not work in other terminals.  Always use color names or #RRGGBB for the GUI.
