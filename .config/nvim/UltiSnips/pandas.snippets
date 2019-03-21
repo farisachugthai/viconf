@@ -1,31 +1,25 @@
 # Pandas.snippets
 
 priority 50
-
-extends python
-extends python3
-
-# TODO: Add descriptions for everything and review all snippets.
-
 snippet import "Import pandas and numpy." b
 import numpy as np
 import pandas as pd
 endsnippet
 
 snippet desc "Describe a dataframe." b
-${VISUAL:1}.describe(include = "all")
-${VISUAL:1}.info()
-${VISUAL:1}.memory_user(deep = True)
+${1:${VISUAL}}.describe(include = "all")
+${1:${VISUAL}}.info()
+${1:${VISUAL}}.memory_user(deep = True)
 endsnippet
 
 snippet dtypes "Determine the dtype." b
-${1:VISUAL}.dtypes
+${1:${VISUAL}}.dtypes
 endsnippet
 
 snippet csvread "Read a CSV file into a dataframe" b
 ${VISUAL:1} = pd.read_csv($2, sep=None, engine='python',
 parse_dates=['fcast_date','timestamp'], dtype={${3:'user_id'}: ${4:"category"},
-${5:'stringa'}: ${6:'object'}})
+${5:'strings'}: ${6:'object'}})
 endsnippet
 
 snippet csvwrite "Arg.to_csv"
@@ -81,132 +75,133 @@ test = dataset.drop(train.index)
 endsnippet
 
 snippet nullvaluesummary
-${VISUAL:1}.isna().sum()
+${1:${VISUAL}}.isna().sum()
 endsnippet
 
 snippet drop_if_any_null
-${VISUAL:1}.dropna(how='any')
+${1:${VISUAL}}.dropna(how='any')
 endsnippet
 
 snippet drop_if_all_null
-${VISUAL:1}.dropna(how='all')
+${1:${VISUAL}}.dropna(how='all')
 endsnippet
 
 snippet drop_if_any_null_w_subset
-${VISUAL:1}.dropna(subset = ['column', 'column2'], how='any')
+${1:${VISUAL}}.dropna(subset = ['column', 'column2'], how='any')
 endsnippet
 
 snippet drop_if_all_null_w_subset
-${VISUAL:1}.dropna(subset = ['column', 'column2'], how='all')
+${1:${VISUAL}}.dropna(subset = ['column', 'column2'], how='all')
 endsnippet
 
 snippet count_column_values
-${VISUAL:1}['columnname'].value_counts(dropna = False)
+${1:${VISUAL}}['columnname'].value_counts(dropna = False)
 endsnippet
 
 snippet fillna
-${VISUAL:1}['column_name'].fillna(value='not assigned', inplace = True)
+${1:${VISUAL}}['column_name'].fillna(value='not assigned', inplace = True)
 endsnippet
 
 snippet duplicates_count
-${VISUAL:1}.duplicated().sum()
+${1:${VISUAL}}.duplicated().sum()
 endsnippet
 
 snippet duplicates_view
-${VISUAL:1}.loc[users.duplicated(keep = 'last'), :]
+${1:${VISUAL}}.loc[users.duplicated(keep = 'last'), :]
 endsnippet
 
 snippet duplicates_drop_first
-${VISUAL:1}.drop_duplicates(keep = 'first')
+${1:${VISUAL}}.drop_duplicates(keep = 'first')
 endsnippet
 
 snippet duplicates_drop_last
-${VISUAL:1}.drop_duplicates(keep = 'last')
+${1:${VISUAL}}.drop_duplicates(keep = 'last')
 endsnippet
 
 snippet duplicates_drop_w_subset
-${VISUAL:1}.drop_duplicates(subset = ['age', 'zip_code'])
+${1:${VISUAL}}.drop_duplicates(subset = ['age', 'zip_code'])
 endsnippet
 
 snippet duplicates_count_w_subset
-${VISUAL:1}.duplicated(subset['age','zip_code']).sum()
+${1:${VISUAL}}.duplicated(subset['age','zip_code']).sum()
 endsnippet
 
 snippet duplicates_count_for_column
-${VISUAL:1}['column_name'].duplicated().sum()
+${1:${VISUAL}}['column_name'].duplicated().sum()
 endsnippet
 
 snippet filter_w_conditions
-${VISUAL:1}[(${VISUAL:1}.column1 >= 200) & (${VISUAL:1}.column2 == 'Drama')]
+${1:${VISUAL}}[(${1:${VISUAL}}.column1 >= 200) & (${1:${VISUAL}}.column2 == 'Drama')]
 endsnippet
 
 snippet mean
-${VISUAL:1}.field_name.mean()
+${1:${VISUAL}}.field_name.mean()
 endsnippet
 
 snippet median
-${VISUAL:1}.field_name.median()
+${1:${VISUAL}}.field_name.median()
 endsnippet
 
 snippet percentiles
-${VISUAL:1}.field.quantile([0.1,0.15, .9])
+${1:${VISUAL}}.field.quantile([0.1,0.15, .9])
 endsnippet
 
 snippet sort_values
-${VISUAL:1}.sort_values(['column_1'], ascending=False)
+${1:${VISUAL}}.sort_values(['column_1'], ascending=False)
 endsnippet
 
 snippet groupby_ex1
-${VISUAL:1}.groupby('column_name').column2.mean()
+${1:${VISUAL}}.groupby('column_name').column2.mean()
 endsnippet
 
 snippet groupby_ex2
-${VISUAL:1}.groupby('column_name').column2.max()
+${1:${VISUAL}}.groupby('column_name').column2.max()
 endsnippet
 
 snippet groupby_ex3
-${VISUAL:1}.groupby('continent').mean()
+${1:${VISUAL}}.groupby('continent').mean()
 endsnippet
 
 snippet if_then
-${VISUAL:1}.loc[${VISUAL:1}.AAA >= 5,['BBB','CCC']] = 555;
+${1:${VISUAL}}.loc[${1:${VISUAL}}.AAA >= 5,['BBB','CCC']] = 555;
 endsnippet
 
 snippet if_then
-${VISUAL:1}.loc[${VISUAL:1}.AAA >= 5,['BBB','CCC']] = 555;
+${1:${VISUAL}}.loc[${1:${VISUAL}}.AAA >= 5,['BBB','CCC']] = 555;
 endsnippet
 
 snippet if_else
-${VISUAL:1}['logic'] = np.where(${VISUAL:1}['AAA'] > 5,'high','low');${VISUAL:1}
+${1:${VISUAL}}['logic'] = np.where(${1:${VISUAL}}['AAA'] > 5,'high','low');${1:${VISUAL}}
 endsnippet
 
 snippet map "Map applies a translation to each element of a series"
-${VISUAL:1}['new_column'] =${VISUAL:1}.column.name.map({'female':0, 'male':1})
+${1:${VISUAL}}['new_column'] =${1:${VISUAL}}.column.name.map({'female':0, 'male':1})
 endsnippet
 
 snippet apply "Apply applies a function to each element of a series"
-${VISUAL:1}['new_column'] = train.col1.apply(len)
+${1:${VISUAL}}['new_column'] = train.col1.apply(len)
 endsnippet
 
 snippet loc1
-${VISUAL:1}.loc[0:4, ['column1','column2']]
+
+${1:${VISUAL}}.loc[0:4, ['column1','column2']]
 endsnippet
 
 # This is also a way to remove column and just keep those two
 snippet loc2
-${VISUAL:1}.loc[:, ['column1','column2']]
+${1:${VISUAL}}.loc[:, ['column1','column2']]
 endsnippet
 
 snippet loc3
-${VISUAL:1}.loc[0:4, 'column1':'column2']
+${1:${VISUAL}}.loc[0:4, 'column1':'column2']
 endsnippet
 
 snippet iloc "Iloc to select data referring to numbers for columns"
-${VISUAL:1}.iloc[:, 0:4]
+${1:${VISUAL}}.iloc[:, 0:4]
 endsnippet
 
 snippet type_change
-${VISUAL:1}['column_name'] = ${VISUAL:1}['column_name'].astype('category', categories=['good', 'very good', 'excellent'])
+${1:${VISUAL}}['column_name'] = ${1:${VISUAL}}['column_name'].astype('category', categories=['good', 'very good', 'excellent'])
 endsnippet
 
 # vim:set sw=4 ts=4 ft=snippets:

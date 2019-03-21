@@ -24,7 +24,8 @@ augroup nerd_loader
   autocmd VimEnter * silent! autocmd! FileExplorer
   autocmd BufEnter,BufNew *
         \  if isdirectory(expand('<amatch>'))
-        \|   call plug#load('nerdtree')
+  " FUCK! This hasn't worked for MONTHS and it's because the plugin is called nerdTree not nerdtree...
+        \|   call plug#load('nerdTree')
         \|   execute 'autocmd! nerd_loader'
         \| endif
     autocmd bufenter *
