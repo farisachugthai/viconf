@@ -96,6 +96,10 @@ nnoremap <silent> <Leader>`        :Marks<CR>
 " If you want help with that, remember that :he fzf and :he fzf-vim give 2
 " different docs
 " FZF beat fugitive out on this one. Might take git log too.
+nnoremap <Leader>gg <Cmd>GGrep<Space>
+nnoremap <Leader>gl <Cmd>Commits<CR>
+" [[B]Commits] Customize the options used by 'git log':
+let g:fzf_commits_log_options = '--graph --color=always --format="h%d %s %c(black)%c(bold)%cr"'
 nnoremap <Leader>gs <Cmd>GFiles?<CR>
 
 " Global Line Completion: {{{2
@@ -110,8 +114,6 @@ inoremap <expr> <c-x><l> fzf#vim#complete(fzf#wrap({
 
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1
-" [[B]Commits] Customize the options used by 'git log':
-let g:fzf_commits_log_options = '--graph --color=always --format="h%d %s %c(black)%c(bold)%cr"'
 " [Tags] Command to generate tags file
 let g:fzf_tags_command = 'ctags -R ./** && ctags -R --append ./.*'
 

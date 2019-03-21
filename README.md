@@ -32,7 +32,9 @@ As a result of personal modifications, this setup currently has:
   run `docutils` on a buffer and then preview it in a browser.
 
 - [Personally configured](./.config/nvim/after/ftplugin/) filetype plugins and
-  [improved syntax highlighting](./.config/nvim/after/ftplugin/man.vim) for man pages over the defaults provided by either Neovim or Vim.
+added [filetype detection](./.config/nvim/ftdetect).
+
+- [Improved syntax highlighting](./.config/nvim/syntax/man.vim) for man pages over the defaults provided by either Neovim or Vim.
   - This was accomplished by merging together the highlighting groups of
   both Neovim and Vim, and then adding around 20 links to color groups.
   - It also depends on the variable `g:colors_name` being set to `Gruvbox`.
@@ -62,7 +64,6 @@ ease navigation between Nvim windows and the embedded terminal.
   [dotfiles](https://www.github.com/farisachugthai/dotfiles) repo.
   - Specifically Flake8, pydocstyle, the python-language-server and others.
 
-
 - Syntax highlighting for files from [Zim
 wiki](https://github.com/jaap-karssenberg/zim-desktop-wiki) found at
 [zimwiki.vim](./.config/nvim/syntax/zimwiki.vim)
@@ -72,7 +73,7 @@ wiki](https://github.com/jaap-karssenberg/zim-desktop-wiki) found at
   [en.utf-8.add](./.config/nvim/spell/en.utf-8.add)
 
 - Multiple colorschemes that support xterm-256 or 24 bit terminals including
-Solarized, Jellybeans, Gruvbox and Monokai..
+Solarized, Jellybeans, Gruvbox and Monokai.
   - An explanation of how to work with colorschemes is given at the
   [README](./.config/nvim/colors/README.rst)
 
@@ -103,15 +104,15 @@ Further explanations for how nvim is configured can be found in my personal
 
 ### Diffs
 
-+---------------------------------+
-|next change         |         ]c |
-|previous change     |        \[c |
-|diff obtain         |         do |
-|diff put            |         dp |
-|fold open           |         zo |
-|fold close          |         zc |
-|rescan files        |:diffupdate |
-+---------------------------------+
++----------------------------------+
+|next change         |          ]c |
+|previous change     |         \[c |
+|diff obtain         |          do |
+|diff put            |          dp |
+|fold open           |          zo |
+|fold close          |          zc |
+|rescan files        | :diffupdate |
++----------------------------------+
 
 
 ## Plugins Used
@@ -150,7 +151,7 @@ functionality to your vim editing.  You can learn more about it with
 
 #### QuickStart
 
-Launch using `<Leader>nt`.
+Launch using <kbd><Leader>nt</kbd>.
 
 
 ### Sources for all plugins

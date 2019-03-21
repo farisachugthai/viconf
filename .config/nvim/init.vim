@@ -373,8 +373,7 @@ nnoremap <Leader>te <Cmd>tabedit <c-r>=expand("%:p:h")<CR>
 
 " It should also be easier to edit the config. Bind similarly to tmux
 nnoremap <Leader>ed <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
-nnoremap <F9> <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
-inoremap <F9> <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
+noremap <F9> <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 
 " Now reload it
 nnoremap <Leader>re :so $MYVIMRC<CR>
@@ -400,15 +399,15 @@ nnoremap k gk
 nnoremap <Leader>cd :cd %:p:h<CR>:pwd<CR>
 
 " Utilize the mouse!
-map <ScrollWheelUp> <C-Y>
+map <silent> <ScrollWheelUp> <C-Y>
 map <S-ScrollWheelUp> <C-U>
-map <ScrollWheelDown> <C-E>
+map <silent> <ScrollWheelDown> <C-E>
 map <S-ScrollWheelDown> <C-D>
 
 " Save a file as root
 noremap <leader>W :w !sudo tee % > /dev/null<CR>
 
-" Spell Checking: {{{2
+" Spell Checking:
 nnoremap <Leader>sp :setlocal spell!<CR>
 nnoremap <Leader>s= z=
 
@@ -432,26 +431,6 @@ nnoremap <A-j> <C-w>j
 nnoremap <A-k> <C-w>k
 nnoremap <A-l> <C-w>l
 
-" ALE: {{{2
-
-" This isn't working idk why
-nnoremap <Leader>l <Plug>(ale_toggle_buffer)<CR>
-
-nnoremap ]a <Plug>(ale_next_wrap)
-nnoremap [a <Plug>(ale_previous_wrap)
-
-" `:ALEInfoToFile` will write the ALE runtime information to a given filename.
-" The filename works just like |:w|.
-
-" <Meta-a> now gives detailed messages about what the linters have sent to ALE
-nnoremap <A-a> <Plug>(ale_detail)
-
-" This might be a good idea. * is already 'search for the cword' so let ALE
-" work in a similar manner right?
-nnoremap <Leader>* <Plug>(ale_go_to_reference)
-
-nnoremap <Leader>a <Cmd>ALEInfo<CR>
-
 " Fugitive: {{{2
 nnoremap <silent> <Leader>gb   <Cmd>Gblame<CR>
 nnoremap <silent> <Leader>gc   <Cmd>Gcommit<CR>
@@ -461,8 +440,9 @@ nnoremap <silent> <Leader>gds  <Cmd>Gdiff --staged<CR>
 nnoremap <silent> <Leader>gds2 <Cmd>Git diff --stat --staged<CR>
 nnoremap <silent> <Leader>ge   :Gedit<Space>
 nnoremap <silent> <Leader>gf   <Cmd>Gfetch<CR>
-nnoremap <silent> <Leader>gg   <Cmd>Ggrep<CR>
-nnoremap <silent> <Leader>gl   <Cmd>0Glog<CR>
+" nnoremap <silent> <Leader>gg   <Cmd>Ggrep<CR>
+" FZF got em
+" nnoremap <silent> <Leader>gl   <Cmd>0Glog<CR>
 nnoremap <silent> <Leader>gL   <Cmd>0Glog --pretty=oneline --graph --decorate --abbrev --all --branches<CR>
 nnoremap <silent> <Leader>gm   <Cmd>Gmerge<CR>
 " Make the mapping longer but clear as to whether gp would pull or push
@@ -477,39 +457,11 @@ nnoremap <silent> <Leader>gst  <Cmd>Git diff --stat<CR>
 nnoremap <silent> <Leader>gw   <Cmd>Gwrite<CR>
 nnoremap <silent> <Leader>gW   <Cmd>Gwrite!<CR>
 
-" Tagbar: {{{2
-" This works perfectly and should be how you handle all plugins and their
-" mappings !!!!!
-if has_key(plugs, 'tagbar')
-    nnoremap <silent> <F8> <Cmd>TagbarToggle<CR>
-    inoremap <silent> <F8> <Cmd>TagbarToggle<CR>
-endif
-
 " Remaining Plugins: {{{1
 
 " Vim_Plug: {{{2
 let g:plug_window = 'tabe'
 
-
-" ALE: {{{2
-let g:ale_fixers = { '*': [ 'remove_trailing_lines', 'trim_whitespace' ] }
-let g:ale_fix_on_save = 1
-" Now because you fix the trailing whitespace and trailing lines
-let g:ale_warn_about_trailing_whitespace = 0
-let g:ale_warn_about_trailing_blank_lines = 0
-
-let g:ale_list_vertical = 1
-
-let g:ale_set_signs = 1
-let g:ale_sign_column_always = 1
-let g:ale_virtualenv_dir_names = [ '$HOME/virtualenvs' ]
-" Display progress while linting.
-let s:ale_running = 0
-augroup ALEProgress
-    autocmd!
-    autocmd User ALELintPre  let s:ale_running = 1 | redrawstatus
-    autocmd User ALELintPost let s:ale_running = 0 | redrawstatus
-augroup END
 
 " Devicons: {{{2
 let g:webdevicons_enable = 1
@@ -544,13 +496,6 @@ if s:ubuntu
 elseif s:termux
     let g:deoplete#sources#jedi#enable_typeinfo = 0
 endif
-
-" Tagbar: {{{2
-" just a thought i had. For any normal mode remaps you have, add the same
-" thing and prefix <Esc> to the RHS and boom!
-let g:tagbar_left = 1
-let g:tagbar_width = 30
-let g:tagbar_sort = 0
 
 " Zim: {{{2
 let g:zim_notebooks_dir = expand('~/Notebooks/Notes')
@@ -697,20 +642,6 @@ function! s:scriptnames(re) abort
     echo join(filtered, '\n')
 endfunction
 
-" Helptabs: {{{2
-
-function! s:helptab()
-    if &buftype ==# 'help'
-        setlocal number relativenumber
-        wincmd T
-        nnoremap <buffer> q :q<cr>
-    " need to make an else for if ft isn't help then open a help page with the
-    " first argument
-    endif
-endfunction
-
-command! -nargs=1 Help call <SID>helptab()
-
 " AutoSave: {{{2
 " I feel like I need to put this in a autocmd but I'm not sure what I would
 " want to trigger it.
@@ -729,13 +660,33 @@ endfunction
 
 command! -bang Autosave call s:autosave(<bang>1)
 
-" HL: {{{2
-" Whats the syntax group under my cursor?
+" Syntax Highlighting Functions: {{{2
+
+" HL: {{{3
+" Whats the highlighting group under my cursor?
 function! s:hl()
   echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
 endfunction
 
 command! HL call <SID>hl()
+
+" HiC: {{{3
+" Heres a possibly easier way to do this. Still in testing.
+" Mar 17, 2019: So far does the exact same thing!
+function! s:HiC()
+    echo 'Highlighting group: ' . synIDattr(synID(line('.'), col('.'), 1), 'name')
+    echo 'Foreground color: ' . synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'fg')
+endfunction
+
+command! HiC call <SID>HiC()
+
+" HiDebug: {{{3
+" function! s:HiD()
+"     echo join(map(synstack(line('.'), col('.')), 'synIDattr(id, "name")') '\n')
+" endfunction
+
+" command! HiD call <SID>HiD()
+
 
 " Explore PlugHelp: {{{2
 " Call :PlugHelp to use fzf to open a window with all of the plugins
@@ -778,6 +729,9 @@ function! s:statusline_expr()
 endfunction
 
 let &statusline = s:statusline_expr()
+
+" Except for...
+autocmd TermOpen * setlocal statusline=%{b:term_title}
 
 " Rename: {{{2
 " :he map line 1454. How have i never noticed this isn't a feature???

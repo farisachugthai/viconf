@@ -70,13 +70,9 @@ before every single space.
 
 Environment Variables
 ---------------------
-Do not ever redefine VIMRUNTIME! If set in your .profile or .bashrc, this will
-mess up compatability between nvim and vim as nvim defines the same variable,
-but instead of the expected /usr/share/vim/runtime/ definition, $VIMRUNTIME is
-set to /usr/share/nvim/runtime.
-
-Therefore, defining VIMRUNTIME as /usr/share/vim/runtime in a startup file will
-cause unexpected behavior when starting nvim.
+.. admonition::
+    
+    Do not ever redefine `$VIMRUNTIME`! This variable is used by both Neovim and Vim; however, both define the var differently. If this is set in a startup file like `.bash_profile` or `.bashrc`, this will mess up compatability between the two. Nvim defines $VIMRUNTIME as /usr/share/nvim/runtime/ instead of the expected /usr/share/vim/runtime/ definition, Therefore, defining `$VIMRUNTIME` as /usr/share/vim/runtime/ in a startup file will cause unexpected behavior when starting nvim.
 
 
 Directory Layout and Runtimepath
