@@ -38,25 +38,44 @@ let g:fzf_history_dir = expand('$XDG_DATA_HOME') . '/fzf-history'
 
 " FZF Colors: {{{1
 
-" g:fzf_colors: {{{2
+" Gruvbox Hard Coded: {{{2
+
+" Mar 21, 2019:
+let g:fzf_colors =
+\ {  'fg':      ['fg', '#bdae93'],
+  \  'bg':      ['bg', '#1d2021'],
+  \  'hl':      ['fg', '#83a598'],
+  \  'fg+':     ['fg', '#ebdbb2'],
+  \  'bg+':     ['bg', '#ec3836'],
+  \  'hl+':     ['fg', '#83a598'],
+  \  'info':    ['fg', '#fabd2f'],
+  \  'prompt':  ['fg', '#fabd1f'],
+  \  'pointer': ['fg', '#8ec07c'],
+  \  'marker':  ['fg', '#8ec07c'],
+  \  'spinner': ['fg', '#8ec07c'],
+  \  'header':  ['fg', '#83a598'] }
+
+
+" Junegunn Provided Defaults: {{{2
+
 " Customize FZF colors to match your color scheme
 " What are the default colors if you don't specify this?
 " **I think fzf.vim specifies this for us**
 
-let g:fzf_colors =
-\ { 'fg':      ['fg', 'Normal'],
-  \ 'bg':      ['bg', 'Normal'],
-  \ 'hl':      ['fg', 'Comment'],
-  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  \ 'bg+':     ['bg', 'CursorLiVne', 'CursorColumn'],
-  \ 'hl+':     ['fg', 'Statement'],
-  \ 'info':    ['fg', 'PreProc'],
-  \ 'border':  ['fg', 'Ignore'],
-  \ 'prompt':  ['fg', 'Conditional'],
-  \ 'pointer': ['fg', 'Exception'],
-  \ 'marker':  ['fg', 'Keyword'],
-  \ 'spinner': ['fg', 'Label'],
-  \ 'header':  ['fg', 'Comment'] }
+" let g:fzf_colors =
+" \ { 'fg':      ['fg', 'Normal'],
+"   \ 'bg':      ['bg', 'Normal'],
+"   \ 'hl':      ['fg', 'Comment'],
+"   \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+"   \ 'bg+':     ['bg', 'CursorLiVne', 'CursorColumn'],
+"   \ 'hl+':     ['fg', 'Statement'],
+"   \ 'info':    ['fg', 'PreProc'],
+"   \ 'border':  ['fg', 'Ignore'],
+"   \ 'prompt':  ['fg', 'Conditional'],
+"   \ 'pointer': ['fg', 'Exception'],
+"   \ 'marker':  ['fg', 'Keyword'],
+"   \ 'spinner': ['fg', 'Label'],
+"   \ 'header':  ['fg', 'Comment'] }
 
 " Mappings: {{{1
 " Specifically from that repo so I don't get stuff mixed up if I ever take one

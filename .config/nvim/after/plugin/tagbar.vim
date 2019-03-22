@@ -10,10 +10,10 @@ if !has_key(plugs, 'tagbar')
     finish
 endif
 
-if exists('g:loaded_tagbar') || &compatible || v:version < 700
+if exists('g:loaded_tagbar_conf') || &compatible || v:version < 700
     finish
 endif
-let g:loaded_tagbar = 1
+let g:loaded_tagbar_conf = 1
 
 
 " Options: {{{1

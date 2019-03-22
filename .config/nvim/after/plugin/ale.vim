@@ -10,10 +10,10 @@ if !has_key(plugs, 'ale')
     finish
 endif
 
-if exists('g:loaded_ale') || &compatible || v:version < 700
+if exists('g:loaded_ale_conf') || &compatible || v:version < 700
     finish
 endif
-let g:loaded_ale = 1
+let g:loaded_ale_conf = 1
 
 
 " Mappings: {{{1
