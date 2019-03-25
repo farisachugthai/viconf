@@ -10,5 +10,6 @@ riv ~/.local/share/nvim/plugged/riv.vim/doc/riv_instruction.rst
 tutorials ~/Dropbox/python/tutorials
 viconf ~/projects/viconf/.config/nvim
 vim ~/.vim
+sphinx_make ~/miniconda3/envs/utilities/lib/python3.7/site-packages/sphinx/cmd/make_mode.py
 
 sphinx ~/miniconda3/envs/flask/lib/python3.7/site-packages/sphinx

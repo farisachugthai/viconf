@@ -1,15 +1,11 @@
-" Init:
 " Neovim Configuration:
-
-" About: {{{1
-let g:snips_author = 'Faris Chugthai'
-let g:snips_github = 'https://github.com/farisachugthai'
+" Maintainer: Faris Chugthai
+" Last Change: Mar 23, 2019
 
 " Vim Plug: {{{1
 
 " Plug Check: {{{2
-" Shout out Justinmk! Never wanted to go through a full check for vim-plug
-" since it's there 99% of the time but this is a real smart workaround
+" Shout out Justinmk!
 " https://github.com/justinmk/config/blob/291ec0ae12b0b4b35b4cf9315f1878db00b780ec/.config/nvim/init.vim#L12
 let s:plugins = filereadable(expand('~/.local/share/nvim/site/autoload/plug.vim', 1))
 
@@ -23,7 +19,7 @@ if expand('OS') !=# 'Windows_NT'
     endif
 endif
 
-" XDG Check: {{{1
+" XDG Check: {{{2
 " The whole file is now predicated on these existing. Need to add checks in.
 
 if exists('$XDG_DATA_HOME') == 0
@@ -47,34 +43,27 @@ Plug 'davidhalter/jedi-vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
-Plug 'tpope/vim-unimpaired'
+" Plug 'tpope/vim-unimpaired'
 Plug 'w0rp/ale'
 Plug 'SirVer/ultisnips'
-Plug 'christoomey/vim-tmux-navigator'
+
+if has('$TMUX')
+    Plug 'christoomey/vim-tmux-navigator'
+endif
+
 Plug 'mhinz/vim-startify'
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
-Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
 Plug 'Rykka/InstantRst'
 Plug 'gu-fan/riv.vim', { 'for': ['python', 'python3', 'rst'] }
 Plug 'greyblake/vim-preview'
 Plug 'lifepillar/vim-cheat40'
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': 'yarn install'}
+" Plug 'neoclide/coc.nvim', {'tag': '*', 'do': 'yarn install'}
 Plug 'autozimu/LanguageClient-neovim'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 
 " Preliminaries: {{{1
-
-" Nvim Specific: {{{2
-
-if has('nvim')
-    set inccommand=split                    " This alone is enough to never go back
-    set termguicolors
-endif
-
-unlet! skip_defaults_vim
-silent! source $VIMRUNTIME/defaults.vim
 
 " Python Executables: {{{2
 
@@ -87,7 +76,7 @@ if exists('$VIRTUAL_ENV')
 elseif exists('$CONDA_PYTHON_EXE')
     let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
     " Let's hope I don't break things for Windows
-    let &path = &path . ',' . expand('$CONDA_PREFIX/lib/python3.*')
+    let &path = &path . ',' . expand('$CONDA_PREFIX/lib/python3')
 
 else
 " If not then just use the system python
@@ -104,9 +93,9 @@ else
     let g:loaded_python_provider = 1
 endif
 
-" OS Setup: {{{1
+" OS Setup: {{{2
 
-" Platforms: {{{2
+" Platforms: {{{3
 let s:termux = exists('$PREFIX') && has('unix')
 let s:ubuntu = !exists('$PREFIX') && has('unix')
 let s:windows = has('win32') || has('win64')
@@ -122,7 +111,8 @@ if filereadable(s:local_vimrc)
     execute 'source' s:local_vimrc
 endif
 
-" Session options: {{{2
+" Session Options: {{{3
+
 " Here's a nice little setting to encourage interoperability
 " UNIX AND MS-WINDOWS
 
@@ -139,7 +129,7 @@ set sessionoptions+=unix,slash
 " Not related but I wanted to strike these down because they're annoying.
 set sessionoptions-=blank,folds
 
-" Remote hosts: {{{2
+" Remote Hosts: {{{3
 if s:termux
     " holy fuck that was a doozy to find
     let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
@@ -262,19 +252,14 @@ set wildignorecase
 
 " Path: {{{2
 
-" :let &{option-name} = {expr1}         *:let-option* *:let-&*
-"           Set option {option-name} to the result of the
-"           expression {expr1}.  A String or Number value is
-"           always converted to the type of the option.
-"           For an option local to a window or buffer the effect
-"           is just like using the |:set| command: both the local
-"           value and the global value are changed.
-"           Example: >
-"               :let &path = &path . ',/usr/local/include'
-
 " DON'T USE LET. LET ALLOWS FOR EXPRESSION EVALUATION. MUST BE DONE WITH SET
 " OR THE ** WILL EXPAND {rendering it as nothing}
 set path+=**                            " Recursively search dirs with :find
+
+" TODO:
+" function! s:pathadder() abort
+"     if is
+" double check syntax on adding parameters
 
 if isdirectory(expand('$_ROOT/local/include/'))
     let &path = &path . ',' . expand('$_ROOT/local/include')
@@ -291,7 +276,7 @@ endif
 
 if isdirectory(expand('~/.local/lib/python3.7'))
     " Double check globbing in vim
-    let &path = &path . ',' . expand('~/.local/lib/python3.7/site-packages')
+    let &path = &path . ',' . expand('~') . '/.local/lib/python3.7'
 endif
 
 " TODO: How do we glob in vimscript? There's some weird thing about using * and ** right?
@@ -347,6 +332,8 @@ let &showbreak = '↳ '                   " Indent wrapped lines correctly
 set breakindent
 set breakindentopt=sbr
 
+set inccommand=split
+set termguicolors
 " Mappings: {{{1
 
 " Window_Buf_Tab_Mappings: {{{2
@@ -354,6 +341,8 @@ set breakindentopt=sbr
 " Navigate buffers more easily
 nnoremap <Leader>bn <Cmd>bnext<CR>
 nnoremap <Leader>bp <Cmd>bprev<CR>
+nnoremap <Leader>bl <Cmd>blast<CR>
+nnoremap <Leader>bf <Cmd>bfirst<CR>
 
 " Wanna navigate windows more easily?
 " |CTRL-W_gF|   CTRL-W g F     edit file name under the cursor in a new
@@ -370,6 +359,7 @@ nnoremap <Leader>tp <Cmd>tabprev<CR>
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
 nnoremap <Leader>te <Cmd>tabedit <c-r>=expand("%:p:h")<CR>
+nnoremap <Leader>tq <Cmd>tabclose<CR>
 
 " It should also be easier to edit the config. Bind similarly to tmux
 nnoremap <Leader>ed <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
@@ -534,11 +524,6 @@ let g:voom_python_versions = [3]
 " Cheat40: {{{2
 " let g:cheat40_use_default = 1
 
-" Coc: {{{2
-inoremap <silent><expr> <c-space> coc#refresh()
-
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
-
 " Runtime: {{{1
 
 " Matching Parenthesis: {{{2
@@ -700,6 +685,16 @@ command! HiC call <SID>HiC()
 
 " command! HiD call <SID>HiD()
 
+" HiAll: {{{3
+function! s:HiQF()
+  " synstack returns a list. takes lnum and col.
+  " map is crazy specific in its argument requirements. map(list, string)
+  " cexpr evals a command and adds it to the quickfist list
+  cexpr! map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunction
+
+command! HiQF call <SID>HiQF()
+
 
 " Explore PlugHelp: {{{2
 " Call :PlugHelp to use fzf to open a window with all of the plugins
@@ -750,6 +745,24 @@ autocmd TermOpen * setlocal statusline=%{b:term_title}
 " :he map line 1454. How have i never noticed this isn't a feature???
 command! -nargs=1 -bang -complete=file Rename f <args>|w<bang>
 
+" YAPF: {{{2
+
+command! YAPF exec '!yapf <cfile>'
+command! YAPFI exec '!yapf -i <cfile>'
+command! YAPFD cexpr! exec '!yapf -d <cfile'
+
+" Chmod: {{{2
+
+"	:S	Escape special characters for use with a shell command (see
+"		|shellescape()|). Must be the last one. Examples: >
+"		    :!dir <cfile>:S
+"		    :call system('chmod +w -- ' . expand('%:S'))
+" From :he filename-modifiers in the cmdline page.
+
+command! Chmod call system('chmod +x -- ' . expand('%:S')
+
+" Could do word under cursor. Could tack it on to some fzf variation. idk
+
 " Colorscheme: {{{1
 
 " Gruvbox: {{{2
@@ -757,9 +770,12 @@ command! -nargs=1 -bang -complete=file Rename f <args>|w<bang>
 " toggle it.
 function! s:gruvbox()
     set background=dark
+    let g:gruvbox_italic = 1
     let g:gruvbox_contrast_dark = 'hard'
     " let g:gruvbox_improved_strings=1 shockingly terrible
-    let g:gruvbox_improved_warnings=1
+    let g:gruvbox_improved_warnings = 1
+    let g:gruvbox_invert_tabline = 1
+    let g:gruvbox_italicize_strings = 1
 endfunction
 
 " From here I can keep making expressions to the effect of elseif colors==onedark

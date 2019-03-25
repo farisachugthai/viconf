@@ -66,7 +66,7 @@ ${0:Optional arguments above}
 endsnippet
 
 ################
-#  formatting  #
+#      inline  #
 ################
 
 snippet * "Italics" s
@@ -79,6 +79,10 @@ endsnippet
 
 snippet bold "bold" s
 **${1:${VISUAL:Strong emphasis}}** $0
+endsnippet
+
+snippet kbd "Wrap text with the kbd directive"
+:kbd:\`${1:${VISUAL}}\`
 endsnippet
 
 ###########
@@ -124,16 +128,6 @@ endsnippet
 
 snippet ref  "Links that follow labelled objects. Expand 'lab or labhe'" mw
 :ref:\`${1:${VISUAL:path}}\`_
-endsnippet
-
-############
-#  Sphinx  #
-############
-
-snippet sid "SideBar" b
-.. sidebar:: ${1:SideBar Title}
-
-   ${2:${VISUAL:SideBar Content}}
 endsnippet
 
 # TODO: Figure out what snippet method to invoke to get proper indentation.
@@ -461,4 +455,14 @@ snippet chart "Pygal chart for Nikola" b
    'IE',      [85.8, 84.6, 84.7, 74.5, 66, 58.6]
    'Others',  [14.2, 15.4, 15.3, 8.9, 9, 10.4]
 $0
+endsnippet
+
+############
+#  Sphinx  #
+############
+
+snippet sid "SideBar" b
+.. sidebar:: ${1:SideBar Title}
+
+   ${2:${VISUAL:SideBar Content}}
 endsnippet

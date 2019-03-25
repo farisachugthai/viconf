@@ -35,5 +35,6 @@ let g:tagbar_foldlevel = 2
 
 
 " Mappings: {{{2
-nnoremap <silent> <F8> <Cmd>TagbarToggle<CR>
-inoremap <silent> <F8> <Cmd>TagbarToggle<CR>
+
+noremap <silent> <F8> <Cmd>TagbarToggle<CR>
+noremap! <silent> <F8> <Cmd>TagbarToggle<CR>
