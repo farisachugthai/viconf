@@ -1,12 +1,17 @@
-" Set some sane defaults for snippet files
+" ============================================================================
+    " File: snippets.vim
+    " Author: Faris Chugthai
+    " Description: Snippets modifications.
+    " Last Modified: March 21, 2019
+" ============================================================================
 
 if exists('b:did_ftplugin')
     finish
 endif
 let b:did_ftplugin = 1
 
-let s:save_cpo = &cpo
-set cpo&vim
+let s:save_cpo = &cpoptions
+set cpoptions&vim
 
 " Fold by syntax, but open all folds by default
 setlocal foldmethod=syntax
@@ -22,13 +27,13 @@ setlocal autoindent nosmartindent nocindent
 " approximation: If files change outside of the current Vim instance, we will
 " not notice.
 augroup ultisnips_snippets.vim
-autocmd!
-autocmd BufWritePost <buffer> call UltiSnips#RefreshSnippets()
+    autocmd!
+    autocmd BufWritePost <buffer> call UltiSnips#RefreshSnippets()
 augroup END
 
 " Define match words for use with matchit plugin
 " http://www.vim.org/scripts/script.php?script_id=39
-if exists("loaded_matchit") && !exists("b:match_words")
+if exists('loaded_matchit') && !exists('b:match_words')
   let b:match_ignorecase = 0
   let b:match_words = '^snippet\>:^endsnippet\>,^global\>:^endglobal\>,\${:}'
   let s:set_match_words = 1
@@ -52,5 +57,5 @@ let b:undo_ftplugin = "
             \|endif
             \"
 
-let &cpo = s:save_cpo
+let &cpoptions = s:save_cpo
 unlet s:save_cpo

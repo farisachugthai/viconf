@@ -2,7 +2,7 @@ README
 ========
 
 :Author: Faris Chugthai
-:Date: 02/19/2019
+:Date: Mar 24, 2019
 
 To say vim has a lot of options, associated files and directories is an
 understatement. But these can be broken down piece by piece to be more
@@ -71,7 +71,7 @@ before every single space.
 Environment Variables
 ---------------------
 .. admonition::
-    
+
     Do not ever redefine `$VIMRUNTIME`! This variable is used by both Neovim and Vim; however, both define the var differently. If this is set in a startup file like `.bash_profile` or `.bashrc`, this will mess up compatability between the two. Nvim defines $VIMRUNTIME as /usr/share/nvim/runtime/ instead of the expected /usr/share/vim/runtime/ definition, Therefore, defining `$VIMRUNTIME` as /usr/share/vim/runtime/ in a startup file will cause unexpected behavior when starting nvim.
 
 
@@ -212,6 +212,48 @@ From the help docs
 
 Mappings
 ---------
+Mappings initially sounds like a simple enough idea as it's generally commonplace
+in other editors.
+
+    Map :kbd:`Ctrl`+:kbd:`Shift`+:kbd:`F1` to some arbitrary macro
+
+Is conventionally how this works. In Vim there are 7 different mapping modes
+that exist.
+
++--------------+-----------+---------+------------------------------------------+
+| Map Overview |           |         |                                          |
++--------------+-----------+---------+------------------------------------------+
+| Commands     | Modes     |         |                                          |
++--------------+-----------+---------+------------------------------------------+
+| :map         | :noremap  | :unmap  | Normal, Visual, Select, Operator-pending |
++--------------+-----------+---------+------------------------------------------+
+| :nmap        | :nnoremap | :nunmap | Normal                                   |
++--------------+-----------+---------+------------------------------------------+
+| :vmap        | :vnoremap | :vunmap | Visual and Select                        |
++--------------+-----------+---------+------------------------------------------+
++--------------+-----------+---------+------------------------------------------+
+| :smap        |           |         | Select                                   |
++--------------+-----------+---------+------------------------------------------+
++--------------+-----------+---------+------------------------------------------+
+| :xmap        |           |         | Visual                                   |
++--------------+-----------+---------+------------------------------------------+
+| :omap        |           |         | Operating-pending                        |
++--------------+-----------+---------+------------------------------------------+
+| :map!        |           |         | Insert and Command-line                  |
++--------------+-----------+---------+------------------------------------------+
++--------------+-----------+---------+------------------------------------------+
+| :imap        |           |         | Insert                                   |
++--------------+-----------+---------+------------------------------------------+
++--------------+-----------+---------+------------------------------------------+
+| :lmap        |           |         | Insert, Command-line, Lang-Arg           |
++--------------+-----------+---------+------------------------------------------+
++--------------+-----------+---------+------------------------------------------+
+| :cmap        |           |         | Command-line                             |
++--------------+-----------+---------+------------------------------------------+
++--------------+-----------+---------+------------------------------------------+
+| :tmap        |           |         | Terminal                                 |
++--------------+-----------+---------+------------------------------------------+
+
 Ensure that mappings use the ``<Cmd>`` idiom in place of :kbd:`<C-o>` for insert
 mode or :kbd:`<C-u>` for visual mode.
 

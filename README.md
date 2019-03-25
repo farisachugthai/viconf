@@ -64,6 +64,7 @@ ease navigation between Nvim windows and the embedded terminal.
   [dotfiles](https://www.github.com/farisachugthai/dotfiles) repo.
   - Specifically Flake8, pydocstyle, the python-language-server and others.
 
+
 - Syntax highlighting for files from [Zim
 wiki](https://github.com/jaap-karssenberg/zim-desktop-wiki) found at
 [zimwiki.vim](./.config/nvim/syntax/zimwiki.vim)
@@ -81,21 +82,21 @@ Solarized, Jellybeans, Gruvbox and Monokai.
 
 ### Basics Keymappings
 
-+------------------------------------------------------------------------------+
-| Keycode            | Mode     | [Command]Description                         |
-| :---:              | :---:    | :---                                         |
-| <kbd>h</kbd>       | Norm     | Move cursor one char left                    |
-| <kbd>j</kbd>       | Norm     | Move cursor one char down                    |
-| <kbd>k</kbd>       | Norm     | Move cursor one char up                      |
-| <kbd>l</kbd>       | Norm     | Move cursor one char right                   |
-| <kbd>w</kbd>       | Norm     | Move cursor to the beginning of the next word|
-| <kbd>b</kbd>       | Norm     | Move cursor to the beginning of the prev word|
-| <kbd>M</kbd>       | Norm     | Move cursor to vertical center               |
-| <kbd>gg</kbd>      | Norm     | Move to the first line                       |
-| <kbd>G</kbd>       | Norm     | Move to the last line                        |
-| <kbd>:</kbd><kbd>w</kbd>      | Cmd      | Save the current buffer           |
-| <kbd>:</kbd><kbd>q</kbd>      | Cmd      | Close the buffer without saving   |
-+------------------------------------------------------------------------------+
++-----------------------------------------------------------------------------------------+
+| Keycode                       | Mode     | [Command]Description                         |
+| :---:                         | :---:    | :---                                         |
+| <kbd>h</kbd>                  | Norm     | Move cursor one char left                    |
+| <kbd>j</kbd>                  | Norm     | Move cursor one char down                    |
+| <kbd>k</kbd>                  | Norm     | Move cursor one char up                      |
+| <kbd>l</kbd>                  | Norm     | Move cursor one char right                   |
+| <kbd>w</kbd>                  | Norm     | Move cursor to the beginning of the next word|
+| <kbd>b</kbd>                  | Norm     | Move cursor to the beginning of the prev word|
+| <kbd>M</kbd>                  | Norm     | Move cursor to vertical center               |
+| <kbd>gg</kbd>                 | Norm     | Move to the first line                       |
+| <kbd>G</kbd>                  | Norm     | Move to the last line                        |
+| <kbd>:</kbd><kbd>w</kbd>      | Cmd      | Save the current buffer                      |
+| <kbd>:</kbd><kbd>q</kbd>      | Cmd      | Close the buffer without saving              |
++-----------------------------------------------------------------------------------------+
 
 ### Remappings
 
@@ -105,6 +106,8 @@ Further explanations for how nvim is configured can be found in my personal
 ### Diffs
 
 +----------------------------------+
+| Command            | Keycode     |
+|                    |             |
 |next change         |          ]c |
 |previous change     |         \[c |
 |diff obtain         |          do |

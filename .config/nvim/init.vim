@@ -23,6 +23,7 @@ if expand('OS') !=# 'Windows_NT'
     endif
 endif
 
+
 " XDG Check: {{{1
 " The whole file is now predicated on these existing. Need to add checks in.
 
@@ -47,32 +48,26 @@ Plug 'davidhalter/jedi-vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
-Plug 'tpope/vim-unimpaired'
+" Plug 'tpope/vim-unimpaired'
 Plug 'w0rp/ale'
 Plug 'SirVer/ultisnips'
-Plug 'christoomey/vim-tmux-navigator'
+
+if has('$TMUX')
+    Plug 'christoomey/vim-tmux-navigator'
+endif
+
 Plug 'mhinz/vim-startify'
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
-Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
-Plug 'Rykka/InstantRst'
 Plug 'gu-fan/riv.vim', { 'for': ['python', 'python3', 'rst'] }
 Plug 'greyblake/vim-preview'
 Plug 'lifepillar/vim-cheat40'
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': 'yarn install'}
+" Plug 'neoclide/coc.nvim', {'tag': '*', 'do': 'yarn install'}
 Plug 'autozimu/LanguageClient-neovim'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 
 " Preliminaries: {{{1
-
-" Nvim Specific: {{{2
-
-if has('nvim')
-    set inccommand=split                    " This alone is enough to never go back
-    set termguicolors
-endif
-
 unlet! skip_defaults_vim
 silent! source $VIMRUNTIME/defaults.vim
 
@@ -81,7 +76,7 @@ silent! source $VIMRUNTIME/defaults.vim
 " if we have a virtual env start there
 if exists('$VIRTUAL_ENV')
     let g:python3_host_prog = expand('$VIRTUAL_ENV') . '/bin/python'
-    let &path = &path . ',' . expand('$VIRTUAL_ENV') . '/lib/python3.7/site-packages'
+    let &path = &path . ',' . expand('$VIRTUAL_ENV') . '/lib/python3.7**'
 
 " or a conda env.
 elseif exists('$CONDA_PYTHON_EXE')
@@ -262,16 +257,6 @@ set wildignorecase
 
 " Path: {{{2
 
-" :let &{option-name} = {expr1}         *:let-option* *:let-&*
-"           Set option {option-name} to the result of the
-"           expression {expr1}.  A String or Number value is
-"           always converted to the type of the option.
-"           For an option local to a window or buffer the effect
-"           is just like using the |:set| command: both the local
-"           value and the global value are changed.
-"           Example: >
-"               :let &path = &path . ',/usr/local/include'
-
 " DON'T USE LET. LET ALLOWS FOR EXPRESSION EVALUATION. MUST BE DONE WITH SET
 " OR THE ** WILL EXPAND {rendering it as nothing}
 set path+=**                            " Recursively search dirs with :find
@@ -291,7 +276,7 @@ endif
 
 if isdirectory(expand('~/.local/lib/python3.7'))
     " Double check globbing in vim
-    let &path = &path . ',' . expand('~/.local/lib/python3.7/site-packages')
+    let &path = &path . ',' . expand('~') . '/.local/lib/python3.7'
 endif
 
 " TODO: How do we glob in vimscript? There's some weird thing about using * and ** right?
@@ -347,6 +332,8 @@ let &showbreak = '↳ '                   " Indent wrapped lines correctly
 set breakindent
 set breakindentopt=sbr
 
+set inccommand=split
+set termguicolors
 " Mappings: {{{1
 
 " Window_Buf_Tab_Mappings: {{{2
@@ -642,6 +629,20 @@ function! s:scriptnames(re) abort
     echo join(filtered, '\n')
 endfunction
 
+" Helptabs: {{{2
+
+function! s:helptab()
+    if &buftype ==# 'help'
+        setlocal number relativenumber
+        wincmd T
+        nnoremap <buffer> q :q<cr>
+    " need to make an else for if ft isn't help then open a help page with the
+    " first argument
+    endif
+endfunction
+
+command! -nargs=1 Help call <SID>helptab()
+
 " AutoSave: {{{2
 " I feel like I need to put this in a autocmd but I'm not sure what I would
 " want to trigger it.
@@ -686,6 +687,16 @@ command! HiC call <SID>HiC()
 " endfunction
 
 " command! HiD call <SID>HiD()
+
+" HiAll: {{{3
+function! s:HiQF()
+  " synstack returns a list. takes lnum and col.
+  " map is crazy specific in its argument requirements. map(list, string)
+  " cexpr evals a command and adds it to the quickfist list
+  cexpr! map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunction
+
+command! HiQF call <SID>HiQF()
 
 
 " Explore PlugHelp: {{{2
@@ -736,6 +747,24 @@ autocmd TermOpen * setlocal statusline=%{b:term_title}
 " Rename: {{{2
 " :he map line 1454. How have i never noticed this isn't a feature???
 command! -nargs=1 -bang -complete=file Rename f <args>|w<bang>
+
+" YAPF: {{{2
+
+command! YAPF exec '!yapf <cfile>'
+command! YAPFI exec '!yapf -i <cfile>'
+command! YAPFD cexpr! exec '!yapf -d <cfile'
+
+" Chmod: {{{2
+
+"	:S	Escape special characters for use with a shell command (see
+"		|shellescape()|). Must be the last one. Examples: >
+"		    :!dir <cfile>:S
+"		    :call system('chmod +w -- ' . expand('%:S'))
+" From :he filename-modifiers in the cmdline page.
+
+command! Chmod call system('chmod +x -- ' . expand('%:S')
+
+" Could do word under cursor. Could tack it on to some fzf variation. idk
 
 " Colorscheme: {{{1
 
