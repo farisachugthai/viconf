@@ -21,13 +21,13 @@ endif
 
 " XDG Check: {{{2
 " The whole file is now predicated on these existing. Need to add checks in.
-
-if exists('$XDG_DATA_HOME') == 0
+" In $VIMRUNTIME/filetype.vim it looks like Bram himself checks env vars this way
+if empty('$XDG_DATA_HOME')
     echoerr 'XDG_DATA_HOME not set. Exiting'
     finish
 endif
 
-if exists('$XDG_CONFIG_HOME') == 0
+if empty('$XDG_CONFIG_HOME')
     echoerr 'XDG_CONFIG_HOME not set. Exiting.'
     finish
 endif
