@@ -115,17 +115,18 @@ def make_box(twidth, bwidth=None):
         :func:`get_comment_format`
     """
     b, m, e, i = (s.strip() for s in get_comment_format())
-    bwidth_inner = bwidth - 3 - max(len(b), len(i + e)) if bwidth else twidth + 2
+    bwidth_inner = bwidth - 3 - max(len(b),
+                                    len(i + e)) if bwidth else twidth + 2
     sline = b + m + bwidth_inner * m[0] + 2 * m[0]
     nspaces = (bwidth_inner - twidth) // 2
     mlines = i + m + " " + " " * nspaces
-    mlinee = " " + " "*(bwidth_inner - twidth - nspaces) + m
+    mlinee = " " + " " * (bwidth_inner - twidth - nspaces) + m
     eline = i + m + bwidth_inner * m[0] + 2 * m[0] + e
     return sline, mlines, mlinee, eline
 
 
 def foldmarker():
-    "Return a tuple of (open fold marker, close fold marker)"
+    """Return a tuple of (open fold marker, close fold marker)."""
     return vim.eval("&foldmarker").split(",")
 
 
@@ -141,6 +142,7 @@ DOUBLE_QUOTES = '"'
 
 
 class Arg(object):
+
     def __init__(self, arg):
         self.arg = arg
         self.name = arg.split('=')[0].strip()
@@ -197,7 +199,7 @@ def triple_quotes_handle_trailing(snip, quoting_style):
                 break
             if nextc == quoting_style and len(_ret):
                 _ret = _ret[1:]
-                col = col+1
+                col = col + 1
             else:
                 break
         snip.rv = _ret
@@ -206,17 +208,18 @@ def triple_quotes_handle_trailing(snip, quoting_style):
 
 
 def get_style(snip):
+    """Determine what style of docstring the user has."""
     style = snip.opt("g:ultisnips_python_style", "normal")
 
-    if    style == "doxygen":
+    if style == "doxygen":
         return DOXYGEN
-    elif  style == "sphinx":
+    elif style == "sphinx":
         return SPHINX
-    elif  style == "google":
+    elif style == "google":
         return GOOGLE
-    elif  style == "numpy":
+    elif style == "numpy":
         return NUMPY
-    elif  style == "jedi":
+    elif style == "jedi":
         return JEDI
     else:
         return NORMAL
@@ -350,3 +353,33 @@ def write_function_docstring(t, snip):
 
 def get_dir_and_file_name(snip):
     return os.getcwd().split(os.sep)[-1] + '.' + snip.basename
+
+
+class TextTag(object):
+    """Represents a base text tag"""
+
+    def __init__(self, text):
+        self._text = text
+
+    def render(self):
+        return self._text
+
+
+class BoldWrapper(TextTag):
+    """Wraps a tag in <b>"""
+
+    def __init__(self, wrapped):
+        self._wrapped = wrapped
+
+    def render(self):
+        return "<b>{}</b>".format(self._wrapped.render())
+
+
+class ItalicWrapper(TextTag):
+    """Wraps a tag in <i>"""
+
+    def __init__(self, wrapped):
+        self._wrapped = wrapped
+
+    def render(self):
+        return "<i>{}</i>".format(self._wrapped.render())

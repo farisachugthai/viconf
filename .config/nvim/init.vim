@@ -54,7 +54,6 @@ endif
 Plug 'mhinz/vim-startify'
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'vim-voom/voom'
-Plug 'Rykka/InstantRst'
 Plug 'gu-fan/riv.vim', { 'for': ['python', 'python3', 'rst'] }
 Plug 'greyblake/vim-preview'
 Plug 'lifepillar/vim-cheat40'
@@ -247,8 +246,8 @@ endif
 set wildmenu
 set wildmode=longest,list:longest       " Longest string or list alternatives
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
-set fileignorecase                      " when searching for files don't use case
-set wildignorecase
+" set fileignorecase                      " when searching for files don't use case
+" set wildignorecase
 
 " Path: {{{2
 
@@ -295,9 +294,8 @@ if &textwidth!=0
 endif
 set cmdheight=2
 set number relativenumber
-set ignorecase smartcase
+set smartcase
 set infercase
-set autoindent                          " Smart indent fucks up indenting comments
 " FOOBAR=~/<CTRL-><CTRL-F> will now autocomplete!
 set isfname-==
 
@@ -314,10 +312,8 @@ set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
 set diffopt=filler,context:3          " vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
 
-if has('persistent_undo')
-    let &undodir = expand('$XDG_CONFIG_HOME') . '/nvim/undodir'
-    set undofile
-endif
+let &undodir = expand('$XDG_CONFIG_HOME') . '/nvim/undodir'
+set undofile
 
 set backup
 let &backupdir=expand('$XDG_CONFIG_HOME') . '/nvim/undodir'
@@ -334,6 +330,9 @@ set breakindentopt=sbr
 
 set inccommand=split
 set termguicolors
+
+let g:tutor_debug = 1
+
 " Mappings: {{{1
 
 " Window_Buf_Tab_Mappings: {{{2
@@ -390,9 +389,9 @@ nnoremap <Leader>cd :cd %:p:h<CR>:pwd<CR>
 
 " Utilize the mouse!
 map <silent> <ScrollWheelUp> <C-Y>
-map <S-ScrollWheelUp> <C-U>
+map <silent> <S-ScrollWheelUp> <C-U>
 map <silent> <ScrollWheelDown> <C-E>
-map <S-ScrollWheelDown> <C-D>
+map <silent> <S-ScrollWheelDown> <C-D>
 
 " Save a file as root
 noremap <leader>W :w !sudo tee % > /dev/null<CR>
@@ -430,8 +429,6 @@ nnoremap <silent> <Leader>gds  <Cmd>Gdiff --staged<CR>
 nnoremap <silent> <Leader>gds2 <Cmd>Git diff --stat --staged<CR>
 nnoremap <silent> <Leader>ge   :Gedit<Space>
 nnoremap <silent> <Leader>gf   <Cmd>Gfetch<CR>
-nnoremap <silent> <Leader>gg   <Cmd>Ggrep<CR>
-nnoremap <silent> <Leader>gl   <Cmd>0Glog<CR>
 nnoremap <silent> <Leader>gL   <Cmd>0Glog --pretty=oneline --graph --decorate --abbrev --all --branches<CR>
 nnoremap <silent> <Leader>gm   <Cmd>Gmerge<CR>
 " Make the mapping longer but clear as to whether gp would pull or push
@@ -782,6 +779,14 @@ endfunction
 " then set it up like and so forth
 colorscheme gruvbox
 
+if g:colors_name ==# 'gruvbox'
+    call <SID>gruvbox()
+endif
+
+command! -nargs=0 Gruvbox call s:gruvbox()
+
+" General Syntax Highlighting: {{{2
+
 " Lower max syntax highlighting
 set synmaxcol=400
 
@@ -789,14 +794,7 @@ syntax sync minlines=500
 syntax sync fromstart
 syntax on
 
-
-if g:colors_name ==# 'gruvbox'
-    call <SID>gruvbox()
-endif
-
-command! -nargs=0 Gruvbox call s:gruvbox()
-
-" Clear hlsearch: {{{2
+" Clear Hlsearch: {{{2
 
 " TODO: Also this exits and clears the highlighting
 " pattern as soon as you hit enter. So if you type a word, it'll highlight all

@@ -66,7 +66,7 @@ ${0:Optional arguments above}
 endsnippet
 
 ################
-#      inline  #
+#  Inline	   #
 ################
 
 snippet * "Italics" s
@@ -81,10 +81,13 @@ snippet bold "bold" s
 **${1:${VISUAL:Strong emphasis}}** $0
 endsnippet
 
-snippet kbd "Wrap text with the kbd directive"
+snippet kbd "Add the kbd directive to your doc"
 :kbd:\`${1:${VISUAL}}\`
 endsnippet
 
+snippet rep "Replace" ms
+.. |$1| .. replace:: $2
+endsnippet
 ###########
 #  links  #
 ###########
@@ -166,10 +169,10 @@ snippet fig: "Figure directive" b
 $0
 endsnippet
 
-snippet cont "content directive" bs
+snippet cont "content directive" bsm
 .. contents::
 
-   ${0:${VISUAL:content}}
+   ${1:${VISUAL::depth:}} $2
 endsnippet
 
 snippet coded "Code block directive." bs
@@ -457,9 +460,12 @@ snippet chart "Pygal chart for Nikola" b
 $0
 endsnippet
 
+
 ############
 #  Sphinx  #
 ############
+
+# Keep Sphinx specific stuff separate for now.
 
 snippet sid "SideBar" b
 .. sidebar:: ${1:SideBar Title}

@@ -1,5 +1,6 @@
 " Syntax highlighting for snippet files (used for UltiSnips.vim)
 " Revision: 26/03/11 19:53:33
+" Vim: set foldmethod=marker:
 
 if exists("b:current_syntax")
   finish
