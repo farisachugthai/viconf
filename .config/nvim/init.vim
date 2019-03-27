@@ -246,8 +246,8 @@ endif
 set wildmenu
 set wildmode=longest,list:longest       " Longest string or list alternatives
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
-set fileignorecase                      " when searching for files don't use case
-set wildignorecase
+" set fileignorecase                      " when searching for files don't use case
+" set wildignorecase
 
 " Path: {{{2
 
@@ -294,9 +294,8 @@ if &textwidth!=0
 endif
 set cmdheight=2
 set number relativenumber
-set ignorecase smartcase
+set smartcase
 set infercase
-set autoindent                          " Smart indent fucks up indenting comments
 " FOOBAR=~/<CTRL-><CTRL-F> will now autocomplete!
 set isfname-==
 
@@ -313,10 +312,8 @@ set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
 set diffopt=filler,context:3          " vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
 
-if has('persistent_undo')
-    let &undodir = expand('$XDG_CONFIG_HOME') . '/nvim/undodir'
-    set undofile
-endif
+let &undodir = expand('$XDG_CONFIG_HOME') . '/nvim/undodir'
+set undofile
 
 set backup
 let &backupdir=expand('$XDG_CONFIG_HOME') . '/nvim/undodir'
@@ -392,9 +389,9 @@ nnoremap <Leader>cd :cd %:p:h<CR>:pwd<CR>
 
 " Utilize the mouse!
 map <silent> <ScrollWheelUp> <C-Y>
-map <S-ScrollWheelUp> <C-U>
+map <silent> <S-ScrollWheelUp> <C-U>
 map <silent> <ScrollWheelDown> <C-E>
-map <S-ScrollWheelDown> <C-D>
+map <silent> <S-ScrollWheelDown> <C-D>
 
 " Save a file as root
 noremap <leader>W :w !sudo tee % > /dev/null<CR>
@@ -432,9 +429,8 @@ nnoremap <silent> <Leader>gds  <Cmd>Gdiff --staged<CR>
 nnoremap <silent> <Leader>gds2 <Cmd>Git diff --stat --staged<CR>
 nnoremap <silent> <Leader>ge   :Gedit<Space>
 nnoremap <silent> <Leader>gf   <Cmd>Gfetch<CR>
-" nnoremap <silent> <Leader>gg   <Cmd>Ggrep<CR>
-" FZF got em
-" nnoremap <silent> <Leader>gl   <Cmd>0Glog<CR>
+nnoremap <silent> <Leader>gg   <Cmd>Ggrep<CR>
+nnoremap <silent> <Leader>gl   <Cmd>0Glog<CR>
 nnoremap <silent> <Leader>gL   <Cmd>0Glog --pretty=oneline --graph --decorate --abbrev --all --branches<CR>
 nnoremap <silent> <Leader>gm   <Cmd>Gmerge<CR>
 " Make the mapping longer but clear as to whether gp would pull or push
@@ -454,20 +450,6 @@ nnoremap <silent> <Leader>gW   <Cmd>Gwrite!<CR>
 " Vim_Plug: {{{2
 let g:plug_window = 'tabe'
 
-
-" Devicons: {{{2
-let g:webdevicons_enable = 1
-let g:webdevicons_enable_nerdtree = 1               " adding the flags to NERDTree
-let g:airline_powerline_fonts = 1
-
-" For startify
-let entry_format = "'   ['. index .']'. repeat(' ', (3 - strlen(index)))"
-
-if exists('*WebDevIconsGetFileTypeSymbol')  " support for vim-devicons
-    let entry_format .= ". WebDevIconsGetFileTypeSymbol(entry_path) .' '.  entry_path"
-else
-    let entry_format .= '. entry_path'
-endif
 
 " Jedi: {{{2
 let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces
@@ -523,14 +505,6 @@ let g:zim_dev = 1
 let g:voom_ft_modes = {'markdown': 'markdown', 'rst': 'rst', 'zimwiki': 'dokuwiki'}
 let g:voom_default_mode = 'rst'
 let g:voom_python_versions = [3]
-
-" Cheat40: {{{2
-" let g:cheat40_use_default = 1
-
-" Coc: {{{2
-inoremap <silent><expr> <c-space> coc#refresh()
-
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
 
 " Runtime: {{{1
 
@@ -790,6 +764,14 @@ endfunction
 " then set it up like and so forth
 colorscheme gruvbox
 
+if g:colors_name ==# 'gruvbox'
+    call <SID>gruvbox()
+endif
+
+command! -nargs=0 Gruvbox call s:gruvbox()
+
+" General Syntax Highlighting: {{{2
+
 " Lower max syntax highlighting
 set synmaxcol=400
 
@@ -797,14 +779,7 @@ syntax sync minlines=500
 syntax sync fromstart
 syntax on
 
-
-if g:colors_name ==# 'gruvbox'
-    call <SID>gruvbox()
-endif
-
-command! -nargs=0 Gruvbox call s:gruvbox()
-
-" Clear hlsearch: {{{2
+" Clear Hlsearch: {{{2
 
 " TODO: Also this exits and clears the highlighting
 " pattern as soon as you hit enter. So if you type a word, it'll highlight all

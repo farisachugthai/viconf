@@ -6,15 +6,15 @@
 " ============================================================================
 
 " Guards: {{{1
-if exists('did_airline_vim') || &cp || v:version < 700
-    finish
-endif
-let did_airline_vim = 1
-
 
 if !has_key(plugs, 'airline')
     finish
 endif
+
+if exists('b:did_airline_vim') || &cp || v:version < 700
+    finish
+endif
+let b:did_airline_vim = 1
 
 " Mappings: {{{1
 let g:airline#extensions#tabline#buffer_idx_mode = 1
