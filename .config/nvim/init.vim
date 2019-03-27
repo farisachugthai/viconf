@@ -1,30 +1,25 @@
-" Init:
 " Neovim Configuration:
-
-" About: {{{1
-let g:snips_author = 'Faris Chugthai'
-let g:snips_github = 'https://github.com/farisachugthai'
+" Maintainer: Faris Chugthai
+" Last Change: Mar 23, 2019
 
 " Vim Plug: {{{1
 
 " Plug Check: {{{2
-" Shout out Justinmk! Never wanted to go through a full check for vim-plug
-" since it's there 99% of the time but this is a real smart workaround
+" Shout out Justinmk!
 " https://github.com/justinmk/config/blob/291ec0ae12b0b4b35b4cf9315f1878db00b780ec/.config/nvim/init.vim#L12
 let s:plugins = filereadable(expand('~/.local/share/nvim/site/autoload/plug.vim', 1))
 
 if expand('OS') !=# 'Windows_NT'
     if !s:plugins
-        fun! InstallPlug() "bootstrap plug.vim on new systems
+        " bootstrap plug.vim on new systems
+        fun! InstallPlug()
             silent call mkdir(expand('~/.local/share/nvim/site/autoload', 1), 'p')
-            execute '!curl -fLo '.expand('~/.local/share/nvim/site/autoload/plug.vim', 1)
-          \ .' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+            execute '!curl -fLo ' . expand('~/.local/share/nvim/site/autoload/plug.vim', 1) . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
       endfun
     endif
 endif
 
-
-" XDG Check: {{{1
+" XDG Check: {{{2
 " The whole file is now predicated on these existing. Need to add checks in.
 
 if exists('$XDG_DATA_HOME') == 0
@@ -68,21 +63,19 @@ Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 
 " Preliminaries: {{{1
-unlet! skip_defaults_vim
-silent! source $VIMRUNTIME/defaults.vim
 
 " Python Executables: {{{2
 
 " if we have a virtual env start there
 if exists('$VIRTUAL_ENV')
     let g:python3_host_prog = expand('$VIRTUAL_ENV') . '/bin/python'
-    let &path = &path . ',' . expand('$VIRTUAL_ENV') . '/lib/python3.7**'
+    let &path = &path . ',' . expand('$VIRTUAL_ENV') . '/lib/python3.7/site-packages'
 
 " or a conda env.
 elseif exists('$CONDA_PYTHON_EXE')
     let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
     " Let's hope I don't break things for Windows
-    let &path = &path . ',' . expand('$CONDA_PREFIX/lib/python3.*')
+    let &path = &path . ',' . expand('$CONDA_PREFIX/lib/python3')
 
 else
 " If not then just use the system python
@@ -99,9 +92,9 @@ else
     let g:loaded_python_provider = 1
 endif
 
-" OS Setup: {{{1
+" OS Setup: {{{2
 
-" Platforms: {{{2
+" Platforms: {{{3
 let s:termux = exists('$PREFIX') && has('unix')
 let s:ubuntu = !exists('$PREFIX') && has('unix')
 let s:windows = has('win32') || has('win64')
@@ -117,7 +110,8 @@ if filereadable(s:local_vimrc)
     execute 'source' s:local_vimrc
 endif
 
-" Session options: {{{2
+" Session Options: {{{3
+
 " Here's a nice little setting to encourage interoperability
 " UNIX AND MS-WINDOWS
 
@@ -134,7 +128,7 @@ set sessionoptions+=unix,slash
 " Not related but I wanted to strike these down because they're annoying.
 set sessionoptions-=blank,folds
 
-" Remote hosts: {{{2
+" Remote Hosts: {{{3
 if s:termux
     " holy fuck that was a doozy to find
     let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
@@ -261,6 +255,11 @@ set wildignorecase
 " OR THE ** WILL EXPAND {rendering it as nothing}
 set path+=**                            " Recursively search dirs with :find
 
+" TODO:
+" function! s:pathadder() abort
+"     if is
+" double check syntax on adding parameters
+
 if isdirectory(expand('$_ROOT/local/include/'))
     let &path = &path . ',' . expand('$_ROOT/local/include')
 endif
@@ -334,6 +333,9 @@ set breakindentopt=sbr
 
 set inccommand=split
 set termguicolors
+
+let g:tutor_debug = 1
+
 " Mappings: {{{1
 
 " Window_Buf_Tab_Mappings: {{{2
@@ -341,6 +343,8 @@ set termguicolors
 " Navigate buffers more easily
 nnoremap <Leader>bn <Cmd>bnext<CR>
 nnoremap <Leader>bp <Cmd>bprev<CR>
+nnoremap <Leader>bl <Cmd>blast<CR>
+nnoremap <Leader>bf <Cmd>bfirst<CR>
 
 " Wanna navigate windows more easily?
 " |CTRL-W_gF|   CTRL-W g F     edit file name under the cursor in a new
@@ -350,13 +354,14 @@ nnoremap <Leader>bp <Cmd>bprev<CR>
 " Rebind that to C-w t and we can open the filename in a new tab.
 
 " Navigate tabs more easily
-nnoremap <A-Right> <Cmd>tabnext<CR>
-nnoremap <A-Left> <Cmd>tabprev<CR>
+noremap <A-Right> <Cmd>tabnext<CR>
+noremap <A-Left> <Cmd>tabprev<CR>
 nnoremap <Leader>tn <Cmd>tabnext<CR>
 nnoremap <Leader>tp <Cmd>tabprev<CR>
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
 nnoremap <Leader>te <Cmd>tabedit <c-r>=expand("%:p:h")<CR>
+nnoremap <Leader>tq <Cmd>tabclose<CR>
 
 " It should also be easier to edit the config. Bind similarly to tmux
 nnoremap <Leader>ed <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
@@ -773,9 +778,12 @@ command! Chmod call system('chmod +x -- ' . expand('%:S')
 " toggle it.
 function! s:gruvbox()
     set background=dark
+    let g:gruvbox_italic = 1
     let g:gruvbox_contrast_dark = 'hard'
     " let g:gruvbox_improved_strings=1 shockingly terrible
-    let g:gruvbox_improved_warnings=1
+    let g:gruvbox_improved_warnings = 1
+    let g:gruvbox_invert_tabline = 1
+    let g:gruvbox_italicize_strings = 1
 endfunction
 
 " From here I can keep making expressions to the effect of elseif colors==onedark

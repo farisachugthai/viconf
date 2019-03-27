@@ -2,7 +2,7 @@
     " File: nerdtree.vim
     " Author: Faris Chugthai
     " Description: NERDTree Configuration File
-    " Last Modified: Mar 21, 2019
+    " Last Modified: February 27, 2019
 " ============================================================================
 
 " Plugin Guard: {{{1
@@ -24,6 +24,7 @@ augroup nerd_loader
   autocmd VimEnter * silent! autocmd! FileExplorer
   autocmd BufEnter,BufNew *
         \  if isdirectory(expand('<amatch>'))
+  " FUCK! This hasn't worked for MONTHS and it's because the plugin is called nerdTree not nerdtree...
         \|   call plug#load('nerdTree')
         \|   execute 'autocmd! nerd_loader'
         \| endif

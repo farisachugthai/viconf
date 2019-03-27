@@ -85,10 +85,10 @@ let g:fzf_colors =
 " off or something
 
 " Exported fzf <plug> commands.
-" For this first one go down to the advanced functions
-" imap <c-x><c-k> <Plug>(fzf-complete-word)
-imap <c-x><c-f> <Plug>(fzf-complete-path)
-imap <c-x><c-j> <Plug>(fzf-complete-file-ag)
+" For this first one go down to the advanced functions. Eh we can leave it mapped. It uses imap.
+imap <C-x><C-k> <Plug>(fzf-complete-word)
+imap <C-x><C-f> <Plug>(fzf-complete-path)
+imap <C-x><C-j> <Plug>(fzf-complete-file-ag)
 
 " The way I remapped Leader, this actually only works if you do <Space>\
 nnoremap <silent> <expr> <Leader><Leader> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
@@ -97,13 +97,17 @@ nnoremap <silent> <expr> <Leader><Leader> (expand('%') =~ 'NERD_tree' ? "\<c-w>\
 nnoremap <silent> <Leader>C        :Colors<CR>
 nnoremap <silent> <Leader><Enter>  :Buffers<CR>
 
-" Shows all normal mode mappings.
-nmap <leader><tab>  <Plug>(fzf-maps-n)
-omap <leader><tab>  <Plug>(fzf-maps-o)
-xmap <leader><tab>  <Plug>(fzf-maps-x)
+" Mapping for selecting different mappings.
+" Could add one for insert mode but leader tab is gonna happen so often that we need to use
+" something else. Or we could just use \<tab>....hm.
+" NOTE: The imap should probably only be invoked using \<tab>
+nmap <leader><tab> <Plug>(fzf-maps-n)
+omap <leader><tab> <Plug>(fzf-maps-o)
+xmap <leader><tab> <Plug>(fzf-maps-x)
+imap <leader><tab> <Plug>(fzf-maps-i)
 
 " Advanced customization using autoload functions
-inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'left': '15%'})
+inoremap <expr> <C-x><C-k> fzf#vim#complete#word({'left': '15%'})
 
 " Map vim defaults to fzf history commands
 noremap <silent> q: <Cmd>History:<CR>
@@ -175,6 +179,11 @@ augroup end
 "         \ 'source': 'cat $_ROOT/share/dict/words'},
 "         \ get(a:000, 0, fzf#wrap())))
 " endfunction
+
+inoremap <expr> <c-x><c-k> fzf#complete({
+            \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add /usr/share/dict/words 2>/dev/null',
+            \ 'options': '--preview=bat {} --ansi --multi --cycle',
+\ 'left': 50})
 
 " Grep: {{{2
 " Unfortunately the bang doesn't move to a new window. TODO
