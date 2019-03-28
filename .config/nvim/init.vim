@@ -1,37 +1,33 @@
-" Init:
 " Neovim Configuration:
-
-" About: {{{1
-let g:snips_author = 'Faris Chugthai'
-let g:snips_github = 'https://github.com/farisachugthai'
+" Maintainer: Faris Chugthai
+" Last Change: Mar 23, 2019
 
 " Vim Plug: {{{1
 
 " Plug Check: {{{2
-" Shout out Justinmk! Never wanted to go through a full check for vim-plug
-" since it's there 99% of the time but this is a real smart workaround
+" Shout out Justinmk!
 " https://github.com/justinmk/config/blob/291ec0ae12b0b4b35b4cf9315f1878db00b780ec/.config/nvim/init.vim#L12
 let s:plugins = filereadable(expand('~/.local/share/nvim/site/autoload/plug.vim', 1))
 
 if expand('OS') !=# 'Windows_NT'
     if !s:plugins
-        fun! InstallPlug() "bootstrap plug.vim on new systems
+        " bootstrap plug.vim on new systems
+        fun! InstallPlug()
             silent call mkdir(expand('~/.local/share/nvim/site/autoload', 1), 'p')
-            execute '!curl -fLo '.expand('~/.local/share/nvim/site/autoload/plug.vim', 1)
-          \ .' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+            execute '!curl -fLo ' . expand('~/.local/share/nvim/site/autoload/plug.vim', 1) . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
       endfun
     endif
 endif
 
-" XDG Check: {{{1
+" XDG Check: {{{2
 " The whole file is now predicated on these existing. Need to add checks in.
-
-if exists('$XDG_DATA_HOME') == 0
+" In $VIMRUNTIME/filetype.vim it looks like Bram himself checks env vars this way
+if empty('$XDG_DATA_HOME')
     echoerr 'XDG_DATA_HOME not set. Exiting'
     finish
 endif
 
-if exists('$XDG_CONFIG_HOME') == 0
+if empty('$XDG_CONFIG_HOME')
     echoerr 'XDG_CONFIG_HOME not set. Exiting.'
     finish
 endif
@@ -47,34 +43,26 @@ Plug 'davidhalter/jedi-vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
-Plug 'tpope/vim-unimpaired'
+" Plug 'tpope/vim-unimpaired'
 Plug 'w0rp/ale'
 Plug 'SirVer/ultisnips'
-Plug 'christoomey/vim-tmux-navigator'
+
+if has('$TMUX')
+    Plug 'christoomey/vim-tmux-navigator'
+endif
+
 Plug 'mhinz/vim-startify'
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
-Plug 'godlygeek/tabular'
 Plug 'vim-voom/voom'
-Plug 'Rykka/InstantRst'
 Plug 'gu-fan/riv.vim', { 'for': ['python', 'python3', 'rst'] }
 Plug 'greyblake/vim-preview'
 Plug 'lifepillar/vim-cheat40'
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': 'yarn install'}
+" Plug 'neoclide/coc.nvim', {'tag': '*', 'do': 'yarn install'}
 Plug 'autozimu/LanguageClient-neovim'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 
 " Preliminaries: {{{1
-
-" Nvim Specific: {{{2
-
-if has('nvim')
-    set inccommand=split                    " This alone is enough to never go back
-    set termguicolors
-endif
-
-unlet! skip_defaults_vim
-silent! source $VIMRUNTIME/defaults.vim
 
 " Python Executables: {{{2
 
@@ -87,7 +75,7 @@ if exists('$VIRTUAL_ENV')
 elseif exists('$CONDA_PYTHON_EXE')
     let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
     " Let's hope I don't break things for Windows
-    let &path = &path . ',' . expand('$CONDA_PREFIX/lib/python3.*')
+    let &path = &path . ',' . expand('$CONDA_PREFIX/lib/python3')
 
 else
 " If not then just use the system python
@@ -104,9 +92,9 @@ else
     let g:loaded_python_provider = 1
 endif
 
-" OS Setup: {{{1
+" OS Setup: {{{2
 
-" Platforms: {{{2
+" Platforms: {{{3
 let s:termux = exists('$PREFIX') && has('unix')
 let s:ubuntu = !exists('$PREFIX') && has('unix')
 let s:windows = has('win32') || has('win64')
@@ -122,7 +110,8 @@ if filereadable(s:local_vimrc)
     execute 'source' s:local_vimrc
 endif
 
-" Session options: {{{2
+" Session Options: {{{3
+
 " Here's a nice little setting to encourage interoperability
 " UNIX AND MS-WINDOWS
 
@@ -139,7 +128,7 @@ set sessionoptions+=unix,slash
 " Not related but I wanted to strike these down because they're annoying.
 set sessionoptions-=blank,folds
 
-" Remote hosts: {{{2
+" Remote Hosts: {{{3
 if s:termux
     " holy fuck that was a doozy to find
     let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
@@ -257,24 +246,19 @@ endif
 set wildmenu
 set wildmode=longest,list:longest       " Longest string or list alternatives
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
-set fileignorecase                      " when searching for files don't use case
-set wildignorecase
+" set fileignorecase                      " when searching for files don't use case
+" set wildignorecase
 
 " Path: {{{2
-
-" :let &{option-name} = {expr1}         *:let-option* *:let-&*
-"           Set option {option-name} to the result of the
-"           expression {expr1}.  A String or Number value is
-"           always converted to the type of the option.
-"           For an option local to a window or buffer the effect
-"           is just like using the |:set| command: both the local
-"           value and the global value are changed.
-"           Example: >
-"               :let &path = &path . ',/usr/local/include'
 
 " DON'T USE LET. LET ALLOWS FOR EXPRESSION EVALUATION. MUST BE DONE WITH SET
 " OR THE ** WILL EXPAND {rendering it as nothing}
 set path+=**                            " Recursively search dirs with :find
+
+" TODO:
+" function! s:pathadder() abort
+"     if is
+" double check syntax on adding parameters
 
 if isdirectory(expand('$_ROOT/local/include/'))
     let &path = &path . ',' . expand('$_ROOT/local/include')
@@ -291,7 +275,7 @@ endif
 
 if isdirectory(expand('~/.local/lib/python3.7'))
     " Double check globbing in vim
-    let &path = &path . ',' . expand('~/.local/lib/python3.7/site-packages')
+    let &path = &path . ',' . expand('~') . '/.local/lib/python3.7'
 endif
 
 " TODO: How do we glob in vimscript? There's some weird thing about using * and ** right?
@@ -310,9 +294,8 @@ if &textwidth!=0
 endif
 set cmdheight=2
 set number relativenumber
-set ignorecase smartcase
+set smartcase
 set infercase
-set autoindent                          " Smart indent fucks up indenting comments
 " FOOBAR=~/<CTRL-><CTRL-F> will now autocomplete!
 set isfname-==
 
@@ -329,10 +312,8 @@ set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
 set diffopt=filler,context:3          " vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
 
-if has('persistent_undo')
-    let &undodir = expand('$XDG_CONFIG_HOME') . '/nvim/undodir'
-    set undofile
-endif
+let &undodir = expand('$XDG_CONFIG_HOME') . '/nvim/undodir'
+set undofile
 
 set backup
 let &backupdir=expand('$XDG_CONFIG_HOME') . '/nvim/undodir'
@@ -347,6 +328,11 @@ let &showbreak = '↳ '                   " Indent wrapped lines correctly
 set breakindent
 set breakindentopt=sbr
 
+set inccommand=split
+set termguicolors
+
+let g:tutor_debug = 1
+
 " Mappings: {{{1
 
 " Window_Buf_Tab_Mappings: {{{2
@@ -354,6 +340,8 @@ set breakindentopt=sbr
 " Navigate buffers more easily
 nnoremap <Leader>bn <Cmd>bnext<CR>
 nnoremap <Leader>bp <Cmd>bprev<CR>
+nnoremap <Leader>bl <Cmd>blast<CR>
+nnoremap <Leader>bf <Cmd>bfirst<CR>
 
 " Wanna navigate windows more easily?
 " |CTRL-W_gF|   CTRL-W g F     edit file name under the cursor in a new
@@ -363,18 +351,18 @@ nnoremap <Leader>bp <Cmd>bprev<CR>
 " Rebind that to C-w t and we can open the filename in a new tab.
 
 " Navigate tabs more easily
-nnoremap <A-Right> <Cmd>tabnext<CR>
-nnoremap <A-Left> <Cmd>tabprev<CR>
+noremap <A-Right> <Cmd>tabnext<CR>
+noremap <A-Left> <Cmd>tabprev<CR>
 nnoremap <Leader>tn <Cmd>tabnext<CR>
 nnoremap <Leader>tp <Cmd>tabprev<CR>
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
 nnoremap <Leader>te <Cmd>tabedit <c-r>=expand("%:p:h")<CR>
+nnoremap <Leader>tq <Cmd>tabclose<CR>
 
 " It should also be easier to edit the config. Bind similarly to tmux
 nnoremap <Leader>ed <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
-nnoremap <F9> <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
-inoremap <F9> <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
+noremap <F9> <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 
 " Now reload it
 nnoremap <Leader>re :so $MYVIMRC<CR>
@@ -400,15 +388,15 @@ nnoremap k gk
 nnoremap <Leader>cd :cd %:p:h<CR>:pwd<CR>
 
 " Utilize the mouse!
-map <ScrollWheelUp> <C-Y>
-map <S-ScrollWheelUp> <C-U>
-map <ScrollWheelDown> <C-E>
-map <S-ScrollWheelDown> <C-D>
+map <silent> <ScrollWheelUp> <C-Y>
+map <silent> <S-ScrollWheelUp> <C-U>
+map <silent> <ScrollWheelDown> <C-E>
+map <silent> <S-ScrollWheelDown> <C-D>
 
 " Save a file as root
 noremap <leader>W :w !sudo tee % > /dev/null<CR>
 
-" Spell Checking: {{{2
+" Spell Checking:
 nnoremap <Leader>sp :setlocal spell!<CR>
 nnoremap <Leader>s= z=
 
@@ -431,26 +419,6 @@ nnoremap <A-h> <C-w>h
 nnoremap <A-j> <C-w>j
 nnoremap <A-k> <C-w>k
 nnoremap <A-l> <C-w>l
-
-" ALE: {{{2
-
-" This isn't working idk why
-nnoremap <Leader>l <Plug>(ale_toggle_buffer)<CR>
-
-nnoremap ]a <Plug>(ale_next_wrap)
-nnoremap [a <Plug>(ale_previous_wrap)
-
-" `:ALEInfoToFile` will write the ALE runtime information to a given filename.
-" The filename works just like |:w|.
-
-" <Meta-a> now gives detailed messages about what the linters have sent to ALE
-nnoremap <A-a> <Plug>(ale_detail)
-
-" This might be a good idea. * is already 'search for the cword' so let ALE
-" work in a similar manner right?
-nnoremap <Leader>* <Plug>(ale_go_to_reference)
-
-nnoremap <Leader>a <Cmd>ALEInfo<CR>
 
 " Fugitive: {{{2
 nnoremap <silent> <Leader>gb   <Cmd>Gblame<CR>
@@ -477,53 +445,11 @@ nnoremap <silent> <Leader>gst  <Cmd>Git diff --stat<CR>
 nnoremap <silent> <Leader>gw   <Cmd>Gwrite<CR>
 nnoremap <silent> <Leader>gW   <Cmd>Gwrite!<CR>
 
-" Tagbar: {{{2
-" This works perfectly and should be how you handle all plugins and their
-" mappings !!!!!
-if has_key(plugs, 'tagbar')
-    nnoremap <silent> <F8> <Cmd>TagbarToggle<CR>
-    inoremap <silent> <F8> <Cmd>TagbarToggle<CR>
-endif
-
 " Remaining Plugins: {{{1
 
 " Vim_Plug: {{{2
 let g:plug_window = 'tabe'
 
-
-" ALE: {{{2
-let g:ale_fixers = { '*': [ 'remove_trailing_lines', 'trim_whitespace' ] }
-let g:ale_fix_on_save = 1
-" Now because you fix the trailing whitespace and trailing lines
-let g:ale_warn_about_trailing_whitespace = 0
-let g:ale_warn_about_trailing_blank_lines = 0
-
-let g:ale_list_vertical = 1
-
-let g:ale_set_signs = 1
-let g:ale_sign_column_always = 1
-let g:ale_virtualenv_dir_names = [ '$HOME/virtualenvs' ]
-" Display progress while linting.
-let s:ale_running = 0
-augroup ALEProgress
-    autocmd!
-    autocmd User ALELintPre  let s:ale_running = 1 | redrawstatus
-    autocmd User ALELintPost let s:ale_running = 0 | redrawstatus
-augroup END
-
-" Devicons: {{{2
-let g:webdevicons_enable = 1
-let g:webdevicons_enable_nerdtree = 1               " adding the flags to NERDTree
-let g:airline_powerline_fonts = 1
-
-" For startify
-let entry_format = "'   ['. index .']'. repeat(' ', (3 - strlen(index)))"
-
-if exists('*WebDevIconsGetFileTypeSymbol')  " support for vim-devicons
-    let entry_format .= ". WebDevIconsGetFileTypeSymbol(entry_path) .' '.  entry_path"
-else
-    let entry_format .= '. entry_path'
-endif
 
 " Jedi: {{{2
 let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces
@@ -544,13 +470,6 @@ if s:ubuntu
 elseif s:termux
     let g:deoplete#sources#jedi#enable_typeinfo = 0
 endif
-
-" Tagbar: {{{2
-" just a thought i had. For any normal mode remaps you have, add the same
-" thing and prefix <Esc> to the RHS and boom!
-let g:tagbar_left = 1
-let g:tagbar_width = 30
-let g:tagbar_sort = 0
 
 " Zim: {{{2
 let g:zim_notebooks_dir = expand('~/Notebooks/Notes')
@@ -586,14 +505,6 @@ let g:zim_dev = 1
 let g:voom_ft_modes = {'markdown': 'markdown', 'rst': 'rst', 'zimwiki': 'dokuwiki'}
 let g:voom_default_mode = 'rst'
 let g:voom_python_versions = [3]
-
-" Cheat40: {{{2
-" let g:cheat40_use_default = 1
-
-" Coc: {{{2
-inoremap <silent><expr> <c-space> coc#refresh()
-
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
 
 " Runtime: {{{1
 
@@ -729,13 +640,43 @@ endfunction
 
 command! -bang Autosave call s:autosave(<bang>1)
 
-" HL: {{{2
-" Whats the syntax group under my cursor?
+" Syntax Highlighting Functions: {{{2
+
+" HL: {{{3
+" Whats the highlighting group under my cursor?
 function! s:hl()
   echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
 endfunction
 
 command! HL call <SID>hl()
+
+" HiC: {{{3
+" Heres a possibly easier way to do this. Still in testing.
+" Mar 17, 2019: So far does the exact same thing!
+function! s:HiC()
+    echo 'Highlighting group: ' . synIDattr(synID(line('.'), col('.'), 1), 'name')
+    echo 'Foreground color: ' . synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'fg')
+endfunction
+
+command! HiC call <SID>HiC()
+
+" HiDebug: {{{3
+" function! s:HiD()
+"     echo join(map(synstack(line('.'), col('.')), 'synIDattr(id, "name")') '\n')
+" endfunction
+
+" command! HiD call <SID>HiD()
+
+" HiAll: {{{3
+function! s:HiQF()
+  " synstack returns a list. takes lnum and col.
+  " map is crazy specific in its argument requirements. map(list, string)
+  " cexpr evals a command and adds it to the quickfist list
+  cexpr! map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunction
+
+command! HiQF call <SID>HiQF()
+
 
 " Explore PlugHelp: {{{2
 " Call :PlugHelp to use fzf to open a window with all of the plugins
@@ -779,9 +720,30 @@ endfunction
 
 let &statusline = s:statusline_expr()
 
+" Except for...
+autocmd TermOpen * setlocal statusline=%{b:term_title}
+
 " Rename: {{{2
 " :he map line 1454. How have i never noticed this isn't a feature???
 command! -nargs=1 -bang -complete=file Rename f <args>|w<bang>
+
+" YAPF: {{{2
+
+command! YAPF exec '!yapf <cfile>'
+command! YAPFI exec '!yapf -i <cfile>'
+command! YAPFD cexpr! exec '!yapf -d <cfile'
+
+" Chmod: {{{2
+
+"	:S	Escape special characters for use with a shell command (see
+"		|shellescape()|). Must be the last one. Examples: >
+"		    :!dir <cfile>:S
+"		    :call system('chmod +w -- ' . expand('%:S'))
+" From :he filename-modifiers in the cmdline page.
+
+command! Chmod call system('chmod +x -- ' . expand('%:S')
+
+" Could do word under cursor. Could tack it on to some fzf variation. idk
 
 " Colorscheme: {{{1
 
@@ -790,14 +752,25 @@ command! -nargs=1 -bang -complete=file Rename f <args>|w<bang>
 " toggle it.
 function! s:gruvbox()
     set background=dark
+    let g:gruvbox_italic = 1
     let g:gruvbox_contrast_dark = 'hard'
     " let g:gruvbox_improved_strings=1 shockingly terrible
-    let g:gruvbox_improved_warnings=1
+    let g:gruvbox_improved_warnings = 1
+    let g:gruvbox_invert_tabline = 1
+    let g:gruvbox_italicize_strings = 1
 endfunction
 
 " From here I can keep making expressions to the effect of elseif colors==onedark
 " then set it up like and so forth
 colorscheme gruvbox
+
+if g:colors_name ==# 'gruvbox'
+    call <SID>gruvbox()
+endif
+
+command! -nargs=0 Gruvbox call s:gruvbox()
+
+" General Syntax Highlighting: {{{2
 
 " Lower max syntax highlighting
 set synmaxcol=400
@@ -806,14 +779,7 @@ syntax sync minlines=500
 syntax sync fromstart
 syntax on
 
-
-if g:colors_name ==# 'gruvbox'
-    call <SID>gruvbox()
-endif
-
-command! -nargs=0 Gruvbox call s:gruvbox()
-
-" Clear hlsearch: {{{2
+" Clear Hlsearch: {{{2
 
 " TODO: Also this exits and clears the highlighting
 " pattern as soon as you hit enter. So if you type a word, it'll highlight all

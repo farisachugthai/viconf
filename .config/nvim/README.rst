@@ -2,7 +2,7 @@ README
 ========
 
 :Author: Faris Chugthai
-:Date: 02/19/2019
+:Date: Mar 24, 2019
 
 To say vim has a lot of options, associated files and directories is an
 understatement. But these can be broken down piece by piece to be more
@@ -70,14 +70,16 @@ before every single space.
 
 Environment Variables
 ---------------------
-Do not ever redefine VIMRUNTIME! If set in your .profile or .bashrc, this will
-mess up compatability between nvim and vim as nvim defines the same variable,
-but instead of the expected /usr/share/vim/runtime/ definition, $VIMRUNTIME is
-set to /usr/share/nvim/runtime.
+Do not ever redefine `$VIMRUNTIME`! This variable is used by both Neovim and
+Vim; however, both define the var differently.
 
-Therefore, defining VIMRUNTIME as /usr/share/vim/runtime in a startup file will
-cause unexpected behavior when starting nvim.
+If this is set in a startup file like `.bash_profile` or `.bashrc`, it will
+create compatability issues between the two.
 
+Nvim defines `$VIMRUNTIME` as /usr/share/nvim/runtime/, in comparison to Vim's
+/usr/share/vim/runtime/ definition. Therefore, defining `$VIMRUNTIME`
+as /usr/share/vim/runtime/ in a startup file will cause unexpected behavior
+in Neovim's startup.
 
 Directory Layout and Runtimepath
 ---------------------------------
@@ -216,6 +218,48 @@ From the help docs
 
 Mappings
 ---------
+Mappings initially sounds like a simple enough idea as it's generally commonplace
+in other editors.
+
+    Map :kbd:`Ctrl`+:kbd:`Shift`+:kbd:`F1` to some arbitrary macro
+
+Is conventionally how this works. In Vim there are 7 different mapping modes
+that exist.
+
++--------------+-----------+---------+------------------------------------------+
+| Map Overview |           |         |                                          |
++--------------+-----------+---------+------------------------------------------+
+| Commands     | Modes     |         |                                          |
++--------------+-----------+---------+------------------------------------------+
+| :map         | :noremap  | :unmap  | Normal, Visual, Select, Operator-pending |
++--------------+-----------+---------+------------------------------------------+
+| :nmap        | :nnoremap | :nunmap | Normal                                   |
++--------------+-----------+---------+------------------------------------------+
+| :vmap        | :vnoremap | :vunmap | Visual and Select                        |
++--------------+-----------+---------+------------------------------------------+
++--------------+-----------+---------+------------------------------------------+
+| :smap        |           |         | Select                                   |
++--------------+-----------+---------+------------------------------------------+
++--------------+-----------+---------+------------------------------------------+
+| :xmap        |           |         | Visual                                   |
++--------------+-----------+---------+------------------------------------------+
+| :omap        |           |         | Operating-pending                        |
++--------------+-----------+---------+------------------------------------------+
+| :map!        |           |         | Insert and Command-line                  |
++--------------+-----------+---------+------------------------------------------+
++--------------+-----------+---------+------------------------------------------+
+| :imap        |           |         | Insert                                   |
++--------------+-----------+---------+------------------------------------------+
++--------------+-----------+---------+------------------------------------------+
+| :lmap        |           |         | Insert, Command-line, Lang-Arg           |
++--------------+-----------+---------+------------------------------------------+
++--------------+-----------+---------+------------------------------------------+
+| :cmap        |           |         | Command-line                             |
++--------------+-----------+---------+------------------------------------------+
++--------------+-----------+---------+------------------------------------------+
+| :tmap        |           |         | Terminal                                 |
++--------------+-----------+---------+------------------------------------------+
+
 Ensure that mappings use the ``<Cmd>`` idiom in place of :kbd:`<C-o>` for insert
 mode or :kbd:`<C-u>` for visual mode.
 
@@ -240,6 +284,54 @@ mode or :kbd:`<C-u>` for visual mode.
     command: it is executed as if an (unrestricted) |autocmd| was invoked or an
     async event event was processed.
 
+
+To date I haven't had any problems with replacing all instances of :kbd:`:`
+with ``<Cmd>``, and it makes Nvim behave in a slightly more manageable way.
+
+Insert Mode Completion
+----------------------
+
+Because I can never remember these.
+
+7. Insert mode completion				*ins-completion*
+
+In Insert and Replace mode, there are several commands to complete part of a
+keyword or line that has been typed.  This is useful if you are using
+complicated keywords (e.g., function names with capitals and underscores).
+
+These commands are not available when the `+insert_expand` feature was
+disabled at compile time.
+
+Completion can be done for:
+
++-----------------------------------------------+------------+
+| 1. Whole lines                                | <C-x><C-l> |
++-----------------------------------------------+------------+
+| 2. Keywords in the current file               | <C-x><C-n> |
++-----------------------------------------------+------------+
+| 3. keywords in `dictionary`                   | <C-x><C-k> |
++-----------------------------------------------+------------+
++-----------------------------------------------+------------+
+| 4. Keywords in `thesauraus`                   | <C-x><C-t> |
++-----------------------------------------------+------------+
+| 5. Keywords in the current and included files | <C-x><C-i> |
++-----------------------------------------------+------------+
+| 6. tags                                       | <C-x><C-]> |
++-----------------------------------------------+------------+
+| 7. File names                                 | <C-x><C-f> |
++-----------------------------------------------+------------+
++-----------------------------------------------+------------+
+| 8. Definitions or macros                      | <C-x><C-d> |
++-----------------------------------------------+------------+
++-----------------------------------------------+------------+
+| 9. Vim Command Line                           | <C-x><C-v> |
++-----------------------------------------------+------------+
+| 10. User defined completion                   | <C-x><C-u> |
++-----------------------------------------------+------------+
+| 11. Omnicompletion (Filetype specific)        | <C-x><C-o> |
++-----------------------------------------------+------------+
+| 12. Spelling Suggestions                      | <C-x>      |
++-----------------------------------------------+------------+
 
 .. _`after/ftplugin/gitcommit.vim`: after/ftplugin/gitcommit.vim
 .. _`after/ftplugin/`: after/ftplugin/

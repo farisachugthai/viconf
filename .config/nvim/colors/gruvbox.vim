@@ -1,13 +1,11 @@
 " -----------------------------------------------------------------------------
 " File: gruvbox.vim
 " Description: Retro groove color scheme for Vim
-" Author: morhetz <morhetz@gmail.com>
-" Source: https://github.com/morhetz/gruvbox
-" Last Modified: 12 Aug 2017
+" Maintainer: Faris Chugthai
+" Previous Maintainer: morhetz <morhetz@gmail.com>
+" Original Source: https://github.com/morhetz/gruvbox
+" Last Modified: Mar 23, 2019
 " -----------------------------------------------------------------------------
-
-" The line i changed was on 579. I would put this in an after file but there are
-" so many functions that its gonna be hard
 
 " Guards: {{{
 if exists('did_gruvbox') || &cp || v:version < 700
@@ -28,10 +26,6 @@ if v:version > 580
 endif
 
 let g:colors_name='gruvbox'
-
-if !(has('termguicolors') && &termguicolors) && !has('gui_running') && &t_Co != 256
-  finish
-endif
 
 " }}}
 " Global Settings: {{{
@@ -183,9 +177,9 @@ let s:none = ['NONE', 'NONE']
 " determine relative colors
 if s:is_dark
   let s:bg0  = s:gb.dark0
-  if g:gruvbox_contrast_dark == 'soft'
+  if g:gruvbox_contrast_dark ==? 'soft'
     let s:bg0  = s:gb.dark0_soft
-  elseif g:gruvbox_contrast_dark == 'hard'
+  elseif g:gruvbox_contrast_dark ==? 'hard'
     let s:bg0  = s:gb.dark0_hard
   endif
 
@@ -213,9 +207,9 @@ if s:is_dark
   let s:orange = s:gb.bright_orange
 else
   let s:bg0  = s:gb.light0
-  if g:gruvbox_contrast_light == 'soft'
+  if g:gruvbox_contrast_light ==? 'soft'
     let s:bg0  = s:gb.light0_soft
-  elseif g:gruvbox_contrast_light == 'hard'
+  elseif g:gruvbox_contrast_light ==? 'hard'
     let s:bg0  = s:gb.light0_hard
   endif
 
@@ -676,7 +670,7 @@ call s:HL('DiffText',   s:yellow, s:bg0, s:inverse)
 " }}}
 " Spelling: {{{
 
-if has("spell")
+if has('spell')
   " Not capitalised word, or compile warnings
   if g:gruvbox_improved_warnings == 0
     call s:HL('SpellCap',   s:none, s:none, s:undercurl, s:red)
@@ -694,128 +688,155 @@ endif
 " }}}
 
 " Plugin specific -------------------------------------------------------------
-" EasyMotion: {{{
 
-hi! link EasyMotionTarget Search
-hi! link EasyMotionShade Comment
+" AKA Plugins You Don't Have: {{{
 
-" }}}
-" Sneak: {{{
+if 0
+  " EasyMotion: {{{
 
-hi! link Sneak Search
-hi! link SneakLabel Search
+  hi! link EasyMotionTarget Search
+  hi! link EasyMotionShade Comment
 
-" }}}
-" Indent Guides: {{{
+  " }}}
+  " Sneak: {{{
 
-if !exists('g:indent_guides_auto_colors')
-  let g:indent_guides_auto_colors = 0
-endif
+  hi! link Sneak Search
+  hi! link SneakLabel Search
 
-if g:indent_guides_auto_colors == 0
-  if g:gruvbox_invert_indent_guides == 0
-    call s:HL('IndentGuidesOdd', s:vim_bg, s:bg2)
-    call s:HL('IndentGuidesEven', s:vim_bg, s:bg1)
-  else
-    call s:HL('IndentGuidesOdd', s:vim_bg, s:bg2, s:inverse)
-    call s:HL('IndentGuidesEven', s:vim_bg, s:bg3, s:inverse)
+  " }}}
+  " Indent Guides: {{{
+
+  if !exists('g:indent_guides_auto_colors')
+    let g:indent_guides_auto_colors = 0
   endif
-endif
 
-" }}}
-" IndentLine: {{{
+  if g:indent_guides_auto_colors == 0
+    if g:gruvbox_invert_indent_guides == 0
+      call s:HL('IndentGuidesOdd', s:vim_bg, s:bg2)
+      call s:HL('IndentGuidesEven', s:vim_bg, s:bg1)
+    else
+      call s:HL('IndentGuidesOdd', s:vim_bg, s:bg2, s:inverse)
+      call s:HL('IndentGuidesEven', s:vim_bg, s:bg3, s:inverse)
+    endif
+  endif
 
-if !exists('g:indentLine_color_term')
-  let g:indentLine_color_term = s:bg2[1]
-endif
-if !exists('g:indentLine_color_gui')
-  let g:indentLine_color_gui = s:bg2[0]
-endif
+  " }}}
+  " IndentLine: {{{
 
-" }}}
-" Rainbow Parentheses: {{{
+  if !exists('g:indentLine_color_term')
+    let g:indentLine_color_term = s:bg2[1]
+  endif
+  if !exists('g:indentLine_color_gui')
+    let g:indentLine_color_gui = s:bg2[0]
+  endif
 
-if !exists('g:rbpt_colorpairs')
-  let g:rbpt_colorpairs =
-    \ [
-      \ ['blue', '#458588'], ['magenta', '#b16286'],
-      \ ['red',  '#cc241d'], ['166',     '#d65d0e']
+  " }}}
+  " Rainbow Parentheses: {{{
+
+  if !exists('g:rbpt_colorpairs')
+    let g:rbpt_colorpairs =
+      \ [
+        \ ['blue', '#458588'], ['magenta', '#b16286'],
+        \ ['red',  '#cc241d'], ['166',     '#d65d0e']
+      \ ]
+  endif
+
+  let g:rainbow_guifgs = [ '#d65d0e', '#cc241d', '#b16286', '#458588' ]
+  let g:rainbow_ctermfgs = [ '166', 'red', 'magenta', 'blue' ]
+
+  if !exists('g:rainbow_conf')
+     let g:rainbow_conf = {}
+  endif
+  if !has_key(g:rainbow_conf, 'guifgs')
+     let g:rainbow_conf['guifgs'] = g:rainbow_guifgs
+  endif
+  if !has_key(g:rainbow_conf, 'ctermfgs')
+     let g:rainbow_conf['ctermfgs'] = g:rainbow_ctermfgs
+  endif
+
+  let g:niji_dark_colours = g:rbpt_colorpairs
+  let g:niji_light_colours = g:rbpt_colorpairs
+
+  "}}}
+  " Signify: {{{
+
+  hi! link SignifySignAdd GruvboxGreenSign
+  hi! link SignifySignChange GruvboxAquaSign
+  hi! link SignifySignDelete GruvboxRedSign
+
+  " }}}
+  " Syntastic: {{{
+
+  call s:HL('SyntasticError', s:none, s:none, s:undercurl, s:red)
+  call s:HL('SyntasticWarning', s:none, s:none, s:undercurl, s:yellow)
+
+  hi! link SyntasticErrorSign GruvboxRedSign
+  hi! link SyntasticWarningSign GruvboxYellowSign
+
+  " }}}
+  " Signature: {{{
+  hi! link SignatureMarkText   GruvboxBlueSign
+  hi! link SignatureMarkerText GruvboxPurpleSign
+
+  " }}}
+  " ShowMarks: {{{
+
+  hi! link ShowMarksHLl GruvboxBlueSign
+  hi! link ShowMarksHLu GruvboxBlueSign
+  hi! link ShowMarksHLo GruvboxBlueSign
+  hi! link ShowMarksHLm GruvboxBlueSign
+
+  " }}}
+  " CtrlP: {{{
+
+  hi! link CtrlPMatch GruvboxYellow
+  hi! link CtrlPNoEntries GruvboxRed
+  hi! link CtrlPPrtBase GruvboxBg2
+  hi! link CtrlPPrtCursor GruvboxBlue
+  hi! link CtrlPLinePre GruvboxBg2
+
+  call s:HL('CtrlPMode1', s:blue, s:bg2, s:bold)
+  call s:HL('CtrlPMode2', s:bg0, s:blue, s:bold)
+  call s:HL('CtrlPStats', s:fg4, s:bg2, s:bold)
+
+  " }}}
+  " Vimshell: {{{
+
+  let g:vimshell_escape_colors = [
+    \ s:bg4[0], s:red[0], s:green[0], s:yellow[0],
+    \ s:blue[0], s:purple[0], s:aqua[0], s:fg4[0],
+    \ s:bg0[0], s:red[0], s:green[0], s:orange[0],
+    \ s:blue[0], s:purple[0], s:aqua[0], s:fg0[0]
     \ ]
+
+  " }}}
+  " BufTabLine: {{{
+
+  call s:HL('BufTabLineCurrent', s:bg0, s:fg4)
+  call s:HL('BufTabLineActive', s:fg4, s:bg2)
+  call s:HL('BufTabLineHidden', s:bg4, s:bg1)
+  call s:HL('BufTabLineFill', s:bg0, s:bg0)
+
+  " }}}
+  " Dirvish: {{{
+
+  hi! link DirvishPathTail GruvboxAqua
+  hi! link DirvishArg GruvboxYellow
+
+  " }}}
+" Vim Multiple Cursors: {{{
+
+call s:HL('multiple_cursors_cursor', s:none, s:none, s:inverse)
+call s:HL('multiple_cursors_visual', s:none, s:bg2)
+
+" }}}
 endif
-
-let g:rainbow_guifgs = [ '#d65d0e', '#cc241d', '#b16286', '#458588' ]
-let g:rainbow_ctermfgs = [ '166', 'red', 'magenta', 'blue' ]
-
-if !exists('g:rainbow_conf')
-   let g:rainbow_conf = {}
-endif
-if !has_key(g:rainbow_conf, 'guifgs')
-   let g:rainbow_conf['guifgs'] = g:rainbow_guifgs
-endif
-if !has_key(g:rainbow_conf, 'ctermfgs')
-   let g:rainbow_conf['ctermfgs'] = g:rainbow_ctermfgs
-endif
-
-let g:niji_dark_colours = g:rbpt_colorpairs
-let g:niji_light_colours = g:rbpt_colorpairs
-
-"}}}
-" GitGutter: {{{
-
-hi! link GitGutterAdd GruvboxGreenSign
-hi! link GitGutterChange GruvboxAquaSign
-hi! link GitGutterDelete GruvboxRedSign
-hi! link GitGutterChangeDelete GruvboxAquaSign
-
 " }}}
-" GitCommit: "{{{
 
-hi! link gitcommitSelectedFile GruvboxGreen
-hi! link gitcommitDiscardedFile GruvboxRed
+" Plugins You Have: {{{
+" Jesus. Here are the plugins you currently have. We'll figure out a smarter way
+" check if the plugin actually exists another time.
 
-" }}}
-" Signify: {{{
-
-hi! link SignifySignAdd GruvboxGreenSign
-hi! link SignifySignChange GruvboxAquaSign
-hi! link SignifySignDelete GruvboxRedSign
-
-" }}}
-" Syntastic: {{{
-
-call s:HL('SyntasticError', s:none, s:none, s:undercurl, s:red)
-call s:HL('SyntasticWarning', s:none, s:none, s:undercurl, s:yellow)
-
-hi! link SyntasticErrorSign GruvboxRedSign
-hi! link SyntasticWarningSign GruvboxYellowSign
-
-" }}}
-" Signature: {{{
-hi! link SignatureMarkText   GruvboxBlueSign
-hi! link SignatureMarkerText GruvboxPurpleSign
-
-" }}}
-" ShowMarks: {{{
-
-hi! link ShowMarksHLl GruvboxBlueSign
-hi! link ShowMarksHLu GruvboxBlueSign
-hi! link ShowMarksHLo GruvboxBlueSign
-hi! link ShowMarksHLm GruvboxBlueSign
-
-" }}}
-" CtrlP: {{{
-
-hi! link CtrlPMatch GruvboxYellow
-hi! link CtrlPNoEntries GruvboxRed
-hi! link CtrlPPrtBase GruvboxBg2
-hi! link CtrlPPrtCursor GruvboxBlue
-hi! link CtrlPLinePre GruvboxBg2
-
-call s:HL('CtrlPMode1', s:blue, s:bg2, s:bold)
-call s:HL('CtrlPMode2', s:bg0, s:blue, s:bold)
-call s:HL('CtrlPStats', s:fg4, s:bg2, s:bold)
-
-" }}}
 " Startify: {{{
 
 hi! link StartifyBracket GruvboxFg3
@@ -827,55 +848,6 @@ hi! link StartifySection GruvboxYellow
 hi! link StartifySpecial GruvboxBg2
 hi! link StartifyHeader GruvboxOrange
 hi! link StartifyFooter GruvboxBg2
-
-" }}}
-" Vimshell: {{{
-
-let g:vimshell_escape_colors = [
-  \ s:bg4[0], s:red[0], s:green[0], s:yellow[0],
-  \ s:blue[0], s:purple[0], s:aqua[0], s:fg4[0],
-  \ s:bg0[0], s:red[0], s:green[0], s:orange[0],
-  \ s:blue[0], s:purple[0], s:aqua[0], s:fg0[0]
-  \ ]
-
-" }}}
-" BufTabLine: {{{
-
-call s:HL('BufTabLineCurrent', s:bg0, s:fg4)
-call s:HL('BufTabLineActive', s:fg4, s:bg2)
-call s:HL('BufTabLineHidden', s:bg4, s:bg1)
-call s:HL('BufTabLineFill', s:bg0, s:bg0)
-
-" }}}
-" Asynchronous Lint Engine: {{{
-
-call s:HL('ALEError', s:none, s:none, s:undercurl, s:red)
-call s:HL('ALEWarning', s:none, s:none, s:undercurl, s:yellow)
-call s:HL('ALEInfo', s:none, s:none, s:undercurl, s:blue)
-
-hi! link ALEErrorSign GruvboxRedSign
-hi! link ALEWarningSign GruvboxYellowSign
-hi! link ALEInfoSign GruvboxBlueSign
-
-" }}}
-" Dirvish: {{{
-
-hi! link DirvishPathTail GruvboxAqua
-hi! link DirvishArg GruvboxYellow
-
-" }}}
-" Netrw: {{{
-
-hi! link netrwDir GruvboxAqua
-hi! link netrwClassify GruvboxAqua
-hi! link netrwLink GruvboxGray
-hi! link netrwSymLink GruvboxFg1
-hi! link netrwExe GruvboxYellow
-hi! link netrwComment GruvboxGray
-hi! link netrwList GruvboxBlue
-hi! link netrwHelpCmd GruvboxAqua
-hi! link netrwCmdSep GruvboxFg3
-hi! link netrwVersion GruvboxGreen
 
 " }}}
 " NERDTree: {{{
@@ -897,14 +869,50 @@ hi! link NERDTreeToggleOn GruvboxGreen
 hi! link NERDTreeToggleOff GruvboxRed
 
 " }}}
-" Vim Multiple Cursors: {{{
+" Asynchronous Lint Engine: {{{
 
-call s:HL('multiple_cursors_cursor', s:none, s:none, s:inverse)
-call s:HL('multiple_cursors_visual', s:none, s:bg2)
+call s:HL('ALEError', s:none, s:none, s:undercurl, s:red)
+call s:HL('ALEWarning', s:none, s:none, s:undercurl, s:yellow)
+call s:HL('ALEInfo', s:none, s:none, s:undercurl, s:blue)
 
+hi! link ALEErrorSign GruvboxRedSign
+hi! link ALEWarningSign GruvboxYellowSign
+hi! link ALEInfoSign GruvboxBlueSign
+
+" }}}
+" GitGutter: {{{
+
+hi! link GitGutterAdd GruvboxGreenSign
+hi! link GitGutterChange GruvboxAquaSign
+hi! link GitGutterDelete GruvboxRedSign
+hi! link GitGutterChangeDelete GruvboxAquaSign
+
+" }}}
+" GitCommit: "{{{
+" Do I have this plugin? Is this a fugitive thing?
+hi! link gitcommitSelectedFile GruvboxGreen
+hi! link gitcommitDiscardedFile GruvboxRed
+
+" }}}
 " }}}
 
 " Filetype specific -----------------------------------------------------------
+
+" Netrw: {{{
+" Hate to be that guy but Netrw is considered an ftplugin
+
+hi! link netrwDir GruvboxAqua
+hi! link netrwClassify GruvboxAqua
+hi! link netrwLink GruvboxGray
+hi! link netrwSymLink GruvboxFg1
+hi! link netrwExe GruvboxYellow
+hi! link netrwComment GruvboxGray
+hi! link netrwList GruvboxBlue
+hi! link netrwHelpCmd GruvboxAqua
+hi! link netrwCmdSep GruvboxFg3
+hi! link netrwVersion GruvboxGreen
+
+" }}}
 " Diff: {{{
 
 hi! link diffAdded GruvboxGreen

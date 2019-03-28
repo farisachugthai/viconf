@@ -124,7 +124,7 @@ execute 'syntax match manFooter display "^\%'.line('$').'l.*$"'
 
 if g:colors_name ==# 'gruvbox'
     hi! link manCError GruvboxRed
-    hi! link manEmail GruvboxAquaSign
+    hi! link manEmail GruvboxAqua
     hi! link manEnvVar GruvboxBlue
     hi! link manEnvVarFile GruvboxBlue
     hi! link manFile GruvboxYellow
@@ -135,7 +135,7 @@ if g:colors_name ==# 'gruvbox'
     hi! link manHeaderFile GruvboxYellow
     hi! link manSectionHeading GruvboxOrangeBold
     hi! link manSentence GruvboxFg2
-    hi! link manSignal GruvboxPurpleSign
+    hi! link manSignal GruvboxPurple
     hi! link manURL GruvboxGreen
 endif
 
