@@ -32,7 +32,9 @@ As a result of personal modifications, this setup currently has:
   run `docutils` on a buffer and then preview it in a browser.
 
 - [Personally configured](./.config/nvim/after/ftplugin/) filetype plugins and
-  [improved syntax highlighting](./.config/nvim/after/ftplugin/man.vim) for man pages over the defaults provided by either Neovim or Vim.
+added [filetype detection](./.config/nvim/ftdetect).
+
+- [Improved syntax highlighting](./.config/nvim/syntax/man.vim) for man pages over the defaults provided by either Neovim or Vim.
   - This was accomplished by merging together the highlighting groups of
   both Neovim and Vim, and then adding around 20 links to color groups.
   - It also depends on the variable `g:colors_name` being set to `Gruvbox`.
@@ -72,7 +74,7 @@ wiki](https://github.com/jaap-karssenberg/zim-desktop-wiki) found at
   [en.utf-8.add](./.config/nvim/spell/en.utf-8.add)
 
 - Multiple colorschemes that support xterm-256 or 24 bit terminals including
-Solarized, Jellybeans, Gruvbox and Monokai..
+Solarized, Jellybeans, Gruvbox and Monokai.
   - An explanation of how to work with colorschemes is given at the
   [README](./.config/nvim/colors/README.rst)
 
@@ -80,21 +82,21 @@ Solarized, Jellybeans, Gruvbox and Monokai..
 
 ### Basics Keymappings
 
-+------------------------------------------------------------------------------+
-| Keycode            | Mode     | [Command]Description                         |
-| :---:              | :---:    | :---                                         |
-| <kbd>h</kbd>       | Norm     | Move cursor one char left                    |
-| <kbd>j</kbd>       | Norm     | Move cursor one char down                    |
-| <kbd>k</kbd>       | Norm     | Move cursor one char up                      |
-| <kbd>l</kbd>       | Norm     | Move cursor one char right                   |
-| <kbd>w</kbd>       | Norm     | Move cursor to the beginning of the next word|
-| <kbd>b</kbd>       | Norm     | Move cursor to the beginning of the prev word|
-| <kbd>M</kbd>       | Norm     | Move cursor to vertical center               |
-| <kbd>gg</kbd>      | Norm     | Move to the first line                       |
-| <kbd>G</kbd>       | Norm     | Move to the last line                        |
-| <kbd>:</kbd><kbd>w</kbd>      | Cmd      | Save the current buffer           |
-| <kbd>:</kbd><kbd>q</kbd>      | Cmd      | Close the buffer without saving   |
-+------------------------------------------------------------------------------+
++-----------------------------------------------------------------------------------------+
+| Keycode                       | Mode     | [Command]Description                         |
+| :---:                         | :---:    | :---                                         |
+| <kbd>h</kbd>                  | Norm     | Move cursor one char left                    |
+| <kbd>j</kbd>                  | Norm     | Move cursor one char down                    |
+| <kbd>k</kbd>                  | Norm     | Move cursor one char up                      |
+| <kbd>l</kbd>                  | Norm     | Move cursor one char right                   |
+| <kbd>w</kbd>                  | Norm     | Move cursor to the beginning of the next word|
+| <kbd>b</kbd>                  | Norm     | Move cursor to the beginning of the prev word|
+| <kbd>M</kbd>                  | Norm     | Move cursor to vertical center               |
+| <kbd>gg</kbd>                 | Norm     | Move to the first line                       |
+| <kbd>G</kbd>                  | Norm     | Move to the last line                        |
+| <kbd>:</kbd><kbd>w</kbd>      | Cmd      | Save the current buffer                      |
+| <kbd>:</kbd><kbd>q</kbd>      | Cmd      | Close the buffer without saving              |
++-----------------------------------------------------------------------------------------+
 
 ### Remappings
 
@@ -103,15 +105,17 @@ Further explanations for how nvim is configured can be found in my personal
 
 ### Diffs
 
-+---------------------------------+
-|next change         |         ]c |
-|previous change     |        \[c |
-|diff obtain         |         do |
-|diff put            |         dp |
-|fold open           |         zo |
-|fold close          |         zc |
-|rescan files        |:diffupdate |
-+---------------------------------+
++----------------------------------+
+| Command            | Keycode     |
+|                    |             |
+|next change         |          ]c |
+|previous change     |         \[c |
+|diff obtain         |          do |
+|diff put            |          dp |
+|fold open           |          zo |
+|fold close          |          zc |
+|rescan files        | :diffupdate |
++----------------------------------+
 
 
 ## Plugins Used
@@ -150,7 +154,7 @@ functionality to your vim editing.  You can learn more about it with
 
 #### QuickStart
 
-Launch using `<Leader>nt`.
+Launch using <kbd><Leader>nt</kbd>.
 
 
 ### Sources for all plugins

@@ -24,7 +24,7 @@ let g:riv_ignored_maps = '<Tab>'
 let g:riv_ignored_nmaps = '<Tab>'
 let g:riv_i_tab_pum_next = 0
 
-let g:riv_global_leader='<Space>'
+let g:riv_global_leader='\'
 
 " From he riv-instructions. **THIS IS THE ONE!!** UltiSnips finally works again
 let g:riv_i_tab_user_cmd = "\<c-g>u\<c-r>=UltiSnips#ExpandSnippet()\<cr>"

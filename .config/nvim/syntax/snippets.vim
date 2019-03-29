@@ -33,7 +33,7 @@ syn keyword snipTODO contained display FIXME NOTE NOTES TODO XXX HACK TODO:
 " Errors {{{2
 
 " This shouldn't be counted as an error in a snippet?
-" syn match snipLeadingSpaces "^\t* \+" contained
+" syn match snipLeadingSpaces '^\t* \+' contained
 
 " Extends {{{2
 
@@ -47,7 +47,7 @@ syn match snipExtendsKeyword "^extends" contained display
 syn region snipSnippet start="^snippet\_s" end="^endsnippet\s*$" contains=snipSnippetHeader fold keepend
 syn match snipSnippetHeader "^.*$" nextgroup=snipSnippetBody,snipSnippetFooter skipnl contained contains=snipSnippetHeaderKeyword
 syn match snipSnippetHeaderKeyword "^snippet" contained nextgroup=snipSnippetTrigger skipwhite
-syn region snipSnippetBody start="\_." end="^\zeendsnippet\s*$" contained nextgroup=snipSnippetFooter contains=snipLeadingSpaces,@snipTokens
+syn region snipSnippetBody start="\_." end="^\zeendsnippet\s*$" contained nextgroup=snipSnippetFooter contains=@snipTokens
 syn match snipSnippetFooter "^endsnippet.*" contained contains=snipSnippetFooterKeyword
 syn match snipSnippetFooterKeyword "^endsnippet" contained
 
@@ -132,7 +132,7 @@ syn cluster snipTabStopTokens add=snipTransformation
 
 syn region snipGlobal start="^global\_s" end="^\zeendglobal\s*$" contains=snipGlobalHeader nextgroup=snipGlobalFooter fold keepend
 syn match snipGlobalHeader "^.*$" nextgroup=snipGlobalBody,snipGlobalFooter skipnl contained contains=snipGlobalHeaderKeyword
-syn region snipGlobalBody start="\_." end="^\zeendglobal\s*$" contained contains=snipLeadingSpaces
+syn region snipGlobalBody start="\_." end="^\zeendglobal\s*$" contained
 
 " Python (!p) {{{4
 
