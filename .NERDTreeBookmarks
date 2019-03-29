@@ -1,7 +1,6 @@
 ale-linters ~/.local/share/nvim/plugged/ale/ale_linters
 cheat ~/.cheat
 dotfiles ~/projects/dotfiles/unix
-IPyCore ~/miniconda3/lib/python3.7/site-packages/IPython/core
 jedi-docs ~/.local/share/nvim/plugged/jedi-vim/pythonx/jedi/docs/docs
 nvim ~/.config/nvim
 plugged ~/.local/share/nvim/plugged
@@ -10,6 +9,7 @@ riv ~/.local/share/nvim/plugged/riv.vim/doc/riv_instruction.rst
 tutorials ~/Dropbox/python/tutorials
 viconf ~/projects/viconf/.config/nvim
 vim ~/.vim
-sphinx_make ~/miniconda3/envs/utilities/lib/python3.7/site-packages/sphinx/cmd/make_mode.py
+utilities ~/projects/utilities
 
+IPyCore ~/miniconda3/lib/python3.7/site-packages/IPython/core
 sphinx ~/miniconda3/envs/flask/lib/python3.7/site-packages/sphinx

@@ -13,13 +13,11 @@ let b:did_ftplugin = 1
 let s:save_cpo = &cpoptions
 set cpoptions&vim
 
-" Fold by syntax, but open all folds by default
+" Fold by syntax
 setlocal foldmethod=syntax
-setlocal foldlevel=99
 
-setlocal commentstring=#%s
+let b:commentstring='# %s'
 
-setlocal noexpandtab
 setlocal autoindent nosmartindent nocindent
 
 " Whenever a snippets file is written, we ask UltiSnips to reload all snippet
@@ -50,8 +48,8 @@ let g:tagbar_type_snippets = {
 
 " don't unset g:tagbar_type_snippets, it serves no purpose
 let b:undo_ftplugin = "
-            \ setlocal foldmethod< foldlevel< commentstring<
-            \|setlocal expandtab< autoindent< smartindent< cindent<
+            \ setlocal foldmethod< commentstring<
+            \|setlocal autoindent< smartindent< cindent<
             \|if get(s:, 'set_match_words')
                 \|unlet! b:match_ignorecase b:match_words s:set_match_words
             \|endif

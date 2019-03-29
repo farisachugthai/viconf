@@ -21,13 +21,13 @@ endif
 
 " XDG Check: {{{2
 " The whole file is now predicated on these existing. Need to add checks in.
-
-if exists('$XDG_DATA_HOME') == 0
+" In $VIMRUNTIME/filetype.vim it looks like Bram himself checks env vars this way
+if empty('$XDG_DATA_HOME')
     echoerr 'XDG_DATA_HOME not set. Exiting'
     finish
 endif
 
-if exists('$XDG_CONFIG_HOME') == 0
+if empty('$XDG_CONFIG_HOME')
     echoerr 'XDG_CONFIG_HOME not set. Exiting.'
     finish
 endif
@@ -81,13 +81,14 @@ else
 " If not then just use the system python
     if executable(expand('$_ROOT') . '/bin/python3')
         let g:python3_host_prog = expand('$_ROOT') . '/bin/python3'
-        let &path = &path . ',' . expand('$_ROOT') . '/lib/python3**'
+        let &path = &path . ',' . expand('$_ROOT') . '/lib/python3'
     endif
 endif
 
 " Also add a python2 remote host
 if executable(expand('$_ROOT') . '/bin/python2')
     let g:python_host_prog = expand('$_ROOT') . '/bin/python2'
+    let &path = &path . ',' . expand('$_ROOT') . '/lib/python2'
 else
     let g:loaded_python_provider = 1
 endif
@@ -149,19 +150,10 @@ endif
 " Global Options: {{{1
 
 " Leader And Viminfo: {{{2
-" let g:mapleader = '\<Space>'
 noremap <Space> <nop>
 map <Space> <Leader>
 let g:maplocalleader = '<Space>'
 
-" Should deprecate the below and just state I don't use Vim anymore
-if !has('nvim')
-    set viminfo='100,<200,s200,n$HOME/.vim/viminfo
-else
-    " Default on termux nvim 0.3.4, pynvim 0.3.2 Feb 24, 2019
-    " Same as on KDE Neon
-    " shada=!,'100,<50,s10,h
-endif
 
 " Pep8 Global Options: {{{2
 if &tabstop > 4
@@ -194,14 +186,12 @@ set hidden
 set splitbelow splitright
 
 " Spell Checker: {{{2
-setlocal spelllang=en
+set spelllang=en
 
 if filereadable(expand('$XDG_CONFIG_HOME') . '/nvim/spell/en.utf-8.add')
     let &spellfile=expand('$XDG_CONFIG_HOME') . '/nvim/spell/en.utf-8.add'
 elseif filereadable(expand('~/projects/viconf/.config/nvim/spell/en.utf-8.add'))
     let &spellfile=expand('$HOME') . '/projects/viconf/.config/nvim/spell/en.utf-8.add'
-else
-    echoerr 'Spell file not found.'
 endif
 
 set complete+=kspell                    " Autocomplete in insert mode
@@ -246,8 +236,6 @@ endif
 set wildmenu
 set wildmode=longest,list:longest       " Longest string or list alternatives
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
-" set fileignorecase                      " when searching for files don't use case
-" set wildignorecase
 
 " Path: {{{2
 
@@ -255,7 +243,9 @@ set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 " OR THE ** WILL EXPAND {rendering it as nothing}
 set path+=**                            " Recursively search dirs with :find
 
-" TODO:
+" TODO: Come up with a function that checks if i a directory exists and then
+" adds to path. also come up with another that checks if a  file exists and
+" return a bool because man is it annoying to do that as is
 " function! s:pathadder() abort
 "     if is
 " double check syntax on adding parameters
@@ -285,12 +275,13 @@ endif
 
 " Other Global Options: {{{2
 
-set tags+=./tags,./../tags,./*/tags     " usr_29
-set tags+=~/projects/tags               " consider generating a few large tag
-set tags+=~/python/tags                 " files rather than recursive searches
-set mouse=a                             " Automatically enable mouse usage
+set tags+=./tags,./*/tags
+set tags+=~/projects/tags
+set mouse=a
 if &textwidth!=0
-    setl colorcolumn=+1                 " I don't know why this didn't set
+    setl colorcolumn=+1
+else
+    setl colorcolumn=80
 endif
 set cmdheight=2
 set number relativenumber
@@ -299,18 +290,11 @@ set infercase
 " FOOBAR=~/<CTRL-><CTRL-F> will now autocomplete!
 set isfname-==
 
-" TODO: nvim will never eval this to 1. Need to update for nvim-qt.
-if has('gui_running')
-    set guifont=Fira\ Code\ weight=450\ 10
-endif
-
-" In case you wanted to see the guicursor default for gvim win64
-" set gcr=n-v-c:block-Cursor/lCursor,ve:ver35-Cursor,o:hor50-Cursor, i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor, sm:block-Cursor-blinkwait175-blinkoff150-blinkon175
-
 set autochdir
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
-set diffopt=filler,context:3          " vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
+set diffopt=filler,context:3
+" vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
 
 let &undodir = expand('$XDG_CONFIG_HOME') . '/nvim/undodir'
 set undofile
@@ -318,9 +302,9 @@ set undofile
 set backup
 let &backupdir=expand('$XDG_CONFIG_HOME') . '/nvim/undodir'
 set backupext='.bak'        " like wth is that ~ nonsense?
-
 " Directory won't need to be set because it defaults to
 " xdg_data_home/nvim/swap
+
 set modeline
 set browsedir="buffer"                  " which directory is used for the file browser
 
@@ -448,21 +432,6 @@ nnoremap <silent> <Leader>gW   <Cmd>Gwrite!<CR>
 " Vim_Plug: {{{2
 let g:plug_window = 'tabe'
 
-
-" Devicons: {{{2
-let g:webdevicons_enable = 1
-let g:webdevicons_enable_nerdtree = 1               " adding the flags to NERDTree
-let g:airline_powerline_fonts = 1
-
-" For startify
-let entry_format = "'   ['. index .']'. repeat(' ', (3 - strlen(index)))"
-
-if exists('*WebDevIconsGetFileTypeSymbol')  " support for vim-devicons
-    let entry_format .= ". WebDevIconsGetFileTypeSymbol(entry_path) .' '.  entry_path"
-else
-    let entry_format .= '. entry_path'
-endif
-
 " Jedi: {{{2
 let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces
 let g:jedi#usages_command = '<Leader>u'
@@ -517,9 +486,6 @@ let g:zim_dev = 1
 let g:voom_ft_modes = {'markdown': 'markdown', 'rst': 'rst', 'zimwiki': 'dokuwiki'}
 let g:voom_default_mode = 'rst'
 let g:voom_python_versions = [3]
-
-" Cheat40: {{{2
-" let g:cheat40_use_default = 1
 
 " Runtime: {{{1
 

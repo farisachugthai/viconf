@@ -36,7 +36,7 @@ nnoremap <Leader>* <Plug>(ale_go_to_reference)
 
 nnoremap <Leader>a <Cmd>ALEInfo<CR>
 
-" Options: {{{2
+" Options: {{{1
 let g:ale_fixers = { '*': [ 'remove_trailing_lines', 'trim_whitespace' ] }
 let g:ale_fix_on_save = 1
 " Now because you fix the trailing whitespace and trailing lines

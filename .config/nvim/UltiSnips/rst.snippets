@@ -41,26 +41,26 @@ endsnippet
 snippet cb "Code Block. Must have 1 blank line surrounding!" bs
 .. code-block:: ${1:python3}
 
-	 ${2:${VISUAL:code}} $0
+   ${2:${VISUAL:code}}
+
+$0
 endsnippet
 
-# Added s option to remove 'python' if you skip over it
 snippet codeb "code block duplicated" bs
 .. code-block:: ${1:python}
 
-    ${2:${VISUAL:code}}
+   ${2:${VISUAL:code}}
 endsnippet
 
 snippet code "Inline code. Needs to be visually highlighted first." b
 \`\`${0:${VISUAL:text}}\`\`
 endsnippet
 
-# If writing python3 after everything .. code-block:: gets annoying you can add
 snippet hi "Set a highlight directive to establish the base for code block directives" ms
 .. highlight::
-	 ${1::linenos:}
-	 ${2::linenothreshold:}
-	 ${3::emphasize-lines: 1,2,3}
+   ${1::linenos:}
+   ${2::linenothreshold:}
+   ${3::emphasize-lines: 1,2,3}
 
 ${0:Optional arguments above}
 endsnippet
@@ -88,6 +88,20 @@ endsnippet
 snippet rep "Replace" ms
 .. |$1| .. replace:: $2
 endsnippet
+
+snippet ref  "Links that follow labelled objects. Expand 'lab or labhe'" mw
+:ref:\`${1:${VISUAL:path}}\`_
+endsnippet
+
+# TODO: Figure out what snippet method to invoke to get proper indentation.
+snippet func "Inclass function directive" w
+:function:\`${0:${VISUAL}}()\`
+endsnippet
+
+snippet class "Inline class directive" w
+:class:\`${0:${VISUAL}}()\`
+endsnippet
+
 ###########
 #  links  #
 ###########
@@ -96,7 +110,6 @@ snippet external "link to an external URL. Simpler." smw
 \`${1:Optional Link text} <${2:${VISUAL:Link destination}>}\`_ $0
 endsnippet
 
-# This should work even though the tabstops are excessively complicated
 snippet link "External URL. A space is required between the text and URL!" smw
 \`${1:Link text} <${2:${VISUAL:https://github.com/}>}\`_ $0
 endsnippet
@@ -129,8 +142,31 @@ ${1:rel path}: ${2:${VISUAL:link}}_.
 .. _${2}: ${3:path/to/file} $0
 endsnippet
 
+# TODO: Is this a real directive?
+snippet function "function directive" w
+.. func:: ${1:${VISUAL:call signature}}
+
+   ${2:Describe the func}
+endsnippet
+
+snippet class "Class directive" w
+.. class:: ${1:${VISUAL:call signature}}
+
+   ${2:Describe the class}
+endsnippet
+||||||| merged common ancestors
 snippet ref  "Links that follow labelled objects. Expand 'lab or labhe'" mw
 :ref:\`${1:${VISUAL:path}}\`_
+endsnippet
+
+############
+#  Sphinx  #
+############
+
+snippet sid "SideBar" b
+.. sidebar:: ${1:SideBar Title}
+
+   ${2:${VISUAL:SideBar Content}}
 endsnippet
 
 # TODO: Figure out what snippet method to invoke to get proper indentation.
@@ -154,6 +190,8 @@ snippet class "Class directive" w
 
    ${2:Describe the class}
 endsnippet
+=======
+>>>>>>> master
 
 # Directives
 # ------------
@@ -239,11 +277,7 @@ endsnippet
 # j<>j<<>>3j
 # q
 # 5@q
-
-################################################################################
-#                                Neosnippets                                   #
-################################################################################
-
+# Neosnippets
 snippet quickstart "Shougos RST one snippet summary" b
 ===========================
 ${1:content_name}
@@ -460,7 +494,6 @@ snippet chart "Pygal chart for Nikola" b
 $0
 endsnippet
 
-
 ############
 #  Sphinx  #
 ############
@@ -472,3 +505,44 @@ snippet sid "SideBar" b
 
    ${2:${VISUAL:SideBar Content}}
 endsnippet
+
+# Utilize "gf" here!
+# /data/data/com.termux/files/home/virtualenvs/utilities/lib/python3.7/site-packages/sphinx/directives
+# That's the list of every directive sphinx added...
+# directives.register_directive('default-role', DefaultRole)
+# directives.register_directive('default-domain', DefaultDomain)
+# directives.register_directive('describe', ObjectDescription)
+# # new, more consistent, name
+# directives.register_directive('object', ObjectDescription)
+
+# directives.register_directive('highlight', Highlight)
+# directives.register_directive('highlightlang', HighlightLang)
+# directives.register_directive('code-block', CodeBlock)
+# directives.register_directive('sourcecode', CodeBlock)
+# directives.register_directive('literalinclude', LiteralInclude)
+
+# directives.register_directive('toctree', TocTree)
+# directives.register_directive('sectionauthor', Author)
+# directives.register_directive('moduleauthor', Author)
+# directives.register_directive('codeauthor', Author)
+# directives.register_directive('index', Index)
+# directives.register_directive('seealso', SeeAlso)
+# directives.register_directive('tabularcolumns', TabularColumns)
+# directives.register_directive('centered', Centered)
+# directives.register_directive('acks', Acks)
+# directives.register_directive('hlist', HList)
+# directives.register_directive('only', Only)
+# directives.register_directive('include', Include)
+
+# # register the standard rst class directive under a different name
+# # only for backwards compatibility now
+# directives.register_directive('cssclass', Class)
+# # new standard name when default-domain with "class" is in effect
+# directives.register_directive('rst-class', Class)
+
+# directives.register_directive('figure', Figure)
+# directives.register_directive('meta', Meta)
+# directives.register_directive('table', RSTTable)
+# directives.register_directive('csv-table', CSVTable)
+# directives.register_directive('list-table', ListTable)
+# directives.register_directive('math', MathDirective)
