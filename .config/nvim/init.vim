@@ -43,7 +43,6 @@ Plug 'davidhalter/jedi-vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
-" Plug 'tpope/vim-unimpaired'
 Plug 'w0rp/ale'
 Plug 'SirVer/ultisnips'
 
@@ -57,7 +56,6 @@ Plug 'vim-voom/voom'
 Plug 'gu-fan/riv.vim', { 'for': ['python', 'python3', 'rst'] }
 Plug 'greyblake/vim-preview'
 Plug 'lifepillar/vim-cheat40'
-" Plug 'neoclide/coc.nvim', {'tag': '*', 'do': 'yarn install'}
 Plug 'autozimu/LanguageClient-neovim'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
@@ -69,11 +67,12 @@ call plug#end()
 " if we have a virtual env start there
 if exists('$VIRTUAL_ENV')
     let g:python3_host_prog = expand('$VIRTUAL_ENV') . '/bin/python'
-    let &path = &path . ',' . expand('$VIRTUAL_ENV') . '/lib/python3.7/site-packages'
+    let &path = &path . ',' . expand('$VIRTUAL_ENV') . '/lib/python3'
 
 " or a conda env.
-elseif exists('$CONDA_PYTHON_EXE')
-    let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
+elseif exists('$CONDA_PREFIX')
+    " Needs to use CONDA_PREFIX as the other env vars conda sets will only establish the base env not the current one
+    let g:python3_host_prog = expand('$CONDA_PREFIX/bin/python3')
     " Let's hope I don't break things for Windows
     let &path = &path . ',' . expand('$CONDA_PREFIX/lib/python3')
 
@@ -403,29 +402,6 @@ nnoremap <A-h> <C-w>h
 nnoremap <A-j> <C-w>j
 nnoremap <A-k> <C-w>k
 nnoremap <A-l> <C-w>l
-
-" Fugitive: {{{2
-nnoremap <silent> <Leader>gb   <Cmd>Gblame<CR>
-nnoremap <silent> <Leader>gc   <Cmd>Gcommit<CR>
-cmap <silent> gch <Cmd>Git checkout<Space>
-nnoremap <silent> <Leader>gd   <Cmd>Gdiff<CR>
-nnoremap <silent> <Leader>gds  <Cmd>Gdiff --staged<CR>
-nnoremap <silent> <Leader>gds2 <Cmd>Git diff --stat --staged<CR>
-nnoremap <silent> <Leader>ge   :Gedit<Space>
-nnoremap <silent> <Leader>gf   <Cmd>Gfetch<CR>
-nnoremap <silent> <Leader>gL   <Cmd>0Glog --pretty=oneline --graph --decorate --abbrev --all --branches<CR>
-nnoremap <silent> <Leader>gm   <Cmd>Gmerge<CR>
-" Make the mapping longer but clear as to whether gp would pull or push
-nnoremap <silent> <Leader>gpl  <Cmd>Gpull<CR>
-nnoremap <silent> <Leader>gps  <Cmd>Gpush<CR>
-nnoremap <silent> <Leader>gq   <Cmd>Gwq<CR>
-nnoremap <silent> <Leader>gQ   <Cmd>Gwq!<CR>
-nnoremap <silent> <Leader>gR   :Gread<Space>
-" FZF took it. Check ./after/plugin/fzf.vim {btw i love the gf binding}
-" nnoremap <silent> <Leader>gs   <Cmd>Gstatus<CR>
-nnoremap <silent> <Leader>gst  <Cmd>Git diff --stat<CR>
-nnoremap <silent> <Leader>gw   <Cmd>Gwrite<CR>
-nnoremap <silent> <Leader>gW   <Cmd>Gwrite!<CR>
 
 " Remaining Plugins: {{{1
 

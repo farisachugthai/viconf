@@ -142,56 +142,6 @@ ${1:rel path}: ${2:${VISUAL:link}}_.
 .. _${2}: ${3:path/to/file} $0
 endsnippet
 
-# TODO: Is this a real directive?
-snippet function "function directive" w
-.. func:: ${1:${VISUAL:call signature}}
-
-   ${2:Describe the func}
-endsnippet
-
-snippet class "Class directive" w
-.. class:: ${1:${VISUAL:call signature}}
-
-   ${2:Describe the class}
-endsnippet
-||||||| merged common ancestors
-snippet ref  "Links that follow labelled objects. Expand 'lab or labhe'" mw
-:ref:\`${1:${VISUAL:path}}\`_
-endsnippet
-
-############
-#  Sphinx  #
-############
-
-snippet sid "SideBar" b
-.. sidebar:: ${1:SideBar Title}
-
-   ${2:${VISUAL:SideBar Content}}
-endsnippet
-
-# TODO: Figure out what snippet method to invoke to get proper indentation.
-snippet func: "Inclass function directive" w
-:function:\`${0:${VISUAL}}()\`
-endsnippet
-
-snippet class: "Inline class directive" w
-:class:\`${0:${VISUAL}}()\`
-endsnippet
-
-# TODO: Is this a real directive?
-snippet function "function directive" w
-.. func:: ${1:${VISUAL:call signature}}
-
-   ${2:Describe the func}
-endsnippet
-
-snippet class "Class directive" w
-.. class:: ${1:${VISUAL:call signature}}
-
-   ${2:Describe the class}
-endsnippet
-=======
->>>>>>> master
 
 # Directives
 # ------------
@@ -494,18 +444,12 @@ snippet chart "Pygal chart for Nikola" b
 $0
 endsnippet
 
+
 ############
 #  Sphinx  #
 ############
 
 # Keep Sphinx specific stuff separate for now.
-
-snippet sid "SideBar" b
-.. sidebar:: ${1:SideBar Title}
-
-   ${2:${VISUAL:SideBar Content}}
-endsnippet
-
 # Utilize "gf" here!
 # /data/data/com.termux/files/home/virtualenvs/utilities/lib/python3.7/site-packages/sphinx/directives
 # That's the list of every directive sphinx added...
@@ -546,3 +490,10 @@ endsnippet
 # directives.register_directive('csv-table', CSVTable)
 # directives.register_directive('list-table', ListTable)
 # directives.register_directive('math', MathDirective)
+
+
+snippet sid "SideBar" b
+.. sidebar:: ${1:SideBar Title}
+
+   ${2:${VISUAL:SideBar Content}}
+endsnippet

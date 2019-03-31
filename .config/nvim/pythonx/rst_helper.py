@@ -2,13 +2,9 @@
 # -*- coding: utf-8 -*-
 """Helper with rst UltiSnips plugin.
 
-:File: rst_helper.py
-:Author: Faris Chugthai
-
-:Github: https://github.com/farisachugthai
-
 Default file from vim-snippet's repo. Modified docstrings but still much more
 work to do.
+
 """
 import vim
 from os import path as ospath
@@ -129,8 +125,6 @@ def look_up_directives(regex, fpath):
 def get_popular_code_type():
     """Find most frequent filetype in the file
 
-    :param path: file to detect
-
     :return: string, most popular code type in file
     """
     buf = "".join(vim.current.buffer)
@@ -138,8 +132,5 @@ def get_popular_code_type():
     try:
         popular_type = Counter(types).most_common()[0][0]
     except IndexError as e:
-        # what the hell is this?!?
-        # popular_type = "lua" # Don't break default
-        # no i just want the exception
         print(e)
     return popular_type
