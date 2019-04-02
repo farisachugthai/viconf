@@ -52,8 +52,7 @@ endif
 
 Plug 'mhinz/vim-startify'
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
-Plug 'vim-voom/voom'
-Plug 'gu-fan/riv.vim', { 'for': ['python', 'python3', 'rst'] }
+" Plug 'gu-fan/riv.vim', { 'for': ['python', 'python3', 'rst'] }
 Plug 'greyblake/vim-preview'
 Plug 'lifepillar/vim-cheat40'
 Plug 'autozimu/LanguageClient-neovim'
