@@ -66,11 +66,12 @@ call plug#end()
 " if we have a virtual env start there
 if exists('$VIRTUAL_ENV')
     let g:python3_host_prog = expand('$VIRTUAL_ENV') . '/bin/python'
-    let &path = &path . ',' . expand('$VIRTUAL_ENV') . '/lib/python3.7/site-packages'
+    let &path = &path . ',' . expand('$VIRTUAL_ENV') . '/lib/python3'
 
 " or a conda env.
-elseif exists('$CONDA_PYTHON_EXE')
-    let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
+elseif exists('$CONDA_PREFIX')
+    " Needs to use CONDA_PREFIX as the other env vars conda sets will only establish the base env not the current one
+    let g:python3_host_prog = expand('$CONDA_PREFIX/bin/python3')
     " Let's hope I don't break things for Windows
     let &path = &path . ',' . expand('$CONDA_PREFIX/lib/python3')
 
