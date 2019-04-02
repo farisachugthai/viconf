@@ -17,12 +17,6 @@ let b:did_fzf_conf = 1
 
 
 " General Setup: {{{1
-if has('nvim') || has('gui_running')
-    " Wait hold on...if we already set it, then use my bashrc!
-    if exists('$FZF_DEFAULT_OPTS') == 0
-        let $FZF_DEFAULT_OPTS .= ' --inline-info'
-    endif
-endif
 
 " An action can be a reference to a function that processes selected lines
 function! s:build_quickfix_list(lines)
@@ -128,7 +122,7 @@ nnoremap <Leader>gl <Cmd>Commits<CR>
 " [[B]Commits] Customize the options used by 'git log':
 let g:fzf_commits_log_options = '--graph --color=always --all --branches --pretty --format="h%d %s %c(black)%c(bold)%cr"'
 
-noremap <Leader>gs <Cmd>GFiles?<CR>
+noremap <Leader>GS <Cmd>GFiles?<CR>
 
 " Global Line Completion: {{{2
 

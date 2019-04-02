@@ -43,7 +43,6 @@ Plug 'davidhalter/jedi-vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
-" Plug 'tpope/vim-unimpaired'
 Plug 'w0rp/ale'
 Plug 'SirVer/ultisnips'
 
@@ -53,11 +52,9 @@ endif
 
 Plug 'mhinz/vim-startify'
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
-Plug 'vim-voom/voom'
-Plug 'gu-fan/riv.vim', { 'for': ['python', 'python3', 'rst'] }
+" Plug 'gu-fan/riv.vim', { 'for': ['python', 'python3', 'rst'] }
 Plug 'greyblake/vim-preview'
 Plug 'lifepillar/vim-cheat40'
-" Plug 'neoclide/coc.nvim', {'tag': '*', 'do': 'yarn install'}
 Plug 'autozimu/LanguageClient-neovim'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
@@ -81,13 +78,14 @@ else
 " If not then just use the system python
     if executable(expand('$_ROOT') . '/bin/python3')
         let g:python3_host_prog = expand('$_ROOT') . '/bin/python3'
-        let &path = &path . ',' . expand('$_ROOT') . '/lib/python3**'
+        let &path = &path . ',' . expand('$_ROOT') . '/lib/python3'
     endif
 endif
 
 " Also add a python2 remote host
 if executable(expand('$_ROOT') . '/bin/python2')
     let g:python_host_prog = expand('$_ROOT') . '/bin/python2'
+    let &path = &path . ',' . expand('$_ROOT') . '/lib/python2'
 else
     let g:loaded_python_provider = 1
 endif
@@ -149,19 +147,10 @@ endif
 " Global Options: {{{1
 
 " Leader And Viminfo: {{{2
-" let g:mapleader = '\<Space>'
 noremap <Space> <nop>
 map <Space> <Leader>
 let g:maplocalleader = '<Space>'
 
-" Should deprecate the below and just state I don't use Vim anymore
-if !has('nvim')
-    set viminfo='100,<200,s200,n$HOME/.vim/viminfo
-else
-    " Default on termux nvim 0.3.4, pynvim 0.3.2 Feb 24, 2019
-    " Same as on KDE Neon
-    " shada=!,'100,<50,s10,h
-endif
 
 " Pep8 Global Options: {{{2
 if &tabstop > 4
@@ -194,14 +183,12 @@ set hidden
 set splitbelow splitright
 
 " Spell Checker: {{{2
-setlocal spelllang=en
+set spelllang=en
 
 if filereadable(expand('$XDG_CONFIG_HOME') . '/nvim/spell/en.utf-8.add')
     let &spellfile=expand('$XDG_CONFIG_HOME') . '/nvim/spell/en.utf-8.add'
 elseif filereadable(expand('~/projects/viconf/.config/nvim/spell/en.utf-8.add'))
     let &spellfile=expand('$HOME') . '/projects/viconf/.config/nvim/spell/en.utf-8.add'
-else
-    echoerr 'Spell file not found.'
 endif
 
 set complete+=kspell                    " Autocomplete in insert mode
@@ -246,8 +233,6 @@ endif
 set wildmenu
 set wildmode=longest,list:longest       " Longest string or list alternatives
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
-" set fileignorecase                      " when searching for files don't use case
-" set wildignorecase
 
 " Path: {{{2
 
@@ -255,7 +240,9 @@ set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 " OR THE ** WILL EXPAND {rendering it as nothing}
 set path+=**                            " Recursively search dirs with :find
 
-" TODO:
+" TODO: Come up with a function that checks if i a directory exists and then
+" adds to path. also come up with another that checks if a  file exists and
+" return a bool because man is it annoying to do that as is
 " function! s:pathadder() abort
 "     if is
 " double check syntax on adding parameters
@@ -285,12 +272,13 @@ endif
 
 " Other Global Options: {{{2
 
-set tags+=./tags,./../tags,./*/tags     " usr_29
-set tags+=~/projects/tags               " consider generating a few large tag
-set tags+=~/python/tags                 " files rather than recursive searches
-set mouse=a                             " Automatically enable mouse usage
+set tags+=./tags,./*/tags
+set tags+=~/projects/tags
+set mouse=a
 if &textwidth!=0
-    setl colorcolumn=+1                 " I don't know why this didn't set
+    setl colorcolumn=+1
+else
+    setl colorcolumn=80
 endif
 set cmdheight=2
 set number relativenumber
@@ -299,18 +287,11 @@ set infercase
 " FOOBAR=~/<CTRL-><CTRL-F> will now autocomplete!
 set isfname-==
 
-" TODO: nvim will never eval this to 1. Need to update for nvim-qt.
-if has('gui_running')
-    set guifont=Fira\ Code\ weight=450\ 10
-endif
-
-" In case you wanted to see the guicursor default for gvim win64
-" set gcr=n-v-c:block-Cursor/lCursor,ve:ver35-Cursor,o:hor50-Cursor, i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor, sm:block-Cursor-blinkwait175-blinkoff150-blinkon175
-
 set autochdir
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
-set diffopt=filler,context:3          " vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
+set diffopt=filler,context:3
+" vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
 
 let &undodir = expand('$XDG_CONFIG_HOME') . '/nvim/undodir'
 set undofile
@@ -318,9 +299,9 @@ set undofile
 set backup
 let &backupdir=expand('$XDG_CONFIG_HOME') . '/nvim/undodir'
 set backupext='.bak'        " like wth is that ~ nonsense?
-
 " Directory won't need to be set because it defaults to
 " xdg_data_home/nvim/swap
+
 set modeline
 set browsedir="buffer"                  " which directory is used for the file browser
 
@@ -420,36 +401,10 @@ nnoremap <A-j> <C-w>j
 nnoremap <A-k> <C-w>k
 nnoremap <A-l> <C-w>l
 
-" Fugitive: {{{2
-nnoremap <silent> <Leader>gb   <Cmd>Gblame<CR>
-nnoremap <silent> <Leader>gc   <Cmd>Gcommit<CR>
-cmap <silent> gch <Cmd>Git checkout<Space>
-nnoremap <silent> <Leader>gd   <Cmd>Gdiff<CR>
-nnoremap <silent> <Leader>gds  <Cmd>Gdiff --staged<CR>
-nnoremap <silent> <Leader>gds2 <Cmd>Git diff --stat --staged<CR>
-nnoremap <silent> <Leader>ge   :Gedit<Space>
-nnoremap <silent> <Leader>gf   <Cmd>Gfetch<CR>
-nnoremap <silent> <Leader>gg   <Cmd>Ggrep<CR>
-nnoremap <silent> <Leader>gl   <Cmd>0Glog<CR>
-nnoremap <silent> <Leader>gL   <Cmd>0Glog --pretty=oneline --graph --decorate --abbrev --all --branches<CR>
-nnoremap <silent> <Leader>gm   <Cmd>Gmerge<CR>
-" Make the mapping longer but clear as to whether gp would pull or push
-nnoremap <silent> <Leader>gpl  <Cmd>Gpull<CR>
-nnoremap <silent> <Leader>gps  <Cmd>Gpush<CR>
-nnoremap <silent> <Leader>gq   <Cmd>Gwq<CR>
-nnoremap <silent> <Leader>gQ   <Cmd>Gwq!<CR>
-nnoremap <silent> <Leader>gR   :Gread<Space>
-" FZF took it. Check ./after/plugin/fzf.vim {btw i love the gf binding}
-" nnoremap <silent> <Leader>gs   <Cmd>Gstatus<CR>
-nnoremap <silent> <Leader>gst  <Cmd>Git diff --stat<CR>
-nnoremap <silent> <Leader>gw   <Cmd>Gwrite<CR>
-nnoremap <silent> <Leader>gW   <Cmd>Gwrite!<CR>
-
 " Remaining Plugins: {{{1
 
 " Vim_Plug: {{{2
 let g:plug_window = 'tabe'
-
 
 " Jedi: {{{2
 let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces
