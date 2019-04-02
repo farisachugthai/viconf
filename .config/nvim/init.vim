@@ -1,23 +1,8 @@
 " Neovim Configuration:
 " Maintainer: Faris Chugthai
-" Last Change: Mar 23, 2019
+" Last Change: Apr 02, 2019
 
-" Vim Plug: {{{1
-
-" Plug Check: {{{2
-" Shout out Justinmk!
-" https://github.com/justinmk/config/blob/291ec0ae12b0b4b35b4cf9315f1878db00b780ec/.config/nvim/init.vim#L12
-let s:plugins = filereadable(expand('~/.local/share/nvim/site/autoload/plug.vim', 1))
-
-if expand('OS') !=# 'Windows_NT'
-    if !s:plugins
-        " bootstrap plug.vim on new systems
-        fun! InstallPlug()
-            silent call mkdir(expand('~/.local/share/nvim/site/autoload', 1), 'p')
-            execute '!curl -fLo ' . expand('~/.local/share/nvim/site/autoload/plug.vim', 1) . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-      endfun
-    endif
-endif
+" Preliminaries: {{{1
 
 " XDG Check: {{{2
 " The whole file is now predicated on these existing. Need to add checks in.
@@ -32,34 +17,64 @@ if empty('$XDG_CONFIG_HOME')
     finish
 endif
 
-" General Plugins: {{{2
-call plug#begin(expand($XDG_DATA_HOME) . '/nvim/plugged')
-
-Plug 'junegunn/vim-plug'        " plugception
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
-Plug 'davidhalter/jedi-vim'
-Plug 'airblade/vim-gitgutter'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
-Plug 'w0rp/ale'
-Plug 'SirVer/ultisnips'
-
-if has('$TMUX')
-    Plug 'christoomey/vim-tmux-navigator'
+" The below is an env var set as a convenient bridge between Ubuntu and Termux
+" As a result it messes things up if not set, but there's no reason to halt
+" everything. Feel free to discard if you copy/paste my vimrc
+if empty('$_ROOT')
+    echoerr '_ROOT env var not set'
 endif
 
-Plug 'mhinz/vim-startify'
-Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
-" Plug 'gu-fan/riv.vim', { 'for': ['python', 'python3', 'rst'] }
-Plug 'greyblake/vim-preview'
-Plug 'lifepillar/vim-cheat40'
-Plug 'autozimu/LanguageClient-neovim'
-Plug 'ryanoasis/vim-devicons'           " Keep at end!
-call plug#end()
 
-" Preliminaries: {{{1
+" OS Setup: {{{2
+
+" This got moved up so we can check what OS we have and decide what options
+" to set from there
+let g:termux = exists('$PREFIX') && has('unix')
+let g:ubuntu = !exists('$PREFIX') && has('unix')
+let g:windows = has('win32') || has('win64')
+" ^-- This feels dangerous but I'll let it slide.
+
+let g:winrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/winrc.vim'
+if g:windows && filereadable(g:winrc)
+    execute 'source' g:winrc
+endif
+
+" unabashedly stolen from junegunn dude is too good.
+let g:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/init.vim.local'
+if filereadable(g:local_vimrc)
+    execute 'source' g:local_vimrc
+endif
+
+if g:windows
+    " How do i check if I'm on cmd or powershell?
+    " Awh fuck I just thought about the fact that I have powershell installed on Linux too :/
+    " set shell=powershell shellquote=( shellpipe=\| shellredir=> shellxquote=
+    " set shellcmdflag=-NoLogo\ -NoProfile\ -ExecutionPolicy\ RemoteSigned\ -Command
+endif
+
+" Session Options: {{{3
+" From :he options
+" 'slash' and 'unix' are useful on Windows when sharing session files
+" with Unix.  The Unix version of Vim cannot source dos format scripts,
+" but the Windows version of Vim can source unix format scripts.
+set sessionoptions+=unix,slash
+" Remote Hosts: {{{2
+if g:termux
+    " holy fuck that was a doozy to find
+    let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
+    let g:ruby_host_prog = expand($_ROOT) . '/bin/neovim-ruby-host'
+
+elseif g:ubuntu
+    let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
+    " So the one above could very easily be merged. No idea how to do the
+    " below unless I just leave it up to the system.
+    try
+        let g:ruby_host_prog = expand('~') . '/.rvm/gems/default/bin/neovim-ruby-host'
+    catch
+        let g:ruby_host_prog = expand('$_ROOT') . '/local/bin/neovim-ruby-host'
+    endtry
+
+endif
 
 " Python Executables: {{{2
 
@@ -76,10 +91,15 @@ elseif exists('$CONDA_PREFIX')
     let &path = &path . ',' . expand('$CONDA_PREFIX/lib/python3')
 
 else
-" If not then just use the system python
+    " If not then just use the system python
     if executable(expand('$_ROOT') . '/bin/python3')
         let g:python3_host_prog = expand('$_ROOT') . '/bin/python3'
         let &path = &path . ',' . expand('$_ROOT') . '/lib/python3'
+
+    " well that's if we can find it anyway
+    elseif executable('/usr/bin/python3')
+        let g:python3_host_prog = '/usr/bin/python3'
+        let &path = &path . ',' . '/usr/lib/python3'
     endif
 endif
 
@@ -87,63 +107,71 @@ endif
 if executable(expand('$_ROOT') . '/bin/python2')
     let g:python_host_prog = expand('$_ROOT') . '/bin/python2'
     let &path = &path . ',' . expand('$_ROOT') . '/lib/python2'
+elseif executable('/usr/bin/python2')
+    let g:python3_host_prog = '/usr/bin/python2'
+    let &path = &path . ',' . '/usr/lib/python2'
 else
     let g:loaded_python_provider = 1
 endif
 
-" OS Setup: {{{2
+" Vim Plug: {{{1
+" Plug Check: {{{2
+" Shout out Justinmk!
+" https://github.com/justinmk/config/blob/291ec0ae12b0b4b35b4cf9315f1878db00b780ec/.config/nvim/init.vim#L12
+let s:plugins = filereadable(expand('~/.local/share/nvim/site/autoload/plug.vim', 1))
 
-" Platforms: {{{3
-let s:termux = exists('$PREFIX') && has('unix')
-let s:ubuntu = !exists('$PREFIX') && has('unix')
-let s:windows = has('win32') || has('win64')
-
-let s:winrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/winrc.vim'
-if s:windows && filereadable(s:winrc)
-    execute 'source' s:winrc
+if expand('OS') !=# 'Windows_NT'
+    if !s:plugins
+        " bootstrap plug.vim on new systems
+        fun! InstallPlug()
+            silent call mkdir(expand('~/.local/share/nvim/site/autoload', 1), 'p')
+            execute '!curl -fLo ' . expand('~/.local/share/nvim/site/autoload/plug.vim', 1) . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+      endfun
+    endif
 endif
 
-" unabashedly stolen from junegunn dude is too good.
-let s:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/init.vim.local'
-if filereadable(s:local_vimrc)
-    execute 'source' s:local_vimrc
+
+" General Plugins: {{{2
+call plug#begin(expand($XDG_DATA_HOME) . '/nvim/plugged')
+
+Plug 'junegunn/vim-plug'        " plugception
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
+Plug 'davidhalter/jedi-vim'
+Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
+Plug 'w0rp/ale'
+Plug 'SirVer/ultisnips'
+
+if exists('$TMUX')
+    Plug 'christoomey/vim-tmux-navigator'
+    Plug 'edkolev/tmuxline.vim'
 endif
 
-" Session Options: {{{3
+Plug 'mhinz/vim-startify'
+Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
+" Plug 'gu-fan/riv.vim', { 'for': ['python', 'python3', 'rst'] }
+Plug 'greyblake/vim-preview'
+Plug 'lifepillar/vim-cheat40'
 
-" Here's a nice little setting to encourage interoperability
-" UNIX AND MS-WINDOWS
-
-" Some people have to do work on MS-Windows systems one day and on Unix another
-" day.  If you are one of them, consider adding 'slash' and 'unix' to
-" 'sessionoptions'.  The session files will then be written in a format that can
-" be used on both systems.  This is the command to put in your |init.vim| file:
-set sessionoptions+=unix,slash
-" Vim will use the Unix format then, because the MS-Windows Vim can read and
-" write Unix files, but Unix Vim can't read MS-Windows format session files.
-" Similarly, MS-Windows Vim understands file names with / to separate names, but
-" Unix Vim doesn't understand \.
-
-" Not related but I wanted to strike these down because they're annoying.
-set sessionoptions-=blank,folds
-
-" Remote Hosts: {{{3
-if s:termux
-    " holy fuck that was a doozy to find
-    let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
-    let g:ruby_host_prog = expand($_ROOT) . '/bin/neovim-ruby-host'
-
-elseif s:ubuntu
-    let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
-    " So the one above could very easily be merged. No idea how to do the
-    " below unless I just leave it up to the system.
-    try
-        let g:ruby_host_prog = expand('~') . '/.rvm/gems/default/bin/neovim-ruby-host'
-    catch
-        let g:ruby_host_prog = expand('$_ROOT') . '/local/bin/neovim-ruby-host'
-    endtry
-
+" It's very frustrating having termux slow down beyond repair but also frustrating
+" not being able to use more than 15 plugins at any point in time
+if !g:termux
+    Plug 'autozimu/LanguageClient-neovim'
+    Plug 'godlygeek/tabular'
+    Plug 'vim-voom/voom'
+    Plug 'Rykka/InstantRst'
+    Plug 'gu-fan/riv.vim'
+    Plug 'junegunn/vim-peekaboo'
+    Plug 'tpope/vim-unimpaired'
+    Plug 'tpope/vim-surround'
+    " Plug 'mbbill/undotree'    " not yet but soon
 endif
+
+Plug 'ryanoasis/vim-devicons'           " Keep at end!
+call plug#end()
 
 " Global Options: {{{1
 
@@ -151,7 +179,6 @@ endif
 noremap <Space> <nop>
 map <Space> <Leader>
 let g:maplocalleader = '<Space>'
-
 
 " Pep8 Global Options: {{{2
 if &tabstop > 4
@@ -207,14 +234,8 @@ if filereadable('/usr/share/dict/american-english')
 endif
 
 " Fun With Clipboards: {{{2
-if has('unnamedplus')                   " Use the system clipboard.
-    set clipboard+=unnamed,unnamedplus
-else                                    " Accommodate Termux
-    set clipboard+=unnamed
-endif
 
-set pastetoggle=<F7>
-
+" I've been using vim for almost 3 years. I still don't have copy paste ironed out...
 if exists('$TMUX')
     let g:clipboard = {
         \   'name': 'myClipboard',
@@ -228,7 +249,13 @@ if exists('$TMUX')
         \   },
         \   'cache_enabled': 1,
         \ }
+elseif has('unnamedplus')                   " Use the system clipboard.
+    set clipboard+=unnamed,unnamedplus
+else                                        " Accommodate Termux
+    set clipboard+=unnamed
 endif
+
+set pastetoggle=<F7>
 
 " Autocompletion: {{{2
 set wildmenu
@@ -319,6 +346,11 @@ let g:tutor_debug = 1
 
 " Window_Buf_Tab_Mappings: {{{2
 
+noremap <C-h> <Cmd>wincmd h<CR>
+noremap <C-j> <Cmd>wincmd j<CR>
+noremap <C-k> <Cmd>wincmd k<CR>
+noremap <C-l> <Cmd>wincmd l<CR>
+
 " Navigate buffers more easily
 nnoremap <Leader>bn <Cmd>bnext<CR>
 nnoremap <Leader>bp <Cmd>bprev<CR>
@@ -345,12 +377,14 @@ nnoremap <Leader>tq <Cmd>tabclose<CR>
 " It should also be easier to edit the config. Bind similarly to tmux
 nnoremap <Leader>ed <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 noremap <F9> <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
+" Don't forget to add in mappings when in insert/cmd mode
+noremap! <F9> <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 
 " Now reload it
-nnoremap <Leader>re :so $MYVIMRC<CR>
+noremap <Leader>re <Cmd>so $MYVIMRC<CR><Cmd>echo 'Vimrc reloaded!'<CR>
 
 " I feel really slick for this one. Modify ftplugin
-let g:ftplug=$MYVIMRC.'/after/ftplugin/'.&filetype.'.vim'
+" let g:ftplug=$MYVIMRC.'/after/ftplugin/'.&filetype.'.vim'
 " Goddamnit it opens a buffernnamed g:ftplug
 " map <F10> <Cmd>e g:ftplug<CR>
 
@@ -361,26 +395,42 @@ noremap <silent> <Leader>ts <Cmd>!termux-share -a send %<CR>
 " Junegunn:
 nnoremap <Leader>o o<Esc>
 nnoremap <Leader>O O<Esc>
-xnoremap < <gv
-xnoremap > >gv
-nnoremap j gj
-nnoremap k gk
+vnoremap < <gv
+vnoremap > >gv
+" I just realized these were set to nnoremap. Meaning visual mode doesn't get this mapping
+noremap j gj
+noremap k gk
 
 " Switch CWD to the directory of the open buffer
-nnoremap <Leader>cd :cd %:p:h<CR>:pwd<CR>
+nnoremap <Leader>cd <Cmd>cd %:p:h<CR><Cmd>pwd<CR>
 
-" Utilize the mouse!
-map <silent> <ScrollWheelUp> <C-Y>
-map <silent> <S-ScrollWheelUp> <C-U>
-map <silent> <ScrollWheelDown> <C-E>
-map <silent> <S-ScrollWheelDown> <C-D>
+" Mouse Maps: {{{3
+noremap <silent> <ScrollWheelUp> <C-Y>
+noremap <silent> <S-ScrollWheelUp> <C-U>
+noremap <silent> <ScrollWheelDown> <C-E>
+noremap <silent> <S-ScrollWheelDown> <C-D>
+noremap! <silent> <ScrollWheelUp> <C-Y>
+noremap! <silent> <S-ScrollWheelUp> <C-U>
+noremap! <silent> <ScrollWheelDown> <C-E>
+noremap! <silent> <S-ScrollWheelDown> <C-D>
 
 " Save a file as root
-noremap <leader>W :w !sudo tee % > /dev/null<CR>
+noremap <leader>W <Cmd>w !sudo tee % > /dev/null<CR>
 
 " Spell Checking:
-nnoremap <Leader>sp :setlocal spell!<CR>
+nnoremap <Leader>sp <Cmd>setlocal spell!<CR>
 nnoremap <Leader>s= z=
+
+" ALT Navigation: {{{3
+" Originally this inspired primarily for terminal use but why not put it everywhere?
+noremap <A-h> <C-w>h
+noremap <A-j> <C-w>j
+noremap <A-k> <C-w>k
+noremap <A-l> <C-w>l
+noremap! <A-h> <C-w>h
+noremap! <A-j> <C-w>j
+noremap! <A-k> <C-w>k
+noremap! <A-l> <C-w>l
 
 " Terminal: {{{2
 " If running a terminal in Vim, go into Normal mode with Esc
@@ -397,10 +447,6 @@ inoremap <A-h> <C-\><C-N><C-w>h
 inoremap <A-j> <C-\><C-N><C-w>j
 inoremap <A-k> <C-\><C-N><C-w>k
 inoremap <A-l> <C-\><C-N><C-w>l
-nnoremap <A-h> <C-w>h
-nnoremap <A-j> <C-w>j
-nnoremap <A-k> <C-w>k
-nnoremap <A-l> <C-w>l
 
 " Remaining Plugins: {{{1
 
@@ -416,17 +462,6 @@ let g:jedi#smart_auto_mappings = 0
 let g:jedi#force_py_version = 3
 let g:jedi#enable_completions = 0
 
-" Deoplete_Jedi: {{{2
-
-" Setting things up with the `if ubuntu` phrase was oddly a lot easier than
-" i expected it to be...
-if s:ubuntu
-    let g:deoplete#sources#jedi#enable_typeinfo = 1
-    let g:deoplete#sources#jedi#show_docstring = 1
-elseif s:termux
-    let g:deoplete#sources#jedi#enable_typeinfo = 0
-endif
-
 " Zim: {{{2
 let g:zim_notebooks_dir = expand('~/Notebooks/Notes')
 let g:zim_notebook = expand('~/Notebooks/Notes')
@@ -435,32 +470,6 @@ let g:zim_dev = 1
 " Here's an exciting little note about Zim. Ignoring how ...odd this plugin is
 " Voom actually gets pretty close to handling Zimwiki if you recognize it as
 " as dokuwiki!
-
-" Voom: {{{2
-
-"g:voom_ft_modes" is a Vim dictionary: keys are filetypes (|ft|), values are
-" corresponding markup modes (|voom-markup-modes|). Example:
-    " let g:voom_ft_modes = {'markdown': 'markdown', 'tex': 'latex'}
-" This option allows automatic selection of markup mode according to the filetype
-" of the source buffer. If 'g:voom_ft_modes' is defined as above, and 'filetype'
-" of the current buffer is 'tex', then the command
-    " :Voom
-" is identical to the command
-    " :Voom latex
-
-" g:voom_default_mode" is a string with the name of the default markup mode.
-" For example, if there is this in .vimrc:
-    " let g:voom_default_mode = 'asciidoc'
-" then, the command
-    " :Voom
-" is identical to
-    " :Voom asciidoc
-" unless 'g:voom_ft_modes' is also defined and has an entry for the current
-" filetype.
-
-let g:voom_ft_modes = {'markdown': 'markdown', 'rst': 'rst', 'zimwiki': 'dokuwiki'}
-let g:voom_default_mode = 'rst'
-let g:voom_python_versions = [3]
 
 " Runtime: {{{1
 
@@ -512,14 +521,21 @@ let g:ft_html_autocomment = 1
 " From `:he ft-lisp-syntax. Color parentheses differently up to 10 levels deep
 let g:lisp_rainbow = 1
 
-augroup filetypes
+" Omnifuncs: {{{3
+" realistically there's like 10 more but i don't feel like it right now. *shrugs*.
+" could keep going and wanted to note that if you want to you culd. just open the
+" autoload file and check that the function name is what you expect because it's {
+" obviously} not consistently named throughout
+augroup omnifunc
+    autocmd!
+    autocmd Filetype python           setlocal omnifunc=python3complete#Complete
+    autocmd Filetype css              setlocal omnifunc=csscomplete#CompleteCSS
+    autocmd Filetype javascript       setlocal omnifunc=javascriptcomplete#CompleteJS
+    autocmd Filetype html             setlocal omnifunc=htmlcomplete#CompleteTags
     autocmd Filetype *
         \   if &omnifunc == "" |
         \       setlocal omnifunc=syntaxcomplete#Complete |
         \   endif
-            " This is probably a terrible idea but idk whats fucking up my com
-            let &commentstring = '# %s'
-            set comments="
 augroup END
 
 " Functions_Commands: {{{1
@@ -677,7 +693,10 @@ endfunction
 let &statusline = s:statusline_expr()
 
 " Except for...
-autocmd TermOpen * setlocal statusline=%{b:term_title}
+augroup TermStatusline
+    autocmd!
+    autocmd TermOpen * setlocal statusline=%{b:term_title}
+augroup END
 
 " Rename: {{{2
 " :he map line 1454. How have i never noticed this isn't a feature???
@@ -687,7 +706,7 @@ command! -nargs=1 -bang -complete=file Rename f <args>|w<bang>
 
 command! YAPF exec '!yapf <cfile>'
 command! YAPFI exec '!yapf -i <cfile>'
-command! YAPFD cexpr! exec '!yapf -d <cfile'
+command! YAPFD cexpr! exec '!yapf -d <cfile>'
 
 " Chmod: {{{2
 
@@ -697,7 +716,7 @@ command! YAPFD cexpr! exec '!yapf -d <cfile'
 "		    :call system('chmod +w -- ' . expand('%:S'))
 " From :he filename-modifiers in the cmdline page.
 
-command! Chmod call system('chmod +x -- ' . expand('%:S')
+command! -nargs=1 -complete=file Chmod call system('chmod +x -- ' . expand('%:S'))
 
 " Could do word under cursor. Could tack it on to some fzf variation. idk
 
