@@ -31,8 +31,6 @@ the base options like so:
 
 let vs. set
 ~~~~~~~~~~~~
-For anything but the most basic commands, let is always preferable.
-
 ``set`` allows one to set useful configurations and is easier to read than
 some corresponding ``let`` statements, but it only allows one to
 define a variable to one literal value.
@@ -46,8 +44,7 @@ system for coercing types, this will frequently come in handy.
 In addition, let is best used when an  expression requires evaluating a variable
 of some sort.
 
-.. todo::  Show the example of setting python_prog_host based on the
-   VIRTUAL_ENV env var.
+.. todo::  Show the example of setting python_prog_host based on  :envvar:`VIRTUAL_ENV`
 
 Whitespace in Options
 ~~~~~~~~~~~~~~~~~~~~~
@@ -134,16 +131,19 @@ Something like this pseudo code would be perfect.
 
 .. code-block:: vim
 
-    ``if ft != None && ft != gitcommit | finish | endif``
+    if ft != None && ft != gitcommit | finish | endif
 
 
 Then put that in everything in that dir.
 
+.. _syntax-highlighting:
 
 Syntax
 ^^^^^^^
-Similar thing with `after/syntax`_. We also have a fair number of files in
-`syntax`_
+Similar thing with `after/syntax`_. We also have a fair number of files in `syntax`_
+
+.. _`syntax`: ./syntax/
+
 
 .. todo::
 
@@ -194,7 +194,7 @@ From the help docs
 
     SPELLFILE CLEANUP         *spellfile-cleanup*
 
-    The |zw| command turns existing entries in 'spellfile' into comment lines.
+    The ``zw`` command turns existing entries in 'spellfile' into comment lines.
     This avoids having to write a new file every time, but results in the file
     only getting longer, never shorter.  To clean up the comment lines in all
     ".add" spell files do this:
@@ -260,6 +260,36 @@ that exist.
 | :tmap        |           |         | Terminal                                 |
 +--------------+-----------+---------+------------------------------------------+
 
+There are a few things to note about this. One being that the commands map and
+noremap do not apply to insert or command line mode. As a result, mappings that
+would typically conflict with inserted text can easily be used.
+
+My `mapleader` is currently set to :kbd:`Space`. If I were to map :kbd:`Space r e`
+in insert mode, then any time I typed a word like 'return', the mapping would fire.
+
+However, ``noremap`` doesn't touch insert mode.
+
+So how does one ensure that they have a mapping in every mode?
+
+Unfortunately, *to my knowledge* there's no way to do this in one command.
+In fact, **it currently takes 3.**
+
+.. code-block:: vim
+
+    map <F2> <Cmd>NERDTreeToggle
+    map! <F2> <Cmd>NERDTreeToggle
+    tmap <F2> <Cmd>NERDTreeToggle
+
+Nowhere near the most elegant solution; unfortunately, it seems to be the only
+one.
+
+However, using the ``<Cmd>`` keyword prevents us from having to prepend ``<C-o>``
+from all of our normal mode mappings and ``<C-u>`` for the visual and select mode
+mappings.
+
+It actually never fires a ``CmdlineEnter`` event which also preserves our
+command history.
+
 Ensure that mappings use the ``<Cmd>`` idiom in place of :kbd:`<C-o>` for insert
 mode or :kbd:`<C-u>` for visual mode.
 
@@ -271,17 +301,10 @@ mode or :kbd:`<C-u>` for visual mode.
     the command directly (without changing modes, etc.).  Where you might use
     :...<CR>" in the {lhs} of a mapping, you can instead use '<Cmd>...<CR>'.
 
-    This is more flexible than `:<C-U>` in visual and operator-pending mode, or
-    `<C-O>:` in insert-mode, because the commands are executed directly in the
-    current mode (instead of always going to normal-mode).  Visual-mode is
-    preserved, so tricks with |gv| are not needed.  Commands can be invoked
-    directly in cmdline-mode (which otherwise would require timer hacks).
-
-    Because <Cmd> avoids mode-changes (unlike ":") it does not trigger
-    |CmdlineEnter| and |CmdlineLeave| events. This helps performance.
+    ...
 
     Unlike <expr> mappings, there are no special restrictions on the <Cmd>
-    command: it is executed as if an (unrestricted) |autocmd| was invoked or an
+    command: it is executed as if an (unrestricted) ``autocmd`` was invoked or an
     async event event was processed.
 
 
@@ -330,10 +353,9 @@ Completion can be done for:
 +-----------------------------------------------+------------+
 | 11. Omnicompletion (Filetype specific)        | <C-x><C-o> |
 +-----------------------------------------------+------------+
-| 12. Spelling Suggestions                      | <C-x>      |
+| 12. Spelling Suggestions                      | <C-x>s     |
 +-----------------------------------------------+------------+
 
-.. _`after/ftplugin/gitcommit.vim`: after/ftplugin/gitcommit.vim
-.. _`after/ftplugin/`: after/ftplugin/
-.. _`after/syntax/`: after/syntax/
-.. _`syntax/`: syntax/
+.. _`after/ftplugin/gitcommit.vim`: ./after/ftplugin/gitcommit.vim
+.. _`after/ftplugin/`: ./after/ftplugin/
+.. _`after/syntax/`: ./after/syntax/

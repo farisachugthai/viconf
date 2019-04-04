@@ -86,7 +86,7 @@ snippet kbd "Add the kbd directive to your doc"
 endsnippet
 
 snippet rep "Replace" ms
-.. |$1| .. replace:: $2
+.. |$1| replace:: $2
 endsnippet
 
 snippet ref  "Links that follow labelled objects. Expand 'lab or labhe'" mw
@@ -95,11 +95,15 @@ endsnippet
 
 # TODO: Figure out what snippet method to invoke to get proper indentation.
 snippet func "Inclass function directive" w
-:function:\`${0:${VISUAL}}()\`
+:function:\`${0:${VISUAL}}\`
 endsnippet
 
 snippet class "Inline class directive" w
-:class:\`${0:${VISUAL}}()\`
+:class:\`${0:${VISUAL}}\`
+endsnippet
+
+snippet mod "Inline mod directive" w
+:mod:\`${0:${VISUAL}}\`
 endsnippet
 
 ###########
