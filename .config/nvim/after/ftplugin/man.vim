@@ -27,8 +27,8 @@ augroup mantabs
     " the first time we enter nvim?
     " Unfortunately no.
     " autocmd VimEnter finish
-    autocmd BufEnter ft=man call s:helptab()
+    autocmd Filetype man,help call s:helptab()
     " should we do both?
-    autocmd BufEnter buftype ==# 'help' call s:helptab()
+    " autocmd BufEnter buftype ==# 'help' call s:helptab()
 
 augroup END

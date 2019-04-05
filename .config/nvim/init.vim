@@ -58,7 +58,10 @@ endif
 " with Unix.  The Unix version of Vim cannot source dos format scripts,
 " but the Windows version of Vim can source unix format scripts.
 set sessionoptions+=unix,slash
+
 " Remote Hosts: {{{2
+" Set the node and ruby remote hosts
+
 if g:termux
     " holy fuck that was a doozy to find
     let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
@@ -215,6 +218,7 @@ set spelllang=en
 
 if filereadable(expand('$XDG_CONFIG_HOME') . '/nvim/spell/en.utf-8.add')
     let &spellfile=expand('$XDG_CONFIG_HOME') . '/nvim/spell/en.utf-8.add'
+
 elseif filereadable(expand('~/projects/viconf/.config/nvim/spell/en.utf-8.add'))
     let &spellfile=expand('$HOME') . '/projects/viconf/.config/nvim/spell/en.utf-8.add'
 endif
@@ -225,8 +229,8 @@ set spellsuggest=5                      " Limit the number of suggestions from '
 if filereadable('/usr/share/dict/words')
     set dictionary+=/usr/share/dict/words
     " Replace the default dictionary completion with fzf-based fuzzy completion
-    " Courtesy of fzf <3 vim. But make it shorter
-    inoremap <expr> <c-x><k> fzf#vim#complete('cat /usr/share/dict/words')
+    " Courtesy of fzf <3 vim.
+    inoremap <expr> <C-x><C-k> fzf#vim#complete('cat /usr/share/dict/words')
 endif
 
 if filereadable('/usr/share/dict/american-english')
@@ -346,16 +350,22 @@ let g:tutor_debug = 1
 
 " Window_Buf_Tab_Mappings: {{{2
 
+" Navigate windows more easily
 noremap <C-h> <Cmd>wincmd h<CR>
 noremap <C-j> <Cmd>wincmd j<CR>
 noremap <C-k> <Cmd>wincmd k<CR>
 noremap <C-l> <Cmd>wincmd l<CR>
+
+" Resize them more easily. Finish more later. TODO
+noremap <C-w>< <Cmd>wincmd 5<<CR>
+noremap <C-w>> <Cmd>wincmd 5><CR>
 
 " Navigate buffers more easily
 nnoremap <Leader>bn <Cmd>bnext<CR>
 nnoremap <Leader>bp <Cmd>bprev<CR>
 nnoremap <Leader>bl <Cmd>blast<CR>
 nnoremap <Leader>bf <Cmd>bfirst<CR>
+nnoremap <Leader>bd <Cmd>bdelete<CR>
 
 " Wanna navigate windows more easily?
 " |CTRL-W_gF|   CTRL-W g F     edit file name under the cursor in a new
@@ -364,9 +374,19 @@ nnoremap <Leader>bf <Cmd>bfirst<CR>
 "
 " Rebind that to C-w t and we can open the filename in a new tab.
 
-" Navigate tabs more easily
-noremap <A-Right> <Cmd>tabnext<CR>
-noremap <A-Left> <Cmd>tabprev<CR>
+" Navigate tabs more easily. First check we have more than 1 tho.
+if len(nvim_list_tabpages()) > 1
+    noremap <A-Right> <Cmd>tabnext<CR>
+    noremap <A-Left> <Cmd>tabprev<CR>
+    noremap! <A-Right> <Cmd>tabnext<CR>
+    noremap! <A-Left> <Cmd>tabprev<CR>
+elseif len(nvim_list_wins()) > 1
+    noremap <A-Right> <Cmd>wincmd l<CR>
+    noremap <A-Left> <Cmd>wincmd h<CR>
+    noremap! <A-Right> <Cmd>wincmd l<CR>
+    noremap! <A-Left> <Cmd>wincmd h<CR>
+endif
+
 nnoremap <Leader>tn <Cmd>tabnext<CR>
 nnoremap <Leader>tp <Cmd>tabprev<CR>
 " Opens a new tab with the current buffer's path
@@ -521,6 +541,27 @@ let g:ft_html_autocomment = 1
 " From `:he ft-lisp-syntax. Color parentheses differently up to 10 levels deep
 let g:lisp_rainbow = 1
 
+" From he syntax
+" VIM			*vim.vim*		*ft-vim-syntax*
+" 			*g:vimsyn_minlines*	*g:vimsyn_maxlines*
+" Support embedded lua python nd ruby syntax highlighting in vim ftypes. No idea what your other options are.
+let g:vimsyn_embed = 'lPr'
+
+" Turn off errors because 50% of them are wrong.
+let g:vimsyn_noerror = 1
+
+						" *g:vimsyn_folding*
+
+" Some folding is now supported with syntax/vim.vim:
+
+   " g:vimsyn_folding == 0 or doesn't exist: no syntax-based folding
+   " g:vimsyn_folding =~ 'a' : augroups
+   " g:vimsyn_folding =~ 'f' : fold functions
+   " g:vimsyn_folding =~ 'P' : fold python   script
+
+" Are we allowed to combine these?
+
+
 " Omnifuncs: {{{3
 " realistically there's like 10 more but i don't feel like it right now. *shrugs*.
 " could keep going and wanted to note that if you want to you culd. just open the
@@ -528,10 +569,12 @@ let g:lisp_rainbow = 1
 " obviously} not consistently named throughout
 augroup omnifunc
     autocmd!
-    autocmd Filetype python           setlocal omnifunc=python3complete#Complete
+    autocmd Filetype python,xonsh     setlocal omnifunc=python3complete#Complete
+    autocmd Filetype html,xhtml       setlocal omnifunc=htmlcomplete#CompleteTags
+    autocmd Filetype xml              setlocal omnifunc=xmlcomplete#CompleteTags
     autocmd Filetype css              setlocal omnifunc=csscomplete#CompleteCSS
     autocmd Filetype javascript       setlocal omnifunc=javascriptcomplete#CompleteJS
-    autocmd Filetype html             setlocal omnifunc=htmlcomplete#CompleteTags
+    " If there isn't a default or built-in, use the syntax highlighter
     autocmd Filetype *
         \   if &omnifunc == "" |
         \       setlocal omnifunc=syntaxcomplete#Complete |
@@ -711,15 +754,34 @@ command! YAPFD cexpr! exec '!yapf -d <cfile>'
 " Chmod: {{{2
 
 "	:S	Escape special characters for use with a shell command (see
-"		|shellescape()|). Must be the last one. Examples: >
+"		|shellescape()|). Must be the last one. Examples:
 "		    :!dir <cfile>:S
 "		    :call system('chmod +w -- ' . expand('%:S'))
 " From :he filename-modifiers in the cmdline page.
 
-command! -nargs=1 -complete=file Chmod call system('chmod +x -- ' . expand('%:S'))
+command! -nargs=1 -complete=file Chmod call system('chmod +x ' . expand('%:S'))
 
 " Could do word under cursor. Could tack it on to some fzf variation. idk
 
+" Finger: {{{2
+" Example from :he command-complete
+" The following example lists user names to a Finger command
+command! -complete=custom,ListUsers -nargs=1 Finger !finger <args>
+
+function! ListUsers(A,L,P)
+    return system("cut -d: -f1 /etc/passwd")
+endfun
+
+"
+" The following example completes filenames from the directories specified in
+" the 'path' option:
+command! -nargs=1 -bang -complete=customlist,EditFileComplete
+   	\ EF edit<bang> <args>
+function! EditFileComplete(A,L,P)
+    return split(globpath(&path, a:A), "\n")
+endfun
+
+" This example does not work for file names with spaces!
 " Colorscheme: {{{1
 
 " Gruvbox: {{{2
@@ -750,7 +812,6 @@ command! -nargs=0 Gruvbox call s:gruvbox()
 " Lower max syntax highlighting
 set synmaxcol=400
 
-syntax sync minlines=500
 syntax sync fromstart
 syntax on
 

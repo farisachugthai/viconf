@@ -2,7 +2,7 @@
     " File: riv.vim
     " Author: Faris Chugthai
     " Description: Plugin modifications for riv.vim
-    " Last Modified: March 11, 2019
+    " Last Modified: Apr 05, 2019
 " ============================================================================
 
 " Guards: {{{1
@@ -35,7 +35,7 @@ let g:riv_fuzzy_help = 1
 
 " Mar 11, 2019:
 " which languages to highlight. not sure how this is gonna work out but we'll see
-let g:riv_highlight_code = 'lua,python,cpp,javascript,vim,sh,PowerShell,bash,python3,rst,shell,console'
+let g:riv_highlight_code = 'lua,python,cpp,javascript,vim,sh,PowerShell,bash,python3,python,rst,shell,console'
 
 " link target's position when created. don't put it at the bottom because in a
 " python file that means you put it out of the docstring and into the actual
@@ -47,3 +47,8 @@ let g:riv_create_link_pos = '.'
 let g:riv_ignored_imaps = '<Tab>,<S-Tab>,<Leader>cr'
 
 let g:riv_default_path = expand('$HOME') . '/projects'
+
+let riv_project1 = { 'Name': 'utilities', 'path': '~/projects/utilities',}
+let riv_project2 = { 'Name': 'Gruvbox-IPython', 'path': '~/projects/Gruvbox-IPython',}
+
+let g:riv_projects = [ riv_project1, riv_project2 ]

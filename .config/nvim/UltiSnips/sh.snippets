@@ -1,7 +1,4 @@
 # sh.snippets
-#######################################################################
-#                      # Your personal snippets                       #
-#######################################################################
 
 # Shebang. Good place to start
 snippet #! "#!/usr/bin/env (!env)" b
@@ -153,89 +150,6 @@ printf "$RESET"
 fi
 endsnippet
 
-###############
-#  Reference  #
-###############
-
-# Quite honestly more of a personal reference than something I expect to use.
-snippet colors "A list of the ANSI escape codes for colors in scripts."
-LIGHT_RED='\033[1;31m'
-YELLOW='\033[1;33m'
-LIGHT_BLUE='\033[1;34m'
-BLACK='\033[0;30m'
-DARK_GRAY='\033[1;30m'
-Blue='\033[0;34m'
-Green 0;32
-Light_Green 1;32
-Cyan 0;36
-Light_Cyan 1;36
-Red 0;31
-Purple 0;35
-Light_Purple 1;35
-Brown 0;33
-Light_Gray 0;37
-White 1;37
-RESET='\033[0m'
-endsnippet
-
-snippet escape_codes "A gentle reminder of all bash escape sequences. Useful for prompts." b
-# \a an ASCII bell character (07)
-# \d the date in "Weekday Month Date" format (e.g., "Tue May 26")
-# \e an ASCII escape character (033)
-# \h the hostname up to the first .
-# \H the hostname
-# \j the number of jobs currently managed by the shell
-# \l the basename of the shells terminal device name
-# \n newline
-# \r carriage return
-# \s the name of the shell, the basename of \$0 (the portion following the final slash)
-# \t the current time in 24-hour HH:MM:SS format
-# \T the current time in 12-hour HH:MM:SS format
-# \@ the current time in 12-hour am/pm format
-# \u the username of the current user
-# \v the version of bash (e.g., 2.00)
-# \V the release of bash, version + patchlevel (e.g., 2.00.0)
-# \w the current working directory
-# \W the basename of the current working directory
-# \! the history number of this command
-# \# the command number of this command
-# \$ if the effective UID is 0, a #, otherwise a $
-# \nnn the character corresponding to the octal number nnn
-# \\ a backslash
-# \[ begin a sequence of non-printing characters, which could be used to embed a terminal control sequence into the prompt
-# \] end a sequence of non-printing characters
-endsnippet
-
-
-#######################################################################
-#                             UltiSnips                               #
-#######################################################################
-
-global !p
-import vim
-
-# Tests for the existence of a variable declared by Vim's filetype detection
-# suggesting the type of shell script of the current file
-def testShell(scope, shell):
-	return vim.eval("exists('" + scope + ":is_" + shell + "')")
-
-# Loops over the possible variables, checking for global variables
-# first since they indicate an override by the user.
-def getShell():
-	for scope in ["g", "b"]:
-		for shell in ["bash", "posix", "sh", "kornshell"]:
-			if testShell(scope, shell) == "1":
-				if shell == "kornshell":
-					return "ksh"
-				if shell == "posix":
-					return "sh"
-				return shell
-	return "sh"
-endglobal
-
-###########################################################################
-#                            TextMate Snippets                            #
-###########################################################################
 
 snippet sbash "safe bash options"
 #!/usr/bin/env bash
