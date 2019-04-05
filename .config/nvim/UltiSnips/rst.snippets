@@ -19,6 +19,11 @@ ${1:${VISUAL:Section name}}
 `!p snip.rv = rst_char_len(t[1])*'='`
 endsnippet
 
+snippet title- "Title with -" b
+${1:${VISUAL:Subsection name}}
+`!p snip.rv = rst_char_len(t[1])*'-'`
+endsnippet
+
 snippet inlink "Create an internal link"
 :ref:\`${1:${VISUAL:link}}\` $0
 endsnippet
@@ -80,9 +85,8 @@ snippet kbd "Add the kbd directive to your doc"
 :kbd:\`${1:${VISUAL}}\`
 endsnippet
 
-# Is the below the right syntax? 2 sets of double dots?
 snippet rep "Replace" ms
-.. |$1| .. replace:: $2
+.. |$1| replace:: $2
 endsnippet
 
 snippet ref  "Links that follow labelled objects. Expand 'lab or labhe'" mw
@@ -91,15 +95,15 @@ endsnippet
 
 # TODO: Figure out what snippet method to invoke to get proper indentation.
 snippet func "Inclass function directive" w
-:function:\`${0:${VISUAL}}()\`
+:function:\`${0:${VISUAL}}\`
 endsnippet
 
 snippet class "Inline class directive" w
-:class:\`${0:${VISUAL}}()\`
+:class:\`${0:${VISUAL}}\`
 endsnippet
 
-snippet `` "Literal code"
-\`\`${0:${VISUAL}}\`\`
+snippet mod "Inline mod directive" w
+:mod:\`${0:${VISUAL}}\`
 endsnippet
 
 ###########

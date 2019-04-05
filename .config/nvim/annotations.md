@@ -54,7 +54,8 @@ Now here are some functions that don't work.
 ### LanguageClient
 
 Just ran this doozy to setup the build for termux.
-%s/\/tmp/\/data\/data\/com.termux\/files\/usr\/tmp
+
+`%s/\/tmp/\/data\/data\/com.termux\/files\/usr\/tmp`
 
 ### UltiSnips
 
@@ -63,7 +64,6 @@ From the help pages.
 #### Check if text is expandable
 
     6. FAQ   *UltiSnips-FAQ*
-
 
     Q: Do I have to call UltiSnips#ExpandSnippet() to check if a snippet is
     expandable? Is there instead an analog of neosnippet#expandable?
@@ -85,6 +85,6 @@ As notated by folds, go to All --> Remaining Plugins --> UltiSnips. Should be
 around line 700.
 
 I've copied `UltiSnips#IsExpandable()` there, and wanted to list the explanation
-here so as to note clutter up my init.vim.
+here so as to note clutter up my [init.vim](init.vim).
 
-However that func needs a mapping because I'm never gonna remember it.
+However that func needs a mapping because I'm never going to remember it.
