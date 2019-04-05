@@ -10,24 +10,12 @@ setlocal linebreak
 setlocal textwidth=120
 
 setlocal commentstring=#\ %s
-set comments="
 
 setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 
 " also let's know where the line needs to end visually but not invoke the
 " linters to react.
 setlocal colorcolumn=80,120
-" Dude the columns line was destroying nvim's redraw when you split tmux panes
-
-if isdirectory('/usr/lib/python3/')
-    setl path+=/usr/lib/python3*
-endif
-" Completions: {{{2
-" Idk if this is right.
-if &omnifunc==?''
-   set omnifunc=python3#completer
-endif
-
 
 " Autocommands: {{{1
 
@@ -51,7 +39,7 @@ let b:ale_linters_explicit = 1
 
 " Alright let's just do this manually
 
-let b:ale_python_pyls_options = {
+let b:ale_python_pyls_config = {
       \   'pyls': {
       \     'plugins': {
       \       'pycodestyle': {

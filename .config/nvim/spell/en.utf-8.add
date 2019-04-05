@@ -1558,3 +1558,16 @@ LanguageClient
 doozy
 Chatistics
 utilities's
+getcwd
+expanduser
+islink
+PurePath
+splitext
+isabs
+isdir
+joinpath
+StreamRecoder
+fnmatch
+fnmatch
+traceback
+ArgumentParser
