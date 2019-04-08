@@ -1,5 +1,6 @@
 # Rst.snippets:
 # -*- coding: utf-8 -*-
+# Vim: set et:set ts=3:set sts=3:set sw=3:
 
 extends snippets
 extends python
@@ -14,56 +15,6 @@ from rst_helper import *
 
 endglobal
 
-snippet title "Title with =" b
-${1:${VISUAL:Section name}}
-`!p snip.rv = rst_char_len(t[1])*'='`
-endsnippet
-
-snippet title- "Title with -" b
-${1:${VISUAL:Subsection name}}
-`!p snip.rv = rst_char_len(t[1])*'-'`
-endsnippet
-
-snippet inlink "Create an internal link"
-:ref:\`${1:${VISUAL:link}}\` $0
-endsnippet
-
-snippet table "table from sphinx cheatsheet"
-==================   ============
-Name                 Age
-==================   ============
-John D Hunter        40
-Cast of Thousands    41
-And Still More       42
-==================   ============
-endsnippet
-
-snippet cb "Code Block. Must have 1 blank line surrounding!" bs
-.. code-block:: ${1:python3}
-
-   ${2:${VISUAL:code}}
-
-$0
-endsnippet
-
-snippet codeb "code block duplicated" bs
-.. code-block:: ${1:python}
-
-   ${2:${VISUAL:code}}
-endsnippet
-
-snippet code "Inline code. Needs to be visually highlighted first." b
-\`\`${0:${VISUAL:text}}\`\`
-endsnippet
-
-snippet hi "Set a highlight directive to establish the base for code block directives" ms
-.. highlight::
-   ${1::linenos:}
-   ${2::linenothreshold:}
-   ${3::emphasize-lines: 1,2,3}
-
-${0:Optional arguments above}
-endsnippet
 
 ################
 #  Inline	   #
@@ -93,6 +44,12 @@ snippet ref  "Links that follow labelled objects. Expand 'lab or labhe'" mw
 :ref:\`${1:${VISUAL:path}}\`_
 endsnippet
 
+
+snippet inlink "Create an internal link"
+:ref:\`${1:${VISUAL:link}}\`_
+endsnippet
+
+
 # TODO: Figure out what snippet method to invoke to get proper indentation.
 snippet func "Inclass function directive" w
 :function:\`${0:${VISUAL}}\`
@@ -105,6 +62,12 @@ endsnippet
 snippet mod "Inline mod directive" w
 :mod:\`${0:${VISUAL}}\`
 endsnippet
+
+
+snippet code "Inline code. Needs to be visually highlighted first." b
+\`\`${0:${VISUAL:text}}\`\`
+endsnippet
+
 
 ###########
 #  links  #
@@ -150,36 +113,38 @@ endsnippet
 # Directives
 # ------------
 
-snippet img "image link directive"
+snippet img "image link directive" w
 .. |${1:alias}| image:: ${2:img}
 endsnippet
 
-snippet fig: "Figure directive" b
+snippet fig: "Figure directive" w
 .. figure:: ${1:img}
    :alt: ${2:alter text}
 
 $0
 endsnippet
 
-snippet cont "content directive" bsm
+snippet contents "content directive" smw
 .. contents::
+   ${1:${VISUAL::depth:}}
+   ${2::local:}
 
-   ${1:${VISUAL::depth:}} $2
+   $0
 endsnippet
 
-snippet coded "Code block directive." bs
+snippet coded "Code block directive." sw
 .. code:: ${1:type}
 
    ${0:${VISUAL:code}}
 endsnippet
 
-snippet tip "Tips or anyone in need of a directive!" bs
+snippet tip "Tips or anyone in need of a directive!" sw
 .. tip::
 
    ${0:${VISUAL:Tip for anyone having trouble.}}
 endsnippet
 
-snippet coded "Code block directive." b
+snippet coded "Code block directive." wms
 .. code:: ${1:type}
 
    ${0:${VISUAL:write some code}}
@@ -263,11 +228,18 @@ ${8:subtitle2}
 $0
 endsnippet
 
-snippet toctree "directive_toctree" b
-.. toctree::
-   :maxdepth: ${1:2}
+#############
+#  headers  #
+#############
 
-   ${2:FILES}
+snippet title "Title with =" b
+${1:${VISUAL:Section name}}
+`!p snip.rv = rst_char_len(t[1])*'='`
+endsnippet
+
+snippet title- "Title with -" b
+${1:${VISUAL:Subsection name}}
+`!p snip.rv = rst_char_len(t[1])*'-'`
 endsnippet
 
 snippet part "Part"
@@ -315,6 +287,8 @@ ${1:${VISUAL:Paragraph name}} $0
 `!p snip.rv = rst_char_len(t[1])*'"'`
 endsnippet
 
+# honestly idk
+
 # WHAT ARE THESE DOUBLE IF'S!
 snippet em "Emphasize string" i
 `!p
@@ -354,11 +328,10 @@ snip.rv = make_items(match.groupdict()['num'], 1)
 `
 endsnippet
 
-###########################################################################
-#                         More Specialized Stuff.                         #
-###########################################################################
+######################
+#  match snippets :  #
+######################
 
-# match snippets :
 # img, inc, fig
 snippet id "Includable Directives" b
 `!p
@@ -463,13 +436,10 @@ endsnippet
 # # new, more consistent, name
 # directives.register_directive('object', ObjectDescription)
 
-# directives.register_directive('highlight', Highlight)
 # directives.register_directive('highlightlang', HighlightLang)
-# directives.register_directive('code-block', CodeBlock)
 # directives.register_directive('sourcecode', CodeBlock)
 # directives.register_directive('literalinclude', LiteralInclude)
 
-# directives.register_directive('toctree', TocTree)
 # directives.register_directive('sectionauthor', Author)
 # directives.register_directive('moduleauthor', Author)
 # directives.register_directive('codeauthor', Author)
@@ -500,4 +470,59 @@ snippet sid "SideBar" b
 .. sidebar:: ${1:SideBar Title}
 
    ${2:${VISUAL:SideBar Content}}
+endsnippet
+
+
+snippet cb "Code Block. Must have 1 blank line surrounding!" bs
+.. code-block:: ${1:python3}
+
+   ${2:${VISUAL:code}}
+
+$0
+endsnippet
+
+snippet codeb "code block duplicated" bs
+.. code-block:: ${1:python}
+
+   ${2:${VISUAL:code}}
+endsnippet
+
+snippet cb "Code Block. Must have 1 blank line surrounding!" bs
+.. code-block:: ${1:python3}
+
+   ${2:${VISUAL:code}}
+
+$0
+endsnippet
+
+snippet codeb "code block duplicated" bs
+.. code-block:: ${1:python}
+
+   ${2:${VISUAL:code}}
+endsnippet
+
+snippet hi "Set a highlight directive to establish the base for code block directives" ms
+.. highlight::
+   ${1::linenos:}
+   ${2::linenothreshold:}
+   ${3::emphasize-lines: 1,2,3}
+
+${0:Optional arguments above}
+endsnippet
+
+snippet toctree "directive_toctree" b
+.. toctree::
+   :maxdepth: ${1:2}
+
+   ${2:FILES}
+endsnippet
+
+snippet table "table from sphinx cheatsheet"
+==================   ============
+Name                 Age
+==================   ============
+John D Hunter        40
+Cast of Thousands    41
+And Still More       42
+==================   ============
 endsnippet

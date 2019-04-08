@@ -5,10 +5,12 @@ jedi-docs ~/.local/share/nvim/plugged/jedi-vim/pythonx/jedi/docs/docs
 nvim ~/.config/nvim
 plugged ~/.local/share/nvim/plugged
 py_tut ~/python/tutorials
+riv ~/.local/share/nvim/plugged/riv.vim/doc/riv_instruction.rst
 tutorials ~/Dropbox/python/tutorials
+utilities ~/projects/utilities
 viconf ~/projects/viconf/.config/nvim
 vim ~/.vim
-utilities ~/projects/utilities
-riv ~/.local/share/nvim/plugged/riv.vim/doc/riv_instruction.rst
+system-python /data/data/com.termux/files/usr/lib/python3.7
+
 IPyCore ~/miniconda3/lib/python3.7/site-packages/IPython/core
 sphinx ~/miniconda3/envs/flask/lib/python3.7/site-packages/sphinx

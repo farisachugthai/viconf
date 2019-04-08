@@ -1,11 +1,16 @@
-" pydoc.vim: pydoc integration for vim
+" ============================================================================
+    " File: pydoc.vim
+    " Author: Faris Chugthai
+    " Description: " pydoc.vim: pydoc integration for vim
+    " Last Modified: April 08, 2019
+" ============================================================================
 
 " Doc: {{{1
 " So I found this somewhere and wanted to throw it back into the repository if
 " you get bored.
 "
-" TODO: We could define an external command using
-" `let g:pydoc_cmd etc etc
+" We could define an external command using
+" let g:pydoc_cmd etc etc
 "
 " Or you could define a function such that a remote host can utilize it.
 " Then we don't block anything while looking through the docs.
@@ -15,10 +20,9 @@
 " Alternatively though, you could just utilize jedi more effectively and have
 " it set to set its mappings in py/rst/maybe rst.txt files.
 " Then just get more comfortable with th go to usages and declarations.
-"
+
 " HOWEVER. Continue downwards for more of my thoughts.
-"
-"
+
 "This plugin integrates the pydoc into vim. You can view the
 "documentation of a module by using :Pydoc foo.bar.baz or search
 "a word (uses pydoc -k) in the documentation by typing PydocSearch
@@ -36,7 +40,6 @@
 
 "in your .vimrc
 
-
 "pydoc.vim is free software, you can redistribute or modify
 "it under the terms of the GNU General Public License Version 2 or any
 "later Version (see http://www.gnu.org/copyleft/gpl.html for details).
@@ -46,50 +49,65 @@
 " Functions: {{{1
 
 " ShowPyDoc: {{{2
+    " Needs to be a way better check for 'if we're already in the manpager...
+    " if bufloaded('__doc__') >0
+        " let l:buf_is_new = 0
+    " else
+        " let l:buf_is_new = 1
+    " endif
 
-function! ShowPyDoc(name, type)
+    " Stop using sb and abbreviations.
+    " if bufnr('__doc__') >0
+        " execute 'sb __doc__'
+    " else
+        " execute 'split __doc__'
+    " endif
+
+    " setlocal noswapfile
+
+    " Forgot the local or does it not work that way?
+    " You totally can. Also why nofile???
+    " setlocal buftype=help
+    " why the fuck would you set modifiable??
+    " setlocal nomodifiable
+
+    " only saving the below so you can remember that we got halfway through the function
+    " before we decided 'fuck it wipe the buffer'
+    " normal ggdG
+    " OHHHH I just got it. This first part is to check if we're in a pydoc help page already!
+    " If so we need to set modifiable and the others
+    " The purpose of the above section and below section are quite different.
+    " Break this into AT LEAST two functions from here.
+
+function! ShowPyDoc(name, type)  " {{{2
     if !exists('g:pydoc_cmd')
         let g:pydoc_cmd = 'pydoc'
     endif
 
-    if bufloaded('__doc__') >0
-        let l:buf_is_new = 0
-    else
-        let l:buf_is_new = 1
-    endif
-
-    " Stop using sb and abbreviations.
-    if bufnr("__doc__") >0
-        execute "sb __doc__"
-    else
-        execute 'split __doc__'
-    endif
-    setlocal noswapfile
-    " Forgot the local or does it not work that way?
-    set buftype=nofile
-    setlocal modifiable
-    normal ggdG
     let s:name2 = substitute(a:name, '(.*', '', 'g' )
     let s:name2 = substitute(a:name, ':', '', 'g' )
+
+    " type==1 when type is str
     if a:type==1
         execute  'silent read ! ' . g:pydoc_cmd . ' ' . s:name2
     else
         execute  'silent read ! ' . g:pydoc_cmd . ' -k ' . s:name2
     endif
-    setlocal nomodified
+    " setlocal nomodified
     set filetype=man
     normal 1G
+    " could we do `call nvim_set_current_line()`
 
-    if !exists('g:pydoc_wh')
-        let g:pydoc_wh = 10
+    " ...used to be pydoc_wh...
+    if !exists('g:pydoc_win_height')
+        let g:pydoc_win_height = 10
     end
     resize -999
-    execute 'silent resize +' . g:pydoc_wh
+    execute 'silent resize +' . g:pydoc_win_height
 
-    if !exists('g:pydoc_highlight')
-        let g:pydoc_highlight = 1
-    endif
-    if g:pydoc_highlight == 1
+    " was pydoc_highlight...
+    if !exists('g:pydoc_hl_disable')
+        let g:pydoc_hl_disable = 1
         call Highlight(s:name2)
     endif
 
@@ -129,8 +147,12 @@ augroup pydoc_mappings
 augroup end
 
 " Commands: {{{1
-command -nargs=1 Pydoc :call ShowPyDoc('<args>', 1)
-command -nargs=*  PydocSearch :call ShowPyDoc('<args>', 0)
+
+" TODO: Definitely needs a -complete arg
+command! -nargs=1  Pydoc :call ShowPyDoc('<f-args>', 1)
+
+" Whoops. This command doesn't work anymore.
+command! -nargs=*  PydocSearch :call ShowPyDoc('<f-args>', 0)
 
 " These commands doe. We coudl grep them, fzf them, aggregate them. There's a whole lot
 " of fun to be had here

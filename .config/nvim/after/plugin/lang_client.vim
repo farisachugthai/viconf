@@ -9,10 +9,10 @@ if !has_key(plugs, 'LanguageClient-neovim')
     finish
 endif
 
-if exists('g:loaded_lang_client') || &compatible || v:version < 700
+if exists('g:did_conf_lang_client') || &compatible || v:version < 700
     finish
 endif
-let g:loaded_lang_client = 1
+let g:did_conf_lang_client = 1
 
 " Options: {{{1
 

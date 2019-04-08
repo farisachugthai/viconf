@@ -39,17 +39,17 @@ let g:fzf_history_dir = expand('$XDG_DATA_HOME') . '/fzf-history'
 
 " Mar 21, 2019:
 let g:fzf_colors =
-\ {  'fg':      ['fg', '#bdae93'],
+\ {  'fg':      ['fg', '#fbf1c7'],
   \  'bg':      ['bg', '#1d2021'],
   \  'hl':      ['fg', '#83a598'],
-  \  'fg+':     ['fg', '#ebdbb2'],
-  \  'bg+':     ['bg', '#ec3836'],
-  \  'hl+':     ['fg', '#83a598'],
+  \  'fg+':     ['fg', '#ebdbb2', '#3c3836'],
+  \  'bg+':     ['bg', '#ec3836', '#3c3836'],
+  \  'hl+':     ['fg', '#fb4934'],
   \  'info':    ['fg', '#fabd2f'],
-  \  'prompt':  ['fg', '#fabd1f'],
-  \  'pointer': ['fg', '#8ec07c'],
-  \  'marker':  ['fg', '#8ec07c'],
-  \  'spinner': ['fg', '#8ec07c'],
+  \  'prompt':  ['fg', '#fe8019'],
+  \  'pointer': ['fg', '#fb4934'],
+  \  'marker':  ['fg', '#fb4934'],
+  \  'spinner': ['fg', '#b8bb26'],
   \  'header':  ['fg', '#83a598'] }
 
 
@@ -88,8 +88,9 @@ imap <C-x><C-j> <Plug>(fzf-complete-file-ag)
 nnoremap <silent> <expr> <Leader><Leader> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
 
 " The remainder behave as expected.
-nnoremap <silent> <Leader>C        :Colors<CR>
-nnoremap <silent> <Leader><Enter>  :Buffers<CR>
+noremap <silent> <Leader>C        :Colors<CR>
+noremap <silent> <Leader><Enter>  :Buffers<CR>
+noremap <Leader>bu <Cmd>Buffers<CR>
 
 " Mapping for selecting different mappings.
 " Could add one for insert mode but leader tab is gonna happen so often that we need to use
@@ -116,9 +117,11 @@ nnoremap <silent> <Leader>`        <Cmd>Marks<CR>
 
 " If you want help with that, remember that :he fzf and :he fzf-vim give 2
 " different docs
+
 " FZF beat fugitive out on this one. Might take git log too.
-nnoremap <Leader>gg <Cmd>GGrep<Space>
-nnoremap <Leader>gl <Cmd>Commits<CR>
+noremap <Leader>gg <Cmd>GGrep<Space>
+noremap <Leader>gl <Cmd>Commits<CR>
+
 " [[B]Commits] Customize the options used by 'git log':
 let g:fzf_commits_log_options = '--graph --color=always --all --branches --pretty --format="h%d %s %c(black)%c(bold)%cr"'
 
@@ -127,7 +130,7 @@ noremap <Leader>GS <Cmd>GFiles?<CR>
 " Global Line Completion: {{{2
 
 " Global line completion (not just open buffers. ripgrep required.)
-inoremap <expr> <c-x><l> fzf#vim#complete(fzf#wrap({
+inoremap <expr> <C-x><C-l> fzf#vim#complete(fzf#wrap({
     \ 'prefix': '^.*$',
     \ 'source': 'rg -n ^ --color always',
     \ 'options': '--ansi --delimiter : --nth 3..',
@@ -137,6 +140,7 @@ inoremap <expr> <c-x><l> fzf#vim#complete(fzf#wrap({
 
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1
+
 " [Tags] Command to generate tags file
 let g:fzf_tags_command = 'ctags -R ./** && ctags -R --append ./.*'
 
@@ -174,7 +178,7 @@ augroup end
 "         \ get(a:000, 0, fzf#wrap())))
 " endfunction
 
-inoremap <expr> <c-x><c-k> fzf#complete({
+inoremap <expr> <C-x><C-k> fzf#complete({
             \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add /usr/share/dict/words 2>/dev/null',
             \ 'options': '--preview=bat {} --ansi --multi --cycle',
 \ 'left': 50})
@@ -226,7 +230,7 @@ function! s:make_sentence(lines)
     return substitute(join(a:lines), '^.', '\=toupper(submatch(0))', '').'.'
 endfunction
 
-inoremap <expr> <c-x><c-s> fzf#vim#complete({
+inoremap <expr> <C-x><C-s> fzf#vim#complete({
     \ 'source':  'cat /usr/share/dict/words',
     \ 'reducer': function('<sid>make_sentence'),
     \ 'options': '--multi --reverse --margin 15%,0',
