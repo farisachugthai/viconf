@@ -6,13 +6,14 @@
 " License:      Vim License (see `:help license`)
 " Last Updated: Mon 06 Aug 2018 02:49:37 PM CEST
 
-" needs to be updated for startify because that renders wrong.
+" Updated and just needed certain options set
+" Guards: {{{
+if exists('did_gruvbox') || &cp || v:version < 700
+    finish
+endif
+let did_gruvbox= 1
 
-" %s/[a-z]=NONE//g
-" Used to clear all the nones out. Didn't work perfectly and left a bunch of keywords behind.
-
-" %s/guib\s[a-z]*$//
-" I tried that one and it didn't work at all.
+" }}}
 
 if !(has('termguicolors') && &termguicolors) && !has('gui_running')
       \ && (!exists('&t_Co') || &t_Co < 256)
@@ -270,8 +271,8 @@ if &background ==# 'dark'
     hi StartifyBracket ctermfg=144 ctermbg=NONE guifg=#bdae93 guibg=NONE guisp=NONE cterm=NONE gui=NONE
     hi StartifyFile ctermfg=187 ctermbg=NONE guifg=#ebdbb2 guibg=NONE guisp=NONE cterm=NONE gui=NONE
     hi StartifyNumber ctermfg=109 ctermbg=NONE guifg=#83a598 guibg=NONE guisp=NONE cterm=NONE gui=NONE
-    hi StartifyPath ctermfg=102 ctermbg=NONE guifg=#928374 guibg=NONE guisp=NONE cterm=NONE gui=NONE
-    hi StartifySlash ctermfg=102 ctermbg=NONE guifg=#928374 guibg=NONE guisp=NONE cterm=NONE gui=NONE
+    hi StartifyPath ctermfg=102 guifg=#928374
+    hi StartifySlash ctermfg=102 guifg=#928374
     hi StartifySection ctermfg=214 ctermbg=NONE guifg=#fabd2f guibg=NONE guisp=NONE cterm=NONE gui=NONE
     hi StartifySpecial ctermfg=239 ctermbg=NONE guifg=#504945 guibg=NONE guisp=NONE cterm=NONE gui=NONE
     hi StartifyHeader ctermfg=208 ctermbg=NONE guifg=#fe8019 guibg=NONE guisp=NONE cterm=NONE gui=NONE
