@@ -91,6 +91,8 @@ nnoremap <silent> <expr> <Leader><Leader> (expand('%') =~ 'NERD_tree' ? "\<c-w>\
 noremap <silent> <Leader>C        :Colors<CR>
 noremap <silent> <Leader><Enter>  :Buffers<CR>
 noremap <Leader>bu <Cmd>Buffers<CR>
+noremap <Leader>bB <Cmd>Buffers<CR>
+noremap <Leader>F <Cmd>Files<CR>
 
 " Mapping for selecting different mappings.
 " Could add one for insert mode but leader tab is gonna happen so often that we need to use
@@ -119,7 +121,7 @@ nnoremap <silent> <Leader>`        <Cmd>Marks<CR>
 " different docs
 
 " FZF beat fugitive out on this one. Might take git log too.
-noremap <Leader>gg <Cmd>GGrep<Space>
+nnoremap <Leader>gg :GGrep<Space>
 noremap <Leader>gl <Cmd>Commits<CR>
 
 " [[B]Commits] Customize the options used by 'git log':

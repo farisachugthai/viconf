@@ -126,10 +126,10 @@ let s:plugins = filereadable(expand('~/.local/share/nvim/site/autoload/plug.vim'
 if expand('OS') !=# 'Windows_NT'
     if !s:plugins
         " bootstrap plug.vim on new systems
-        fun! InstallPlug()
-            silent call mkdir(expand('~/.local/share/nvim/site/autoload', 1), 'p')
+        function! s:InstallPlug()
+            call mkdir(expand('~/.local/share/nvim/site/autoload', 1), 'p')
             execute '!curl -fLo ' . expand('~/.local/share/nvim/site/autoload/plug.vim', 1) . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-      endfun
+      endfunction
     endif
 endif
 
@@ -361,20 +361,14 @@ noremap <C-w>< <Cmd>wincmd 5<<CR>
 noremap <C-w>> <Cmd>wincmd 5><CR>
 
 " Navigate buffers more easily
+noremap <Leader>bb <Cmd>buffers<CR>
 noremap <Leader>bn <Cmd>bnext<CR>
 noremap <Leader>bp <Cmd>bprev<CR>
+noremap <Leader>bP <Cmd>%y<CR>
 noremap <Leader>bl <Cmd>blast<CR>
 noremap <Leader>bf <Cmd>bfirst<CR>
 noremap <Leader>bd <Cmd>bdelete<CR>
 noremap <Leader>bo <Cmd>bonly<CR>
-
-
-" Wanna navigate windows more easily?
-" |CTRL-W_gF|   CTRL-W g F     edit file name under the cursor in a new
-"                  tab page and jump to the line number
-"                  following the file name.
-"
-" Rebind that to C-w t and we can open the filename in a new tab.
 
 " Navigate tabs more easily. First check we have more than 1 tho.
 if len(nvim_list_tabpages()) > 1
@@ -391,10 +385,11 @@ endif
 
 nnoremap <Leader>tn <Cmd>tabnext<CR>
 nnoremap <Leader>tp <Cmd>tabprev<CR>
+nnoremap <Leader>tq <Cmd>tabclose<CR>
+
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
 nnoremap <Leader>te <Cmd>tabedit <c-r>=expand("%:p:h")<CR>
-nnoremap <Leader>tq <Cmd>tabclose<CR>
 
 " It should also be easier to edit the config. Bind similarly to tmux
 nnoremap <Leader>ed <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
@@ -405,11 +400,6 @@ noremap! <F9> <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 
 " Now reload it
 noremap <Leader>re <Cmd>so $MYVIMRC<CR><Cmd>echo 'Vimrc reloaded!'<CR>
-
-" I feel really slick for this one. Modify ftplugin
-" let g:ftplug=$MYVIMRC.'/after/ftplugin/'.&filetype.'.vim'
-" Goddamnit it opens a buffernnamed g:ftplug
-" map <F10> <Cmd>e g:ftplug<CR>
 
 " General_Mappings: {{{2
 
@@ -430,8 +420,17 @@ noremap <C-]> g<C-]>
 " Switch CWD to the directory of the open buffer
 noremap <Leader>cd <Cmd>cd %:p:h<CR><Cmd>pwd<CR>
 
-" backspace in Visual mode deletes selection
+" Backspace in Visual mode deletes selection
 vnoremap <BS> d
+
+" Spell out the rtp
+function! g:EchoRTP()
+    for directory in nvim_list_runtimepaths()
+        echo directory
+    endfor
+endfunction
+
+nnoremap <Leader>rt call g:EchoRTP()
 
 " Mouse Maps: {{{3
 noremap <silent> <ScrollWheelUp> <C-Y>
@@ -581,7 +580,7 @@ augroup omnifunc
     autocmd Filetype html,xhtml       setlocal omnifunc=htmlcomplete#CompleteTags
     autocmd Filetype xml              setlocal omnifunc=xmlcomplete#CompleteTags
     autocmd Filetype css              setlocal omnifunc=csscomplete#CompleteCSS
-    autocmd Filetype javascript       setlocal omnifunc=javascript#CompleteJS
+    autocmd Filetype javascript       setlocal omnifunc=javascriptcomplete#CompleteJS
     " If there isn't a default or built-in, use the syntax highlighter
     autocmd Filetype *
         \   if &omnifunc == "" |
@@ -595,6 +594,7 @@ augroup END
 
 " Todo Function: {{{2
 command! Todo call todo#Todo()
+
 " Scriptnames: {{{2
 " command to filter :scriptnames output by a regex
 command! -nargs=1 Scriptnames call <sid>scriptnames(<f-args>)
@@ -611,23 +611,18 @@ endfunction
 " Helptabs: {{{2
 " I've pretty heavily modified this one but junegunn gets the initial credit.
 function! s:helptab()
-    if &buftype ==# 'help'
-        setlocal number relativenumber
-        try
-            wincmd T
-        catch
-        endtry
+    setlocal number relativenumber
+    try
+        wincmd T
+    catch
+    endtry
 
-        noremap <buffer> q <Cmd>q<CR>
-    " need to make an else for if ft isn't help then open a help page with the
-    " first argument
-    endif
+    noremap <buffer> q <Cmd>q<CR>
 endfunction
 
 augroup mantabs
     autocmd!
-    " Note that you could add <f-args> to the func call but it doesn't take any so *shrug*
-    autocmd filetype man,help call s:helptab()
+    autocmd Filetype man,help call s:helptab()
 augroup END
 
 command! -nargs=1 Help call <SID>helptab()
@@ -719,7 +714,7 @@ command! YAPFD cexpr! exec '!yapf -d <cfile>'
 " Chmod: {{{2
 
 "	:S	Escape special characters for use with a shell command (see
-"		|shellescape()|). Must be the last one. Examples: >
+"		|shellescape()|). Must be the last one. Examples:
 "		    :!dir <cfile>:S
 "		    :call system('chmod +w -- ' . expand('%:S'))
 " From :he filename-modifiers in the cmdline page.
@@ -727,6 +722,24 @@ command! YAPFD cexpr! exec '!yapf -d <cfile>'
 command! -nargs=1 -complete=file Chmod call system('chmod +x ' . expand('%:S'))
 
 " Could do word under cursor. Could tack it on to some fzf variation. idk
+
+" Finger: {{{2
+" Example from :he command-complete
+" The following example lists user names to a Finger command
+command! -complete=custom,ListUsers -nargs=1 Finger !finger <args>
+
+function! g:ListUsers(A,L,P)
+    return system('cut -d: -f1 /etc/passwd')
+endfun
+
+" Completes filenames from the directories specified in the 'path' option:
+command! -nargs=1 -bang -complete=customlist,EditFileComplete
+   	\ EF edit<bang> <args>
+function! g:EditFileComplete(A,L,P)
+    return split(globpath(&path, a:A), '\n')
+endfunction
+
+" This example does not work for file names with spaces!
 
 " Profile: {{{2
 function! s:profile(bang)
@@ -741,52 +754,15 @@ function! s:profile(bang)
 endfunction
 command! -bang Profile call s:profile(<bang>0)
 
-" Colorscheme: {{{1
-
-" Gruvbox: {{{2
-" I feel like I should put this in a command or something so I can easily
-" toggle it.
-function! s:gruvbox()
-    set background=dark
-    let g:gruvbox_italic = 1
-    let g:gruvbox_contrast_dark = 'hard'
-    " let g:gruvbox_improved_strings=1 shockingly terrible
-    let g:gruvbox_improved_warnings = 1
-    let g:gruvbox_invert_tabline = 1
-    let g:gruvbox_italicize_strings = 1
-endfunction
-
-function! s:gruvbox8_hard()
-    set background=dark
-    let g:gruvbox_plugin_hi_groups = 0
-    let g:gruvbox_filetype_hi_groups = 0
-    let g:gruvbox_italicize_strings = 1
-    let g:gruvbox_italic = 1
-    let g:gruvbox_transp_bg = 1
-    let g:gruvbox_invert_tabline = 1
-endfunction
-
-" From here I can keep making expressions to the effect of elseif colors==onedark
-" then set it up like and so forth
-
-colorscheme gruvbox8_hard
-
-if g:colors_name ==# 'gruvbox'
-    call <SID>gruvbox()
-elseif g:colors_name ==# 'gruvbox8_hard'
-    call <SID>gruvbox8_hard()
-endif
 
 
-command! -nargs=0 Gruvbox call s:gruvbox()
-command! -nargs=0 Gruvbox8 call s:gruvbox8_hard()
+colorscheme gruvbox
 
 " General Syntax Highlighting: {{{2
 
 " Lower max syntax highlighting
 set synmaxcol=400
 
-" syntax sync minlines=500. minlines refers to how many lines back to look. fromstart sets that in an absolute manner.
 syntax sync fromstart
 syntax on
 
