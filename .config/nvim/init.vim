@@ -126,10 +126,10 @@ let s:plugins = filereadable(expand('~/.local/share/nvim/site/autoload/plug.vim'
 if expand('OS') !=# 'Windows_NT'
     if !s:plugins
         " bootstrap plug.vim on new systems
-        fun! InstallPlug()
-            silent call mkdir(expand('~/.local/share/nvim/site/autoload', 1), 'p')
+        function! s:InstallPlug()
+            call mkdir(expand('~/.local/share/nvim/site/autoload', 1), 'p')
             execute '!curl -fLo ' . expand('~/.local/share/nvim/site/autoload/plug.vim', 1) . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-      endfun
+      endfunction
     endif
 endif
 
@@ -361,20 +361,14 @@ noremap <C-w>< <Cmd>wincmd 5<<CR>
 noremap <C-w>> <Cmd>wincmd 5><CR>
 
 " Navigate buffers more easily
+noremap <Leader>bb <Cmd>buffers<CR>
 noremap <Leader>bn <Cmd>bnext<CR>
 noremap <Leader>bp <Cmd>bprev<CR>
+noremap <Leader>bP <Cmd>%y<CR>
 noremap <Leader>bl <Cmd>blast<CR>
 noremap <Leader>bf <Cmd>bfirst<CR>
 noremap <Leader>bd <Cmd>bdelete<CR>
 noremap <Leader>bo <Cmd>bonly<CR>
-
-
-" Wanna navigate windows more easily?
-" |CTRL-W_gF|   CTRL-W g F     edit file name under the cursor in a new
-"                  tab page and jump to the line number
-"                  following the file name.
-"
-" Rebind that to C-w t and we can open the filename in a new tab.
 
 " Navigate tabs more easily. First check we have more than 1 tho.
 if len(nvim_list_tabpages()) > 1
@@ -391,10 +385,11 @@ endif
 
 nnoremap <Leader>tn <Cmd>tabnext<CR>
 nnoremap <Leader>tp <Cmd>tabprev<CR>
+nnoremap <Leader>tq <Cmd>tabclose<CR>
+
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
 nnoremap <Leader>te <Cmd>tabedit <c-r>=expand("%:p:h")<CR>
-nnoremap <Leader>tq <Cmd>tabclose<CR>
 
 " It should also be easier to edit the config. Bind similarly to tmux
 nnoremap <Leader>ed <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
@@ -405,11 +400,6 @@ noremap! <F9> <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 
 " Now reload it
 noremap <Leader>re <Cmd>so $MYVIMRC<CR><Cmd>echo 'Vimrc reloaded!'<CR>
-
-" I feel really slick for this one. Modify ftplugin
-" let g:ftplug=$MYVIMRC.'/after/ftplugin/'.&filetype.'.vim'
-" Goddamnit it opens a buffernnamed g:ftplug
-" map <F10> <Cmd>e g:ftplug<CR>
 
 " General_Mappings: {{{2
 
@@ -430,8 +420,17 @@ noremap <C-]> g<C-]>
 " Switch CWD to the directory of the open buffer
 noremap <Leader>cd <Cmd>cd %:p:h<CR><Cmd>pwd<CR>
 
-" backspace in Visual mode deletes selection
+" Backspace in Visual mode deletes selection
 vnoremap <BS> d
+
+" Spell out the rtp
+function! g:EchoRTP()
+    for directory in nvim_list_runtimepaths()
+        echo directory
+    endfor
+endfunction
+
+nnoremap <Leader>rt call g:EchoRTP()
 
 " Mouse Maps: {{{3
 noremap <silent> <ScrollWheelUp> <C-Y>
@@ -595,6 +594,7 @@ augroup END
 
 " Todo Function: {{{2
 command! Todo call todo#Todo()
+
 " Scriptnames: {{{2
 " command to filter :scriptnames output by a regex
 command! -nargs=1 Scriptnames call <sid>scriptnames(<f-args>)
@@ -611,17 +611,13 @@ endfunction
 " Helptabs: {{{2
 " I've pretty heavily modified this one but junegunn gets the initial credit.
 function! s:helptab()
-    if &buftype ==# 'help'
-        setlocal number relativenumber
-        try
-            wincmd T
-        catch
-        endtry
+    setlocal number relativenumber
+    try
+        wincmd T
+    catch
+    endtry
 
-        noremap <buffer> q <Cmd>q<CR>
-    " need to make an else for if ft isn't help then open a help page with the
-    " first argument
-    endif
+    noremap <buffer> q <Cmd>q<CR>
 endfunction
 
 augroup mantabs
@@ -732,18 +728,16 @@ command! -nargs=1 -complete=file Chmod call system('chmod +x ' . expand('%:S'))
 " The following example lists user names to a Finger command
 command! -complete=custom,ListUsers -nargs=1 Finger !finger <args>
 
-function! ListUsers(A,L,P)
-    return system("cut -d: -f1 /etc/passwd")
+function! g:ListUsers(A,L,P)
+    return system('cut -d: -f1 /etc/passwd')
 endfun
 
-"
-" The following example completes filenames from the directories specified in
-" the 'path' option:
+" Completes filenames from the directories specified in the 'path' option:
 command! -nargs=1 -bang -complete=customlist,EditFileComplete
    	\ EF edit<bang> <args>
-function! EditFileComplete(A,L,P)
-    return split(globpath(&path, a:A), "\n")
-endfun
+function! g:EditFileComplete(A,L,P)
+    return split(globpath(&path, a:A), '\n')
+endfunction
 
 " This example does not work for file names with spaces!
 

@@ -70,6 +70,14 @@ else
     endif
 endif
 
+" TODO:
+" Here's a suggestion. Write your own buffer fixer using ALE and yapf.
+" You do it anyway so why not nnoremap <Leader>bf <expr> py3do % or %yapf or
+" set makeprg=unittest.TestRunner()...or even sphinx build or something.
+" Todo: #2: Map something so that it does "run this line with the py3 host
+
+
+" Virtualenvs: {{{3
 if isdirectory('~/virtualenvs')
     let b:ale_virtualenv_dir_names += '~/virtualenvs'
 endif
@@ -83,3 +91,10 @@ if has_key(plugs, 'LanguageClient-neovim')
     let b:LanguageClient_autoStart = 1
     let b:LanguageClient_selectionUI = 'fzf'
 endif
+
+" Riv: {{{2
+
+" Riv is a plugin for reStructuredText in Vim.
+" The following setting allows docstrings in python files
+" to be properly highlighted. I'm inordinately excited.
+let b:riv_python_rst_hl = 1

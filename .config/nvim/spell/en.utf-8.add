@@ -7,6 +7,7 @@ AICHE
 ALE's
 ALLUSERSPROFILE
 AMD64
+ARP
 AdaBoost
 Adblock
 AirVPN
@@ -69,6 +70,7 @@ Cheat40
 ChemE
 Choi
 Chugthai
+Colab
 ColorColumn
 CommonMark
 Commonmark
@@ -168,6 +170,7 @@ IPv4
 IPv6
 IPython
 IPython's
+IPython7
 ISO9660
 Importlib
 JQuery
@@ -227,7 +230,9 @@ NextCloud
 NodeJS
 NumLock
 NumPy
+NumPy's
 NumPyLexer
+Numpy's
 Nvidia
 Nvim's
 OSError
@@ -379,6 +384,7 @@ Udemy
 UltiSnips
 Umask
 Uninstallation
+VDP
 VIMRUNTIME
 VMWare
 VMware
@@ -566,6 +572,7 @@ csh
 csharp
 css
 csv
+csv's
 ctags
 cterm
 ctermbg
@@ -595,6 +602,7 @@ dirname
 dirs
 dirstat
 django
+dlink
 dns
 dnssec
 dockerfile
@@ -715,6 +723,8 @@ gpg
 groff
 grsync
 gruvbox
+gsutil
+gsutil's
 gtk
 gtk3
 gufw
@@ -792,6 +802,7 @@ islower
 isupper
 itemgetter
 iterable
+iterables
 iw
 iwconfig
 jQuery
@@ -880,6 +891,7 @@ kubuntu
 kvm
 kwallet
 kwarg
+kwargs
 kwin
 kwrite
 langmap
@@ -973,6 +985,7 @@ modeline
 modelines
 module
 moduleauthor
+modulefinder
 moin
 molokai
 monero
@@ -1403,6 +1416,7 @@ trac
 traceback
 tracebacks
 traceroute
+traitlets
 tronscript
 tty
 tty2

@@ -44,11 +44,9 @@ snippet ref  "Links that follow labelled objects. Expand 'lab or labhe'" mw
 :ref:\`${1:${VISUAL:path}}\`_
 endsnippet
 
-
 snippet inlink "Create an internal link"
 :ref:\`${1:${VISUAL:link}}\`_
 endsnippet
-
 
 # TODO: Figure out what snippet method to invoke to get proper indentation.
 snippet func "Inclass function directive" w
@@ -63,11 +61,9 @@ snippet mod "Inline mod directive" w
 :mod:\`${0:${VISUAL}}\`
 endsnippet
 
-
 snippet code "Inline code. Needs to be visually highlighted first." b
 \`\`${0:${VISUAL:text}}\`\`
 endsnippet
-
 
 ###########
 #  links  #
@@ -287,9 +283,6 @@ ${1:${VISUAL:Paragraph name}} $0
 `!p snip.rv = rst_char_len(t[1])*'"'`
 endsnippet
 
-# honestly idk
-
-# WHAT ARE THESE DOUBLE IF'S!
 snippet em "Emphasize string" i
 `!p
 # dirty but works with CJK character detection
@@ -465,7 +458,34 @@ endsnippet
 # directives.register_directive('list-table', ListTable)
 # directives.register_directive('math', MathDirective)
 
+###################
+#  Sphinx Inline  #
+###################
 
+snippet com "command inline" ms
+:command:\`${1:$VISUAL}\`
+endsnippet
+
+snippet math "math inline" ms
+:math:\`${1:$VISUAL}\`
+endsnippet
+
+snippet file "file inline" ms
+:file:\`${1:$VISUAL}\`
+endsnippet
+
+snippet pep "pep inline" ms
+:pep:\`${1:$VISUAL}\`
+endsnippet
+
+snippet doc "doc inline" ms
+:doc:\`${1:$VISUAL}\`
+endsnippet
+
+
+######################
+#  Sphinx Directive  #
+######################
 snippet sid "SideBar" b
 .. sidebar:: ${1:SideBar Title}
 
