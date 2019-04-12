@@ -14,7 +14,6 @@ if exists('g:did_conf_lang_client') || &compatible || v:version < 700
 endif
 let g:did_conf_lang_client = 1
 
-
 " Options: {{{1
 
 let g:LanguageClient_serverCommands = {

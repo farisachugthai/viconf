@@ -431,16 +431,11 @@ function! g:EchoRTP()
 endfunction
 
 nnoremap <Leader>rt call g:EchoRTP()
+noremap <Leader>cd <Cmd>cd %:p:h<CR><Cmd>pwd<CR>
 
-" Mouse Maps: {{{3
-noremap <silent> <ScrollWheelUp> <C-Y>
-noremap <silent> <S-ScrollWheelUp> <C-U>
-noremap <silent> <ScrollWheelDown> <C-E>
-noremap <silent> <S-ScrollWheelDown> <C-D>
-noremap! <silent> <ScrollWheelUp> <C-Y>
-noremap! <silent> <S-ScrollWheelUp> <C-U>
-noremap! <silent> <ScrollWheelDown> <C-E>
-noremap! <silent> <S-ScrollWheelDown> <C-D>
+" Backspace in Visual mode deletes selection
+vnoremap <BS> d
+
 
 " Save a file as root
 noremap <leader>W <Cmd>w !sudo tee % > /dev/null<CR>
@@ -571,9 +566,12 @@ let g:vimsyn_noerror = 1
    " g:vimsyn_folding =~ 'a' : augroups
    " g:vimsyn_folding =~ 'f' : fold functions
    " g:vimsyn_folding =~ 'P' : fold python   script
+
+" Are we allowed to combine these?
 let g:vimsyn_folding = 'afP'
 
 " Omnifuncs: {{{3
+
 augroup omnifunc
     autocmd!
     autocmd Filetype python,xonsh     setlocal omnifunc=python3complete#Complete
@@ -582,6 +580,7 @@ augroup omnifunc
     autocmd Filetype css              setlocal omnifunc=csscomplete#CompleteCSS
     autocmd Filetype javascript       setlocal omnifunc=javascriptcomplete#CompleteJS
     " If there isn't a default or built-in, use the syntax highlighter
+
     autocmd Filetype *
         \   if &omnifunc == "" |
         \       setlocal omnifunc=syntaxcomplete#Complete |

@@ -8,6 +8,7 @@ ALE's
 ALLUSERSPROFILE
 AMD64
 ARP
+ARP
 AdaBoost
 Adblock
 AirVPN
@@ -24,6 +25,8 @@ AppleWebKit
 ArchWiki
 Argparse
 ArgumentParser
+ArgumentParser
+Arkema
 Arkema
 AsciiDoc
 Asciidoc
@@ -66,10 +69,12 @@ Ch5
 Ch8
 Chainmap
 Chatistics
+Chatistics
 Cheat40
 ChemE
 Choi
 Chugthai
+Colab
 Colab
 ColorColumn
 CommonMark
@@ -98,6 +103,7 @@ ConEmuServerPID
 ConEmuWorkDir
 ConEmuWorkDrive
 Conda
+Configurator
 Configurator
 Coursera
 CrOS
@@ -142,6 +148,7 @@ FZF
 Facebook
 Faris
 FileType
+FileType
 Filetype
 Firefox
 Fn
@@ -171,10 +178,13 @@ IPv6
 IPython
 IPython's
 IPython7
+IPython7
 ISO9660
+Importlib
 Importlib
 JQuery
 Junegunn
+Junegunn's
 Junegunn's
 Jupyter
 KVM
@@ -193,6 +203,8 @@ LOCALAPPDATA
 LVM
 LaTex
 LanguageClient
+LanguageClient
+Lansdale
 Lansdale
 Lightline
 Linksys
@@ -231,7 +243,9 @@ NodeJS
 NumLock
 NumPy
 NumPy's
+NumPy's
 NumPyLexer
+Numpy's
 Numpy's
 Nvidia
 Nvim's
@@ -267,6 +281,7 @@ Pottsville
 PowerShell
 Preprocesses
 ProTools
+PurePath
 PurePath
 PyCharm
 PyCon
@@ -344,9 +359,13 @@ Spc
 Spotify
 StackOverflow
 Startify/!
+Startify/!
+Startify/!
+StreamRecoder
 StreamRecoder
 Subgraph
 SubgraphOS
+Subkeys
 Subkeys
 Submodules
 Subprocesses
@@ -384,6 +403,7 @@ Udemy
 UltiSnips
 Umask
 Uninstallation
+VDP
 VDP
 VIMRUNTIME
 VMWare
@@ -433,6 +453,7 @@ Xenial
 Xorg
 Xresources
 YouCompleteMe
+YouCompleteMe
 YouTube
 ZeroNet
 Zim
@@ -459,6 +480,7 @@ akregator
 alacritty
 algol
 alice
+alice
 amd64
 anacron
 anacrontab
@@ -471,9 +493,11 @@ applescript
 apt
 arduino
 arg
+arg
 argparse
 args
 aria2c
+asc
 asc
 aspx
 asyncio
@@ -573,6 +597,7 @@ csharp
 css
 csv
 csv's
+csv's
 ctags
 cterm
 ctermbg
@@ -603,6 +628,7 @@ dirs
 dirstat
 django
 dlink
+dlink
 dns
 dnssec
 dockerfile
@@ -611,11 +637,13 @@ docstring
 docstrings
 doctest
 doctesting
+doctesting
 doctests
 docutils
 dokuwiki
 domwidget
 dont/!
+doozy
 doozy
 dosbatch
 dotfiles
@@ -649,6 +677,7 @@ exe
 exitcode
 expandtab
 expanduser
+expanduser
 exrc
 ext2
 ext3
@@ -673,6 +702,8 @@ fmt
 fnmatch
 fnmatch
 fnmatch
+fnmatch
+fnmatch
 fortran
 from
 fsharp
@@ -694,6 +725,7 @@ geany
 gedit
 gem
 gem
+getcwd
 getcwd
 getenv
 getenvb
@@ -724,6 +756,8 @@ groff
 grsync
 gruvbox
 gsutil
+gsutil
+gsutil's
 gsutil's
 gtk
 gtk3
@@ -768,6 +802,7 @@ ifconfig
 ignorecase
 img
 importlib
+importlib
 indexeddb
 init
 inodes
@@ -794,14 +829,21 @@ ipywidget
 ipywidgets
 irc
 isabs
+isabs
 isdir
+isdir
+isfile
 isfile
 iskeyword
 islink
+islink
 islower
+islower
+isupper
 isupper
 itemgetter
 iterable
+iterables
 iterables
 iw
 iwconfig
@@ -814,6 +856,8 @@ jekyll
 jetbrains
 jinja
 jinja2
+jinja2
+joinpath
 joinpath
 jpeg
 jq
@@ -892,6 +936,7 @@ kvm
 kwallet
 kwarg
 kwargs
+kwargs
 kwin
 kwrite
 langmap
@@ -967,6 +1012,7 @@ metadata
 metakernel
 metapackage
 meth
+meth
 microkernel
 microkernels
 microservices
@@ -985,6 +1031,7 @@ modeline
 modelines
 module
 moduleauthor
+modulefinder
 modulefinder
 moin
 molokai
@@ -1014,8 +1061,10 @@ neosnippets
 neovim
 nepomk
 netmask
+netmask
 netrc
 netrw
+netstat
 netstat
 netstat
 nextcloud
@@ -1051,6 +1100,7 @@ nsupdate
 nt
 ntfs
 numpy
+numpydoc
 numpydoc
 nvidia
 nvim
@@ -1171,6 +1221,7 @@ pydocstyle
 pygmentize
 pygments
 pylab
+pylab
 pynvim
 pypi
 pyplot
@@ -1230,6 +1281,7 @@ remappings
 remoting
 repo
 resave
+resave
 restructuredtext
 rg
 ripgrep
@@ -1247,6 +1299,7 @@ rvm
 rw
 samsung
 sas
+savefig
 savefig
 sbin
 scala
@@ -1318,6 +1371,7 @@ sphinxify
 spiceworks
 spl
 splitext
+splitext
 spotify
 spyder
 spyder3
@@ -1349,6 +1403,8 @@ stylesheets
 su
 subclassing
 subkey
+subkey
+subkeys
 subkeys
 submodule
 submodules
@@ -1414,9 +1470,12 @@ tpope's
 tput
 trac
 traceback
+traceback
 tracebacks
 traceroute
 traitlets
+traitlets
+tronscript
 tronscript
 tty
 tty2
@@ -1430,6 +1489,7 @@ uPnP
 ubuntu
 udp
 ufw
+ultisnips
 ultisnips
 umask
 umasks
@@ -1471,6 +1531,7 @@ userspace
 userspaces
 using
 usr
+utilities's
 utilities's
 utils
 uuid
@@ -1538,6 +1599,7 @@ worktree
 wouldn/!
 wouldn’t
 wpa
+writefile
 writefile
 writethedocs
 www
