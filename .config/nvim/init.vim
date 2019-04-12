@@ -126,10 +126,10 @@ let s:plugins = filereadable(expand('~/.local/share/nvim/site/autoload/plug.vim'
 if expand('OS') !=# 'Windows_NT'
     if !s:plugins
         " bootstrap plug.vim on new systems
-        fun! InstallPlug()
-            silent call mkdir(expand('~/.local/share/nvim/site/autoload', 1), 'p')
+        function! s:InstallPlug()
+            call mkdir(expand('~/.local/share/nvim/site/autoload', 1), 'p')
             execute '!curl -fLo ' . expand('~/.local/share/nvim/site/autoload/plug.vim', 1) . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-      endfun
+      endfunction
     endif
 endif
 
@@ -155,9 +155,9 @@ endif
 
 Plug 'mhinz/vim-startify'
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
-" Plug 'gu-fan/riv.vim', { 'for': ['python', 'python3', 'rst'] }
 Plug 'greyblake/vim-preview'
 Plug 'lifepillar/vim-cheat40'
+Plug 'luffah/vim-zim', { 'for': 'zim'}
 
 " It's very frustrating having termux slow down beyond repair but also frustrating
 " not being able to use more than 15 plugins at any point in time
@@ -304,6 +304,7 @@ endif
 
 " Other Global Options: {{{2
 
+scriptencoding utf-8
 set tags+=./tags,./*/tags
 set tags+=~/projects/tags
 set mouse=a
@@ -361,40 +362,39 @@ noremap <C-w>< <Cmd>wincmd 5<<CR>
 noremap <C-w>> <Cmd>wincmd 5><CR>
 
 " Navigate buffers more easily
-nnoremap <Leader>bn <Cmd>bnext<CR>
-nnoremap <Leader>bp <Cmd>bprev<CR>
-nnoremap <Leader>bl <Cmd>blast<CR>
-nnoremap <Leader>bf <Cmd>bfirst<CR>
-
-" Wanna navigate windows more easily?
-" |CTRL-W_gF|   CTRL-W g F     edit file name under the cursor in a new
-"                  tab page and jump to the line number
-"                  following the file name.
-"
-" Rebind that to C-w t and we can open the filename in a new tab.
+noremap <Leader>bb <Cmd>buffers<CR>
+noremap <Leader>bn <Cmd>bnext<CR>
+noremap <Leader>bp <Cmd>bprev<CR>
+noremap <Leader>bP <Cmd>%y<CR>
+noremap <Leader>bl <Cmd>blast<CR>
+noremap <Leader>bf <Cmd>bfirst<CR>
+noremap <Leader>bd <Cmd>bdelete<CR>
+noremap <Leader>bo <Cmd>bonly<CR>
 
 " Navigate tabs more easily. First check we have more than 1 tho.
 if len(nvim_list_tabpages()) > 1
-    noremap <A-Right> <Cmd>tabnext<CR>
-    noremap <A-Left> <Cmd>tabprev<CR>
+    noremap <A-Right>  <Cmd>tabnext<CR>
+    noremap <A-Left>   <Cmd>tabprev<CR>
     noremap! <A-Right> <Cmd>tabnext<CR>
-    noremap! <A-Left> <Cmd>tabprev<CR>
+    noremap! <A-Left>  <Cmd>tabprev<CR>
 elseif len(nvim_list_wins()) > 1
-    noremap <A-Right> <Cmd>wincmd l<CR>
-    noremap <A-Left> <Cmd>wincmd h<CR>
+    noremap <A-Right>  <Cmd>wincmd l<CR>
+    noremap <A-Left>   <Cmd>wincmd h<CR>
     noremap! <A-Right> <Cmd>wincmd l<CR>
-    noremap! <A-Left> <Cmd>wincmd h<CR>
+    noremap! <A-Left>  <Cmd>wincmd h<CR>
 endif
 
 nnoremap <Leader>tn <Cmd>tabnext<CR>
 nnoremap <Leader>tp <Cmd>tabprev<CR>
+nnoremap <Leader>tq <Cmd>tabclose<CR>
+
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
 nnoremap <Leader>te <Cmd>tabedit <c-r>=expand("%:p:h")<CR>
-nnoremap <Leader>tq <Cmd>tabclose<CR>
 
 " It should also be easier to edit the config. Bind similarly to tmux
 nnoremap <Leader>ed <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
+
 noremap <F9> <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 " Don't forget to add in mappings when in insert/cmd mode
 noremap! <F9> <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
@@ -402,43 +402,48 @@ noremap! <F9> <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 " Now reload it
 noremap <Leader>re <Cmd>so $MYVIMRC<CR><Cmd>echo 'Vimrc reloaded!'<CR>
 
-" I feel really slick for this one. Modify ftplugin
-" let g:ftplug=$MYVIMRC.'/after/ftplugin/'.&filetype.'.vim'
-" Goddamnit it opens a buffernnamed g:ftplug
-" map <F10> <Cmd>e g:ftplug<CR>
-
 " General_Mappings: {{{2
 
-noremap <silent> <Leader>ts <Cmd>!termux-share -a send %<CR>
+if g:termux
+    noremap <silent> <Leader>ts <Cmd>!termux-share -a send %<CR>
+endif
 
 " Junegunn:
-nnoremap <Leader>o o<Esc>
-nnoremap <Leader>O O<Esc>
+noremap <Leader>o o<Esc>
+noremap <Leader>O O<Esc>
 vnoremap < <gv
 vnoremap > >gv
 " I just realized these were set to nnoremap. Meaning visual mode doesn't get this mapping
 noremap j gj
 noremap k gk
+noremap <C-]> g<C-]>
 
 " Switch CWD to the directory of the open buffer
-nnoremap <Leader>cd <Cmd>cd %:p:h<CR><Cmd>pwd<CR>
+noremap <Leader>cd <Cmd>cd %:p:h<CR><Cmd>pwd<CR>
 
-" Mouse Maps: {{{3
-noremap <silent> <ScrollWheelUp> <C-Y>
-noremap <silent> <S-ScrollWheelUp> <C-U>
-noremap <silent> <ScrollWheelDown> <C-E>
-noremap <silent> <S-ScrollWheelDown> <C-D>
-noremap! <silent> <ScrollWheelUp> <C-Y>
-noremap! <silent> <S-ScrollWheelUp> <C-U>
-noremap! <silent> <ScrollWheelDown> <C-E>
-noremap! <silent> <S-ScrollWheelDown> <C-D>
+" Backspace in Visual mode deletes selection
+vnoremap <BS> d
+
+" Spell out the rtp
+function! g:EchoRTP()
+    for directory in nvim_list_runtimepaths()
+        echo directory
+    endfor
+endfunction
+
+nnoremap <Leader>rt call g:EchoRTP()
+noremap <Leader>cd <Cmd>cd %:p:h<CR><Cmd>pwd<CR>
+
+" Backspace in Visual mode deletes selection
+vnoremap <BS> d
+
 
 " Save a file as root
 noremap <leader>W <Cmd>w !sudo tee % > /dev/null<CR>
 
 " Spell Checking:
-nnoremap <Leader>sp <Cmd>setlocal spell!<CR>
-nnoremap <Leader>s= z=
+noremap <Leader>sp <Cmd>setlocal spell!<CR>
+noremap <Leader>s= z=
 
 " ALT Navigation: {{{3
 " Originally this inspired primarily for terminal use but why not put it everywhere?
@@ -467,6 +472,11 @@ inoremap <A-j> <C-\><C-N><C-w>j
 inoremap <A-k> <C-\><C-N><C-w>k
 inoremap <A-l> <C-\><C-N><C-w>l
 
+tnoremap <A-A> <Esc>A
+tnoremap <A-b> <Esc>b
+tnoremap <A-d> <Esc>d
+tnoremap <A-f> <Esc>f
+
 " Remaining Plugins: {{{1
 
 " Vim_Plug: {{{2
@@ -480,15 +490,6 @@ let g:jedi#show_call_signatures_delay = 100
 let g:jedi#smart_auto_mappings = 0
 let g:jedi#force_py_version = 3
 let g:jedi#enable_completions = 0
-
-" Zim: {{{2
-let g:zim_notebooks_dir = expand('~/Notebooks/Notes')
-let g:zim_notebook = expand('~/Notebooks/Notes')
-let g:zim_dev = 1
-
-" Here's an exciting little note about Zim. Ignoring how ...odd this plugin is
-" Voom actually gets pretty close to handling Zimwiki if you recognize it as
-" as dokuwiki!
 
 " Runtime: {{{1
 
@@ -511,7 +512,7 @@ let g:matchparen_insert_timeout = 300
 " Builtin Plugins: {{{2
 " To every plugin I've never used before. Stop slowing me down.
 let g:loaded_vimballPlugin     = 1
-let g:loaded_getsciptPlugin    = 1
+let g:loaded_getscriptPlugin   = 1
 let g:loaded_2html_plugin      = 1
 let g:loaded_logiPat           = 1
 
@@ -559,6 +560,9 @@ let g:vimsyn_noerror = 1
    " g:vimsyn_folding =~ 'P' : fold python   script
 
 " Are we allowed to combine these?
+let g:vimsyn_folding = 'afP'
+
+" Omnifuncs: {{{3
 
 augroup omnifunc
     autocmd!
@@ -566,8 +570,9 @@ augroup omnifunc
     autocmd Filetype html,xhtml       setlocal omnifunc=htmlcomplete#CompleteTags
     autocmd Filetype xml              setlocal omnifunc=xmlcomplete#CompleteTags
     autocmd Filetype css              setlocal omnifunc=csscomplete#CompleteCSS
-    autocmd Filetype javascript       setlocal omnifunc=javascript#CompleteJS
+    autocmd Filetype javascript       setlocal omnifunc=javascriptcomplete#CompleteJS
     " If there isn't a default or built-in, use the syntax highlighter
+
     autocmd Filetype *
         \   if &omnifunc == "" |
         \       setlocal omnifunc=syntaxcomplete#Complete |
@@ -579,29 +584,7 @@ augroup END
 " Up until Rename are from Junegunn so credit to him
 
 " Todo Function: {{{2
-" Grep for todos in the current repo and populate the quickfix list with them.
-" You could run an if then to check you're in a git repo.
-" Also could use ag/rg/fd and fzf instead of grep to supercharge this.
-function! s:todo() abort
-    let entries = []
-    for cmd in ['git grep -niI -e TODO -e todo -e FIXME -e XXX -e HACK 2> /dev/null',
-                \ 'grep -rniI -e TODO -e todo -e FIXME -e XXX -e HACK * 2> /dev/null']
-        let lines = split(system(cmd), '\n')
-        if v:shell_error != 0 | continue | endif
-        for line in lines
-            let [fname, lno, text] = matchlist(line, '^\([^:]*\):\([^:]*\):\(.*\)')[1:3]
-            call add(entries, { 'filename': fname, 'lnum': lno, 'text': text })
-        endfor
-        break
-    endfor
-
-    if !empty(entries)
-        call setqflist(entries)
-        copen
-    endif
-endfunction
-
-command! Todo call s:todo()
+command! Todo call todo#Todo()
 
 " Scriptnames: {{{2
 " command to filter :scriptnames output by a regex
@@ -617,16 +600,21 @@ function! s:scriptnames(re) abort
 endfunction
 
 " Helptabs: {{{2
-
+" I've pretty heavily modified this one but junegunn gets the initial credit.
 function! s:helptab()
-    if &buftype ==# 'help'
-        setlocal number relativenumber
+    setlocal number relativenumber
+    try
         wincmd T
-        nnoremap <buffer> q :q<cr>
-    " need to make an else for if ft isn't help then open a help page with the
-    " first argument
-    endif
+    catch
+    endtry
+
+    noremap <buffer> q <Cmd>q<CR>
 endfunction
+
+augroup mantabs
+    autocmd!
+    autocmd Filetype man,help call s:helptab()
+augroup END
 
 command! -nargs=1 Help call <SID>helptab()
 
@@ -648,43 +636,13 @@ endfunction
 
 command! -bang Autosave call s:autosave(<bang>1)
 
-" Syntax Highlighting Functions: {{{2
+" Syntax Commands: {{{2
 
-" HL: {{{3
-" Whats the highlighting group under my cursor?
-function! s:hl()
-  echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
-endfunction
+command! HL call syncom#HL()
 
-command! HL call <SID>hl()
+command! HiC call syncom#HiC()
 
-" HiC: {{{3
-" Heres a possibly easier way to do this. Still in testing.
-" Mar 17, 2019: So far does the exact same thing!
-function! s:HiC()
-    echo 'Highlighting group: ' . synIDattr(synID(line('.'), col('.'), 1), 'name')
-    echo 'Foreground color: ' . synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'fg')
-endfunction
-
-command! HiC call <SID>HiC()
-
-" HiDebug: {{{3
-" function! s:HiD()
-"     echo join(map(synstack(line('.'), col('.')), 'synIDattr(id, "name")') '\n')
-" endfunction
-
-" command! HiD call <SID>HiD()
-
-" HiAll: {{{3
-function! s:HiQF()
-  " synstack returns a list. takes lnum and col.
-  " map is crazy specific in its argument requirements. map(list, string)
-  " cexpr evals a command and adds it to the quickfist list
-  cexpr! map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-endfunction
-
-command! HiQF call <SID>HiQF()
-
+command! HiQF call syncom#HiQF()
 
 " Explore PlugHelp: {{{2
 " Call :PlugHelp to use fzf to open a window with all of the plugins
@@ -713,6 +671,7 @@ command! PlugHelp call fzf#run(fzf#wrap({
 "
 " Yeah junegunn gets this one too.
 function! s:statusline_expr()
+  let dicons = ' %{WebDevIconsGetFileTypeSymbol()} '
   let mod = "%{&modified ? '[+] ' : !&modifiable ? '[x] ' : ''}"
   let ro  = "%{&readonly ? '[RO] ' : ''}"
   let ft  = "%{len(&filetype) ? '['.&filetype.'] ' : ''}"
@@ -720,10 +679,9 @@ function! s:statusline_expr()
   let sep = ' %= '
   let pos = ' %-12(%l : %c%V%) '
   let pct = ' %P'
-  let dicons = ' %{WebDevIconsGetFileTypeSymbol()} '
+" %n is buffer #, %f is filename relative to $PWD, sep is right align
 
-
-  return '[%n] %F '.dicons.mod.ro.ft.fug.sep.pos.'%*'.pct
+  return '[%n] %f '.dicons.mod.ro.ft.fug.sep.pos.'%*'.pct
 endfunction
 
 let &statusline = s:statusline_expr()
@@ -747,7 +705,7 @@ command! YAPFD cexpr! exec '!yapf -d <cfile>'
 " Chmod: {{{2
 
 "	:S	Escape special characters for use with a shell command (see
-"		|shellescape()|). Must be the last one. Examples: >
+"		|shellescape()|). Must be the last one. Examples:
 "		    :!dir <cfile>:S
 "		    :call system('chmod +w -- ' . expand('%:S'))
 " From :he filename-modifiers in the cmdline page.
@@ -756,37 +714,46 @@ command! -nargs=1 -complete=file Chmod call system('chmod +x ' . expand('%:S'))
 
 " Could do word under cursor. Could tack it on to some fzf variation. idk
 
-" Colorscheme: {{{1
+" Finger: {{{2
+" Example from :he command-complete
+" The following example lists user names to a Finger command
+command! -complete=custom,ListUsers -nargs=1 Finger !finger <args>
 
-" Gruvbox: {{{2
-" I feel like I should put this in a command or something so I can easily
-" toggle it.
-function! s:gruvbox()
-    set background=dark
-    let g:gruvbox_italic = 1
-    let g:gruvbox_contrast_dark = 'hard'
-    " let g:gruvbox_improved_strings=1 shockingly terrible
-    let g:gruvbox_improved_warnings = 1
-    let g:gruvbox_invert_tabline = 1
-    let g:gruvbox_italicize_strings = 1
+function! g:ListUsers(A,L,P)
+    return system('cut -d: -f1 /etc/passwd')
+endfun
+
+" Completes filenames from the directories specified in the 'path' option:
+command! -nargs=1 -bang -complete=customlist,EditFileComplete
+   	\ EF edit<bang> <args>
+function! g:EditFileComplete(A,L,P)
+    return split(globpath(&path, a:A), '\n')
 endfunction
 
-" From here I can keep making expressions to the effect of elseif colors==onedark
-" then set it up like and so forth
+" This example does not work for file names with spaces!
+
+" Profile: {{{2
+function! s:profile(bang)
+  if a:bang
+    profile pause
+    noautocmd qall
+  else
+    profile start expand('$_ROOT') . 'tmp/profile.log'
+    profile func *
+    profile file *
+  endif
+endfunction
+command! -bang Profile call s:profile(<bang>0)
+
+
+
 colorscheme gruvbox
-
-if g:colors_name ==# 'gruvbox'
-    call <SID>gruvbox()
-endif
-
-command! -nargs=0 Gruvbox call s:gruvbox()
 
 " General Syntax Highlighting: {{{2
 
 " Lower max syntax highlighting
 set synmaxcol=400
 
-" syntax sync minlines=500. minlines refers to how many lines back to look. fromstart sets that in an absolute manner.
 syntax sync fromstart
 syntax on
 

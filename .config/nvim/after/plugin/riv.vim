@@ -2,7 +2,7 @@
     " File: riv.vim
     " Author: Faris Chugthai
     " Description: Plugin modifications for riv.vim
-    " Last Modified: March 11, 2019
+    " Last Modified: Apr 05, 2019
 " ============================================================================
 
 " Guards: {{{1

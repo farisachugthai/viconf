@@ -18,7 +18,7 @@ endif
 let b:did_nerdtree = 1
 
 
-" nerd_loader: {{{1
+" nerd_loader: autoload NERDTree {{{1
 augroup nerd_loader
   autocmd!
   autocmd VimEnter * silent! autocmd! FileExplorer
@@ -49,8 +49,17 @@ let g:NERDTreeWinPos = 'right'
 let g:NERDTreeShowHidden = 1
 let g:NERDTreeShowBookmarks = 1
 let g:NERDTreeNaturalSort = 1
-let g:NERDTreeChDirMode = 2             " change cwd every time NT root changes
+
+ " change cwd every time NT root changes
+let g:NERDTreeChDirMode = 2
+
 let g:NERDTreeShowLineNumbers = 1
-let g:NERDTreeMouseMode = 2             " Open dir with 1 keys, files with 2
-let g:NERDTreeIgnore = ['\.pyc$', '\.pyo$', '__pycache__$', '\.git$', '\.mypy*']
-let g:NERDTreeRespectWildIgnore = 1     " yeah i meant those ones too
+
+ " Open dir with 1 keys, files with 2
+let g:NERDTreeMouseMode = 2
+
+let g:NERDTreeIgnore = [ '\~$', '\.pyc$', '\.pyo$', '__pycache__$', '\.git$', '\.mypy*', 'node_modules']
+let g:NERDTreeRespectWildIgnore = 1
+
+" Let's give netrw a shot I guess
+let g:NERDTreeHijackNetrw = 0
