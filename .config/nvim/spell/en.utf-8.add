@@ -9,6 +9,8 @@ ALLUSERSPROFILE
 AMD64
 ARP
 ARP
+ARP
+ARP
 AdaBoost
 Adblock
 AirVPN
@@ -24,6 +26,8 @@ AppData
 AppleWebKit
 ArchWiki
 Argparse
+ArgumentParser
+ArgumentParser
 ArgumentParser
 ArgumentParser
 Arkema
@@ -70,10 +74,14 @@ Ch8
 Chainmap
 Chatistics
 Chatistics
+Chatistics
+Chatistics
 Cheat40
 ChemE
 Choi
 Chugthai
+Colab
+Colab
 Colab
 Colab
 ColorColumn
@@ -179,6 +187,8 @@ IPython
 IPython's
 IPython7
 IPython7
+IPython7
+IPython7
 ISO9660
 Importlib
 Importlib
@@ -202,6 +212,8 @@ L
 LOCALAPPDATA
 LVM
 LaTex
+LanguageClient
+LanguageClient
 LanguageClient
 LanguageClient
 Lansdale
@@ -244,7 +256,11 @@ NumLock
 NumPy
 NumPy's
 NumPy's
+NumPy's
+NumPy's
 NumPyLexer
+Numpy's
+Numpy's
 Numpy's
 Numpy's
 Nvidia
@@ -281,6 +297,8 @@ Pottsville
 PowerShell
 Preprocesses
 ProTools
+PurePath
+PurePath
 PurePath
 PurePath
 PyCharm
@@ -363,6 +381,8 @@ Startify/!
 Startify/!
 StreamRecoder
 StreamRecoder
+StreamRecoder
+StreamRecoder
 Subgraph
 SubgraphOS
 Subkeys
@@ -403,6 +423,8 @@ Udemy
 UltiSnips
 Umask
 Uninstallation
+VDP
+VDP
 VDP
 VDP
 VIMRUNTIME
@@ -598,6 +620,8 @@ css
 csv
 csv's
 csv's
+csv's
+csv's
 ctags
 cterm
 ctermbg
@@ -629,6 +653,8 @@ dirstat
 django
 dlink
 dlink
+dlink
+dlink
 dns
 dnssec
 dockerfile
@@ -643,6 +669,8 @@ docutils
 dokuwiki
 domwidget
 dont/!
+doozy
+doozy
 doozy
 doozy
 dosbatch
@@ -678,6 +706,8 @@ exitcode
 expandtab
 expanduser
 expanduser
+expanduser
+expanduser
 exrc
 ext2
 ext3
@@ -704,6 +734,10 @@ fnmatch
 fnmatch
 fnmatch
 fnmatch
+fnmatch
+fnmatch
+fnmatch
+fnmatch
 fortran
 from
 fsharp
@@ -725,6 +759,8 @@ geany
 gedit
 gem
 gem
+getcwd
+getcwd
 getcwd
 getcwd
 getenv
@@ -757,6 +793,10 @@ grsync
 gruvbox
 gsutil
 gsutil
+gsutil
+gsutil
+gsutil's
+gsutil's
 gsutil's
 gsutil's
 gtk
@@ -830,11 +870,17 @@ ipywidgets
 irc
 isabs
 isabs
+isabs
+isabs
+isdir
+isdir
 isdir
 isdir
 isfile
 isfile
 iskeyword
+islink
+islink
 islink
 islink
 islower
@@ -843,6 +889,8 @@ isupper
 isupper
 itemgetter
 iterable
+iterables
+iterables
 iterables
 iterables
 iw
@@ -857,6 +905,8 @@ jetbrains
 jinja
 jinja2
 jinja2
+joinpath
+joinpath
 joinpath
 joinpath
 jpeg
@@ -937,6 +987,8 @@ kwallet
 kwarg
 kwargs
 kwargs
+kwargs
+kwargs
 kwin
 kwrite
 langmap
@@ -1011,6 +1063,7 @@ memcache
 metadata
 metakernel
 metapackage
+metavar
 meth
 meth
 microkernel
@@ -1031,6 +1084,8 @@ modeline
 modelines
 module
 moduleauthor
+modulefinder
+modulefinder
 modulefinder
 modulefinder
 moin
@@ -1100,6 +1155,8 @@ nsupdate
 nt
 ntfs
 numpy
+numpydoc
+numpydoc
 numpydoc
 numpydoc
 nvidia
@@ -1372,6 +1429,8 @@ spiceworks
 spl
 splitext
 splitext
+splitext
+splitext
 spotify
 spyder
 spyder3
@@ -1471,8 +1530,12 @@ tput
 trac
 traceback
 traceback
+traceback
+traceback
 tracebacks
 traceroute
+traitlets
+traitlets
 traitlets
 traitlets
 tronscript
@@ -1531,6 +1594,8 @@ userspace
 userspaces
 using
 usr
+utilities's
+utilities's
 utilities's
 utilities's
 utils

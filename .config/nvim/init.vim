@@ -157,6 +157,7 @@ Plug 'mhinz/vim-startify'
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'greyblake/vim-preview'
 Plug 'lifepillar/vim-cheat40'
+Plug 'luffah/vim-zim', { 'for': 'zim'}
 
 " It's very frustrating having termux slow down beyond repair but also frustrating
 " not being able to use more than 15 plugins at any point in time
@@ -489,15 +490,6 @@ let g:jedi#show_call_signatures_delay = 100
 let g:jedi#smart_auto_mappings = 0
 let g:jedi#force_py_version = 3
 let g:jedi#enable_completions = 0
-
-" Zim: {{{2
-let g:zim_notebooks_dir = expand('~/Notebooks/Notes')
-let g:zim_notebook = expand('~/Notebooks/Notes')
-let g:zim_dev = 1
-
-" Here's an exciting little note about Zim. Ignoring how ...odd this plugin is
-" Voom actually gets pretty close to handling Zimwiki if you recognize it as
-" as dokuwiki!
 
 " Runtime: {{{1
 
