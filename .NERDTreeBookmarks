@@ -1,9 +1,10 @@
 dotfiles ~/projects/dotfiles/unix
-IPython ~/miniconda3/lib/python3.7/site-packages/IPython/core
 jedi-docs ~/.local/share/nvim/plugged/jedi-vim/pythonx/jedi/docs/docs
 config-nvim ~/.config/nvim
 plugged ~/.local/share/nvim/plugged
-sphinx ~/miniconda3/envs/flask/lib/python3.7/site-packages/sphinx
 tutorials ~/Dropbox/python/tutorials
 utilities ~/projects/utilities
 viconf ~/projects/viconf/.config/nvim
+
+IPython ~/miniconda3/lib/python3.7/site-packages/IPython/core
+sphinx ~/miniconda3/envs/flask/lib/python3.7/site-packages/sphinx

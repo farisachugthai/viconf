@@ -14,6 +14,10 @@ what a Python plugin looks like. This plugin exports a command, a function, and
 an autocmd. The plugin is called 'Limit', and all it does is limit the number
 of requests made to it. Here's the plugin source code:
 
+
+Apr 15, 2019
+
+This module does in fact work and confused the hell out of me when it started firing.
 """
 import sys
 try:
@@ -38,12 +42,12 @@ class Count(object):
             'Command: Called %d times, args: %s, range: %s' % (self.calls,
                                                                args, range))
 
-    @pynvim.autocmd(
-        'BufEnter', pattern='*.py', eval='expand("<afile>")', sync=True)
-    def autocmd_handler(self, filename):
-        self._increment_calls()
-        self.vim.current.line = (
-            'Autocmd: Called %s times, file: %s' % (self.calls, filename))
+    # @pynvim.autocmd(
+    #     'BufEnter', pattern='*.py', eval='expand("<afile>")', sync=True)
+    # def autocmd_handler(self, filename):
+    #     self._increment_calls()
+    #     self.vim.current.line = (
+    #         'Autocmd: Called %s times, file: %s' % (self.calls, filename))
 
     @pynvim.function('Func')
     def function_handler(self, args):

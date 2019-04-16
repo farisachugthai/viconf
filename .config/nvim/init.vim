@@ -141,7 +141,7 @@ Plug 'junegunn/vim-plug'        " plugception
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
-Plug 'davidhalter/jedi-vim'
+Plug 'davidhalter/jedi-vim', {'for': ['rst', 'python'] }
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
@@ -166,7 +166,7 @@ if !g:termux
     Plug 'godlygeek/tabular'
     Plug 'vim-voom/voom'
     Plug 'Rykka/InstantRst'
-    Plug 'gu-fan/riv.vim'
+    Plug 'gu-fan/riv.vim', {'for': 'rst'}
     Plug 'junegunn/vim-peekaboo'
     Plug 'tpope/vim-unimpaired'
     Plug 'tpope/vim-surround'
@@ -342,9 +342,11 @@ let &showbreak = '↳ '                   " Indent wrapped lines correctly
 set breakindent
 set breakindentopt=sbr
 
+set updatetime=100
+
+" 3 options below are nvim specific.
 set inccommand=split
 set termguicolors
-
 let g:tutor_debug = 1
 
 " Mappings: {{{1
@@ -456,40 +458,10 @@ noremap! <A-j> <C-w>j
 noremap! <A-k> <C-w>k
 noremap! <A-l> <C-w>l
 
-" Terminal: {{{2
-" If running a terminal in Vim, go into Normal mode with Esc
-tnoremap <Esc> <C-\><C-n>
-" From he term. Alt-R is better because this causes us to lose C-r in every
-" command we run from nvim
-tnoremap <expr> <A-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
-" From :he terminal
-tnoremap <A-h> <C-\><C-N><C-w>h
-tnoremap <A-j> <C-\><C-N><C-w>j
-tnoremap <A-k> <C-\><C-N><C-w>k
-tnoremap <A-l> <C-\><C-N><C-w>l
-inoremap <A-h> <C-\><C-N><C-w>h
-inoremap <A-j> <C-\><C-N><C-w>j
-inoremap <A-k> <C-\><C-N><C-w>k
-inoremap <A-l> <C-\><C-N><C-w>l
-
-tnoremap <A-A> <Esc>A
-tnoremap <A-b> <Esc>b
-tnoremap <A-d> <Esc>d
-tnoremap <A-f> <Esc>f
-
 " Remaining Plugins: {{{1
 
 " Vim_Plug: {{{2
 let g:plug_window = 'tabe'
-
-" Jedi: {{{2
-let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces
-let g:jedi#usages_command = '<Leader>u'
-let g:jedi#rename_command = '<F2>'
-let g:jedi#show_call_signatures_delay = 100
-let g:jedi#smart_auto_mappings = 0
-let g:jedi#force_py_version = 3
-let g:jedi#enable_completions = 0
 
 " Runtime: {{{1
 

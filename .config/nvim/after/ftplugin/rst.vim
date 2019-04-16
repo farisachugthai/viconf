@@ -2,11 +2,11 @@
     " File: rst.vim
     " Author: Faris Chugthai
     " Description: ReStructured Text ftplugin
-    " Last Modified: Mar 25, 2019
+    " Last Modified: Apr 14, 2019
 " ============================================================================
-setlocal tabstop=4
-setlocal softtabstop=4
-setlocal shiftwidth=4
+" setlocal tabstop=4
+" setlocal softtabstop=4
+" setlocal shiftwidth=4
 setlocal expandtab
 
 setlocal colorcolumn=80
@@ -15,8 +15,7 @@ setlocal foldlevel=2
 setlocal foldlevelstart=2
 setlocal spell!
 
-setlocal keywordprg=pydoc
-" TODO: Need to set an undo ftplugin.
+" This works beautifully!
+setlocal keywordprg=:r!pydoc
 
-" Which kinda raises the question of why both neovim and vim
-" don't set an undo ftplugin for either rst or python files. Hm.
+" TODO: Set makeprg. sphinx-build or something. Do we set some defaults? Check if we have an exe?
