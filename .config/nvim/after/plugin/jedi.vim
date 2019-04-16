@@ -6,7 +6,7 @@
 " ============================================================================
 
 " Guard: {{{1
-if !has_key(plugs, 'jedi.vim')
+if !has_key(plugs, 'jedi-vim')
     finish
 endif
 
@@ -17,8 +17,6 @@ let g:did_jedi = 1
 
 " Options: {{{1
 let g:jedi#use_tabs_not_buffers = 1         " easy to maintain workspaces
-let g:jedi#usages_command = '<Leader>u'
-let g:jedi#rename_command = '<F2>'
 if g:termux
     let g:jedi#show_call_signatures_delay = 1000
 elseif g:ubuntu

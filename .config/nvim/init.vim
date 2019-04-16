@@ -1,6 +1,6 @@
 " Neovim Configuration:
 " Maintainer: Faris Chugthai
-" Last Change: Apr 02, 2019
+" Last Change: Apr 16, 2019
 
 " Preliminaries: {{{1
 
@@ -118,8 +118,9 @@ else
 endif
 
 " Vim Plug: {{{1
+
 " Plug Check: {{{2
-" Shout out Justinmk!
+
 " https://github.com/justinmk/config/blob/291ec0ae12b0b4b35b4cf9315f1878db00b780ec/.config/nvim/init.vim#L12
 let s:plugins = filereadable(expand('~/.local/share/nvim/site/autoload/plug.vim', 1))
 
@@ -144,7 +145,7 @@ Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
 Plug 'davidhalter/jedi-vim', {'for': ['rst', 'python'] }
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-commentary'         " Lighter version of NERDCom since i don't use most features anyway
+Plug 'tpope/vim-commentary'
 Plug 'w0rp/ale'
 Plug 'SirVer/ultisnips'
 
@@ -162,7 +163,7 @@ Plug 'luffah/vim-zim', { 'for': 'zim'}
 " It's very frustrating having termux slow down beyond repair but also frustrating
 " not being able to use more than 15 plugins at any point in time
 if !g:termux
-    Plug 'autozimu/LanguageClient-neovim'
+    Plug 'autozimu/LanguageClient-neovim', {'do': ':UpdateRemotePlugins'}
     Plug 'godlygeek/tabular'
     Plug 'vim-voom/voom'
     Plug 'Rykka/InstantRst'
@@ -182,6 +183,8 @@ call plug#end()
 noremap <Space> <nop>
 map <Space> <Leader>
 let g:maplocalleader = '<Space>'
+
+let &shadafile = expand('$XDG_DATA_HOME') . '/nvim/shada/main.shada'
 
 " Pep8 Global Options: {{{2
 if &tabstop > 4
@@ -315,8 +318,7 @@ else
 endif
 set cmdheight=2
 set number relativenumber
-set smartcase
-set infercase
+set smartcase infercase
 " FOOBAR=~/<CTRL-><CTRL-F> will now autocomplete!
 set isfname-==
 
@@ -349,6 +351,10 @@ set inccommand=split
 set termguicolors
 let g:tutor_debug = 1
 
+" When set: Add 's' flag to 'shortmess' option (this makes the message
+" for a search that hits the start or end of the file not being displayed)
+set terse
+
 " Mappings: {{{1
 
 " Window_Buf_Tab_Mappings: {{{2
@@ -371,7 +377,8 @@ noremap <Leader>bP <Cmd>%y<CR>
 noremap <Leader>bl <Cmd>blast<CR>
 noremap <Leader>bf <Cmd>bfirst<CR>
 noremap <Leader>bd <Cmd>bdelete<CR>
-noremap <Leader>bo <Cmd>bonly<CR>
+" Sunovabitch bonly isn't a command?? Why is
+" noremap <Leader>bo <Cmd>bonly<CR>
 
 " Navigate tabs more easily. First check we have more than 1 tho.
 if len(nvim_list_tabpages()) > 1
@@ -410,42 +417,23 @@ if g:termux
     noremap <silent> <Leader>ts <Cmd>!termux-share -a send %<CR>
 endif
 
-" Junegunn:
-noremap <Leader>o o<Esc>
-noremap <Leader>O O<Esc>
-vnoremap < <gv
-vnoremap > >gv
-" I just realized these were set to nnoremap. Meaning visual mode doesn't get this mapping
-noremap j gj
-noremap k gk
-noremap <C-]> g<C-]>
-
 " Switch CWD to the directory of the open buffer
 noremap <Leader>cd <Cmd>cd %:p:h<CR><Cmd>pwd<CR>
 
 " Backspace in Visual mode deletes selection
 vnoremap <BS> d
 
-" Spell out the rtp
-function! g:EchoRTP()
-    for directory in nvim_list_runtimepaths()
-        echo directory
-    endfor
-endfunction
-
-nnoremap <Leader>rt call g:EchoRTP()
 noremap <Leader>cd <Cmd>cd %:p:h<CR><Cmd>pwd<CR>
 
 " Backspace in Visual mode deletes selection
 vnoremap <BS> d
 
-
 " Save a file as root
-noremap <leader>W <Cmd>w !sudo tee % > /dev/null<CR>
+noremap <Leader>W <Cmd>w !sudo tee % > /dev/null<CR>
 
-" Spell Checking:
 noremap <Leader>sp <Cmd>setlocal spell!<CR>
 noremap <Leader>s= z=
+
 
 " ALT Navigation: {{{3
 " Originally this inspired primarily for terminal use but why not put it everywhere?
@@ -457,6 +445,16 @@ noremap! <A-h> <C-w>h
 noremap! <A-j> <C-w>j
 noremap! <A-k> <C-w>k
 noremap! <A-l> <C-w>l
+
+" Junegunn: {{{3
+noremap <Leader>o o<Esc>
+noremap <Leader>O O<Esc>
+vnoremap < <gv
+vnoremap > >gv
+" I just realized these were set to nnoremap. Meaning visual mode doesn't get this mapping
+noremap j gj
+noremap k gk
+noremap <C-]> g<C-]>
 
 " Remaining Plugins: {{{1
 
@@ -640,39 +638,37 @@ command! PlugHelp call fzf#run(fzf#wrap({
   \ 'sink'  :   function('s:plug_help_sink')}))
 
 " Statusline: {{{2
-"
+
 " Yeah junegunn gets this one too.
+" Apr 16, 2019: I wonder if Vim doesn't have the same statusline expressions as Neovim because literally half of these are builtin flags...
 function! s:statusline_expr()
   let dicons = ' %{WebDevIconsGetFileTypeSymbol()} '
   let mod = "%{&modified ? '[+] ' : !&modifiable ? '[x] ' : ''}"
-  let ro  = "%{&readonly ? '[RO] ' : ''}"
-  let ft  = "%{len(&filetype) ? '['.&filetype.'] ' : ''}"
+  " let ro  = "%{&readonly ? '[RO] ' : ''}"
+  " let ft  = "%{len(&filetype) ? '['.&filetype.'] ' : ''}"
   let fug = "%{exists('g:loaded_fugitive') ? fugitive#statusline() : ''}"
   let sep = ' %= '
   let pos = ' %-12(%l : %c%V%) '
   let pct = ' %P'
 " %n is buffer #, %f is filename relative to $PWD, sep is right align
 
-  return '[%n] %f '.dicons.mod.ro.ft.fug.sep.pos.'%*'.pct
+  return '[%n] %f '.dicons.mod . '%r' . '%y' .fug.sep.pos.'%*'.pct
 endfunction
 
 let &statusline = s:statusline_expr()
 
 " Except for...
-augroup TermStatusline
+augroup TermGroup
     autocmd!
     autocmd TermOpen * setlocal statusline=%{b:term_title}
+    " `set nomodified` so Nvim stops prompting you when you
+    " try to close a buftype==terminal buffer
+    autocmd TermOpen * setlocal nomodified
 augroup END
 
 " Rename: {{{2
 " :he map line 1454. How have i never noticed this isn't a feature???
 command! -nargs=1 -bang -complete=file Rename f <args>|w<bang>
-
-" YAPF: {{{2
-
-command! YAPF exec '!yapf <cfile>'
-command! YAPFI exec '!yapf -i <cfile>'
-command! YAPFD cexpr! exec '!yapf -d <cfile>'
 
 " Chmod: {{{2
 
@@ -705,6 +701,8 @@ endfunction
 " This example does not work for file names with spaces!
 
 " Profile: {{{2
+
+" Profile a func or file. Oooo I could use XDG_DATA_HOME instead of _ROOT there
 function! s:profile(bang)
   if a:bang
     profile pause
@@ -717,10 +715,6 @@ function! s:profile(bang)
 endfunction
 command! -bang Profile call s:profile(<bang>0)
 
-
-
-colorscheme gruvbox
-
 " General Syntax Highlighting: {{{2
 
 " Lower max syntax highlighting
@@ -728,6 +722,10 @@ set synmaxcol=400
 
 syntax sync fromstart
 syntax on
+
+" Try to keep as close to the bottom of the file as possible
+colorscheme gruvbox
+
 
 " Clear Hlsearch: {{{2
 
@@ -740,3 +738,14 @@ augroup vimrc_incsearch_highlight
     autocmd CmdlineEnter /,\? :set hlsearch
     autocmd CmdlineLeave /,\? :set nohlsearch
 augroup END
+
+" EchoRTP: {{{2
+" The nvim API is seriously fantastic.
+
+function! g:EchoRTP()
+    for directory in nvim_list_runtimepaths()
+        echo directory
+    endfor
+endfunction
+nnoremap <Leader>rt call g:EchoRTP()
+command! -nargs=0 EchoRTP call g:EchoRTP()

@@ -1,15 +1,20 @@
 " ============================================================================
     " File: terminally_unimpaired.vim
     " Author: Faris Chugthai
-    " Description: noremap doesn't change terminal mappings
+    " Description: Because noremap doesn't change terminal mappings
     " Last Modified: April 14, 2019
 " ============================================================================
 
-" Mappings:
+if exists('did_terminally_unimpaired_vim') || &cp || v:version < 700
+    finish
+endif
+let did_terminally_unimpaired_vim = 1
+
+
+" Mappings: {{{1
 
 " IPython in a Vim terminal acts oddly. If you hit i or a it doesn't move to where
 " your cursor is. It moves relative to its old positon.
-" TODO: Add more readline mappings for terminal.
 
 " If running a terminal in Vim, go into Normal mode with Esc
 tnoremap <Esc> <C-\><C-n>
@@ -35,3 +40,7 @@ tnoremap <A-f> <Esc>f
 " nope
 tnoremap <A-a> <Esc>I
 tnoremap <A-e> <Esc>$i
+
+" Leader -- applications -- htop. Requires nvim for <Cmd> which tmk doesn't exist
+" even in vim8.0+. Also requires htop which more than likely rules out Win32.
+noremap <Leader>ah <Cmd>vsplit term://htop

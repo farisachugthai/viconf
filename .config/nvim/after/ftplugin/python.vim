@@ -1,18 +1,13 @@
 " Python:
 " Maintainer: Faris Chugthai
 
-" PEP Indenting: {{{1
-setlocal tabstop=4 shiftwidth=4 expandtab softtabstop=4
-let b:python_highlight_all = 1
-
 " Options: {{{1
 setlocal linebreak
 setlocal textwidth=120
-
 setlocal commentstring=#\ %s
-
+setlocal tabstop=4 shiftwidth=4 expandtab softtabstop=4
+let b:python_highlight_all = 1
 setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
-
 " also let's know where the line needs to end visually but not invoke the
 " linters to react.
 setlocal colorcolumn=80,120
@@ -24,20 +19,15 @@ augroup pythonchars
     autocmd!
     autocmd FileType python highlight Excess ctermbg=DarkGrey guibg=Black
     autocmd FileType python match Excess /\%120v.*/
-    autocmd FileType python set nowrap
+    autocmd FileType python setlocal nowrap
 augroup END
 
 " Plugins: {{{1
 
 " ALE: {{{2
 
-" Jan 24, 2019: pyls went because A) it doesn't output an error message B) it
-" uses flake8 and jedi anyway and C) its slow
-" Ugh! But flake8 isn't returning any message to ALE so i suppose enable it.
 let b:ale_linters = [ 'flake8', 'pydocstyle', 'pyls' ]
 let b:ale_linters_explicit = 1
-
-" Alright let's just do this manually
 
 let b:ale_python_pyls_config = {
       \   'pyls': {
@@ -62,6 +52,13 @@ if executable('yapf')
     setlocal equalprg=yapf
     setlocal formatprg=yapf
     let b:ale_fixers += ['yapf']
+
+    " Is it unnecessary to do it this way? Sure. But it means that the only
+    " time these commands get defined is when I'm in a python file with YAPF installed
+    command! -nargs=0 YAPF exec '!yapf <cfile>'
+    command! -nargs=0 YAPFI exec '!yapf -i <cfile>'
+    command! -nargs=0 YAPFD cexpr! exec '!yapf -d <cfile>'
+
 else
     if executable('autopep8')
         setlocal equalprg=autopep8
@@ -70,31 +67,13 @@ else
     endif
 endif
 
-" TODO:
-" Here's a suggestion. Write your own buffer fixer using ALE and yapf.
-" You do it anyway so why not nnoremap <Leader>bf <expr> py3do % or %yapf or
-" set makeprg=unittest.TestRunner()...or even sphinx build or something.
-" Todo: #2: Map something so that it does "run this line with the py3 host
-
-
-" Virtualenvs: {{{3
 if isdirectory('~/virtualenvs')
     let b:ale_virtualenv_dir_names += '~/virtualenvs'
 endif
 
 " Python Language Server: {{{2
-" Delete the mappings off of here since they're defined in init.vim
-
-" Vim-plug exports a dictionary with all of the info it gathers about your
-" plugins!
 if has_key(plugs, 'LanguageClient-neovim')
-    let b:LanguageClient_autoStart = 1
-    let b:LanguageClient_selectionUI = 'fzf'
 endif
 
 " Riv: {{{2
-
-" Riv is a plugin for reStructuredText in Vim.
-" The following setting allows docstrings in python files
-" to be properly highlighted. I'm inordinately excited.
 let b:riv_python_rst_hl = 1
