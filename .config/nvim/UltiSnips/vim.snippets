@@ -19,7 +19,7 @@ endif
 endsnippet
 
 snippet guard "Script reload guard. Good to put directly under the header snippet." b
-if exists('${1:did_`!p snip.rv = snip.fn.replace('.','_')`}') || ${2:&cp} || ${3:v:version < 700}
+if exists('${1:g:did_`!p snip.rv = snip.fn.replace('.','_')`}') || ${2:&cp} || ${3:v:version < 700}
 	finish
 endif
 let $1 = ${4:1}

@@ -9,7 +9,7 @@
 " You could run an if then to check you're in a git repo.
 " Also could use ag/rg/fd and fzf instead of grep to supercharge this.
 
-function! s:todo#Todo() abort
+function! todo#Todo() abort
     let entries = []
     for cmd in ['git grep -niI -e TODO -e todo -e FIXME -e XXX -e HACK 2> /dev/null',
                 \ 'grep -rniI -e TODO -e todo -e FIXME -e XXX -e HACK * 2> /dev/null']
@@ -27,3 +27,5 @@ function! s:todo#Todo() abort
         copen
     endif
 endfunction
+
+command! Todo call todo#Todo()

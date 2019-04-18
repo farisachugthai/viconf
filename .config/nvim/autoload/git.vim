@@ -3,7 +3,7 @@
 " Cycle through hunks in all buffers
 " ]c and [c jump from one hunk to the next in the current buffer. You can use this code to jump to the next hunk no matter which buffer it's in.
 
-function! NextHunkAllBuffers()
+function! git#NextHunkAllBuffers()
   let line = line('.')
   GitGutterNextHunk
   if line('.') != line
@@ -24,7 +24,7 @@ function! NextHunkAllBuffers()
   endwhile
 endfunction
 
-function! PrevHunkAllBuffers()
+function! git#PrevHunkAllBuffers()
   let line = line('.')
   GitGutterPrevHunk
   if line('.') != line
@@ -45,9 +45,8 @@ function! PrevHunkAllBuffers()
   endwhile
 endfunction
 
-command! NextHunkAllBuffers call NextHunkAllBuffers()
-command! PrevHunkAllBuffers call PrevHunkAllBuffers()
+command! NextHunkAllBuffers call git#NextHunkAllBuffers()
+command! PrevHunkAllBuffers call git#PrevHunkAllBuffers()
 
-
-noremap <silent> ]c :call NextHunkAllBuffers()<CR>
-noremap <silent> [c :call PrevHunkAllBuffers()<CR>
+noremap <silent> ]c :call git#NextHunkAllBuffers()<CR>
+noremap <silent> [c :call git#PrevHunkAllBuffers()<CR>

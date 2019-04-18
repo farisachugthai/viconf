@@ -39,8 +39,8 @@ class Count(object):
     def command_handler(self, args, range):
         self._increment_calls()
         self.vim.current.line = (
-            'Command: Called %d times, args: %s, range: %s' % (self.calls,
-                                                               args, range))
+            'Command: Called %d times, args: %s, range: %s' %
+            (self.calls, args, range))
 
     # @pynvim.autocmd(
     #     'BufEnter', pattern='*.py', eval='expand("<afile>")', sync=True)
@@ -52,8 +52,8 @@ class Count(object):
     @pynvim.function('Func')
     def function_handler(self, args):
         self._increment_calls()
-        self.vim.current.line = (
-            'Function: Called %d times, args: %s' % (self.calls, args))
+        self.vim.current.line = ('Function: Called %d times, args: %s' %
+                                 (self.calls, args))
 
     def _increment_calls(self):
         if self.calls == 5:
