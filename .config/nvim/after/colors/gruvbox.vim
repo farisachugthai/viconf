@@ -4,18 +4,22 @@
     " Description: Gruvbox mods
     " Last Modified: April 09, 2019
 " ============================================================================
-
 " Figured there's no point in it taking up space in the init.vim
 
 " Guard: {{{1
+if exists('did_gruvbox_vim') || &cp || v:version < 700
+    finish
+endif
+let did_gruvbox_vim = 1
+
 if g:colors_name !=# 'gruvbox'
     finish
-else
-    call s:gruvbox()
+elseif g:colors_name ==# 'gruvbox'
+    call <SID>gruvbox()
 endif
 
 " Functions: {{{1
-function! s:gruvbox()
+function! <SID>gruvbox()
     set background=dark
     let g:gruvbox_italic = 1
     let g:gruvbox_contrast_dark = 'hard'
@@ -25,7 +29,5 @@ function! s:gruvbox()
     let g:gruvbox_italicize_strings = 1
 endfunction
 
-
 " Commands: {{{1
-
 command! -nargs=0 Gruvbox call s:gruvbox()

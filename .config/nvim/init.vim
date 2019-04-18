@@ -184,7 +184,13 @@ noremap <Space> <nop>
 map <Space> <Leader>
 let g:maplocalleader = '<Space>'
 
-let &shadafile = expand('$XDG_DATA_HOME') . '/nvim/shada/main.shada'
+if has('nvim-0.4')
+    let &shadafile = expand('$XDG_DATA_HOME') . '/nvim/shada/main.shada'
+else
+   " This is an option I swear! Wait do the helpdocs have an error in them?
+   " they mention viminfofile as an option but its not working on termux
+   set shada+=n$XDG_DATA_HOME/nvim/shada/main.shada
+endif
 
 " Pep8 Global Options: {{{2
 if &tabstop > 4
@@ -269,6 +275,9 @@ set wildmenu
 set wildmode=longest,list:longest       " Longest string or list alternatives
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 
+" A list of words that change how command line completion is done.
+" Currently only one word is allowed: tagfile
+set wildoptions=tagfile
 " Path: {{{2
 
 " DON'T USE LET. LET ALLOWS FOR EXPRESSION EVALUATION. MUST BE DONE WITH SET
@@ -552,10 +561,6 @@ augroup END
 " Functions_Commands: {{{1
 
 " Up until Rename are from Junegunn so credit to him
-
-" Todo Function: {{{2
-command! Todo call todo#Todo()
-
 " Scriptnames: {{{2
 " command to filter :scriptnames output by a regex
 command! -nargs=1 Scriptnames call <sid>scriptnames(<f-args>)
@@ -682,24 +687,6 @@ command! -nargs=1 -complete=file Chmod call system('chmod +x ' . expand('%:S'))
 
 " Could do word under cursor. Could tack it on to some fzf variation. idk
 
-" Finger: {{{2
-" Example from :he command-complete
-" The following example lists user names to a Finger command
-command! -complete=custom,ListUsers -nargs=1 Finger !finger <args>
-
-function! g:ListUsers(A,L,P)
-    return system('cut -d: -f1 /etc/passwd')
-endfun
-
-" Completes filenames from the directories specified in the 'path' option:
-command! -nargs=1 -bang -complete=customlist,EditFileComplete
-   	\ EF edit<bang> <args>
-function! g:EditFileComplete(A,L,P)
-    return split(globpath(&path, a:A), '\n')
-endfunction
-
-" This example does not work for file names with spaces!
-
 " Profile: {{{2
 
 " Profile a func or file. Oooo I could use XDG_DATA_HOME instead of _ROOT there
@@ -716,16 +703,13 @@ endfunction
 command! -bang Profile call s:profile(<bang>0)
 
 " General Syntax Highlighting: {{{2
-
 " Lower max syntax highlighting
 set synmaxcol=400
 
 syntax sync fromstart
-syntax on
 
 " Try to keep as close to the bottom of the file as possible
 colorscheme gruvbox
-
 
 " Clear Hlsearch: {{{2
 

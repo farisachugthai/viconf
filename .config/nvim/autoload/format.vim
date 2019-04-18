@@ -37,5 +37,5 @@ func! format#Format()
     return 0
 endfunc
 
-" You can then enable the formatting by executing: >
-"   setlocal formatexpr=format#Format()
+" You can then enable the formatting by executing:
+" setlocal formatexpr=format#Format()

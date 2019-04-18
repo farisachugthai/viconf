@@ -1,5 +1,14 @@
-" Python:
-" Maintainer: Faris Chugthai
+" ============================================================================
+    " File: python.vim
+    " Author: Faris Chugthai
+    " Description: python ftplugin
+    " Last Modified: April 17, 2019
+" ============================================================================
+
+if exists('g:did_python_vim') || &cp || v:version < 700
+    finish
+endif
+let g:did_python_vim = 1
 
 " Options: {{{1
 setlocal linebreak
@@ -12,15 +21,20 @@ setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 " linters to react.
 setlocal colorcolumn=80,120
 
-" Autocommands: {{{1
-
-" Highlight characters after 120 chars
+" Highlight I20 Chars: {{{1
 augroup pythonchars
     autocmd!
     autocmd FileType python highlight Excess ctermbg=DarkGrey guibg=Black
     autocmd FileType python match Excess /\%120v.*/
     autocmd FileType python setlocal nowrap
 augroup END
+
+" Pylint Compiler: {{{1
+" Well this is neat!
+if executable('pylint')
+    compiler pylint
+    echomsg 'Using pylint as buffer-local compiler. Run `:make %` to use.'
+endif
 
 " Plugins: {{{1
 
