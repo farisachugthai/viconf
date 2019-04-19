@@ -14,6 +14,7 @@
     - Finish argument parser
 """
 import argparse
+import logging
 import os
 import subprocess
 import sys
@@ -22,6 +23,10 @@ try:
     import requests
 except ImportError:
     NOREQUESTS = 1
+else:
+    NOREQUESTS = None
+
+logger = logging.getLogger(name=__name__)
 
 
 def _parse_arguments():
@@ -41,15 +46,28 @@ def _parse_arguments():
     parser = argparse.ArgumentParser(
         description='Installs and sets up neovim.')
 
-    parser.add_argument(
-        '--plug-dir',
-        dest='plugd',
-        metavar="Directory for vim-plug",
-        help='The directory that vim-plug is downloaded to.')
+    parser.add_argument('-p',
+                        '--plug-dir',
+                        dest='plugd',
+                        metavar="Directory for vim-plug",
+                        help='The directory that vim-plug is downloaded to.')
 
     args = parser.parse_args()
 
     return args
+
+
+class Machine:
+    """Create a class with attributes representing varying platforms.
+
+    Probably gonna want to move those functions `get_home` and stuff into this class.
+    """
+
+    def __init__(self, home, uname):
+        """Initialize a machine."""
+        self.home = home
+        self.uname = uname
+        self.pip_version = pip_version
 
 
 def get_home():
@@ -90,7 +108,7 @@ def requests_download(plug):
     with open(plug, "wt") as f:
         f.write(res.text)
 
-    return res.status
+    return res.status_code
 
 
 def urllib_dl(plug):
@@ -100,7 +118,7 @@ def urllib_dl(plug):
     :returns: None
     """
     from urllib.request import Request, urlopen
-    from urllib.error import URLError
+    from urllib.error import URLError, HTTPError
     req = Request(
         "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim")
     try:
@@ -110,8 +128,11 @@ def urllib_dl(plug):
             print('We failed to reach a server.')
             print('Reason: ', e.reason)
         elif hasattr(e, 'code'):
-            print('The server couldn\'t fulfill the request.')
+            print("The server couldn't fulfill the request.")
             print('Error code: ', e.code)
+    except HTTPError as e:
+        logging.error(e)
+        logging.error(req.full_url)
 
     with open(plug, "wb") as f:
         f.write(response.read())
@@ -183,9 +204,12 @@ def main():
     plug = os.path.join(plugd, '', 'plug.vim')
     # download vim-plug
     if NOREQUESTS:
-        urllib_dl(plug)
+        status = urllib_dl(plug)
     else:
-        requests_download(plug)
+        status = requests_download(plug)
+        if not status == 200:
+            logging.warning("Vim plug download status code: ")
+            logging.warning(status)
 
     # could also have done platform.machine. *shrugs*
     # TODO: Download packages in a venv. Interestingly enough the PEP that
@@ -200,4 +224,5 @@ def main():
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.WARNING)
     sys.exit(main())

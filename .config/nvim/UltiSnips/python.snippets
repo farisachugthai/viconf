@@ -445,8 +445,8 @@ endsnippet
 
 
 # Functions:{{{1
-snippet deff "function with default self arg" b
-def ${1:fname}(`!p snip.rv = vim.eval('indent(".") ? "self" : ""')`$2):
+snippet deff "function with default self arg" smw
+def ${1:${VISUAL}}(`!p snip.rv = vim.eval('indent(".") ? "self" : ""')`$2):
 	$0
 endsnippet
 
