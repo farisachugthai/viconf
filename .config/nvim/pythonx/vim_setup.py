@@ -18,6 +18,11 @@ import os
 import subprocess
 import sys
 
+try:
+    import requests
+except ImportError:
+    NOREQUESTS = 1
+
 
 def _parse_arguments():
     """Parsers the command line arguments given to the installer.
@@ -38,7 +43,8 @@ def _parse_arguments():
 
     parser.add_argument(
         '--plug-dir',
-        dest=plugd,
+        dest='plugd',
+        metavar="Directory for vim-plug",
         help='The directory that vim-plug is downloaded to.')
 
     args = parser.parse_args()
@@ -50,7 +56,7 @@ def get_home():
     """Get a user's home directory.
 
     .. note::
-        sysconfig._getuserbase() does a similar thing; however, the end
+        :func:`sysconfig._getuserbase()` does a similar thing; however, the end
         directory is different in every OS case so we can't just import it and
         walk away.
     """
@@ -61,20 +67,18 @@ def get_home():
     return home
 
 
-def check_plug_dir(plugd):
-    """Check if the directory vim-plug is downloaded to exists.
+def check_dir(dir_d):
+    """Check if a dir exists and if not, create it.
 
-    If not, create it.
-
-    :param plugd: The directory to put vim-plug in.
+    :param dir_d: The directory to put vim-plug in.
     :returns: None
     """
-    if not os.path.isdir(plugd):
-        os.makedirs(plugd, mode=0o755, exist_ok=True)
+    if not os.path.isdir(dir_d):
+        os.makedirs(dir_d, mode=0o755, exist_ok=True)
 
 
 def requests_download(plug):
-    """Download vim-plug using requests.
+    """Download vim-plug using requests. Overwrites file if it exists.
 
     :param plug: File to download vim-plug to.
     :returns: None
@@ -83,8 +87,10 @@ def requests_download(plug):
         "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim")
     res.raise_for_status()
 
-    with open(plug, "xt") as f:
+    with open(plug, "wt") as f:
         f.write(res.text)
+
+    return res.status
 
 
 def urllib_dl(plug):
@@ -120,14 +126,25 @@ def termux_packages():
         - Ensure we have write access to the virtualenv
         - If the user doesn't give us a place to do this, where do we go?
             - May end up a required arg although that should be avoided.
+        - Do we need to decode the output? Also since we're capturing it, it
+          should be assigned to something and returned right?
+
     """
     subprocess.run(["pkg", "install", "vim-python", "python-dev"],
                    capture_output=True)
 
 
-def pip_install():
-    """Run platform-independent pip install. Install both pynvim and neovim."""
+def pip_version():
     if sys.version_info > (3, 7):
+        PIP37 = True
+        return PIP37
+    else:
+        return None
+
+
+def pip_install(PIP37=None):
+    """Run platform-independent pip install. Install both pynvim and neovim."""
+    if PIP37:
         subprocess.run([
             "pip", "install", "-U", "pip", "neovim",
             "python-language-server[all]", "pynvim"
@@ -142,7 +159,7 @@ def pip_install():
                        capture_output=True)
 
 
-if __name__ == "__main__":
+def main():
     # Before anything check that we're on a supported system.
     home = get_home()
     uname = os.uname()  # store in a var for when we branch to other systems
@@ -161,15 +178,10 @@ if __name__ == "__main__":
         plugd = os.path.join(home, ".local", "share", "nvim", "site",
                              "autoload")
 
-    check_plug_dir(plugd)
+    check_dir(plugd)
 
     plug = os.path.join(plugd, '', 'plug.vim')
     # download vim-plug
-    try:
-        import requests
-    except ImportError:
-        NOREQUESTS = 1
-
     if NOREQUESTS:
         urllib_dl(plug)
     else:
@@ -184,4 +196,8 @@ if __name__ == "__main__":
 
     # conda_check = subprocess.run(["command", "-v", "conda"])
     # conda_check.check_returncode()
-    pip_install()
+    pip_install(pip_version())
+
+
+if __name__ == "__main__":
+    sys.exit(main())

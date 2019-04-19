@@ -139,6 +139,7 @@ endif
 call plug#begin(expand($XDG_DATA_HOME) . '/nvim/plugged')
 
 Plug 'junegunn/vim-plug'        " plugception
+let g:plug_window = 'tabe'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
@@ -434,15 +435,11 @@ vnoremap <BS> d
 
 noremap <Leader>cd <Cmd>cd %:p:h<CR><Cmd>pwd<CR>
 
-" Backspace in Visual mode deletes selection
-vnoremap <BS> d
-
 " Save a file as root
 noremap <Leader>W <Cmd>w !sudo tee % > /dev/null<CR>
 
 noremap <Leader>sp <Cmd>setlocal spell!<CR>
 noremap <Leader>s= z=
-
 
 " ALT Navigation: {{{3
 " Originally this inspired primarily for terminal use but why not put it everywhere?
@@ -464,11 +461,6 @@ vnoremap > >gv
 noremap j gj
 noremap k gk
 noremap <C-]> g<C-]>
-
-" Remaining Plugins: {{{1
-
-" Vim_Plug: {{{2
-let g:plug_window = 'tabe'
 
 " Runtime: {{{1
 
@@ -560,38 +552,37 @@ augroup END
 
 " Functions_Commands: {{{1
 
-" Up until Rename are from Junegunn so credit to him
 " Scriptnames: {{{2
 " command to filter :scriptnames output by a regex
-command! -nargs=1 Scriptnames call <sid>scriptnames(<f-args>)
+" command! -nargs=1 Scriptnames call <sid>scriptnames(<f-args>)
 
-function! s:scriptnames(re) abort
-    redir => scriptnames
-    silent scriptnames
-    redir END
+" function! <SID>scriptnames(a:re)
+"     redir => scriptnames
+"     silent scriptnames
+"     redir END
 
-    let filtered = filter(split(scriptnames, "\n"), "v:val =~ '" . a:re . "'")
-    echo join(filtered, '\n')
-endfunction
+"     let filtered = filter(split(scriptnames, "\n"), "v:val =~ '" . a:re . "'")
+"     echo join(filtered, '\n')
+" endfunction
 
 " Helptabs: {{{2
 " I've pretty heavily modified this one but junegunn gets the initial credit.
-function! s:helptab()
-    setlocal number relativenumber
-    try
-        wincmd T
-    catch
-    endtry
+" function! s:helptab()
+"     setlocal number relativenumber
+"     try
+"         wincmd T
+"     catch
+"     endtry
 
-    noremap <buffer> q <Cmd>q<CR>
-endfunction
+"     noremap <buffer> q <Cmd>q<CR>
+" endfunction
 
-augroup mantabs
-    autocmd!
-    autocmd Filetype man,help call s:helptab()
-augroup END
+" augroup mantabs
+"     autocmd!
+"     autocmd Filetype man,help call s:helptab()
+" augroup END
 
-command! -nargs=1 Help call <SID>helptab()
+" command! -nargs=1 Help call <SID>helptab()
 
 " AutoSave: {{{2
 " I feel like I need to put this in a autocmd but I'm not sure what I would

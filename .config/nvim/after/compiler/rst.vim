@@ -4,12 +4,41 @@
 " Previous Maintainer:  Nikolai Weibull <now@bitwi.se>
 " Latest Revision:      2017-03-31
 
-" Uhhh this guy wrote all this but never defined a makeprg??
+if exists("current_compiler")
+  finish
+endif
+let current_compiler = "rst"
 
-if exists(':CompilerSet') != 2
+let s:cpo_save = &cpo
+set cpo&vim
+
+" From he exists:
+
+" :cmdname	ex command: built-in command, user
+"     command or command modifier |:command|.
+"     returns:
+"     1  for match with start of a command
+"     2  full match with a command
+"     3  matches several user commands
+"     to check for a supported command
+"     always check the return value to be 2.
+if exists(":CompilerSet") != 2
   command -nargs=* CompilerSet setlocal <args>
 endif
 
-" Doubt we're allwoed to do this. No makeprg takes a string.
-" So now run :make in your ./docs/ dir and it should work right?
-CompilerSet makeprg='sphinx-build . -o _build'
+CompilerSet errorformat=
+      \%f\\:%l:\ %tEBUG:\ %m,
+      \%f\\:%l:\ %tNFO:\ %m,
+      \%f\\:%l:\ %tARNING:\ %m,
+      \%f\\:%l:\ %tRROR:\ %m,
+      \%f\\:%l:\ %tEVERE:\ %m,
+      \%f\\:%s:\ %tARNING:\ %m,
+      \%f\\:%s:\ %tRROR:\ %m,
+      \%D%*\\a[%*\\d]:\ Entering\ directory\ `%f',
+      \%X%*\\a[%*\\d]:\ Leaving\ directory\ `%f',
+      \%DMaking\ %*\\a\ in\ %f
+
+CompilerSet 'sphinx-build'
+
+let &cpo = s:cpo_save
+unlet s:cpo_save

@@ -70,8 +70,8 @@ $1
 let b:undo_ftplugin = '${2:setl cms< com< fo<}' $0
 endsnippet
 
-snippet syn "Syntax file guard" b
-if version < 600
+snippet syntax "Syntax file guard" b
+if v:version < 600
 	syntax clear
 elseif exists(${1:'b:current_syntax'})
 	finish
@@ -90,8 +90,8 @@ endsnippet
 snippet try "try ... catch statement"
 try
 	${1:${VISUAL}}
-catch ${2}
-	${0}
+catch $2
+	$0
 endtry
 endsnippet
 
