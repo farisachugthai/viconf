@@ -31,7 +31,8 @@ let g:fzf_action = {
   \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit' }
 
-let g:fzf_history_dir = expand('$XDG_DATA_HOME') . '/fzf-history'
+" Apr 16, 2019: I'm gonna move this down a directory into the nvim one
+let g:fzf_history_dir = expand('$XDG_DATA_HOME') . '/nvim/fzf-history'
 
 " FZF Colors: {{{1
 
@@ -191,6 +192,7 @@ inoremap <expr> <C-x><C-k> fzf#complete({
 " How do we fix that?
 command! -nargs=1 -bang -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
 
+
 " GGrep: {{{2
 " From fzf-vim.txt
 " fzf-vim-advanced-customization
@@ -237,3 +239,7 @@ inoremap <expr> <C-x><C-s> fzf#vim#complete({
     \ 'reducer': function('<sid>make_sentence'),
     \ 'options': '--multi --reverse --margin 15%,0',
     \ 'left':    20})
+
+" F: {{{1
+let g:ag_command = 'ag --smart-case -u -g " " --'
+command! -bang -nargs=* F call fzf#vim#grep(g:ag_command .shellescape(<q-args>), 1, <bang>0)

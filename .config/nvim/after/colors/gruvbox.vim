@@ -5,6 +5,8 @@
     " Last Modified: April 09, 2019
 " ============================================================================
 " Figured there's no point in it taking up space in the init.vim
+" POOP! None of my modifications had been applying because the function call
+" was call s:gruvbox not <SID>
 
 " Guard: {{{1
 if exists('did_gruvbox_vim') || &cp || v:version < 700

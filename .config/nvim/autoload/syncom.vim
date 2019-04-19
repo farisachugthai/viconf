@@ -10,6 +10,7 @@ if exists('g:did_syncom_vim') || &cp || v:version < 700
 endif
 let g:did_syncom_vim = 1
 
+" Syntax Highlighting Functions: {{{1
 
 " HL: Whats the highlighting group under my cursor? {{{1
 function! syncom#HL()
@@ -19,7 +20,7 @@ endfunction
 " HiC: Show hl group and fg color {{{1
 
 " Heres a possibly easier way to do this. Still in testing.
-" Mar 17, 2019: So far does the exact same thing!
+" Mar 17, 2019: So far behaves as expected!
 function! syncom#HiC()
     echo 'Highlighting group: ' . synIDattr(synID(line('.'), col('.'), 1), 'name')
     echo 'Foreground color: ' . synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'fg')
@@ -79,3 +80,9 @@ function! s:get_syn_info()
         \ ' guibg: ' . linkedSyn.guibg
 endfunction
 command! SyntaxInfo call s:get_syn_info()
+
+command! HL call syncom#HL()
+
+command! HiC call syncom#HiC()
+
+command! HiQF call syncom#HiQF()

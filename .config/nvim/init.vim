@@ -32,7 +32,6 @@ endif
 let g:termux = exists('$PREFIX') && has('unix')
 let g:ubuntu = !exists('$PREFIX') && has('unix')
 let g:windows = has('win32') || has('win64')
-" ^-- This feels dangerous but I'll let it slide.
 
 let g:winrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/winrc.vim'
 if g:windows && filereadable(g:winrc)
@@ -53,10 +52,6 @@ if g:windows
 endif
 
 " Session Options: {{{3
-" From :he options
-" 'slash' and 'unix' are useful on Windows when sharing session files
-" with Unix.  The Unix version of Vim cannot source dos format scripts,
-" but the Windows version of Vim can source unix format scripts.
 set sessionoptions+=unix,slash
 
 " Remote Hosts: {{{2
@@ -134,8 +129,8 @@ if expand('OS') !=# 'Windows_NT'
     endif
 endif
 
-
 " General Plugins: {{{2
+
 call plug#begin(expand($XDG_DATA_HOME) . '/nvim/plugged')
 
 Plug 'junegunn/vim-plug'        " plugception
@@ -156,10 +151,10 @@ if exists('$TMUX')
 endif
 
 Plug 'mhinz/vim-startify'
-Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
+Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
 Plug 'greyblake/vim-preview'
 Plug 'lifepillar/vim-cheat40'
-Plug 'luffah/vim-zim', { 'for': 'zim'}
+Plug 'luffah/vim-zim', {'for': ['zimwiki', 'zimindex']}
 
 " It's very frustrating having termux slow down beyond repair but also frustrating
 " not being able to use more than 15 plugins at any point in time
@@ -172,7 +167,8 @@ if !g:termux
     Plug 'junegunn/vim-peekaboo'
     Plug 'tpope/vim-unimpaired'
     Plug 'tpope/vim-surround'
-    " Plug 'mbbill/undotree'    " not yet but soon
+    Plug 'mbbill/undotree'
+    Plug 'chrisbra/csv.vim'
 endif
 
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
@@ -441,7 +437,7 @@ noremap <Leader>W <Cmd>w !sudo tee % > /dev/null<CR>
 noremap <Leader>sp <Cmd>setlocal spell!<CR>
 noremap <Leader>s= z=
 
-" ALT Navigation: {{{3
+" ALT Navigation: {{{2
 " Originally this inspired primarily for terminal use but why not put it everywhere?
 noremap <A-h> <C-w>h
 noremap <A-j> <C-w>j
@@ -452,7 +448,7 @@ noremap! <A-j> <C-w>j
 noremap! <A-k> <C-w>k
 noremap! <A-l> <C-w>l
 
-" Junegunn: {{{3
+" Junegunn: {{{2
 noremap <Leader>o o<Esc>
 noremap <Leader>O O<Esc>
 vnoremap < <gv
@@ -650,8 +646,13 @@ function! s:statusline_expr()
   let pos = ' %-12(%l : %c%V%) '
   let pct = ' %P'
 " %n is buffer #, %f is filename relative to $PWD, sep is right align
+if exists("*CSV_WCol")
+    let csv = '%1*%{&ft=~"csv" ? CSV_WCol() : ""}%*'
+else
+    let csv = ''
+endif
 
-  return '[%n] %f '.dicons.mod . '%r' . '%y' .fug.sep.pos.'%*'.pct
+  return '[%n] %f '. dicons . mod . '%r' . '%y' . fug . csv . sep.pos.'%*'.pct
 endfunction
 
 let &statusline = s:statusline_expr()

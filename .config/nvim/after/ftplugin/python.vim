@@ -69,9 +69,15 @@ if executable('yapf')
 
     " Is it unnecessary to do it this way? Sure. But it means that the only
     " time these commands get defined is when I'm in a python file with YAPF installed
-    command! -nargs=0 YAPF exec '!yapf <cfile>'
-    command! -nargs=0 YAPFI exec '!yapf -i <cfile>'
-    command! -nargs=0 YAPFD cexpr! exec '!yapf -d <cfile>'
+
+    " Don't forget this advice from usr_41
+" USER COMMANDS
+
+" To add a user command for a specific file type, so that it can only be used in
+" one buffer, use the "-buffer" argument to |:command|.  Example: >
+    command! -buffer -nargs=0 YAPF exec '!yapf <cfile>'
+    command! -buffer -nargs=0 YAPFI exec '!yapf -i <cfile>'
+    command! -buffer -nargs=0 YAPFD cexpr! exec '!yapf -d <cfile>'
 
 else
     if executable('autopep8')
