@@ -256,8 +256,8 @@ endsnippet
 # if/elif/else: {{{2
 
 snippet if "If" w
-if ${1:condition}:
-	${2:${VISUAL:pass}} $0
+if ${1:$VISUAL}:
+	$2
 endsnippet
 
 # TODO: How to make it so that we can just tab past the else condition if we don't need it? i suppose just use if
@@ -268,7 +268,7 @@ else:
 	${3:pass}
 endsnippet
 
-snippet ifee "If / Elif / Else" b
+snippet ifee "If / Elif / Else" w
 if ${1:condition}:
 	${2:${VISUAL:pass}}
 elif ${3:condition}:
@@ -277,25 +277,25 @@ else:
 	${5:pass}
 endsnippet
 
-snippet elif "You should use ifee but just in case" b
+snippet elif "You should use ifee but just in case" w
 elif ${1:condition}:
 	${2:pass}
 endsnippet
 
-snippet else "You should use ife but just in case" b
+snippet else "You should use ife but just in case" w
 else:
 	${1:pass}
 endsnippet
 
 # try/except/finally:{{{2
-snippet try "Try / Except" b
+snippet try "Try / Except" w
 try:
 	${1:${VISUAL:pass}}
 except ${2:Exception} as ${3:e}:
 	${4:raise $3}
 endsnippet
 
-snippet trye "Try / Except / Else" b
+snippet trye "Try / Except / Else" w
 try:
 	${1:${VISUAL:pass}}
 except ${2:Exception} as ${3:e}:
@@ -304,7 +304,7 @@ else:
 	${5:pass}
 endsnippet
 
-snippet tryf "Try / Except / Finally" b
+snippet tryf "Try / Except / Finally" w
 try:
 	${1:${VISUAL:pass}}
 except ${2:Exception} as ${3:e}:
@@ -313,7 +313,7 @@ finally:
 	${5:pass}
 endsnippet
 
-snippet tryef "Try / Except / Else / Finally" b
+snippet tryef "Try / Except / Else / Finally" w
 try:
 	${1:${VISUAL:pass}}
 except${2: ${3:Exception} as ${4:e}}:
@@ -445,8 +445,8 @@ endsnippet
 
 
 # Functions:{{{1
-snippet deff "function with default self arg" b
-def ${1:fname}(`!p snip.rv = vim.eval('indent(".") ? "self" : ""')`$2):
+snippet deff "function with default self arg" smw
+def ${1:${VISUAL}}(`!p snip.rv = vim.eval('indent(".") ? "self" : ""')`$2):
 	$0
 endsnippet
 

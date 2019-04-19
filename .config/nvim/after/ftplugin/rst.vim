@@ -18,4 +18,4 @@ setlocal spell!
 " This works beautifully!
 setlocal keywordprg=:r!pydoc
 
-" TODO: Set makeprg. sphinx-build or something. Do we set some defaults? Check if we have an exe?
+compiler rst
