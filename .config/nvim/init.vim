@@ -422,6 +422,8 @@ noremap! <F9> <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 noremap <Leader>re <Cmd>so $MYVIMRC<CR><Cmd>echo 'Vimrc reloaded!'<CR>
 
 " General_Mappings: {{{2
+" Todo: map this to a key in a manner similar to unimpaired
+" setlocal comments=:# commentstring=#\ %s formatoptions-=t formatoptions+=croql
 
 if g:termux
     noremap <silent> <Leader>ts <Cmd>!termux-share -a send %<CR>
@@ -441,7 +443,7 @@ noremap <Leader>W <Cmd>w !sudo tee % > /dev/null<CR>
 noremap <Leader>sp <Cmd>setlocal spell!<CR>
 noremap <Leader>s= z=
 
-" ALT Navigation: {{{3
+" ALT Navigation: {{{2
 " Originally this inspired primarily for terminal use but why not put it everywhere?
 noremap <A-h> <C-w>h
 noremap <A-j> <C-w>j
@@ -452,7 +454,7 @@ noremap! <A-j> <C-w>j
 noremap! <A-k> <C-w>k
 noremap! <A-l> <C-w>l
 
-" Junegunn: {{{3
+" Junegunn: {{{2
 noremap <Leader>o o<Esc>
 noremap <Leader>O O<Esc>
 vnoremap < <gv
@@ -601,14 +603,6 @@ function! s:autosave(enable)
 endfunction
 
 command! -bang Autosave call s:autosave(<bang>1)
-
-" Syntax Commands: {{{2
-
-command! HL call syncom#HL()
-
-command! HiC call syncom#HiC()
-
-command! HiQF call syncom#HiQF()
 
 " Explore PlugHelp: {{{2
 " Call :PlugHelp to use fzf to open a window with all of the plugins

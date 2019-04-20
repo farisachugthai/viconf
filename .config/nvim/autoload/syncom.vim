@@ -16,6 +16,8 @@ function! syncom#HL()
   echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
 endfunction
 
+command! HL call syncom#HL()
+
 " HiC: Show hl group and fg color {{{1
 
 " Heres a possibly easier way to do this. Still in testing.
@@ -24,6 +26,8 @@ function! syncom#HiC()
     echo 'Highlighting group: ' . synIDattr(synID(line('.'), col('.'), 1), 'name')
     echo 'Foreground color: ' . synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'fg')
 endfunction
+
+command! HiC call syncom#HiC()
 
 " HiDebug: {{{1
 " function! s:HiD()
