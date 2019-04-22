@@ -15,7 +15,6 @@ from rst_helper import *
 
 endglobal
 
-
 ################
 #  Inline	   #
 ################
@@ -104,11 +103,8 @@ ${1:rel path}: ${2:${VISUAL:link}}_.
 
 .. _${2}: ${3:path/to/file} $0
 endsnippet
-
-
 # Directives
 # ------------
-
 snippet img "image link directive" w
 .. |${1:alias}| image:: ${2:img}
 endsnippet
@@ -188,11 +184,6 @@ snippet cau "Caution directive" wms
    ${0:${VISUAL:Take precaution with:}}
 endsnippet
 
-# Fixed whitespace with qq
-# j<>j<<>>3j
-# q
-# 5@q
-# Neosnippets
 snippet quickstart "Shougos RST one snippet summary" b
 ===========================
 ${1:content_name}
@@ -469,20 +460,15 @@ endsnippet
 snippet math "math inline" ms
 :math:\`${1:$VISUAL}\`
 endsnippet
-
 snippet file "file inline" ms
 :file:\`${1:$VISUAL}\`
 endsnippet
-
 snippet pep "pep inline" ms
 :pep:\`${1:$VISUAL}\`
 endsnippet
-
 snippet doc "doc inline" ms
 :doc:\`${1:$VISUAL}\`
 endsnippet
-
-
 ######################
 #  Sphinx Directive  #
 ######################
@@ -491,8 +477,6 @@ snippet sid "SideBar" b
 
    ${2:${VISUAL:SideBar Content}}
 endsnippet
-
-
 snippet cb "Code Block. Must have 1 blank line surrounding!" bs
 .. code-block:: ${1:python3}
 
@@ -500,13 +484,11 @@ snippet cb "Code Block. Must have 1 blank line surrounding!" bs
 
 $0
 endsnippet
-
 snippet codeb "code block duplicated" bs
 .. code-block:: ${1:python}
 
    ${2:${VISUAL:code}}
 endsnippet
-
 snippet cb "Code Block. Must have 1 blank line surrounding!" bs
 .. code-block:: ${1:python3}
 
@@ -514,13 +496,11 @@ snippet cb "Code Block. Must have 1 blank line surrounding!" bs
 
 $0
 endsnippet
-
 snippet codeb "code block duplicated" bs
 .. code-block:: ${1:python}
 
    ${2:${VISUAL:code}}
 endsnippet
-
 snippet hi "Set a highlight directive to establish the base for code block directives" ms
 .. highlight::
    ${1::linenos:}
@@ -529,14 +509,12 @@ snippet hi "Set a highlight directive to establish the base for code block direc
 
 ${0:Optional arguments above}
 endsnippet
-
 snippet toctree "directive_toctree" b
 .. toctree::
    :maxdepth: ${1:2}
 
    ${2:FILES}
 endsnippet
-
 snippet table "table from sphinx cheatsheet"
 ==================   ============
 Name                 Age
@@ -545,4 +523,7 @@ John D Hunter        40
 Cast of Thousands    41
 And Still More       42
 ==================   ============
+endsnippet
+snippet env "Environment variables" ms
+:envvar:\`${1:${VISUAL}}\`
 endsnippet

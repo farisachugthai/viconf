@@ -346,23 +346,23 @@ parser.add_argument(${1:${VISUAL}},
 )
 endsnippet
 
-snippet argopt "Add argument for an optional argument." b
-parser.add_argument(${1:-s}, ${2:--long}, dest= ${3: var},
-					type=${4:pathlib.Path}, help=${5:RTFM})
+snippet parser "Add argument for an optional argument." smw
+parser.add_argument("$1", "--$2", dest="$2",
+					metavar=$3, help="$4")
 endsnippet
 
-snippet argv "add argument for version = %(prog)s" b
+snippet parser "add argument for version = %(prog)s" b
 parser.add_argument('-V', '--version', action='version',
 					version='%(prog)s' + pyutil.__about__['version'])
 endsnippet
 
 # TODO: Figure out how to account for whitespace
-snippet argfile "add arg - file" bms
+snippet parser "add arg - file" bms
 parser.add_argument('${1:${VISUAL}}', required=$2, type=argparse.FileType('$3'),
 					help='$4')
 endsnippet
 
-snippet arglog "Logging argument" b
+snippet parser "Logging argument" b
 parser.add_argument(
 	'${1:-l}',
 	'${2:--log}',

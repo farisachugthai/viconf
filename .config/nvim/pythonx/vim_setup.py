@@ -2,6 +2,13 @@
 # -*- coding: utf-8 -*-
 """Setup Neovim on Linux or on Termux.
 
+Apr 19, 2019:
+
+    Just executed it and no errors.
+    Also no output so don't know if anything executed.
+    Logging needs to be set up mpre thoroughly and a plan needs to get formulated
+    for how to design the classes and overall structure of the mod.
+
 .. todo::
 
     - Show usage instructions in :func: and in :mod: docstring.
@@ -46,12 +53,18 @@ def _parse_arguments():
     parser = argparse.ArgumentParser(
         description='Installs and sets up neovim.')
 
-    parser.add_argument('-p',
+    parser.add_argument('-d',
                         '--plug-dir',
                         dest='plugd',
                         metavar="Directory for vim-plug",
                         help='The directory that vim-plug is downloaded to.')
-
+    parser.add_argument("-p",
+                        "--packages",
+                        dest="packages",
+                        metavar="packages",
+                        required=False,
+                        default=None,
+                        help="Packages for pip to install.")
     args = parser.parse_args()
 
     return args
@@ -167,15 +180,15 @@ def pip_install(PIP37=None):
     """Run platform-independent pip install. Install both pynvim and neovim."""
     if PIP37:
         subprocess.run([
-            "pip", "install", "-U", "pip", "neovim",
-            "python-language-server[all]", "pynvim"
+            "pip", "install", "-U", "pip", "python-language-server[all]",
+            "pynvim"
         ],
                        capture_output=True,
                        check=True)
     else:
         subprocess.run([
-            "pip", "install", "-U", "pip", "neovim",
-            "python-language-server[all]", "pynvim"
+            "pip", "install", "-U", "pip", "python-language-server[all]",
+            "pynvim"
         ],
                        capture_output=True)
 

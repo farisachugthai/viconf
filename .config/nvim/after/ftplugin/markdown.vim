@@ -1,18 +1,23 @@
-" Markdown:
-" Maintainer: Faris Chugthai
+" ============================================================================
+    " File: markdown.vim
+    " Author: Faris Chugthai
+    " Description: Markdown
+    " Last Modified: April 20, 2019
+" ============================================================================
 
+" Options: {{{1
 " Enable spellchecking.
 setlocal spell!
 
 " Automatically wrap at 80 characters after whitespace
 setlocal textwidth=80
 setlocal colorcolumn=80
-" Then break lines if they're too long.
-" setlocal linebreak
+setlocal nowrap
 
 " Fix tabs so that we can have ordered lists render properly
 setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
 
+" Mappings: {{{1
 augroup filetype_markdown
     autocmd!
     autocmd FileType markdown noremap <buffer> <localleader>1 m`yypVr=``

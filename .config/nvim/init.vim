@@ -17,14 +17,6 @@ if empty('$XDG_CONFIG_HOME')
     finish
 endif
 
-" The below is an env var set as a convenient bridge between Ubuntu and Termux
-" As a result it messes things up if not set, but there's no reason to halt
-" everything. Feel free to discard if you copy/paste my vimrc
-if empty('$_ROOT')
-    echoerr '_ROOT env var not set'
-endif
-
-
 " OS Setup: {{{2
 
 " This got moved up so we can check what OS we have and decide what options
@@ -54,23 +46,38 @@ endif
 " Session Options: {{{3
 set sessionoptions+=unix,slash
 
+" $_ROOT: {{{2
+
+" accommodate differing filesystems
+" The below is an env var set as a convenient bridge between Ubuntu and Termux
+" As a result it messes things up if not set, but there's no reason to halt
+" everything. Feel free to discard if you copy/paste my vimrc
+
+if !exists('$_ROOT') && expand(g:termux) == 1
+    let $_ROOT = expand('$PREFIX')
+elseif !exists('$_ROOT') && expand(g:ubuntu) == 1
+    let $_ROOT = '/usr'
+endif
+
 " Remote Hosts: {{{2
 " Set the node and ruby remote hosts
 
 if g:termux
     " holy fuck that was a doozy to find
     let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
+    " huh apparently quotes are optional
     let g:ruby_host_prog = expand($_ROOT) . '/bin/neovim-ruby-host'
 
 elseif g:ubuntu
     let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
-    " So the one above could very easily be merged. No idea how to do the
-    " below unless I just leave it up to the system.
-    try
-        let g:ruby_host_prog = expand('~') . '/.rvm/gems/default/bin/neovim-ruby-host'
-    catch
+
+    if executable('rvm')
+        let g:ruby_host_prog = 'rvm system do neovim-ruby-host'
+    elseif filereadable(expand('$_ROOT') . '/local/bin/neovim-ruby-host')
         let g:ruby_host_prog = expand('$_ROOT') . '/local/bin/neovim-ruby-host'
-    endtry
+    elseif filereadable('~/.local/bin/neovim-ruby-host')
+        let g:ruby_host_prog = '~/.local/bin/neovim-ruby-host'
+    endif
 
 endif
 
@@ -418,6 +425,8 @@ noremap! <F9> <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 noremap <Leader>re <Cmd>so $MYVIMRC<CR><Cmd>echo 'Vimrc reloaded!'<CR>
 
 " General_Mappings: {{{2
+" Todo: map this to a key in a manner similar to unimpaired
+" setlocal comments=:# commentstring=#\ %s formatoptions-=t formatoptions+=croql
 
 if g:termux
     noremap <silent> <Leader>ts <Cmd>!termux-share -a send %<CR>
@@ -600,14 +609,6 @@ function! s:autosave(enable)
 endfunction
 
 command! -bang Autosave call s:autosave(<bang>1)
-
-" Syntax Commands: {{{2
-
-command! HL call syncom#HL()
-
-command! HiC call syncom#HiC()
-
-command! HiQF call syncom#HiQF()
 
 " Explore PlugHelp: {{{2
 " Call :PlugHelp to use fzf to open a window with all of the plugins
