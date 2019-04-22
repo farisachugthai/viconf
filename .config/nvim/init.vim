@@ -17,14 +17,6 @@ if empty('$XDG_CONFIG_HOME')
     finish
 endif
 
-" The below is an env var set as a convenient bridge between Ubuntu and Termux
-" As a result it messes things up if not set, but there's no reason to halt
-" everything. Feel free to discard if you copy/paste my vimrc
-if empty('$_ROOT')
-    echoerr '_ROOT env var not set'
-endif
-
-
 " OS Setup: {{{2
 
 " This got moved up so we can check what OS we have and decide what options
@@ -59,23 +51,38 @@ endif
 " but the Windows version of Vim can source unix format scripts.
 set sessionoptions+=unix,slash
 
+" $_ROOT: {{{2
+
+" accommodate differing filesystems
+" The below is an env var set as a convenient bridge between Ubuntu and Termux
+" As a result it messes things up if not set, but there's no reason to halt
+" everything. Feel free to discard if you copy/paste my vimrc
+
+if !exists('$_ROOT') && expand(g:termux) == 1
+    let $_ROOT = expand('$PREFIX')
+elseif !exists('$_ROOT') && expand(g:ubuntu) == 1
+    let $_ROOT = '/usr'
+endif
+
 " Remote Hosts: {{{2
 " Set the node and ruby remote hosts
 
 if g:termux
     " holy fuck that was a doozy to find
     let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
+    " huh apparently quotes are optional
     let g:ruby_host_prog = expand($_ROOT) . '/bin/neovim-ruby-host'
 
 elseif g:ubuntu
     let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
-    " So the one above could very easily be merged. No idea how to do the
-    " below unless I just leave it up to the system.
-    try
-        let g:ruby_host_prog = expand('~') . '/.rvm/gems/default/bin/neovim-ruby-host'
-    catch
+
+    if executable('rvm')
+        let g:ruby_host_prog = 'rvm system do neovim-ruby-host'
+    elseif filereadable(expand('$_ROOT') . '/local/bin/neovim-ruby-host')
         let g:ruby_host_prog = expand('$_ROOT') . '/local/bin/neovim-ruby-host'
-    endtry
+    elseif filereadable('~/.local/bin/neovim-ruby-host')
+        let g:ruby_host_prog = '~/.local/bin/neovim-ruby-host'
+    endif
 
 endif
 

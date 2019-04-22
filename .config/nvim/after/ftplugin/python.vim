@@ -64,10 +64,6 @@ endif
 
 " ALE: {{{2
 
-if has_key(plugs, 'ale')
-    call ALE_conf()
-endif
-
 function! ALE_conf()
     let b:ale_linters = [ 'flake8', 'pydocstyle', 'pyls' ]
 
@@ -104,3 +100,7 @@ function! ALE_conf()
         let b:ale_virtualenv_dir_names += '~/virtualenvs'
     endif
 endfunction
+
+if has_key(plugs, 'ale')
+    call ALE_conf()
+endif

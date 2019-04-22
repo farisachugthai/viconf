@@ -33,6 +33,7 @@ Apr 19, 2019:
     I mean don't intermix langs like that but that general idea.
 
 """
+import re
 import sys
 try:
     import pynvim
@@ -44,7 +45,7 @@ except ModuleNotFoundError:
 class Pydoc(object):
     """Read output from :mod:`pydoc` into a buffer."""
 
-    def __init__(self, vim, initial_path):
+    def __init__(self, vim):
         """Initialize the class."""
         self.vim = vim
         # Is this legal?
@@ -56,3 +57,12 @@ class Pydoc(object):
         self.vim.command('tabe')
         self.vim.command('r!pydoc ' + args[0])
         self.vim.command('set ft=man')
+
+    @pynvim.autocmd('BufEnter', pattern='Filetype=man', eval='expand("<afile>")')
+    def check_buffer_output(self):
+        """Make sure the first line isn't an error message."""
+        line0 = self.vim.getline(1)  # yes we need to 0 index it!
+        nodoc = re.compile('^[nN]o Python documentation.*$')
+        matched = nodoc.search(line0)
+        if matched:  # damn
+            self.vim.command('%d')
