@@ -22,6 +22,22 @@ setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 " linters to react.
 setlocal colorcolumn=80,120
 
+" Undo ftplugin?
+if isdirectory(expand('$_ROOT') . '/lib/python3')
+    " Double check globbing in vim
+    let &path = &path . ',' . expand('$_ROOT') . '/lib/python3'
+endif
+
+if isdirectory(expand('~/.local/lib/python3.7'))
+    " Double check globbing in vim
+    let &path = &path . ',' . expand('~') . '/.local/lib/python3.7'
+endif
+
+" TODO: How do we glob in vimscript? There's some weird thing about using * and ** right?
+" if isdirectory(expand('$_ROOT/lib/python3'))
+
+" endif
+
 " Highlight I20 Chars: {{{1
 augroup pythonchars
     autocmd!
@@ -101,6 +117,10 @@ function! ALE_conf()
     endif
 endfunction
 
-if has_key(plugs, 'ale')
-    call ALE_conf()
-endif
+" This func didn't get called upon reading a py file goddamnit Vim you can
+" be so annoying. Wrap in an autocmd.
+
+augroup aleconf
+    au!
+    autocmd Filetype python if has_key(plugs, 'ale') | call ALE_conf() | endif
+augroup END

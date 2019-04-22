@@ -33,12 +33,16 @@ Apr 19, 2019:
     I mean don't intermix langs like that but that general idea.
 
 """
+import os
 import re
 import sys
 try:
     import pynvim
 except ModuleNotFoundError:
     sys.exit("Pynvim isn't installed. Exiting.")
+else:
+    # forgot this was a thing!
+    from pynvim import setup_logging
 
 
 @pynvim.plugin
@@ -48,8 +52,6 @@ class Pydoc(object):
     def __init__(self, vim):
         """Initialize the class."""
         self.vim = vim
-        # Is this legal?
-        # self.initial_path = initial_path
 
     @pynvim.command('Pydoc', nargs=1)
     def command_handler(self, args):
@@ -58,7 +60,8 @@ class Pydoc(object):
         self.vim.command('r!pydoc ' + args[0])
         self.vim.command('set ft=man')
 
-    @pynvim.autocmd('BufEnter', pattern='Filetype=man', eval='expand("<afile>")')
+    @pynvim.autocmd(
+        'BufEnter', pattern='Filetype=man', eval='expand("<afile>")')
     def check_buffer_output(self):
         """Make sure the first line isn't an error message."""
         line0 = self.vim.getline(1)  # yes we need to 0 index it!
@@ -66,3 +69,14 @@ class Pydoc(object):
         matched = nodoc.search(line0)
         if matched:  # damn
             self.vim.command('%d')
+
+
+if __name__ == "__main__":
+    if not os.environ.get('NVIM_PYTHON_LOG_FILE'):
+        os.environ.set(
+            'NVIM_PYTHON_LOG_FILE',
+            os.path.join(
+                os.environ.get('XDG_DATA_HOME'), '', 'nvim', 'python.log'))
+    setup_logging()
+
+    Pydoc()

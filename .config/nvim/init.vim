@@ -71,7 +71,11 @@ if g:termux
     " holy fuck that was a doozy to find
     let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
     " huh apparently quotes are optional
-    let g:ruby_host_prog = expand($_ROOT) . '/bin/neovim-ruby-host'
+    if filereadable(expand($_ROOT) . 'lib/ruby/gems/2.6.0/gems/neovim-0.8.0/exe/neovim-ruby-host')
+        let g:ruby_host_prog = expand($_ROOT) . 'lib/ruby/gems/2.6.0/gems/neovim-0.8.0/exe/neovim-ruby-host'
+    elseif filereadable(expand('$_ROOT') . 'bin/neovim-ruby-host')
+        let g:ruby_host_prog = expand('$_ROOT') . 'bin/neovim-ruby-host'
+    endif
 
 elseif g:ubuntu
     let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
@@ -307,26 +311,16 @@ if isdirectory(expand('$_ROOT') . '/include/libcs50')
     let &path = &path .','. expand('$_ROOT') . '/include/libcs50'
 endif
 
-if isdirectory(expand('$_ROOT') . '/lib/python3')
-    " Double check globbing in vim
-    let &path = &path . ',' . expand('$_ROOT') . '/lib/python3'
-endif
-
-if isdirectory(expand('~/.local/lib/python3.7'))
-    " Double check globbing in vim
-    let &path = &path . ',' . expand('~') . '/.local/lib/python3.7'
-endif
-
-" TODO: How do we glob in vimscript? There's some weird thing about using * and ** right?
-" if isdirectory(expand('$_ROOT/lib/python3'))
-
-" endif
-
 " Other Global Options: {{{2
+
+if &formatexpr ==# ''
+  setlocal formatexpr=format#Format()
+endif
 
 scriptencoding utf-8
 set tags+=./tags,./*/tags
-set tags+=~/projects/tags
+set tags+=~/projects/**/tags
+" set tagcase=smartcase
 set mouse=a
 if &textwidth!=0
     setl colorcolumn=+1
@@ -372,61 +366,10 @@ let g:tutor_debug = 1
 " for a search that hits the start or end of the file not being displayed)
 set terse
 
-" Mappings: {{{1
-
-" Window_Buf_Tab_Mappings: {{{2
-
-" Navigate windows more easily
-noremap <C-h> <Cmd>wincmd h<CR>
-noremap <C-j> <Cmd>wincmd j<CR>
-noremap <C-k> <Cmd>wincmd k<CR>
-noremap <C-l> <Cmd>wincmd l<CR>
-
-" Resize them more easily. Finish more later. TODO
-noremap <C-w>< <Cmd>wincmd 5<<CR>
-noremap <C-w>> <Cmd>wincmd 5><CR>
-
-" Navigate buffers more easily
-noremap <Leader>bb <Cmd>buffers<CR>
-noremap <Leader>bn <Cmd>bnext<CR>
-noremap <Leader>bp <Cmd>bprev<CR>
-noremap <Leader>bP <Cmd>%y<CR>
-noremap <Leader>bl <Cmd>blast<CR>
-noremap <Leader>bf <Cmd>bfirst<CR>
-noremap <Leader>bd <Cmd>bdelete<CR>
-" Sunovabitch bonly isn't a command?? Why is
-" noremap <Leader>bo <Cmd>bonly<CR>
-
-" Navigate tabs more easily. First check we have more than 1 tho.
-if len(nvim_list_tabpages()) > 1
-    noremap <A-Right>  <Cmd>tabnext<CR>
-    noremap <A-Left>   <Cmd>tabprev<CR>
-    noremap! <A-Right> <Cmd>tabnext<CR>
-    noremap! <A-Left>  <Cmd>tabprev<CR>
-elseif len(nvim_list_wins()) > 1
-    noremap <A-Right>  <Cmd>wincmd l<CR>
-    noremap <A-Left>   <Cmd>wincmd h<CR>
-    noremap! <A-Right> <Cmd>wincmd l<CR>
-    noremap! <A-Left>  <Cmd>wincmd h<CR>
+if exists('+shellslash')
+    set shellslash
 endif
-
-nnoremap <Leader>tn <Cmd>tabnext<CR>
-nnoremap <Leader>tp <Cmd>tabprev<CR>
-nnoremap <Leader>tq <Cmd>tabclose<CR>
-
-" Opens a new tab with the current buffer's path
-" Super useful when editing files in the same directory
-nnoremap <Leader>te <Cmd>tabedit <c-r>=expand("%:p:h")<CR>
-
-" It should also be easier to edit the config. Bind similarly to tmux
-nnoremap <Leader>ed <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
-
-noremap <F9> <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
-" Don't forget to add in mappings when in insert/cmd mode
-noremap! <F9> <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
-
-" Now reload it
-noremap <Leader>re <Cmd>so $MYVIMRC<CR><Cmd>echo 'Vimrc reloaded!'<CR>
+" Mappings: {{{1
 
 " General_Mappings: {{{2
 " Todo: map this to a key in a manner similar to unimpaired
@@ -525,7 +468,17 @@ let g:lisp_rainbow = 1
 " VIM			*vim.vim*		*ft-vim-syntax*
 " 			*g:vimsyn_minlines*	*g:vimsyn_maxlines*
 " Support embedded lua python nd ruby syntax highlighting in vim ftypes. No idea what your other options are.
-let g:vimsyn_embed = 'lPr'
+   " GOT IT!
+" Allows users to specify the type of embedded script highlighting
+" they want:  (perl/python/ruby/tcl support)
+"   g:vimsyn_embed == 0   : don't embed any scripts
+"   g:vimsyn_embed =~# 'l' : embed lua
+"   g:vimsyn_embed =~# 'm' : embed mzscheme
+"   g:vimsyn_embed =~# 'p' : embed perl
+"   g:vimsyn_embed =~# 'P' : embed python
+"   g:vimsyn_embed =~# 'r' : embed ruby
+"   g:vimsyn_embed =~# 't' : embed tcl
+let g:vimsyn_embed = 'lmptPr'
 
 " Turn off errors because 50% of them are wrong.
 let g:vimsyn_noerror = 1
@@ -541,6 +494,8 @@ let g:vimsyn_noerror = 1
 
 " Are we allowed to combine these?
 let g:vimsyn_folding = 'afP'
+
+let g:vimsyn_maxlines = 500  " why is the default 60???
 
 " Omnifuncs: {{{3
 
@@ -576,22 +531,24 @@ augroup END
 
 " Helptabs: {{{2
 " I've pretty heavily modified this one but junegunn gets the initial credit.
-" function! s:helptab()
-"     setlocal number relativenumber
-"     try
-"         wincmd T
-"     catch
-"     endtry
+function! g:Helptab()
+    setlocal number relativenumber
+    if len(nvim_list_wins()) > 1
+        wincmd T
+    endif
 
-"     noremap <buffer> q <Cmd>q<CR>
-" endfunction
+    setlocal nomodified
+    setlocal nomodifiable
+    setlocal buflisted
+    noremap <buffer> q <Cmd>q<CR>
+endfunction
 
-" augroup mantabs
-"     autocmd!
-"     autocmd Filetype man,help call s:helptab()
-" augroup END
+augroup mantabs
+    autocmd!
+    autocmd Filetype man,help call g:Helptab()
+augroup END
 
-" command! -nargs=1 Help call <SID>helptab()
+command! -nargs=1 Help call g:Helptab()
 
 " AutoSave: {{{2
 " I feel like I need to put this in a autocmd but I'm not sure what I would
