@@ -121,9 +121,6 @@ function! ALE_conf()
     endif
 endfunction
 
-" This func didn't get called upon reading a py file goddamnit Vim you can
-" be so annoying. Wrap in an autocmd.
-
 augroup aleconf
     au!
     autocmd Filetype python if has_key(plugs, 'ale') | call ALE_conf() | endif

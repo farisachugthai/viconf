@@ -180,6 +180,8 @@ if !g:termux
     Plug 'tpope/vim-surround'
     Plug 'mbbill/undotree'
     Plug 'chrisbra/csv.vim'
+    Plug 'omnisharp/omnisharp-vim', {'for': 'cs'}
+    Plug 'ervandew/supertab'
 endif
 
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
@@ -210,6 +212,7 @@ endif
 set expandtab smarttab      " On pressing tab, insert 4 spaces
 set softtabstop=4
 let g:python_highlight_all = 1
+set pyx=3
 
 " Folds: {{{2
 set foldenable
@@ -535,7 +538,7 @@ function! g:Helptab()
 
     setlocal nomodified
     setlocal nomodifiable
-    setlocal buflisted
+
     noremap <buffer> q <Cmd>q<CR>
     " Check the rplugin/python3/pydoc.py file
     noremap <buffer> P <Cmd>Pydoc<CR>

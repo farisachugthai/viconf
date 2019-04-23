@@ -1,11 +1,16 @@
 # Taken from:
 # https://raw.githubusercontent.com/dclong/python-UltiSnips/master/snippets/python/numpy/numpy_stat.snippet
 
-global !p
+# Gotta be honest I don't really get what's happening in this file; however,
+# none of these snippets are showing up in a python filetype
+# Rst and pandas are though so `extend` syntax is fine
+
+
+global +p
 from complete import *
 endglobal
 
-snippet "trigger" "Methods of trigger" r
+snippet "trigger" "Methods of trigger" r
 trigger$1`!p snip.rv = complete(t[1], ["Order", "amin", "amax", "nanmin", "nanmax", "ptp", "percentile", "Averages", "median", "average", "mean", "std", "var", "nanmean", "nanstd", "nanvar", "Correlating", "corrcoef", "correlate", "cov", "Histograms", "histogram", "histogram2d", "histogramdd", "bincount", "digitize"])`
 endsnippet
 
