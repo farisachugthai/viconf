@@ -270,6 +270,10 @@ if exists('$TMUX')
         \   },
         \   'cache_enabled': 1,
         \ }
+
+    " Double check if we need to do this but sometimes the clipboard fries when set this way
+	runtime autoload/provider/clipboard.vim
+
 elseif has('unnamedplus')                   " Use the system clipboard.
     set clipboard+=unnamed,unnamedplus
 else                                        " Accommodate Termux
@@ -286,6 +290,8 @@ set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 " A list of words that change how command line completion is done.
 " Currently only one word is allowed: tagfile
 set wildoptions=tagfile
+setlocal suffixesadd=*.vim
+
 " Path: {{{2
 
 " DON'T USE LET. LET ALLOWS FOR EXPRESSION EVALUATION. MUST BE DONE WITH SET
@@ -534,7 +540,8 @@ function! g:Helptab()
     endif
 
     setlocal nomodified
-    setlocal nomodifiable
+    " Complains that we can't modify any buffer. But its a local option so yes we can
+    silent setlocal nomodifiable
     setlocal buflisted
     noremap <buffer> q <Cmd>q<CR>
     " Check the rplugin/python3/pydoc.py file
@@ -546,7 +553,9 @@ augroup mantabs
     autocmd Filetype man,help call g:Helptab()
 augroup END
 
-command! -nargs=1 Help call g:Helptab()
+" Apr 23, 2019: Didn't know complete help was a thing.
+" Oh holy shit that's awesome
+command! -nargs=1 -complete=help Help call g:Helptab()
 
 " AutoSave: {{{2
 " I feel like I need to put this in a autocmd but I'm not sure what I would
@@ -603,7 +612,7 @@ function! s:statusline_expr()
   let pos = ' %-12(%l : %c%V%) '
   let pct = ' %P'
 " %n is buffer #, %f is filename relative to $PWD, sep is right align
-if exists("*CSV_WCol")
+if exists('*CSV_WCol')
     let csv = '%1*%{&ft=~"csv" ? CSV_WCol() : ""}%*'
 else
     let csv = ''

@@ -32,6 +32,19 @@ Apr 19, 2019:
 
     I mean don't intermix langs like that but that general idea.
 
+
+Setting up completions for pydoc
+--------------------------------
+Jedi can do it with the Pyimport command.
+
+
+function! jedi#py_import_completions(argl, cmdl, pos) abort
+    PythonJedi jedi_vim.py_import_completions()
+endfun
+
+
+Take apart this function (or call it as your completer) and use that.
+
 """
 import os
 import re
@@ -44,6 +57,7 @@ else:
     # forgot this was a thing!
     from pynvim import setup_logging
 
+import jedi
 
 @pynvim.plugin
 class Pydoc(object):
@@ -53,7 +67,8 @@ class Pydoc(object):
         """Initialize the class."""
         self.vim = vim
 
-    @pynvim.command('Pydoc', nargs=1)
+    @pynvim.command(
+        'Pydoc', nargs=1, complete='customlist,sys.modules().keys()')
     def command_handler(self, args):
         """Open a new tab with the pydoc output."""
         self.vim.command('tabe')
@@ -73,10 +88,8 @@ class Pydoc(object):
 
 if __name__ == "__main__":
     if not os.environ.get('NVIM_PYTHON_LOG_FILE'):
-        os.environ.set(
+        os.environ.putenv(
             'NVIM_PYTHON_LOG_FILE',
             os.path.join(
                 os.environ.get('XDG_DATA_HOME'), '', 'nvim', 'python.log'))
-    setup_logging()
-
-    Pydoc()
+    setup_logging(name=__name__)
