@@ -24,7 +24,7 @@ syntax match manTitle           '^\(\f\|:\)\+([0-9nlpo][a-z]*).*'
 syntax match manSectionHeading  '^[a-z][a-z0-9& ,.-]*[a-z]$'
 syntax match manHeaderFile      '\s\zs<\f\+\.h>\ze\(\W\|$\)'
 " Needs fixing. Vint says syntax error and urls don't highlight if >1 line.
-syntax match manURL             `\v<(((https?|ftp|gopher)://|(mailto|file|news):)[^' 	<>"]+|(www|web|w3)[a-z0-9_-]*\.[a-z0-9._-]+\.[^' 	<>"]+)[a-zA-Z0-9/]`
+" syntax match manURL             `\v<(((https?|ftp|gopher)://|(mailto|file|news):)[^' 	<>"]+|(www|web|w3)[a-z0-9_-]*\.[a-z0-9._-]+\.[^' 	<>"]+)[a-zA-Z0-9/]`
 syntax match manEmail           '<\?[a-zA-Z0-9_.+-]\+@[a-zA-Z0-9-]\+\.[a-zA-Z0-9-.]\+>\?'
 syntax match manHighlight       +`.\{-}''\?+
 
@@ -47,10 +47,10 @@ if &filetype != 'man'
 endif
 
 " So here are the group Vim has and how they defined them
-" syn match  manReference       '\f\+([1-9][a-z]\=)'
-" syn match  manTitle	      '^\f\+([0-9]\+[a-z]\=).*'
-" syn match  manSectionHeading  '^[a-z][a-z -]*[a-z]$'
-" syn match  manSubHeading      '^\s\{3\}[a-z][a-z -]*[a-z]$'
+syn match  manReference       '\f\+([1-9][a-z]\=)'
+syn match  manTitle	      '^\f\+([0-9]\+[a-z]\=).*'
+syn match  manSectionHeading  '^[a-z][a-z -]*[a-z]$'
+syn match  manSubHeading      '^\s\{3\}[a-z][a-z -]*[a-z]$'
 syn match  manOptionDesc      '^\s*[+-][a-z0-9]\S*'
 syn match  manLongOptionDesc  '^\s*--[a-z0-9-]\S*'
 syn match  manHistory		'^[a-z].*last change.*$'
@@ -108,6 +108,7 @@ if b:man_sect =~# '^[023]'
   hi! link manLowerSentence String
   hi! link manSignal Type
   hi! link manSynopsis Title
+  hi! link manLowerSentence
 
 endif
 
@@ -116,6 +117,8 @@ endif
 " a highlighting group.
 hi! link manLongOptionDesc Constant
 hi! link manSentence       String
+hi! link manFile Include
+hi! link manFiles Include
 
 " Prevent everything else from matching the last line
 execute 'syntax match manFooter display "^\%'.line('$').'l.*$"'
@@ -127,8 +130,6 @@ if g:colors_name ==# 'gruvbox'
     hi! link manEmail GruvboxAqua
     hi! link manEnvVar GruvboxBlue
     hi! link manEnvVarFile GruvboxBlue
-    hi! link manFile GruvboxYellow
-    hi! link manFiles GruvboxFg0
     hi! link manFooter GruvboxPurple
     hi! link manHighlight GruvboxYellow
     hi! link manHistory GruvboxYellow

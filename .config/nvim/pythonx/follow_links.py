@@ -6,6 +6,7 @@ Honestly don't know what to do to make this work.
 """
 import logging
 import os
+from os.path import join, realpath, pardir
 from pathlib import Path
 import sys
 
@@ -21,10 +22,11 @@ class FileLink():
     Could we have files display with an embedded link?
     """
 
-    def __init__(self, vim):
+    def __init__(self, vim, logger=None):
         """Initialize a file object."""
         self.vim = vim
         self.path_obj = vim.current.buffer.name
+        self.logger = logger
 
     # i did this wrong somehow.
     # so do we implement this as a a function with an autocmd yeah actually
@@ -55,12 +57,40 @@ class FileLink():
             self.vim.command('edit' + real_file)
 
 
+def _setup_logging(level):
+    logger = logging.getLogger(name=__name__)
+    logger.setLevel(level)
+    if os.environ.get('NVIM_PYTHON_LOG_FILE'):
+        log_file = os.environ.get('NVIM_PYTHON_LOG_FILE')
+    else:
+        log_file = sys.stdout
+    log_dir = realpath(join(__file__, pardir, 'log'))
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+    log_file = os.path.join(log_dir, 'lint.log')
+    hdlr = logging.FileHandler(log_file)
+    logger.addHandler(hdlr)
+    formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+    hdlr.setFormatter(formatter)
+    return logger
+
+
 @pynvim.autocmd(
     'BufEnter', 'BufNewFile', eval='getftype(expand("<afile>"))==#link')
 def main():
-    if os.environ.get('NVIM_PYTHON_LOG_FILE'):
-        logging.basicConfig(
-            level=logging.WARNING, file=os.environ.get('NVIM_PYTHON_LOG_FILE'))
-    else:
-        logging.basicConfig(level=logging.WARNING, file=sys.stdout)
-    FileLink()
+    args = sys.argv[:]
+    log_levels = {
+        'debug': logging.DEBUG,
+        'info': logging.INFO,
+        'warning': logging.WARNING,
+        'error': logging.ERROR,
+        'critical': logging.CRITICAL,
+    }
+    if len(args) < 1:
+        logger = _setup_logging(log_levels['warning'])
+
+    FileLink(logger)
+
+
+if __name__ == '__main__':
+    main()
