@@ -180,6 +180,8 @@ if !g:termux
     Plug 'tpope/vim-surround'
     Plug 'mbbill/undotree'
     Plug 'chrisbra/csv.vim'
+    Plug 'omnisharp/omnisharp-vim', {'for': 'cs'}
+    Plug 'ervandew/supertab'
 endif
 
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
@@ -194,6 +196,8 @@ let g:maplocalleader = '<Space>'
 
 if has('nvim-0.4')
     let &shadafile = expand('$XDG_DATA_HOME') . '/nvim/shada/main.shada'
+    " Damnit it happened AGAIN
+    set pyx=3
 else
    " This is an option I swear! Wait do the helpdocs have an error in them?
    " they mention viminfofile as an option but its not working on termux
@@ -539,10 +543,9 @@ function! g:Helptab()
         wincmd T
     endif
 
-    setlocal nomodified
     " Complains that we can't modify any buffer. But its a local option so yes we can
     silent setlocal nomodifiable
-    setlocal buflisted
+
     noremap <buffer> q <Cmd>q<CR>
     " Check the rplugin/python3/pydoc.py file
     noremap <buffer> P <Cmd>Pydoc<CR>

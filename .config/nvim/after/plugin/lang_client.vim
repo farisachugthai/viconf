@@ -9,10 +9,12 @@ if !has_key(plugs, 'LanguageClient-neovim')
     finish
 endif
 
-if exists('g:did_conf_lang_client') || &compatible || v:version < 700
+" DUDE THIS NEEDS TO BE BUFFER LOCAL NOT GLOBAL! We need to re-source this file
+" every time we change filetypeeeee
+if exists('b:did_conf_lang_client') || &compatible || v:version < 700
     finish
 endif
-let g:did_conf_lang_client = 1
+let b:did_conf_lang_client = 1
 
 " Options: {{{1
 let g:LanguageClient_autoStart = 1
@@ -45,7 +47,10 @@ let g:LanguageClient_loadSettings = 1
 " You dickhead you never call the function??? Yeah let's not do that.
 if has_key(g:LanguageClient_serverCommands, &filetype)
     nnoremap <buffer> <Leader>lh <Cmd>call LanguageClient#textDocument_hover()<CR>
-    inoremap <buffer> <F2>       <Cmd>call LanguageClient#textDocument_rename()<CR>
+    " Jedi might steal this periodically
+    if !hasmapto('<F2>')
+        inoremap <buffer> <F2>       <Cmd>call LanguageClient#textDocument_rename()<CR>
+    endif
     nnoremap <buffer> <Leader>ld <Cmd>call LanguageClient#textDocument_definition()<CR>
     nnoremap <buffer> <Leader>lr <Cmd>call LanguageClient#textDocument_rename()<CR>
     nnoremap <buffer> <Leader>lf <Cmd>call LanguageClient#textDocument_formatting()<CR>
