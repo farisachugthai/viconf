@@ -506,6 +506,9 @@ if v:version >= 703
 
   " Line number of CursorLine
   call s:HL('CursorLineNr', s:yellow, s:bg1)
+
+  " Obviously not canonical but w/e
+  hi TermCursorNC ctermfg=237 ctermbg=187 guifg=#3c3836 guibg=#ebdbb2 guisp=NONE cterm=NONE gui=NONE
 endif
 
 hi! link NonText GruvboxBg2

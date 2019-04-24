@@ -38,7 +38,7 @@ endif
 
 " endif
 
-" Highlight I20 Chars: {{{1
+" Highlight I20 Chars: {{{2
 augroup pythonchars
     autocmd!
     autocmd FileType python highlight Excess ctermbg=DarkGrey guibg=Black
@@ -46,24 +46,25 @@ augroup pythonchars
     autocmd FileType python setlocal nowrap
 augroup END
 
-" Pylint Compiler: {{{1
+" Compiler: {{{1
 " Well this is neat!
 if executable('pylint')
     compiler pylint
     echomsg 'Using pylint as buffer-local compiler. Run `:make %` to use.'
 endif
 
+" Mappings: {{{1
+" Don't know how I haven't done this yet.
+noremap <F5> <Cmd>py3f %
+
 " Commands: {{{1
 if executable('yapf')
     setlocal equalprg=yapf
     setlocal formatprg=yapf
-
-
     " Don't forget this advice from usr_41
-" USER COMMANDS
-
-" To add a user command for a specific file type, so that it can only be used in
-" one buffer, use the "-buffer" argument to |:command|.  Example:
+    " USER COMMANDS
+    " To add a user command for a specific file type, so that it can only be used in
+    " one buffer, use the "-buffer" argument to |:command|.  Example:
     command! -buffer -nargs=0 YAPF exec '!yapf %'
     command! -buffer -nargs=0 YAPFI exec '!yapf -i %'
     command! -buffer -nargs=0 YAPFD cexpr! exec '!yapf -d %'
@@ -78,7 +79,6 @@ else
         " command! -nargs=0 Autopep8 cexpr! exec '!autopep8 -d %'
     endif
 endif
-
 
 " Plugins: {{{1
 

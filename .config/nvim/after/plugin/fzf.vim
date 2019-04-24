@@ -182,9 +182,9 @@ augroup end
 " endfunction
 
 inoremap <expr> <C-x><C-k> fzf#complete({
-            \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add /usr/share/dict/words 2>/dev/null',
-            \ 'options': '--preview=bat {} --ansi --multi --cycle',
-\ 'left': 50})
+            \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
+            \ 'options': '--preview=bat --ansi --multi --cycle',
+\ 'left': 30})
 
 " Grep: {{{2
 " Unfortunately the bang doesn't move to a new window. TODO

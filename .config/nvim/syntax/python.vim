@@ -15,6 +15,30 @@
 " " Stand on the shoulders of giants
 " runtime syntax/python.vim
 
+							" *:syn-matchgroup*
+	" "matchgroup" can be used to highlight the start and/or end pattern
+	" differently than the body of the region.  Example: >
+  " :syntax region String matchgroup=Quote start=+"+  skip=+\\"+	end=+"+
+" <	This will highlight the quotes with the "Quote" group, and the text in
+	" between with the "String" group.
+	" The "matchgroup" is used for all start and end patterns that follow,
+	" until the next "matchgroup".  Use "matchgroup=NONE" to go back to not
+	" using a matchgroup.
+
+	" In a start or end pattern that is highlighted with "matchgroup" the
+	" contained items of the region are not used.  This can be used to avoid
+	" that a contained item matches in the start or end pattern match.  When
+	" using "transparent", this does not apply to a start or end pattern
+	" match that is highlighted with "matchgroup".
+
+	" Here is an example, which highlights three levels of parentheses in
+	" different colors: >
+   " sy region par1 matchgroup=par1 start=/(/ end=/)/ contains=par2
+   " sy region par2 matchgroup=par2 start=/(/ end=/)/ contains=par3 contained
+   " sy region par3 matchgroup=par3 start=/(/ end=/)/ contains=par1 contained
+   " hi par1 ctermfg=GruvboxRed guifg=GruvboxRed
+   " hi par2 ctermfg=GruvboxBlue guifg=GruvboxBlue
+   " hi par3 ctermfg=GruvboxGreen guifg=GruvboxGreen
 " syn match pythonBrackets "{[(|)]}" contained skipwhite
 
 " syn keyword pythonLambdaExpr lambda
