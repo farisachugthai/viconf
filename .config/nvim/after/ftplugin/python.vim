@@ -6,10 +6,13 @@
 " ============================================================================
 
 " Guards: {{{1
-if exists('g:did_python_vim') || &cp || v:version < 700
+if exists('g:did_python_vim') || &compatible || v:version < 700
     finish
 endif
 let g:did_python_vim = 1
+
+let s:cpo_save = &cpoptions
+set cpoptions&vim
 
 " Options: {{{1
 setlocal linebreak
@@ -21,6 +24,7 @@ setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 " also let's know where the line needs to end visually but not invoke the
 " linters to react.
 setlocal colorcolumn=80,120
+setlocal foldmethod=indent
 
 " Undo ftplugin?
 if isdirectory(expand('$_ROOT') . '/lib/python3')
@@ -55,7 +59,7 @@ endif
 
 " Mappings: {{{1
 " Don't know how I haven't done this yet.
-noremap <F5> <Cmd>py3f %
+noremap <F5> <Cmd>py3f %<CR>
 
 " Commands: {{{1
 if executable('yapf')
@@ -125,3 +129,7 @@ augroup aleconf
     au!
     autocmd Filetype python if has_key(plugs, 'ale') | call ALE_conf() | endif
 augroup END
+
+" Cpoptions: {{{1
+let &cpoptions = s:cpo_save
+unlet s:cpo_save

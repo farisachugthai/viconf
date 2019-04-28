@@ -1656,3 +1656,5 @@ UID
 GID
 strftime
 timefmt
+fsck
+rplugin

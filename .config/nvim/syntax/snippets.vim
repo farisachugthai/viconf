@@ -27,7 +27,7 @@ endtry
 
 " Comments {{{2
 
-syn match snipComment "^#.*" contains=snipTODO display
+syn match snipComment ".*#.*" contains=snipTODO display
 syn keyword snipTODO contained display FIXME NOTE NOTES TODO XXX HACK TODO:
 
 " Errors {{{2

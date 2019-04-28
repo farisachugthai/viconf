@@ -19,11 +19,11 @@ endif
 
 " OS Setup: {{{2
 
-" This got moved up so we can check what OS we have and decide what options
-" to set from there
-let g:termux = exists('$PREFIX') && has('unix')
-let g:ubuntu = !exists('$PREFIX') && has('unix')
+" Termux check from Evervim. Thanks!
+let g:termux = isdirectory('/data/data/com.termux')
+let g:ubuntu = has('unix') && !has('macunix')
 let g:windows = has('win32') || has('win64')
+let g:wsl = has('wsl')   " The fact that this is a thing blows my mind
 
 let g:winrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/winrc.vim'
 if g:windows && filereadable(g:winrc)
@@ -196,11 +196,13 @@ let g:maplocalleader = '<Space>'
 
 if has('nvim-0.4')
     let &shadafile = expand('$XDG_DATA_HOME') . '/nvim/shada/main.shada'
-    " Damnit it happened AGAIN
+
+  try
     set pyx=3
+  catch /^Vim:E518:*/
+  endtry
+    " Damnit it happened AGAIN.
 else
-   " This is an option I swear! Wait do the helpdocs have an error in them?
-   " they mention viminfofile as an option but its not working on termux
    set shada+=n$XDG_DATA_HOME/nvim/shada/main.shada
 endif
 
@@ -214,7 +216,6 @@ endif
 set expandtab smarttab      " On pressing tab, insert 4 spaces
 set softtabstop=4
 let g:python_highlight_all = 1
-set pyx=3
 
 " Folds: {{{2
 set foldenable
@@ -317,6 +318,8 @@ endif
 if isdirectory(expand('$_ROOT') . '/include/libcs50')
     let &path = &path .','. expand('$_ROOT') . '/include/libcs50'
 endif
+
+let &path = &path . ',' . expand('$VIMRUNTIME/**')
 
 " Other Global Options: {{{2
 

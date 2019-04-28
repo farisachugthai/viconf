@@ -1,4 +1,9 @@
-# Vim Snippets:
+# ============================================================================
+	# File: vim.snippets
+	# Author: Faris Chugthai
+	# Description: # Vim Snippets:
+	# Last Modified: April 27, 2019
+# ============================================================================
 
 # TODO Use this funcs as snips and you'll be set for help files
 # https://github.com/google/vimdoc/blob/master/vimdoc/output.py
@@ -19,7 +24,7 @@ endif
 endsnippet
 
 snippet guard "Script reload guard. Good to put directly under the header snippet." b
-if exists('${1:b:did_`!p snip.rv = snip.fn.replace('.','_')`}') || ${2:&cp} || ${3:v:version < 700}
+if exists('${1:b:did_`!p snip.rv = snip.fn.replace('.','_')`}') || ${2:&compatible} || ${3:v:version < 700}
 	finish
 endif
 let $1 = ${4:1}
@@ -151,15 +156,12 @@ while ${1}
 endw
 endsnippet
 
-# does it need to be nested like that? test and come back.
-snippet if "if statement" s
+snippet if "if statement" sbm
 if ${1}
 	${0:${VISUAL:body}}
 endif
 endsnippet
 
-# **TODO**: Use this style of snippet a few times and let me know if it's better to
-# put $VISUAL on the condition or the code.
 snippet elif "elif by vim" bs
 elseif ${1}
 	${0:${VISUAL:body}}
