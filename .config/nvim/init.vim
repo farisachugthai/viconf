@@ -132,10 +132,17 @@ endif
 let s:plugins = filereadable(expand('$XDG_DATA_HOME/nvim/site/autoload/plug.vim', 1))
 
 if !s:plugins
-    " bootstrap plug.vim on new systems
-    function! s:InstallPlug()
-        call mkdir(expand('$XDG_DATA_HOME/nvim/site/autoload', 1), 'p')
-        execute '!curl -fLo ' . expand('$XDG_DATA_HOME/nvim/site/autoload/plug.vim', 1) . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  " bootstrap plug.vim on new systems
+  function! s:InstallPlug()
+    if !isdirectory(expand('$XDG_DATA_HOME/nvim/site/autoload'))
+      call mkdir(expand('$XDG_DATA_HOME/nvim/site/autoload', 1), 'p')
+    endif
+
+    try
+      execute '!curl -fLo ' . expand('$XDG_DATA_HOME/nvim/site/autoload/plug.vim', 1) . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    catch /**/
+      echo v:exception
+    endtry
   endfunction
 endif
 
@@ -155,6 +162,9 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
 Plug 'w0rp/ale'
 if empty(g:windows)    " need to debug but ultisnips freaks out on win32
+  Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+endif
+if empty(g:windows)
   Plug 'SirVer/ultisnips'
 endif
 
@@ -175,13 +185,13 @@ if !g:termux
     Plug 'autozimu/LanguageClient-neovim', {'do': ':UpdateRemotePlugins'}
     Plug 'godlygeek/tabular'
     Plug 'vim-voom/voom'
-    Plug 'Rykka/InstantRst'
+    Plug 'Rykka/InstantRst', {'for': 'rst'}
     Plug 'gu-fan/riv.vim', {'for': 'rst'}
     Plug 'junegunn/vim-peekaboo'
-    " Plug 'tpope/vim-unimpaired'  you do too many similar things
+    Plug 'tpope/vim-unimpaired'
     Plug 'tpope/vim-surround'
     Plug 'mbbill/undotree'
-    Plug 'chrisbra/csv.vim'
+    Plug 'chrisbra/csv.vim', {'for': 'csv'}
     Plug 'omnisharp/omnisharp-vim', {'for': 'cs'}
     Plug 'ervandew/supertab'
 endif
@@ -475,7 +485,7 @@ endif
 " Noticed this bit in he syntax line 2800
 let g:is_bash = 1
 let g:sh_fold_enabled= 4  "   (enable if/do/for folding)
-let g:sh_fold_enabled= 3  "   (enables function and heredoc folding)
+let g:sh_fold_enabled= 3  "   (enables function and heregoc folding)
 
 " he rst.vim or ft-rst-syntax or syntax 2600. Don't put bash instead of sh.
 " $VIMRUNTIME/syntax/rst.vim iterates over this var and if it can't find a
@@ -731,5 +741,7 @@ function! g:EchoRTP()
         echo directory
     endfor
 endfunction
+
 nnoremap <Leader>rt call g:EchoRTP()
+
 command! -nargs=0 EchoRTP call g:EchoRTP()

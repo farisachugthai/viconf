@@ -4,8 +4,14 @@
 # Personal
 .zim/
 tmux-history
+*.local
 
 # Python
+#########
+
+# Virtualenvs
+.env
+
 # mypy
 .mypy_cache/
 
@@ -43,6 +49,11 @@ build/
 
 # PyCharm
 .idea
+
+# JavaScript
+#############
+
+node_modules/
 
 # From:
 # https://raw.githubusercontent.com/github/gitignore/afbff9027d02ccfc680e031f6c295f79ad61662d/Global/Tags.gitignore
@@ -372,7 +383,6 @@ FakesAssemblies/
 
 # Node.js Tools for Visual Studio
 .ntvs_analysis.dat
-node_modules/
 
 # Visual Studio 6 build log
 *.plg

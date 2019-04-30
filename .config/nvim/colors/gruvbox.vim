@@ -901,6 +901,20 @@ hi! link gitcommitDiscardedFile GruvboxRed
 
 " Filetype specific -----------------------------------------------------------
 
+" Man.vim: {{{
+  hi! link manCError GruvboxRed
+  hi! link manEmail GruvboxAqua
+  hi! link manEnvVar GruvboxBlue
+  hi! link manEnvVarFile GruvboxBlue
+  hi! link manFooter GruvboxPurple
+  hi! link manHighlight GruvboxYellow
+  hi! link manHistory GruvboxYellow
+  hi! link manHeaderFile GruvboxYellow
+  hi! link manSectionHeading GruvboxOrangeBold
+  hi! link manSentence GruvboxFg2
+  hi! link manSignal GruvboxPurple
+  hi! link manURL GruvboxGreen
+" }}}
 " Netrw: {{{
 " Hate to be that guy but Netrw is considered an ftplugin
 
@@ -1278,6 +1292,10 @@ hi! link pythonConditional GruvboxRed
 hi! link pythonRepeat GruvboxRed
 hi! link pythonDottedName GruvboxGreenBold
 
+" vimPythonRegion vimPythonRegion
+" hi! link pythonMatrixMultiply python
+" pythonAttribute pythonAttribute
+" pythonSync pythonSync
 " }}}
 " CSS: {{{
 
