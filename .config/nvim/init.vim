@@ -1,6 +1,7 @@
 " Neovim Configuration:
 " Maintainer: Faris Chugthai
 " Last Change: Apr 16, 2019
+scriptencoding utf-8
 
 " Preliminaries: {{{1
 
@@ -22,13 +23,12 @@ endif
 " Termux check from Evervim. Thanks!
 let g:termux = isdirectory('/data/data/com.termux')
 let g:ubuntu = has('unix') && !has('macunix')
+" This got moved up so we can check what OS we have and decide what options
+" to set from there
+" how the literal fuck is `has('win32')` a nvim specific thing.
+" Just tried it in vim and it didn't work!!
 let g:windows = has('win32') || has('win64')
 let g:wsl = has('wsl')   " The fact that this is a thing blows my mind
-
-let g:winrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/winrc.vim'
-if g:windows && filereadable(g:winrc)
-    execute 'source' g:winrc
-endif
 
 " unabashedly stolen from junegunn dude is too good.
 let g:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/init.vim.local'
@@ -43,12 +43,7 @@ if g:windows
     " set shellcmdflag=-NoLogo\ -NoProfile\ -ExecutionPolicy\ RemoteSigned\ -Command
 endif
 
-" Session Options: {{{3
-set sessionoptions+=unix,slash
-
 " $_ROOT: {{{2
-
-" accommodate differing filesystems
 " The below is an env var set as a convenient bridge between Ubuntu and Termux
 " As a result it messes things up if not set, but there's no reason to halt
 " everything. Feel free to discard if you copy/paste my vimrc
@@ -60,7 +55,7 @@ elseif !exists('$_ROOT') && expand(g:ubuntu) == 1
 endif
 
 " Remote Hosts: {{{2
-" Set the node and ruby remote hosts
+    " Set the node and ruby remote hosts
 
 if g:termux
     " holy fuck that was a doozy to find
@@ -83,16 +78,22 @@ elseif g:ubuntu
         let g:ruby_host_prog = '~/.local/bin/neovim-ruby-host'
     endif
 
+elseif g:windows
+  if filereadable(expand('$XDG_DATA_HOME') . '/Yarn/Data/global/node_modules/.bin/neovim-node-host.cmd')
+    let g:node_host_prog = expand('$XDG_DATA_HOME') . '/Yarn/Data/global/node_modules/.bin/neovim-node-host.cmd'
+  endif
+
 endif
 
 " Python Executables: {{{2
 
-" if we have a virtual env start there
+" If we have a virtual env start there
 if exists('$VIRTUAL_ENV')
     let g:python3_host_prog = expand('$VIRTUAL_ENV') . '/bin/python'
     let &path = &path . ',' . expand('$VIRTUAL_ENV') . '/lib/python3'
 
-" or a conda env.
+" Or a conda env. Not trying to ruin your day here but Windows sets a var
+" '$CONDA_PREFIX_1' if CONDA_SHLVL > 1....
 elseif exists('$CONDA_PREFIX')
     " Needs to use CONDA_PREFIX as the other env vars conda sets will only establish the base env not the current one
     let g:python3_host_prog = expand('$CONDA_PREFIX/bin/python3')
@@ -126,7 +127,7 @@ endif
 " Vim Plug: {{{1
 
 " Plug Check: {{{2
-
+" https://github.com/justinmk/config/blob/291ec0ae12b0b4b35b4cf9315f1878db00b780ec/.config/nvim/init.vim#L12
 let s:plugins = filereadable(expand('$XDG_DATA_HOME/nvim/site/autoload/plug.vim', 1))
 
 if !s:plugins
@@ -138,7 +139,7 @@ if !s:plugins
 
     try
       execute '!curl -fLo ' . expand('$XDG_DATA_HOME/nvim/site/autoload/plug.vim', 1) . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-    catch /**/
+    catch
       echo v:exception
     endtry
   endfunction
@@ -150,7 +151,8 @@ call plug#begin(expand('$XDG_DATA_HOME') . '/nvim/plugged')
 
 Plug 'junegunn/vim-plug'        " plugception
 let g:plug_window = 'tabe'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+" Wait is the fact that I didn't use expand the reason FZF hasn't been working?
+Plug 'junegunn/fzf', { 'dir': expand('~/.fzf'), 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
 Plug 'davidhalter/jedi-vim', {'for': ['rst', 'python'] }
@@ -161,6 +163,7 @@ Plug 'w0rp/ale'
 if empty(g:windows)
   Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 endif
+  Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 
 if exists('$TMUX')
     Plug 'christoomey/vim-tmux-navigator'
@@ -182,10 +185,11 @@ if !g:termux
     Plug 'Rykka/InstantRst', {'for': 'rst'}
     Plug 'gu-fan/riv.vim', {'for': 'rst'}
     Plug 'junegunn/vim-peekaboo'
-    Plug 'tpope/vim-unimpaired'  you do too many similar things
+    Plug 'tpope/vim-unimpaired'  " you do too many similar things
+    Plug 'tpope/vim-unimpaired'
     Plug 'tpope/vim-surround'
     Plug 'mbbill/undotree'
-    Plug 'chrisbra/csv.vim', {'for': 'cs'}
+    Plug 'chrisbra/csv.vim', {'for': 'csv'}
     Plug 'omnisharp/omnisharp-vim', {'for': 'cs'}
     Plug 'ervandew/supertab'
 endif
@@ -327,22 +331,41 @@ endif
 
 let &path = &path . ',' . expand('$VIMRUNTIME/**')
 
+" Write Once Debug Everywhere: {{{2
+
+" The following are options set in order to promote one plug and play configuration
+" regardless of unix/windows/android etc
+set sessionoptions+=unix,slash
+
+if exists('shellslash')
+  set shellslash
+endif
+
+
+if &term =~ 'xterm-256color' || &term ==# 'cygwin'
+" mintty identifies itself as xterm-compatible
+" Yeah mintty does. Conemu/Cmder identify as cygwin sooo. we get ansi colors
+  set termguicolors
+endif
+
 " Other Global Options: {{{2
 
 if &formatexpr ==# ''
   setlocal formatexpr=format#Format()
 endif
 
-scriptencoding utf-8
 set tags+=./tags,./*/tags
 set tags+=~/projects/**/tags
 " set tagcase=smartcase
+
 set mouse=a
+
 if &textwidth!=0
     setl colorcolumn=+1
 else
     setl colorcolumn=80
 endif
+
 set cmdheight=2
 set number relativenumber
 set smartcase infercase
@@ -375,16 +398,12 @@ set updatetime=100
 
 " 3 options below are nvim specific.
 set inccommand=split
-set termguicolors
 let g:tutor_debug = 1
 
 " When set: Add 's' flag to 'shortmess' option (this makes the message
 " for a search that hits the start or end of the file not being displayed)
 set terse
 
-if exists('+shellslash')
-    set shellslash
-endif
 " Mappings: {{{1
 
 " General_Mappings: {{{2
@@ -494,7 +513,7 @@ let g:lisp_rainbow = 1
 "   g:vimsyn_embed =~# 'P' : embed python
 "   g:vimsyn_embed =~# 'r' : embed ruby
 "   g:vimsyn_embed =~# 't' : embed tcl
-let g:vimsyn_embed = 'lmptPr'
+let g:vimsyn_embed = 'lmtPr'
 
 " Turn off errors because 50% of them are wrong.
 let g:vimsyn_noerror = 1
@@ -517,7 +536,7 @@ let g:vimsyn_maxlines = 500  " why is the default 60???
 
 augroup omnifunc
     autocmd!
-    autocmd Filetype python,xonsh     setlocal omnifunc=python3complete#Complete
+    " autocmd Filetype python,xonsh     setlocal omnifunc=python3complete#Complete
     autocmd Filetype html,xhtml       setlocal omnifunc=htmlcomplete#CompleteTags
     autocmd Filetype xml              setlocal omnifunc=xmlcomplete#CompleteTags
     autocmd Filetype css              setlocal omnifunc=csscomplete#CompleteCSS
@@ -534,16 +553,16 @@ augroup END
 
 " Scriptnames: {{{2
 " command to filter :scriptnames output by a regex
-" command! -nargs=1 Scriptnames call <sid>scriptnames(<f-args>)
 
-" function! <SID>scriptnames(a:re)
-"     redir => scriptnames
-"     silent scriptnames
-"     redir END
+function! g:Scriptnames(re)
+    redir => scriptnames
+    silent scriptnames
+    redir END
 
-"     let filtered = filter(split(scriptnames, "\n"), "v:val =~ '" . a:re . "'")
-"     echo join(filtered, '\n')
-" endfunction
+    let filtered = filter(split(scriptnames, "\n"), "v:val =~ '" . a:re . "'")
+    echo join(filtered, '\n ')
+endfunction
+command! -nargs=? Scriptnames call g:Scriptnames(<f-args>)
 
 " Helptabs: {{{2
 " I've pretty heavily modified this one but junegunn gets the initial credit.
@@ -614,10 +633,10 @@ command! PlugHelp call fzf#run(fzf#wrap({
   \ 'sink'  :   function('s:plug_help_sink')}))
 
 " Statusline: {{{2
-
-" Yeah junegunn gets this one too.
 " Apr 16, 2019: I wonder if Vim doesn't have the same statusline expressions as Neovim because literally half of these are builtin flags...
+
 function! s:statusline_expr()
+
   let dicons = ' %{WebDevIconsGetFileTypeSymbol()} '
   let mod = "%{&modified ? '[+] ' : !&modifiable ? '[x] ' : ''}"
   " let ro  = "%{&readonly ? '[RO] ' : ''}"
@@ -646,6 +665,19 @@ augroup TermGroup
     " try to close a buftype==terminal buffer
     autocmd TermOpen * setlocal nomodified
 augroup END
+
+" TODO: Integrate this into the statusline I like what bram left us with a lot
+" Show EOL type and last modified timestamp, right after the filename
+" Set the statusline
+" set statusline=%f               " filename relative to current $PWD
+" set statusline+=%h              " help file flag
+" set statusline+=%m              " modified flag
+" set statusline+=%r              " readonly flag
+" set statusline+=\ [%{&ff}]      " Fileformat [unix]/[dos] etc...
+" set statusline+=\ (%{strftime(\"%H:%M\ %d/%m/%Y\",getftime(expand(\"%:p\")))})  " last modified timestamp
+" set statusline+=%=              " Rest: right align
+" set statusline+=%l,%c%V         " Position in buffer: linenumber, column, virtual column
+" set statusline+=\ %P            " Position in buffer: Percentage
 
 " Rename: {{{2
 " :he map line 1454. How have i never noticed this isn't a feature???
