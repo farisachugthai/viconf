@@ -127,22 +127,26 @@ endif
 
 " Plug Check: {{{2
 
-" https://github.com/justinmk/config/blob/291ec0ae12b0b4b35b4cf9315f1878db00b780ec/.config/nvim/init.vim#L12
-let s:plugins = filereadable(expand('~/.local/share/nvim/site/autoload/plug.vim', 1))
+let s:plugins = filereadable(expand('$XDG_DATA_HOME/nvim/site/autoload/plug.vim', 1))
 
-if expand('OS') !=# 'Windows_NT'
-    if !s:plugins
-        " bootstrap plug.vim on new systems
-        function! s:InstallPlug()
-            call mkdir(expand('~/.local/share/nvim/site/autoload', 1), 'p')
-            execute '!curl -fLo ' . expand('~/.local/share/nvim/site/autoload/plug.vim', 1) . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-      endfunction
+if !s:plugins
+  " bootstrap plug.vim on new systems
+  function! s:InstallPlug()
+    if !isdirectory(expand('$XDG_DATA_HOME/nvim/site/autoload'))
+      call mkdir(expand('$XDG_DATA_HOME/nvim/site/autoload', 1), 'p')
     endif
+
+    try
+      execute '!curl -fLo ' . expand('$XDG_DATA_HOME/nvim/site/autoload/plug.vim', 1) . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    catch /**/
+      echo v:exception
+    endtry
+  endfunction
 endif
 
 " General Plugins: {{{2
 
-call plug#begin(expand($XDG_DATA_HOME) . '/nvim/plugged')
+call plug#begin(expand('$XDG_DATA_HOME') . '/nvim/plugged')
 
 Plug 'junegunn/vim-plug'        " plugception
 let g:plug_window = 'tabe'
@@ -154,7 +158,9 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
 Plug 'w0rp/ale'
-Plug 'SirVer/ultisnips'
+if empty(g:windows)
+  Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+endif
 
 if exists('$TMUX')
     Plug 'christoomey/vim-tmux-navigator'
@@ -173,13 +179,13 @@ if !g:termux
     Plug 'autozimu/LanguageClient-neovim', {'do': ':UpdateRemotePlugins'}
     Plug 'godlygeek/tabular'
     Plug 'vim-voom/voom'
-    Plug 'Rykka/InstantRst'
+    Plug 'Rykka/InstantRst', {'for': 'rst'}
     Plug 'gu-fan/riv.vim', {'for': 'rst'}
     Plug 'junegunn/vim-peekaboo'
-    " Plug 'tpope/vim-unimpaired'  you do too many similar things
+    Plug 'tpope/vim-unimpaired'  you do too many similar things
     Plug 'tpope/vim-surround'
     Plug 'mbbill/undotree'
-    Plug 'chrisbra/csv.vim'
+    Plug 'chrisbra/csv.vim', {'for': 'cs'}
     Plug 'omnisharp/omnisharp-vim', {'for': 'cs'}
     Plug 'ervandew/supertab'
 endif
@@ -458,7 +464,7 @@ endif
 " Noticed this bit in he syntax line 2800
 let g:is_bash = 1
 let g:sh_fold_enabled= 4  "   (enable if/do/for folding)
-let g:sh_fold_enabled= 3  "   (enables function and heredoc folding)
+let g:sh_fold_enabled= 3  "   (enables function and heregoc folding)
 
 " he rst.vim or ft-rst-syntax or syntax 2600. Don't put bash instead of sh.
 " $VIMRUNTIME/syntax/rst.vim iterates over this var and if it can't find a
@@ -701,5 +707,7 @@ function! g:EchoRTP()
         echo directory
     endfor
 endfunction
+
 nnoremap <Leader>rt call g:EchoRTP()
+
 command! -nargs=0 EchoRTP call g:EchoRTP()

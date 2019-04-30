@@ -168,6 +168,11 @@
 
 
 " TODO:
+" vimPythonRegion vimPythonRegion
+" pythonMatrixMultiply pythonMatrixMultiply
+" pythonAttribute pythonAttribute
+" pythonSync pythonSync
+
 " pythonBuiltin  xxx links to GruvboxOrange
 " pythonBuiltinObj xxx links to GruvboxOrange
 " pythonBuiltinFunc xxx links to GruvboxOrange

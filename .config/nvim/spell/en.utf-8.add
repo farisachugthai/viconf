@@ -1658,3 +1658,8 @@ strftime
 timefmt
 fsck
 rplugin
+#ackages's
+packages/!
+s/!
+packages's/!
+packages
