@@ -1,5 +1,43 @@
+<<<<<<< Updated upstream
 {
   "dependencies": {
     "neovim": "^4.5.0"
   }
 }
+||||||| merged common ancestors
+=======
+{
+  "name": "viconf",
+  "version": "1.0.0",
+  "description": "node-modules for neovim",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "dependencies": {
+    "coc.nvim": "^0.0.66",
+    "neovim": "^4.5.0",
+    "vscode-css-languageserver-bin": "^1.4.0",
+    "vscode-html-languageserver-bin": "^1.4.0",
+    "vscode-languageserver": "^5.2.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Faris Chugthai <farischugthai@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/farisachugthai/viconf.git"
+  },
+  "keywords": [
+    "nvim",
+    "vim"
+  ],
+  "bugs": {
+    "url": "https://github.com/farisachugthai/viconf/issues"
+  },
+  "homepage": "https://github.com/farisachugthai/viconf#readme"
+}
+>>>>>>> Stashed changes
