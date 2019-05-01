@@ -60,7 +60,8 @@ endif
 if g:termux
     " holy fuck that was a doozy to find
     let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
-    " huh apparently quotes are optional
+
+    " Todo: Ruby section needs to be updated.
     if filereadable(expand($_ROOT) . 'lib/ruby/gems/2.6.0/gems/neovim-0.8.0/exe/neovim-ruby-host')
         let g:ruby_host_prog = expand($_ROOT) . 'lib/ruby/gems/2.6.0/gems/neovim-0.8.0/exe/neovim-ruby-host'
     elseif filereadable(expand('$_ROOT') . 'bin/neovim-ruby-host')
@@ -163,7 +164,6 @@ Plug 'w0rp/ale'
 if empty(g:windows)
   Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 endif
-  Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 
 if exists('$TMUX')
     Plug 'christoomey/vim-tmux-navigator'
@@ -175,6 +175,7 @@ Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
 Plug 'greyblake/vim-preview'
 Plug 'lifepillar/vim-cheat40'
 Plug 'luffah/vim-zim', {'for': ['zimwiki', 'zimindex']}
+Plug 'tomtom/tlib_vim'  " this library is incredible
 
 " It's very frustrating having termux slow down beyond repair but also frustrating
 " not being able to use more than 15 plugins at any point in time
@@ -185,8 +186,6 @@ if !g:termux
     Plug 'Rykka/InstantRst', {'for': 'rst'}
     Plug 'gu-fan/riv.vim', {'for': 'rst'}
     Plug 'junegunn/vim-peekaboo'
-    Plug 'tpope/vim-unimpaired'  " you do too many similar things
-    Plug 'tpope/vim-unimpaired'
     Plug 'tpope/vim-surround'
     Plug 'mbbill/undotree'
     Plug 'chrisbra/csv.vim', {'for': 'csv'}
@@ -250,13 +249,12 @@ set splitbelow splitright
 set spelllang=en
 
 if filereadable(expand('$XDG_CONFIG_HOME') . '/nvim/spell/en.utf-8.add')
-    let &spellfile=expand('$XDG_CONFIG_HOME') . '/nvim/spell/en.utf-8.add'
+    let &spellfile = expand('$XDG_CONFIG_HOME') . '/nvim/spell/en.utf-8.add'
 
 elseif filereadable(expand('~/projects/viconf/.config/nvim/spell/en.utf-8.add'))
-    let &spellfile=expand('$HOME') . '/projects/viconf/.config/nvim/spell/en.utf-8.add'
+    let &spellfile = expand('$HOME') . '/projects/viconf/.config/nvim/spell/en.utf-8.add'
 endif
 
-set complete+=kspell                    " Autocomplete in insert mode
 set spellsuggest=5                      " Limit the number of suggestions from 'spell suggest'
 
 if filereadable('/usr/share/dict/words')
@@ -299,6 +297,7 @@ endif
 set pastetoggle=<F7>
 
 " Autocompletion: {{{2
+
 set wildmenu
 set wildmode=longest,list:longest       " Longest string or list alternatives
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
@@ -308,6 +307,8 @@ set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 set wildoptions=tagfile
 setlocal suffixesadd=*.vim
 
+set complete+=kspell                    " Autocomplete in insert mode
+set completeopt=menu,menuone,noselect,noinsert,preview
 " Path: {{{2
 
 " DON'T USE LET. LET ALLOWS FOR EXPRESSION EVALUATION. MUST BE DONE WITH SET
@@ -560,9 +561,33 @@ function! g:Scriptnames(re)
     redir END
 
     let filtered = filter(split(scriptnames, "\n"), "v:val =~ '" . a:re . "'")
-    echo join(filtered, '\n ')
+    echo join(filtered, ' \n ')
 endfunction
 command! -nargs=? Scriptnames call g:Scriptnames(<f-args>)
+
+" From 10,000 lines deep in :he eval
+" Get the output of ":scriptnames" in the scriptnames_output variable.
+let scriptnames_output = ''
+redir => scriptnames_output
+silent scriptnames
+redir END
+
+" Split the output into lines and parse each line.	Add an entry to the
+" "scripts" dictionary.
+let scripts = {}
+for line in split(scriptnames_output, "\n")
+  " Only do non-blank lines.
+  if line =~ '\S'
+" Get the first number in the line.
+let nr = matchstr(line, '\d\+')
+" Get the file name, remove the script number " 123: ".
+let name = substitute(line, '.\+:\s*', '', '')
+" Add an item to the Dictionary
+let scripts[nr] = name
+  endif
+endfor
+unlet scriptnames_output
+
 
 " Helptabs: {{{2
 " I've pretty heavily modified this one but junegunn gets the initial credit.

@@ -3,7 +3,7 @@
 ![Screenshot](./images/neodark_statuslines.png)
 
 While still a work-in-progress, this repository houses a collection of
-initialization files I use to run Neovim on Linux, Windows 10, and
+initialization file I use to run Neovim on Linux, Windows 10, and
 [Termux](https://www.github.com/termux/termuxapp) on Android.
 
 ## Vim
@@ -90,7 +90,7 @@ Solarized, Jellybeans, Gruvbox and Monokai.
 | <kbd>k</kbd>                  | Norm     | Move cursor one char up                      |
 | <kbd>l</kbd>                  | Norm     | Move cursor one char right                   |
 | <kbd>w</kbd>                  | Norm     | Move cursor to the beginning of the next word|
-| <kbd>b</kbd>                  | Norm     | Move cursor to the beginning of the prev word|
+| <kbd>b</kbd>                  | Norm     | Move cursor to the beginning of the previous word|
 | <kbd>M</kbd>                  | Norm     | Move cursor to vertical center               |
 | <kbd>gg</kbd>                 | Norm     | Move to the first line                       |
 | <kbd>G</kbd>                  | Norm     | Move to the last line                        |
@@ -160,7 +160,7 @@ Launch using <kbd><Leader>nt</kbd>.
 ### Sources for all plugins
 
 Here's a current list of all my plugins, a summary of their usage, and notes
-on my personal customizations.
+on my personal customization.
 
 - [vim-plug](https://www.github.com/junegunn/vim-plug)
 - [FZF](https://www.github.com/junegunn/fzf)

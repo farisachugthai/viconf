@@ -10,8 +10,7 @@ if exists('did_terminally_unimpaired_vim') || &cp || v:version < 700
 endif
 let did_terminally_unimpaired_vim = 1
 
-
-" Mappings: {{{1
+" Mappings:1
 
 " IPython in a Vim terminal acts oddly. If you hit i or a it doesn't move to where
 " your cursor is. It moves relative to its old positon.
@@ -43,4 +42,18 @@ tnoremap <A-e> <Esc>$i
 
 " Leader -- applications -- htop. Requires nvim for <Cmd> which tmk doesn't exist
 " even in vim8.0+. Also requires htop which more than likely rules out Win32.
-noremap <Leader>ah <Cmd>vsplit term://htop
+
+" Need to use enew in case your previous buffer setl nomodifiable
+noremap <Leader>ah <Cmd>wincmd v<CR> <Cmd>enew<CR> term://htop
+
+" Leader -- applications -- IPython
+
+" Let's add options to this to give the feeling of a real plugin
+function! g:IPython() abort
+  if !exists('g:ipy_vert') && !exists('g:ipy_horiz') && !exists('g:ipy_tab')
+    let g:ipy_horiz = 1
+  endif
+endfunction
+
+" do later
+
