@@ -539,57 +539,20 @@ let g:vimsyn_maxlines = 500  " why is the default 60???
 
 augroup omnifunc
     autocmd!
-    " autocmd Filetype python,xonsh     setlocal omnifunc=python3complete#Complete
-    autocmd Filetype html,xhtml       setlocal omnifunc=htmlcomplete#CompleteTags
-    autocmd Filetype xml              setlocal omnifunc=xmlcomplete#CompleteTags
-    autocmd Filetype css              setlocal omnifunc=csscomplete#CompleteCSS
-    autocmd Filetype javascript       setlocal omnifunc=javascriptcomplete#CompleteJS
+    autocmd Filetype python,xonsh     setlocal completefunc=python3complete#Complete
+    autocmd Filetype html,xhtml       setlocal completefunc=htmlcomplete#CompleteTags
+    autocmd Filetype xml              setlocal completefunc=xmlcomplete#CompleteTags
+    autocmd Filetype css              setlocal completefunc=csscomplete#CompleteCSS
+    autocmd Filetype javascript       setlocal completefunc=javascriptcomplete#CompleteJS
     " If there isn't a default or built-in, use the syntax highlighter
 
     autocmd Filetype *
         \   if &omnifunc == "" |
-        \       setlocal omnifunc=syntaxcomplete#Complete |
+        \       setlocal completefunc=syntaxcomplete#Complete |
         \   endif
 augroup END
 
 " Functions_Commands: {{{1
-
-" Scriptnames: {{{2
-" command to filter :scriptnames output by a regex
-
-function! g:Scriptnames(re)
-    redir => scriptnames
-    silent scriptnames
-    redir END
-
-    let filtered = filter(split(scriptnames, "\n"), "v:val =~ '" . a:re . "'")
-    echo join(filtered, ' \n ')
-endfunction
-command! -nargs=? Scriptnames call g:Scriptnames(<f-args>)
-
-" From 10,000 lines deep in :he eval
-" Get the output of ":scriptnames" in the scriptnames_output variable.
-let scriptnames_output = ''
-redir => scriptnames_output
-silent scriptnames
-redir END
-
-" Split the output into lines and parse each line.	Add an entry to the
-" "scripts" dictionary.
-let scripts = {}
-for line in split(scriptnames_output, "\n")
-  " Only do non-blank lines.
-  if line =~ '\S'
-" Get the first number in the line.
-let nr = matchstr(line, '\d\+')
-" Get the file name, remove the script number " 123: ".
-let name = substitute(line, '.\+:\s*', '', '')
-" Add an item to the Dictionary
-let scripts[nr] = name
-  endif
-endfor
-unlet scriptnames_output
-
 
 " Helptabs: {{{2
 " I've pretty heavily modified this one but junegunn gets the initial credit.
@@ -757,16 +720,3 @@ augroup vimrc_incsearch_highlight
     autocmd CmdlineEnter /,\? :set hlsearch
     autocmd CmdlineLeave /,\? :set nohlsearch
 augroup END
-
-" EchoRTP: {{{2
-" The nvim API is seriously fantastic.
-
-function! g:EchoRTP()
-    for directory in nvim_list_runtimepaths()
-        echo directory
-    endfor
-endfunction
-
-nnoremap <Leader>rt call g:EchoRTP()
-
-command! -nargs=0 EchoRTP call g:EchoRTP()

@@ -8,6 +8,7 @@ endif
 let b:did_cheat40_autoload_vim = 1
 
 let s:cheat40_dir = fnamemodify(resolve(expand('<sfile>:p')), ':h:h')
+echomsg 'cheat40dir is' . str(s:cheat40_dir)
 " let s:cheat40_dir = expand('$XDG_CONFIG_HOME') . '/nvim'
 
 " Courtesy of Pathogen

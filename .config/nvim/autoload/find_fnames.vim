@@ -303,3 +303,49 @@ fun! find_fnames#colorscheme()
   endif
   call find_fnames#interactively(s:colors, 's:set_colorscheme', 'Choose colorscheme')
 endf
+
+
+" Wow this is already fairly long and in need of some review
+function! find_fnames#smart_quote_input(input)
+  if get(g:, 'find_fnames#disable_smart_quoting', 0) > 0
+    return a:input
+  endif
+  let hasQuotes = match(a:input, '"') > -1 || match(a:input, "'") > -1
+  let hasOptions = match(' ' . a:input, '\s-[-a-zA-Z]') > -1
+  let hasEscapedSpacesPlusPath = match(a:input, '\\ .*\ ') > 0
+  return hasQuotes || hasOptions || hasEscapedSpacesPlusPath ? a:input : '-- "' . a:input . '"'
+endfunction
+
+function! find_fnames#trim_and_escape_register_a()
+  let query = getreg('a')
+  let trimmedQuery = trim(query)
+  let escapedQuery = escape(trimmedQuery, "'#%\\")
+  call setreg('a', escapedQuery)
+endfunction
+
+function! find_fnames#fzf_ag_raw(command_suffix, ...)
+  if !executable('ag')
+    return s:warn('ag is not found')
+  endif
+
+  let userOptions = get(g:, 'find_fnames#ag_options', '')
+  let command = 'ag --nogroup --column --color ' . trim(userOptions . ' ' . a:command_suffix)
+  return call('fzf#vim#grep', extend([command, 1], a:000))
+endfunction
+
+function! find_fnames#fzf_rg_raw(command_suffix, ...)
+  if !executable('rg')
+    return s:warn('rg is not found')
+  endif
+
+  let userOptions = get(g:, 'find_fnames#rg_options', '')
+  let command = 'rg --column --line-number --no-heading --color=always ' . trim(userOptions . ' ' . a:command_suffix)
+  return call('fzf#vim#grep', extend([command, 1], a:000))
+endfunction
+
+function! s:warn(message)
+  echohl WarningMsg
+  echom a:message
+  echohl None
+  return 0
+endfunction
