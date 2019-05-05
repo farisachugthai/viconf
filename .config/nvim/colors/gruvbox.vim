@@ -996,8 +996,9 @@ hi! link xmlEntityPunct GruvboxOrange
 
 " I could be wrong but according to `so $VIMRUNTIME/syntax/hitest.vim`
 
+" Dude you aren't wrong. Everything below is  a cleared syn match for vim*
 " vimOnlyCommand	vimOnlyCommand
-" vimStdPlugin	vimStdPlugin
+hi! link vimStdPlugin Function
 " vimOnlyOption	vimOnlyOption
 " vimTermOption	vimTermOption
 " vimErrSetting	vimErrSetting
@@ -1016,7 +1017,6 @@ hi! link xmlEntityPunct GruvboxOrange
 " vimAugroup	vimAugroup
 " vimExecute	vimExecute
 " vimFunction	vimFunction
-" vimFunctionError	vimFunctionError
 " vimOperParen	vimOperParen
 " vimRegion	vimRegion
 " vimSynLine	vimSynLine
@@ -1084,157 +1084,176 @@ hi! link vimSetSep GruvboxFg3
 hi! link vimSep GruvboxFg3
 hi! link vimContinue GruvboxFg3
 
+" Oh actually here's more from the syntax file. Jesus.
+hi def link vimBehaveError	vimError
+hi def link vimCollClassErr	vimError
+hi def link vimErrSetting	vimError
+hi def link vimEmbedError	Normal
+hi def link vimFTError	vimError
+hi def link vimFunctionError	vimError
+hi def link vimFunc         	vimError
+hi def link vimHiAttribList	vimError
+hi def link vimHiCtermError	vimError
+hi def link vimHiKeyError	vimError
+hi def link vimKeyCodeError	vimError
+hi def link vimMapModErr	vimError
+hi def link vimSubstFlagErr	vimError
+hi def link vimSynCaseError	vimError
+hi def link vimBufnrWarn	vimWarn
+
+
 " Heres everything from VIMRUNTIME/syntax/vim.vim
 "  HOW DID THAT DO ALMOST NOTHING
- hi! link vimAbb	vimCommand
- hi! link vimAddress	vimMark
- hi! link vimAugroupError	vimError
- hi! link vimAugroupKey	vimCommand
- hi! link vimAuHighlight	vimHighlight
- hi! link vimAutoCmdOpt	vimOption
- hi! link vimAutoCmd	vimCommand
- hi! link vimAutoEvent	Type
- hi! link vimAutoSet	vimCommand
- hi! link vimBehaveModel	vimBehave
- hi! link vimBehave	vimCommand
- hi! link vimBracket	Delimiter
- hi! link vimCmplxRepeat	SpecialChar
- hi! link vimCommand	Statement
- hi! link vimComment	Comment
- hi! link vimCommentString	vimString
- hi! link vimCommentTitle	PreProc
- hi! link vimCondHL	vimCommand
- hi! link vimContinue	Special
- hi! link vimCtrlChar	SpecialChar
- hi! link vimEchoHLNone	vimGroup
- hi! link vimEchoHL	vimCommand
- hi! link vimElseIfErr	Error
- hi! link vimElseif	vimCondHL
- hi! link vimEnvvar	PreProc
- hi! link vimError	Error
- hi! link vimFBVar	vimVar
- hi! link vimFgBgAttrib	vimHiAttrib
- hi! link vimFold	Folded
- hi! link vimFTCmd	vimCommand
- hi! link vimFTOption	vimSynType
- hi! link vimFuncKey	vimCommand
- hi! link vimFuncName	Function
- hi! link vimFuncSID	Special
- hi! link vimFuncVar	Identifier
- hi! link vimGroupAdd	vimSynOption
- hi! link vimGroupName	vimGroup
- hi! link vimGroupRem	vimSynOption
- hi! link vimGroupSpecial	Special
- hi! link vimGroup	Type
- hi! link vimHiAttrib	PreProc
- hi! link vimHiClear	vimHighlight
- hi! link vimHiCtermFgBg	vimHiTerm
- hi! link vimHiCTerm	vimHiTerm
- hi! link vimHighlight	vimCommand
- hi! link vimHiGroup	vimGroupName
- hi! link vimHiGuiFgBg	vimHiTerm
- hi! link vimHiGuiFont	vimHiTerm
- hi! link vimHiGuiRgb	vimNumber
- hi! link vimHiGui	vimHiTerm
- hi! link vimHiNmbr	Number
- hi! link vimHiStartStop	vimHiTerm
- hi! link vimHiTerm	Type
- hi! link vimHLGroup	vimGroup
- hi! link vimHLMod	PreProc
- hi! link vimInsert	vimString
- hi! link vimIskSep	Delimiter
- hi! link vimKeyCode	vimSpecFile
- hi! link vimKeyword	Statement
- hi! link vimLet	vimCommand
- hi! link vimLineComment	vimComment
- hi! link vimMapBang	vimCommand
- hi! link vimMapModKey	vimFuncSID
- hi! link vimMapMod	vimBracket
- hi! link vimMap	vimCommand
- hi! link vimMark	Number
- hi! link vimMarkNumber	vimNumber
- hi! link vimMenuMod	vimMapMod
- hi! link vimMenuNameMore	vimMenuName
- hi! link vimMenuName	PreProc
- hi! link vimMtchComment	vimComment
- hi! link vimNorm	vimCommand
- hi! link vimNotation	Special
- hi! link vimNotFunc	vimCommand
- hi! link vimNotPatSep	vimString
- hi! link vimNumber	Number
- hi! link vimOperError	Error
- hi! link vimOper	Operator
- hi! link vimOption	PreProc
- hi! link vimParenSep	Delimiter
- hi! link vimPatSepErr	vimError
- hi! link vimPatSepR	vimPatSep
- hi! link vimPatSep	SpecialChar
- hi! link vimPatSepZone	vimString
- hi! link vimPatSepZ	vimPatSep
- hi! link vimPattern	Type
- hi! link vimPlainMark	vimMark
- hi! link vimPlainRegister	vimRegister
- hi! link vimRegister	SpecialChar
- hi! link vimScriptDelim	Comment
- hi! link vimSearchDelim	Statement
- hi! link vimSearch	vimString
- hi! link vimSep	Delimiter
- hi! link vimSetMod	vimOption
- hi! link vimSetSep	Statement
- hi! link vimSetString	vimString
- hi! link vimSpecFile	Identifier
- hi! link vimSpecFileMod	vimSpecFile
- hi! link vimSpecial	Type
- hi! link vimStatement	Statement
- hi! link vimStringCont	vimString
- hi! link vimString	String
- hi! link vimStringEnd	vimString
- hi! link vimSubst1	vimSubst
- hi! link vimSubstDelim	Delimiter
- hi! link vimSubstFlags	Special
- hi! link vimSubstSubstr	SpecialChar
- hi! link vimSubstTwoBS	vimString
- hi! link vimSubst	vimCommand
- hi! link vimSynCaseError	Error
- hi! link vimSynCase	Type
- hi! link vimSyncC	Type
- hi! link vimSyncError	Error
- hi! link vimSyncGroupName	vimGroupName
- hi! link vimSyncGroup	vimGroupName
- hi! link vimSyncKey	Type
- hi! link vimSyncNone	Type
- hi! link vimSynContains	vimSynOption
- hi! link vimSynError	Error
- hi! link vimSynKeyContainedin	vimSynContains
- hi! link vimSynKeyOpt	vimSynOption
- hi! link vimSynMtchGrp	vimSynOption
- hi! link vimSynMtchOpt	vimSynOption
- hi! link vimSynNextgroup	vimSynOption
- hi! link vimSynNotPatRange	vimSynRegPat
- hi! link vimSynOption	Special
- hi! link vimSynPatRange	vimString
- hi! link vimSynRegOpt	vimSynOption
- hi! link vimSynRegPat	vimString
- hi! link vimSynReg	Type
- hi! link vimSyntax	vimCommand
- hi! link vimSynType	vimSpecial
- hi! link vimTodo	Todo
- hi! link vimUnmap	vimMap
- hi! link vimUserAttrbCmpltFunc	Special
- hi! link vimUserAttrbCmplt	vimSpecial
- hi! link vimUserAttrbKey	vimOption
- hi! link vimUserAttrb	vimSpecial
- hi! link vimUserAttrbError	Error
- hi! link vimUserCmdError	Error
- hi! link vimUserCommand	vimCommand
- hi! link vimUserFunc	Normal
- hi! link vimVar	Identifier
- hi! link vimWarn	WarningMsg
+hi! link vimAbb	vimCommand
+hi! link vimAddress	vimMark
+hi! link vimAugroupError	vimError
+hi! link vimAugroupKey	vimCommand
+hi! link vimAuHighlight	vimHighlight
+hi! link vimAutoCmdOpt	vimOption
+hi! link vimAutoCmd	vimCommand
+hi! link vimAutoEvent	Type
+hi! link vimAutoSet	vimCommand
+hi! link vimBehaveModel	vimBehave
+hi! link vimBehave	vimCommand
+hi! link vimBracket	Delimiter
+hi! link vimCmplxRepeat	SpecialChar
+hi! link vimCommand	Statement
+hi! link vimComment	Comment
+hi! link vimCommentString	vimString
+hi! link vimCommentTitle	PreProc
+hi! link vimCondHL	vimCommand
+hi! link vimContinue	Special
+hi! link vimCtrlChar	SpecialChar
+hi! link vimEchoHLNone	vimGroup
+hi! link vimEchoHL	vimCommand
+hi! link vimElseIfErr	Error
+hi! link vimElseif	vimCondHL
+hi! link vimEnvvar	PreProc
+hi! link vimError	Error
+hi! link vimFBVar	vimVar
+hi! link vimFgBgAttrib	vimHiAttrib
+hi! link vimFold	Folded
+hi! link vimFTCmd	vimCommand
+hi! link vimFTOption	vimSynType
+hi! link vimFuncKey	vimCommand
+hi! link vimFuncName	Function
+hi! link vimFuncSID	Special
+hi! link vimFuncVar	Identifier
+hi! link vimGroupAdd	vimSynOption
+hi! link vimGroupName	vimGroup
+hi! link vimGroupRem	vimSynOption
+hi! link vimGroupSpecial	Special
+hi! link vimGroup	Type
+hi! link vimHiAttrib	PreProc
+hi! link vimHiClear	vimHighlight
+hi! link vimHiCtermFgBg	vimHiTerm
+hi! link vimHiCTerm	vimHiTerm
+hi! link vimHighlight	vimCommand
+hi! link vimHiGroup	vimGroupName
+hi! link vimHiGuiFgBg	vimHiTerm
+hi! link vimHiGuiFont	vimHiTerm
+hi! link vimHiGuiRgb	vimNumber
+hi! link vimHiGui	vimHiTerm
+hi! link vimHiNmbr	Number
+hi! link vimHiStartStop	vimHiTerm
+hi! link vimHiTerm	Type
+hi! link vimHLGroup	vimGroup
+hi! link vimHLMod	PreProc
+hi! link vimInsert	vimString
+hi! link vimIskSep	Delimiter
+hi! link vimKeyCode	vimSpecFile
+hi! link vimKeyword	Statement
+hi! link vimLet	vimCommand
+hi! link vimLineComment	vimComment
+hi! link vimMapBang	vimCommand
+hi! link vimMapModKey	vimFuncSID
+hi! link vimMapMod	vimBracket
+hi! link vimMap	vimCommand
+hi! link vimMark	Number
+hi! link vimMarkNumber	vimNumber
+hi! link vimMenuMod	vimMapMod
+hi! link vimMenuNameMore	vimMenuName
+hi! link vimMenuName	PreProc
+hi! link vimMtchComment	vimComment
+hi! link vimNorm	vimCommand
+hi! link vimNotation	Special
+hi! link vimNotFunc	vimCommand
+hi! link vimNotPatSep	vimString
+hi! link vimNumber	Number
+hi! link vimOperError	Error
+hi! link vimOper	Operator
+hi! link vimOption	PreProc
+hi! link vimParenSep	Delimiter
+hi! link vimPatSepErr	vimError
+hi! link vimPatSepR	vimPatSep
+hi! link vimPatSep	SpecialChar
+hi! link vimPatSepZone	vimString
+hi! link vimPatSepZ	vimPatSep
+hi! link vimPattern	Type
+hi! link vimPlainMark	vimMark
+hi! link vimPlainRegister	vimRegister
+hi! link vimRegister	SpecialChar
+hi! link vimScriptDelim	Comment
+hi! link vimSearchDelim	Statement
+hi! link vimSearch	vimString
+hi! link vimSep	Delimiter
+hi! link vimSetMod	vimOption
+hi! link vimSetSep	Statement
+hi! link vimSetString	vimString
+hi! link vimSpecFile	Identifier
+hi! link vimSpecFileMod	vimSpecFile
+hi! link vimSpecial	Type
+hi! link vimStatement	Statement
+hi! link vimStringCont	vimString
+hi! link vimString	String
+hi! link vimStringEnd	vimString
+hi! link vimSubst1	vimSubst
+hi! link vimSubstDelim	Delimiter
+hi! link vimSubstFlags	Special
+hi! link vimSubstSubstr	SpecialChar
+hi! link vimSubstTwoBS	vimString
+hi! link vimSubst	vimCommand
+hi! link vimSynCaseError	Error
+hi! link vimSynCase	Type
+hi! link vimSyncC	Type
+hi! link vimSyncError	Error
+hi! link vimSyncGroupName	vimGroupName
+hi! link vimSyncGroup	vimGroupName
+hi! link vimSyncKey	Type
+hi! link vimSyncNone	Type
+hi! link vimSynContains	vimSynOption
+hi! link vimSynError	Error
+hi! link vimSynKeyContainedin	vimSynContains
+hi! link vimSynKeyOpt	vimSynOption
+hi! link vimSynMtchGrp	vimSynOption
+hi! link vimSynMtchOpt	vimSynOption
+hi! link vimSynNextgroup	vimSynOption
+hi! link vimSynNotPatRange	vimSynRegPat
+hi! link vimSynOption	Special
+hi! link vimSynPatRange	vimString
+hi! link vimSynRegOpt	vimSynOption
+hi! link vimSynRegPat	vimString
+hi! link vimSynReg	Type
+hi! link vimSyntax	vimCommand
+hi! link vimSynType	vimSpecial
+hi! link vimTodo	Todo
+hi! link vimUnmap	vimMap
+hi! link vimUserAttrbCmpltFunc	Special
+hi! link vimUserAttrbCmplt	vimSpecial
+hi! link vimUserAttrbKey	vimOption
+hi! link vimUserAttrb	vimSpecial
+hi! link vimUserAttrbError	Error
+hi! link vimUserCmdError	Error
+hi! link vimUserCommand	vimCommand
+hi! link vimUserFunc	Normal
+hi! link vimVar	Identifier
+hi! link vimWarn	WarningMsg
 
- hi def link nvimAutoEvent	vimAutoEvent
- hi def link nvimHLGroup	vimHLGroup
- hi def link nvimMap	vimMap
- hi def link nvimUnmap	vimUnmap
+hi def link NvimInternalError Error
+hi def link nvimAutoEvent	vimAutoEvent
+hi def link nvimHLGroup	vimHLGroup
+hi def link nvimMap	vimMap
+hi def link nvimUnmap	vimUnmap
 " }}}
 " Clojure: {{{
 

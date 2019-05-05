@@ -186,7 +186,6 @@ if !g:termux
     Plug 'Rykka/InstantRst', {'for': 'rst'}
     Plug 'gu-fan/riv.vim', {'for': 'rst'}
     Plug 'junegunn/vim-peekaboo'
-    Plug 'tpope/vim-unimpaired'  " you do too many similar things
     Plug 'tpope/vim-surround'
     Plug 'mbbill/undotree'
     Plug 'chrisbra/csv.vim', {'for': 'csv'}

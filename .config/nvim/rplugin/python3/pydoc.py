@@ -49,6 +49,7 @@ Take apart this function (or call it as your completer) and use that.
 import os
 import re
 import sys
+
 try:
     import pynvim
 except ModuleNotFoundError:

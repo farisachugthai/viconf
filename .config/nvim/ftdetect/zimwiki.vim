@@ -29,11 +29,13 @@ augroup zimwikidetect
     autocmd!
     " autocmd BufRead,BufNewFile ~/Notebooks.git/*.txt call s:DetectZimWiki()
     " Honestly though if it's in that directory it IS a zimwiki note
-    autocmd BufRead,BufNewFile ~/Notebooks/** setlocal filetype=zimwiki
+
+    " Actually no it might not be. This is a git controlled repository and
+    " commit messages shouldn't come up with zimwiki syntax
+    " autocmd BufRead,BufNewFile ~/Notebooks/** setlocal filetype=zimwiki
 
     " Alternatively we can check all textfiles which oddly works better
-
-    " autocmd BufRead,BufNewFile *.txt  call s:DetectZimWiki()
+    autocmd BufRead,BufNewFile *.txt  call s:DetectZimWiki()
 augroup end
 
 
