@@ -14,7 +14,12 @@ let b:did_startify = 1
 
 " List Commits: {{{1
 function! s:list_commits()
-    let git = 'git -C ~/projects/viconf/'
+  " I don't entirely understand why but:
+  " echo isdirectory('~/projects/viconf')
+  " outputs 0 on windows and
+  " echo isdirectory(glob('~/projects/viconf'))
+  " outputs 1 so we have to glob it to get anything to show up in startify
+    let git = 'git -C ' . glob('~/projects/viconf')
     let commits = systemlist(git .' log --oneline | head -n10')
     let git = 'G'. git[1:]
     return map(commits, '{"line": matchstr(v:val, "\\s\\zs.*"), "cmd": "'. git .' show ". matchstr(v:val, "^\\x\\+") }')
@@ -56,6 +61,11 @@ let g:startify_skiplist = [
     \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc', ]
 
 " Session Dir: {{{1
+
+" Here's a way cleaner way of doing this. Now we don't depend on nvim/vim, win or linux.
+" Just make a dir in the config directory that's called session.
+let g:startify_session_dir = runtime session
+
 if has('gui_win32')
     let g:startify_session_dir = expand('$HOME\vimfiles\session')
 else

@@ -460,9 +460,11 @@ endsnippet
 snippet math "math inline" ms
 :math:\`${1:$VISUAL}\`
 endsnippet
+
 snippet file "file inline" ms
 :file:\`${1:$VISUAL}\`
 endsnippet
+
 snippet pep "pep inline" ms
 :pep:\`${1:$VISUAL}\`
 endsnippet
@@ -474,11 +476,14 @@ endsnippet
 ######################
 #  Sphinx Directive  #
 ######################
+
+
 snippet sid "SideBar" b
 .. sidebar:: ${1:SideBar Title}
 
    ${2:${VISUAL:SideBar Content}}
 endsnippet
+
 snippet cb "Code Block. Must have 1 blank line surrounding!" bs
 .. code-block:: ${1:python3}
 
@@ -486,11 +491,13 @@ snippet cb "Code Block. Must have 1 blank line surrounding!" bs
 
 $0
 endsnippet
+
 snippet codeb "code block duplicated" bs
 .. code-block:: ${1:python}
 
    ${2:${VISUAL:code}}
 endsnippet
+
 snippet cb "Code Block. Must have 1 blank line surrounding!" bs
 .. code-block:: ${1:python3}
 
@@ -498,11 +505,13 @@ snippet cb "Code Block. Must have 1 blank line surrounding!" bs
 
 $0
 endsnippet
+
 snippet codeb "code block duplicated" bs
 .. code-block:: ${1:python}
 
    ${2:${VISUAL:code}}
 endsnippet
+
 snippet hi "Set a highlight directive to establish the base for code block directives" ms
 .. highlight::
    ${1::linenos:}
@@ -511,12 +520,14 @@ snippet hi "Set a highlight directive to establish the base for code block direc
 
 ${0:Optional arguments above}
 endsnippet
+
 snippet toctree "directive_toctree" b
 .. toctree::
    :maxdepth: ${1:2}
 
    ${2:FILES}
 endsnippet
+
 snippet table "table from sphinx cheatsheet"
 ==================   ============
 Name                 Age
@@ -526,6 +537,7 @@ Cast of Thousands    41
 And Still More       42
 ==================   ============
 endsnippet
+
 snippet env "Environment variables" ms
 :envvar:\`${1:${VISUAL}}\`
 endsnippet

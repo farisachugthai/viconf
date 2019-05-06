@@ -2,7 +2,7 @@
     " File: netrw.vim
     " Author: Faris Chugthai
     " Description: Yes netrw is a ftplugin
-    " Last Modified: April 11, 2019
+    " Last Modified: April 30, 2019
 " ============================================================================
 
 " Can be modified interactively using `:NetrwSettings` !!
@@ -15,7 +15,7 @@ endif
 let g:did_netrw = 1
 
 " Options: {{{1
-
+" Hide that weird looking banner
 let g:netrw_banner = 0
 
 " Keep the current directory the same as the browsing directory
@@ -35,3 +35,6 @@ if !has('win32')
 endif
 
 let g:netrw_sizestyle = 'h'
+
+" Only display errors as messages
+let g:netrw_errorlvl          = 2

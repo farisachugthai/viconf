@@ -240,6 +240,30 @@ inoremap <expr> <C-x><C-s> fzf#vim#complete({
     \ 'options': '--multi --reverse --margin 15%,0',
     \ 'left':    20})
 
-" F: {{{1
+" Explore PlugHelp: {{{2
+" Call :PlugHelp to use fzf to open a window with all of the plugins
+" you have installed listed and upon pressing enter open the help
+" docs. That's not a great explanation but honestly easier to explain
+" with a picture.
+" TODO: Screenshot usage.
+function! s:plug_help_sink(line)
+  let dir = g:plugs[a:line].dir
+  for pat in ['doc/*.txt', 'README.md']
+    let match = get(split(globpath(dir, pat), "\n"), 0, '')
+    if len(match)
+      execute 'tabedit' match
+      return
+    endif
+  endfor
+  tabnew
+  execute 'Explore' dir
+endfunction
+
+command! PlugHelp call fzf#run(fzf#wrap({
+  \ 'source': sort(keys(g:plugs)),
+  \ 'sink'  :   function('s:plug_help_sink')}))
+
+" F: {{{2
+
 let g:ag_command = 'ag --smart-case -u -g " " --'
 command! -bang -nargs=* F call fzf#vim#grep(g:ag_command .shellescape(<q-args>), 1, <bang>0)

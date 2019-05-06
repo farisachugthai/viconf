@@ -1,101 +1,104 @@
 # Snippets for
 # Authored by Trevor Sullivan <trevor@trevorsullivan.net>
 
-# PowerShell Class
-snippet class
+snippet class "Powershell Class definition" b
 	class {
-		[string] ${1:FirstName}
+		[string] ${1:${VISUAL}FirstName}
 	}
 
-# PowerShell Advanced Function
-snippet function
-	function ${1:name} {
-		[CmdletBinding()]
-		param (
-			[Parameter(Mandatory = $true)]
-			[string] ${2:Param}
-		)
+endsnippet
 
-		begin {
-		}
+snippet function "CmdletBinding with mandatory parameter definition" bms
+function ${1:${VISUAL}} {
+	[CmdletBinding()]
+	param (
+		[Parameter(Mandatory = ${2:$true})]
+		[string] ${3:Param}
+	)
 
-		process {
-		}
-
-		end {
-		}
+	begin {$4
 	}
 
-# PowerShell Splatting
-snippet splatting
-	$Params = @{
-		${1:Param1} = '{2:Value1}'
-		${3:Param2} = '{4:Value2}'
-	}
-	${5:CommandName} @Params
-
-# PowerShell Enumeration
-snippet enum
-	enum ${1:name} {
-		${2:item1}
-		${3:item2}
+	process {$5
 	}
 
-# PowerShell if..then
-snippet if
-	if (${1:condition}) {
-		${2:statement}
+	end {$6
 	}
+} $7
+endsnippet
 
-# PowerShell if..else
-snippet ife
-	if ( ${1:condition} ) {
-		${2}
-	}
-	else {
-		${3}
-	}
+snippet spl "Powershell splatting. I don't know" smb
+$Params = @{
+	${1:Param1} = '$2'
+	${3:Param2} = '$4'
+}
+${5:CommandName} ${6:@Params}
+endsnippet
 
-# PowerShell While Loop
-snippet while
-	while (${1:condition}) {
-		${2:statement}
-	}
+snippet enum "Powershell. Enumerate a dictionary looking data structure." bms
+enum ${1:name} {
+	${2:item1}
+	${3:item2}
+}
+endsnippet
 
-# PowerShell Filter..Sort
-snippet filtersort
-	${1:command} | Where-Object -FilterScript { $PSItem.${2:property} -${3:operator} '${4:expression}' } | Sort-Object -Property ${5:sortproperty}
+# Control structures
 
-# PowerShell foreach
-snippet foreach
-	foreach ( $${1:iterator} in $${2:collection} ) {
-		${3:statement}
-	}
+snippet if "Simple powershell if statement" bms
+if (${1:condition}) {
+	${2:statement}
+}
+endsnippet
 
-# PowerShell export-csv
-snippet epcsv
-	Export-CSV -NoTypeInformation -Path ${1:path}
+snippet ife "Powershell If else" bms
+if ( ${1:condition} ) {
+	${2}
+}
+else {
+	${3}
+}
+endsnippet
 
-# Powershell Comment Based Help
-snippet help
-	<#
-	.SYNOPSIS
-		${1:Short Description}
-	.DESCRIPTION
-		${2:Full Description}
-	.PARAMETER ${3:Param1}
-		${4: $3 usage}
-	.EXAMPLE
-		${5:Example}
-	.NOTES
-		${6:notes}
-	.LINK
-		${7:online help}
-	#>
+snippet while "Powershell while loop"  bms
+while (${1:condition}) {
+	${2:statement}
+}
+endsnippet
 
-# Powershell switch statement
-snippet switch
-	switch ( ${1:test} ){
-		${2:condition1} { ${3:action} }
-		${4:condition2} { ${5:action} }
-		default { ${6:action} }
+snippet filtersort "PowerShell Filter..Sort" bms
+${1:command} | Where-Object -FilterScript { $PSItem.${2:property} -${3:operator} '${4:expression}' } | Sort-Object -Property ${5:sortproperty}
+endsnippet
+
+snippet foreach "PowerShell foreach" bms
+foreach ( $${1:iterator} in $${2:collection} ) {
+	${3:statement}
+}
+endsnippet
+
+snippet csv "PowerShell export-csv" bms
+Export-CSV -NoTypeInformation -Path ${1:path}
+endsnippet
+
+snippet help "Powershell Comment Based Help" bms
+<#
+.SYNOPSIS
+	${1:Short Description}
+.DESCRIPTION
+	${2:Full Description}
+.PARAMETER ${3:Param1}
+	${4: $3 usage}
+.EXAMPLE
+	${5:Example}
+.NOTES
+	${6:notes}
+.LINK
+	${7:online help}
+#>
+endsnippet
+
+snippet switch "Powershell switch statement" msb
+switch ( ${1:test} ){
+	${2:condition1} { ${3:action} }
+	${4:condition2} { ${5:action} }
+	default { ${6:action} }
+endsnippet

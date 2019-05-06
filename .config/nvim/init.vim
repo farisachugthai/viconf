@@ -37,6 +37,7 @@ if filereadable(g:local_vimrc)
 endif
 
 if g:windows
+
     " How do i check if I'm on cmd or powershell?
     " Awh fuck I just thought about the fact that I have powershell installed on Linux too :/
     " set shell=powershell shellquote=( shellpipe=\| shellredir=> shellxquote=
@@ -199,6 +200,13 @@ call plug#end()
 
 " Global Options: {{{1
 
+" Get this going as soon as possible
+runtime! plugin/**/*.vim
+
+" Idk if this is necessary. *shrugs*
+filetype plugin indent on
+
+
 " Leader And Viminfo: {{{2
 noremap <Space> <nop>
 map <Space> <Leader>
@@ -339,7 +347,7 @@ let &path = &path . ',' . expand('$VIMRUNTIME/**')
 " regardless of unix/windows/android etc
 set sessionoptions+=unix,slash
 
-if exists('shellslash')
+if exists('+shellslash')   " don't drop the +!
   set shellslash
 endif
 
@@ -377,8 +385,8 @@ set isfname-==
 set autochdir
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
-set diffopt=filler,context:3
-" vertical split d: Recent modifications from jupyter nteractiffs. def cont is 6
+" Filler lines to keep text synced, 3 lines of context on diffs, don't diff hidden files,default foldcolumn is 2
+set diffopt=filler,context:3,hiddenoff,foldcolumn:1
 
 let &undodir = expand('$XDG_CONFIG_HOME') . '/nvim/undodir'
 set undofile
@@ -453,9 +461,10 @@ noremap <C-]> g<C-]>
 
 " Runtime: {{{1
 
+
 " Matching Parenthesis: {{{2
 
-runtime! macros/matchit.vim
+runtime macros/matchit.vim
 
 set showmatch
 set matchpairs+=<:>
@@ -598,29 +607,6 @@ endfunction
 
 command! -bang Autosave call s:autosave(<bang>1)
 
-" Explore PlugHelp: {{{2
-" Call :PlugHelp to use fzf to open a window with all of the plugins
-" you have installed listed and upon pressing enter open the help
-" docs. That's not a great explanation but honestly easier to explain
-" with a picture.
-" TODO: Screenshot usage.
-function! s:plug_help_sink(line)
-  let dir = g:plugs[a:line].dir
-  for pat in ['doc/*.txt', 'README.md']
-    let match = get(split(globpath(dir, pat), "\n"), 0, '')
-    if len(match)
-      execute 'tabedit' match
-      return
-    endif
-  endfor
-  tabnew
-  execute 'Explore' dir
-endfunction
-
-command! PlugHelp call fzf#run(fzf#wrap({
-  \ 'source': sort(keys(g:plugs)),
-  \ 'sink'  :   function('s:plug_help_sink')}))
-
 " Statusline: {{{2
 " Apr 16, 2019: I wonder if Vim doesn't have the same statusline expressions as Neovim because literally half of these are builtin flags...
 
@@ -684,20 +670,6 @@ command! -nargs=1 -complete=file Chmod call system('chmod +x ' . expand('%:S'))
 
 " Could do word under cursor. Could tack it on to some fzf variation. idk
 
-" Profile: {{{2
-
-" Profile a func or file. Oooo I could use XDG_DATA_HOME instead of _ROOT there
-function! s:profile(bang)
-  if a:bang
-    profile pause
-    noautocmd qall
-  else
-    profile start expand('$_ROOT') . 'tmp/profile.log'
-    profile func *
-    profile file *
-  endif
-endfunction
-command! -bang Profile call s:profile(<bang>0)
 
 " General Syntax Highlighting: {{{2
 " Lower max syntax highlighting
@@ -707,6 +679,10 @@ syntax sync fromstart
 
 " Try to keep as close to the bottom of the file as possible
 colorscheme gruvbox
+let g:gruvbox_contrast_hard = 1
+let g:gruvbox_contrast_soft = 0
+let g:gruvbox_improved_strings = 1
+let g:gruvbox_italic = 1
 
 " Clear Hlsearch: {{{2
 
@@ -719,3 +695,7 @@ augroup vimrc_incsearch_highlight
     autocmd CmdlineEnter /,\? :set hlsearch
     autocmd CmdlineLeave /,\? :set nohlsearch
 augroup END
+
+" Plug: {{{2
+" I utilize this command so often I may as well save the characters
+command -nargs=0 Pl echo keys(plugs)

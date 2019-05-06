@@ -15,6 +15,8 @@ Shit. This is probably gonna be hard really soon.
 """
 import sys
 
+import vim
+
 try:
     import pynvim
 except ImportError:  # Probably ModuleNotFound too but import is more backwards compatible
@@ -48,10 +50,32 @@ class Instance(App):
         >>> def some_wrapped_func(self):
         ...     pass
 
+    List buf should go into this class but I'm making it a simple func for now.
+
+    Since it doesn't really require self, do we call it a class method?
+    Could it be a property?
+
+
     """
+    pass
 
-    @pynvim.command('ListBuf', nargs='*')
-    @property
-    def list_buf(self, args):
+@pynvim.command('ListBuf', nargs=0)
+def list_buf():
+    """Return the Vimscript function :func:`nvim_list_bufs()`.
 
+    Returns
+    --------
+    bufnrs : list of ints
+        Currently loaded buffers
 
+    Examples
+    --------
+    .. code-block:: vim
+
+        :ListBuf
+        " With one open buffer the output will be [1]
+        " Note that this could be any list of integers
+
+    """
+    bufnrs = vim.command('call nvim_list_bufs()')
+    return bufnrs
