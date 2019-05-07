@@ -4,22 +4,12 @@
 
 A useful combination with UltiSnips.
 
-.. todo::
+* Add docstrings to everything. Kinda forces your hand to learn how
+everything works
+    * Admittedly good start though!
+    * May want to add which snippets depend on it. If not simple examples
+      for the return value will be more than plenty.
 
-    * Find out if we can do the following.
-
-    .. code::
-
-        try:
-            import nvim as vim
-        except ImportError:
-            import vim
-
-    * Add docstrings to everything. Kinda forces your hand to learn how
-    everything works
-        * Admittedly good start though!
-        * May want to add which snippets depend on it. If not simple examples
-        for the return value will be more than plenty.
 """
 import os
 import string
@@ -382,4 +372,27 @@ class ItalicWrapper(TextTag):
         self._wrapped = wrapped
 
     def render(self):
+        """Wrap the text with HTML italic tags."""
         return "<i>{}</i>".format(self._wrapped.render())
+
+
+def create_table(snip):
+    """Create a table. For markdown snippets."""
+    # retrieving single line from current string and treat it like tabstops count
+    placeholders_string = snip.buffer[snip.line].strip()[2:].split("x", 1)
+    rows_amount = int(placeholders_string[0])
+    columns_amount = int(placeholders_string[1])
+
+    # erase current line
+    snip.buffer[snip.line] = ''
+
+    # create anonymous snippet with expected content and number of tabstops
+    anon_snippet_title = ' | '.join(['$' + str(col) for col in range(1,columns_amount+1)]) + "\n"
+    anon_snippet_delimiter = ':-|' * (columns_amount-1) + ":-\n"
+    anon_snippet_body = ""
+    for row in range(1,rows_amount+1):
+        anon_snippet_body += ' | '.join(['$' + str(row*columns_amount+col) for col in range(1,columns_amount+1)]) + "\n"
+    anon_snippet_table = anon_snippet_title + anon_snippet_delimiter + anon_snippet_body
+
+    # expand anonymous snippet
+    snip.expand_anon(anon_snippet_table)

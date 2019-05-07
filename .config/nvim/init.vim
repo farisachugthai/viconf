@@ -5,19 +5,6 @@ scriptencoding utf-8
 
 " Preliminaries: {{{1
 
-" XDG Check: {{{2
-" The whole file is now predicated on these existing. Need to add checks in.
-" In $VIMRUNTIME/filetype.vim it looks like Bram himself checks env vars this way
-if empty('$XDG_DATA_HOME')
-    echoerr 'XDG_DATA_HOME not set. Exiting'
-    finish
-endif
-
-if empty('$XDG_CONFIG_HOME')
-    echoerr 'XDG_CONFIG_HOME not set. Exiting.'
-    finish
-endif
-
 " OS Setup: {{{2
 
 " Termux check from Evervim. Thanks!
@@ -44,6 +31,26 @@ if g:windows
     " set shellcmdflag=-NoLogo\ -NoProfile\ -ExecutionPolicy\ RemoteSigned\ -Command
 endif
 
+" XDG Check: {{{2
+" The whole file is now predicated on these existing. Need to add checks in.
+" In $VIMRUNTIME/filetype.vim it looks like Bram himself checks env vars this way
+if empty('$XDG_DATA_HOME')
+  " May 07, 2019: Just realized you could set these. :facepalm:
+  if empty(g:windows)
+    let $XDG_DATA_HOME = expand('~/.local/share')
+  else
+    let $XDG_DATA_HOME = expand('~/AppData/Local')
+  endif
+endif
+
+if empty('$XDG_CONFIG_HOME')
+  if empty(g:windows)
+    let $XDG_CONFIG_HOME = expand('~/.config')
+  else
+    let $XDG_CONFIG_HOME = expand('~/AppData/Local')
+  endif
+endif
+
 " $_ROOT: {{{2
 " The below is an env var set as a convenient bridge between Ubuntu and Termux
 " As a result it messes things up if not set, but there's no reason to halt
@@ -62,9 +69,8 @@ if g:termux
     " holy fuck that was a doozy to find
     let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
 
-    " Todo: Ruby section needs to be updated.
-    if filereadable(expand($_ROOT) . 'lib/ruby/gems/2.6.0/gems/neovim-0.8.0/exe/neovim-ruby-host')
-        let g:ruby_host_prog = expand($_ROOT) . 'lib/ruby/gems/2.6.0/gems/neovim-0.8.0/exe/neovim-ruby-host'
+    if filereadable(expand($_ROOT) . 'lib/ruby/gems/2.6.3/gems/neovim-0.8.0/exe/neovim-ruby-host')
+        let g:ruby_host_prog = expand($_ROOT) . 'lib/ruby/gems/2.6.3/gems/neovim-0.8.0/exe/neovim-ruby-host'
     elseif filereadable(expand('$_ROOT') . 'bin/neovim-ruby-host')
         let g:ruby_host_prog = expand('$_ROOT') . 'bin/neovim-ruby-host'
     endif
@@ -135,15 +141,12 @@ let s:plugins = filereadable(expand('$XDG_DATA_HOME/nvim/site/autoload/plug.vim'
 if !s:plugins
   " bootstrap plug.vim on new systems
   function! s:InstallPlug()
-    if !isdirectory(expand('$XDG_DATA_HOME/nvim/site/autoload'))
-      call mkdir(expand('$XDG_DATA_HOME/nvim/site/autoload', 1), 'p')
-    endif
-
     try
-      execute '!curl -fLo ' . expand('$XDG_DATA_HOME/nvim/site/autoload/plug.vim', 1) . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+      execute '!curl -fLo --create-dirs ' . expand('$XDG_DATA_HOME/nvim/site/autoload/plug.vim', 1) . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
     catch
       echo v:exception
     endtry
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
   endfunction
 endif
 
@@ -180,6 +183,7 @@ Plug 'tomtom/tlib_vim'  " this library is incredible
 
 " It's very frustrating having termux slow down beyond repair but also frustrating
 " not being able to use more than 15 plugins at any point in time
+
 if !g:termux
     Plug 'autozimu/LanguageClient-neovim', {'do': ':UpdateRemotePlugins'}
     Plug 'godlygeek/tabular'
@@ -205,8 +209,6 @@ runtime! plugin/**/*.vim
 
 " Idk if this is necessary. *shrugs*
 filetype plugin indent on
-
-
 " Leader And Viminfo: {{{2
 noremap <Space> <nop>
 map <Space> <Leader>
@@ -339,7 +341,7 @@ if isdirectory(expand('$_ROOT') . '/include/libcs50')
     let &path = &path .','. expand('$_ROOT') . '/include/libcs50'
 endif
 
-let &path = &path . ',' . expand('$VIMRUNTIME/**')
+let &path = &path . ',' . expand('$VIMRUNTIME/*')
 
 " Write Once Debug Everywhere: {{{2
 
@@ -460,7 +462,6 @@ noremap k gk
 noremap <C-]> g<C-]>
 
 " Runtime: {{{1
-
 
 " Matching Parenthesis: {{{2
 
@@ -669,7 +670,6 @@ command! -nargs=1 -bang -complete=file Rename f <args>|w<bang>
 command! -nargs=1 -complete=file Chmod call system('chmod +x ' . expand('%:S'))
 
 " Could do word under cursor. Could tack it on to some fzf variation. idk
-
 
 " General Syntax Highlighting: {{{2
 " Lower max syntax highlighting

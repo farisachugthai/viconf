@@ -1,11 +1,11 @@
 config-nvim ~/.config/nvim
 dotfiles ~/projects/dotfiles/unix
-IPython ~/miniconda3/lib/python3.7/site-packages/IPython/core
 jedi-docs ~/.local/share/nvim/plugged/jedi-vim/pythonx/jedi/docs/docs
 plugged ~/.local/share/nvim/plugged
-sphinx ~/miniconda3/lib/python3.7/site-packages/sphinx
 tutorials ~/Dropbox/python/tutorials
 utilities ~/projects/utilities
 viconf ~/projects/viconf/.config/nvim
-
 tlib ~/.local/share/nvim/plugged/tlib_vim/autoload/tlib
+
+IPython ~/miniconda3/lib/python3.7/site-packages/IPython/core
+sphinx ~/miniconda3/lib/python3.7/site-packages/sphinx

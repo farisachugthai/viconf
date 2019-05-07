@@ -14,6 +14,7 @@ Adblock
 AirVPN
 Akonadi
 AliasManager
+:so fixdup.vim
 AngularJS
 Anisa
 Ansi
@@ -74,6 +75,7 @@ Cheat40
 ChemE
 Choi
 Chugthai
+Cmder
 Colab
 Colab
 ColorColumn
@@ -155,6 +157,7 @@ Fn
 FreeNAS
 Freenode
 Frontend
+GID
 GNOME's
 GPG
 GPT
@@ -173,6 +176,7 @@ HTTPServer
 Harleysville
 Hettinger
 I'll
+I've/have
 IPv4
 IPv6
 IPython
@@ -210,6 +214,7 @@ Lightline
 Linksys
 Linter
 Litecoin
+Losh
 Losh's
 Lubuntu
 MBR
@@ -226,6 +231,7 @@ Messer
 MinGW
 MinGW's
 Miniconda
+Mintty
 Monero
 MongoDB
 NDK
@@ -391,6 +397,7 @@ Todo
 Torrenting
 Twilio
 UC
+UID
 UPnP
 URIs
 USBs
@@ -566,10 +573,12 @@ clojure
 clojurescript
 cmake
 cmd
+cmder
 cmdline
 cmds
 cnoremap
 cobol
+coc
 codeacademy
 coffeescript
 colorcolumn
@@ -579,6 +588,7 @@ commit's
 completefunc
 conda
 condarc
+conemu
 conf
 config
 configs
@@ -706,6 +716,7 @@ fnmatch
 fnmatch
 fortran
 from
+fsck
 fsharp
 fstab
 fstrings
@@ -1104,6 +1115,7 @@ numpydoc
 numpydoc
 nvidia
 nvim
+nvim's
 nvm
 nyancat
 oauth
@@ -1136,6 +1148,8 @@ outfile
 overlined
 owncloud
 p7zip
+packages's/!
+packages/!
 pandoc
 panopticlick
 panoptik
@@ -1220,6 +1234,7 @@ pydoc
 pydocstyle
 pygmentize
 pygments
+pygments
 pylab
 pylab
 pynvim
@@ -1282,11 +1297,13 @@ remoting
 repo
 resave
 resave
+rescan
 restructuredtext
 rg
 ripgrep
 rkt
 rmdir
+rplugin
 rst
 rst2html
 rstcheck
@@ -1297,6 +1314,7 @@ runtimepath
 rustup
 rvm
 rw
+s/!
 samsung
 sas
 savefig
@@ -1398,6 +1416,7 @@ stdlib
 stdout
 str
 strace
+strftime
 stylesheet
 stylesheets
 su
@@ -1447,9 +1466,11 @@ tex
 texting
 thunar
 tiddlywiki
+timefmt
 timeit
 timezones
 tldr
+tmap
 tmp
 tmux
 tnoremap
@@ -1531,6 +1552,7 @@ userspace
 userspaces
 using
 usr
+utf
 utilities's
 utilities's
 utils
@@ -1538,6 +1560,7 @@ uuid
 vala
 valgrind
 vbnet
+vendored
 venv
 verilog
 vhdl
@@ -1647,27 +1670,3 @@ zshrc
 µMatrix
 µTP
 µTorrent
-conemu
-cmder
-Cmder
-vendored
-Mintty
-UID
-GID
-strftime
-timefmt
-fsck
-rplugin
-#ackages's
-packages/!
-s/!
-packages's/!
-packages
-tmap
-I've/have
-I've-/have-
-coc
-utf
-rescan
-Losh
-nvim's

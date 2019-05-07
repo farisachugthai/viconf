@@ -22,6 +22,8 @@ let g:jedi#use_tabs_not_buffers = 1
 " Huge contributor to Jedi's affect on startuptime
 let g:jedi#show_call_signatures = 0
 
+let g:jedi#show_call_signatures = 0
+
 if g:termux
     let g:jedi#smart_auto_mappings = 0
 

@@ -108,8 +108,7 @@ if b:man_sect =~# '^[023]'
   hi! link manLowerSentence String
   hi! link manSignal Type
   hi! link manSynopsis Title
-  hi! link manLowerSentence
-
+  hi! link manLowerSentence String
 endif
 
 " Nvim's highlighting pattern with longopt and CFunc from Vim.
