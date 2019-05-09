@@ -19,6 +19,7 @@ Apr 19, 2019:
     - Expand to windows compatability
     - Add conda compatability
     - Finish argument parser
+
 """
 import argparse
 import logging
@@ -76,46 +77,39 @@ class Machine:
     Probably gonna want to move those functions `get_home` and stuff into this class.
     """
 
-    def __init__(self, home, uname):
+    def __init__(self, conda=None):
         """Initialize a machine."""
-        self.home = home
-        self.uname = uname
-        self.pip_version = pip_version
+        self.conda = conda
+
+    def get_home(self):
+        """Get a user's home directory.
+
+        .. note::
+
+            :func:`sysconfig._getuserbase()` does a similar thing; however, the end
+            directory is different in every OS case so we can't just import it and
+            walk away.
+
+        """
+        try:
+            self.home = os.path.expanduser("~")
+        except OSError:
+            self.home = os.environ.get("%userprofile%")
+        return self.home
+
+    def check_dir(self, dir_d=None):
+        """Check if a dir exists and if not, create it.
+
+        :param dir_d: The directory to put vim-plug in.
+        :returns: None
+        """
+        if not os.path.isdir(dir_d):
+            os.makedirs(dir_d, mode=0o755, exist_ok=True)
 
 
-def get_home():
-    """Get a user's home directory.
-
-    .. note::
-        :func:`sysconfig._getuserbase()` does a similar thing; however, the end
-        directory is different in every OS case so we can't just import it and
-        walk away.
-    """
-    try:
-        home = os.path.expanduser("~")
-    except OSError:
-        home = os.environ.get("%userprofile%")
-    return home
-
-
-def check_dir(dir_d):
-    """Check if a dir exists and if not, create it.
-
-    :param dir_d: The directory to put vim-plug in.
-    :returns: None
-    """
-    if not os.path.isdir(dir_d):
-        os.makedirs(dir_d, mode=0o755, exist_ok=True)
-
-
-def requests_download(plug):
-    """Download vim-plug using requests. Overwrites file if it exists.
-
-    :param plug: File to download vim-plug to.
-    :returns: None
-    """
-    res = requests.get(
-        "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim")
+def requests_download(url=None, plug=None):
+    """Download any file."""
+    res = requests.get(url)
     res.raise_for_status()
 
     with open(plug, "wt") as f:
@@ -219,7 +213,8 @@ def main():
     if NOREQUESTS:
         status = urllib_dl(plug)
     else:
-        status = requests_download(plug)
+        url = "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+        status = requests_download(url=url, plug=plug)
         if not status == 200:
             logging.warning("Vim plug download status code: ")
             logging.warning(status)

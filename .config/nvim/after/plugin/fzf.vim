@@ -181,7 +181,7 @@ augroup end
 "         \ get(a:000, 0, fzf#wrap())))
 " endfunction
 
-inoremap <expr> <C-x><C-k> fzf#complete({
+inoremap <expr><C-x><C-k> fzf#complete({
             \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
             \ 'options': '--preview=bat --ansi --multi --cycle',
 \ 'left': 30})
@@ -227,20 +227,19 @@ command! -bang -nargs=? -complete=dir Files
     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
 " Make Sentence: {{{2
-
 " *fzf-vim-reducer-example*
-
-function! s:make_sentence(lines)
+function! s:make_sentence(lines) abort
     return substitute(join(a:lines), '^.', '\=toupper(submatch(0))', '').'.'
 endfunction
 
-inoremap <expr> <C-x><C-s> fzf#vim#complete({
+inoremap <expr><C-x><C-s> fzf#vim#complete({
     \ 'source':  'cat /usr/share/dict/words',
     \ 'reducer': function('<sid>make_sentence'),
     \ 'options': '--multi --reverse --margin 15%,0',
     \ 'left':    20})
 
 " Explore PlugHelp: {{{2
+
 " Call :PlugHelp to use fzf to open a window with all of the plugins
 " you have installed listed and upon pressing enter open the help
 " docs. That's not a great explanation but honestly easier to explain
@@ -264,6 +263,6 @@ command! PlugHelp call fzf#run(fzf#wrap({
   \ 'sink'  :   function('s:plug_help_sink')}))
 
 " F: {{{2
-
 let g:ag_command = 'ag --smart-case -u -g " " --'
+
 command! -bang -nargs=* F call fzf#vim#grep(g:ag_command .shellescape(<q-args>), 1, <bang>0)

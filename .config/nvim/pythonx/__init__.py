@@ -5,10 +5,7 @@ import logging
 import os
 import sys
 
-try:
-    import pynvim as vim
-except ImportError:
-    import vim
+import vim
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 

@@ -38,3 +38,5 @@ endfunction
 "
 " It operates on the current, potentially unsaved buffer and does not create
 " or save any files. To revert a formatting, just undo.
+
+setlocal makeprg=make\ %<.o

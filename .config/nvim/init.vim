@@ -19,9 +19,7 @@ let g:wsl = has('wsl')   " The fact that this is a thing blows my mind
 
 " unabashedly stolen from junegunn dude is too good.
 let g:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/init.vim.local'
-if filereadable(g:local_vimrc)
-    execute 'source' g:local_vimrc
-endif
+runtime g:local_vimrc
 
 if g:windows
 
@@ -146,8 +144,9 @@ if !s:plugins
     catch
       echo v:exception
     endtry
-    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
   endfunction
+
+  call <SID>InstallPlug()
 endif
 
 " General Plugins: {{{2
@@ -209,6 +208,7 @@ runtime! plugin/**/*.vim
 
 " Idk if this is necessary. *shrugs*
 filetype plugin indent on
+
 " Leader And Viminfo: {{{2
 noremap <Space> <nop>
 map <Space> <Leader>
@@ -320,6 +320,7 @@ setlocal suffixesadd=*.vim
 
 set complete+=kspell                    " Autocomplete in insert mode
 set completeopt=menu,menuone,noselect,noinsert,preview
+
 " Path: {{{2
 
 " DON'T USE LET. LET ALLOWS FOR EXPRESSION EVALUATION. MUST BE DONE WITH SET
@@ -354,7 +355,7 @@ if exists('+shellslash')   " don't drop the +!
 endif
 
 
-if &term =~ 'xterm-256color' || &term ==# 'cygwin'
+if &term =~? 'xterm-256color' || &term ==# 'cygwin' || &term ==# 'builtin_tmux'
 " mintty identifies itself as xterm-compatible
 " Yeah mintty does. Conemu/Cmder identify as cygwin sooo. we get ansi colors
   set termguicolors
@@ -368,7 +369,7 @@ endif
 
 set tags+=./tags,./*/tags
 set tags+=~/projects/**/tags
-" set tagcase=smartcase
+set tagcase=smart
 
 set mouse=a
 
@@ -488,10 +489,6 @@ let g:loaded_logiPat           = 1
 
 " Filetype Specific Options: {{{2
 
-if &filetype ==# 'c'
-    set makeprg=make\ %<.o
-endif
-
 " Noticed this bit in he syntax line 2800
 let g:is_bash = 1
 let g:sh_fold_enabled= 4  "   (enable if/do/for folding)
@@ -511,48 +508,16 @@ let g:ft_html_autocomment = 1
 " From `:he ft-lisp-syntax. Color parentheses differently up to 10 levels deep
 let g:lisp_rainbow = 1
 
-" From he syntax
-" VIM			*vim.vim*		*ft-vim-syntax*
-" 			*g:vimsyn_minlines*	*g:vimsyn_maxlines*
-" Support embedded lua python nd ruby syntax highlighting in vim ftypes. No idea what your other options are.
-   " GOT IT!
-" Allows users to specify the type of embedded script highlighting
-" they want:  (perl/python/ruby/tcl support)
-"   g:vimsyn_embed == 0   : don't embed any scripts
-"   g:vimsyn_embed =~# 'l' : embed lua
-"   g:vimsyn_embed =~# 'm' : embed mzscheme
-"   g:vimsyn_embed =~# 'p' : embed perl
-"   g:vimsyn_embed =~# 'P' : embed python
-"   g:vimsyn_embed =~# 'r' : embed ruby
-"   g:vimsyn_embed =~# 't' : embed tcl
-let g:vimsyn_embed = 'lmtPr'
-
-" Turn off errors because 50% of them are wrong.
-let g:vimsyn_noerror = 1
-
-						" *g:vimsyn_folding*
-
-" Some folding is now supported with syntax/vim.vim:
-
-   " g:vimsyn_folding == 0 or doesn't exist: no syntax-based folding
-   " g:vimsyn_folding =~ 'a' : augroups
-   " g:vimsyn_folding =~ 'f' : fold functions
-   " g:vimsyn_folding =~ 'P' : fold python   script
-
-" Are we allowed to combine these?
-let g:vimsyn_folding = 'afP'
-
-let g:vimsyn_maxlines = 500  " why is the default 60???
-
 " Omnifuncs: {{{3
 
 augroup omnifunc
     autocmd!
-    autocmd Filetype python,xonsh     setlocal completefunc=python3complete#Complete
-    autocmd Filetype html,xhtml       setlocal completefunc=htmlcomplete#CompleteTags
-    autocmd Filetype xml              setlocal completefunc=xmlcomplete#CompleteTags
-    autocmd Filetype css              setlocal completefunc=csscomplete#CompleteCSS
-    autocmd Filetype javascript       setlocal completefunc=javascriptcomplete#CompleteJS
+    autocmd Filetype python,xonsh     setlocal omnifunc=python3complete#Complete
+    autocmd Filetype html,xhtml       setlocal omnifunc=htmlcomplete#CompleteTags
+    autocmd Filetype xml              setlocal omnifunc=xmlcomplete#CompleteTags
+    autocmd Filetype css              setlocal omnifunc=csscomplete#CompleteCSS
+    autocmd Filetype javascript       setlocal omnifunc=javascriptcomplete#CompleteJS
+    autocmd Filetype ruby             setlocal omnifunc=rubycomplete#Complete
     " If there isn't a default or built-in, use the syntax highlighter
 
     autocmd Filetype *
@@ -609,26 +574,22 @@ endfunction
 command! -bang Autosave call s:autosave(<bang>1)
 
 " Statusline: {{{2
-" Apr 16, 2019: I wonder if Vim doesn't have the same statusline expressions as Neovim because literally half of these are builtin flags...
 
 function! s:statusline_expr()
 
+" %n is buffer #, %f is filename relative to $PWD, sep is right align
+" %m is modified?, %r is filetype,
   let dicons = ' %{WebDevIconsGetFileTypeSymbol()} '
-  let mod = "%{&modified ? '[+] ' : !&modifiable ? '[x] ' : ''}"
-  " let ro  = "%{&readonly ? '[RO] ' : ''}"
-  " let ft  = "%{len(&filetype) ? '['.&filetype.'] ' : ''}"
   let fug = "%{exists('g:loaded_fugitive') ? fugitive#statusline() : ''}"
   let sep = ' %= '
   let pos = ' %-12(%l : %c%V%) '
-  let pct = ' %P'
-" %n is buffer #, %f is filename relative to $PWD, sep is right align
 if exists('*CSV_WCol')
     let csv = '%1*%{&ft=~"csv" ? CSV_WCol() : ""}%*'
 else
     let csv = ''
 endif
 
-  return '[%n] %f '. dicons . mod . '%r' . '%y' . fug . csv . sep.pos.'%*'.pct
+  return '[%n] %f '. dicons . '%m' . '%r' . ' %y ' . fug . csv . ' ' . ' %{&ff} ' . sep . pos . '%*' . ' %P'
 endfunction
 
 let &statusline = s:statusline_expr()
@@ -642,18 +603,9 @@ augroup TermGroup
     autocmd TermOpen * setlocal nomodified
 augroup END
 
-" TODO: Integrate this into the statusline I like what bram left us with a lot
-" Show EOL type and last modified timestamp, right after the filename
-" Set the statusline
-" set statusline=%f               " filename relative to current $PWD
 " set statusline+=%h              " help file flag
-" set statusline+=%m              " modified flag
-" set statusline+=%r              " readonly flag
-" set statusline+=\ [%{&ff}]      " Fileformat [unix]/[dos] etc...
 " set statusline+=\ (%{strftime(\"%H:%M\ %d/%m/%Y\",getftime(expand(\"%:p\")))})  " last modified timestamp
-" set statusline+=%=              " Rest: right align
 " set statusline+=%l,%c%V         " Position in buffer: linenumber, column, virtual column
-" set statusline+=\ %P            " Position in buffer: Percentage
 
 " Rename: {{{2
 " :he map line 1454. How have i never noticed this isn't a feature???

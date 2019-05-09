@@ -23,15 +23,16 @@ if !exists('g:${1:MyUltraImportantVar}')
 endif
 endsnippet
 
-snippet guard "Script reload guard. Good to put directly under the header snippet." b
-if exists('${1:b:did_`!p snip.rv = snip.fn.replace('.','_')`}') || ${2:&compatible} || ${3:v:version < 700}
+snippet guard "Script reload guard. Good to put directly under the header snippet." bms
+" Guard: {{{1
+if exists('${2:b:did_`!p snip.rv = snip.fn.replace('.','_')`$1}') || &compatible || ${3:v:version < 700}
 	finish
 endif
 let $1 = ${4:1}
 endsnippet
 
 snippet plugin "Plugin reload guard. Newly minted so be observant of bugs." s
-if !has_key(plugs, '${1:${VISUAL}`!p snip.rv = snip.basename.replace('.', '_')`}')
+if !has_key(plugs, '${2:`!p snip.rv = snip.basename.replace('.', '_')`}${1:${VISUAL}}}')
 	finish
 endif
 
@@ -42,7 +43,7 @@ let b:did_`!p snip.rv = snip.basename.replace('.', '_')` = 1
 
 endsnippet
 
-snippet cpo "compatability options"
+snippet cpo "compatability options" ms
 let s:cpo_save = &cpoptions
 set cpoptions&vim
 

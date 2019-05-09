@@ -10,10 +10,10 @@ if !has_key(plugs, 'voom')
     finish
 endif
 
-if exists('g:did_voom_conf') || &compatible || v:version < 700
+if exists('g:did_voom_after_plugin') || &compatible || v:version < 700
     finish
 endif
-let g:did_voom_conf = 1
+let g:did_voom_after_plugin = 1
 
 
 " Options: {{{1
@@ -38,5 +38,13 @@ let g:did_voom_conf = 1
 " filetype.
 
 let g:voom_ft_modes = {'markdown': 'markdown', 'rst': 'rst', 'zimwiki': 'dokuwiki'}
+
+
+" autoload is oddly full of python files which *obviously* don't get imported correctly.
+" Possibly copy paste into pythonx?
 let g:voom_default_mode = 'rst'
-let g:voom_python_versions = [3]
+let g:voom_python_versions = [3,2]
+
+" You conditionally can't use << or <C-Left> unless your node is the furthest down the stack
+" But that's kinda dumb.
+let g:voom_always_allow_move_left = 1

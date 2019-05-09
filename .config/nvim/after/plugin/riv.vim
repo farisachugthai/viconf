@@ -2,7 +2,7 @@
     " File: riv.vim
     " Author: Faris Chugthai
     " Description: Plugin modifications for riv.vim
-    " Last Modified: Apr 05, 2019
+    " Last Modified: May 09, 2019
 " ============================================================================
 
 " Guards: {{{1
@@ -11,9 +11,10 @@ if !has_key(plugs, 'riv.vim')
     finish
 endif
 
-if exists('b:did_riv.vim') || &cp || v:version < 700
+if exists('g:did_riv_after_plugin') || &compatible || v:version < 700
     finish
 endif
+let g:did_riv_after_plugin = 1
 
 " Options: {{{1
 
@@ -52,3 +53,7 @@ let riv_project1 = { 'Name': 'utilities', 'path': '~/projects/utilities',}
 let riv_project2 = { 'Name': 'Gruvbox-IPython', 'path': '~/projects/Gruvbox-IPython',}
 
 let g:riv_projects = [ riv_project1, riv_project2 ]
+
+" *sigh*
+let g:riv_ignored_nmaps = "<Leader>tp,<Leader>ht"
+let g:riv_todo_helper_ignore_done = 1
