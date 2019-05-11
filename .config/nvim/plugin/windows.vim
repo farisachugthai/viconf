@@ -5,6 +5,12 @@
   " Last Modified: May 03, 2019
 " ============================================================================
 
+" Guard: {{{1
+if exists('b:did_windows_vim') || &compatible || v:version < 700
+  finish
+endif
+let b:did_windows_vim = 1
+
 " Here's a bunch from the nvim api. I wanna start experimenting with that and see how it goes
 
 " EchoRTP: {{{1
@@ -20,13 +26,15 @@ nnoremap <Leader>rt call g:EchoRTP()
 
 command! -nargs=0 EchoRTP call g:EchoRTP()
 
-function! g:PreviewWord() abort  " {{{1
+" PreviewWord: {{{1
+" Preview the word under the cursor. Could definitely do with a mapping
+function! g:PreviewWord() abort
 " From :he cursorhold-example
   if &previewwindow			" don't do this in the preview window
     return
   endif
-  let w = expand("<cword>")		" get the word under cursor
-  if w =~ '\a'			" if the word contains a letter
+  let w = expand('<cword>')		" get the word under cursor
+  if w =~? '\a'			" if the word contains a letter
 
     " Delete any existing highlight before showing another tag
     silent! wincmd P			" jump to preview window
@@ -37,7 +45,7 @@ function! g:PreviewWord() abort  " {{{1
 
     " Try displaying a matching tag for the word under the cursor
     try
-       exe "ptag " . w
+       execute "ptag " . w
     catch
       return
     endtry

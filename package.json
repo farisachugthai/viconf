@@ -1,11 +1,3 @@
-<<<<<<< Updated upstream
-{
-  "dependencies": {
-    "neovim": "^4.5.0"
-  }
-}
-||||||| merged common ancestors
-=======
 {
   "name": "viconf",
   "version": "1.0.0",
@@ -15,7 +7,7 @@
     "doc": "doc"
   },
   "dependencies": {
-    "coc.nvim": "^0.0.66",
+    "coc.nvim": "^0.0.67",
     "neovim": "^4.5.0",
     "vscode-css-languageserver-bin": "^1.4.0",
     "vscode-html-languageserver-bin": "^1.4.0",
@@ -40,4 +32,3 @@
   },
   "homepage": "https://github.com/farisachugthai/viconf#readme"
 }
->>>>>>> Stashed changes

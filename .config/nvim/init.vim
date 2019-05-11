@@ -6,26 +6,26 @@ scriptencoding utf-8
 " Preliminaries: {{{1
 
 " OS Setup: {{{2
+" This got moved up so we can check what OS we have and decide what options
+" to set from there
 
 " Termux check from Evervim. Thanks!
 let g:termux = isdirectory('/data/data/com.termux')
 let g:ubuntu = has('unix') && !has('macunix')
-" This got moved up so we can check what OS we have and decide what options
-" to set from there
+
 " how the literal fuck is `has('win32')` a nvim specific thing.
 " Just tried it in vim and it didn't work!!
 let g:windows = has('win32') || has('win64')
 let g:wsl = has('wsl')   " The fact that this is a thing blows my mind
 
-" unabashedly stolen from junegunn dude is too good.
 let g:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/init.vim.local'
 if filereadable(g:local_vimrc)
     execute 'source' g:local_vimrc
 endif
 
 if g:windows
-
     " How do i check if I'm on cmd or powershell?
+    " StackOverflow recommended grepping actively running processes like wtf
     " Awh fuck I just thought about the fact that I have powershell installed on Linux too :/
     " set shell=powershell shellquote=( shellpipe=\| shellredir=> shellxquote=
     " set shellcmdflag=-NoLogo\ -NoProfile\ -ExecutionPolicy\ RemoteSigned\ -Command
@@ -63,7 +63,7 @@ elseif !exists('$_ROOT') && expand(g:ubuntu) == 1
 endif
 
 " Remote Hosts: {{{2
-    " Set the node and ruby remote hosts
+" Set the node and ruby remote hosts
 
 if g:termux
     " holy fuck that was a doozy to find
@@ -187,7 +187,6 @@ Plug 'tomtom/tlib_vim'  " this library is incredible
 if !g:termux
     Plug 'autozimu/LanguageClient-neovim', {'do': ':UpdateRemotePlugins'}
     Plug 'godlygeek/tabular'
-    Plug 'vim-voom/voom'
     Plug 'Rykka/InstantRst', {'for': 'rst'}
     Plug 'gu-fan/riv.vim', {'for': 'rst'}
     Plug 'junegunn/vim-peekaboo'
@@ -195,20 +194,39 @@ if !g:termux
     Plug 'mbbill/undotree'
     Plug 'chrisbra/csv.vim', {'for': 'csv'}
     Plug 'omnisharp/omnisharp-vim', {'for': 'cs'}
-    Plug 'neoclide/coc.nvim'
-    Plug 'ervandew/supertab'
 endif
+
+Plug 'vim-voom/voom'
+Plug 'neoclide/coc.nvim'
+Plug 'ervandew/supertab'
 
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 
 " Global Options: {{{1
 
-" Get this going as soon as possible
-runtime! plugin/**/*.vim
+" I've seen it recommended to run `:filetype plugin indent on` and `:syntax on` immediately after plugins.
 
-" Idk if this is necessary. *shrugs*
-filetype plugin indent on
+" nvim does the ftplugin part for you! I ran nvim -u none and still saw my plugins in scriptnames
+
+" General Syntax Highlighting: {{{2
+
+" Lower max syntax highlighting
+set synmaxcol=400
+
+colorscheme gruvbox
+
+function! Gruvbox() abort
+  let g:gruvbox_contrast_hard = 1
+  let g:gruvbox_contrast_soft = 0
+  let g:gruvbox_improved_strings = 1
+  let g:gruvbox_italic = 1
+endfunction
+
+call Gruvbox()
+
+syntax sync fromstart
+
 " Leader And Viminfo: {{{2
 noremap <Space> <nop>
 map <Space> <Leader>
@@ -221,7 +239,6 @@ if has('nvim-0.4')
     set pyx=3
   catch /^Vim:E518:*/
   endtry
-    " Damnit it happened AGAIN.
 else
    set shada+=n$XDG_DATA_HOME/nvim/shada/main.shada
 endif
@@ -244,7 +261,6 @@ set foldlevel=0
 set foldnestmax=10
 set foldmethod=marker
 " Use 1 column to indicate fold level and whether a fold is open or closed.
-" Trade off for valuable window real estate though....
 set foldcolumn=1
 
 " Buffers Windows Tabs: {{{2
@@ -271,7 +287,6 @@ set spellsuggest=5                      " Limit the number of suggestions from '
 if filereadable('/usr/share/dict/words')
     set dictionary+=/usr/share/dict/words
     " Replace the default dictionary completion with fzf-based fuzzy completion
-    " Courtesy of fzf <3 vim.
     inoremap <expr> <C-x><C-k> fzf#vim#complete('cat /usr/share/dict/words')
 endif
 
@@ -316,10 +331,10 @@ set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 " A list of words that change how command line completion is done.
 " Currently only one word is allowed: tagfile
 set wildoptions=tagfile
-setlocal suffixesadd=*.vim
 
 set complete+=kspell                    " Autocomplete in insert mode
 set completeopt=menu,menuone,noselect,noinsert,preview
+
 " Path: {{{2
 
 " DON'T USE LET. LET ALLOWS FOR EXPRESSION EVALUATION. MUST BE DONE WITH SET
@@ -341,7 +356,7 @@ if isdirectory(expand('$_ROOT') . '/include/libcs50')
     let &path = &path .','. expand('$_ROOT') . '/include/libcs50'
 endif
 
-let &path = &path . ',' . expand('$VIMRUNTIME/*')
+let &path = &path . ',' . expand('$VIMRUNTIME')
 
 " Write Once Debug Everywhere: {{{2
 
@@ -354,7 +369,7 @@ if exists('+shellslash')   " don't drop the +!
 endif
 
 
-if &term =~ 'xterm-256color' || &term ==# 'cygwin'
+if &term =~# 'xterm-256color' || &term ==# 'cygwin' || &term ==# 'tmux-256color'
 " mintty identifies itself as xterm-compatible
 " Yeah mintty does. Conemu/Cmder identify as cygwin sooo. we get ansi colors
   set termguicolors
@@ -396,8 +411,7 @@ set undofile
 set backup
 let &backupdir=expand('$XDG_CONFIG_HOME') . '/nvim/undodir'
 set backupext='.bak'        " like wth is that ~ nonsense?
-" Directory won't need to be set because it defaults to
-" xdg_data_home/nvim/swap
+" Directory won't need to be set because it defaults to xdg_data_home/nvim/swap
 
 set modeline
 set browsedir="buffer"                  " which directory is used for the file browser
@@ -416,6 +430,8 @@ let g:tutor_debug = 1
 " for a search that hits the start or end of the file not being displayed)
 set terse
 
+set sidescroll=10                       " Didn't realize the default is 1
+
 " Mappings: {{{1
 
 " General_Mappings: {{{2
@@ -429,7 +445,6 @@ endif
 " Switch CWD to the directory of the open buffer
 noremap <Leader>cd <Cmd>cd %:p:h<CR><Cmd>pwd<CR>
 
-" Backspace in Visual mode deletes selection
 vnoremap <BS> d
 
 noremap <Leader>cd <Cmd>cd %:p:h<CR><Cmd>pwd<CR>
@@ -475,7 +490,6 @@ set matchtime=20
 " From pi_paren.txt
 " Matching parenthesises are highlighted A timeout of 300 msec (60 msec in Insert mode). This can be changed with the
 let g:matchparen_timeout = 500
-" and
 let g:matchparen_insert_timeout = 300
 " variables and their buffer-local equivalents b:matchparen_timeout and b:matchparen_insert_timeout.
 
@@ -489,7 +503,6 @@ let g:loaded_logiPat           = 1
 " Filetype Specific Options: {{{2
 
 if &filetype ==# 'c'
-    set makeprg=make\ %<.o
 endif
 
 " Noticed this bit in he syntax line 2800
@@ -511,50 +524,19 @@ let g:ft_html_autocomment = 1
 " From `:he ft-lisp-syntax. Color parentheses differently up to 10 levels deep
 let g:lisp_rainbow = 1
 
-" From he syntax
-" VIM			*vim.vim*		*ft-vim-syntax*
-" 			*g:vimsyn_minlines*	*g:vimsyn_maxlines*
-" Support embedded lua python nd ruby syntax highlighting in vim ftypes. No idea what your other options are.
-   " GOT IT!
-" Allows users to specify the type of embedded script highlighting
-" they want:  (perl/python/ruby/tcl support)
-"   g:vimsyn_embed == 0   : don't embed any scripts
-"   g:vimsyn_embed =~# 'l' : embed lua
-"   g:vimsyn_embed =~# 'm' : embed mzscheme
-"   g:vimsyn_embed =~# 'p' : embed perl
-"   g:vimsyn_embed =~# 'P' : embed python
-"   g:vimsyn_embed =~# 'r' : embed ruby
-"   g:vimsyn_embed =~# 't' : embed tcl
-let g:vimsyn_embed = 'lmtPr'
-
-" Turn off errors because 50% of them are wrong.
-let g:vimsyn_noerror = 1
-
-						" *g:vimsyn_folding*
-
-" Some folding is now supported with syntax/vim.vim:
-
-   " g:vimsyn_folding == 0 or doesn't exist: no syntax-based folding
-   " g:vimsyn_folding =~ 'a' : augroups
-   " g:vimsyn_folding =~ 'f' : fold functions
-   " g:vimsyn_folding =~ 'P' : fold python   script
-
-" Are we allowed to combine these?
-let g:vimsyn_folding = 'afP'
-
-let g:vimsyn_maxlines = 500  " why is the default 60???
 
 " Omnifuncs: {{{3
 
 augroup omnifunc
     autocmd!
-    autocmd Filetype python,xonsh     setlocal completefunc=python3complete#Complete
-    autocmd Filetype html,xhtml       setlocal completefunc=htmlcomplete#CompleteTags
-    autocmd Filetype xml              setlocal completefunc=xmlcomplete#CompleteTags
-    autocmd Filetype css              setlocal completefunc=csscomplete#CompleteCSS
-    autocmd Filetype javascript       setlocal completefunc=javascriptcomplete#CompleteJS
-    " If there isn't a default or built-in, use the syntax highlighter
+    autocmd Filetype python,xonsh     setlocal omnifunc=python3complete#Complete
+    autocmd Filetype html,xhtml       setlocal omnifunc=htmlcomplete#CompleteTags
+    autocmd Filetype xml              setlocal omnifunc=xmlcomplete#CompleteTags
+    autocmd Filetype css              setlocal omnifunc=csscomplete#CompleteCSS
+    autocmd Filetype javascript       setlocal omnifunc=javascriptcomplete#CompleteJS
+    autocmd Filetype ruby             setlocal omnifunc=rubycomplete#Complete
 
+    " If there isn't a default or built-in, use the syntax highlighter
     autocmd Filetype *
         \   if &omnifunc == "" |
         \       setlocal completefunc=syntaxcomplete#Complete |
@@ -628,7 +610,7 @@ else
     let csv = ''
 endif
 
-  return '[%n] %f '. dicons . mod . '%r' . '%y' . fug . csv . sep.pos.'%*'.pct
+  return '[%n] %f '. dicons . mod . '%r' . '%y' . fug . csv . sep . pos . '%*'. pct . '        '
 endfunction
 
 let &statusline = s:statusline_expr()
@@ -643,9 +625,6 @@ augroup TermGroup
 augroup END
 
 " TODO: Integrate this into the statusline I like what bram left us with a lot
-" Show EOL type and last modified timestamp, right after the filename
-" Set the statusline
-" set statusline=%f               " filename relative to current $PWD
 " set statusline+=%h              " help file flag
 " set statusline+=%m              " modified flag
 " set statusline+=%r              " readonly flag
@@ -666,23 +645,11 @@ command! -nargs=1 -bang -complete=file Rename f <args>|w<bang>
 "		    :!dir <cfile>:S
 "		    :call system('chmod +w -- ' . expand('%:S'))
 " From :he filename-modifiers in the cmdline page.
+" TODO: Using system means this won't work on windows. Doesn't python have a version in shutil?
 
 command! -nargs=1 -complete=file Chmod call system('chmod +x ' . expand('%:S'))
 
 " Could do word under cursor. Could tack it on to some fzf variation. idk
-
-" General Syntax Highlighting: {{{2
-" Lower max syntax highlighting
-set synmaxcol=400
-
-syntax sync fromstart
-
-" Try to keep as close to the bottom of the file as possible
-colorscheme gruvbox
-let g:gruvbox_contrast_hard = 1
-let g:gruvbox_contrast_soft = 0
-let g:gruvbox_improved_strings = 1
-let g:gruvbox_italic = 1
 
 " Clear Hlsearch: {{{2
 
@@ -698,4 +665,4 @@ augroup END
 
 " Plug: {{{2
 " I utilize this command so often I may as well save the characters
-command -nargs=0 Pl echo keys(plugs)
+command! -nargs=0 Plugins echo keys(plugs)

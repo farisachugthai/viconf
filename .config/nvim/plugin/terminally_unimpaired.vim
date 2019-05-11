@@ -5,21 +5,23 @@
     " Last Modified: April 14, 2019
 " ============================================================================
 
-if exists('did_terminally_unimpaired_vim') || &cp || v:version < 700
+if exists('g:did_terminally_unimpaired_vim') || &cp || v:version < 700
     finish
 endif
-let did_terminally_unimpaired_vim = 1
+let g:did_terminally_unimpaired_vim = 1
 
-" Mappings:1
+" Mappings:
 
 " IPython in a Vim terminal acts oddly. If you hit i or a it doesn't move to where
 " your cursor is. It moves relative to its old positon.
 
 " If running a terminal in Vim, go into Normal mode with Esc
 tnoremap <Esc> <C-\><C-n>
+
 " From he term. Alt-R is better because this causes us to lose C-r in every
 " command we run from nvim
 tnoremap <expr> <A-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
+
 " From :he terminal
 tnoremap <A-h> <C-\><C-N><C-w>h
 tnoremap <A-j> <C-\><C-N><C-w>j
@@ -30,10 +32,14 @@ inoremap <A-j> <C-\><C-N><C-w>j
 inoremap <A-k> <C-\><C-N><C-w>k
 inoremap <A-l> <C-\><C-N><C-w>l
 
+" Move around the line
 tnoremap <A-A> <Esc>A
 tnoremap <A-b> <Esc>b
 tnoremap <A-d> <Esc>d
 tnoremap <A-f> <Esc>f
+
+" Other window
+tnoremap <C-w> <Esc><C-w>
 
 " test that these work
 " nope
@@ -56,4 +62,3 @@ function! g:IPython() abort
 endfunction
 
 " do later
-
