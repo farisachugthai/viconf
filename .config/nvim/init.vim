@@ -146,7 +146,6 @@ if !s:plugins
     catch
       echo v:exception
     endtry
-    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
   endfunction
 endif
 
@@ -214,13 +213,13 @@ call plug#end()
 " Lower max syntax highlighting
 set synmaxcol=400
 
-colorscheme gruvbox
-
 function! Gruvbox() abort
+  " Define Gruvbox parameters and then set the colorscheme.
   let g:gruvbox_contrast_hard = 1
   let g:gruvbox_contrast_soft = 0
   let g:gruvbox_improved_strings = 1
   let g:gruvbox_italic = 1
+  colorscheme gruvbox
 endfunction
 
 call Gruvbox()
@@ -384,6 +383,7 @@ endif
 set tags+=./tags,./*/tags
 set tags+=~/projects/**/tags
 " set tagcase=smartcase
+set showfulltag
 
 set mouse=a
 
@@ -501,9 +501,6 @@ let g:loaded_2html_plugin      = 1
 let g:loaded_logiPat           = 1
 
 " Filetype Specific Options: {{{2
-
-if &filetype ==# 'c'
-endif
 
 " Noticed this bit in he syntax line 2800
 let g:is_bash = 1

@@ -50,7 +50,7 @@ tnoremap <A-e> <Esc>$i
 " even in vim8.0+. Also requires htop which more than likely rules out Win32.
 
 " Need to use enew in case your previous buffer setl nomodifiable
-noremap <Leader>ah <Cmd>wincmd v<CR> <Cmd>enew<CR> term://htop
+noremap <Leader>ah <Cmd>wincmd v<CR><bar><Cmd>enew<CR><bar>term://htop
 
 " Leader -- applications -- IPython
 

@@ -7,7 +7,7 @@
 
 " Guards: {{{1
 
-if exists('did_ultisnips') || &compatible || v:version < 700
+if exists('did_ultisnips_after_plugin') || &compatible || v:version < 700
     finish
 endif
 let did_ultisnips = 1
@@ -33,7 +33,7 @@ let g:UltiSnipsExpandTrigger = '<Tab>'
 let g:UltiSnipsListSnippets = '<C-Tab>'
 let g:UltiSnipsJumpForwardTrigger = '<C-j>'
 let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
-inoremap <C-Tab> * <Esc>:call ultisnips#listsnippets()<CR>
+inoremap <C-Tab> * <Cmd>call ultisnips#listsnippets()<CR>
 let g:ultisnips_python_style = 'numpy'
 let g:ultisnips_python_quoting_style = 'double'
 let g:UltiSnipsEnableSnipMate = 0

@@ -10,14 +10,13 @@ if !has_key(plugs, 'fzf.vim')
     finish
 endif
 
-if exists('b:did_fzf_conf') || &compatible || v:version < 700
+if exists('g:did_fzf_after_plugin') || &compatible || v:version < 700
     finish
 endif
-let b:did_fzf_conf = 1
+let g:did_fzf_conf = 1
 
 
 " General Setup: {{{1
-
 " An action can be a reference to a function that processes selected lines
 function! s:build_quickfix_list(lines)
   call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
@@ -53,32 +52,7 @@ let g:fzf_colors =
   \  'spinner': ['fg', '#b8bb26'],
   \  'header':  ['fg', '#83a598'] }
 
-
-" Junegunn Provided Defaults: {{{2
-
-" Customize FZF colors to match your color scheme
-" What are the default colors if you don't specify this?
-" **I think fzf.vim specifies this for us**
-
-" let g:fzf_colors =
-" \ { 'fg':      ['fg', 'Normal'],
-"   \ 'bg':      ['bg', 'Normal'],
-"   \ 'hl':      ['fg', 'Comment'],
-"   \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-"   \ 'bg+':     ['bg', 'CursorLiVne', 'CursorColumn'],
-"   \ 'hl+':     ['fg', 'Statement'],
-"   \ 'info':    ['fg', 'PreProc'],
-"   \ 'border':  ['fg', 'Ignore'],
-"   \ 'prompt':  ['fg', 'Conditional'],
-"   \ 'pointer': ['fg', 'Exception'],
-"   \ 'marker':  ['fg', 'Keyword'],
-"   \ 'spinner': ['fg', 'Label'],
-"   \ 'header':  ['fg', 'Comment'] }
-
 " Mappings: {{{1
-" Specifically from that repo so I don't get stuff mixed up if I ever take one
-" off or something
-
 " Exported fzf <plug> commands.
 " For this first one go down to the advanced functions. Eh we can leave it mapped. It uses imap.
 imap <C-x><C-k> <Plug>(fzf-complete-word)
@@ -86,14 +60,14 @@ imap <C-x><C-f> <Plug>(fzf-complete-path)
 imap <C-x><C-j> <Plug>(fzf-complete-file-ag)
 
 " The way I remapped Leader, this actually only works if you do <Space>\
-nnoremap <silent> <expr> <Leader><Leader> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
+nnoremap <silent> <expr> <LocalLeader><LocalLeader> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
 
 " The remainder behave as expected.
-noremap <silent> <Leader>C        :Colors<CR>
-noremap <silent> <Leader><Enter>  :Buffers<CR>
-noremap <Leader>bu <Cmd>Buffers<CR>
-noremap <Leader>bB <Cmd>Buffers<CR>
-noremap <Leader>F <Cmd>Files<CR>
+noremap <silent> <Leader>C        <Cmd>Colors<CR>
+noremap <silent> <Leader><CR>  <Cmd>Buffers<CR>
+noremap <Leader>bu                <Cmd>Buffers<CR>
+noremap <Leader>bB                <Cmd>Buffers<CR>
+noremap <Leader>f                 <Cmd>Files<CR>
 
 " Mapping for selecting different mappings.
 " Could add one for insert mode but leader tab is gonna happen so often that we need to use
@@ -122,11 +96,11 @@ nnoremap <silent> <Leader>`        <Cmd>Marks<CR>
 " different docs
 
 " FZF beat fugitive out on this one. Might take git log too.
-nnoremap <Leader>gg :GGrep<Space>
+noremap <Leader>gg <Cmd>GGrep<Space>
 noremap <Leader>gl <Cmd>Commits<CR>
 
 " [[B]Commits] Customize the options used by 'git log':
-let g:fzf_commits_log_options = '--graph --color=always --all --branches --pretty --format="h%d %s %c(black)%c(bold)%cr"'
+let g:fzf_commits_log_options = ' --graph --color=always --all --branches --pretty --format="h%d %s %c(black)%c(bold)%cr $*n"'
 
 noremap <Leader>GS <Cmd>GFiles?<CR>
 

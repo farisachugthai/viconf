@@ -8,11 +8,11 @@
 "         Without {end} the result is a String, which is line {lnum}
 "         from the current buffer.  Example: >
 "             getline(1)
-" And if we run :echo getline(1) on a zim filetype, we get the top line.
 
 " Yes
 " Vim is not 0 indexed :(
 
+" And if we run :echo getline(1) on a zim filetype, we get the top line.
 
 " ####################
 " #  " Mar 13, 2019  #
@@ -27,16 +27,5 @@ endfunction
 
 augroup zimwikidetect
     autocmd!
-    " autocmd BufRead,BufNewFile ~/Notebooks.git/*.txt call s:DetectZimWiki()
-    " Honestly though if it's in that directory it IS a zimwiki note
-
-    " Actually no it might not be. This is a git controlled repository and
-    " commit messages shouldn't come up with zimwiki syntax
-    " autocmd BufRead,BufNewFile ~/Notebooks/** setlocal filetype=zimwiki
-
-    " Alternatively we can check all textfiles which oddly works better
     autocmd BufRead,BufNewFile *.txt  call s:DetectZimWiki()
 augroup end
-
-
-let b:did_ftplugin = 1
