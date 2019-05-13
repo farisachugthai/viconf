@@ -8,10 +8,10 @@
 " -----------------------------------------------------------------------------
 
 " Guards: {{{
-if exists('did_gruvbox') || &cp || v:version < 700
+if exists('b:did_gruvbox_colors') || &compatible || v:version < 700
     finish
 endif
-let did_gruvbox= 1
+let b:did_gruvbox_colors = 1
 
 " }}}
 
@@ -31,21 +31,25 @@ let g:colors_name='gruvbox'
 " Global Settings: {{{
 
 if !exists('g:gruvbox_bold')
-  let g:gruvbox_bold=1
+  let g:gruvbox_bold = 1
 endif
+
 if !exists('g:gruvbox_italic')
   if has('gui_running') || $TERM_ITALICS ==? 'true'
-    let g:gruvbox_italic=1
+    let g:gruvbox_italic = 1
   else
-    let g:gruvbox_italic=0
+    let g:gruvbox_italic = 0
   endif
 endif
+
 if !exists('g:gruvbox_undercurl')
   let g:gruvbox_undercurl=1
 endif
+
 if !exists('g:gruvbox_underline')
   let g:gruvbox_underline=1
 endif
+
 if !exists('g:gruvbox_inverse')
   let g:gruvbox_inverse=1
 endif
@@ -76,16 +80,14 @@ endif
 
 if !exists('g:gruvbox_contrast_dark')
   let g:gruvbox_contrast_dark='medium'
-endif
-
-if !exists('g:gruvbox_contrast_light')
+elseif !exists('g:gruvbox_contrast_light')
   let g:gruvbox_contrast_light='medium'
 endif
 
 let s:is_dark=(&background ==? 'dark')
 
 " }}}
-" Palette: {{{
+" s:var -> hex codes: {{{
 
 " setup palette dictionary
 let s:gb = {}
@@ -140,7 +142,7 @@ let s:gb.faded_aqua     = ['#427b58', 66]      " 66-123-88
 let s:gb.faded_orange   = ['#af3a03', 130]     " 175-58-3
 
 " }}}
-" Setup Emphasis: {{{
+" Setup Emphasis Options: {{{
 
 let s:bold = 'bold,'
 if g:gruvbox_bold == 0
@@ -168,7 +170,7 @@ if g:gruvbox_inverse == 0
 endif
 
 " }}}
-" Setup Colors: {{{
+" Map s:vars to s:vars: {{{
 
 let s:vim_bg = ['bg', 'bg']
 let s:vim_fg = ['fg', 'fg']
@@ -306,7 +308,7 @@ if has('nvim')
 endif
 
 " }}}
-" Overload Setting: {{{
+" Override Default Settings: {{{
 
 let s:hls_cursor = s:orange
 if exists('g:gruvbox_hls_cursor')
@@ -626,7 +628,8 @@ hi! link Character GruvboxPurple
 if g:gruvbox_improved_strings == 0
   call s:HL('String',  s:green, s:none, s:italicize_strings)
 else
-  call s:HL('String',  s:fg1, s:bg1, s:italicize_strings)
+  " May 11, 2019: Don't change the background on strings
+  call s:HL('String',  s:green, s:none, s:italicize_strings)
 endif
 " Boolean constant: TRUE, false
 hi! link Boolean GruvboxPurple
@@ -689,7 +692,6 @@ if has('spell')
 endif
 
 " }}}
-
 " Plugin specific -------------------------------------------------------------
 
 " AKA Plugins You Don't Have: {{{
@@ -998,30 +1000,28 @@ hi! link xmlEntityPunct GruvboxOrange
 
 " Dude you aren't wrong. Everything below is  a cleared syn match for vim*
 " vimOnlyCommand	vimOnlyCommand
-hi! link vimStdPlugin Function
+hi! link vimStdPlugin       Function
 " vimOnlyOption	vimOnlyOption
 " vimTermOption	vimTermOption
 " vimErrSetting	vimErrSetting
 " vimOnlyHLGroup	vimOnlyHLGroup
 " vimGlobal	vimGlobal
 " vimEcho	vimEcho
-" vimIsCommand	vimIsCommand
+hi! link vimIsCommand       vimOption
 " vimExtCmd	vimExtCmd
 " vimFilter	vimFilter
 " vimSet	vimSet
 " vimUserCmd	vimUserCmd
 " vimCmdSep	vimCmdSep
-" vimBehaveError	vimBehaveError
-" vimFTError	vimFTError
 " vimFiletype	vimFiletype
 " vimAugroup	vimAugroup
 " vimExecute	vimExecute
-" vimFunction	vimFunction
+hi! link vimFunction Function
 " vimOperParen	vimOperParen
 " vimRegion	vimRegion
 " vimSynLine	vimSynLine
 " vimSetEqual	vimSetEqual
-" vimFunc	vimFunc
+hi! link vimFunc Function
 " vimFuncBody	vimFuncBody
 " vimFuncBlank	vimFuncBlank
 " vimEscapeBrace	vimEscapeBrace
@@ -1064,14 +1064,15 @@ hi! link vimStdPlugin Function
 " vimSyncRegion	vimSyncRegion
 " vimHiLink	vimHiLink
 " vimHiKeyList	vimHiKeyList
-" vimHiBang	vimHiBang
+
+" Yes the exclamation mark in hi! It got cleared so hey.
+hi! link vimHiBang vimHighlight
+
 " vimHiAttribList	vimHiAttribList
 " vimHiCtermColor	vimHiCtermColor
 " vimHiFontname	vimHiFontname
 " vimHiGuiFontname	vimHiGuiFontname
-" vimHiKeyError	vimHiKeyError
 " vimHiTermcap	vimHiTermcap
-" vimHiCtermError	vimHiCtermError
 " vimCommentTitleLeader	vimCommentTitleLeader
 " vimLuaRegion	vimLuaRegion
 

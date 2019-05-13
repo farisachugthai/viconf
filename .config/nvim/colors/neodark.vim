@@ -109,7 +109,7 @@ endfunction
 " }}}
 
 if !exists('g:neodark#italics')
-  let g:neodark#italics = 0
+  let g:neodark#italics = 1
 endif
 
 if !exists('g:neodark#use_custom_terminal_theme')
@@ -117,7 +117,7 @@ if !exists('g:neodark#use_custom_terminal_theme')
 endif
 
 if !exists('g:neodark#use_256color')
-  let g:neodark#use_256color = 0
+  let g:neodark#use_256color = 1
 endif
 
 if !exists('g:neodark#background')
@@ -132,7 +132,7 @@ if !exists('g:neodark#solid_vertsplit')
   let g:neodark#solid_vertsplit = 0
 endif
 
-if g:neodark#background == ''
+if empty('g:neodark#background')
   let s:base1 = ['#1F2F38', 236]
   let s:base2 = ['#263A45', 237]
   let s:base3 = ['#475C69', 59]

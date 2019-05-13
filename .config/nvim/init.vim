@@ -10,20 +10,19 @@ scriptencoding utf-8
 " Termux check from Evervim. Thanks!
 let g:termux = isdirectory('/data/data/com.termux')
 let g:ubuntu = has('unix') && !has('macunix')
-" This got moved up so we can check what OS we have and decide what options
-" to set from there
+
 " how the literal fuck is `has('win32')` a nvim specific thing.
 " Just tried it in vim and it didn't work!!
 let g:windows = has('win32') || has('win64')
 let g:wsl = has('wsl')   " The fact that this is a thing blows my mind
 
-" unabashedly stolen from junegunn dude is too good.
 let g:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/init.vim.local'
 runtime g:local_vimrc
 
 if g:windows
 
     " How do i check if I'm on cmd or powershell?
+    " StackOverflow recommended grepping actively running processes like wtf
     " Awh fuck I just thought about the fact that I have powershell installed on Linux too :/
     " set shell=powershell shellquote=( shellpipe=\| shellredir=> shellxquote=
     " set shellcmdflag=-NoLogo\ -NoProfile\ -ExecutionPolicy\ RemoteSigned\ -Command
@@ -61,7 +60,7 @@ elseif !exists('$_ROOT') && expand(g:ubuntu) == 1
 endif
 
 " Remote Hosts: {{{2
-    " Set the node and ruby remote hosts
+" Set the node and ruby remote hosts
 
 if g:termux
     " holy fuck that was a doozy to find
@@ -186,7 +185,6 @@ Plug 'tomtom/tlib_vim'  " this library is incredible
 if !g:termux
     Plug 'autozimu/LanguageClient-neovim', {'do': ':UpdateRemotePlugins'}
     Plug 'godlygeek/tabular'
-    Plug 'vim-voom/voom'
     Plug 'Rykka/InstantRst', {'for': 'rst'}
     Plug 'gu-fan/riv.vim', {'for': 'rst'}
     Plug 'junegunn/vim-peekaboo'
@@ -194,9 +192,11 @@ if !g:termux
     Plug 'mbbill/undotree'
     Plug 'chrisbra/csv.vim', {'for': 'csv'}
     Plug 'omnisharp/omnisharp-vim', {'for': 'cs'}
-    Plug 'neoclide/coc.nvim'
-    Plug 'ervandew/supertab'
 endif
+
+Plug 'vim-voom/voom'
+Plug 'neoclide/coc.nvim'
+Plug 'ervandew/supertab'
 
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
@@ -205,9 +205,23 @@ call plug#end()
 
 " Get this going as soon as possible
 runtime! plugin/**/*.vim
+" General Syntax Highlighting: {{{2
 
-" Idk if this is necessary. *shrugs*
-filetype plugin indent on
+" Lower max syntax highlighting
+set synmaxcol=400
+
+function! Gruvbox() abort
+  " Define Gruvbox parameters and then set the colorscheme.
+  let g:gruvbox_contrast_hard = 1
+  let g:gruvbox_contrast_soft = 0
+  let g:gruvbox_improved_strings = 1
+  let g:gruvbox_italic = 1
+  colorscheme gruvbox
+endfunction
+
+call Gruvbox()
+
+syntax sync fromstart
 
 " Leader And Viminfo: {{{2
 noremap <Space> <nop>
@@ -221,7 +235,6 @@ if has('nvim-0.4')
     set pyx=3
   catch /^Vim:E518:*/
   endtry
-    " Damnit it happened AGAIN.
 else
    set shada+=n$XDG_DATA_HOME/nvim/shada/main.shada
 endif
@@ -244,7 +257,6 @@ set foldlevel=0
 set foldnestmax=10
 set foldmethod=marker
 " Use 1 column to indicate fold level and whether a fold is open or closed.
-" Trade off for valuable window real estate though....
 set foldcolumn=1
 
 " Buffers Windows Tabs: {{{2
@@ -271,7 +283,6 @@ set spellsuggest=5                      " Limit the number of suggestions from '
 if filereadable('/usr/share/dict/words')
     set dictionary+=/usr/share/dict/words
     " Replace the default dictionary completion with fzf-based fuzzy completion
-    " Courtesy of fzf <3 vim.
     inoremap <expr> <C-x><C-k> fzf#vim#complete('cat /usr/share/dict/words')
 endif
 
@@ -316,7 +327,6 @@ set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 " A list of words that change how command line completion is done.
 " Currently only one word is allowed: tagfile
 set wildoptions=tagfile
-setlocal suffixesadd=*.vim
 
 set complete+=kspell                    " Autocomplete in insert mode
 set completeopt=menu,menuone,noselect,noinsert,preview
@@ -342,7 +352,7 @@ if isdirectory(expand('$_ROOT') . '/include/libcs50')
     let &path = &path .','. expand('$_ROOT') . '/include/libcs50'
 endif
 
-let &path = &path . ',' . expand('$VIMRUNTIME/*')
+let &path = &path . ',' . expand('$VIMRUNTIME')
 
 " Write Once Debug Everywhere: {{{2
 
@@ -355,7 +365,7 @@ if exists('+shellslash')   " don't drop the +!
 endif
 
 
-if &term =~? 'xterm-256color' || &term ==# 'cygwin' || &term ==# 'builtin_tmux'
+if &term =~# 'xterm-256color' || &term ==# 'cygwin' || &term ==# 'builtin_tmux' || &term ==# 'tmux-256color'
 " mintty identifies itself as xterm-compatible
 " Yeah mintty does. Conemu/Cmder identify as cygwin sooo. we get ansi colors
   set termguicolors
@@ -370,6 +380,7 @@ endif
 set tags+=./tags,./*/tags
 set tags+=~/projects/**/tags
 set tagcase=smart
+set showfulltag
 
 set mouse=a
 
@@ -397,8 +408,7 @@ set undofile
 set backup
 let &backupdir=expand('$XDG_CONFIG_HOME') . '/nvim/undodir'
 set backupext='.bak'        " like wth is that ~ nonsense?
-" Directory won't need to be set because it defaults to
-" xdg_data_home/nvim/swap
+" Directory won't need to be set because it defaults to xdg_data_home/nvim/swap
 
 set modeline
 set browsedir="buffer"                  " which directory is used for the file browser
@@ -417,9 +427,14 @@ let g:tutor_debug = 1
 " for a search that hits the start or end of the file not being displayed)
 set terse
 
+set sidescroll=10                       " Didn't realize the default is 1
+
 " Mappings: {{{1
 
 " General_Mappings: {{{2
+" I accidentally do this so often it feels necessary
+noremap q; q:
+
 " Todo: map this to a key in a manner similar to unimpaired
 " setlocal comments=:# commentstring=#\ %s formatoptions-=t formatoptions+=croql
 
@@ -476,7 +491,6 @@ set matchtime=20
 " From pi_paren.txt
 " Matching parenthesises are highlighted A timeout of 300 msec (60 msec in Insert mode). This can be changed with the
 let g:matchparen_timeout = 500
-" and
 let g:matchparen_insert_timeout = 300
 " variables and their buffer-local equivalents b:matchparen_timeout and b:matchparen_insert_timeout.
 
@@ -497,8 +511,18 @@ let g:sh_fold_enabled= 3  "   (enables function and heregoc folding)
 " he rst.vim or ft-rst-syntax or syntax 2600. Don't put bash instead of sh.
 " $VIMRUNTIME/syntax/rst.vim iterates over this var and if it can't find a
 " bash.vim syntax file it will crash.
-let rst_syntax_code_list = ['vim', 'python', 'sh', 'markdown', 'lisp']
 
+" May 13, 2019: Updated. Grabbed this directly from $VIMRUNTIME/syntax/rst.vim
+let g:rst_syntax_code_list = {
+    \ 'vim': ['vim'],
+    \ 'java': ['java'],
+    \ 'cpp': ['cpp', 'c++'],
+    \ 'lisp': ['lisp'],
+    \ 'php': ['php'],
+    \ 'python': ['python', 'python3', 'ipython'],
+    \ 'perl': ['perl'],
+    \ 'sh': ['sh'],
+    \ }
 " highlighting readline options
 let readline_has_bash = 1
 
@@ -507,6 +531,7 @@ let g:ft_html_autocomment = 1
 
 " From `:he ft-lisp-syntax. Color parentheses differently up to 10 levels deep
 let g:lisp_rainbow = 1
+
 
 " Omnifuncs: {{{3
 
@@ -518,6 +543,7 @@ augroup omnifunc
     autocmd Filetype css              setlocal omnifunc=csscomplete#CompleteCSS
     autocmd Filetype javascript       setlocal omnifunc=javascriptcomplete#CompleteJS
     autocmd Filetype ruby             setlocal omnifunc=rubycomplete#Complete
+
     " If there isn't a default or built-in, use the syntax highlighter
 
     autocmd Filetype *
@@ -618,23 +644,11 @@ command! -nargs=1 -bang -complete=file Rename f <args>|w<bang>
 "		    :!dir <cfile>:S
 "		    :call system('chmod +w -- ' . expand('%:S'))
 " From :he filename-modifiers in the cmdline page.
+" TODO: Using system means this won't work on windows. Doesn't python have a version in shutil?
 
 command! -nargs=1 -complete=file Chmod call system('chmod +x ' . expand('%:S'))
 
 " Could do word under cursor. Could tack it on to some fzf variation. idk
-
-" General Syntax Highlighting: {{{2
-" Lower max syntax highlighting
-set synmaxcol=400
-
-syntax sync fromstart
-
-" Try to keep as close to the bottom of the file as possible
-colorscheme gruvbox
-let g:gruvbox_contrast_hard = 1
-let g:gruvbox_contrast_soft = 0
-let g:gruvbox_improved_strings = 1
-let g:gruvbox_italic = 1
 
 " Clear Hlsearch: {{{2
 
@@ -650,4 +664,4 @@ augroup END
 
 " Plug: {{{2
 " I utilize this command so often I may as well save the characters
-command -nargs=0 Pl echo keys(plugs)
+command! -nargs=0 Plugins echo keys(plugs)

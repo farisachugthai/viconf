@@ -5,14 +5,21 @@
     " Last Modified: May 09, 2019
 " ============================================================================
 
+if exists('b:did_vim_after_ftplugin') || &compatible || v:version < 700
+  finish
+endi
+let b:did_vim_after_ftplugin = 1
+
 setlocal expandtab
 setlocal shiftwidth=2
 setlocal tabstop=2
 setlocal softtabstop=2
+setlocal suffixesadd=*.vim
 
 let &commentstring='" %s'
 setlocal comments="
 
+" Let's add a little meat in here shall we?
 
 " From he syntax
 " VIM			*vim.vim*		*ft-vim-syntax*
@@ -29,6 +36,7 @@ setlocal comments="
 "   g:vimsyn_embed =~# 'r' : embed ruby
 "   g:vimsyn_embed =~# 't' : embed tcl
 let g:vimsyn_embed = 'lmtPr'
+" perl removed because its slow and also fuck perl
 
 " Turn off errors because 50% of them are wrong.
 let g:vimsyn_noerror = 1
@@ -42,7 +50,6 @@ let g:vimsyn_noerror = 1
    " g:vimsyn_folding =~ 'f' : fold functions
    " g:vimsyn_folding =~ 'P' : fold python   script
 
-" Are we allowed to combine these?
 let g:vimsyn_folding = 'afP'
 
 let g:vimsyn_maxlines = 500  " why is the default 60???

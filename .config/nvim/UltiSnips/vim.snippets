@@ -1,15 +1,15 @@
 # ============================================================================
-	# File: vim.snippets
-	# Author: Faris Chugthai
-	# Description: # Vim Snippets:
-	# Last Modified: April 27, 2019
+# File: vim.snippets
+# Author: Faris Chugthai
+# Description: # Vim Snippets:
+# Last Modified: April 27, 2019
 # ============================================================================
 
 # TODO Use this funcs as snips and you'll be set for help files
 # https://github.com/google/vimdoc/blob/master/vimdoc/output.py
 
 #########################
-#  # Personal snippets  #
+#    Personal snippets  #
 #########################
 
 
@@ -23,16 +23,16 @@ if !exists('g:${1:MyUltraImportantVar}')
 endif
 endsnippet
 
-snippet guard "Script reload guard. Good to put directly under the header snippet." bms
+snippet guard "Script reload guard. Good to put directly under the header snippet." b
 " Guard: {{{1
-if exists('${2:b:did_`!p snip.rv = snip.fn.replace('.','_')`$1}') || &compatible || ${3:v:version < 700}
+if exists('${1:b:did_`!p snip.rv = snip.fn.replace('.','_')`}') || ${2:&compatible} || ${3:v:version < 700}
 	finish
 endif
 let $1 = ${4:1}
 endsnippet
 
 snippet plugin "Plugin reload guard. Newly minted so be observant of bugs." s
-if !has_key(plugs, '${2:`!p snip.rv = snip.basename.replace('.', '_')`}${1:${VISUAL}}}')
+if !has_key(plugs, '${1:${VISUAL}`!p snip.rv = snip.basename.replace('.', '_')`}')
 	finish
 endif
 
@@ -43,7 +43,7 @@ let b:did_`!p snip.rv = snip.basename.replace('.', '_')` = 1
 
 endsnippet
 
-snippet cpo "compatability options" ms
+snippet cpo "compatability options"
 let s:cpo_save = &cpoptions
 set cpoptions&vim
 
@@ -83,11 +83,11 @@ elseif exists(${1:'b:current_syntax'})
 	finish
 endif
 
-let b:current_syntax = 1
+let ${2:b:current_syntax} = 1
 $0
 endsnippet
 
-snippet func "Autocompletes function name based on filename"
+snippet func "Autocompletes function name based on filename" b
 function! ${1:`expand('%') =~ 'autoload' ? substitute(matchstr(expand('%:p'),'autoload/\zs.*\ze.vim'),'[/\\]','#','g').'#' : ''`}${2:function_name}(${3}) abort
 		${0}
 endif

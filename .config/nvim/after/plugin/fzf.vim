@@ -10,10 +10,10 @@ if !has_key(plugs, 'fzf.vim')
     finish
 endif
 
-if exists('b:did_fzf_conf') || &compatible || v:version < 700
+if exists('g:did_fzf_after_plugin') || &compatible || v:version < 700
     finish
 endif
-let b:did_fzf_conf = 1
+let g:did_fzf_conf = 1
 
 
 " General Setup: {{{1
@@ -53,32 +53,7 @@ let g:fzf_colors =
   \  'spinner': ['fg', '#b8bb26'],
   \  'header':  ['fg', '#83a598'] }
 
-
-" Junegunn Provided Defaults: {{{2
-
-" Customize FZF colors to match your color scheme
-" What are the default colors if you don't specify this?
-" **I think fzf.vim specifies this for us**
-
-" let g:fzf_colors =
-" \ { 'fg':      ['fg', 'Normal'],
-"   \ 'bg':      ['bg', 'Normal'],
-"   \ 'hl':      ['fg', 'Comment'],
-"   \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-"   \ 'bg+':     ['bg', 'CursorLiVne', 'CursorColumn'],
-"   \ 'hl+':     ['fg', 'Statement'],
-"   \ 'info':    ['fg', 'PreProc'],
-"   \ 'border':  ['fg', 'Ignore'],
-"   \ 'prompt':  ['fg', 'Conditional'],
-"   \ 'pointer': ['fg', 'Exception'],
-"   \ 'marker':  ['fg', 'Keyword'],
-"   \ 'spinner': ['fg', 'Label'],
-"   \ 'header':  ['fg', 'Comment'] }
-
 " Mappings: {{{1
-" Specifically from that repo so I don't get stuff mixed up if I ever take one
-" off or something
-
 " Exported fzf <plug> commands.
 " For this first one go down to the advanced functions. Eh we can leave it mapped. It uses imap.
 imap <C-x><C-k> <Plug>(fzf-complete-word)
@@ -86,14 +61,14 @@ imap <C-x><C-f> <Plug>(fzf-complete-path)
 imap <C-x><C-j> <Plug>(fzf-complete-file-ag)
 
 " The way I remapped Leader, this actually only works if you do <Space>\
-nnoremap <silent> <expr> <Leader><Leader> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
+nnoremap <silent> <expr> <LocalLeader><LocalLeader> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
 
 " The remainder behave as expected.
-noremap <silent> <Leader>C        :Colors<CR>
-noremap <silent> <Leader><Enter>  :Buffers<CR>
-noremap <Leader>bu <Cmd>Buffers<CR>
-noremap <Leader>bB <Cmd>Buffers<CR>
-noremap <Leader>F <Cmd>Files<CR>
+noremap <silent> <Leader>C        <Cmd>Colors<CR>
+noremap <silent> <Leader><CR>  <Cmd>Buffers<CR>
+noremap <Leader>bu                <Cmd>Buffers<CR>
+noremap <Leader>bB                <Cmd>Buffers<CR>
+noremap <Leader>f                 <Cmd>Files<CR>
 
 " Mapping for selecting different mappings.
 " Could add one for insert mode but leader tab is gonna happen so often that we need to use
@@ -114,7 +89,7 @@ noremap <silent> q/ <Cmd>History/<CR>
 " And get the rest of the fzf.vim commands involved.
 noremap <silent> <Leader>L        <Cmd>Lines<CR>
 noremap <silent> <Leader>ag       <Cmd>Ag <C-R><C-W><CR>
-nnoremap <silent> <Leader>AG       <Cmd>Ag <C-R><C-A><CR>
+noremap <silent> <Leader>AG       <Cmd>Ag <C-R><C-A><CR>
 xnoremap <silent> <Leader>ag       y<Cmd>Ag <C-R>"<CR>
 nnoremap <silent> <Leader>`        <Cmd>Marks<CR>
 
@@ -122,11 +97,11 @@ nnoremap <silent> <Leader>`        <Cmd>Marks<CR>
 " different docs
 
 " FZF beat fugitive out on this one. Might take git log too.
-nnoremap <Leader>gg :GGrep<Space>
+noremap <Leader>gg <Cmd>GGrep<Space>
 noremap <Leader>gl <Cmd>Commits<CR>
 
 " [[B]Commits] Customize the options used by 'git log':
-let g:fzf_commits_log_options = '--graph --color=always --all --branches --pretty --format="h%d %s %c(black)%c(bold)%cr"'
+let g:fzf_commits_log_options = ' --graph --color=always --all --branches --pretty --format="h%d %s %c(black)%c(bold)%cr $*n"'
 
 noremap <Leader>GS <Cmd>GFiles?<CR>
 
@@ -181,7 +156,7 @@ augroup end
 "         \ get(a:000, 0, fzf#wrap())))
 " endfunction
 
-inoremap <expr><C-x><C-k> fzf#complete({
+inoremap <expr> <C-x><C-k> fzf#complete({
             \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
             \ 'options': '--preview=bat --ansi --multi --cycle',
 \ 'left': 30})
@@ -227,12 +202,13 @@ command! -bang -nargs=? -complete=dir Files
     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
 " Make Sentence: {{{2
+
 " *fzf-vim-reducer-example*
 function! s:make_sentence(lines) abort
     return substitute(join(a:lines), '^.', '\=toupper(submatch(0))', '').'.'
 endfunction
 
-inoremap <expr><C-x><C-s> fzf#vim#complete({
+inoremap <expr> <C-x><C-s> fzf#vim#complete({
     \ 'source':  'cat /usr/share/dict/words',
     \ 'reducer': function('<sid>make_sentence'),
     \ 'options': '--multi --reverse --margin 15%,0',
@@ -263,6 +239,7 @@ command! PlugHelp call fzf#run(fzf#wrap({
   \ 'sink'  :   function('s:plug_help_sink')}))
 
 " F: {{{2
+
 let g:ag_command = 'ag --smart-case -u -g " " --'
 
 command! -bang -nargs=* F call fzf#vim#grep(g:ag_command .shellescape(<q-args>), 1, <bang>0)

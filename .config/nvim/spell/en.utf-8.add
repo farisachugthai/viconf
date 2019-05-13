@@ -14,7 +14,6 @@ Adblock
 AirVPN
 Akonadi
 AliasManager
-:so fixdup.vim
 AngularJS
 Anisa
 Ansi
@@ -189,7 +188,6 @@ Importlib
 JQuery
 Junegunn
 Junegunn's
-Junegunn's
 Jupyter
 KVM
 KWin
@@ -207,8 +205,6 @@ LOCALAPPDATA
 LVM
 LaTex
 LanguageClient
-LanguageClient
-Lansdale
 Lansdale
 Lightline
 Linksys
@@ -249,9 +245,7 @@ NodeJS
 NumLock
 NumPy
 NumPy's
-NumPy's
 NumPyLexer
-Numpy's
 Numpy's
 Nvidia
 Nvim's
@@ -272,6 +266,7 @@ PID
 PIM
 PPA
 PPAs
+PS1
 PS2
 PS3
 PSModulePath
@@ -320,6 +315,7 @@ REPL
 RET
 RFID
 RHEL
+RPC
 ReStructured
 ReStructuredText
 ReadTheDocs
@@ -559,6 +555,7 @@ cURL
 cant/!
 cd
 cdrom
+cell
 chainmap
 chdir
 cheat40
@@ -1148,6 +1145,7 @@ outfile
 overlined
 owncloud
 p7zip
+packages
 packages's/!
 packages/!
 pandoc
@@ -1671,4 +1669,3 @@ zshrc
 µTP
 µTorrent
 cell
-RPC
