@@ -2,7 +2,7 @@
     " File: vim.vim
     " Author: Faris Chugthai
     " Description: vim ftplugin
-    " Last Modified: May 08, 2019
+    " Last Modified: May 09, 2019
 " ============================================================================
 
 if exists('b:did_vim_after_ftplugin') || &compatible || v:version < 700
@@ -54,5 +54,4 @@ let g:vimsyn_folding = 'afP'
 
 let g:vimsyn_maxlines = 500  " why is the default 60???
 
-" TODO:
-" let b:undo_ftplugin = 
+let b:undo_ftplugin = 'set com< cms< et< sw< ts< sts<'

@@ -36,7 +36,7 @@ def complete(tab, opts):
 
 
 def _parse_comments(s):
-    """Parses vim's comments option to extract comment format """
+    """Parse vim's comments option to extract comment format """
     i = iter(s.split(","))
 
     rv = []
@@ -105,8 +105,8 @@ def make_box(twidth, bwidth=None):
         :func:`get_comment_format`
     """
     b, m, e, i = (s.strip() for s in get_comment_format())
-    bwidth_inner = bwidth - 3 - max(len(b),
-                                    len(i + e)) if bwidth else twidth + 2
+    bwidth_inner = bwidth - 3 - max(len(b), len(i +
+                                                e)) if bwidth else twidth + 2
     sline = b + m + bwidth_inner * m[0] + 2 * m[0]
     nspaces = (bwidth_inner - twidth) // 2
     mlines = i + m + " " + " " * nspaces
@@ -132,6 +132,7 @@ DOUBLE_QUOTES = '"'
 
 
 class Arg(object):
+    """Handle Python docstrings."""
 
     def __init__(self, arg):
         self.arg = arg
@@ -377,7 +378,12 @@ class ItalicWrapper(TextTag):
 
 
 def create_table(snip):
-    """Create a table. For markdown snippets."""
+    """Create a table. Used for markdown snippets.
+
+    05/09/2019
+
+    Whoo! This snippet stopped working for a little but we're back!
+    """
     # retrieving single line from current string and treat it like tabstops count
     placeholders_string = snip.buffer[snip.line].strip()[2:].split("x", 1)
     rows_amount = int(placeholders_string[0])
@@ -387,11 +393,15 @@ def create_table(snip):
     snip.buffer[snip.line] = ''
 
     # create anonymous snippet with expected content and number of tabstops
-    anon_snippet_title = ' | '.join(['$' + str(col) for col in range(1,columns_amount+1)]) + "\n"
-    anon_snippet_delimiter = ':-|' * (columns_amount-1) + ":-\n"
+    anon_snippet_title = ' | '.join(
+        ['$' + str(col) for col in range(1, columns_amount + 1)]) + "\n"
+    anon_snippet_delimiter = ':-|' * (columns_amount - 1) + ":-\n"
     anon_snippet_body = ""
-    for row in range(1,rows_amount+1):
-        anon_snippet_body += ' | '.join(['$' + str(row*columns_amount+col) for col in range(1,columns_amount+1)]) + "\n"
+    for row in range(1, rows_amount + 1):
+        anon_snippet_body += ' | '.join([
+            '$' + str(row * columns_amount + col)
+            for col in range(1, columns_amount + 1)
+        ]) + "\n"
     anon_snippet_table = anon_snippet_title + anon_snippet_delimiter + anon_snippet_body
 
     # expand anonymous snippet

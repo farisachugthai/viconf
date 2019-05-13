@@ -1,68 +1,92 @@
 # README
 
-![Screenshot](./images/neodark_statuslines.png)
+![Screenshot](./images/startup_init.jpg)
 
 While still a work-in-progress, this repository houses a collection of
-initialization file I use to run Neovim on Linux, Windows 10, and
+initialization files, plugin modifications and syntax highlighting Vim
+scripts that I use to run Neovim on Linux, Windows 10, and
 [Termux](https://www.github.com/termux/termuxapp) on Android.
 
-## Vim
+## Copy and Paste
 
-My configuration for Vim has been deprecated as of March 2019. The files in this
-repository therefore do not attempt to maintain compatibility with Vi or Vim's
-default behavior.
+As much of this [init.vim](.config/nvim/init.vim) is set up in a way that it
+can be easily copied and pasted. This is done both to allow anyone using
+Nvim to easily benefit from my modifications, and also to ease things for myself
+when logging into a new remote server.
 
-There are no checks that will resemble the following:
+The initialization file makes as few assumptions as possible and I've personally
+used it on:
 
-- `if has('nvim')`
-- `if has(patch7*)` as Neovim was forked from Vim7.4
-- `if has(terminal)` or `if has(autocmd)` or `if has(tmap)`. These are all
-features that have been built into every version of Neovim.
+* A 60 in. TV with an HDMI cable
+* A 5.5 in. cell phone with no X server configured
+* Windows 10 with ConEmu in a Cmd terminal
+* Windows 10 Powershell
+* Ubuntu
 
-Neovim is my primary text editor and as a result, I've attempted integrating it
-into as much of my workflow as possible.
+The first 100 lines of the init.vim are actually just checks to determine
+the user's setup.
+
+```vim
+let g:termux = isdirectory('/data/data/com.termux')
+let g:ubuntu = has('unix') && !has('macunix')
+let g:windows = has('win32') || has('win64')
+let g:wsl = has('wsl')   " The fact that this is a thing blows my mind
+```
+
+In adhering to the XDG standard, it's also checked whether those environment
+variables are set. If they are not, then the folders that they typically
+inhabit are defined.
+
+```vim
+if empty('$XDG_DATA_HOME')
+  if empty(g:windows)
+    let $XDG_DATA_HOME = expand('~/.local/share')
+  else
+    let $XDG_DATA_HOME = expand('~/AppData/Local')
+  endif
+endif
+```
+
+This repository ensures maximum portability so long as 1 assumptions remain
+true:
+
+1. [vim-plug](https://www.github.com/junegunn/vim-plug) is the plugin manager
+that you'd like to use.
+
+My init.vim will immediately check that the plug.vim file is there, and it will
+automatically download it if not.
 
 
 ## Features
 
-As a result of personal modifications, this setup currently has:
+As a result modifications, this setup currently has:
 
-- Real time interactive displays for reStructured Text files.
-  - The plugin [Riv.vim](https://www.github.com/gu-fan/riv.vim) allows one to
-  run `docutils` on a buffer and then preview it in a browser.
 
-- [Personally configured](./.config/nvim/after/ftplugin/) filetype plugins and
-added [filetype detection](./.config/nvim/ftdetect).
+### Remote Providers
+
+- 4 different remote providers that Neovim can communicate with via RPC.
+  - node.js, ruby, and python hosts are communicated with to offload work.
+  - In addition, a Tmux server is connected to and used as a clipboard!
+
+### Man pages
 
 - [Improved syntax highlighting](./.config/nvim/syntax/man.vim) for man pages over the defaults provided by either Neovim or Vim.
   - This was accomplished by merging together the highlighting groups of
   both Neovim and Vim, and then adding around 20 links to color groups.
   - It also depends on the variable `g:colors_name` being set to `Gruvbox`.
 
-- Automatic autocompletion for any filetype Vim supports via
-[coc.nvim](https://www.github.com/neoclide/coc.nvim).
-  - This plugin depends on node.js and Yarn being installed.
+### Other
 
-- Snippet integration/expansion for 24 different filetypes. Well over [1000
-  snippets](./.config/nvim/UltiSnips) are included.
-  - Nvim's Python integration is utilized to expand some snippets. Over [20 functions](./.config/nvim/pythonx/snippets_helper.py) are imported and used throughout the varying snippet files.
+- [Personally configured](./.config/nvim/after/ftplugin/) filetype plugins and
+added [filetype detection](./.config/nvim/ftdetect).
 
-- Git integration with aliases via Tim Pope's plugin
-[Fugitive](https://www.github.com/tpope/vim-fugitive).
-
-- Lightly configured embedded terminal. 20+ convenience mappings are provided to
-ease navigation between Nvim windows and the embedded terminal.
+- Lightly configured embedded terminal. 
+  [20+ convenience mappings](.config/nvim/plugin/terminally_unimpaired.vim)
+  are provided to ease navigation between Nvim windows and the embedded terminal.
 
 - Seamless Tmux integration.
   - Keybindings for both Nvim and tmux correspond so that jumping from a Nvim window to a Tmux pane uses the same keys.
   - The configuration for Tmux is displayed at [dotfiles](https://www.github.com/farisachugthai/dotfiles).
-
-- Asynchronous linters thanks to the Asynchronous Lint Engine or
-[ALE](https://www.github.com/w0rp/ale).
-  - Support for specific filetype dependent linters including ReStructured Text
-  are configured in my
-  [dotfiles](https://www.github.com/farisachugthai/dotfiles) repo.
-  - Specifically Flake8, pydocstyle, the python-language-server and others.
 
 
 - Syntax highlighting for files from [Zim
@@ -71,12 +95,12 @@ wiki](https://github.com/jaap-karssenberg/zim-desktop-wiki) found at
 
 - Spell-checking with dictionaries that have been personally compiled and reviewed.
   - For the full list of words check
-  [en.utf-8.add](./.config/nvim/spell/en.utf-8.add)
+    [en.utf-8.add](./.config/nvim/spell/en.utf-8.add)
 
 - Multiple colorschemes that support xterm-256 or 24 bit terminals including
-Solarized, Jellybeans, Gruvbox and Monokai.
+  Solarized, Jellybeans, Gruvbox and Monokai.
   - An explanation of how to work with colorschemes is given at the
-  [README](./.config/nvim/colors/README.rst)
+    [README](./.config/nvim/colors/README.rst)
 
 ## Usage
 
@@ -105,18 +129,16 @@ Further explanations for how nvim is configured can be found in my personal
 
 ### Diffs
 
-+----------------------------------+
-| Command            | Keycode     |
-|                    |             |
-|next change         |          ]c |
-|previous change     |         \[c |
-|diff obtain         |          do |
-|diff put            |          dp |
-|fold open           |          zo |
-|fold close          |          zc |
-|rescan files        | :diffupdate |
-+----------------------------------+
-
+Command | Keycode
+:-|:-
+Next change | <kbd>]c</kbd>
+Previous change |  <kbd>\[c</kbd>
+Diff obtain {Grab differing lines from other buffer} | <kbd>do</kbd>
+Diff put {Put differing lines in other buffer} | <kbd>dp</kbd>
+Open fold directly under cursor | <kbd>zo</kbd>
+Close fold directly under cursor | <kbd>zc</kbd>
+Update diff and syntax highlighting in windows | `:diffupdate`
+Toggle diff under cursor | <kbd>za</kbd>
 
 ## Plugins Used
 
@@ -144,6 +166,18 @@ Currently, lazily loaded modification files exist for:
 - [startify.vim](./.config/nvim/after/plugin/startify.vim)
 - [ultisnips.vim](./.config/nvim/after/plugin/ultisnips.vim)
 
+In addition, configurations exist for:
+
+- [coc.nvim](https://www.github.com/neoclide/coc.nvim).
+  - Automatic autocompletion for any filetype Vim supports via
+  - This plugin depends on node.js and Yarn being installed.
+- Snippet integration/expansion for 24 different filetypes. Well over [1000
+  snippets](./.config/nvim/UltiSnips) are included.
+  - Nvim's Python integration is utilized to expand some snippets.
+    Over [20 functions](./.config/nvim/pythonx/snippets_helper.py) are imported and used throughout the varying snippet files.
+- [Fugitive](https://www.github.com/tpope/vim-fugitive).
+ Git integration with aliases via Tim Pope's plugin.
+
 ### NERDTree
 
 - [NERDTree](https://www.github.com/scrooloose/nerdTree)
@@ -152,10 +186,19 @@ NERDTree is a file explorer plugin that provides "project drawer"
 functionality to your vim editing.  You can learn more about it with
 `:help NERDTree`.
 
-#### QuickStart
+### Filetype Plugins
 
-Launch using <kbd><Leader>nt</kbd>.
+This repository contains:
 
+- Real time interactive displays for reStructured Text files.
+  - The plugin [Riv.vim](https://www.github.com/gu-fan/riv.vim) allows one to
+  run `docutils` on a buffer and then preview it in a browser.
+- Asynchronous linters thanks to the Asynchronous Lint Engine or
+[ALE](https://www.github.com/w0rp/ale).
+  - Support for specific filetype dependent linters including ReStructured Text
+  are configured in my
+  [dotfiles](https://www.github.com/farisachugthai/dotfiles) repo.
+  - Specifically Flake8, pydocstyle, the python-language-server and others.
 
 ### Sources for all plugins
 
@@ -183,6 +226,22 @@ on my personal customization.
 - [Voom](https://www.github.com/vim-voom/voom)
 - [Riv.vim](https://www.github.com/gu-fan/riv.vim)
 - [Devicons](https://www.github.com/ryanoasis/vim-devicons)
+
+## Vim
+
+My configuration for Vim has been deprecated as of March 2019. The files in this
+repository therefore do not attempt to maintain compatibility with Vi or Vim's
+default behavior.
+
+There are no checks that will resemble the following:
+
+- `if has('nvim')`
+- `if has(patch7*)` as Neovim was forked from Vim7.4
+- `if has(terminal)` or `if has(autocmd)` or `if has(tmap)`. These are all
+features that have been built into every version of Neovim.
+
+Neovim is my primary text editor and as a result, I've attempted integrating it
+into as much of my workflow as possible.
 
 ## License
 

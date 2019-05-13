@@ -19,9 +19,7 @@ let g:windows = has('win32') || has('win64')
 let g:wsl = has('wsl')   " The fact that this is a thing blows my mind
 
 let g:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/init.vim.local'
-if filereadable(g:local_vimrc)
-    execute 'source' g:local_vimrc
-endif
+runtime g:local_vimrc
 
 if g:windows
     " How do i check if I'm on cmd or powershell?
@@ -147,6 +145,8 @@ if !s:plugins
       echo v:exception
     endtry
   endfunction
+
+  call <SID>InstallPlug()
 endif
 
 " General Plugins: {{{2
@@ -204,10 +204,8 @@ call plug#end()
 
 " Global Options: {{{1
 
-" I've seen it recommended to run `:filetype plugin indent on` and `:syntax on` immediately after plugins.
-
-" nvim does the ftplugin part for you! I ran nvim -u none and still saw my plugins in scriptnames
-
+" Get this going as soon as possible
+runtime! plugin/**/*.vim
 " General Syntax Highlighting: {{{2
 
 " Lower max syntax highlighting
@@ -368,7 +366,7 @@ if exists('+shellslash')   " don't drop the +!
 endif
 
 
-if &term =~# 'xterm-256color' || &term ==# 'cygwin' || &term ==# 'tmux-256color'
+if &term =~# 'xterm-256color' || &term ==# 'cygwin' || &term ==# 'builtin_tmux' || &term ==# 'tmux-256color'
 " mintty identifies itself as xterm-compatible
 " Yeah mintty does. Conemu/Cmder identify as cygwin sooo. we get ansi colors
   set termguicolors
@@ -382,7 +380,7 @@ endif
 
 set tags+=./tags,./*/tags
 set tags+=~/projects/**/tags
-" set tagcase=smartcase
+set tagcase=smart
 set showfulltag
 
 set mouse=a
@@ -435,6 +433,9 @@ set sidescroll=10                       " Didn't realize the default is 1
 " Mappings: {{{1
 
 " General_Mappings: {{{2
+" I accidentally do this so often it feels necessary
+noremap q; q:
+
 " Todo: map this to a key in a manner similar to unimpaired
 " setlocal comments=:# commentstring=#\ %s formatoptions-=t formatoptions+=croql
 
@@ -510,8 +511,18 @@ let g:sh_fold_enabled= 3  "   (enables function and heregoc folding)
 " he rst.vim or ft-rst-syntax or syntax 2600. Don't put bash instead of sh.
 " $VIMRUNTIME/syntax/rst.vim iterates over this var and if it can't find a
 " bash.vim syntax file it will crash.
-let rst_syntax_code_list = ['vim', 'python', 'sh', 'markdown', 'lisp']
 
+" May 13, 2019: Updated. Grabbed this directly from $VIMRUNTIME/syntax/rst.vim
+let g:rst_syntax_code_list = {
+    \ 'vim': ['vim'],
+    \ 'java': ['java'],
+    \ 'cpp': ['cpp', 'c++'],
+    \ 'lisp': ['lisp'],
+    \ 'php': ['php'],
+    \ 'python': ['python', 'python3', 'ipython'],
+    \ 'perl': ['perl'],
+    \ 'sh': ['sh'],
+    \ }
 " highlighting readline options
 let readline_has_bash = 1
 
@@ -532,6 +543,8 @@ augroup omnifunc
     autocmd Filetype css              setlocal omnifunc=csscomplete#CompleteCSS
     autocmd Filetype javascript       setlocal omnifunc=javascriptcomplete#CompleteJS
     autocmd Filetype ruby             setlocal omnifunc=rubycomplete#Complete
+
+    " If there isn't a default or built-in, use the syntax highlighter
 
     " If there isn't a default or built-in, use the syntax highlighter
     autocmd Filetype *
@@ -588,26 +601,22 @@ endfunction
 command! -bang Autosave call s:autosave(<bang>1)
 
 " Statusline: {{{2
-" Apr 16, 2019: I wonder if Vim doesn't have the same statusline expressions as Neovim because literally half of these are builtin flags...
 
 function! s:statusline_expr()
 
+" %n is buffer #, %f is filename relative to $PWD, sep is right align
+" %m is modified?, %r is filetype,
   let dicons = ' %{WebDevIconsGetFileTypeSymbol()} '
-  let mod = "%{&modified ? '[+] ' : !&modifiable ? '[x] ' : ''}"
-  " let ro  = "%{&readonly ? '[RO] ' : ''}"
-  " let ft  = "%{len(&filetype) ? '['.&filetype.'] ' : ''}"
   let fug = "%{exists('g:loaded_fugitive') ? fugitive#statusline() : ''}"
   let sep = ' %= '
   let pos = ' %-12(%l : %c%V%) '
-  let pct = ' %P'
-" %n is buffer #, %f is filename relative to $PWD, sep is right align
 if exists('*CSV_WCol')
     let csv = '%1*%{&ft=~"csv" ? CSV_WCol() : ""}%*'
 else
     let csv = ''
 endif
 
-  return '[%n] %f '. dicons . mod . '%r' . '%y' . fug . csv . sep . pos . '%*'. pct . '        '
+  return '[%n] %f '. dicons . '%m' . '%r' . ' %y ' . fug . csv . ' ' . ' %{&ff} ' . sep . pos . '%*' . ' %P'
 endfunction
 
 let &statusline = s:statusline_expr()
@@ -621,15 +630,9 @@ augroup TermGroup
     autocmd TermOpen * setlocal nomodified
 augroup END
 
-" TODO: Integrate this into the statusline I like what bram left us with a lot
 " set statusline+=%h              " help file flag
-" set statusline+=%m              " modified flag
-" set statusline+=%r              " readonly flag
-" set statusline+=\ [%{&ff}]      " Fileformat [unix]/[dos] etc...
 " set statusline+=\ (%{strftime(\"%H:%M\ %d/%m/%Y\",getftime(expand(\"%:p\")))})  " last modified timestamp
-" set statusline+=%=              " Rest: right align
 " set statusline+=%l,%c%V         " Position in buffer: linenumber, column, virtual column
-" set statusline+=\ %P            " Position in buffer: Percentage
 
 " Rename: {{{2
 " :he map line 1454. How have i never noticed this isn't a feature???

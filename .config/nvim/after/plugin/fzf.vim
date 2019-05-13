@@ -88,7 +88,7 @@ noremap <silent> q/ <Cmd>History/<CR>
 " And get the rest of the fzf.vim commands involved.
 noremap <silent> <Leader>L        <Cmd>Lines<CR>
 noremap <silent> <Leader>ag       <Cmd>Ag <C-R><C-W><CR>
-nnoremap <silent> <Leader>AG       <Cmd>Ag <C-R><C-A><CR>
+noremap <silent> <Leader>AG       <Cmd>Ag <C-R><C-A><CR>
 xnoremap <silent> <Leader>ag       y<Cmd>Ag <C-R>"<CR>
 nnoremap <silent> <Leader>`        <Cmd>Marks<CR>
 
@@ -203,8 +203,7 @@ command! -bang -nargs=? -complete=dir Files
 " Make Sentence: {{{2
 
 " *fzf-vim-reducer-example*
-
-function! s:make_sentence(lines)
+function! s:make_sentence(lines) abort
     return substitute(join(a:lines), '^.', '\=toupper(submatch(0))', '').'.'
 endfunction
 
@@ -215,6 +214,7 @@ inoremap <expr> <C-x><C-s> fzf#vim#complete({
     \ 'left':    20})
 
 " Explore PlugHelp: {{{2
+
 " Call :PlugHelp to use fzf to open a window with all of the plugins
 " you have installed listed and upon pressing enter open the help
 " docs. That's not a great explanation but honestly easier to explain
@@ -240,4 +240,5 @@ command! PlugHelp call fzf#run(fzf#wrap({
 " F: {{{2
 
 let g:ag_command = 'ag --smart-case -u -g " " --'
+
 command! -bang -nargs=* F call fzf#vim#grep(g:ag_command .shellescape(<q-args>), 1, <bang>0)

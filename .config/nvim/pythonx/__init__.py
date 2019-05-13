@@ -6,11 +6,7 @@ import logging
 import os
 import sys
 
-try:
-    import pynvim as vim
-except ImportError:
-    import vim  # pylint:disable=import-error,unused-import
-
+import vim  # noqa pylint:disable=import-error,unused-import
 __docformat__ = 'reStructuredText'
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())
@@ -35,10 +31,11 @@ class QueueHandler(logging.Handler):
 
 
 QUEUE = deque(maxlen=1000)
-FMT_NORMAL = logging.Formatter(
-        fmt='%(asctime)s %(levelname).4s %(message)s', datefmt='%H:%M:%S')
+FMT_NORMAL = logging.Formatter(fmt='%(asctime)s %(levelname).4s %(message)s',
+                               datefmt='%H:%M:%S')
 FMT_DEBUG = logging.Formatter(
-        fmt='%(asctime)s.%(msecs)03d %(levelname).4s [%(name)s] %(message)s', datefmt='%H:%M:%S')
+    fmt='%(asctime)s.%(msecs)03d %(levelname).4s [%(name)s] %(message)s',
+    datefmt='%H:%M:%S')
 
 
 def setup_logging(debug=True, logfile=None):

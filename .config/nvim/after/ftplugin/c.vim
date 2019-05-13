@@ -40,5 +40,3 @@ endfunction
 " or save any files. To revert a formatting, just undo.
 
 setlocal makeprg=make\ %<.o
-
-" What the hell would we make the undo ftplugin?

@@ -5,12 +5,13 @@
     " Last Modified: April 14, 2019
 " ============================================================================
 
-if exists('g:did_terminally_unimpaired_vim') || &cp || v:version < 700
+" Guard: {{{1
+if exists('g:did_terminally_unimpaired_vim') || &compatible || v:version < 700
     finish
 endif
 let g:did_terminally_unimpaired_vim = 1
 
-" Mappings:
+" Mappings: {{{1
 
 " IPython in a Vim terminal acts oddly. If you hit i or a it doesn't move to where
 " your cursor is. It moves relative to its old positon.
@@ -46,12 +47,16 @@ tnoremap <C-w> <Esc><C-w>
 tnoremap <A-a> <Esc>I
 tnoremap <A-e> <Esc>$i
 
+" Functions: {{{1
+
+" htop: {{{2
 " Leader -- applications -- htop. Requires nvim for <Cmd> which tmk doesn't exist
 " even in vim8.0+. Also requires htop which more than likely rules out Win32.
 
 " Need to use enew in case your previous buffer setl nomodifiable
 noremap <Leader>ah <Cmd>wincmd v<CR><bar><Cmd>enew<CR><bar>term://htop
 
+" IPython: {{{2
 " Leader -- applications -- IPython
 
 " Let's add options to this to give the feeling of a real plugin

@@ -1,12 +1,17 @@
 " ============================================================================
   " File: lua.vim
   " Author: Faris Chugthai
-  " Description: A description of the file below
+  " Description: Lua ftplugin
   " Last Modified: May 09, 2019
 " ============================================================================
 
-" I need to figure out whats screwing up my comments option!
-" verbose set comments isn't giving me anything
+" Guard: {{{1
+if exists('b:did_lua_after_ftplugin') || &compatible || v:version < 700
+  finish
+endif
+let b:did_lua_after_ftplugin = 1
+
+setlocal commentstring=--\ %s
 setlocal comments=--\ %s
 
-let undo_ftplugin = 'set com<'
+let b:undo_ftplugin = 'set cms< com<'

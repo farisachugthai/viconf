@@ -8,7 +8,6 @@
 " -----------------------------------------------------------------------------
 
 " Guards: {{{
-" This var should probabpy be buffer local right?
 if exists('b:did_gruvbox_colors') || &compatible || v:version < 700
     finish
 endif
@@ -171,7 +170,7 @@ if g:gruvbox_inverse == 0
 endif
 
 " }}}
-" Map s:vars to s:vars
+" Map s:vars to s:vars: {{{
 
 let s:vim_bg = ['bg', 'bg']
 let s:vim_fg = ['fg', 'fg']
@@ -693,7 +692,6 @@ if has('spell')
 endif
 
 " }}}
-
 " Plugin specific -------------------------------------------------------------
 
 " AKA Plugins You Don't Have: {{{
@@ -1066,7 +1064,10 @@ hi! link vimFunc Function
 " vimSyncRegion	vimSyncRegion
 " vimHiLink	vimHiLink
 " vimHiKeyList	vimHiKeyList
-" vimHiBang	vimHiBang
+
+" Yes the exclamation mark in hi! It got cleared so hey.
+hi! link vimHiBang vimHighlight
+
 " vimHiAttribList	vimHiAttribList
 " vimHiCtermColor	vimHiCtermColor
 " vimHiFontname	vimHiFontname
