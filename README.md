@@ -53,14 +53,13 @@ true:
 1. [vim-plug](https://www.github.com/junegunn/vim-plug) is the plugin manager
 that you'd like to use.
 
-My init.vim will immediately check that the plug.vim file is there, and it will
-automatically download it if not.
+My [init.vim](./.config/nvim/init.vim) will immediately check that the
+plug.vim file is there, and it will automatically download it if not.
 
 
 ## Features
 
-As a result modifications, this setup currently has:
-
+As a result of my modifications, this setup currently has:
 
 ### Remote Providers
 
@@ -70,10 +69,23 @@ As a result modifications, this setup currently has:
 
 ### Man pages
 
-- [Improved syntax highlighting](./.config/nvim/syntax/man.vim) for man pages over the defaults provided by either Neovim or Vim.
+- [Improved syntax highlighting](./.config/nvim/syntax/man.vim) for man pages
+  over the defaults provided by either Neovim or Vim.
   - This was accomplished by merging together the highlighting groups of
-  both Neovim and Vim, and then adding around 20 links to color groups.
-  - It also depends on the variable `g:colors_name` being set to `Gruvbox`.
+    both Neovim and Vim, and then adding around 20 links to color groups.
+  - It also depends on the variable `g:colors_name` being set to `Gruvbox`;
+    however, this is being refactored to be more portable to other colorschemes.
+
+### Colorscheme Improvements
+
+- The [Gruvbox](https://github.com/morhetz/gruvbox.vim) colorscheme has been
+  integrated into the repository and currently stands at over [double the
+  original length](./.config/nvim/colors/gruvbox.vim) with no appreciable
+  change in startup time.
+
+  This has been accomplished by falling back to Nvim's builtin functions for
+  highlighting certain syntax groups.
+
 
 ### Other
 

@@ -473,6 +473,10 @@ call s:HL('GruvboxAquaSign', s:aqua, s:sign_column, s:invert_signs)
 " Normal text
 call s:HL('Normal', s:fg1, s:bg0)
 
+" And to state it explicitly
+" Normal         xxx ctermfg=223 ctermbg=234 guifg=#ebdbb2 guibg=#1d2021
+" so keep those background colors in mind and use them for everything.
+
 " Correct background (see issue #7):
 " --- Problem with changing between dark and light on 256 color terminal
 " --- https://github.com/morhetz/gruvbox/issues/7
@@ -550,6 +554,7 @@ hi! link Question GruvboxOrangeBold
 " Warning messages
 hi! link WarningMsg GruvboxRedBold
 
+
 " }}}
 " Gutter: {{{
 
@@ -582,7 +587,7 @@ hi! link lCursor Cursor
 if g:gruvbox_improved_strings == 0
   hi! link Special GruvboxOrange
 else
-  call s:HL('Special', s:orange, s:bg1, s:italicize_strings)
+  call s:HL('Special', s:orange, s:none, s:italicize_strings)
 endif
 
 call s:HL('Comment', s:gray, s:none, s:italicize_comments)
@@ -932,6 +937,15 @@ hi! link netrwCmdSep GruvboxFg3
 hi! link netrwVersion GruvboxGreen
 
 " }}}
+" Rst: {{{ TODO
+" Ugh this hasn't been implemented at all and riv keeps overtaking random syn groups
+
+hi def link rstHyperLinkTarget Underlined
+hi def link rstHyperlinkReference Underlined
+hi def link rstFileLink rstHyperlinkReference
+
+" }}}
+"
 " Diff: {{{
 
 hi! link diffAdded GruvboxGreen
@@ -997,102 +1011,93 @@ hi! link xmlEntityPunct GruvboxOrange
 " Vim: {{{ TODO
 
 " I could be wrong but according to `so $VIMRUNTIME/syntax/hitest.vim`
+" All of these are cleared groups...
 
 " Dude you aren't wrong. Everything below is  a cleared syn match for vim*
-" vimOnlyCommand	vimOnlyCommand
-hi! link vimStdPlugin       Function
-" vimOnlyOption	vimOnlyOption
-" vimTermOption	vimTermOption
-" vimErrSetting	vimErrSetting
-" vimOnlyHLGroup	vimOnlyHLGroup
-" vimGlobal	vimGlobal
-" vimEcho	vimEcho
-hi! link vimIsCommand       vimOption
-" vimExtCmd	vimExtCmd
-" vimFilter	vimFilter
-" vimSet	vimSet
-" vimUserCmd	vimUserCmd
-" vimCmdSep	vimCmdSep
-" vimFiletype	vimFiletype
+
+" May 13, 2019: Sorted them at least...
+
+" Heres everything from VIMRUNTIME/syntax/vim.vim
+" vimAuSyntax	vimAuSyntax
 " vimAugroup	vimAugroup
-" vimExecute	vimExecute
-hi! link vimFunction Function
-" vimOperParen	vimOperParen
-" vimRegion	vimRegion
-" vimSynLine	vimSynLine
-" vimSetEqual	vimSetEqual
-hi! link vimFunc Function
-" vimFuncBody	vimFuncBody
-" vimFuncBlank	vimFuncBlank
-" vimEscapeBrace	vimEscapeBrace
-" vimSubstRep	vimSubstRep
-" vimSubstRange	vimSubstRange
-" vimPatRegion	vimPatRegion
-" vimCollection	vimCollection
-" vimSubstPat	vimSubstPat
-" vimSubst2	vimSubst2
-" vimSubstRep4	vimSubstRep4
-" vimSubstFlagErr	vimSubstFlagErr
-" vimCollClass	vimCollClass
-" vimCollClassErr	vimCollClassErr
-" vimMapLhs	vimMapLhs
+" vimAutoCmdSfxList	vimAutoCmdSfxList
 " vimAutoCmdSpace	vimAutoCmdSpace
 " vimAutoEventList	vimAutoEventList
-" vimAutoCmdSfxList	vimAutoCmdSfxList
-" vimMapRhs	vimMapRhs
-" vimMapModErr	vimMapModErr
-" vimMapRhsExtend	vimMapRhsExtend
-" vimMenuBang	vimMenuBang
-" vimMenuPriority	vimMenuPriority
-" vimMenuMap	vimMenuMap
-" vimMenuRhs	vimMenuRhs
-" vimNormCmds	vimNormCmds
-" vimGroupList	vimGroupList
-" vimAuSyntax	vimAuSyntax
 " vimClusterName	vimClusterName
-" vimIskList	vimIskList
-" vimSynKeyRegion	vimSynKeyRegion
-" vimSynMatchRegion	vimSynMatchRegion
-" vimSynMtchCchar	vimSynMtchCchar
-" vimSynMtchGroup	vimSynMtchGroup
-" vimSynRegion	vimSynRegion
-" vimSynPatMod	vimSynPatMod
-" vimSyncLines	vimSyncLines
-" vimSyncMatch	vimSyncMatch
-" vimSyncLinebreak	vimSyncLinebreak
-" vimSyncLinecont	vimSyncLinecont
-" vimSyncRegion	vimSyncRegion
-" vimHiLink	vimHiLink
-" vimHiKeyList	vimHiKeyList
-
-" Yes the exclamation mark in hi! It got cleared so hey.
-hi! link vimHiBang vimHighlight
-
+" vimCmdSep	vimCmdSep
+" vimCollClass	vimCollClass
+" vimCollClassErr	vimCollClassErr
+" vimCollection	vimCollection
+" vimCommentTitleLeader	vimCommentTitleLeader
+" vimEcho	vimEcho
+" vimErrSetting	vimErrSetting
+" vimEscapeBrace	vimEscapeBrace
+" vimExecute	vimExecute
+" vimExtCmd	vimExtCmd
+" vimFiletype	vimFiletype
+" vimFilter	vimFilter
+" vimFuncBlank	vimFuncBlank
+" vimGlobal	vimGlobal
+" vimGroupList	vimGroupList
 " vimHiAttribList	vimHiAttribList
 " vimHiCtermColor	vimHiCtermColor
 " vimHiFontname	vimHiFontname
 " vimHiGuiFontname	vimHiGuiFontname
+" vimHiKeyList	vimHiKeyList
+" vimHiLink	vimHiLink
 " vimHiTermcap	vimHiTermcap
-" vimCommentTitleLeader	vimCommentTitleLeader
+" vimIskList	vimIskList
 " vimLuaRegion	vimLuaRegion
-
-" All of those hi groups got cleared...
-hi! link vimNotation GruvboxOrange
-hi! link vimBracket GruvboxOrange
-hi! link vimMapModKey GruvboxOrange
-hi! link vimFuncSID GruvboxFg3
-hi! link vimSetSep GruvboxFg3
-hi! link vimSep GruvboxFg3
-hi! link vimContinue GruvboxFg3
-
-" Oh actually here's more from the syntax file. Jesus.
+" vimMapLhs	vimMapLhs
+" vimMapModErr	vimMapModErr
+" vimMapRhs	vimMapRhs
+" vimMapRhsExtend	vimMapRhsExtend
+" vimMenuBang	vimMenuBang
+" vimMenuMap	vimMenuMap
+" vimMenuPriority	vimMenuPriority
+" vimMenuRhs	vimMenuRhs
+" vimNormCmds	vimNormCmds
+" vimOnlyCommand	vimOnlyCommand
+" vimOnlyHLGroup	vimOnlyHLGroup
+" vimOnlyOption	vimOnlyOption
+" vimOperParen	vimOperParen
+" vimPatRegion	vimPatRegion
+" vimRegion	vimRegion
+" vimSet	vimSet
+" vimSetEqual	vimSetEqual
+" vimSubst2	vimSubst2
+" vimSubstFlagErr	vimSubstFlagErr
+" vimSubstPat	vimSubstPat
+" vimSubstRange	vimSubstRange
+" vimSubstRep	vimSubstRep
+" vimSubstRep4	vimSubstRep4
+" vimSynKeyRegion	vimSynKeyRegion
+" vimSynLine	vimSynLine
+" vimSynMatchRegion	vimSynMatchRegion
+" vimSynMtchCchar	vimSynMtchCchar
+" vimSynMtchGroup	vimSynMtchGroup
+" vimSynPatMod	vimSynPatMod
+" vimSynRegion	vimSynRegion
+" vimSyncLinebreak	vimSyncLinebreak
+" vimSyncLinecont	vimSyncLinecont
+" vimSyncLines	vimSyncLines
+" vimSyncMatch	vimSyncMatch
+" vimSyncRegion	vimSyncRegion
+" vimTermOption	vimTermOption
+hi def link NvimInternalError Error
+hi def link nvimAutoEvent	vimAutoEvent
+hi def link nvimHLGroup	vimHLGroup
+hi def link nvimMap	vimMap
+hi def link nvimUnmap	vimUnmap
 hi def link vimBehaveError	vimError
+hi def link vimBufnrWarn	vimWarn
 hi def link vimCollClassErr	vimError
-hi def link vimErrSetting	vimError
 hi def link vimEmbedError	Normal
+hi def link vimErrSetting	vimError
 hi def link vimFTError	vimError
-hi def link vimFunctionError	vimError
 hi def link vimFunc         	vimError
+hi def link vimFuncBody Function
+hi def link vimFunctionError	vimError
 hi def link vimHiAttribList	vimError
 hi def link vimHiCtermError	vimError
 hi def link vimHiKeyError	vimError
@@ -1100,23 +1105,19 @@ hi def link vimKeyCodeError	vimError
 hi def link vimMapModErr	vimError
 hi def link vimSubstFlagErr	vimError
 hi def link vimSynCaseError	vimError
-hi def link vimBufnrWarn	vimWarn
-
-
-" Heres everything from VIMRUNTIME/syntax/vim.vim
-"  HOW DID THAT DO ALMOST NOTHING
 hi! link vimAbb	vimCommand
 hi! link vimAddress	vimMark
+hi! link vimAuHighlight	vimHighlight
 hi! link vimAugroupError	vimError
 hi! link vimAugroupKey	vimCommand
-hi! link vimAuHighlight	vimHighlight
-hi! link vimAutoCmdOpt	vimOption
 hi! link vimAutoCmd	vimCommand
+hi! link vimAutoCmdOpt	vimOption
 hi! link vimAutoEvent	Type
 hi! link vimAutoSet	vimCommand
-hi! link vimBehaveModel	vimBehave
 hi! link vimBehave	vimCommand
+hi! link vimBehaveModel	vimBehave
 hi! link vimBracket	Delimiter
+hi! link vimBracket GruvboxOrange
 hi! link vimCmplxRepeat	SpecialChar
 hi! link vimCommand	Statement
 hi! link vimComment	Comment
@@ -1125,103 +1126,115 @@ hi! link vimCommentTitle	PreProc
 hi! link vimCondHL	vimCommand
 hi! link vimContinue	Special
 hi! link vimCtrlChar	SpecialChar
-hi! link vimEchoHLNone	vimGroup
 hi! link vimEchoHL	vimCommand
+hi! link vimEchoHLNone	vimGroup
 hi! link vimElseIfErr	Error
 hi! link vimElseif	vimCondHL
 hi! link vimEnvvar	PreProc
 hi! link vimError	Error
 hi! link vimFBVar	vimVar
-hi! link vimFgBgAttrib	vimHiAttrib
-hi! link vimFold	Folded
 hi! link vimFTCmd	vimCommand
 hi! link vimFTOption	vimSynType
+hi! link vimFgBgAttrib	vimHiAttrib
+hi! link vimFold	Folded
+hi! link vimFunc Function
 hi! link vimFuncKey	vimCommand
 hi! link vimFuncName	Function
 hi! link vimFuncSID	Special
+hi! link vimFuncSID GruvboxFg3
 hi! link vimFuncVar	Identifier
+hi! link vimFunction Function
+hi! link vimGroup	Type
 hi! link vimGroupAdd	vimSynOption
 hi! link vimGroupName	vimGroup
 hi! link vimGroupRem	vimSynOption
 hi! link vimGroupSpecial	Special
-hi! link vimGroup	Type
+hi! link vimHLGroup	vimGroup
+hi! link vimHLMod	PreProc
 hi! link vimHiAttrib	PreProc
+hi! link vimHiBang vimHighlight
+hi! link vimHiCTerm	vimHiTerm
 hi! link vimHiClear	vimHighlight
 hi! link vimHiCtermFgBg	vimHiTerm
-hi! link vimHiCTerm	vimHiTerm
-hi! link vimHighlight	vimCommand
 hi! link vimHiGroup	vimGroupName
+hi! link vimHiGui	vimHiTerm
 hi! link vimHiGuiFgBg	vimHiTerm
 hi! link vimHiGuiFont	vimHiTerm
 hi! link vimHiGuiRgb	vimNumber
-hi! link vimHiGui	vimHiTerm
 hi! link vimHiNmbr	Number
 hi! link vimHiStartStop	vimHiTerm
 hi! link vimHiTerm	Type
-hi! link vimHLGroup	vimGroup
-hi! link vimHLMod	PreProc
+hi! link vimHighlight	vimCommand
 hi! link vimInsert	vimString
+
+" vimIsCommand is a terrible regex honestly don't match it with anything
+" Output of `syn list vimIsCommand
+" --- Syntax items ---
+" vimIsCommand   xxx match /\<\h\w*\>/  contains=vimCommand
+"                    match /<Bar>\s*\a\+/  transparent contains=vimCommand,vimNotation
+" \h is any upper case letter. \w is any letter. wtf? that contains SO many false positives
+
+" hi! link vimIsCommand       vimOption
 hi! link vimIskSep	Delimiter
 hi! link vimKeyCode	vimSpecFile
 hi! link vimKeyword	Statement
 hi! link vimLet	vimCommand
 hi! link vimLineComment	vimComment
-hi! link vimMapBang	vimCommand
-hi! link vimMapModKey	vimFuncSID
-hi! link vimMapMod	vimBracket
 hi! link vimMap	vimCommand
+hi! link vimMapBang	vimCommand
+hi! link vimMapMod	vimBracket
+hi! link vimMapModKey	vimFuncSID
+hi! link vimMapModKey GruvboxOrange
 hi! link vimMark	Number
 hi! link vimMarkNumber	vimNumber
 hi! link vimMenuMod	vimMapMod
-hi! link vimMenuNameMore	vimMenuName
 hi! link vimMenuName	PreProc
+hi! link vimMenuNameMore	vimMenuName
 hi! link vimMtchComment	vimComment
 hi! link vimNorm	vimCommand
-hi! link vimNotation	Special
 hi! link vimNotFunc	vimCommand
 hi! link vimNotPatSep	vimString
+hi! link vimNotation	Special
+hi! link vimNotation GruvboxOrange
 hi! link vimNumber	Number
-hi! link vimOperError	Error
 hi! link vimOper	Operator
+hi! link vimOperError	Error
 hi! link vimOption	PreProc
 hi! link vimParenSep	Delimiter
+hi! link vimPatSep	SpecialChar
 hi! link vimPatSepErr	vimError
 hi! link vimPatSepR	vimPatSep
-hi! link vimPatSep	SpecialChar
-hi! link vimPatSepZone	vimString
 hi! link vimPatSepZ	vimPatSep
+hi! link vimPatSepZone	vimString
 hi! link vimPattern	Type
 hi! link vimPlainMark	vimMark
 hi! link vimPlainRegister	vimRegister
 hi! link vimRegister	SpecialChar
 hi! link vimScriptDelim	Comment
-hi! link vimSearchDelim	Statement
 hi! link vimSearch	vimString
+hi! link vimSearchDelim	Statement
 hi! link vimSep	Delimiter
+hi! link vimSep GruvboxFg3
 hi! link vimSetMod	vimOption
 hi! link vimSetSep	Statement
+hi! link vimSetSep GruvboxFg3
 hi! link vimSetString	vimString
 hi! link vimSpecFile	Identifier
 hi! link vimSpecFileMod	vimSpecFile
 hi! link vimSpecial	Type
 hi! link vimStatement	Statement
-hi! link vimStringCont	vimString
+hi! link vimStdPlugin       Function
 hi! link vimString	String
+hi! link vimStringCont	vimString
 hi! link vimStringEnd	vimString
+hi! link vimSubst	vimCommand
 hi! link vimSubst1	vimSubst
 hi! link vimSubstDelim	Delimiter
 hi! link vimSubstFlags	Special
 hi! link vimSubstSubstr	SpecialChar
 hi! link vimSubstTwoBS	vimString
-hi! link vimSubst	vimCommand
-hi! link vimSynCaseError	Error
 hi! link vimSynCase	Type
-hi! link vimSyncC	Type
-hi! link vimSyncError	Error
-hi! link vimSyncGroupName	vimGroupName
-hi! link vimSyncGroup	vimGroupName
-hi! link vimSyncKey	Type
-hi! link vimSyncNone	Type
+hi! link vimSynCaseError	Error
 hi! link vimSynContains	vimSynOption
 hi! link vimSynError	Error
 hi! link vimSynKeyContainedin	vimSynContains
@@ -1232,29 +1245,30 @@ hi! link vimSynNextgroup	vimSynOption
 hi! link vimSynNotPatRange	vimSynRegPat
 hi! link vimSynOption	Special
 hi! link vimSynPatRange	vimString
+hi! link vimSynReg	Type
 hi! link vimSynRegOpt	vimSynOption
 hi! link vimSynRegPat	vimString
-hi! link vimSynReg	Type
-hi! link vimSyntax	vimCommand
 hi! link vimSynType	vimSpecial
+hi! link vimSyncC	Type
+hi! link vimSyncError	Error
+hi! link vimSyncGroup	vimGroupName
+hi! link vimSyncGroupName	vimGroupName
+hi! link vimSyncKey	Type
+hi! link vimSyncNone	Type
+hi! link vimSyntax	vimCommand
 hi! link vimTodo	Todo
 hi! link vimUnmap	vimMap
-hi! link vimUserAttrbCmpltFunc	Special
-hi! link vimUserAttrbCmplt	vimSpecial
-hi! link vimUserAttrbKey	vimOption
 hi! link vimUserAttrb	vimSpecial
+hi! link vimUserAttrbCmplt	vimSpecial
+hi! link vimUserAttrbCmpltFunc	Special
 hi! link vimUserAttrbError	Error
+hi! link vimUserAttrbKey	vimOption
+hi! link vimUserCmd vimUserCommand
 hi! link vimUserCmdError	Error
 hi! link vimUserCommand	vimCommand
 hi! link vimUserFunc	Normal
 hi! link vimVar	Identifier
 hi! link vimWarn	WarningMsg
-
-hi def link NvimInternalError Error
-hi def link nvimAutoEvent	vimAutoEvent
-hi def link nvimHLGroup	vimHLGroup
-hi def link nvimMap	vimMap
-hi def link nvimUnmap	vimUnmap
 " }}}
 " Clojure: {{{
 
@@ -1311,6 +1325,8 @@ hi! link pythonDot GruvboxFg3
 hi! link pythonConditional GruvboxRed
 hi! link pythonRepeat GruvboxRed
 hi! link pythonDottedName GruvboxGreenBold
+
+" Here are a few more xxx cleared syn groups
 
 " vimPythonRegion vimPythonRegion
 " hi! link pythonMatrixMultiply python
@@ -1684,4 +1700,4 @@ endfunction
 
 " }}}
 
-" vim: set sw=2 ts=2 sts=2 et tw=80 ft=vim fdm=marker:
+" vim: set sw=2 ts=2 sts=2 et fdm=marker fdls=0:

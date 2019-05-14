@@ -27,7 +27,8 @@ nnoremap <Leader>rt call g:EchoRTP()
 command! -nargs=0 EchoRTP call g:EchoRTP()
 
 " PreviewWord: {{{1
-" Preview the word under the cursor. Could definitely do with a mapping
+" Open a tag for the word under the cursor in the preview window.
+" Could definitely do with a mapping
 function! g:PreviewWord() abort
 " From :he cursorhold-example
   if &previewwindow			" don't do this in the preview window
@@ -52,16 +53,42 @@ function! g:PreviewWord() abort
 
     silent! wincmd P			" jump to preview window
     if &previewwindow		" if we really get there...
-	 if has("folding")
+	 if has('folding')
 	   silent! .foldopen		" don't want a closed fold
 	 endif
-	 call search("$", "b")		" to end of previous line
-	 let w = substitute(w, '\\', '\\\\', "")
+	 call search('$', 'b')		" to end of previous line
+	 let w = substitute(w, '\\', '\\\\', '')
 	 call search('\<\V' . w . '\>')	" position cursor on match
 	 " Add a match highlight to the word at this position
       hi previewWord term=bold ctermbg=green guibg=green
-	 exe 'match previewWord "\%' . line(".") . 'l\%' . col(".") . 'c\k*"'
+	 exe 'match previewWord "\%' . line('.') . 'l\%' . col('.') . 'c\k*"'
       wincmd p			" back to old window
     endif
   endif
 endfunction
+
+" General Mappings: {{{1
+" To make navigating windows easier
+noremap <leader>c <Cmd>cclose<CR><bar><Cmd>lclose<CR>
+
+" Navigate windows more easily
+noremap <C-h> <Cmd>wincmd h<CR>
+noremap <C-j> <Cmd>wincmd j<CR>
+noremap <C-k> <Cmd>wincmd k<CR>
+noremap <C-l> <Cmd>wincmd l<CR>
+
+" Resize them more easily. Finish more later. TODO
+noremap <C-w>< <Cmd>wincmd 5<<CR>
+noremap <C-w>> <Cmd>wincmd 5><CR>
+
+
+" ALT Key Window Navigation: {{{1
+" Originally this inspired primarily for terminal use but why not put it everywhere?
+noremap <A-h> <C-w>h
+noremap <A-j> <C-w>j
+noremap <A-k> <C-w>k
+noremap <A-l> <C-w>l
+noremap! <A-h> <C-w>h
+noremap! <A-j> <C-w>j
+noremap! <A-k> <C-w>k
+noremap! <A-l> <C-w>l
