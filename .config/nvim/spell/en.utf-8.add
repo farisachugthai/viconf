@@ -556,6 +556,7 @@ cant/!
 cd
 cdrom
 cell
+cell
 chainmap
 chdir
 cheat40
@@ -1668,4 +1669,3 @@ zshrc
 µMatrix
 µTP
 µTorrent
-cell

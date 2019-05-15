@@ -44,6 +44,11 @@ Yeah I actually really don't like that code.
 
 We should set up our own logging package. *sigh*.
 
+.. admonition::
+
+    Don't import vim! That works in the ../../pythonx/ directory but crashes the
+    remote host if used here.
+
 """
 import logging
 import os
@@ -53,12 +58,12 @@ import sys
 try:
     import pynvim  # noqa F401
 except ImportError:
-    import vim
+    sys.exit('Pynvim not installed.')
 else:
     from pynvim import setup_logging
 
-from .Neovim import *
-from .pydoc import *
+from Neovim import *
+from pydoc import *
 
 
 def check_and_set_envvar(envvar, default=None):
@@ -77,7 +82,8 @@ def check_and_set_envvar(envvar, default=None):
             os.environ.setdefault(envvar, default)
             logging.info(envvar + " set to: " + default)
     else:
-        logging.debug(envvar + " already set to value of: " + os.environ.get(envvar))
+        logging.debug(envvar + " already set to value of: " +
+                      os.environ.get(envvar))
 
 
 def main():

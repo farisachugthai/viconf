@@ -17,7 +17,9 @@ setlocal softtabstop=2
 setlocal suffixesadd=*.vim
 
 let &commentstring='" %s'
-setlocal comments="
+
+" This is the absolute worst way to implement this
+" setlocal comments="
 
 " Let's add a little meat in here shall we?
 

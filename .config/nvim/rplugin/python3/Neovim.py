@@ -15,8 +15,6 @@ Shit. This is probably gonna be hard really soon.
 """
 import sys
 
-import vim
-
 try:
     import pynvim
 except ImportError:  # Probably ModuleNotFound too but import is more backwards compatible
@@ -58,6 +56,7 @@ class Instance(App):
 
     """
     pass
+
 
 @pynvim.command('ListBuf', nargs=0)
 def list_buf():

@@ -6,7 +6,12 @@ import logging
 import os
 import sys
 
-import vim  # noqa pylint:disable=import-error,unused-import
+try:
+    import pynvim as vim
+except ImportError:
+    import vim  # noqa pylint:disable=import-error,unused-import
+
+
 __docformat__ = 'reStructuredText'
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())

@@ -159,7 +159,7 @@ let g:plug_window = 'tabe'
 Plug 'junegunn/fzf', { 'dir': expand('~/.fzf'), 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
-Plug 'davidhalter/jedi-vim', {'for': ['rst', 'python'] }
+" Plug 'davidhalter/jedi-vim', {'for': ['rst', 'python'] }
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
@@ -294,24 +294,27 @@ endif
 " Fun With Clipboards: {{{2
 
 " I've been using vim for almost 3 years. I still don't have copy paste ironed out...
-if exists('$TMUX')
-    let g:clipboard = {
-        \   'name': 'myClipboard',
-        \   'copy': {
-        \      '+': 'tmux load-buffer -',
-        \      '*': 'tmux load-buffer -',
-        \    },
-        \   'paste': {
-        \      '+': 'tmux save-buffer -',
-        \      '*': 'tmux save-buffer -',
-        \   },
-        \   'cache_enabled': 1,
-        \ }
+" if exists('$TMUX')
+"     let g:clipboard = {
+"         \   'name': 'myClipboard',
+"         \   'copy': {
+"         \      '+': 'tmux load-buffer -',
+"         \      '*': 'tmux load-buffer -',
+"         \    },
+"         \   'paste': {
+"         \      '+': 'tmux save-buffer -',
+"         \      '*': 'tmux save-buffer -',
+"         \   },
+"         \   'cache_enabled': 1,
+"         \ }
 
-    " Double check if we need to do this but sometimes the clipboard fries when set this way
-	runtime autoload/provider/clipboard.vim
+"     " Double check if we need to do this but sometimes the clipboard fries when set this way
+" 	runtime! autoload/provider/clipboard.vim
+"   " shit it sometimes needs to be rerun when the clipboard doesn't set correctly.
+"   " xxx What is happening
+" endif
 
-elseif has('unnamedplus')                   " Use the system clipboard.
+if has('unnamedplus')                   " Use the system clipboard.
     set clipboard+=unnamed,unnamedplus
 else                                        " Accommodate Termux
     set clipboard+=unnamed
@@ -372,6 +375,8 @@ if &term =~# 'xterm-256color' || &term ==# 'cygwin' || &term ==# 'builtin_tmux' 
   set termguicolors
 endif
 
+" Used by the markprg. system locale is used
+set makeencoding=char
 " Other Global Options: {{{2
 
 if &formatexpr ==# ''
@@ -448,24 +453,13 @@ noremap <Leader>cd <Cmd>cd %:p:h<CR><Cmd>pwd<CR>
 
 vnoremap <BS> d
 
-noremap <Leader>cd <Cmd>cd %:p:h<CR><Cmd>pwd<CR>
+noremap <Leader>cd <Cmd>cd %:p:h<CR><Bar><Cmd>pwd<CR>
 
 " Save a file as root
 noremap <Leader>W <Cmd>w !sudo tee % > /dev/null<CR>
 
 noremap <Leader>sp <Cmd>setlocal spell!<CR>
 noremap <Leader>s= z=
-
-" ALT Navigation: {{{2
-" Originally this inspired primarily for terminal use but why not put it everywhere?
-noremap <A-h> <C-w>h
-noremap <A-j> <C-w>j
-noremap <A-k> <C-w>k
-noremap <A-l> <C-w>l
-noremap! <A-h> <C-w>h
-noremap! <A-j> <C-w>j
-noremap! <A-k> <C-w>k
-noremap! <A-l> <C-w>l
 
 " Junegunn: {{{2
 noremap <Leader>o o<Esc>
@@ -532,7 +526,6 @@ let g:ft_html_autocomment = 1
 " From `:he ft-lisp-syntax. Color parentheses differently up to 10 levels deep
 let g:lisp_rainbow = 1
 
-
 " Omnifuncs: {{{3
 
 augroup omnifunc
@@ -545,11 +538,9 @@ augroup omnifunc
     autocmd Filetype ruby             setlocal omnifunc=rubycomplete#Complete
 
     " If there isn't a default or built-in, use the syntax highlighter
-
-    " If there isn't a default or built-in, use the syntax highlighter
     autocmd Filetype *
         \   if &omnifunc == "" |
-        \       setlocal completefunc=syntaxcomplete#Complete |
+        \       setlocal omnifunc=syntaxcomplete#Complete |
         \   endif
 augroup END
 

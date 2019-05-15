@@ -5,16 +5,17 @@
     " Last Modified: Apr 16, 2019
 " ============================================================================
 
+" Guards: {{{1
 if !has_key(plugs, 'LanguageClient-neovim')
     finish
 endif
 
 " DUDE THIS NEEDS TO BE BUFFER LOCAL NOT GLOBAL! We need to re-source this file
 " every time we change filetypeeeee
-if exists('b:did_conf_lang_client') || &compatible || v:version < 700
+if exists('b:did_language_client_after_plugin') || &compatible || v:version < 700
     finish
 endif
-let b:did_conf_lang_client = 1
+let b:did_language_client_after_plugin = 1
 
 " Options: {{{1
 let g:LanguageClient_autoStart = 1
@@ -40,35 +41,45 @@ let g:LanguageClient_loggingFile = expand('$XDG_DATA_HOME') . '/nvim/LC.log'
 let g:LanguageClient_loadSettings = 1
 
 " Mappings: {{{1
-" This is a good way to give LangClient the necessary bindings it needs;
-" while, first ensuring that the plugin loaded and that it only applies for
-" relevant filetypes.
 
-" You dickhead you never call the function??? Yeah let's not do that.
 if has_key(g:LanguageClient_serverCommands, &filetype)
-    nnoremap <buffer> <Leader>lh <Cmd>call LanguageClient#textDocument_hover()<CR>
+  " And as a double check I ran :echo has_key(g:LanguageClient_serverCommands, &filetype)
+  " in a vim buffer and got the expected 0 and ran it again in a python buffer and got
+  " the expected 1
+    noremap <buffer> <Leader>lh <Cmd>call LanguageClient#textDocument_hover()<CR>
+
     " Jedi might steal this periodically
     if !hasmapto('<F2>')
-        inoremap <buffer> <F2>       <Cmd>call LanguageClient#textDocument_rename()<CR>
+        inoremap <buffer> <F2>   <Cmd>call LanguageClient#textDocument_rename()<CR>
     endif
-    nnoremap <buffer> <Leader>ld <Cmd>call LanguageClient#textDocument_definition()<CR>
-    nnoremap <buffer> <Leader>lr <Cmd>call LanguageClient#textDocument_rename()<CR>
-    nnoremap <buffer> <Leader>lf <Cmd>call LanguageClient#textDocument_formatting()<CR>
-    nnoremap <buffer> <Leader>lt <Cmd>call LanguageClient#textDocument_typeDefinition()<CR>
-    nnoremap <buffer> <Leader>lx <Cmd>call LanguageClient#textDocument_references()<CR>
-    nnoremap <buffer> <Leader>la <Cmd>call LanguageClient_workspace_applyEdit()<CR>
-    nnoremap <buffer> <Leader>lc <Cmd>call LanguageClient#textDocument_completion()<CR>
-    nnoremap <buffer> <Leader>ls <Cmd>call LanguageClient_textDocument_documentSymbol()<CR>
-    nnoremap <buffer> <Leader>lm <Cmd>call LanguageClient_contextMenu()<CR>
+    " Regardless this can work as a fallback
+    noremap <buffer> <Leader>lr <Cmd>call LanguageClient#textDocument_rename()<CR>
+    noremap <buffer> <Leader>ld <Cmd>call LanguageClient#textDocument_definition()<CR>
+    noremap <buffer> <Leader>lf <Cmd>call LanguageClient#textDocument_formatting()<CR>
+    noremap <buffer> <Leader>lt <Cmd>call LanguageClient#textDocument_typeDefinition()<CR>
+    noremap <buffer> <Leader>lx <Cmd>call LanguageClient#textDocument_references()<CR>
+    noremap <buffer> <Leader>la <Cmd>call LanguageClient_workspace_applyEdit()<CR>
+    noremap <buffer> <Leader>lc <Cmd>call LanguageClient#textDocument_completion()<CR>
+    noremap <buffer> <Leader>ls <Cmd>call LanguageClient_textDocument_documentSymbol()<CR>
+    noremap <buffer> <Leader>lm <Cmd>call LanguageClient_contextMenu()<CR>
     set completefunc=LanguageClient#complete
     set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
 endif
 
+" Commands: {{{1
 
 " LanguageClient Check: {{{2
 " Check if the LanguageClient is running.
 function! g:LC_Check()
-  echo LanguageClient#serverStatus()
+  " No args
+  " exists(*funcname) is how you can check if either a built-in function or a
+  " user-defined function exists
+	if exists('*g:LC_Check')
+    echo LanguageClient#serverStatus()
+  else
+    " It'll probably be a good idea to start prefixing echoed messages
+    " so i can figure out where they came from
+    echo 'viconf#after#plugin: LanguageClient#serverStatus() not registered'
 endfunction
 
 command! LCS call g:LC_Check()
