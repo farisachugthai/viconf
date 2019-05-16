@@ -204,8 +204,19 @@ call plug#end()
 
 " Global Options: {{{1
 
+" Should probably load these before the runtime! call
+
+" Builtin Plugins: {{{2
+" To every plugin I've never used before. Stop slowing me down.
+let g:loaded_vimballPlugin     = 1
+let g:loaded_getscriptPlugin   = 1
+let g:loaded_2html_plugin      = 1
+let g:loaded_logiPat           = 1
+
+
 " Get this going as soon as possible
 runtime! plugin/**/*.vim
+
 " General Syntax Highlighting: {{{2
 
 " Lower max syntax highlighting
@@ -487,13 +498,6 @@ set matchtime=20
 let g:matchparen_timeout = 500
 let g:matchparen_insert_timeout = 300
 " variables and their buffer-local equivalents b:matchparen_timeout and b:matchparen_insert_timeout.
-
-" Builtin Plugins: {{{2
-" To every plugin I've never used before. Stop slowing me down.
-let g:loaded_vimballPlugin     = 1
-let g:loaded_getscriptPlugin   = 1
-let g:loaded_2html_plugin      = 1
-let g:loaded_logiPat           = 1
 
 " Filetype Specific Options: {{{2
 
