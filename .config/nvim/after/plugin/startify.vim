@@ -5,36 +5,40 @@ if !has_key(plugs, 'startify')
     finish
 endif
 
-if exists('b:did_startify') || &cp || v:version < 700
+if exists('b:did_startify_after_plugin') || &cp || v:version < 700
     finish
 endif
-let b:did_startify = 1
+let b:did_startify_after_plugin = 1
 
-" What shows up in the startify list?
 
 " List Commits: {{{1
 function! s:list_commits()
-  " I don't entirely understand why but:
+  " note: Don't forget that
   " echo isdirectory('~/projects/viconf')
   " outputs 0 on windows and
   " echo isdirectory(glob('~/projects/viconf'))
   " outputs 1 so we have to glob it to get anything to show up in startify
     let git = 'git -C ' . glob('~/projects/viconf')
-    let commits = systemlist(git .' log --oneline | head -n10')
-    let git = 'G'. git[1:]
+    if empty(g:windows)
+      let commits = systemlist(git .' log --oneline | head -n10')
+    else
+      " Assume powershell
+      let commits = systemlist(git .' log --oneline | Get-Content -TotalCount 10')
+    endif
+
+    let git = 'Git' . git[1:]
     return map(commits, '{"line": matchstr(v:val, "\\s\\zs.*"), "cmd": "'. git .' show ". matchstr(v:val, "^\\x\\+") }')
 endfunction
 
 " Startify Lists: {{{1
-" TODO: Would you wanna add other repos to the start list?
 
 let g:startify_lists = [
-    \ { 'type': 'files',     'header': ['   MRU']            },
-    \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
-    \ { 'type': 'sessions',  'header': ['   Sessions']       },
+    \ { 'type': 'files',     'header': ['   MRU']                   },
+    \ { 'type': 'dir',       'header': ['   MRU ' . getcwd()]       },
+    \ { 'type': 'sessions',  'header': ['   Sessions']              },
     \ { 'type': function('s:list_commits'),  'header': ['   Viconf']},
-    \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
-    \ { 'type': 'commands',  'header': ['   Commands']       },
+    \ { 'type': 'bookmarks', 'header': ['   Bookmarks']             },
+    \ { 'type': 'commands',  'header': ['   Commands']              },
     \ ]
 
 " Setup_devicons: {{{1
@@ -66,20 +70,18 @@ let g:startify_skiplist = [
 " Just make a dir in the config directory that's called session.
 let g:startify_session_dir = runtime session
 
-if has('gui_win32')
-    let g:startify_session_dir = expand('$HOME\vimfiles\session')
-else
-    let g:startify_session_dir = expand('~/.vim/session')
-endif
-
 " General Options: {{{1
 " TODO: Figure out how to set let g:startify_bookmarks = [ Contents of
 " NERDTreeBookmarks ]
-let g:startify_change_to_dir = 1
+
+" This might be getting messed up on windows
+" let g:startify_change_to_dir = 1
+
 let g:startify_fortune_use_unicode = 1
 let g:startify_update_oldfiles = 1
 let g:startify_session_persistence = 1
 let g:startify_session_sort = 1
+
 " Configured correctly this could be a phenomenal way to store commands and
 " expressions on a per directory basis aka projects / workspaces!
 let g:startify_session_autoload = 1

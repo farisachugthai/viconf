@@ -3,7 +3,6 @@
     " Author: Faris Chugthai
     " Description: The C Programming Language
     " Last Modified: April 23, 2019
-
 " ============================================================================
 
 " Options: {{{1

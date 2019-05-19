@@ -1,88 +1,46 @@
-" Neovim Configuration:
-" Maintainer: Faris Chugthai
-" Last Change: Apr 16, 2019
-scriptencoding utf-8
+"  Review this and delete lines that match. Then when you get to bottom review diffs.
 
-" Preliminaries: {{{1
-
-" OS Setup: {{{2
-" This got moved up so we can check what OS we have and decide what options
-" to set from there
-
-" Termux check from Evervim. Thanks!
-let g:termux = isdirectory('/data/data/com.termux')
-let g:ubuntu = has('unix') && !has('macunix')
-
-" how the literal fuck is `has('win32')` a nvim specific thing.
-" Just tried it in vim and it didn't work!!
-let g:windows = has('win32') || has('win64')
-let g:wsl = has('wsl')   " The fact that this is a thing blows my mind
-
-let g:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/init.vim.local'
-runtime g:local_vimrc
-
-if g:windows
-    " How do i check if I'm on cmd or powershell?
-    " StackOverflow recommended grepping actively running processes like wtf
-    " Awh fuck I just thought about the fact that I have powershell installed on Linux too :/
-    " set shell=powershell shellquote=( shellpipe=\| shellredir=> shellxquote=
-    " set shellcmdflag=-NoLogo\ -NoProfile\ -ExecutionPolicy\ RemoteSigned\ -Command
-endif
-
-" XDG Check: {{{2
-" The whole file is now predicated on these existing. Need to add checks in.
-" In $VIMRUNTIME/filetype.vim it looks like Bram himself checks env vars this way
-if empty('$XDG_DATA_HOME')
-  " May 07, 2019: Just realized you could set these. :facepalm:
-  if empty(g:windows)
-    let $XDG_DATA_HOME = expand('~/.local/share')
-  else
-    let $XDG_DATA_HOME = expand('~/AppData/Local')
-  endif
-endif
-
-if empty('$XDG_CONFIG_HOME')
-  if empty(g:windows)
-    let $XDG_CONFIG_HOME = expand('~/.config')
-  else
-    let $XDG_CONFIG_HOME = expand('~/AppData/Local')
-  endif
-endif
 
 " $_ROOT: {{{2
 " The below is an env var set as a convenient bridge between Ubuntu and Termux
 " As a result it messes things up if not set, but there's no reason to halt
 " everything. Feel free to discard if you copy/paste my vimrc
 
-if !exists('$_ROOT') && expand(g:termux) == 1
-    let $_ROOT = expand('$PREFIX')
-elseif !exists('$_ROOT') && expand(g:ubuntu) == 1
-    let $_ROOT = '/usr'
+" Added: 05/18/19: Just found out Windows has an envvar %SystemRoot%"
+
+if !exists('$_ROOT') && !empty(g:termux)
+   let $_ROOT = expand('$PREFIX')
+elseif !exists('$_ROOT') && !empty(g:ubuntu)
+   let $_ROOT = '/usr'
+elseif !exists('$_ROOT') && !empty(g:windows)
+   let $_ROOT = expand('$SystemRoot')
 endif
 
 " Remote Hosts: {{{2
-" Set the node and ruby remote hosts
+    " Set the node and ruby remote hosts
 
 if g:termux
-    " holy fuck that was a doozy to find
-    let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
+  " yarn global
+  let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
 
-    if filereadable(expand($_ROOT) . 'lib/ruby/gems/2.6.3/gems/neovim-0.8.0/exe/neovim-ruby-host')
-        let g:ruby_host_prog = expand($_ROOT) . 'lib/ruby/gems/2.6.3/gems/neovim-0.8.0/exe/neovim-ruby-host'
-    elseif filereadable(expand('$_ROOT') . 'bin/neovim-ruby-host')
-        let g:ruby_host_prog = expand('$_ROOT') . 'bin/neovim-ruby-host'
-    endif
+  " gem remote host
+  if filereadable(expand($_ROOT) . 'lib/ruby/gems/2.6.3/gems/neovim-0.8.0/exe/neovim-ruby-host')
+      let g:ruby_host_prog = expand($_ROOT) . 'lib/ruby/gems/2.6.3/gems/neovim-0.8.0/exe/neovim-ruby-host'
+  elseif filereadable(expand('$_ROOT') . 'bin/neovim-ruby-host')
+      let g:ruby_host_prog = expand('$_ROOT') . 'bin/neovim-ruby-host'
+  endif
 
 elseif g:ubuntu
-    let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
+  "
+  let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
 
-    if executable('rvm')
-        let g:ruby_host_prog = 'rvm system do neovim-ruby-host'
-    elseif filereadable(expand('$_ROOT') . '/local/bin/neovim-ruby-host')
-        let g:ruby_host_prog = expand('$_ROOT') . '/local/bin/neovim-ruby-host'
-    elseif filereadable('~/.local/bin/neovim-ruby-host')
-        let g:ruby_host_prog = '~/.local/bin/neovim-ruby-host'
-    endif
+  if executable('rvm')
+      let g:ruby_host_prog = 'rvm system do neovim-ruby-host'
+  elseif filereadable(expand('$_ROOT') . '/local/bin/neovim-ruby-host')
+      let g:ruby_host_prog = expand('$_ROOT') . '/local/bin/neovim-ruby-host'
+  elseif filereadable('~/.local/bin/neovim-ruby-host')
+      let g:ruby_host_prog = '~/.local/bin/neovim-ruby-host'
+  endif
 
 elseif g:windows
   if filereadable(expand('$XDG_DATA_HOME') . '/Yarn/Data/global/node_modules/.bin/neovim-node-host.cmd')
@@ -133,17 +91,19 @@ endif
 " Vim Plug: {{{1
 
 " Plug Check: {{{2
-" https://github.com/justinmk/config/blob/291ec0ae12b0b4b35b4cf9315f1878db00b780ec/.config/nvim/init.vim#L12
 let s:plugins = filereadable(expand('$XDG_DATA_HOME/nvim/site/autoload/plug.vim', 1))
 
-if !s:plugins
+if empty(s:plugins)
   " bootstrap plug.vim on new systems
   function! s:InstallPlug()
-    try
-      execute '!curl -fLo --create-dirs ' . expand('$XDG_DATA_HOME/nvim/site/autoload/plug.vim', 1) . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-    catch
-      echo v:exception
-    endtry
+    if g:windows
+      try
+      " 0 represents don't do this silently
+        execute('!curl -fLo --create-dirs ' . stdpath('data') . '/nvim-data/site/autoload/plug.vim' . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim', 0)
+      catch
+        echo v:exception
+      endtry
+  endif
   endfunction
 
   call <SID>InstallPlug()
@@ -151,7 +111,7 @@ endif
 
 " General Plugins: {{{2
 
-call plug#begin(expand('$XDG_DATA_HOME') . '/nvim/plugged')
+call plug#begin(stdpath('data') . '/plugged')
 
 Plug 'junegunn/vim-plug'        " plugception
 let g:plug_window = 'tabe'
@@ -164,8 +124,11 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
 Plug 'w0rp/ale'
+
 if empty(g:windows)
   Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+else  " not logically connected but figured i'd get this in while we're evaling g:windows
+  Plug 'PProvost/vim-ps1'
 endif
 
 if exists('$TMUX')
@@ -213,7 +176,6 @@ let g:loaded_getscriptPlugin   = 1
 let g:loaded_2html_plugin      = 1
 let g:loaded_logiPat           = 1
 
-
 " Get this going as soon as possible
 runtime! plugin/**/*.vim
 
@@ -248,7 +210,8 @@ if has('nvim-0.4')
   catch /^Vim:E518:*/
   endtry
 else
-   set shada+=n$XDG_DATA_HOME/nvim/shada/main.shada
+  " on windows we'd prefer it go to nvim-data but we can't specify it this way
+  " set shada+=n$XDG_DATA_HOME/nvim/shada/main.shada
 endif
 
 " Pep8 Global Options: {{{2
@@ -303,28 +266,6 @@ if filereadable('/usr/share/dict/american-english')
 endif
 
 " Fun With Clipboards: {{{2
-
-" I've been using vim for almost 3 years. I still don't have copy paste ironed out...
-" if exists('$TMUX')
-"     let g:clipboard = {
-"         \   'name': 'myClipboard',
-"         \   'copy': {
-"         \      '+': 'tmux load-buffer -',
-"         \      '*': 'tmux load-buffer -',
-"         \    },
-"         \   'paste': {
-"         \      '+': 'tmux save-buffer -',
-"         \      '*': 'tmux save-buffer -',
-"         \   },
-"         \   'cache_enabled': 1,
-"         \ }
-
-"     " Double check if we need to do this but sometimes the clipboard fries when set this way
-" 	runtime! autoload/provider/clipboard.vim
-"   " shit it sometimes needs to be rerun when the clipboard doesn't set correctly.
-"   " xxx What is happening
-" endif
-
 if has('unnamedplus')                   " Use the system clipboard.
     set clipboard+=unnamed,unnamedplus
 else                                        " Accommodate Termux
@@ -388,6 +329,7 @@ endif
 
 " Used by the markprg. system locale is used
 set makeencoding=char
+
 " Other Global Options: {{{2
 
 if &formatexpr ==# ''
@@ -482,6 +424,14 @@ noremap j gj
 noremap k gk
 noremap <C-]> g<C-]>
 
+" Avoid accidental hits of <F1> while aiming for <Esc>
+noremap! <F1> <Esc>
+
+" Complete whole filenames/lines with a quicker shortcut key in insert mode
+" Leave these are recursive mappings though
+imap <C-f> <C-x><C-f>
+imap <C-l> <C-x><C-l>
+
 " Runtime: {{{1
 
 " Matching Parenthesis: {{{2
@@ -506,21 +456,6 @@ let g:is_bash = 1
 let g:sh_fold_enabled= 4  "   (enable if/do/for folding)
 let g:sh_fold_enabled= 3  "   (enables function and heregoc folding)
 
-" he rst.vim or ft-rst-syntax or syntax 2600. Don't put bash instead of sh.
-" $VIMRUNTIME/syntax/rst.vim iterates over this var and if it can't find a
-" bash.vim syntax file it will crash.
-
-" May 13, 2019: Updated. Grabbed this directly from $VIMRUNTIME/syntax/rst.vim
-let g:rst_syntax_code_list = {
-    \ 'vim': ['vim'],
-    \ 'java': ['java'],
-    \ 'cpp': ['cpp', 'c++'],
-    \ 'lisp': ['lisp'],
-    \ 'php': ['php'],
-    \ 'python': ['python', 'python3', 'ipython'],
-    \ 'perl': ['perl'],
-    \ 'sh': ['sh'],
-    \ }
 " highlighting readline options
 let readline_has_bash = 1
 
@@ -597,11 +532,14 @@ command! -bang Autosave call s:autosave(<bang>1)
 
 " Statusline: {{{2
 
-function! s:statusline_expr()
-
+function! s:statusline_expr() abort
 " %n is buffer #, %f is filename relative to $PWD, sep is right align
 " %m is modified?, %r is filetype,
-  let dicons = ' %{WebDevIconsGetFileTypeSymbol()} '
+  if exists('*WebDevIconsGetFileTypeSymbol')
+    let dicons = ' %{WebDevIconsGetFileTypeSymbol()} '
+  else
+    let dicons = ''
+  endif
   let fug = "%{exists('g:loaded_fugitive') ? fugitive#statusline() : ''}"
   let sep = ' %= '
   let pos = ' %-12(%l : %c%V%) '
@@ -614,7 +552,7 @@ endif
   return '[%n] %f '. dicons . '%m' . '%r' . ' %y ' . fug . csv . ' ' . ' %{&ff} ' . sep . pos . '%*' . ' %P'
 endfunction
 
-let &statusline = s:statusline_expr()
+let &statusline = <SID>statusline_expr()
 
 " Except for...
 augroup TermGroup
@@ -637,10 +575,9 @@ command! -nargs=1 -bang -complete=file Rename f <args>|w<bang>
 
 "	:S	Escape special characters for use with a shell command (see
 "		|shellescape()|). Must be the last one. Examples:
-"		    :!dir <cfile>:S
-"		    :call system('chmod +w -- ' . expand('%:S'))
+"           :!dir <cfile>:S
+"           :call system('chmod +w -- ' . expand('%:S'))
 " From :he filename-modifiers in the cmdline page.
-" TODO: Using system means this won't work on windows. Doesn't python have a version in shutil?
 
 command! -nargs=1 -complete=file Chmod call system('chmod +x ' . expand('%:S'))
 
@@ -661,3 +598,22 @@ augroup END
 " Plug: {{{2
 " I utilize this command so often I may as well save the characters
 command! -nargs=0 Plugins echo keys(plugs)
+
+
+" Toggle The Quickfix Window: {{{2
+" From Steve Losh, http://learnvimscriptthehardway.stevelosh.com/chapters/38.html
+
+let g:quickfix_is_open = 0
+
+function! s:QuickfixToggle()
+    if g:quickfix_is_open
+        cclose
+        let g:quickfix_is_open = 0
+        wincmd w
+    else
+        copen
+        let g:quickfix_is_open = 1
+    endif
+endfunction
+
+noremap <C-q> <Cmd>call <SID>QuickfixToggle()<CR>
