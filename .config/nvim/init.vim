@@ -96,7 +96,7 @@ endif
 " If we have a virtual env start there
 if exists('$VIRTUAL_ENV')
     let g:python3_host_prog = expand('$VIRTUAL_ENV') . '/bin/python'
-    let &path = &path . ',' . expand('$VIRTUAL_ENV') . '/lib/python3'
+    let &path = &path . ',' . expand('$VIRTUAL_ENV') . '/lib/python3/*'
 
 " Or a conda env. Not trying to ruin your day here but Windows sets a var
 " '$CONDA_PREFIX_1' if CONDA_SHLVL > 1....
@@ -104,28 +104,28 @@ elseif exists('$CONDA_PREFIX')
     " Needs to use CONDA_PREFIX as the other env vars conda sets will only establish the base env not the current one
     let g:python3_host_prog = expand('$CONDA_PREFIX/bin/python3')
     " Let's hope I don't break things for Windows
-    let &path = &path . ',' . expand('$CONDA_PREFIX/lib/python3')
+    let &path = &path . ',' . expand('$CONDA_PREFIX/lib/python3/*')
 
 else
     " If not then just use the system python
     if executable(expand('$_ROOT') . '/bin/python3')
         let g:python3_host_prog = expand('$_ROOT') . '/bin/python3'
-        let &path = &path . ',' . expand('$_ROOT') . '/lib/python3'
+        let &path = &path . ',' . expand('$_ROOT') . '/lib/python3/*'
 
     " well that's if we can find it anyway
     elseif executable('/usr/bin/python3')
         let g:python3_host_prog = '/usr/bin/python3'
-        let &path = &path . ',' . '/usr/lib/python3'
+        let &path = &path . ',' . '/usr/lib/python3/*'
     endif
 endif
 
 " Also add a python2 remote host
 if executable(expand('$_ROOT') . '/bin/python2')
     let g:python_host_prog = expand('$_ROOT') . '/bin/python2'
-    let &path = &path . ',' . expand('$_ROOT') . '/lib/python2'
+    let &path = &path . ',' . expand('$_ROOT') . '/lib/python2/*'
 elseif executable('/usr/bin/python2')
     let g:python3_host_prog = '/usr/bin/python2'
-    let &path = &path . ',' . '/usr/lib/python2'
+    let &path = &path . ',' . '/usr/lib/python2/*'
 else
     let g:loaded_python_provider = 1
 endif
@@ -159,7 +159,7 @@ let g:plug_window = 'tabe'
 Plug 'junegunn/fzf', { 'dir': expand('~/.fzf'), 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
-" Plug 'davidhalter/jedi-vim', {'for': ['rst', 'python'] }
+Plug 'davidhalter/jedi-vim', {'for': ['rst', 'python'] }
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
@@ -198,6 +198,7 @@ endif
 Plug 'vim-voom/voom'
 Plug 'neoclide/coc.nvim'
 Plug 'ervandew/supertab'
+Plug 'rust-lang/rust.vim'  " idk rust so delete later
 
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
@@ -205,14 +206,11 @@ call plug#end()
 " Global Options: {{{1
 
 " Should probably load these before the runtime! call
-
 " Builtin Plugins: {{{2
-" To every plugin I've never used before. Stop slowing me down.
 let g:loaded_vimballPlugin     = 1
 let g:loaded_getscriptPlugin   = 1
 let g:loaded_2html_plugin      = 1
 let g:loaded_logiPat           = 1
-
 
 " Get this going as soon as possible
 runtime! plugin/**/*.vim
@@ -443,6 +441,8 @@ let g:tutor_debug = 1
 " When set: Add 's' flag to 'shortmess' option (this makes the message
 " for a search that hits the start or end of the file not being displayed)
 set terse
+set shortmess+=a
+set shortmess-=tT
 
 set sidescroll=10                       " Didn't realize the default is 1
 
@@ -501,14 +501,9 @@ let g:matchparen_insert_timeout = 300
 
 " Filetype Specific Options: {{{2
 
-" Noticed this bit in he syntax line 2800
 let g:is_bash = 1
 let g:sh_fold_enabled= 4  "   (enable if/do/for folding)
 let g:sh_fold_enabled= 3  "   (enables function and heregoc folding)
-
-" he rst.vim or ft-rst-syntax or syntax 2600. Don't put bash instead of sh.
-" $VIMRUNTIME/syntax/rst.vim iterates over this var and if it can't find a
-" bash.vim syntax file it will crash.
 
 " May 13, 2019: Updated. Grabbed this directly from $VIMRUNTIME/syntax/rst.vim
 let g:rst_syntax_code_list = {
@@ -527,14 +522,14 @@ let readline_has_bash = 1
 " from runtime/ftplugin/html.vim
 let g:ft_html_autocomment = 1
 
-" From `:he ft-lisp-syntax. Color parentheses differently up to 10 levels deep
+" From `:he ft-lisp-syntax`. Color parentheses differently up to 10 levels deep
 let g:lisp_rainbow = 1
 
 " Omnifuncs: {{{3
 
 augroup omnifunc
     autocmd!
-    autocmd Filetype python,xonsh     setlocal omnifunc=python3complete#Complete
+    autocmd Filetype python,xonsh     setlocal omnifunc=python3complete#Completer
     autocmd Filetype html,xhtml       setlocal omnifunc=htmlcomplete#CompleteTags
     autocmd Filetype xml              setlocal omnifunc=xmlcomplete#CompleteTags
     autocmd Filetype css              setlocal omnifunc=csscomplete#CompleteCSS
@@ -597,7 +592,7 @@ command! -bang Autosave call s:autosave(<bang>1)
 
 " Statusline: {{{2
 
-function! s:statusline_expr()
+function! s:statusline_expr() abort
 
 " %n is buffer #, %f is filename relative to $PWD, sep is right align
 " %m is modified?, %r is filetype,
@@ -611,7 +606,19 @@ else
     let csv = ''
 endif
 
-  return '[%n] %f '. dicons . '%m' . '%r' . ' %y ' . fug . csv . ' ' . ' %{&ff} ' . sep . pos . '%*' . ' %P'
+if exists('*strftime')
+" Overtakes the whole screen when Termux zooms in
+  if &columns > 60
+    let tstmp = ' ' . '%{strftime("%H:%M %d/%m/%Y", getftime(expand("%:p")))}'  " last modified timestamp
+  else
+    let tstmp = ''
+  endif
+
+else
+  let tstmp = ''
+endif
+
+  return '[%n] %f '. dicons . '%m' . '%r' . ' %y ' . fug . csv . ' ' . ' %{&ff} ' . tstmp . sep . pos . '%*' . ' %P'
 endfunction
 
 let &statusline = s:statusline_expr()
@@ -626,7 +633,6 @@ augroup TermGroup
 augroup END
 
 " set statusline+=%h              " help file flag
-" set statusline+=\ (%{strftime(\"%H:%M\ %d/%m/%Y\",getftime(expand(\"%:p\")))})  " last modified timestamp
 " set statusline+=%l,%c%V         " Position in buffer: linenumber, column, virtual column
 
 " Rename: {{{2
