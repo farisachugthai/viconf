@@ -141,26 +141,22 @@ endif
 
 " Vim Plug: {{{1
 
-" Commenting this out stopped the 'missing )' error i was getting
 " Plug Check: {{{2
-" https://github.com/justinmk/config/blob/291ec0ae12b0b4b35b4cf9315f1878db00b780ec/.config/nvim/init.vim#L12
-" let s:plugins = filereadable(expand('$XDG_DATA_HOME/nvim/site/autoload/plug.vim', 1))
+let s:plugins = filereadable(expand('$XDG_DATA_HOME/nvim/site/autoload/plug.vim', 1))
 
-" if empty(s:plugins)
+if empty(s:plugins)
   " bootstrap plug.vim on new systems
-  " function! s:InstallPlug()
-  " if g:windows
-  " try
+  function! s:InstallPlug()
+    try
       " 0 represents don't do this silently
-      " execute('!curl -fLo --create-dirs ' . stdpath('data') '/site/autoload/plug.vim' . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim', 0)
-      " catch
-      " echo v:exception
-      " endtry
-      " endif
-      " endfunction
+      execute('!curl -fLo --create-dirs ' . stdpath('data') . '/site/autoload/plug.vim' . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim', 0)
+    catch
+      echo v:exception
+    endtry
+  endfunction
 
-      " call <SID>InstallPlug()
-      " endif
+  call <SID>InstallPlug()
+endif
 
 " General Plugins: {{{2
 " I don't know why this isn't working but let's try this
