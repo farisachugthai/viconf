@@ -1,5 +1,56 @@
-"  Review this and delete lines that match. Then when you get to bottom review diffs.
+" Neovim Configuration:
+" Maintainer: Faris Chugthai
+" Last Change: Apr 16, 2019
+scriptencoding utf-8
 
+" Preliminaries: {{{1
+
+" OS Setup: {{{2
+
+" Termux check from Evervim. Thanks!
+let g:termux = isdirectory('/data/data/com.termux')
+let g:ubuntu = has('unix') && !has('macunix')
+" This got moved up so we can check what OS we have and decide what options
+" to set from there
+" how the literal fuck is `has('win32')` a nvim specific thing.
+" Just tried it in vim and it didn't work!!
+let g:windows = has('win32') || has('win64')
+let g:wsl = has('wsl')   " The fact that this is a thing blows my mind
+
+" unabashedly stolen from junegunn dude is too good.
+let g:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/init.vim.local'
+runtime g:local_vimrc
+
+if g:windows
+  runtime winrc.vim
+    " How do i check if I'm on cmd or powershell?
+  set shell=powershell shellquote=( shellpipe=\| shellredir=> shellxquote=
+  let &shellcmdflag='-NoLogo  -ExecutionPolicy RemoteSigned -Command'  " Should I -NoExit this?
+  if exists('+shellslash')   " don't drop the +!
+    set shellslash
+  endif
+endif
+
+" XDG Check: {{{2
+" The whole file is now predicated on these existing. Need to add checks in.
+" In $VIMRUNTIME/filetype.vim it looks like Bram himself checks env vars this way
+" Actually we might not need to do this. nvim has a function called stdpath()
+if empty('$XDG_DATA_HOME')
+  " May 07, 2019: Just realized you could set these. :facepalm:
+  if empty(g:windows)
+    let $XDG_DATA_HOME = expand('~/.local/share')
+  else
+    let $XDG_DATA_HOME = expand('~/AppData/Local')
+  endif
+endif
+
+if empty('$XDG_CONFIG_HOME')
+  if empty(g:windows)
+    let $XDG_CONFIG_HOME = expand('~/.config')
+  else
+    let $XDG_CONFIG_HOME = expand('~/Appdata/Local')
+  endif
+endif
 
 " $_ROOT: {{{2
 " The below is an env var set as a convenient bridge between Ubuntu and Termux
@@ -9,15 +60,16 @@
 " Added: 05/18/19: Just found out Windows has an envvar %SystemRoot%"
 
 if !exists('$_ROOT') && !empty(g:termux)
-   let $_ROOT = expand('$PREFIX')
+  let $_ROOT = expand('$PREFIX')
 elseif !exists('$_ROOT') && !empty(g:ubuntu)
-   let $_ROOT = '/usr'
+  let $_ROOT = '/usr'
 elseif !exists('$_ROOT') && !empty(g:windows)
-   let $_ROOT = expand('$SystemRoot')
+  " Or should I use ALLUSERSPROFILE
+  let $_ROOT = expand('$SystemRoot')
 endif
 
 " Remote Hosts: {{{2
-    " Set the node and ruby remote hosts
+  " Set the node and ruby remote hosts
 
 if g:termux
   " yarn global
@@ -31,7 +83,6 @@ if g:termux
   endif
 
 elseif g:ubuntu
-  "
   let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
 
   if executable('rvm')
@@ -90,28 +141,45 @@ endif
 
 " Vim Plug: {{{1
 
+" Commenting this out stopped the 'missing )' error i was getting
 " Plug Check: {{{2
-let s:plugins = filereadable(expand('$XDG_DATA_HOME/nvim/site/autoload/plug.vim', 1))
+" https://github.com/justinmk/config/blob/291ec0ae12b0b4b35b4cf9315f1878db00b780ec/.config/nvim/init.vim#L12
+" let s:plugins = filereadable(expand('$XDG_DATA_HOME/nvim/site/autoload/plug.vim', 1))
 
-if empty(s:plugins)
+" if empty(s:plugins)
   " bootstrap plug.vim on new systems
-  function! s:InstallPlug()
-    if g:windows
-      try
+  " function! s:InstallPlug()
+  " if g:windows
+  " try
       " 0 represents don't do this silently
-        execute('!curl -fLo --create-dirs ' . stdpath('data') . '/nvim-data/site/autoload/plug.vim' . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim', 0)
-      catch
-        echo v:exception
-      endtry
-  endif
-  endfunction
+      " execute('!curl -fLo --create-dirs ' . stdpath('data') '/site/autoload/plug.vim' . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim', 0)
+      " catch
+      " echo v:exception
+      " endtry
+      " endif
+      " endfunction
 
-  call <SID>InstallPlug()
-endif
+      " call <SID>InstallPlug()
+      " endif
 
 " General Plugins: {{{2
+" I don't know why this isn't working but let's try this
 
-call plug#begin(stdpath('data') . '/plugged')
+" this is unreal. how is this saying 'undefined variable C...That's the fucking
+" name of the root drive on Windows!!
+" exec 'call plug#begin(' . stdpath('data') . '/plugged)'
+
+" This works but i'm gonna have to make a conditional for the func call which
+" feels like a waste..
+" Actually i should just refactor all of the vim-plug stuff out of this file
+" so that if plug.vim ever doesn't get sourced correctly i can still load
+" nvim to SOME extent...
+
+" we still aren't sourcing plug.vim in it at the right time
+exec 'source ' stdpath('config') . '/site/autoload/plug.vim'
+" GOT IT! I checked `echo &rtp` and it's looking for the site folder in the nvim not nvim-data!!
+
+call plug#begin('~/AppData/Local/nvim-data/plugged')
 
 Plug 'junegunn/vim-plug'        " plugception
 let g:plug_window = 'tabe'
@@ -128,7 +196,7 @@ Plug 'w0rp/ale'
 if empty(g:windows)
   Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 else  " not logically connected but figured i'd get this in while we're evaling g:windows
-  Plug 'PProvost/vim-ps1'
+  Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
 endif
 
 if exists('$TMUX')
@@ -153,7 +221,7 @@ if !g:termux
     Plug 'gu-fan/riv.vim', {'for': 'rst'}
     Plug 'junegunn/vim-peekaboo'
     Plug 'tpope/vim-surround'
-    Plug 'mbbill/undotree'
+    Plug 'mbbill/undotree', {'on': 'UndoTreeToggle'}
     Plug 'chrisbra/csv.vim', {'for': 'csv'}
     Plug 'omnisharp/omnisharp-vim', {'for': 'cs'}
 endif
@@ -184,7 +252,7 @@ runtime! plugin/**/*.vim
 " Lower max syntax highlighting
 set synmaxcol=400
 
-function! Gruvbox() abort
+function! g:Gruvbox() abort
   " Define Gruvbox parameters and then set the colorscheme.
   let g:gruvbox_contrast_hard = 1
   let g:gruvbox_contrast_soft = 0
@@ -193,7 +261,7 @@ function! Gruvbox() abort
   colorscheme gruvbox
 endfunction
 
-call Gruvbox()
+call g:Gruvbox()
 
 syntax sync fromstart
 
@@ -266,6 +334,7 @@ if filereadable('/usr/share/dict/american-english')
 endif
 
 " Fun With Clipboards: {{{2
+
 if has('unnamedplus')                   " Use the system clipboard.
     set clipboard+=unnamed,unnamedplus
 else                                        " Accommodate Termux
@@ -316,14 +385,14 @@ let &path = &path . ',' . expand('$VIMRUNTIME')
 " regardless of unix/windows/android etc
 set sessionoptions+=unix,slash
 
-if exists('+shellslash')   " don't drop the +!
-  set shellslash
-endif
 
-
-if &term =~# 'xterm-256color' || &term ==# 'cygwin' || &term ==# 'builtin_tmux' || &term ==# 'tmux-256color'
+" Well this definitely feels like it's never going to end.
+if &term =~# 'xterm-256color' || &term ==# 'cygwin' || &term ==# 'builtin_tmux' || &term ==# 'tmux-256color' || &term ==# 'builtin-vtpcon'
 " mintty identifies itself as xterm-compatible
 " Yeah mintty does. Conemu/Cmder identify as cygwin sooo. we get ansi colors
+  set termguicolors
+" This might be easier to check for lol
+elseif exists('ConEmuAnsi')
   set termguicolors
 endif
 
@@ -344,9 +413,9 @@ set showfulltag
 set mouse=a
 
 if &textwidth!=0
-    setl colorcolumn=+1
+  setl colorcolumn=+1
 else
-    setl colorcolumn=80
+  setl colorcolumn=80
 endif
 
 set cmdheight=2
@@ -456,6 +525,21 @@ let g:is_bash = 1
 let g:sh_fold_enabled= 4  "   (enable if/do/for folding)
 let g:sh_fold_enabled= 3  "   (enables function and heregoc folding)
 
+" he rst.vim or ft-rst-syntax or syntax 2600. Don't put bash instead of sh.
+" $VIMRUNTIME/syntax/rst.vim iterates over this var and if it can't find a
+" bash.vim syntax file it will crash.
+
+" May 13, 2019: Updated. Grabbed this directly from $VIMRUNTIME/syntax/rst.vim
+let g:rst_syntax_code_list = {
+    \ 'vim': ['vim'],
+    \ 'java': ['java'],
+    \ 'cpp': ['cpp', 'c++'],
+    \ 'lisp': ['lisp'],
+    \ 'php': ['php'],
+    \ 'python': ['python', 'python3', 'ipython'],
+    \ 'perl': ['perl'],
+    \ 'sh': ['sh'],
+    \ }
 " highlighting readline options
 let readline_has_bash = 1
 
@@ -531,9 +615,12 @@ endfunction
 command! -bang Autosave call s:autosave(<bang>1)
 
 " Statusline: {{{2
+" TODO statusline groups
+" set statusline+=%h              " help file flag
+" set statusline+=\ (%{strftime(\"%H:%M\ %d/%m/%Y\",getftime(expand(\"%:p\")))})  " last modified timestamp
+" set statusline+=%l,%c%V         " Position in buffer: linenumber, column, virtual column
 
 function! s:statusline_expr() abort
-" %n is buffer #, %f is filename relative to $PWD, sep is right align
 " %m is modified?, %r is filetype,
   if exists('*WebDevIconsGetFileTypeSymbol')
     let dicons = ' %{WebDevIconsGetFileTypeSymbol()} '
@@ -556,16 +643,21 @@ let &statusline = <SID>statusline_expr()
 
 " Except for...
 augroup TermGroup
-    autocmd!
-    autocmd TermOpen * setlocal statusline=%{b:term_title}
-    " `set nomodified` so Nvim stops prompting you when you
-    " try to close a buftype==terminal buffer
-    autocmd TermOpen * setlocal nomodified
-augroup END
+  autocmd!
 
-" set statusline+=%h              " help file flag
-" set statusline+=\ (%{strftime(\"%H:%M\ %d/%m/%Y\",getftime(expand(\"%:p\")))})  " last modified timestamp
-" set statusline+=%l,%c%V         " Position in buffer: linenumber, column, virtual column
+  " I don't know if this is mentioned anywhere but do we have to set an
+  " undoftplugin?
+
+  autocmd TermOpen * setlocal statusline=%{b:term_title}
+  " `set nomodified` so Nvim stops prompting you when you
+  " try to close a buftype==terminal buffer
+  autocmd TermOpen * setlocal nomodified
+
+  " Fails if changes have been made to the current buffer,
+  " unless 'hidden' is set.
+  " To enter |Terminal-mode| automatically: >
+  autocmd TermOpen * startinsert
+augroup END
 
 " Rename: {{{2
 " :he map line 1454. How have i never noticed this isn't a feature???
