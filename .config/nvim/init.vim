@@ -23,12 +23,18 @@ runtime g:local_vimrc
 
 if g:windows
   runtime winrc.vim
-    " How do i check if I'm on cmd or powershell?
-  set shell=powershell shellquote=( shellpipe=\| shellredir=> shellxquote=
-  let &shellcmdflag='-NoLogo  -ExecutionPolicy RemoteSigned -Command'  " Should I -NoExit this?
+  " How do i check if I'm on cmd or powershell?
+  " tried setting shell to conemu and it wasn't as interesting as you'd hope
+  " lol it obviously didn't work
+  " set shell=conemu
+  " DOn't delete this because, at least superficially, this is working for powershell
+  set shell=powershell shellpipe=\| shellredir=> shellxquote=
+  let &shellcmdflag='-NoLogo  -ExecutionPolicy RemoteSigned -Command $* '  " Should I -NoExit this?
+  " set shell=cmd.exe
   if exists('+shellslash')   " don't drop the +!
     set shellslash
   endif
+  set fileformats=unix,dos
 endif
 
 " XDG Check: {{{2
@@ -172,10 +178,12 @@ endif
 " nvim to SOME extent...
 
 " we still aren't sourcing plug.vim in it at the right time
-exec 'source ' stdpath('config') . '/site/autoload/plug.vim'
 " GOT IT! I checked `echo &rtp` and it's looking for the site folder in the nvim not nvim-data!!
+" ...well now that we got that sorted out can we not waste this time on the source?
+" exec 'source ' stdpath('config') . '/site/autoload/plug.vim'
+let s:plugged_dir = stdpath('data') . '/plugged'
 
-call plug#begin('~/AppData/Local/nvim-data/plugged')
+call plug#begin(s:plugged_dir)
 
 Plug 'junegunn/vim-plug'        " plugception
 let g:plug_window = 'tabe'
@@ -189,10 +197,10 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
 Plug 'w0rp/ale'
 
-if empty(g:windows)
-  Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-else  " not logically connected but figured i'd get this in while we're evaling g:windows
+if !empty(g:windows)
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
+else
+  Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 endif
 
 if exists('$TMUX')

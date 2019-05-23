@@ -26,6 +26,7 @@ setlocal spell!
 " This works beautifully!
 setlocal keywordprg=:r!pydoc
 
+" TODO: Need to set an undo ftplugin.
 compiler rst
 
 " Syntax Highlighting: {{{1

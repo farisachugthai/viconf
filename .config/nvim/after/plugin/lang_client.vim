@@ -32,6 +32,7 @@ let g:LanguageClient_serverCommands = {
             \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
             \ }
 
+let g:LanguageClient_autoStart = 1
 let g:LanguageClient_selectionUI = 'fzf'
 let g:LanguageClient_settingsPath = expand('$XDG_CONFIG_HOME') . '/nvim/settings.json'
 let g:LanguageClient_loggingFile = expand('$XDG_DATA_HOME') . '/nvim/LC.log'

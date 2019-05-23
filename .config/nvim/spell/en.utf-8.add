@@ -60,6 +60,7 @@ BufReadPost
 BufWritePost
 BufWritePre
 CLA
+CLI
 CS50
 CTRL
 CalledProcessError
@@ -69,13 +70,11 @@ Ch5
 Ch8
 Chainmap
 Chatistics
-Chatistics
 Cheat40
 ChemE
 Choi
 Chugthai
 Cmder
-Colab
 Colab
 ColorColumn
 CommonMark
@@ -104,7 +103,6 @@ ConEmuServerPID
 ConEmuWorkDir
 ConEmuWorkDrive
 Conda
-Configurator
 Configurator
 Coursera
 CrOS
@@ -148,8 +146,6 @@ FAT32
 FZF
 Facebook
 Faris
-FileType
-FileType
 Filetype
 Firefox
 Fn
@@ -181,9 +177,7 @@ IPv6
 IPython
 IPython's
 IPython7
-IPython7
 ISO9660
-Importlib
 Importlib
 JQuery
 Junegunn
@@ -200,7 +194,6 @@ Keymappings
 Kleopatra
 Kochan
 Kubernetes
-L
 LOCALAPPDATA
 LVM
 LaTex
@@ -283,7 +276,6 @@ PowerShell
 Preprocesses
 ProTools
 PurePath
-PurePath
 PyCharm
 PyCon
 PyData
@@ -361,13 +353,9 @@ Spc
 Spotify
 StackOverflow
 Startify/!
-Startify/!
-Startify/!
-StreamRecoder
 StreamRecoder
 Subgraph
 SubgraphOS
-Subkeys
 Subkeys
 Submodules
 Subprocesses
@@ -407,9 +395,7 @@ UltiSnips
 Umask
 Uninstallation
 VDP
-VDP
 VIMRUNTIME
-VMWare
 VMware
 VeraCrypt
 Vigenere
@@ -456,16 +442,15 @@ Xenial
 Xorg
 Xresources
 YouCompleteMe
-YouCompleteMe
 YouTube
 ZeroNet
 Zim
 Zim's
 ZimWiki
 ZipRecruiter
-a
 aarch64
 abspath
+accessor
 ack
 actionscript
 ada
@@ -483,7 +468,6 @@ akregator
 alacritty
 algol
 alice
-alice
 amd64
 anacron
 anacrontab
@@ -496,11 +480,9 @@ applescript
 apt
 arduino
 arg
-arg
 argparse
 args
 aria2c
-asc
 asc
 aspx
 asyncio
@@ -509,7 +491,6 @@ attr
 atwood
 augroup
 autocmd
-autocommand
 autocommand
 autocommands
 autocomplete
@@ -555,8 +536,6 @@ cURL
 cant/!
 cd
 cdrom
-cell
-cell
 chainmap
 chdir
 cheat40
@@ -605,7 +584,6 @@ csharp
 css
 csv
 csv's
-csv's
 ctags
 cterm
 ctermbg
@@ -636,7 +614,6 @@ dirs
 dirstat
 django
 dlink
-dlink
 dns
 dnssec
 dockerfile
@@ -651,7 +628,6 @@ docutils
 dokuwiki
 domwidget
 dont/!
-doozy
 doozy
 dosbatch
 dotfiles
@@ -685,7 +661,6 @@ exe
 exitcode
 expandtab
 expanduser
-expanduser
 exrc
 ext2
 ext3
@@ -708,10 +683,6 @@ fishshell
 flake8
 fmt
 fnmatch
-fnmatch
-fnmatch
-fnmatch
-fnmatch
 fortran
 from
 fsck
@@ -733,8 +704,6 @@ gdrive
 geany
 gedit
 gem
-gem
-getcwd
 getcwd
 getenv
 getenvb
@@ -764,7 +733,6 @@ gpg
 groff
 grsync
 gruvbox
-gsutil
 gsutil
 gsutil's
 gsutil's
@@ -811,7 +779,6 @@ ifconfig
 ignorecase
 img
 importlib
-importlib
 indexeddb
 init
 inodes
@@ -838,21 +805,14 @@ ipywidget
 ipywidgets
 irc
 isabs
-isabs
 isdir
-isdir
-isfile
 isfile
 iskeyword
 islink
-islink
 islower
-islower
-isupper
 isupper
 itemgetter
 iterable
-iterables
 iterables
 iw
 iwconfig
@@ -864,9 +824,6 @@ jedi
 jekyll
 jetbrains
 jinja
-jinja2
-jinja2
-joinpath
 joinpath
 jpeg
 jq
@@ -944,7 +901,6 @@ kubuntu
 kvm
 kwallet
 kwarg
-kwargs
 kwargs
 kwin
 kwrite
@@ -1041,7 +997,6 @@ modelines
 module
 moduleauthor
 modulefinder
-modulefinder
 moin
 molokai
 monero
@@ -1056,7 +1011,6 @@ mpd
 msys
 mypy
 mysql
-n
 namespace
 namespacing
 nano
@@ -1070,11 +1024,8 @@ neosnippets
 neovim
 nepomk
 netmask
-netmask
 netrc
 netrw
-netstat
-netstat
 netstat
 nextcloud
 nginx
@@ -1109,7 +1060,6 @@ nsupdate
 nt
 ntfs
 numpy
-numpydoc
 numpydoc
 nvidia
 nvim
@@ -1147,8 +1097,6 @@ overlined
 owncloud
 p7zip
 packages
-packages's/!
-packages/!
 pandoc
 panopticlick
 panoptik
@@ -1233,8 +1181,6 @@ pydoc
 pydocstyle
 pygmentize
 pygments
-pygments
-pylab
 pylab
 pynvim
 pypi
@@ -1388,7 +1334,6 @@ sphinxify
 spiceworks
 spl
 splitext
-splitext
 spotify
 spyder
 spyder3
@@ -1421,8 +1366,6 @@ stylesheets
 su
 subclassing
 subkey
-subkey
-subkeys
 subkeys
 submodule
 submodules
@@ -1490,17 +1433,13 @@ tpope's
 tput
 trac
 traceback
-traceback
 tracebacks
 traceroute
 traitlets
-traitlets
-tronscript
 tronscript
 tty
 tty2
 twilio
-txt
 txt
 txt2tags
 uBO
@@ -1509,7 +1448,6 @@ uPnP
 ubuntu
 udp
 ufw
-ultisnips
 ultisnips
 umask
 umasks
@@ -1552,8 +1490,6 @@ userspaces
 using
 usr
 utf
-utilities's
-utilities's
 utils
 uuid
 vala
@@ -1622,7 +1558,6 @@ wouldn/!
 wouldn’t
 wpa
 writefile
-writefile
 writethedocs
 www
 wysiwyg
@@ -1640,7 +1575,6 @@ xfwm4
 xhtml
 xinitrc
 xkb
-xkeycaps
 xkeymaps
 xml
 xmodmap
@@ -1669,3 +1603,4 @@ zshrc
 µMatrix
 µTP
 µTorrent
+DirChange

@@ -10,10 +10,10 @@ if !has_key(plugs, 'ale')
     finish
 endif
 
-if exists('g:did_ale_after_plugin') || &compatible || v:version < 700
+if exists('b:did_ale_after_plugin') || &compatible || v:version < 700
     finish
 endif
-let g:did_ale_after_plugin = 1
+let b:did_ale_after_plugin = 1
 
 
 " Mappings: {{{1
@@ -21,8 +21,8 @@ let g:did_ale_after_plugin = 1
 " This isn't working idk why
 noremap <Leader>l <Plug>(ale_toggle_buffer)<CR>
 
-noremap ]a <Plug>(ale_next_wrap)
-noremap [a <Plug>(ale_previous_wrap)
+noremap ]a <Plug>(ale_next_wrap)<CR>
+noremap [a <Plug>(ale_previous_wrap)<CR>
 
 " `:ALEInfoToFile` will write the ALE runtime information to a given filename.
 " The filename works just like |:w|.
@@ -32,7 +32,7 @@ noremap <A-a> <Plug>(ale_detail)
 
 " This might be a good idea. * is already 'search for the cword' so let ALE
 " work in a similar manner right?
-noremap <Leader>* <Plug>(ale_go_to_reference)
+noremap <Leader>* <Plug>(ale_go_to_reference)<CR>
 
 noremap <Leader>a <Cmd>ALEInfo<CR>
 

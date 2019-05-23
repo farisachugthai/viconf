@@ -13,10 +13,11 @@ endif
 if exists('g:did_fzf_after_plugin') || &compatible || v:version < 700
     finish
 endif
-let g:did_fzf_conf = 1
+let b:did_fzf_after_plugin = 1
 
 
 " General Setup: {{{1
+
 " An action can be a reference to a function that processes selected lines
 function! s:build_quickfix_list(lines)
   call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
