@@ -1,9 +1,14 @@
 " Neovim Configuration:
 " Maintainer: Faris Chugthai
 " Last Change: Apr 16, 2019
-scriptencoding utf-8
 
 " Preliminaries: {{{1
+scriptencoding utf-8
+scriptencoding utf-8
+let s:cpo_save = &cpoptions
+set cpoptions&vim
+let s:cpo_save = &cpoptions
+set cpoptions&vim
 
 " OS Setup: {{{2
 " This got moved up so we can check what OS we have and decide what options
@@ -203,7 +208,6 @@ Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 
 " Global Options: {{{1
-
 " Should probably load these before the runtime! call
 
 " Builtin Plugins: {{{2
@@ -213,14 +217,12 @@ let g:loaded_getscriptPlugin   = 1
 let g:loaded_2html_plugin      = 1
 let g:loaded_logiPat           = 1
 
-
 " Get this going as soon as possible
 runtime! plugin/**/*.vim
 
 " General Syntax Highlighting: {{{2
 
-" Lower max syntax highlighting
-set synmaxcol=400
+set synmaxcol=400                       " Lower max syntax highlighting
 
 function! Gruvbox() abort
   " Define Gruvbox parameters and then set the colorscheme.
@@ -303,27 +305,50 @@ if filereadable('/usr/share/dict/american-english')
 endif
 
 " Fun With Clipboards: {{{2
-
 " I've been using vim for almost 3 years. I still don't have copy paste ironed out...
-" if exists('$TMUX')
-"     let g:clipboard = {
-"         \   'name': 'myClipboard',
-"         \   'copy': {
-"         \      '+': 'tmux load-buffer -',
-"         \      '*': 'tmux load-buffer -',
-"         \    },
-"         \   'paste': {
-"         \      '+': 'tmux save-buffer -',
-"         \      '*': 'tmux save-buffer -',
-"         \   },
-"         \   'cache_enabled': 1,
-"         \ }
 
-"     " Double check if we need to do this but sometimes the clipboard fries when set this way
-" 	runtime! autoload/provider/clipboard.vim
-"   " shit it sometimes needs to be rerun when the clipboard doesn't set correctly.
-"   " xxx What is happening
-" endif
+" First check that we're in a tmux session before trying this
+if exists('$TMUX')
+
+  " Now let's make a dictionary for copying and pasting actions. Name both
+  " to hopefully make debugging easier. In `he provider-clipboard` they define
+  " these commands so that they go to * and +....But what if we put them in
+  " named registers? Then we can still utilize the * and + registers however
+  " we want. Idk give it a try.
+  " Holy hell that emits a lot of warnings and error messages don't do that
+  " again.
+  "
+  " As an FYI, running `:echo provider#clipboard#Executable()` on Ubuntu gave
+  " me xclip so that's something worth knowing
+    let g:clipboard = {
+        \   'name': 'TmuxCopyPasteClipboard',
+        \   'copy': {
+        \      '*': 'tmux load-buffer -',
+        \      '+': 'tmux load-buffer -',
+        \    },
+        \   'paste': {
+        \      '*': 'tmux save-buffer -',
+        \      '+': 'tmux save-buffer -',
+        \   },
+        \   'cache_enabled': 1,
+        \ }
+else
+  if exists('$DISPLAY') && executable('xclip')
+    " This is how it's defined in autoload/providor/clipboard.vim
+    let g:clipboard = {
+        \    'name': 'xclipboard',
+        \    'copy': {
+        \       '*': 'xclip -quiet -i -selection primary',
+        \       '+': 'xclip -quiet -i -selection clipboard',
+        \    },
+        \   'paste': {
+        \       '*': 'xclip -o -selection primary',
+        \       '+': 'xclip -o -selection clipboard',
+        \   },
+        \   'cache_enabled': 1,
+        \ }
+  endif
+endif
 
 if has('unnamedplus')                   " Use the system clipboard.
     set clipboard+=unnamed,unnamedplus
@@ -332,6 +357,8 @@ else                                        " Accommodate Termux
 endif
 
 set pastetoggle=<F7>
+
+runtime! autoload/provider/clipboard.vim
 
 " Autocompletion: {{{2
 
@@ -506,21 +533,6 @@ let g:is_bash = 1
 let g:sh_fold_enabled= 4  "   (enable if/do/for folding)
 let g:sh_fold_enabled= 3  "   (enables function and heregoc folding)
 
-" he rst.vim or ft-rst-syntax or syntax 2600. Don't put bash instead of sh.
-" $VIMRUNTIME/syntax/rst.vim iterates over this var and if it can't find a
-" bash.vim syntax file it will crash.
-
-" May 13, 2019: Updated. Grabbed this directly from $VIMRUNTIME/syntax/rst.vim
-let g:rst_syntax_code_list = {
-    \ 'vim': ['vim'],
-    \ 'java': ['java'],
-    \ 'cpp': ['cpp', 'c++'],
-    \ 'lisp': ['lisp'],
-    \ 'php': ['php'],
-    \ 'python': ['python', 'python3', 'ipython'],
-    \ 'perl': ['perl'],
-    \ 'sh': ['sh'],
-    \ }
 " highlighting readline options
 let readline_has_bash = 1
 
@@ -661,3 +673,6 @@ augroup END
 " Plug: {{{2
 " I utilize this command so often I may as well save the characters
 command! -nargs=0 Plugins echo keys(plugs)
+
+let &cpoptions = s:cpo_save
+unlet s:cpo_save
