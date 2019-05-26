@@ -34,3 +34,5 @@ setlocal spell
 " Keep the first line of a git commit 50 char long and everything after 72.
 setlocal colorcolumn=50,73
 setlocal linebreak
+
+let b:undo_ftplugin = 'set tw< sp< cc<'

@@ -12,6 +12,16 @@ endif
 let b:did_powershell_after_ftplugin = 1
 
 " Options: {{{1
+setlocal expandtab
+setlocal shiftwidth=4
+setlocal softtabstop=4
 setlocal commentstring=#\ %s
+setlocal textwidth=0
+" Recognize powershell's goofy ass hyphenated commands
+setlocal iskeyword+=-
 
-let b:undo_ftplugin = 'set cms<'
+
+" So this'll be tricky to do period and it's gonna {probably} be a bitch to
+" implement in any sort of portable manner...but how can we set up keywordprg
+
+let b:undo_ftplugin = 'set et< sw< sts< cms< tw< isk<'
