@@ -15,10 +15,10 @@ if !has_key(plugs, 'jedi-vim')
     finish
 endif
 
-if exists('g:did_jedi_after_plugin') || &compatible || v:version < 700
+if exists('b:did_jedi_after_plugin') || &compatible || v:version < 700
     finish
 endif
-let g:did_jedi_after_plugin = 1
+let b:did_jedi_after_plugin = 1
 
 " Options: {{{1
 
@@ -37,11 +37,12 @@ elseif g:ubuntu
     let g:jedi#smart_auto_mappings = 1
 endif
 
-let g:jedi#enable_completions = 1
+let g:jedi#enable_completions = 0
 let g:jedi#force_py_version = 3
 let g:jedi#use_splits_not_buffers = 'winwidth'
 
 " Why would I choose C-n?
+
 let g:jedi#completions_command = '<C-P>'
 
 " Make sure completeopt contains noinsert,noselect as well.

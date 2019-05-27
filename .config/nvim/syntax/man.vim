@@ -109,6 +109,7 @@ if b:man_sect =~# '^[023]'
   hi! link manSignal Type
   hi! link manSynopsis Title
   hi! link manLowerSentence String
+
 endif
 
 " Nvim's highlighting pattern with longopt and CFunc from Vim.
@@ -123,6 +124,27 @@ hi! link manFiles Include
 execute 'syntax match manFooter display "^\%'.line('$').'l.*$"'
 " Wait why. Usually those include links to other man pages,
 " not only do I want those highlighted I want extra funcs for them
+
+if g:colors_name ==# 'gruvbox'
+    hi! link manCError GruvboxRed
+    hi! link manEmail GruvboxAqua
+    hi! link manEnvVar GruvboxBlue
+    hi! link manEnvVarFile GruvboxBlue
+    hi! link manFile GruvboxYellow
+    hi! link manFiles GruvboxFg0
+    hi! link manFooter GruvboxPurple
+    hi! link manHighlight GruvboxYellow
+    hi! link manHistory GruvboxYellow
+    hi! link manHeaderFile GruvboxYellow
+    hi! link manSectionHeading GruvboxOrangeBold
+    hi! link manSentence GruvboxFg2
+    hi! link manSignal GruvboxPurple
+    hi! link manURL GruvboxGreen
+endif
+
+" Mar 14, 2019
+" manCFuncDefinition xxx cleared
+" manSignal      xxx cleared
 
 
 let b:current_syntax = 'man'

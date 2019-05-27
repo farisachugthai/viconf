@@ -7,6 +7,7 @@
     "doc": "doc"
   },
   "dependencies": {
+    "coc-json": "^1.0.17",
     "coc.nvim": "^0.0.67",
     "neovim": "^4.5.0",
     "vscode-css-languageserver-bin": "^1.4.0",

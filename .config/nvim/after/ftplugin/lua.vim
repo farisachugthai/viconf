@@ -11,7 +11,13 @@ if exists('b:did_lua_after_ftplugin') || &compatible || v:version < 700
 endif
 let b:did_lua_after_ftplugin = 1
 
+" Options: {{{1
+setlocal shiftwidth=2
+setlocal expandtab
+setlocal softtabstop=2
 setlocal commentstring=--\ %s
-setlocal comments=--\ %s
+" Apparently this is a problem. Echoes out an error message.
+" setlocal comments=--\ %s
 
-let b:undo_ftplugin = 'set cms< com<'
+
+let b:undo_ftplugin = 'set sw< et< sts< cms<'

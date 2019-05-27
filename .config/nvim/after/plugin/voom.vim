@@ -10,10 +10,10 @@ if !has_key(plugs, 'voom')
     finish
 endif
 
-if exists('g:did_voom_after_plugin') || &compatible || v:version < 700
+if exists('b:did_voom_after_plugin') || &compatible || v:version < 700
     finish
 endif
-let g:did_voom_after_plugin = 1
+let b:did_voom_after_plugin = 1
 
 
 " Options: {{{1
@@ -38,7 +38,6 @@ let g:did_voom_after_plugin = 1
 " filetype.
 
 let g:voom_ft_modes = {'markdown': 'markdown', 'rst': 'rst', 'zimwiki': 'dokuwiki'}
-
 
 " autoload is oddly full of python files which *obviously* don't get imported correctly.
 " Possibly copy paste into pythonx?

@@ -12,11 +12,10 @@ if !has_key(plugs, 'coc.nvim')
     finish
 endif
 
-if exists('did_coc_nvim_conf') || &compatible || v:version < 700
+if exists('b:did_coc_after_plugin') || &compatible || v:version < 700
     finish
 endif
-
-let g:did_coc_nvim_conf = 1
+let b:did_coc_after_plugin = 1
 
 let s:cpo_save = &cpoptions
 set cpoptions&vim

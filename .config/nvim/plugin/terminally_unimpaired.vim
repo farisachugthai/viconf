@@ -1,15 +1,15 @@
 " ============================================================================
     " File: terminally_unimpaired.vim
     " Author: Faris Chugthai
-    " Description: Because noremap doesn't change terminal mappings
+    " Description: Configuring the terminal
     " Last Modified: April 14, 2019
 " ============================================================================
 
 " Guard: {{{1
-if exists('g:did_terminally_unimpaired_vim') || &compatible || v:version < 700
+if exists('b:did_terminally_unimpaired_vim') || &compatible || v:version < 700
     finish
 endif
-let g:did_terminally_unimpaired_vim = 1
+let b:did_terminally_unimpaired_vim = 1
 
 " Mappings: {{{1
 
@@ -49,7 +49,7 @@ tnoremap <A-e> <Esc>$i
 
 " Functions: {{{1
 
-" htop: {{{2
+" Htop: {{{2
 " Leader -- applications -- htop. Requires nvim for <Cmd> which tmk doesn't exist
 " even in vim8.0+. Also requires htop which more than likely rules out Win32.
 
@@ -67,3 +67,18 @@ function! g:IPython() abort
 endfunction
 
 " do later
+
+" Autocmd For Statusline: {{{1
+augroup TermGroup
+  autocmd!
+  " I don't know if this is mentioned anywhere but do we have to set an
+  " undoftplugin?
+  autocmd TermOpen * setlocal statusline=%{b:term_title}
+  " `set nomodified` so Nvim stops prompting you when you
+  " try to close a buftype==terminal buffer
+  autocmd TermOpen * setlocal nomodified
+  " Fails if changes have been made to the current buffer,
+  " unless 'hidden' is set.
+  " To enter |Terminal-mode| automatically:
+  autocmd TermOpen * startinsert
+augroup END

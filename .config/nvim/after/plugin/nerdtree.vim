@@ -50,7 +50,7 @@ let g:NERDTreeShowHidden = 1
 let g:NERDTreeShowBookmarks = 1
 let g:NERDTreeNaturalSort = 1
 
- " change cwd every time NT root changes
+" change cwd every time NT root changes
 let g:NERDTreeChDirMode = 2
 
 let g:NERDTreeShowLineNumbers = 1

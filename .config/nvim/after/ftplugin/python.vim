@@ -17,15 +17,18 @@ set cpoptions&vim
 " Options: {{{1
 setlocal linebreak
 setlocal textwidth=120
+
 setlocal commentstring=#\ %s
 setlocal tabstop=4 shiftwidth=4 expandtab softtabstop=4
 let b:python_highlight_all = 1
 setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
+
 " also let's know where the line needs to end visually but not invoke the
 " linters to react.
 setlocal colorcolumn=80,120
 setlocal foldmethod=indent
 
+" Autocommands: {{{1
 " Undo ftplugin?
 if isdirectory(expand('$_ROOT') . '/lib/python3')
     " Double check globbing in vim

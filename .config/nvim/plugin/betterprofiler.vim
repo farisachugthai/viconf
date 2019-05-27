@@ -21,11 +21,10 @@ function! g:BetterProfiler(fname) abort
   return msg
 endfunction
 
-let s:Debug = 1
-
-let b:fname = '~/projects/viconf/.config/nvim/colors/gruvbox8.vim'
-
-call g:BetterProfiler(b:fname)
+" ...wth was i trying to do here?
+" let s:Debug = 1
+" let b:fname = '~/projects/viconf/.config/nvim/colors/gruvbox8.vim'
+" call g:BetterProfiler(b:fname)
 
 
 " AH I forgot Junegunn has one written as well!
