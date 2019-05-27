@@ -1,22 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""2018-09-03
-This shouldn't be so hard
-
-Week 1 - Problem Set 1 - Problem 3:
-
-.. todo::
-
-    Probably need to check that this works.
-    Then drop the prompt back in here.
-"""
-import string
-import random
-
-
-def rstr():
-    """Produce a random string."""
-    return ''.join(random.choice(string.ascii_lowercase) for i in range(10))
+"""Sort a list of words and then remove the duplicate entries therein."""
 
 
 def main():
@@ -32,7 +16,7 @@ def main():
     running = 0
     longest = []
 
-    for i in range(len(mapped) - 1 ):
+    for i in range(len(mapped) - 1):
         if mapped[i] < mapped[i+1]:
             longest.append(mapped[i])
         elif mapped[i] > mapped[i+1]:

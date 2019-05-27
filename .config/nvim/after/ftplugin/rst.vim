@@ -26,7 +26,6 @@ setlocal spell!
 " This works beautifully!
 setlocal keywordprg=:r!pydoc
 
-" TODO: Need to set an undo ftplugin.
 compiler rst
 
 " Syntax Highlighting: {{{1
@@ -46,4 +45,4 @@ let g:rst_syntax_code_list = {
     \ 'sh': ['sh'],
     \ }
 
-let b:undo_ftplugin = 'set et< cc< fdl< fdls< spell<'
+let b:undo_ftplugin = 'set et< cc< lbr< fdl< fdls< spell<'

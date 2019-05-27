@@ -1,9 +1,11 @@
 " Neovim Configuration:
 " Maintainer: Faris Chugthai
 " Last Change: Apr 16, 2019
-scriptencoding utf-8
 
 " Preliminaries: {{{1
+scriptencoding utf-8
+let s:cpo_save = &cpoptions
+set cpoptions&vim
 
 " OS Setup: {{{2
 
@@ -24,10 +26,6 @@ runtime g:local_vimrc
 if g:windows
   runtime winrc.vim
   " How do i check if I'm on cmd or powershell?
-  " tried setting shell to conemu and it wasn't as interesting as you'd hope
-  " lol it obviously didn't work
-  " set shell=conemu
-  " DOn't delete this because, at least superficially, this is working for powershell
   set shell=powershell shellpipe=\| shellredir=> shellxquote=
   let &shellcmdflag='-NoLogo  -ExecutionPolicy RemoteSigned -Command $* '  " Should I -NoExit this?
   " set shell=cmd.exe
@@ -131,7 +129,12 @@ else
     elseif executable('/usr/bin/python3')
         let g:python3_host_prog = '/usr/bin/python3'
         let &path = &path . ',' . '/usr/lib/python3/*'
+
+    " and if we can't just disable it because it starts spouting off errors
+    else
+      let g:loaded_python3_provider = 1
     endif
+
 endif
 
 " Also add a python2 remote host
@@ -154,8 +157,7 @@ if empty(s:plugins)
   " bootstrap plug.vim on new systems
   function! s:InstallPlug()
     try
-      " 0 represents don't do this silently
-      execute('!curl -fLo --create-dirs ' . stdpath('data') . '/site/autoload/plug.vim' . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim', "")
+      execute('!curl --create-dirs --progress-bar -fLo ' . stdpath('data') . '/site/autoload/plug.vim' . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
     catch
       echo v:exception
     endtry
@@ -237,8 +239,8 @@ Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 
 " Global Options: {{{1
-
 " Should probably load these before the runtime! call
+
 " Builtin Plugins: {{{2
 let g:loaded_vimballPlugin     = 1
 let g:loaded_getscriptPlugin   = 1
@@ -250,8 +252,7 @@ runtime! plugin/**/*.vim
 
 " General Syntax Highlighting: {{{2
 
-" Lower max syntax highlighting
-set synmaxcol=400
+set synmaxcol=400                       " Lower max syntax highlighting
 
 function! g:Gruvbox() abort
   " Define Gruvbox parameters and then set the colorscheme.
@@ -335,6 +336,8 @@ if filereadable('/usr/share/dict/american-english')
 endif
 
 " Fun With Clipboards: {{{2
+" I've been using vim for almost 3 years. I still don't have copy paste ironed out...
+" Let's start simple
 
 if has('unnamedplus')                   " Use the system clipboard.
     set clipboard+=unnamed,unnamedplus
@@ -343,6 +346,54 @@ else                                        " Accommodate Termux
 endif
 
 set pastetoggle=<F7>
+
+" Now let's set up the clipboard provider
+
+" First check that we're in a tmux session before trying this
+if exists('$TMUX')
+
+  " Now let's make a dictionary for copying and pasting actions. Name both
+  " to hopefully make debugging easier. In `he provider-clipboard` they define
+  " these commands so that they go to * and +....But what if we put them in
+  " named registers? Then we can still utilize the * and + registers however
+  " we want. Idk give it a try.
+  " Holy hell that emits a lot of warnings and error messages don't do that
+  " again.
+  "
+  " As an FYI, running `:echo provider#clipboard#Executable()` on Ubuntu gave
+  " me xclip so that's something worth knowing
+  let g:clipboard = {
+      \   'name': 'TmuxCopyPasteClipboard',
+      \   'copy': {
+      \      '*': 'tmux load-buffer -',
+      \      '+': 'tmux load-buffer -',
+      \    },
+      \   'paste': {
+      \      '*': 'tmux save-buffer -',
+      \      '+': 'tmux save-buffer -',
+      \   },
+      \   'cache_enabled': 1,
+      \ }
+else
+  if exists('$DISPLAY') && executable('xclip')
+    " This is how it's defined in autoload/providor/clipboard.vim
+    let g:clipboard = {
+      \    'name': 'xclipboard',
+      \    'copy': {
+      \       '*': 'xclip -quiet -i -selection primary',
+      \       '+': 'xclip -quiet -i -selection clipboard',
+      \    },
+      \   'paste': {
+      \       '*': 'xclip -o -selection primary',
+      \       '+': 'xclip -o -selection clipboard',
+      \   },
+      \   'cache_enabled': 1,
+      \ }
+  endif
+endif
+
+" Double check if we need to do this but sometimes the clipboard fries when set this way
+runtime! autoload/provider/clipboard.vim
 
 " Autocompletion: {{{2
 
@@ -526,7 +577,6 @@ let g:is_bash = 1
 let g:sh_fold_enabled= 4  "   (enable if/do/for folding)
 let g:sh_fold_enabled= 3  "   (enables function and heregoc folding)
 
-" May 13, 2019: Updated. Grabbed this directly from $VIMRUNTIME/syntax/rst.vim
 " highlighting readline options
 let readline_has_bash = 1
 
@@ -674,7 +724,6 @@ augroup END
 " I utilize this command so often I may as well save the characters
 command! -nargs=0 Plugins echo keys(plugs)
 
-
 " Toggle The Quickfix Window: {{{2
 " From Steve Losh, http://learnvimscriptthehardway.stevelosh.com/chapters/38.html
 
@@ -692,3 +741,6 @@ function! s:QuickfixToggle()
 endfunction
 
 noremap <C-q> <Cmd>call <SID>QuickfixToggle()<CR>
+
+let &cpoptions = s:cpo_save
+unlet s:cpo_save

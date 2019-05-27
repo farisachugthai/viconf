@@ -66,9 +66,8 @@ function! g:IPython() abort
   endif
 endfunction
 
-" do later
-
 " Autocmd For Statusline: {{{1
+
 augroup TermGroup
   autocmd!
   " I don't know if this is mentioned anywhere but do we have to set an
