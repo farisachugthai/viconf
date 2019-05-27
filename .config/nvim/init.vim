@@ -157,7 +157,8 @@ if empty(s:plugins)
   " bootstrap plug.vim on new systems
   function! s:InstallPlug()
     try
-      execute('!curl --create-dirs --progress-bar -fLo ' . stdpath('data') . '/site/autoload/plug.vim' . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
+      " Successfully executed on termux
+      execute('!curl --progress-bar --create-dirs -Lo ' . stdpath('data') . '/site/autoload/plug.vim' . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
     catch
       echo v:exception
     endtry
@@ -183,9 +184,10 @@ endif
 " GOT IT! I checked `echo &rtp` and it's looking for the site folder in the nvim not nvim-data!!
 " ...well now that we got that sorted out can we not waste this time on the source?
 " exec 'source ' stdpath('config') . '/site/autoload/plug.vim'
-let s:plugged_dir = stdpath('data') . '/plugged'
+" let s:plugged_dir = stdpath('data') . '/plugged'
 
-call plug#begin(s:plugged_dir)
+" call plug#begin(s:plugged_dir)
+call plug#begin(stdpath('data') . '/plugged')
 
 Plug 'junegunn/vim-plug'        " plugception
 let g:plug_window = 'tabe'
@@ -520,7 +522,9 @@ noremap q; q:
 " setlocal comments=:# commentstring=#\ %s formatoptions-=t formatoptions+=croql
 
 if g:termux
-    noremap <silent> <Leader>ts <Cmd>!termux-share -a send %<CR>
+  " May 26, 2019: Just ran into my first problem from a filename with a
+  " space in the name *sigh*
+  noremap <silent> <Leader>ts <Cmd>exe "!termux-share -a send " . shellescape(expand("%"))<CR>
 endif
 
 " Switch CWD to the directory of the open buffer
@@ -590,7 +594,7 @@ let g:lisp_rainbow = 1
 
 augroup omnifunc
     autocmd!
-    autocmd Filetype python,xonsh     setlocal omnifunc=python3complete#Completer
+    autocmd Filetype python,xonsh     setlocal omnifunc=python3complete#Complete
     autocmd Filetype html,xhtml       setlocal omnifunc=htmlcomplete#CompleteTags
     autocmd Filetype xml              setlocal omnifunc=xmlcomplete#CompleteTags
     autocmd Filetype css              setlocal omnifunc=csscomplete#CompleteCSS
@@ -677,8 +681,8 @@ endif
 
 if exists('*strftime')
 " Overtakes the whole screen when Termux zooms in
-  if &columns > 60
-    let tstmp = ' ' . '%{strftime("%H:%M %d/%m/%Y", getftime(expand("%:p")))}'  " last modified timestamp
+  if &columns < 80
+    let tstmp = ' ' . '%{strftime("%H:%M %m/%d/%Y", getftime(expand("%:p")))}'  " last modified timestamp
   else
     let tstmp = ''
   endif
