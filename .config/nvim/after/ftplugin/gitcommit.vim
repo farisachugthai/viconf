@@ -1,4 +1,16 @@
-" Git_Commit:
+" ============================================================================
+    " File: gitcommit.vim
+    " Author: Faris Chugthai
+    " Description: Git commit buffer mods
+    " Last Modified: May 19, 2019
+" ============================================================================
+
+" Guard: {{{1
+if exists('b:did_git_commit_after_ftplugin') || &compatible || v:version < 700
+  finish
+endif
+let b:did_git_commit_after_ftplugin = 1
+
 
 " TPope To The Rescue: {{{1
 " Dude I was just looking at the gitrebase.vim ftplugin. There's no way
@@ -11,7 +23,7 @@
 " command! -buffer -bar Fixup  :call s:choose('fixup')
 " command! -buffer -bar Cycle  :call s:cycle()
 
-" Thoughtbot: {{{1
+" Options: {{{1
 " Taken from:
 " <https://github.com/thoughtbot/dotfiles/blob/master/vim/ftplugin/gitcommit.vim>
 
@@ -19,10 +31,8 @@
 setlocal textwidth=72
 setlocal spell
 
-" General: {{{1
 " Keep the first line of a git commit 50 char long and everything after 72.
 setlocal colorcolumn=50,73
 setlocal linebreak
 
-" If you want a hint at the required hl-ColorColumn syntax.
-" hi ColorColumn ctermbg=lightgrey guibg=lightgrey
+let b:undo_ftplugin = 'set tw< sp< cc<'

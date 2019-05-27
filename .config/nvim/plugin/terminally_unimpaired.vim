@@ -66,4 +66,23 @@ function! g:IPython() abort
   endif
 endfunction
 
-" do later
+" TODO: do later
+
+" Autocmds: {{{1
+
+augroup TermGroup
+  autocmd!
+
+  " I don't know if this is mentioned anywhere but do we have to set an
+  " undoftplugin?
+
+  autocmd TermOpen * setlocal statusline=%{b:term_title}
+  " `set nomodified` so Nvim stops prompting you when you
+  " try to close a buftype==terminal buffer
+  autocmd TermOpen * setlocal nomodified
+
+  " Fails if changes have been made to the current buffer,
+  " unless 'hidden' is set.
+  " To enter |Terminal-mode| automatically: >
+  autocmd TermOpen * startinsert
+augroup END

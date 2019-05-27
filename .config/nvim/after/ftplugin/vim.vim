@@ -5,11 +5,13 @@
     " Last Modified: May 09, 2019
 " ============================================================================
 
+" Guard: {{{1
 if exists('b:did_vim_after_ftplugin') || &compatible || v:version < 700
   finish
 endi
 let b:did_vim_after_ftplugin = 1
 
+" Options: {{{1
 setlocal expandtab
 setlocal shiftwidth=2
 setlocal tabstop=2
@@ -21,13 +23,17 @@ let &commentstring='" %s'
 " This is the absolute worst way to implement this
 " setlocal comments="
 
+
+" Syntax Highlighting: {{{1
 " Let's add a little meat in here shall we?
 
 " From he syntax
 " VIM			*vim.vim*		*ft-vim-syntax*
 " 			*g:vimsyn_minlines*	*g:vimsyn_maxlines*
-" Support embedded lua python nd ruby syntax highlighting in vim ftypes. No idea what your other options are.
-   " GOT IT!
+" Support embedded lua python nd ruby syntax highlighting in vim ftypes.
+" No idea what your other options are.
+" GOT IT!
+
 " Allows users to specify the type of embedded script highlighting
 " they want:  (perl/python/ruby/tcl support)
 "   g:vimsyn_embed == 0   : don't embed any scripts

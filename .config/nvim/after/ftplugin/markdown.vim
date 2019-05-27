@@ -12,7 +12,8 @@ setlocal spell!
 " Automatically wrap at 80 characters after whitespace
 setlocal textwidth=80
 setlocal colorcolumn=80
-setlocal nowrap
+" Then break lines if they're too long.
+" setlocal linebreak
 
 " Fix tabs so that we can have ordered lists render properly
 setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab

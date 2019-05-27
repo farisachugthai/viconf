@@ -2,8 +2,16 @@
     " File: rst.vim
     " Author: Faris Chugthai
     " Description: ReStructured Text ftplugin
-    " Last Modified: Apr 14, 2019
+    " Last Modified: May 19, 2019
 " ============================================================================
+
+" Guard: {{{1
+if exists('b:did_rst_after_ftplugin') || &compatible || v:version < 700
+  finish
+endif
+let b:did_rst_after_ftplugin = 1
+
+" Options: {{{1
 " setlocal tabstop=4
 " setlocal softtabstop=4
 " setlocal shiftwidth=4
@@ -20,6 +28,7 @@ setlocal keywordprg=:r!pydoc
 
 compiler rst
 
+" Syntax Highlighting: {{{1
 " he rst.vim or ft-rst-syntax or syntax 2600. Don't put bash instead of sh.
 " $VIMRUNTIME/syntax/rst.vim iterates over this var and if it can't find a
 " bash.vim syntax file it will crash.
@@ -35,3 +44,5 @@ let g:rst_syntax_code_list = {
     \ 'perl': ['perl'],
     \ 'sh': ['sh'],
     \ }
+
+let b:undo_ftplugin = 'set et< cc< lbr< fdl< fdls< spell<'

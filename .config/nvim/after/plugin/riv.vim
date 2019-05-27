@@ -44,6 +44,7 @@ let g:riv_highlight_code = 'lua,python,cpp,javascript,vim,sh,PowerShell,bash,pyt
 " link target's position when created. don't put it at the bottom because in a
 " python file that means you put it out of the docstring and into the actual
 " content where it gets executed...
+
 let g:riv_create_link_pos = '.'
 
 let g:riv_default_path = expand('$HOME') . '/projects'
