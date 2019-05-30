@@ -6,10 +6,10 @@
 " ============================================================================
 
 " Guard: {{{1
-if exists('b:did_terminally_unimpaired_vim') || &compatible || v:version < 700
+if exists('g:did_terminally_unimpaired_vim') || &compatible || v:version < 700
     finish
 endif
-let b:did_terminally_unimpaired_vim = 1
+let g:did_terminally_unimpaired_vim = 1
 
 " Mappings: {{{1
 
@@ -57,6 +57,8 @@ tnoremap <A-e> <Esc>$i
 noremap <Leader>ah <Cmd>wincmd v<CR><bar><Cmd>enew<CR><bar>term://htop
 
 " IPython: {{{2
+
+" TODO:
 " Leader -- applications -- IPython
 
 " Let's add options to this to give the feeling of a real plugin

@@ -7,29 +7,29 @@
 
 " Then we can define a few variables and skip a bunch of the unnecessary loops in this plugin
 
-" Guards:
-if exists('g:loaded_cheatsheet') || &compatible || v:version < 700
+" Guards: {{{1
+if exists('g:loaded_cheatsheet_plugin') || &compatible || v:version < 700
   finish
 endif
-let g:loaded_cheatsheet = 1
+let g:loaded_cheatsheet_plugin = 1
 
 
-" Configuration:
+" Configuration: {{{1
 " I wanna use my own cheatsheet sorry man
 if !exists('g:cheat40_use_default')
     let g:cheat40_use_default = 0
 endif
 
 if !exists('g:cheat40_file')
-    let g:cheat40_file = expand('$XDG_CONFIG_HOME') . 'nvim/cheat40.txt'
+    let g:cheat40_file = expand('$XDG_CONFIG_HOME') . '/nvim/cheat40.txt'
 endif
 
 
-" Commands:
-command -bar -nargs=0 -bang Cheat40 call cheat40#open('<bang>' ==# '!')
+" Commands: {{{1
+command! -bar -nargs=0 -bang Cheat40 call cheat40#open('<bang>' ==# '!')
 
 
-" Mappings:
+" Mappings: {{{1
 if mapcheck('<LocalLeader>?', 'n') ==# ''
-  noremap <Leader>? <Cmd>Cheat40<CR>
+  noremap <LocalLeader>? <Cmd>Cheat40<CR>
 endif

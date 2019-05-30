@@ -8,15 +8,16 @@
 " Guards: {{{1
 
 " Note that ]c and [c are mapped by git-gutter and ALE has ]a and [a
-if exists('g:loaded_unimpaired') || &compatible || v:version < 700
+if exists('g:loaded_unimpaired_plugin') || &compatible || v:version < 700
     finish
 endif
-let g:loaded_unimpaired = 1
+let g:loaded_unimpaired_plugin = 1
 
 let s:cpo_save = &cpoptions
 set cpoptions&vim
 
 " Unimpaired: {{{1
+
 " Map quickfix list, buffers, windows and tabs to *[ and *]
 noremap ]q <Cmd>cnext<CR>
 noremap [q <Cmd>cprev<CR>
@@ -37,13 +38,14 @@ noremap [T <Cmd>tabfirst<CR>
 
 
 " Navigate Buffers More Easily: {{{1
+
 noremap <Leader>bb <Cmd>buffers<CR>
 noremap <Leader>bd <Cmd>bdelete<CR>
 noremap <Leader>bn <Cmd>bnext<CR>
 noremap <Leader>bp <Cmd>bprev<CR>
 noremap <Leader>bf <Cmd>bfirst<CR>
 noremap <Leader>bl <Cmd>blast<CR>
-noremap <Leader>bY <Cmd>%y<CR>
+noremap <Leader>bY <Cmd>"+%y<CR>
 noremap <Leader>bP <Cmd>"+P<CR>
 " Sunovabitch bonly isn't a command?? Why is
 " noremap <Leader>bo <Cmd>bonly<CR>
@@ -79,6 +81,7 @@ noremap! <F9> <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
 " Now reload it
 noremap <Leader>re <Cmd>so $MYVIMRC<CR><Cmd>echo 'Vimrc reloaded!'<CR>
 
+" atexit: {{{1
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

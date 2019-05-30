@@ -151,7 +151,7 @@ endif
 " Vim Plug: {{{1
 
 " Plug Check: {{{2
-let s:plugins = filereadable(expand('$XDG_DATA_HOME/nvim/site/autoload/plug.vim', 1))
+let s:plugins = filereadable(expand(stdpath('data') . '/site/autoload/plug.vim'))
 
 if empty(s:plugins)
   " bootstrap plug.vim on new systems
@@ -550,9 +550,6 @@ noremap j gj
 noremap k gk
 noremap <C-]> g<C-]>
 
-" Avoid accidental hits of <F1> while aiming for <Esc>
-noremap! <F1> <Esc>
-
 " Complete whole filenames/lines with a quicker shortcut key in insert mode
 " Leave these are recursive mappings though
 imap <C-f> <C-x><C-f>
@@ -748,3 +745,7 @@ noremap <C-q> <Cmd>call <SID>QuickfixToggle()<CR>
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save
+
+" NewGrep: {{{2
+" he quickfix
+command! -nargs=+ NewGrep execute 'silent grep! <args>' | copen 42

@@ -5,10 +5,10 @@
     " Last Modified: March 14, 2019
 " ============================================================================
 
-if exists('g:loaded_autocorrect') || &cp || v:version < 700
+if exists('g:loaded_autocorrect_plugin') || &compatible || v:version < 700
     finish
 endif
-let g:loaded_autocorrect = 1
+let g:loaded_autocorrect_plugin = 1
 
 iab abbout about
 iab Abbout About

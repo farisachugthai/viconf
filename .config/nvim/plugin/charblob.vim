@@ -1,7 +1,14 @@
+" ============================================================================
+  " File: charblob.vim
+  " Author: Faris Chugthai
+  " Description: Load an autoloaded lua function.
+  " Last Modified: May 30, 2019
+" ============================================================================
 
-if exists('g:charblob_loaded')
+" Guard: {{{1
+if exists('g:charblob_loaded_plugin') || &compatible || v:version < 700
   finish
 endif
-let g:charblob_loaded = 1
+let g:charblob_loaded_plugin = 1
 
-command MakeCharBlob :call charblob#encode_buffer()
+command! MakeCharBlob :call charblob#encode_buffer()
