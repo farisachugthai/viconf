@@ -6,10 +6,10 @@
 " ============================================================================
 
 " Guard: {{{1
-if exists('b:did_cheat40_after_ftplugin') || &compatible || v:version < 700
+if exists('g:did_cheat40_after_ftplugin') || &compatible || v:version < 700
   finish
 endif
-let b:did_cheat40_after_ftplugin = 1
+let g:did_cheat40_after_ftplugin = 1
 
 let s:cpo_save = &cpoptions
 set cpoptions&vim

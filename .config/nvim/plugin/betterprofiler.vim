@@ -9,7 +9,7 @@
 if exists('g:did_better_profiler_vim_plugin') || &compatible || v:version < 700
   finish
 endif
-let g:did_better_profiler_vim_plugin' = 1
+let g:did_better_profiler_vim_plugin = 1
 
 let s:cpo_save = &cpoptions
 set cpoptions&vim

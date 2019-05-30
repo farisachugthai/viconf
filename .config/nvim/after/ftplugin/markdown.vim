@@ -5,6 +5,15 @@
     " Last Modified: April 20, 2019
 " ============================================================================
 
+" Guard: {{{1
+if exists('g:did_markdown_after_ftplugin') || &compatible || v:version < 700
+  finish
+endif
+let g:did_markdown_after_ftplugin_make_after_ftplugin = 1
+
+let s:cpo_save = &cpoptions
+set cpoptions&vim
+
 " Options: {{{1
 " Enable spellchecking.
 setlocal spell!
@@ -27,3 +36,11 @@ augroup filetype_markdown
     autocmd FileType markdown noremap <buffer> <localleader>4 m`^i#### <esc>``5l
     autocmd FileType markdown noremap <buffer> <localleader>5 m`^i##### <esc>``6l
 augroup END
+
+
+" atexit
+
+let b:undo_ftplugin = 'set spell< cc< tw< et< ts< sts< sw<'
+
+let &cpoptions = s:cpo_save
+unlet s:cpo_save

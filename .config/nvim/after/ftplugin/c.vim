@@ -5,6 +5,15 @@
     " Last Modified: April 23, 2019
 " ============================================================================
 
+" Guard: {{{1
+if exists('g:did_c_after_ftplugin') || &compatible || v:version < 700
+  finish
+endif
+let g:did_c_after_ftplugin = 1
+
+let s:cpo_save = &cpoptions
+set cpoptions&vim
+
 " Options: {{{1
 
 setlocal suffixesadd='.c'
@@ -39,3 +48,10 @@ endfunction
 " or save any files. To revert a formatting, just undo.
 
 setlocal makeprg=make\ %<.o
+
+" atexit: {{{1
+
+" let b:undo_ftplugin =
+
+let &cpoptions = s:cpo_save
+unlet s:cpo_save

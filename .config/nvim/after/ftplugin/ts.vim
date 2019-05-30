@@ -4,11 +4,12 @@
     " Description: Typescript Vim Ftplugin
     " Last Modified: January 05, 2019
 " ============================================================================
-if v:version < 600
-    syntax clear
-elseif exists('b:current_syntax')
-    finish
+
+" Guard: {{{1
+if exists('g:did_ts_after_ftplugin') || &compatible || v:version < 700
+  finish
 endif
+let g:did_ts_after_ftplugin = 1
 
 " Plugins: {{{1
 
