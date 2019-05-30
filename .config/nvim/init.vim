@@ -171,7 +171,6 @@ endif
 " Don't assume that the InstallPlug() func worked
 if empty('plugs')
   let plugs = {}
-  " define the dictionary so all the files in ./after/plugin don't complain
 else
   runtime junegunn.vim
 endif
@@ -186,7 +185,7 @@ let g:loaded_2html_plugin      = 1
 let g:loaded_logiPat           = 1
 
 " Get this going as soon as possible
-runtime! plugin/**/*.vim
+runtime! plugin/*.vim
 
 " General Syntax Highlighting: {{{2
 

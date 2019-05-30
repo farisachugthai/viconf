@@ -10,10 +10,13 @@ if !has_key(plugs, 'vim-zim')
     finish
 endif
 
-if exists('b:did_zim_vim_after_ftplugin') || &compatible || v:version < 700
+if exists('g:did_zim_vim_after_ftplugin') || &compatible || v:version < 700
     finish
 endif
-let b:did_zim_vim_after_ftplugin = 1
+let g:did_zim_vim_after_ftplugin = 1
+
+let s:cpo_save = &cpoptions
+set cpoptions&vim
 
 " Options: {{{1
 
@@ -41,3 +44,8 @@ let &path = path . ',' . expand('~/Notebooks/Notes/**')
 
 let b:undo_ftplugin = 'setlocal com< cms< path<'
 " Dude the ruby ftplugin is amazing. Take notes.
+
+" atexit: {{{1
+
+let &cpoptions = s:cpo_save
+unlet s:cpo_save
