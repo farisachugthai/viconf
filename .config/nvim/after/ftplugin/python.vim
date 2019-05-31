@@ -6,10 +6,10 @@
 " ============================================================================
 
 " Guards: {{{1
-if exists('g:did_python_vim') || &compatible || v:version < 700
+if exists('g:did_python_after_plugin') || &compatible || v:version < 700
     finish
 endif
-let g:did_python_vim = 1
+let g:did_python_after_plugin = 1
 
 let s:cpo_save = &cpoptions
 set cpoptions&vim
@@ -27,6 +27,8 @@ setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 " linters to react.
 setlocal colorcolumn=80,120
 setlocal foldmethod=indent
+
+setlocal keywordprg=enew\ r!pydoc
 
 " Autocommands: {{{1
 " Undo ftplugin?
@@ -63,6 +65,7 @@ endif
 " Mappings: {{{1
 " Don't know how I haven't done this yet.
 noremap <F5> <Cmd>py3f %<CR>
+noremap! <F5> <Cmd>py3f %<CR>
 
 " Commands: {{{1
 if executable('yapf')
@@ -133,6 +136,9 @@ augroup aleconf
     autocmd Filetype python if has_key(plugs, 'ale') | call ALE_conf() | endif
 augroup END
 
-" Cpoptions: {{{1
+" Atexit: {{{1
+" A bunch missing
+let b:undo_ftplugin = 'set lbr< tw< cms< et< sts< ts< sw< cc< fdm<'
+
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

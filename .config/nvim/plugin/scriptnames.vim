@@ -1,7 +1,19 @@
+" ============================================================================
+  " File: scriptnames.vim
+  " Author: Faris Chugthai
+  " Description: Modify the scriptnames command a little
+  " Last Modified: May 30, 2019
+" ============================================================================
 
-" Scriptnames:
+" Guard: {{{1
+if exists('g:did_scriptnames_vim_plugin') || &compatible || v:version < 700
+  finish
+endif
+let g:did_scriptnames_vim_plugin = 1
 
-function! g:Scriptnames(re)  " {{{1
+" Functions: {{{1
+
+function! g:Scriptnames(re)  " {{{2
 " Command to filter :scriptnames output by a regex
     redir => scriptnames
     silent scriptnames
@@ -13,7 +25,7 @@ endfunction
 command! -nargs=? Scriptnames call g:Scriptnames(<f-args>)
 
 
-function! g:ScriptnamesDict() abort  " {{{1
+function! g:ScriptnamesDict() abort  " {{{2
 " From 10,000 lines deep in :he eval
 " Get the output of ":scriptnames" in the scriptnames_output variable.
 " Call by entering `:echo g:ScriptNamesDict()` or the command below.
@@ -44,4 +56,5 @@ function! g:ScriptnamesDict() abort  " {{{1
   return scripts
 endfunction
 
+" Commands: {{{1
 command! -nargs=0 Scriptnamesdict echo g:ScriptnamesDict()

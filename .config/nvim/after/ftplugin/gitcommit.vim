@@ -6,11 +6,13 @@
 " ============================================================================
 
 " Guard: {{{1
-if exists('b:did_git_commit_after_ftplugin') || &compatible || v:version < 700
+if exists('g:did_git_commit_after_ftplugin') || &compatible || v:version < 700
   finish
 endif
-let b:did_git_commit_after_ftplugin = 1
+let g:did_git_commit_after_ftplugin = 1
 
+let s:cpo_save = &cpoptions
+set cpoptions&vim
 
 " TPope To The Rescue: {{{1
 " Dude I was just looking at the gitrebase.vim ftplugin. There's no way
@@ -35,4 +37,9 @@ setlocal spell
 setlocal colorcolumn=50,73
 setlocal linebreak
 
+" atexit: {{{1
+
 let b:undo_ftplugin = 'set tw< sp< cc<'
+
+let &cpoptions = s:cpo_save
+unlet s:cpo_save

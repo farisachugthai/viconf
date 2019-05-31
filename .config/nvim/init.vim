@@ -26,9 +26,9 @@ runtime g:local_vimrc
 if g:windows
   runtime winrc.vim
   " How do i check if I'm on cmd or powershell?
-  set shell=powershell shellpipe=\| shellredir=> shellxquote=
-  let &shellcmdflag='-NoLogo  -ExecutionPolicy RemoteSigned -Command $* '  " Should I -NoExit this?
-  " set shell=cmd.exe
+  " set shell=powershell shellpipe=\| shellredir=> shellxquote=
+  " let &shellcmdflag='-NoLogo  -ExecutionPolicy RemoteSigned -Command $* '  " Should I -NoExit this?
+  set shell=cmd.exe
   if exists('+shellslash')   " don't drop the +!
     set shellslash
   endif
@@ -151,7 +151,7 @@ endif
 " Vim Plug: {{{1
 
 " Plug Check: {{{2
-let s:plugins = filereadable(expand('$XDG_DATA_HOME/nvim/site/autoload/plug.vim', 1))
+let s:plugins = filereadable(expand(stdpath('data') . '/site/autoload/plug.vim'))
 
 if empty(s:plugins)
   " bootstrap plug.vim on new systems
@@ -167,78 +167,13 @@ if empty(s:plugins)
   call <SID>InstallPlug()
 endif
 
-" General Plugins: {{{2
-" I don't know why this isn't working but let's try this
-
-" this is unreal. how is this saying 'undefined variable C...That's the fucking
-" name of the root drive on Windows!!
-" exec 'call plug#begin(' . stdpath('data') . '/plugged)'
-
-" This works but i'm gonna have to make a conditional for the func call which
-" feels like a waste..
-" Actually i should just refactor all of the vim-plug stuff out of this file
-" so that if plug.vim ever doesn't get sourced correctly i can still load
-" nvim to SOME extent...
-
-" we still aren't sourcing plug.vim in it at the right time
-" GOT IT! I checked `echo &rtp` and it's looking for the site folder in the nvim not nvim-data!!
-" ...well now that we got that sorted out can we not waste this time on the source?
-" exec 'source ' stdpath('config') . '/site/autoload/plug.vim'
-" let s:plugged_dir = stdpath('data') . '/plugged'
-
-" call plug#begin(s:plugged_dir)
-call plug#begin(stdpath('data') . '/plugged')
-
-Plug 'junegunn/vim-plug'        " plugception
-let g:plug_window = 'tabe'
-" Wait is the fact that I didn't use expand the reason FZF hasn't been working?
-Plug 'junegunn/fzf', { 'dir': expand('~/.fzf'), 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
-Plug 'airblade/vim-gitgutter'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-commentary'
-Plug 'w0rp/ale'
-
-if !empty(g:windows)
-  Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
+" Define The Plugs Dict: {{{2
+" Don't assume that the InstallPlug() func worked
+if empty('plugs')
+  let plugs = {}
 else
-  Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+  runtime junegunn.vim
 endif
-
-if exists('$TMUX')
-    Plug 'christoomey/vim-tmux-navigator'
-    Plug 'edkolev/tmuxline.vim'
-endif
-
-Plug 'mhinz/vim-startify'
-Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
-Plug 'greyblake/vim-preview'
-Plug 'lifepillar/vim-cheat40'
-Plug 'luffah/vim-zim', {'for': ['zimwiki', 'zimindex']}
-Plug 'tomtom/tlib_vim'  " this library is incredible
-
-" It's very frustrating having termux slow down beyond repair but also frustrating
-" not being able to use more than 15 plugins at any point in time
-
-if !g:termux
-    Plug 'autozimu/LanguageClient-neovim', {'do': ':UpdateRemotePlugins'}
-    Plug 'godlygeek/tabular'
-    Plug 'Rykka/InstantRst', {'for': 'rst'}
-    Plug 'gu-fan/riv.vim', {'for': 'rst'}
-    Plug 'junegunn/vim-peekaboo'
-    Plug 'tpope/vim-surround'
-    Plug 'mbbill/undotree', {'on': 'UndoTreeToggle'}
-    Plug 'chrisbra/csv.vim', {'for': 'csv'}
-    Plug 'omnisharp/omnisharp-vim', {'for': 'cs'}
-endif
-
-Plug 'vim-voom/voom'
-Plug 'neoclide/coc.nvim'
-Plug 'ervandew/supertab'
-
-Plug 'ryanoasis/vim-devicons'           " Keep at end!
-call plug#end()
 
 " Global Options: {{{1
 " Should probably load these before the runtime! call
@@ -250,7 +185,7 @@ let g:loaded_2html_plugin      = 1
 let g:loaded_logiPat           = 1
 
 " Get this going as soon as possible
-runtime! plugin/**/*.vim
+runtime! plugin/*.vim
 
 " General Syntax Highlighting: {{{2
 
@@ -337,66 +272,6 @@ if filereadable('/usr/share/dict/american-english')
     set dictionary+=/usr/share/dict/american-english
 endif
 
-" Fun With Clipboards: {{{2
-" I've been using vim for almost 3 years. I still don't have copy paste ironed out...
-" Let's start simple
-
-if has('unnamedplus')                   " Use the system clipboard.
-    set clipboard+=unnamed,unnamedplus
-else                                        " Accommodate Termux
-    set clipboard+=unnamed
-endif
-
-set pastetoggle=<F7>
-
-" Now let's set up the clipboard provider
-
-" First check that we're in a tmux session before trying this
-if exists('$TMUX')
-
-  " Now let's make a dictionary for copying and pasting actions. Name both
-  " to hopefully make debugging easier. In `he provider-clipboard` they define
-  " these commands so that they go to * and +....But what if we put them in
-  " named registers? Then we can still utilize the * and + registers however
-  " we want. Idk give it a try.
-  " Holy hell that emits a lot of warnings and error messages don't do that
-  " again.
-  "
-  " As an FYI, running `:echo provider#clipboard#Executable()` on Ubuntu gave
-  " me xclip so that's something worth knowing
-  let g:clipboard = {
-      \   'name': 'TmuxCopyPasteClipboard',
-      \   'copy': {
-      \      '*': 'tmux load-buffer -',
-      \      '+': 'tmux load-buffer -',
-      \    },
-      \   'paste': {
-      \      '*': 'tmux save-buffer -',
-      \      '+': 'tmux save-buffer -',
-      \   },
-      \   'cache_enabled': 1,
-      \ }
-else
-  if exists('$DISPLAY') && executable('xclip')
-    " This is how it's defined in autoload/providor/clipboard.vim
-    let g:clipboard = {
-      \    'name': 'xclipboard',
-      \    'copy': {
-      \       '*': 'xclip -quiet -i -selection primary',
-      \       '+': 'xclip -quiet -i -selection clipboard',
-      \    },
-      \   'paste': {
-      \       '*': 'xclip -o -selection primary',
-      \       '+': 'xclip -o -selection clipboard',
-      \   },
-      \   'cache_enabled': 1,
-      \ }
-  endif
-endif
-
-" Double check if we need to do this but sometimes the clipboard fries when set this way
-runtime! autoload/provider/clipboard.vim
-
 " Autocompletion: {{{2
 
 set wildmenu
@@ -433,10 +308,6 @@ endif
 
 let &path = &path . ',' . expand('$VIMRUNTIME')
 
-" Write Once Debug Everywhere: {{{2
-
-" The following are options set in order to promote one plug and play configuration
-" regardless of unix/windows/android etc
 set sessionoptions+=unix,slash
 
 " Well this definitely feels like it's never going to end.
@@ -529,9 +400,7 @@ endif
 
 " Switch CWD to the directory of the open buffer
 noremap <Leader>cd <Cmd>cd %:p:h<CR><Cmd>pwd<CR>
-
 vnoremap <BS> d
-
 noremap <Leader>cd <Cmd>cd %:p:h<CR><Bar><Cmd>pwd<CR>
 
 " Save a file as root
@@ -656,14 +525,6 @@ endfunction
 command! -bang Autosave call s:autosave(<bang>1)
 
 " Statusline: {{{2
-
-" %n is buffer #, %f is filename relative to $PWD, sep is right align
-" %m is modified?, %r is filetype,
-" TODO statusline groups
-" set statusline+=%h              " help file flag
-" set statusline+=\ (%{strftime(\"%H:%M\ %d/%m/%Y\",getftime(expand(\"%:p\")))})  " last modified timestamp
-" set statusline+=%l,%c%V         " Position in buffer: linenumber, column, virtual column
-
 function! s:statusline_expr() abort
   if exists('*WebDevIconsGetFileTypeSymbol')
     let dicons = ' %{WebDevIconsGetFileTypeSymbol()} '
@@ -681,7 +542,7 @@ endif
 
 if exists('*strftime')
 " Overtakes the whole screen when Termux zooms in
-  if &columns < 80
+  if &columns > 80
     let tstmp = ' ' . '%{strftime("%H:%M %m/%d/%Y", getftime(expand("%:p")))}'  " last modified timestamp
   else
     let tstmp = ''
@@ -707,16 +568,10 @@ command! -nargs=1 -bang -complete=file Rename f <args>|w<bang>
 "           :!dir <cfile>:S
 "           :call system('chmod +w -- ' . expand('%:S'))
 " From :he filename-modifiers in the cmdline page.
-
 command! -nargs=1 -complete=file Chmod call system('chmod +x ' . expand('%:S'))
-
-" Could do word under cursor. Could tack it on to some fzf variation. idk
 
 " Clear Hlsearch: {{{2
 
-" TODO: Also this exits and clears the highlighting
-" pattern as soon as you hit enter. So if you type a word, it'll highlight all
-" matches. But once you hit enter to find the next one it clears. Hmmm.
 set nohlsearch
 augroup vimrc_incsearch_highlight
     autocmd!
@@ -748,3 +603,7 @@ noremap <C-q> <Cmd>call <SID>QuickfixToggle()<CR>
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save
+
+" NewGrep: {{{2
+" he quickfix
+command! -nargs=+ NewGrep execute 'silent grep! <args>' | copen 42

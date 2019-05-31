@@ -6,12 +6,13 @@
 " ============================================================================
 
 " Guard: {{{1
-if exists('b:did_vim_after_ftplugin') || &compatible || v:version < 700
+if exists('g:did_vim_after_ftplugin') || &compatible || v:version < 700
   finish
 endi
-let b:did_vim_after_ftplugin = 1
+let g:did_vim_after_ftplugin = 1
 
 " Options: {{{1
+"
 setlocal expandtab
 setlocal shiftwidth=2
 setlocal tabstop=2

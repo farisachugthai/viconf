@@ -60,12 +60,16 @@ else:
 
 
 @pynvim.plugin
-class Pydoc(object):
+class Pydoc:
     """Read output from :mod:`pydoc` into a buffer."""
 
-    def __init__(self, vim):
+    def __init__(self, vim, env=None):
         """Initialize the class."""
         self.vim = vim
+        if env is not None:
+            self.env = env
+        else:
+            self.env = os.environ.items()
 
     @pynvim.command('Pydoc',
                     nargs=1,
@@ -89,9 +93,13 @@ class Pydoc(object):
 
 
 if __name__ == "__main__":
+    # should check for xdg data home existing too. probably should make this
+    # its own function
     if not os.environ.get('NVIM_PYTHON_LOG_FILE'):
         os.environ.putenv(
             'NVIM_PYTHON_LOG_FILE',
             os.path.join(os.environ.get('XDG_DATA_HOME'), '', 'nvim',
                          'python.log'))
-    setup_logging(name=__name__)
+    setup_logging(name='rplugin/python3/pydoc')
+
+    pydoc_plugin = Pydoc()

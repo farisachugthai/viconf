@@ -1,4 +1,20 @@
-" Profiling commands
+" ============================================================================
+  " File: betterprofiler.vim
+  " Author: Faris Chugthai
+  " Description: Profiling commands
+  " Last Modified: May 30, 2019
+" ============================================================================
+
+" Guard: {{{1
+if exists('g:did_better_profiler_vim_plugin') || &compatible || v:version < 700
+  finish
+endif
+let g:did_better_profiler_vim_plugin = 1
+
+let s:cpo_save = &cpoptions
+set cpoptions&vim
+
+" Functions: {{{1
 
 " 04/29/2019
 
@@ -6,6 +22,9 @@ function! g:BetterProfiler(fname) abort
   " Because Vim's built in profiling capabilities are nonsensical like wtf?
   setlocal shellslash
   profile! start tempfile.log
+
+  " Toggle debugging
+  let s:Debug = 0
 
   if s:Debug
     " echomsg fname actually causes an error so that's good i guess
@@ -17,8 +36,8 @@ function! g:BetterProfiler(fname) abort
   profile stop
   profile dump
 
-  msg = 'No errors mostly because fuck exception catching in this platform!'
-  return msg
+  let b:msg = 'No errors mostly because fuck exception catching in this platform!'
+  return b:msg
 endfunction
 
 " ...wth was i trying to do here?
@@ -43,3 +62,7 @@ function! s:profile(bang)
   endif
 endfunction
 command! -bang Profile call s:profile(<bang>0)
+
+" atexit: {{{1
+let &cpoptions = s:cpo_save
+unlet s:cpo_save

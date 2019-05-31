@@ -6,12 +6,16 @@
 " ============================================================================
 
 " Guard: {{{1
-if exists('b:did_windows_vim') || &compatible || v:version < 700
+if exists('g:did_windows_plugin') || &compatible || v:version < 700
   finish
 endif
-let b:did_windows_vim = 1
+let g:did_windows_plugin = 1
 
-" Here's a bunch from the nvim api. I wanna start experimenting with that and see how it goes
+let s:cpo_save = &cpoptions
+set cpoptions&vim
+
+" Here's a bunch from the nvim api. I wanna start experimenting with that and
+" see how it goes
 
 " EchoRTP: {{{1
 " The nvim API is seriously fantastic.
@@ -27,8 +31,10 @@ nnoremap <Leader>rt call g:EchoRTP()
 command! -nargs=0 EchoRTP call g:EchoRTP()
 
 " PreviewWord: {{{1
+
 " Open a tag for the word under the cursor in the preview window.
 " Could definitely do with a mapping
+
 function! g:PreviewWord() abort
 " From :he cursorhold-example
   if &previewwindow			" don't do this in the preview window
@@ -46,7 +52,7 @@ function! g:PreviewWord() abort
 
     " Try displaying a matching tag for the word under the cursor
     try
-       execute "ptag " . w
+       execute 'ptag ' . w
     catch
       return
     endtry
@@ -68,8 +74,11 @@ function! g:PreviewWord() abort
 endfunction
 
 " General Mappings: {{{1
-" To make navigating windows easier
+
+" To make navigating the location list and quickfiz easier
+" Also check ./unimpaired.vim
 noremap <leader>c <Cmd>cclose<CR><bar><Cmd>lclose<CR>
+noremap <leader>q <Cmd>copen<CR><bar><Cmd>lopen<CR>
 
 " Navigate windows more easily
 noremap <C-h> <Cmd>wincmd h<CR>
@@ -92,3 +101,8 @@ noremap! <A-h> <C-w>h
 noremap! <A-j> <C-w>j
 noremap! <A-k> <C-w>k
 noremap! <A-l> <C-w>l
+
+" atexit: {{{1
+
+let &cpoptions = s:cpo_save
+unlet s:cpo_save

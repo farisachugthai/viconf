@@ -2,21 +2,24 @@
     " File: rsi.vim
     " Author: Faris Chugthai
     " Description: A reimplementation of rsi.vim
-    " Last Modified: Jan 29, 2019
+    " Last Modified: May 30, 2019
 " ============================================================================
 
-if exists('did_rsi_vim') || &cp|| v:version < 700
+if exists('g:did_rsi_vim_plugin') || &cp|| v:version < 700
     finish
 endif
-let did_rsi_vim = 1
+let g:did_rsi_vim_pluginm = 1
 
 " Readline_Basics:{{{1
 
-" But wait can I get that cmdline completion behavior back?
+" Admonition: The below doesn't work the way youd assume.
 " cnoremap <Tab> <C-a>
-" This still ends up recursively binding where Tab inputs every completion suggestion it can
-" Tab maps to C-a so it brings up completion suggestions then home binds it tot he beginning of the
-" line after inserting. Shits retarded.
+" This still ends up recursively binding where Tab inputs every completion
+" suggestion it can so it brings up completion suggestions, then the C-a to
+" Home binding brings it to the beginning of the line after inserting.
+" Shits retarded.
+
+" Command Line: {{{2
 " start of line
 cnoremap <C-A> <Home>
 " back one character
@@ -37,10 +40,15 @@ cmap <A-f> <S-Right>
 cnoremap <C-v> <PageDown>
 " page up
 cmap <A-v> <PageUp>
+" TODO: do these work?
 " Top of buffer
 cmap <A\<> :norm gg
 " Bottom of buffer
 cmap <A\>> :norm G
+
+" Insert Mode: {{{2
+"
+inoremap <C-a> <C-o>^
 
 " History: {{{1
 
@@ -51,7 +59,6 @@ cmap <A-p> <Up>
 
 " Other: {{{1
 
-" How did I do this backwards??
 " It's annoying you lose a whole command from a typo
 cnoremap <Esc> <nop>
 " However I still need the functionality
@@ -60,6 +67,11 @@ cnoremap <C-g> <Esc>
 " From he cedit. Open the command window with F1 because it being bound to
 " help is SO annoying.
 execute 'set cedit=<F1>'
+
+" In the same line of thinking:
+" Avoid accidental hits of <F1> while aiming for <Esc>
+noremap! <F1> <Esc>
+
 
 " In case you want inspiration!
 " <A-BS> is delete previous word

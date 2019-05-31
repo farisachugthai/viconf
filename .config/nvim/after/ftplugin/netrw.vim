@@ -4,11 +4,12 @@
     " Description: Yes netrw is a ftplugin
     " Last Modified: April 30, 2019
 " ============================================================================
+
 " Guards: {{{1
-if exists('b:did_netrw_after_ftplugin') || &compatible || v:version < 700
+if exists('g:did_netrw_after_ftplugin') || &compatible || v:version < 700
     finish
 endif
-let b:did_netrw_after_ftplugin = 1
+let g:did_netrw_after_ftplugin = 1
 
 " Options: {{{1
 " Can be modified interactively using `:NetrwSettings` !!
