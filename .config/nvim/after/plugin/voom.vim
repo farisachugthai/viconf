@@ -10,10 +10,10 @@ if !has_key(plugs, 'voom')
     finish
 endif
 
-if exists('b:did_voom_after_plugin') || &compatible || v:version < 700
+if exists('g:did_voom_after_plugin') || &compatible || v:version < 700
     finish
 endif
-let b:did_voom_after_plugin = 1
+let g:did_voom_after_plugin = 1
 
 
 " Options: {{{1

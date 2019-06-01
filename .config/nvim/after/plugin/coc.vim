@@ -63,5 +63,6 @@ let g:coc_snippet_next = '<tab>'
 " Supertab's also installed hahahah
 let g:coc_snippet_prev = '<S-Tab>'
 
+" atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save
