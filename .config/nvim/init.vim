@@ -1,6 +1,6 @@
 " Neovim Configuration:
 " Maintainer: Faris Chugthai
-" Last Change: Apr 16, 2019
+" Last Change: May 31, 2019
 
 " Preliminaries: {{{1
 scriptencoding utf-8
@@ -159,6 +159,7 @@ let s:plugins = filereadable(expand(stdpath('data') . '/site/autoload/plug.vim')
 if empty(s:plugins)
   " bootstrap plug.vim on new systems
   function! s:InstallPlug()
+
     try
       " Successfully executed on termux
       execute('!curl --progress-bar --create-dirs -Lo ' . stdpath('data') . '/site/autoload/plug.vim' . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
@@ -187,8 +188,7 @@ let g:loaded_getscriptPlugin   = 1
 let g:loaded_2html_plugin      = 1
 let g:loaded_logiPat           = 1
 
-" Get this going as soon as possible
-runtime! plugin/*.vim
+runtime plugin/*.vim
 
 " General Syntax Highlighting: {{{2
 

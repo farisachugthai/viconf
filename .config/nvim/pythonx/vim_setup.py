@@ -24,6 +24,7 @@ Apr 19, 2019:
 import argparse
 import logging
 import os
+import shutil
 import subprocess
 import sys
 
@@ -34,7 +35,7 @@ except ImportError:
 else:
     NOREQUESTS = None
 
-logger = logging.getLogger(name=__name__)
+LOGGER = logging.getLogger(name=__name__)
 
 
 def _parse_arguments():
@@ -50,23 +51,28 @@ def _parse_arguments():
         - Add arguments for where they want the virtualenv to install this into
         - Argument for what additional packages they'd like
         - Give an option to specify a file with a listing of packages?
+
     """
     parser = argparse.ArgumentParser(
         description='Installs and sets up neovim.')
 
     parser.add_argument('-d',
                         '--plug-dir',
-                        dest='plugd',
+                        dest='plug_dir',
                         metavar="Directory for vim-plug",
                         help='The directory that vim-plug is downloaded to.')
     parser.add_argument("-p",
                         "--packages",
-                        dest="packages",
                         metavar="packages",
                         required=False,
                         default=None,
                         help="Packages for pip to install.")
     args = parser.parse_args()
+
+    # did we get any args
+    if len(sys.argv) == 1:
+        parser.print_help()
+        sys.exit()
 
     return args
 
@@ -77,9 +83,10 @@ class Machine:
     Probably gonna want to move those functions `get_home` and stuff into this class.
     """
 
-    def __init__(self, conda=None):
+    def __init__(self, home=None):
         """Initialize a machine."""
-        self.conda = conda
+        self.conda = shutil.which('conda')
+        self.home = home
 
     def get_home(self):
         """Get a user's home directory.
@@ -158,8 +165,9 @@ def termux_packages():
           should be assigned to something and returned right?
 
     """
-    subprocess.run(["pkg", "install", "vim-python", "python-dev"],
-                   capture_output=True)
+    output = subprocess.run(["pkg", "install", "vim-python", "python-dev"],
+                             capture_output=True)
+    return output
 
 
 def pip_version():
@@ -188,14 +196,14 @@ def pip_install(PIP37=None):
 
 
 def main():
-    # Before anything check that we're on a supported system.
-    home = get_home()
     uname = os.uname()  # store in a var for when we branch to other systems
+    # Before anything check that we're on a supported system.
     if uname[0] == 'Linux':
         pass
     else:
         sys.exit("Unfortunately your platform isn't supported yet. Sorry!")
 
+    home = Machine().get_home()
     # now that we know we're on a supported OS parse the args
     args = _parse_arguments()
 
@@ -217,7 +225,7 @@ def main():
         status = requests_download(url=url, plug=plug)
         if not status == 200:
             logging.warning("Vim plug download status code: ")
-            logging.warning(status)
+            logging.warning(status, exc_info=1)
 
     # could also have done platform.machine. *shrugs*
     # TODO: Download packages in a venv. Interestingly enough the PEP that

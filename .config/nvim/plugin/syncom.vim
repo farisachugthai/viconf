@@ -24,6 +24,7 @@ command! HiQF call g:syncom#HiQF()
 command! SyntaxInfo call g:syncom#get_syn_info()
 
 " Plug Mappings: {{{1
+" To attempt making this a little more modular.
 
 nnoremap <Plug>HL <Cmd>HL<CR>
 nnoremap <Plug>HiC <Cmd>HiC<CR>

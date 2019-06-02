@@ -45,7 +45,7 @@ Plug 'w0rp/ale'
 if !empty(g:windows)
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
 else
-  " Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+  Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 endif
 
 if exists('$TMUX')
@@ -56,7 +56,8 @@ endif
 Plug 'mhinz/vim-startify'
 Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
 Plug 'greyblake/vim-preview'
-" Plug 'luffah/vim-zim', {'for': ['zimwiki', 'zimindex']}
+Plug 'lifepillar/vim-cheat40'
+Plug 'luffah/vim-zim', {'for': ['zimwiki', 'zimindex']}
 Plug 'tomtom/tlib_vim'  " this library is incredible
 
 " It's very frustrating having termux slow down beyond repair but also frustrating
@@ -72,6 +73,7 @@ if !g:termux
     Plug 'chrisbra/csv.vim', {'for': 'csv'}
     Plug 'omnisharp/omnisharp-vim', {'for': 'cs'}
     Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
+    Plug 'ekalinin/Dockerfile.vim', {'for': 'dockerfile'}
 endif
 
 Plug 'vim-voom/voom'

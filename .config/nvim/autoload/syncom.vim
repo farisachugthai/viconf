@@ -10,6 +10,12 @@ if exists('g:did_autoload_syncom_vim') || &cp || v:version < 700
 endif
 let g:did_autoload_syncom_vim = 1
 
+let s:cpo_save = &cpoptions
+set cpoptions&vim
+
+let &cpoptions = s:cpo_save
+unlet s:cpo_save
+
 " Syntax Highlighting Functions: {{{1
 
 " HL: Whats the highlighting group under my cursor? {{{1
@@ -82,4 +88,15 @@ function! g:syncom#get_syn_info()
         \ ' ctermbg: ' . linkedSyn.ctermbg .
         \ ' guifg: ' . linkedSyn.guifg .
         \ ' guibg: ' . linkedSyn.guibg
+endfunction
+
+" Hitest: An easier way of sourcing hitest {{{1
+
+function! g:syncom#hitest() abort
+  try
+    so $VIMRUNTIME/syntax/hitest.vim
+  catch E403
+    " vint is listing an error...why? continue can go in a try block
+    continue
+  endtry
 endfunction
