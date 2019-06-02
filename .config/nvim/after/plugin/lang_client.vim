@@ -10,7 +10,7 @@ if !has_key(plugs, 'LanguageClient-neovim')
     finish
 endif
 
-" DUDE THIS NEEDS TO BE BUFFER LOCAL NOT GLOBAL! We need to re-source this file
+" This needs to be buffer local not global! We need to re-source this file.
 " every time we change filetypeeeee
 if exists('b:did_language_client_after_plugin') || &compatible || v:version < 700
     finish
@@ -69,7 +69,8 @@ endif
 
 " Commands: {{{1
 
-" LanguageClient Check: {{{2
+" LanguageClient Check:
+
 " Check if the LanguageClient is running.
 function! g:LC_Check()
   " No args

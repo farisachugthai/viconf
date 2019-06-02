@@ -34,7 +34,7 @@ let g:tagbar_show_linenumbers = -1
 let g:tagbar_foldlevel = 2
 
 
-" Mappings: {{{2
+" Mappings: {{{1
 
 noremap <silent> <F8> <Cmd>TagbarToggle<CR>
 noremap! <silent> <F8> <Cmd>TagbarToggle<CR>

@@ -36,7 +36,7 @@ noremap <Leader>* <Plug>(ale_go_to_reference)<CR>
 
 noremap <Leader>a <Cmd>ALEInfo<CR>
 
-" Options: {{{2
+" Options: {{{1
 
 " For buffer specific options, see ../ftplugin/*.vim
 let g:ale_fixers = { '*': [ 'remove_trailing_lines', 'trim_whitespace' ] }
@@ -52,7 +52,9 @@ let g:ale_set_signs = 1
 let g:ale_sign_column_always = 1
 let g:ale_virtualenv_dir_names = [ expand('$HOME/virtualenvs') ]
 
-" Quickfix:
+let g:ale_cache_executable_check_failures = v:true
+
+" Quickfix: {{{2
 
 " By default ale uses location list which I never remember
 let g:ale_set_quickfix = 1

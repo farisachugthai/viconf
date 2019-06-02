@@ -63,6 +63,7 @@ function! s:profile(bang)
 endfunction
 command! -bang Profile call s:profile(<bang>0)
 
-" atexit: {{{1
+" Atexit: {{{1
+
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

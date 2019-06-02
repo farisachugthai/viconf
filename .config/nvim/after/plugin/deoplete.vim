@@ -1,7 +1,6 @@
 " Deoplete:
 " Vim: scriptencoding=utf-8:
-" Trying to shut vint up but can't. Don't know what's wrong with the modeline.
-" But deoplete is probably gonna get canned because so far coc is lovely
+
 
 if !has_key(plugs, 'deoplete.nvim')
     finish

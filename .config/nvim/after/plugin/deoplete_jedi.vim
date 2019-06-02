@@ -10,10 +10,10 @@ if !has_key(plugs, 'deoplete_jedi')
     finish
 endif
 
-if exists('g:did_deoplete_jedi') || &compatible || v:version < 700
+if exists('g:did_deoplete_jedi_after_plugin') || &compatible || v:version < 700
     finish
 endif
-let g:did_deoplete_jedi = 1
+let g:did_deoplete_jedi_after_plugin = 1
 
 
 " Options: {{{1

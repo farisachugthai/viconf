@@ -1,14 +1,15 @@
 " Vim_Startify:
+" TODO: Holy hell this needs some reorganization.
 
 " Plugin Guard: {{{1
 if !has_key(plugs, 'startify')
     finish
 endif
 
-if exists('b:did_startify_after_plugin') || &cp || v:version < 700
+if exists('g:did_startify_after_plugin') || &cp || v:version < 700
     finish
 endif
-let b:did_startify_after_plugin = 1
+let g:did_startify_after_plugin = 1
 
 
 " List Commits: {{{1

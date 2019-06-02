@@ -6,8 +6,12 @@
 " ============================================================================
 
 " Guard: {{{1
-if exists('b:did_ftplugin') | finish | endif
-let b:did_ftplugin = 1
+" I don't know if this is how you do this. ftdetect folder doesn't exist in the
+" $VIMRUNTIME so we don't have a canonical reference. I suppose we could treat
+" tpope or junegunn as one but.. eh.
+
+" if exists('b:did_ftplugin') | finish | endif
+" let b:did_ftplugin = 1
 
 augroup xonsh_filetypedetect
     au!

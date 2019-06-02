@@ -11,18 +11,26 @@ if !has_key(plugs, 'supertab')
   finish
 endif
 
-if exists('b:did_supertab_after_plugin') || &compatible || v:version < 700
+if exists('g:did_supertab_after_plugin') || &compatible || v:version < 700
   finish
 endif
-let b:did_supertab_after_plugin = 1
+let g:did_supertab_after_plugin = 1
 
 
 " Culmination Of The Help Docs: {{{1
-  let g:SuperTabDefaultCompletionType = 'context'
+
+" Pretty much a copy paste of the help docs except I added the autocmd
+" to it's own augroup
+
+let g:SuperTabDefaultCompletionType = 'context'
+
+augroup SuperTabOmniFunc
+  autocmd!
   autocmd FileType *
     \ if &omnifunc != '' |
     \   call SuperTabChain(&omnifunc, "<c-p>") |
     \ endif
+augroup END
 
 
 " This configuration will result in a completion flow like so:

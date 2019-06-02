@@ -13,7 +13,7 @@ endif
 if exists('g:did_fzf_after_plugin') || &compatible || v:version < 700
     finish
 endif
-let b:did_fzf_after_plugin = 1
+let g:did_fzf_after_plugin = 1
 
 
 " General Setup: {{{1

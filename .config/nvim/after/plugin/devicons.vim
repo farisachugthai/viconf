@@ -10,10 +10,10 @@ if !has_key(plugs, 'devicons')
     finish
 endif
 
-if exists('g:loaded_devicons_conf') || &compatible || v:version < 700
+if exists('g:did_devicons_after_plugin') || &compatible || v:version < 700
     finish
 endif
-let g:loaded_devicons_conf = 1
+let g:did_devicons_after_plugin = 1
 
 
 " Options: {{{1

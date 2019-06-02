@@ -5,18 +5,20 @@
     " Last Modified: March 14, 2019
 " ============================================================================
 
+" Guards: {{{1
 if !has_key(plugs, 'lightline')
     finish
 endif
 
-if g:loaded_lightline
+if exists('g:did_lightline_after_plugin') || &compatible || v:version < 700
     finish
 endif
-
-let g:loaded_lightline = 1
+let g:did_lightline_after_plugin = 1
 
 let s:cpo_save = &cpo
 set cpo&vim
+
+" Options: {{{1
 
 let g:lightline = {
     \ 'active': {

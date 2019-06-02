@@ -16,7 +16,7 @@ let g:loaded_unimpaired_plugin = 1
 let s:cpo_save = &cpoptions
 set cpoptions&vim
 
-" Unimpaired: {{{1
+" Unimpaired Mappings: {{{1
 
 " Map quickfix list, buffers, windows and tabs to *[ and *]
 noremap ]q <Cmd>cnext<CR>
@@ -37,7 +37,7 @@ noremap ]T <Cmd>tablast<CR>
 noremap [T <Cmd>tabfirst<CR>
 
 
-" Navigate Buffers More Easily: {{{1
+" Navigate Buffers More Easily: *TODO*: Should we merge windows.vim into this file? {{{1
 
 noremap <Leader>bb <Cmd>buffers<CR>
 noremap <Leader>bd <Cmd>bdelete<CR>

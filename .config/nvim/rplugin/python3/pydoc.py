@@ -5,7 +5,7 @@
 Apr 18, 2019
 It works!
 
-So currently it opens up a new tab with your info.
+Currently it opens up a new tab with your info.
 
 If we decide to make this a full plugin distribute it as it's own filetype
 and distribute your own syntax highlighting.
@@ -44,6 +44,33 @@ endfun
 
 
 Take apart this function (or call it as your completer) and use that.
+
+06/02/2019:
+
+The only thing that PythonJedi does is determine py2 or 3. So we can skip that.
+jedi_vim is the pythonx file that jedi loads to call this function. 
+
+py_import_completions()::
+
+    @catch_and_print_exceptions
+    def py_import_completions():
+        argl = vim.eval('a:argl')
+        try:
+            import jedi
+        except ImportError:
+            print('Pyimport completion requires jedi module: https://github.com/davidhalter/jedi')
+            comps = []
+        else:
+            text = 'import %s' % argl
+            script = jedi.Script(text, 1, len(text), '', environment=get_environment())
+            comps = ['%s%s' % (argl, c.complete) for c in script.completions()]
+        vim.command("return '%s'" % '\n'.join(comps))
+
+Let's initialize a :class:`jedi.Script()` object, and return whatever we get by running a
+list comprehension over the completions data attribute of our :class:`jedi.Script()`
+object.
+
+*PHEW* we're getting closer.
 
 """
 import os

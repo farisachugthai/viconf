@@ -12,6 +12,7 @@ endif
 let g:did_terminally_unimpaired_vim = 1
 
 " Mappings: {{{1
+" hmmm. this file unimpaired.vim and windows.vim all serve the same purpose...
 
 " IPython in a Vim terminal acts oddly. If you hit i or a it doesn't move to where
 " your cursor is. It moves relative to its old positon.

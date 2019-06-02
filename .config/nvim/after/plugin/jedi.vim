@@ -9,16 +9,15 @@
 " many features are disabled. Jedi was responsible for over 80% of my startuptime
 " in some cases, which I was initially shocked by.
 
-
 " Guard: {{{1
 if !has_key(plugs, 'jedi-vim')
     finish
 endif
 
-if exists('b:did_jedi_after_plugin') || &compatible || v:version < 700
+if exists('g:did_jedi_after_plugin') || &compatible || v:version < 700
     finish
 endif
-let b:did_jedi_after_plugin = 1
+let g:did_jedi_after_plugin = 1
 
 " Options: {{{1
 

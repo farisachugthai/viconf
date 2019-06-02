@@ -25,6 +25,8 @@
 " call plug#begin(s:plugged_dir)
 
 " Well that crashed horribly
+"
+" Plugins: {{{1
 execute 'source ' . stdpath('data') . '/site/autoload/plug.vim'
 
 call plug#begin(stdpath('data') . '/plugged')
@@ -43,7 +45,7 @@ Plug 'w0rp/ale'
 if !empty(g:windows)
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
 else
-  Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+  " Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 endif
 
 if exists('$TMUX')
@@ -54,13 +56,11 @@ endif
 Plug 'mhinz/vim-startify'
 Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
 Plug 'greyblake/vim-preview'
-Plug 'lifepillar/vim-cheat40'
-Plug 'luffah/vim-zim', {'for': ['zimwiki', 'zimindex']}
+" Plug 'luffah/vim-zim', {'for': ['zimwiki', 'zimindex']}
 Plug 'tomtom/tlib_vim'  " this library is incredible
 
 " It's very frustrating having termux slow down beyond repair but also frustrating
 " not being able to use more than 15 plugins at any point in time
-
 if !g:termux
     Plug 'autozimu/LanguageClient-neovim', {'do': ':UpdateRemotePlugins'}
     Plug 'godlygeek/tabular'
@@ -71,6 +71,7 @@ if !g:termux
     Plug 'mbbill/undotree', {'on': 'UndoTreeToggle'}
     Plug 'chrisbra/csv.vim', {'for': 'csv'}
     Plug 'omnisharp/omnisharp-vim', {'for': 'cs'}
+    Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
 endif
 
 Plug 'vim-voom/voom'

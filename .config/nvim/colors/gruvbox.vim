@@ -8,10 +8,10 @@
 " -----------------------------------------------------------------------------
 
 " Guards: {{{
-if exists('b:did_gruvbox_colors') || &compatible || v:version < 700
+if exists('g:did_gruvbox_colors') || &compatible || v:version < 700
     finish
 endif
-let b:did_gruvbox_colors = 1
+let g:did_gruvbox_colors = 1
 
 " }}}
 

@@ -30,7 +30,12 @@ nnoremap <Plug>HiC <Cmd>HiC<CR>
 nnoremap <Plug>HiQF <Cmd>HiQF<CR>
 nnoremap <Plug>SyntaxInfo <Cmd>SyntaxInfo<CR>
 
-" atexit: {{{1
+" TODO: when i come up with some default mappings for this, remember to
+" use this idiom:
+" if !exists('no_plugin_maps') && !exists('no_windows_vim_maps') | call funcs
+" | endif
+
+" Atexit: {{{1
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

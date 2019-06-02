@@ -74,35 +74,48 @@ function! g:PreviewWord() abort
 endfunction
 
 " General Mappings: {{{1
+" This is specifically for ftplugins but why not add a check here regardless?
+" <						*no_plugin_maps*
+" 4. Disable defining mappings for all filetypes by setting a variable: >
+" 	:let no_plugin_maps = 1
 
-" To make navigating the location list and quickfiz easier
-" Also check ./unimpaired.vim
-noremap <leader>c <Cmd>cclose<CR><bar><Cmd>lclose<CR>
-noremap <leader>q <Cmd>copen<CR><bar><Cmd>lopen<CR>
+function! Buf_Window_Mapping() abort
+  " To make navigating the location list and quickfiz easier
+  " Also check ./unimpaired.vim
+  noremap <leader>c <Cmd>cclose<CR><bar><Cmd>lclose<CR>
+  noremap <leader>q <Cmd>copen<CR><bar><Cmd>lopen<CR>
 
-" Navigate windows more easily
-noremap <C-h> <Cmd>wincmd h<CR>
-noremap <C-j> <Cmd>wincmd j<CR>
-noremap <C-k> <Cmd>wincmd k<CR>
-noremap <C-l> <Cmd>wincmd l<CR>
+  " Navigate windows more easily
+  noremap <C-h> <Cmd>wincmd h<CR>
+  noremap <C-j> <Cmd>wincmd j<CR>
+  noremap <C-k> <Cmd>wincmd k<CR>
+  noremap <C-l> <Cmd>wincmd l<CR>
 
-" Resize them more easily. Finish more later. TODO
-noremap <C-w>< <Cmd>wincmd 5<<CR>
-noremap <C-w>> <Cmd>wincmd 5><CR>
+  " Resize them more easily. Finish more later. TODO
+  noremap <C-w>< <Cmd>wincmd 5<<CR>
+  noremap <C-w>> <Cmd>wincmd 5><CR>
+endfunction
 
 
-" ALT Key Window Navigation: {{{1
-" Originally this inspired primarily for terminal use but why not put it everywhere?
-noremap <A-h> <C-w>h
-noremap <A-j> <C-w>j
-noremap <A-k> <C-w>k
-noremap <A-l> <C-w>l
-noremap! <A-h> <C-w>h
-noremap! <A-j> <C-w>j
-noremap! <A-k> <C-w>k
-noremap! <A-l> <C-w>l
+  " ALT Key Window Navigation: {{{1
+function! Alt_Key_Navigation() abort
+  " Originally this inspired primarily for terminal use but why not put it everywhere?
+  noremap <A-h> <C-w>h
+  noremap <A-j> <C-w>j
+  noremap <A-k> <C-w>k
+  noremap <A-l> <C-w>l
+  noremap! <A-h> <C-w>h
+  noremap! <A-j> <C-w>j
+  noremap! <A-k> <C-w>k
+  noremap! <A-l> <C-w>l
+endfunction
 
-" atexit: {{{1
+if !exists('no_plugin_maps') && !exists('no_windows_vim_maps')
+  call Buf_Window_Mapping()
+  call Alt_Key_Navigation()
+endif
+
+" Atexit: {{{1
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

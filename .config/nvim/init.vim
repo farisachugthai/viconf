@@ -17,7 +17,10 @@ let g:ubuntu = has('unix') && !has('macunix')
 " how the literal fuck is `has('win32')` a nvim specific thing.
 " Just tried it in vim and it didn't work!!
 let g:windows = has('win32') || has('win64')
-let g:wsl = has('wsl')   " The fact that this is a thing blows my mind
+
+" The fact that this is a thing blows my mind
+" TODO: it doesn't work. - From wsl
+let g:wsl = has('wsl')
 
 " unabashedly stolen from junegunn dude is too good.
 let g:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/init.vim.local'
@@ -601,9 +604,9 @@ endfunction
 
 noremap <C-q> <Cmd>call <SID>QuickfixToggle()<CR>
 
-let &cpoptions = s:cpo_save
-unlet s:cpo_save
-
 " NewGrep: {{{2
 " he quickfix
 command! -nargs=+ NewGrep execute 'silent grep! <args>' | copen 42
+
+let &cpoptions = s:cpo_save
+unlet s:cpo_save

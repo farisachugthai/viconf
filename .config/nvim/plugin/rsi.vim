@@ -21,15 +21,15 @@ let g:did_rsi_vim_pluginm = 1
 
 " Command Line: {{{2
 " start of line
-cnoremap <C-A> <Home>
+cnoremap <C-a> <Home>
 " back one character
-cnoremap <C-B> <Left>
+cnoremap <C-b> <Left>
 " delete character under cursor
-cnoremap <C-D> <Del>
+cnoremap <C-d> <Del>
 " end of line. I think Vim's default behavior
-cnoremap <C-E> <End>
+cnoremap <C-e> <End>
 " forward one character
-cnoremap <C-F> <Right>
+cnoremap <C-f> <Right>
 
 " back one word
 cmap <A-b> <S-Left>
@@ -40,15 +40,16 @@ cmap <A-f> <S-Right>
 cnoremap <C-v> <PageDown>
 " page up
 cmap <A-v> <PageUp>
-" TODO: do these work?
+" TODO: do these work? Nope.
 " Top of buffer
-cmap <A\<> :norm gg
+" cmap <A\<> :norm gg
 " Bottom of buffer
-cmap <A\>> :norm G
+" cmap <A\>> :norm G
 
 " Insert Mode: {{{2
-"
-inoremap <C-a> <C-o>^
+
+" wait why doesn't this work? :/
+" inoremap <C-a> <C-o>^
 
 " History: {{{1
 

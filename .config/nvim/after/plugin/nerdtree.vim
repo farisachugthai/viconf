@@ -12,13 +12,14 @@
 "     finish
 " endif
 
-if exists('b:did_nerdtree') || &cp || v:version < 700
+if exists('g:did_nerdtree_after_plugin') || &compatible || v:version < 700
     finish
 endif
-let b:did_nerdtree = 1
+let g:did_nerdtree_after_plugin = 1
 
 
-" nerd_loader: autoload NERDTree {{{1
+" Nerd_Loader Autoload NERDTree: {{{1
+
 augroup nerd_loader
   autocmd!
   autocmd VimEnter * silent! autocmd! FileExplorer
@@ -37,10 +38,9 @@ augroup END
 " Mappings: {{{1
 
 " Simple way to speed up startup
-nnoremap <Leader>nt :NERDTreeToggle<CR>
+noremap <Leader>nt :NERDTreeToggle<CR>
 " Switch NERDTree root to dir of currently focused window.
-nnoremap <Leader>ncd :NERDTreeCWD
-
+noremap <Leader>ncd :NERDTreeCWD
 
 " Options: {{{1
 
