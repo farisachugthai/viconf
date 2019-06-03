@@ -38,6 +38,8 @@ if g:windows
   set fileformats=unix,dos
 endif
 
+set sessionoptions+=unix,slash
+
 " XDG Check: {{{2
 " The whole file is now predicated on these existing. Need to add checks in.
 " In $VIMRUNTIME/filetype.vim it looks like Bram himself checks env vars this way
@@ -152,7 +154,6 @@ else
 endif
 
 " Vim Plug: {{{1
-
 " Plug Check: {{{2
 let s:plugins = filereadable(expand(stdpath('data') . '/site/autoload/plug.vim'))
 
@@ -181,14 +182,13 @@ endif
 
 " Global Options: {{{1
 " Should probably load these before the runtime! call
-
 " Builtin Plugins: {{{2
 let g:loaded_vimballPlugin     = 1
 let g:loaded_getscriptPlugin   = 1
 let g:loaded_2html_plugin      = 1
 let g:loaded_logiPat           = 1
 
-runtime plugin/*.vim
+runtime plugin/*.vim                    " Load my plugins
 
 " General Syntax Highlighting: {{{2
 
@@ -214,9 +214,8 @@ let g:maplocalleader = '<Space>'
 
 if has('nvim-0.4')
     let &shadafile = expand('$XDG_DATA_HOME') . '/nvim/shada/main.shada'
-
   try
-    set pyx=3
+    set pyxversion=3
   catch /^Vim:E518:*/
   endtry
 else
@@ -252,6 +251,8 @@ endtry
 
 set hidden
 set splitbelow splitright
+" Resize windows automatically. nvim also autosets equalalways
+set winfixheight winfixwidth
 
 " Spell Checker: {{{2
 set spelllang=en
@@ -288,6 +289,14 @@ set wildoptions=tagfile
 set complete+=kspell                    " Autocomplete in insert mode
 set completeopt=menu,menuone,noselect,noinsert,preview
 
+" don't show more than 15 choices in the popup menu. defaults to 0
+set pumheight=15
+
+" idk if this is a new feature but let's try it out. toggle transparency in
+" pum
+set pumblend=80
+
+
 " Path: {{{2
 
 " DON'T USE LET. LET ALLOWS FOR EXPRESSION EVALUATION. MUST BE DONE WITH SET
@@ -311,19 +320,14 @@ endif
 
 let &path = &path . ',' . expand('$VIMRUNTIME')
 
-set sessionoptions+=unix,slash
-
-" Well this definitely feels like it's never going to end.
 if &term =~# 'xterm-256color' || &term ==# 'cygwin' || &term ==# 'builtin_tmux' || &term ==# 'tmux-256color' || &term ==# 'builtin-vtpcon'
-" mintty identifies itself as xterm-compatible
-" Yeah mintty does. Conemu/Cmder identify as cygwin sooo. we get ansi colors
   set termguicolors
-" This might be easier to check for lol
+
 elseif exists('ConEmuAnsi')
   set termguicolors
 endif
 
-" Used by the markprg. system locale is used
+" Used by the makeprg. system locale is used
 set makeencoding=char
 
 " Other Global Options: {{{2
@@ -387,7 +391,6 @@ set shortmess-=tT
 set sidescroll=10                       " Didn't realize the default is 1
 
 " Mappings: {{{1
-
 " General_Mappings: {{{2
 " I accidentally do this so often it feels necessary
 noremap q; q:
@@ -431,7 +434,6 @@ imap <C-f> <C-x><C-f>
 imap <C-l> <C-x><C-l>
 
 " Runtime: {{{1
-
 " Matching Parenthesis: {{{2
 
 runtime macros/matchit.vim
@@ -481,7 +483,6 @@ augroup omnifunc
 augroup END
 
 " Functions_Commands: {{{1
-
 " Helptabs: {{{2
 " I've pretty heavily modified this one but junegunn gets the initial credit.
 function! g:Helptab()
@@ -606,7 +607,7 @@ noremap <C-q> <Cmd>call <SID>QuickfixToggle()<CR>
 
 " NewGrep: {{{2
 " he quickfix
-command! -nargs=+ NewGrep execute 'silent grep! <args>' | copen 42
+command! -nargs=+ NewGrep execute 'silent grep! <args>' | copen
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

@@ -12,7 +12,11 @@ What were good reasons for writing a class that doesn't do anything?
 Or only defines an init?? I think that was in MIT600.
 
 Shit. This is probably gonna be hard really soon.
+
 """
+import logging
+import os
+from pathlib import Path
 import sys
 
 try:
@@ -20,13 +24,24 @@ try:
 except ImportError:  # Probably ModuleNotFound too but import is more backwards compatible
     sys.exit("Pynvim python library isn't installed. Exiting.")
 
+import vim
+
 
 @pynvim.plugin
 class App:
-    """Instantiate an object and bind functions to it's ns as properties."""
+    """Instantiate an object and bind functions to it's ns as properties.
 
-    def __init__(self, vim):
-        self.vim = vim
+    We can bind the :func:`os.environ` to the namespace and maybe also
+    :class:`pathlib.Path()` so that we can simply have those abstracted
+    away and add a ton of built-in methods for use with our class.
+
+    """
+
+    def __init__(self, _vim):
+        """Instantiate the remote python process for neovim."""
+        self.vim = _vim
+        self.env = os.environ
+        self.Path = Path
 
 
 class Instance(App):
@@ -55,6 +70,10 @@ class Instance(App):
 
 
     """
+
+    # we'll need to do an env check for NVIM_LISTEN_ADDRESS, then attach and
+    # that'll be our init method
+    # def __init__(self):
     pass
 
 
@@ -78,3 +97,50 @@ def list_buf():
     """
     bufnrs = vim.command('call nvim_list_bufs()')
     return bufnrs
+
+
+def check_and_set_envvar(envvar, default=None):
+    """Maintenance and housekeeping of the OS.
+
+    Parameters
+    ----------
+    envvar : str
+        Environment variable to check.
+    default : str, optional
+        If environment variable doesn't exist, set it to ``default``.
+
+    """
+    if not os.environ.get(envvar):
+        logging.debug(envvar + " not set.")
+        if default:
+            os.environ.setdefault(envvar, default)
+            logging.info(envvar + " set to: " + default)
+    else:
+        logging.debug(envvar + " already set to value of: " +
+                      os.environ.get(envvar))
+
+
+def main():
+    """Set logging, ensure the correct environment variables are set up.
+
+    Returns
+    -------
+    TODO
+
+    """
+    home = Path.home()
+    if sys.platform == 'linux':
+        xdg_data_default = str(home.joinpath('.local/share/'))
+    elif sys.platform.startswith('win'):
+        xdg_data_default = str(home.joinpath('AppData/Local/'))
+    check_and_set_envvar('XDG_DATA_HOME', default=xdg_data_default)
+
+    nvim_log_file = Path(xdg_data_default).joinpath('nvim/python.log')
+    check_and_set_envvar('NVIM_PYTHON_LOG_FILE', default=nvim_log_file)
+
+    nvim_log_level = 20
+    check_and_set_envvar('NVIM_PYTHON_LOG_LEVEL', default=nvim_log_level)
+
+
+if __name__ == "__main__":
+    main()

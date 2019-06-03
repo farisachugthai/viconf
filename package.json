@@ -8,8 +8,11 @@
   },
   "dependencies": {
     "coc-json": "^1.0.17",
+    "coc-python": "^1.1.14",
+    "coc-ultisnips": "^1.2.3",
     "coc.nvim": "^0.0.67",
     "neovim": "^4.5.0",
+    "vscode": "^1.1.34",
     "vscode-css-languageserver-bin": "^1.4.0",
     "vscode-html-languageserver-bin": "^1.4.0",
     "vscode-languageserver": "^5.2.1"

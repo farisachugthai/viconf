@@ -18,6 +18,7 @@ setlocal shiftwidth=2
 setlocal tabstop=2
 setlocal softtabstop=2
 setlocal suffixesadd=*.vim
+setlocal nolinebreak
 
 let &commentstring='" %s'
 
@@ -63,4 +64,4 @@ let g:vimsyn_folding = 'afP'
 
 let g:vimsyn_maxlines = 500  " why is the default 60???
 
-let b:undo_ftplugin = 'set com< cms< et< sw< ts< sts<'
+let b:undo_ftplugin = 'set com< cms< et< sw< ts< sts< linebreak<'

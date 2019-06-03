@@ -9,5 +9,16 @@
     "suggest.preferCompleteThanJumpPlaceholder": true,
     "coc.preferences.extensionUpdateCheck": "never",
     "coc.preferences.currentFunctionSymbolAutoUpdate": true,
-    "list.source.symbols.defaultOptions": ["--interactive", "--number-select"]
+    "list.source.symbols.defaultOptions": ["--interactive", "--number-select"],
+    "python.condaPath": "~/miniconda3/bin/conda",
+    "python.autoComplete.addBrackets": true,
+    "python.formatting.provider": "yapf",
+    "python.linting.flake8Enabled": true,
+    "python.linting.pydocstyleEnabled": true,
+    "python.linting.pylintEnabled": false,
+    "python.linting.pylintUseMinimalCheckers": true,
+    "python.terminal.executeInFileDir": true,
+    "python.venvPath": "~/miniconda3/envs/",
+    "python.jediEnabled": true,
+    "python.linting.banditEnabled": true
 }

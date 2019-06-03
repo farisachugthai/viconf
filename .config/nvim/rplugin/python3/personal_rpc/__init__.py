@@ -49,64 +49,23 @@ We should set up our own logging package. *sigh*.
     Don't import vim! That works in the ../../pythonx/ directory but crashes the
     remote host if used here.
 
+
+.. todo::
+
+    Jun 03, 2019: As currently set up these files don't get registered as a
+    remote plugin
+
 """
 import logging
 import os
-from pathlib import Path
 import sys
 
 try:
     import pynvim  # noqa F401
 except ImportError:
-    sys.exit('Pynvim not installed.')
+    try:
+        import neovim
+    except ImportError:
+        sys.exit('Pynvim not installed.')
 else:
     from pynvim import setup_logging
-
-from Neovim import *
-from pydoc import *
-
-
-def check_and_set_envvar(envvar, default=None):
-    """Maintenance and housekeeping of the OS.
-
-    Parameters
-    ----------
-    envvar : str
-        Environment variable to check.
-    default : str, optional
-        If environment variable doesn't exist, set it to ``default``.
-    """
-    if not os.environ.get(envvar):
-        logging.debug(envvar + " not set.")
-        if default:
-            os.environ.setdefault(envvar, default)
-            logging.info(envvar + " set to: " + default)
-    else:
-        logging.debug(envvar + " already set to value of: " +
-                      os.environ.get(envvar))
-
-
-def main():
-    """Setup logging, ensure the correct environment variables are set up.
-
-    Returns
-    -------
-    TODO
-
-    """
-    home = Path.home()
-    if sys.platform == 'linux':
-        xdg_data_default = str(home.joinpath('.local/share/'))
-    elif sys.platform.startswith('win'):
-        xdg_data_default = str(home.joinpath('AppData/Local/'))
-    check_and_set_envvar('XDG_DATA_HOME', default=xdg_data_default)
-
-    nvim_log_file = Path(xdg_data_default).joinpath('nvim/python.log')
-    check_and_set_envvar('NVIM_PYTHON_LOG_FILE', default=nvim_log_file)
-
-    nvim_log_level = 20
-    check_and_set_envvar('NVIM_PYTHON_LOG_LEVEL', default=nvim_log_level)
-
-
-if __name__ == "__main__":
-    main()
