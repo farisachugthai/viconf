@@ -38,8 +38,8 @@ if g:windows
   set fileformats=unix,dos
 endif
 
+" To encourage cross platform use
 set sessionoptions+=unix,slash
-
 " XDG Check: {{{2
 " The whole file is now predicated on these existing. Need to add checks in.
 " In $VIMRUNTIME/filetype.vim it looks like Bram himself checks env vars this way
@@ -116,10 +116,15 @@ if exists('$VIRTUAL_ENV')
     let g:python3_host_prog = expand('$VIRTUAL_ENV') . '/bin/python'
     let &path = &path . ',' . expand('$VIRTUAL_ENV') . '/lib/python3/*'
 
-" Or a conda env. Not trying to ruin your day here but Windows sets a var
-" '$CONDA_PREFIX_1' if CONDA_SHLVL > 1....
+" Check if we have a pipenv
+elseif exists('$PIPENV_ACTIVE')
+    let g:python3_host_prog = expand('$PIP_PYTHON_PATH')
+    let &path = &path . ',' .expand('$PIP_PYTHON_PATH')
+
+" Or a conda env
 elseif exists('$CONDA_PREFIX')
-    " Needs to use CONDA_PREFIX as the other env vars conda sets will only establish the base env not the current one
+    " Needs to use CONDA_PREFIX as the other env vars conda sets will only
+    " establish the base env not the current one
     let g:python3_host_prog = expand('$CONDA_PREFIX/bin/python3')
     " Let's hope I don't break things for Windows
     let &path = &path . ',' . expand('$CONDA_PREFIX/lib/python3/*')
@@ -181,7 +186,6 @@ else
 endif
 
 " Global Options: {{{1
-" Should probably load these before the runtime! call
 " Builtin Plugins: {{{2
 let g:loaded_vimballPlugin     = 1
 let g:loaded_getscriptPlugin   = 1
@@ -212,13 +216,16 @@ noremap <Space> <nop>
 map <Space> <Leader>
 let g:maplocalleader = '<Space>'
 
+" if has(nvim-0.4): {{{2
 if has('nvim-0.4')
-    let &shadafile = expand('$XDG_DATA_HOME') . '/nvim/shada/main.shada'
+  let &shadafile = expand('$XDG_DATA_HOME') . '/nvim/shada/main.shada'
+" toggle transparency in the pum
+  set pumblend=80
   try
     set pyxversion=3
   catch /^Vim:E518:*/
   endtry
-else
+" else
   " on windows we'd prefer it go to nvim-data but we can't specify it this way
   " set shada+=n$XDG_DATA_HOME/nvim/shada/main.shada
 endif
@@ -292,23 +299,11 @@ set completeopt=menu,menuone,noselect,noinsert,preview
 " don't show more than 15 choices in the popup menu. defaults to 0
 set pumheight=15
 
-" idk if this is a new feature but let's try it out. toggle transparency in
-" pum
-set pumblend=80
-
-
 " Path: {{{2
 
 " DON'T USE LET. LET ALLOWS FOR EXPRESSION EVALUATION. MUST BE DONE WITH SET
 " OR THE ** WILL EXPAND {rendering it as nothing}
 set path+=**                            " Recursively search dirs with :find
-
-" TODO: Come up with a function that checks if i a directory exists and then
-" adds to path. also come up with another that checks if a  file exists and
-" return a bool because man is it annoying to do that as is
-" function! s:pathadder() abort
-"     if is
-" double check syntax on adding parameters
 
 if isdirectory(expand('$_ROOT/local/include/'))
     let &path = &path . ',' . expand('$_ROOT/local/include')
@@ -609,5 +604,32 @@ noremap <C-q> <Cmd>call <SID>QuickfixToggle()<CR>
 " he quickfix
 command! -nargs=+ NewGrep execute 'silent grep! <args>' | copen
 
+" Title: {{{2
+" From `:he change`  line 352 tag g?g?
+" Adding range means that the command defaults to cuurent line
+" Need to add a check that we're in visual mode and drop the '<,'> if not.
+command! -nargs=0 -range Title <Cmd>'<,'>s/\v<(.)(\w*)/\u\1\L\2/g
+
+" Global Ftplugin: {{{2
+function! s:after_ft()
+
+  let s:cur_ft = &filetype
+  let s:after_ftplugin_dir = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/after/ftplugin/'
+  let s:after_ftplugin_file = s:after_ftplugin_dir . s:cur_ft . '.vim'
+  let s:ftplugin_dir = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/ftplugin/'
+  let s:ftplugin_file = s:ftplugin_dir . s:cur_ft . '.vim'
+
+  if file_readable(s:ftplugin_file)
+    exec 'edit ' . s:ftplugin_file
+  endif
+
+  if file_readable(s:after_ftplugin_file)
+    exec 'edit ' . s:after_ftplugin_file
+  endif
+endfunction
+
+command! -nargs=0 EditThisFiletype call s:after_ft()
+
+" Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

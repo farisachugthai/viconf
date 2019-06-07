@@ -172,7 +172,7 @@ HTTPServer
 Harleysville
 Hettinger
 I'll
-I've/have
+I've
 IPv4
 IPv6
 IPython
@@ -1606,3 +1606,8 @@ zshrc
 µTP
 µTorrent
 Jinja2
+Pipfile
+envvar
+bytestream
+nc
+metacharacters

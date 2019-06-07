@@ -65,7 +65,7 @@ nnoremap <silent> <expr> <LocalLeader><LocalLeader> (expand('%') =~ 'NERD_tree' 
 
 " The remainder behave as expected.
 noremap <silent> <Leader>C        <Cmd>Colors<CR>
-noremap <silent> <Leader><CR>  <Cmd>Buffers<CR>
+noremap <silent> <Leader><CR>     <Cmd>Buffers<CR>
 noremap <Leader>bu                <Cmd>Buffers<CR>
 noremap <Leader>bB                <Cmd>Buffers<CR>
 noremap <Leader>f                 <Cmd>Files<CR>
@@ -100,10 +100,14 @@ nnoremap <silent> <Leader>`        <Cmd>Marks<CR>
 noremap <Leader>gg <Cmd>GGrep<Space>
 noremap <Leader>gl <Cmd>Commits<CR>
 
+cabbrev Gl Commits
+
 " [[B]Commits] Customize the options used by 'git log':
 let g:fzf_commits_log_options = ' --graph --color=always --all --branches --pretty --format="h%d %s %c(black)%c(bold)%cr $*n"'
 
 noremap <Leader>GS <Cmd>GFiles?<CR>
+
+cabbrev GS GFiles?
 
 " Global Line Completion: {{{2
 
@@ -243,3 +247,51 @@ command! PlugHelp call fzf#run(fzf#wrap({
 let g:ag_command = 'ag --smart-case -u -g " " --'
 
 command! -bang -nargs=* F call fzf#vim#grep(g:ag_command .shellescape(<q-args>), 1, <bang>0)
+
+" FZFBuffers FZFMRU FZFGit: {{{2
+
+function! s:buflist()
+  redir => ls
+  silent ls
+  redir END
+  return split(ls, '\n')
+endfunction
+
+function! s:bufopen(e)
+  execute 'buffer' matchstr(a:e, '^[ 0-9]*')
+endfunction
+
+command! FZFBuffers call fzf#run({
+        \ 'source':  reverse(<sid>buflist()),
+        \ 'sink':    function('<sid>bufopen'),
+        \ 'options': '+m',
+        \ 'down':    len(<sid>buflist()) + 2
+        \ })
+
+function! FZFMru()
+    call fzf#run({
+        \ 'source':   v:oldfiles,
+        \ 'sink' :   'edit',
+        \ 'options': '-m --no-sort',
+        \ 'down':    '40%'
+        \ })
+endfunction
+command! FZFMru call FZFMru()
+
+
+function! FZFGit()
+    " Remove trailing new line to make it work with tmux splits
+    let directory = substitute(system('git rev-parse --show-toplevel'), '\n$', '', '')
+    if !v:shell_error
+        lcd `=directory`
+        call fzf#run({
+            \ 'sink': 'edit',
+            \ 'dir': directory,
+            \ 'source': 'git ls-files',
+            \ 'down': '40%'
+            \ })
+    else
+        FZF
+    endif
+endfunction
+command! FZFGit call FZFGit()

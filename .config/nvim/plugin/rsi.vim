@@ -5,7 +5,8 @@
     " Last Modified: May 30, 2019
 " ============================================================================
 
-if exists('g:did_rsi_vim_plugin') || &cp|| v:version < 700
+" Guards: {{{1
+if exists('g:did_rsi_vim_plugin') || &compatible || v:version < 700
     finish
 endif
 let g:did_rsi_vim_pluginm = 1
@@ -74,15 +75,15 @@ execute 'set cedit=<F1>'
 noremap! <F1> <Esc>
 
 
-" In case you want inspiration!
+" In case you want inspiration!: {{{2
 " <A-BS> is delete previous word
 " C-k is kill from cursor to end of line
-
-" Already default Vim behavior!
-" C-u is either kill from cursor to beginning of line or an indication of a
-" count with a command
-
 " C-y is yank.
-
 " Idk if this would only work in the command window but <C-v> and <M-v> would
 " be page forward and page back. Think Vim C-f and C-b.
+
+" Already default Vim behavior!: {{{2
+" C-u is either kill from cursor to beginning of line or an indication of a
+" count with a command
+" C-w is backwards delete word so that's 2.
+" C-j and C-m for accept and enter new line make 4!
