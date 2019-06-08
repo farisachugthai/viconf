@@ -190,7 +190,7 @@ if filereadable(expand('$XDG_CONFIG_HOME') . '/nvim/spell/en.utf-8.add')
     let &spellfile = expand('$XDG_CONFIG_HOME') . '/nvim/spell/en.utf-8.add'
 
 elseif filereadable(expand('~/projects/viconf/.config/nvim/spell/en.utf-8.add'))
-    let &spellfile = expand('$HOME') . '/projects/viconf/.config/nvim/spell/en.utf-8.add'
+    let &spellfile = expand('~') . '/projects/viconf/.config/nvim/spell/en.utf-8.add'
 endif
 
 set spellsuggest=5                      " Limit the number of suggestions from 'spell suggest'
@@ -526,7 +526,6 @@ noremap <C-q> <Cmd>call <SID>QuickfixToggle()<CR>
 " he quickfix
 command! -nargs=+ NewGrep execute 'silent grep! <args>' | copen
 
-<<<<<<< HEAD
 " Title: {{{2
 " From `:he change`  line 352 tag g?g?
 " Adding range means that the command defaults to cuurent line

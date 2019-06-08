@@ -2,7 +2,7 @@
     " File: remote.vim
     " Author: Faris Chugthai
     " Description: All the remote hosts that Neovim loads
-    " Last Modified: June 08, 2019 
+    " Last Modified: June 08, 2019
 " ============================================================================
 
 " Preliminaries: {{{1
@@ -13,11 +13,32 @@ set cpoptions&vim
 " Remote Hosts: {{{1
   " Set the node and ruby remote hosts
 
-if g:termux
-  " yarn global
-  let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
+function! Get_Node_Host() abort
+  " So we should be able to refactor the yarn portion out.
+  " It's the same on every platform.
+  if executable('yarn')
+    if filereadable(shellescape(expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'))
+      let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
+    endif
 
-  " gem remote host
+  elseif executable('which')   " if we're using bash or we have 'nix tools loaded
+
+      " slashes end up backwards on windows but let's see if that's not a problem
+      " postscript: if it is utilize a function! g:Slash() abort
+      " tr('\\', '/') or some shit to fix path names. Check out fugitive
+      " or pathogen for inspiration.
+      let g:node_host_prog = system('which node')
+
+  else
+    let g:loaded_node_provider = 1
+  endif
+endfunction
+
+call Get_Node_Host()
+
+" gem remote host. should be refactored.
+if g:termux
+
   if filereadable(expand($_ROOT) . 'lib/ruby/gems/2.6.3/gems/neovim-0.8.0/exe/neovim-ruby-host')
       let g:ruby_host_prog = expand($_ROOT) . 'lib/ruby/gems/2.6.3/gems/neovim-0.8.0/exe/neovim-ruby-host'
   elseif filereadable(expand('$_ROOT') . 'bin/neovim-ruby-host')
@@ -25,23 +46,12 @@ if g:termux
   endif
 
 elseif g:ubuntu
-  let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
-
   if executable('rvm')
       let g:ruby_host_prog = 'rvm system do neovim-ruby-host'
   elseif filereadable(expand('$_ROOT') . '/local/bin/neovim-ruby-host')
       let g:ruby_host_prog = expand('$_ROOT') . '/local/bin/neovim-ruby-host'
   elseif filereadable('~/.local/bin/neovim-ruby-host')
       let g:ruby_host_prog = '~/.local/bin/neovim-ruby-host'
-  endif
-
-elseif g:windows
-  if filereadable(expand('$XDG_DATA_HOME') . '/Yarn/Data/global/node_modules/.bin/neovim-node-host.cmd')
-    let g:node_host_prog = expand('$XDG_DATA_HOME') . '/Yarn/Data/global/node_modules/.bin/neovim-node-host.cmd'
-  elseif executable('which')   " if we're using bash or we have 'nix tools loaded
-
-      " slashes end up backwards but let's see if that's not a problem
-      let g:node_host_prog = system('which node')
   endif
 
 endif

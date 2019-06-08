@@ -1,4 +1,5 @@
 {
+	"coc.preferences.diagnostic.displayByAle": true,
     "suggest.autoTrigger": "none",
     "suggest.triggerAfterInsertEnter": true,
     "suggest.enablePreview": true,
