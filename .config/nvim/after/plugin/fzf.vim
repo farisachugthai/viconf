@@ -32,7 +32,8 @@ let g:fzf_action = {
   \ 'ctrl-v': 'vsplit' }
 
 " Apr 16, 2019: I'm gonna move this down a directory into the nvim one
-let g:fzf_history_dir = expand('$XDG_DATA_HOME') . '/nvim/fzf-history'
+" June 08, 2019: Changing to stdpath so that it goes to the right dir on Windows
+let g:fzf_history_dir = stdpath('data') . '/fzf-history'
 
 " FZF Colors: {{{1
 

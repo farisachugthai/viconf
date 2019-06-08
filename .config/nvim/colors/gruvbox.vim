@@ -231,6 +231,9 @@ else
   let s:fg4_256 = s:gb.dark4_256
 
   let s:red    = s:gb.faded_red
+  " 06/08/2019: This is showing up white on WSL...?
+  " GruvboxGreenBold xxx cterm=bold ctermfg=142 gui=bold guifg=#b8bb26
+
   let s:green  = s:gb.faded_green
   let s:yellow = s:gb.faded_yellow
   let s:blue   = s:gb.faded_blue
