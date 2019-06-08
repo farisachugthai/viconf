@@ -5,6 +5,7 @@ This directory contains the snippets for `UltiSnips`_.
 
 .. _`UltiSnips`: https://github.com/sirver/ultisnips
 
+.. highlight:: vim
 
 Notes on Ultisnips
 =======================
@@ -52,10 +53,11 @@ The following are options to modify the way that snippets behave. My most
 commonly used options are::
 
     b  Only expand a snippet if it is the only text on the line
-       ...
-    s  Remove whitespace immediately at the end of a line after skipping over a
-       tabstop. This is useful if there is a
-       tabstop with optional text at the end of a line.
+
+    s  Remove whitespace immediately at the end of a line after skipping
+       over a tabstop. This is useful if there is a tabstop with optional text
+       at the end of a line.
+
     t  Do not expand tabs - If a snippet definition includes leading tab
        characters, by default UltiSnips expands the tab characters honoring
        the Vim 'shiftwidth', 'softtabstop', 'expandtab' and 'tabstop'
@@ -63,6 +65,7 @@ commonly used options are::
        replaced with spaces.) If this option is set, UltiSnips will ignore the
        Vim settings and insert the tab characters as is. This option is useful
        for snippets involved with tab delimited formats.
+
     w  Word boundary - With this option, the snippet is expanded if
        the tab trigger start matches a word boundary and the tab trigger end
        matches a word boundary. In other words the tab trigger must be
@@ -158,11 +161,11 @@ you have them defined. If you've defined the same word in different
 snippet files, (I.E. I have doc defined in most snippet files), then
 it will display:
 
-   1. (doc) description <File-Location>
+1. (doc) description <File-Location>
 
 Which will indicate to you exactly which filetype it came from.
 
-Vim has spotty handling of the Alt or Meta key; however Neovim handles
+Vim has spotty handling of the :kbd:`Alt` or Meta key; however Neovim handles
 it quite gracefully. This leaves a full modifier key that has almost nothing
 bound to it, and as a result, I'd recommend binding it in your init.vim
 somewhat like this.
@@ -173,25 +176,25 @@ somewhat like this.
 
 
 .. code-block:: html
+
    <kbd>M-u</kbd>
 
 Isn't bound to anything in insert mode; however,
 it is bound to delete a fairly large amount of text in normal mode.
 
-Be careful of that, and possibly disable it by remapping it to **<nop>**.
+Be careful of that, and possibly disable it by remapping it to :kbd:`nop`.
 
 Just added the `m` option to a bunch of these to eliminate
-trailing whitespace. Also adding $0 to a couple. I've noticed that if you
+trailing whitespace. Also adding ``$0`` to a couple. I've noticed that if you
 press `UltiSnipsNextTrigger` on the last one that it deletes the word.
 
-Adding a bare $0 on the last line of the snippet ensures that we can tab all
+Adding a bare ``$0`` on the last line of the snippet ensures that we can tab all
 the way over and not delete anything. Then the `m` option ensures we don't
 have trailing whitespace.
 
 
 Programmatic Editing
 --------------------
-
 
 Vim's Search and Replace
 ~~~~~~~~~~~~~~~~~~~~~~~~

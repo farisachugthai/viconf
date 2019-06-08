@@ -37,9 +37,13 @@ setlocal spell
 setlocal colorcolumn=50,73
 setlocal linebreak
 
-" atexit: {{{1
+" More tpope. Official git commit ftplugin.
+setlocal formatoptions-=t formatoptions+=croql
+setlocal comments=:#,:; commentstring=;\ %s
 
-let b:undo_ftplugin = 'set tw< sp< cc<'
+" Atexit: {{{1
+
+let b:undo_ftplugin = 'set tw< sp< cc< fo< com< cms<'
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save
