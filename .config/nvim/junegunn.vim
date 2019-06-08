@@ -1,31 +1,13 @@
 " A Vim Script to isolate where I define my plugins.
 
+scriptencoding utf-8
 " Note that this will only work on neovim as it it makes a call
 " to Vim-Plug using the function stdpath() which only exists on neovim
+" todo: get the plugin guard in here
 
 " General Plugins: {{{1
-" I don't know why this isn't working but let's try this
-
-" this is unreal. how is this saying 'undefined variable C...That's the fucking
-" name of the root drive on Windows!!
-" exec 'call plug#begin(' . stdpath('data') . '/plugged)'
-
-" This works but i'm gonna have to make a conditional for the func call which
-" feels like a waste..
-" Actually i should just refactor all of the vim-plug stuff out of this file
-" so that if plug.vim ever doesn't get sourced correctly i can still load
-" nvim to SOME extent...
-
-" we still aren't sourcing plug.vim in it at the right time
 " GOT IT! I checked `echo &rtp` and it's looking for the site folder in the nvim not nvim-data!!
-" ...well now that we got that sorted out can we not waste this time on the source?
-" exec 'source ' stdpath('config') . '/site/autoload/plug.vim'
-" let s:plugged_dir = stdpath('data') . '/plugged'
 
-" call plug#begin(s:plugged_dir)
-
-" Well that crashed horribly
-"
 " Plugins: {{{1
 execute 'source ' . stdpath('data') . '/site/autoload/plug.vim'
 
@@ -45,6 +27,8 @@ Plug 'w0rp/ale'
 if !empty(g:windows)
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
 else
+  " I just expanded 2 snippets on Windows...Coc expanded them without
+  " UltiSnips being loaded...
   Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 endif
 
@@ -56,17 +40,18 @@ endif
 Plug 'mhinz/vim-startify'
 Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
 Plug 'greyblake/vim-preview'
-Plug 'lifepillar/vim-cheat40'
 Plug 'luffah/vim-zim', {'for': ['zimwiki', 'zimindex']}
 Plug 'tomtom/tlib_vim'  " this library is incredible
 
 " It's very frustrating having termux slow down beyond repair but also frustrating
 " not being able to use more than 15 plugins at any point in time
 if !g:termux
-    Plug 'autozimu/LanguageClient-neovim', {'do': ':UpdateRemotePlugins'}
+    " honestly this almost never actually begins the language server
+    " Plug 'autozimu/LanguageClient-neovim', {'do': ':UpdateRemotePlugins'}
     Plug 'godlygeek/tabular'
-    Plug 'Rykka/InstantRst', {'for': 'rst'}
-    Plug 'gu-fan/riv.vim', {'for': 'rst'}
+    " Plug 'Rykka/InstantRst', {'for': 'rst'}
+    " uses python2 syntax and that's killing windows
+    " Plug 'gu-fan/riv.vim', {'for': 'rst'}
     Plug 'junegunn/vim-peekaboo'
     Plug 'tpope/vim-surround'
     Plug 'mbbill/undotree', {'on': 'UndoTreeToggle'}
