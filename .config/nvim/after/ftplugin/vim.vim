@@ -11,20 +11,22 @@ if exists('g:did_vim_after_ftplugin') || &compatible || v:version < 700
 endi
 let g:did_vim_after_ftplugin = 1
 
+let s:cpo_save = &cpoptions
+set cpoptions&vim
+
 " Options: {{{1
-"
+
 setlocal expandtab
 setlocal shiftwidth=2
 setlocal tabstop=2
 setlocal softtabstop=2
-setlocal suffixesadd=*.vim
+setlocal suffixesadd+=.vim
 setlocal nolinebreak
 
 let &commentstring='" %s'
 
 " This is the absolute worst way to implement this
 " setlocal comments="
-
 
 " Syntax Highlighting: {{{1
 " Let's add a little meat in here shall we?
@@ -64,4 +66,8 @@ let g:vimsyn_folding = 'afP'
 
 let g:vimsyn_maxlines = 500  " why is the default 60???
 
-let b:undo_ftplugin = 'set com< cms< et< sw< ts< sts< linebreak<'
+" Atexit: {{{1
+let b:undo_ftplugin = 'set com< cms< et< sw< ts< sts< linebreak< sua<'
+
+let &cpoptions = s:cpo_save
+unlet s:cpo_save

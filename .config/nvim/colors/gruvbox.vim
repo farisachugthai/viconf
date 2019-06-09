@@ -912,10 +912,27 @@ hi! link gitcommitDiscardedFile GruvboxRed
 " Filetype specific -----------------------------------------------------------
 
 " Man.vim: {{{
+" Define the default highlighting.
+" Only when an item doesn't have highlighting yet
+
+highlight default link manTitle          Title
+highlight default link manSectionHeading Statement
+highlight default link manOptionDesc     Constant
+highlight default link manReference      PreProc
+highlight default link manSubHeading     Function
+
+highlight default manUnderline cterm=underline gui=underline
+highlight default manBold      cterm=bold      gui=bold
+highlight default manItalic    cterm=italic    gui=italic
+
+" And the rest
   hi! link manCError GruvboxRed
   hi! link manEmail GruvboxAqua
   hi! link manEnvVar GruvboxBlue
   hi! link manEnvVarFile GruvboxBlue
+  hi! link manEnvVarFile GruvboxBlue
+  hi! link manFile GruvboxYellow
+  hi! link manFiles GruvboxFg0
   hi! link manFooter GruvboxPurple
   hi! link manHighlight GruvboxYellow
   hi! link manHistory GruvboxYellow
@@ -924,6 +941,7 @@ hi! link gitcommitDiscardedFile GruvboxRed
   hi! link manSentence GruvboxFg2
   hi! link manSignal GruvboxPurple
   hi! link manURL GruvboxGreen
+
 " }}}
 " Netrw: {{{
 " Hate to be that guy but Netrw is considered an ftplugin
@@ -948,7 +966,23 @@ hi def link rstHyperlinkReference Underlined
 hi def link rstFileLink rstHyperlinkReference
 
 " }}}
-"
+" Tmux: {{{
+
+hi def link tmuxFormatString      Identifier
+hi def link tmuxAction            Boolean
+hi def link tmuxBoolean           Boolean
+hi def link tmuxCommands          Keyword
+hi def link tmuxComment           Comment
+hi def link tmuxKey               Special
+hi def link tmuxNumber            Number
+hi def link tmuxFlags             Identifier
+hi def link tmuxOptions           Function
+hi def link tmuxString            String
+hi def link tmuxTodo              Todo
+hi def link tmuxVariable          Identifier
+hi def link tmuxVariableExpansion Identifier
+
+" }}}
 " Diff: {{{
 
 hi! link diffAdded GruvboxGreen

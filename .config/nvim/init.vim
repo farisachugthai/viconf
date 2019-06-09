@@ -368,16 +368,6 @@ let g:matchparen_insert_timeout = 300
 
 " Filetype Specific Options: {{{2
 
-let g:is_bash = 1
-let g:sh_fold_enabled= 4  "   (enable if/do/for folding)
-let g:sh_fold_enabled= 3  "   (enables function and heregoc folding)
-
-" highlighting readline options
-let readline_has_bash = 1
-
-" from runtime/ftplugin/html.vim
-let g:ft_html_autocomment = 1
-
 " From `:he ft-lisp-syntax`. Color parentheses differently up to 10 levels deep
 let g:lisp_rainbow = 1
 
@@ -386,7 +376,7 @@ let g:lisp_rainbow = 1
 augroup omnifunc
     autocmd!
     autocmd Filetype python,xonsh     setlocal omnifunc=python3complete#Complete
-    autocmd Filetype html,xhtml       setlocal omnifunc=htmlcomplete#CompleteTags
+    autocmd Filetype html,xhtml       setlocal omnifunc=htmlcomplete#CompleteTags && call htmlcomplete#DetectOmniFlavor()
     autocmd Filetype xml              setlocal omnifunc=xmlcomplete#CompleteTags
     autocmd Filetype css              setlocal omnifunc=csscomplete#CompleteCSS
     autocmd Filetype javascript       setlocal omnifunc=javascriptcomplete#CompleteJS
@@ -426,24 +416,6 @@ augroup END
 " Apr 23, 2019: Didn't know complete help was a thing.
 " Oh holy shit that's awesome
 command! -nargs=1 -complete=help Help call g:Helptab()
-
-" AutoSave: {{{2
-" I feel like I need to put this in a autocmd but I'm not sure what I would
-" want to trigger it.
-" Even better would be if it called :Gwrite haha!
-function! s:autosave(enable)
-  augroup autosave
-    autocmd!
-    if a:enable
-      autocmd TextChanged,InsertLeave <buffer>
-            \  if empty(&buftype) && !empty(bufname(''))
-            \|   silent! update
-            \| endif
-    endif
-  augroup END
-endfunction
-
-command! -bang Autosave call s:autosave(<bang>1)
 
 " Statusline: {{{2
 function! s:statusline_expr() abort
@@ -503,24 +475,6 @@ augroup END
 " Plug: {{{2
 " I utilize this command so often I may as well save the characters
 command! -nargs=0 Plugins echo keys(plugs)
-
-" Toggle The Quickfix Window: {{{2
-" From Steve Losh, http://learnvimscriptthehardway.stevelosh.com/chapters/38.html
-
-let g:quickfix_is_open = 0
-
-function! s:QuickfixToggle()
-    if g:quickfix_is_open
-        cclose
-        let g:quickfix_is_open = 0
-        wincmd w
-    else
-        copen
-        let g:quickfix_is_open = 1
-    endif
-endfunction
-
-noremap <C-q> <Cmd>call <SID>QuickfixToggle()<CR>
 
 " NewGrep: {{{2
 " he quickfix

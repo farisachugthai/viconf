@@ -6,7 +6,7 @@
 " ============================================================================
 
 " Guard: {{{1
-if !has_keys(plugs, 'vim-gitgutter')
+if !has_key(plugs, 'vim-gitgutter')
     finish
 endif
 
@@ -19,6 +19,8 @@ let g:did_git_gutter_after_plugin = 1
 if executable('rg')
     let g:gitgutter_grep = 'rg --color=never '
 endif
+
+let g:gitgutter_log = 1
 
 " Mappings: {{{1
 nmap [c <Plug>GitGutterPrevHunk
