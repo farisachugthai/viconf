@@ -24,8 +24,6 @@ try:
 except ImportError:  # Probably ModuleNotFound too but import is more backwards compatible
     sys.exit("Pynvim python library isn't installed. Exiting.")
 
-import vim
-
 
 @pynvim.plugin
 class App:

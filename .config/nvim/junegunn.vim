@@ -1,6 +1,13 @@
-" A Vim Script to isolate where I define my plugins.
+" ============================================================================
+    " File: junegunn.vim
+    " Author: Faris Chugthai
+    " Description: " Isolate where I define my plugins.
+    " Last Modified: June 09, 2019
+" ============================================================================
 
 scriptencoding utf-8
+let s:cpo_save = &cpoptions
+set cpoptions&vim
 " Note that this will only work on neovim as it it makes a call
 " to Vim-Plug using the function stdpath() which only exists on neovim
 " todo: get the plugin guard in here
@@ -26,10 +33,10 @@ Plug 'w0rp/ale'
 
 if !empty(g:windows)
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
-else
+" else
   " I just expanded 2 snippets on Windows...Coc expanded them without
   " UltiSnips being loaded...
-  Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+  " Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 endif
 
 if exists('$TMUX')
@@ -45,13 +52,16 @@ Plug 'tomtom/tlib_vim'  " this library is incredible
 
 " It's very frustrating having termux slow down beyond repair but also frustrating
 " not being able to use more than 15 plugins at any point in time
-if !g:termux
+if !empty(g:ubuntu)
+  Plug 'Rykka/InstantRst', {'for': 'rst'}
+ " uses python2 syntax and that's killing windows
+  Plug 'gu-fan/riv.vim', {'for': 'rst'}
+endif
+
+if empty(g:termux)
     " honestly this almost never actually begins the language server
     " Plug 'autozimu/LanguageClient-neovim', {'do': ':UpdateRemotePlugins'}
     Plug 'godlygeek/tabular'
-    " Plug 'Rykka/InstantRst', {'for': 'rst'}
-    " uses python2 syntax and that's killing windows
-    " Plug 'gu-fan/riv.vim', {'for': 'rst'}
     Plug 'junegunn/vim-peekaboo'
     Plug 'tpope/vim-surround'
     Plug 'mbbill/undotree', {'on': 'UndoTreeToggle'}
@@ -67,3 +77,7 @@ Plug 'ervandew/supertab'
 
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
+
+" Atexit: {{{1
+let &cpoptions = s:cpo_save
+unlet s:cpo_save

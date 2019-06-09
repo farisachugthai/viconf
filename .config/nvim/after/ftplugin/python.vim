@@ -94,7 +94,7 @@ endif
 
 " ALE: {{{2
 
-function! ALE_conf()
+function! ALE_Python_Conf()
     let b:ale_linters = [ 'flake8', 'pydocstyle', 'pyls' ]
 
     let b:ale_linters_explicit = 1
@@ -131,9 +131,9 @@ function! ALE_conf()
     endif
 endfunction
 
-augroup aleconf
+augroup alepythonconf
     au!
-    autocmd Filetype python if has_key(plugs, 'ale') | call ALE_conf() | endif
+    autocmd Filetype python if has_key(plugs, 'ale') | call ALE_Python_Conf() | endif
 augroup END
 
 " Atexit: {{{1

@@ -8,12 +8,9 @@ if exists("b:current_syntax")
     finish
 endif
 
-" Explicitly change compatiblity options to Vim's defaults because this file
-" uses line continuations.
-let s:original_cpo = &cpo
-set cpo&vim
+let s:cpo_save = &cpoptions
+set cpoptions&vim
 
-let b:current_syntax = "tmux"
 syntax iskeyword @,48-57,_,192-255,-
 syntax case match
 
@@ -38,30 +35,6 @@ syn region tmuxString start=+'+ skip=+\\\\\|\\'\|\\$+ excludenl end=+'+ end='$' 
 syn region tmuxFormatString start=/#[#DFhHIPSTW]/ end=// contained keepend
 syn region tmuxFormatString start=/#{/ skip=/#{.\{-}}/ end=/}/ contained keepend
 syn region tmuxFormatString start=/#(/ skip=/#(.\{-})/ end=/)/ contained keepend
-
-hi def link tmuxFormatString      Identifier
-hi def link tmuxAction            Boolean
-hi def link tmuxBoolean           Boolean
-hi def link tmuxCommands          Keyword
-hi def link tmuxComment           Comment
-hi def link tmuxKey               Special
-hi def link tmuxNumber            Number
-hi def link tmuxFlags             Identifier
-hi def link tmuxOptions           Function
-hi def link tmuxString            String
-hi def link tmuxTodo              Todo
-hi def link tmuxVariable          Identifier
-hi def link tmuxVariableExpansion Identifier
-
-" Make the foreground of colourXXX keywords match the color they represent.
-" Darker colors have their background set to white.
-
-" Commented out because it affects any colors and makes status-bg words impossible to read
-" for s:i in range(0, 255)
-"     let s:bg = (!s:i || s:i == 16 || (s:i > 231 && s:i < 235)) ? 15 : "none"
-"     exec "syn match tmuxColour" . s:i . " /\\<colour" . s:i . "\\>/ display"
-" \     " | highlight tmuxColour" . s:i . " ctermfg=" . s:i . " ctermbg=" . s:bg
-" endfor
 
 syn keyword tmuxOptions
 \ buffer-limit command-alias default-terminal escape-time exit-empty
@@ -121,5 +94,5 @@ syn keyword tmuxCommands
 \ swap-window swapp swapw switch-client switchc unbind unbind-key
 \ unlink-window unlinkw wait wait-for
 
-let &cpo = s:original_cpo
-unlet! s:original_cpo s:bg s:i
+let &cpoptions = s:cpo_save
+unlet s:cpo_save
