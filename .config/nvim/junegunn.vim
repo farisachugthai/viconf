@@ -33,10 +33,10 @@ Plug 'w0rp/ale'
 
 if !empty(g:windows)
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
-" else
+else
   " I just expanded 2 snippets on Windows...Coc expanded them without
   " UltiSnips being loaded...
-  " Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 endif
 
 if exists('$TMUX')

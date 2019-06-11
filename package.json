@@ -8,7 +8,9 @@
   },
   "dependencies": {
     "coc-json": "^1.0.17",
+    "coc-lists": "^1.1.6",
     "coc-python": "^1.1.14",
+    "coc-snippets": "^2.0.16",
     "coc-ultisnips": "^1.2.3",
     "coc.nvim": "^0.0.68",
     "neovim": "^4.5.0",

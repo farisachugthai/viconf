@@ -37,9 +37,10 @@ function! ALE_TS_Conf()
 
 endfunction
 
+" Is this the right filetype?
 augroup aletsconf
     au!
-    autocmd Filetype html if has_key(plugs, 'ale') | call ALE_TS_Conf() | endif
+    autocmd Filetype ts if has_key(plugs, 'ale') | call ALE_TS_Conf() | endif
 augroup END
 
 " Atexit: {{{1

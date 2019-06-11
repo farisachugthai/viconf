@@ -22,7 +22,14 @@ endif
 
 let g:gitgutter_log = 1
 
+" Default is empty like no color no external diff no context seems
+" reasonable...
+let g:gitgutter_diff_args = ' --no-color --no-ext-diff -U0 -- '
+
 " Mappings: {{{1
+
+" Because of coc we should check if we already have a mapping.
+" Not sure how. maparg('keys') returns the RHS of a mapping so idk
 nmap [c <Plug>GitGutterPrevHunk
 nmap ]c <Plug>GitGutterNextHunk
 

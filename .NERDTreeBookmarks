@@ -1,9 +1,10 @@
 config-nvim ~/.config/nvim
 dotfiles ~/projects/dotfiles/unix
-tutorials ~/Dropbox/python/tutorials
-utilities ~/projects/utilities
-viconf ~/projects/viconf/.config/nvim
-
 jedi-docs ~/.local/share/nvim/plugged/jedi-vim/pythonx/jedi/docs/docs
 plugged ~/.local/share/nvim/plugged
 tlib ~/.local/share/nvim/plugged/tlib_vim/autoload/tlib
+tutorials ~/Dropbox/python/tutorials
+utilities ~/projects/utilities
+viconf ~/projects/viconf/.config/nvim
+index /data/data/com.termux/files/usr/share/nvim/runtime/doc/index.txt
+

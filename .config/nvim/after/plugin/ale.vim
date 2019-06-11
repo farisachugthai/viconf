@@ -19,7 +19,8 @@ let b:did_ale_after_plugin = 1
 " Mappings: {{{1
 
 " This isn't working idk why
-noremap <Leader>l <Plug>(ale_toggle_buffer)<CR>
+" Still isn't working even when run interactively wth
+noremap <LocalLeader>l <Plug>(ale_toggle_buffer)<CR><bar>echo 'ALE toggled!'<CR>
 
 noremap ]a <Plug>(ale_next_wrap)<CR>
 noremap [a <Plug>(ale_previous_wrap)<CR>
@@ -46,6 +47,8 @@ let g:ale_fix_on_save = 1
 let g:ale_warn_about_trailing_whitespace = 0
 let g:ale_warn_about_trailing_blank_lines = 0
 
+" forgot how annoying open list was
+" let g:ale_open_list = 1
 let g:ale_list_vertical = 1
 
 let g:ale_set_signs = 1

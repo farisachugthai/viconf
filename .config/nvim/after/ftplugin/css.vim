@@ -35,7 +35,7 @@ endfunction
 
 augroup alecssconf
     au!
-    autocmd Filetype html if has_key(plugs, 'ale') | call ALE_CSS_Conf() | endif
+    autocmd Filetype css if has_key(plugs, 'ale') | call ALE_CSS_Conf() | endif
 augroup END
 
 " Atexit: {{{1
