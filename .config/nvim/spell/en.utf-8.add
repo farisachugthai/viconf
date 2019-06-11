@@ -8,7 +8,6 @@ ALE's
 ALLUSERSPROFILE
 AMD64
 ARP
-ARP
 AdaBoost
 Adblock
 AirVPN
@@ -126,6 +125,7 @@ Docopt
 Docstring
 DokuWiki
 Dotfiles
+DynamicStyle
 EHD
 Eich
 Envs
@@ -181,6 +181,7 @@ IPython7
 ISO9660
 Importlib
 JQuery
+Jinja2
 Junegunn
 Junegunn's
 Jupyter
@@ -216,6 +217,7 @@ MRU's
 MSDOS
 MathCAD
 MathJax
+Matplotlib's
 MediaWiki
 Messer
 MinGW
@@ -267,6 +269,7 @@ PSModulePath
 PSReadline
 PackageKit
 Pep8
+Pipfile
 PluginInstall
 PluginSearch
 Pluma
@@ -498,6 +501,7 @@ autocommands
 autocomplete
 autocompletion
 autocorrect
+autoflake
 autohotkey
 autoindenting
 autoload
@@ -529,6 +533,7 @@ btw
 bugfix
 builtins
 byobu
+bytestream
 bz2
 bzip
 bzip2
@@ -650,6 +655,7 @@ endblockquote
 endfunction
 endif
 env
+envvar
 equalprg
 erlang
 esac
@@ -975,6 +981,7 @@ md5
 md5sum
 melpa
 memcache
+metacharacters
 metadata
 metakernel
 metapackage
@@ -1017,6 +1024,7 @@ namespace
 namespacing
 nano
 nbconvert
+nc
 ncdu
 ncmpcpp
 ndarray
@@ -1181,6 +1189,7 @@ pycodestyle
 pycon
 pydoc
 pydocstyle
+pyflakes
 pygmentize
 pygments
 pylab
@@ -1605,10 +1614,3 @@ zshrc
 µMatrix
 µTP
 µTorrent
-Jinja2
-Pipfile
-envvar
-bytestream
-nc
-metacharacters
-DynamicStyle

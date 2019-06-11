@@ -11,6 +11,9 @@ if exists('g:did_rst_after_ftplugin') || &compatible || v:version < 700
 endif
 let g:did_rst_after_ftplugin = 1
 
+let s:cpo_save = &cpoptions
+set cpoptions&vim
+"
 " Options: {{{1
 " setlocal tabstop=4
 " setlocal softtabstop=4
@@ -27,6 +30,8 @@ setlocal spell!
 setlocal keywordprg=:r!pydoc
 
 compiler rst
+
+let &makeprg='sphinx-build '
 
 " Syntax Highlighting: {{{1
 " he rst.vim or ft-rst-syntax or syntax 2600. Don't put bash instead of sh.
@@ -45,4 +50,9 @@ let g:rst_syntax_code_list = {
     \ 'sh': ['sh'],
     \ }
 
-let b:undo_ftplugin = 'set et< cc< lbr< fdl< fdls< spell<'
+" Atexit: {{{1
+
+let b:undo_ftplugin = 'set et< cc< lbr< fdl< fdls< spell< kp< unlet! makeprg '
+
+let &cpoptions = s:cpo_save
+unlet s:cpo_save
