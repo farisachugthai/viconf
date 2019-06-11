@@ -1,5 +1,4 @@
 {
-	"coc.preferences.diagnostic.displayByAle": true,
     "suggest.autoTrigger": "none",
     "suggest.triggerAfterInsertEnter": true,
     "suggest.enablePreview": true,
@@ -21,5 +20,36 @@
     "python.terminal.executeInFileDir": true,
     "python.venvPath": "~/miniconda3/envs/",
     "python.jediEnabled": true,
-    "python.linting.banditEnabled": true
+    "python.linting.banditEnabled": false,
+	"codeLens.enable": true,
+    "coc.preferences.formatOnSaveFiletypes":["javascript", "html", "css"],
+	"list.normalMappings": {
+		"d": "action:delete",
+		"<C-t>": "action:tabe",
+        "<C-x>": "action:split",
+        "<C-v>": "action:vsplit"
+	},
+	"list.insertMappings": {
+		"<C-r>": "do:refresh",
+		"<C-n>": "normal:j",
+		"<C-p>": "normal:k",
+		"<C-t>": "action:tabe",
+        "<C-x>": "action:split",
+        "<C-v>": "action:vsplit"
+	},
+    "vimlsp.debug": {
+      "type": "boolean",
+      "default": false,
+      "description": "enable coc-vimlsp service debug"
+    },
+    "vimlsp.trace.server": {
+      "type": "string",
+      "default": "off",
+      "enum": [
+        "off",
+        "messages",
+        "verbose"
+      ],
+      "description": "Trace level of vim language server"
+    }
 }

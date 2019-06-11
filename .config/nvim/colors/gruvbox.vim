@@ -964,6 +964,7 @@ hi! link netrwVersion GruvboxGreen
 hi def link rstHyperLinkTarget Underlined
 hi def link rstHyperlinkReference Underlined
 hi def link rstFileLink rstHyperlinkReference
+hi! link rstInlineLiteral GruvboxBlue
 
 " }}}
 " Tmux: {{{
