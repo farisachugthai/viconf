@@ -21,6 +21,11 @@ setlocal shiftwidth=2
 setlocal softtabstop=2
 setlocal suffixesadd=.html,.css,.js
 
+" Set 'comments' to format dashed lists in comments.
+setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
+
+setlocal commentstring=//%s
+
 " Plugins: {{{1
 
 function! ALE_JS_Conf()
@@ -40,6 +45,6 @@ augroup END
 
 " Atexit: {{{1
 
-let b:undo_ftplugin = 'set et< sw< sts< sua<'
+let b:undo_ftplugin = 'set et< sw< sts< sua< com< cms<'
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

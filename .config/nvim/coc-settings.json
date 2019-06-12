@@ -1,5 +1,4 @@
 {
-	"coc.preferences.diagnostic.displayByAle": true,
     "suggest.autoTrigger": "none",
     "suggest.triggerAfterInsertEnter": true,
     "suggest.enablePreview": true,
@@ -21,7 +20,6 @@
     "python.terminal.executeInFileDir": true,
     "python.venvPath": "~/miniconda3/envs/",
     "python.jediEnabled": true,
-    "python.linting.banditEnabled": false,
 	"list.source.grep.defaultArgs": ["-regex"],
 	"list.insertMappings": {
 		"<C-r>": "do:refresh",
@@ -38,5 +36,8 @@
 		"<C-v>": "action:vsplit",
 		"<C-t>": "action:tabe",
         "<CR>": "action:select"
-	}
+    },
+    "python.linting.banditEnabled": false,
+	"codeLens.enable": true,
+    "coc.preferences.formatOnSaveFiletypes":["javascript", "html", "css"]
 }

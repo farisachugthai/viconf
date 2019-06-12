@@ -6,4 +6,5 @@ tlib ~/.local/share/nvim/plugged/tlib_vim/autoload/tlib
 tutorials ~/Dropbox/python/tutorials
 utilities ~/projects/utilities
 viconf ~/projects/viconf/.config/nvim
+index /data/data/com.termux/files/usr/share/nvim/runtime/doc/index.txt
 

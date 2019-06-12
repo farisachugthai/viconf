@@ -296,3 +296,9 @@ function! FZFGit()
     endif
 endfunction
 command! FZFGit call FZFGit()
+
+" Grepprg And Find: {{{1
+" Should we set a corresponding grepformat?
+let &grepprg = 'rg --vimgrep --no-messages '
+
+command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --glob "!.git/*" -g "!vendor/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)

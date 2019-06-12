@@ -28,9 +28,15 @@ setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 setlocal colorcolumn=80,120
 setlocal foldmethod=indent
 
-setlocal keywordprg=enew\ r!pydoc
+function! PydocKeywordprg() abort
+    enew
+    exec ':r! pydoc <CWORD>'
+endfunction
+
+setlocal keywordprg=PydocKeywordprg()
 
 " Autocommands: {{{1
+
 " Undo ftplugin?
 if isdirectory(expand('$_ROOT') . '/lib/python3')
     " Double check globbing in vim
@@ -48,6 +54,7 @@ endif
 " endif
 
 " Highlight I20 Chars: {{{2
+
 augroup pythonchars
     autocmd!
     autocmd FileType python highlight Excess ctermbg=DarkGrey guibg=Black
@@ -56,6 +63,7 @@ augroup pythonchars
 augroup END
 
 " Compiler: {{{1
+
 " Well this is neat!
 if executable('pylint')
     compiler pylint
@@ -63,9 +71,12 @@ if executable('pylint')
 endif
 
 " Mappings: {{{1
+
 " Don't know how I haven't done this yet.
 noremap <F5> <Cmd>py3f %<CR>
 noremap! <F5> <Cmd>py3f %<CR>
+
+noremap K call PydocKeywordprg()
 
 " Commands: {{{1
 if executable('yapf')

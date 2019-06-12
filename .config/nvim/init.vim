@@ -29,6 +29,7 @@ runtime g:local_vimrc
 if g:windows
   runtime winrc.vim
   " How do i check if I'm on cmd or powershell?
+  " might need to individually set the envvar SHELL in a startup script for each
   " set shell=powershell shellpipe=\| shellredir=> shellxquote=
   " let &shellcmdflag='-NoLogo  -ExecutionPolicy RemoteSigned -Command $* '  " Should I -NoExit this?
   set shell=cmd.exe
@@ -171,6 +172,7 @@ set foldnestmax=10
 set foldmethod=marker
 " Use 1 column to indicate fold level and whether a fold is open or closed.
 set foldcolumn=1
+set signcolumn=yes    " not fold related but close to column
 
 " Buffers Windows Tabs: {{{2
 try
@@ -375,12 +377,13 @@ let g:lisp_rainbow = 1
 
 augroup omnifunc
     autocmd!
-    autocmd Filetype python,xonsh     setlocal omnifunc=python3complete#Complete
-    autocmd Filetype html,xhtml       setlocal omnifunc=htmlcomplete#CompleteTags && call htmlcomplete#DetectOmniFlavor()
-    autocmd Filetype xml              setlocal omnifunc=xmlcomplete#CompleteTags
+    autocmd Filetype c,cpp            setlocal omnifunc=ccomplete#Complete
     autocmd Filetype css              setlocal omnifunc=csscomplete#CompleteCSS
+    autocmd Filetype html,xhtml       setlocal omnifunc=htmlcomplete#CompleteTags && call htmlcomplete#DetectOmniFlavor()
     autocmd Filetype javascript       setlocal omnifunc=javascriptcomplete#CompleteJS
+    autocmd Filetype python,xonsh     setlocal omnifunc=python3complete#Complete
     autocmd Filetype ruby             setlocal omnifunc=rubycomplete#Complete
+    autocmd Filetype xml              setlocal omnifunc=xmlcomplete#CompleteTags
 
     " If there isn't a default or built-in, use the syntax highlighter
     autocmd Filetype *
@@ -453,15 +456,6 @@ let &statusline = <SID>statusline_expr()
 " Rename: {{{2
 " :he map line 1454. How have i never noticed this isn't a feature???
 command! -nargs=1 -bang -complete=file Rename f <args>|w<bang>
-
-" Chmod: {{{2
-
-"	:S	Escape special characters for use with a shell command (see
-"		|shellescape()|). Must be the last one. Examples:
-"           :!dir <cfile>:S
-"           :call system('chmod +w -- ' . expand('%:S'))
-" From :he filename-modifiers in the cmdline page.
-command! -nargs=1 -complete=file Chmod call system('chmod +x ' . expand('%:S'))
 
 " Clear Hlsearch: {{{2
 

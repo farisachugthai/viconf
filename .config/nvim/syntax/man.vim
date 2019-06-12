@@ -111,7 +111,6 @@ hi! link manFiles Include
 execute 'syntax match manFooter display "^\%'.line('$').'l.*$"'
 " Wait why. Usually those include links to other man pages,
 " not only do I want those highlighted I want extra funcs for them
-endif
 
 " Mar 14, 2019
 " manCFuncDefinition xxx cleared
