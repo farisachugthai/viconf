@@ -52,7 +52,8 @@ let g:rst_syntax_code_list = {
 
 " Atexit: {{{1
 
-let b:undo_ftplugin = 'set et< cc< lbr< fdl< fdls< spell< kp< unlet! makeprg '
+let b:undo_ftplugin = 'set et< cc< lbr< fdl< fdls< spell< kp<'
+" can't use unlet! or unlet in the same '' apparently
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

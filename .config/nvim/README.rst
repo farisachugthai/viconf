@@ -18,8 +18,10 @@ the base options like so:
 
 +--------------------------+----------------+
 | Options                  |                |
++--------------------------+----------------+
 |                          |                |
 | .. code-block:: vim      |                |
++--------------------------+----------------+
 |                          |                |
 |    :let OPTION_NAME = 1  | Enable option  |
 +--------------------------+----------------+
@@ -32,6 +34,7 @@ the base options like so:
 
 let vs. set
 ~~~~~~~~~~~~
+
 ``set`` allows one to set useful configurations and is easier to read than
 some corresponding ``let`` statements, but it only allows one to
 define a variable to one literal value.
@@ -49,6 +52,7 @@ of some sort.
 
 Whitespace in Options
 ~~~~~~~~~~~~~~~~~~~~~
+
 The ``set`` command is whitespace sensitive which can become quickly
 cumbersome. The ``let`` command, in comparison, is not as strict.
 
@@ -68,6 +72,7 @@ before every single space.
 
 Environment Variables
 ---------------------
+
 Do not ever redefine `$VIMRUNTIME`! This variable is used by both Neovim and
 Vim; however, both define the var differently.
 
@@ -81,6 +86,7 @@ in Neovim's startup.
 
 Directory Layout and Runtimepath
 ---------------------------------
+
 How are the folders in a :mod:`pynvim` neovim directory tree supposed to be
 laid out?
 
@@ -154,6 +160,7 @@ Similar thing with `after/syntax`_. We also have a fair number of files in `synt
 
 Working with Plugins
 ^^^^^^^^^^^^^^^^^^^^^
+
 Vim Plug is a highly recommended plugin manager, and the one that I myself use.
 
 Written by Junegunn Choi (also the author of FZF), vim-plug creates a simple way of interacting with plugins.
@@ -184,6 +191,7 @@ Jedi, this can help startup times and remedy unexpected behavior.
 
 Spell Files
 ^^^^^^^^^^^^
+
 On the TODO list.
 
 - Cleanup script for autocorrect.vim and spell files.
@@ -219,6 +227,7 @@ From the help docs
 
 Mappings
 ---------
+
 Mappings initially sounds like a simple enough idea as it's generally commonplace
 in other editors.
 

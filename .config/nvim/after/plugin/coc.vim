@@ -22,6 +22,8 @@ let s:cpo_save = &cpoptions
 set cpoptions&vim
 
 " Mappings: {{{1
+
+" This section primarily focuses on setting up the autocompletion aspect
 " Refresh completions with C-Space
 inoremap <silent><expr> <C-Space> <Cmd>coc#refresh()<CR>
 
@@ -63,6 +65,83 @@ let g:coc_snippet_next = '<tab>'
 " Supertab's also installed hahahah
 let g:coc_snippet_prev = '<S-Tab>'
 
-" atexit: {{{1
+" Remap keys for gotos
+" Now let's start working with the niceties of an LSP. Docs and symbols
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Remap for rename current word
+nmap <leader>rn <Plug>(coc-rename)
+
+" Remap for format selected region
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+
+augroup CocConf
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+  " Highlight symbol under cursor on CursorHold
+  autocmd CursorHold * silent call CocActionAsync('highlight')
+
+augroup end
+
+" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
+" TODO: needs a better mapping
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+" Remap for do codeAction of current line
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Fix autofix problem of current line
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" Use `:Format` to format current buffer
+command! -nargs=0 Format :call CocAction('format')
+
+" Use `:Fold` to fold current buffer
+command! -nargs=? Fold :call CocAction('fold', <f-args>)
+
+" use `:OR` for organize import of current buffer
+command! -nargs=0 Isort :call CocAction('runCommand', 'editor.action.organizeImport')
+"
+"
+" Using CocList: {{{1
+" Show all diagnostics
+" nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+" Manage extensions
+" nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+" Show commands
+" nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+" Find symbol of current document
+" nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+" Search workspace symbols
+" nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+" nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+" nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+" Resume latest coc list
+" nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+" I'm gonna redo the mappings and try this piecemeal
+noremap <C-c>lr :<Cmd>CocListResume<CR>
+noremap <C-c>d :<Cmd>CocList diagnostics<CR>
+
+" Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

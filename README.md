@@ -27,10 +27,12 @@ The first 100 lines of the init.vim are actually just checks to determine
 the user's setup.
 
 ```vim
+
 let g:termux = isdirectory('/data/data/com.termux')
 let g:ubuntu = has('unix') && !has('macunix')
 let g:windows = has('win32') || has('win64')
 let g:wsl = has('wsl')   " The fact that this is a thing blows my mind
+
 ```
 
 In adhering to the XDG standard, it's also checked whether those environment
@@ -38,6 +40,7 @@ variables are set. If they are not, then the folders that they typically
 inhabit are defined.
 
 ```vim
+
 if empty('$XDG_DATA_HOME')
   if empty(g:windows)
     let $XDG_DATA_HOME = expand('~/.local/share')
@@ -45,6 +48,7 @@ if empty('$XDG_DATA_HOME')
     let $XDG_DATA_HOME = expand('~/AppData/Local')
   endif
 endif
+
 ```
 
 This repository ensures maximum portability so long as 1 assumptions remain
@@ -92,7 +96,7 @@ As a result of my modifications, this setup currently has:
 - [Personally configured](./.config/nvim/after/ftplugin/) filetype plugins and
 added [filetype detection](./.config/nvim/ftdetect).
 
-- Lightly configured embedded terminal. 
+- Lightly configured embedded terminal.
   [20+ convenience mappings](.config/nvim/plugin/terminally_unimpaired.vim)
   are provided to ease navigation between Nvim windows and the embedded terminal.
 
@@ -118,21 +122,19 @@ wiki](https://github.com/jaap-karssenberg/zim-desktop-wiki) found at
 
 ### Basics Keymappings
 
-+-----------------------------------------------------------------------------------------+
-| Keycode                       | Mode     | [Command]Description                         |
-| :---:                         | :---:    | :---                                         |
-| <kbd>h</kbd>                  | Norm     | Move cursor one char left                    |
-| <kbd>j</kbd>                  | Norm     | Move cursor one char down                    |
-| <kbd>k</kbd>                  | Norm     | Move cursor one char up                      |
-| <kbd>l</kbd>                  | Norm     | Move cursor one char right                   |
-| <kbd>w</kbd>                  | Norm     | Move cursor to the beginning of the next word|
-| <kbd>b</kbd>                  | Norm     | Move cursor to the beginning of the previous word|
-| <kbd>M</kbd>                  | Norm     | Move cursor to vertical center               |
-| <kbd>gg</kbd>                 | Norm     | Move to the first line                       |
-| <kbd>G</kbd>                  | Norm     | Move to the last line                        |
-| <kbd>:</kbd><kbd>w</kbd>      | Cmd      | Save the current buffer                      |
-| <kbd>:</kbd><kbd>q</kbd>      | Cmd      | Close the buffer without saving              |
-+-----------------------------------------------------------------------------------------+
+Keycode                       | Mode     | [Command]Description                         |
+:-                            | :-       | :-
+<kbd>h</kbd>                  | Norm     | Move cursor one char left                    |
+<kbd>j</kbd>                  | Norm     | Move cursor one char down                    |
+<kbd>k</kbd>                  | Norm     | Move cursor one char up                      |
+<kbd>l</kbd>                  | Norm     | Move cursor one char right                   |
+<kbd>w</kbd>                  | Norm     | Move cursor to the beginning of the next word|
+<kbd>b</kbd>                  | Norm     | Move cursor to the beginning of the previous word|
+<kbd>M</kbd>                  | Norm     | Move cursor to vertical center               |
+<kbd>gg</kbd>                 | Norm     | Move to the first line                       |
+<kbd>G</kbd>                  | Norm     | Move to the last line                        |
+<kbd>:</kbd><kbd>w</kbd>      | Cmd      | Save the current buffer                      |
+<kbd>:</kbd><kbd>q</kbd>      | Cmd      | Close the buffer without saving              |
 
 ### Remappings
 

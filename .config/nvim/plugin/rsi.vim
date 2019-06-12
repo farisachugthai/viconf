@@ -87,3 +87,23 @@ noremap! <F1> <Esc>
 " count with a command
 " C-w is backwards delete word so that's 2.
 " C-j and C-m for accept and enter new line make 4!
+
+" Pure Emacs: {{{1
+" There are more comfortable ways of doing the following in Vim.
+" I'm not going to convince you it's better. That it's cleaner.
+" Unfortunately, there are  few of *their* keybindings wired in.
+" May as well map them correctly.
+
+" Alt-x: {{{2
+" This seemingly trivial difference determines whether the following is run
+" by fzf or the vim built-in, and they both have quite different looking
+" interfaces IMO.
+if exists('*fzf#wrap')
+  noremap <M-x> <Cmd>Commands<CR>
+  noremap <C-x><C-b> <Cmd>Buffers<CR>
+else
+  noremap <M-x> <Cmd>commands<CR>
+  noremap <C-x><C-b> <Cmd>buffers<CR>
+endif
+
+noremap <C-x>o <Cmd>wincmdtW<CR>

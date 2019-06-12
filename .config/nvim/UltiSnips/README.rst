@@ -1,3 +1,4 @@
+======
 README
 ======
 
@@ -43,7 +44,31 @@ snippets are housed in.
 Options
 --------
 
-We have a few options to choose from when defining snippets. They are as follows:
+A valid snippet should start with::
+
+    snippet trigger_word [ "description" [ options ] ]
+
+and end with:
+
+    endsnippet
+
+.. i'm assuming there has to be an easy way to turn that into a table
+Snippet options:
+
+    b - Beginning of line.
+    i - In-word expansion.
+    w - Word boundary.
+    r - Regular expression
+    e - Custom context snippet
+    A - Snippet will be triggered automatically, when condition matches.
+
+Basic example:
+
+      	snippet emitter "emitter properties" b
+      	private readonly ${1} = new Emitter<$2>()
+      	public readonly ${1/^_(.*)/$1/}: Event<$2> = this.$1.event
+      	endsnippet
+
 
 
 Snippets Options
@@ -88,7 +113,6 @@ Do not use the 'b' option for snippets that could be expanded after a comment
 For example, in :ref:`vim.snippets`, the header snippet is regularly text
 that has already been written and is commented out. With the ``b`` option, a
 commented out header will not expand.
-
 
 Usage
 -----

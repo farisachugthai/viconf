@@ -24,7 +24,6 @@ AppleWebKit
 ArchWiki
 Argparse
 ArgumentParser
-ArgumentParser
 Arkema
 Arkema
 AsciiDoc
@@ -182,6 +181,8 @@ ISO9660
 Importlib
 JQuery
 Jinja2
+Jinja2
+Jinja2
 Junegunn
 Junegunn's
 Jupyter
@@ -269,6 +270,8 @@ PSModulePath
 PSReadline
 PackageKit
 Pep8
+Pipfile
+Pipfile
 Pipfile
 PluginInstall
 PluginSearch
@@ -415,7 +418,6 @@ Viminfo
 Vimrc
 Vimwiki's
 VirtualBox
-Virtualbox
 Vitalik
 Voom
 Vundle
@@ -531,8 +533,11 @@ bs4
 bsdmake
 btw
 bugfix
+buildpackage
 builtins
 byobu
+bytestream
+bytestream
 bytestream
 bz2
 bzip
@@ -543,6 +548,7 @@ cURL
 cant/!
 cd
 cdrom
+certifi
 chainmap
 chdir
 cheat40
@@ -552,6 +558,7 @@ chmod
 chown
 chroot
 chsh
+cli
 cljs
 clojure
 clojurescript
@@ -564,6 +571,7 @@ cnoremap
 cobol
 coc
 codeacademy
+codecs
 coffeescript
 colorcolumn
 colorscheme
@@ -619,6 +627,7 @@ dir
 dirname
 dirs
 dirstat
+distutils
 django
 dlink
 dns
@@ -743,7 +752,6 @@ grsync
 gruvbox
 gsutil
 gsutil's
-gsutil's
 gtk
 gtk3
 gufw
@@ -762,6 +770,7 @@ haml
 hashable
 haskell
 helpgrep
+homie
 hostname
 html
 html2markdown
@@ -779,6 +788,7 @@ hunspell
 huponexit
 hyperlink
 i'll/!
+i'm
 i386
 i686
 iFixit
@@ -865,6 +875,7 @@ keepass2
 keepassdroid
 keepassx
 keepassxc
+kennethreitz
 keras
 keybase
 keybindings
@@ -960,6 +971,7 @@ macchanger
 macos
 macrokernel
 mailfile
+mainfest
 makedirs
 makemigrations
 makepasswd
@@ -975,6 +987,7 @@ matlab
 matplotlib
 mawk
 maxdays/!
+maya
 mccabe
 md
 md5
@@ -1018,6 +1031,8 @@ mp3
 mp4
 mpd
 msys
+mycli
+mymodule
 mypy
 mysql
 namespace
@@ -1087,6 +1102,7 @@ okular
 omnifunc
 omnifuncs
 onedark
+onefile
 openSSH
 openSUSE
 openbazaar
@@ -1192,6 +1208,7 @@ pydocstyle
 pyflakes
 pygmentize
 pygments
+pyinstaller
 pylab
 pynvim
 pypi
@@ -1247,18 +1264,22 @@ reflog
 reflogs
 regex
 rehashx
+reitz's
 relativenumber
 remappings
 remoting
 repo
+reqs
 resave
 resave
 rescan
 restructuredtext
+rfakeroot
 rg
 ripgrep
 rkt
 rmdir
+rmtree
 rplugin
 rst
 rst2html
@@ -1270,10 +1291,8 @@ runtimepath
 rustup
 rvm
 rw
-s/!
 samsung
 sas
-savefig
 savefig
 sbin
 scala
@@ -1301,6 +1320,7 @@ sdb2
 sdc
 sdc1
 sdc2
+sdist
 sdk
 sdks
 seaborn
@@ -1362,9 +1382,11 @@ sshpass
 stackexchange
 stackoverflow
 startify
+staticmethod
 statusbar
 statusline
 statuslines
+stdeb
 stderr
 stdin
 stdlib
@@ -1457,6 +1479,7 @@ uBO
 uBlock
 uPnP
 ubuntu
+uc
 udp
 ufw
 ultisnips
@@ -1501,6 +1524,7 @@ userspaces
 using
 usr
 utf
+utiities
 utils
 uuid
 vala

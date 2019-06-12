@@ -35,7 +35,7 @@ endfunction
 
 augroup alejsconf
     au!
-    autocmd Filetype html if has_key(plugs, 'ale') | call ALE_JS_Conf() | endif
+    autocmd Filetype javascript if has_key(plugs, 'ale') | call ALE_JS_Conf() | endif
 augroup END
 
 " Atexit: {{{1

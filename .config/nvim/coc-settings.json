@@ -21,5 +21,22 @@
     "python.terminal.executeInFileDir": true,
     "python.venvPath": "~/miniconda3/envs/",
     "python.jediEnabled": true,
-    "python.linting.banditEnabled": true
+    "python.linting.banditEnabled": false,
+	"list.source.grep.defaultArgs": ["-regex"],
+	"list.insertMappings": {
+		"<C-r>": "do:refresh",
+		"<C-n>": "normal:j",
+		"<C-p>": "normal:k",
+		"<C-t>": "action:tabe",
+		"<C-x>": "action:split",
+		"<C-v>": "action:vsplit",
+        "<CR>": "action:select"
+	},
+	"list.normalMappings": {
+		"d": "action:delete",
+		"<C-x>": "action:split",
+		"<C-v>": "action:vsplit",
+		"<C-t>": "action:tabe",
+        "<CR>": "action:select"
+	}
 }
