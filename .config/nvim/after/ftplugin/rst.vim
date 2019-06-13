@@ -27,11 +27,11 @@ setlocal foldlevelstart=2
 setlocal spell!
 
 " This works beautifully!
-setlocal keywordprg=:r!pydoc
+setlocal keywordprg=pydoc
 
 compiler rst
 
-let &makeprg='sphinx-build '
+let &makeprg='sphinx-build -b html . _build '
 
 " Syntax Highlighting: {{{1
 " he rst.vim or ft-rst-syntax or syntax 2600. Don't put bash instead of sh.

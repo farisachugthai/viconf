@@ -7,21 +7,23 @@ initialization files, plugin modifications and syntax highlighting Vim
 scripts that I use to run Neovim on Linux, Windows 10, and
 [Termux](https://www.github.com/termux/termuxapp) on Android.
 
-## Copy and Paste
+## How it works
 
 As much of this [init.vim](.config/nvim/init.vim) is set up in a way that it
 can be easily copied and pasted. This is done both to allow anyone using
-Nvim to easily benefit from my modifications, and also to ease things for myself
-when logging into a new remote server.
+Nvim to easily benefit from my modifications, and also to ease things for
+myself when logging into a new remote server.
+
+### Set up
 
 The initialization file makes as few assumptions as possible and I've personally
-used it on:
+used it from:
 
-* A 60 in. TV with an HDMI cable
 * A 5.5 in. cell phone with no X server configured
 * Windows 10 with ConEmu in a Cmd terminal
-* Windows 10 Powershell
-* Ubuntu
+* Windows 10 Powershell (ISE and console)
+* Neovim-QT on both Ubuntu and Windows
+* Bash in a dozen different terminals
 
 The first 100 lines of the init.vim are actually just checks to determine
 the user's setup.
@@ -31,13 +33,15 @@ the user's setup.
 let g:termux = isdirectory('/data/data/com.termux')
 let g:ubuntu = has('unix') && !has('macunix')
 let g:windows = has('win32') || has('win64')
-let g:wsl = has('wsl')   " The fact that this is a thing blows my mind
+let g:wsl = has('wsl')
 
 ```
 
-In adhering to the XDG standard, it's also checked whether those environment
-variables are set. If they are not, then the folders that they typically
-inhabit are defined.
+### XDG
+
+In adhering to the XDG standard, it's also checked whether environment
+variables such as `$XDG_DATA_HOME` and `$XDG_CONFIG_HOME` are set.
+If they are not, then the folders that they typically inhabit are defined.
 
 ```vim
 
@@ -51,14 +55,27 @@ endif
 
 ```
 
-This repository ensures maximum portability so long as 1 assumptions remain
+This repository strives for maximum portability so long as 1 assumption remain
 true:
 
-1. [vim-plug](https://www.github.com/junegunn/vim-plug) is the plugin manager
-that you'd like to use.
+- [vim-plug](https://www.github.com/junegunn/vim-plug) is the plugin manager
+  that you'd like to use.
 
-My [init.vim](./.config/nvim/init.vim) will immediately check that the
+The [init.vim](./.config/nvim/init.vim) will immediately check that the
 plug.vim file is there, and it will automatically download it if not.
+
+## Plugins Used
+
+The configuration for the plugins used by Neovim are currently being refactored
+out of the [init.vim](./.config/nvim/init.vim) and moved into the directory
+[after/plugin](./.config/nvim/after/plugin)
+
+By factoring these files out of the init.vim, it becomes easier to check that
+Vim-Plug actually loaded the plugin. If the plugin was not loaded, the
+configuration file runs `finish` immediately.
+
+This allows for extensive modification to the way that Neovim handles files and
+allows for startup time to remain the realm of 200 milliseconds.
 
 
 ## Features
@@ -122,19 +139,19 @@ wiki](https://github.com/jaap-karssenberg/zim-desktop-wiki) found at
 
 ### Basics Keymappings
 
-Keycode                       | Mode     | [Command]Description                         |
+Keycode                       | Mode     | [Command]Description
 :-                            | :-       | :-
-<kbd>h</kbd>                  | Norm     | Move cursor one char left                    |
-<kbd>j</kbd>                  | Norm     | Move cursor one char down                    |
-<kbd>k</kbd>                  | Norm     | Move cursor one char up                      |
-<kbd>l</kbd>                  | Norm     | Move cursor one char right                   |
-<kbd>w</kbd>                  | Norm     | Move cursor to the beginning of the next word|
-<kbd>b</kbd>                  | Norm     | Move cursor to the beginning of the previous word|
-<kbd>M</kbd>                  | Norm     | Move cursor to vertical center               |
-<kbd>gg</kbd>                 | Norm     | Move to the first line                       |
-<kbd>G</kbd>                  | Norm     | Move to the last line                        |
-<kbd>:</kbd><kbd>w</kbd>      | Cmd      | Save the current buffer                      |
-<kbd>:</kbd><kbd>q</kbd>      | Cmd      | Close the buffer without saving              |
+<kbd>h</kbd>                  | Norm     | Move cursor one char left
+<kbd>j</kbd>                  | Norm     | Move cursor one char down
+<kbd>k</kbd>                  | Norm     | Move cursor one char up
+<kbd>l</kbd>                  | Norm     | Move cursor one char right
+<kbd>w</kbd>                  | Norm     | Move cursor to the beginning of the next word
+<kbd>b</kbd>                  | Norm     | Move cursor to the beginning of the previous word
+<kbd>M</kbd>                  | Norm     | Move cursor to vertical center
+<kbd>gg</kbd>                 | Norm     | Move to the first line
+<kbd>G</kbd>                  | Norm     | Move to the last line
+<kbd>:</kbd><kbd>w</kbd>      | Cmd      | Save the current buffer
+<kbd>:</kbd><kbd>q</kbd>      | Cmd      | Close the buffer without saving
 
 ### Remappings
 
@@ -154,19 +171,7 @@ Close fold directly under cursor | <kbd>zc</kbd>
 Update diff and syntax highlighting in windows | `:diffupdate`
 Toggle diff under cursor | <kbd>za</kbd>
 
-## Plugins Used
-
-The configuration for the plugins used by Neovim are currently being refactored
-out of the [init.vim](./.config/nvim/init.vim) and moved into the directory
-[after/plugin](./.config/nvim/after/plugin)
-
-By factoring these files out of the init.vim, it becomes easier to check that
-Vim-Plug actually loaded the plugin. If the plugin was not loaded, the
-configuration file runs `finish` immediately.
-
-This allows for extensive modification to the way that Neovim handles files and
-allows for startup time to remain the realm of 200 milliseconds.
-
+### Plugins Used
 
 Currently, lazily loaded modification files exist for:
 

@@ -98,9 +98,7 @@ class Pydoc:
         else:
             self.env = os.environ.items()
 
-    @pynvim.command('Pydoc',
-                    nargs=1,
-                    complete='customlist,sys.modules().keys()')
+    @pynvim.command('Pydoc', nargs=1)
     def command_handler(self, args):
         """Open a new tab with the pydoc output."""
         self.vim.command('tabe')

@@ -41,12 +41,10 @@ endif
 
 " To encourage cross platform use
 set sessionoptions+=unix,slash
+
 " XDG Check: {{{2
-" The whole file is now predicated on these existing. Need to add checks in.
-" In $VIMRUNTIME/filetype.vim it looks like Bram himself checks env vars this way
 " Actually we might not need to do this. nvim has a function called stdpath()
 if empty('$XDG_DATA_HOME')
-  " May 07, 2019: Just realized you could set these. :facepalm:
   if empty(g:windows)
     let $XDG_DATA_HOME = expand('~/.local/share')
   else
@@ -87,7 +85,7 @@ let s:plugins = filereadable(expand(stdpath('data') . '/site/autoload/plug.vim')
 
 if empty(s:plugins)
   " bootstrap plug.vim on new systems
-  function! s:InstallPlug()
+  function! s:InstallPlug() abort
 
     try
       " Successfully executed on termux
@@ -141,16 +139,13 @@ let g:maplocalleader = '<Space>'
 
 " if has(nvim-0.4): {{{2
 if has('nvim-0.4')
-  let &shadafile = expand('$XDG_DATA_HOME') . '/nvim/shada/main.shada'
-" toggle transparency in the pum
+  let &shadafile = stdpath('data') . 'shada/main.shada'
+  " toggle transparency in the pum
   set pumblend=80
   try
     set pyxversion=3
   catch /^Vim:E518:*/
   endtry
-" else
-  " on windows we'd prefer it go to nvim-data but we can't specify it this way
-  " set shada+=n$XDG_DATA_HOME/nvim/shada/main.shada
 endif
 
 " Pep8 Global Options: {{{2
@@ -176,7 +171,7 @@ set signcolumn=yes    " not fold related but close to column
 
 " Buffers Windows Tabs: {{{2
 try
-    set switchbuf=useopen,usetab,newtab
+  set switchbuf=useopen,usetab,newtab
 catch
 endtry
 
@@ -314,18 +309,19 @@ set sidescroll=10                       " Didn't realize the default is 1
 " I accidentally do this so often it feels necessary
 noremap q; q:
 
+" Ex mode is dumb
+noremap Q @q
+
 " Todo: map this to a key in a manner similar to unimpaired
 " setlocal comments=:# commentstring=#\ %s formatoptions-=t formatoptions+=croql
 
 if g:termux
-  " May 26, 2019: Just ran into my first problem from a filename with a
-  " space in the name *sigh*
+  " May 26, 2019: Just ran into my first problem from a filename with a space in the name *sigh*
   noremap <silent> <Leader>ts <Cmd>exe "!termux-share -a send " . shellescape(expand("%"))<CR>
 endif
 
-" Switch CWD to the directory of the open buffer
-noremap <Leader>cd <Cmd>cd %:p:h<CR><Cmd>pwd<CR>
 vnoremap <BS> d
+" Switch CWD to the directory of the open buffer
 noremap <Leader>cd <Cmd>cd %:p:h<CR><Bar><Cmd>pwd<CR>
 
 " Save a file as root
@@ -348,9 +344,11 @@ noremap <C-]> g<C-]>
 noremap! <F1> <Esc>
 
 " Complete whole filenames/lines with a quicker shortcut key in insert mode
-" Leave these are recursive mappings though
+" Leave these as recursive mappings though
 imap <C-f> <C-x><C-f>
 imap <C-l> <C-x><C-l>
+" Dude read over :he getcharsearch(). Now ; and , search forward backward no matter what!!!
+
 
 " Runtime: {{{1
 " Matching Parenthesis: {{{2
@@ -367,6 +365,8 @@ set matchtime=20
 let g:matchparen_timeout = 500
 let g:matchparen_insert_timeout = 300
 " variables and their buffer-local equivalents b:matchparen_timeout and b:matchparen_insert_timeout.
+noremap <expr> ; getcharsearch().forward ? ';' : ','
+noremap <expr> , getcharsearch().forward ? ',' : ';'
 
 " Filetype Specific Options: {{{2
 

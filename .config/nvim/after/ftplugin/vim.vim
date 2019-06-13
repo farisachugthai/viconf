@@ -22,6 +22,7 @@ setlocal tabstop=2
 setlocal softtabstop=2
 setlocal suffixesadd+=.vim
 setlocal nolinebreak
+setlocal nowrap
 
 let &commentstring='" %s'
 
@@ -35,8 +36,7 @@ let &commentstring='" %s'
 " VIM			*vim.vim*		*ft-vim-syntax*
 " 			*g:vimsyn_minlines*	*g:vimsyn_maxlines*
 " Support embedded lua python nd ruby syntax highlighting in vim ftypes.
-" No idea what your other options are.
-" GOT IT!
+let g:vimsyn_minlines = 300
 
 " Allows users to specify the type of embedded script highlighting
 " they want:  (perl/python/ruby/tcl support)
@@ -67,7 +67,7 @@ let g:vimsyn_folding = 'afP'
 let g:vimsyn_maxlines = 500  " why is the default 60???
 
 " Atexit: {{{1
-let b:undo_ftplugin = 'set com< cms< et< sw< ts< sts< linebreak< sua<'
+let b:undo_ftplugin = 'set com< cms< et< sw< ts< sts< linebreak< sua< wrap<'
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

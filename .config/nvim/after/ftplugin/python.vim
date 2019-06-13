@@ -28,12 +28,7 @@ setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 setlocal colorcolumn=80,120
 setlocal foldmethod=indent
 
-function! PydocKeywordprg() abort
-    enew
-    exec ':r! pydoc <CWORD>'
-endfunction
-
-setlocal keywordprg=PydocKeywordprg()
+setlocal keywordprg=pydoc
 
 " Autocommands: {{{1
 

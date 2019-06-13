@@ -36,7 +36,7 @@ if !empty(g:windows)
 else
   " I just expanded 2 snippets on Windows...Coc expanded them without
   " UltiSnips being loaded...
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+  Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 endif
 
 if exists('$TMUX')
@@ -56,6 +56,10 @@ if !empty(g:ubuntu)
   Plug 'Rykka/InstantRst', {'for': 'rst'}
  " uses python2 syntax and that's killing windows
   Plug 'gu-fan/riv.vim', {'for': 'rst'}
+
+  " I don't know rust but honestly its a model ftplugin so download it for
+  " reference
+  Plug 'rust-lang/rust.vim'
 endif
 
 if empty(g:termux)
