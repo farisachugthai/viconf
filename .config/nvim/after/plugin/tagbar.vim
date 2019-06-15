@@ -36,10 +36,10 @@ let g:tagbar_foldlevel = 2
 
 " If this variable is set to 1 then moving the cursor in the Tagbar window will
 " automatically show the current tag in the preview window.
-
+" Dude it takes up a crazy amount of room on termux and is generally quite annoying
 " Example:
 " >
-let g:tagbar_autopreview = 1
+" let g:tagbar_autopreview = 1
 
 " Mappings: {{{1
 

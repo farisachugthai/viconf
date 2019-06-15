@@ -2,7 +2,7 @@
     " File: python.vim
     " Author: Faris Chugthai
     " Description: python ftplugin
-    " Last Modified: April 17, 2019
+    " Last Modified: Jun 13, 2019
 " ============================================================================
 
 " Guards: {{{1
@@ -71,9 +71,8 @@ endif
 noremap <F5> <Cmd>py3f %<CR>
 noremap! <F5> <Cmd>py3f %<CR>
 
-noremap K call PydocKeywordprg()
-
 " Commands: {{{1
+
 if executable('yapf')
     setlocal equalprg=yapf
     setlocal formatprg=yapf

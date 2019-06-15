@@ -1,5 +1,6 @@
 .. _after-readme:
 
+===================
 Final Modifications
 ===================
 
@@ -23,6 +24,7 @@ the following structure.::
 
 
 Filetype plugins are listed for all the filetypes I commonly use.
+
 
 FZF Mappings
 ------------

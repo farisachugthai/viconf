@@ -4,6 +4,7 @@
 " Previous Maintainer:  Nikolai Weibull <now@bitwi.se>
 " Latest Revision:      2017-03-31
 
+" Guards: {{{1
 if exists("current_compiler")
   finish
 endif
@@ -12,6 +13,7 @@ let current_compiler = "rst"
 let s:cpo_save = &cpo
 set cpo&vim
 
+" CompilerSet: {{{1
 " From he exists:
 
 " :cmdname	ex command: built-in command, user
@@ -38,7 +40,11 @@ CompilerSet errorformat=
       \%X%*\\a[%*\\d]:\ Leaving\ directory\ `%f',
       \%DMaking\ %*\\a\ in\ %f
 
+
 CompilerSet 'sphinx-build'
 
+" Invoke the command with something to the effect of :make -b html . _build
+
+" Atexit: {{{1
 let &cpo = s:cpo_save
 unlet s:cpo_save

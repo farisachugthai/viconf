@@ -42,24 +42,6 @@ endif
 " To encourage cross platform use
 set sessionoptions+=unix,slash
 
-" XDG Check: {{{2
-" Actually we might not need to do this. nvim has a function called stdpath()
-if empty('$XDG_DATA_HOME')
-  if empty(g:windows)
-    let $XDG_DATA_HOME = expand('~/.local/share')
-  else
-    let $XDG_DATA_HOME = expand('~/AppData/Local')
-  endif
-endif
-
-if empty('$XDG_CONFIG_HOME')
-  if empty(g:windows)
-    let $XDG_CONFIG_HOME = expand('~/.config')
-  else
-    let $XDG_CONFIG_HOME = expand('~/Appdata/Local')
-  endif
-endif
-
 " $_ROOT: {{{2
 " The below is an env var set as a convenient bridge between Ubuntu and Termux
 " As a result it messes things up if not set, but there's no reason to halt
@@ -183,23 +165,14 @@ set winfixheight winfixwidth
 " Spell Checker: {{{2
 set spelllang=en
 
-if filereadable(expand('$XDG_CONFIG_HOME') . '/nvim/spell/en.utf-8.add')
-    let &spellfile = expand('$XDG_CONFIG_HOME') . '/nvim/spell/en.utf-8.add'
-
-elseif filereadable(expand('~/projects/viconf/.config/nvim/spell/en.utf-8.add'))
-    let &spellfile = expand('~') . '/projects/viconf/.config/nvim/spell/en.utf-8.add'
+if filereadable(stdpath('config') . '/nvim/spell/en.utf-8.add')
+  let &spellfile = stdpath('config') . '/nvim/spell/en.utf-8.add'
 endif
 
 set spellsuggest=5                      " Limit the number of suggestions from 'spell suggest'
 
 if filereadable('/usr/share/dict/words')
-    set dictionary+=/usr/share/dict/words
-    " Replace the default dictionary completion with fzf-based fuzzy completion
-    inoremap <expr> <C-x><C-k> fzf#vim#complete('cat /usr/share/dict/words')
-endif
-
-if filereadable('/usr/share/dict/american-english')
-    set dictionary+=/usr/share/dict/american-english
+  set dictionary+=/usr/share/dict/words
 endif
 
 " Autocompletion: {{{2
@@ -275,13 +248,12 @@ set nojoinspaces
 " Filler lines to keep text synced, 3 lines of context on diffs, don't diff hidden files,default foldcolumn is 2
 set diffopt=filler,context:3,hiddenoff,foldcolumn:1
 
-let &undodir = expand('$XDG_CONFIG_HOME') . '/nvim/undodir'
+let &undodir = stdpath('config') . '/nvim/undodir'
 set undofile
 
 set backup
-let &backupdir=expand('$XDG_CONFIG_HOME') . '/nvim/undodir'
+let &backupdir=stdpath('config') . '/nvim/undodir'
 set backupext='.bak'        " like wth is that ~ nonsense?
-" Directory won't need to be set because it defaults to xdg_data_home/nvim/swap
 
 set modeline
 set browsedir="buffer"                  " which directory is used for the file browser
@@ -491,10 +463,16 @@ function! s:after_ft()
 
   if file_readable(s:ftplugin_file)
     exec 'edit ' . s:ftplugin_file
-  endif
 
-  if file_readable(s:after_ftplugin_file)
+  elseif file_readable(s:after_ftplugin_file)
     exec 'edit ' . s:after_ftplugin_file
+
+  elseif file_readable(stdpath('config') . '/ftplugin' . s:cur_ft . '.vim')
+    exec 'edit ' . stdpath('config') . '/ftplugin' . s:cur_ft . '.vim'
+
+  elseif file_readable(stdpath('config') . '/after/ftplugin' . s:cur_ft . '.vim')
+    exec 'edit ' . stdpath('config') . '/after/ftplugin' . s:cur_ft . '.vim'
+
   endif
 endfunction
 

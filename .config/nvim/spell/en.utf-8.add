@@ -1641,3 +1641,5 @@ zshrc
 ISE
 intellisense
 vim8
+tox
+qutebrowser

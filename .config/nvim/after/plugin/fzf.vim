@@ -110,6 +110,13 @@ noremap <Leader>GS <Cmd>GFiles?<CR>
 
 cabbrev GS GFiles?
 
+if filereadable('/usr/share/dict/words')
+    " Replace the default dictionary completion with fzf-based fuzzy completion
+  inoremap <expr> <C-x><C-k> fzf#vim#complete('cat /usr/share/dict/words')
+  " Also make it shorter
+  inoremap <expr> <C-k> fzf#vim#complete('cat /usr/share/dict/words')
+endif
+
 " Global Line Completion: {{{2
 
 " Global line completion (not just open buffers. ripgrep required.)
@@ -166,6 +173,14 @@ inoremap <expr> <C-x><C-k> fzf#complete({
             \ 'options': '--preview=bat --ansi --multi --cycle',
 \ 'left': 30})
 
+" Grepprg And Find: {{{2
+" 06/13/2019: Just got moved up so that the grep command down there uses the
+" new grepprg
+" Should we set a corresponding grepformat?
+let &grepprg = 'rg --vimgrep --no-messages '
+
+command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --glob "!.git/*" -g "!vendor/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
+
 " Grep: {{{2
 " Unfortunately the bang doesn't move to a new window. TODO
 " Opens matches in a split. Appending ! gives an error.
@@ -214,6 +229,13 @@ function! s:make_sentence(lines) abort
 endfunction
 
 inoremap <expr> <C-x><C-s> fzf#vim#complete({
+    \ 'source':  'cat /usr/share/dict/words',
+    \ 'reducer': function('<sid>make_sentence'),
+    \ 'options': '--multi --reverse --margin 15%,0',
+    \ 'left':    20})
+
+" And add a shorter version
+inoremap <expr> <C-s> fzf#vim#complete({
     \ 'source':  'cat /usr/share/dict/words',
     \ 'reducer': function('<sid>make_sentence'),
     \ 'options': '--multi --reverse --margin 15%,0',
@@ -297,8 +319,3 @@ function! FZFGit()
 endfunction
 command! FZFGit call FZFGit()
 
-" Grepprg And Find: {{{1
-" Should we set a corresponding grepformat?
-let &grepprg = 'rg --vimgrep --no-messages '
-
-command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --glob "!.git/*" -g "!vendor/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)

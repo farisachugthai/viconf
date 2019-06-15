@@ -30,6 +30,8 @@ setlocal commentstring=//%s
 
 function! ALE_JS_Conf()
 
+  let g:ale_windows_node_executable_path = 'C:/Program Files/nodejs/node.exe'
+
   let b:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
 
   if executable('prettier')

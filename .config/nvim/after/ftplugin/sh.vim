@@ -23,8 +23,36 @@ let g:sh_fold_enabled= 3  "   (enables function and heregoc folding)
 " highlighting readline options
 let readline_has_bash = 1
 
+setlocal commentstring=#\ %s
+setlocal shiftwidth=4 expandtab softtabstop=4
+
+setlocal colorcolumn=120
+
+let b:is_bash = 1
+
+" Plugins: {{{1
+"
+" ALE: {{{2
+
+function! ALE_sh_conf() abort
+" if we're using powershell or cmd on windows set ales default shell to bash
+" TODO: set the path to shellcheck.
+    if !empty(g:windows)
+        let shell_is_bash = match(expand('$SHELL'), 'bash')
+        if !shell_is_bash
+            let g:ale_sh_shell_default_shell = 1
+        endif
+    endif
+endfunction
+
+augroup aleshconf
+    au!
+    au Filetype sh call ALE_sh_conf()
+augroup END
 
 " Atexit: {{{1
+
+let b:undo_ftplugin = 'set cms< sw< et< sts< cc< '
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save
