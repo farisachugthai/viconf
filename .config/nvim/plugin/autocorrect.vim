@@ -13,14 +13,6 @@ let g:loaded_autocorrect_plugin = 1
 iab abbout about
 iab Abbout About
 iab Abotu About
-iab Abouta About A
-iab Aboutit About It
-iab Aboutthe About The
-iab Abscence Absence
-iab Accesories Accessories
-iab Accidant Accident
-iab Accomodate Accommodate
-iab Accordingto According To
 iab Accross Across
 iab Acheive Achieve
 iab Acheived Achieved
@@ -36,15 +28,6 @@ iab Adequite Adequate
 iab Adn And
 iab Advanage Advantage
 iab Affraid Afraid
-iab Afterthe After The
-iab Aganist Against
-iab Aggresive Aggressive
-iab Agian Again
-iab Agreemeent Agreement
-iab Agreemeents Agreements
-iab Agreemnet Agreement
-iab Agreemnets Agreements
-iab Agressive Aggressive
 iab Ahppen Happen
 iab Ahve Have
 iab Allready Already
@@ -53,7 +36,6 @@ iab Allwyas Always
 iab Almots Almost
 iab Almsot Almost
 iab Alomst Almost
-iab Alot A Lot
 iab Alraedy Already
 iab Alreayd Already
 iab Alreday Already
@@ -66,15 +48,6 @@ iab Ameria America
 iab Amke Make
 iab Amkes Makes
 iab Anbd And
-iab Andone And One
-iab Andteh And The
-iab Andthe And The
-iab Anothe Another
-iab Anual Annual
-iab Aplyed Applied
-iab Apparant Apparent
-iab Apparrent Apparent
-iab Appearence Appearance
 iab Appeares Appears
 iab Applicaiton Application
 iab Applicaitons Applications
@@ -91,18 +64,6 @@ iab Arguements Arguments
 iab Arond Around
 iab Artical Article
 iab Articel Article
-iab Asdvertising Advertising
-iab Assistent Assistant
-iab Asthe As The
-iab Atention Attention
-iab Atmospher Atmosphere
-iab Attentioin Attention
-iab Atthe At The
-iab Audeince Audience
-iab Audiance Audience
-iab Availalbe Available
-iab Awya Away
-iab Aywa Away
 iab Bakc Back
 iab Balence Balance
 iab Ballance Balance
@@ -111,12 +72,6 @@ iab Bcak Back
 iab Beacuse Because
 iab Becasue Because
 iab Becaus Because
-iab Becausea Because A
-iab Becauseof Because Of
-iab Becausethe Because The
-iab Becauseyou Because You
-iab Becomeing Becoming
-iab Becomming Becoming
 iab Becuase Because
 iab Becuse Because
 iab Befoer Before
@@ -135,9 +90,6 @@ iab Betwen Between
 iab Beutiful Beautiful
 iab Boxs Boxes
 iab Brodcast Broadcast
-iab Butthe But The
-iab Bve Be
-iab Caharcter Character
 iab Calcullated Calculated
 iab Calulated Calculated
 iab Candidtae Candidate
@@ -214,10 +166,6 @@ iab Corruptable Corruptible
 iab Cotten Cotton
 iab Coudl Could
 iab Couldnt Couldn't
-iab Couldthe Could The
-iab Cpoy Copy
-iab Ctaegory Category
-iab Cusotmer Customer
 iab Cusotmers Customers
 iab Cutsomer Customer
 iab Cutsomers Customers
@@ -251,10 +199,7 @@ iab Developors Developers
 iab Develpment Development
 iab Diaplay Display
 iab Didint Didn't
-iab Didnot Did Not
 iab Didnt Didn't
-iab Difefrent Different
-iab Diferences Differences
 iab Differance Difference
 iab Differances Differences
 iab Differant Different
@@ -328,10 +273,6 @@ iab Firends Friends
 iab Firts First
 iab Follwo Follow
 iab Follwoing Following
-iab Fora For A
-iab Foriegn Foreign
-iab Forthe For The
-iab Forwrd Forward
 iab Forwrds Forwards
 iab Foudn Found
 iab Foward Forward
@@ -341,34 +282,12 @@ iab Freindly Friendly
 iab Freinds Friends
 iab Frmo From
 iab Fro For
-iab Fromthe From The
-iab Furneral Funeral
-iab Fwe Few
-iab Garantee Guarantee
-iab Gaurd Guard
-iab Gemeral General
-iab Gerat Great
-iab Geting Getting
-iab Gettin Getting
-iab Gievn Given
-iab Giveing Giving
-iab Gloabl Global
-iab Goign Going
-iab Gonig Going
-iab Govenment Government
-iab Goverment Government
-iab Gruop Group
-iab Gruops Groups
-iab Grwo Grow
-iab Guidlines Guidelines
-iab Hadbeen Had Been
 iab Haev Have
 iab Hapened Happened
 iab Hapen Happen
 iab Hapening Happening
 iab Hapens Happens
 iab Happend Happened
-iab Hasbeen Has Been
 iab Hasnt Hasn't
 iab Havebeen Have Been
 iab Haveing Having
@@ -377,9 +296,6 @@ iab Hda Had
 iab Hearign Hearing
 iab Helpfull Helpful
 iab Herat Heart
-iab Hesaid He Said
-iab Hewas He Was
-iab Hge He
 iab Hismelf Himself
 iab Hlep Help
 iab Hsa Has
@@ -391,7 +307,6 @@ iab Htey They
 iab Hting Thing
 iab Htink Think
 iab Htis This
-iab Httpl Http:
 iab Hvae Have
 iab Hvaing Having
 iab Hwich Which
@@ -412,26 +327,8 @@ iab Improvemnt Improvement
 iab Improvment Improvement
 iab Includ Include
 iab Indecate Indicate
-iab Indenpendence Independence
-iab Indenpendent Independent
-iab Indepedent Independent
-iab Independance Independence
-iab Independant Independent
-iab Independantly Independently
-iab Influance Influence
-iab Infomation Information
-iab Informatoin Information
 iab Inital Initial
-iab Instaleld Installed
-iab Insted Instead
-iab Insted Intead
-iab Insurence Insurance
-iab Inteh In The
-iab Interum Interim
-iab Inthe In The
-iab Inwhich In Which
 ia Isnt Isn't
-iab Isthe Is The
 ia Itd It'd
 iab Itis It Is
 iab Ititial Initial
@@ -446,19 +343,9 @@ iab Iwll Will
 iab Iwth With
 ia Ive I've
 iab Jsut Just
-iab Jugment Judgment
-iab Knowldge Knowledge
-iab Knowlege Knowledge
-iab Knwo Know
-iab Knwon Known
-iab Knwos Knows
 iab Konw Know
 iab Konwn Known
 iab Konws Knows
-iab Labratory Laboratory
-iab Lastyear Last Year
-iab Learnign Learning
-iab Lenght Length
 ia Lets Let's
 iab Levle Level
 iab Libary Library
@@ -519,19 +406,12 @@ iab Occurence Occurrence
 iab Occurrance Occurrence
 iab Ocur Occur
 iab Oeprator Operator
-iab Ofits Of Its
 iab Ofthe Of The
-iab Oging Going
-iab Ohter Other
 ia Oit Out
 iab Omre More
 iab Oneof One Of
-iab Onepoint One Point
 iab Onthe On The
 iab Onyl Only
-iab Oppasite Opposite
-iab Opperation Operation
-iab Oppertunity Opportunity
 iab Opposate Opposite
 iab Opposible Opposable
 iab Opposit Opposite
@@ -543,14 +423,11 @@ iab Orginization Organization
 iab Orginized Organized
 iab Otehr Other
 iab Otu Out
-iab Outof Out Of
-iab Overthe Over The
 iab Owrk Work
 iab Owuld Would
 iab Oxident Oxidant
 iab Papaer Paper
 iab Parliment Parliament
-iab Partof Part Of
 iab Paymetn Payment
 iab Paymetns Payments
 iab Pciture Picture
@@ -558,9 +435,6 @@ iab Peice Piece
 iab Peices Pieces
 iab Peolpe People
 iab Peopel People
-iab Percentof Percent Of
-iab Percentto Percent To
-iab Performence Performance
 iab Perhasp Perhaps
 iab Perhpas Perhaps
 iab Permanant Permanent
@@ -632,42 +506,10 @@ iab Reveiwing Reviewing
 iab Reveiw Review
 iab Rumers Rumors
 iab Rwite Write
-iab Rythm Rhythm
-iab Saidhe Said He
-iab Saidit Said It
-iab Saidthat Said That
-iab Saidthe Said The
-iab Sceduled Scheduled
-iab Scedule Schedule
-iab Secratary Secretary
-iab Sectino Section
-iab Seh She
-iab Selectoin Selection
-iab Sentance Sentence
-iab Separeate Separate
-iab Seperate Separate
-iab Sercumstances Circumstances
-iab Shcool School
-iab Shesaid She Said
-iab Shineing Shining
-iab Shiped Shipped
-iab Shoudl Should
-iab Shouldent Shouldn't
 iab Shouldnt Shouldn't
 ia Shouldve Should've
 iab Showinf Showing
 iab Signifacnt Significant
-iab Simalar Similar
-iab Similiar Similar
-iab Simpyl Simply
-iab Sincerly Sincerely
-iab Sitll Still
-iab Smae Same
-iab Smoe Some
-iab Soem Some
-iab Sohw Show
-iab Soical Social
-iab Somethign Something
 iab Someting Something
 iab Somewaht Somewhat
 iab Somthing Something
@@ -713,16 +555,8 @@ iab Tghe The
 iab Tghis This
 iab Thansk Thanks
 iab Thats That's
-iab Thatthe That The
-iab Thecompany The Company
-iab Thefirst The First
-iab Thegovernment The Government
-iab Themselfs Themselves
 iab Themself Themselves
-iab Thenew The New
-iab Theri Their
 iab Thesame The Same
-iab Thetwo The Two
 iab Theyll They'll
 iab Theyve They've
 ia Theyre They're
@@ -730,7 +564,6 @@ iab Thgat That
 iab Thge The
 iab Thier Their
 iab Thigsn Things
-iab Thisyear This Year
 iab Thme Them
 iab Thna Than
 iab Thna Than
@@ -757,7 +590,6 @@ iab Tongiht Tonight
 iab Tonihgt Tonight
 iab Totalyl Totally
 iab Totaly Totally
-iab Tothe To The
 iab Towrad Toward
 iab Traditionalyl Traditionally
 iab Transfered Transferred
@@ -771,43 +603,6 @@ iab Tyhe The
 ia Typinf Typing
 iab Udnerstand Understand
 iab Understnad Understand
-iab Unitedstates United States
-iab Unliek Unlike
-iab Unpleasently Unpleasantly
-iab Untilll Until
-iab Useing Using
-iab Usualyl Usually
-iab Veyr Very
-iab Virtualyl Virtually
-iab Vrey Very
-iab Vulnerible Vulnerable
-iab Waht What
-iab Warrent Warrant
-iab Wasnt Wasn't
-iab Watn Want
-iab Wehn When
-iab Werre Were
-iab Whcih Which
-iab Wherre Where
-iab Whic Which
-iab Whihc Which
-iab Whta What
-iab Whta What
-iab Wief Wife
-iab Wierd Weird
-iab Wihch Which
-iab Wiht With
-iab Willbe Will Be
-iab Windoes Windows
-iab Witha With A
-iab Withe With
-iab Withthe With The
-iab Wiull Will
-iab Wnated Wanted
-iab Wnats Wants
-iab Wnat Want
-iab Wohle Whole
-iab Woh Who
 iab Wokr Work
 ia Wont Won't
 iab Woudl Would
@@ -1214,7 +1009,7 @@ iab htey they
 iab hting thing
 iab htink think
 iab htis this
-iab httpL http:
+ia http http://
 iab hvae have
 iab hvaing having
 iab hwich which
@@ -1274,12 +1069,6 @@ iab knowldge knowledge
 iab knowlege knowledge
 iab knwo know
 iab knwon known
-iab knwos knows
-iab konw know
-iab konwn known
-iab konws knows
-iab labratory laboratory
-iab lastyear last year
 iab learnign learning
 iab lenght length
 ia lets let's
@@ -1289,7 +1078,6 @@ iab librarry library
 iab librery library
 iab liekd liked
 iab liek like
-iab lieutenent lieutenant
 iab liev live
 iab likly likely
 iab lisense license
@@ -1304,9 +1092,7 @@ iab maintenence maintenance
 iab mainting maintaining
 iab makeing making
 iab managment management
-iab mantain maintain
 iab marraige marriage
-iab memeber member
 iab merchent merchant
 iab mesage message
 iab mesages messages
@@ -1317,7 +1103,6 @@ iab mkae make
 iab mkaes makes
 iab mkaing making
 iab moeny money
-iab morgage mortgage
 iab mroe more
 iab mysefl myself
 iab myu my
@@ -1342,38 +1127,27 @@ iab occurence occurrence
 iab occurrance occurrence
 iab ocur occur
 iab oeprator operator
-iab ofits of its
-iab ofthe of the
 iab oging going
 iab ohter other
 ia oit out
 iab omre more
-iab oneof one of
 iab onepoint one point
-iab onthe on the
 iab onyl only
 iab oppasite opposite
-iab opperation operation
-iab oppertunity opportunity
-iab opposate opposite
 iab opposible opposable
 iab opposit opposite
 iab oppotunities opportunities
 iab oppotunity opportunity
 iab optoin option
 iab optoins options
-iab orginization organization
 iab orginized organized
 iab otehr other
 iab otu out
-iab outof out of
-iab overthe over the
 iab owrk work
 iab owuld would
 iab oxident oxidant
 iab papaer paper
 iab parliment parliament
-iab partof part of
 iab paymetn payment
 iab paymetns payments
 iab pciture picture
@@ -1381,8 +1155,6 @@ iab peice piece
 iab peices pieces
 iab peolpe people
 iab peopel people
-iab percentof percent of
-iab percentto percent to
 iab performence performance
 iab perhasp perhaps
 iab perhpas perhaps
@@ -1434,8 +1206,6 @@ iab religous religious
 iab reluctent reluctant
 iab remeber remember
 iab reommend recommend
-iab representativs representatives
-iab representives representatives
 iab represetned represented
 iab represnt represent
 iab reserach research
@@ -1444,8 +1214,6 @@ iab resorces resources
 iab respomd respond
 iab respomse response
 iab responce response
-iab responsapreferredbility responsibility
-iab responsable responsible
 iab responsibile responsible
 iab responsiblity responsibility
 iab restaraunt restaurant
@@ -1453,13 +1221,8 @@ iab restuarant restaurant
 iab reult result
 iab reveiwing reviewing
 iab reveiw review
-iab rumers rumors
 iab rwite write
 iab rythm rhythm
-iab saidhe said he
-iab saidit said it
-iab saidthat said that
-iab saidthe said the
 iab sceduled scheduled
 iab scedule schedule
 iab secratary secretary
@@ -1469,8 +1232,6 @@ iab selectoin selection
 iab sentance sentence
 iab separeate separate
 iab seperate separate
-iab sercumstances circumstances
-iab shcool school
 iab shesaid she said
 iab shineing shining
 iab shiped shipped
@@ -1536,16 +1297,9 @@ iab tghe the
 iab tghis this
 iab thansk thanks
 iab thats that's
-iab thatthe that the
-iab thecompany the company
-iab thefirst the first
-iab thegovernment the government
 iab themselfs themselves
 iab themself themselves
-iab thenew the new
 iab theri their
-iab thesame the same
-iab thetwo the two
 iab theyll they'll
 iab theyve they've
 ia theyre they're
@@ -1553,7 +1307,6 @@ iab thgat that
 iab thge the
 iab thier their
 iab thigsn things
-iab thisyear this year
 iab thme them
 iab thna than
 iab thna than
@@ -1580,7 +1333,6 @@ iab tongiht tonight
 iab tonihgt tonight
 iab totalyl totally
 iab totaly totally
-iab tothe to the
 iab towrad toward
 iab traditionalyl traditionally
 iab transfered transferred
@@ -1594,7 +1346,6 @@ iab tyhe the
 ia typinf typing
 iab udnerstand understand
 iab understnad understand
-iab UnitedStates United States
 iab unliek unlike
 iab unpleasently unpleasantly
 iab untilll until
@@ -1609,23 +1360,9 @@ iab warrent warrant
 iab wasnt wasn't
 iab watn want
 iab wehn when
-iab werre were
-iab whcih which
-iab wherre where
-iab whic which
-iab whihc which
-iab whta what
-iab whta what
-iab wief wife
 iab wierd weird
 iab wihch which
 iab wiht with
-iab willbe will be
-iab windoes windows
-iab witha with a
-iab withe with
-iab withthe with the
-iab wiull will
 iab wnated wanted
 iab wnats wants
 iab wnat want
@@ -1634,7 +1371,6 @@ iab woh who
 ia wont won't
 iab wokr work
 iab woudl would
-iab wouldbe would be
 iab wouldnt wouldn't
 ia wouldve would've
 iab wriet write
@@ -1651,7 +1387,6 @@ iab yeras years
 iab yera year
 iab yersa years
 iab yoiu you
-iab youare you are
 ia youll you'll
 ia youre you're
 iab youve you've

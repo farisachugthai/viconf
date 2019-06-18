@@ -21,13 +21,16 @@ setlocal number
 setlocal relativenumber
 setlocal expandtab
 setlocal wrap
+setlocal keywordprg=:help
 
 " Kinda works. Statusline doesn't revert correctly though.
-let &statusline = ' %{&ft} '
+" DUDE THIS DOESNT WORK WTH
+" let &statusline = ' %{&ft} '
 
+" Atexit: {{{1
 " What is the abbreviation of nowrap? :set nowr<Tab> shows multiple choices.
-let b:undo_ftplugin = 'set nu< rnu< et< wrap<
-      \ unlet statusline'
+let b:undo_ftplugin = 'set nu< rnu< et< wrap< kp<'
+"      \ unlet statusline'
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save
