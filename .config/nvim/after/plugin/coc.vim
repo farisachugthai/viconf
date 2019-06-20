@@ -21,16 +21,7 @@ let b:did_coc_after_plugin = 1
 let s:cpo_save = &cpoptions
 set cpoptions&vim
 
-" Mappings: {{{1
-
-" This section primarily focuses on setting up the autocompletion aspect
-" Refresh completions with C-Space
-inoremap <silent><expr> <C-Space> <Cmd>coc#refresh()<CR>
-
-" Set Enter to accept autocompletion. More settings in
-" ~/.config/nvim/coc-settings.json
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
-
+" Snippets: {{{1
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 " function! s:check_back_space() abort
@@ -58,17 +49,27 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-let g:coc_snippet_next = '<tab>'
+let g:coc_snippet_next = '<C-j>'
 
 " Note: the `coc-snippets` extension is required for this to work.
 " Holy hell that's a hell of a setup!
 " Supertab's also installed hahahah
-let g:coc_snippet_prev = '<S-Tab>'
+let g:coc_snippet_prev = '<C-k>'
+
+" Mappings: {{{1
+
+" This section primarily focuses on setting up the autocompletion aspect
+" Refresh completions with C-Space
+inoremap <silent><expr> <C-Space> <Cmd>coc#refresh()<CR>
+
+" Set Enter to accept autocompletion. More settings in
+" ~/.config/nvim/coc-settings.json
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
 
 " Use `[c` and `]c` to navigate diagnostics
 " First check that gitgutter doesn't have these mapped first
-" nmap <silent> [c <Plug>(coc-diagnostic-prev)
-" nmap <silent> ]c <Plug>(coc-diagnostic-next)
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
 " Now let's start working with the niceties of an LSP. Docs and symbols
@@ -101,7 +102,6 @@ augroup CocConf
   autocmd CursorHold * silent call CocActionAsync('highlight')
 augroup end
 
-
 " Using CocList: {{{1
 " Show all diagnostics
 " nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
@@ -127,13 +127,13 @@ noremap <C-c>d :<Cmd>CocList diagnostics<CR>
 " Remap for rename current word
 nmap <F2> <Plug>(coc-rename)
 
-" Remap for format selected region
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
+" Remap for format selected region. e for errors and visual selection
+xmap <leader>ev  <Plug>(coc-format-selected)
+nmap <leader>ev  <Plug>(coc-format-selected)
 
 " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-xmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
+" xmap <leader>a  <Plug>(coc-codeaction-selected)
+" nmap <leader>a  <Plug>(coc-codeaction-selected)
 
 " Remap for do codeAction of current line
 nmap <leader>ac  <Plug>(coc-codeaction)

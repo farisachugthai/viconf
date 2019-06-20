@@ -1,8 +1,8 @@
 # ============================================================================
-# File: vim.snippets
-# Author: Faris Chugthai
-# Description: # Vim Snippets:
-# Last Modified: April 27, 2019
+	# File: vim.snippets
+	# Author: Faris Chugthai
+	# Description: # Vim Snippets:
+	# Last Modified: April 27, 2019
 # ============================================================================
 
 # TODO Use this funcs as snips and you'll be set for help files
@@ -87,6 +87,7 @@ endif
 let ${2:b:current_syntax} = 1
 $0
 endsnippet
+
 
 snippet func "Autocompletes function name based on filename" b
 function! ${1:`expand('%') =~ 'autoload' ? substitute(matchstr(expand('%:p'),'autoload/\zs.*\ze.vim'),'[/\\]','#','g').'#' : ''`}${2:function_name}(${3}) abort

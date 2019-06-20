@@ -31,9 +31,4 @@ def main():
 
 
 if __name__ == "__main__":
-    s = rstr()
-    print("There's your starting string.")
-    print(s)
     run_str = main()
-    print("Here's the longest continuous subsection of increasing letters.")
-    print(run_str)

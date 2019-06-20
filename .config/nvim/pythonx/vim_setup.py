@@ -24,6 +24,7 @@ Apr 19, 2019:
 import argparse
 import logging
 import os
+from pathlib import Path
 import shutil
 import subprocess
 import sys
@@ -48,6 +49,7 @@ def _parse_arguments():
     :return: :class:`Response <Response>` object
 
     .. todo::
+
         - Add arguments for where they want the virtualenv to install this into
         - Argument for what additional packages they'd like
         - Give an option to specify a file with a listing of packages?
@@ -56,20 +58,22 @@ def _parse_arguments():
     parser = argparse.ArgumentParser(
         description='Installs and sets up neovim.')
 
-    parser.add_argument('-d',
-                        '--plug-dir',
-                        dest='plug_dir',
-                        metavar="Directory for vim-plug",
-                        help='The directory that vim-plug is downloaded to.')
-    parser.add_argument("-p",
-                        "--packages",
-                        metavar="packages",
-                        required=False,
-                        default=None,
-                        help="Packages for pip to install.")
+    parser.add_argument(
+        '-d',
+        '--plug-dir',
+        dest='plug_dir',
+        metavar="Directory for vim-plug",
+        help='The directory that vim-plug is downloaded to.')
+    parser.add_argument(
+        "-p",
+        "--packages",
+        metavar="packages",
+        default='pip, pynvim',
+        action='store_append',
+        help="Comma separated list of packages for pip to install.")
+
     args = parser.parse_args()
 
-    # did we get any args
     if len(sys.argv) == 1:
         parser.print_help()
         sys.exit()
@@ -83,26 +87,24 @@ class Machine:
     Probably gonna want to move those functions `get_home` and stuff into this class.
     """
 
-    def __init__(self, home=None):
+    def __init__(self, path=None):
         """Initialize a machine."""
         self.conda = shutil.which('conda')
-        self.home = home
+        if not path:
+            self.path = Path('.')
+        else:
+            self.path = Path
+        self._py_version = sys.version_info
+
+    def _is_py37(self):
+        return self._py_version > (3, 7)
 
     def get_home(self):
-        """Get a user's home directory.
-
-        .. note::
-
-            :func:`sysconfig._getuserbase()` does a similar thing; however, the end
-            directory is different in every OS case so we can't just import it and
-            walk away.
-
-        """
+        """Get a user's home directory."""
         try:
-            self.home = os.path.expanduser("~")
-        except OSError:
-            self.home = os.environ.get("%userprofile%")
-        return self.home
+            return self.path.home()
+        except Exception as e:
+            logging.error(e, exc_info=True)
 
     def check_dir(self, dir_d=None):
         """Check if a dir exists and if not, create it.
@@ -166,21 +168,13 @@ def termux_packages():
 
     """
     output = subprocess.run(["pkg", "install", "vim-python", "python-dev"],
-                             capture_output=True)
+                            capture_output=True)
     return output
 
 
-def pip_version():
-    if sys.version_info > (3, 7):
-        PIP37 = True
-        return PIP37
-    else:
-        return None
-
-
-def pip_install(PIP37=None):
+def pip_install():
     """Run platform-independent pip install. Install both pynvim and neovim."""
-    if PIP37:
+    if pip_version():
         subprocess.run([
             "pip", "install", "-U", "pip", "python-language-server[all]",
             "pynvim"
