@@ -18,7 +18,6 @@
     "python.linting.pylintEnabled": false,
     "python.linting.pylintUseMinimalCheckers": true,
     "python.terminal.executeInFileDir": true,
-    "python.venvPath": "~/miniconda3/envs/",
     "python.jediEnabled": true,
 	"list.source.grep.defaultArgs": ["-regex"],
 	"list.insertMappings": {
@@ -39,7 +38,13 @@
     },
     "python.linting.banditEnabled": false,
     "coc.preferences.formatOnSaveFiletypes":["javascript", "html", "css", "python", "vim", "bash", "powershell"],
-	  "suggest.completionItemKindLabels": {
+    "diagnostic.checkCurrentLine": true,
+    "diagnostic.displayByAle": true,
+    "diagnostic.virtualText": true,
+	"codeLens.enable": true,
+    "list.extendedSearchMode": true,
+    "coc.preferences.previewAutoClose": false,
+	"suggest.completionItemKindLabels": {
 		"keyword": "\uf1de",
 		"variable": "\ue79b",
 		"value": "\uf89f",
@@ -66,10 +71,9 @@
 		"typeParameter": "\uf728",
 		"default": "\uf29c"
 	},
-    "diagnostic.checkCurrentLine": true,
-    "diagnostic.displayByAle": true,
-    "diagnostic.virtualText": true,
-	"codeLens.enable": true,
-    "list.extendedSearchMode": true,
-    "coc.preferences.previewAutoClose": false,
+  "python.venvFolders": [
+      "~/virtualenvs",
+      "~/.local/share/virtualenvs/"
+  ],
+  "json.format.enable": true
 }

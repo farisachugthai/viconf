@@ -13,4 +13,3 @@ jupyter-extensions ~/.local/share/jupyter
 
 WindowsPowerShell ~/Documents/WindowsPowerShell
 ConEmu C:/Program Files/ConEmu/ConEmu
-index /data/data/com.termux/files/usr/share/nvim/runtime/doc/index.txt

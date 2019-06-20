@@ -13,12 +13,16 @@ set cpoptions&vim
 " Remote Hosts: {{{1
   " Set the node and ruby remote hosts
 
+" Node Host: {{{2
 function! Get_Node_Host() abort
   " So we should be able to refactor the yarn portion out.
   " It's the same on every platform.
   if executable('yarn')
     if filereadable(shellescape(expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'))
       let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
+
+    elseif filereadable(shellescape(system('yarn global dir')) . '/node_modules/.bin/neovim-node-host')
+        let g:node_host_prog = shellescape(system('yarn global dir')) . '/node_modules/.bin/neovim-node-host'
     endif
 
   elseif executable('which')   " if we're using bash or we have 'nix tools loaded
@@ -36,7 +40,7 @@ endfunction
 
 call Get_Node_Host()
 
-" gem remote host. should be refactored.
+" gem remote host. {{{2
 if g:termux
 
   if filereadable(expand($_ROOT) . 'lib/ruby/gems/2.6.3/gems/neovim-0.8.0/exe/neovim-ruby-host')
@@ -96,7 +100,8 @@ else
 
 endif
 
-" Also add a python2 remote host: {{{2
+" python2 remote host: {{{2
+
 if executable(expand('$_ROOT') . '/bin/python2')
     let g:python_host_prog = expand('$_ROOT') . '/bin/python2'
     let &path = &path . ',' . expand('$_ROOT') . '/lib/python2/*'

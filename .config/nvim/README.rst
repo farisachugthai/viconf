@@ -321,6 +321,27 @@ mode or :kbd:`<C-u>` for visual mode.
 To date I haven't had any problems with replacing all instances of :kbd:`:`
 with ``<Cmd>``, and it makes Nvim behave in a slightly more manageable way.
 
+Autocompletion
+===============
+
+Whew! Just spent a whole lot of time setting up autocompletion from scratch.
+
+Let's first start with ex-mode completion.::
+
+   set wildmode=full:list:longest,full:list
+
+So what does this lugubrious setting provide?
+
+Broken up with a comma, this indicates that your first use of
+``wildchar``, or :kbd:`Tab`, will autocomplete the longest single completion. If
+multiple match, show them but only fill until the longest common string.
+This is nice because you won't have to delete extra characters that get
+inputted by setting only the ``full`` or ``list`` options.
+
+Then if you hit ``wildchar`` a second time, drop the longest option. If i hit
+tab twice in a row, I want you to start autopopulating the command line
+
+
 Insert Mode Completion
 ----------------------
 
@@ -366,6 +387,19 @@ Completion can be done for:
 | 12. Spelling Suggestions                      | <C-x>s     |
 +-----------------------------------------------+------------+
 
+FZF in Insert Mode
+~~~~~~~~~~~~~~~~~~~
+
+For a good portion of these, I've written mappings that correspond to
+their respective FZF functions. In addition I've added shorter variations
+by dropping the redundant :kbd:`C-x`.
+
+For example, :kbd:`C-f` only in insert mode invokes FZF.
+
+That code can be found `here.`_
+
+
+.. _`here.`: after/plugin/fzf.vim
 .. _`after/ftplugin/gitcommit.vim`: ./after/ftplugin/gitcommit.vim
 .. _`after/ftplugin/`: ./after/ftplugin/
 .. _`after/syntax/`: ./after/syntax/
