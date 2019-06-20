@@ -121,7 +121,7 @@ let g:maplocalleader = '<Space>'
 
 " if has(nvim-0.4): {{{2
 if has('nvim-0.4')
-  let &shadafile = stdpath('data') . 'shada/main.shada'
+  let &shadafile = stdpath('data') . '/shada/main.shada'
   " toggle transparency in the pum
   set pumblend=80
   try
@@ -248,11 +248,11 @@ set nojoinspaces
 " Filler lines to keep text synced, 3 lines of context on diffs, don't diff hidden files,default foldcolumn is 2
 set diffopt=filler,context:3,hiddenoff,foldcolumn:1
 
-let &undodir = stdpath('config') . '/nvim/undodir'
+let &undodir = stdpath('config') . '/undodir'
 set undofile
 
 set backup
-let &backupdir=stdpath('config') . '/nvim/undodir'
+let &backupdir=stdpath('config') . '/undodir'
 set backupext='.bak'        " like wth is that ~ nonsense?
 
 set modeline
@@ -393,7 +393,11 @@ augroup END
 command! -nargs=1 -complete=help Help call g:Helptab()
 
 " Statusline: {{{2
+
 function! s:statusline_expr() abort
+  " Define statusline groups for WebDevIcons, Fugitive and other plugins.
+  " Define empty fallbacks if those plugins aren't installed. Then
+  " use the builtins to fill out the information.
   if exists('*WebDevIconsGetFileTypeSymbol')
     let dicons = ' %{WebDevIconsGetFileTypeSymbol()} '
   else
@@ -421,6 +425,19 @@ else
 endif
 
   return '[%n] %f '. dicons . '%m' . '%r' . ' %y ' . fug . csv . ' ' . ' %{&ff} ' . tstmp . sep . pos . '%*' . ' %P'
+endfunction
+
+function! StatusDiagnostic() abort
+let info = get(b:, 'coc_diagnostic_info', {})
+if empty(info) | return '' | endif
+let msgs = []
+if get(info, 'error', 0)
+call add(msgs, 'E' . info['error'])
+endif
+if get(info, 'warning', 0)
+call add(msgs, 'W' . info['warning'])
+endif
+return join(msgs, ' ') . ' ' . get(g:, 'coc_status', '')
 endfunction
 
 let &statusline = <SID>statusline_expr()

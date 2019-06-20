@@ -75,7 +75,7 @@ else
 endif
 
 " Double check if we need to do this but sometimes the clipboard fries when set this way
-runtime! autoload/provider/clipboard.vim
+runtime autoload/provider/clipboard.vim
 
 " atexit: {{{1
 
