@@ -58,12 +58,12 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-let g:coc_snippet_next = '<tab>'
+let g:coc_snippet_next = '<C-j>'
 
 " Note: the `coc-snippets` extension is required for this to work.
 " Holy hell that's a hell of a setup!
 " Supertab's also installed hahahah
-let g:coc_snippet_prev = '<S-Tab>'
+let g:coc_snippet_prev = '<C-k>'
 
 " Use `[c` and `]c` to navigate diagnostics
 " First check that gitgutter doesn't have these mapped first
@@ -81,8 +81,9 @@ nmap <silent> gr <Plug>(coc-references)
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
 function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
+  " Jun 15, 2019: Added none if we do something like `:r!pydoc thing`
+  if (index(['vim','help','none'], &filetype) >= 0)
+    execute 'h ' . expand('<cWORD>')
   else
     call CocAction('doHover')
   endif
@@ -90,6 +91,7 @@ endfunction
 
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
+nmap <F2> <Plug>(coc-rename)
 
 augroup CocConf
   autocmd!
@@ -128,17 +130,18 @@ noremap <C-c>d :<Cmd>CocList diagnostics<CR>
 nmap <F2> <Plug>(coc-rename)
 
 " Remap for format selected region
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
+xmap <leader>cf  <Plug>(coc-format-selected)
+nmap <leader>cf  <Plug>(coc-format-selected)
 
 " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-xmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
+xmap <leader>ca  <Plug>(coc-codeaction-selected)
+" nmap <leader>ca  <Plug>(coc-codeaction-selected)
 
 " Remap for do codeAction of current line
-nmap <leader>ac  <Plug>(coc-codeaction)
+nmap <leader>ca  <Plug>(coc-codeaction)
+
 " Fix autofix problem of current line
-nmap <leader>qf  <Plug>(coc-fix-current)
+nmap <leader>cqf  <Plug>(coc-fix-current)
 
 " Commands: {{{1
 

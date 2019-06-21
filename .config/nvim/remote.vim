@@ -5,29 +5,32 @@
     " Last Modified: June 08, 2019
 " ============================================================================
 
-" Preliminaries: {{{1
+" Preliminaries: 
 scriptencoding utf-8
 let s:cpo_save = &cpoptions
 set cpoptions&vim
 
-" Remote Hosts: {{{1
+" Remote Hosts: 
   " Set the node and ruby remote hosts
 
 function! Get_Node_Host() abort
-  " So we should be able to refactor the yarn portion out.
-  " It's the same on every platform.
-  if executable('yarn')
-    if filereadable(shellescape(expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'))
-      let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
-    endif
-
-  elseif executable('which')   " if we're using bash or we have 'nix tools loaded
+    " worked when i ran it with set shell=cmd
+  if executable('which')   " if we're using bash or we have 'nix tools loaded
 
       " slashes end up backwards on windows but let's see if that's not a problem
       " postscript: if it is utilize a function! g:Slash() abort
       " tr('\\', '/') or some shit to fix path names. Check out fugitive
       " or pathogen for inspiration.
+      " ...or just set shellslash dude.
+
       let g:node_host_prog = system('which node')
+
+  " TODO: do a conda check. I know this is annoying as hell but the remote
+  " hosts keep getting unset!!
+  elseif executable('yarn')
+    if filereadable(shellescape(expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'))
+      let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
+    endif
 
   else
     let g:loaded_node_provider = 1
@@ -56,9 +59,9 @@ elseif g:ubuntu
 
 endif
 
-" Python Executables: {{{1
+" Python Executables: 
 
-" Python3: {{{2
+" Python3: 
 " If we have a virtual env start there
 if exists('$VIRTUAL_ENV')
     let g:python3_host_prog = expand('$VIRTUAL_ENV') . '/bin/python'
@@ -96,7 +99,7 @@ else
 
 endif
 
-" Also add a python2 remote host: {{{2
+" Also add a python2 remote host: 
 if executable(expand('$_ROOT') . '/bin/python2')
     let g:python_host_prog = expand('$_ROOT') . '/bin/python2'
     let &path = &path . ',' . expand('$_ROOT') . '/lib/python2/*'
@@ -107,6 +110,6 @@ else
     let g:loaded_python_provider = 1
 endif
 
-" Atexit: {{{1
+" Atexit: 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

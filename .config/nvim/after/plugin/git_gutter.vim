@@ -26,6 +26,12 @@ let g:gitgutter_log = 1
 " reasonable...
 let g:gitgutter_diff_args = ' --no-color --no-ext-diff -U0 -- '
 
+if g:windows
+  let g:gitgutter_grep = 'rg --vimdiff --color always '
+  let g:gitgutter_git_executable = 'C:\tools\Cmder\vendor\git-for-windows\git-cmd.exe'
+
+endif
+
 " Mappings: {{{1
 
 " Because of coc we should check if we already have a mapping.

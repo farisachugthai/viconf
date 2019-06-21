@@ -43,11 +43,6 @@ if isdirectory(expand('~/.local/lib/python3.7'))
     let &path = &path . ',' . expand('~') . '/.local/lib/python3.7'
 endif
 
-" TODO: How do we glob in vimscript? There's some weird thing about using * and ** right?
-" if isdirectory(expand('$_ROOT/lib/python3'))
-
-" endif
-
 " Highlight I20 Chars: {{{2
 
 augroup pythonchars
@@ -79,10 +74,20 @@ if executable('yapf')
     " Don't forget this advice from usr_41
     " USER COMMANDS
     " To add a user command for a specific file type, so that it can only be used in
-    " one buffer, use the "-buffer" argument to |:command|.  Example:
-    command! -buffer -nargs=0 YAPF exec '!yapf %'
-    command! -buffer -nargs=0 YAPFI exec '!yapf -i %'
-    command! -buffer -nargs=0 YAPFD cexpr! exec '!yapf -d %'
+    " one buffer, use the "-buffer" argument to |:command|.:
+  function! YAPF() abort
+    " ughhhhh this is gonna be a pain in the ass to modify so it reads into a buffer
+    redir => b:tmp_var
+    exec '!yapf %'
+    redir END
+    enew
+    " shit how do we read in the output.... TODO: alternatively try
+    " `:TBrowseOutput because tlib is the bees knees
+  endfunction
+
+  command! -buffer -nargs=0 YAPF exec '!yapf %'
+  command! -buffer -nargs=0 YAPFI exec '!yapf -i %'
+  command! -buffer -nargs=0 YAPFD cexpr! exec '!yapf -d %'
 
 else
     if executable('autopep8')
@@ -100,10 +105,8 @@ endif
 " ALE: {{{2
 
 function! ALE_Python_Conf()
-    let b:ale_linters = [ 'flake8', 'pydocstyle', 'pyls' ]
-
     let b:ale_linters_explicit = 1
-
+    let b:ale_linters = [ 'flake8', 'pydocstyle', 'pyls' ]
     let b:ale_python_pyls_config = {
           \   'pyls': {
           \     'plugins': {
@@ -121,7 +124,11 @@ function! ALE_Python_Conf()
     " Hey you in the future. You can use :set *prg<Tab> and see all of the
     " configuration options you have.
     " Now you can also use gq for yapf
-    let b:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
+    let b:ale_fixers = [
+          \ 'remove_trailing_lines', 
+          \ 'trim_whitespace',
+          \ 'reorder-python-imports'
+          \ ]
 
     if executable('yapf')
         let b:ale_fixers += ['yapf']
@@ -131,9 +138,13 @@ function! ALE_Python_Conf()
         endif
     endif
 
+    let b:ale_virtualenv_dir_names = []
     if isdirectory('~/virtualenvs')
-        let b:ale_virtualenv_dir_names += '~/virtualenvs'
+      let b:ale_virtualenv_dir_names += '~/virtualenvs'
+    elseif isdirectory(expand('~/Anaconda3'))
+      let b:ale_virtualenv_dir_names += expand('~/Anaconda3')
     endif
+
 endfunction
 
 augroup alepythonconf
