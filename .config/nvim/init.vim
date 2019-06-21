@@ -11,7 +11,10 @@ set cpoptions&vim
 
 " Termux check from Evervim. Thanks!
 let g:termux = isdirectory('/data/data/com.termux')
+
+" This evals to 1 on termux...
 let g:ubuntu = has('unix') && !has('macunix')
+
 " This got moved up so we can check what OS we have and decide what options
 " to set from there
 " how the literal fuck is `has('win32')` a nvim specific thing.
@@ -121,7 +124,7 @@ let g:maplocalleader = '<Space>'
 
 " if has(nvim-0.4): {{{2
 if has('nvim-0.4')
-  let &shadafile = stdpath('data') . 'shada/main.shada'
+  let &shadafile = stdpath('data') . '/shada/main.shada'
   " toggle transparency in the pum
   set pumblend=80
   try
@@ -162,11 +165,21 @@ set splitbelow splitright
 " Resize windows automatically. nvim also autosets equalalways
 set winfixheight winfixwidth
 
+" Admittedly I kinda know why the screen looks so small
+if &textwidth!=0
+  setl colorcolumn=+1
+else
+  setl colorcolumn=80
+endif
+
+set cmdheight=2
+set number relativenumber
+
 " Spell Checker: {{{2
 set spelllang=en
 
-if filereadable(stdpath('config') . '/nvim/spell/en.utf-8.add')
-  let &spellfile = stdpath('config') . '/nvim/spell/en.utf-8.add'
+if filereadable(stdpath('config') . '/spell/en.utf-8.add')
+  let &spellfile = stdpath('config') . '/spell/en.utf-8.add'
 endif
 
 set spellsuggest=5                      " Limit the number of suggestions from 'spell suggest'
@@ -177,8 +190,7 @@ endif
 
 " Autocompletion: {{{2
 
-set wildmenu
-set wildmode=longest,list:longest       " Longest string or list alternatives
+set wildmode=full:list:longest,full:list
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 
 " A list of words that change how command line completion is done.
@@ -186,15 +198,15 @@ set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 set wildoptions=tagfile
 
 set complete+=kspell                    " Autocomplete in insert mode
+" Create a preview window and display all possibilities but don't insert
 set completeopt=menu,menuone,noselect,noinsert,preview
 
 " don't show more than 15 choices in the popup menu. defaults to 0
 set pumheight=15
 
-" Path: {{{2
+set smartcase infercase    " the case when you search for stuff
 
-" DON'T USE LET. LET ALLOWS FOR EXPRESSION EVALUATION. MUST BE DONE WITH SET
-" OR THE ** WILL EXPAND {rendering it as nothing}
+" Path: {{{2
 set path+=**                            " Recursively search dirs with :find
 
 if isdirectory(expand('$_ROOT/local/include/'))
@@ -214,8 +226,7 @@ elseif exists('ConEmuAnsi')
   set termguicolors
 endif
 
-" Used by the makeprg. system locale is used
-set makeencoding=char
+set makeencoding=char         " Used by the makeprg. system locale is used
 
 " Other Global Options: {{{2
 
@@ -223,22 +234,11 @@ if &formatexpr ==# ''
   setlocal formatexpr=format#Format()
 endif
 
-set tags+=./tags,./*/tags
-set tags+=~/projects/**/tags
+set tags+=./tags,./*/tags,~/projects/**/tags
 set tagcase=smart
 set showfulltag
 
 set mouse=a
-
-if &textwidth!=0
-  setl colorcolumn=+1
-else
-  setl colorcolumn=80
-endif
-
-set cmdheight=2
-set number relativenumber
-set smartcase infercase
 " FOOBAR=~/<CTRL-><CTRL-F> will now autocomplete!
 set isfname-==
 
@@ -248,11 +248,11 @@ set nojoinspaces
 " Filler lines to keep text synced, 3 lines of context on diffs, don't diff hidden files,default foldcolumn is 2
 set diffopt=filler,context:3,hiddenoff,foldcolumn:1
 
-let &undodir = stdpath('config') . '/nvim/undodir'
+let &undodir = stdpath('config') . '/undodir'
 set undofile
 
 set backup
-let &backupdir=stdpath('config') . '/nvim/undodir'
+let &backupdir=stdpath('config') . '/undodir'
 set backupext='.bak'        " like wth is that ~ nonsense?
 
 set modeline
@@ -264,7 +264,6 @@ set breakindentopt=sbr
 
 set updatetime=100
 
-" 3 options below are nvim specific.
 set inccommand=split
 let g:tutor_debug = 1
 
@@ -310,7 +309,11 @@ vnoremap > >gv
 " I just realized these were set to nnoremap. Meaning visual mode doesn't get this mapping
 noremap j gj
 noremap k gk
-noremap <C-]> g<C-]>
+" Help docs reminded me I hadn't done this!
+noremap <Up> gk
+noremap <Down> gj
+
+" this can be annoying. maybe turn to command? noremap <C-]> g<C-]>
 
 " Avoid accidental hits of <F1> while aiming for <Esc>
 noremap! <F1> <Esc>
@@ -320,7 +323,8 @@ noremap! <F1> <Esc>
 imap <C-f> <C-x><C-f>
 imap <C-l> <C-x><C-l>
 " Dude read over :he getcharsearch(). Now ; and , search forward backward no matter what!!!
-
+noremap <expr> ; getcharsearch().forward ? ';' : ','
+noremap <expr> , getcharsearch().forward ? ',' : ';'
 
 " Runtime: {{{1
 " Matching Parenthesis: {{{2
@@ -337,15 +341,8 @@ set matchtime=20
 let g:matchparen_timeout = 500
 let g:matchparen_insert_timeout = 300
 " variables and their buffer-local equivalents b:matchparen_timeout and b:matchparen_insert_timeout.
-noremap <expr> ; getcharsearch().forward ? ';' : ','
-noremap <expr> , getcharsearch().forward ? ',' : ';'
 
-" Filetype Specific Options: {{{2
-
-" From `:he ft-lisp-syntax`. Color parentheses differently up to 10 levels deep
-let g:lisp_rainbow = 1
-
-" Omnifuncs: {{{3
+" Omnifuncs: {{{2
 
 augroup omnifunc
     autocmd!
@@ -393,7 +390,11 @@ augroup END
 command! -nargs=1 -complete=help Help call g:Helptab()
 
 " Statusline: {{{2
+
 function! s:statusline_expr() abort
+  " Define statusline groups for WebDevIcons, Fugitive and other plugins.
+  " Define empty fallbacks if those plugins aren't installed. Then
+  " use the builtins to fill out the information.
   if exists('*WebDevIconsGetFileTypeSymbol')
     let dicons = ' %{WebDevIconsGetFileTypeSymbol()} '
   else
@@ -421,6 +422,19 @@ else
 endif
 
   return '[%n] %f '. dicons . '%m' . '%r' . ' %y ' . fug . csv . ' ' . ' %{&ff} ' . tstmp . sep . pos . '%*' . ' %P'
+endfunction
+
+function! StatusDiagnostic() abort
+let info = get(b:, 'coc_diagnostic_info', {})
+if empty(info) | return '' | endif
+let msgs = []
+if get(info, 'error', 0)
+call add(msgs, 'E' . info['error'])
+endif
+if get(info, 'warning', 0)
+call add(msgs, 'W' . info['warning'])
+endif
+return join(msgs, ' ') . ' ' . get(g:, 'coc_status', '')
 endfunction
 
 let &statusline = <SID>statusline_expr()
@@ -467,10 +481,10 @@ function! s:after_ft()
   elseif file_readable(s:after_ftplugin_file)
     exec 'edit ' . s:after_ftplugin_file
 
-  elseif file_readable(stdpath('config') . '/ftplugin' . s:cur_ft . '.vim')
+  elseif file_readable(fnamemodify(resolve(stdpath('config') . '/ftplugin' . s:cur_ft . '.vim')))
     exec 'edit ' . stdpath('config') . '/ftplugin' . s:cur_ft . '.vim'
 
-  elseif file_readable(stdpath('config') . '/after/ftplugin' . s:cur_ft . '.vim')
+  elseif file_readable(fnamemodify(resolve(stdpath('config') . '/after/ftplugin' . s:cur_ft . '.vim')))
     exec 'edit ' . stdpath('config') . '/after/ftplugin' . s:cur_ft . '.vim'
 
   endif

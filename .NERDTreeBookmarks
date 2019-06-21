@@ -1,14 +1,14 @@
 conemu ~/Dropbox/msft/cmder/conemu
+config-nvim ~/.config/nvim
 dotfiles ~/projects/dotfiles/unix
+jedi-docs ~/.local/share/nvim/plugged/jedi-vim/pythonx/jedi/docs/docs
+mpl /usr/share/doc/python-matplotlib-doc/tutorials
+plugged ~/.local/share/nvim/plugged
 python ~/python
+tlib ~/.local/share/nvim/plugged/tlib_vim/autoload/tlib
 tutorials ~/Dropbox/python/tutorials
 utilities ~/projects/utilities
 viconf ~/projects/viconf/.config/nvim
-WindowsPowerShell ~/Documents/WindowsPowerShell
-
 ConEmu C:/Program Files/ConEmu/ConEmu
-config-nvim ~/.config/nvim
-jedi-docs ~/.local/share/nvim/plugged/jedi-vim/pythonx/jedi/docs/docs
-plugged ~/.local/share/nvim/plugged
-tlib ~/.local/share/nvim/plugged/tlib_vim/autoload/tlib
-index /data/data/com.termux/files/usr/share/nvim/runtime/doc/index.txt
+jupyter-extensions ~/.local/share/jupyter
+WindowsPowerShell ~/Documents/WindowsPowerShell

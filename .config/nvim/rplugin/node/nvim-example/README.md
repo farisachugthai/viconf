@@ -129,3 +129,42 @@ Registers a command named by `name`, calling function `fn` with `options`. This 
 ```ts
   NvimPlugin.registerFunction(name: string, fn: Function, options?: NvimFunctionOptions): void;
   NvimPlugin.registerFunction(name: string, fn: [any, Function], options?: NvimFunctionOptions): void;
+  ```
+
+## Original index.js
+
+```js
+
+/* Wow also we should configure eslint because it's marking everything as wrong */
+
+module.exports = plugin => {
+  plugin.setOptions({ dev: false });
+
+  plugin.registerCommand('EchoMessage', async () => {
+      try {
+        await plugin.nvim.outWrite('Dayman (ah-ah-ah) \n');
+      } catch (err) {
+        console.error(err);
+      }
+    }, { sync: false });
+
+  plugin.registerFunction('SetLines',() => {
+    return plugin.nvim.setLine('May I offer you an egg in these troubling times')
+      .then(() => console.log('Line should be set'))
+  }, {sync: false})
+
+  plugin.registerAutocmd('BufEnter', async (fileName) => {
+    await plugin.nvim.buffer.append('BufEnter for a JS File?')
+  }, {sync: false, pattern: '*.js', eval: 'expand("<afile>")'})
+};
+
+```
+
+I tried commenting out the `plugin.nvim.buffer.append` line. 
+To an unfortunate extent it destroyed my startup-time. On Termux it hit 10000ms
+on a very simple and short file.
+
+I can't delete an "Its Always Sunny" reference, but I can't have an autocommand
+modifying buffers or slowing everything down from 200ms to 10,000.
+
+So here it stays.

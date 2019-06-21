@@ -5,17 +5,27 @@
     " Last Modified: June 08, 2019
 " ============================================================================
 
-" Preliminaries: 
+" Preliminaries: {{{1
 scriptencoding utf-8
 let s:cpo_save = &cpoptions
 set cpoptions&vim
 
-" Remote Hosts: 
+" Remote Hosts: {{{1
   " Set the node and ruby remote hosts
 
+" Node Host: {{{2
 function! Get_Node_Host() abort
     " worked when i ran it with set shell=cmd
-  if executable('which')   " if we're using bash or we have 'nix tools loaded
+  if executable('yarn')
+    if filereadable(shellescape(expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'))
+      let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
+    endif
+
+    elseif filereadable(shellescape(system('yarn global dir')) . '/node_modules/.bin/neovim-node-host')
+        let g:node_host_prog = shellescape(system('yarn global dir')) . '/node_modules/.bin/neovim-node-host'
+    endif
+
+  elseif executable('which')   " if we're using bash or we have 'nix tools loaded
 
       " slashes end up backwards on windows but let's see if that's not a problem
       " postscript: if it is utilize a function! g:Slash() abort
@@ -27,11 +37,6 @@ function! Get_Node_Host() abort
 
   " TODO: do a conda check. I know this is annoying as hell but the remote
   " hosts keep getting unset!!
-  elseif executable('yarn')
-    if filereadable(shellescape(expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'))
-      let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
-    endif
-
   else
     let g:loaded_node_provider = 1
   endif
@@ -39,77 +44,92 @@ endfunction
 
 call Get_Node_Host()
 
-" gem remote host. should be refactored.
-if g:termux
+" Gem Remote Host. {{{2
 
-  if filereadable(expand($_ROOT) . 'lib/ruby/gems/2.6.3/gems/neovim-0.8.0/exe/neovim-ruby-host')
-      let g:ruby_host_prog = expand($_ROOT) . 'lib/ruby/gems/2.6.3/gems/neovim-0.8.0/exe/neovim-ruby-host'
-  elseif filereadable(expand('$_ROOT') . 'bin/neovim-ruby-host')
-      let g:ruby_host_prog = expand('$_ROOT') . 'bin/neovim-ruby-host'
+function! Get_Ruby_Host() abort
+
+  if g:termux
+
+    if filereadable(expand($_ROOT) . 'lib/ruby/gems/2.6.3/gems/neovim-0.8.0/exe/neovim-ruby-host')
+        let g:ruby_host_prog = expand($_ROOT) . 'lib/ruby/gems/2.6.3/gems/neovim-0.8.0/exe/neovim-ruby-host'
+    elseif filereadable(expand('$_ROOT') . 'bin/neovim-ruby-host')
+        let g:ruby_host_prog = expand('$_ROOT') . 'bin/neovim-ruby-host'
+    endif
+
+  elseif g:ubuntu
+    if executable('rvm')
+        let g:ruby_host_prog = 'rvm system do neovim-ruby-host'
+    elseif filereadable(expand('$_ROOT') . '/local/bin/neovim-ruby-host')
+        let g:ruby_host_prog = expand('$_ROOT') . '/local/bin/neovim-ruby-host'
+    elseif filereadable('~/.local/bin/neovim-ruby-host')
+        let g:ruby_host_prog = '~/.local/bin/neovim-ruby-host'
+    endif
+
   endif
 
-elseif g:ubuntu
-  if executable('rvm')
-      let g:ruby_host_prog = 'rvm system do neovim-ruby-host'
-  elseif filereadable(expand('$_ROOT') . '/local/bin/neovim-ruby-host')
-      let g:ruby_host_prog = expand('$_ROOT') . '/local/bin/neovim-ruby-host'
-  elseif filereadable('~/.local/bin/neovim-ruby-host')
-      let g:ruby_host_prog = '~/.local/bin/neovim-ruby-host'
-  endif
+endfunction
 
-endif
+call Get_Ruby_Host()
 
-" Python Executables: 
+" Python Executables: {{{1
 
-" Python3: 
-" If we have a virtual env start there
-if exists('$VIRTUAL_ENV')
-    let g:python3_host_prog = expand('$VIRTUAL_ENV') . '/bin/python'
-    let &path = &path . ',' . expand('$VIRTUAL_ENV') . '/lib/python3/*'
+" Python3: {{{2
 
-" Or a conda env. Not trying to ruin your day here but Windows sets a var
-" '$CONDA_PREFIX_1' if CONDA_SHLVL > 1....
-" doesn't matter we can circumvent all of it
-elseif exists('$CONDA_PYTHON_EXE')
-  let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
-  let &path = &path . ',' . expand('$CONDA_PYTHON_EXE')
+function! PythonRemoteHost() abort
+  " If we have a virtual env start there
+  if exists('$VIRTUAL_ENV')
+      let g:python3_host_prog = expand('$VIRTUAL_ENV') . '/bin/python'
+      let &path = &path . ',' . expand('$VIRTUAL_ENV') . '/lib/python3/*'
 
-elseif exists('$CONDA_PREFIX')
+  elseif exists('$CONDA_PYTHON_EXE')
+    let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
+    let &path = &path . ',' . expand('$CONDA_PYTHON_EXE')
 
-  " Needs to use CONDA_PREFIX as the other env vars conda sets will only establish the base env not the current one
-  let g:python3_host_prog = expand('$CONDA_PREFIX/bin/python3')
-  " Let's hope I don't break things for Windows
-  let &path = &path . ',' . expand('$CONDA_PREFIX/lib/python3/*')
+  elseif exists('$CONDA_PREFIX')
 
-else
-    " If not then just use the system python
-  if executable(expand('$_ROOT') . '/bin/python3')
-  let g:python3_host_prog = expand('$_ROOT') . '/bin/python3'
-  let &path = &path . ',' . expand('$_ROOT') . '/lib/python3/*'
+    " Needs to use CONDA_PREFIX as the other env vars conda sets will only establish the base env not the current one
+    let g:python3_host_prog = expand('$CONDA_PREFIX/bin/python3')
+    " Let's hope I don't break things for Windows
+    let &path = &path . ',' . expand('$CONDA_PREFIX/lib/python3/*')
 
-  " well that's if we can find it anyway
-  elseif executable('/usr/bin/python3')
-    let g:python3_host_prog = '/usr/bin/python3'
-    let &path = &path . ',' . '/usr/lib/python3/*'
-
-  " and if we can't just disable it because it starts spouting off errors
   else
-    let g:loaded_python3_provider = 1
+      " If not then just use the system python
+    if executable(expand('$_ROOT') . '/bin/python3')
+    let g:python3_host_prog = expand('$_ROOT') . '/bin/python3'
+    let &path = &path . ',' . expand('$_ROOT') . '/lib/python3/*'
+
+    " well that's if we can find it anyway
+    elseif executable('/usr/bin/python3')
+      let g:python3_host_prog = '/usr/bin/python3'
+      let &path = &path . ',' . '/usr/lib/python3/*'
+
+    " and if we can't just disable it because it starts spouting off errors
+    else
+      let g:loaded_python3_provider = 1
+    endif
+
   endif
+endfunction
 
-endif
+call PythonRemoteHost()
 
-" Also add a python2 remote host: 
-if executable(expand('$_ROOT') . '/bin/python2')
-    let g:python_host_prog = expand('$_ROOT') . '/bin/python2'
-    let &path = &path . ',' . expand('$_ROOT') . '/lib/python2/*'
-elseif executable('/usr/bin/python2')
-    let g:python3_host_prog = '/usr/bin/python2'
-    let &path = &path . ',' . '/usr/lib/python2/*'
-else
-    let g:loaded_python_provider = 1
-endif
+" python2 remote host: {{{2
 
-" Atexit: 
+function! RemotePython2Host() abort
+
+  if executable(expand('$_ROOT') . '/bin/python2')
+      let g:python_host_prog = expand('$_ROOT') . '/bin/python2'
+      let &path = &path . ',' . expand('$_ROOT') . '/lib/python2/*'
+  elseif executable('/usr/bin/python2')
+      let g:python3_host_prog = '/usr/bin/python2'
+      let &path = &path . ',' . '/usr/lib/python2/*'
+  else
+      let g:loaded_python_provider = 1
+  endif
+endfunction
+
+call RemotePython2Host()
+
+" Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

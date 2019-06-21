@@ -11,6 +11,13 @@ if exists('g:did_snippets_after_syntax') || &compatible || v:version < 700
 endif
 let g:did_snippets_after_syntax = 1
 
+" Idk what i did that this is necessary
+runtime syntax/snippets.vim
 
 " Syn match: {{{1
-syn match snipComment '\_s*\_^#' contains=snipTODO display
+
+" We fixed snippet comments!
+syn match snipComment '^\W*#.*$' contains=snipComment display
+
+" Let's add a few keywords while we're here.
+syntax keyword snipTODO contained todo hack xxx fixme notes note:

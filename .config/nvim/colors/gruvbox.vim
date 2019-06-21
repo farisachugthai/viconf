@@ -521,7 +521,7 @@ if v:version >= 703
 endif
 
 hi! link NonText GruvboxBg2
-hi! link SpecialKey GruvboxBg2
+hi! link SpecialKey GruvboxFg2
 
 call s:HL('Visual',    s:none,  s:bg3, s:invert_selection)
 hi! link VisualNOS Visual
@@ -848,7 +848,7 @@ endif
 
 " Plugins You Have: {{{
 " Jesus. Here are the plugins you currently have. We'll figure out a smarter way
-" check if the plugin actually exists another time.
+" to check if the plugin actually exists another time.
 
 " Startify: {{{
 
@@ -907,6 +907,13 @@ hi! link gitcommitSelectedFile GruvboxGreen
 hi! link gitcommitDiscardedFile GruvboxRed
 
 " }}}
+" Tagbar: {{{2
+hi! link TagbarSignature GruvboxFg2
+hi! link TagbarTitle GruvboxGreen
+" I mean this is whats displayed at the top of the buffer so why not title?
+hi! link TagbarHelp Title
+
+" }}}
 " }}}
 
 " Filetype specific -----------------------------------------------------------
@@ -926,21 +933,21 @@ highlight default manBold      cterm=bold      gui=bold
 highlight default manItalic    cterm=italic    gui=italic
 
 " And the rest
-  hi! link manCError GruvboxRed
-  hi! link manEmail GruvboxAqua
-  hi! link manEnvVar GruvboxBlue
-  hi! link manEnvVarFile GruvboxBlue
-  hi! link manEnvVarFile GruvboxBlue
-  hi! link manFile GruvboxYellow
-  hi! link manFiles GruvboxFg0
-  hi! link manFooter GruvboxPurple
-  hi! link manHighlight GruvboxYellow
-  hi! link manHistory GruvboxYellow
-  hi! link manHeaderFile GruvboxYellow
-  hi! link manSectionHeading GruvboxOrangeBold
-  hi! link manSentence GruvboxFg2
-  hi! link manSignal GruvboxPurple
-  hi! link manURL GruvboxGreen
+hi! link manCError GruvboxRed
+hi! link manEmail GruvboxAqua
+hi! link manEnvVar GruvboxBlue
+hi! link manEnvVarFile GruvboxBlue
+hi! link manEnvVarFile GruvboxBlue
+hi! link manFile GruvboxYellow
+hi! link manFiles GruvboxFg0
+hi! link manFooter GruvboxPurple
+hi! link manHighlight GruvboxYellow
+hi! link manHistory GruvboxYellow
+hi! link manHeaderFile GruvboxYellow
+hi! link manSectionHeading GruvboxOrangeBold
+hi! link manSentence GruvboxFg2
+hi! link manSignal GruvboxPurple
+hi! link manURL GruvboxGreen
 
 " }}}
 " Netrw: {{{
@@ -1122,6 +1129,14 @@ hi! link xmlEntityPunct GruvboxOrange
 " vimSyncMatch	vimSyncMatch
 " vimSyncRegion	vimSyncRegion
 " vimTermOption	vimTermOption
+
+" Here are a few more xxx cleared syn groups
+
+" vimPythonRegion vimPythonRegion
+" hi! link pythonMatrixMultiply python
+" pythonAttribute pythonAttribute
+" pythonSync pythonSync
+
 hi def link NvimInternalError Error
 hi def link nvimAutoEvent	vimAutoEvent
 hi def link nvimHLGroup	vimHLGroup
@@ -1364,12 +1379,6 @@ hi! link pythonConditional GruvboxRed
 hi! link pythonRepeat GruvboxRed
 hi! link pythonDottedName GruvboxGreenBold
 
-" Here are a few more xxx cleared syn groups
-
-" vimPythonRegion vimPythonRegion
-" hi! link pythonMatrixMultiply python
-" pythonAttribute pythonAttribute
-" pythonSync pythonSync
 " }}}
 " CSS: {{{
 

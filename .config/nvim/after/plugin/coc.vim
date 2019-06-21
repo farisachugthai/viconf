@@ -17,7 +17,6 @@ if exists('b:did_coc_after_plugin') || &compatible || v:version < 700
 endif
 let b:did_coc_after_plugin = 1
 
-
 let s:cpo_save = &cpoptions
 set cpoptions&vim
 
@@ -67,8 +66,8 @@ let g:coc_snippet_prev = '<C-k>'
 
 " Use `[c` and `]c` to navigate diagnostics
 " First check that gitgutter doesn't have these mapped first
-" nmap <silent> [c <Plug>(coc-diagnostic-prev)
-" nmap <silent> ]c <Plug>(coc-diagnostic-next)
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
 " Now let's start working with the niceties of an LSP. Docs and symbols
@@ -91,7 +90,6 @@ endfunction
 
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
-nmap <F2> <Plug>(coc-rename)
 
 augroup CocConf
   autocmd!
@@ -127,11 +125,10 @@ noremap <C-c>d :<Cmd>CocList diagnostics<CR>
 
 
 " Remap for rename current word
-nmap <F2> <Plug>(coc-rename)
 
-" Remap for format selected region
-xmap <leader>cf  <Plug>(coc-format-selected)
-nmap <leader>cf  <Plug>(coc-format-selected)
+" Remap for format selected region. e for errors and visual selection
+xmap <leader>ev  <Plug>(coc-format-selected)
+nmap <leader>ev  <Plug>(coc-format-selected)
 
 " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
 xmap <leader>ca  <Plug>(coc-codeaction-selected)

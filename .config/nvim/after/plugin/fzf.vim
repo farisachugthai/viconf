@@ -104,7 +104,7 @@ noremap <Leader>gl <Cmd>Commits<CR>
 cabbrev Gl Commits
 
 " [[B]Commits] Customize the options used by 'git log':
-let g:fzf_commits_log_options = ' --graph --color=always --all --branches --pretty --format="h%d %s %c(black)%c(bold)%cr $*n"'
+let g:fzf_commits_log_options = ' --graph --color=always --all --branches --pretty --format="h%d %s $*n"'
 
 noremap <Leader>GS <Cmd>GFiles?<CR>
 
@@ -318,4 +318,3 @@ function! FZFGit()
     endif
 endfunction
 command! FZFGit call FZFGit()
-

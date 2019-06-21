@@ -24,6 +24,7 @@ setlocal suffixesadd+=.vim
 setlocal nolinebreak
 setlocal nowrap
 
+let &path = &path . ',' . stdpath('data') . '/plugged/*/*/*.vim'
 let &commentstring='" %s'
 
 " This is the absolute worst way to implement this

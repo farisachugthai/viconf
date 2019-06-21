@@ -6,6 +6,11 @@
 " ============================================================================
 
 " Guard: {{{1
+if exists("b:did_ftplugin")
+    finish
+endif
+let b:did_ftplugin = 1
+
 if exists('g:did_rst_after_ftplugin') || &compatible || v:version < 700
   finish
 endif
@@ -14,13 +19,9 @@ let g:did_rst_after_ftplugin = 1
 let s:cpo_save = &cpoptions
 set cpoptions&vim
 
-" So I officially took the entire ftplugin so at this point disable it
-if exists("b:did_ftplugin")
-    finish
-endif
-let b:did_ftplugin = 1
-
 " Options: {{{1
+setlocal expandtab
+
 setlocal colorcolumn=80
 setlocal linebreak
 setlocal foldlevel=2
@@ -36,7 +37,7 @@ let &makeprg='sphinx-build -b html '
 
 " The Official Ftplugin: {{{1
 
-setlocal comments=fb:.. commentstring=..\ %s expandtab
+setlocal comments=fb:.. commentstring=..\ %s
 setlocal formatoptions+=tcroql
 
 " reStructuredText standard recommends that tabs be expanded to 8 spaces
@@ -46,18 +47,18 @@ setlocal formatoptions+=tcroql
 "
 " More sophisticated indentation rules should be revisted in the future.
 
-" if !exists("g:rst_style") || g:rst_style != 0
+if !exists("g:rst_style") || g:rst_style != 0
     setlocal expandtab shiftwidth=3 softtabstop=3 tabstop=8
-" endif
+endif
 
-" if has('patch-7.3.867')  " Introduced the TextChanged event.
+if has('patch-7.3.867')  " Introduced the TextChanged event.
   setlocal foldmethod=expr
   setlocal foldexpr=RstFold#GetRstFold()
   setlocal foldtext=RstFold#GetRstFoldText()
   augroup RstFold
     autocmd TextChanged,InsertLeave <buffer> unlet! b:RstFoldCache
   augroup END
-" endif
+endif
 
 " Syntax Highlighting: {{{1
 " he rst.vim or ft-rst-syntax or syntax 2600. Don't put bash instead of sh.
@@ -75,10 +76,8 @@ let g:rst_syntax_code_list = {
     \ 'perl': ['perl'],
     \ 'sh': ['sh'],
     \ }
-
 " Atexit: {{{1
-
-let b:undo_ftplugin = 'set cc< lbr< fdl< fdls< spell< kp< et< ts< sw< sts<'
+let b:undo_ftplugin = 'set et< ts< sw< sts< fo< cms< com< cc< lbr< fdl< fdls< spell< kp<'
 " can't use unlet! or unlet in the same '' apparently
 
 let &cpoptions = s:cpo_save

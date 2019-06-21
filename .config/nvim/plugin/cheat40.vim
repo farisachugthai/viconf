@@ -13,6 +13,9 @@ if exists('g:loaded_cheatsheet_plugin') || &compatible || v:version < 700
 endif
 let g:loaded_cheatsheet_plugin = 1
 
+let s:cpo_save = &cpoptions
+set cpoptions&vim
+
 
 " Configuration: {{{1
 " I wanna use my own cheatsheet sorry man
@@ -30,6 +33,6 @@ command! -bar -nargs=0 -bang Cheat40 call cheat40#open('<bang>' ==# '!')
 
 
 " Mappings: {{{1
-if mapcheck('<LocalLeader>?', 'n') ==# ''
-  noremap <LocalLeader>? <Cmd>Cheat40<CR>
+if mapcheck('Leader>?', 'n') ==# ''
+  noremap <Leader>? <Cmd>Cheat40<CR>
 endif

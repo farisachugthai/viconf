@@ -2,13 +2,14 @@
 " Maintainer:   Lifepillar
 " License:      Distributed under the same terms as Vim itself. See :help license.
 
-if exists('b:did_cheat40_autoload_vim') || &compatible || v:version < 700
+if exists('g:did_cheat40_autoload_vim') || &compatible || v:version < 700
     finish
 endif
-let b:did_cheat40_autoload_vim = 1
+let g:did_cheat40_autoload_vim = 1
 
 let s:cheat40_dir = fnamemodify(resolve(expand('<sfile>:p')), ':h:h')
-echomsg 'cheat40dir is' . str(s:cheat40_dir)
+
+" echomsg 'cheat40dir is' . s:cheat40_dir
 " let s:cheat40_dir = expand('$XDG_CONFIG_HOME') . '/nvim'
 
 " Courtesy of Pathogen
