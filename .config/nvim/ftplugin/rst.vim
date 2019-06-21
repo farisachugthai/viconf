@@ -6,6 +6,11 @@
 " ============================================================================
 
 " Guard: {{{1
+if exists("b:did_ftplugin")
+    finish
+endif
+let b:did_ftplugin = 1
+
 if exists('g:did_rst_after_ftplugin') || &compatible || v:version < 700
   finish
 endif
@@ -15,9 +20,6 @@ let s:cpo_save = &cpoptions
 set cpoptions&vim
 "
 " Options: {{{1
-" setlocal tabstop=4
-" setlocal softtabstop=4
-" setlocal shiftwidth=4
 setlocal expandtab
 
 setlocal colorcolumn=80
@@ -50,9 +52,36 @@ let g:rst_syntax_code_list = {
     \ 'sh': ['sh'],
     \ }
 
+" Original Ftplugin: {{{1
+" Distributed with nvim3.4
+
+
+setlocal comments=fb:.. commentstring=..\ %s
+setlocal formatoptions+=tcroql
+
+" reStructuredText standard recommends that tabs be expanded to 8 spaces
+" The choice of 3-space indentation is to provide slightly better support for
+" directives (..) and ordered lists (1.), although it can cause problems for
+" many other cases.
+"
+" More sophisticated indentation rules should be revisted in the future.
+
+if !exists("g:rst_style") || g:rst_style != 0
+    setlocal expandtab shiftwidth=3 softtabstop=3 tabstop=8
+endif
+
+if has('patch-7.3.867')  " Introduced the TextChanged event.
+  setlocal foldmethod=expr
+  setlocal foldexpr=RstFold#GetRstFold()
+  setlocal foldtext=RstFold#GetRstFoldText()
+  augroup RstFold
+    autocmd TextChanged,InsertLeave <buffer> unlet! b:RstFoldCache
+  augroup END
+endif
+
 " Atexit: {{{1
 
-let b:undo_ftplugin = 'set et< cc< lbr< fdl< fdls< spell< kp<'
+let b:undo_ftplugin = 'set et< ts< sw< sts< fo< cms< com< cc< lbr< fdl< fdls< spell< kp<'
 " can't use unlet! or unlet in the same '' apparently
 
 let &cpoptions = s:cpo_save
