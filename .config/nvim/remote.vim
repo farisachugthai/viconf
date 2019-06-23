@@ -19,12 +19,14 @@ function! Get_Node_Host() abort
   if executable('yarn')
     if filereadable(shellescape(expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'))
       let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
-    endif
 
     elseif filereadable(shellescape(system('yarn global dir')) . '/node_modules/.bin/neovim-node-host')
         let g:node_host_prog = shellescape(system('yarn global dir')) . '/node_modules/.bin/neovim-node-host'
     endif
 
+  " on the assumption that which has to stat every hashed exec on the $PATH,
+  " I'd guess its the slowest way to fogure this out, but probably a really
+  " smart one to fall back on.
   elseif executable('which')   " if we're using bash or we have 'nix tools loaded
 
       " slashes end up backwards on windows but let's see if that's not a problem
@@ -47,24 +49,22 @@ call Get_Node_Host()
 " Gem Remote Host. {{{2
 
 function! Get_Ruby_Host() abort
+  " Really doesn't help that I don't know anything about ruby.
 
-  if g:termux
-
-    if filereadable(expand($_ROOT) . 'lib/ruby/gems/2.6.3/gems/neovim-0.8.0/exe/neovim-ruby-host')
-        let g:ruby_host_prog = expand($_ROOT) . 'lib/ruby/gems/2.6.3/gems/neovim-0.8.0/exe/neovim-ruby-host'
-    elseif filereadable(expand('$_ROOT') . 'bin/neovim-ruby-host')
-        let g:ruby_host_prog = expand('$_ROOT') . 'bin/neovim-ruby-host'
-    endif
-
-  elseif g:ubuntu
-    if executable('rvm')
-        let g:ruby_host_prog = 'rvm system do neovim-ruby-host'
-    elseif filereadable(expand('$_ROOT') . '/local/bin/neovim-ruby-host')
-        let g:ruby_host_prog = expand('$_ROOT') . '/local/bin/neovim-ruby-host'
-    elseif filereadable('~/.local/bin/neovim-ruby-host')
-        let g:ruby_host_prog = '~/.local/bin/neovim-ruby-host'
-    endif
-
+  if executable('rvm')
+    let g:ruby_host_prog = 'rvm system do neovim-ruby-host'
+  elseif filereadable(expand('$_ROOT') . '/local/bin/neovim-ruby-host')
+    let g:ruby_host_prog = expand('$_ROOT') . '/local/bin/neovim-ruby-host'
+  elseif filereadable('~/.local/bin/neovim-ruby-host')
+    let g:ruby_host_prog = '~/.local/bin/neovim-ruby-host'
+  elseif filereadable(expand($_ROOT) . 'lib/ruby/gems/2.6.3/gems/neovim-0.8.0/exe/neovim-ruby-host')
+    let g:ruby_host_prog = expand($_ROOT) . 'lib/ruby/gems/2.6.3/gems/neovim-0.8.0/exe/neovim-ruby-host'
+  elseif filereadable(expand('$_ROOT') . 'bin/neovim-ruby-host')
+    let g:ruby_host_prog = expand('$_ROOT') . 'bin/neovim-ruby-host'
+  elseif executable('which')
+    let g:ruby_host_prog = system('which ruby')
+  else
+    let g:loaded_ruby_provider = 1
   endif
 
 endfunction
@@ -112,6 +112,10 @@ function! PythonRemoteHost() abort
 endfunction
 
 call PythonRemoteHost()
+
+" Make it simpler to view the host. This is the same as
+" provider#python3#Prog()
+command! Python3Host -nargs=0 echo provider#pythonx#Detect(3)[0]
 
 " python2 remote host: {{{2
 

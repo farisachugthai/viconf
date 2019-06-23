@@ -1,8 +1,6 @@
-conemu ~/Dropbox/msft/cmder/conemu
 config-nvim ~/.config/nvim
 dotfiles ~/projects/dotfiles/unix
 jedi-docs ~/.local/share/nvim/plugged/jedi-vim/pythonx/jedi/docs/docs
-mpl /usr/share/doc/python-matplotlib-doc/tutorials
 plugged ~/.local/share/nvim/plugged
 python ~/python
 tlib ~/.local/share/nvim/plugged/tlib_vim/autoload/tlib
@@ -11,4 +9,6 @@ utilities ~/projects/utilities
 viconf ~/projects/viconf/.config/nvim
 ConEmu C:/Program Files/ConEmu/ConEmu
 jupyter-extensions ~/.local/share/jupyter
+conemu ~/Dropbox/msft/cmder/conemu
+mpl /usr/share/doc/python-matplotlib-doc/tutorials
 WindowsPowerShell ~/Documents/WindowsPowerShell

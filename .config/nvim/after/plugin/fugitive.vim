@@ -34,9 +34,11 @@ function! FugitiveMappings() abort
   noremap <silent> <Leader>gd   <Cmd>Gdiff<CR>
   cabbrev Gd Gdiff
   noremap <silent> <Leader>gds  <Cmd>Gdiff --staged<CR>
+  cabbrev gds2 Git diff --stat --staged
   noremap <silent> <Leader>gds2 <Cmd>Git diff --stat --staged<CR>
   noremap <silent> <Leader>ge   <Cmd>Gedit<Space>
   noremap <silent> <Leader>gf   <Cmd>Gfetch<CR>
+  cabbrev gL 0Glog --pretty=oneline --graph --decorate --abbrev --all --branches
   noremap <silent> <Leader>gL   <Cmd>0Glog --pretty=oneline --graph --decorate --abbrev --all --branches<CR>
   noremap <silent> <Leader>gm   <Cmd>Gmerge<CR>
   " Make the mapping longer but clear as to whether gp would pull or push

@@ -1,4 +1,4 @@
-" ============================================================================
+" ============================================================================{{{}}}
     " File: nerdtree.vim
     " Author: Faris Chugthai
     " Description: NERDTree Configuration File
@@ -27,6 +27,7 @@ augroup nerd_loader
         \  if isdirectory(expand('<amatch>'))
   " FUCK! This hasn't worked for MONTHS and it's because the plugin is called nerdTree not nerdtree...
         \|   call plug#load('nerdTree')
+        \|   execute 'NERDTreeToggle'
         \|   execute 'autocmd! nerd_loader'
         \| endif
     autocmd bufenter *

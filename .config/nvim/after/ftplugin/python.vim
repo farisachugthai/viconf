@@ -19,7 +19,7 @@ setlocal linebreak
 setlocal textwidth=120
 
 setlocal commentstring=#\ %s
-setlocal tabstop=4 shiftwidth=4 expandtab softtabstop=4
+setlocal tabstop=8 shiftwidth=4 expandtab softtabstop=4
 let b:python_highlight_all = 1
 setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 

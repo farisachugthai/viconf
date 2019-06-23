@@ -5,15 +5,13 @@
     " Last Modified: June 09, 2019
 " ============================================================================
 
+" Guard: {{{1
 scriptencoding utf-8
 let s:cpo_save = &cpoptions
 set cpoptions&vim
 " Note that this will only work on neovim as it it makes a call
 " to Vim-Plug using the function stdpath() which only exists on neovim
 " todo: get the plugin guard in here
-
-" General Plugins: {{{1
-" GOT IT! I checked `echo &rtp` and it's looking for the site folder in the nvim not nvim-data!!
 
 " Plugins: {{{1
 execute 'source ' . stdpath('data') . '/site/autoload/plug.vim'
@@ -78,6 +76,9 @@ endif
 Plug 'vim-voom/voom'
 Plug 'neoclide/coc.nvim'
 Plug 'ervandew/supertab'
+
+Plug 'mhinz/vim-signify'
+Plug 'mhinz/vim-grepper', { 'on': ['Grepper', '<plug>(GrepperOperator)'] }
 
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
