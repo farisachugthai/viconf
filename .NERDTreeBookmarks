@@ -11,5 +11,5 @@ utilities ~/projects/utilities
 viconf ~/projects/viconf/.config/nvim
 
 ConEmu C:/Program Files/ConEmu/ConEmu
-WindowsPowerShell ~/Documents/WindowsPowerShell
 conemu ~/Dropbox/msft/cmder/conemu
+WindowsPowerShell ~/Documents/WindowsPowerShell

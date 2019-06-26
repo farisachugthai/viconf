@@ -10,7 +10,6 @@
     "suggest.preferCompleteThanJumpPlaceholder": true,
     "coc.preferences.extensionUpdateCheck": "never",
     "coc.preferences.currentFunctionSymbolAutoUpdate": true,
-    "list.source.defaultOptions": ["--interactive", "--number-select", "--auto-preview", "--top", "--normal"],
     "python.autoComplete.addBrackets": true,
     "python.formatting.provider": "yapf",
     "python.linting.flake8Enabled": true,
@@ -43,7 +42,6 @@
     "diagnostic.joinMessageLines": true,
     "diagnostic.virtualText": true,
     "diagnostic.virtualTextPrefix": "VT Diagnostic: ",
-	"codeLens.enable": true,
     "list.extendedSearchMode": true,
     "coc.preferences.previewAutoClose": true,
 	"suggest.completionItemKindLabels": {

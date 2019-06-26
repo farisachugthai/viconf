@@ -178,6 +178,8 @@ IPython
 IPython's
 IPython7
 ISE
+ISE
+ISE
 ISO9660
 Importlib
 JQuery
@@ -804,6 +806,8 @@ inodes
 inoremap
 inputrc
 intellisense
+intellisense
+intellisense
 interactiveshell
 interwiki
 ionice
@@ -1160,6 +1164,7 @@ pip2
 pip3
 pipdeptree
 pipenv
+pipfile
 pkcon
 pkcs11
 pkgconfig
@@ -1240,6 +1245,8 @@ quickstart
 quoteplus
 quotequote
 quotestar
+qutebrowser
+qutebrowser
 qutebrowser
 qutebrowser
 rb
@@ -1445,6 +1452,8 @@ texting
 thunar
 tiddlywiki
 tig
+tig
+tig
 timefmt
 timeit
 timezones
@@ -1465,6 +1474,8 @@ torrenting
 torrified
 torsocks
 touch
+tox
+tox
 tox
 tpope
 tpope's
@@ -1541,6 +1552,8 @@ verilog
 vhdl
 vim
 vim74
+vim8
+vim8
 vim8
 vimcasts
 vimdiff

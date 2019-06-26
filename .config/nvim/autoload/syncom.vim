@@ -96,7 +96,5 @@ function! g:syncom#hitest() abort
   try
     so $VIMRUNTIME/syntax/hitest.vim
   catch E403
-    " vint is listing an error...why? continue can go in a try block
-    continue
   endtry
 endfunction
