@@ -10,7 +10,7 @@ if !has_key(plugs, 'vim-startify')
     finish
 endif
 
-if exists('g:did_startify_after_plugin') || &cp || v:version < 700
+if exists('g:did_startify_after_plugin') || &compatible || v:version < 700
     finish
 endif
 let g:did_startify_after_plugin = 1
@@ -27,12 +27,15 @@ function! s:list_commits()
     if empty(g:windows)
       let commits = systemlist(git . ' log --oneline | head -n10')
     else
-      " Assume powershell
+      " Assume powershell. XXX wait should we just go ahead and assume
+      " that? Wouldn't it make more sense to do if (&shell) ==
+      " 'powershell or even expand('$SHELL') or check both with a '||'
+      " in between?
       let commits = systemlist(git . ' log --oneline | Get-Content -TotalCount 10')
     endif
 
     " mapping that lines up commits from this repo
-    let git = 'Git' . git[1:]
+    let git = 'Git'
     return map(commits, '{"line": matchstr(v:val, "\\s\\zs.*"), "cmd": "'. git .' show ". matchstr(v:val, "^\\x\\+") }')
 endfunction
 
@@ -65,11 +68,9 @@ let g:startify_custom_header = s:filter_header(startify#fortune#cowsay())
 " Skiplist: {{{1
 " Don't show these files
 
-" the last 2 lines are the same aren't they?
 let g:startify_skiplist = [
     \ 'COMMIT_EDITMSG',
     \ glob( stdpath('data') . 'plugged/*/doc'),
-    \ 'C:\Program Files\Vim\vim81\doc',
     \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc', ]
 
 " Session Dir: {{{1

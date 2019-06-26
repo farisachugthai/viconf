@@ -6,14 +6,13 @@
 " ============================================================================
 
 " Guard: {{{1
-if !has_key(plugs, 'devicons')
+if !has_key(plugs, 'vim-devicons')
     finish
 endif
 
-if exists('g:did_devicons_after_plugin') || &compatible || v:version < 700
+if exists('g:did_webdevicons_after_plugin') || &compatible || v:version < 700
     finish
 endif
-let g:did_devicons_after_plugin = 1
 
 
 " Options: {{{1
@@ -28,4 +27,24 @@ if exists('*WebDevIconsGetFileTypeSymbol')  " support for vim-devicons
     let entry_format .= ". WebDevIconsGetFileTypeSymbol(entry_path) .' '.  entry_path"
 else
     let entry_format .= '. entry_path'
+endif
+let g:did_webdevicons_after_plugin = 1
+
+" change the default character when no match found
+let g:WebDevIconsUnicodeDecorateFileNodesDefaultSymbol = 'ƛ'
+
+" enable file extension pattern matching glyphs on folder/directory (disabled by default with 0)
+let g:DevIconsEnableFolderExtensionPatternMatching = 1
+
+" Enable this for a specific ftplugin I'm curious what thisll look like. We
+" already call that func but the rest I'm curious about.
+" setlocal statusline=%f\ %{WebDevIconsGetFileTypeSymbol()}\ %h%w%m%r\ %=%(%l,%c%V\ %Y\ %=\ %P%)
+"
+" -------------------------------------------------------------------------------
+" How do I solve issues after re-sourcing my *vimrc*?
+
+" - Try adding this to the bottom of your |vimrc|
+
+if exists('g:loaded_webdevicons')
+    call webdevicons#refresh()
 endif
