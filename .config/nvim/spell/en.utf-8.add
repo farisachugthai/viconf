@@ -177,6 +177,7 @@ IPv6
 IPython
 IPython's
 IPython7
+ISE
 ISO9660
 Importlib
 JQuery
@@ -802,6 +803,7 @@ init
 inodes
 inoremap
 inputrc
+intellisense
 interactiveshell
 interwiki
 ionice
@@ -1239,6 +1241,7 @@ quoteplus
 quotequote
 quotestar
 qutebrowser
+qutebrowser
 rb
 rc
 rclone
@@ -1441,6 +1444,7 @@ tex
 texting
 thunar
 tiddlywiki
+tig
 timefmt
 timeit
 timezones
@@ -1461,6 +1465,7 @@ torrenting
 torrified
 torsocks
 touch
+tox
 tpope
 tpope's
 tput
@@ -1536,6 +1541,7 @@ verilog
 vhdl
 vim
 vim74
+vim8
 vimcasts
 vimdiff
 vimfiles
@@ -1638,9 +1644,3 @@ zshrc
 µMatrix
 µTP
 µTorrent
-ISE
-intellisense
-vim8
-tox
-qutebrowser
-tig

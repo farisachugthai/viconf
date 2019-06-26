@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Sort a list of words and then remove the duplicate entries therein."""
+import vim  # pylint:disable=import-error
 
 
 def main():

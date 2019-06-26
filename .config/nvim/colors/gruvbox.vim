@@ -1578,6 +1578,77 @@ hi! link coffeeBracket GruvboxOrange
 
 hi! link rubyStringDelimiter GruvboxGreen
 hi! link rubyInterpolationDelimiter GruvboxAqua
+" So TPope defined all of these but they got wiped in the hi clear. So copy
+" paste it is?
+hi def link rubyClass			rubyDefine
+hi def link rubyModule			rubyDefine
+hi def link rubyMethodExceptional	rubyDefine
+hi def link rubyDefine			Define
+hi def link rubyFunction		Function
+hi def link rubyConditional		Conditional
+hi def link rubyConditionalModifier	rubyConditional
+hi def link rubyExceptional		rubyConditional
+hi def link rubyRepeat			Repeat
+hi def link rubyRepeatModifier		rubyRepeat
+hi def link rubyOptionalDo		rubyRepeat
+hi def link rubyControl			Statement
+hi def link rubyInclude			Include
+hi def link rubyInteger			Number
+hi def link rubyASCIICode		Character
+hi def link rubyFloat			Float
+hi def link rubyBoolean			Boolean
+hi def link rubyException		Exception
+if !exists("ruby_no_identifiers")
+  hi def link rubyIdentifier		Identifier
+else
+  hi def link rubyIdentifier		NONE
+endif
+hi def link rubyClassVariable		rubyIdentifier
+hi def link rubyConstant		Type
+hi def link rubyGlobalVariable		rubyIdentifier
+hi def link rubyBlockParameter		rubyIdentifier
+hi def link rubyInstanceVariable	rubyIdentifier
+hi def link rubyPredefinedIdentifier	rubyIdentifier
+hi def link rubyPredefinedConstant	rubyPredefinedIdentifier
+hi def link rubyPredefinedVariable	rubyPredefinedIdentifier
+hi def link rubySymbol			Constant
+hi def link rubyKeyword			Keyword
+hi def link rubyOperator		Operator
+hi def link rubyBeginEnd		Statement
+hi def link rubyAccess			Statement
+hi def link rubyAttribute		Statement
+hi def link rubyEval			Statement
+hi def link rubyPseudoVariable		Constant
+hi def link rubyCapitalizedMethod	rubyLocalVariableOrMethod
+
+hi def link rubyComment			Comment
+hi def link rubyData			Comment
+hi def link rubyDataDirective		Delimiter
+hi def link rubyDocumentation		Comment
+hi def link rubyTodo			Todo
+
+hi def link rubyQuoteEscape		rubyStringEscape
+hi def link rubyStringEscape		Special
+" hi def link rubyInterpolationDelimiter	Delimiter
+hi def link rubyNoInterpolation		rubyString
+hi def link rubySharpBang		PreProc
+hi def link rubyRegexpDelimiter		rubyStringDelimiter
+hi def link rubySymbolDelimiter		rubySymbol
+" hi def link rubyStringDelimiter		Delimiter
+hi def link rubyHeredoc			rubyString
+hi def link rubyString			String
+hi def link rubyRegexpEscape		rubyRegexpSpecial
+hi def link rubyRegexpQuantifier	rubyRegexpSpecial
+hi def link rubyRegexpAnchor		rubyRegexpSpecial
+hi def link rubyRegexpDot		rubyRegexpCharClass
+hi def link rubyRegexpCharClass		rubyRegexpSpecial
+hi def link rubyRegexpSpecial		Special
+hi def link rubyRegexpComment		Comment
+hi def link rubyRegexp			rubyString
+
+hi def link rubyInvalidVariable		Error
+hi def link rubyError			Error
+hi def link rubySpaceError		rubyError
 
 " }}}
 " ObjectiveC: {{{

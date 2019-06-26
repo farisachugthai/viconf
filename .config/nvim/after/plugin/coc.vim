@@ -24,7 +24,7 @@ set cpoptions&vim
 
 " This section primarily focuses on setting up the autocompletion aspect
 " Refresh completions with C-Space
-inoremap <silent><expr> <C-Space> <Cmd>coc#refresh()<CR>
+inoremap <silent><expr> <C-Space> coc#refresh()
 
 " Set Enter to accept autocompletion. More settings in
 " ~/.config/nvim/coc-settings.json
@@ -66,15 +66,15 @@ let g:coc_snippet_prev = '<C-k>'
 
 " Use `[c` and `]c` to navigate diagnostics
 " First check that gitgutter doesn't have these mapped first
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
+nnoremap <silent> [g <Plug>(coc-diagnostic-prev)
+nnoremap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
 " Now let's start working with the niceties of an LSP. Docs and symbols
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+nnoremap <silent> gd <Plug>(coc-definition)
+nnoremap <silent> gy <Plug>(coc-type-definition)
+nnoremap <silent> gi <Plug>(coc-implementation)
+nnoremap <silent> gr <Plug>(coc-references)
 
 " Use K to show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -89,7 +89,7 @@ function! s:show_documentation()
 endfunction
 
 " Remap for rename current word
-nmap <leader>rn <Plug>(coc-rename)
+nnoremap <leader>rn <Plug>(coc-rename)
 
 augroup CocConf
   autocmd!
@@ -120,8 +120,8 @@ augroup end
 " Resume latest coc list
 " nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 " I'm gonna redo the mappings and try this piecemeal
-noremap <C-c>lr :<Cmd>CocListResume<CR>
-noremap <C-c>d :<Cmd>CocList diagnostics<CR>
+noremap <silent> <C-c>r <Cmd>CocListResume<CR>
+noremap <silent> <C-c>d <Cmd>CocList diagnostics<CR>
 
 
 " Remap for rename current word
@@ -139,6 +139,9 @@ nmap <leader>ca  <Plug>(coc-codeaction)
 
 " Fix autofix problem of current line
 nmap <leader>cqf  <Plug>(coc-fix-current)
+
+" Dude that is an OBNOXIOUS amount of typing though.
+noremap <silent> <C-c>q <Plug>(coc-fix-current)
 
 " Commands: {{{1
 
