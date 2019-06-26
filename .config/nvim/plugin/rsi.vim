@@ -9,7 +9,7 @@
 if exists('g:did_rsi_vim_plugin') || &compatible || v:version < 700
     finish
 endif
-let g:did_rsi_vim_pluginm = 1
+let g:did_rsi_vim_plugin = 1
 
 " Readline_Basics:{{{1
 
@@ -21,6 +21,12 @@ let g:did_rsi_vim_pluginm = 1
 " Shits retarded.
 
 " Command Line: {{{2
+" Admittedly it would be weird to set the 2nd one since that's all this does
+" but whatever.
+if exists('no_plugin_maps') || exists('no_rsi_maps')
+  finish
+endif
+
 " start of line
 cnoremap <C-a> <Home>
 " back one character
@@ -41,23 +47,25 @@ cmap <A-f> <S-Right>
 cnoremap <C-v> <PageDown>
 " page up
 cmap <A-v> <PageUp>
-" TODO: do these work? Nope.
-" Top of buffer
-" cmap <A\<> :norm gg
-" Bottom of buffer
-" cmap <A\>> :norm G
 
-" Insert Mode: {{{2
+cnoremap        <M-d> <S-Right><C-W>
 
-" wait why doesn't this work? :/
-" inoremap <C-a> <C-o>^
+" Insert Mode And Command: {{{2
+
+noremap! <C-a> <C-o>^
+noremap!        <M-d> <C-O>dw
+noremap!        <M-BS> <C-W>
+noremap!        <M-f> <S-Right>
+noremap!        <M-n> <Down>
+noremap!        <M-p> <Up>
+
 
 " History: {{{1
 
 " recall newer command-line. {Actually C-n and C-p on Emacs}
-cmap <A-n> <Down>
+cnoremap <A-n> <Down>
 " recall previous (older) command-line. {But we can't lose C-n and C-p}
-cmap <A-p> <Up>
+cnoremap <A-p> <Up>
 
 " Other: {{{1
 
@@ -99,11 +107,11 @@ noremap! <F1> <Esc>
 " by fzf or the vim built-in, and they both have quite different looking
 " interfaces IMO.
 if exists('*fzf#wrap')
-  noremap <M-x> <Cmd>Commands<CR>
+  noremap <M-x>      <Cmd>Commands<CR>
   noremap <C-x><C-b> <Cmd>Buffers<CR>
 else
   noremap <M-x> <Cmd>commands<CR>
   noremap <C-x><C-b> <Cmd>buffers<CR>
 endif
 
-noremap <C-x>o <Cmd>wincmdtW<CR>
+noremap <silent> <C-x>o <Cmd>wincmd W<CR>

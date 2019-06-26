@@ -44,7 +44,7 @@ function! Get_Node_Host() abort
   endif
 endfunction
 
-call Get_Node_Host()
+" call Get_Node_Host()
 
 " Gem Remote Host. {{{2
 
@@ -69,7 +69,7 @@ function! Get_Ruby_Host() abort
 
 endfunction
 
-call Get_Ruby_Host()
+" call Get_Ruby_Host()
 
 " Python Executables: {{{1
 

@@ -231,7 +231,7 @@ set makeencoding=char         " Used by the makeprg. system locale is used
 " Other Global Options: {{{2
 
 if &formatexpr ==# ''
-  setlocal formatexpr=format#Format()
+  setlocal formatexpr=format#Format()  " check the autoload directory
 endif
 
 set tags+=./tags,./*/tags,~/projects/**/tags

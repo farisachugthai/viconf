@@ -42,7 +42,6 @@ function! ultisnips#ExpandPossibleShorterSnippet()
   endif
   return 0
 endfunction
-inoremap <silent> <C-L> <C-R>=(ultisnips#ExpandPossibleShorterSnippet() == 0? '': UltiSnips#ExpandSnippet())<CR>
 
 " Expand Snippet Or CR: {{{3
 " Hopefully will expand snippets or CR. Or it'll destroy deoplete's
@@ -55,5 +54,3 @@ function! ultisnips#ExpandSnippetOrCarriageReturn() abort
       return "\<CR>"
     endif
 endfunction
-
-inoremap <expr> <CR> pumvisible() ? "<C-R>=ultisnips#ExpandSnippetOrCarriageReturn()<CR>" : "\<CR>"

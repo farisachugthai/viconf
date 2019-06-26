@@ -41,7 +41,6 @@
     "diagnostic.checkCurrentLine": true,
     "diagnostic.displayByAle": true,
     "diagnostic.virtualText": true,
-	"codeLens.enable": true,
     "list.extendedSearchMode": true,
     "coc.preferences.previewAutoClose": false,
 	"suggest.completionItemKindLabels": {

@@ -36,8 +36,3 @@ func! format#Format()
     " do not run internal formatter!
     return 0
 endfunc
-
-" You can then enable the formatting by executing:
-" setlocal formatexpr=format#Format()
-" yo but wait. how does it work by checking that mode is normal? what about
-" visual/select mode? v, s or x mode should work here.

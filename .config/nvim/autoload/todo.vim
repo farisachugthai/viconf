@@ -27,5 +27,3 @@ function! todo#Todo() abort
         copen
     endif
 endfunction
-
-command! Todo call todo#Todo()

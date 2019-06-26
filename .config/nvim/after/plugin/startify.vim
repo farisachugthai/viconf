@@ -77,7 +77,7 @@ let g:startify_skiplist = [
 
 " Here's a way cleaner way of doing this. Now we don't depend on nvim/vim, win or linux.
 " Just make a dir in the config directory that's called session.
-let g:startify_session_dir =  stdpath('config') . 'session'
+let g:startify_session_dir =  stdpath('config') . '/session'
 
 " General Options: {{{1
 " TODO: Figure out how to set let g:startify_bookmarks = [ Contents of

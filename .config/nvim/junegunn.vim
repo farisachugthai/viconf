@@ -24,7 +24,6 @@ let g:plug_window = 'tabe'
 Plug 'junegunn/fzf', { 'dir': expand('~/.fzf'), 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
-Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
 Plug 'w0rp/ale'
@@ -44,6 +43,7 @@ endif
 
 Plug 'mhinz/vim-startify'
 Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
+" TODO: lazy load this plugin
 Plug 'greyblake/vim-preview'
 Plug 'luffah/vim-zim', {'for': ['zimwiki', 'zimindex']}
 Plug 'tomtom/tlib_vim'  " this library is incredible
@@ -63,22 +63,25 @@ endif
 if empty(g:termux)
     " honestly this almost never actually begins the language server
     " Plug 'autozimu/LanguageClient-neovim', {'do': ':UpdateRemotePlugins'}
-    Plug 'godlygeek/tabular'
-    Plug 'junegunn/vim-peekaboo'
-    Plug 'tpope/vim-surround'
-    Plug 'mbbill/undotree', {'on': 'UndoTreeToggle'}
-    Plug 'chrisbra/csv.vim', {'for': 'csv'}
-    Plug 'omnisharp/omnisharp-vim', {'for': 'cs'}
-    Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
-    Plug 'ekalinin/Dockerfile.vim', {'for': 'dockerfile'}
+  Plug 'godlygeek/tabular'
+  Plug 'mbbill/undotree', {'on': 'UndoTreeToggle'}
+  Plug 'chrisbra/csv.vim', {'for': 'csv'}
+  Plug 'omnisharp/omnisharp-vim', {'for': 'cs'}
+  Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
+  Plug 'ekalinin/Dockerfile.vim', {'for': 'dockerfile'}
+  Plug 'ervandew/supertab'
 endif
+
+Plug 'junegunn/vim-peekaboo'
+Plug 'tpope/vim-surround'
 
 Plug 'vim-voom/voom'
 Plug 'neoclide/coc.nvim'
-Plug 'ervandew/supertab'
 
 Plug 'mhinz/vim-signify'
 Plug 'mhinz/vim-grepper', { 'on': ['Grepper', '<plug>(GrepperOperator)'] }
+
+Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
 
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()

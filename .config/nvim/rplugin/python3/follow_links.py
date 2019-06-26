@@ -20,63 +20,63 @@ class FileLink():
     """FileLink because it may be an IPython class.
 
     Could we have files display with an embedded link?
+
+    .. note::
+
+        nvim.__init_subclass__() can not take any keyword arguments.
+
     """
 
-    def __init__(self, vim, logger=None):
+    def __init__(self, nvim, logger=None):
         """Initialize a file object."""
-        self.vim = vim
-        self.path_obj = vim.current.buffer.name
-        self.logger = logger
+        self.nvim = nvim
+        self.path_obj = self.nvim.current.buffer.name
 
-    # i did this wrong somehow.
-    # so do we implement this as a a function with an autocmd yeah actually
-    # that's probably it
-    # def follow_edit(self, fobj):
-    #     self.fobj = fobj
-    #     # self.Path = Path(fobj)
-    #     path_obj = Path(self.fobj)
-
-    def _path_file(self, linked_file):
+    def _path_file(self):
         """Pathify a file."""
-        return Path(linked_file)
+        return Path(self.path_obj)
 
-    def _check_symlink(self, path_obj):
+    def _check_symlink(self):
         """Check if `path_obj` is a symlink."""
-        return path_obj.is_symlink()
+        return self._path_file().is_symlink()
 
-    def _resolved_path(self, path_obj):
-        return path_obj.resolve()
+    def _resolved_path(self):
+        return self._path_file().resolve()
 
     @pynvim.command(name='Follow', nargs=1, complete='file')
     def true_file(self, path_obj):
-        _link_file = self._path_file(path_obj)
-        if self._check_symlink(_link_file):
-            real_file = self._resolved_path(_link_file)
-            dirname = Path.absolute(_link_file.parent)
-            self.vim.chdir(dirname)
-            self.vim.command('edit' + real_file)
+        """Implement a command that opens and resolves a symlink."""
+        if self._check_symlink():
+            real_file = self._resolved_path()
+            dirname = real_file.parent
+            self.nvim.chdir(str(dirname))
+            self.nvim.command('edit' + str(real_file))
 
 
 def _setup_logging(level):
-    logger = logging.getLogger(name=__name__)
+    logger = logging.getLogger(name='rplugin/python3/follow_links')
     logger.setLevel(level)
     if os.environ.get('NVIM_PYTHON_LOG_FILE'):
         log_file = os.environ.get('NVIM_PYTHON_LOG_FILE')
     else:
-        log_file = sys.stdout
-    log_dir = realpath(join(__file__, pardir, 'log'))
-    if not os.path.exists(log_dir):
-        os.makedirs(log_dir)
-    log_file = os.path.join(log_dir, 'lint.log')
-    hdlr = logging.FileHandler(log_file)
-    logger.addHandler(hdlr)
+        # log_file = sys.stdout
+        # log_dir = realpath(join(__file__, pardir, 'log'))
+        # if not os.path.exists(log_dir):
+        # os.makedirs(log_dir)
+        # log_file = os.path.join(log_dir, 'lint.log')
+        pass
+    try:
+        hdlr = logging.FileHandler(log_file)
+    except:
+        pass
+    else:
+        logger.addHandler(hdlr)
     formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
     hdlr.setFormatter(formatter)
     return logger
 
 
-@pynvim.autocmd(
-    'BufEnter', 'BufNewFile', eval='getftype(expand("<afile>"))==#link')
+@pynvim.autocmd('BufEnter')
 def main():
     args = sys.argv[:]
     log_levels = {
@@ -87,9 +87,9 @@ def main():
         'critical': logging.CRITICAL,
     }
     if len(args) < 1:
-        logger = _setup_logging(log_levels['warning'])
+        LOGGER = _setup_logging(log_levels['warning'])
 
-    FileLink(logger)
+    FileLink(LOGGER)
 
 
 if __name__ == '__main__':

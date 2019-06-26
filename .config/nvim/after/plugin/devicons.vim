@@ -39,12 +39,3 @@ let g:DevIconsEnableFolderExtensionPatternMatching = 1
 " Enable this for a specific ftplugin I'm curious what thisll look like. We
 " already call that func but the rest I'm curious about.
 " setlocal statusline=%f\ %{WebDevIconsGetFileTypeSymbol()}\ %h%w%m%r\ %=%(%l,%c%V\ %Y\ %=\ %P%)
-"
-" -------------------------------------------------------------------------------
-" How do I solve issues after re-sourcing my *vimrc*?
-
-" - Try adding this to the bottom of your |vimrc|
-
-if exists('g:loaded_webdevicons')
-    call webdevicons#refresh()
-endif

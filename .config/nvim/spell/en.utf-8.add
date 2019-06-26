@@ -1644,3 +1644,4 @@ vim8
 tox
 qutebrowser
 tig
+pipfile
