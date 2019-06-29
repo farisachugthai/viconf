@@ -141,8 +141,8 @@ set foldlevelstart=0
 set foldlevel=0
 set foldnestmax=10
 set foldmethod=marker
-" Use 1 column to indicate fold level and whether a fold is open or closed.
-set foldcolumn=1
+" Use 2 columns to indicate fold level and whether a fold is open or closed.
+set foldcolumn=2      " If less than 2 is used it can get pushed off screen in the TUI
 set signcolumn=yes    " not fold related but close to column
 
 " Buffers Windows Tabs: {{{2
@@ -195,6 +195,7 @@ set completeopt=menu,menuone,noselect,noinsert,preview
 " don't show more than 15 choices in the popup menu. defaults to 0
 set pumheight=15
 
+set ignorecase             " both smartcase and infercase require ignorecase to be set
 set smartcase infercase    " the case when you search for stuff
 
 " Path: {{{2

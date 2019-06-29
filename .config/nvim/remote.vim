@@ -2,10 +2,15 @@
     " File: remote.vim
     " Author: Faris Chugthai
     " Description: All the remote hosts that Neovim loads
-    " Last Modified: ddat
+    " Last Modified: June 08, 2019
 " ============================================================================
 
 " Preliminaries: {{{1
+if exists('g:loaded_your_remotes') || &compatible || v:version < 700
+    finish
+endif
+let g:loaded_your_remotes = 1
+
 scriptencoding utf-8
 let s:cpo_save = &cpoptions
 set cpoptions&vim
@@ -90,9 +95,9 @@ function! PythonRemoteHost() abort
   " conda activate neovim
   " but nvim needs the .exe at the end and i'm really trying to avoid
   " unnecessary OS stats whereever possible...
-  " elseif exists('$CONDA_PYTHON_EXE')
-  "   let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
-  "   let &path = &path . ',' . expand('$CONDA_PYTHON_EXE')
+  elseif exists('$CONDA_PYTHON_EXE')
+    let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
+    let &path = &path . ',' . expand('$CONDA_PYTHON_EXE')
 
   elseif exists('$CONDA_PREFIX')
     let g:python3_host_prog = expand('$CONDA_PREFIX/bin/python3')

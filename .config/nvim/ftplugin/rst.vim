@@ -29,7 +29,8 @@ setlocal keywordprg=pydoc
 augroup rstcompiler
     au!
     autocmd Filetype rst compiler rst
-augroup END
+
+" Don't set makeprg!!! That's what the compiler command is for!
 
 " The Official Ftplugin: {{{1
 

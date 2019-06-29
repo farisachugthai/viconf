@@ -1,17 +1,18 @@
 " Vim compiler file
 " Compiler:             sphinx >= 1.0.8, http://www.sphinx-doc.org
 " Description:          reStructuredText Documentation Format
+" Maintainer: Faris Chugthai
 " Previous Maintainer:  Nikolai Weibull <now@bitwi.se>
-" Latest Revision:      2017-03-31
+" Latest Revision:      Jun 29, 2019
 
 " Guards: {{{1
-if exists("current_compiler")
+if exists('current_compiler')
   finish
 endif
-let current_compiler = "rst"
+let current_compiler = 'rst'
 
-let s:cpo_save = &cpo
-set cpo&vim
+let s:cpo_save = &cpoptions
+set cpoptions&vim
 
 " CompilerSet: {{{1
 " From he exists:
@@ -24,7 +25,7 @@ set cpo&vim
 "     3  matches several user commands
 "     to check for a supported command
 "     always check the return value to be 2.
-if exists(":CompilerSet") != 2
+if exists(':CompilerSet') != 2
   command -nargs=* CompilerSet setlocal <args>
 endif
 
@@ -40,11 +41,15 @@ CompilerSet errorformat=
       \%X%*\\a[%*\\d]:\ Leaving\ directory\ `%f',
       \%DMaking\ %*\\a\ in\ %f
 
-
-CompilerSet 'sphinx-build'
+" Makeprg: {{{1
+if filereadable('Makefile')
+  CompilerSet makeprg=make
+else
+  let &makeprg = 'sphinx-build -b html'
+endif
 
 " Invoke the command with something to the effect of :make -b html . _build
 
 " Atexit: {{{1
-let &cpo = s:cpo_save
+let &cpoptions = s:cpo_save
 unlet s:cpo_save

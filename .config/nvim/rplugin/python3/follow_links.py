@@ -6,7 +6,7 @@ Honestly don't know what to do to make this work.
 """
 import logging
 import os
-from os.path import join, realpath, pardir
+from os.path import join, realpath
 from pathlib import Path
 import sys
 
