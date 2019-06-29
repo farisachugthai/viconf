@@ -15,7 +15,7 @@ import pynvim
 logger = logging.getLogger(name=__name__)
 
 
-@pynvim.plugin
+# @pynvim.plugin
 class FileLink():
     """FileLink because it may be an IPython class.
 
@@ -43,7 +43,7 @@ class FileLink():
     def _resolved_path(self):
         return self._path_file().resolve()
 
-    @pynvim.command(name='Follow', nargs=1, complete='file')
+    # @pynvim.command(name='Follow', nargs=1, complete='file')
     def true_file(self, path_obj):
         """Implement a command that opens and resolves a symlink."""
         if self._check_symlink():
@@ -76,7 +76,7 @@ def _setup_logging(level):
     return logger
 
 
-@pynvim.autocmd('BufEnter')
+# @pynvim.autocmd('BufEnter')
 def main():
     args = sys.argv[:]
     log_levels = {

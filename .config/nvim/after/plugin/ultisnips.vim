@@ -2,15 +2,14 @@
     " File: ultisnips.vim
     " Author: Faris Chugthai
     " Description: UltiSnips plugin configuration.
-    " Last Modified: May 13, 2019
+    " Last Modified: Jun 29, 2019
 " ============================================================================
 
 " Guards: {{{1
-
-if exists('b:did_ultisnips_after_plugin') || &compatible || v:version < 700
+if exists('g:did_ultisnips_after_plugin') || &compatible || v:version < 700
     finish
 endif
-let b:did_ultisnips_after_plugin = 1
+let g:did_ultisnips_after_plugin = 1
 
 if !has_key(plugs, 'ultisnips')
     finish
@@ -33,18 +32,31 @@ inoremap <C-Tab> * <Cmd>call ultisnips#listsnippets()<CR>
 
 let g:snips_author = 'Faris Chugthai'
 let g:snips_github = 'https://github.com/farisachugthai'
-let g:UltiSnipsSnippetDir = [ expand('~') . '/.config/nvim/UltiSnips' ]
+
+" Do a directory check before we assign and also use the stdpath() function
+if isdirectory(stdpath('config') . '/UltiSnips')
+  let g:UltiSnipsSnippetDir = [stdpath('config') . '/UltiSnips']
+endif
+
+" well poop i didn't realize i never set this
+let g:UltiSnipsUsePythonVersion = 3
+
 let g:UltiSnipsExpandTrigger = '<Tab>'
+" TODO: Mapped in ConEmu and I don't know how to unmap a system keybinding...
 let g:UltiSnipsListSnippets = '<C-Tab>'
 let g:UltiSnipsJumpForwardTrigger = '<C-j>'
 let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
 let g:ultisnips_python_style = 'numpy'
 let g:ultisnips_python_quoting_style = 'double'
 let g:UltiSnipsEnableSnipMate = 0
+
+" I just noticed in plugged/UltiSnips/autoload/UltiSnips/map_keys.vim
+" that there's a context option....what the hell does that mean??
 let g:UltiSnipsEditSplit = 'tabdo'
 
-" Defining it in this way means that UltiSnips doesn't iterate
-" through every dir in &rtp which should save a lot of time
+" Defining it and limiting it to 1 directory means that UltiSnips doesn't
+" iterate through every dir in &rtp which saves an immense amount of time
+" on startup.
 let g:UltiSnipsSnippetDirectories = [ expand('~') . '/.config/nvim/UltiSnips' ]
 
 " Functions And Commands: {{{1

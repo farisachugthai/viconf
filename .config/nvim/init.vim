@@ -31,15 +31,6 @@ runtime g:local_vimrc
 
 if g:windows
   runtime winrc.vim
-  " How do i check if I'm on cmd or powershell?
-  " might need to individually set the envvar SHELL in a startup script for each
-  " set shell=powershell shellpipe=\| shellredir=> shellxquote=
-  " let &shellcmdflag='-NoLogo  -ExecutionPolicy RemoteSigned -Command $* '  " Should I -NoExit this?
-  set shell=cmd.exe
-  if exists('+shellslash')   " don't drop the +!
-    set shellslash
-  endif
-  set fileformats=unix,dos
 endif
 
 " To encourage cross platform use

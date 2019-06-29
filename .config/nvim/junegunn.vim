@@ -30,12 +30,9 @@ Plug 'w0rp/ale'
 
 if !empty(g:windows)
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
-else
-  " I just expanded 2 snippets on Windows...Coc expanded them without
-  " UltiSnips being loaded...
-  Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 endif
 
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 if exists('$TMUX')
     Plug 'christoomey/vim-tmux-navigator'
     Plug 'edkolev/tmuxline.vim'
@@ -51,18 +48,14 @@ Plug 'tomtom/tlib_vim'  " this library is incredible
 " It's very frustrating having termux slow down beyond repair but also frustrating
 " not being able to use more than 15 plugins at any point in time
 if !empty(g:ubuntu)
-  Plug 'Rykka/InstantRst', {'for': 'rst'}
- " uses python2 syntax and that's killing windows
-  Plug 'gu-fan/riv.vim', {'for': 'rst'}
-
   " I don't know rust but honestly its a model ftplugin so download it for
   " reference
   Plug 'rust-lang/rust.vim'
 endif
 
 if empty(g:termux)
-    " honestly this almost never actually begins the language server
-    " Plug 'autozimu/LanguageClient-neovim', {'do': ':UpdateRemotePlugins'}
+  Plug 'Rykka/InstantRst', {'for': ['rst', 'python']}
+  Plug 'gu-fan/riv.vim', {'for': ['rst', 'python']}
   Plug 'godlygeek/tabular'
   Plug 'mbbill/undotree', {'on': 'UndoTreeToggle'}
   Plug 'chrisbra/csv.vim', {'for': 'csv'}

@@ -11,12 +11,8 @@
     "coc.preferences.extensionUpdateCheck": "never",
     "coc.preferences.currentFunctionSymbolAutoUpdate": true,
     "python.autoComplete.addBrackets": true,
-    "python.formatting.provider": "yapf",
-    "python.linting.flake8Enabled": true,
-    "python.linting.pydocstyleEnabled": true,
     "python.linting.pylintEnabled": false,
     "python.terminal.executeInFileDir": true,
-    "python.jediEnabled": true,
 	"list.source.grep.defaultArgs": ["-regex"],
 	"list.insertMappings": {
 		"<C-r>": "do:refresh",

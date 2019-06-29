@@ -6,15 +6,10 @@
 " ============================================================================
 
 " Guard: {{{1
-if exists("b:did_ftplugin")
-    finish
-endif
-let b:did_ftplugin = 1
-
-if exists('g:did_rst_after_ftplugin') || &compatible || v:version < 700
+if exists('b:did_ftplugin') || &compatible || v:version < 700
   finish
 endif
-let g:did_rst_after_ftplugin = 1
+let b:did_ftplugin = 1
 
 let s:cpo_save = &cpoptions
 set cpoptions&vim
@@ -31,14 +26,14 @@ setlocal spell!
 " This works beautifully!
 setlocal keywordprg=pydoc
 
-compiler rst
-
-let &makeprg='sphinx-build -b html '
+augroup rstcompiler
+    au!
+    autocmd Filetype rst compiler rst
+augroup END
 
 " The Official Ftplugin: {{{1
 
 setlocal comments=fb:.. commentstring=..\ %s
-setlocal formatoptions+=tcroql
 
 " reStructuredText standard recommends that tabs be expanded to 8 spaces
 " The choice of 3-space indentation is to provide slightly better support for
@@ -47,7 +42,7 @@ setlocal formatoptions+=tcroql
 "
 " More sophisticated indentation rules should be revisted in the future.
 
-if !exists("g:rst_style") || g:rst_style != 0
+if !exists('g:rst_style') || g:rst_style != 0
     setlocal expandtab shiftwidth=3 softtabstop=3 tabstop=8
 endif
 
@@ -76,8 +71,10 @@ let g:rst_syntax_code_list = {
     \ 'perl': ['perl'],
     \ 'sh': ['sh'],
     \ }
+
+
 " Atexit: {{{1
-let b:undo_ftplugin = 'set et< ts< sw< sts< fo< cms< com< cc< lbr< fdl< fdls< spell< kp<'
+let b:undo_ftplugin = 'set et< ts< sw< sts< cms< com< cc< lbr< fdl< fdls< spell< kp<'
 " can't use unlet! or unlet in the same '' apparently
 
 let &cpoptions = s:cpo_save

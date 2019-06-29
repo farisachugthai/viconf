@@ -2,7 +2,7 @@
     " File: remote.vim
     " Author: Faris Chugthai
     " Description: All the remote hosts that Neovim loads
-    " Last Modified: June 08, 2019
+    " Last Modified: ddat
 " ============================================================================
 
 " Preliminaries: {{{1
@@ -15,7 +15,8 @@ set cpoptions&vim
 
 " Node Host: {{{2
 function! Get_Node_Host() abort
-    " worked when i ran it with set shell=cmd
+  " TODO: add conda env var checks
+  " worked when i ran it with set shell=cmd
   if executable('yarn')
     if filereadable(shellescape(expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'))
       let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
@@ -79,13 +80,19 @@ function! PythonRemoteHost() abort
   " If we have a virtual env start there. Actually we should probably check if
   " we have expand('$PIPENV_ACTIVE') == 1 dude fuckkk TODO
   if exists('$VIRTUAL_ENV')
-      let g:python3_host_prog = expand('$VIRTUAL_ENV') . '/bin/python'
-      let &path = &path . ',' . expand('$VIRTUAL_ENV') . '/lib/python3/*'
+    let g:python3_host_prog = expand('$VIRTUAL_ENV') . '/bin/python'
+    let &path = &path . ',' . expand('$VIRTUAL_ENV') . '/lib/python3/*'
 
   " On Windows we conveniently get this env var with Conda.
-  elseif exists('$CONDA_PYTHON_EXE')
-    let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
-    let &path = &path . ',' . expand('$CONDA_PYTHON_EXE')
+  " Dude fuck me. It doesn't handle nested conda sessions correctly
+  " Conda prefix handles the following correctly, when in a shell, >
+  " conda activate base
+  " conda activate neovim
+  " but nvim needs the .exe at the end and i'm really trying to avoid
+  " unnecessary OS stats whereever possible...
+  " elseif exists('$CONDA_PYTHON_EXE')
+  "   let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
+  "   let &path = &path . ',' . expand('$CONDA_PYTHON_EXE')
 
   elseif exists('$CONDA_PREFIX')
     let g:python3_host_prog = expand('$CONDA_PREFIX/bin/python3')
@@ -101,6 +108,9 @@ function! PythonRemoteHost() abort
     elseif executable('/usr/bin/python3')
       let g:python3_host_prog = '/usr/bin/python3'
       let &path = &path . ',' . '/usr/lib/python3/*'
+
+    elseif executable('which')
+        let g:python3_host_prog = system('which python')
 
     " and if we can't just disable it because it starts spouting off errors
     else
@@ -132,6 +142,69 @@ function! RemotePython2Host() abort
 endfunction
 
 call RemotePython2Host()
+
+" Fun With Clipboards: {{{1
+
+" I've been using vim for almost 3 years. I still don't have copy paste ironed out...
+" Let's start simple
+
+" Set Clipboard: {{{2
+if has('unnamedplus')                   " Use the system clipboard.
+    set clipboard+=unnamed,unnamedplus
+else                                        " Accommodate Termux
+    set clipboard+=unnamed
+endif
+
+set pastetoggle=<F7>
+
+" Clipboard Provider: {{{2
+" Now let's set up the clipboard provider
+
+" First check that we're in a tmux session before trying this
+if exists('$TMUX')
+
+  " Now let's make a dictionary for copying and pasting actions. Name both
+  " to hopefully make debugging easier. In `he provider-clipboard` they define
+  " these commands so that they go to * and +....But what if we put them in
+  " named registers? Then we can still utilize the * and + registers however
+  " we want. Idk give it a try.
+  " Holy hell that emits a lot of warnings and error messages don't do that
+  " again.
+  "
+  " As an FYI, running `:echo provider#clipboard#Executable()` on Ubuntu gave
+  " me xclip so that's something worth knowing
+  let g:clipboard = {
+      \   'name': 'TmuxCopyPasteClipboard',
+      \   'copy': {
+      \      '*': 'tmux load-buffer -',
+      \      '+': 'tmux load-buffer -',
+      \    },
+      \   'paste': {
+      \      '*': 'tmux save-buffer -',
+      \      '+': 'tmux save-buffer -',
+      \   },
+      \   'cache_enabled': 1,
+      \ }
+else
+  if exists('$DISPLAY') && executable('xclip')
+    " This is how it's defined in autoload/providor/clipboard.vim
+    let g:clipboard = {
+      \    'name': 'xclipboard',
+      \    'copy': {
+      \       '*': 'xclip -quiet -i -selection primary',
+      \       '+': 'xclip -quiet -i -selection clipboard',
+      \    },
+      \   'paste': {
+      \       '*': 'xclip -o -selection primary',
+      \       '+': 'xclip -o -selection clipboard',
+      \   },
+      \   'cache_enabled': 1,
+      \ }
+  endif
+endif
+
+" Double check if we need to do this but sometimes the clipboard fries when set this way
+runtime autoload/provider/clipboard.vim
 
 " Atexit: {{{1
 let &cpoptions = s:cpo_save
