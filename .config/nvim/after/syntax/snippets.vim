@@ -14,7 +14,7 @@ let g:did_snippets_after_syntax = 1
 " Idk what i did that this is necessary
 runtime syntax/snippets.vim
 
-" Syn match: {{{1
+" Syn Match: {{{1
 
 " We fixed snippet comments!
 syn match snipComment '^\W*#.*$' contains=snipComment display
