@@ -2,7 +2,7 @@
     " File: remote.vim
     " Author: Faris Chugthai
     " Description: All the remote hosts that Neovim loads
-    " Last Modified: ddat
+    " Last Modified: Jul 03, 2019
 " ============================================================================
 
 " Preliminaries: {{{1
@@ -54,6 +54,9 @@ function! Get_Ruby_Host() abort
 
   if executable('rvm')
     let g:ruby_host_prog = 'rvm system do neovim-ruby-host'
+  elseif filereadable('C:/tools/ruby26/bin/neovim-ruby-host.bat')
+    let g:ruby_host_prog = 'C:/tools/ruby26/bin/neovim-ruby-host.bat'
+
   elseif filereadable(expand('$_ROOT') . '/local/bin/neovim-ruby-host')
     let g:ruby_host_prog = expand('$_ROOT') . '/local/bin/neovim-ruby-host'
   elseif filereadable('~/.local/bin/neovim-ruby-host')
@@ -79,9 +82,17 @@ endfunction
 function! PythonRemoteHost() abort
   " If we have a virtual env start there. Actually we should probably check if
   " we have expand('$PIPENV_ACTIVE') == 1 dude fuckkk TODO
+  " holy shit this is so annoying. have to add an OS specific check because
+  " python doesn't go into the same spot in any of these programs
   if exists('$VIRTUAL_ENV')
-    let g:python3_host_prog = expand('$VIRTUAL_ENV') . '/bin/python'
+    if empty(g:windows)
+      let g:python3_host_prog = expand('$VIRTUAL_ENV') . '/bin/python'
+    else
+      let g:python3_host_prog = expand($VIRTUAL_ENV) . '/Scripts/python.exe'
+    endif
+
     let &path = &path . ',' . expand('$VIRTUAL_ENV') . '/lib/python3/*'
+    return g:python3_host_prog
 
   " On Windows we conveniently get this env var with Conda.
   " Dude fuck me. It doesn't handle nested conda sessions correctly
@@ -90,31 +101,37 @@ function! PythonRemoteHost() abort
   " conda activate neovim
   " but nvim needs the .exe at the end and i'm really trying to avoid
   " unnecessary OS stats whereever possible...
-  " elseif exists('$CONDA_PYTHON_EXE')
-  "   let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
-  "   let &path = &path . ',' . expand('$CONDA_PYTHON_EXE')
+  elseif exists('$CONDA_PYTHON_EXE')
+    let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
+    let &path = &path . ',' . expand('$CONDA_PYTHON_EXE')
+    return g:python3_host_prog
 
   elseif exists('$CONDA_PREFIX')
     let g:python3_host_prog = expand('$CONDA_PREFIX/bin/python3')
     let &path = &path . ',' . expand('$CONDA_PREFIX/lib/python3/*')
+    return g:python3_host_prog
 
   else
       " If not then just use the system python
     if executable(expand('$_ROOT') . '/bin/python3')
-    let g:python3_host_prog = expand('$_ROOT') . '/bin/python3'
-    let &path = &path . ',' . expand('$_ROOT') . '/lib/python3/*'
+      let g:python3_host_prog = expand('$_ROOT') . '/bin/python3'
+      let &path = &path . ',' . expand('$_ROOT') . '/lib/python3/*'
+      return g:python3_host_prog
 
     " well that's if we can find it anyway
     elseif executable('/usr/bin/python3')
       let g:python3_host_prog = '/usr/bin/python3'
       let &path = &path . ',' . '/usr/lib/python3/*'
+      return g:python3_host_prog
 
     elseif executable('which')
-        let g:python3_host_prog = system('which python')
+      let g:python3_host_prog = system('which python')
+      return g:python3_host_prog
 
     " and if we can't just disable it because it starts spouting off errors
     else
       let g:loaded_python3_provider = 1
+      return g:loaded_python3_provider
     endif
 
   endif
