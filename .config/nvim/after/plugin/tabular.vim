@@ -28,10 +28,11 @@ endif
 let s:save_cpo = &cpo
 set cpo&vim
 
-AddTabularPattern! asterisk /*/l1
+" I think the problem is that we lazy load it so maybe don't do that? idk
+" AddTabularPattern! asterisk /*/l1
 
-AddTabularPipeline! remove_leading_spaces /^ /
-          \ map(a:lines, "substitute(v:val, '^ *', '', '')")
+" AddTabularPipeline! remove_leading_spaces /^ /
+"           \ map(a:lines, "substitute(v:val, '^ *', '', '')")
 
 " Restore the saved value of 'cpo'
 let &cpo = s:save_cpo
