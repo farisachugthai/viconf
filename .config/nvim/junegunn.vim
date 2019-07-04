@@ -55,8 +55,8 @@ if !empty(g:ubuntu)
 endif
 
 if empty(g:termux)
-  Plug 'Rykka/InstantRst', {'for': ['rst', 'python']}
-  Plug 'gu-fan/riv.vim', {'for': ['rst', 'python']}
+  " Plug 'Rykka/InstantRst', {'for': ['rst', 'python']}
+  " Plug 'gu-fan/riv.vim', {'for': ['rst', 'python']}
   Plug 'chrisbra/csv.vim', {'for': 'csv'}
   Plug 'omnisharp/omnisharp-vim', {'for': 'cs'}
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
