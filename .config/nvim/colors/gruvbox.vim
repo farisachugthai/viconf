@@ -1111,7 +1111,7 @@ hi default link vimCommentTitleLeader	vimCommentTitle
 " vimOperParen	vimOperParen
 " vimPatRegion	vimPatRegion
 " vimRegion	vimRegion
-" vimSet	vimSet
+hi default link vimSet Number
 
 " There's a highlighting group for the equals sign in a set option statement...
 hi default link vimSetEqual	Operator
@@ -1175,7 +1175,6 @@ hi! link vimAutoSet	vimCommand
 hi! link vimBehave	vimCommand
 hi! link vimBehaveModel	vimBehave
 hi! link vimBracket	Delimiter
-hi! link vimBracket GruvboxOrange
 hi! link vimCmplxRepeat	SpecialChar
 hi! link vimCommand	Statement
 hi! link vimComment	Comment
@@ -1199,7 +1198,6 @@ hi! link vimFunc Function
 hi! link vimFuncKey	vimCommand
 hi! link vimFuncName	Function
 hi! link vimFuncSID	Special
-hi! link vimFuncSID GruvboxFg3
 hi! link vimFuncVar	Identifier
 hi! link vimFunction Function
 hi! link vimGroup	Type
@@ -1242,7 +1240,6 @@ hi! link vimMap	vimCommand
 hi! link vimMapBang	vimCommand
 hi! link vimMapMod	vimBracket
 hi! link vimMapModKey	vimFuncSID
-hi! link vimMapModKey GruvboxOrange
 hi! link vimMark	Number
 hi! link vimMarkNumber	vimNumber
 hi! link vimMenuMod	vimMapMod
@@ -1253,7 +1250,6 @@ hi! link vimNorm	vimCommand
 hi! link vimNotFunc	vimCommand
 hi! link vimNotPatSep	vimString
 hi! link vimNotation	Special
-hi! link vimNotation GruvboxOrange
 hi! link vimNumber	Number
 hi! link vimOper	Operator
 hi! link vimOperError	Error
@@ -1272,10 +1268,8 @@ hi! link vimScriptDelim	Comment
 hi! link vimSearch	vimString
 hi! link vimSearchDelim	Statement
 hi! link vimSep	Delimiter
-hi! link vimSep GruvboxFg3
 hi! link vimSetMod	vimOption
 hi! link vimSetSep	Statement
-hi! link vimSetSep GruvboxFg3
 hi! link vimSetString	vimString
 hi! link vimSpecFile	Identifier
 hi! link vimSpecFileMod	vimSpecFile

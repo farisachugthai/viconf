@@ -1,12 +1,12 @@
-dotfiles ~/projects/dotfiles/unix
-nvim ~/AppData/Local/nvim
-nvim-data ~/AppData/Local/nvim-data
-python ~/python
-tutorials ~/Dropbox/python/tutorials
-utilities ~/projects/utilities
-viconf ~/projects/viconf/.config/nvim
-WindowsPowerShell ~/Documents/WindowsPowerShell
-tools C:/tools
+dotfiles ~\projects\dotfiles\unix
+nvim ~\AppData\Local\nvim
+nvim-data ~\AppData\Local\nvim-data
+python ~\python
+tutorials ~\Dropbox\python\tutorials
+utilities ~\projects\utilities
+viconf ~\projects\viconf\.config\nvim
+WindowsPowerShell ~\Documents\WindowsPowerShell
+tools C:\tools
 
 config-nvim ~/.config/nvim
 jedi-docs ~/.local/share/nvim/plugged/jedi-vim/pythonx/jedi/docs/docs

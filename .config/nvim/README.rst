@@ -3,37 +3,33 @@ README
 ========
 
 :Author: Faris Chugthai
-:Date: Mar 24, 2019
+:Date: Jul 06, 2019
 
-To say vim has a lot of options, associated files and directories is an
+To say Vim has a lot of options, associated files and directories is an
 understatement. But these can be broken down piece by piece to be more
 easily digestible.
 
 First I'll go over setting basic options.
 
 Options
----------
+=========
 The first and most obvious file is the :doc:`init.vim`. We can setup
 the base options like so:
 
 +--------------------------+----------------+
 | Options                  |                |
 +--------------------------+----------------+
-|                          |                |
 | .. code-block:: vim      |                |
 +--------------------------+----------------+
-|                          |                |
 |    :let OPTION_NAME = 1  | Enable option  |
 +--------------------------+----------------+
 |    :let OPTION_NAME = 0  | Disable option |
 +--------------------------+----------------+
-|                          |                |
-|                          |                |
 | Continuation of settings |                |
 +--------------------------+----------------+
 
 let vs. set
-~~~~~~~~~~~~
+------------
 
 ``set`` allows one to set useful configurations and is easier to read than
 some corresponding ``let`` statements, but it only allows one to
@@ -51,7 +47,7 @@ of some sort.
 .. todo::  Show the example of setting python_prog_host based on  :envvar:`VIRTUAL_ENV`
 
 Whitespace in Options
-~~~~~~~~~~~~~~~~~~~~~
+---------------------
 
 The ``set`` command is whitespace sensitive which can become quickly
 cumbersome. The ``let`` command, in comparison, is not as strict.
@@ -71,21 +67,41 @@ still required; however I find this more manageable than adding a `\\``
 before every single space.
 
 Environment Variables
----------------------
+=====================
 
 Do not ever redefine `$VIMRUNTIME`! This variable is used by both Neovim and
 Vim; however, both define the var differently.
 
 If this is set in a startup file like `.bash_profile` or `.bashrc`, it will
-create compatability issues between the two.
+create compatibility issues between the two.
 
 Nvim defines `$VIMRUNTIME` as /usr/share/nvim/runtime/, in comparison to Vim's
 /usr/share/vim/runtime/ definition. Therefore, defining `$VIMRUNTIME`
 as /usr/share/vim/runtime/ in a startup file will cause unexpected behavior
 in Neovim's startup.
 
+
+Extraneous Environment Variables
+--------------------------------
+
+The below is an env var set as a convenient bridge between Ubuntu and Termux
+As a result it messes things up if not set, but there's no reason to halt
+everything. Feel free to discard if you copy/paste my vimrc.
+
+Added: 05/18/19: Just found out Windows has an envvar ``%SystemRoot%``::
+
+   if !exists('$_ROOT') && !empty(g:termux)
+     let $_ROOT = expand('$PREFIX')
+   elseif !exists('$_ROOT') && !empty(g:ubuntu)
+     let $_ROOT = '/usr'
+   elseif !exists('$_ROOT') && !empty(g:windows)
+     " Or should I use ALLUSERSPROFILE
+     let $_ROOT = expand('$SystemRoot')
+   endif
+
+
 Directory Layout and Runtimepath
----------------------------------
+=================================
 
 How are the folders in a :mod:`pynvim` neovim directory tree supposed to be
 laid out?
@@ -98,17 +114,21 @@ directories all affect how different settings are recorded and in what order
 the code is ran.
 
 Runtimepath
-~~~~~~~~~~~
+-----------
 
 
 Ftdetect
-^^^^^^^^^^
-How does writing an ftdetect file work?
-What necessary guards are there?
+~~~~~~~~~~
+
+.. todo::
+
+   How does writing an ftdetect file work?
+   What necessary guards are there?
 
 
 Ftplugin
-^^^^^^^^^^
+~~~~~~~~~~
+
 Ftplugin files should be used to totally override the configuration
 neovim has built-in for a certain filetype.
 
@@ -127,14 +147,13 @@ configuration that comes built in the with editor.
     This is only true if you put ftplugin guards in your configs.
     However, you absolutely should.
 
-As a result, we won't put the
-usual ftplugin guard in there. However, we should do something to ensure
-that buffers of a different filetype don't source everything in
-`after/ftplugin`_.
+As a result, we won't put the usual ftplugin guard in there. However, we
+should do something to ensure that buffers of a different filetype don't
+source everything in `after/ftplugin`_.
 
-For example, let's say we were in `after/ftplugin/gitcommit.vim`_
+For example, let's say we were in `after/ftplugin/gitcommit.vim`_.
 
-Something like this pseudo code would be perfect.
+Something like this pseudo code would be perfect.:
 
 .. code-block:: vim
 
@@ -146,24 +165,22 @@ Then put that in everything in that dir.
 .. _syntax-highlighting:
 
 Syntax
-^^^^^^^
-Similar thing with `after/syntax`_. We also have a fair number of files in `syntax`_
+~~~~~~~
+
+A similar way of organizing Vim's configuration files exists with the directory
+that dictates syntax highlighting: `after/syntax`_. We also have a fair
+number of files in `syntax`_
 
 .. _`syntax`: ./syntax/
 
 
-.. todo::
-
-    We should probably set up some kind of guard so that it doesn't source
-    a dozen times.
-
-
 Working with Plugins
----------------------
+=====================
 
-Vim Plug is a highly recommended plugin manager, and the one that I myself use.
+Vim-Plug is a highly recommended plugin manager, and the one that I myself use.
 
-Written by Junegunn Choi (also the author of FZF), vim-plug creates a simple way of interacting with plugins.
+Written by Junegunn Choi (also the author of FZF), vim-plug creates a 
+simple way of interacting with plugins.
 
 Beyond the basic commands you can read about in his README, vim-plug has
 an API that exports the command ``plug``. This command utilizes vimscript to
@@ -178,24 +195,24 @@ can be accessed with
 
 This feature proves phenomenally useful in a handful of situations.
 
-For example, one may want to check whether a ftplugin was lazily loaded.
+For example, one may want to check whether a ftplugin was lazily loaded or
+loaded at all.
+
+Echoing the plugins that Vim-Plug has loaded at startup time can also be
+an easy way to diagnose performance issues with Vim.
+
+As a product of its utility, I wrote a command to quickly call the dictionary.::
+
+   command! Plugins -nargs=0 echo keys(plugs)
 
 In addition, one could be in the situation where they may have
 different configuration files on different devices, and would like to
 check whether a plugin was installed. It's also good for debugging and
 seeing in what order a plugin loads.
 
-For plugins that are dependent on each other, like how deoplete-jedi depends on
-Jedi, this can help startup times and remedy unexpected behavior.
-
 
 Spell Files
-------------
-
-On the TODO list.
-
-- Cleanup script for autocorrect.vim and spell files.
-    - Luckily vim already has this functionality!
+============
 
 From the help docs
 
@@ -226,7 +243,7 @@ From the help docs
 
 
 Mappings
----------
+=========
 
 Mappings initially sounds like a simple enough idea as it's generally commonplace
 in other editors.
@@ -357,20 +374,17 @@ Completion can be done for:
 +-----------------------------------------------+------------+
 | 2. Keywords in the current file               | <C-x><C-n> |
 +-----------------------------------------------+------------+
-| 3. keywords in `dictionary`                   | <C-x><C-k> |
+| 3. Keywords in `dictionary`                   | <C-x><C-k> |
 +-----------------------------------------------+------------+
-+-----------------------------------------------+------------+
-| 4. Keywords in `thesauraus`                   | <C-x><C-t> |
+| 4. Keywords in `thesaurus`                    | <C-x><C-t> |
 +-----------------------------------------------+------------+
 | 5. Keywords in the current and included files | <C-x><C-i> |
 +-----------------------------------------------+------------+
-| 6. tags                                       | <C-x><C-]> |
+| 6. Tags                                       | <C-x><C-]> |
 +-----------------------------------------------+------------+
 | 7. File names                                 | <C-x><C-f> |
 +-----------------------------------------------+------------+
-+-----------------------------------------------+------------+
 | 8. Definitions or macros                      | <C-x><C-d> |
-+-----------------------------------------------+------------+
 +-----------------------------------------------+------------+
 | 9. Vim Command Line                           | <C-x><C-v> |
 +-----------------------------------------------+------------+

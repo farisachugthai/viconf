@@ -28,7 +28,20 @@ syntax match manHeaderFile      '\s\zs<\f\+\.h>\ze\(\W\|$\)'
 syntax match manEmail           '<\?[a-zA-Z0-9_.+-]\+@[a-zA-Z0-9-]\+\.[a-zA-Z0-9-.]\+>\?'
 syntax match manHighlight       +`.\{-}''\?+
 
-if &filetype !=# 'man'
+" Define the default highlighting.
+" Only when an item doesn't have highlighting yet
+
+highlight default link manTitle          Title
+highlight default link manSectionHeading Statement
+highlight default link manOptionDesc     Constant
+highlight default link manReference      PreProc
+highlight default link manSubHeading     Function
+
+highlight default manUnderline cterm=underline gui=underline
+highlight default manBold      cterm=bold      gui=bold
+highlight default manItalic    cterm=italic    gui=italic
+
+if &filetype != 'man'
   " May have been included by some other filetype.
   finish
 endif
