@@ -87,7 +87,7 @@ endif
 let s:is_dark=(&background ==? 'dark')
 
 " }}}
-" s:var -> hex codes: {{{
+" Script Local Mappings Hex Codes And RGB: {{{
 
 " setup palette dictionary
 let s:gb = {}
@@ -122,7 +122,10 @@ let s:gb.bright_green   = ['#b8bb26', 142]     " 184-187-38
 let s:gb.bright_yellow  = ['#fabd2f', 214]     " 250-189-47
 let s:gb.bright_blue    = ['#83a598', 109]     " 131-165-152
 let s:gb.bright_purple  = ['#d3869b', 175]     " 211-134-155
-let s:gb.bright_aqua    = ['#8ec07c', 108]     " 142-192-124
+" let s:gb.bright_aqua    = ['#8ec07c', 108]     " 142-192-124
+" Yo but honestly the bright aqua is green. 142-192-224 is way more aqua
+" Sorry i don't know how to figure out what the corresponding 0-255 value is
+let s:gb.bright_aqua    = ['#8ec0e1', 108]     " 142-192-224
 let s:gb.bright_orange  = ['#fe8019', 208]     " 254-128-25
 
 let s:gb.neutral_red    = ['#cc241d', 124]     " 204-36-29
@@ -1073,7 +1076,7 @@ hi! link xmlEntityPunct GruvboxOrange
 " vimCollClass	vimCollClass
 " vimCollClassErr	vimCollClassErr
 " vimCollection	vimCollection
-" vimCommentTitleLeader	vimCommentTitleLeader
+hi default link vimCommentTitleLeader	vimCommentTitle
 " vimEcho	vimEcho
 " vimErrSetting	vimErrSetting
 " vimEscapeBrace	vimEscapeBrace
@@ -1109,7 +1112,9 @@ hi! link xmlEntityPunct GruvboxOrange
 " vimPatRegion	vimPatRegion
 " vimRegion	vimRegion
 " vimSet	vimSet
-" vimSetEqual	vimSetEqual
+
+" There's a highlighting group for the equals sign in a set option statement...
+hi default link vimSetEqual	Operator
 " vimSubst2	vimSubst2
 " vimSubstFlagErr	vimSubstFlagErr
 " vimSubstPat	vimSubstPat

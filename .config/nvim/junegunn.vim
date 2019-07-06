@@ -10,8 +10,8 @@ scriptencoding utf-8
 let s:cpo_save = &cpoptions
 set cpoptions&vim
 " Note that this will only work on neovim as it it makes a call
-" to Vim-Plug using the function stdpath() which only exists on neovim
-" todo: get the plugin guard in here
+
+" guard
 
 " Plugins: {{{1
 execute 'source ' . stdpath('data') . '/site/autoload/plug.vim'
@@ -26,13 +26,14 @@ Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-rsi'
+Plug 'tpope/vim-surround'
 Plug 'w0rp/ale'
 
 if !empty(g:windows)
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
 endif
-
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+" Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 if exists('$TMUX')
     Plug 'christoomey/vim-tmux-navigator'
     Plug 'edkolev/tmuxline.vim'
@@ -54,20 +55,20 @@ if !empty(g:ubuntu)
 endif
 
 if empty(g:termux)
-  Plug 'Rykka/InstantRst', {'for': ['rst', 'python']}
-  Plug 'gu-fan/riv.vim', {'for': ['rst', 'python']}
-  Plug 'godlygeek/tabular'
-  Plug 'mbbill/undotree', {'on': 'UndoTreeToggle'}
+  " Plug 'Rykka/InstantRst', {'for': ['rst', 'python']}
+  " Plug 'gu-fan/riv.vim', {'for': ['rst', 'python']}
   Plug 'chrisbra/csv.vim', {'for': 'csv'}
   Plug 'omnisharp/omnisharp-vim', {'for': 'cs'}
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
   Plug 'ekalinin/Dockerfile.vim', {'for': 'dockerfile'}
-  Plug 'ervandew/supertab'
+  Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
 endif
 
+" I feel like the lazy loaded ones can come out here
+Plug 'mbbill/undotree', {'on': 'UndoTreeToggle'}
+Plug 'godlygeek/tabular', {'on': 'Tabularize'}
+Plug 'ervandew/supertab'
 Plug 'junegunn/vim-peekaboo'
-Plug 'tpope/vim-surround'
-
 Plug 'vim-voom/voom'
 Plug 'neoclide/coc.nvim'
 

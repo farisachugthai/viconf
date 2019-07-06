@@ -1,8 +1,7 @@
 " ============================================================================
     " File: unix.vim
     " Author: Faris Chugthai
-    " Description: Add unix commands in a general way so they work on all
-    " platforms
+    " Description: Add GNU/Linux commands, functions and mappings
     " Last Modified: April 17, 2019
 " ============================================================================
 
@@ -15,6 +14,7 @@ let g:did_unix_vim_autoloaded = 1
 let s:cpo_save = &cpoptions
 set cpoptions&vim
 
+" These should probably just get autoloaded. Why define them at startup?
 " Finger: {{{1
 " Example from :he command-complete
 " The following example lists user names to a Finger command
@@ -44,6 +44,27 @@ endfunction
 "           :call system('chmod +w -- ' . expand('%:S'))
 " From :he filename-modifiers in the cmdline page.
 command! -nargs=1 -complete=file Chmod call system('chmod +x ' . expand('%:S'))
+
+" Pure Emacs: {{{1
+" There are more comfortable ways of doing the following in Vim.
+" I'm not going to convince you it's better. That it's cleaner.
+" Unfortunately, there are  few of *their* keybindings wired in.
+" May as well map them correctly.
+
+" Alt-x: {{{2
+" This seemingly trivial difference determines whether the following is run
+" by fzf or the vim built-in, and they both have quite different looking
+" interfaces IMO.
+if exists('*fzf#wrap')
+  noremap <M-x>      <Cmd>Commands<CR>
+  noremap <C-x><C-b> <Cmd>Buffers<CR>
+else
+  noremap <M-x> <Cmd>commands<CR>
+  noremap <C-x><C-b> <Cmd>buffers<CR>
+endif
+
+noremap <silent> <C-x>o <Cmd>wincmd W<CR>
+
 
 " Atexit: {{{1
 let &cpoptions = s:cpo_save

@@ -1,7 +1,7 @@
 # ============================================================================
 	# File: vim.snippets
 	# Author: Faris Chugthai
-	# Description: # Vim Snippets:
+	# Description: Vim Snippets:
 	# Last Modified: April 27, 2019
 # ============================================================================
 
@@ -12,9 +12,10 @@
 #    Personal snippets  #
 #########################
 
+# Paths:
 
 snippet path "Refer to a file in the same dir as the script."
-${1:'let ${2:${VISUAL:s:local_vimrc}}' = }}fnamemodify(resolve(expand('${3:<sfile>}')), '${4::p:h}')
+${1:let ${2:${VISUAL:s:local_vimrc}} = }}fnamemodify(resolve(expand('${3:<sfile>}')), '${4::p:h}')
 endsnippet
 
 snippet gvar "Global / configuration variable" b
@@ -31,7 +32,7 @@ endif
 let $1 = ${4:1}
 endsnippet
 
-snippet plugin "Plugin reload guard." sb
+snippet plugin "Plugin reload guard." b
 " Guard: {{{1
 if !has_key(plugs, '${1:${VISUAL}`!p snip.rv = snip.basename.replace('.', '_')`}')
 	finish

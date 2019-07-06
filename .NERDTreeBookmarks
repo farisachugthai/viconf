@@ -1,4 +1,3 @@
-
 ConEmu C:/Program Files/ConEmu/ConEmu
 WindowsPowerShell ~/Documents/WindowsPowerShell
 config-nvim ~/.config/nvim
@@ -10,6 +9,7 @@ nvim-data ~/AppData/Local/nvim-data
 plugged ~/.local/share/nvim/plugged
 python ~/python
 tlib ~/.local/share/nvim/plugged/tlib_vim/autoload/tlib
+tools C:/tools
 tutorials ~/Dropbox/python/tutorials
 utilities ~/projects/utilities
 viconf ~/projects/viconf/.config/nvim

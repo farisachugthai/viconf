@@ -96,6 +96,21 @@ function! Buf_Window_Mapping() abort
   noremap <C-w>> <Cmd>wincmd 5><CR>
 endfunction
 
+" Command Line: {{{1
+" It's annoying you lose a whole command from a typo
+cnoremap <Esc> <nop>
+" However I still need the functionality
+cnoremap <C-g> <Esc>
+
+" From he cedit. Open the command window with F1 because it being bound to
+" help is SO annoying.
+execute 'set cedit=<F1>'
+
+" In the same line of thinking:
+" Avoid accidental hits of <F1> while aiming for <Esc>
+noremap! <F1> <Esc>
+
+
 
   " ALT Key Window Navigation: {{{1
 function! Alt_Key_Navigation() abort

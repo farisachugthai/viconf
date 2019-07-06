@@ -67,7 +67,7 @@ def _setup_logging(level):
         pass
     try:
         hdlr = logging.FileHandler(log_file)
-    except:
+    except Exception:
         pass
     else:
         logger.addHandler(hdlr)

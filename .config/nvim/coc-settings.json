@@ -31,7 +31,7 @@
         "<CR>"  : "action : select"
     },
     "python.linting.banditEnabled": false,
-    "coc.preferences.formatOnSaveFiletypes":["javascript", "html", "css", "python", "vim", "bash", "powershell"],
+    "coc.preferences.formatOnSaveFiletypes":["javascript", "html", "css", "vim", "bash", "powershell"],
     "diagnostic.checkCurrentLine": true,
     "diagnostic.displayByAle": true,
     "diagnostic.level": "warning",
