@@ -2,53 +2,56 @@
 # -*- coding: utf-8 -*-
 """Try to set up a pydoc remote plugin.
 
-Apr 18, 2019
-It works!
+=====
+Pydoc
+======
 
-Currently it opens up a new tab with your info.
+:date: Apr 18, 2019
 
-If we decide to make this a full plugin distribute it as it's own filetype
-and distribute your own syntax highlighting.
+.. highlight:: vim
+
+Currently this module opens up a new tab with your info.
+
+Roadmap
+========
+
+If we decide to make this a full plugin, distribute it as it's own filetype,
+then we might wanna distribute your own syntax highlighting.
 
 In addition it'd be considerate if we added in:
 
-A) options for vsplit, hsplit or open in a tab and
-B) a mapping to ``<LocalLeader>`` or to :kbd:`K`.
+A) Options for ``vsplit``, ``hsplit`` or ``open`` in a tab and
+B) A mapping to ``<LocalLeader>`` or to :kbd:`K`.
 C) Cmdline completion.
+
+Cmdline Completion
+===================
 
 Apr 19, 2019:
 
-    We could try hacking the :class:`~IPython.core.completer.Completer` into
-    this script but it'd take a LOT of extra imports.
+Figure out if this'll work for the completer.
 
-    Actually we might get away with:
+.. code-block:: vim
 
-        .. code-block:: vim
+    let l:old_path = &path
+    set path=''
+    let &path = sys.prefix + '**,'
+    command -complete=file_in_path
 
-            let l:old_path = &path
-            set path=''
-            let &path = sys.prefix + '**,'
-            command -complete=file_in_path
-
-    I mean don't intermix langs like that but that general idea.
+I mean don't intermix langs like that but that general idea.
 
 
 Setting up completions for pydoc
 --------------------------------
-Jedi can do it with the Pyimport command.
 
+Jedi can do it with the Pyimport command.::
 
-function! jedi#py_import_completions(argl, cmdl, pos) abort
-    PythonJedi jedi_vim.py_import_completions()
-endfun
-
-
-Take apart this function (or call it as your completer) and use that.
-
-06/02/2019:
+    function! jedi#py_import_completions(argl, cmdl, pos) abort
+        PythonJedi jedi_vim.py_import_completions()
+    endfun
 
 The only thing that PythonJedi does is determine py2 or 3. So we can skip that.
-jedi_vim is the pythonx file that jedi loads to call this function. 
+jedi_vim is the pythonx file that jedi loads to call this function.
 
 py_import_completions()::
 
@@ -58,17 +61,19 @@ py_import_completions()::
         try:
             import jedi
         except ImportError:
-            print('Pyimport completion requires jedi module: https://github.com/davidhalter/jedi')
+            print('Pyimport completion requires jedi module:'
+            ' https://github.com/davidhalter/jedi')
             comps = []
         else:
             text = 'import %s' % argl
-            script = jedi.Script(text, 1, len(text), '', environment=get_environment())
+            script = jedi.Script(text, 1, len(text), '',
+                                 environment=get_environment())
             comps = ['%s%s' % (argl, c.complete) for c in script.completions()]
         vim.command("return '%s'" % '\n'.join(comps))
 
-Let's initialize a :class:`jedi.Script()` object, and return whatever we get by running a
-list comprehension over the completions data attribute of our :class:`jedi.Script()`
-object.
+Let's initialize a :class:`jedi.Script()` object, and return whatever we
+get by running a list comprehension over the completions data attribute of
+our :class:`jedi.Script()` object.
 
 *PHEW* we're getting closer.
 

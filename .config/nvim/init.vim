@@ -1,6 +1,6 @@
 " Neovim Configuration:
 " Maintainer: Faris Chugthai
-" Last Change: May 31, 2019
+" Last Change: Jul 06, 2019
 
 " Preliminaries: {{{1
 scriptencoding utf-8
@@ -12,16 +12,11 @@ set cpoptions&vim
 " Termux check from Evervim. Thanks!
 let g:termux = isdirectory('/data/data/com.termux')
 
-" This evals to 1 on termux...
-let g:ubuntu = has('unix') && !has('macunix')
+let g:ubuntu = has('unix') && !has('macunix') && empty(g:termux)
 
-" This got moved up so we can check what OS we have and decide what options
-" to set from there
-" how the literal fuck is `has('win32')` a nvim specific thing.
-" Just tried it in vim and it didn't work!!
+" How is `has('win32')` a nvim specific thing. Tried in vim and it didn't work!
 let g:windows = has('win32') || has('win64')
 
-" The fact that this is a thing blows my mind
 " TODO: it doesn't work. - From wsl
 let g:wsl = has('wsl')
 
@@ -37,12 +32,6 @@ endif
 set sessionoptions+=unix,slash
 
 " $_ROOT: {{{2
-" The below is an env var set as a convenient bridge between Ubuntu and Termux
-" As a result it messes things up if not set, but there's no reason to halt
-" everything. Feel free to discard if you copy/paste my vimrc
-
-" Added: 05/18/19: Just found out Windows has an envvar %SystemRoot%"
-
 if !exists('$_ROOT') && !empty(g:termux)
   let $_ROOT = expand('$PREFIX')
 elseif !exists('$_ROOT') && !empty(g:ubuntu)
@@ -110,8 +99,8 @@ syntax sync fromstart
 
 " Leader And Viminfo: {{{2
 noremap <Space> <nop>
-map <Space> <Leader>
 let g:maplocalleader = '<Space>'
+map <Space> <Leader>
 
 " if has(nvim-0.4): {{{2
 if has('nvim-0.4')
@@ -231,7 +220,6 @@ set tagcase=smart
 set showfulltag
 
 set mouse=a
-" FOOBAR=~/<CTRL-><CTRL-F> will now autocomplete!
 set isfname-==
 
 set autochdir
@@ -259,9 +247,7 @@ set updatetime=100
 set inccommand=split
 let g:tutor_debug = 1
 
-" When set: Add 's' flag to 'shortmess' option (this makes the message
-" for a search that hits the start or end of the file not being displayed)
-set terse
+set terse     " Don't display the message when a search hits the end of file
 set shortmess+=a
 set shortmess-=tT
 
@@ -274,9 +260,6 @@ noremap q; q:
 
 " Ex mode is dumb
 noremap Q @q
-
-" Todo: map this to a key in a manner similar to unimpaired
-" setlocal comments=:# commentstring=#\ %s formatoptions-=t formatoptions+=croql
 
 if g:termux
   " May 26, 2019: Just ran into my first problem from a filename with a space in the name *sigh*
@@ -314,6 +297,12 @@ noremap! <F1> <Esc>
 " Leave these as recursive mappings though
 imap <C-f> <C-x><C-f>
 imap <C-l> <C-x><C-l>
+" Let's add in dictionary, tags and a few others
+imap <C-k> <C-x><C-k>
+imap <C-]> <C-x><C-]>
+imap <C-d> <C-x><C-d>
+imap <C-i> <C-x><C-i>
+
 " Dude read over :he getcharsearch(). Now ; and , search forward backward no matter what!!!
 noremap <expr> ; getcharsearch().forward ? ';' : ','
 noremap <expr> , getcharsearch().forward ? ',' : ';'

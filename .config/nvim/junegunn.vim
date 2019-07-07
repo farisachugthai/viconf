@@ -32,8 +32,10 @@ Plug 'w0rp/ale'
 
 if !empty(g:windows)
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
+else
+  Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 endif
-" Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+
 if exists('$TMUX')
     Plug 'christoomey/vim-tmux-navigator'
     Plug 'edkolev/tmuxline.vim'
@@ -52,11 +54,13 @@ if !empty(g:ubuntu)
   " I don't know rust but honestly its a model ftplugin so download it for
   " reference
   Plug 'rust-lang/rust.vim'
+
+  " These plugins are insanely heavy
+  Plug 'Rykka/InstantRst', {'for': ['rst', 'python']}
+  Plug 'gu-fan/riv.vim', {'for': ['rst', 'python']}
 endif
 
 if empty(g:termux)
-  " Plug 'Rykka/InstantRst', {'for': ['rst', 'python']}
-  " Plug 'gu-fan/riv.vim', {'for': ['rst', 'python']}
   Plug 'chrisbra/csv.vim', {'for': 'csv'}
   Plug 'omnisharp/omnisharp-vim', {'for': 'cs'}
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}

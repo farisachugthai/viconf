@@ -22,12 +22,14 @@ Apr 19, 2019:
 
 """
 import argparse
+import contextlib
 import logging
 import os
 from pathlib import Path
 import shutil
 import subprocess
 import sys
+import threading
 
 try:
     import requests
@@ -56,20 +58,21 @@ def _parse_arguments():
 
     """
     parser = argparse.ArgumentParser(
-        description='Installs and sets up neovim.')
+            prog='Neovim automated installer.',
+            description='Installs and sets up neovim.')
 
     parser.add_argument(
         '-d',
         '--plug-dir',
-        dest='plug_dir',
+        nargs='?',
         metavar="Directory for vim-plug",
         help='The directory that vim-plug is downloaded to.')
     parser.add_argument(
         "-p",
         "--packages",
-        metavar="packages",
         default='pip, pynvim',
-        action='store_append',
+        action='append',
+        nargs='*',
         help="Comma separated list of packages for pip to install.")
 
     args = parser.parse_args()
@@ -174,41 +177,46 @@ def termux_packages():
 
 def pip_install():
     """Run platform-independent pip install. Install both pynvim and neovim."""
-    if pip_version():
-        subprocess.run([
+    output = subprocess.run([
             "pip", "install", "-U", "pip", "python-language-server[all]",
-            "pynvim"
-        ],
-                       capture_output=True,
-                       check=True)
-    else:
-        subprocess.run([
-            "pip", "install", "-U", "pip", "python-language-server[all]",
-            "pynvim"
-        ],
-                       capture_output=True)
+            "pynvim", "neovim"], capture_output=True, check=True)
+    return output
+
+
+@contextlib.contextmanager
+def use_virtualenv(virtualenv, python_version):
+    """Use specific virtualenv."""
+    context = threading.local()
+    try:
+        if virtualenv:
+            # check if given directory is a virtualenv
+            if not os.path.join(virtualenv, "bin/activate"):
+                raise Exception("Given directory {0} is not a virtualenv.".format(virtualenv))
+
+            context.virtualenv_path = virtualenv
+            yield True
+        else:
+            proc = subprocess.Popen("virtualenv env -p {0} >> {1}".format(python_version, context.logfile),
+                         shell=True, cwd=context.tempdir_path)
+            context.virtualenv_path = os.path.join(context.tempdir_path, "env")
+            yield proc.wait() == 0
+    finally:
+        context.virtualenv_path = None
 
 
 def main():
-    uname = os.uname()  # store in a var for when we branch to other systems
-    # Before anything check that we're on a supported system.
-    if uname[0] == 'Linux':
-        pass
-    else:
-        sys.exit("Unfortunately your platform isn't supported yet. Sorry!")
-
-    home = Machine().get_home()
-    # now that we know we're on a supported OS parse the args
+    user_machine = Machine()
+    home = user_machine.get_home()
     args = _parse_arguments()
 
     # check that the dir we need to download vim-plug to exists.
-    if args.plugd:
+    try:
         plugd = args.plugd
-    else:
+    except AttributeError:
         plugd = os.path.join(home, ".local", "share", "nvim", "site",
                              "autoload")
 
-    check_dir(plugd)
+    user_machine.check_dir(plugd)
 
     plug = os.path.join(plugd, '', 'plug.vim')
     # download vim-plug
@@ -221,12 +229,8 @@ def main():
             logging.warning("Vim plug download status code: ")
             logging.warning(status, exc_info=1)
 
-    # could also have done platform.machine. *shrugs*
-    # TODO: Download packages in a venv. Interestingly enough the PEP that
-    # introduced virtual environments might be your best bet here.
-    if uname.machine == 'aarch64':
+    if os.environ.get('ANDROID_ROOT'):
         termux_packages()
-    # TODO: Every other machine you own haha.
 
     # conda_check = subprocess.run(["command", "-v", "conda"])
     # conda_check.check_returncode()

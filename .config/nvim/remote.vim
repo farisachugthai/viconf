@@ -18,8 +18,10 @@ set cpoptions&vim
 " Remote Hosts: {{{1
   " Set the node and ruby remote hosts
 
-" Node Host: {{{2
+" Node Host: {{{1
+
 function! Get_Node_Host() abort
+  " Define the location of the node executable we're currently using.
   " TODO: add conda env var checks
   " worked when i ran it with set shell=cmd
   if executable('yarn')
@@ -50,9 +52,9 @@ function! Get_Node_Host() abort
   endif
 endfunction
 
-" call Get_Node_Host()
+call Get_Node_Host()
 
-" Gem Remote Host. {{{2
+" Gem Remote Host. {{{1
 
 function! Get_Ruby_Host() abort
   " Really doesn't help that I don't know anything about ruby.
@@ -80,24 +82,18 @@ endfunction
 
 " call Get_Ruby_Host()
 
-" Python Executables: {{{1
 
-" Python3: {{{2
+" Python3 Remote Host: {{{1
 
-function! PythonRemoteHost() abort
+function! Get_Python3_Root_Dir() abort
   " If we have a virtual env start there. Actually we should probably check if
   " we have expand('$PIPENV_ACTIVE') == 1 dude fuckkk TODO
   " holy shit this is so annoying. have to add an OS specific check because
   " python doesn't go into the same spot in any of these programs
-  if exists('$VIRTUAL_ENV')
-    if empty(g:windows)
-      let g:python3_host_prog = expand('$VIRTUAL_ENV') . '/bin/python'
-    else
-      let g:python3_host_prog = expand($VIRTUAL_ENV) . '/Scripts/python.exe'
-    endif
-
-    let &path = &path . ',' . expand('$VIRTUAL_ENV') . '/lib/python3/*'
-    return g:python3_host_prog
+  if exists($VIRTUAL_ENV)
+    " let &path = &path . ',' . expand('$VIRTUAL_ENV') . '/lib/python3/*'
+    let s:python3_root_dir = expand($VIRTUAL_ENV)
+    return s:python3_root_dir
 
   " On Windows we conveniently get this env var with Conda.
   " Dude fuck me. It doesn't handle nested conda sessions correctly
@@ -106,32 +102,41 @@ function! PythonRemoteHost() abort
   " conda activate neovim
   " but nvim needs the .exe at the end and i'm really trying to avoid
   " unnecessary OS stats whereever possible...
-  elseif exists('$CONDA_PYTHON_EXE')
-    let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
-    let &path = &path . ',' . expand('$CONDA_PYTHON_EXE')
-    return g:python3_host_prog
+  elseif exists($CONDA_PYTHON_EXE)
+    let s:python3_root_dir = expand('$CONDA_PYTHON_EXE')
+    " let &path = &path . ',' . expand('$CONDA_PYTHON_EXE')
+    return s:python3_root_dir
 
-  elseif exists('$CONDA_PREFIX')
-    let g:python3_host_prog = expand('$CONDA_PREFIX/bin/python3')
-    let &path = &path . ',' . expand('$CONDA_PREFIX/lib/python3/*')
-    return g:python3_host_prog
+  elseif exists($CONDA_PREFIX)
+    " let s:python3_root_dir = expand('$CONDA_PREFIX/bin/python3')
+    " let &path = &path . ',' . expand('$CONDA_PREFIX/lib/python3/*')
+    let s:python3_root_dir = expand('$CONDA_PYTHON_EXE')
+    return s:python3_root_dir
+
+  elseif exists($PIPENV_ACTIVE)
+    let s:python3_root_dir = fnamemodify(expand($PIP_PYTHON_PATH), ':p:h:h')
 
   else
       " If not then just use the system python
+      " TODO: this doesn't send back the root dir anymore.
+      " Honestly though even if it did, that doesn't completely fix the
+      " windows problem right? Because we have to figure out whether we're
+      " looking for miniconda_root/python.exe or
+      " miniconda_root/envs/*/python.exe
     if executable(expand('$_ROOT') . '/bin/python3')
-      let g:python3_host_prog = expand('$_ROOT') . '/bin/python3'
-      let &path = &path . ',' . expand('$_ROOT') . '/lib/python3/*'
-      return g:python3_host_prog
+      let s:python3_root_dir = expand('$_ROOT') . '/bin/python3'
+      " let &path = &path . ',' . expand('$_ROOT') . '/lib/python3/*'
+      return s:python3_root_dir
 
     " well that's if we can find it anyway
     elseif executable('/usr/bin/python3')
-      let g:python3_host_prog = '/usr/bin/python3'
-      let &path = &path . ',' . '/usr/lib/python3/*'
-      return g:python3_host_prog
+      let s:python3_root_dir = '/usr/bin/python3'
+      " let &path = &path . ',' . '/usr/lib/python3/*'
+      return s:python3_root_dir
 
     elseif executable('which')
-      let g:python3_host_prog = system('which python')
-      return g:python3_host_prog
+      let s:python3_root_dir = system('which python')
+      return s:python3_root_dir
 
     " and if we can't just disable it because it starts spouting off errors
     else
@@ -142,13 +147,23 @@ function! PythonRemoteHost() abort
   endif
 endfunction
 
-call PythonRemoteHost()
+
+" TODO: Sigh even for all of these changes it still doesn't set correctly AND
+" the path is wrong.
+
+if empty(g:windows)
+  let g:python3_host_prog = Get_Python3_Root_Dir()
+else
+  let g:python3_host_prog = fnamemodify(Get_Python3_Root_Dir(), ':p:h') . '/python.exe'
+  let &path = &path . ',' .  fnamemodify(Get_Python3_Root_Dir(), ':p:h') . 'Lib/site-packages/*'
+
+endif
 
 " Make it simpler to view the host. This is the same as
 " provider#python3#Prog()
-command! Python3Host -nargs=0 echo provider#pythonx#Detect(3)[0]
+command! Python3Host -nargs=0 echo provider#python3#Prog()
 
-" python2 remote host: {{{2
+" Python2 Remote Host: {{{1
 
 function! RemotePython2Host() abort
 
@@ -158,6 +173,10 @@ function! RemotePython2Host() abort
   elseif executable('/usr/bin/python2')
       let g:python3_host_prog = '/usr/bin/python2'
       let &path = &path . ',' . '/usr/lib/python2/*'
+    " elseif executable('which')
+    "   let s:python2_root_dir = system('which python')
+    "   return s:python2_root_dir
+
   else
       let g:loaded_python_provider = 1
   endif
@@ -183,17 +202,18 @@ set pastetoggle=<F7>
 " Now let's set up the clipboard provider
 
 " First check that we're in a tmux session before trying this
-if exists('$TMUX')
+function! Get_Remote_Clipboard_Hist() abort
+  if exists('$TMUX')
 
-  " Now let's make a dictionary for copying and pasting actions. Name both
-  " to hopefully make debugging easier. In `he provider-clipboard` they define
-  " these commands so that they go to * and +....But what if we put them in
-  " named registers? Then we can still utilize the * and + registers however
-  " we want. Idk give it a try.
-  " Holy hell that emits a lot of warnings and error messages don't do that
-  " again.
-  "
-  " As an FYI, running `:echo provider#clipboard#Executable()` on Ubuntu gave
+    " Now let's make a dictionary for copying and pasting actions. Name both
+    " to hopefully make debugging easier. In `he provider-clipboard` they define
+    " these commands so that they go to * and +....But what if we put them in
+    " named registers? Then we can still utilize the * and + registers however
+    " we want. Idk give it a try.
+    " Holy hell that emits a lot of warnings and error messages don't do that
+    " again.
+    "
+    " As an FYI, running `:echo provider#clipboard#Executable()` on Ubuntu gave
   " me xclip so that's something worth knowing
   let g:clipboard = {
       \   'name': 'TmuxCopyPasteClipboard',
@@ -207,8 +227,22 @@ if exists('$TMUX')
       \   },
       \   'cache_enabled': 1,
       \ }
-else
-  if exists('$DISPLAY') && executable('xclip')
+
+  elseif executable('win32yank.exe')
+    let g:clipboard = {
+          \ 'name': 'win32yank_clipboard',
+          \ 'copy': {
+          \    '*': 'win32yank.exe -i -crlf',
+          \    '+': 'win32yank.exe -i -crlf',
+          \ },
+          \ 'paste': {
+          \ '*': 'win32yank.exe -o --lf',
+          \ '+': 'win32yank.exe -o --lf',
+          \ },
+          \ 'cache_enabled': 1,
+          \ }
+
+  elseif exists('$DISPLAY') && executable('xclip')
     " This is how it's defined in autoload/providor/clipboard.vim
     let g:clipboard = {
       \    'name': 'xclipboard',
@@ -222,8 +256,14 @@ else
       \   },
       \   'cache_enabled': 1,
       \ }
+
+  else
+    " can i do this?
+    " let g:clipboard = &clipboard
+    unlet g:clipboard
   endif
-endif
+
+endfunction
 
 " Double check if we need to do this but sometimes the clipboard fries when set this way
 runtime autoload/provider/clipboard.vim
