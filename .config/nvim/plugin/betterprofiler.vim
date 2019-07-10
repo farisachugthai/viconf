@@ -14,13 +14,19 @@ let g:did_better_profiler_vim_plugin = 1
 let s:cpo_save = &cpoptions
 set cpoptions&vim
 
-" Functions: {{{1
+if !has('profile') || !has('reltime')  " timing functionality
+  finish
+endif
 
-" 04/29/2019
+if has('+shellslash')
+  set shellslash
+endif
+
+
+" Functions: {{{1
 
 function! g:BetterProfiler(fname) abort
   " Because Vim's built in profiling capabilities are nonsensical like wtf?
-  setlocal shellslash
   profile! start tempfile.log
 
   " Toggle debugging
@@ -36,15 +42,11 @@ function! g:BetterProfiler(fname) abort
   profile stop
   profile dump
 
-  let b:msg = 'No errors mostly because fuck exception catching in this platform!'
-  return b:msg
 endfunction
 
-" ...wth was i trying to do here?
 " let s:Debug = 1
 " let b:fname = '~/projects/viconf/.config/nvim/colors/gruvbox8.vim'
 " call g:BetterProfiler(b:fname)
-
 
 " AH I forgot Junegunn has one written as well!
 
@@ -61,7 +63,10 @@ function! s:profile(bang)
     profile file *
   endif
 endfunction
-command! -bang Profile call s:profile(<bang>0)
+
+" Probably shouldn't allow for a range but this needs a good amount of
+" debugging anyway
+command! -bang Profile -complete=buffer,file -nargs=1 -range=% call s:profile(<bang>0)
 
 " Atexit: {{{1
 

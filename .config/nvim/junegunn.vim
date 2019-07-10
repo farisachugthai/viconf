@@ -66,6 +66,7 @@ if empty(g:termux)
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
   Plug 'ekalinin/Dockerfile.vim', {'for': 'dockerfile'}
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
+  Plug 'itspriddle/vim-shellcheck', { 'for': ['sh', 'bash'] }
 endif
 
 " I feel like the lazy loaded ones can come out here

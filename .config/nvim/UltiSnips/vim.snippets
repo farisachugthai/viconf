@@ -234,6 +234,10 @@ snippet letb "let buffer local var = val"
 let b:${1:variable} = ${0: value}
 endsnippet
 
+snippet sg "setglobal"
+setglobal  ${1:${VISUAL}} $0
+endsnippet
+
 snippet se "set a var"
 set ${1:${VISUAL}}
 endsnippet

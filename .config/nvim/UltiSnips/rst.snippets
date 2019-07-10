@@ -19,15 +19,15 @@ endglobal
 #  Inline      #
 ################
 
-snippet * "Italics" s
+snippet * "Italics"
 *${1:${VISUAL:Emphasis}}* $0
 endsnippet
 
-snippet ** "Bold" s
+snippet ** "Bold"
 **${1:${VISUAL:Strong emphasis}}** $0
 endsnippet
 
-snippet bold "bold" s
+snippet bold "bold"
 **${1:${VISUAL:Strong emphasis}}** $0
 endsnippet
 
@@ -85,7 +85,7 @@ snippet lab "Marks all headers as the destination for links" smw
 .. _${0:${VISUAL}}:
 endsnippet
 
-snippet labhe "Label and header tied together." smw
+snippet labhe "Label and header tied together." w
 .. _${1}:
 
 ${1:${VISUAL}}
@@ -99,11 +99,11 @@ snippet url "Separated link and target." b
 .. _${1:optional text leading into}: ${2:\`https://somedomain.com\`}
 endsnippet
 
-snippet http "Separated link and target." bs
+snippet http "Separated link and target." b
 .. _${1:${VISUAL:text}}: ${2:\`https://somedomain.com\`}
 endsnippet
 
-snippet path "Link to a local file" s
+snippet path "Link to a local file"
 ${1:rel path}: ${2:${VISUAL:link}}_.
 
 .. _${2}: ${3:path/to/file} $0
@@ -121,7 +121,7 @@ snippet fig: "Figure directive" w
 $0
 endsnippet
 
-snippet contents "content directive" smw
+snippet contents "content directive" w
 .. contents::
    ${1:${VISUAL::depth:}}
    ${2::local:}
@@ -129,61 +129,61 @@ snippet contents "content directive" smw
    $0
 endsnippet
 
-snippet coded "Code block directive." sw
+snippet coded "Code block directive." w
 .. code:: ${1:type}
 
    ${0:${VISUAL:code}}
 endsnippet
 
-snippet tip "Tips or anyone in need of a directive!" sw
+snippet tip "Tips or anyone in need of a directive!" w
 .. tip::
 
    ${0:${VISUAL:Tip for anyone having trouble.}}
 endsnippet
 
-snippet coded "Code block directive." wms
+snippet coded "Code block directive." w
 .. code:: ${1:type}
 
    ${0:${VISUAL:write some code}}
 endsnippet
 
-snippet note "Take note of this directive over here ;)" wms
+snippet note "Take note of this directive over here ;)" w
 .. note::
 
    ${0:${VISUAL:Take note of the fact that}}
 endsnippet
 
-snippet warn "Warning directive" wms
+snippet warn "Warning directive" wm
 .. warning::
 
    ${0:${VISUAL:Warning:}}
 endsnippet
 
-snippet important "Important directive" wms
+snippet important "Important directive" w
 .. important::
 
    ${0:${VISUAL:Important notice:}}
 endsnippet
 
-snippet att "Attention directive" wms
+snippet att "Attention directive" w
 .. attention::
 
    ${0:${VISUAL:Attention!}}
 endsnippet
 
-snippet dan "Danger directive" wms
+snippet dan "Danger directive" w
 .. danger::
 
    ${0:${VISUAL:Danger:}}
 endsnippet
 
-snippet err "Error directive" wms
+snippet err "Error directive" w
 .. error::
 
    ${0:${VISUAL:Error:}}
 endsnippet
 
-snippet cau "Caution directive" wms
+snippet cau "Caution directive" w
 .. caution::
 
    ${0:${VISUAL:Take precaution with:}}

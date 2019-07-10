@@ -2,7 +2,7 @@
     " File: fzf.vim
     " Author: Faris Chugthai
     " Description: FZF configuration
-    " Last Modified: March 24, 2019
+    " Last Modified: Jul 09, 2019
 " ============================================================================
 
 " Guards: {{{1
@@ -60,6 +60,13 @@ let g:fzf_colors =
 imap <C-x><C-k> <Plug>(fzf-complete-word)
 imap <C-x><C-f> <Plug>(fzf-complete-path)
 imap <C-x><C-j> <Plug>(fzf-complete-file-ag)
+imap <C-x><C-l> <Plug>(fzf-complete-line)
+
+imap <C-k> <Plug>(fzf-complete-word)
+imap <C-f> <Plug>(fzf-complete-path)
+imap <C-j> <Plug>(fzf-complete-file-ag)
+imap <C-l> <Plug>(fzf-complete-line)
+
 
 " The way I remapped Leader, this actually only works if you do <Space>\
 nnoremap <silent> <expr> <LocalLeader><LocalLeader> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
@@ -110,12 +117,12 @@ noremap <Leader>GS <Cmd>GFiles?<CR>
 
 cabbrev GS GFiles?
 
-if filereadable('/usr/share/dict/words')
-    " Replace the default dictionary completion with fzf-based fuzzy completion
-  inoremap <expr> <C-x><C-k> fzf#vim#complete('cat /usr/share/dict/words')
-  " Also make it shorter
-  inoremap <expr> <C-k> fzf#vim#complete('cat /usr/share/dict/words')
-endif
+" if filereadable('/usr/share/dict/words')
+"     " Replace the default dictionary completion with fzf-based fuzzy completion
+"   inoremap <expr> <C-x><C-k> fzf#vim#complete('cat /usr/share/dict/words')
+"   " Also make it shorter
+"   inoremap <expr> <C-k> fzf#vim#complete('cat /usr/share/dict/words')
+" endif
 
 " Global Line Completion: {{{2
 
@@ -168,10 +175,15 @@ augroup end
 "         \ get(a:000, 0, fzf#wrap())))
 " endfunction
 
-inoremap <expr> <C-x><C-k> fzf#complete({
-            \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
-            \ 'options': '--preview=bat --ansi --multi --cycle',
-\ 'left': 30})
+if filereadable('/usr/share/dict/words')
+  inoremap <expr> <C-x><C-k> fzf#complete({
+              \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
+              \ 'options': '--preview=bat --ansi --multi --cycle', 'left': 30})
+
+  inoremap <expr> <C-k> fzf#complete({
+              \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
+              \ 'options': '--preview=bat --ansi --multi --cycle', 'left': 30})
+endif
 
 " Grepprg And Find: {{{2
 " 06/13/2019: Just got moved up so that the grep command down there uses the
@@ -179,7 +191,7 @@ inoremap <expr> <C-x><C-k> fzf#complete({
 " Should we set a corresponding grepformat?
 let &grepprg = 'rg --vimgrep --no-messages '
 
-command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --glob "!.git/*" -g "!vendor/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
+command! -bang -nargs=* Find call fzf#vim#grep('rg --no-heading --fixed-strings --ignore-case --no-ignore --glob "!.git/*" -g "!vendor/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
 
 " Grep: {{{2
 " Unfortunately the bang doesn't move to a new window. TODO
@@ -211,7 +223,7 @@ command! -bang -nargs=* Ag
 " Similarly, we can apply it to fzf#vim#grep. To use ripgrep instead of ag:
 command! -bang -nargs=* Rg
     \ call fzf#vim#grep(
-    \ 'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
+    \ 'rg --no-heading --color=always '.shellescape(<q-args>), 1,
     \ <bang>0 ? fzf#vim#with_preview('up:60%')
     \ : fzf#vim#with_preview('right:50%:hidden', '?'),
     \ <bang>0)

@@ -9,6 +9,8 @@ Damnit! Doesn't work. Just silently deleted the file...:/
 """
 import sys
 
+import vim
+
 
 def fix_spellfile(wordlist):
     """Git merges screw up the module but it's an easy fix."""

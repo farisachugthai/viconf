@@ -8,7 +8,7 @@
     "suggest.minTriggerInputLength": 2,
     "suggest.snippetIndicator": "[Coc-US]",
     "suggest.preferCompleteThanJumpPlaceholder": true,
-    "coc.preferences.extensionUpdateCheck": "never",
+    "coc.preferences.extensionUpdateCheck": "daily",
     "coc.preferences.currentFunctionSymbolAutoUpdate": true,
     "python.autoComplete.addBrackets": true,
     "python.linting.pylintEnabled": false,

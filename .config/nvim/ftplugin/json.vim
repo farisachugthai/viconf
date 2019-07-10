@@ -6,10 +6,8 @@
 " ============================================================================
 
 " Guards: {{{1
-if exists('g:did_python_after_plugin') || &compatible || v:version < 700
-    finish
-endif
-let g:did_python_after_plugin = 1
+let s:cpo_save = &cpoptions
+set cpoptions&vim
 
 let s:cpo_save = &cpoptions
 set cpoptions&vim
@@ -37,14 +35,16 @@ function! ALE_JSON_Conf() abort
 
   " we already defined it globally so let's be lazy but not use += on an uninitialized
   " buffer local variable
-  let b:ale_fixers = g:ale_fixers
+  " don't go buffer local because then the vars won't leave the function
+  " namespace
+  let g:ale_fixers = {'json': g:ale_fixers}
 
   if executable('prettier')
-    let b:ale_fixers += ['prettier']
+    let g:ale_fixers += {'json': ['prettier']}
   endif
 
   if executable('jq')
-    let b:ale_fixers += ['jq']
+    let g:ale_fixers += {'json': ['jq']}
   endif
 
 endfunction
@@ -58,5 +58,12 @@ augroup alejsonconf
 augroup END
 
 
+" Commands: {{{1
+" TODO: Could pretty easily make a command that runs python -m json.fix('%')
+" on a buffer
+
 " Atexit: {{{1
 let b:undo_ftplugin = 'setlocal formatoptions< comments< commentstring<'
+
+let &cpoptions = s:cpo_save
+unlet s:cpo_save

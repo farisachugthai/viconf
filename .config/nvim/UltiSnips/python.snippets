@@ -41,7 +41,7 @@ endsnippet
 
 # Docstrings: {{{2
 
-snippet moddoc "Module Docstring" mbs
+snippet moddoc "Module Docstring" b
 """${1:${VISUAL:One sentence module summary.}}
 
 .. :mod:\``!p snip.rv = snip.basename`\`
@@ -117,7 +117,7 @@ endsnippet
 
 
 # and if we didn't like that module docstring how about this one?
-snippet pmdoc "pocoo style module doc string" mb
+snippet pmdoc "pocoo style module doc string" b
 """
 	`!p snip.rv = get_dir_and_file_name(snip)`
 	`!p snip.rv = '~' * len(get_dir_and_file_name(snip))`
@@ -153,19 +153,19 @@ snippet imp "import statement" b
 import ${0:${VISUAL}}
 endsnippet
 
-snippet from "from package import module" mb
+snippet from "from package import module" b
 from ${1:package} import ${0:module}
 endsnippet
 
-snippet ipy "Generic IPython import" bs
+snippet ipy "Generic IPython import" b
 from IPython import ${1:${VISUAL}} $0
 endsnippet
 
-snippet ipyemb "Embed IPython into your application." bs
-from IPython import ${1:embed; embed()} $0
+snippet ipyeb "Embed IPython into your application." b
+from IPython import ${1:ebed; embed()} $0
 endsnippet
 
-snippet pp "Import and use pprint" bsw
+snippet pp "Import and use pprint" bw
 from pprint import ${1:pprint}
 
 pprint($1)
@@ -193,7 +193,7 @@ if __name__ == '__main__':
 endsnippet
 
 # Use our ifmain block to shield against stray global vars
-snippet ifmain "ifmain. optionally adds in function call to argparser" bs
+snippet ifmain "ifmain. optionally adds in function call to argparser" b
 if __name__ == `!p snip.rv = get_quoting_style(snip)`__main__`!p snip.rv = get_quoting_style(snip)`:
 	${1:${VISUAL:main()}}$0
 endsnippet
@@ -338,7 +338,7 @@ def _parse_arguments():
 	return args
 endsnippet
 
-snippet argpos "Add argument - positional argument for a string type." bs
+snippet argpos "Add argument - positional argument for a string type." b
 parser.add_argument(${1:${VISUAL}},
 	type=${1:str},
 	nargs=${2:"+"},
@@ -697,7 +697,7 @@ def __neg__(self):
 def __pos__(self):
 	${16:pass}
 
-def __abs__(self):
+def __ab__(self):
 	${17:pass}
 
 def __invert__(self):

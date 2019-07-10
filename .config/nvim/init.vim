@@ -164,10 +164,6 @@ endif
 
 set spellsuggest=5                      " Limit the number of suggestions from 'spell suggest'
 
-if filereadable('/usr/share/dict/words')
-  set dictionary+=/usr/share/dict/words
-endif
-
 " Autocompletion: {{{2
 
 set wildmode=full:list:longest,full:list
@@ -189,14 +185,6 @@ set smartcase infercase    " the case when you search for stuff
 
 " Path: {{{2
 set path+=**                            " Recursively search dirs with :find
-
-if isdirectory(expand('$_ROOT/local/include/'))
-    let &path = &path . ',' . expand('$_ROOT/local/include')
-endif
-
-if isdirectory(expand('$_ROOT') . '/include/libcs50')
-    let &path = &path .','. expand('$_ROOT') . '/include/libcs50'
-endif
 
 let &path = &path . ',' . expand('$VIMRUNTIME')
 
@@ -260,11 +248,6 @@ noremap q; q:
 
 " Ex mode is dumb
 noremap Q @q
-
-if g:termux
-  " May 26, 2019: Just ran into my first problem from a filename with a space in the name *sigh*
-  noremap <silent> <Leader>ts <Cmd>exe "!termux-share -a send " . shellescape(expand("%"))<CR>
-endif
 
 vnoremap <BS> d
 " Switch CWD to the directory of the open buffer
@@ -418,11 +401,7 @@ endif
 return join(msgs, ' ') . ' ' . get(g:, 'coc_status', '')
 endfunction
 
-let &statusline = <SID>statusline_expr()
-
-" Rename: {{{2
-" :he map line 1454. How have i never noticed this isn't a feature???
-command! -nargs=1 -bang -complete=file Rename f <args>|w<bang>
+let &statusline = <SID>statusline_expr() . StatusDiagnostic()
 
 " Clear Hlsearch: {{{2
 

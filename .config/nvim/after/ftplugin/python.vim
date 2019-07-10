@@ -125,7 +125,7 @@ function! ALE_Python_Conf()
     " configuration options you have.
     " Now you can also use gq for yapf
     let b:ale_fixers = [
-          \ 'remove_trailing_lines', 
+          \ 'remove_trailing_lines',
           \ 'trim_whitespace',
           \ 'reorder-python-imports'
           \ ]
@@ -147,10 +147,12 @@ function! ALE_Python_Conf()
 
 endfunction
 
-augroup alepythonconf
-    au!
-    autocmd Filetype python if has_key(plugs, 'ale') | call ALE_Python_Conf() | endif
-augroup END
+if has_key(plugs, 'ale') && &filetype==#'python'
+
+  augroup alepythonconf
+    autocmd Filetype * call ALE_Python_Conf()
+  augroup END
+endif
 
 " Atexit: {{{1
 " A bunch missing. Check :he your-runtime-path somewhere around there is a

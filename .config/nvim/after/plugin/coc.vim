@@ -103,22 +103,23 @@ augroup end
 
 
 " Using CocList: {{{1
+
 " Show all diagnostics
-" nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+nnoremap <silent> <C-c>d :<C-u>CocList diagnostics<cr>
 " Manage extensions
-" nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+nnoremap <silent> <C-c>e  :<C-u>CocList extensions<cr>
 " Show commands
-" nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+nnoremap <silent> <C-c><C-c>  :<C-u>CocList commands<cr>
 " Find symbol of current document
-" nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+nnoremap <silent> <C-c>o  :<C-u>CocList outline<cr>
 " Search workspace symbols
-" nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+nnoremap <silent> <C-c>s :<C-u>CocList -I symbols<cr>
 " Do default action for next item.
-" nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+nnoremap <silent> <C-c>j  :<C-u>CocNext<CR>
 " Do default action for previous item.
-" nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+nnoremap <silent> <C-c>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
-" nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+nnoremap <silent> <C-c>p  :<C-u>CocListResume<CR>
 " I'm gonna redo the mappings and try this piecemeal
 noremap <silent> <C-c>r <Cmd>CocListResume<CR>
 noremap <silent> <C-c>d <Cmd>CocList diagnostics<CR>
@@ -127,18 +128,18 @@ noremap <silent> <C-c>d <Cmd>CocList diagnostics<CR>
 " Remap for rename current word
 
 " Remap for format selected region. e for errors and visual selection
-xmap <leader>ev  <Plug>(coc-format-selected)
-nmap <leader>ev  <Plug>(coc-format-selected)
+xmap <C-c>m  <Plug>(coc-format-selected)
+nmap <C-c>m  <Plug>(coc-format-selected)
 
 " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-xmap <leader>ca  <Plug>(coc-codeaction-selected)
-" nmap <leader>ca  <Plug>(coc-codeaction-selected)
+xmap <C-c>a  <Plug>(coc-codeaction-selected)
+" nmap <C-c>a  <Plug>(coc-codeaction-selected)
 
 " Remap for do codeAction of current line
-nmap <leader>ca  <Plug>(coc-codeaction)
+nmap <C-c>a  <Plug>(coc-codeaction)
 
 " Fix autofix problem of current line
-nmap <leader>cqf  <Plug>(coc-fix-current)
+nmap <C-c>f  <Plug>(coc-fix-current)
 
 " Dude that is an OBNOXIOUS amount of typing though.
 noremap <silent> <C-c>q <Plug>(coc-fix-current)

@@ -52,7 +52,7 @@ function! Get_Node_Host() abort
   endif
 endfunction
 
-call Get_Node_Host()
+" call Get_Node_Host()
 
 " Gem Remote Host. {{{1
 
@@ -86,57 +86,34 @@ endfunction
 " Python3 Remote Host: {{{1
 
 function! Get_Python3_Root_Dir() abort
-  " If we have a virtual env start there. Actually we should probably check if
-  " we have expand('$PIPENV_ACTIVE') == 1 dude fuckkk TODO
-  " holy shit this is so annoying. have to add an OS specific check because
-  " python doesn't go into the same spot in any of these programs
   if exists($VIRTUAL_ENV)
     " let &path = &path . ',' . expand('$VIRTUAL_ENV') . '/lib/python3/*'
-    let s:python3_root_dir = expand($VIRTUAL_ENV)
-    return s:python3_root_dir
-
-  " On Windows we conveniently get this env var with Conda.
-  " Dude fuck me. It doesn't handle nested conda sessions correctly
-  " Conda prefix handles the following correctly, when in a shell, >
-  " conda activate base
-  " conda activate neovim
-  " but nvim needs the .exe at the end and i'm really trying to avoid
-  " unnecessary OS stats whereever possible...
-  elseif exists($CONDA_PYTHON_EXE)
-    let s:python3_root_dir = expand('$CONDA_PYTHON_EXE')
-    " let &path = &path . ',' . expand('$CONDA_PYTHON_EXE')
-    return s:python3_root_dir
+    let g:python3_host_prog = expand($VIRTUAL_ENV)
+    return g:python3_host_prog
 
   elseif exists($CONDA_PREFIX)
-    " let s:python3_root_dir = expand('$CONDA_PREFIX/bin/python3')
-    " let &path = &path . ',' . expand('$CONDA_PREFIX/lib/python3/*')
-    let s:python3_root_dir = expand('$CONDA_PYTHON_EXE')
-    return s:python3_root_dir
+    let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
+    return g:python3_host_prog
 
   elseif exists($PIPENV_ACTIVE)
-    let s:python3_root_dir = fnamemodify(expand($PIP_PYTHON_PATH), ':p:h:h')
+    let g:python3_host_prog = expand($PIP_PYTHON_PATH)
+    return g:python3_host_prog
 
-  else
-      " If not then just use the system python
-      " TODO: this doesn't send back the root dir anymore.
-      " Honestly though even if it did, that doesn't completely fix the
-      " windows problem right? Because we have to figure out whether we're
-      " looking for miniconda_root/python.exe or
-      " miniconda_root/envs/*/python.exe
-    if executable(expand('$_ROOT') . '/bin/python3')
-      let s:python3_root_dir = expand('$_ROOT') . '/bin/python3'
-      " let &path = &path . ',' . expand('$_ROOT') . '/lib/python3/*'
-      return s:python3_root_dir
+  " If not then just use the system python
+  elseif executable(expand($_ROOT) . '/bin/python3')
+    let s:python3_root_dir = expand($_ROOT) . '/bin/python3'
+    " let &path = &path . ',' . expand('$_ROOT') . '/lib/python3/*'
+    return s:python3_root_dir
 
-    " well that's if we can find it anyway
-    elseif executable('/usr/bin/python3')
-      let s:python3_root_dir = '/usr/bin/python3'
-      " let &path = &path . ',' . '/usr/lib/python3/*'
-      return s:python3_root_dir
+  " well that's if we can find it anyway
+  elseif executable('/usr/bin/python3')
+    let s:python3_root_dir = '/usr/bin/python3'
+    " let &path = &path . ',' . '/usr/lib/python3/*'
+    return s:python3_root_dir
 
-    elseif executable('which')
-      let s:python3_root_dir = system('which python')
-      return s:python3_root_dir
+  elseif executable('which')
+    let s:python3_root_dir = system('which python')
+    return s:python3_root_dir
 
     " and if we can't just disable it because it starts spouting off errors
     else
@@ -154,9 +131,7 @@ endfunction
 if empty(g:windows)
   let g:python3_host_prog = Get_Python3_Root_Dir()
 else
-  let g:python3_host_prog = fnamemodify(Get_Python3_Root_Dir(), ':p:h') . '/python.exe'
-  let &path = &path . ',' .  fnamemodify(Get_Python3_Root_Dir(), ':p:h') . 'Lib/site-packages/*'
-
+  let g:python3_host_prog = Get_Python3_Root_Dir()
 endif
 
 " Make it simpler to view the host. This is the same as

@@ -6,15 +6,45 @@
 " ============================================================================
 
 " Guard: {{{1
-if exists('g:did_unix_vim_autoloaded') || &compatible || v:version < 700
+if exists('g:did_unix_vim') || &compatible || v:version < 700
   finish
 endif
-let g:did_unix_vim_autoloaded = 1
+let g:did_unix_vim = 1
 
 let s:cpo_save = &cpoptions
 set cpoptions&vim
 
 " These should probably just get autoloaded. Why define them at startup?
+
+" Options: {{{1
+
+function! UnixOptions() abort
+    if filereadable('/usr/share/dict/words')
+      set dictionary+=/usr/share/dict/words
+    endif
+
+    if g:termux
+      " May 26, 2019: Just ran into my first problem from a filename with a space in the name *sigh*
+      noremap <silent> <Leader>ts <Cmd>exe "!termux-share -a send " . shellescape(expand("%"))<CR>
+    endif
+
+    if isdirectory(expand('$_ROOT/local/include/'))
+        let &path = &path . ',' . expand('$_ROOT/local/include')
+    endif
+
+    if isdirectory(expand('$_ROOT') . '/include/libcs50')
+        let &path = &path .','. expand('$_ROOT') . '/include/libcs50'
+    endif
+
+endfunction
+
+if empty(g:windows)
+    augroup unixsettings
+        au!
+        au BufRead,BufFilePre * call UnixOptions()
+    augroup END
+endif
+
 " Finger: {{{1
 " Example from :he command-complete
 " The following example lists user names to a Finger command
