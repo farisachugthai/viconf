@@ -6,11 +6,6 @@
 " ============================================================================
 
 " Preliminaries: {{{1
-if exists('g:loaded_your_remotes') || &compatible || v:version < 700
-    finish
-endif
-let g:loaded_your_remotes = 1
-
 scriptencoding utf-8
 let s:cpo_save = &cpoptions
 set cpoptions&vim
@@ -85,53 +80,72 @@ endfunction
 
 " Python3 Remote Host: {{{1
 
-function! Get_Python3_Root_Dir() abort
+function! Get_Python3_Remote_Host() abort
+
+  " Unix specific remote host
+  " Check if there's a virtualenv first
   if exists($VIRTUAL_ENV)
-    " let &path = &path . ',' . expand('$VIRTUAL_ENV') . '/lib/python3/*'
-    let g:python3_host_prog = expand($VIRTUAL_ENV)
+    let g:python3_host_prog = expand($VIRTUAL_ENV) . '/bin/python3'
+    let &path = &path . ',' . expand($VIRTUAL_ENV) . '/lib/python3/site-packages/*'
     return g:python3_host_prog
 
-  elseif exists($CONDA_PREFIX)
-    let g:python3_host_prog = expand('$CONDA_PYTHON_EXE')
+  " Or a conda executable we can use
+    let g:python3_host_prog = expand($CONDA_PREFIX) . '/bin/python3'
+    let &path = &path . ',' . expand($CONDA_PREFIX) . '/lib/python3/site-packages/*'
     return g:python3_host_prog
 
+  " Pipenv is regularly a good indicator
   elseif exists($PIPENV_ACTIVE)
     let g:python3_host_prog = expand($PIP_PYTHON_PATH)
     return g:python3_host_prog
 
   " If not then just use the system python
   elseif executable(expand($_ROOT) . '/bin/python3')
-    let s:python3_root_dir = expand($_ROOT) . '/bin/python3'
-    " let &path = &path . ',' . expand('$_ROOT') . '/lib/python3/*'
-    return s:python3_root_dir
+    let g:python3_host_prog = expand($_ROOT) . '/bin/python3'
+    let &path = &path . ',' . expand($_ROOT) . '/lib/python3/site-packages/*'
+    return g:python3_host_prog
+
+  elseif executable(expand('~') . '/.local/bin/python3')
+    let g:python3_host_prog = expand('~') . '/.local/bin/python3'
+    let &path = &path . ',' . expand('~') . '/.local/bin/python3'
+    return g:python3_host_prog
 
   " well that's if we can find it anyway
   elseif executable('/usr/bin/python3')
-    let s:python3_root_dir = '/usr/bin/python3'
-    " let &path = &path . ',' . '/usr/lib/python3/*'
-    return s:python3_root_dir
+    let g:python3_host_prog =  '/usr/bin/python3'
+    let &path = &path . ',' . '/usr/lib/python3/site-packages*'
+    return g:python3_host_prog
 
   elseif executable('which')
-    let s:python3_root_dir = system('which python')
-    return s:python3_root_dir
-
+    " TODO: error handling which is admittedly tough in vimscript...
+    let g:python3_host_prog = system(which('python3'))
+    return g:python3_host_prog
     " and if we can't just disable it because it starts spouting off errors
+ 
     else
       let g:loaded_python3_provider = 1
       return g:loaded_python3_provider
     endif
 
   endif
+
+endfunction
+
+function! Python3_Exe() abort
+  " Only run if windows because otherwise it gets so excessively complex
+  if !empty($CONDA_PREFIX)
+    return expand($CONDA_PREFIX)
+  endif
+
+  " TODO: The rest
 endfunction
 
 
-" TODO: Sigh even for all of these changes it still doesn't set correctly AND
-" the path is wrong.
-
-if empty(g:windows)
-  let g:python3_host_prog = Get_Python3_Root_Dir()
+if has('unix')
+  let g:python3_host_prog = Get_Python3_Remote_Host()
 else
-  let g:python3_host_prog = Get_Python3_Root_Dir()
+  let g:python3_host_prog = Python3_Exe() . '/python.exe'
+
 endif
 
 " Make it simpler to view the host. This is the same as
@@ -177,7 +191,7 @@ set pastetoggle=<F7>
 " Now let's set up the clipboard provider
 
 " First check that we're in a tmux session before trying this
-function! Get_Remote_Clipboard_Hist() abort
+function! Get_Remote_Clipboard_Hist()
   if exists('$TMUX')
 
     " Now let's make a dictionary for copying and pasting actions. Name both
@@ -232,6 +246,20 @@ function! Get_Remote_Clipboard_Hist() abort
       \   'cache_enabled': 1,
       \ }
 
+  elseif executable('termux-clipboard-set')
+    let g:clipboard = {
+      \    'name': 'termux-clipboard',
+      \    'copy': {
+      \       '*': 'termux-clipboard-set',
+      \       '+': 'termux-clipboard-set',
+      \    },
+      \   'paste': {
+      \       '*': 'termux-clipboard-get',
+      \       '+': 'termux-clipboard-get',
+      \   },
+      \   'cache_enabled': 1,
+      \ }
+
   else
     " can i do this?
     " let g:clipboard = &clipboard
@@ -239,10 +267,6 @@ function! Get_Remote_Clipboard_Hist() abort
   endif
 
 endfunction
-
-" Double check if we need to do this but sometimes the clipboard fries when set this way
-runtime autoload/provider/clipboard.vim
-
 " Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

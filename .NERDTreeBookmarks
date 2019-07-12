@@ -1,17 +1,17 @@
-config-nvim ~/.config/nvim
 dotfiles ~/projects/dotfiles/unix
-jupyter-extensions ~/.local/share/jupyter
-plugged ~/.local/share/nvim/plugged
 python ~/python
-tlib ~/.local/share/nvim/plugged/tlib_vim/autoload/tlib
 tutorials ~/Dropbox/python/tutorials
 viconf ~/projects/viconf/.config/nvim
-
-ConEmu C:/Program Files/ConEmu/ConEmu
 WindowsPowerShell ~/Documents/WindowsPowerShell
-jedi-docs ~/.local/share/nvim/plugged/jedi-vim/pythonx/jedi/docs/docs
-mpl /usr/share/doc/python-matplotlib-doc/tutorials
 nvim ~/AppData/Local/nvim
 nvim-data ~/AppData/Local/nvim-data
 tools C:/tools
-utilities ~\projects\utilities
+utilities ~/projects/utilities
+
+config-nvim ~/.config/nvim
+jupyter-extensions ~/.local/share/jupyter
+plugged ~/.local/share/nvim/plugged
+tlib ~/.local/share/nvim/plugged/tlib_vim/autoload/tlib
+ConEmu C:/Program Files/ConEmu/ConEmu
+jedi-docs ~/.local/share/nvim/plugged/jedi-vim/pythonx/jedi/docs/docs
+mpl /usr/share/doc/python-matplotlib-doc/tutorials

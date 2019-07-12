@@ -1067,7 +1067,9 @@ hi! link xmlEntityPunct GruvboxOrange
 
 " Heres everything from VIMRUNTIME/syntax/vim.vim
 " vimAuSyntax	vimAuSyntax
-" vimAugroup	vimAugroup
+
+" The last letter of an autocmd like wth
+highlight default link vimAugroup	vimAugroupKey
 " vimAutoCmdSfxList	vimAutoCmdSfxList
 " vimAutoCmdSpace	vimAutoCmdSpace
 " vimAutoEventList	vimAutoEventList

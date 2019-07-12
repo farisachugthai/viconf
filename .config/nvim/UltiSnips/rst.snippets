@@ -35,15 +35,15 @@ snippet kbd "Add the kbd directive to your doc"
 :kbd:\`${1:${VISUAL}}\`
 endsnippet
 
-snippet rep "Replace" ms
+snippet rep "Replace"
 .. |$1| replace:: $2
 endsnippet
 
-snippet ref  "Links that follow labelled objects. Expand 'lab or labhe'" mw
+snippet ref  "Links that follow labelled objects. Expand 'lab or labhe'" w
 :ref:\`${1:${VISUAL:path}}\`_
 endsnippet
 
-snippet inlink "Create an internal link"
+snippet inlink "Create an internal link" w
 :ref:\`${1:${VISUAL:link}}\`_
 endsnippet
 
@@ -73,15 +73,15 @@ endsnippet
 #  links  #
 ###########
 
-snippet external "link to an external URL. Simpler." smw
+snippet external "link to an external URL. Simpler." w
 \`${1:Optional Link text} <${2:${VISUAL:Link destination}>}\`_ $0
 endsnippet
 
-snippet link "External URL. A space is required between the text and URL!" smw
+snippet link "External URL. A space is required between the text and URL!" w
 \`${1:Link text} <${2:${VISUAL:https://github.com/}>}\`_ $0
 endsnippet
 
-snippet lab "Marks all headers as the destination for links" smw
+snippet lab "Marks all headers as the destination for links" w
 .. _${0:${VISUAL}}:
 endsnippet
 
@@ -108,8 +108,10 @@ ${1:rel path}: ${2:${VISUAL:link}}_.
 
 .. _${2}: ${3:path/to/file} $0
 endsnippet
+
 # Directives
 # ------------
+
 snippet img "image link directive" w
 .. |${1:alias}| image:: ${2:img}
 endsnippet
@@ -153,7 +155,7 @@ snippet note "Take note of this directive over here ;)" w
    ${0:${VISUAL:Take note of the fact that}}
 endsnippet
 
-snippet warn "Warning directive" wm
+snippet warn "Warning directive"
 .. warning::
 
    ${0:${VISUAL:Warning:}}
@@ -279,29 +281,6 @@ ${1:${VISUAL:Paragraph name}} $0
 `!p snip.rv = rst_char_len(t[1])*'"'`
 endsnippet
 
-snippet em "Emphasize string" i
-`!p
-# dirty but works with CJK character detection
-if has_cjk(vim.current.line):
-    snip.rv ="\ "`*${1:${VISUAL:Em}}*`!p
-if has_cjk(vim.current.line):
-    snip.rv ="\ "
-else:
-    snip.rv = " "
-`$0
-endsnippet
-
-# I'm about to take a weedwhacker to this file.
-snippet st "Strong string" i
-`!p
-if has_cjk(vim.current.line):
-    snip.rv ="\ "`**${1:${VISUAL:Strong}}**`!p
-if has_cjk(vim.current.line):
-    snip.rv ="\ "
-else:
-    snip.rv = " "
-`$0
-endsnippet
 
 snippet "li(st)? (?P<num>\d+)" "List usage: li 4<tab> which will extand into a unordered list contains 4 items" br
 $0
@@ -543,11 +522,11 @@ And Still More       42
 ==================   ============
 endsnippet
 
-snippet env "Environment variables" ms
+snippet env "Environment variables" s
 :envvar:\`${1:${VISUAL}}\`
 endsnippet
 
-snippet only "Only create directive based on certain parameters" ms
+snippet only "Only create directive based on certain parameters" s
 .. only:: html
 
    :Release: |version|

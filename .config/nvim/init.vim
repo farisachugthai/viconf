@@ -312,7 +312,7 @@ augroup omnifunc
     autocmd!
     autocmd Filetype c,cpp            setlocal omnifunc=ccomplete#Complete
     autocmd Filetype css              setlocal omnifunc=csscomplete#CompleteCSS
-    autocmd Filetype html,xhtml       setlocal omnifunc=htmlcomplete#CompleteTags && call htmlcomplete#DetectOmniFlavor()
+    autocmd Filetype html,xhtml       setlocal omnifunc=htmlcomplete#CompleteTags | call htmlcomplete#DetectOmniFlavor()
     autocmd Filetype javascript       setlocal omnifunc=javascriptcomplete#CompleteJS
     autocmd Filetype python,xonsh     setlocal omnifunc=python3complete#Complete
     autocmd Filetype ruby             setlocal omnifunc=rubycomplete#Complete

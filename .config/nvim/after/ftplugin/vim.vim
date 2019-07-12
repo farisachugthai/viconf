@@ -6,11 +6,6 @@
 " ============================================================================
 
 " Guard: {{{1
-if exists('g:did_vim_after_ftplugin') || &compatible || v:version < 700
-  finish
-endi
-let g:did_vim_after_ftplugin = 1
-
 let s:cpo_save = &cpoptions
 set cpoptions&vim
 
@@ -67,7 +62,29 @@ let g:vimsyn_folding = 'afP'
 
 let g:vimsyn_maxlines = 500  " why is the default 60???
 
+" ALE: {{{1
+
+function! ALE_Vim_Conf()
+
+  let b:ale_linters = ['ale_custom_linting_rules']  " idk wtf this is but let's try
+
+  if executable('vint')
+    let b:ale_linters += ['vint']
+  endif
+
+
+endfunction
+
+if has_key(plugs, 'ale') && &filetype=='vim'
+
+  augroup ALEVimConf
+    autocmd Filetype * call ALE_Vim_Conf()
+  augroup END
+
+endif
+
 " Atexit: {{{1
+
 let b:undo_ftplugin = 'set com< cms< et< sw< ts< sts< linebreak< sua< wrap<'
 
 let &cpoptions = s:cpo_save

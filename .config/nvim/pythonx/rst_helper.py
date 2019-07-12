@@ -91,8 +91,13 @@ except AttributeError:
 def make_items(times, leading='+'):
     """Make lines with leading char multiple times.
 
+    So wait why is this set up so that times is a keyword argument...?
+    Couldn't you just go times=None and then if times is None: times = len(t[0])
+    like wtf?
+
     :param: times, how many times you need
     :param: leading, leading character
+
     """
     times = int(times)
     if leading == 1:

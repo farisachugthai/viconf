@@ -2,7 +2,7 @@
     " File: ale.vim
     " Author: Faris Chugthai
     " Description: Ale configuration
-    " Last Modified: May 11, 2019
+    " Last Modified: Jul 08, 2019
 " ============================================================================
 
 " Guard: {{{1
@@ -20,22 +20,21 @@ set cpoptions&vim
 
 " Mappings: {{{1
 
-" This isn't working idk why
-" Still isn't working even when run interactively wth
-noremap <LocalLeader>l <Plug>(ale_toggle_buffer)<CR><bar>echo 'ALE toggled!'<CR>
+" e for error t for toggle
+noremap <Leader>et <Cmd>ALEToggleBuffer<CR><bar>echo 'ALE toggled!'<CR>
 
-noremap ]a <Plug>(ale_next_wrap)<CR>
-noremap [a <Plug>(ale_previous_wrap)<CR>
+" Follow the lead of vim-unimpaired with a for ale
+noremap ]a <Cmd>ALENextWrap<CR>
+noremap [a <Cmd>ALEPreviousWrap<CR>
 
 " `:ALEInfoToFile` will write the ALE runtime information to a given filename.
 " The filename works just like |:w|.
 
 " <Meta-a> now gives detailed messages about what the linters have sent to ALE
-noremap <A-a> <Plug>(ale_detail)
+noremap <A-a> <Cmd>ALEDetail<CR>
 
-" This might be a good idea. * is already 'search for the cword' so let ALE
-" work in a similar manner right?
-noremap <Leader>* <Plug>(ale_go_to_reference)<CR>
+" This might be a good idea. * is already 'search for <cword>'
+noremap <Leader>* <Cmd>ALEFindReference<CR>
 
 noremap <Leader>a <Cmd>ALEInfo<CR>
 
@@ -57,11 +56,34 @@ let g:ale_list_vertical = 1
 
 let g:ale_set_signs = 1
 let g:ale_sign_column_always = 1
-let g:ale_virtualenv_dir_names = [ expand('$HOME/virtualenvs') ]
+
+" Virtualenvs: {{{2
+let g:ale_virtualenv_dir_names = []
+
+if isdirectory('~/virtualenvs')
+  let g:ale_virtualenv_dir_names += [expand('~/virtualenvs')]
+endif
+
+if isdirectory(expand('~/miniconda3'))
+  let g:ale_virtualenv_dir_names +=  [expand('~/miniconda3')]
+elseif isdirectory('C:/tools/miniconda3')
+  let g:ale_virtualenv_dir_names += ['C:/tools/miniconda3']
+endif
 
 let g:ale_cache_executable_check_failures = v:true
 
-" Quickfix: {{{1
+" Node: {{{2
+
+if !has('unix')
+
+  if executable('C:/Program\ Files/nodejs/node.exe')
+    let g:ale_windows_node_executable_path = 'C:/Program\ Files/nodejs/node.exe'
+  " TODO: make an else. possibly use some system calls but those are difficult
+  " to handle if an error is raised
+  endif
+endif
+
+" Quickfix: {{{2
 
 " By default ale uses location list which I never remember
 let g:ale_set_quickfix = 1
