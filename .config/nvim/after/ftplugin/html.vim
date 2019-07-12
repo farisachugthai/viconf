@@ -28,10 +28,8 @@ let g:ft_html_autocomment = 1
 
 function! ALE_Html_Conf()
 
-  let b:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
-
   if executable('prettier')
-    let b:ale_fixers += ['prettier']
+    let g:ale_fixers = extend(g:ale_fixers, {'html': ['prettier']})
   endif
 
 endfunction

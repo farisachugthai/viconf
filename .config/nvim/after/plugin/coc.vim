@@ -12,11 +12,6 @@ if !has_key(plugs, 'coc.nvim')
     finish
 endif
 
-if exists('b:did_coc_after_plugin') || &compatible || v:version < 700
-    finish
-endif
-let b:did_coc_after_plugin = 1
-
 let s:cpo_save = &cpoptions
 set cpoptions&vim
 
@@ -30,23 +25,8 @@ inoremap <silent><expr> <C-Space> coc#refresh()
 " ~/.config/nvim/coc-settings.json
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
 
-" Use tab for trigger completion with characters ahead and navigate.
-" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-" function! s:check_back_space() abort
-"   let col = col('.') - 1
-"   return !col || getline('.')[col - 1]  =~# '\s'
-" endfunction
 
-" inoremap <silent><expr> <TAB>
-"       \ pumvisible() ? '\<C-n>' :
-"       \ <SID>check_back_space() ? '\<TAB>' :
-"       \ coc#refresh()
-" inoremap <expr><S-TAB> pumvisible() ? '\<C-p>' : '\<C-h>'
-
-" Map <tab> for trigger completion, completion confirm, snippet expand and jump
-" like VSCode. >
-
-inoremap <silent><expr> <TAB>
+inoremap <silent><expr> <C-j>
   \ pumvisible() ? coc#_select_confirm() :
   \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
   \ <SID>check_back_space() ? "\<TAB>" :
@@ -59,13 +39,8 @@ endfunction
 
 let g:coc_snippet_next = '<C-j>'
 
-" Note: the `coc-snippets` extension is required for this to work.
-" Holy hell that's a hell of a setup!
-" Supertab's also installed hahahah
 let g:coc_snippet_prev = '<C-k>'
 
-" Use `[c` and `]c` to navigate diagnostics
-" First check that gitgutter doesn't have these mapped first
 nnoremap <silent> [g <Plug>(coc-diagnostic-prev)
 nnoremap <silent> ]g <Plug>(coc-diagnostic-next)
 
@@ -92,7 +67,6 @@ endfunction
 nnoremap <leader>rn <Plug>(coc-rename)
 
 augroup CocConf
-  autocmd!
   " Setup formatexpr specified filetype(s).
   autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
   " Update signature help on jump placeholder
@@ -154,6 +128,10 @@ command! -nargs=? Fold :call CocAction('fold', <f-args>)
 
 " use `:OR` for organize import of current buffer
 command! -nargs=0 SortImport :call CocAction('runCommand', 'editor.action.organizeImport')
+
+" Just tried this and it worked! So keep checking :CocList commands and add
+" more as we go.
+command! -nargs=0 Python :call CocActionAsync('runCommand', 'python.startREPL')|
 
 " Atexit: {{{1
 let &cpoptions = s:cpo_save

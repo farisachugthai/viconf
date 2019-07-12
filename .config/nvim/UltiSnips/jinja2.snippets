@@ -9,7 +9,10 @@
 
 extends html
 extends htmljinja
-extends python, python3
+
+snippet comment "Add a jinja comment" b
+{# ${1:${VISUAL}} #} $0
+endsnippet
 
 snippet jinjablock "Block" b
 {% block ${1:name} %}

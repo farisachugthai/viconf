@@ -560,7 +560,6 @@ hi! link Question GruvboxOrangeBold
 " Warning messages
 hi! link WarningMsg GruvboxRedBold
 
-
 " }}}
 " Gutter: {{{
 
@@ -861,7 +860,7 @@ hi! link StartifyNumber GruvboxBlue
 hi! link StartifyPath GruvboxGray
 hi! link StartifySlash GruvboxGray
 hi! link StartifySection GruvboxYellow
-hi! link StartifySpecial GruvboxBg2
+hi! link StartifySpecial GruvboxBlue
 hi! link StartifyHeader GruvboxOrange
 hi! link StartifyFooter GruvboxBg2
 
@@ -1072,7 +1071,10 @@ hi! link xmlEntityPunct GruvboxOrange
 highlight default link vimAugroup	vimAugroupKey
 " vimAutoCmdSfxList	vimAutoCmdSfxList
 " vimAutoCmdSpace	vimAutoCmdSpace
-" vimAutoEventList	vimAutoEventList
+
+" Lmao the comma between BufEnter,BufReadPre
+hi default link vimAutoEventList vimAutoEvent
+
 " vimClusterName	vimClusterName
 " vimCmdSep	vimCmdSep
 " vimCollClass	vimCollClass

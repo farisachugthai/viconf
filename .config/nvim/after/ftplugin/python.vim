@@ -9,6 +9,8 @@
 let s:cpo_save = &cpoptions
 set cpoptions&vim
 
+let s:debug = 1
+
 " Options: {{{1
 setlocal linebreak
 setlocal textwidth=120
@@ -24,9 +26,19 @@ setlocal colorcolumn=80,120
 setlocal foldmethod=indent
 
 setlocal keywordprg=pydoc
+
 setlocal suffixesadd+=.py
 
-" Autocommands: {{{1
+" Undo ftplugin?
+if isdirectory(expand('$_ROOT') . '/lib/python3')
+    " Double check globbing in vim
+    let &path = &path . ',' . expand('$_ROOT') . '/lib/python3'
+endif
+
+if isdirectory(expand('~/.local/lib/python3.7'))
+    " Double check globbing in vim
+    let &path = &path . ',' . expand('~') . '/.local/lib/python3.7'
+endif
 
 " Highlight I20 Chars: {{{2
 
@@ -86,8 +98,11 @@ endif
 
 " ALE: {{{1
 
-function! ALE_Python_Conf() abort
+function! ALE_Python_Conf()
 
+    if s:debug
+        echomsg 'Did the function call?'
+    endif
   let b:ale_linters_explicit = 1
 
   " Functions don't globalize buffer local variables...So everything has to
@@ -122,8 +137,6 @@ function! ALE_Python_Conf() abort
   endif
 
 endfunction
-
-" I don't know why none of my autocommands are working but fuck it
 
 if &filetype=='python'
   call ALE_Python_Conf()

@@ -66,7 +66,7 @@
     "vim.enableNeovim": true,
     "vsicons.presets.angular": true,
     "extensions.closeExtensionDetailsOnViewChange": true,
-    "python.jediEnabled": false,
+    "python.jediEnabled": true,
     "gitlens.settings.mode": "advanced",
     "spotify.forceWebApiImplementation": true,
     "spotify.showPauseButton": true,

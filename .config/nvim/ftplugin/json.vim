@@ -33,6 +33,9 @@ setlocal commentstring=
 
 function! ALE_JSON_Conf() abort
 
+  if s:debug
+    echomsg 'JSON ftplugin was called'
+  endif
   " we already defined it globally so let's be lazy but not use += on an uninitialized
   " buffer local variable
   " don't go buffer local because then the vars won't leave the function
@@ -51,6 +54,8 @@ endfunction
 
 
 " Autocmd: {{{1
+
+let s:debug = 1
 
 augroup alejsonconf
     au!
