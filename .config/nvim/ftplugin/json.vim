@@ -36,11 +36,6 @@ function! ALE_JSON_Conf() abort
   if s:debug
     echomsg 'JSON ftplugin was called'
   endif
-  " we already defined it globally so let's be lazy but not use += on an uninitialized
-  " buffer local variable
-  " don't go buffer local because then the vars won't leave the function
-  " namespace
-  let g:ale_fixers = {'json': g:ale_fixers}
 
   if executable('prettier')
     let g:ale_fixers += {'json': ['prettier']}

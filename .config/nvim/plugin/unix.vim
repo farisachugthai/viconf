@@ -18,7 +18,7 @@ set cpoptions&vim
 
 " Options: {{{1
 
-" Function named incorrectly. 
+" Function named incorrectly.
 " if has('unix')
 "     augroup unixsettings
 "         au!
@@ -42,13 +42,20 @@ set cpoptions&vim
 " Finger: {{{1
 " Example from :he command-complete
 " The following example lists user names to a Finger command
-command! -complete=custom,g:ListUsers -nargs=1 Finger !finger <args>
 
-function! g:ListUsers(A,L,P)
-    return system('cut -d: -f1 /etc/passwd')
-endfun
+" Yo this is a terrible command though because termux doesn't have the command
+" finger nor does it have read access to /etc/passwd
+if executable('!finger')
+  if filereadable('/etc/passwd')
+    command! -complete=custom,g:ListUsers -nargs=0 Finger !finger <args>
 
-" Alternative edit implementation: {{{1
+    function! g:ListUsers(A,L,P)
+        return system('cut -d: -f1 /etc/passwd')
+    endfun
+  endif
+endif
+
+" Alternative Edit Implementation: {{{1
 " Completes filenames from the directories specified in the 'path' option:
 command! -nargs=1 -bang -complete=customlist,g:EditFileComplete
    	\ EF edit<bang> <args>

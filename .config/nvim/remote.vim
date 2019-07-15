@@ -121,12 +121,10 @@ function! Get_Python3_Remote_Host() abort
     let g:python3_host_prog = system(which('python3'))
     return g:python3_host_prog
     " and if we can't just disable it because it starts spouting off errors
- 
-    else
-      let g:loaded_python3_provider = 1
-      return g:loaded_python3_provider
-    endif
 
+  else
+    let g:loaded_python3_provider = 1
+    return g:loaded_python3_provider
   endif
 
 endfunction
@@ -267,6 +265,8 @@ function! Get_Remote_Clipboard_Hist()
   endif
 
 endfunction
+
 " Atexit: {{{1
+
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

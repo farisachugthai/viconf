@@ -85,6 +85,12 @@ Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 
+" Commands: {{{1
+
+" I utilize this command so often I may as well save the characters
+command! -nargs=0 Plugins echo keys(plugs)
+
+
 " Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

@@ -4,6 +4,19 @@
     " Description: Autoloaded formatter from :he format-formatexpr
     " Last Modified: February 24, 2019
 " ============================================================================
+
+" Guard: {{{1
+if exists('g:did_format_vim') || &compatible || v:version < 700
+  finish
+endif
+let g:did_format_vim = 1
+
+let s:cpo_save = &cpoptions
+set cpoptions&vim
+
+" Functions: {{{1
+
+function! format#Format() abort
 "                                                         *format-formatexpr*
 " The 'formatexpr' option can be set to a Vim script function that performs
 " reformatting of the buffer.  This should usually happen in an |ftplugin|,
@@ -22,8 +35,6 @@
 
 " Here is an example script that removes trailing whitespace from the selected
 " text.  Put it in your autoload directory, e.g. ~/.vim/autoload/format.vim: >
-
-func! format#Format()
 " only reformat on explicit gq command
     if mode() !=# 'n'
         " fall back to Vims internal reformatting
@@ -36,3 +47,8 @@ func! format#Format()
     " do not run internal formatter!
     return 0
 endfunc
+
+" Atexit: {{{1
+
+let &cpoptions = s:cpo_save
+unlet s:cpo_save

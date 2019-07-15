@@ -411,17 +411,13 @@ augroup vimrc_incsearch_highlight
     autocmd CmdlineLeave /,\? :set nohlsearch
 augroup END
 
-" Plug: {{{2
-" I utilize this command so often I may as well save the characters
-command! -nargs=0 Plugins echo keys(plugs)
-
 " NewGrep: {{{2
 " he quickfix
 command! -nargs=+ NewGrep execute 'silent grep! <args>' | copen
 
 " Title: {{{2
 " From `:he change`  line 352 tag g?g?
-" Adding range means that the command defaults to cuurent line
+" Adding range means that the command defaults to current line
 " Need to add a check that we're in visual mode and drop the '<,'> if not.
 command! -nargs=0 -range Title <Cmd>'<,'>s/\v<(.)(\w*)/\u\1\L\2/g
 

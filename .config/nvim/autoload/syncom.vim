@@ -2,8 +2,10 @@
     " File: syncom.vim
     " Author: Faris Chugthai
     " Description: Syntax commands
-    " Last Modified: April 08, 2019
+    " Last Modified: Jul 15, 2019
 " ============================================================================
+"
+" Guards: {{{1
 
 if exists('g:did_autoload_syncom_vim') || &cp || v:version < 700
     finish
@@ -19,48 +21,59 @@ unlet s:cpo_save
 " Syntax Highlighting Functions: {{{1
 
 " HL: Whats the highlighting group under my cursor? {{{1
-function! syncom#HL()
+function! syncom#HL() abort
+
   echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
+
 endfunction
 
 
 " HiC: Show hl group and fg color {{{1
+function! syncom#HiC() abort
 
-" Heres a possibly easier way to do this. Still in testing.
-" Mar 17, 2019: So far behaves as expected!
-function! syncom#HiC()
-    echo 'Highlighting group: ' . synIDattr(synID(line('.'), col('.'), 1), 'name')
-    echo 'Foreground color: ' . synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'fg')
-endfunction
+  echo 'Highlighting group: ' . synIDattr(synID(line('.'), col('.'), 1), 'name')
+  echo 'Foreground color: ' . synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'fg')
+
+  endfunction
 
 
 " HiDebug: {{{1
-" function! s:HiD()
-"     echo join(map(synstack(line('.'), col('.')), 'synIDattr(id, "name")') '\n')
-" endfunction
+
+function! s:syncom#HiD() abort
+
+  " TODO: Debug
+  echo join(map(synstack(line('.'), col('.')), 'synIDattr(id, "name")') '\n')
+
+endfunction
 
 " command! HiD call <SID>HiD()
 
 " HiAll: Now utilize quickfix {{{1
-function! syncom#HiQF()
+
+function! syncom#HiQF() abort
+
   " synstack returns a list. takes lnum and col.
   " map is crazy specific in its argument requirements. map(list, string)
   " cexpr evals a command and adds it to the quickfist list
   cexpr! map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+
 endfunction
 
 " SyntaxInfo: {{{1
-" Display syntax infomation on under the current cursor
-function! g:syncom#get_syn_id(transparent)
+function! g:syncom#get_syn_id(transparent) abort
+
+  " Display syntax infomation on under the current cursor
   let synid = synID(line('.'), col('.'), 1)
   if a:transparent
     return synIDtrans(synid)
   else
     return synid
   endif
+
 endfunction
 
-function! g:syncom#get_syn_attr(synid)
+function! g:syncom#get_syn_attr(synid) abort
+
   let name = synIDattr(a:synid, 'name')
   let ctermfg = synIDattr(a:synid, 'fg', 'cterm')
   let ctermbg = synIDattr(a:synid, 'bg', 'cterm')
@@ -72,9 +85,11 @@ function! g:syncom#get_syn_attr(synid)
         \ 'ctermbg': ctermbg,
         \ 'guifg': guifg,
         \ 'guibg': guibg}
+
 endfunction
 
-function! g:syncom#get_syn_info()
+function! g:syncom#get_syn_info() abort
+
   let baseSyn = g:get_syn_attr(g:get_syn_id(0))
   echo 'name: ' . baseSyn.name .
         \ ' CTERMFG: ' . baseSyn.ctermfg .
@@ -88,13 +103,16 @@ function! g:syncom#get_syn_info()
         \ ' ctermbg: ' . linkedSyn.ctermbg .
         \ ' guifg: ' . linkedSyn.guifg .
         \ ' guibg: ' . linkedSyn.guibg
+
 endfunction
 
 " Hitest: An easier way of sourcing hitest {{{1
 
 function! g:syncom#hitest() abort
+
   try
     so $VIMRUNTIME/syntax/hitest.vim
   catch E403
   endtry
+
 endfunction

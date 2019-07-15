@@ -6,10 +6,21 @@
 " ============================================================================
 
 " Guard: {{{1
+let s:debug = 1
+
 if exists('g:loaded_winrc') || &compatible || v:version < 700
 	finish
 endif
-" let g:loaded_winrc = 1
+
+if s:debug
+  " if were debugging don't define it I'll probably source this file
+  " repeatedly
+else
+  let g:loaded_winrc = 1
+endif
+
+let s:cpo_save = &cpoptions
+set cpoptions&vim
 
 " Font: {{{1
 " Should note in the future the pros and cons of checking the existence of the
@@ -24,15 +35,15 @@ if exists(':GuiFont') == 2
   execute 'GuiFont Hack:h12'
 endif
 
-" Shellslash / fileformats: {{{1
-" Moved out of the init.
-" How do i check if I'm on cmd or powershell?
-" might need to individually set the envvar SHELL in a startup script for each
-" set shell=powershell shellpipe=\| shellredir=> shellxquote=
-" let &shellcmdflag='-NoLogo  -ExecutionPolicy RemoteSigned -Command $* '  " Should I -NoExit this?
+" Shellslash And Fileformats: {{{1
 "
-function! g:Cmd() abort
+function! g:Cmd()
+
+  " Moved out of the init.
+  " How do i check if I'm on cmd or powershell?
+  " might need to individually set the envvar SHELL in a startup script for each
   set shell=cmd.exe
+
 endfunction
 
 if exists('+shellslash')   " don't drop the +!
@@ -42,11 +53,10 @@ endif
 set fileformats=dos,unix
 
 " Other: {{{1
-" TODO:
-" well the usual guards.
 " rewrite the s:InstallPlug() function so that win32 can handle it.
 
-" I don't know why this has been necessary
+" I don't know why this has been necessary but if i don't source this
+" UltiSnips doesn't work.
 let g:UglyUltiSnipsHack = stdpath('data') . '/plugged/ultisnips/autoload/UltiSnips.vim'
 execute 'source ' . g:UglyUltiSnipsHack
 
@@ -59,6 +69,12 @@ function! g:PowerShell() abort
   let $SHELL = 'C:/Program Files/PowerShell/6/pwsh.exe'
   set shell=pwsh.exe
   let &shellcmdflag = '-Command $* '
+
+  " The below is from the nvim help docs.
+  " set shell=powershell shellpipe=\| shellredir=> shellxquote=
+  " let &shellcmdflag='-NoLogo  -ExecutionPolicy RemoteSigned -Command $* '
+  " Should I -NoExit this?
+
 endfunction
 
 " I want this to work so badly but it usually doesn't soooo
@@ -69,3 +85,8 @@ endfunction
 " endtry
 
 command! PowerShell call g:Powershell()
+
+" Atexit: {{{1
+
+let &cpoptions = s:cpo_save
+unlet s:cpo_save
