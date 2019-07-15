@@ -2,7 +2,7 @@
   "name": "viconf",
   "version": "1.0.0",
   "description": "node-modules for neovim",
-  "main": "index.js",
+  "main": ".config/nvim/rplugin/node/nvim-example/index.js",
   "directories": {
     "doc": "doc"
   },

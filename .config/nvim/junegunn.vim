@@ -75,10 +75,10 @@ Plug 'godlygeek/tabular', {'on': 'Tabularize'}
 Plug 'ervandew/supertab'
 Plug 'junegunn/vim-peekaboo'
 Plug 'vim-voom/voom'
-Plug 'neoclide/coc.nvim'
+Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 
 Plug 'mhinz/vim-signify'
-Plug 'mhinz/vim-grepper', { 'on': ['Grepper', '<plug>(GrepperOperator)'] }
+Plug 'mhinz/vim-grepper', { 'on': ['Grepper', '<Plug>(GrepperOperator)'] }
 
 Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
 

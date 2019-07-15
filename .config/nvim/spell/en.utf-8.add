@@ -178,8 +178,6 @@ IPython
 IPython's
 IPython7
 ISE
-ISE
-ISE
 ISO9660
 Importlib
 JQuery
@@ -237,11 +235,13 @@ NVim
 Namespace
 Navient
 NeoVim
+Neovim's
 NerdCom
 NetworkManager
 Newbuntu
 NextCloud
 NodeJS
+NteractApp
 NumLock
 NumPy
 NumPy's
@@ -254,6 +254,7 @@ OSI
 OSINT
 OTR
 OWASP
+Omnicompletion
 OpenDNS
 OpenSSH
 OpenVPN
@@ -273,8 +274,6 @@ PSModulePath
 PSReadline
 PackageKit
 Pep8
-Pipfile
-Pipfile
 Pipfile
 PluginInstall
 PluginSearch
@@ -430,6 +429,7 @@ WSGI
 WSL
 WebExtension
 WebGL
+Webpack's
 Wes
 WikiLeaks
 Win10
@@ -558,6 +558,7 @@ cheat40
 cheatsheet
 cheatsheets
 chmod
+choco
 chown
 chroot
 chsh
@@ -567,6 +568,7 @@ clojure
 clojurescript
 cmake
 cmd
+cmd's
 cmder
 cmdline
 cmds
@@ -588,6 +590,7 @@ conf
 config
 configs
 configurables
+cookiejar
 cp
 cpp
 cronfile
@@ -641,7 +644,6 @@ docstring
 docstrings
 doctest
 doctesting
-doctesting
 doctests
 docutils
 dokuwiki
@@ -649,6 +651,7 @@ domwidget
 dont/!
 doozy
 dosbatch
+doskey
 dotfiles
 dpkg
 dropbox
@@ -657,6 +660,7 @@ dtd
 du
 duckduckgo
 ecryptfs
+editablyNteractApp
 eg
 elif
 elinks
@@ -805,8 +809,6 @@ init
 inodes
 inoremap
 inputrc
-intellisense
-intellisense
 intellisense
 interactiveshell
 interwiki
@@ -1297,6 +1299,7 @@ rstcheck
 rsync
 ruby
 rufus
+runpy
 runtimepath
 rustup
 rvm
@@ -1515,6 +1518,7 @@ uniq
 unittest
 unittests
 unix
+unmap
 unordered
 unpushed
 unstage
@@ -1553,8 +1557,6 @@ vhdl
 vim
 vim74
 vim8
-vim8
-vim8
 vimcasts
 vimdiff
 vimfiles
@@ -1586,6 +1588,7 @@ webdriver
 webextensions
 webpage
 webrtc
+webserver
 weechat
 wget
 whitelist
@@ -1657,12 +1660,3 @@ zshrc
 µMatrix
 µTP
 µTorrent
-choco
-doskey
-cmd's
-cookiejar
-webserver
-Neovim's
-unmap
-Omnicompletion
-runpy

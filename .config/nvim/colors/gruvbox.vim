@@ -4,7 +4,7 @@
 " Maintainer: Faris Chugthai
 " Previous Maintainer: morhetz <morhetz@gmail.com>
 " Original Source: https://github.com/morhetz/gruvbox
-" Last Modified: Mar 23, 2019
+" Last Modified: Jul 13, 2019
 " -----------------------------------------------------------------------------
 
 " Guards: {{{
@@ -12,6 +12,8 @@ if exists('g:did_gruvbox_colors') || &compatible || v:version < 700
     finish
 endif
 let g:did_gruvbox_colors = 1
+
+scriptencoding utf8
 
 " }}}
 
@@ -772,12 +774,6 @@ if 0
   let g:niji_dark_colours = g:rbpt_colorpairs
   let g:niji_light_colours = g:rbpt_colorpairs
 
-  "}}}
-  " Signify: {{{
-
-  hi! link SignifySignAdd GruvboxGreenSign
-  hi! link SignifySignChange GruvboxAquaSign
-  hi! link SignifySignDelete GruvboxRedSign
 
   " }}}
   " Syntastic: {{{
@@ -845,12 +841,23 @@ call s:HL('multiple_cursors_cursor', s:none, s:none, s:inverse)
 call s:HL('multiple_cursors_visual', s:none, s:bg2)
 
 " }}}
+
 endif
+
 " }}}
 
 " Plugins You Have: {{{
+
 " Jesus. Here are the plugins you currently have. We'll figure out a smarter way
 " to check if the plugin actually exists another time.
+
+" Signify: {{{
+
+hi! link SignifySignAdd GruvboxGreenSign
+hi! link SignifySignChange GruvboxAquaSign
+hi! link SignifySignDelete GruvboxRedSign
+
+" }}}
 
 " Startify: {{{
 
@@ -916,6 +923,7 @@ hi! link TagbarTitle GruvboxGreen
 hi! link TagbarHelp Title
 
 " }}}
+
 " }}}
 
 " Filetype specific -----------------------------------------------------------
@@ -958,7 +966,7 @@ hi! link manURL GruvboxGreen
 hi! link netrwDir GruvboxAqua
 hi! link netrwClassify GruvboxAqua
 hi! link netrwLink GruvboxGray
-hi! link netrwSymLink GruvboxFg1
+hi! link netrwSymLink GruvboxAqua
 hi! link netrwExe GruvboxYellow
 hi! link netrwComment GruvboxGray
 hi! link netrwList GruvboxBlue
@@ -1115,7 +1123,9 @@ hi default link vimCommentTitleLeader	vimCommentTitle
 " vimOperParen	vimOperParen
 " vimPatRegion	vimPatRegion
 " vimRegion	vimRegion
-hi default link vimSet Number
+
+" Randomly is the last letter in a set foo=value
+hi default link vimSet vimSetEqual
 
 " There's a highlighting group for the equals sign in a set option statement...
 hi default link vimSetEqual	Operator
@@ -1431,87 +1441,67 @@ hi! link javaScriptNull GruvboxPurple
 hi! link javaScriptParens GruvboxFg3
 
 " }}}
+
 " YAJS: {{{
-
-hi! link javascriptImport GruvboxAqua
-hi! link javascriptExport GruvboxAqua
-hi! link javascriptClassKeyword GruvboxAqua
-hi! link javascriptClassExtends GruvboxAqua
-hi! link javascriptDefault GruvboxAqua
-
-hi! link javascriptClassName GruvboxYellow
-hi! link javascriptClassSuperName GruvboxYellow
-hi! link javascriptGlobal GruvboxYellow
-
-hi! link javascriptEndColons GruvboxFg1
-hi! link javascriptFuncArg GruvboxFg1
-hi! link javascriptGlobalMethod GruvboxFg1
-hi! link javascriptNodeGlobal GruvboxFg1
-hi! link javascriptBOMWindowProp GruvboxFg1
-hi! link javascriptArrayMethod GruvboxFg1
-hi! link javascriptArrayStaticMethod GruvboxFg1
-hi! link javascriptCacheMethod GruvboxFg1
-hi! link javascriptDateMethod GruvboxFg1
-hi! link javascriptMathStaticMethod GruvboxFg1
-
-" hi! link javascriptProp GruvboxFg1
-hi! link javascriptURLUtilsProp GruvboxFg1
-hi! link javascriptBOMNavigatorProp GruvboxFg1
-hi! link javascriptDOMDocMethod GruvboxFg1
-hi! link javascriptDOMDocProp GruvboxFg1
-hi! link javascriptBOMLocationMethod GruvboxFg1
-hi! link javascriptBOMWindowMethod GruvboxFg1
-hi! link javascriptStringMethod GruvboxFg1
-
-hi! link javascriptVariable GruvboxOrange
-" hi! link javascriptVariable GruvboxRed
-" hi! link javascriptIdentifier GruvboxOrange
-" hi! link javascriptClassSuper GruvboxOrange
-hi! link javascriptIdentifier GruvboxOrange
-hi! link javascriptClassSuper GruvboxOrange
-
-" hi! link javascriptFuncKeyword GruvboxOrange
-" hi! link javascriptAsyncFunc GruvboxOrange
-hi! link javascriptFuncKeyword GruvboxAqua
-hi! link javascriptAsyncFunc GruvboxAqua
-hi! link javascriptClassStatic GruvboxOrange
-
-hi! link javascriptOperator GruvboxRed
-hi! link javascriptForOperator GruvboxRed
-hi! link javascriptYield GruvboxRed
-hi! link javascriptExceptions GruvboxRed
-hi! link javascriptMessage GruvboxRed
-
-hi! link javascriptTemplateSB GruvboxAqua
-hi! link javascriptTemplateSubstitution GruvboxFg1
-
-" hi! link javascriptLabel GruvboxBlue
-" hi! link javascriptObjectLabel GruvboxBlue
-" hi! link javascriptPropertyName GruvboxBlue
-hi! link javascriptLabel GruvboxFg1
-hi! link javascriptObjectLabel GruvboxFg1
-hi! link javascriptPropertyName GruvboxFg1
-
-hi! link javascriptLogicSymbols GruvboxFg1
+hi! link javascriptArrayMethod GruvboxFg2
+hi! link javascriptArrayStaticMethod GruvboxFg2
 hi! link javascriptArrowFunc GruvboxYellow
-
-hi! link javascriptDocParamName GruvboxFg4
-hi! link javascriptDocTags GruvboxFg4
-hi! link javascriptDocNotation GruvboxFg4
-hi! link javascriptDocParamType GruvboxFg4
-hi! link javascriptDocNamedParamType GruvboxFg4
-
+hi! link javascriptAsyncFunc GruvboxAqua
+hi! link javascriptAsyncFuncKeyword GruvboxRed
+hi! link javascriptAwaitFuncKeyword GruvboxRed
+hi! link javascriptBOMLocationMethod GruvboxFg2
+hi! link javascriptBOMNavigatorProp GruvboxFg2
+hi! link javascriptBOMWindowMethod GruvboxFg2
+hi! link javascriptBOMWindowProp GruvboxFg2
 hi! link javascriptBrackets GruvboxFg1
+hi! link javascriptCacheMethod GruvboxFg2
+hi! link javascriptClassExtends GruvboxAqua
+hi! link javascriptClassKeyword GruvboxAqua
+hi! link javascriptClassName GruvboxYellow
+hi! link javascriptClassStatic GruvboxOrange
+hi! link javascriptClassSuper GruvboxOrange
+hi! link javascriptClassSuperName GruvboxYellow
+hi! link javascriptDOMDocMethod GruvboxFg2
+hi! link javascriptDOMDocProp GruvboxFg2
 hi! link javascriptDOMElemAttrs GruvboxFg1
 hi! link javascriptDOMEventMethod GruvboxFg1
 hi! link javascriptDOMNodeMethod GruvboxFg1
 hi! link javascriptDOMStorageMethod GruvboxFg1
+hi! link javascriptDateMethod GruvboxFg2
+hi! link javascriptDefault GruvboxAqua
+hi! link javascriptDocNamedParamType GruvboxFg4
+hi! link javascriptDocNotation GruvboxFg4
+hi! link javascriptDocParamName GruvboxFg4
+hi! link javascriptDocTags GruvboxFg4
+hi! link javascriptEndColons GruvboxFg2
+hi! link javascriptExceptions GruvboxRed
+hi! link javascriptExport GruvboxAqua
+hi! link javascriptForOperator GruvboxRed
+hi! link javascriptFuncArg GruvboxFg2
+hi! link javascriptFuncKeyword GruvboxAqua
+hi! link javascriptGlobal GruvboxYellow
+hi! link javascriptGlobalMethod GruvboxFg2
 hi! link javascriptHeadersMethod GruvboxFg1
-
-hi! link javascriptAsyncFuncKeyword GruvboxRed
-hi! link javascriptAwaitFuncKeyword GruvboxRed
+hi! link javascriptIdentifier GruvboxOrange
+hi! link javascriptImport GruvboxAqua
+hi! link javascriptLabel GruvboxBlue
+hi! link javascriptLogicSymbols GruvboxFg1
+hi! link javascriptMathStaticMethod GruvboxFg2
+hi! link javascriptMessage GruvboxRed
+hi! link javascriptNodeGlobal GruvboxFg2
+hi! link javascriptObjectLabel GruvboxBlue
+hi! link javascriptOperator GruvboxRed
+hi! link javascriptProp GruvboxFg2
+hi! link javascriptPropertyName GruvboxBlue
+hi! link javascriptStringMethod GruvboxFg2
+hi! link javascriptTemplateSB GruvboxAqua
+hi! link javascriptTemplateSubstitution GruvboxFg1
+hi! link javascriptURLUtilsProp GruvboxFg2
+hi! link javascriptVariable GruvboxRed
+hi! link javascriptYield GruvboxRed
 
 " }}}
+
 " PanglossJS: {{{
 
 hi! link jsClassKeyword GruvboxAqua
@@ -1603,7 +1593,7 @@ hi def link rubyASCIICode		Character
 hi def link rubyFloat			Float
 hi def link rubyBoolean			Boolean
 hi def link rubyException		Exception
-if !exists("ruby_no_identifiers")
+if !exists('ruby_no_identifiers')
   hi def link rubyIdentifier		Identifier
 else
   hi def link rubyIdentifier		NONE

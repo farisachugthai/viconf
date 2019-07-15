@@ -2,7 +2,7 @@
     " File: unix.vim
     " Author: Faris Chugthai
     " Description: Add GNU/Linux commands, functions and mappings
-    " Last Modified: April 17, 2019
+    " Last Modified: Jul 13, 2019
 " ============================================================================
 
 " Guard: {{{1
@@ -18,32 +18,26 @@ set cpoptions&vim
 
 " Options: {{{1
 
-function! UnixOptions() abort
-    if filereadable('/usr/share/dict/words')
-      set dictionary+=/usr/share/dict/words
-    endif
+" Function named incorrectly. 
+" if has('unix')
+"     augroup unixsettings
+"         au!
+"         au BufRead,BufFilePre * call s:unix#UnixOptions()
+"     augroup END
+" endif
 
-    if g:termux
-      " May 26, 2019: Just ran into my first problem from a filename with a space in the name *sigh*
-      noremap <silent> <Leader>ts <Cmd>exe "!termux-share -a send " . shellescape(expand("%"))<CR>
-    endif
+" Tmux: {{{1
 
-    if isdirectory(expand('$_ROOT/local/include/'))
-        let &path = &path . ',' . expand('$_ROOT/local/include')
-    endif
-
-    if isdirectory(expand('$_ROOT') . '/include/libcs50')
-        let &path = &path .','. expand('$_ROOT') . '/include/libcs50'
-    endif
-
-endfunction
-
-if empty(g:windows)
-    augroup unixsettings
-        au!
-        au BufRead,BufFilePre * call UnixOptions()
-    augroup END
-endif
+" Doesn't work. Fuck the way Vim namespaces shit holy hell.
+" call <SID>unix#tmux_map('<leader>tt', '')
+" call <SID>unix#tmux_map('<leader>th', '.left')
+" call <SID>unix#tmux_map('<leader>tj', '.bottom')
+" call <SID>unix#tmux_map('<leader>tk', '.top')
+" call <SID>unix#tmux_map('<leader>tl', '.right')
+" call <SID>unix#tmux_map('<leader>ty', '.top-left')
+" call <SID>unix#tmux_map('<leader>to', '.top-right')
+" call <SID>unix#tmux_map('<leader>tn', '.bottom-left')
+" call <SID>unix#tmux_map('<leader>t.', '.bottom-right')
 
 " Finger: {{{1
 " Example from :he command-complete

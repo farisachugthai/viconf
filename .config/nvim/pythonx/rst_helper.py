@@ -95,6 +95,8 @@ def make_items(times, leading='+'):
     Couldn't you just go times=None and then if times is None: times = len(t[0])
     like wtf?
 
+    Used by snippet li(st)? and for olist.
+
     :param: times, how many times you need
     :param: leading, leading character
 
@@ -110,7 +112,7 @@ def make_items(times, leading='+'):
 
 
 def look_up_directives(regex, fpath):
-    """Find all directive args in given file
+    """Find all directive args in given file.
 
     :param: regex, the regex that needs to match
     :param: path, to path to rst file
@@ -128,7 +130,7 @@ def look_up_directives(regex, fpath):
 # so what the fuck? def doesn't take an arg, the docstring says path
 # and its to determine embedded syntaxes in a file.
 def get_popular_code_type():
-    """Find most frequent filetype in the file
+    """Find most frequent filetype in the file.
 
     :return: string, most popular code type in file
     """

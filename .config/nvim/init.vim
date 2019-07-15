@@ -28,7 +28,6 @@ if g:windows
   runtime winrc.vim
 endif
 
-" To encourage cross platform use
 set sessionoptions+=unix,slash
 
 " $_ROOT: {{{2
@@ -314,7 +313,7 @@ augroup omnifunc
     autocmd Filetype css              setlocal omnifunc=csscomplete#CompleteCSS
     autocmd Filetype html,xhtml       setlocal omnifunc=htmlcomplete#CompleteTags | call htmlcomplete#DetectOmniFlavor()
     autocmd Filetype javascript       setlocal omnifunc=javascriptcomplete#CompleteJS
-    autocmd Filetype python,xonsh     setlocal omnifunc=python3complete#Complete
+    autocmd Filetype python           setlocal omnifunc=python3complete#Complete
     autocmd Filetype ruby             setlocal omnifunc=rubycomplete#Complete
     autocmd Filetype xml              setlocal omnifunc=xmlcomplete#CompleteTags
 
@@ -425,32 +424,6 @@ command! -nargs=+ NewGrep execute 'silent grep! <args>' | copen
 " Adding range means that the command defaults to cuurent line
 " Need to add a check that we're in visual mode and drop the '<,'> if not.
 command! -nargs=0 -range Title <Cmd>'<,'>s/\v<(.)(\w*)/\u\1\L\2/g
-
-" Global Ftplugin: {{{2
-function! s:after_ft()
-
-  let s:cur_ft = &filetype
-  let s:after_ftplugin_dir = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/after/ftplugin/'
-  let s:after_ftplugin_file = s:after_ftplugin_dir . s:cur_ft . '.vim'
-  let s:ftplugin_dir = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/ftplugin/'
-  let s:ftplugin_file = s:ftplugin_dir . s:cur_ft . '.vim'
-
-  if file_readable(s:ftplugin_file)
-    exec 'edit ' . s:ftplugin_file
-
-  elseif file_readable(s:after_ftplugin_file)
-    exec 'edit ' . s:after_ftplugin_file
-
-  elseif file_readable(fnamemodify(resolve(stdpath('config') . '/ftplugin' . s:cur_ft . '.vim')))
-    exec 'edit ' . stdpath('config') . '/ftplugin' . s:cur_ft . '.vim'
-
-  elseif file_readable(fnamemodify(resolve(stdpath('config') . '/after/ftplugin' . s:cur_ft . '.vim')))
-    exec 'edit ' . stdpath('config') . '/after/ftplugin' . s:cur_ft . '.vim'
-
-  endif
-endfunction
-
-command! -nargs=0 EditThisFiletype call s:after_ft()
 
 " Atexit: {{{1
 let &cpoptions = s:cpo_save

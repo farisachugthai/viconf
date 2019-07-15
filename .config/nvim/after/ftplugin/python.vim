@@ -29,6 +29,8 @@ setlocal keywordprg=pydoc
 
 setlocal suffixesadd+=.py
 
+" Autocommands: {{{1
+
 " Undo ftplugin?
 if isdirectory(expand('$_ROOT') . '/lib/python3')
     " Double check globbing in vim
@@ -72,13 +74,10 @@ if executable('yapf')
     " To add a user command for a specific file type, so that it can only be used in
     " one buffer, use the "-buffer" argument to |:command|.:
   function! YAPF() abort
-    " ughhhhh this is gonna be a pain in the ass to modify so it reads into a buffer
-    redir => b:tmp_var
-    exec '!yapf %'
-    redir END
-    enew
-    " shit how do we read in the output.... TODO: alternatively try
-    " `:TBrowseOutput because tlib is the bees knees
+    if exists(':TBrowseOutput')
+      " Realistically should accept func args
+      :TBrowseOutput !yapf %
+    endif
   endfunction
 
   command! -buffer -complete=buffer -nargs=0 YAPF exec '!yapf %'
@@ -103,42 +102,51 @@ function! ALE_Python_Conf()
     if s:debug
         echomsg 'Did the function call?'
     endif
-  let b:ale_linters_explicit = 1
+    let b:ale_linters_explicit = 1
 
-  " Functions don't globalize buffer local variables...So everything has to
-  " be a g: prefixed var
-  let g:ale_linters = extend(g:ale_linters, {'python': [ 'flake8', 'pydocstyle', 'pyls' ]})
+    let g:ale_linters = extend(g:ale_linters, {'python': [ 'flake8', 'pydocstyle', 'pyls' ]})
 
-  let g:ale_python_pyls_config = {
-        \   'pyls': {
-        \     'plugins': {
-        \       'pycodestyle': {
-        \         'enabled': v:false
-        \       },
-        \       'flake8': {
-        \         'enabled': v:true
-        \       }
-        \     }
-        \   },
-        \ }
+    let g:ale_python_pyls_config = {
+          \   'pyls': {
+          \     'plugins': {
+          \       'pycodestyle': {
+          \         'enabled': v:false
+          \       },
+          \       'flake8': {
+          \         'enabled': v:true
+          \       }
+          \     }
+          \   },
+          \ }
 
-  " The external program vim uses for gg=G can be configured
-  " Hey you in the future. You can use :set *prg<Tab> and see all of the
-  " configuration options you have.
-  " Now you can also use gq for yapf
-  let g:ale_fixers = extend(g:ale_fixers, {'python': 'reorder-python-imports'})
+    " The external program vim uses for gg=G can be configured
+    " Hey you in the future. You can use :set *prg<Tab> and see all of the
+    " configuration options you have.
+    " Now you can also use gq for yapf
+    let g:ale_fixers = extend(g:ale_fixers, {'python': [
+          \ 'remove_trailing_lines',
+          \ 'trim_whitespace',
+          \ 'reorder-python-imports'
+          \ ]})
 
-  if executable('yapf')
-      let g:ale_fixers += extend(g:ale_fixers, {'python': 'yapf'})
-  else
-      if executable('autopep8')
-          let b:ale_fixers += extend(g:ale_fixers, {'python': 'autopep8'})
-      endif
-  endif
+    if executable('yapf')
+        let g:ale_fixers = extend(g:ale_fixers, {'python': ['yapf']})
+    else
+        if executable('autopep8')
+          let g:ale_fixers = extend(g:ale_fixers, {'python': ['autopep8']})
+        endif
+    endif
+
+    let g:ale_virtualenv_dir_names = []
+    if isdirectory('~/virtualenvs')
+      let g:ale_virtualenv_dir_names += '~/virtualenvs'
+    elseif isdirectory(expand('~/Anaconda3'))
+      let g:ale_virtualenv_dir_names += expand('~/Anaconda3')
+    endif
 
 endfunction
 
-if &filetype=='python'
+if &filetype==#'python'
   call ALE_Python_Conf()
 endif
 
