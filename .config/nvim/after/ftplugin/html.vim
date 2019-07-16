@@ -29,15 +29,17 @@ let g:ft_html_autocomment = 1
 function! ALE_Html_Conf()
 
   if executable('prettier')
-    let g:ale_fixers = extend(g:ale_fixers, {'html': ['prettier']})
+    let b:ale_fixers = ['prettier']
   endif
 
 endfunction
 
-augroup alehtmlconf
+if has_key(plugs, 'ale') && &filetype==#'html'
+  augroup alehtmlconf
     au!
-    autocmd Filetype html if has_key(plugs, 'ale') | call ALE_Html_Conf() | endif
-augroup END
+    autocmd Filetype| call ALE_Html_Conf()
+  augroup END
+endif
 
 " Atexit: {{{1
 let b:undo_ftplugin = 'set et< sw< sts< sua<'

@@ -2,7 +2,7 @@
     " File: coc.vim
     " Author: Faris Chugthai
     " Description: Coc plugin mods
-    " Last Modified: March 22, 2019
+    " Last Modified: Jul 15, 2019
 " ============================================================================
 
 " Options are in coc_settings.json
@@ -41,15 +41,16 @@ let g:coc_snippet_next = '<C-j>'
 
 let g:coc_snippet_prev = '<C-k>'
 
-nnoremap <silent> [g <Plug>(coc-diagnostic-prev)
-nnoremap <silent> ]g <Plug>(coc-diagnostic-next)
+" Shit none of these work
+" nnoremap <silent> [g <Plug>(coc-diagnostic-prev)
+" nnoremap <silent> ]g <Plug>(coc-diagnostic-next)
 
-" Remap keys for gotos
-" Now let's start working with the niceties of an LSP. Docs and symbols
-nnoremap <silent> gd <Plug>(coc-definition)
-nnoremap <silent> gy <Plug>(coc-type-definition)
-nnoremap <silent> gi <Plug>(coc-implementation)
-nnoremap <silent> gr <Plug>(coc-references)
+" " Remap keys for gotos
+" " Now let's start working with the niceties of an LSP. Docs and symbols
+" nnoremap <silent> gd <Plug>(coc-definition)
+" nnoremap <silent> gy <Plug>(coc-type-definition)
+" nnoremap <silent> gi <Plug>(coc-implementation)
+" nnoremap <silent> gr <Plug>(coc-references)
 
 " Use K to show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -64,7 +65,7 @@ function! s:show_documentation()
 endfunction
 
 " Remap for rename current word
-nnoremap <leader>rn <Plug>(coc-rename)
+" nnoremap <leader>rn <Plug>(coc-rename)
 
 augroup CocConf
   " Setup formatexpr specified filetype(s).

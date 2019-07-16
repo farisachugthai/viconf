@@ -28,6 +28,7 @@ setlocal comments=
 setlocal commentstring=
 
 " Like what the literal fuck
+setlocal expandtab softtabstop=2 shiftwidth=2
 
 " Plugins: {{{1
 
@@ -52,10 +53,12 @@ endfunction
 
 let s:debug = 1
 
-augroup alejsonconf
+if has_key(plugs, 'ale') && &filetype==#'json'
+  augroup alejsonconf
     au!
-    autocmd Filetype json if has_key(plugs, 'ale') | call ALE_JSON_Conf() | endif
-augroup END
+    autocmd Filetype * call ALE_JSON_Conf()
+  augroup END
+endif
 
 
 " Commands: {{{1
@@ -63,7 +66,7 @@ augroup END
 " on a buffer
 
 " Atexit: {{{1
-let b:undo_ftplugin = 'setlocal formatoptions< comments< commentstring<'
+let b:undo_ftplugin = 'setlocal fo< com< cms< sts< et< sw<'
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

@@ -29,8 +29,6 @@ setlocal keywordprg=pydoc
 
 setlocal suffixesadd+=.py
 
-" Autocommands: {{{1
-
 " Undo ftplugin?
 if isdirectory(expand('$_ROOT') . '/lib/python3')
     " Double check globbing in vim
@@ -42,7 +40,7 @@ if isdirectory(expand('~/.local/lib/python3.7'))
     let &path = &path . ',' . expand('~') . '/.local/lib/python3.7'
 endif
 
-" Highlight I20 Chars: {{{2
+" Autocmd: Highlight 120 Chars: {{{1
 
 augroup pythonchars
     autocmd!

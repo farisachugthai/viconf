@@ -17,7 +17,6 @@ setlocal tabstop=2
 setlocal softtabstop=2
 setlocal suffixesadd+=.vim
 setlocal nolinebreak
-setlocal nowrap
 
 let &path = &path . ',' . stdpath('data') . '/plugged/*/*/*.vim'
 let &commentstring='" %s'
@@ -66,7 +65,8 @@ let g:vimsyn_maxlines = 500  " why is the default 60???
 
 function! ALE_Vim_Conf()
 
-  let b:ale_linters = ['ale_custom_linting_rules']  " idk wtf this is but let's try
+  let b:ale_linters = ['ale_custom_linting_rules']
+  let b:ale_linters_explicit = 1
 
   if executable('vint')
     let b:ale_linters += ['vint']
@@ -75,7 +75,7 @@ function! ALE_Vim_Conf()
 
 endfunction
 
-if has_key(plugs, 'ale') && &filetype=='vim'
+if has_key(plugs, 'ale') && &filetype==#'vim'
 
   augroup ALEVimConf
     autocmd Filetype * call ALE_Vim_Conf()
@@ -85,7 +85,7 @@ endif
 
 " Atexit: {{{1
 
-let b:undo_ftplugin = 'set com< cms< et< sw< ts< sts< linebreak< sua< wrap<'
+let b:undo_ftplugin = 'set com< cms< et< sw< ts< sts< linebreak< sua<'
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

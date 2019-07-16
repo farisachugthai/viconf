@@ -18,17 +18,18 @@ set cpoptions&vim
 
 setlocal suffixesadd='.c'
 setlocal suffixesadd+='.h'
+setlocal cindent
 
 " Plugins: {{{1
 let b:ale_fixers = [ 'clang-format' ]
 
 " Should add a mapping
 
-let g:clang_format_path =  expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
+" let g:clang_format_path =  expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
 
-noremap <Leader><C-c>f <Cmd>pyfile expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
+" noremap <Leader><C-c>f <Cmd>pyfile expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
 
-noremap! <Leader><C-c>f <Cmd>pyfile expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
+" noremap! <Leader><C-c>f <Cmd>pyfile expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
 
 " With this integration you can press the bound key and clang-format will
 " format the current line in NORMAL and INSERT mode or the selected region in
@@ -39,6 +40,7 @@ noremap! <Leader><C-c>f <Cmd>pyfile expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/
 " formatting. This variable can either contain "<start line>:<end line>" or
 " "all" to format the full file. So, to format the full file, write a function
 " like:
+
 function! FormatFile()
   let l:lines='all'
   pyf expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
@@ -49,9 +51,9 @@ endfunction
 
 setlocal makeprg=make\ %<.o
 
-" atexit: {{{1
+" Atexit: {{{1
 
-" let b:undo_ftplugin =
+let b:undo_ftplugin = 'set sua< makeprg< cin<'
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

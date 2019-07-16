@@ -33,10 +33,12 @@ function! ALE_CSS_Conf()
 
 endfunction
 
-augroup alecssconf
+if has_key(plugs, 'ale') && &filetype==#'css'
+  augroup alecssconf
     au!
-    autocmd Filetype css if has_key(plugs, 'ale') | call ALE_CSS_Conf() | endif
-augroup END
+    autocmd Filetype * call ALE_CSS_Conf()
+  augroup END
+endif
 
 " Atexit: {{{1
 

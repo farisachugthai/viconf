@@ -1665,3 +1665,6 @@ NotebookApp
 certfile
 QTConsole
 qtconsole
+SciPy
+toolstack
+automodule
