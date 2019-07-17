@@ -15,6 +15,7 @@ let s:cpo_save = &cpoptions
 set cpoptions&vim
 
 " Options: {{{1
+
 " Enable spellchecking.
 setlocal spell!
 
@@ -28,8 +29,13 @@ setlocal colorcolumn=80
 setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
 
 " Mappings: {{{1
+
+" I don't know if you're supposed to run an initial au! for augroups that
+" only define Filetype events. I think it's supposed to be reserved for when
+" the event is as common as BufReadPre or BufNewFile or something.
 augroup filetype_markdown
-    autocmd!
+
+    " autocmd!
     autocmd FileType markdown noremap <buffer> <localleader>1 m`yypVr=``
     autocmd FileType markdown noremap <buffer> <localleader>2 m`yypVr-``
     autocmd FileType markdown noremap <buffer> <localleader>3 m`^i### <esc>``4l
@@ -37,8 +43,15 @@ augroup filetype_markdown
     autocmd FileType markdown noremap <buffer> <localleader>5 m`^i##### <esc>``6l
 augroup END
 
+" Plugins: {{{1
 
-" atexit
+function! ALE_Markdown_Conf()
+
+  let b:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
+
+endfunction
+
+" Atexit: {{{1
 
 let b:undo_ftplugin = 'set spell< cc< tw< et< ts< sts< sw<'
 

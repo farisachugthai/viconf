@@ -58,8 +58,8 @@ def _parse_arguments():
 
     """
     parser = argparse.ArgumentParser(
-            prog='Neovim automated installer.',
-            description='Installs and sets up neovim.')
+        prog='Neovim automated installer.',
+        description='Installs and sets up neovim.')
 
     parser.add_argument(
         '-d',
@@ -178,8 +178,11 @@ def termux_packages():
 def pip_install():
     """Run platform-independent pip install. Install both pynvim and neovim."""
     output = subprocess.run([
-            "pip", "install", "-U", "pip", "python-language-server[all]",
-            "pynvim", "neovim"], capture_output=True, check=True)
+        "pip", "install", "-U", "pip", "python-language-server[all]", "pynvim",
+        "neovim"
+    ],
+                            capture_output=True,
+                            check=True)
     return output
 
 
@@ -191,13 +194,17 @@ def use_virtualenv(virtualenv, python_version):
         if virtualenv:
             # check if given directory is a virtualenv
             if not os.path.join(virtualenv, "bin/activate"):
-                raise Exception("Given directory {0} is not a virtualenv.".format(virtualenv))
+                raise Exception("Given directory {0} is not a virtualenv.".
+                                format(virtualenv))
 
             context.virtualenv_path = virtualenv
             yield True
         else:
-            proc = subprocess.Popen("virtualenv env -p {0} >> {1}".format(python_version, context.logfile),
-                         shell=True, cwd=context.tempdir_path)
+            proc = subprocess.Popen(
+                "virtualenv env -p {0} >> {1}".format(python_version,
+                                                      context.logfile),
+                shell=True,
+                cwd=context.tempdir_path)
             context.virtualenv_path = os.path.join(context.tempdir_path, "env")
             yield proc.wait() == 0
     finally:

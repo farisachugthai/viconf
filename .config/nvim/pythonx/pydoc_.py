@@ -110,9 +110,8 @@ class Pydoc:
         self.vim.command('r!pydoc ' + args[0])
         self.vim.command('set ft=man')
 
-    @pynvim.autocmd('BufEnter',
-                    pattern='Filetype=man',
-                    eval='expand("<afile>")')
+    @pynvim.autocmd(
+        'BufEnter', pattern='Filetype=man', eval='expand("<afile>")')
     def check_buffer_output(self):
         """Make sure the first line isn't an error message."""
         line0 = self.vim.getline(1)  # yes we need to 0 index it!
@@ -128,8 +127,8 @@ if __name__ == "__main__":
     if not os.environ.get('NVIM_PYTHON_LOG_FILE'):
         os.environ.putenv(
             'NVIM_PYTHON_LOG_FILE',
-            os.path.join(os.environ.get('XDG_DATA_HOME'), '', 'nvim',
-                         'python.log'))
+            os.path.join(
+                os.environ.get('XDG_DATA_HOME'), '', 'nvim', 'python.log'))
     setup_logging(name='rplugin/python3/pydoc')
 
     pydoc_plugin = Pydoc()

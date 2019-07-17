@@ -121,11 +121,11 @@ function! ALE_Python_Conf()
     " Hey you in the future. You can use :set *prg<Tab> and see all of the
     " configuration options you have.
     " Now you can also use gq for yapf
-    let g:ale_fixers = extend(g:ale_fixers, {'python': [
+    let b:ale_fixers = [
           \ 'remove_trailing_lines',
           \ 'trim_whitespace',
           \ 'reorder-python-imports'
-          \ ]})
+          \ ]
 
     if executable('yapf')
         let g:ale_fixers = extend(g:ale_fixers, {'python': ['yapf']})

@@ -5,17 +5,17 @@
 " Preliminaries: {{{1
 scriptencoding utf-8
 let s:cpo_save = &cpoptions
-set cpoptions&vim
+set cpoptions-=c
 
 " OS Setup: {{{2
 
 " Termux check from Evervim. Thanks!
 let g:termux = isdirectory('/data/data/com.termux')
-
 let g:ubuntu = has('unix') && !has('macunix') && empty(g:termux)
 
 " How is `has('win32')` a nvim specific thing. Tried in vim and it didn't work!
 let g:windows = has('win32') || has('win64')
+" Not gonna lie though wouldn't !has('unix') just be easier?
 
 " TODO: it doesn't work. - From wsl
 let g:wsl = has('wsl')
@@ -30,16 +30,6 @@ endif
 
 set sessionoptions+=unix,slash
 
-" $_ROOT: {{{2
-if !exists('$_ROOT') && !empty(g:termux)
-  let $_ROOT = expand('$PREFIX')
-elseif !exists('$_ROOT') && !empty(g:ubuntu)
-  let $_ROOT = '/usr'
-elseif !exists('$_ROOT') && !empty(g:windows)
-  " Or should I use ALLUSERSPROFILE
-  let $_ROOT = expand('$SystemRoot')
-endif
-
 " Factor out all of the remote hosts stuff.
 runtime remote.vim
 
@@ -50,6 +40,10 @@ let s:plugins = filereadable(expand(stdpath('data') . '/site/autoload/plug.vim')
 if empty(s:plugins)
   " bootstrap plug.vim on new systems
   function! s:InstallPlug() abort
+
+    if empty(executable('curl'))
+      break
+    endif
 
     try
       " Successfully executed on termux
@@ -113,31 +107,21 @@ if has('nvim-0.4')
 endif
 
 " Pep8 Global Options: {{{2
-if &tabstop > 4
-    set tabstop=4           " show existing tab with 4 spaces width
-endif
-if &shiftwidth > 4
-    set shiftwidth=4        " when indenting with '>', use 4 spaces width
-endif
+if &tabstop > 4 | set tabstop=4 | endif
+if &shiftwidth > 4  | set shiftwidth=4 | endif
 set expandtab smarttab      " On pressing tab, insert 4 spaces
 set softtabstop=4
 let g:python_highlight_all = 1
 
 " Folds: {{{2
 set foldenable
-set foldlevelstart=0
-set foldlevel=0
-set foldnestmax=10
-set foldmethod=marker
+set foldlevelstart=0 foldlevel=0 foldnestmax=10 foldmethod=marker
 " Use 2 columns to indicate fold level and whether a fold is open or closed.
 set foldcolumn=2      " If less than 2 is used it can get pushed off screen in the TUI
-set signcolumn=yes    " not fold related but close to column
+set signcolumn=yes    " not fold related but signcolumn and foldcolumn seem close
 
 " Buffers Windows Tabs: {{{2
-try
-  set switchbuf=useopen,usetab,newtab
-catch
-endtry
+try | set switchbuf=useopen,usetab,newtab | catch | endtry
 
 set hidden
 set splitbelow splitright
@@ -145,26 +129,19 @@ set splitbelow splitright
 set winfixheight winfixwidth
 
 " Admittedly I kinda know why the screen looks so small
-if &textwidth!=0
-  setl colorcolumn=+1
-else
-  setl colorcolumn=80
-endif
+if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif
 
 set cmdheight=2
 set number relativenumber
 
 " Spell Checker: {{{2
-set spelllang=en
+set spelllang=en spellsuggest=5
 
 if filereadable(stdpath('config') . '/spell/en.utf-8.add')
   let &spellfile = stdpath('config') . '/spell/en.utf-8.add'
 endif
 
-set spellsuggest=5                      " Limit the number of suggestions from 'spell suggest'
-
 " Autocompletion: {{{2
-
 set wildmode=full:list:longest,full:list
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 
@@ -325,33 +302,6 @@ augroup omnifunc
 augroup END
 
 " Functions_Commands: {{{1
-" Helptabs: {{{2
-" I've pretty heavily modified this one but junegunn gets the initial credit.
-function! g:Helptab()
-    setlocal number relativenumber
-    if len(nvim_list_wins()) > 1
-        wincmd T
-    endif
-
-    setlocal nomodified
-    setlocal buflisted
-    " Complains that we can't modify any buffer. But its a local option so yes we can
-    silent setlocal nomodifiable
-
-    noremap <buffer> q <Cmd>q<CR>
-    " Check the rplugin/python3/pydoc.py file
-    noremap <buffer> P <Cmd>Pydoc<CR>
-endfunction
-
-augroup mantabs
-    autocmd!
-    autocmd Filetype man,help call g:Helptab()
-augroup END
-
-" Apr 23, 2019: Didn't know complete help was a thing.
-" Oh holy shit that's awesome
-command! -nargs=1 -complete=help Help call g:Helptab()
-
 " Statusline: {{{2
 
 function! s:statusline_expr() abort
@@ -384,23 +334,25 @@ else
   let tstmp = ''
 endif
 
-  return '[%n] %f '. dicons . '%m' . '%r' . ' %y ' . fug . csv . ' ' . ' %{&ff} ' . tstmp . sep . pos . '%*' . ' %P'
+let cocline = StatusDiagnostic()
+
+  return '[%n] %f '. dicons . '%m' . '%r' . ' %y ' . fug . csv . ' ' . ' %{&ff} ' . tstmp . cocline . sep . pos . '%*' . ' %P'
 endfunction
 
 function! StatusDiagnostic() abort
-let info = get(b:, 'coc_diagnostic_info', {})
-if empty(info) | return '' | endif
-let msgs = []
-if get(info, 'error', 0)
-call add(msgs, 'E' . info['error'])
-endif
-if get(info, 'warning', 0)
-call add(msgs, 'W' . info['warning'])
-endif
-return join(msgs, ' ') . ' ' . get(g:, 'coc_status', '')
+  let info = get(b:, 'coc_diagnostic_info', {})
+  if empty(info) | return '' | endif
+  let msgs = []
+  if get(info, 'error', 0)
+    call add(msgs, 'E' . info['error'])
+  endif
+  if get(info, 'warning', 0)
+    call add(msgs, 'W' . info['warning'])
+  endif
+  return join(msgs, ' ') . ' ' . get(g:, 'coc_status', '')
 endfunction
 
-let &statusline = <SID>statusline_expr() . StatusDiagnostic()
+let &statusline = <SID>statusline_expr()
 
 " Clear Hlsearch: {{{2
 

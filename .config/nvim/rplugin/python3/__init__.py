@@ -15,10 +15,10 @@ import sys
 # new neovim module and fallback
 try:
     import pynvim
-except (ImportError,ModuleNotFoundError):
+except (ImportError, ModuleNotFoundError):
     try:
         import neovim
-    except (ImportError,ModuleNotFoundError):
+    except (ImportError, ModuleNotFoundError):
         sys.exit('Neither pynvim or neovim installed.')
 
 try:

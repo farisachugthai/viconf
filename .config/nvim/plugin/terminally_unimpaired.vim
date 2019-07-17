@@ -41,12 +41,7 @@ tnoremap <A-d> <Esc>d
 tnoremap <A-f> <Esc>f
 
 " Other window
-tnoremap <C-w> <Esc><C-w>
-
-" test that these work
-" nope
-tnoremap <A-a> <Esc>I
-tnoremap <A-e> <Esc>$i
+tnoremap <C-w>w <C-><C-N><C-w>w
 
 " Functions: {{{1
 
@@ -57,30 +52,23 @@ tnoremap <A-e> <Esc>$i
 " Need to use enew in case your previous buffer setl nomodifiable
 noremap <Leader>ah <Cmd>wincmd v<CR><bar><Cmd>enew<CR><bar>term://htop
 
-" IPython: {{{2
-
-" TODO:
-" Leader -- applications -- IPython
-
-" Let's add options to this to give the feeling of a real plugin
-function! g:IPython() abort
-  if !exists('g:ipy_vert') && !exists('g:ipy_horiz') && !exists('g:ipy_tab')
-    let g:ipy_horiz = 1
-  endif
-endfunction
 
 " Autocmd For Statusline: {{{1
 
 augroup TermGroup
-  autocmd!
-  " I don't know if this is mentioned anywhere but do we have to set an
-  " undoftplugin?
+
   autocmd TermOpen * setlocal statusline=%{b:term_title}
+
   " `set nomodified` so Nvim stops prompting you when you
   " try to close a buftype==terminal buffer
   autocmd TermOpen * setlocal nomodified
-  " Fails if changes have been made to the current buffer,
-  " unless 'hidden' is set.
+
+  " April 14, 2019
   " To enter |Terminal-mode| automatically:
   autocmd TermOpen * startinsert
+
+  " Jul 17, 2019: It's been like 3 months and I only recently realized
+  " that I didn't mention to leave insert mode when the terminal closes...
+  autocmd TermClose * stopinsert
+
 augroup END

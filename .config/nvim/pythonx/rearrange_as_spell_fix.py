@@ -18,9 +18,9 @@ def main():
     longest = []
 
     for i in range(len(mapped) - 1):
-        if mapped[i] < mapped[i+1]:
+        if mapped[i] < mapped[i + 1]:
             longest.append(mapped[i])
-        elif mapped[i] > mapped[i+1]:
+        elif mapped[i] > mapped[i + 1]:
             longest.append(mapped[i])
             # lets record what our longest was
             if len(longest) > running:
