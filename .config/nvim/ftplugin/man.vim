@@ -8,25 +8,25 @@
 " this script from your startup vimrc file.
 
 " If 'filetype' isn't "man", we must have been called to only define ":Man".
-if &filetype == "man"
+if &filetype ==# 'man'
 
   " Only do this when not done yet for this buffer
-  if exists("b:did_ftplugin")
+  if exists('b:did_ftplugin')
     finish
   endif
   let b:did_ftplugin = 1
 endif
 
-let s:cpo_save = &cpo
+let s:cpo_save = &cpoptions
 set cpo-=C
 
-if &filetype == "man"
+if &filetype ==# 'man'
   " allow dot and dash in manual page name.
   setlocal iskeyword+=\.,-
-  let b:undo_ftplugin = "setlocal iskeyword<"
+  let b:undo_ftplugin = 'setlocal iskeyword<'
 
   " Add mappings, unless the user didn't want this.
-  if !exists("no_plugin_maps") && !exists("no_man_maps")
+  if !exists('no_plugin_maps') && !exists('no_man_maps')
     if !hasmapto('<Plug>ManBS')
       nmap <buffer> <LocalLeader>h <Plug>ManBS
       let b:undo_ftplugin = b:undo_ftplugin
@@ -52,25 +52,54 @@ if &filetype == "man"
 	  \ . '|silent! setl fdm< fdn< fen<'
   endif
 
+  " My Own Stuff:
+  "
+  " Helptabs:
+  " I've pretty heavily modified this one but junegunn gets the initial credit.
+  function! g:Helptab()
+      setlocal number relativenumber
+      if len(nvim_list_wins()) > 1
+	  wincmd T
+      endif
+
+      setlocal nomodified
+      setlocal buflisted
+      " Complains that we can't modify any buffer. But its a local option so yes we can
+      silent setlocal nomodifiable
+
+      noremap <buffer> q <Cmd>q<CR>
+      " Check the rplugin/python3/pydoc.py file
+      noremap <buffer> P <Cmd>Pydoc<CR>
+  endfunction
+
+  augroup mantabs
+      autocmd!
+      autocmd Filetype man,help call g:Helptab()
+  augroup END
+
+  " Apr 23, 2019: Didn't know complete help was a thing.
+  " Oh holy shit that's awesome
+  command! -nargs=1 -complete=help Help call g:Helptab()
+
 endif
 
-if exists(":Man") != 2
+if exists('g:Man') != 2
   com -nargs=+ -complete=shellcmd Man call s:GetPage(<q-mods>, <f-args>)
   nmap <Leader>K :call <SID>PreGetPage(0)<CR>
   nmap <Plug>ManPreGetPage :call <SID>PreGetPage(0)<CR>
 endif
 
 " Define functions only once.
-if !exists("s:man_tag_depth")
+if !exists('s:man_tag_depth')
 
   let s:man_tag_depth = 0
 
-  let s:man_sect_arg = ""
-  let s:man_find_arg = "-w"
+  let s:man_sect_arg = ''
+  let s:man_find_arg = '-w'
   try
     if !has('win32') && $OSTYPE !~ 'cygwin\|linux' && system('uname -s') =~ 'SunOS' && system('uname -r') =~ '^5'
-      let s:man_sect_arg = "-s"
-      let s:man_find_arg = "-l"
+      let s:man_sect_arg = '-s'
+      let s:man_find_arg = '-l'
     endif
   catch /E145:/
     " Ignore the error in restricted mode
@@ -79,18 +108,18 @@ if !exists("s:man_tag_depth")
   func <SID>PreGetPage(cnt)
     if a:cnt == 0
       let old_isk = &iskeyword
-      if &ft == 'man'
+      if &filetype ==# 'man'
         setl iskeyword+=(,)
       endif
-      let str = expand("<cword>")
+      let str = expand('<cword>')
       let &l:iskeyword = old_isk
       let page = substitute(str, '(*\(\k\+\).*', '\1', '')
       let sect = substitute(str, '\(\k\+\)(\([^()]*\)).*', '\2', '')
       if match(sect, '^[0-9 ]\+$') == -1
-        let sect = ""
+        let sect = ''
       endif
       if sect == page
-        let sect = ""
+        let sect = ''
       endif
     else
       let sect = a:cnt
@@ -107,7 +136,7 @@ if !exists("s:man_tag_depth")
   endfunc
 
   func <SID>FindPage(sect, page)
-    let where = system("man ".s:man_find_arg.' '.s:GetCmdArg(a:sect, a:page))
+1    let where = system("man ".s:man_find_arg.' '.s:GetCmdArg(a:sect, a:page))
     if where !~ "^/"
       if matchstr(where, " [^ ]*$") !~ "^ /"
         return 0
@@ -223,15 +252,15 @@ if !exists("s:man_tag_depth")
   func <SID>PopPage()
     if s:man_tag_depth > 0
       let s:man_tag_depth = s:man_tag_depth - 1
-      exec "let s:man_tag_buf=s:man_tag_buf_".s:man_tag_depth
-      exec "let s:man_tag_lin=s:man_tag_lin_".s:man_tag_depth
-      exec "let s:man_tag_col=s:man_tag_col_".s:man_tag_depth
-      exec s:man_tag_buf."b"
+      exec 'let s:man_tag_buf=s:man_tag_buf_'.s:man_tag_depth
+      exec 'let s:man_tag_lin=s:man_tag_lin_'.s:man_tag_depth
+      exec 'let s:man_tag_col=s:man_tag_col_'.s:man_tag_depth
+      exec s:man_tag_buf.'b'
       exec s:man_tag_lin
-      exec "norm! ".s:man_tag_col."|"
-      exec "unlet s:man_tag_buf_".s:man_tag_depth
-      exec "unlet s:man_tag_lin_".s:man_tag_depth
-      exec "unlet s:man_tag_col_".s:man_tag_depth
+      exec 'norm! '.s:man_tag_col.'|'
+      exec 'unlet s:man_tag_buf_'.s:man_tag_depth
+      exec 'unlet s:man_tag_lin_'.s:man_tag_depth
+      exec 'unlet s:man_tag_col_'.s:man_tag_depth
       unlet s:man_tag_buf s:man_tag_lin s:man_tag_col
     endif
   endfunc

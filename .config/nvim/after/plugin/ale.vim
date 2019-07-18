@@ -5,7 +5,7 @@
     " Last Modified: Jul 08, 2019
 " ============================================================================
 
-" Guard: {{{1
+" Guard: 
 if !has_key(plugs, 'ale')
     finish
 endif
@@ -18,7 +18,7 @@ let g:did_ale_after_plugin = 1
 let s:cpo_save = &cpoptions
 set cpoptions&vim
 
-" Mappings: {{{1
+" Mappings: 
 
 " e for error t for toggle
 noremap <Leader>et <Cmd>ALEToggleBuffer<CR><bar>echo 'ALE toggled!'<CR>
@@ -38,7 +38,7 @@ noremap <Leader>* <Cmd>ALEFindReference<CR>
 
 noremap <Leader>a <Cmd>ALEInfo<CR>
 
-" Options: {{{1
+" Options: 
 
 " For buffer specific options, see ../ftplugin/*.vim
 let g:ale_fixers = { '*': [ 'remove_trailing_lines', 'trim_whitespace' ] }
@@ -57,8 +57,17 @@ let g:ale_list_vertical = 1
 let g:ale_set_signs = 1
 let g:ale_sign_column_always = 1
 
-" Virtualenvs: {{{2
-let g:ale_virtualenv_dir_names = []
+" Virtualenvs: 
+" Checkout ale/autoload/ale/python.vim this is the base definition
+let g:ale_virtualenv_dir_names = [
+    \   '.env',
+    \   '.venv',
+    \   'env',
+    \   've-py3',
+    \   've',
+    \   'virtualenv',
+    \   'venv',
+    \ ]
 
 if isdirectory('~/virtualenvs')
   let g:ale_virtualenv_dir_names += [expand('~/virtualenvs')]
@@ -72,7 +81,7 @@ endif
 
 let g:ale_cache_executable_check_failures = v:true
 
-" Node: {{{2
+" Node: 
 
 if !has('unix')
 
@@ -83,12 +92,12 @@ if !has('unix')
   endif
 endif
 
-" Quickfix: {{{2
+" Quickfix: 
 
 " By default ale uses location list which I never remember
 let g:ale_set_quickfix = 1
 let g:ale_set_loclist = 0
 
-" Atexit: {{{1
+" Atexit: 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

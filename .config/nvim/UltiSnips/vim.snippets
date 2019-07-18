@@ -5,9 +5,6 @@
 	# Last Modified: April 27, 2019
 # ============================================================================
 
-# TODO Use this funcs as snips and you'll be set for help files
-# https://github.com/google/vimdoc/blob/master/vimdoc/output.py
-
 #########################
 #    Personal snippets  #
 #########################
@@ -47,7 +44,7 @@ endsnippet
 
 snippet cpo "compatability options"
 let s:cpo_save = &cpoptions
-set cpoptions&vim
+set cpo-=C
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save
@@ -69,7 +66,7 @@ snippet header "standard Vim script file header" b
 " ============================================================================
 endsnippet
 
-snippet ft "Ftplugin guard" bs
+snippet ft "Ftplugin guard" b
 if exists('b:did_ftplugin') | finish | endif
 let b:did_ftplugin = 1
 
@@ -88,7 +85,6 @@ endif
 let ${2:b:current_syntax} = 1
 $0
 endsnippet
-
 
 snippet func "Autocompletes function name based on filename" b
 function! ${1:`expand('%') =~ 'autoload' ? substitute(matchstr(expand('%:p'),'autoload/\zs.*\ze.vim'),'[/\\]','#','g').'#' : ''`}${2:function_name}(${3}) abort
@@ -115,17 +111,17 @@ def sec_title(snip, t):
 	return ("*%s-%s*" % (file_start, sec_name)).rjust(78-len(t[1]))
 endglobal
 
-snippet sec "Section marker" sb
+snippet sec "Section marker" b
 ==============================================================================
 ${1:SECTION}`!p snip.rv = sec_title(snip, t)`
 endsnippet
 
-snippet ssec "Sub section marker" sb
+snippet ssec "Sub section marker" b
 ${1:Subsection}`!p snip.rv = sec_title(snip, t)
 snip += "-"*len(t[1])`
 endsnippet
 
-snippet sssec "Subsub Section marker" sb
+snippet sssec "Subsub Section marker" b
 ${1:SubSubsection}:`!p snip.rv = sec_title(snip, t)`
 endsnippet
 
@@ -141,26 +137,26 @@ endsnippet
 #  loops  #
 ###########
 
-snippet for "for ... in loop" s
+snippet for "for ... in loop"
 for ${1} in ${2}
 	${0:${VISUAL}}
 endfor
 endsnippet
 
-snippet for "for [key, value] in loop" s
+snippet for "for [key, value] in loop"
 for [${1},${2}] in items(${3})
 	${0}
 	unlet $1 $2
 endfor
 endsnippet
 
-snippet wh "while loop" s
+snippet wh "while loop"
 while ${1}
 	${0:${VISUAL:body}}
 endw
 endsnippet
 
-snippet if "if statement" sbm
+snippet if "if statement" b
 if ${1}
 	${0:${VISUAL:body}}
 endif
@@ -171,7 +167,7 @@ elseif ${1}
 	${0:${VISUAL:body}}
 endsnippet
 
-snippet ife "if ... else statement" s
+snippet ife "if ... else statement"
 if ${1}
 	${2:${VISUAL:body}}
 else
@@ -179,7 +175,7 @@ else
 endif
 endsnippet
 
-snippet aug "augroup ... autocmd block" bs
+snippet aug "augroup ... autocmd block" b
 augroup ${1:AU_NAME}
 	autocmd!
 	autocmd ${2:BufRead,BufNewFile} ${3:*.ext,*.ext3|<buffer[=N]>} $0
@@ -198,27 +194,27 @@ snippet bun "Vundle.vim Plugin definition"
 Plugin '${VISUAL:0}'
 endsnippet
 
-snippet plug "vim-plug Plugin definition" bs
+snippet plug "vim-plug Plugin definition" b
 Plug '${VISUAL:0}'
 endsnippet
 
-snippet plugdo "vim-plug Plugin definition with { 'do': '' }" bs
+snippet plugdo "vim-plug Plugin definition with { 'do': '' }" b
 Plug '${VISUAL:1}', { 'do': '${0}' }
 endsnippet
 
-snippet plugon "vim-plug Plugin definition with { 'on': '' }" bs
+snippet plugon "vim-plug Plugin definition with { 'on': '' }" b
 Plug '${VISUAL:1}', { 'on': '${0}' }
 endsnippet
 
-snippet plugfor "vim-plug Plugin definition with { 'for': '' }" bs
+snippet plugfor "vim-plug Plugin definition with { 'for': '' }" b
 Plug '${VISUAL:1}', { 'for': '${0}' }
 endsnippet
 
-snippet plugbr "vim-plug Plugin definition with { 'branch': '' }" bs
+snippet plugbr "vim-plug Plugin definition with { 'branch': '' }" b
 Plug '${VISUAL:1}', { 'branch': '${0}' }
 endsnippet
 
-snippet plugtag "vim-plug Plugin definition with { 'tag': '' }" bs
+snippet plugtag "vim-plug Plugin definition with { 'tag': '' }" b
 Plug '${VISUAL:1}', { 'tag': '${0}' }
 endsnippet
 
@@ -256,39 +252,39 @@ endsnippet
 #  mapping  #
 #############
 
-snippet m "map var var CR" bs
+snippet m "map var var CR" b
 map ${<Leader>${1}} ${2}${3:<CR>}
 endsnippet
 
-snippet no "noremap var var CR" bs
+snippet no "noremap var var CR" b
 noremap ${1} ${2}${3:<CR>}
 endsnippet
 
-snippet nno "nnoremap var var CR" bs
+snippet nno "nnoremap var var CR" b
 nnoremap ${1} ${2}${3:<CR>}
 endsnippet
 
-snippet vm "noremap var var CR" bs
+snippet vm "noremap var var CR" b
 vmap ${1} ${2}${3:<CR>}
 endsnippet
 
-snippet vno "vnoremap var var CR" bs
+snippet vno "vnoremap var var CR" b
 vnoremap ${1} ${2}${3:<CR>}
 endsnippet
 
-snippet im "imap var var CR" bs
+snippet im "imap var var CR" b
 imap ${1} ${2}${3:<CR>}
 endsnippet
 
-snippet ino "inoremap var var CR" bs
+snippet ino "inoremap var var CR" b
 inoremap ${1} ${2}${3:<CR>}
 endsnippet
 
-snippet cm "cmap var var CR" bs
+snippet cm "cmap var var CR" b
 cmap ${1} ${2}${3:<CR>}
 endsnippet
 
-snippet cnm "cnoremap var var CR" bs
+snippet cnm "cnoremap var var CR" b
 cnoremap ${1} ${2}${3:<CR>}
 endsnippet
 

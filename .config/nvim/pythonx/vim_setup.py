@@ -58,22 +58,25 @@ def _parse_arguments():
 
     """
     parser = argparse.ArgumentParser(
-            prog='Neovim automated installer.',
-            description='Installs and sets up neovim.')
+        prog='Neovim automated installer.',
+        description='Installs and sets up neovim.'
+    )
 
     parser.add_argument(
         '-d',
         '--plug-dir',
         nargs='?',
         metavar="Directory for vim-plug",
-        help='The directory that vim-plug is downloaded to.')
+        help='The directory that vim-plug is downloaded to.'
+    )
     parser.add_argument(
         "-p",
         "--packages",
         default='pip, pynvim',
         action='append',
         nargs='*',
-        help="Comma separated list of packages for pip to install.")
+        help="Comma separated list of packages for pip to install."
+    )
 
     args = parser.parse_args()
 
@@ -139,7 +142,8 @@ def urllib_dl(plug):
     from urllib.request import Request, urlopen
     from urllib.error import URLError, HTTPError
     req = Request(
-        "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim")
+        "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+    )
     try:
         response = urlopen(req)
     except URLError as e:
@@ -170,16 +174,22 @@ def termux_packages():
           should be assigned to something and returned right?
 
     """
-    output = subprocess.run(["pkg", "install", "vim-python", "python-dev"],
-                            capture_output=True)
+    output = subprocess.run(
+        ["pkg", "install", "vim-python", "python-dev"], capture_output=True
+    )
     return output
 
 
 def pip_install():
     """Run platform-independent pip install. Install both pynvim and neovim."""
-    output = subprocess.run([
+    output = subprocess.run(
+        [
             "pip", "install", "-U", "pip", "python-language-server[all]",
-            "pynvim", "neovim"], capture_output=True, check=True)
+            "pynvim", "neovim"
+        ],
+        capture_output=True,
+        check=True
+    )
     return output
 
 
@@ -191,13 +201,21 @@ def use_virtualenv(virtualenv, python_version):
         if virtualenv:
             # check if given directory is a virtualenv
             if not os.path.join(virtualenv, "bin/activate"):
-                raise Exception("Given directory {0} is not a virtualenv.".format(virtualenv))
+                raise Exception(
+                    "Given directory {0} is not a virtualenv.".
+                    format(virtualenv)
+                )
 
             context.virtualenv_path = virtualenv
             yield True
         else:
-            proc = subprocess.Popen("virtualenv env -p {0} >> {1}".format(python_version, context.logfile),
-                         shell=True, cwd=context.tempdir_path)
+            proc = subprocess.Popen(
+                "virtualenv env -p {0} >> {1}".format(
+                    python_version, context.logfile
+                ),
+                shell=True,
+                cwd=context.tempdir_path
+            )
             context.virtualenv_path = os.path.join(context.tempdir_path, "env")
             yield proc.wait() == 0
     finally:
@@ -213,8 +231,9 @@ def main():
     try:
         plugd = args.plugd
     except AttributeError:
-        plugd = os.path.join(home, ".local", "share", "nvim", "site",
-                             "autoload")
+        plugd = os.path.join(
+            home, ".local", "share", "nvim", "site", "autoload"
+        )
 
     user_machine.check_dir(plugd)
 

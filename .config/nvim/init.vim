@@ -325,32 +325,6 @@ augroup omnifunc
 augroup END
 
 " Functions_Commands: {{{1
-" Helptabs: {{{2
-" I've pretty heavily modified this one but junegunn gets the initial credit.
-function! g:Helptab()
-    setlocal number relativenumber
-    if len(nvim_list_wins()) > 1
-        wincmd T
-    endif
-
-    setlocal nomodified
-    setlocal buflisted
-    " Complains that we can't modify any buffer. But its a local option so yes we can
-    silent setlocal nomodifiable
-
-    noremap <buffer> q <Cmd>q<CR>
-    " Check the rplugin/python3/pydoc.py file
-    noremap <buffer> P <Cmd>Pydoc<CR>
-endfunction
-
-augroup mantabs
-    autocmd!
-    autocmd Filetype man,help call g:Helptab()
-augroup END
-
-" Apr 23, 2019: Didn't know complete help was a thing.
-" Oh holy shit that's awesome
-command! -nargs=1 -complete=help Help call g:Helptab()
 
 " Statusline: {{{2
 

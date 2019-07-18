@@ -94,6 +94,7 @@ function! Buf_Window_Mapping() abort
   " Resize them more easily. Finish more later. TODO
   noremap <C-w>< <Cmd>wincmd 5<<CR>
   noremap <C-w>> <Cmd>wincmd 5><CR>
+  noremap <C-w>+ <Cmd>wincmd 5+<CR>
 endfunction
 
 " Command Line: {{{1
@@ -177,6 +178,19 @@ function! TabMaps() abort
 
 endfunction
 
+" Navigate Windows More Easily: {{{1
+function! SpaceWindows()
+  noremap <Leader>ws <Cmd>windo s<CR>
+  noremap <Leader>wv <Cmd>windo v<CR>
+  noremap <Leader>ww <Cmd>windo w<CR>
+  " Split and edit file under the cursor
+  noremap <Leader>wf <Cmd>windo f<CR>
+  " Split and open the word under the cursor as a tag
+  noremap <Leader>w] <Cmd>windo ]<CR>
+  noremap <Leader>wc <Cmd>windo c<CR>
+  noremap <Leader>wo <Cmd>windo o<CR>
+endfunction
+
 " Unimpaired Mappings: {{{1
 
 function! UnImpairedWindows() abort
@@ -207,6 +221,7 @@ if !exists('no_plugin_maps') && !exists('no_windows_vim_maps')
   call g:SpaceBuffers()
   call TabMaps()
   call UnImpairedWindows()
+  call SpaceWindows()
 endif
 
 " Atexit: {{{1

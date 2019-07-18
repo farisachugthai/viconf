@@ -116,10 +116,14 @@ def escape(inp):
         if isinstance(obj, list):
             rv = as_unicode('[' + ','.join(conv(o) for o in obj) + ']')
         elif isinstance(obj, dict):
-            rv = as_unicode('{' + ','.join([
-                '%s:%s' % (conv(key), conv(value))
-                for key, value in obj.iteritems()
-            ]) + '}')
+            rv = as_unicode(
+                '{' + ','.join(
+                    [
+                        '%s:%s' % (conv(key), conv(value))
+                        for key, value in obj.iteritems()
+                    ]
+                ) + '}'
+            )
         else:
             rv = as_unicode('"%s"') % as_unicode(obj).replace('"', '\\"')
         return rv
@@ -219,7 +223,8 @@ def select(start, end):
         else:
             move_cmd += '%iG%i|' % virtual_position(end.line + 1, end.col + 1)
         move_cmd += 'o%iG%i|o\\<c-g>' % virtual_position(
-            start.line + 1, start.col + 1)
+            start.line + 1, start.col + 1
+        )
     feedkeys(move_cmd)
 
 
@@ -270,8 +275,10 @@ def _unmap_select_mode_mapping():
 
         for option in ('<buffer>', ''):
             # Put all smaps into a var, and then read the var
-            command(r"redir => _tmp_smaps | silent smap %s " % option +
-                    '| redir END')
+            command(
+                r"redir => _tmp_smaps | silent smap %s " % option +
+                '| redir END'
+            )
 
             # Check if any mappings where found
             if hasattr(vim, 'bindeval'):
@@ -296,8 +303,8 @@ def _unmap_select_mode_mapping():
             for map in maps:
                 # The first three chars are the modes, that might be listed.
                 # We are not interested in them here.
-                trig = map[3:].split()[0] if len(
-                    map[3:].split()) != 0 else None
+                trig = map[3:].split(
+                )[0] if len(map[3:].split()) != 0 else None
 
                 if trig is None:
                     continue
