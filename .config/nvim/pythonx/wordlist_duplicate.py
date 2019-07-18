@@ -4,6 +4,16 @@ If executed in the spell directory, one can run::
 
     python ../pythonx/wordlist_duplicate.py en.utf-8.add
 
+.. warning:: Still a work in progress
+
+    This file also will sort itself rendering it unusable!!! Still needs
+    debugging unfortunately.
+
+
+....Wait. I had sys.argv[:]...that means the file name was used as an argument.
+It should ignore itself if we go sys.argv[1:] right?
+
+
 """
 import logging
 import sys
@@ -63,7 +73,7 @@ def sortfile(spellfile):
 
 def main():
     """Execute the module."""
-    args = sys.argv[:]
+    args = sys.argv[1:]
     if len(args) < 1:
         sys.exit('Error. Please provide a path to the file(s) to edit')
 

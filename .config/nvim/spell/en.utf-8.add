@@ -1,5 +1,3 @@
-ACL
-ACLs
 ACPI
 ADB
 AICHE
@@ -238,10 +236,6 @@ Newbuntu
 NextCloud
 NodeJS
 NotebookApp
-NotebookApp
-NotebookApp
-NotebookApp
-NotebookApp
 NteractApp
 NumLock
 NumPy
@@ -306,10 +300,6 @@ PythonDataScienceHandbook
 Pythonesque
 QEMU
 QTConsole
-QTConsole
-QTConsole
-QTConsole
-QTConsole
 Qt5
 QtWebEngine
 Qubes
@@ -349,7 +339,6 @@ SSH1
 SSID
 STDOUT
 SVG
-SciPy
 SciPy
 Scikit
 Scrapy
@@ -519,7 +508,6 @@ autohotkey
 autoindenting
 autoload
 automodule
-automodule
 autossh
 backlinking
 backlinks
@@ -559,10 +547,6 @@ cURL
 cant/!
 cd
 cdrom
-certfile
-certfile
-certfile
-certfile
 certfile
 certifi
 chainmap
@@ -793,7 +777,6 @@ haskell
 helpgrep
 homie
 hostname
-hostnames
 hostnames
 html
 html2markdown
@@ -1251,10 +1234,6 @@ qrcode
 qt4
 qt5
 qtconsole
-qtconsole
-qtconsole
-qtconsole
-qtconsole
 quantserve
 quickfix
 quickhelp
@@ -1477,7 +1456,6 @@ todo
 todotxt
 toolchain
 toolstack
-toolstack
 torbirdy
 torbrowser
 torify
@@ -1664,12 +1642,5 @@ zlib
 zsh
 zshrc
 ||||||| merged common ancestors
-||||||| merged common ancestors
-||||||| merged common ancestors
-||||||| merged common ancestors
-||||||| merged common ancestors
 µBlock
 µMatrix
-µTP
-µTorrent
-µTorrent
