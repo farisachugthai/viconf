@@ -42,6 +42,7 @@ endif
 
 " Autocmd: Highlight 120 Chars: {{{1
 
+
 augroup pythonchars
     autocmd!
     autocmd FileType python highlight Excess ctermbg=DarkGrey guibg=Black
@@ -100,9 +101,10 @@ function! ALE_Python_Conf()
     if s:debug
         echomsg 'Did the function call?'
     endif
-    let b:ale_linters_explicit = 1
 
-    let g:ale_linters = extend(g:ale_linters, {'python': [ 'flake8', 'pydocstyle', 'pyls' ]})
+    let b:ale_linters = ['flake8', 'pydocstyle', 'pyls']
+
+    let b:ale_linters_explicit = 1
 
     let g:ale_python_pyls_config = {
           \   'pyls': {
@@ -119,28 +121,26 @@ function! ALE_Python_Conf()
 
     " The external program vim uses for gg=G can be configured
     " Hey you in the future. You can use :set *prg<Tab> and see all of the
-    " configuration options you have.
-    " Now you can also use gq for yapf
-    let g:ale_fixers = extend(g:ale_fixers, {'python': [
-          \ 'remove_trailing_lines',
-          \ 'trim_whitespace',
-          \ 'reorder-python-imports'
-          \ ]})
-
-    if executable('yapf')
-        let g:ale_fixers = extend(g:ale_fixers, {'python': ['yapf']})
-    else
-        if executable('autopep8')
-          let g:ale_fixers = extend(g:ale_fixers, {'python': ['autopep8']})
-        endif
-    endif
-
     let g:ale_virtualenv_dir_names = []
     if isdirectory('~/virtualenvs')
       let g:ale_virtualenv_dir_names += '~/virtualenvs'
     elseif isdirectory(expand('~/Anaconda3'))
       let g:ale_virtualenv_dir_names += expand('~/Anaconda3')
     endif
+
+  let b:ale_fixers = [
+        \ 'remove_trailing_lines',
+        \ 'trim_whitespace',
+        \ 'reorder-python-imports',
+        \ ]
+
+  if executable('yapf')
+      let b:ale_fixers += ['yapf']
+  else
+      if executable('autopep8')
+          let b:ale_fixers += ['autopep8']
+      endif
+  endif
 
 endfunction
 
@@ -154,7 +154,7 @@ endif
 
 " A bunch missing. Check :he your-runtime-path somewhere around there is a
 " good starter for writing an ftplugin
-let b:undo_ftplugin = 'set lbr< tw< cms< et< sts< ts< sw< cc< fdm< sua<'
+let b:undo_ftplugin = 'set lbr< tw< cms< et< sts< ts< sw< cc< fdm< kp< sua<'
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

@@ -774,6 +774,12 @@ if 0
   let g:niji_dark_colours = g:rbpt_colorpairs
   let g:niji_light_colours = g:rbpt_colorpairs
 
+  "}}}
+  " Signify: {{{
+
+  hi! link SignifySignAdd GruvboxGreenSign
+  hi! link SignifySignChange GruvboxAquaSign
+  hi! link SignifySignDelete GruvboxRedSign
 
   " }}}
   " Syntastic: {{{
@@ -850,14 +856,6 @@ endif
 
 " Jesus. Here are the plugins you currently have. We'll figure out a smarter way
 " to check if the plugin actually exists another time.
-
-" Signify: {{{
-
-hi! link SignifySignAdd GruvboxGreenSign
-hi! link SignifySignChange GruvboxAquaSign
-hi! link SignifySignDelete GruvboxRedSign
-
-" }}}
 
 " Startify: {{{
 
@@ -1022,7 +1020,8 @@ hi! link htmlTagName GruvboxAquaBold
 hi! link htmlArg GruvboxAqua
 
 hi! link htmlScriptTag GruvboxPurple
-hi! link htmlTagN GruvboxFg1
+" Literally why is this Fg1. Filepaths inside of <> change colors randomly
+hi! link htmlTagN GruvboxBlue
 hi! link htmlSpecialTagName GruvboxAquaBold
 
 call s:HL('htmlLink', s:fg4, s:none, s:underline)
@@ -1123,8 +1122,6 @@ hi default link vimCommentTitleLeader	vimCommentTitle
 " vimOperParen	vimOperParen
 " vimPatRegion	vimPatRegion
 " vimRegion	vimRegion
-
-" Randomly is the last letter in a set foo=value
 hi default link vimSet vimSetEqual
 
 " There's a highlighting group for the equals sign in a set option statement...
@@ -1264,7 +1261,7 @@ hi! link vimNorm	vimCommand
 hi! link vimNotFunc	vimCommand
 hi! link vimNotPatSep	vimString
 hi! link vimNotation	Special
-hi! link vimNumber	Number
+hi! link vimNumber GruvboxRed
 hi! link vimOper	Operator
 hi! link vimOperError	Error
 hi! link vimOption	PreProc

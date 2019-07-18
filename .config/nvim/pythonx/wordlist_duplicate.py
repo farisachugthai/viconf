@@ -1,57 +1,81 @@
+"""Fix duplicate entries in the spellfile.
 
+If executed in the spell directory, one can run::
+
+    python ../pythonx/wordlist_duplicate.py en.utf-8.add
+
+"""
+import logging
+import sys
+
+# import vim
+
+
+def fix_spellfile(wordlist):
+    """Take the old file and append it piecemeal to a new list.
+
+    This function checks that the old element exists, that the
+    word and the next word don't match, and that the item doesn't
+    start with an :kbd:`!`. These are words that are considered
+    incorrect and can be safely ignored.
+
+    Parameters
+    ----------
+    wordlist : list
+        List of correct words.
+    Returns
+    -------
+    new_wordlist : list
+        Filtered list of words.
+    """
+    new_wordlist = []
+    for i, j in enumerate(wordlist):
+        try:
+            if i > 0:
+                if wordlist[i] and wordlist[i] != wordlist[i + 1] \
                         and not wordlist[i].startswith('!'):
                     new_wordlist.append(j)
-                if wordlist[i] and wordlist[i] != wordlist[i + 1] \
+        except IndexError:  # Goes until its 1 too high idk how to stop that
             break
-            f.writelines(fixed)
-            if i > 0:
-        File to fix.
-        Filtered list of words.
-        List of correct words.
-        Sorted list of words.
-        except IndexError:  # it will go until its 1 too high idk how to stop that
-        fixed = fix_spellfile(spell_list)
-        sorted_spellfile = sorted(spellobj)
-        spell_list = sortfile(i)
-        spellobj = f.readlines()
-        sys.exit('Error. Please provide a path to the file(s) to edit')
-        try:
-        with open(i, 'wt') as f:
-    """
-    """Execute the module."""
-    """Sort `spellfile` as the implemented fix only works if sorted.
-    """Take the old file and append it piecemeal to a new list.
-    -------
-    ----------
-    Parameters
-    Returns
-    This function checks that the old element exists, that the
-    args = sys.argv[:]
-    for i in args[0:]:
-    for i, j in enumerate(wordlist):
-    if len(args) < 1:
-    incorrect and can be safely ignored.
-    logging.basicConfig(level=logging.DEBUG)
-    logging.debug('Args: ', args)
-    main()
-    new_wordlist : list
-    new_wordlist = []
-    python ../pythonx/wordlist_duplicate.py en.utf-8.add
+
     return new_wordlist
-    return sorted_spellfile
-    sorted_spellfile : list
-    spellfile : str (Path-like)
-    start with an :kbd:`!`. These are words that are considered
-    with open(spellfile, 'rt') as f:
-    word and the next word don't match, and that the item doesn't
-    wordlist : list
-"""
-"""Fix duplicate entries in the spellfile.
-# import vim
-Damnit! Doesn't work. Just silently deleted the file...:/
-If executed in the spell directory, one can run::
-def fix_spellfile(wordlist):
-def main():
+
+
 def sortfile(spellfile):
+    """Sort `spellfile` as the implemented fix only works if sorted.
+
+    Parameters
+    ----------
+    spellfile : str (Path-like)
+        File to fix.
+
+    Returns
+    -------
+    sorted_spellfile : list
+        Sorted list of words.
+    """
+    with open(spellfile, 'rt') as f:
+        spellobj = f.readlines()
+
+    sorted_spellfile = sorted(spellobj)
+    return sorted_spellfile
+
+
+def main():
+    """Execute the module."""
+    args = sys.argv[:]
+    if len(args) < 1:
+        sys.exit('Error. Please provide a path to the file(s) to edit')
+
+    logging.basicConfig(level=logging.DEBUG)
+
+    logging.debug('Args: ', args)
+    for i in args[0:]:
+        spell_list = sortfile(i)
+        fixed = fix_spellfile(spell_list)
+        with open(i, 'wt') as f:
+            f.writelines(fixed)
+
+
 if __name__ == '__main__':
-import logging
+    main()

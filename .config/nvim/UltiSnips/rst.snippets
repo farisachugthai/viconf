@@ -11,7 +11,7 @@ extends python
 
 global !p
 
-from rst_helper import *
+from snippets_helper import make_items,
 
 endglobal
 
@@ -228,57 +228,57 @@ endsnippet
 
 snippet title "Title with =" b
 ${1:${VISUAL:Section name}}
-`!p snip.rv = rst_char_len(t[1])*'='`
+`!p snip.rv = len(t[1])*'='`
 endsnippet
 
 snippet title- "Title with -" b
 ${1:${VISUAL:Subsection name}}
-`!p snip.rv = rst_char_len(t[1])*'-'`
+`!p snip.rv = len(t[1])*'-'`
 endsnippet
 
 snippet part "Part"
 ${1:${VISUAL:Part name}}
-`!p snip.rv = rst_char_len(t[1])*'#'`
+`!p snip.rv = len(t[1])*'#'`
 endsnippet
 
 snippet chap "Chapter"
 ${1:${VISUAL:Chapter name}}
-`!p snip.rv = rst_char_len(t[1])*'*'`
+`!p snip.rv = len(t[1])*'*'`
 endsnippet
 
 snippet sec "Section"
 ${1:${VISUAL:Section name}}
-`!p snip.rv = rst_char_len(t[1])*'='`
+`!p snip.rv = len(t[1])*'='`
 endsnippet
 
 snippet h1 "Header 1" mwb
 ${1:${VISUAL:Section name}}
-`!p snip.rv = rst_char_len(t[1])*'='`
+`!p snip.rv = len(t[1])*'='`
 endsnippet
 
 snippet ssec "Subsection"
 ${1:${VISUAL:Subsection name}}
-`!p snip.rv = rst_char_len(t[1])*'-'`
+`!p snip.rv = len(t[1])*'-'`
 endsnippet
 
 snippet h2 "Header 2" bwm
 ${1:${VISUAL:Subsection name}}
-`!p snip.rv = rst_char_len(t[1])*'-'`
+`!p snip.rv = len(t[1])*'-'`
 endsnippet
 
 snippet sssec "Subsubsection"
 ${1:${VISUAL:Subsubsection name}}
-`!p snip.rv = rst_char_len(t[1])*'^'`
+`!p snip.rv = len(t[1])*'^'`
 endsnippet
 
 snippet h3 "Header three" bmw
 ${1:${VISUAL:Subsubsection name}}
-`!p snip.rv = rst_char_len(t[1])*'^'`
+`!p snip.rv = len(t[1])*'^'`
 endsnippet
 
 snippet para "Paragraph"
 ${1:${VISUAL:Paragraph name}} $0
-`!p snip.rv = rst_char_len(t[1])*'"'`
+`!p snip.rv = len(t[1])*'"'`
 endsnippet
 
 
@@ -294,99 +294,6 @@ $0
 `!p
 snip.rv = make_items(match.groupdict()['num'], 1)
 `
-endsnippet
-
-######################
-#  match snippets :  #
-######################
-
-# img, inc, fig
-snippet id "Includable Directives" b
-`!p
-real_name=real_filename(ospath.basename(t[2]))
-di=t[1][:2]
-
-link=""
-content=""
-
-if di == 'im':
-    link = "|{0}|".format(real_name)
-
-if di == 'fi':
-    content="""
-    :alt: {0}
-
-    {0}""".format(real_name)
-`
-..`!p snip.rv = " %s" % link if link else ""` $1`!p
-snip.rv=complete(t[1], INCLUDABLE_DIRECTIVES)
-`:: ${2:${VISUAL:file}}`!p
-if content:
-    snip.rv +="    "+content`
-`!p
-# Tip of whether file is exist in comment type
-if not check_file_exist(path, t[2]):
-    snip.rv='.. FILE {0} does not exist'.format(t[2])
-else:
-    snip.rv=""
-`$0
-endsnippet
-
-snippet di "Directives" b
-.. $1`!p snip.rv=complete(t[1], DIRECTIVES)`:: $2
-
-   ${3:${VISUAL:Content}}
-$0
-endsnippet
-
-snippet nd "None Content Directives" b
-.. $1`!p snip.rv=complete(t[1], NONE_CONTENT_DIRECTIVES)`:: $2
-$0
-endsnippet
-
-snippet sa "Specific Admonitions" b
-.. $1`!p snip.rv =complete(t[1], SPECIFIC_ADMONITIONS)`::
-
-   ${2:${VISUAL:Content}}
-
-$0
-endsnippet
-
-#it will be trigger at start of line or after a word
-snippet ro "Text Roles" w
-\ :$1`!p snip.rv=complete(t[1],
-                          TEXT_ROLES+look_up_directives(TEXT_ROLES_REGEX,
-                                                        path))`:\`$2\`\
-endsnippet
-
-snippet eu "Embedded URI" i
-`!p
-if has_cjk(vim.current.line):
-    snip.rv = "\ "`\`${1:${VISUAL:Text}} <${2:URI}>\`_`!p
-if has_cjk(vim.current.line):
-    snip.rv ="\ "
-else:
-    snip.rv = ""
-`$0
-endsnippet
-
-snippet fnt "Footnote or Citation" i
-[${1:Label}]_ $0
-
-.. [$1] ${2:Reference}
-endsnippet
-
-# Only for Nikola — Static Site Generator
-snippet chart "Pygal chart for Nikola" b
-.. chart:: $1`!p snip.rv=complete(t[1], CHART_TYPES)`
-   :title: '${2:Browser usage evolution (in %)}'
-   :x_labels: [${3:"2002", "2003", "2004", "2005", "2006", "2007"}]
-
-   'Firefox', [None, None, 0, 16.6, 25, 31]
-   'Chrome',  [None, None, None, None, None, None]
-   'IE',      [85.8, 84.6, 84.7, 74.5, 66, 58.6]
-   'Others',  [14.2, 15.4, 15.3, 8.9, 9, 10.4]
-$0
 endsnippet
 
 

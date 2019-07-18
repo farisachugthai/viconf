@@ -36,21 +36,18 @@ if exists(':GuiFont') == 2
 endif
 
 " Shellslash And Fileformats: {{{1
-"
+
 function! g:Cmd()
-
-  " Moved out of the init.
-  " How do i check if I'm on cmd or powershell?
-  " might need to individually set the envvar SHELL in a startup script for each
   set shell=cmd.exe
-
 endfunction
 
 if exists('+shellslash')   " don't drop the +!
   set shellslash
 endif
 
-set fileformats=dos,unix
+" In usr_41 it's mentioned that files formatted with dos formatting won't
+" run vim scripts correctly so holy shit that might explain a hell of a lot
+set fileformats=unix,dos
 
 " Other: {{{1
 " rewrite the s:InstallPlug() function so that win32 can handle it.
@@ -62,6 +59,13 @@ execute 'source ' . g:UglyUltiSnipsHack
 
 function! g:PowerShell() abort
 
+  " Set up powershell as the system shell in Neovim
+  " Moved out of the init.
+  " The below is from the nvim help docs.
+  " set shell=powershell shellpipe=\| shellredir=> shellxquote=
+  " let &shellcmdflag='-NoLogo  -ExecutionPolicy RemoteSigned -Command $* '
+  " Should I -NoExit this?
+
   " Here goes...
   unlet! $COMSPEC
   let $COMSPEC = 'C:/Program Files/PowerShell/6/pwsh.exe'
@@ -69,11 +73,6 @@ function! g:PowerShell() abort
   let $SHELL = 'C:/Program Files/PowerShell/6/pwsh.exe'
   set shell=pwsh.exe
   let &shellcmdflag = '-Command $* '
-
-  " The below is from the nvim help docs.
-  " set shell=powershell shellpipe=\| shellredir=> shellxquote=
-  " let &shellcmdflag='-NoLogo  -ExecutionPolicy RemoteSigned -Command $* '
-  " Should I -NoExit this?
 
 endfunction
 

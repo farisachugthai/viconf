@@ -16,6 +16,12 @@ import string
 
 import vim
 
+from os import path as ospath
+# I swear the snip option has a few of these ready to go
+import re
+from collections import Counter
+
+
 
 def complete(tab, opts):
     """Get options that start with tab.
@@ -410,3 +416,27 @@ def create_table(snip):
 
     # expand anonymous snippet
     snip.expand_anon(anon_snippet_table)
+
+
+
+def make_items(times, leading='+'):
+    """Make lines with leading char multiple times.
+
+    So wait why is this set up so that times is a keyword argument...?
+    Couldn't you just go times=None and then if times is None: times = len(t[0])
+    like wtf?
+
+    Used by snippet li(st)? and for olist.
+
+    :param: times, how many times you need
+    :param: leading, leading character
+
+    """
+    times = int(times)
+    if leading == 1:
+        msg = ""
+        for x in range(1, times + 1):
+            msg += "%s. Item\n" % x
+        return msg
+    else:
+        return ("%s Item\n" % leading) * times
