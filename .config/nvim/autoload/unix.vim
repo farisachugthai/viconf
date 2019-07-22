@@ -1,3 +1,5 @@
+" Autoloaded unix style functions
+
 " ----------------------------------------------------------------------------
 " tmux
 " ----------------------------------------------------------------------------
@@ -5,7 +7,7 @@
 
 " Guards: {{{1
 let s:cpo_save = &cpoptions
-set cpoptions&vim
+set cpoptions-=c
 
 " Functions: {{{1
 
@@ -24,7 +26,7 @@ function! s:unix#tmux_map(key, dest)
 endfunction
 
 
-function! s:unix#UnixOptions() abort
+function! unix#UnixOptions() abort
   " These conditions only ever exist on Unix. Only run them if that's what
   " we're using
 

@@ -8,7 +8,7 @@
 " Guard: {{{1
 scriptencoding utf-8
 let s:cpo_save = &cpoptions
-set cpoptions&vim
+set cpoptions-=c
 " Note that this will only work on neovim as it it makes a call
 
 " guard
@@ -30,6 +30,7 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-jdaddy'
+Plug 'tpope/vim-markdown'
 Plug 'w0rp/ale'
 
 if !empty(g:windows)

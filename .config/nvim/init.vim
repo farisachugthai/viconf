@@ -123,12 +123,8 @@ end
 
 " Global Options: {{{1
 " Pep8 Global Options: {{{2
-if &tabstop > 4
-    set tabstop=4           " show existing tab with 4 spaces width
-endif
-if &shiftwidth > 4
-    set shiftwidth=4        " when indenting with '>', use 4 spaces width
-endif
+if &tabstop > 4 | set tabstop=4 | endif
+if &shiftwidth > 4 | set shiftwidth=4 | endif
 set expandtab smarttab      " On pressing tab, insert 4 spaces
 set softtabstop=4
 let g:python_highlight_all = 1
@@ -210,7 +206,7 @@ set showfulltag
 set mouse=a
 set isfname-==
 
-set autochdir
+if has('unix') | set autochdir | endif     " I think this is what's killing windows
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
 " Filler lines to keep text synced, 3 lines of context on diffs, don't diff hidden files,default foldcolumn is 2
@@ -220,7 +216,7 @@ set diffopt=filler,context:3,hiddenoff,foldcolumn:1
 endif
 
 set modeline
-set browsedir="buffer"                  " which directory is used for the file browser
+set autochdir browsedir="buffer"   " which directory is used for the file browser
 
 let &showbreak = '↳ '                   " Indent wrapped lines correctly
 set breakindent

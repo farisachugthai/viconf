@@ -162,7 +162,9 @@ Gravatar
 Gruvbox
 GuiMacro
 Gvim
+HLS
 HMAC
+HSV
 HTTPServer
 Harleysville
 Hettinger
@@ -176,6 +178,7 @@ IPython7
 ISE
 ISO9660
 Importlib
+InteractiveShell
 JQuery
 Jinja2
 Junegunn
@@ -448,6 +451,7 @@ XenServer
 Xenial
 Xorg
 Xresources
+YIQ
 YouCompleteMe
 YouTube
 ZeroNet
@@ -1014,6 +1018,7 @@ miniconda2
 miniconda3
 mit600
 mitm
+mixins
 mkdir
 mklink
 mkspell

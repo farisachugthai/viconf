@@ -8,19 +8,16 @@
 " Guard: {{{1
 let s:debug = 1
 
-if exists('g:loaded_winrc') || &compatible || v:version < 700
-	finish
-endif
-
 if s:debug
   " if were debugging don't define it I'll probably source this file
   " repeatedly
+  echomsg 'Sourced winrc'
 else
   let g:loaded_winrc = 1
 endif
 
 let s:cpo_save = &cpoptions
-set cpoptions&vim
+set cpoptions-=c
 
 " Font: {{{1
 " Should note in the future the pros and cons of checking the existence of the
@@ -32,13 +29,22 @@ set cpoptions&vim
 " too....
 if exists(':GuiFont') == 2
   " warning: font hack reports bad fixed pitch metrics.
-  execute 'GuiFont Hack:h12'
+  execute 'GuiFont Hack:h12:cANSI'
+  " HEY THIS ACTUALLY WORKS! And if you run this from ConEmu you don't get the
+  " bad fixed pitch metrics error anymore!
+
 endif
 
 " Shellslash And Fileformats: {{{1
 
 function! g:Cmd()
+
+  " All the defaults when running cmd as comspec on windows 10
   set shell=cmd.exe
+  set shellcmdflag=/s\ /c
+  set shellpipe=>%s\ 2>&1
+  set shellredir=>%s\ 2>&1
+  set shellxquote="
 endfunction
 
 if exists('+shellslash')   " don't drop the +!

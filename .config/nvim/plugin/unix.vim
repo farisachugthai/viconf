@@ -114,6 +114,24 @@ endif
 noremap <silent> <C-x>o <Cmd>wincmd W<CR>
 
 
+" Git: {{{1
+
+augroup gitconf
+    " Set UTF-8 as the default encoding for commit messages
+    autocmd BufReadPre COMMIT_EDITMSG,MERGE_MSG,git-rebase-todo setlocal fileencodings=utf-8
+
+    " Remember the positions in files with some git-specific exceptions"
+    autocmd BufReadPost *
+      \ if line("'\"") > 0 && line("'\"") <= line("$")
+      \           && &filetype !~# 'commit\|gitrebase'
+      \           && expand("%") !~ "ADD_EDIT.patch"
+      \           && expand("%") !~ "addp-hunk-edit.diff" |
+      \   exe "normal g`\"" |
+      \ endif
+
+      autocmd BufNewFile,BufRead *.patch set filetype=diff
+
+augroup END
 " Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

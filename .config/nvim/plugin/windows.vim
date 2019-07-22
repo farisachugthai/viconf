@@ -2,10 +2,10 @@
   " File: windows.vim
   " Author: Faris Chugthai
   " Description: Plugin with functions and commands for vim windows
-  " Last Modified: May 03, 2019
+  " Last Modified: Jul 19, 2019
 " ============================================================================
 
-" Guard: {{{1
+" Guard: 
 if exists('g:did_windows_plugin') || &compatible || v:version < 700
   finish
 endif
@@ -14,10 +14,7 @@ let g:did_windows_plugin = 1
 let s:cpo_save = &cpoptions
 set cpoptions&vim
 
-" Here's a bunch from the nvim api. I wanna start experimenting with that and
-" see how it goes
-
-" EchoRTP: {{{1
+" EchoRTP: 
 " The nvim API is seriously fantastic.
 
 function! g:EchoRTP()
@@ -30,10 +27,10 @@ nnoremap <Leader>rt call g:EchoRTP()
 
 command! -nargs=0 EchoRTP call g:EchoRTP()
 
-" PreviewWord: {{{1
+" PreviewWord: 
 
 " Open a tag for the word under the cursor in the preview window.
-" Could definitely do with a mapping
+" TODO: Could definitely do with a mapping
 
 function! g:PreviewWord() abort
 " From :he cursorhold-example
@@ -73,7 +70,7 @@ function! g:PreviewWord() abort
   endif
 endfunction
 
-" General Mappings: {{{1
+" General Mappings: 
 " This is specifically for ftplugins but why not add a check here regardless?
 " <						*no_plugin_maps*
 " 4. Disable defining mappings for all filetypes by setting a variable: >
@@ -92,12 +89,13 @@ function! Buf_Window_Mapping() abort
   noremap <C-l> <Cmd>wincmd l<CR>
 
   " Resize them more easily. Finish more later. TODO
-  noremap <C-w>< <Cmd>wincmd 5<<CR>
-  noremap <C-w>> <Cmd>wincmd 5><CR>
-  noremap <C-w>+ <Cmd>wincmd 5+<CR>
+  noremap <C-w>< <Cmd>5wincmd <<CR>
+  noremap <C-w>> <Cmd>5wincmd ><CR>
+  noremap <C-w>+ <Cmd>5wincmd +<CR>
+  noremap <C-w>- <Cmd>5wincmd -<CR>
 endfunction
 
-" Command Line: {{{1
+" Command Line: 
 " It's annoying you lose a whole command from a typo
 cnoremap <Esc> <nop>
 " However I still need the functionality
@@ -113,13 +111,13 @@ noremap! <F1> <Esc>
 
 
 
-  " ALT Key Window Navigation: {{{1
+  " ALT Key Window Navigation: 
 function! Alt_Key_Navigation() abort
   " Originally this inspired primarily for terminal use but why not put it everywhere?
-  noremap <A-h> <C-w>h
-  noremap <A-j> <C-w>j
-  noremap <A-k> <C-w>k
-  noremap <A-l> <C-w>l
+  noremap  <A-h> <C-w>h
+  noremap  <A-j> <C-w>j
+  noremap  <A-k> <C-w>k
+  noremap  <A-l> <C-w>l
   noremap! <A-h> <C-w>h
   noremap! <A-j> <C-w>j
   noremap! <A-k> <C-w>k
@@ -127,7 +125,7 @@ function! Alt_Key_Navigation() abort
 endfunction
 
 
-" Navigate Buffers More Easily: {{{1
+" Navigate Buffers More Easily: 
 
 function! g:SpaceBuffers() abort
   noremap <Leader>bb <Cmd>buffers<CR>
@@ -142,7 +140,7 @@ function! g:SpaceBuffers() abort
   " noremap <Leader>bo <Cmd>bonly<CR>
 endfunction
 
-" Navigate Tabs More Easily: {{{1
+" Navigate Tabs More Easily: 
 
 function! TabMaps() abort
   " First check we have more than 1 tho.
@@ -178,20 +176,20 @@ function! TabMaps() abort
 
 endfunction
 
-" Navigate Windows More Easily: {{{1
+" Navigate Windows More Easily: 
 function! SpaceWindows()
-  noremap <Leader>ws <Cmd>windo s<CR>
-  noremap <Leader>wv <Cmd>windo v<CR>
-  noremap <Leader>ww <Cmd>windo w<CR>
+  noremap <Leader>ws <Cmd>wincmd s<CR>
+  noremap <Leader>wv <Cmd>wincmd v<CR>
+  noremap <Leader>ww <Cmd>wincmd w<CR>
   " Split and edit file under the cursor
-  noremap <Leader>wf <Cmd>windo f<CR>
+  noremap <Leader>wf <Cmd>wincmd f<CR>
   " Split and open the word under the cursor as a tag
-  noremap <Leader>w] <Cmd>windo ]<CR>
-  noremap <Leader>wc <Cmd>windo c<CR>
-  noremap <Leader>wo <Cmd>windo o<CR>
+  noremap <Leader>w] <Cmd>wincmd ]<CR>
+  noremap <Leader>wc <Cmd>wincmd c<CR>
+  noremap <Leader>wo <Cmd>wincmd o<CR>
 endfunction
 
-" Unimpaired Mappings: {{{1
+" Unimpaired Mappings: 
 
 function! UnImpairedWindows() abort
   " Map quickfix list, buffers, windows and tabs to *[ and *]
@@ -213,7 +211,7 @@ function! UnImpairedWindows() abort
   noremap [T <Cmd>tabfirst<CR>
 endfunction
 
-" Call Functions: {{{1
+" Call Functions: 
 
 if !exists('no_plugin_maps') && !exists('no_windows_vim_maps')
   call Buf_Window_Mapping()
@@ -224,7 +222,7 @@ if !exists('no_plugin_maps') && !exists('no_windows_vim_maps')
   call SpaceWindows()
 endif
 
-" Atexit: {{{1
+" Atexit: 
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

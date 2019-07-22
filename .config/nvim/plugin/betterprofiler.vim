@@ -12,7 +12,7 @@ endif
 let g:did_better_profiler_vim_plugin = 1
 
 let s:cpo_save = &cpoptions
-set cpoptions&vim
+set cpoptions-=c
 
 if !has('profile') || !has('reltime')  " timing functionality
   finish
@@ -27,16 +27,28 @@ endif
 
 function! g:BetterProfiler(fname) abort
   " Because Vim's built in profiling capabilities are nonsensical like wtf?
-  profile! start tempfile.log
 
   " Toggle debugging
-  let s:Debug = 0
+  let s:Debug = 1
+
+  let s:logfile = expand(stdpath('data') . '/site/profile.log')
+  profile! start s:logfile
 
   if s:Debug
-    " echomsg fname actually causes an error so that's good i guess
-    echomsg a:fname
+  " echomsg fname actually causes an error so that's good i guess
+    echomsg string(a:fname)
   endif
 
+" :prof[ile][!] file {pattern}
+" 		Profile script file that matches the pattern {pattern}.
+" 		See |:debug-name| for how {pattern} is used.
+" 		This only profiles the script itself, not the functions
+" 		defined in it.
+" 		When the [!] is added then all functions defined in the script
+" 		will also be profiled.
+" 		Note that profiling only starts when the script is loaded
+" 		after this command.  A :profile command in the script itself
+" 		won't work.
   profile file a:fname
   source a:fname
   profile stop
@@ -58,7 +70,8 @@ function! s:profile(bang)
     profile pause
     noautocmd qall
   else
-    profile start expand('$_ROOT') . 'tmp/profile.log'
+    let s:logfile = expand(stdpath('data') . '/site/profile.log')
+    profile start s:logfile
     profile func *
     profile file *
   endif

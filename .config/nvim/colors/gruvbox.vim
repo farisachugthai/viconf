@@ -1103,10 +1103,13 @@ hi default link vimCommentTitleLeader	vimCommentTitle
 " vimHiTermcap	vimHiTermcap
 " vimIskList	vimIskList
 " vimLuaRegion	vimLuaRegion
-" vimMapLhs	vimMapLhs
 " vimMapModErr	vimMapModErr
-" vimMapRhs	vimMapRhs
-" vimMapRhsExtend	vimMapRhsExtend
+
+" Vim notation was the only reason that mappings were getting highlighted
+" Randomly they wouldn't
+hi default link vimMapLhs vimNotation
+hi default link vimMapRhs vimNotation
+hi default link vimMapRhsExtend	vimNotation
 " vimMenuBang	vimMenuBang
 " vimMenuMap	vimMenuMap
 " vimMenuPriority	vimMenuPriority
