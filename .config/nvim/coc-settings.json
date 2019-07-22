@@ -11,8 +11,14 @@
   "coc.preferences.extensionUpdateCheck": "daily",
   "coc.preferences.currentFunctionSymbolAutoUpdate": true,
   "python.autoComplete.addBrackets": true,
+  "python.formatting.provider": "yapf",
+  "python.jediEnabled": true,
+  "python.linting.banditEnabled": false,
+  "python.linting.flake8Enabled": true,
+  "python.linting.pydocstyleEnabled": true,
   "python.linting.pylintEnabled": false,
   "python.terminal.executeInFileDir": true,
+  "python.trace.server": "messages",
   "python.venvFolders": [
     "~/virtualenvs",
     "~/.local/share/virtualenvs/"
@@ -21,10 +27,10 @@
     "python": {
       "command": "python",
       "args": [
-        "-mpyls",
+        "-m pyls",
         "-vv",
         "--log-file",
-        "/tmp/lsp_python.log"
+        "~/.local/share/nvim/site/lsp_python.log"
       ],
       "trace.server": "verbose",
       "filetypes": [
@@ -65,10 +71,10 @@
               "enabled": true
             },
             "pycodestyle": {
-              "enabled": true
+              "enabled": false
             },
             "pydocstyle": {
-              "enabled": false,
+              "enabled": true,
               "match": "(?!test_).*\\.py",
               "matchDir": "[^\\.].*"
             },
@@ -103,7 +109,6 @@
     "<C-t>" : "action : tabe",
     "<CR>"  : "action : select"
   },
-  "python.linting.banditEnabled": false,
   "coc.preferences.formatOnSaveFiletypes":["javascript", "html", "css", "vim", "bash", "powershell"],
   "diagnostic.checkCurrentLine": true,
   "diagnostic.displayByAle": true,

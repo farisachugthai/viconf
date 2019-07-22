@@ -7,16 +7,13 @@
 "
 " Guards: {{{1
 
-if exists('g:did_autoload_syncom_vim') || &cp || v:version < 700
+if exists('g:did_autoload_syncom_vim') || &compatible || v:version < 700
     finish
 endif
 let g:did_autoload_syncom_vim = 1
 
 let s:cpo_save = &cpoptions
-set cpoptions&vim
-
-let &cpoptions = s:cpo_save
-unlet s:cpo_save
+set cpoptions-=c
 
 " Syntax Highlighting Functions: {{{1
 
@@ -34,19 +31,17 @@ function! syncom#HiC() abort
   echo 'Highlighting group: ' . synIDattr(synID(line('.'), col('.'), 1), 'name')
   echo 'Foreground color: ' . synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'fg')
 
-  endfunction
+endfunction
 
 
 " HiDebug: {{{1
 
-function! s:syncom#HiD() abort
+function! syncom#HiD() abort
 
   " TODO: Debug
-  echo join(map(synstack(line('.'), col('.')), 'synIDattr(id, "name")') '\n')
+  echo join(map(synstack(line('.'), col('.')), 'synIDattr(id, "name")'), '\n')
 
 endfunction
-
-" command! HiD call <SID>HiD()
 
 " HiAll: Now utilize quickfix {{{1
 
@@ -116,3 +111,7 @@ function! g:syncom#hitest() abort
   endtry
 
 endfunction
+
+" Atexit: {{{1
+let &cpoptions = s:cpo_save
+unlet s:cpo_save

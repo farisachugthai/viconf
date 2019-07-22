@@ -7,10 +7,7 @@
 
 " Guards: {{{1
 let s:cpo_save = &cpoptions
-set cpoptions&vim
-
-let s:cpo_save = &cpoptions
-set cpoptions&vim
+set cpoptions-=c
 
 " Original Implementation: {{{1
 
@@ -38,12 +35,14 @@ function! ALE_JSON_Conf() abort
     echomsg 'JSON ftplugin was called'
   endif
 
+  let b:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
+
   if executable('prettier')
-    let g:ale_fixers += {'json': ['prettier']}
+    let b:ale_fixers += ['prettier']
   endif
 
   if executable('jq')
-    let g:ale_fixers += {'json': ['jq']}
+    let b:ale_fixers += ['jq']
   endif
 
 endfunction

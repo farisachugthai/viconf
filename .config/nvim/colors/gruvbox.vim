@@ -705,7 +705,6 @@ endif
 
 " }}}
 " Plugin specific -------------------------------------------------------------
-
 " AKA Plugins You Don't Have: {{{
 
 if 0
@@ -851,7 +850,6 @@ call s:HL('multiple_cursors_visual', s:none, s:bg2)
 endif
 
 " }}}
-
 " Plugins You Have: {{{
 
 " Jesus. Here are the plugins you currently have. We'll figure out a smarter way
@@ -923,9 +921,7 @@ hi! link TagbarHelp Title
 " }}}
 
 " }}}
-
 " Filetype specific -----------------------------------------------------------
-
 " Man.vim: {{{
 " Define the default highlighting.
 " Only when an item doesn't have highlighting yet
@@ -1438,7 +1434,6 @@ hi! link javaScriptNull GruvboxPurple
 hi! link javaScriptParens GruvboxFg3
 
 " }}}
-
 " YAJS: {{{
 hi! link javascriptArrayMethod GruvboxFg2
 hi! link javascriptArrayStaticMethod GruvboxFg2
@@ -1498,7 +1493,6 @@ hi! link javascriptVariable GruvboxRed
 hi! link javascriptYield GruvboxRed
 
 " }}}
-
 " PanglossJS: {{{
 
 hi! link jsClassKeyword GruvboxAqua
@@ -1795,7 +1789,6 @@ hi! link jsonBraces GruvboxFg1
 hi! link jsonString GruvboxFg1
 
 " }}}
-
 
 " Functions -------------------------------------------------------------------
 " Search Highlighting Cursor {{{

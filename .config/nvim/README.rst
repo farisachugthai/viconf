@@ -13,6 +13,7 @@ First I'll go over setting basic options.
 
 Options
 =========
+
 The first and most obvious file is the :doc:`init.vim`. We can setup
 the base options like so:
 
@@ -66,6 +67,19 @@ a variable it recognizes and not defining our own. The single quotes are
 still required; however I find this more manageable than adding a `\\``
 before every single space.
 
+Virtualedit
+------------
+
+.. code-block:: vim
+
+   set virtualedit=all
+
+It allows you to move the cursor anywhere in the window.
+If you enter characters or insert a visual block, Vim will add whatever
+spaces are required to the left of the inserted characters to keep
+them in place. Virtual edit mode makes it simple to edit tabular data.
+Turn it off with ``:set virtualedit=.``
+
 Environment Variables
 =====================
 
@@ -113,18 +127,37 @@ The variable of importance is ``runtimepath``. The varying
 directories all affect how different settings are recorded and in what order
 the code is ran.
 
+We can observe this with::
+
+   set rtp   " or alternatively
+   echo &rtp
+
 Runtimepath
 -----------
 
+Here's a quick summary of the folders in a standard runtimepath layout.
 
-Ftdetect
-~~~~~~~~~~
+.. glossary::
 
-.. todo::
-
-   How does writing an ftdetect file work?
-   What necessary guards are there?
-
+   plugin/
+       Vim script files that are loaded automatically when editing any kind of
+       file. Called “global plugins.”
+   autoload/
+       (Not to be confused with “plugin.”) Scripts in autoload contain
+       functions that are loaded only when requested by other scripts.
+   ftdetect/
+       Scripts to detect filetypes. They can base their decision on filename
+       extension, location, or internal file contents.
+   ftplugin/
+       Scripts that are executed when editing files with known type.
+   compiler/
+       Definitions of how to run various compilers or linters, and of how to
+       parse their output. Can be shared between multiple ftplugins.
+       Also not applied automatically, must be called with :compiler
+   pack/
+       Container for Vim 8 native packages, the successor to “Pathogen”
+       style package management. The native packaging system does not
+       require any third-party code.
 
 Ftplugin
 ~~~~~~~~~~
@@ -162,8 +195,6 @@ Something like this pseudo code would be perfect.:
 
 Then put that in everything in that dir.
 
-.. _syntax-highlighting:
-
 Syntax
 ~~~~~~~
 
@@ -179,7 +210,7 @@ Working with Plugins
 
 Vim-Plug is a highly recommended plugin manager, and the one that I myself use.
 
-Written by Junegunn Choi (also the author of FZF), vim-plug creates a 
+Written by Junegunn Choi (also the author of FZF), vim-plug creates a
 simple way of interacting with plugins.
 
 Beyond the basic commands you can read about in his README, vim-plug has
@@ -246,9 +277,9 @@ Mappings
 =========
 
 Mappings initially sounds like a simple enough idea as it's generally commonplace
-in other editors.
+in other editors.:
 
-    Map :kbd:`Ctrl`+:kbd:`Shift`+:kbd:`F1` to some arbitrary macro
+    Map :kbd:`Ctrl` + :kbd:`Shift` + :kbd:`F1` to some arbitrary macro
 
 Is conventionally how this works. In Vim there are 7 different mapping modes
 that exist.
@@ -264,9 +295,9 @@ that exist.
 +--------------+-----------+---------+------------------------------------------+
 | :vmap        | :vnoremap | :vunmap | Visual and Select                        |
 +--------------+-----------+---------+------------------------------------------+
-| :smap        |           |         | Select                                   |
+| :smap        | :snoremap | :sunmap | Select                                   |
 +--------------+-----------+---------+------------------------------------------+
-| :xmap        |           |         | Visual                                   |
+| :xmap        | :xnoremap | :xunmap | Visual                                   |
 +--------------+-----------+---------+------------------------------------------+
 | :omap        |           |         | Operating-pending                        |
 +--------------+-----------+---------+------------------------------------------+
@@ -350,7 +381,7 @@ This is nice because you won't have to delete extra characters that get
 inputted by setting only the ``full`` or ``list`` options.
 
 Then if you hit ``wildchar`` a second time, drop the longest option. If i hit
-tab twice in a row, I want you to start autopopulating the command line
+tab twice in a row, I want you to start auto-populating the command line
 
 
 Insert Mode Completion

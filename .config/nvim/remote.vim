@@ -8,7 +8,7 @@
 " Preliminaries: {{{1
 scriptencoding utf-8
 let s:cpo_save = &cpoptions
-set cpoptions&vim
+set cpoptions-=c
 
 " Remote Hosts: {{{1
   " Set the node and ruby remote hosts
@@ -19,7 +19,7 @@ function! Get_Node_Host() abort
   " Define the location of the node executable we're currently using.
   " TODO: add conda env var checks
   " worked when i ran it with set shell=cmd
- 
+
   if executable('yarn')
     if filereadable(shellescape(expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'))
       let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
@@ -143,9 +143,14 @@ function! Python3_Exe() abort
   " TODO: The rest
 endfunction
 
+" We may even be able to remove the 2 separate functions
+" with a ternary operator and concatenating the results of:
+" let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
 
 if has('unix')
-  let g:python3_host_prog = Get_Python3_Remote_Host()
+  " let g:python3_host_prog = Get_Python3_Remote_Host()
+  " If this works as a functional substitute I'm gonna lose it.1
+  let g:python3_host_prog = exepath('python')
 else
   let g:python3_host_prog = Python3_Exe() . '/python.exe'
 
@@ -153,7 +158,8 @@ endif
 
 " Make it simpler to view the host. This is the same as
 " provider#python3#Prog()
-command! Python3Host -nargs=0 echo provider#python3#Prog()
+" Also it doesn't work.
+" command! Python3Host -nargs=0 echo provider#python3#Prog()
 
 " Python2 Remote Host: {{{1
 
@@ -163,18 +169,22 @@ function! RemotePython2Host() abort
       let g:python_host_prog = expand('$_ROOT') . '/bin/python2'
       let &path = &path . ',' . expand('$_ROOT') . '/lib/python2/*'
   elseif executable('/usr/bin/python2')
-      let g:python3_host_prog = '/usr/bin/python2'
+      let g:python_host_prog = '/usr/bin/python2'
       let &path = &path . ',' . '/usr/lib/python2/*'
     " elseif executable('which')
     "   let s:python2_root_dir = system('which python')
     "   return s:python2_root_dir
+  elseif executable(exepath('python2'))
+    let g:python_host_prog = exepath('python2')
+    " will need some mucking
+    " let &path = &path . ',' .
 
   else
       let g:loaded_python_provider = 1
   endif
 endfunction
 
-call RemotePython2Host()
+" call RemotePython2Host()
 
 " Fun With Clipboards: {{{1
 

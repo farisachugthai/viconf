@@ -9,7 +9,7 @@
 
 " Guard: {{{1
 if !has_key(plugs, 'coc.nvim')
-    finish
+  finish
 endif
 
 let s:cpo_save = &cpoptions
@@ -26,11 +26,11 @@ inoremap <silent><expr> <C-Space> coc#refresh()
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
 
 
-inoremap <silent><expr> <C-j>
-  \ pumvisible() ? coc#_select_confirm() :
-  \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-  \ <SID>check_back_space() ? "\<TAB>" :
-  \ coc#refresh()
+" inoremap <silent><expr> <C-j>
+"   \ pumvisible() ? coc#_select_confirm() :
+"   \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+"   \ <SID>check_back_space() ? "\<TAB>" :
+"   \ coc#refresh()
 
 function! s:check_back_space() abort
   let col = col('.') - 1

@@ -12,7 +12,7 @@ endif
 let g:did_unix_vim = 1
 
 let s:cpo_save = &cpoptions
-set cpoptions&vim
+set cpoptions-=c
 
 " These should probably just get autoloaded. Why define them at startup?
 
@@ -68,6 +68,7 @@ endfunction
 " so wait if that's true can't we just use shellescape...?
 " Actually i have a great example right here.
 
+
 " Chmod: {{{1
 "	:S	Escape special characters for use with a shell command (see
 "		|shellescape()|). Must be the last one. Examples:
@@ -76,13 +77,29 @@ endfunction
 " From :he filename-modifiers in the cmdline page.
 command! -nargs=1 -complete=file Chmod call system('chmod +x ' . expand('%:S'))
 
+" More From The Bottom Of :he map.txt: {{{1
+
+command! -nargs=+ -complete=file MyEdit
+    \ for f in expand(<q-args>, 0, 1) |
+    \ exe '<mods> split ' . f |
+    \ endfor
+
+function! SpecialEdit(files, mods)
+  for f in expand(a:files, 0, 1)
+    exe a:mods . ' split ' . f
+  endfor
+endfunction
+
+command! -nargs=+ -complete=file Sedit call SpecialEdit(<q-args>, <q-mods>)
+
+
 " Pure Emacs: {{{1
 " There are more comfortable ways of doing the following in Vim.
 " I'm not going to convince you it's better. That it's cleaner.
 " Unfortunately, there are  few of *their* keybindings wired in.
 " May as well map them correctly.
 
-" Alt-x: {{{2
+" Alt X: {{{2
 " This seemingly trivial difference determines whether the following is run
 " by fzf or the vim built-in, and they both have quite different looking
 " interfaces IMO.

@@ -1208,6 +1208,7 @@ pycodestyle
 pycon
 pydoc
 pydocstyle
+pyenv
 pyflakes
 pygmentize
 pygments
@@ -1537,8 +1538,10 @@ valgrind
 vbnet
 vendored
 venv
+venv
 verilog
 vhdl
+viconf
 vim
 vim74
 vim8
@@ -1641,6 +1644,5 @@ zipimport
 zlib
 zsh
 zshrc
-||||||| merged common ancestors
 µBlock
 µMatrix

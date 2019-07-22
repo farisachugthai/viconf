@@ -7,7 +7,7 @@
 
 " Guards: {{{1
 let s:cpo_save = &cpoptions
-set cpoptions&vim
+set cpoptions-=c
 
 let s:debug = 1
 
@@ -88,7 +88,7 @@ else
         setlocal equalprg=autopep8
         setlocal formatprg=autopep8
 
-        command! -nargs=0 Autopep8 exec '!autopep8 %'
+        command! -nargs=0 -complete=buffer -buffer Autopep8 exec '!autopep8 %'
         " command! -nargs=0 Autopep8 exec '!autopep8 -i %'
         " command! -nargs=0 Autopep8 cexpr! exec '!autopep8 -d %'
     endif
@@ -106,7 +106,7 @@ function! ALE_Python_Conf()
 
     let b:ale_linters_explicit = 1
 
-    let g:ale_python_pyls_config = {
+    let b:ale_python_pyls_config = {
           \   'pyls': {
           \     'plugins': {
           \       'pycodestyle': {
@@ -144,7 +144,7 @@ function! ALE_Python_Conf()
 
 endfunction
 
-if &filetype==#'python'
+if has_key(plugs, 'ale') && &filetype==#'python'
   call ALE_Python_Conf()
 endif
 

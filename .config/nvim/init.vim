@@ -5,7 +5,7 @@
 " Preliminaries: {{{1
 scriptencoding utf-8
 let s:cpo_save = &cpoptions
-set cpoptions&vim
+set cpoptions-=c
 
 " OS Setup: {{{2
 
@@ -24,26 +24,14 @@ let g:wsl = has('wsl')
 let g:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/init.vim.local'
 runtime g:local_vimrc
 
-if g:windows
-  runtime winrc.vim
-endif
+if !has('unix') | runtime winrc.vim | endif
 
 set sessionoptions+=unix,slash
-
-" $_ROOT: {{{2
-if !exists('$_ROOT') && !empty(g:termux)
-  let $_ROOT = expand('$PREFIX')
-elseif !exists('$_ROOT') && !empty(g:ubuntu)
-  let $_ROOT = '/usr'
-elseif !exists('$_ROOT') && !empty(g:windows)
-  " Or should I use ALLUSERSPROFILE
-  let $_ROOT = expand('$SystemRoot')
-endif
 
 " Factor out all of the remote hosts stuff.
 runtime remote.vim
 
-" Vim Plug: {{{1
+" Vim Plug And Third Party Packages: {{{1
 " Plug Check: {{{2
 let s:plugins = filereadable(expand(stdpath('data') . '/site/autoload/plug.vim'))
 
@@ -70,20 +58,11 @@ else
   runtime junegunn.vim
 endif
 
-" Global Options: {{{1
-" Builtin Plugins: {{{2
-let g:loaded_vimballPlugin     = 1
-let g:loaded_getscriptPlugin   = 1
-let g:loaded_2html_plugin      = 1
-let g:loaded_logiPat           = 1
-
-runtime plugin/*.vim                    " Load my plugins
-
-" General Syntax Highlighting: {{{2
-
+" General Syntax Highlighting: {{{1
+" Gruvbox: {{{2
 set synmaxcol=400                       " Lower max syntax highlighting
 
-function! g:Gruvbox() abort
+function! s:Gruvbox() abort
   " Define Gruvbox parameters and then set the colorscheme.
   let g:gruvbox_contrast_hard = 1
   let g:gruvbox_contrast_soft = 0
@@ -92,16 +71,21 @@ function! g:Gruvbox() abort
   colorscheme gruvbox
 endfunction
 
-call g:Gruvbox()
-
+call s:Gruvbox()
 syntax sync fromstart
+
+" Builtin Plugins: {{{1
+let g:loaded_vimballPlugin     = 1
+let g:loaded_getscriptPlugin   = 1
+let g:loaded_2html_plugin      = 1
+let g:loaded_logiPat           = 1
 
 " Leader And Viminfo: {{{2
 noremap <Space> <nop>
 let g:maplocalleader = '<Space>'
 map <Space> <Leader>
 
-" if has(nvim-0.4): {{{2
+" if has(nvim-0.4): {{{1
 if has('nvim-0.4')
   let &shadafile = stdpath('data') . '/shada/main.shada'
   " toggle transparency in the pum
@@ -112,6 +96,32 @@ if has('nvim-0.4')
   endtry
 endif
 
+" Backups: {{{1
+
+" Protect changes between writes. Default values of updatecount
+" (200 keystrokes) and updatetime (4 seconds) are fine
+set swapfile        " also note nvim sets directory to stdpath(data) . /swap
+
+" persist the undo tree for each file
+let &undodir = stdpath('config') . '/undodir'
+set undofile
+
+set backupext='.bak'        " like wth is that ~ nonsense?
+
+" protect against crash-during-write
+set writebackup
+" but do not persist backup after successful write
+set nobackup
+" use rename-and-write-new method whenever safe
+set backupcopy=auto
+" patch required to honor double slash at end
+if has("patch-8.1.0251")
+	" consolidate the writebackups -- not a big
+	" deal either way, since they usually get deleted
+  let &backupdir=stdpath('config') . '/undodir//'
+end
+
+" Global Options: {{{1
 " Pep8 Global Options: {{{2
 if &tabstop > 4
     set tabstop=4           " show existing tab with 4 spaces width
@@ -134,22 +144,12 @@ set foldcolumn=2      " If less than 2 is used it can get pushed off screen in t
 set signcolumn=yes    " not fold related but close to column
 
 " Buffers Windows Tabs: {{{2
-try
-  set switchbuf=useopen,usetab,newtab
-catch
-endtry
+try | set switchbuf=useopen,usetab,newtab | catch | endtry
 
 set hidden
 set splitbelow splitright
 " Resize windows automatically. nvim also autosets equalalways
 set winfixheight winfixwidth
-
-" Admittedly I kinda know why the screen looks so small
-if &textwidth!=0
-  setl colorcolumn=+1
-else
-  setl colorcolumn=80
-endif
 
 set cmdheight=2
 set number relativenumber
@@ -184,7 +184,8 @@ set smartcase infercase    " the case when you search for stuff
 
 " Path: {{{2
 set path+=**                            " Recursively search dirs with :find
-
+let &path = &path . ',' . stdpath('config')
+let &path = &path . ',' . stdpath('data')
 let &path = &path . ',' . expand('$VIMRUNTIME')
 
 if &term =~# 'xterm-256color' || &term ==# 'cygwin' || &term ==# 'builtin_tmux' || &term ==# 'tmux-256color' || &term ==# 'builtin-vtpcon'
@@ -214,13 +215,9 @@ set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
 " Filler lines to keep text synced, 3 lines of context on diffs, don't diff hidden files,default foldcolumn is 2
 set diffopt=filler,context:3,hiddenoff,foldcolumn:1
-
-let &undodir = stdpath('config') . '/undodir'
-set undofile
-
-set backup
-let &backupdir=stdpath('config') . '/undodir'
-set backupext='.bak'        " like wth is that ~ nonsense?
+ if has('patch-8.1.0360')
+	set diffopt+=internal,algorithm:patience
+endif
 
 set modeline
 set browsedir="buffer"                  " which directory is used for the file browser
@@ -239,6 +236,8 @@ set shortmess+=a
 set shortmess-=tT
 
 set sidescroll=10                       " Didn't realize the default is 1
+
+set virtualedit=all
 
 " Mappings: {{{1
 " General_Mappings: {{{2
@@ -325,7 +324,6 @@ augroup omnifunc
 augroup END
 
 " Functions_Commands: {{{1
-
 " Statusline: {{{2
 
 function! s:statusline_expr() abort
@@ -362,16 +360,21 @@ endif
 endfunction
 
 function! StatusDiagnostic() abort
-let info = get(b:, 'coc_diagnostic_info', {})
-if empty(info) | return '' | endif
-let msgs = []
-if get(info, 'error', 0)
-call add(msgs, 'E' . info['error'])
-endif
-if get(info, 'warning', 0)
-call add(msgs, 'W' . info['warning'])
-endif
-return join(msgs, ' ') . ' ' . get(g:, 'coc_status', '')
+
+  let info = get(b:, 'coc_diagnostic_info', {})
+  if empty(info) | return '' | endif
+
+  let msgs = []
+  if get(info, 'error', 0)
+    call add(msgs, 'E' . info['error'])
+  endif
+
+  if get(info, 'warning', 0)
+    call add(msgs, 'W' . info['warning'])
+  endif
+
+  return join(msgs, ' ') . ' ' . get(g:, 'coc_status', '')
+
 endfunction
 
 let &statusline = <SID>statusline_expr() . StatusDiagnostic()
