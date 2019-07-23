@@ -25,7 +25,7 @@ function! s:DetectZimWiki()
     endif
 endfunction
 
-augroup YourFtdetect
+augroup YourFtDetect
     autocmd!
     autocmd BufRead,BufNewFile *.txt  call s:DetectZimWiki()
 augroup end

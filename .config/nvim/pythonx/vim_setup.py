@@ -62,11 +62,16 @@ def _parse_arguments():
         description='Installs and sets up neovim.'
     )
 
+    parser.add_argument('-e', '--virtualenv', nargs='?',
+                        default=os.environ.get('VIRTUAL_ENV'),
+                        help='Virtualenv to install python packages to.'
+                             ' Defaults to VIRTUALENV envvar or None if not'
+                             ' set and none provided.')
+
     parser.add_argument(
         '-d',
         '--plug-dir',
         nargs='?',
-        metavar="Directory for vim-plug",
         help='The directory that vim-plug is downloaded to.'
     )
     parser.add_argument(
@@ -100,10 +105,16 @@ class Machine:
             self.path = Path('.')
         else:
             self.path = Path
-        self._py_version = sys.version_info
 
+    @property
+    def py_version(self):
+        """Return the version of python veing used."""
+        self.py_vers= sys.version_info
+        return self.py_vers
+
+    @property
     def _is_py37(self):
-        return self._py_version > (3, 7)
+        return self.py_version > (3, 7)
 
     def get_home(self):
         """Get a user's home directory."""
@@ -162,18 +173,7 @@ def urllib_dl(plug):
 
 
 def termux_packages():
-    """Prepare all necessary packages for termux.
-
-    .. todo::
-
-        - Rewrite for a virtualenv
-        - Ensure we have write access to the virtualenv
-        - If the user doesn't give us a place to do this, where do we go?
-            - May end up a required arg although that should be avoided.
-        - Do we need to decode the output? Also since we're capturing it, it
-          should be assigned to something and returned right?
-
-    """
+    """Prepare all necessary packages for termux."""
     output = subprocess.run(
         ["pkg", "install", "vim-python", "python-dev"], capture_output=True
     )
@@ -223,6 +223,7 @@ def use_virtualenv(virtualenv, python_version):
 
 
 def main():
+    """Run the installer."""
     user_machine = Machine()
     home = user_machine.get_home()
     args = _parse_arguments()
@@ -253,7 +254,8 @@ def main():
 
     # conda_check = subprocess.run(["command", "-v", "conda"])
     # conda_check.check_returncode()
-    pip_install(pip_version())
+    with use_virtualenv(args.virtualenv, user_machine.python_version):
+        pip_install()
 
 
 if __name__ == "__main__":

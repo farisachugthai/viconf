@@ -18,13 +18,9 @@ set cpoptions-=c
 
 " Options: {{{1
 
-" Function named incorrectly.
-" if has('unix')
-"     augroup unixsettings
-"         au!
-"         au BufRead,BufFilePre * call s:unix#UnixOptions()
-"     augroup END
-" endif
+if has('unix')
+  call unix#UnixOptions()
+endif
 
 " Tmux: {{{1
 
@@ -39,35 +35,18 @@ set cpoptions-=c
 " call <SID>unix#tmux_map('<leader>tn', '.bottom-left')
 " call <SID>unix#tmux_map('<leader>t.', '.bottom-right')
 
-" Finger: {{{1
-" Example from :he command-complete
-" The following example lists user names to a Finger command
-
-" Yo this is a terrible command though because termux doesn't have the command
-" finger nor does it have read access to /etc/passwd
-if executable('!finger')
-  if filereadable('/etc/passwd')
-    command! -complete=custom,g:ListUsers -nargs=0 Finger !finger <args>
-
-    function! g:ListUsers(A,L,P)
-        return system('cut -d: -f1 /etc/passwd')
-    endfun
-  endif
-endif
-
 " Alternative Edit Implementation: {{{1
 " Completes filenames from the directories specified in the 'path' option:
-command! -nargs=1 -bang -complete=customlist,g:EditFileComplete
+command! -nargs=1 -bang -complete=customlist,unix#EditFileComplete
    	\ EF edit<bang> <args>
 
-function! g:EditFileComplete(A,L,P)
-    return split(globpath(&path, a:A), '\n')
-endfunction
 
-" This example does not work for file names with spaces!
-" so wait if that's true can't we just use shellescape...?
-" Actually i have a great example right here.
-
+" Finger: {{{1
+if executable('!finger')
+  if filereadable('/etc/passwd')
+    command! -complete=custom,unix#ListUsers -nargs=0 Finger !finger <args>
+  endif
+endif
 
 " Chmod: {{{1
 "	:S	Escape special characters for use with a shell command (see
@@ -84,13 +63,7 @@ command! -nargs=+ -complete=file MyEdit
     \ exe '<mods> split ' . f |
     \ endfor
 
-function! SpecialEdit(files, mods)
-  for f in expand(a:files, 0, 1)
-    exe a:mods . ' split ' . f
-  endfor
-endfunction
-
-command! -nargs=+ -complete=file Sedit call SpecialEdit(<q-args>, <q-mods>)
+command! -nargs=+ -complete=file Sedit call unix#SpecialEdit(<q-args>, <q-mods>)
 
 
 " Pure Emacs: {{{1
@@ -117,19 +90,21 @@ noremap <silent> <C-x>o <Cmd>wincmd W<CR>
 " Git: {{{1
 
 augroup gitconf
-    " Set UTF-8 as the default encoding for commit messages
-    autocmd BufReadPre COMMIT_EDITMSG,MERGE_MSG,git-rebase-todo setlocal fileencodings=utf-8
 
-    " Remember the positions in files with some git-specific exceptions"
-    autocmd BufReadPost *
-      \ if line("'\"") > 0 && line("'\"") <= line("$")
-      \           && &filetype !~# 'commit\|gitrebase'
-      \           && expand("%") !~ "ADD_EDIT.patch"
-      \           && expand("%") !~ "addp-hunk-edit.diff" |
-      \   exe "normal g`\"" |
-      \ endif
+  " Don't set this! Kills ConEmu!
+  " Set UTF-8 as the default encoding for commit messages
+  " autocmd BufReadPre COMMIT_EDITMSG,MERGE_MSG,git-rebase-todo setlocal fileencodings=utf-8
 
-      autocmd BufNewFile,BufRead *.patch set filetype=diff
+  " Remember the positions in files with some git-specific exceptions"
+  autocmd BufReadPost *
+    \ if line("'\"") > 0 && line("'\"") <= line("$")
+    \           && &filetype !~# 'commit\|gitrebase'
+    \           && expand("%") !~ "ADD_EDIT.patch"
+    \           && expand("%") !~ "addp-hunk-edit.diff" |
+    \   exe "normal g`\"" |
+    \ endif
+
+    autocmd BufNewFile,BufRead *.patch set filetype=diff
 
 augroup END
 " Atexit: {{{1

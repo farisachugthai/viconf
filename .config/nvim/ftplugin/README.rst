@@ -2,8 +2,11 @@
 Ftplugins
 =========
 
+.. highlight:: vim
+
 Vim's distributed readme
-------------------------
+========================
+
 From ``$VIMRUNTIME/ftplugin/README.txt`` in Vim 8.1.
 
 The ftplugin directory is for Vim plugin scripts that are only used for a

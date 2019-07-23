@@ -233,7 +233,7 @@ set shortmess-=tT
 
 set sidescroll=10                       " Didn't realize the default is 1
 
-set virtualedit=all
+set virtualedit=block,insert,onemore
 
 " Mappings: {{{1
 " General_Mappings: {{{2
