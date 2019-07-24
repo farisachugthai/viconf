@@ -8,32 +8,26 @@ let s:cpo_save = &cpoptions
 set cpoptions-=c
 
 " OS Setup: {{{2
-
 " Termux check from Evervim. Thanks!
 let g:termux = isdirectory('/data/data/com.termux')
 let g:ubuntu = has('unix') && !has('macunix') && empty(g:termux)
-
 " How is `has('win32')` a nvim specific thing. Tried in vim and it didn't work!
+" TODO: !has('unix') is easier
 let g:windows = has('win32') || has('win64')
-" Not gonna lie though wouldn't !has('unix') just be easier?
-
-" TODO: it doesn't work. - From wsl
-let g:wsl = has('wsl')
+let g:wsl = has('wsl') " TODO: it doesn't work. - From wsl
 
 " unabashedly stolen from junegunn dude is too good.
 let g:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/init.vim.local'
 runtime g:local_vimrc
 
-if g:windows
-  runtime winrc.vim
-endif
+if !has('unix') | runtime winrc.vim | endif
 
 set sessionoptions+=unix,slash
 
 " Factor out all of the remote hosts stuff.
 runtime remote.vim
 
-" Vim Plug: {{{1
+" Vim Plug And Third Party Packages: {{{1
 " Plug Check: {{{2
 let s:plugins = filereadable(expand(stdpath('data') . '/site/autoload/plug.vim'))
 
@@ -42,12 +36,14 @@ if empty(s:plugins)
   function! s:InstallPlug() abort
 
     if empty(executable('curl'))
-      break
+      finish  " what scope does this statement end?
     endif
 
     try
       " Successfully executed on termux
-      execute('!curl --progress-bar --create-dirs -Lo ' . stdpath('data') . '/site/autoload/plug.vim' . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
+      execute('!curl --progress-bar --create-dirs -Lo '
+            \ . stdpath('data') . '/site/autoload/plug.vim'
+            \ . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
     catch
       echo v:exception
     endtry
@@ -57,27 +53,16 @@ if empty(s:plugins)
 endif
 
 " Define The Plugs Dict: {{{2
-" Don't assume that the InstallPlug() func worked
-if empty('plugs')
-  let plugs = {}
-else
+" Don't assume that the InstallPlug() func worked so ensure it's defined
+if empty('plugs') | let plugs = {} | else
   runtime junegunn.vim
 endif
 
-" Global Options: {{{1
-" Builtin Plugins: {{{2
-let g:loaded_vimballPlugin     = 1
-let g:loaded_getscriptPlugin   = 1
-let g:loaded_2html_plugin      = 1
-let g:loaded_logiPat           = 1
-
-runtime plugin/*.vim                    " Load my plugins
-
-" General Syntax Highlighting: {{{2
-
+" General Syntax Highlighting: {{{1
+" Gruvbox: {{{2
 set synmaxcol=400                       " Lower max syntax highlighting
 
-function! g:Gruvbox() abort
+function! s:Gruvbox() abort
   " Define Gruvbox parameters and then set the colorscheme.
   let g:gruvbox_contrast_hard = 1
   let g:gruvbox_contrast_soft = 0
@@ -86,16 +71,21 @@ function! g:Gruvbox() abort
   colorscheme gruvbox
 endfunction
 
-call g:Gruvbox()
-
+call s:Gruvbox()
 syntax sync fromstart
+
+" Builtin Plugins: {{{1
+let g:loaded_vimballPlugin     = 1
+let g:loaded_getscriptPlugin   = 1
+let g:loaded_2html_plugin      = 1
+let g:loaded_logiPat           = 1
 
 " Leader And Viminfo: {{{2
 noremap <Space> <nop>
 let g:maplocalleader = '<Space>'
 map <Space> <Leader>
 
-" if has(nvim-0.4): {{{2
+" if has(nvim-0.4): {{{1
 if has('nvim-0.4')
   let &shadafile = stdpath('data') . '/shada/main.shada'
   " toggle transparency in the pum
@@ -106,6 +96,32 @@ if has('nvim-0.4')
   endtry
 endif
 
+" Backups: {{{1
+
+" Protect changes between writes. Default values of updatecount
+" (200 keystrokes) and updatetime (4 seconds) are fine
+set swapfile        " also note nvim sets directory to stdpath(data) . /swap
+
+" persist the undo tree for each file
+let &undodir = stdpath('config') . '/undodir'
+set undofile
+
+set backupext='.bak'        " like wth is that ~ nonsense?
+
+" protect against crash-during-write
+set writebackup
+" but do not persist backup after successful write
+set nobackup
+" use rename-and-write-new method whenever safe
+set backupcopy=auto
+" patch required to honor double slash at end
+if has('patch-8.1.0251')
+	" consolidate the writebackups -- not a big
+	" deal either way, since they usually get deleted
+  let &backupdir=stdpath('config') . '/undodir//'
+end
+
+" Global Options: {{{1
 " Pep8 Global Options: {{{2
 if &tabstop > 4 | set tabstop=4 | endif
 if &shiftwidth > 4  | set shiftwidth=4 | endif
@@ -130,7 +146,6 @@ set winfixheight winfixwidth
 
 " Admittedly I kinda know why the screen looks so small
 if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif
-
 set cmdheight=2
 set number relativenumber
 
@@ -161,10 +176,12 @@ set smartcase infercase    " the case when you search for stuff
 
 " Path: {{{2
 set path+=**                            " Recursively search dirs with :find
-
+let &path = &path . ',' . stdpath('config')
+let &path = &path . ',' . stdpath('data')
 let &path = &path . ',' . expand('$VIMRUNTIME')
 
-if &term =~# 'xterm-256color' || &term ==# 'cygwin' || &term ==# 'builtin_tmux' || &term ==# 'tmux-256color' || &term ==# 'builtin-vtpcon'
+if &term =~# 'xterm-256color' || &term ==# 'cygwin' || &term ==# 'builtin_tmux'
+      \ || &term ==# 'tmux-256color' || &term ==# 'builtin-vtpcon'
   set termguicolors
 
 elseif exists('ConEmuAnsi')
@@ -174,10 +191,7 @@ endif
 set makeencoding=char         " Used by the makeprg. system locale is used
 
 " Other Global Options: {{{2
-
-if &formatexpr ==# ''
-  setlocal formatexpr=format#Format()  " check the autoload directory
-endif
+if &formatexpr ==# '' | setlocal formatexpr=format#Format() | endif
 
 set tags+=./tags,./*/tags,~/projects/**/tags
 set tagcase=smart
@@ -186,52 +200,37 @@ set showfulltag
 set mouse=a
 set isfname-==
 
-set autochdir
+if has('unix') | set autochdir | endif     " I think this is what's killing windows
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
 " Filler lines to keep text synced, 3 lines of context on diffs, don't diff hidden files,default foldcolumn is 2
 set diffopt=filler,context:3,hiddenoff,foldcolumn:1
-
-let &undodir = stdpath('config') . '/undodir'
-set undofile
-
-set backup
-let &backupdir=stdpath('config') . '/undodir'
-set backupext='.bak'        " like wth is that ~ nonsense?
+ if has('patch-8.1.0360')
+	set diffopt+=internal,algorithm:patience
+endif
 
 set modeline
-set browsedir="buffer"                  " which directory is used for the file browser
-
+set autochdir browsedir="buffer"   " which directory is used for the file browser
 let &showbreak = '↳ '                   " Indent wrapped lines correctly
-set breakindent
-set breakindentopt=sbr
-
+set breakindent breakindentopt=sbr
 set updatetime=100
-
 set inccommand=split
 let g:tutor_debug = 1
-
 set terse     " Don't display the message when a search hits the end of file
 set shortmess+=a
 set shortmess-=tT
-
 set sidescroll=10                       " Didn't realize the default is 1
 
 " Mappings: {{{1
 " General_Mappings: {{{2
 " I accidentally do this so often it feels necessary
 noremap q; q:
-
-" Ex mode is dumb
 noremap Q @q
-
 vnoremap <BS> d
 " Switch CWD to the directory of the open buffer
 noremap <Leader>cd <Cmd>cd %:p:h<CR><Bar><Cmd>pwd<CR>
-
 " Save a file as root
 noremap <Leader>W <Cmd>w !sudo tee % > /dev/null<CR>
-
 noremap <Leader>sp <Cmd>setlocal spell!<CR>
 noremap <Leader>s= z=
 
@@ -247,11 +246,8 @@ noremap k gk
 noremap <Up> gk
 noremap <Down> gj
 
-" this can be annoying. maybe turn to command? noremap <C-]> g<C-]>
-
 " Avoid accidental hits of <F1> while aiming for <Esc>
 noremap! <F1> <Esc>
-
 " Complete whole filenames/lines with a quicker shortcut key in insert mode
 " Leave these as recursive mappings though
 imap <C-f> <C-x><C-f>
@@ -271,16 +267,15 @@ noremap <expr> , getcharsearch().forward ? ',' : ';'
 
 runtime macros/matchit.vim
 
-set showmatch
-set matchpairs+=<:>
+set showmatch matchpairs+=<:>
 " Show the matching pair for 2 seconds
 set matchtime=20
 
 " From pi_paren.txt
 " Matching parenthesises are highlighted A timeout of 300 msec (60 msec in Insert mode). This can be changed with the
+" variables and their buffer-local equivalents b:matchparen_timeout and b:matchparen_insert_timeout.
 let g:matchparen_timeout = 500
 let g:matchparen_insert_timeout = 300
-" variables and their buffer-local equivalents b:matchparen_timeout and b:matchparen_insert_timeout.
 
 " Omnifuncs: {{{2
 
@@ -310,29 +305,20 @@ function! s:statusline_expr() abort
   " use the builtins to fill out the information.
   if exists('*WebDevIconsGetFileTypeSymbol')
     let dicons = ' %{WebDevIconsGetFileTypeSymbol()} '
-  else
-    let dicons = ''
-  endif
+  else | let dicons = '' | endif
   let fug = "%{exists('g:loaded_fugitive') ? fugitive#statusline() : ''}"
   let sep = ' %= '
   let pos = ' %-12(%l : %c%V%) '
 if exists('*CSV_WCol')
     let csv = '%1*%{&ft=~"csv" ? CSV_WCol() : ""}%*'
-else
-    let csv = ''
-endif
+else | let csv = '' | endif
 
 if exists('*strftime')
 " Overtakes the whole screen when Termux zooms in
   if &columns > 80
     let tstmp = ' ' . '%{strftime("%H:%M %m/%d/%Y", getftime(expand("%:p")))}'  " last modified timestamp
-  else
-    let tstmp = ''
-  endif
-
-else
-  let tstmp = ''
-endif
+  else | let tstmp = '' | endif
+else | let tstmp = '' | endif
 
 let cocline = StatusDiagnostic()
 

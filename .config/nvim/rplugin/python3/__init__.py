@@ -21,7 +21,20 @@ except (ImportError, ModuleNotFoundError):
     except (ImportError, ModuleNotFoundError):
         sys.exit('Neither pynvim or neovim installed.')
 
-try:
-    from nvim_api import EmbeddedNvimShell
-except Exception as e:
-    print(e)
+# try:
+#     from nvim_api import EmbeddedNvimShell
+# except Exception as e:
+#     print(e)
+
+
+# So we haven't exited yet so let's go.
+
+logging.basicConfig(level=logging.INFO)
+
+def rplugin_attach():
+    """Let's define a basic function to initialize everything."""
+    global_nvim = pynvim.attach('socket', path=os.environ['NVIM_LISTEN_ADDRESS'])
+    return global_nvim
+
+
+nvim = rplugin_attach()

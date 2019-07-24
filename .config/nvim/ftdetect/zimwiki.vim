@@ -1,4 +1,9 @@
-" Language: ZimWiki
+" ============================================================================
+  " File: zimwiki.vim
+  " Author: Faris Chugthai
+  " Description: ZimWiki
+  " Last Modified: July 24, 2019
+" ============================================================================
 " License: MIT
 
 " My Vimscript is quite weak so excuse me.

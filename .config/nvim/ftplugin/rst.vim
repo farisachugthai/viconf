@@ -12,7 +12,7 @@ endif
 let b:did_ftplugin = 1
 
 let s:cpo_save = &cpoptions
-set cpoptions&vim
+set cpoptions-=c
 
 " Options: {{{1
 setlocal expandtab
@@ -27,8 +27,9 @@ setlocal spell!
 setlocal keywordprg=pydoc
 
 augroup rstcompiler
-    au!
     autocmd Filetype rst compiler rst
+    echomsg 'rst is now using make to compile sphinx docs'
+augroup END
 
 " Don't set makeprg!!! That's what the compiler command is for!
 
@@ -62,14 +63,13 @@ endif
 " bash.vim syntax file it will crash.
 
 " May 13, 2019: Updated. Grabbed this directly from $VIMRUNTIME/syntax/rst.vim
+"
+" Use fewer code lists it ends up accounting for 50% of startuptime when
+" using rst docs
 let g:rst_syntax_code_list = {
     \ 'vim': ['vim'],
     \ 'java': ['java'],
-    \ 'cpp': ['cpp', 'c++'],
-    \ 'lisp': ['lisp'],
-    \ 'php': ['php'],
     \ 'python': ['python', 'python3', 'ipython'],
-    \ 'perl': ['perl'],
     \ 'sh': ['sh'],
     \ }
 

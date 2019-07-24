@@ -59,21 +59,29 @@ def _parse_arguments():
     """
     parser = argparse.ArgumentParser(
         prog='Neovim automated installer.',
-        description='Installs and sets up neovim.')
+        description='Installs and sets up neovim.'
+    )
+
+    parser.add_argument('-e', '--virtualenv', nargs='?',
+                        default=os.environ.get('VIRTUAL_ENV'),
+                        help='Virtualenv to install python packages to.'
+                             ' Defaults to VIRTUALENV envvar or None if not'
+                             ' set and none provided.')
 
     parser.add_argument(
         '-d',
         '--plug-dir',
         nargs='?',
-        metavar="Directory for vim-plug",
-        help='The directory that vim-plug is downloaded to.')
+        help='The directory that vim-plug is downloaded to.'
+    )
     parser.add_argument(
         "-p",
         "--packages",
         default='pip, pynvim',
         action='append',
         nargs='*',
-        help="Comma separated list of packages for pip to install.")
+        help="Comma separated list of packages for pip to install."
+    )
 
     args = parser.parse_args()
 
@@ -97,10 +105,16 @@ class Machine:
             self.path = Path('.')
         else:
             self.path = Path
-        self._py_version = sys.version_info
 
+    @property
+    def py_version(self):
+        """Return the version of python veing used."""
+        self.py_vers= sys.version_info
+        return self.py_vers
+
+    @property
     def _is_py37(self):
-        return self._py_version > (3, 7)
+        return self.py_version > (3, 7)
 
     def get_home(self):
         """Get a user's home directory."""
@@ -139,7 +153,8 @@ def urllib_dl(plug):
     from urllib.request import Request, urlopen
     from urllib.error import URLError, HTTPError
     req = Request(
-        "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim")
+        "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+    )
     try:
         response = urlopen(req)
     except URLError as e:
@@ -158,31 +173,23 @@ def urllib_dl(plug):
 
 
 def termux_packages():
-    """Prepare all necessary packages for termux.
-
-    .. todo::
-
-        - Rewrite for a virtualenv
-        - Ensure we have write access to the virtualenv
-        - If the user doesn't give us a place to do this, where do we go?
-            - May end up a required arg although that should be avoided.
-        - Do we need to decode the output? Also since we're capturing it, it
-          should be assigned to something and returned right?
-
-    """
-    output = subprocess.run(["pkg", "install", "vim-python", "python-dev"],
-                            capture_output=True)
+    """Prepare all necessary packages for termux."""
+    output = subprocess.run(
+        ["pkg", "install", "vim-python", "python-dev"], capture_output=True
+    )
     return output
 
 
 def pip_install():
     """Run platform-independent pip install. Install both pynvim and neovim."""
-    output = subprocess.run([
-        "pip", "install", "-U", "pip", "python-language-server[all]", "pynvim",
-        "neovim"
-    ],
-                            capture_output=True,
-                            check=True)
+    output = subprocess.run(
+        [
+            "pip", "install", "-U", "pip", "python-language-server[all]",
+            "pynvim", "neovim"
+        ],
+        capture_output=True,
+        check=True
+    )
     return output
 
 
@@ -194,8 +201,10 @@ def use_virtualenv(virtualenv, python_version):
         if virtualenv:
             # check if given directory is a virtualenv
             if not os.path.join(virtualenv, "bin/activate"):
-                raise Exception("Given directory {0} is not a virtualenv.".
-                                format(virtualenv))
+                raise Exception(
+                    "Given directory {0} is not a virtualenv.".
+                    format(virtualenv)
+                )
 
             context.virtualenv_path = virtualenv
             yield True
@@ -212,6 +221,7 @@ def use_virtualenv(virtualenv, python_version):
 
 
 def main():
+    """Run the installer."""
     user_machine = Machine()
     home = user_machine.get_home()
     args = _parse_arguments()
@@ -220,8 +230,9 @@ def main():
     try:
         plugd = args.plugd
     except AttributeError:
-        plugd = os.path.join(home, ".local", "share", "nvim", "site",
-                             "autoload")
+        plugd = os.path.join(
+            home, ".local", "share", "nvim", "site", "autoload"
+        )
 
     user_machine.check_dir(plugd)
 
@@ -241,7 +252,8 @@ def main():
 
     # conda_check = subprocess.run(["command", "-v", "conda"])
     # conda_check.check_returncode()
-    pip_install(pip_version())
+    with use_virtualenv(args.virtualenv, user_machine.python_version):
+        pip_install()
 
 
 if __name__ == "__main__":

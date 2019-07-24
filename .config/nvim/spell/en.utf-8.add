@@ -1,6 +1,3 @@
-AC1750
-ACL
-ACLs
 ACPI
 ADB
 AICHE
@@ -24,7 +21,6 @@ AppleWebKit
 ArchWiki
 Argparse
 ArgumentParser
-Arkema
 Arkema
 AsciiDoc
 Asciidoc
@@ -166,7 +162,9 @@ Gravatar
 Gruvbox
 GuiMacro
 Gvim
+HLS
 HMAC
+HSV
 HTTPServer
 Harleysville
 Hettinger
@@ -180,9 +178,8 @@ IPython7
 ISE
 ISO9660
 Importlib
+InteractiveShell
 JQuery
-Jinja2
-Jinja2
 Jinja2
 Junegunn
 Junegunn's
@@ -241,6 +238,7 @@ NetworkManager
 Newbuntu
 NextCloud
 NodeJS
+NotebookApp
 NteractApp
 NumLock
 NumPy
@@ -304,6 +302,7 @@ PythonAnywhere
 PythonDataScienceHandbook
 Pythonesque
 QEMU
+QTConsole
 Qt5
 QtWebEngine
 Qubes
@@ -343,6 +342,7 @@ SSH1
 SSID
 STDOUT
 SVG
+SciPy
 Scikit
 Scrapy
 Seaborn
@@ -451,6 +451,7 @@ XenServer
 Xenial
 Xorg
 Xresources
+YIQ
 YouCompleteMe
 YouTube
 ZeroNet
@@ -510,6 +511,7 @@ autoflake
 autohotkey
 autoindenting
 autoload
+automodule
 autossh
 backlinking
 backlinks
@@ -540,8 +542,6 @@ buildpackage
 builtins
 byobu
 bytestream
-bytestream
-bytestream
 bz2
 bzip
 bzip2
@@ -551,6 +551,7 @@ cURL
 cant/!
 cd
 cdrom
+certfile
 certifi
 chainmap
 chdir
@@ -617,6 +618,7 @@ cython
 datatypes
 datetime
 debian
+deleters
 delphi
 deoplete
 dev
@@ -659,8 +661,8 @@ drwxrwxr
 dtd
 du
 duckduckgo
+dunder
 ecryptfs
-editablyNteractApp
 eg
 elif
 elinks
@@ -779,6 +781,7 @@ haskell
 helpgrep
 homie
 hostname
+hostnames
 html
 html2markdown
 html2text
@@ -816,7 +819,6 @@ ionice
 iostat
 iotop
 ip
-ipdb
 ipdb
 ipdb3
 iptables
@@ -962,7 +964,6 @@ logfile
 logstart
 logstate
 lol
-lol
 lrwxrwxrwx
 lsb
 lsblk
@@ -1007,7 +1008,6 @@ metadata
 metakernel
 metapackage
 meth
-meth
 microkernel
 microkernels
 microservices
@@ -1018,6 +1018,7 @@ miniconda2
 miniconda3
 mit600
 mitm
+mixins
 mkdir
 mklink
 mkspell
@@ -1180,7 +1181,6 @@ plugdev
 plugin
 plymouth
 png
-png
 popd
 popen
 poppler
@@ -1193,7 +1193,6 @@ ppa
 prepended
 printenv
 printf
-proc
 proc
 prolog
 protonmail
@@ -1214,6 +1213,7 @@ pycodestyle
 pycon
 pydoc
 pydocstyle
+pyenv
 pyflakes
 pygmentize
 pygments
@@ -1239,6 +1239,7 @@ qml
 qrcode
 qt4
 qt5
+qtconsole
 quantserve
 quickfix
 quickhelp
@@ -1247,9 +1248,6 @@ quickstart
 quoteplus
 quotequote
 quotestar
-qutebrowser
-qutebrowser
-qutebrowser
 qutebrowser
 rb
 rc
@@ -1282,7 +1280,6 @@ remappings
 remoting
 repo
 reqs
-resave
 resave
 rescan
 restructuredtext
@@ -1428,7 +1425,6 @@ sys
 sysctl
 sysinfo
 syslog
-syslog
 syslogd
 systemctl
 systemd
@@ -1448,14 +1444,10 @@ termux
 termux's
 tesla
 testcase
-testcase
-tex
 tex
 texting
 thunar
 tiddlywiki
-tig
-tig
 tig
 timefmt
 timeit
@@ -1469,6 +1461,7 @@ toctree
 todo
 todotxt
 toolchain
+toolstack
 torbirdy
 torbrowser
 torify
@@ -1477,8 +1470,6 @@ torrenting
 torrified
 torsocks
 touch
-tox
-tox
 tox
 tpope
 tpope's
@@ -1552,8 +1543,10 @@ valgrind
 vbnet
 vendored
 venv
+venv
 verilog
 vhdl
+viconf
 vim
 vim74
 vim8
@@ -1658,13 +1651,5 @@ zsh
 zshrc
 µBlock
 µMatrix
-µTP
-µTorrent
-hostnames
-NotebookApp
-certfile
-QTConsole
-qtconsole
-SciPy
-toolstack
-automodule
+autoloaded
+Autoloading

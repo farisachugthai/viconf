@@ -7,9 +7,9 @@
 
 " Guards: {{{1
 let s:cpo_save = &cpoptions
-set cpoptions&vim
+set cpoptions-=c
 
-let s:debug = 1
+let s:debug = 0
 
 " Options: {{{1
 setlocal linebreak
@@ -41,6 +41,7 @@ if isdirectory(expand('~/.local/lib/python3.7'))
 endif
 
 " Autocmd: Highlight 120 Chars: {{{1
+
 
 augroup pythonchars
     autocmd!
@@ -87,7 +88,7 @@ else
         setlocal equalprg=autopep8
         setlocal formatprg=autopep8
 
-        command! -nargs=0 Autopep8 exec '!autopep8 %'
+        command! -nargs=0 -complete=buffer -buffer Autopep8 exec '!autopep8 %'
         " command! -nargs=0 Autopep8 exec '!autopep8 -i %'
         " command! -nargs=0 Autopep8 cexpr! exec '!autopep8 -d %'
     endif
@@ -100,11 +101,12 @@ function! ALE_Python_Conf()
     if s:debug
         echomsg 'Did the function call?'
     endif
+
+    let b:ale_linters = ['flake8', 'pydocstyle', 'pyls']
+
     let b:ale_linters_explicit = 1
 
-    let g:ale_linters = extend(g:ale_linters, {'python': [ 'flake8', 'pydocstyle', 'pyls' ]})
-
-    let g:ale_python_pyls_config = {
+    let b:ale_python_pyls_config = {
           \   'pyls': {
           \     'plugins': {
           \       'pycodestyle': {
@@ -117,34 +119,34 @@ function! ALE_Python_Conf()
           \   },
           \ }
 
-    " The external program vim uses for gg=G can be configured
-    " Hey you in the future. You can use :set *prg<Tab> and see all of the
-    " configuration options you have.
-    " Now you can also use gq for yapf
-    let b:ale_fixers = [
-          \ 'remove_trailing_lines',
-          \ 'trim_whitespace',
-          \ 'reorder-python-imports'
-          \ ]
-
-    if executable('yapf')
-        let g:ale_fixers = extend(g:ale_fixers, {'python': ['yapf']})
-    else
-        if executable('autopep8')
-          let g:ale_fixers = extend(g:ale_fixers, {'python': ['autopep8']})
-        endif
-    endif
-
     let g:ale_virtualenv_dir_names = []
-    if isdirectory('~/virtualenvs')
-      let g:ale_virtualenv_dir_names += '~/virtualenvs'
+    if isdirectory(expand('~/virtualenvs'))
+      let g:ale_virtualenv_dir_names += expand('~/virtualenvs')
     elseif isdirectory(expand('~/Anaconda3'))
       let g:ale_virtualenv_dir_names += expand('~/Anaconda3')
     endif
 
+    if isdirectory(expand('~/.local/share/virtualenvs'))
+      let g:ale_virtualenv_dir_names += expand('~/.local/share/virtualenvs')
+    endif
+
+  let b:ale_fixers = [
+        \ 'remove_trailing_lines',
+        \ 'trim_whitespace',
+        \ 'reorder-python-imports',
+        \ ]
+
+  if executable('yapf')
+      let b:ale_fixers += ['yapf']
+  else
+      if executable('autopep8')
+          let b:ale_fixers += ['autopep8']
+      endif
+  endif
+
 endfunction
 
-if &filetype==#'python'
+if has_key(plugs, 'ale') && &filetype==#'python'
   call ALE_Python_Conf()
 endif
 
@@ -154,7 +156,7 @@ endif
 
 " A bunch missing. Check :he your-runtime-path somewhere around there is a
 " good starter for writing an ftplugin
-let b:undo_ftplugin = 'set lbr< tw< cms< et< sts< ts< sw< cc< fdm< sua<'
+let b:undo_ftplugin = 'set lbr< tw< cms< et< sts< ts< sw< cc< fdm< kp< sua<'
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

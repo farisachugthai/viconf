@@ -28,7 +28,7 @@ Just making a short mental note that it's common convention to use
 ``let g:loaded_plugin_name`` when writing a guard for a plugin.
 
 It's common convention to use ``b:did_ftplugin`` for a specific ftplugin,
-and similarly named guards for the indent and syntax directoreis.
+and similarly named guards for the indent and syntax directories.
 
 Particularly relevant because, for example, an rst filetype plugin doesn't
 need the var to be named ``b:did_rst_ftplugin``.
@@ -48,7 +48,7 @@ adding var names will probably pay dividends.
 Autocmd for Vim Commentary
 ===========================
 
-Also. I found this in `after/plugin/vim-commentary.vim`_ but... why? So I want
+Also. I found this in `after/plugin/vim-commentary.vim`_ but ... why? So I want
 to move it in here but I'm not actually sure where.
 
 .. code-block:: vim
@@ -84,3 +84,29 @@ So there's actually no need anymore to define functions as::
 And it'd actually possibly be better to define it without the :kbd:`!`.
 
 We would want an error if that go re-sourced and re-defined.
+
+Writing Plugins on NT systems
+==============================
+
+From ``:he source_crnl``
+
+.. are you allowed to do that for a directive?
+
+.. code-block:: help
+
+   Windows: Files that are read with ":source" normally have <CR><NL> <EOL>s.
+   These always work.  If you are using a file with <NL> <EOL>s (for example, a
+   file made on Unix), this will be recognized if 'fileformats' is not empty and
+   the first line does not end in a <CR>.  This fails if the first line has
+   something like ":map <F1> :help^M", where "^M" is a <CR>.  If the first line
+   ends in a <CR>, but following ones don't, you will get an error message,
+   because the <CR> from the first lines will be lost.
+
+   On other systems, Vim expects ":source"ed files to end in a <NL>.  These
+   always work.  If you are using a file with <CR><NL> <EOL>s (for example, a
+   file made on Windows), all lines will have a trailing <CR>.  This may cause
+   problems for some commands (e.g., mappings).  There is no automatic <EOL>
+   detection, because it's common to start with a line that defines a mapping
+   that ends in a <CR>, which will confuse the automaton.
+
+**tl;dr** Always use ff=unix ffs=unix,dos even on NT.

@@ -114,8 +114,9 @@ def check_and_set_envvar(envvar, default=None):
             os.environ.setdefault(envvar, default)
             logging.info(envvar + " set to: " + default)
     else:
-        logging.debug(envvar + " already set to value of: " +
-                      os.environ.get(envvar))
+        logging.debug(
+            envvar + " already set to value of: " + os.environ.get(envvar)
+        )
 
 
 def main():

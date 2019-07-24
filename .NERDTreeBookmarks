@@ -2,11 +2,11 @@ dotfiles ~/projects/dotfiles/unix
 python ~/python
 tutorials ~/Dropbox/python/tutorials
 viconf ~/projects/viconf/.config/nvim
+utilities ~/projects/utilities
 WindowsPowerShell ~/Documents/WindowsPowerShell
 nvim ~/AppData/Local/nvim
 nvim-data ~/AppData/Local/nvim-data
 tools C:/tools
-utilities ~/projects/utilities
 
 config-nvim ~/.config/nvim
 jupyter-extensions ~/.local/share/jupyter

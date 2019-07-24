@@ -40,6 +40,7 @@ function! ALE_JSON_Conf() abort
   if s:debug
     echomsg 'JSON ftplugin was called'
   endif
+
   " Standard fixers defined for JSON
   let b:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
 

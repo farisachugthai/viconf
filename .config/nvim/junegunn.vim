@@ -1,4 +1,4 @@
-" ============================================================================
+" ============================================================================{{{}}}
     " File: junegunn.vim
     " Author: Faris Chugthai
     " Description: " Isolate where I define my plugins.
@@ -8,13 +8,14 @@
 " Guard: {{{1
 scriptencoding utf-8
 let s:cpo_save = &cpoptions
-set cpoptions&vim
+set cpoptions-=c
 " Note that this will only work on neovim as it it makes a call
 
 " guard
 
 " Plugins: {{{1
-execute 'source ' . stdpath('data') . '/site/autoload/plug.vim'
+" 07/16/2019: I don't think this is needed on windows anymore!
+" execute 'source ' . stdpath('data') . '/site/autoload/plug.vim'
 
 call plug#begin(stdpath('data') . '/plugged')
 
@@ -28,6 +29,8 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-jdaddy'
+Plug 'tpope/vim-markdown'
 Plug 'w0rp/ale'
 
 if !empty(g:windows)

@@ -8,7 +8,7 @@
 " Preliminaries: {{{1
 scriptencoding utf-8
 let s:cpo_save = &cpoptions
-set cpoptions&vim
+set cpoptions-=c
 
 " Remote Hosts: {{{1
   " Set the node and ruby remote hosts
@@ -19,6 +19,7 @@ function! Get_Node_Host() abort
   " Define the location of the node executable we're currently using.
   " TODO: add conda env var checks
   " worked when i ran it with set shell=cmd
+
   if executable('yarn')
     if filereadable(shellescape(expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'))
       let g:node_host_prog = expand('$XDG_DATA_HOME') . '/yarn/global/node_modules/.bin/neovim-node-host'
@@ -27,7 +28,10 @@ function! Get_Node_Host() abort
         let g:node_host_prog = shellescape(system('yarn global dir')) . '/node_modules/.bin/neovim-node-host'
     endif
 
-  " on the assumption that which has to stat every hashed exec on the $PATH,
+  elseif executable('C:/Program\ Files/nodejs/node')
+    let g:node_host_prog = 'C:/Program\ Files/nodejs/node'
+
+  " on the assumption that `which` has to stat every hashed exec on the $PATH,
   " I'd guess its the slowest way to fogure this out, but probably a really
   " smart one to fall back on.
   elseif executable('which')   " if we're using bash or we have 'nix tools loaded
@@ -47,6 +51,7 @@ function! Get_Node_Host() abort
   endif
 endfunction
 
+" Jesus. If you uncomment this on Windows it adds 400 ms to startuptime wth??
 " call Get_Node_Host()
 
 " Gem Remote Host. {{{1
@@ -138,9 +143,14 @@ function! Python3_Exe() abort
   " TODO: The rest
 endfunction
 
+" We may even be able to remove the 2 separate functions
+" with a ternary operator and concatenating the results of:
+" let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
 
 if has('unix')
-  let g:python3_host_prog = Get_Python3_Remote_Host()
+  " let g:python3_host_prog = Get_Python3_Remote_Host()
+  " If this works as a functional substitute I'm gonna lose it.1
+  let g:python3_host_prog = exepath('python')
 else
   let g:python3_host_prog = Python3_Exe() . '/python.exe'
 
@@ -148,7 +158,8 @@ endif
 
 " Make it simpler to view the host. This is the same as
 " provider#python3#Prog()
-command! Python3Host -nargs=0 echo provider#python3#Prog()
+" Also it doesn't work.
+" command! Python3Host -nargs=0 echo provider#python3#Prog()
 
 " Python2 Remote Host: {{{1
 
@@ -158,18 +169,22 @@ function! RemotePython2Host() abort
       let g:python_host_prog = expand('$_ROOT') . '/bin/python2'
       let &path = &path . ',' . expand('$_ROOT') . '/lib/python2/*'
   elseif executable('/usr/bin/python2')
-      let g:python3_host_prog = '/usr/bin/python2'
+      let g:python_host_prog = '/usr/bin/python2'
       let &path = &path . ',' . '/usr/lib/python2/*'
     " elseif executable('which')
     "   let s:python2_root_dir = system('which python')
     "   return s:python2_root_dir
+  elseif executable(exepath('python2'))
+    let g:python_host_prog = exepath('python2')
+    " will need some mucking
+    " let &path = &path . ',' .
 
   else
       let g:loaded_python_provider = 1
   endif
 endfunction
 
-call RemotePython2Host()
+" call RemotePython2Host()
 
 " Fun With Clipboards: {{{1
 
@@ -188,83 +203,88 @@ set pastetoggle=<F7>
 " Clipboard Provider: {{{2
 " Now let's set up the clipboard provider
 
+" As insane as this might be....it might not be necessary
+runtime $VIMRUNTIME/autoload/provider/clipboard.vim
+
+let g:clipboard = provider#clipboard#Executable()
+
 " First check that we're in a tmux session before trying this
-function! Get_Remote_Clipboard_Hist()
-  if exists('$TMUX')
+"function! Get_Remote_Clipboard_Hist()
+"  if exists('$TMUX')
 
-    " Now let's make a dictionary for copying and pasting actions. Name both
-    " to hopefully make debugging easier. In `he provider-clipboard` they define
-    " these commands so that they go to * and +....But what if we put them in
-    " named registers? Then we can still utilize the * and + registers however
-    " we want. Idk give it a try.
-    " Holy hell that emits a lot of warnings and error messages don't do that
-    " again.
-    "
-    " As an FYI, running `:echo provider#clipboard#Executable()` on Ubuntu gave
-  " me xclip so that's something worth knowing
-  let g:clipboard = {
-      \   'name': 'TmuxCopyPasteClipboard',
-      \   'copy': {
-      \      '*': 'tmux load-buffer -',
-      \      '+': 'tmux load-buffer -',
-      \    },
-      \   'paste': {
-      \      '*': 'tmux save-buffer -',
-      \      '+': 'tmux save-buffer -',
-      \   },
-      \   'cache_enabled': 1,
-      \ }
+"    " Now let's make a dictionary for copying and pasting actions. Name both
+"    " to hopefully make debugging easier. In `he provider-clipboard` they define
+"    " these commands so that they go to * and +....But what if we put them in
+"    " named registers? Then we can still utilize the * and + registers however
+"    " we want. Idk give it a try.
+"    " Holy hell that emits a lot of warnings and error messages don't do that
+"    " again.
+"    "
+"    " As an FYI, running `:echo provider#clipboard#Executable()` on Ubuntu gave
+"  " me xclip so that's something worth knowing
+"  let g:clipboard = {
+"      \   'name': 'TmuxCopyPasteClipboard',
+"      \   'copy': {
+"      \      '*': 'tmux load-buffer -',
+"      \      '+': 'tmux load-buffer -',
+"      \    },
+"      \   'paste': {
+"      \      '*': 'tmux save-buffer -',
+"      \      '+': 'tmux save-buffer -',
+"      \   },
+"      \   'cache_enabled': 1,
+"      \ }
 
-  elseif executable('win32yank.exe')
-    let g:clipboard = {
-          \ 'name': 'win32yank_clipboard',
-          \ 'copy': {
-          \    '*': 'win32yank.exe -i -crlf',
-          \    '+': 'win32yank.exe -i -crlf',
-          \ },
-          \ 'paste': {
-          \ '*': 'win32yank.exe -o --lf',
-          \ '+': 'win32yank.exe -o --lf',
-          \ },
-          \ 'cache_enabled': 1,
-          \ }
+"  elseif executable('win32yank.exe')
+"    let g:clipboard = {
+"          \ 'name': 'win32yank_clipboard',
+"          \ 'copy': {
+"          \    '*': 'win32yank.exe -i -crlf',
+"          \    '+': 'win32yank.exe -i -crlf',
+"          \ },
+"          \ 'paste': {
+"          \ '*': 'win32yank.exe -o --lf',
+"          \ '+': 'win32yank.exe -o --lf',
+"          \ },
+"          \ 'cache_enabled': 1,
+"          \ }
 
-  elseif exists('$DISPLAY') && executable('xclip')
-    " This is how it's defined in autoload/providor/clipboard.vim
-    let g:clipboard = {
-      \    'name': 'xclipboard',
-      \    'copy': {
-      \       '*': 'xclip -quiet -i -selection primary',
-      \       '+': 'xclip -quiet -i -selection clipboard',
-      \    },
-      \   'paste': {
-      \       '*': 'xclip -o -selection primary',
-      \       '+': 'xclip -o -selection clipboard',
-      \   },
-      \   'cache_enabled': 1,
-      \ }
+"  elseif exists('$DISPLAY') && executable('xclip')
+"    " This is how it's defined in autoload/providor/clipboard.vim
+"    let g:clipboard = {
+"      \    'name': 'xclipboard',
+"      \    'copy': {
+"      \       '*': 'xclip -quiet -i -selection primary',
+"      \       '+': 'xclip -quiet -i -selection clipboard',
+"      \    },
+"      \   'paste': {
+"      \       '*': 'xclip -o -selection primary',
+"      \       '+': 'xclip -o -selection clipboard',
+"      \   },
+"      \   'cache_enabled': 1,
+"      \ }
 
-  elseif executable('termux-clipboard-set')
-    let g:clipboard = {
-      \    'name': 'termux-clipboard',
-      \    'copy': {
-      \       '*': 'termux-clipboard-set',
-      \       '+': 'termux-clipboard-set',
-      \    },
-      \   'paste': {
-      \       '*': 'termux-clipboard-get',
-      \       '+': 'termux-clipboard-get',
-      \   },
-      \   'cache_enabled': 1,
-      \ }
+"  elseif executable('termux-clipboard-set')
+"    let g:clipboard = {
+"      \    'name': 'termux-clipboard',
+"      \    'copy': {
+"      \       '*': 'termux-clipboard-set',
+"      \       '+': 'termux-clipboard-set',
+"      \    },
+"      \   'paste': {
+"      \       '*': 'termux-clipboard-get',
+"      \       '+': 'termux-clipboard-get',
+"      \   },
+"      \   'cache_enabled': 1,
+"      \ }
 
-  else
-    " can i do this?
-    " let g:clipboard = &clipboard
-    unlet g:clipboard
-  endif
+"  else
+"    " can i do this?
+"    " let g:clipboard = &clipboard
+"    unlet g:clipboard
+"  endif
 
-endfunction
+"endfunction
 
 " Atexit: {{{1
 

@@ -5,7 +5,7 @@
 A useful combination with UltiSnips.
 
 * Add docstrings to everything. Kinda forces your hand to learn how
-everything works
+  everything works
     * Admittedly good start though!
     * May want to add which snippets depend on it. If not simple examples
       for the return value will be more than plenty.
@@ -15,6 +15,12 @@ import os
 import string
 
 import vim
+
+from os import path as ospath
+# I swear the snip option has a few of these ready to go
+import re
+from collections import Counter
+
 
 
 def complete(tab, opts):
@@ -104,9 +110,9 @@ def make_box(twidth, bwidth=None):
 
         :func:`get_comment_format`
     """
-    b, m, e, i = (s.strip() for s in get_comment_format())
-    bwidth_inner = bwidth - 3 - max(len(b),
-                                    len(i + e)) if bwidth else twidth + 2
+    bwidth_inner = bwidth - 3 - max(
+        len(b), len(i + e)
+    ) if bwidth else twidth + 2
     sline = b + m + bwidth_inner * m[0] + 2 * m[0]
     nspaces = (bwidth_inner - twidth) // 2
     mlines = i + m + " " + " " * nspaces
@@ -394,15 +400,42 @@ def create_table(snip):
 
     # create anonymous snippet with expected content and number of tabstops
     anon_snippet_title = ' | '.join(
-        ['$' + str(col) for col in range(1, columns_amount + 1)]) + "\n"
+        ['$' + str(col) for col in range(1, columns_amount + 1)]
+    ) + "\n"
     anon_snippet_delimiter = ':-|' * (columns_amount - 1) + ":-\n"
     anon_snippet_body = ""
     for row in range(1, rows_amount + 1):
-        anon_snippet_body += ' | '.join([
-            '$' + str(row * columns_amount + col)
-            for col in range(1, columns_amount + 1)
-        ]) + "\n"
+        anon_snippet_body += ' | '.join(
+            [
+                '$' + str(row * columns_amount + col)
+                for col in range(1, columns_amount + 1)
+            ]
+        ) + "\n"
     anon_snippet_table = anon_snippet_title + anon_snippet_delimiter + anon_snippet_body
 
     # expand anonymous snippet
     snip.expand_anon(anon_snippet_table)
+
+
+
+def make_items(times, leading='+'):
+    """Make lines with leading char multiple times.
+
+    So wait why is this set up so that times is a keyword argument...?
+    Couldn't you just go times=None and then if times is None: times = len(t[0])
+    like wtf?
+
+    Used by snippet li(st)? and for olist.
+
+    :param: times, how many times you need
+    :param: leading, leading character
+
+    """
+    times = int(times)
+    if leading == 1:
+        msg = ""
+        for x in range(1, times + 1):
+            msg += "%s. Item\n" % x
+        return msg
+    else:
+        return ("%s Item\n" % leading) * times

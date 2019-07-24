@@ -2,13 +2,23 @@
 # -*- coding: utf-8 -*-
 """Open a file, check if symlink, if so follow link and cd to dir.
 
+.. module:: follow_links
+
+.. highlight:: vim
+
 Honestly don't know what to do to make this work.
+
+Well now you can open up nvim and run::
+
+    terminal
+    ipython -i --pdb follow_links.py
+
+And it'll execute without errors which is nice.
+
 """
 import logging
 import os
-from os.path import join, realpath
 from pathlib import Path
-import sys
 
 import pynvim
 
@@ -16,7 +26,7 @@ logger = logging.getLogger(name=__name__)
 
 
 # @pynvim.plugin
-class FileLink():
+class FileLink:
     """FileLink because it may be an IPython class.
 
     Could we have files display with an embedded link?
@@ -31,22 +41,35 @@ class FileLink():
         """Initialize a file object."""
         self.nvim = nvim
         self.path_obj = self.nvim.current.buffer.name
+        if logger is not None:
+            self.logger = logger
+
+    def __repr__(self):
+        return '{!r}'.format(self._path_file())
 
     def _path_file(self):
         """Pathify a file."""
         return Path(self.path_obj)
 
-    def _check_symlink(self):
+    @property
+    def is_symlink(self):
         """Check if `path_obj` is a symlink."""
         return self._path_file().is_symlink()
 
     def _resolved_path(self):
         return self._path_file().resolve()
 
+    @property
+    def dirname(self):
+        """Get the buffers directory."""
+        real_file = self._resolved_path()
+        if real_file:
+            return real_file.parent
+
     # @pynvim.command(name='Follow', nargs=1, complete='file')
     def true_file(self, path_obj):
         """Implement a command that opens and resolves a symlink."""
-        if self._check_symlink():
+        if self._is_symlink:
             real_file = self._resolved_path()
             dirname = real_file.parent
             self.nvim.chdir(str(dirname))
@@ -78,7 +101,7 @@ def _setup_logging(level):
 
 # @pynvim.autocmd('BufEnter')
 def main():
-    args = sys.argv[:]
+    """Set everything up."""
     log_levels = {
         'debug': logging.DEBUG,
         'info': logging.INFO,
@@ -86,10 +109,16 @@ def main():
         'error': logging.ERROR,
         'critical': logging.CRITICAL,
     }
-    if len(args) < 1:
-        LOGGER = _setup_logging(log_levels['warning'])
+    LOGGER = _setup_logging(log_levels['warning'])
+    if os.environ.get('NVIM_LISTEN_ADDRESS'):
+        nvim = pynvim.attach('socket', path=os.environ['NVIM_LISTEN_ADDRESS'])
+    else:
+        nvim = None
 
-    FileLink(LOGGER)
+    cur_file = FileLink(nvim, logger=LOGGER)
+
+    if cur_file.is_symlink:
+        cur_file.true_file()
 
 
 if __name__ == '__main__':

@@ -705,7 +705,6 @@ endif
 
 " }}}
 " Plugin specific -------------------------------------------------------------
-
 " AKA Plugins You Don't Have: {{{
 
 if 0
@@ -774,6 +773,12 @@ if 0
   let g:niji_dark_colours = g:rbpt_colorpairs
   let g:niji_light_colours = g:rbpt_colorpairs
 
+  "}}}
+  " Signify: {{{
+
+  hi! link SignifySignAdd GruvboxGreenSign
+  hi! link SignifySignChange GruvboxAquaSign
+  hi! link SignifySignDelete GruvboxRedSign
 
   " }}}
   " Syntastic: {{{
@@ -845,19 +850,10 @@ call s:HL('multiple_cursors_visual', s:none, s:bg2)
 endif
 
 " }}}
-
 " Plugins You Have: {{{
 
 " Jesus. Here are the plugins you currently have. We'll figure out a smarter way
 " to check if the plugin actually exists another time.
-
-" Signify: {{{
-
-hi! link SignifySignAdd GruvboxGreenSign
-hi! link SignifySignChange GruvboxAquaSign
-hi! link SignifySignDelete GruvboxRedSign
-
-" }}}
 
 " Startify: {{{
 
@@ -925,9 +921,7 @@ hi! link TagbarHelp Title
 " }}}
 
 " }}}
-
 " Filetype specific -----------------------------------------------------------
-
 " Man.vim: {{{
 " Define the default highlighting.
 " Only when an item doesn't have highlighting yet
@@ -1022,7 +1016,8 @@ hi! link htmlTagName GruvboxAquaBold
 hi! link htmlArg GruvboxAqua
 
 hi! link htmlScriptTag GruvboxPurple
-hi! link htmlTagN GruvboxFg1
+" Literally why is this Fg1. Filepaths inside of <> change colors randomly
+hi! link htmlTagN GruvboxBlue
 hi! link htmlSpecialTagName GruvboxAquaBold
 
 call s:HL('htmlLink', s:fg4, s:none, s:underline)
@@ -1108,10 +1103,13 @@ hi default link vimCommentTitleLeader	vimCommentTitle
 " vimHiTermcap	vimHiTermcap
 " vimIskList	vimIskList
 " vimLuaRegion	vimLuaRegion
-" vimMapLhs	vimMapLhs
 " vimMapModErr	vimMapModErr
-" vimMapRhs	vimMapRhs
-" vimMapRhsExtend	vimMapRhsExtend
+
+" Vim notation was the only reason that mappings were getting highlighted
+" Randomly they wouldn't
+hi default link vimMapLhs vimNotation
+hi default link vimMapRhs vimNotation
+hi default link vimMapRhsExtend	vimNotation
 " vimMenuBang	vimMenuBang
 " vimMenuMap	vimMenuMap
 " vimMenuPriority	vimMenuPriority
@@ -1123,8 +1121,6 @@ hi default link vimCommentTitleLeader	vimCommentTitle
 " vimOperParen	vimOperParen
 " vimPatRegion	vimPatRegion
 " vimRegion	vimRegion
-
-" Randomly is the last letter in a set foo=value
 hi default link vimSet vimSetEqual
 
 " There's a highlighting group for the equals sign in a set option statement...
@@ -1264,7 +1260,7 @@ hi! link vimNorm	vimCommand
 hi! link vimNotFunc	vimCommand
 hi! link vimNotPatSep	vimString
 hi! link vimNotation	Special
-hi! link vimNumber	Number
+hi! link vimNumber GruvboxRed
 hi! link vimOper	Operator
 hi! link vimOperError	Error
 hi! link vimOption	PreProc
@@ -1441,7 +1437,6 @@ hi! link javaScriptNull GruvboxPurple
 hi! link javaScriptParens GruvboxFg3
 
 " }}}
-
 " YAJS: {{{
 hi! link javascriptArrayMethod GruvboxFg2
 hi! link javascriptArrayStaticMethod GruvboxFg2
@@ -1501,7 +1496,6 @@ hi! link javascriptVariable GruvboxRed
 hi! link javascriptYield GruvboxRed
 
 " }}}
-
 " PanglossJS: {{{
 
 hi! link jsClassKeyword GruvboxAqua
@@ -1798,7 +1792,6 @@ hi! link jsonBraces GruvboxFg1
 hi! link jsonString GruvboxFg1
 
 " }}}
-
 
 " Functions -------------------------------------------------------------------
 " Search Highlighting Cursor {{{
