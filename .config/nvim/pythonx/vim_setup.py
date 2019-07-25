@@ -210,12 +210,10 @@ def use_virtualenv(virtualenv, python_version):
             yield True
         else:
             proc = subprocess.Popen(
-                "virtualenv env -p {0} >> {1}".format(
-                    python_version, context.logfile
-                ),
+                "virtualenv env -p {0} >> {1}".format(python_version,
+                                                      context.logfile),
                 shell=True,
-                cwd=context.tempdir_path
-            )
+                cwd=context.tempdir_path)
             context.virtualenv_path = os.path.join(context.tempdir_path, "env")
             yield proc.wait() == 0
     finally:

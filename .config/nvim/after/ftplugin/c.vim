@@ -2,7 +2,7 @@
     " File: c.vim
     " Author: Faris Chugthai
     " Description: The C Programming Language
-    " Last Modified: April 23, 2019
+    " Last Modified: Jul 17, 2019
 " ============================================================================
 
 " Guard: {{{1
@@ -21,9 +21,9 @@ setlocal suffixesadd+='.h'
 setlocal cindent
 
 " Plugins: {{{1
-let b:ale_fixers = [ 'clang-format' ]
+" let b:ale_fixers = [ 'clang-format' ]
 
-" Should add a mapping
+" " Should add a mapping
 
 " let g:clang_format_path =  expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
 
@@ -48,6 +48,37 @@ endfunction
 "
 " It operates on the current, potentially unsaved buffer and does not create
 " or save any files. To revert a formatting, just undo.
+" autocmd BufWritePre *.h,*.cc,*.cpp call Formatonsave()
+
+" This is honestly really useful if you simply swap out the filetype
+" function! ClangCheckImpl(cmd)
+"   if &autowrite | wall | endif
+"   echo "Running " . a:cmd . " ..."
+"   let l:output = system(a:cmd)
+"   cexpr l:output
+"   cwindow
+"   let w:quickfix_title = a:cmd
+"   if v:shell_error != 0
+"     cc
+"   endif
+"   let g:clang_check_last_cmd = a:cmd
+" endfunction
+
+" function! ClangCheck()
+"   let l:filename = expand('%')
+"   if l:filename =~ '\.\(cpp\|cxx\|cc\|c\)$'
+"     call ClangCheckImpl("clang-check " . l:filename)
+"   elseif exists("g:clang_check_last_cmd")
+"     call ClangCheckImpl(g:clang_check_last_cmd)
+"   else
+"     echo "Can't detect file's compilation arguments and no previous clang-check invocation!"
+"   endif
+" endfunction
+
+" nmap <silent> <F5> :call ClangCheck()<CR><CR>
+
+" Idk why <CR> is  there twice and idk if it was a typo on the part of the
+" CLANG people but its in their official documentation..
 
 setlocal makeprg=make\ %<.o
 

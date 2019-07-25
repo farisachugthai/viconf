@@ -17,12 +17,14 @@
   "python.linting.flake8Enabled": true,
   "python.linting.pydocstyleEnabled": true,
   "python.linting.pylintEnabled": false,
+  "python.linting.banditEnabled": false,
   "python.terminal.executeInFileDir": true,
   "python.trace.server": "messages",
   "python.venvFolders": [
     "~/virtualenvs",
     "~/.local/share/virtualenvs/"
   ],
+
   "languageserver": {
     "python": {
       "command": "python",
@@ -92,6 +94,7 @@
       }
     }
   },
+
   "list.source.grep.defaultArgs": ["-regex"],
   "list.source.symbols.defaultOptions": ["--interactive", "--number-select"],
   "list.insertMappings": {
@@ -100,23 +103,24 @@
     "<C-p>": "normal:k",
     "<C-t>": "action:tabe",
     "<C-x>": "action:split",
-    "<C-v>": "action:vsplit",
     "<CR>" : "action:select"
   },
   "list.normalMappings": {
     "d"     : "action : delete",
     "<C-x>" : "action : split",
-    "<C-v>" : "action : vsplit",
     "<C-t>" : "action : tabe",
     "<CR>"  : "action : select"
   },
-  "coc.preferences.formatOnSaveFiletypes":["javascript", "html", "css", "vim", "bash", "powershell"],
+  "coc.preferences.formatOnSaveFiletypes":["javascript", "html", "css", "vim", "bash", "powershell", "python"],
   "diagnostic.checkCurrentLine": true,
   "diagnostic.displayByAle": true,
   "diagnostic.level": "warning",
   "diagnostic.joinMessageLines": true,
   "diagnostic.virtualText": true,
-  "diagnostic.virtualTextPrefix": "VT Diagnostic: ",
+  "diagnostic.virtualText": true,
+  "diagnostic.virtualTextPrefix": "Coc Diagnostic: ",
+  "diagnostic.messageTarget": "echo",
+  "diagnostic.refreshAfterSave": true,
   "list.extendedSearchMode": true,
   "coc.preferences.previewAutoClose": true,
   "suggest.completionItemKindLabels": {
@@ -146,5 +150,5 @@
     "typeParameter" : "\uf728",
     "default"       : "\uf29c"
   },
-  "json.format.enable": true
+  "signature.hideOnTextChange": true
 }

@@ -9,7 +9,7 @@
 let s:cpo_save = &cpoptions
 set cpoptions-=c
 
-let s:debug = 1
+let s:debug = 0
 
 " Options: {{{1
 setlocal linebreak
@@ -119,13 +119,15 @@ function! ALE_Python_Conf()
           \   },
           \ }
 
-    " The external program vim uses for gg=G can be configured
-    " Hey you in the future. You can use :set *prg<Tab> and see all of the
     let g:ale_virtualenv_dir_names = []
-    if isdirectory('~/virtualenvs')
-      let g:ale_virtualenv_dir_names += '~/virtualenvs'
+    if isdirectory(expand('~/virtualenvs'))
+      let g:ale_virtualenv_dir_names += expand('~/virtualenvs')
     elseif isdirectory(expand('~/Anaconda3'))
       let g:ale_virtualenv_dir_names += expand('~/Anaconda3')
+    endif
+
+    if isdirectory(expand('~/.local/share/virtualenvs'))
+      let g:ale_virtualenv_dir_names += expand('~/.local/share/virtualenvs')
     endif
 
   let b:ale_fixers = [

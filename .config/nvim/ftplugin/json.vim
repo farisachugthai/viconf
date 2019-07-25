@@ -1,7 +1,7 @@
 " ============================================================================
   " File: json.vim
   " Author: Faris Chugthai
-  " Description: JSON
+  " Description: JSON ftplugin
   " Last Modified: June 23, 2019
 " ============================================================================
 
@@ -27,14 +27,21 @@ setlocal commentstring=
 " Like what the literal fuck
 setlocal expandtab softtabstop=2 shiftwidth=2
 
+" Let's add in a few more options though. Enforce 2 space tabs
+setlocal expandtab softtabstop=2 shiftwidth=2
+
+set suffixesadd=.json
+
 " Plugins: {{{1
 
 function! ALE_JSON_Conf() abort
+  " Slowly but surely I'm working towards a uniform way of doing this
 
   if s:debug
     echomsg 'JSON ftplugin was called'
   endif
 
+  " Standard fixers defined for JSON
   let b:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
 
   if executable('prettier')
@@ -43,6 +50,12 @@ function! ALE_JSON_Conf() abort
 
   if executable('jq')
     let b:ale_fixers += ['jq']
+  endif
+
+  " Jul 17, 2019: Only json linter available
+  if executable('fixjson')
+    let b:ale_linters = ['fixjson']
+    let b:ale_linters_explicit = 1
   endif
 
 endfunction
@@ -59,13 +72,13 @@ if has_key(plugs, 'ale') && &filetype==#'json'
   augroup END
 endif
 
-
 " Commands: {{{1
 " TODO: Could pretty easily make a command that runs python -m json.fix('%')
 " on a buffer
+" Unfortunately I can't get the right invocation down :/
 
 " Atexit: {{{1
-let b:undo_ftplugin = 'setlocal fo< com< cms< sts< et< sw<'
+let b:undo_ftplugin = 'setlocal fo< com< cms< et< sts< sw< sua<'
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

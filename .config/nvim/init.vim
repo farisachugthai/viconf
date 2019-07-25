@@ -12,8 +12,9 @@ set cpoptions-=c
 let g:termux = isdirectory('/data/data/com.termux')
 let g:ubuntu = has('unix') && !has('macunix') && empty(g:termux)
 " How is `has('win32')` a nvim specific thing. Tried in vim and it didn't work!
+" TODO: !has('unix') is easier
 let g:windows = has('win32') || has('win64')
-let g:wsl = has('wsl')
+let g:wsl = has('wsl') " TODO: it doesn't work. - From wsl
 
 " unabashedly stolen from junegunn dude is too good.
 let g:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/init.vim.local'
@@ -31,24 +32,19 @@ if empty(s:plugins)
   " bootstrap plug.vim on new systems
   function! s:InstallPlug() abort
 
-    try
-      " Successfully executed on termux
-      execute('!curl --progress-bar --create-dirs -Lo ' . stdpath('data') . '/site/autoload/plug.vim' . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
-    catch
-      echo v:exception
-    endtry
+    if empty(executable('curl')) | finish | endif  " what scope does this statement end?
+    try " Successfully executed on termux
+      execute('!curl --progress-bar --create-dirs -Lo '
+            \ . stdpath('data') . '/site/autoload/plug.vim'
+            \ . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
+    catch | echo v:exception | endtry
   endfunction
 
   call <SID>InstallPlug()
 endif
 
-" Define The Plugs Dict: {{{2
-" Don't assume that the InstallPlug() func worked
-if empty('plugs')
-  let plugs = {}
-else
-  runtime junegunn.vim
-endif
+" Don't assume that the InstallPlug() func worked so ensure it's defined
+if empty('plugs') | let plugs = {} | else | runtime junegunn.vim | endif
 
 " General Syntax Highlighting: {{{1
 " Gruvbox: {{{2
@@ -93,32 +89,27 @@ endif
 set swapfile undofile
 " persist the undo tree for each file
 let &undodir = stdpath('config') . '/undodir'
-
 set backupext='.bak'        " like wth is that ~ nonsense?
-
-" protect against crash-during-write
-set writebackup
-" but do not persist backup after successful write
-set nobackup
-" use rename-and-write-new method whenever safe
-set backupcopy=auto
+set writebackup        " protect against crash-during-write
+set nobackup           " but do not persist backup after successful write
+set backupcopy=auto    " use rename-and-write-new method whenever safe
 " patch required to honor double slash at end
-if has("patch-8.1.0251")
-	" consolidate the writebackups -- not a big
-	" deal either way, since they usually get deleted
+if has('patch-8.1.0251')
+	" consolidate the writebackups -- they usually get deleted
   let &backupdir=stdpath('config') . '/undodir//'
 end
 
 " Global Options: {{{1
 " Pep8 Global Options: {{{2
 if &tabstop > 4 | set tabstop=4 | endif
-if &shiftwidth > 4 | set shiftwidth=4 | endif
+if &shiftwidth > 4  | set shiftwidth=4 | endif
 set expandtab smarttab      " On pressing tab, insert 4 spaces
 set softtabstop=4
 let g:python_highlight_all = 1
 
 " Folds: {{{2
 set foldenable
+" Use 2 columns to indicate fold level and whether a fold is open or closed.
 set foldlevelstart=0 foldlevel=0 foldnestmax=10 foldmethod=marker foldcolumn=2
 set signcolumn=yes    " not fold related but close to column
 
@@ -130,18 +121,17 @@ set splitbelow splitright
 " Resize windows automatically. nvim also autosets equalalways
 set winfixheight winfixwidth
 
+" Admittedly I kinda know why the screen looks so small
+if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif
 set cmdheight=2
 set number relativenumber
-
-" Spell Checker: {{{2
-set spelllang=en spellsuggest=5                      " Limit the number of suggestions from 'spell suggest'
+set spelllang=en spellsuggest=5       " Limit suggestions from 'spell suggest'
 
 if filereadable(stdpath('config') . '/spell/en.utf-8.add')
   let &spellfile = stdpath('config') . '/spell/en.utf-8.add'
 endif
 
 " Autocompletion: {{{2
-
 set wildmode=full:list:longest,full:list
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 " A list of words that change how command line completion is done.
@@ -161,7 +151,8 @@ let &path = &path . ',' . stdpath('config')
 let &path = &path . ',' . stdpath('data')
 let &path = &path . ',' . expand('$VIMRUNTIME')
 
-if &term =~# 'xterm-256color' || &term ==# 'cygwin' || &term ==# 'builtin_tmux' || &term ==# 'tmux-256color' || &term ==# 'builtin-vtpcon'
+if &term =~# 'xterm-256color' || &term ==# 'cygwin' || &term ==# 'builtin_tmux'
+      \ || &term ==# 'tmux-256color' || &term ==# 'builtin-vtpcon'
   set termguicolors
 
 elseif exists('ConEmuAnsi')
@@ -176,7 +167,6 @@ set sessionoptions+=unix,slash
 if &formatexpr ==# ''
   setlocal formatexpr=format#Format()  " check the autoload directory
 endif
-
 set tags+=./tags,./*/tags,~/projects/**/tags
 set tagcase=smart
 set showfulltag
@@ -213,7 +203,6 @@ vnoremap <BS> d
 noremap <Leader>cd <Cmd>cd %:p:h<CR><Bar><Cmd>pwd<CR>
 " Save a file as root
 noremap <Leader>W <Cmd>w !sudo tee % > /dev/null<CR>
-
 noremap <Leader>sp <Cmd>setlocal spell!<CR>
 noremap <Leader>s= z=
 
@@ -229,10 +218,8 @@ noremap k gk
 noremap <Up> gk
 noremap <Down> gj
 
-" this can be annoying. maybe turn to command? noremap <C-]> g<C-]>
 " Avoid accidental hits of <F1> while aiming for <Esc>
 noremap! <F1> <Esc>
-
 " Complete whole filenames/lines with a quicker shortcut key in insert mode
 " Leave these as recursive mappings though
 imap <C-f> <C-x><C-f>
@@ -252,16 +239,15 @@ noremap <expr> , getcharsearch().forward ? ',' : ';'
 
 runtime macros/matchit.vim
 
-set showmatch
-set matchpairs+=<:>
+set showmatch matchpairs+=<:>
 " Show the matching pair for 2 seconds
 set matchtime=20
 
 " From pi_paren.txt
 " Matching parenthesises are highlighted A timeout of 300 msec (60 msec in Insert mode). This can be changed with the
+" variables and their buffer-local equivalents b:matchparen_timeout and b:matchparen_insert_timeout.
 let g:matchparen_timeout = 500
 let g:matchparen_insert_timeout = 300
-" variables and their buffer-local equivalents b:matchparen_timeout and b:matchparen_insert_timeout.
 
 " Omnifuncs: {{{2
 
@@ -291,31 +277,27 @@ function! s:statusline_expr() abort
   " use the builtins to fill out the information.
   if exists('*WebDevIconsGetFileTypeSymbol')
     let dicons = ' %{WebDevIconsGetFileTypeSymbol()} '
-  else
-    let dicons = ''
-  endif
+  else | let dicons = '' | endif
   let fug = "%{exists('g:loaded_fugitive') ? fugitive#statusline() : ''}"
   let sep = ' %= '
   let pos = ' %-12(%l : %c%V%) '
-if exists('*CSV_WCol')
-    let csv = '%1*%{&ft=~"csv" ? CSV_WCol() : ""}%*'
-else | let csv = '' | endif
+  if exists('*CSV_WCol')
+      let csv = '%1*%{&ft=~"csv" ? CSV_WCol() : ""}%*'
+  else | let csv = '' | endif
 
-if exists('*strftime')
-" Overtakes the whole screen when Termux zooms in
-  if &columns > 80
-    let tstmp = ' ' . '%{strftime("%H:%M %m/%d/%Y", getftime(expand("%:p")))}'  " last modified timestamp
+  if exists('*strftime')
+  " Overtakes the whole screen when Termux zooms in
+    if &columns > 80
+      let tstmp = ' ' . '%{strftime("%H:%M %m/%d/%Y", getftime(expand("%:p")))}'  " last modified timestamp
+    else | let tstmp = '' | endif
   else | let tstmp = '' | endif
-
-else | let tstmp = '' | endif
-
   return '[%n] %f '. dicons . '%m' . '%r' . ' %y ' . fug . csv . ' ' . ' %{&ff} ' . tstmp . sep . pos . '%*' . ' %P'
 endfunction
 
+let &statusline = <SID>statusline_expr()
 if exists('*coc#status')
 	set statusline^=%{coc#status()}
 endif
-let &statusline = <SID>statusline_expr()
 
 " Clear Hlsearch: {{{2
 

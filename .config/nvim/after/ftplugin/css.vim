@@ -21,6 +21,8 @@ setlocal shiftwidth=2
 setlocal softtabstop=2
 setlocal suffixesadd=.html,.css
 
+compiler csslint
+
 " Plugins: {{{1
 
 function! ALE_CSS_Conf()

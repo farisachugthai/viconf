@@ -5,7 +5,7 @@
 A useful combination with UltiSnips.
 
 * Add docstrings to everything. Kinda forces your hand to learn how
-everything works
+  everything works
     * Admittedly good start though!
     * May want to add which snippets depend on it. If not simple examples
       for the return value will be more than plenty.
@@ -110,7 +110,6 @@ def make_box(twidth, bwidth=None):
 
         :func:`get_comment_format`
     """
-    b, m, e, i = (s.strip() for s in get_comment_format())
     bwidth_inner = bwidth - 3 - max(
         len(b), len(i + e)
     ) if bwidth else twidth + 2
