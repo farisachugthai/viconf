@@ -7,7 +7,14 @@
 
 " Guards: {{{1
 let s:cpo_save = &cpoptions
-set cpoptions-=c
+set cpoptions-=C
+
+" Oddly I don't have an ftplugin guard setup. But rst sourced this in so...
+if &filetype != 'python'
+  finish
+endif
+
+" I mean is it not a little ridiculous that I have to do shit like that
 
 let s:debug = 0
 
@@ -121,13 +128,13 @@ function! ALE_Python_Conf()
 
     let g:ale_virtualenv_dir_names = []
     if isdirectory(expand('~/virtualenvs'))
-      let g:ale_virtualenv_dir_names += expand('~/virtualenvs')
+      let g:ale_virtualenv_dir_names += [expand('~/virtualenvs')]
     elseif isdirectory(expand('~/Anaconda3'))
-      let g:ale_virtualenv_dir_names += expand('~/Anaconda3')
+      let g:ale_virtualenv_dir_names += [expand('~/Anaconda3')]
     endif
 
     if isdirectory(expand('~/.local/share/virtualenvs'))
-      let g:ale_virtualenv_dir_names += expand('~/.local/share/virtualenvs')
+      let g:ale_virtualenv_dir_names += [expand('~/.local/share/virtualenvs')]
     endif
 
   let b:ale_fixers = [

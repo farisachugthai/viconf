@@ -12,7 +12,7 @@ endif
 " let g:loaded_pydoc_plugin = 1
 
 let s:cpo_save = &cpoptions
-set cpoptions-=c
+set cpoptions-=C
 
 " Options: {{{1
 
@@ -20,41 +20,22 @@ if !exists('g:pydoc_window')
   let g:pydoc_window = 1  " should this be an int or str. hm.
 endif
 
-" Functions: {{{1
-
-" Helptabs:
-" I've pretty heavily modified this one but junegunn gets the initial credit.
-function! g:Helptab()
-  setlocal number relativenumber
-  if len(nvim_list_wins()) > 1
-    wincmd T
-  endif
-
-  setlocal nomodified
-  setlocal buflisted
-  " Complains that we can't modify any buffer. But its a local option so yes we can
-  silent setlocal nomodifiable
-
-  noremap <buffer> q <Cmd>q<CR>
-  " Check the rplugin/python3/pydoc.py file
-  noremap <buffer> P <Cmd>Pydoc<CR>
-endfunction
 
 " Autocmds: {{{1
 
 if &filetype==man || &filetype==help
   augroup mantabs
-    autocmd Filetype * call g:Helptab()
+    autocmd Filetype * call pydoc_help#Helptab()
   augroup END
 endif
 
 " Apr 23, 2019: Didn't know complete help was a thing.
 " Oh holy shit that's awesome
-command! -nargs=1 -complete=help Help call g:Helptab()
+command! -nargs=1 -complete=help Help call pydoc_help#Helptab()
 
 " Commands: {{{1
 
-if has('python') || has('python')
+if has('python') || has('python3')
 
   command! -nargs=0 -range PydocThis call pydoc_help#PydocCword()
 

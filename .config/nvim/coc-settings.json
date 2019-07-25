@@ -150,5 +150,6 @@
     "typeParameter" : "\uf728",
     "default"       : "\uf29c"
   },
-  "signature.hideOnTextChange": true
+  "signature.hideOnTextChange": true,
+  "git.enableGutters": true
 }
