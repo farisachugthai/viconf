@@ -83,4 +83,7 @@ augroup TermGroup
   " unless 'hidden' is set.
   " To enter |Terminal-mode| automatically:
   autocmd TermOpen * startinsert
+
+  " Can't believe I went this longnwithout this to match!
+  autocmd TermClose * stopinsert
 augroup END

@@ -27,7 +27,7 @@ endfunction
 
 " HiC: Show hl group and fg color {{{1
 function! syncom#HiC() abort
-
+  " This function could be expanded with groups 
   echo 'Highlighting group: ' . synIDattr(synID(line('.'), col('.'), 1), 'name')
   echo 'Foreground color: ' . synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'fg')
 
@@ -39,7 +39,7 @@ endfunction
 function! syncom#HiD() abort
 
   " TODO: Debug
-  echo join(map(synstack(line('.'), col('.')), 'synIDattr(id, "name")'), '\n')
+  echo join(map(synstack(line('.'), col('.')),) synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'fg')
 
 endfunction
 

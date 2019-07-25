@@ -93,6 +93,7 @@
     }
   },
   "list.source.grep.defaultArgs": ["-regex"],
+  "list.source.symbols.defaultOptions": ["--interactive", "--number-select"],
   "list.insertMappings": {
     "<C-r>": "do:refresh",
     "<C-n>": "normal:j",

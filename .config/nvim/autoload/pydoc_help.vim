@@ -11,8 +11,19 @@ set cpoptions-=c
 
 " Pydoc Cword: {{{1
 function! pydoc_help#PydocCword() abort
-    enew
-    exec ':r! pydoc <cword>'
+
+  " Holy shit it works!!!
+  let s:temp_cword = expand('<cWORD>')
+  enew
+  exec ':r! pydoc ' . s:temp_cword
+  setlocal relativenumber
+  setlocal filetype=rst
+  setlocal nomodified
+  setlocal buflisted
+  silent setlocal nomodifiable
+
+  " If you wanna keep going we can change the status line. We can change how
+  " we invoke python
 endfunction
 
 " Pydoc Split Cword: {{{1

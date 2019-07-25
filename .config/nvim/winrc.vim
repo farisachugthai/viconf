@@ -68,17 +68,18 @@ function! g:PowerShell() abort
   " Set up powershell as the system shell in Neovim
   " Moved out of the init.
   " The below is from the nvim help docs.
-  " set shell=powershell shellpipe=\| shellredir=> shellxquote=
+  " set shell=powershell
   " let &shellcmdflag='-NoLogo  -ExecutionPolicy RemoteSigned -Command $* '
   " Should I -NoExit this?
 
   " Here goes...
-  unlet! $COMSPEC
-  let $COMSPEC = 'C:/Program Files/PowerShell/6/pwsh.exe'
+  " unlet! $COMSPEC
+  " let $COMSPEC = 'C:/Program Files/PowerShell/6/pwsh.exe'
   unlet! $SHELL
-  let $SHELL = 'C:/Program Files/PowerShell/6/pwsh.exe'
+  let $SHELL = 'C:/pwsh/7-preview/pwsh.exe'
   set shell=pwsh.exe
-  let &shellcmdflag = '-Command $* '
+  set shellpipe=\| shellredir=> shellxquote=
+  let &shellcmdflag = '-Command -NoProfile -NoLogo $* '
 
 endfunction
 

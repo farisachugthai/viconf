@@ -9,7 +9,7 @@
 if exists('g:loaded_pydoc_plugin') || &compatible
     finish
 endif
-let g:loaded_pydoc_plugin = 1
+" let g:loaded_pydoc_plugin = 1
 
 let s:cpo_save = &cpoptions
 set cpoptions-=c
@@ -42,10 +42,11 @@ endfunction
 
 " Autocmds: {{{1
 
-augroup mantabs
-  autocmd!
-  autocmd Filetype man,help call g:Helptab()
-augroup END
+if &filetype==man || &filetype==help
+  augroup mantabs
+    autocmd Filetype * call g:Helptab()
+  augroup END
+endif
 
 " Apr 23, 2019: Didn't know complete help was a thing.
 " Oh holy shit that's awesome
@@ -53,11 +54,14 @@ command! -nargs=1 -complete=help Help call g:Helptab()
 
 " Commands: {{{1
 
-command! PydocThis call pydoc_help#PydocCword()
+if has('python') || has('python')
 
-" This should be able to take the argument '-bang' and allow to open in a new
-" separate window like fzf does.
-command! PydocSplit call pydoc_help#SplitPydocCword()
+  command! -nargs=0 -range PydocThis call pydoc_help#PydocCword()
+
+  " This should be able to take the argument '-bang' and allow to open in a new
+  " separate window like fzf does.
+  command! -nargs=0 PydocSplit call pydoc_help#SplitPydocCword()
+endif
 
 " Atexit: {{{1
 

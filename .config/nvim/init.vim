@@ -8,16 +8,11 @@ let s:cpo_save = &cpoptions
 set cpoptions-=c
 
 " OS Setup: {{{2
-
 " Termux check from Evervim. Thanks!
 let g:termux = isdirectory('/data/data/com.termux')
-
 let g:ubuntu = has('unix') && !has('macunix') && empty(g:termux)
-
 " How is `has('win32')` a nvim specific thing. Tried in vim and it didn't work!
 let g:windows = has('win32') || has('win64')
-
-" TODO: it doesn't work. - From wsl
 let g:wsl = has('wsl')
 
 " unabashedly stolen from junegunn dude is too good.
@@ -25,9 +20,6 @@ let g:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/init.vim
 runtime g:local_vimrc
 
 if !has('unix') | runtime winrc.vim | endif
-
-set sessionoptions+=unix,slash
-
 " Factor out all of the remote hosts stuff.
 runtime remote.vim
 
@@ -90,9 +82,7 @@ if has('nvim-0.4')
   let &shadafile = stdpath('data') . '/shada/main.shada'
   " toggle transparency in the pum
   set pumblend=80
-  try
-    set pyxversion=3
-  catch /^Vim:E518:*/
+  try | set pyxversion=3 | catch /^Vim:E518:*/
   endtry
 endif
 
@@ -100,11 +90,9 @@ endif
 
 " Protect changes between writes. Default values of updatecount
 " (200 keystrokes) and updatetime (4 seconds) are fine
-set swapfile        " also note nvim sets directory to stdpath(data) . /swap
-
+set swapfile undofile
 " persist the undo tree for each file
 let &undodir = stdpath('config') . '/undodir'
-set undofile
 
 set backupext='.bak'        " like wth is that ~ nonsense?
 
@@ -131,12 +119,7 @@ let g:python_highlight_all = 1
 
 " Folds: {{{2
 set foldenable
-set foldlevelstart=0
-set foldlevel=0
-set foldnestmax=10
-set foldmethod=marker
-" Use 2 columns to indicate fold level and whether a fold is open or closed.
-set foldcolumn=2      " If less than 2 is used it can get pushed off screen in the TUI
+set foldlevelstart=0 foldlevel=0 foldnestmax=10 foldmethod=marker foldcolumn=2
 set signcolumn=yes    " not fold related but close to column
 
 " Buffers Windows Tabs: {{{2
@@ -151,30 +134,24 @@ set cmdheight=2
 set number relativenumber
 
 " Spell Checker: {{{2
-set spelllang=en
+set spelllang=en spellsuggest=5                      " Limit the number of suggestions from 'spell suggest'
 
 if filereadable(stdpath('config') . '/spell/en.utf-8.add')
   let &spellfile = stdpath('config') . '/spell/en.utf-8.add'
 endif
 
-set spellsuggest=5                      " Limit the number of suggestions from 'spell suggest'
-
 " Autocompletion: {{{2
 
 set wildmode=full:list:longest,full:list
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
-
 " A list of words that change how command line completion is done.
 " Currently only one word is allowed: tagfile
 set wildoptions=tagfile
-
 set complete+=kspell                    " Autocomplete in insert mode
 " Create a preview window and display all possibilities but don't insert
 set completeopt=menu,menuone,noselect,noinsert,preview
-
 " don't show more than 15 choices in the popup menu. defaults to 0
 set pumheight=15
-
 set ignorecase             " both smartcase and infercase require ignorecase to be set
 set smartcase infercase    " the case when you search for stuff
 
@@ -194,6 +171,7 @@ endif
 set makeencoding=char         " Used by the makeprg. system locale is used
 
 " Other Global Options: {{{2
+set sessionoptions+=unix,slash
 
 if &formatexpr ==# ''
   setlocal formatexpr=format#Format()  " check the autoload directory
@@ -202,7 +180,6 @@ endif
 set tags+=./tags,./*/tags,~/projects/**/tags
 set tagcase=smart
 set showfulltag
-
 set mouse=a
 set isfname-==
 
@@ -217,36 +194,23 @@ endif
 
 set modeline
 set autochdir browsedir="buffer"   " which directory is used for the file browser
-
 let &showbreak = '↳ '                   " Indent wrapped lines correctly
-set breakindent
-set breakindentopt=sbr
-
+set breakindent breakindentopt=sbr
 set updatetime=100
-
 set inccommand=split
 let g:tutor_debug = 1
-
 set terse     " Don't display the message when a search hits the end of file
 set shortmess+=a
 set shortmess-=tT
-
 set sidescroll=10                       " Didn't realize the default is 1
-
-set virtualedit=block,insert,onemore
 
 " Mappings: {{{1
 " General_Mappings: {{{2
 " I accidentally do this so often it feels necessary
 noremap q; q:
-
-" Ex mode is dumb
 noremap Q @q
-
 vnoremap <BS> d
-" Switch CWD to the directory of the open buffer
 noremap <Leader>cd <Cmd>cd %:p:h<CR><Bar><Cmd>pwd<CR>
-
 " Save a file as root
 noremap <Leader>W <Cmd>w !sudo tee % > /dev/null<CR>
 
@@ -266,7 +230,6 @@ noremap <Up> gk
 noremap <Down> gj
 
 " this can be annoying. maybe turn to command? noremap <C-]> g<C-]>
-
 " Avoid accidental hits of <F1> while aiming for <Esc>
 noremap! <F1> <Esc>
 
@@ -336,44 +299,23 @@ function! s:statusline_expr() abort
   let pos = ' %-12(%l : %c%V%) '
 if exists('*CSV_WCol')
     let csv = '%1*%{&ft=~"csv" ? CSV_WCol() : ""}%*'
-else
-    let csv = ''
-endif
+else | let csv = '' | endif
 
 if exists('*strftime')
 " Overtakes the whole screen when Termux zooms in
   if &columns > 80
     let tstmp = ' ' . '%{strftime("%H:%M %m/%d/%Y", getftime(expand("%:p")))}'  " last modified timestamp
-  else
-    let tstmp = ''
-  endif
+  else | let tstmp = '' | endif
 
-else
-  let tstmp = ''
-endif
+else | let tstmp = '' | endif
 
   return '[%n] %f '. dicons . '%m' . '%r' . ' %y ' . fug . csv . ' ' . ' %{&ff} ' . tstmp . sep . pos . '%*' . ' %P'
 endfunction
 
-function! StatusDiagnostic() abort
-
-  let info = get(b:, 'coc_diagnostic_info', {})
-  if empty(info) | return '' | endif
-
-  let msgs = []
-  if get(info, 'error', 0)
-    call add(msgs, 'E' . info['error'])
-  endif
-
-  if get(info, 'warning', 0)
-    call add(msgs, 'W' . info['warning'])
-  endif
-
-  return join(msgs, ' ') . ' ' . get(g:, 'coc_status', '')
-
-endfunction
-
-let &statusline = <SID>statusline_expr() . StatusDiagnostic()
+if exists('*coc#status')
+	set statusline^=%{coc#status()}
+endif
+let &statusline = <SID>statusline_expr()
 
 " Clear Hlsearch: {{{2
 
