@@ -68,11 +68,11 @@ endif
 " using rst docs
 let g:rst_syntax_code_list = {
     \ 'vim': ['vim'],
-    \ 'java': ['java'],
     \ 'python': ['python', 'python3', 'ipython'],
     \ 'sh': ['sh'],
     \ }
 
+" can't use java in the syntax list anymore this shit takes way too long
 
 " Atexit: {{{1
 let b:undo_ftplugin = 'set et< ts< sw< sts< cms< com< cc< lbr< fdl< fdls< spell< kp<'

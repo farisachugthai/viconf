@@ -20,26 +20,21 @@ if !exists('g:pydoc_window')
   let g:pydoc_window = 1  " should this be an int or str. hm.
 endif
 
-" Functions: {{{1
-
-" Helptabs:
-" I've pretty heavily modified this one but junegunn gets the initial credit.
-
 " Autocmds: {{{1
 
 if &filetype==man || &filetype==help
   augroup mantabs
-    autocmd Filetype * call g:Helptab()
+    autocmd Filetype * call pydoc_help#Helptab()
   augroup END
 endif
 
 " Apr 23, 2019: Didn't know complete help was a thing.
 " Oh holy shit that's awesome
-command! -nargs=1 -complete=help Help call g:Helptab()
+command! -nargs=1 -complete=help Help call pydoc_help#Helptab()
 
 " Commands: {{{1
 
-if has('python') || has('python')
+if has('python') || has('python3')
 
   command! -nargs=0 -range PydocThis call pydoc_help#PydocCword()
 

@@ -57,10 +57,6 @@ if !empty(g:ubuntu)
   " I don't know rust but honestly its a model ftplugin so download it for
   " reference
   Plug 'rust-lang/rust.vim'
-
-  " These plugins are insanely heavy
-  Plug 'Rykka/InstantRst', {'for': ['rst', 'python']}
-  Plug 'gu-fan/riv.vim', {'for': ['rst', 'python']}
 endif
 
 if empty(g:termux)
