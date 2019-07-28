@@ -15,6 +15,12 @@ endif
 let s:cpo_save = &cpoptions
 set cpoptions&vim
 
+" }}}
+" Well I guess here's one option
+if exists('*coc#status')
+  set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+endif
+
 " Mappings: {{{1
 
 " This section primarily focuses on setting up the autocompletion aspect
@@ -53,23 +59,23 @@ let g:coc_snippet_prev = '<C-k>'
 " nnoremap <silent> gr <Plug>(coc-references)
 
 " Use K to show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
+"nnoremap <silent> K :call <SID>show_documentation()<CR>
 
-function! s:show_documentation()
-  " Jun 15, 2019: Added none if we do something like `:r!pydoc thing`
-  if (index(['vim','help','none'], &filetype) >= 0)
-    execute 'h ' . expand('<cWORD>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
+" function! s:show_documentation()
+"   " Jun 15, 2019: Added none if we do something like `:r!pydoc thing`
+"   if (index(['vim','help','none'], &filetype) >= 0)
+"     execute 'h ' . expand('<cWORD>')
+"   else
+"     call CocAction('doHover')
+"   endif
+" endfunction
 
 " Remap for rename current word
 " nnoremap <leader>rn <Plug>(coc-rename)
 
 augroup CocConf
   " Setup formatexpr specified filetype(s).
-  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
   " Update signature help on jump placeholder
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
   " Highlight symbol under cursor on CursorHold
@@ -121,18 +127,20 @@ noremap <silent> <C-c>q <Plug>(coc-fix-current)
 
 " Commands: {{{1
 
+" Let's start grouping these together by prefixing with C or something
+
 " Use `:Format` to format current buffer
-command! -nargs=0 Format :call CocAction('format')
+command! -nargs=0 CoFormat :call CocAction('format')
 
 " Use `:Fold` to fold current buffer
-command! -nargs=? Fold :call CocAction('fold', <f-args>)
+command! -nargs=? CoFold :call CocAction('fold', <f-args>)
 
 " use `:OR` for organize import of current buffer
-command! -nargs=0 SortImport :call CocAction('runCommand', 'editor.action.organizeImport')
+command! -nargs=0 CoSort :call CocAction('runCommand', 'editor.action.organizeImport')
 
 " Just tried this and it worked! So keep checking :CocList commands and add
 " more as we go.
-command! -nargs=0 Python :call CocActionAsync('runCommand', 'python.startREPL')|
+command! -nargs=0 CoPython :call CocActionAsync('runCommand', 'python.startREPL')|
 
 " Atexit: {{{1
 let &cpoptions = s:cpo_save

@@ -12,7 +12,7 @@ endif
 " let g:loaded_pydoc_plugin = 1
 
 let s:cpo_save = &cpoptions
-set cpoptions-=c
+set cpoptions-=C
 
 " Options: {{{1
 
@@ -24,21 +24,6 @@ endif
 
 " Helptabs:
 " I've pretty heavily modified this one but junegunn gets the initial credit.
-function! g:Helptab()
-  setlocal number relativenumber
-  if len(nvim_list_wins()) > 1
-    wincmd T
-  endif
-
-  setlocal nomodified
-  setlocal buflisted
-  " Complains that we can't modify any buffer. But its a local option so yes we can
-  silent setlocal nomodifiable
-
-  noremap <buffer> q <Cmd>q<CR>
-  " Check the rplugin/python3/pydoc.py file
-  noremap <buffer> P <Cmd>Pydoc<CR>
-endfunction
 
 " Autocmds: {{{1
 

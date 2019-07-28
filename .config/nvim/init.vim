@@ -190,7 +190,7 @@ set updatetime=100
 set inccommand=split
 let g:tutor_debug = 1
 set terse     " Don't display the message when a search hits the end of file
-set shortmess+=a
+set shortmess+=ac
 set shortmess-=tT
 set sidescroll=10                       " Didn't realize the default is 1
 
@@ -295,9 +295,6 @@ function! s:statusline_expr() abort
 endfunction
 
 let &statusline = <SID>statusline_expr()
-if exists('*coc#status')
-	set statusline^=%{coc#status()}
-endif
 
 " Clear Hlsearch: {{{2
 

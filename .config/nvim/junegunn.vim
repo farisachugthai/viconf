@@ -8,7 +8,7 @@
 " Guard: {{{1
 scriptencoding utf-8
 let s:cpo_save = &cpoptions
-set cpoptions-=c
+set cpoptions-=C
 " Note that this will only work on neovim as it it makes a call
 
 " guard

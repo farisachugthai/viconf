@@ -7,7 +7,7 @@
 
 " Guards: {{{1
 let s:cpo_save = &cpoptions
-set cpoptions-=c
+set cpoptions-=C
 
 " Pydoc Cword: {{{1
 function! pydoc_help#PydocCword() abort
@@ -31,6 +31,24 @@ function! pydoc_help#SplitPydocCword() abort
     split
     enew
     exec ':r! pydoc <cword>'
+endfunction
+
+" Helptags: {{{1
+
+function! pydoc_help#Helptab() abort
+  setlocal number relativenumber
+  if len(nvim_list_wins()) > 1
+    wincmd T
+  endif
+
+  setlocal nomodified
+  setlocal buflisted
+  " Complains that we can't modify any buffer. But its a local option so yes we can
+  silent setlocal nomodifiable
+
+  noremap <buffer> q <Cmd>q<CR>
+  " Check the rplugin/python3/pydoc.py file
+  noremap <buffer> P <Cmd>Pydoc<CR>
 endfunction
 
 " Atexit: {{{1

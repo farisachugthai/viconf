@@ -6,6 +6,11 @@
 " ============================================================================
 
 " Guards: {{{1
+if exists('g:did_python_vim') || &compatible || v:version < 700
+  finish
+endif
+let g:did_python_vim = 1
+
 let s:cpo_save = &cpoptions
 set cpoptions-=c
 
@@ -29,6 +34,8 @@ setlocal keywordprg=pydoc
 
 setlocal suffixesadd+=.py
 
+" Path: {{{2
+
 " Undo ftplugin?
 if isdirectory(expand('$_ROOT') . '/lib/python3')
     " Double check globbing in vim
@@ -40,21 +47,40 @@ if isdirectory(expand('~/.local/lib/python3.7'))
     let &path = &path . ',' . expand('~') . '/.local/lib/python3.7'
 endif
 
+function! PythonPath()
+
+  let s:orig_path = &path
+
+  if !empty(g:python3_host_prog)
+    let s:root_dir = fnamemodify(g:python3_host_prog, ':h:h')
+  else
+    return s:orig_path
+  endif
+  let s:site_pack = s:root_dir . '/lib/python3.7/site-packages/**3'  " max out at 3 dir deep
+
+  let &path = &path . ',' . s:site_pack
+
+  return &path
+
+endfunction
+
+let &path = PythonPath()
+
 " Autocmd: Highlight 120 Chars: {{{1
-
-
-augroup pythonchars
-    autocmd!
-    autocmd FileType python highlight Excess ctermbg=DarkGrey guibg=Black
-    autocmd FileType python match Excess /\%120v.*/
-augroup END
+" augroup pythonchars
+"     autocmd!
+"     autocmd FileType python highlight Excess ctermbg=DarkGrey guibg=Black
+"     autocmd FileType python match Excess /\%120v.*/
+" augroup END
 
 " Compiler: {{{1
 
 " Well this is neat!
 if executable('pylint')
-    compiler pylint
-    echomsg 'Using pylint as buffer-local compiler. Run `:make %` to use.'
+  compiler pylint
+  echomsg 'Using pylint as buffer-local compiler. Run `:make %` to use.'
+else
+  compiler pytest
 endif
 
 " Mappings: {{{1
@@ -63,7 +89,7 @@ endif
 noremap <F5> <Cmd>py3f %<CR>
 noremap! <F5> <Cmd>py3f %<CR>
 
-" Commands: {{{1
+" Formatters: {{{1
 
 if executable('yapf')
     setlocal equalprg=yapf
