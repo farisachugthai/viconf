@@ -8,7 +8,7 @@
 " Guard: {{{1
 
 let s:cpo_save = &cpoptions
-set cpoptions&vim
+set cpoptions-=C
 
 " Options: {{{1
 setlocal expandtab
@@ -18,7 +18,9 @@ setlocal commentstring=#\ %s
 setlocal textwidth=0
 
 " Recognize powershell's goofy ass hyphenated commands
-setlocal iskeyword+=-
+" Actually it's easier to have this off. Maybe. Maybe make a buffer local
+" mapping where you can toggle it?
+setlocal iskeyword-=-
 
 setlocal suffixesadd+=.ps1
 
@@ -35,7 +37,7 @@ function! ALE_PowerShell_Conf() abort
     echomsg 'Func was called'
   endif
 
-  let g:ale_fixers = extend(g:ale_fixers, {'powershell': ['powershell']})
+  let b:ale_fixers = ['powershell']
 
   if s:debug
     echomsg string(g:ale_fixers)

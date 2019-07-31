@@ -8,7 +8,7 @@
 " Guard: {{{1
 scriptencoding utf-8
 let s:cpo_save = &cpoptions
-set cpoptions-=c
+set cpoptions-=C
 " Note that this will only work on neovim as it it makes a call
 
 " guard
@@ -35,7 +35,6 @@ Plug 'tpope/vim-markdown'
 
 if !empty(g:windows)
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
-else
   Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 endif
 
@@ -46,7 +45,6 @@ endif
 
 Plug 'mhinz/vim-startify'
 Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
-" TODO: lazy load this plugin
 Plug 'greyblake/vim-preview'
 Plug 'luffah/vim-zim', {'for': ['zimwiki', 'zimindex']}
 Plug 'tomtom/tlib_vim'  " this library is incredible

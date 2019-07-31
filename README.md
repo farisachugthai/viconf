@@ -37,23 +37,6 @@ let g:wsl = has('wsl')
 
 ```
 
-### XDG
-
-In adhering to the XDG standard, it's also checked whether environment
-variables such as `$XDG_DATA_HOME` and `$XDG_CONFIG_HOME` are set.
-If they are not, then the folders that they typically inhabit are defined.
-
-```vim
-
-if empty('$XDG_DATA_HOME')
-  if empty(g:windows)
-    let $XDG_DATA_HOME = expand('~/.local/share')
-  else
-    let $XDG_DATA_HOME = expand('~/AppData/Local')
-  endif
-endif
-
-```
 
 This repository strives for maximum portability so long as 1 assumption remain
 true:
@@ -94,8 +77,6 @@ As a result of my modifications, this setup currently has:
   over the defaults provided by either Neovim or Vim.
   - This was accomplished by merging together the highlighting groups of
     both Neovim and Vim, and then adding around 20 links to color groups.
-  - It also depends on the variable `g:colors_name` being set to `Gruvbox`;
-    however, this is being refactored to be more portable to other colorschemes.
 
 ### Colorscheme Improvements
 
@@ -118,7 +99,8 @@ added [filetype detection](./.config/nvim/ftdetect).
   are provided to ease navigation between Nvim windows and the embedded terminal.
 
 - Seamless Tmux integration.
-  - Keybindings for both Nvim and tmux correspond so that jumping from a Nvim window to a Tmux pane uses the same keys.
+  - Keybindings for both Nvim and tmux correspond so that jumping from a Nvim
+    window to a Tmux pane uses the same keys.
   - The configuration for Tmux is displayed at [dotfiles](https://www.github.com/farisachugthai/dotfiles).
 
 

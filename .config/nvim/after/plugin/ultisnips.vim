@@ -16,7 +16,7 @@ if !has_key(plugs, 'ultisnips')
 endif
 
 let s:cpo_save = &cpoptions
-set cpoptions&vim
+set cpoptions-=C
 
 " Mappings: {{{1
 
@@ -26,7 +26,8 @@ noremap! <F4> <Cmd>UltiSnipsEdit<CR>
 noremap <F6> <Cmd>Snippets<CR>
 noremap! <F6> <Cmd>Snippets<CR>
 
-inoremap <C-Tab> * <Cmd>call ultisnips#listsnippets()<CR>
+" Seriously why does this not work yet
+" inoremap <C-Tab> * <Cmd>call ultisnips#listsnippets()<CR>
 
 " Options: {{{1
 
@@ -50,9 +51,7 @@ let g:ultisnips_python_style = 'numpy'
 let g:ultisnips_python_quoting_style = 'double'
 let g:UltiSnipsEnableSnipMate = 0
 
-" I just noticed in plugged/UltiSnips/autoload/UltiSnips/map_keys.vim
-" that there's a context option....what the hell does that mean??
-let g:UltiSnipsEditSplit = 'tabdo'
+let g:UltiSnipsEditSplit = 'context'  " context is an interesting option. it's a vert split unless textwidth <= 80
 
 " Defining it and limiting it to 1 directory means that UltiSnips doesn't
 " iterate through every dir in &rtp which saves an immense amount of time
@@ -80,7 +79,8 @@ endfunction
 " Changed the mapping to Alt-S for snippets.
 inoremap <silent> <M-s> <C-R>=(ExpandPossibleShorterSnippet() == 0? '': UltiSnips#ExpandSnippet())<CR>
 
-" Atexit
+
+" Atexit: {{{1
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

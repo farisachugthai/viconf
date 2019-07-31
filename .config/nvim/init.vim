@@ -47,7 +47,7 @@ endif
 if empty('plugs') | let plugs = {} | else | runtime junegunn.vim | endif
 
 " General Syntax Highlighting: {{{1
-" Gruvbox: {{{2
+
 set synmaxcol=400                       " Lower max syntax highlighting
 
 function! s:Gruvbox() abort

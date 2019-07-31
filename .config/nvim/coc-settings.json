@@ -17,9 +17,11 @@
   "python.linting.flake8Enabled": true,
   "python.linting.pydocstyleEnabled": true,
   "python.linting.pylintEnabled": false,
-  "python.linting.banditEnabled": false,
   "python.terminal.executeInFileDir": true,
   "python.trace.server": "messages",
+  "python.condaPath": "C:/tools/miniconda3/Scripts/conda.exe",
+  "python.jediShortcut": "Jedi",
+  "python.analysis.logLevel": "Warning",
   "python.venvFolders": [
     "~/virtualenvs",
     "~/.local/share/virtualenvs/"

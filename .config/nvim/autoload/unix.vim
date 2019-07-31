@@ -44,7 +44,7 @@ function! unix#UnixOptions() abort
 
     if g:termux
       " May 26, 2019: Just ran into my first problem from a filename with a space in the name *sigh*
-      noremap <silent> <Leader>ts <Cmd>exe "!termux-share -a send " . shellescape(expand("%"))<CR>
+      noremap <silent> <Leader>ts <Cmd>execute '!termux-share -a send ' . shellescape(expand("%"))<CR>
     endif
 
     if isdirectory(expand('$_ROOT/local/include/'))

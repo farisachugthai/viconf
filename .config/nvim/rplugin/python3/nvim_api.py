@@ -1,40 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Helper functions and commands for the nvim API.
-
-.. currentmodule:: nvim_api
-
-:Author: Faris Chugthai
-
-:Last Modified: May 08, 2019
-
-Help on LegacyVim in module pynvim.plugin.script_host object:
-class LegacyVim(pynvim.api.nvim.Nvim)
-|  Method resolution order:
-|      LegacyVim
-|      pynvim.api.nvim.Nvim
-|      __builtin__.object
-|
-|  Methods defined here:
-|
-|  eval(self, expr)
-|
-|  ----------------------------------------------------------------------   |
-Methods inherited from pynvim.api.nvim.Nvim:
-|
-|  __enter__(self)
-|      Enter nvim session as a context manager.
-|
-|  __exit__(self, *exc_info)
-|      Exit nvim session as a context manager.
-|
-|      Closes the event loop.
-|
-|  __init__(self, session, channel_id, metadata, types, decode=False, err_cb=None)
-| Initialize a new Nvim instance. This method is module-private.
-|
-
-"""
+"""Helper functions and commands for the nvim API."""
 import atexit
 from io import StringIO
 import logging

@@ -18,6 +18,7 @@ set cpoptions-=c
 
 " Options: {{{1
 
+" Function named incorrectly.
 if has('unix')
   call unix#UnixOptions()
 endif
@@ -40,13 +41,6 @@ endif
 command! -nargs=1 -bang -complete=customlist,unix#EditFileComplete
    	\ EF edit<bang> <args>
 
-
-" Finger: {{{1
-if executable('!finger')
-  if filereadable('/etc/passwd')
-    command! -complete=custom,unix#ListUsers -nargs=0 Finger !finger <args>
-  endif
-endif
 
 " Chmod: {{{1
 "	:S	Escape special characters for use with a shell command (see
@@ -107,6 +101,7 @@ augroup gitconf
     autocmd BufNewFile,BufRead *.patch set filetype=diff
 
 augroup END
+
 " Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

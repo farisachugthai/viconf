@@ -11,13 +11,12 @@ let s:debug = 1
 if s:debug
   " if were debugging don't define it I'll probably source this file
   " repeatedly
-  echomsg 'Sourced winrc'
 else
   let g:loaded_winrc = 1
 endif
 
 let s:cpo_save = &cpoptions
-set cpoptions-=c
+set cpoptions-=C
 
 " Font: {{{1
 " Should note in the future the pros and cons of checking the existence of the
@@ -70,11 +69,12 @@ function! g:PowerShell() abort
   " The below is from the nvim help docs.
   " set shell=powershell
   " let &shellcmdflag='-NoLogo  -ExecutionPolicy RemoteSigned -Command $* '
-  " Should I -NoExit this?
 
   " Here goes...
   " unlet! $COMSPEC
   " let $COMSPEC = 'C:/Program Files/PowerShell/6/pwsh.exe'
+  " 07/23/2019: Just found out that even when using powershell comspec is
+  " supposed to be set to cmd. Explains a few things
   unlet! $SHELL
   let $SHELL = 'C:/pwsh/7-preview/pwsh.exe'
   set shell=pwsh.exe
@@ -91,6 +91,22 @@ endfunction
 " endtry
 
 command! PowerShell call g:Powershell()
+
+" Terrible Windows/UltiSnips Hack: {{{1
+
+" I have no idea why this needs to be done but it actually fixes UltiSnips,
+" a plugin I haven't been able to use on Windows for MONTHS!
+if !has('unix')
+  if v:vim_did_enter
+    source C:/Users/faris/AppData/Local/nvim-data/plugged/ultisnips/autoload/ultisnips.vim
+  else
+    autocmd VimEnter * source C:/Users/faris/AppData/Local/nvim-data/plugged/ultisnips/autoload/ultisnips.vim
+  endif
+endif
+
+" Hackish way of setting the remotes:{{{1
+
+let g:ruby_provider_host='C:/tools/ruby26/bin/neovim-ruby-host'
 
 " Atexit: {{{1
 

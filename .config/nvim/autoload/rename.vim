@@ -42,11 +42,6 @@ EOF
 endif
 
 
-" Commands: {{{1
-
-" :he map line 1454. How have i never noticed this isn't a feature???
-command! -nargs=1 -bang -complete=file Rename f <args>|w<bang>za
-
 " Atexit: {{{1
 
 let &cpoptions = s:cpo_save
