@@ -20,10 +20,9 @@ if !exists('g:pydoc_window')
   let g:pydoc_window = 1  " should this be an int or str. hm.
 endif
 
-
 " Autocmds: {{{1
 
-if &filetype==man || &filetype==help
+if &filetype=='man' || &filetype=='help'
   augroup mantabs
     autocmd Filetype * call pydoc_help#Helptab()
   augroup END

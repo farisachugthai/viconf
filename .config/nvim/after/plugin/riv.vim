@@ -15,13 +15,12 @@ endif
 if exists('b:did_riv_after_plugin') || &compatible || v:version < 700
     finish
 endif
-let b:did_riv_after_plugin = 1
+
+" Options: {{{1
 
 " Turn off his syntax highlighting
 
 let b:af_rst_loaded = 1
-
-" Options: {{{1
 
 " Highlight py docstrings with rst highlighting
 let g:riv_python_rst_hl = 1
@@ -39,7 +38,7 @@ let g:riv_fuzzy_help = 1
 
 " Mar 11, 2019:
 " which languages to highlight. not sure how this is gonna work out but we'll see
-let g:riv_highlight_code = 'lua,python,cpp,javascript,vim,sh,PowerShell,bash,python3,python,rst,shell,console'
+let g:riv_highlight_code = 'python3,python,shell,console'
 
 " link target's position when created. don't put it at the bottom because in a
 " python file that means you put it out of the docstring and into the actual
@@ -49,10 +48,10 @@ let g:riv_create_link_pos = '.'
 
 let g:riv_default_path = expand('$HOME') . '/projects'
 
-let riv_project1 = { 'Name': 'utilities', 'path': expand('~/projects/utilities'), }
-let riv_project2 = { 'Name': 'Gruvbox-IPython', 'path': expand('~/projects/Gruvbox-IPython'), }
+let s:riv_project1 = { 'Name': 'utilities', 'path': expand('~/projects/utilities'), }
+let s:riv_project2 = { 'Name': 'Gruvbox-IPython', 'path': expand('~/projects/Gruvbox-IPython'), }
 
-let g:riv_projects = [riv_project1, riv_project2]
+let g:riv_projects = [ s:riv_project1, s:riv_project2 ]
 
 let g:riv_todo_helper_ignore_done = 1
 

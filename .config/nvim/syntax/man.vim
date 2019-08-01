@@ -70,46 +70,48 @@ if !exists('b:man_sect')
   call man#init_pager()
 endif
 
-if b:man_sect =~# '^[023]'
+if exists('b:man_sect')
+  if b:man_sect =~# '^[023]'
 
-  syntax case match
+    syntax case match
 
-  syntax include @c $VIMRUNTIME/syntax/c.vim
+    syntax include @c $VIMRUNTIME/syntax/c.vim
 
-  syntax match manCFuncDefinition display '\<\h\w*\>\ze\(\s\|\n\)*(' contained
-  syntax match manSentence display '\%(^ \{3,7}\u\|\.  \u\)\_.\{-}
-        \\%(-$\|\.$\|:$\)\|
-        \ \{3,7}\a.*\%(\.\|:\)$' contained contains=manReference
-
-
-  syntax region manSynopsis start='^\%(
-        \SYNOPSIS\|
-        \SYNTAX\|
-        \SINTASSI\|
-        \SKŁADNIA\|
-        \СИНТАКСИС\|
-        \書式\)$' end='^\%(\S.*\)\=\S$' keepend contains=manSentence,manSectionHeading,@c,manCFuncDefinition
-  syntax region manSynopsis start='^\(LEGACY \)\?SYNOPSIS'hs=s+8 end='^\u[A-Z ]*$'me=e-30 keepend contains=manSectionHeading,@cCode,manCFuncDefinition,manHeaderFile
-  syntax region manErrors   start='^ERRORS'hs=s+6 end='^\u[A-Z ]*$'me=e-30 keepend contains=manSignal,manReference,manSectionHeading,manHeaderFile,manCError
-  syntax match manLowerSentence /\n\s\{7}\l.\+[()]\=\%(\:\|.\|-\)[()]\=[{};]\@<!\n$/ display keepend contained contains=manReference
-  syntax region manExample start='^EXAMPLES\=$' end='^\%(\S.*\)\=\S$' keepend contains=manLowerSentence,manSentence,manSectionHeading,manSubHeading,@c,manCFuncDefinition
-
-  syntax sync match manSyncExample groupthere manExample '^EXAMPLES\=$'
-  syntax sync match manSyncExample groupthere NONE '^\%(EXAMPLES\=\)\@!\%(\S.*\)\=\S$'
-
-  syntax match manCFuncDefinition  display '\<\h\w*\>\s*('me=e-1 contained
-  syntax match manCError           display '^\s\+\[E\(\u\|\d\)\+\]' contained
-  syntax match manSignal           display '\C\<\zs\(SIG\|SIG_\|SA_\)\(\d\|\u\)\+\ze\(\W\|$\)'
+    syntax match manCFuncDefinition display '\<\h\w*\>\ze\(\s\|\n\)*(' contained
+    syntax match manSentence display '\%(^ \{3,7}\u\|\.  \u\)\_.\{-}
+          \\%(-$\|\.$\|:$\)\|
+          \ \{3,7}\a.*\%(\.\|:\)$' contained contains=manReference
 
 
-  hi! link manCFuncDefinition Function
-  hi! link manCError Error
-  hi! link manErrors Error
-  hi! link manLowerSentence String
-  hi! link manSignal Type
-  hi! link manSynopsis Title
-  hi! link manLowerSentence String
+    syntax region manSynopsis start='^\%(
+          \SYNOPSIS\|
+          \SYNTAX\|
+          \SINTASSI\|
+          \SKŁADNIA\|
+          \СИНТАКСИС\|
+          \書式\)$' end='^\%(\S.*\)\=\S$' keepend contains=manSentence,manSectionHeading,@c,manCFuncDefinition
+    syntax region manSynopsis start='^\(LEGACY \)\?SYNOPSIS'hs=s+8 end='^\u[A-Z ]*$'me=e-30 keepend contains=manSectionHeading,@cCode,manCFuncDefinition,manHeaderFile
+    syntax region manErrors   start='^ERRORS'hs=s+6 end='^\u[A-Z ]*$'me=e-30 keepend contains=manSignal,manReference,manSectionHeading,manHeaderFile,manCError
+    syntax match manLowerSentence /\n\s\{7}\l.\+[()]\=\%(\:\|.\|-\)[()]\=[{};]\@<!\n$/ display keepend contained contains=manReference
+    syntax region manExample start='^EXAMPLES\=$' end='^\%(\S.*\)\=\S$' keepend contains=manLowerSentence,manSentence,manSectionHeading,manSubHeading,@c,manCFuncDefinition
 
+    syntax sync match manSyncExample groupthere manExample '^EXAMPLES\=$'
+    syntax sync match manSyncExample groupthere NONE '^\%(EXAMPLES\=\)\@!\%(\S.*\)\=\S$'
+
+    syntax match manCFuncDefinition  display '\<\h\w*\>\s*('me=e-1 contained
+    syntax match manCError           display '^\s\+\[E\(\u\|\d\)\+\]' contained
+    syntax match manSignal           display '\C\<\zs\(SIG\|SIG_\|SA_\)\(\d\|\u\)\+\ze\(\W\|$\)'
+
+
+    hi! link manCFuncDefinition Function
+    hi! link manCError Error
+    hi! link manErrors Error
+    hi! link manLowerSentence String
+    hi! link manSignal Type
+    hi! link manSynopsis Title
+    hi! link manLowerSentence String
+
+  endif
 endif
 
 " Nvim's highlighting pattern with longopt and CFunc from Vim.

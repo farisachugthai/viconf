@@ -169,7 +169,7 @@ def get_quoting_style(snip):
 
 
 def triple_quotes(snip):
-    style = snip.opt("g:ultisnips_python_triple_quoting_style")
+    style = snip.opt("g:ultisnips_python_quoting_style")
     if not style:
         return get_quoting_style(snip) * 3
     return (SINGLE_QUOTES if style == 'single' else DOUBLE_QUOTES) * 3

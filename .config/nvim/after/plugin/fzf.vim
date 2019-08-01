@@ -109,22 +109,6 @@ noremap <Leader>GS <Cmd>GFiles?<CR>
 
 cabbrev GS GFiles?
 
-" if filereadable('/usr/share/dict/words')
-"     " Replace the default dictionary completion with fzf-based fuzzy completion
-"   inoremap <expr> <C-x><C-k> fzf#vim#complete('cat /usr/share/dict/words')
-"   " Also make it shorter
-"   inoremap <expr> <C-k> fzf#vim#complete('cat /usr/share/dict/words')
-" endif
-
-" Global Line Completion: {{{2
-
-" Global line completion (not just open buffers. ripgrep required.)
-" inoremap <expr> <C-x><C-l> fzf#vim#complete(fzf#wrap({
-"     \ 'prefix': '^.*$',
-"     \ 'source': 'rg -n ^ --color always',
-"     \ 'options': '--ansi --delimiter : --nth 3..',
-"     \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }}))
-
 " Command Local Options: {{{2
 
 " [Buffers] Jump to the existing window if possible
@@ -135,7 +119,6 @@ let g:fzf_tags_command = 'ctags -R ./** && ctags -R --append ./.*'
 
 " [Commands] --expect expression for directly executing the command
 " let g:fzf_commands_expect = 'alt-enter,ctrl-x'
-
 
 " FZF_Statusline: {{{1
 
@@ -150,6 +133,26 @@ augroup end
 
 if filereadable('/usr/share/dict/words')
   call find_files#fzf_maps()
+endif
+
+" Complete Word: {{{2
+
+" This was an autoloaded funcref so name needs to match path
+" FZF complete word with prefix added for termux
+" function! fzf#vim#complete#word(...)
+"     return fzf#vim#complete(s:extend){
+"         \ 'source': 'cat $_ROOT/share/dict/words'},
+"         \ get(a:000, 0, fzf#wrap())))
+" endfunction
+
+if filereadable(expand($_ROOT) . '/share/dict/words')
+  inoremap <expr> <C-x><C-k> fzf#complete({
+              \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
+              \ 'options': ' --ansi --multi --cycle', 'left': 30})
+
+  inoremap <expr> <C-k> fzf#complete({
+              \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
+              \ 'options': ' --ansi --multi --cycle', 'left': 30})
 endif
 
 " Grepprg And Find: {{{2
@@ -240,6 +243,7 @@ command! FZFBuffers call fzf#run({
         \ 'options': '+m',
         \ 'down':    len(find_files#buflist()) + 2
         \ })
+
 command! FZFMru call FZFMru()
 
 command! FZFGit call find_files#FZFGit()

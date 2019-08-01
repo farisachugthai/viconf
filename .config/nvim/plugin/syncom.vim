@@ -48,6 +48,16 @@ nnoremap <Plug>SyntaxInfo <Cmd>SyntaxInfo<CR>
 " if !exists('no_plugin_maps') && !exists('no_windows_vim_maps') | call funcs
 " | endif
 
+" NewGrep: {{{1
+" he quickfix
+command! -nargs=+ NewGrep execute 'silent grep! <args>' | copen
+
+
+" Title: {{{1
+" From `:he change`  line 352 tag g?g?
+" Adding range means that the command defaults to current line
+" Need to add a check that we're in visual mode and drop the '<,'> if not.
+command! -nargs=0 -range Title <Cmd>'<,'>s/\v<(.)(\w*)/\u\1\L\2/g
 " Atexit: {{{1
 
 let &cpoptions = s:cpo_save

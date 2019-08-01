@@ -31,6 +31,7 @@ AttributeError
 Autocompletion
 Autocorrection
 Autogroups
+Autoloading
 Awh
 BackTrack
 BaseHTTPServer
@@ -237,6 +238,7 @@ NerdCom
 NetworkManager
 Newbuntu
 NextCloud
+NixOS
 NodeJS
 NotebookApp
 NteractApp
@@ -511,6 +513,8 @@ autoflake
 autohotkey
 autoindenting
 autoload
+autoloaded
+autoloads
 automodule
 autossh
 backlinking
@@ -1359,6 +1363,7 @@ shopt
 shutil
 silverlight
 smalltalk
+smidge
 snapchat
 snipmate
 socks5
@@ -1430,6 +1435,7 @@ systemctl
 systemd
 tabstop
 tabview
+tasklist
 tc
 tcl
 tcp
@@ -1538,6 +1544,7 @@ utf
 utiities
 utils
 uuid
+vagrantfile
 vala
 valgrind
 vbnet
@@ -1601,6 +1608,7 @@ win32
 win64
 winbatch
 windo
+winrc
 wombat256
 workflow
 worktree
@@ -1651,9 +1659,3 @@ zsh
 zshrc
 µBlock
 µMatrix
-autoloaded
-Autoloading
-vagrantfile
-tasklist
-winrc
-autoloads
