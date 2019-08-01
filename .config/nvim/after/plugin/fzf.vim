@@ -18,15 +18,8 @@ let g:did_fzf_after_plugin = 1
 
 " General Setup: {{{1
 
-" An action can be a reference to a function that processes selected lines
-function! s:build_quickfix_list(lines)
-  call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
-  copen
-  cc
-endfunction
-
 let g:fzf_action = {
-  \ 'ctrl-q': function('s:build_quickfix_list'),
+  \ 'ctrl-q': function('find_files#build_quickfix_list'),
   \ 'ctrl-t': 'tab split',
   \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit' }
@@ -67,9 +60,8 @@ imap <C-f> <Plug>(fzf-complete-path)
 imap <C-j> <Plug>(fzf-complete-file-ag)
 imap <C-l> <Plug>(fzf-complete-line)
 
-
 " The way I remapped Leader, this actually only works if you do <Space>\
-nnoremap <silent> <expr> <LocalLeader><LocalLeader> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
+nnoremap <silent> <expr> \<Leader> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
 
 " The remainder behave as expected.
 noremap <silent> <Leader>C        <Cmd>Colors<CR>
@@ -82,10 +74,10 @@ noremap <Leader>f                 <Cmd>Files<CR>
 " Could add one for insert mode but leader tab is gonna happen so often that we need to use
 " something else. Or we could just use \<tab>....hm.
 " NOTE: The imap should probably only be invoked using \<tab>
-nmap <leader><tab> <Plug>(fzf-maps-n)
-omap <leader><tab> <Plug>(fzf-maps-o)
-xmap <leader><tab> <Plug>(fzf-maps-x)
-imap <leader><tab> <Plug>(fzf-maps-i)
+nmap <Leader><tab> <Plug>(fzf-maps-n)
+omap <Leader><tab> <Plug>(fzf-maps-o)
+xmap <Leader><tab> <Plug>(fzf-maps-x)
+imap <Leader><tab> <Plug>(fzf-maps-i)
 
 " Advanced customization using autoload functions
 inoremap <expr> <C-x><C-k> fzf#vim#complete#word({'left': '15%'})
@@ -127,11 +119,11 @@ cabbrev GS GFiles?
 " Global Line Completion: {{{2
 
 " Global line completion (not just open buffers. ripgrep required.)
-inoremap <expr> <C-x><C-l> fzf#vim#complete(fzf#wrap({
-    \ 'prefix': '^.*$',
-    \ 'source': 'rg -n ^ --color always',
-    \ 'options': '--ansi --delimiter : --nth 3..',
-    \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }}))
+" inoremap <expr> <C-x><C-l> fzf#vim#complete(fzf#wrap({
+"     \ 'prefix': '^.*$',
+"     \ 'source': 'rg -n ^ --color always',
+"     \ 'options': '--ansi --delimiter : --nth 3..',
+"     \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }}))
 
 " Command Local Options: {{{2
 
@@ -142,54 +134,29 @@ let g:fzf_buffers_jump = 1
 let g:fzf_tags_command = 'ctags -R ./** && ctags -R --append ./.*'
 
 " [Commands] --expect expression for directly executing the command
-let g:fzf_commands_expect = 'alt-enter,ctrl-x'
+" let g:fzf_commands_expect = 'alt-enter,ctrl-x'
 
 
 " FZF_Statusline: {{{1
 
 " Custom fzf statusline function: {{{2
-function! s:fzf_statusline()
-    " Override statusline as you like
-    highlight fzf1 ctermfg=161 ctermbg=251
-    highlight fzf2 ctermfg=23 ctermbg=251
-    highlight fzf3 ctermfg=237 ctermbg=251
-    setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
-endfunction
 
 augroup fzfstatusline
     autocmd! FileType fzf
     autocmd FileType fzf set laststatus=0 noshowmode noruler
     \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
-    autocmd! user Fzfstatusline call <SID>fzf_statusline()
+    autocmd! user Fzfstatusline call find_files#fzf_statusline()
 augroup end
 
-" Advanced Functions And Commands: {{{1
-
-" Complete Word: {{{2
-
-" This was an autoloaded funcref so name needs to match path
-" FZF complete word with prefix added for termux
-" function! fzf#vim#complete#word(...)
-"     return fzf#vim#complete(s:extend){
-"         \ 'source': 'cat $_ROOT/share/dict/words'},
-"         \ get(a:000, 0, fzf#wrap())))
-" endfunction
-
 if filereadable('/usr/share/dict/words')
-  inoremap <expr> <C-x><C-k> fzf#complete({
-              \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
-              \ 'options': '--preview=bat --ansi --multi --cycle', 'left': 30})
-
-  inoremap <expr> <C-k> fzf#complete({
-              \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
-              \ 'options': '--preview=bat --ansi --multi --cycle', 'left': 30})
+  call find_files#fzf_maps()
 endif
 
 " Grepprg And Find: {{{2
 " 06/13/2019: Just got moved up so that the grep command down there uses the
 " new grepprg
 " Should we set a corresponding grepformat?
-let &grepprg = 'rg --vimgrep --no-messages '
+let &grepprg = 'rg --vimgrep --no-messages ^'
 
 command! -bang -nargs=* Find call fzf#vim#grep('rg --no-heading --fixed-strings --ignore-case --no-ignore --glob "!.git/*" -g "!vendor/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
 
@@ -223,14 +190,14 @@ command! -bang -nargs=* Ag
 " Similarly, we can apply it to fzf#vim#grep. To use ripgrep instead of ag:
 command! -bang -nargs=* Rg
     \ call fzf#vim#grep(
-    \ 'rg --no-heading --color=always '.shellescape(<q-args>), 1,
+    \ 'rg --no-heading --color=always ^ '.shellescape(<q-args>), 1,
     \ <bang>0 ? fzf#vim#with_preview('up:60%')
     \ : fzf#vim#with_preview('right:50%:hidden', '?'),
     \ <bang>0)
 
 " Files: {{{2
 " Likewise, Files command with preview window
-command! -bang -nargs=? -complete=dir Files
+command! -bang -nargs=? -complete=file Files
     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
 " Make Sentence: {{{2
@@ -253,80 +220,26 @@ inoremap <expr> <C-s> fzf#vim#complete({
     \ 'options': '--multi --reverse --margin 15%,0',
     \ 'left':    20})
 
-" Explore PlugHelp: {{{2
-
-" Call :PlugHelp to use fzf to open a window with all of the plugins
-" you have installed listed and upon pressing enter open the help
-" docs. That's not a great explanation but honestly easier to explain
-" with a picture.
-" TODO: Screenshot usage.
-function! s:plug_help_sink(line)
-  let dir = g:plugs[a:line].dir
-  for pat in ['doc/*.txt', 'README.md']
-    let match = get(split(globpath(dir, pat), "\n"), 0, '')
-    if len(match)
-      execute 'tabedit' match
-      return
-    endif
-  endfor
-  tabnew
-  execute 'Explore' dir
-endfunction
-
+" PlugHelp: {{{1
+" Does this need an f-args?
 command! PlugHelp call fzf#run(fzf#wrap({
   \ 'source': sort(keys(g:plugs)),
-  \ 'sink'  :   function('s:plug_help_sink')}))
+  \ 'sink'  :   function('find_files#plug_help_sink')}))
 
-" F: {{{2
+" F: {{{1
 
 let g:ag_command = 'ag --smart-case -u -g " " --'
 
 command! -bang -nargs=* F call fzf#vim#grep(g:ag_command .shellescape(<q-args>), 1, <bang>0)
 
-" FZFBuffers FZFMRU FZFGit: {{{2
-
-function! s:buflist()
-  redir => ls
-  silent ls
-  redir END
-  return split(ls, '\n')
-endfunction
-
-function! s:bufopen(e)
-  execute 'buffer' matchstr(a:e, '^[ 0-9]*')
-endfunction
+" FZFBuffers FZFMRU FZFGit: {{{1
 
 command! FZFBuffers call fzf#run({
-        \ 'source':  reverse(<sid>buflist()),
-        \ 'sink':    function('<sid>bufopen'),
+        \ 'source':  reverse(find_files#buflist()),
+        \ 'sink':    function('find_files#bufopen'),
         \ 'options': '+m',
-        \ 'down':    len(<sid>buflist()) + 2
+        \ 'down':    len(find_files#buflist()) + 2
         \ })
-
-function! FZFMru()
-    call fzf#run({
-        \ 'source':   v:oldfiles,
-        \ 'sink' :   'edit',
-        \ 'options': '-m --no-sort',
-        \ 'down':    '40%'
-        \ })
-endfunction
 command! FZFMru call FZFMru()
 
-
-function! FZFGit()
-    " Remove trailing new line to make it work with tmux splits
-    let directory = substitute(system('git rev-parse --show-toplevel'), '\n$', '', '')
-    if !v:shell_error
-        lcd `=directory`
-        call fzf#run({
-            \ 'sink': 'edit',
-            \ 'dir': directory,
-            \ 'source': 'git ls-files',
-            \ 'down': '40%'
-            \ })
-    else
-        FZF
-    endif
-endfunction
-command! FZFGit call FZFGit()
+command! FZFGit call find_files#FZFGit()

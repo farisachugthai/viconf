@@ -11,6 +11,9 @@ if exists('g:did_terminally_unimpaired_vim') || &compatible || v:version < 700
 endif
 " let g:did_terminally_unimpaired_vim = 1
 
+let s:cpo_save = &cpoptions
+set cpoptions-=C
+
 " Mappings: {{{1
 " hmmm. this file unimpaired.vim and windows.vim all serve the same purpose...
 
@@ -56,12 +59,12 @@ noremap <Leader>ah <Cmd>wincmd v<CR><bar><Cmd>enew<CR><bar>term://htop
 " Autocmd For Statusline: {{{1
 
 augroup TermGroup
-
+  " Statusline in the terminal
   autocmd TermOpen * setlocal statusline=%{b:term_title}
 
   " `set nomodified` so Nvim stops prompting you when you
-  " try to close a buftype==terminal buffer
-  autocmd TermOpen * setlocal nomodified
+  " try to close a buftype==terminal buffer. afterwards clean up the window
+  autocmd TermOpen * setlocal nomodified norelativenumber foldcolumn=0 signcolumn=
 
   " April 14, 2019
   " To enter |Terminal-mode| automatically:
@@ -71,3 +74,9 @@ augroup TermGroup
   " that I didn't mention to leave insert mode when the terminal closes...
   autocmd TermClose * stopinsert
 augroup END
+
+
+" Atexit: {{{1
+
+let &cpoptions = s:cpo_save
+unlet s:cpo_save

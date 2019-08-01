@@ -1,9 +1,23 @@
-" UltiSnips:
-" 90% sure i need to rename these to use them.
+" ============================================================================
+  " File: ultisnips.vim
+  " Author: Faris Chugthai
+  " Description: UltiSnips autoloaded functions
+  " Last Modified: August 01, 2019 
+" ============================================================================
+
+" Guards: {{{1
+
+let s:cpo_save = &cpoptions
+set cpoptions-=C
+
+" Functions: {{{1
 
 " ultisnips#GetAllSnippets: {{{1
+
 " Definitely a TODO
-function! ultisnips#GetAllSnippets()
+
+function ultisnips#GetAllSnippets() abort
+
   call UltiSnips#SnippetsInCurrentScope(1)
   let list = []
   for [key, info] in items(g:current_ulti_dict_info)
@@ -18,21 +32,9 @@ function! ultisnips#GetAllSnippets()
   return list
 endfunction
 
-" ultisnips#Expandable: {{{1
-
-" TODO: Come up with a mapping for it. Also what is E746
-" Go to the annotations for an explanation of this function.
-" function UltiSnips#IsExpandable()
-"     return !(
-"         \ col('.') <= 1
-"         \ || !empty(matchstr(getline('.'), '\%' . (col('.') - 1) . 'c\s'))
-"         \ || empty(UltiSnips#SnippetsInCurrentScope())
-"         \ )
-" endfunction
-
 " ultisnips#ExpandPossibleShorterSnippet: {{{1
 
-function! ultisnips#ExpandPossibleShorterSnippet()
+function ultisnips#ExpandPossibleShorterSnippet() abort
   if len(UltiSnips#SnippetsInCurrentScope()) == 1 "only one candidate...
     let curr_key = keys(UltiSnips#SnippetsInCurrentScope())[0]
     normal diw
@@ -46,7 +48,7 @@ endfunction
 " Expand Snippet Or CR: {{{3
 " Hopefully will expand snippets or CR. Or it'll destroy deoplete's
 " ability to close the pum. *shrugs*
-function! ultisnips#ExpandSnippetOrCarriageReturn() abort
+function ultisnips#ExpandSnippetOrCarriageReturn() abort
   let snippet = UltiSnips#ExpandSnippetOrJump()
     if g:ulti_expand_or_jump_res > 0
       return snippet
@@ -54,3 +56,9 @@ function! ultisnips#ExpandSnippetOrCarriageReturn() abort
       return "\<CR>"
     endif
 endfunction
+
+
+" Atexit: {{{1
+
+let &cpoptions = s:cpo_save
+unlet s:cpo_save

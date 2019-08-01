@@ -2,36 +2,28 @@
     " File: winrc.vim
     " Author: Faris Chugthai
     " Description: Windows specific modifications
-    " Last Modified: June 29, 2019
+    " Last Modified: August 01, 2019
 " ============================================================================
 
 " Guard: {{{1
-let s:debug = 1
-
-if s:debug
-  " if were debugging don't define it I'll probably source this file
-  " repeatedly
-else
-  let g:loaded_winrc = 1
+if exists('did_winrc') || &cp || version < 700
+  finish
 endif
+" let did_winrc = 1
+
+if has('unix') | finish | endif
+
+
+let s:debug = 1
 
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
 " Font: {{{1
-" Should note in the future the pros and cons of checking the existence of the
-" command in this way
-"
-" Or largely what the pros and cons are of checking if the GUI is running this
-" way. I mean it makes sense to check GuiFont because we need to call it but
-" ...shit this shouldn't be in a windows specific file...nvim has nvim-qt
+" ...shit this shouldn't be in a windows specific file...ubuntu has nvim-qt
 " too....
 if exists(':GuiFont') == 2
-  " warning: font hack reports bad fixed pitch metrics.
-  execute 'GuiFont Hack:h12:cANSI'
-  " HEY THIS ACTUALLY WORKS! And if you run this from ConEmu you don't get the
-  " bad fixed pitch metrics error anymore!
-
+  execute 'GuiFont Source Code Pro:h12:cANSI'
 endif
 
 " Shellslash And Fileformats: {{{1
@@ -64,47 +56,19 @@ execute 'source ' . g:UglyUltiSnipsHack
 
 function! g:PowerShell() abort
 
-  " Set up powershell as the system shell in Neovim
-  " Moved out of the init.
-  " The below is from the nvim help docs.
-  " set shell=powershell
-  " let &shellcmdflag='-NoLogo  -ExecutionPolicy RemoteSigned -Command $* '
-
-  " Here goes...
-  " unlet! $COMSPEC
-  " let $COMSPEC = 'C:/Program Files/PowerShell/6/pwsh.exe'
   " 07/23/2019: Just found out that even when using powershell comspec is
   " supposed to be set to cmd. Explains a few things
   unlet! $SHELL
   let $SHELL = 'C:/pwsh/7-preview/pwsh.exe'
   set shell=pwsh.exe
   set shellpipe=\| shellredir=> shellxquote=
-  let &shellcmdflag = '-Command -NoProfile -NoLogo $* '
+  let &shellcmdflag = '-NoProfile -NoLogo -ExecutionPolicy RemoteSigned $* '
 
 endfunction
 
-" I want this to work so badly but it usually doesn't soooo
-" try
-"   call g:PowerShell()
-" catch
-"   call g:Cmd()
-" endtry
-
 command! PowerShell call g:Powershell()
 
-" Terrible Windows/UltiSnips Hack: {{{1
-
-" I have no idea why this needs to be done but it actually fixes UltiSnips,
-" a plugin I haven't been able to use on Windows for MONTHS!
-if !has('unix')
-  if v:vim_did_enter
-    source C:/Users/faris/AppData/Local/nvim-data/plugged/ultisnips/autoload/ultisnips.vim
-  else
-    autocmd VimEnter * source C:/Users/faris/AppData/Local/nvim-data/plugged/ultisnips/autoload/ultisnips.vim
-  endif
-endif
-
-" Hackish way of setting the remotes:{{{1
+" Hackish Way Of Setting The Remotes: {{{1
 
 let g:ruby_provider_host='C:/tools/ruby26/bin/neovim-ruby-host'
 
