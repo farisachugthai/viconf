@@ -5,9 +5,8 @@
 " Preliminaries: {{{1
 scriptencoding utf-8
 let s:cpo_save = &cpoptions
-set cpoptions-=c
+set cpoptions-=C
 
-" OS Setup: {{{2
 " Termux check from Evervim. Thanks!
 let g:termux = isdirectory('/data/data/com.termux')
 let g:ubuntu = has('unix') && !has('macunix') && empty(g:termux)
@@ -25,11 +24,9 @@ if !has('unix') | runtime winrc.vim | endif
 runtime remote.vim
 
 " Vim Plug And Third Party Packages: {{{1
-" Plug Check: {{{2
 let s:plugins = filereadable(expand(stdpath('data') . '/site/autoload/plug.vim'))
 
-if empty(s:plugins)
-  " bootstrap plug.vim on new systems
+if empty(s:plugins)  " bootstrap plug.vim on new systems
   function! s:InstallPlug() abort
 
     if empty(executable('curl')) | finish | endif  " what scope does this statement end?
@@ -43,14 +40,14 @@ if empty(s:plugins)
   call <SID>InstallPlug()
 endif
 
+runtime junegunn.vim 
 " Don't assume that the InstallPlug() func worked so ensure it's defined
-if empty('plugs') | let plugs = {} | else | runtime junegunn.vim | endif
+if empty('plugs') | let plugs = {} | endif
 
-" General Syntax Highlighting: {{{1
-" Gruvbox: {{{2
 set synmaxcol=400                       " Lower max syntax highlighting
+syntax sync fromstart
 
-function! s:Gruvbox() abort
+function! Gruvbox() abort
   " Define Gruvbox parameters and then set the colorscheme.
   let g:gruvbox_contrast_hard = 1
   let g:gruvbox_contrast_soft = 0
@@ -58,22 +55,17 @@ function! s:Gruvbox() abort
   let g:gruvbox_italic = 1
   colorscheme gruvbox
 endfunction
+call Gruvbox()
 
-call s:Gruvbox()
-syntax sync fromstart
-
-" Builtin Plugins: {{{1
 let g:loaded_vimballPlugin     = 1
 let g:loaded_getscriptPlugin   = 1
 let g:loaded_2html_plugin      = 1
 let g:loaded_logiPat           = 1
 
-" Leader And Viminfo: {{{2
 noremap <Space> <nop>
 let g:maplocalleader = '<Space>'
 map <Space> <Leader>
 
-" if has(nvim-0.4): {{{1
 if has('nvim-0.4')
   let &shadafile = stdpath('data') . '/shada/main.shada'
   " toggle transparency in the pum
@@ -81,8 +73,6 @@ if has('nvim-0.4')
   try | set pyxversion=3 | catch /^Vim:E518:*/
   endtry
 endif
-
-" Backups: {{{1
 
 " Protect changes between writes. Default values of updatecount
 " (200 keystrokes) and updatetime (4 seconds) are fine
@@ -100,20 +90,17 @@ if has('patch-8.1.0251')
 end
 
 " Global Options: {{{1
-" Pep8 Global Options: {{{2
 if &tabstop > 4 | set tabstop=4 | endif
 if &shiftwidth > 4  | set shiftwidth=4 | endif
 set expandtab smarttab      " On pressing tab, insert 4 spaces
 set softtabstop=4
 let g:python_highlight_all = 1
 
-" Folds: {{{2
 set foldenable
 " Use 2 columns to indicate fold level and whether a fold is open or closed.
 set foldlevelstart=0 foldlevel=0 foldnestmax=10 foldmethod=marker foldcolumn=2
 set signcolumn=yes    " not fold related but close to column
 
-" Buffers Windows Tabs: {{{2
 try | set switchbuf=useopen,usetab,newtab | catch | endtry
 
 set hidden
@@ -131,7 +118,6 @@ if filereadable(stdpath('config') . '/spell/en.utf-8.add')
   let &spellfile = stdpath('config') . '/spell/en.utf-8.add'
 endif
 
-" Autocompletion: {{{2
 set wildmode=full:list:longest,full:list
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 " A list of words that change how command line completion is done.
@@ -145,7 +131,6 @@ set pumheight=15
 set ignorecase             " both smartcase and infercase require ignorecase to be set
 set smartcase infercase    " the case when you search for stuff
 
-" Path: {{{2
 set path+=**                            " Recursively search dirs with :find
 let &path = &path . ',' . stdpath('config')
 let &path = &path . ',' . stdpath('data')
@@ -161,15 +146,13 @@ endif
 
 set makeencoding=char         " Used by the makeprg. system locale is used
 
-" Other Global Options: {{{2
 set sessionoptions+=unix,slash
 
 if &formatexpr ==# ''
   setlocal formatexpr=format#Format()  " check the autoload directory
 endif
 set tags+=./tags,./*/tags,~/projects/**/tags
-set tagcase=smart
-set showfulltag
+set tagcase=smart showfulltag
 set mouse=a
 set isfname-==
 
@@ -178,9 +161,7 @@ set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
 " Filler lines to keep text synced, 3 lines of context on diffs, don't diff hidden files,default foldcolumn is 2
 set diffopt=filler,context:3,hiddenoff,foldcolumn:1
- if has('patch-8.1.0360')
-	set diffopt+=internal,algorithm:patience
-endif
+ if has('patch-8.1.0360') | set diffopt+=internal,algorithm:patience | endif
 
 set modeline
 set autochdir browsedir="buffer"   " which directory is used for the file browser
@@ -196,7 +177,6 @@ set sidescroll=10                       " Didn't realize the default is 1
 
 " Mappings: {{{1
 " General_Mappings: {{{2
-" I accidentally do this so often it feels necessary
 noremap q; q:
 noremap Q @q
 vnoremap <BS> d
@@ -235,21 +215,12 @@ noremap <expr> ; getcharsearch().forward ? ';' : ','
 noremap <expr> , getcharsearch().forward ? ',' : ';'
 
 " Runtime: {{{1
-" Matching Parenthesis: {{{2
-
 runtime macros/matchit.vim
-
 set showmatch matchpairs+=<:>
-" Show the matching pair for 2 seconds
-set matchtime=20
+set matchtime=20  " Show the matching pair for 2 seconds
 
-" From pi_paren.txt
-" Matching parenthesises are highlighted A timeout of 300 msec (60 msec in Insert mode). This can be changed with the
-" variables and their buffer-local equivalents b:matchparen_timeout and b:matchparen_insert_timeout.
 let g:matchparen_timeout = 500
 let g:matchparen_insert_timeout = 300
-
-" Omnifuncs: {{{2
 
 augroup omnifunc
     autocmd!
@@ -304,16 +275,6 @@ augroup vimrc_incsearch_highlight
     autocmd CmdlineEnter /,\? :set hlsearch
     autocmd CmdlineLeave /,\? :set nohlsearch
 augroup END
-
-" NewGrep: {{{2
-" he quickfix
-command! -nargs=+ NewGrep execute 'silent grep! <args>' | copen
-
-" Title: {{{2
-" From `:he change`  line 352 tag g?g?
-" Adding range means that the command defaults to current line
-" Need to add a check that we're in visual mode and drop the '<,'> if not.
-command! -nargs=0 -range Title <Cmd>'<,'>s/\v<(.)(\w*)/\u\1\L\2/g
 
 " Atexit: {{{1
 let &cpoptions = s:cpo_save

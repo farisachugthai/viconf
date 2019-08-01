@@ -72,8 +72,15 @@ def sortfile(spellfile):
 
 
 def main():
-    """Execute the module."""
-    args = sys.argv[1:]
+    """Execute the module.
+
+    .. admonition::
+
+        Don't use sys.argv[1:] when executing a file using py3file in neovim!
+        Args 1 and 2 are already set to -c and 'script-host.py'
+
+    """
+    args = sys.argv[3:]
     if len(args) < 1:
         sys.exit('Error. Please provide a path to the file(s) to edit')
 

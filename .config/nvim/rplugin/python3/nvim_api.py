@@ -52,7 +52,7 @@ import pynvim
 logging.getLogger(name=__name__)
 
 
-@pynvim.plugin
+#@pynvim.plugin
 class EmbeddedNvimShell:
     """Copy paste IPython.sphinxext.plugin.EmbeddedSphinxShell."""
 
@@ -112,7 +112,7 @@ class EmbeddedNvimShell:
         for line in exec_lines:
             self.process_input_line(line, store_history=False)
 
-    @pynvim.command('IPython', range='', nargs='*')
+    #@pynvim.command('IPython', range='', nargs='*')
     def entry_point(self, rang, args):
         self.nvim.current.buffer = self.nvim.command('enew')
         return self.init()

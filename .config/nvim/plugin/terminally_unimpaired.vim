@@ -61,7 +61,7 @@ augroup TermGroup
 
   " `set nomodified` so Nvim stops prompting you when you
   " try to close a buftype==terminal buffer
-  autocmd TermOpen * setlocal nomodified
+  autocmd TermOpen * setlocal nomodified norelativenumber foldcolumn=0 signcolumn=
 
   " April 14, 2019
   " To enter |Terminal-mode| automatically:

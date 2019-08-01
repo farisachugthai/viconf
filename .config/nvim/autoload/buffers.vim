@@ -6,14 +6,26 @@
   " Last Modified: July 22, 2019
 " ============================================================================
 
-" Splitlist the rtp and echo: {{{1
+" Guard: {{{1
+if exists('g:did_buffers_vim') || &compatible || v:version < 700
+  finish
+endif
+let g:did_buffers_vim = 1
+
+let s:cpo_save = &cpoptions
+set cpoptions-=C
+
+" EchoRTP: {{{1
+
 function! buffers#EchoRTP()
-    for directory in nvim_list_runtime_paths()
-        echo directory
-    endfor
+
+  for directory in nvim_list_runtime_paths()   
+    echo directory
+  endfor
+
 endfunction
 
-" PreviewWord:
+" PreviewWord: {{{1
 
 " Open a tag for the word under the cursor in the preview window.
 " TODO: Could definitely do with a mapping
@@ -55,3 +67,7 @@ function! buffers#PreviewWord() abort
     endif
   endif
 endfunction
+
+" Atexit: {{{1
+let &cpoptions = s:cpo_save
+unlet s:cpo_save

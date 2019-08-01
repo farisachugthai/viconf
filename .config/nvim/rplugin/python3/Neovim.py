@@ -25,7 +25,7 @@ except (ImportError, ModuleNotFoundError) as e:
     sys.exit(e)
 
 
-@pynvim.plugin
+#@pynvim.plugin
 class App:
     """Instantiate an object and bind functions to it's ns as properties.
 
@@ -75,7 +75,7 @@ class Instance(App):
     pass
 
 
-@pynvim.command('ListBuf', nargs=0)
+# @pynvim.command('ListBuf', nargs=0)
 def list_buf():
     """Return the Vimscript function :func:`nvim_list_bufs()`.
 

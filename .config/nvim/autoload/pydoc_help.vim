@@ -28,9 +28,15 @@ endfunction
 
 " Pydoc Split Cword: {{{1
 function! pydoc_help#SplitPydocCword() abort
-    split
-    enew
-    exec ':r! pydoc <cword>'
+  let s:temp_cword = expand('<cWORD>')
+  split
+  enew
+  exec ':r! pydoc ' . s:temp_cword
+  setlocal relativenumber
+  setlocal filetype=rst
+  setlocal nomodified
+  setlocal buflisted
+  silent setlocal nomodifiable
 endfunction
 
 " Helptags: {{{1
@@ -46,9 +52,6 @@ function! pydoc_help#Helptab() abort
   " Complains that we can't modify any buffer. But its a local option so yes we can
   silent setlocal nomodifiable
 
-  noremap <buffer> q <Cmd>q<CR>
-  " Check the rplugin/python3/pydoc.py file
-  noremap <buffer> P <Cmd>Pydoc<CR>
 endfunction
 
 " Atexit: {{{1

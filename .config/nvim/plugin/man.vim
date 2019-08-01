@@ -22,7 +22,7 @@ endif
 
 " Autocmds: {{{1
 
-if &filetype==man || &filetype==help
+if &filetype=='man' || &filetype=='help'
   augroup mantabs
     autocmd Filetype * call pydoc_help#Helptab()
   augroup END

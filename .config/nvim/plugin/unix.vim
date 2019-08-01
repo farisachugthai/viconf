@@ -12,7 +12,7 @@ endif
 let g:did_unix_vim = 1
 
 let s:cpo_save = &cpoptions
-set cpoptions-=c
+set cpoptions-=C
 
 " These should probably just get autoloaded. Why define them at startup?
 
@@ -107,6 +107,8 @@ augroup gitconf
     autocmd BufNewFile,BufRead *.patch set filetype=diff
 
 augroup END
+
+
 " Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

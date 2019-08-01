@@ -774,13 +774,6 @@ if 0
   let g:niji_light_colours = g:rbpt_colorpairs
 
   "}}}
-  " Signify: {{{
-
-  hi! link SignifySignAdd GruvboxGreenSign
-  hi! link SignifySignChange GruvboxAquaSign
-  hi! link SignifySignDelete GruvboxRedSign
-
-  " }}}
   " Syntastic: {{{
 
   call s:HL('SyntasticError', s:none, s:none, s:undercurl, s:red)
@@ -855,6 +848,13 @@ endif
 " Jesus. Here are the plugins you currently have. We'll figure out a smarter way
 " to check if the plugin actually exists another time.
 
+  " Signify: {{{
+
+  hi! link SignifySignAdd GruvboxGreenSign
+  hi! link SignifySignChange GruvboxAquaSign
+  hi! link SignifySignDelete GruvboxRedSign
+
+  " }}}
 " Startify: {{{
 
 hi! link StartifyBracket GruvboxFg3
@@ -1060,14 +1060,7 @@ hi! link xmlEntityPunct GruvboxOrange
 " }}}
 " Vim: {{{ TODO
 
-" I could be wrong but according to `so $VIMRUNTIME/syntax/hitest.vim`
-" All of these are cleared groups...
-
-" Dude you aren't wrong. Everything below is  a cleared syn match for vim*
-
-" May 13, 2019: Sorted them at least...
-
-" Heres everything from VIMRUNTIME/syntax/vim.vim
+" Here's everything from VIMRUNTIME/syntax/vim.vim
 " vimAuSyntax	vimAuSyntax
 
 " The last letter of an autocmd like wth
@@ -1152,15 +1145,14 @@ hi default link vimSetEqual	Operator
 " pythonAttribute pythonAttribute
 " pythonSync pythonSync
 
-hi def link NvimInternalError Error
-hi def link nvimAutoEvent	vimAutoEvent
-hi def link nvimHLGroup	vimHLGroup
-hi def link nvimMap	vimMap
-hi def link nvimUnmap	vimUnmap
+" Got unlinked at some point
+hi! link NvimInternalError Error
+
+" Vim Errors: {{{
 hi def link vimBehaveError	vimError
 hi def link vimBufnrWarn	vimWarn
 hi def link vimCollClassErr	vimError
-hi def link vimEmbedError	Normal
+hi def link vimEmbedError	vimError
 hi def link vimErrSetting	vimError
 hi def link vimFTError	vimError
 hi def link vimFunc         	vimError
@@ -1173,6 +1165,14 @@ hi def link vimKeyCodeError	vimError
 hi def link vimMapModErr	vimError
 hi def link vimSubstFlagErr	vimError
 hi def link vimSynCaseError	vimError
+
+" Nvim Specific: {{{
+hi def link nvimAutoEvent	vimAutoEvent
+hi def link nvimHLGroup	vimHLGroup
+hi def link nvimMap	vimMap
+hi def link nvimUnmap	vimUnmap
+
+" Defined In Syntax File: {{{
 hi! link vimAbb	vimCommand
 hi! link vimAddress	vimMark
 hi! link vimAuHighlight	vimHighlight

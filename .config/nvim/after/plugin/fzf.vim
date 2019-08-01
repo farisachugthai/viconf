@@ -126,13 +126,6 @@ cabbrev GS GFiles?
 
 " Global Line Completion: {{{2
 
-" Global line completion (not just open buffers. ripgrep required.)
-inoremap <expr> <C-x><C-l> fzf#vim#complete(fzf#wrap({
-    \ 'prefix': '^.*$',
-    \ 'source': 'rg -n ^ --color always',
-    \ 'options': '--ansi --delimiter : --nth 3..',
-    \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }}))
-
 " Command Local Options: {{{2
 
 " [Buffers] Jump to the existing window if possible
@@ -175,21 +168,21 @@ augroup end
 "         \ get(a:000, 0, fzf#wrap())))
 " endfunction
 
-if filereadable('/usr/share/dict/words')
+if filereadable(expand($_ROOT) . '/share/dict/words')
   inoremap <expr> <C-x><C-k> fzf#complete({
               \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
-              \ 'options': '--preview=bat --ansi --multi --cycle', 'left': 30})
+              \ 'options': ' --ansi --multi --cycle', 'left': 30})
 
   inoremap <expr> <C-k> fzf#complete({
               \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
-              \ 'options': '--preview=bat --ansi --multi --cycle', 'left': 30})
+              \ 'options': ' --ansi --multi --cycle', 'left': 30})
 endif
 
 " Grepprg And Find: {{{2
 " 06/13/2019: Just got moved up so that the grep command down there uses the
 " new grepprg
 " Should we set a corresponding grepformat?
-let &grepprg = 'rg --vimgrep --no-messages '
+let &grepprg = 'rg --vimgrep --no-messages . '
 
 command! -bang -nargs=* Find call fzf#vim#grep('rg --no-heading --fixed-strings --ignore-case --no-ignore --glob "!.git/*" -g "!vendor/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
 
