@@ -30,8 +30,12 @@ if has('unix')
   " If this works as a functional substitute I'm gonna lose it.1
   let g:python3_host_prog = exepath('python')
   let g:loaded_python_provider = 1
-else
+
+else  " windows
   let g:python3_host_prog = Python3_Exe() . '/python.exe'
+  let g:loaded_python_provider = 1
+  let g:ruby_provider_host = 'C:/tools/ruby26/bin/neovim-ruby-host'
+  let g:node_provider_host = 'C:/Users/faris/AppData/Local/Yarn/global/node_modules/neovim/bin/cli.js'
 
 endif
 

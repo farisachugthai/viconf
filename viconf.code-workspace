@@ -2,7 +2,7 @@
 	"folders": [
 		{
 			"path": "."
-		},
+		}
 	],
 	"settings": {
 		"files.eol": "\n",
@@ -37,6 +37,6 @@
         "vim.visualstar": true,
         "vim.camelCaseMotion.enable": true,
         "vim.highlightedyank.enable": true,
-        "vim.enableNeovim": true,
+        "vim.enableNeovim": true
 	}
 }

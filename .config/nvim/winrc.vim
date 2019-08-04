@@ -13,7 +13,6 @@ endif
 
 if has('unix') | finish | endif
 
-
 let s:debug = 1
 
 let s:cpo_save = &cpoptions
@@ -67,10 +66,6 @@ function! g:PowerShell() abort
 endfunction
 
 command! PowerShell call g:Powershell()
-
-" Hackish Way Of Setting The Remotes: {{{1
-
-let g:ruby_provider_host='C:/tools/ruby26/bin/neovim-ruby-host'
 
 " Atexit: {{{1
 

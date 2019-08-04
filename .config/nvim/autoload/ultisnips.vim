@@ -16,7 +16,7 @@ set cpoptions-=C
 
 " Definitely a TODO
 
-function ultisnips#GetAllSnippets() abort
+function! ultisnips#GetAllSnippets() abort
 
   call UltiSnips#SnippetsInCurrentScope(1)
   let list = []
@@ -34,7 +34,7 @@ endfunction
 
 " ultisnips#ExpandPossibleShorterSnippet: {{{1
 
-function ultisnips#ExpandPossibleShorterSnippet() abort
+function! ultisnips#ExpandPossibleShorterSnippet() abort
   if len(UltiSnips#SnippetsInCurrentScope()) == 1 "only one candidate...
     let curr_key = keys(UltiSnips#SnippetsInCurrentScope())[0]
     normal diw
@@ -48,7 +48,7 @@ endfunction
 " Expand Snippet Or CR: {{{3
 " Hopefully will expand snippets or CR. Or it'll destroy deoplete's
 " ability to close the pum. *shrugs*
-function ultisnips#ExpandSnippetOrCarriageReturn() abort
+function! ultisnips#ExpandSnippetOrCarriageReturn() abort
   let snippet = UltiSnips#ExpandSnippetOrJump()
     if g:ulti_expand_or_jump_res > 0
       return snippet

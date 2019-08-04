@@ -12,7 +12,7 @@ endif
 " let g:did_better_profiler_vim_plugin = 1
 
 let s:cpo_save = &cpoptions
-set cpoptions-=c
+set cpoptions-=C
 
 if !has('profile') || !has('reltime')  " timing functionality
   finish
@@ -26,12 +26,9 @@ endif
 
 " Commands: {{{1
 
-" Probably shouldn't allow for a range but this needs a good amount of
-" debugging anyway
-command! -bang Profile
-      \ -complete=buffer,file
-      \ -nargs=1 -range=%
-      \ call vimscript#profile(<bang>0)
+" Aug 02, 2019: So this command still doesn't work as expected; however, it
+" doesn't produce an error on run so there's that
+command! -bang -complete=buffer -complete=file -nargs=? -range=% Profile call vimscript#profile(<f-args>)
 
 command! -nargs=? Scriptnames call vimscript#Scriptnames(<f-args>)
 command! -nargs=0 Scriptnamesdict echo vimscript#ScriptnamesDict()

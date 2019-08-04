@@ -7,7 +7,7 @@
 
 " Guards: {{{1
 let s:cpo_save = &cpoptions
-set cpoptions-=c
+set cpoptions-=C
 
 " Global Ftplugin: {{{1
 
@@ -81,6 +81,8 @@ function! vimscript#BetterProfiler(fname) abort
   source a:fname
   profile stop
   profile dump
+
+  exec 'e ' a:fname
 
 endfunction
 

@@ -31,11 +31,11 @@ Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-jdaddy'
 Plug 'tpope/vim-markdown'
-" Plug 'w0rp/ale'
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+Plug 'w0rp/ale', { 'on': 'ALEEnable'}
 
 if !empty(g:windows)
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
-  Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 endif
 
 if exists('$TMUX')
@@ -62,7 +62,6 @@ if empty(g:termux)
   Plug 'omnisharp/omnisharp-vim', {'for': 'cs'}
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
   Plug 'ekalinin/Dockerfile.vim', {'for': 'dockerfile'}
-  Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
   Plug 'itspriddle/vim-shellcheck', { 'for': ['sh', 'bash'] }
 endif
 
