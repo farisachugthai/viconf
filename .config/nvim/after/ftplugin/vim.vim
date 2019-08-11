@@ -7,7 +7,7 @@
 
 " Guard: {{{1
 let s:cpo_save = &cpoptions
-set cpoptions&vim
+set cpoptions-=C
 
 " Options: {{{1
 
@@ -17,10 +17,13 @@ setlocal tabstop=2
 setlocal softtabstop=2
 setlocal suffixesadd+=.vim
 setlocal nolinebreak
+setlocal nowrap
 
 let &path = &path . ',' . stdpath('data') . '/plugged/*/*/*.vim'
 let &commentstring='" %s'
 
+" So that you can cleanly jump around inside of autoloaded func names
+setlocal iskeyword-=#
 " This is the absolute worst way to implement this
 " setlocal comments="
 
@@ -71,21 +74,17 @@ function! ALE_Vim_Conf()
   if executable('vint')
     let b:ale_linters += ['vint']
   endif
-
-
 endfunction
 
-if has_key(plugs, 'ale') && &filetype==#'vim'
-
+if has_key(plugs, 'ale')
   augroup ALEVimConf
-    autocmd Filetype * call ALE_Vim_Conf()
+    au!
+    autocmd Filetype vim call ALE_Vim_Conf()
   augroup END
-
 endif
 
 " Atexit: {{{1
-
-let b:undo_ftplugin = 'set com< cms< et< sw< ts< sts< linebreak< sua<'
+let b:undo_ftplugin = 'set com< cms< et< sw< ts< sts< lbr< sua< wrap< isk<'
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

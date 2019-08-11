@@ -85,6 +85,7 @@ noremap <silent> <C-x>o <Cmd>wincmd W<CR>
 
 augroup gitconf
 
+  au!
   " Don't set this! Kills ConEmu!
   " Set UTF-8 as the default encoding for commit messages
   " autocmd BufReadPre COMMIT_EDITMSG,MERGE_MSG,git-rebase-todo setlocal fileencodings=utf-8
@@ -101,6 +102,8 @@ augroup gitconf
     autocmd BufNewFile,BufRead *.patch set filetype=diff
 
 augroup END
+
+
 " Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

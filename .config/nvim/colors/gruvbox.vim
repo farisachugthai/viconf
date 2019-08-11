@@ -15,6 +15,8 @@ let g:did_gruvbox_colors = 1
 
 scriptencoding utf8
 
+let s:cpo_save = &cpoptions
+set cpoptions-=C
 " }}}
 
 " Supporting code -------------------------------------------------------------
@@ -848,6 +850,120 @@ endif
 " Jesus. Here are the plugins you currently have. We'll figure out a smarter way
 " to check if the plugin actually exists another time.
 
+" Aug 10, 2019: Well now we need to define a few more
+
+" Coc: {{{
+
+" CocListBlackBlack	CocListBlackBlack
+" CocListBlackBlue	CocListBlackBlue
+" CocListBlackGreen	CocListBlackGreen
+" CocListBlackGrey	CocListBlackGrey
+" CocListBlackWhite	CocListBlackWhite
+" CocListBlackCyan	CocListBlackCyan
+" CocListBlackYellow	CocListBlackYellow
+" CocListBlackMagenta	CocListBlackMagenta
+" CocListBlackRed	CocListBlackRed
+" CocListFgBlack	CocListFgBlack
+" CocListBgBlack	CocListBgBlack
+" CocListBlueBlack	CocListBlueBlack
+" CocListBlueBlue	CocListBlueBlue
+" CocListBlueGreen	CocListBlueGreen
+" CocListBlueGrey	CocListBlueGrey
+" CocListBlueWhite	CocListBlueWhite
+" CocListBlueCyan	CocListBlueCyan
+" CocListBlueYellow	CocListBlueYellow
+" CocListBlueMagenta	CocListBlueMagenta
+" CocListBlueRed	CocListBlueRed
+" CocListFgBlue	CocListFgBlue
+" CocListBgBlue	CocListBgBlue
+" CocListGreenBlack	CocListGreenBlack
+" CocListGreenBlue	CocListGreenBlue
+" CocListGreenGreen	CocListGreenGreen
+" CocListGreenGrey	CocListGreenGrey
+" CocListGreenWhite	CocListGreenWhite
+" CocListGreenCyan	CocListGreenCyan
+" CocListGreenYellow	CocListGreenYellow
+" CocListGreenMagenta	CocListGreenMagenta
+" CocListGreenRed	CocListGreenRed
+" CocListFgGreen	CocListFgGreen
+" CocListBgGreen	CocListBgGreen
+" CocListGreyBlack	CocListGreyBlack
+" CocListGreyBlue	CocListGreyBlue
+" CocListGreyGreen	CocListGreyGreen
+" CocListGreyGrey	CocListGreyGrey
+" CocListGreyWhite	CocListGreyWhite
+" CocListGreyCyan	CocListGreyCyan
+" CocListGreyYellow	CocListGreyYellow
+" CocListGreyMagenta	CocListGreyMagenta
+" CocListGreyRed	CocListGreyRed
+" CocListFgGrey	CocListFgGrey
+" CocListBgGrey	CocListBgGrey
+" CocListWhiteBlack	CocListWhiteBlack
+" CocListWhiteBlue	CocListWhiteBlue
+" CocListWhiteGreen	CocListWhiteGreen
+" CocListWhiteGrey	CocListWhiteGrey
+" CocListWhiteWhite	CocListWhiteWhite
+" CocListWhiteCyan	CocListWhiteCyan
+" CocListWhiteYellow	CocListWhiteYellow
+" CocListWhiteMagenta	CocListWhiteMagenta
+" CocListWhiteRed	CocListWhiteRed
+" CocListFgWhite	CocListFgWhite
+" CocListBgWhite	CocListBgWhite
+" CocListCyanBlack	CocListCyanBlack
+" CocListCyanBlue	CocListCyanBlue
+" CocListCyanGreen	CocListCyanGreen
+" CocListCyanGrey	CocListCyanGrey
+" CocListCyanWhite	CocListCyanWhite
+" CocListCyanCyan	CocListCyanCyan
+" CocListCyanYellow	CocListCyanYellow
+" CocListCyanMagenta	CocListCyanMagenta
+" CocListCyanRed	CocListCyanRed
+" CocListFgCyan	CocListFgCyan
+" CocListBgCyan	CocListBgCyan
+" CocListYellowBlack	CocListYellowBlack
+" CocListYellowBlue	CocListYellowBlue
+" CocListYellowGreen	CocListYellowGreen
+" CocListYellowGrey	CocListYellowGrey
+" CocListYellowWhite	CocListYellowWhite
+" CocListYellowCyan	CocListYellowCyan
+" CocListYellowYellow	CocListYellowYellow
+" CocListYellowMagenta	CocListYellowMagenta
+" CocListYellowRed	CocListYellowRed
+" CocListFgYellow	CocListFgYellow
+" CocListBgYellow	CocListBgYellow
+" CocListMagentaBlack	CocListMagentaBlack
+" CocListMagentaBlue	CocListMagentaBlue
+" CocListMagentaGreen	CocListMagentaGreen
+" CocListMagentaGrey	CocListMagentaGrey
+" CocListMagentaWhite	CocListMagentaWhite
+" CocListMagentaCyan	CocListMagentaCyan
+" CocListMagentaYellow	CocListMagentaYellow
+" CocListMagentaMagenta	CocListMagentaMagenta
+" CocListMagentaRed	CocListMagentaRed
+" CocListFgMagenta	CocListFgMagenta
+" CocListBgMagenta	CocListBgMagenta
+" CocListRedBlack	CocListRedBlack
+" CocListRedBlue	CocListRedBlue
+" CocListRedGreen	CocListRedGreen
+" CocListRedGrey	CocListRedGrey
+" CocListRedWhite	CocListRedWhite
+" CocListRedCyan	CocListRedCyan
+" CocListRedYellow	CocListRedYellow
+" CocListRedMagenta	CocListRedMagenta
+" CocListRedRed	CocListRedRed
+" CocListFgRed	CocListFgRed
+" CocListBgRed	CocListBgRed
+hi default link CocErrorLine Exception
+hi default link CocWarningLine WarningMsg
+hi default link CocInfoLine GruvboxBlueSign
+hi default link CocHintLine GruvboxGreenSign
+hi default link CocSelectedLine Visual
+
+" Override one of his
+hi! link CocInfoSign GruvboxPurpleSign
+
+" }}}
+
   " Signify: {{{
 
   hi! link SignifySignAdd GruvboxGreenSign
@@ -939,9 +1055,9 @@ highlight default manItalic    cterm=italic    gui=italic
 " And the rest
 hi! link manCError GruvboxRed
 hi! link manEmail GruvboxAqua
-hi! link manEnvVar GruvboxBlue
-hi! link manEnvVarFile GruvboxBlue
-hi! link manEnvVarFile GruvboxBlue
+hi! link manEnvVar Identifier
+hi! link manEnvVarFile Identifier
+hi! link manEnvVarFile Identifier
 hi! link manFile GruvboxYellow
 hi! link manFiles GruvboxFg0
 hi! link manFooter GruvboxPurple
@@ -975,7 +1091,7 @@ hi! link netrwVersion GruvboxGreen
 hi def link rstHyperLinkTarget Underlined
 hi def link rstHyperlinkReference Underlined
 hi def link rstFileLink rstHyperlinkReference
-hi! link rstInlineLiteral GruvboxBlue
+hi! link rstInlineLiteral Identifier
 
 " }}}
 " Tmux: {{{
@@ -1072,7 +1188,8 @@ highlight default link vimAugroup	vimAugroupKey
 hi default link vimAutoEventList vimAutoEvent
 
 " vimClusterName	vimClusterName
-" vimCmdSep	vimCmdSep
+"
+hi default link vimCmdSep vimCommand
 " vimCollClass	vimCollClass
 " vimCollClassErr	vimCollClassErr
 " vimCollection	vimCollection
@@ -1140,9 +1257,7 @@ hi default link vimSetEqual	Operator
 
 " Here are a few more xxx cleared syn groups
 
-" vimPythonRegion vimPythonRegion
-" hi! link pythonMatrixMultiply python
-" pythonAttribute pythonAttribute
+hi def link vimPythonRegion Identifier
 " pythonSync pythonSync
 
 " Got unlinked at some point
@@ -1166,12 +1281,14 @@ hi def link vimMapModErr	vimError
 hi def link vimSubstFlagErr	vimError
 hi def link vimSynCaseError	vimError
 
+" }}}
 " Nvim Specific: {{{
 hi def link nvimAutoEvent	vimAutoEvent
 hi def link nvimHLGroup	vimHLGroup
 hi def link nvimMap	vimMap
 hi def link nvimUnmap	vimUnmap
 
+" }}}
 " Defined In Syntax File: {{{
 hi! link vimAbb	vimCommand
 hi! link vimAddress	vimMark
@@ -1332,6 +1449,7 @@ hi! link vimUserFunc	Normal
 hi! link vimVar	Identifier
 hi! link vimWarn	WarningMsg
 " }}}
+" }}}
 " Clojure: {{{
 
 hi! link clojureKeyword GruvboxBlue
@@ -1369,26 +1487,31 @@ hi! link cStructure GruvboxOrange
 
 " }}}
 " Python: {{{
-
-hi default link pythonMatrixMultiply pythonNumber
+" Idk why it seems so many aren't linked anymore.
+hi default link pythonMatrixMultiply Number
+hi def link pythonAttribute Identifier
+hi def link pythonComment Comment
+hi def link pythonAsync Statement
+hi def link pythonNumber Number
 
 hi! link pythonBoolean GruvboxPurple
 hi! link pythonBuiltin GruvboxOrange
 hi! link pythonBuiltinFunc GruvboxOrange
 hi! link pythonBuiltinObj GruvboxOrange
-hi! link pythonCoding GruvboxBlue
+hi! link pythonCoding Identifier
 hi! link pythonConditional GruvboxRed
 hi! link pythonDecorator GruvboxRed
 hi! link pythonDot GruvboxFg3
 hi! link pythonDottedName GruvboxGreenBold
-hi! link pythonException GruvboxRed
+hi! link pythonException GruvboxRedBold
 hi! link pythonExceptions GruvboxPurple
 hi! link pythonFunction GruvboxAqua
-hi! link pythonImport GruvboxBlue
-hi! link pythonInclude GruvboxBlue
+hi! link pythonImport Identifier
+hi! link pythonInclude Identifier
 hi! link pythonOperator GruvboxRed
 hi! link pythonRepeat GruvboxRed
-hi! link pythonRun GruvboxBlue
+hi! link pythonRun Identifier
+hi! link pythonSync IdentifierBold
 
 " }}}
 " CSS: {{{
@@ -1428,16 +1551,13 @@ hi! link cssGeneratedContentProp GruvboxAqua
 " }}}
 " JavaScript: {{{
 
-hi! link javaScriptBraces GruvboxFg1
+hi! link javaScriptBraces GruvboxFg0
 hi! link javaScriptFunction GruvboxAqua
 hi! link javaScriptIdentifier GruvboxRed
 hi! link javaScriptMember GruvboxBlue
-hi! link javaScriptNumber GruvboxPurple
 hi! link javaScriptNull GruvboxPurple
+hi! link javaScriptNumber GruvboxPurple
 hi! link javaScriptParens GruvboxFg3
-
-" }}}
-" YAJS: {{{
 hi! link javascriptArrayMethod GruvboxFg2
 hi! link javascriptArrayStaticMethod GruvboxFg2
 hi! link javascriptArrowFunc GruvboxYellow
@@ -1448,7 +1568,7 @@ hi! link javascriptBOMLocationMethod GruvboxFg2
 hi! link javascriptBOMNavigatorProp GruvboxFg2
 hi! link javascriptBOMWindowMethod GruvboxFg2
 hi! link javascriptBOMWindowProp GruvboxFg2
-hi! link javascriptBrackets GruvboxFg1
+hi! link javascriptBrackets GruvboxFg0
 hi! link javascriptCacheMethod GruvboxFg2
 hi! link javascriptClassExtends GruvboxAqua
 hi! link javascriptClassKeyword GruvboxAqua
@@ -1458,10 +1578,10 @@ hi! link javascriptClassSuper GruvboxOrange
 hi! link javascriptClassSuperName GruvboxYellow
 hi! link javascriptDOMDocMethod GruvboxFg2
 hi! link javascriptDOMDocProp GruvboxFg2
-hi! link javascriptDOMElemAttrs GruvboxFg1
-hi! link javascriptDOMEventMethod GruvboxFg1
-hi! link javascriptDOMNodeMethod GruvboxFg1
-hi! link javascriptDOMStorageMethod GruvboxFg1
+hi! link javascriptDOMElemAttrs GruvboxFg0
+hi! link javascriptDOMEventMethod GruvboxFg0
+hi! link javascriptDOMNodeMethod GruvboxFg0
+hi! link javascriptDOMStorageMethod GruvboxFg0
 hi! link javascriptDateMethod GruvboxFg2
 hi! link javascriptDefault GruvboxAqua
 hi! link javascriptDocNamedParamType GruvboxFg4
@@ -1476,11 +1596,11 @@ hi! link javascriptFuncArg GruvboxFg2
 hi! link javascriptFuncKeyword GruvboxAqua
 hi! link javascriptGlobal GruvboxYellow
 hi! link javascriptGlobalMethod GruvboxFg2
-hi! link javascriptHeadersMethod GruvboxFg1
+hi! link javascriptHeadersMethod GruvboxFg0
 hi! link javascriptIdentifier GruvboxOrange
 hi! link javascriptImport GruvboxAqua
 hi! link javascriptLabel GruvboxBlue
-hi! link javascriptLogicSymbols GruvboxFg1
+hi! link javascriptLogicSymbols GruvboxFg0
 hi! link javascriptMathStaticMethod GruvboxFg2
 hi! link javascriptMessage GruvboxRed
 hi! link javascriptNodeGlobal GruvboxFg2
@@ -1490,7 +1610,7 @@ hi! link javascriptProp GruvboxFg2
 hi! link javascriptPropertyName GruvboxBlue
 hi! link javascriptStringMethod GruvboxFg2
 hi! link javascriptTemplateSB GruvboxAqua
-hi! link javascriptTemplateSubstitution GruvboxFg1
+hi! link javascriptTemplateSubstitution GruvboxFg0
 hi! link javascriptURLUtilsProp GruvboxFg2
 hi! link javascriptVariable GruvboxRed
 hi! link javascriptYield GruvboxRed
@@ -1569,75 +1689,72 @@ hi! link rubyStringDelimiter GruvboxGreen
 hi! link rubyInterpolationDelimiter GruvboxAqua
 " So TPope defined all of these but they got wiped in the hi clear. So copy
 " paste it is?
+hi def link rubyASCIICode		Character
+hi def link rubyBoolean			Boolean
 hi def link rubyClass			rubyDefine
-hi def link rubyModule			rubyDefine
-hi def link rubyMethodExceptional	rubyDefine
-hi def link rubyDefine			Define
-hi def link rubyFunction		Function
 hi def link rubyConditional		Conditional
 hi def link rubyConditionalModifier	rubyConditional
-hi def link rubyExceptional		rubyConditional
-hi def link rubyRepeat			Repeat
-hi def link rubyRepeatModifier		rubyRepeat
-hi def link rubyOptionalDo		rubyRepeat
 hi def link rubyControl			Statement
+hi def link rubyDefine			Define
+hi def link rubyException		Exception
+hi def link rubyExceptional		rubyConditional
+hi def link rubyFloat			Float
+hi def link rubyFunction		Function
 hi def link rubyInclude			Include
 hi def link rubyInteger			Number
-hi def link rubyASCIICode		Character
-hi def link rubyFloat			Float
-hi def link rubyBoolean			Boolean
-hi def link rubyException		Exception
+hi def link rubyMethodExceptional	rubyDefine
+hi def link rubyModule			rubyDefine
+hi def link rubyOptionalDo		rubyRepeat
+hi def link rubyRepeat			Repeat
+hi def link rubyRepeatModifier		rubyRepeat
 if !exists('ruby_no_identifiers')
   hi def link rubyIdentifier		Identifier
 else
   hi def link rubyIdentifier		NONE
 endif
-hi def link rubyClassVariable		rubyIdentifier
-hi def link rubyConstant		Type
-hi def link rubyGlobalVariable		rubyIdentifier
-hi def link rubyBlockParameter		rubyIdentifier
-hi def link rubyInstanceVariable	rubyIdentifier
-hi def link rubyPredefinedIdentifier	rubyIdentifier
-hi def link rubyPredefinedConstant	rubyPredefinedIdentifier
-hi def link rubyPredefinedVariable	rubyPredefinedIdentifier
-hi def link rubySymbol			Constant
-hi def link rubyKeyword			Keyword
-hi def link rubyOperator		Operator
-hi def link rubyBeginEnd		Statement
+" hi def link rubyInterpolationDelimiter	Delimiter
+" hi def link rubyStringDelimiter		Delimiter
 hi def link rubyAccess			Statement
 hi def link rubyAttribute		Statement
-hi def link rubyEval			Statement
-hi def link rubyPseudoVariable		Constant
+hi def link rubyBeginEnd		Statement
+hi def link rubyBlockParameter		rubyIdentifier
 hi def link rubyCapitalizedMethod	rubyLocalVariableOrMethod
-
+hi def link rubyClassVariable		rubyIdentifier
 hi def link rubyComment			Comment
+hi def link rubyConstant		Type
 hi def link rubyData			Comment
 hi def link rubyDataDirective		Delimiter
 hi def link rubyDocumentation		Comment
-hi def link rubyTodo			Todo
-
-hi def link rubyQuoteEscape		rubyStringEscape
-hi def link rubyStringEscape		Special
-" hi def link rubyInterpolationDelimiter	Delimiter
-hi def link rubyNoInterpolation		rubyString
-hi def link rubySharpBang		PreProc
-hi def link rubyRegexpDelimiter		rubyStringDelimiter
-hi def link rubySymbolDelimiter		rubySymbol
-" hi def link rubyStringDelimiter		Delimiter
+hi def link rubyError			Error
+hi def link rubyEval			Statement
+hi def link rubyGlobalVariable		rubyIdentifier
 hi def link rubyHeredoc			rubyString
-hi def link rubyString			String
+hi def link rubyInstanceVariable	rubyIdentifier
+hi def link rubyInvalidVariable		Error
+hi def link rubyKeyword			Keyword
+hi def link rubyNoInterpolation		rubyString
+hi def link rubyOperator		Operator
+hi def link rubyPredefinedConstant	rubyPredefinedIdentifier
+hi def link rubyPredefinedIdentifier	rubyIdentifier
+hi def link rubyPredefinedVariable	rubyPredefinedIdentifier
+hi def link rubyPseudoVariable		Constant
+hi def link rubyQuoteEscape		rubyStringEscape
+hi def link rubyRegexp			rubyString
+hi def link rubyRegexpAnchor		rubyRegexpSpecial
+hi def link rubyRegexpCharClass		rubyRegexpSpecial
+hi def link rubyRegexpComment		Comment
+hi def link rubyRegexpDelimiter		rubyStringDelimiter
+hi def link rubyRegexpDot		rubyRegexpCharClass
 hi def link rubyRegexpEscape		rubyRegexpSpecial
 hi def link rubyRegexpQuantifier	rubyRegexpSpecial
-hi def link rubyRegexpAnchor		rubyRegexpSpecial
-hi def link rubyRegexpDot		rubyRegexpCharClass
-hi def link rubyRegexpCharClass		rubyRegexpSpecial
 hi def link rubyRegexpSpecial		Special
-hi def link rubyRegexpComment		Comment
-hi def link rubyRegexp			rubyString
-
-hi def link rubyInvalidVariable		Error
-hi def link rubyError			Error
+hi def link rubySharpBang		PreProc
 hi def link rubySpaceError		rubyError
+hi def link rubyString			String
+hi def link rubyStringEscape		Special
+hi def link rubySymbol			Constant
+hi def link rubySymbolDelimiter		rubySymbol
+hi def link rubyTodo			Todo
 
 " }}}
 " ObjectiveC: {{{
@@ -1749,6 +1866,8 @@ hi! link markdownUrlTitleDelimiter GruvboxGreen
 call s:HL('markdownLinkText', s:gray, s:none, s:underline)
 hi! link markdownIdDeclaration markdownLinkText
 
+" I hate the built-in definition of a markdown error so sorry
+hi! link markdownError markdownText
 " }}}
 " Haskell: {{{
 
@@ -1792,6 +1911,169 @@ hi! link jsonBraces GruvboxFg1
 hi! link jsonString GruvboxFg1
 
 " }}}
+" Sh: {{{
+
+ hi def link bashAdminStatement	shStatement
+ hi def link bashSpecialVariables	shShellVariables
+ hi def link bashStatement		shStatement
+ hi def link shAlias		Identifier
+ hi def link shArithRegion	shShellVariables
+ hi def link shArithmetic		Special
+ hi def link shAstQuote	shDoubleQuote
+ hi def link shAtExpr	shSetList
+ hi def link shBQComment	shComment
+ hi def link shBeginHere	shRedir
+ hi def link shBkslshDblQuote	shDOubleQuote
+ hi def link shBkslshSnglQuote	shSingleQuote
+ hi def link shCaseBar	shConditional
+ hi def link shCaseCommandSub	shCommandSub
+ hi def link shCaseDoubleQuote	shDoubleQuote
+ hi def link shCaseIn	shConditional
+ hi def link shCaseSingleQuote	shSingleQuote
+ hi def link shCaseStart	shConditional
+ hi def link shCharClass		Identifier
+ hi def link shCharClass		shSpecial
+ hi def link shCmdSubRegion	shShellVariables
+ hi def link shColon	shComment
+ hi def link shCommandSub		Special
+ hi def link shCommandSubBQ		shCommandSub
+ hi def link shComment		Comment
+ hi def link shConditional		Conditional
+ hi def link shCtrlSeq		Special
+ hi def link shDeref	shShellVariables
+ hi def link shDerefDelim	shOperator
+ hi def link shDerefLen		shDerefOff
+ hi def link shDerefOff		shDerefOp
+ hi def link shDerefOp	shOperator
+ hi def link shDerefPOL	shDerefOp
+ hi def link shDerefPPS	shDerefOp
+ hi def link shDerefPSR	shDerefOp
+ hi def link shDerefSimple	shDeref
+ hi def link shDerefSpecial	shDeref
+ hi def link shDerefString	shDoubleQuote
+ hi def link shDerefVar	shDeref
+ hi def link shDoubleQuote	shString
+ hi def link shEcho	shString
+ hi def link shEchoDelim	shOperator
+ hi def link shEchoQuote	shString
+ hi def link shEmbeddedEcho	shString
+ hi def link shEscape	shCommandSub
+ hi def link shExDoubleQuote	shDoubleQuote
+ hi def link shExSingleQuote	shSingleQuote
+ hi def link shExprRegion		Delimiter
+ hi def link shForPP	shLoop
+ hi def link shFunction	Function
+ hi def link shFunctionKey		Function
+ hi def link shFunctionName		Function
+ hi! link shFunctionOne Identifier
+ hi def link shHereDoc	shString
+ hi def link shHereDoc01		shRedir
+ hi def link shHereDoc02		shRedir
+ hi def link shHereDoc03		shRedir
+ hi def link shHereDoc04		shRedir
+ hi def link shHereDoc05		shRedir
+ hi def link shHereDoc06		shRedir
+ hi def link shHereDoc07		shRedir
+ hi def link shHereDoc08		shRedir
+ hi def link shHereDoc09		shRedir
+ hi def link shHereDoc10		shRedir
+ hi def link shHereDoc11		shRedir
+ hi def link shHereDoc12		shRedir
+ hi def link shHereDoc13		shRedir
+ hi def link shHereDoc14		shRedir
+ hi def link shHereDoc15		shRedir
+ hi def link shHerePayload	shHereDoc
+ hi def link shHereString	shRedir
+ hi def link shLoop	shStatement
+ hi def link shNoQuote	shDoubleQuote
+ hi def link shNumber		Number
+ hi def link shOperator		Operator
+ hi def link shOption	shCommandSub
+ hi def link shParen	shArithmetic
+ hi def link shPattern	shString
+ hi def link shPosnParm	shShellVariables
+ hi def link shQuickComment	shComment
+ hi def link shQuote	shOperator
+ hi def link shRange	shOperator
+ hi def link shRedir	shOperator
+ hi def link shRepeat		Repeat
+ hi def link shSet		Statement
+ hi def link shSetList		Identifier
+ hi def link shSetListDelim	shOperator
+ hi def link shSetOption	shOption
+ hi def link shShellVariables		PreProc
+ hi def link shSingleQuote	shString
+ hi def link shSnglCase		Statement
+ hi def link shSource	shOperator
+ hi def link shSpecial		Special
+ hi def link shSpecialDQ		Special
+ hi def link shSpecialNoZS		shSpecial
+ hi def link shSpecialNxt	shSpecial
+ hi def link shSpecialSQ		Special
+ hi def link shSpecialStart	shSpecial
+ hi def link shStatement		Statement
+ hi def link shString		String
+ hi def link shStringSpecial	shSpecial
+ hi def link shSubShRegion	shOperator
+ hi def link shTestDoubleQuote	shString
+ hi def link shTestOpr	shConditional
+ hi def link shTestPattern	shString
+ hi def link shTestSingleQuote	shString
+ hi def link shTodo		Todo
+ hi def link shTouchCmd	shStatement
+ hi def link shVariable	shSetList
+ hi def link shWrapLineOperator	shOperator
+" }}}
+
+" TODO:
+
+hi! link shOK               Question
+hi! link shCaseEsac         Question
+hi! link shDo               Question
+hi! link shTest             Question
+hi! link shIf               Question
+hi! link shFor              Question
+hi! link shCaseLabel        Question
+hi! link shCase             Question
+hi! link shCaseExSingleQuote Question
+hi! link shCaseRange        Question
+hi! link shExpr             Question
+hi! link shCmdParenRegion   Question
+hi! link shSubSh            Question
+hi! link shComma            Question
+hi! link shDerefVarArray    Question
+hi! link shDblBrace         Question
+hi! link shDblParen         Question
+hi! link shFunctionTwo      Question
+hi! link shTouch            Question
+hi! link shSpecialVar       Question
+hi! link shCurlyIn          Question
+hi! link shHereDoc16        Question
+hi! link shVarAssign        Question
+hi! link shFunctionStart    Question
+hi! link shFunctionThree    Question
+hi! link shFunctionFour     Question
+hi! link shDerefPattern     Question
+hi! link shDerefEscape      Question
+hi! link shDerefPPSleft     Question
+hi! link shDerefPPSright    Question
+hi! link shDerefPSRleft     Question
+hi! link shDerefPSRright    Question
+hi! link shCaseEsacSync     Question
+hi! link shDoSync           Question
+hi! link shForSync          Question
+hi! link shIfSync           Question
+hi! link shUntilSync        Question
+hi! link shWhileSync        Question
+hi! link rstDirectivesh     Question
+hi! link rstDirectivepython Question
+hi! link jsonStringMatch    Question
+hi! link jsonKeywordMatch   Question
+hi! link jsonFold           Question
+hi! link Quote              Question
+hi! link Noise              Question
+
+
 
 " Functions -------------------------------------------------------------------
 " Search Highlighting Cursor {{{
@@ -1806,4 +2088,8 @@ endfunction
 
 " }}}
 
+" Atexit: {{{
+
+let &cpoptions = s:cpo_save
+unlet s:cpo_save
 " vim: set sw=2 ts=2 sts=2 et fdm=marker fdls=0:

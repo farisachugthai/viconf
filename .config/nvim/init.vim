@@ -7,16 +7,14 @@ scriptencoding utf-8
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
-" Termux check from Evervim. Thanks!
-let g:termux = isdirectory('/data/data/com.termux')
-let g:ubuntu = has('unix') && !has('macunix') && empty(g:termux)
-" How is `has('win32')` a nvim specific thing. Tried in vim and it didn't work!
-let g:windows = has('win32') || has('win64')    " TODO: !has('unix') is easier
-let g:wsl = has('wsl') " TODO: it doesn't work. - From wsl
+let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Evervim. Thanks!
+let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux)
+let s:windows = has('win32') || has('win64')    " TODO: remove all instances of this var !has('unix') is easier
+let s:wsl = !empty($WSL_DISTRO_NAME)
 
 " unabashedly stolen from junegunn dude is too good.
-let g:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/init.vim.local'
-runtime g:local_vimrc
+let s:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/init.vim.local'
+runtime s:local_vimrc
 
 if !has('unix') | runtime winrc.vim | endif
 " Factor out all of the remote hosts stuff.
@@ -43,7 +41,7 @@ runtime junegunn.vim
 " Don't assume that the InstallPlug() func worked so ensure it's defined
 if empty('plugs') | let plugs = {} | endif
 
-" General Syntax Highlighting: {{{1
+" Global Options: {{{1
 set synmaxcol=400                       " Lower max syntax highlighting
 syntax sync fromstart
 
@@ -57,6 +55,11 @@ function! Gruvbox() abort
 endfunction
 call Gruvbox()
 
+if &term =~# 'xterm-256color' || &term ==# 'cygwin' || &term ==# 'builtin_tmux'
+      \ || &term ==# 'tmux-256color' || &term ==# 'builtin-vtpcon' || &term==# 'screen-256color'
+  set termguicolors
+endif
+
 let g:loaded_vimballPlugin     = 1
 let g:loaded_getscriptPlugin   = 1
 let g:loaded_2html_plugin      = 1
@@ -66,12 +69,11 @@ noremap <Space> <nop>
 let g:maplocalleader = '<Space>'
 map <Space> <Leader>
 
-if has('nvim-0.4')
+if has('nvim-0.4')   " Fun new features!
+  set wildoptions+=pum   " Insert mode style completion...in Ex mode holy fuck
   let &shadafile = stdpath('data') . '/shada/main.shada'
-  " toggle transparency in the pum
-  set pumblend=80
-  try | set pyxversion=3 | catch /^Vim:E518:*/
-  endtry
+  set pumblend=80   " toggle transparency in the pum
+  try | set pyxversion=3 | catch /^Vim:E518:*/ | endtry
 endif
 
 " Protect changes between writes. Default values of updatecount
@@ -79,7 +81,7 @@ endif
 set swapfile undofile
 " persist the undo tree for each file
 let &undodir = stdpath('config') . '/undodir'
-set backupext='.bak'        " like wth is that ~ nonsense?
+set backupext='.bak'
 set writebackup        " protect against crash-during-write
 set nobackup           " but do not persist backup after successful write
 set backupcopy=auto    " use rename-and-write-new method whenever safe
@@ -89,7 +91,6 @@ if has('patch-8.1.0251')
   let &backupdir=stdpath('config') . '/undodir//'
 end
 
-" Global Options: {{{1
 if &tabstop > 4 | set tabstop=4 | endif
 if &shiftwidth > 4  | set shiftwidth=4 | endif
 set expandtab smarttab      " On pressing tab, insert 4 spaces
@@ -120,9 +121,7 @@ endif
 
 set wildmode=full:list:longest,full:list
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
-" A list of words that change how command line completion is done.
-" Currently only one word is allowed: tagfile
-set wildoptions=tagfile
+set wildoptions=tagfile   " A list of words that change how command line completion is done.
 set complete+=kspell                    " Autocomplete in insert mode
 " Create a preview window and display all possibilities but don't insert
 set completeopt=menu,menuone,noselect,noinsert,preview
@@ -136,22 +135,17 @@ let &path = &path . ',' . stdpath('config')
 let &path = &path . ',' . stdpath('data')
 let &path = &path . ',' . expand('$VIMRUNTIME')
 
-if &term =~# 'xterm-256color' || &term ==# 'cygwin' || &term ==# 'builtin_tmux'
-      \ || &term ==# 'tmux-256color' || &term ==# 'builtin-vtpcon'
-  set termguicolors
-endif
-
 set makeencoding=char         " Used by the makeprg. system locale is used
 set sessionoptions+=unix,slash
 if &formatexpr ==# ''
   setlocal formatexpr=format#Format()  " check the autoload directory
 endif
-set tags+=./tags,./*/tags,~/projects/**/tags
+set tags+=./tags,./*/tags
 set tagcase=smart showfulltag
 set mouse=a
 set isfname-==
-
-if has('unix') | set autochdir | endif     " I think this is what's killing windows
+" I think autochdir was killing windows. Admittedly the wildignorecase is unrelated but whatever
+if has('unix') | set autochdir | else | set wildignorecase | endif
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
 " Filler lines to keep text synced, 3 lines of context on diffs, don't diff hidden files,default foldcolumn is 2
@@ -168,10 +162,9 @@ let g:tutor_debug = 1
 set terse     " Don't display the message when a search hits the end of file
 set shortmess+=ac
 set shortmess-=tT
-set sidescroll=10                       " Didn't realize the default is 1
+set sidescroll=5                       " Didn't realize the default is 1
 
 " Mappings: {{{1
-" General_Mappings: {{{2
 noremap q; q:
 noremap Q @q
 vnoremap <BS> d
@@ -181,7 +174,6 @@ noremap <Leader>W <Cmd>w !sudo tee % > /dev/null<CR>
 noremap <Leader>sp <Cmd>setlocal spell!<CR>
 noremap <Leader>s= z=
 
-" Junegunn: {{{2
 noremap <Leader>o o<Esc>
 noremap <Leader>O O<Esc>
 vnoremap < <gv
@@ -195,14 +187,6 @@ noremap <Down> gj
 
 " Avoid accidental hits of <F1> while aiming for <Esc>
 noremap! <F1> <Esc>
-" Complete whole filenames/lines with a quicker shortcut key in insert mode
-imap <C-f> <C-x><C-f>
-imap <C-l> <C-x><C-l>
-imap <C-k> <C-x><C-k>
-imap <C-]> <C-x><C-]>
-imap <C-d> <C-x><C-d>
-imap <C-i> <C-x><C-i>
-
 " Dude read over :he getcharsearch(). Now ; and , search forward backward no matter what!!!
 noremap <expr> ; getcharsearch().forward ? ';' : ','
 noremap <expr> , getcharsearch().forward ? ',' : ';'
@@ -232,8 +216,7 @@ augroup omnifunc
         \   endif
 augroup END
 
-" Functions_Commands: {{{1
-" Statusline: {{{2
+" Statusline: {{{1
 
 function! s:statusline_expr() abort
   " Define statusline groups for WebDevIcons, Fugitive and other plugins.
@@ -259,8 +242,6 @@ function! s:statusline_expr() abort
 endfunction
 
 let &statusline = <SID>statusline_expr()
-
-" Clear Hlsearch: {{{2
 
 set nohlsearch
 augroup vimrc_incsearch_highlight

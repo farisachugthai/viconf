@@ -6,13 +6,13 @@
 " ============================================================================
 
 " Guards: {{{1
-if exists('b:did_syncom_plugin') || &compatible || v:version < 700
+if exists('g:did_syncom_plugin') || &compatible || v:version < 700
     finish
 endif
-let b:did_syncom_plugin = 1
+let g:did_syncom_plugin = 1
 
 let s:cpo_save = &cpoptions
-set cpoptions-=c
+set cpoptions-=C
 
 " Options: {{{1
 
@@ -24,6 +24,8 @@ else
 endif
 
 " Commands: {{{1
+
+" Did you know that both -complete=color and -complete=highlight are things??
 command! HL call syncom#HL()
 command! HiC call syncom#HiC()
 " command! HiD call <SID>syncom#HiD()
@@ -49,6 +51,12 @@ nnoremap <Plug>SyntaxInfo <Cmd>SyntaxInfo<CR>
 " | endif
 
 " NewGrep: {{{1
+
+" 06/13/2019: Just got moved up so that the grep command down there uses the
+" new grepprg
+" Should we set a corresponding grepformat?
+let &grepprg = 'rg --vimgrep --no-messages --color=never --smart-case --no-messages ^'
+
 " he quickfix
 command! -nargs=+ NewGrep execute 'silent grep! <args>' | copen
 
@@ -58,6 +66,8 @@ command! -nargs=+ NewGrep execute 'silent grep! <args>' | copen
 " Adding range means that the command defaults to current line
 " Need to add a check that we're in visual mode and drop the '<,'> if not.
 command! -nargs=0 -range Title <Cmd>'<,'>s/\v<(.)(\w*)/\u\1\L\2/g
+
+
 " Atexit: {{{1
 
 let &cpoptions = s:cpo_save
