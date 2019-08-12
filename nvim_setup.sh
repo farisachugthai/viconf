@@ -16,37 +16,56 @@ setup_plug() {
     if [[ -z "$HOME/.local/share/nvim/site/autoload/plug.vim" ]]; then
         curl -fLo "$HOME/.local/share/nvim/autoload/plug.vim" --create-dirs \
         "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
-    else
-        nvim -c"PlugInstall!" -c"PlugUpgrade!" -c "UpdateRemotePlugins" -c"qa"
     fi
+    nvim -c"PlugInstall!" -c"PlugUpgrade!" -c "UpdateRemotePlugins" -c"qa" &
 }
 
-setup_nvim() {
-    local dist
+update_pkgs() {
+    local update
     if [[ -n $ANDROID_ROOT ]]; then
-        dist="apt install"
+        update="apt update"
     else
-        dist="sudo apt update && sudo apt install"
+        update="sudo apt update"
+    fi
+    log "Updating packages"
+    $update;
+}
+
+install_nvim() {
+    local install
+    if [[ -n $ANDROID_ROOT ]]; then
+        install="apt install neovim"
+    else
+        install="sudo apt install neovim nvim-qt"
     fi
     log "Installing neovim"
-    $dist neovim;
-    # assume they have pip and use user for easier permissions
-    # ahhh but --user fails in virtualenvs goddamnit
-    # pip3 install -U --user pynvim
+    $install;
 }
 
 setup_pynvim() {
-    if [[ -n $VIRTUAL_ENV ]]; then
-        pip3 install -U pynvim
+    if [[ -n "$VIRTUAL_ENV" ]]; then
+        python3 -m pip install -U pynvim
     else
-        pip3 install -U --user pynvim
+        python3 -m pip install -U --user pynvim
     fi
     log "Done installing pynvim!"
     log "We're all set up!"
 }
 
-setup_nvim
+notify() {
+    if [[ -n "$1" ]]; then
+        echo "$1" | termux-notification
+    fi
+}
+
+update_pkgs
+
+install_nvim
 
 setup_plug
 
 setup_pynvim
+
+$notify "Pynvim done updating."
+
+exit 0

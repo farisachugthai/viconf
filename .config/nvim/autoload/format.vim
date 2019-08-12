@@ -12,7 +12,7 @@ endif
 let g:did_format_vim = 1
 
 let s:cpo_save = &cpoptions
-set cpoptions&vim
+set cpoptions-=C
 
 " Functions: {{{1
 

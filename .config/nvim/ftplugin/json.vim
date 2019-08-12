@@ -22,7 +22,9 @@ setlocal formatoptions-=t
 
 " JSON has no comments.
 setlocal comments=
-setlocal commentstring=
+" setlocal commentstring=
+" sometimes it does fuck you
+let &commentstring='\\ %s'
 
 " Like what the literal fuck
 setlocal expandtab softtabstop=2 shiftwidth=2
@@ -65,12 +67,13 @@ endfunction
 
 let s:debug = 1
 
-if has_key(plugs, 'ale') && &filetype==#'json'
-  augroup alejsonconf
-    au!
-    autocmd Filetype * call ALE_JSON_Conf()
-  augroup END
-endif
+augroup alejsonconf
+  au!
+  autocmd Filetype *
+        \ if has_key(plugs, 'ale') && &filetype==#'json'
+        \ call ALE_JSON_Conf()
+        \ endif
+augroup END
 
 " Commands: {{{1
 " TODO: Could pretty easily make a command that runs python -m json.fix('%')

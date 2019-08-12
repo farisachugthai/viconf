@@ -1,4 +1,21 @@
+" ============================================================================
+  " File: find_files.vim
+  " Author: Faris Chugthai
+  " Description: Find files autoload
+  " Last Modified: August 02, 2019 
+" ============================================================================
 
+" Guards: {{{1
+if exists('g:did_find_files_vim') || &compatible || v:version < 700
+  finish
+endif
+let g:did_find_files_vim = 1
+
+let s:cpo_save = &cpoptions
+set cpoptions-=C
+
+
+" FZF: {{{1
 " An action can be a reference to a function that processes selected lines
 function! find_files#build_quickfix_list(lines) abort
   call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
@@ -47,13 +64,13 @@ endfunction
 " FZFBuffers: {{{1
 
 function! find_files#buflist() abort
-  redir => ls
-  silent ls
+  redir => s:ls
+  silent s:ls
   redir END
-  return split(ls, '\n')
+  return split(s:ls, '\n')
 endfunction
 
-function!  find_files#bufopen(e) abort
+function! find_files#bufopen(e) abort
   execute 'buffer' matchstr(a:e, '^[ 0-9]*')
 endfunction
 
@@ -82,3 +99,7 @@ function! find_files#FZFGit() abort
         FZF
     endif
 endfunction
+
+" Atexit: {{{1
+let &cpoptions = s:cpo_save
+unlet s:cpo_save

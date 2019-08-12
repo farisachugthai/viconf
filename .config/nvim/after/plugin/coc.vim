@@ -13,10 +13,8 @@ if !has_key(plugs, 'coc.nvim')
 endif
 
 let s:cpo_save = &cpoptions
-set cpoptions&vim
+set cpoptions-=C
 
-" }}}
-" Well I guess here's one option
 if exists('*coc#status')
   set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 endif
@@ -31,21 +29,17 @@ inoremap <silent><expr> <C-Space> coc#refresh()
 " ~/.config/nvim/coc-settings.json
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
 
-
-" inoremap <silent><expr> <C-j>
-"   \ pumvisible() ? coc#_select_confirm() :
-"   \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-"   \ <SID>check_back_space() ? "\<TAB>" :
-"   \ coc#refresh()
+inoremap <silent><expr> <C-j>
+  \ pumvisible() ? coc#_select_confirm() :
+  \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+  \ <SID>check_back_space() ? "\<TAB>" :
+  \ coc#refresh()
 
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-let g:coc_snippet_next = '<C-j>'
-
-let g:coc_snippet_prev = '<C-k>'
 
 " Shit none of these work
 " nnoremap <silent> [g <Plug>(coc-diagnostic-prev)
@@ -71,7 +65,8 @@ let g:coc_snippet_prev = '<C-k>'
 " endfunction
 
 " Remap for rename current word
-" nnoremap <leader>rn <Plug>(coc-rename)
+nnoremap <F2> <Plug>(coc-rename)
+xnoremap <F2> <Cmd>CocCommand document.renameCurrentWord<CR>
 
 augroup CocConf
   " Setup formatexpr specified filetype(s).
@@ -80,33 +75,34 @@ augroup CocConf
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
   " Highlight symbol under cursor on CursorHold
   autocmd CursorHold * silent call CocActionAsync('highlight')
+
 augroup end
 
 
 " Using CocList: {{{1
 
 " Show all diagnostics
-nnoremap <silent> <C-c>d :<C-u>CocList diagnostics<cr>
+nnoremap <silent> <C-c><C-d> <Cmd>CocList diagnostics<CR>
 " Manage extensions
-nnoremap <silent> <C-c>e  :<C-u>CocList extensions<cr>
+nnoremap <silent> <C-c><C-e> <Cmd>CocList extensions<CR>
 " Show commands
-nnoremap <silent> <C-c><C-c>  :<C-u>CocList commands<cr>
+nnoremap <silent> <C-c><C-c>  <Cmd>CocList commands<CR>
 " Find symbol of current document
-nnoremap <silent> <C-c>o  :<C-u>CocList outline<cr>
+nnoremap <silent> <C-c><C-o>  <Cmd>CocList outline<CR>
 " Search workspace symbols
-nnoremap <silent> <C-c>s :<C-u>CocList -I symbols<cr>
+nnoremap <silent> <C-c><C-s> <Cmd>CocList -I symbols<CR>
 " Do default action for next item.
-nnoremap <silent> <C-c>j  :<C-u>CocNext<CR>
+nnoremap <silent> <C-c>j  <Cmd>CocNext<CR>
 " Do default action for previous item.
-nnoremap <silent> <C-c>k  :<C-u>CocPrev<CR>
+nnoremap <silent> <C-c>k  <Cmd>CocPrev<CR>
 " Resume latest coc list
-nnoremap <silent> <C-c>p  :<C-u>CocListResume<CR>
+nnoremap <silent> <C-c>p  <Cmd>CocListResume<CR>
 " I'm gonna redo the mappings and try this piecemeal
 noremap <silent> <C-c>r <Cmd>CocListResume<CR>
 noremap <silent> <C-c>d <Cmd>CocList diagnostics<CR>
 
 
-" Remap for rename current word
+" Remap For Rename Current Word: {{{1
 
 " Remap for format selected region. e for errors and visual selection
 xmap <C-c>m  <Plug>(coc-format-selected)
@@ -130,17 +126,17 @@ noremap <silent> <C-c>q <Plug>(coc-fix-current)
 " Let's start grouping these together by prefixing with C or something
 
 " Use `:Format` to format current buffer
-command! -nargs=0 CoFormat :call CocAction('format')
+command! -nargs=0 CFormat :call CocAction('format')
 
 " Use `:Fold` to fold current buffer
-command! -nargs=? CoFold :call CocAction('fold', <f-args>)
+command! -nargs=? CFold :call CocAction('fold', <f-args>)
 
 " use `:OR` for organize import of current buffer
-command! -nargs=0 CoSort :call CocAction('runCommand', 'editor.action.organizeImport')
+command! -nargs=0 CSort :call CocAction('runCommand', 'editor.action.organizeImport')
 
 " Just tried this and it worked! So keep checking :CocList commands and add
 " more as we go.
-command! -nargs=0 CoPython :call CocActionAsync('runCommand', 'python.startREPL')|
+command! -nargs=0 CPython :call CocActionAsync('runCommand', 'python.startREPL')|
 
 " Atexit: {{{1
 let &cpoptions = s:cpo_save

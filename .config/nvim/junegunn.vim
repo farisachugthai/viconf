@@ -1,4 +1,4 @@
-" ============================================================================{{{}}}
+" ============================================================================
     " File: junegunn.vim
     " Author: Faris Chugthai
     " Description: Isolate where I define my plugins.
@@ -11,12 +11,10 @@ let s:cpo_save = &cpoptions
 set cpoptions-=C
 
 " Plugins: {{{1
-
 let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Evervim. Thanks!
 let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux)
 let s:windows = has('win32') || has('win64')    " TODO: remove all instances of this var !has('unix') is easier
 let s:wsl = !empty($WSL_DISTRO_NAME)
-
 
 call plug#begin(stdpath('data') . '/plugged')
 

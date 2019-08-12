@@ -10,9 +10,7 @@ scriptencoding utf-8
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
-" Fun With Clipboards: {{{1
-
-" Set Clipboard: {{{2
+" Clipboards: {{{1
 if has('unnamedplus')                   " Use the system clipboard.
     set clipboard+=unnamed,unnamedplus
 else                                        " Accommodate Termux

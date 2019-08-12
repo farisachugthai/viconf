@@ -1,13 +1,11 @@
 # Git Attributes
-# From man 5 gitattributes line 551:
 # Vim: set ft=git:
+
 # Dude tpope wrote this ftplugin how bad ass is that?
 # WHOAAAAA keywordprg is now git show!
-
 # That's too good
 
-# From man git attributes
-
+# From man 5 gitattributes line 551:
 #  The system knows a built-in macro attribute, binary:
 
 *.spl   binary

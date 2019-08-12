@@ -1,7 +1,10 @@
 # Pandas.snippets
 
 priority 50
-snippet import "Import pandas and numpy." b
+
+# Tip #1: Snippets should be shorter than the original word.
+# Don't make your keyword import
+snippet imp "Import pandas and numpy." b
 import numpy as np
 import pandas as pd
 endsnippet
@@ -16,44 +19,37 @@ snippet dtypes "Determine the dtype." b
 ${1:${VISUAL}}.dtypes
 endsnippet
 
-snippet csvread "Read a CSV file into a dataframe" b
-${VISUAL:1} = pd.read_csv($2, sep=None, engine='python',
-parse_dates=['fcast_date','timestamp'], dtype={${3:'user_id'}: ${4:"category"},
-${5:'strings'}: ${6:'object'}})
+snippet csv "Read a CSV file into a dataframe" b
+${VISUAL} = pd.read_csv($2, sep=None, engine='python',
+						parse_dates=['fcast_date','timestamp'], 
+						dtype={${3:'user_id'}: ${4:"category"},
+						${5:'strings'}: ${6:'object'}})
 endsnippet
 
 snippet csvwrite "Arg.to_csv"
-${1:VISUAL}.to_csv($2, index = False)
+${1:${VISUAL}}.to_csv($2, index = False)
 endsnippet
 
 snippet colremove "Arg.drop()"
-${1:VISUAL}.drop(['column1','column2'], 1, inplace = True)
+${1:${VISUAL}}.drop(['column1','column2'], 1, inplace = True)
 endsnippet
 
 snippet colrename "Arg.rename()"
-${1:VISUAL}.rename(columns={'fcast_date_a': 'date_fcast'}, inplace=True)
+${1:${VISUAL}}.rename(columns={'fcast_date_a': 'date_fcast'}, inplace=True)
 endsnippet
 
 snippet unique "Arg[i.d.].unique()"
-${1:VISUAL}["ifp_id"].unique()
+${1:${VISUAL}}["ifp_id"].unique()
 endsnippet
 
 snippet rowconcat "Arg = pd.concat()"
-${1:VISUAL} = pd.concat([df_even, df_odd], axis=1)
+${1:${VISUAL}} = pd.concat([df_even, df_odd], axis=1)
 endsnippet
 
 snippet colnewop "Arg[col] = Arg[col1] - Arg[col2]"
 ${VISUAL:1}[${2:"days_from_start"}] = ${VISUAL:1}[${3:"fcast_date_a"}] -${VISUAL:1}[${4:"date_start"}]
 endsnippet
 
-snippet colnewop_apply
-def compute_euclidean_distance(row):
-	a = np.array([row['value_a'], row['value_b'], row['value_c']])
-	b = np.array([row['a'], row['b'], row['c']])
-	return distance.euclidean(a, b)
-
-${VISUAL:1}['new_distance'] =${VISUAL:1}.apply(compute_euclidean_distance, axis=1)
-endsnippet
 
 snippet colgetdummies
 one_hot_cols = pd.get_dummies(ds['outcome'], prefix='outcome')
@@ -65,7 +61,7 @@ snippet rowremovecond
 c = c[c.n_opts != 5]
 endsnippet
 
-snippet merge
+snippet pdmerge
 c = pd.merge(ex1,ex2,on='ifp_id')
 endsnippet
 
@@ -182,26 +178,15 @@ snippet apply "Apply applies a function to each element of a series"
 ${1:${VISUAL}}['new_column'] = train.col1.apply(len)
 endsnippet
 
-snippet loc1
-
-${1:${VISUAL}}.loc[0:4, ['column1','column2']]
-endsnippet
-
 # This is also a way to remove column and just keep those two
-snippet loc2
+snippet loc
 ${1:${VISUAL}}.loc[:, ['column1','column2']]
 endsnippet
 
-snippet loc3
-${1:${VISUAL}}.loc[0:4, 'column1':'column2']
-endsnippet
-
 snippet iloc "Iloc to select data referring to numbers for columns"
-${1:${VISUAL}}.iloc[:, 0:4]
+${1:${VISUAL}}.iloc[:, ${2:0:4}]
 endsnippet
 
 snippet type_change
 ${1:${VISUAL}}['column_name'] = ${1:${VISUAL}}['column_name'].astype('category', categories=['good', 'very good', 'excellent'])
 endsnippet
-
-# vim:set sw=4 ts=4 ft=snippets:

@@ -251,7 +251,7 @@ ${1:${VISUAL:Section name}}
 `!p snip.rv = len(t[1])*'='`
 endsnippet
 
-snippet h1 "Header 1" mwb
+snippet h1 "Header 1" wb
 ${1:${VISUAL:Section name}}
 `!p snip.rv = len(t[1])*'='`
 endsnippet
@@ -261,7 +261,7 @@ ${1:${VISUAL:Subsection name}}
 `!p snip.rv = len(t[1])*'-'`
 endsnippet
 
-snippet h2 "Header 2" bwm
+snippet h2 "Header 2" bw
 ${1:${VISUAL:Subsection name}}
 `!p snip.rv = len(t[1])*'-'`
 endsnippet
@@ -271,7 +271,7 @@ ${1:${VISUAL:Subsubsection name}}
 `!p snip.rv = len(t[1])*'^'`
 endsnippet
 
-snippet h3 "Header three" bmw
+snippet h3 "Header three" bw
 ${1:${VISUAL:Subsubsection name}}
 `!p snip.rv = len(t[1])*'^'`
 endsnippet
@@ -344,23 +344,23 @@ endsnippet
 #  Sphinx Inline  #
 ###################
 
-snippet com "command inline" ms
+snippet com "command inline" s
 :command:\`${1:$VISUAL}\`
 endsnippet
 
-snippet math "math inline" ms
+snippet math "math inline" s
 :math:\`${1:$VISUAL}\`
 endsnippet
 
-snippet file "file inline" ms
+snippet file "file inline" s
 :file:\`${1:$VISUAL}\`
 endsnippet
 
-snippet pep "pep inline" ms
+snippet pep "pep inline" s
 :pep:\`${1:$VISUAL}\`
 endsnippet
 
-snippet doc "doc inline" ms
+snippet doc "doc inline" s
 :doc:\`${1:$VISUAL}\`
 endsnippet
 

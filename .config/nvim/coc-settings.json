@@ -81,7 +81,7 @@
           },
           "commandPath": "",
           "configurationSources": [
-            "pycodestyle"
+            "flake8"
           ],
           "plugins": {
             "jedi_completion": {
@@ -100,6 +100,7 @@
               "enabled": true,
               "all_scopes": true
             },
+
             "mccabe": {
               "enabled": true,
               "threshold": 15
@@ -116,6 +117,9 @@
               "matchDir": "[^\\.].*"
             },
             "pyflakes": {
+              "enabled": true
+            },
+            "flake8": {
               "enabled": true
             },
             "rope_completion": {
@@ -135,7 +139,7 @@
   "list.extendedSearchMode": true,
   "list.source.files.command": "rg",
   "list.source.files.args": ["--hidden", "--smart-case", "--no-column", "--no-line-number", "--no-messages", "--crlf", "--color=never", "--files"],
-  // "list.source.files.excludePatterns": ["node_modules/*", ".git/*", "__pycache__/*", "*.pyc"],
+  "list.source.files.excludePatterns": ["node_modules/*", ".git/*", "__pycache__/*", "*.pyc"],
   "list.source.files.defaultOptions": ["--number-select", "--auto-preview", "--top"],
   "list.insertMappings": {
     "<C-r>": "do:refresh",
@@ -156,15 +160,22 @@
   "coc.preferences.currentFunctionSymbolAutoUpdate": true,
   "coc.preferences.previewAutoClose": true,
   "diagnostic.checkCurrentLine": true,
-  "diagnostic.displayByAle": true,
+  "diagnostic.displayByAle": false,
   "diagnostic.level": "warning",
   "diagnostic.joinMessageLines": true,
-  "diagnostic.virtualText": true,
   "diagnostic.virtualText": true,
   "diagnostic.virtualTextPrefix": "Coc Diagnostic: ",
   "diagnostic.messageTarget": "echo",
   "diagnostic.refreshAfterSave": true,
   "signature.hideOnTextChange": true,
   "vimlsp.suggest.fromVimruntime": true,
-  "git.enableGutters": true
+  "git.enableGutters": true,
+  "snippets.ultisnips.directories": [
+    "~/.config/nvim/UltiSnips",
+    "~/AppData/Local/nvim/UltiSnips"
+  ],
+  "snippets.extends": {"python": ["rst"]},
+  "snippets.snipmate.author": "Faris A. Chugthai",
+  "snippets.trace": "verbose",
+  "snippets.triggerCharacters": ["Tab", "C-j"]
 }

@@ -34,6 +34,7 @@ Autogroups
 Autoloading
 Awh
 BackTrack
+BaseException
 BaseHTTPServer
 BeautifulSoup
 Beazley
@@ -113,6 +114,7 @@ DataFrame
 DataFrames
 Datatypes
 Devicons
+Dicts
 Diffs
 DirChange
 Discover's
@@ -330,6 +332,7 @@ RuntimeError
 SCADA
 SCM
 SDKs
+SDists
 SELinux
 SGR
 SHA
@@ -350,11 +353,13 @@ Scrapy
 Seaborn
 SetEnv
 SharePoint
+ShimModule
 Shotts
 Showkey
 SimpleHTTPRequestHandler
 SimpleHTTPServer
 SirVer
+SkipTest
 SnipMate
 SoHo
 SocketServer
@@ -403,6 +408,7 @@ UUIDs
 Ubuntu
 Udacity
 Udemy
+Ufuncs
 UltiSnips
 Umask
 Uninstallation
@@ -1032,6 +1038,7 @@ modelines
 module
 moduleauthor
 modulefinder
+moduletype
 moin
 molokai
 monero
@@ -1335,6 +1342,7 @@ sdc
 sdc1
 sdc2
 sdist
+sdists
 sdk
 sdks
 seaborn
@@ -1497,6 +1505,8 @@ uPnP
 ubuntu
 uc
 udp
+ufunc
+ufuncs
 ufw
 ultisnips
 umask
@@ -1605,6 +1615,7 @@ wildcards
 wildmenu
 win10
 win32
+win32yank
 win64
 winbatch
 windo
@@ -1659,8 +1670,3 @@ zsh
 zshrc
 µBlock
 µMatrix
-SDists
-sdists
-ShimModule
-moduletype
-win32yank

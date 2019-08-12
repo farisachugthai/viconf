@@ -51,7 +51,7 @@ function! vimscript#after_ft() abort
 endfunction
 
 
-" Functions: {{{1
+" BetterProfiler: {{{1
 
 function! vimscript#BetterProfiler(fname) abort
   " Because Vim's built in profiling capabilities are nonsensical like wtf?
@@ -92,7 +92,7 @@ endfunction
 
 " AH I forgot Junegunn has one written as well!
 
-" Profile: {{{1
+" Junegunns Profiler: {{{1
 
 " Profile a func or file. Oooo I could use XDG_DATA_HOME instead of _ROOT there
 function! vimscript#profile(bang) abort
