@@ -44,6 +44,11 @@ true:
 - [vim-plug](https://www.github.com/junegunn/vim-plug) is the plugin manager
   that you'd like to use.
 
+Luckily upgrading is typically as simple as running:
+
+    `sudo add-apt-repository ppa:neovim-ppa/unstable  # or`
+    `choco install neovim --pre`
+
 The [init.vim](./.config/nvim/init.vim) will immediately check that the
 plug.vim file is there, and it will automatically download it if not.
 
@@ -243,6 +248,19 @@ features that have been built into every version of Neovim.
 
 Neovim is my primary text editor and as a result, I've attempted integrating it
 into as much of my workflow as possible.
+
+### Neovim Specific Features
+
+The init.vim file features a handful of snippets that are not only specific
+to Neovim, but require relatively new versions of neovim.
+
+Unfortunately the newest version of neovim in the Ubuntu18.04 repositories
+is 0.2.2, which didn't ship with the `stdpath()` function along with many other niceties.
+
+Luckily upgrading is typically as simple as running:
+
+    `sudo add-apt-repository ppa:neovim-ppa/unstable  # or`
+    `choco install neovim --pre`
 
 ## License
 

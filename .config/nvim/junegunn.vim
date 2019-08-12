@@ -1,7 +1,7 @@
 " ============================================================================{{{}}}
     " File: junegunn.vim
     " Author: Faris Chugthai
-    " Description: " Isolate where I define my plugins.
+    " Description: Isolate where I define my plugins.
     " Last Modified: June 09, 2019
 " ============================================================================
 
@@ -9,13 +9,14 @@
 scriptencoding utf-8
 let s:cpo_save = &cpoptions
 set cpoptions-=C
-" Note that this will only work on neovim as it it makes a call
-
-" guard
 
 " Plugins: {{{1
-" 07/16/2019: I don't think this is needed on windows anymore!
-" execute 'source ' . stdpath('data') . '/site/autoload/plug.vim'
+
+let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Evervim. Thanks!
+let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux)
+let s:windows = has('win32') || has('win64')    " TODO: remove all instances of this var !has('unix') is easier
+let s:wsl = !empty($WSL_DISTRO_NAME)
+
 
 call plug#begin(stdpath('data') . '/plugged')
 
@@ -29,12 +30,10 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-surround'
-Plug 'tpope/vim-jdaddy'
-Plug 'tpope/vim-markdown'
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'w0rp/ale', { 'on': 'ALEEnable'}
 
-if !empty(g:windows)
+if !has('unix')
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
 endif
 
@@ -45,24 +44,23 @@ endif
 
 Plug 'mhinz/vim-startify'
 Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
-Plug 'greyblake/vim-preview'
+Plug 'greyblake/vim-preview', {'on': 'Preview'}
 Plug 'luffah/vim-zim', {'for': ['zimwiki', 'zimindex']}
 Plug 'tomtom/tlib_vim'  " this library is incredible
 
 " It's very frustrating having termux slow down beyond repair but also frustrating
 " not being able to use more than 15 plugins at any point in time
-if !empty(g:ubuntu)
+if !empty(s:ubuntu)
   " I don't know rust but honestly its a model ftplugin so download it for
   " reference
   Plug 'rust-lang/rust.vim'
+  Plug 'itspriddle/vim-shellcheck', { 'for': ['sh', 'bash'] }
 endif
 
-if empty(g:termux)
+if empty(s:termux)
   Plug 'chrisbra/csv.vim', {'for': 'csv'}
-  Plug 'omnisharp/omnisharp-vim', {'for': 'cs'}
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
   Plug 'ekalinin/Dockerfile.vim', {'for': 'dockerfile'}
-  Plug 'itspriddle/vim-shellcheck', { 'for': ['sh', 'bash'] }
 endif
 
 " I feel like the lazy loaded ones can come out here
@@ -72,10 +70,6 @@ Plug 'ervandew/supertab'
 Plug 'junegunn/vim-peekaboo'
 Plug 'vim-voom/voom'
 Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
-
-Plug 'mhinz/vim-signify'
-Plug 'mhinz/vim-grepper', { 'on': ['Grepper', '<Plug>(GrepperOperator)'] }
-
 Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
 
 Plug 'ryanoasis/vim-devicons'           " Keep at end!

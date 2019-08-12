@@ -8,6 +8,7 @@ utilities ~/projects/utilities
 viconf ~/projects/viconf/.config/nvim
 WindowsPowerShell ~/Documents/WindowsPowerShell
 winterm-profiles ~/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/RoamingState/profiles.json
+terminal ~/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe
 
 ConEmu C:/Program Files/ConEmu/ConEmu
 config-nvim ~/.config/nvim

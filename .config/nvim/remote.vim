@@ -10,40 +10,7 @@ scriptencoding utf-8
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
-" Remote Hosts: {{{1
-
-function! Python3_Exe() abort
-  " Only run if windows because otherwise it gets so excessively complex
-  if !empty($CONDA_PREFIX)
-    return expand($CONDA_PREFIX)
-  endif
-
-  " TODO: The rest
-endfunction
-
-" We may even be able to remove the 2 separate functions
-" with a ternary operator and concatenating the results of:
-" let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
-
-if has('unix')
-  " let g:python3_host_prog = Get_Python3_Remote_Host()
-  " If this works as a functional substitute I'm gonna lose it.1
-  let g:python3_host_prog = exepath('python')
-  let g:loaded_python_provider = 1
-
-else  " windows
-  let g:python3_host_prog = Python3_Exe() . '/python.exe'
-  let g:loaded_python_provider = 1
-  let g:ruby_provider_host = 'C:/tools/ruby26/bin/neovim-ruby-host'
-  let g:node_provider_host = 'C:/Users/faris/AppData/Local/Yarn/global/node_modules/neovim/bin/cli.js'
-
-endif
-
-
 " Fun With Clipboards: {{{1
-
-" I've been using vim for almost 3 years. I still don't have copy paste ironed out...
-" Let's start simple
 
 " Set Clipboard: {{{2
 if has('unnamedplus')                   " Use the system clipboard.
@@ -54,13 +21,42 @@ endif
 
 set pastetoggle=<F7>
 
-" Clipboard Provider: {{{2
-" Now let's set up the clipboard provider
+" Remote Hosts: {{{1
 
-" As insane as this might be....it might not be necessary
-runtime $VIMRUNTIME/autoload/provider/clipboard.vim
+if has('unix')
+  " This is still gonna be tough because exepath('python') on termux ==
+  " python3 and on wsl == python2...
+  if exists($ANDROID_DATA)
+    let g:python3_host_prog = exepath('python')
+    let g:loaded_python_provider = 1
+  else
+    let g:python3_host_prog = exepath('python3')
+    let g:python_host_prog = exepath('python')
+  endif
 
-let g:clipboard = provider#clipboard#Executable()
+else  " windows not wsl
+  if !empty($CONDA_PREFIX)
+    let g:python3_host_prog = expand($CONDA_PREFIX) . '/python.exe'
+  else
+    let g:python3_host_prog = 'C:/tools/miniconda3/python.exe'
+  endif
+  let g:python_host_prog = 'C:/tools/miniconda3/envs/ansible/python.exe'
+  let loaded_ruby_provider = 1
+  let g:node_provider_host = 'C:/Users/faris/AppData/Local/Yarn/global/node_modules/neovim/bin/cli.js'
+
+  let g:clipboard = {
+        \   'name': 'winClip',
+        \   'copy': {
+        \      '+': 'win32yank.exe -i --crlf',
+        \      '*': 'win32yank.exe -i --crlf',
+        \    },
+        \   'paste': {
+        \      '+': 'win32yank.exe -o --lf',
+        \      '*': 'win32yank.exe -o --lf',
+        \   },
+        \   'cache_enabled': 1,
+        \ }
+endif
 
 " Atexit: {{{1
 

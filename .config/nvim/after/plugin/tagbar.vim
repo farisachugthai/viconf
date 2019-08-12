@@ -15,6 +15,8 @@ if exists('g:loaded_tagbar_conf') || &compatible || v:version < 700
 endif
 let g:loaded_tagbar_conf = 1
 
+let s:cpo_save = &cpoptions
+set cpoptions-=C
 
 " Options: {{{1
 let g:tagbar_left = 1
@@ -37,11 +39,17 @@ let g:tagbar_foldlevel = 2
 " If this variable is set to 1 then moving the cursor in the Tagbar window will
 " automatically show the current tag in the preview window.
 " Dude it takes up a crazy amount of room on termux and is generally quite annoying
-" Example:
-" >
-" let g:tagbar_autopreview = 1
+if !has('unix')
+  let g:tagbar_autopreview = 1
+  let g:tagbar_ctags_bin = 'C:/tools/miniconda3/envs/neovim/Library/bin/ctags.exe'
+endif
 
 " Mappings: {{{1
 
 noremap <silent> <F8> <Cmd>TagbarToggle<CR>
 noremap! <silent> <F8> <Cmd>TagbarToggle<CR>
+
+" Atexit: {{{1
+
+let &cpoptions = s:cpo_save
+unlet s:cpo_save

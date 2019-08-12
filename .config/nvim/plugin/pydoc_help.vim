@@ -17,13 +17,15 @@ set cpoptions-=C
 " Options: {{{1
 
 if !exists('g:pydoc_window')
-  let g:pydoc_window = 1  " should this be an int or str. hm.
+  " Check in <../autoload/pydoc_help.vim> for function definitions
+  let g:pydoc_window = "split"  " should this be an int or str. hm.
 endif
 
 " Autocmds: {{{1
 
 if &filetype=='man' || &filetype=='help'
   augroup mantabs
+    au!
     autocmd Filetype * call pydoc_help#Helptab()
   augroup END
 endif
@@ -41,6 +43,8 @@ if has('python') || has('python3')
   " This should be able to take the argument '-bang' and allow to open in a new
   " separate window like fzf does.
   command! -nargs=0 PydocSplit call pydoc_help#SplitPydocCword()
+
+  command! -nargs=? Pydoc call pydoc_help#Pydoc(<f-args>)
 endif
 
 " Atexit: {{{1

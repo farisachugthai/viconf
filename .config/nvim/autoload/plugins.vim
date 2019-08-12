@@ -16,7 +16,7 @@ set cpoptions-=C
 
 " Definitely a TODO
 
-function! ultisnips#GetAllSnippets() abort
+function! plugins#GetAllSnippets() abort
 
   call UltiSnips#SnippetsInCurrentScope(1)
   let list = []
@@ -34,7 +34,7 @@ endfunction
 
 " ultisnips#ExpandPossibleShorterSnippet: {{{1
 
-function! ultisnips#ExpandPossibleShorterSnippet() abort
+function! plugins#ExpandPossibleShorterSnippet() abort
   if len(UltiSnips#SnippetsInCurrentScope()) == 1 "only one candidate...
     let curr_key = keys(UltiSnips#SnippetsInCurrentScope())[0]
     normal diw
@@ -45,16 +45,31 @@ function! ultisnips#ExpandPossibleShorterSnippet() abort
   return 0
 endfunction
 
-" Expand Snippet Or CR: {{{3
+" Expand Snippet Or CR: {{{1
 " Hopefully will expand snippets or CR. Or it'll destroy deoplete's
 " ability to close the pum. *shrugs*
-function! ultisnips#ExpandSnippetOrCarriageReturn() abort
+function! plugins#ExpandSnippetOrCarriageReturn() abort
   let snippet = UltiSnips#ExpandSnippetOrJump()
     if g:ulti_expand_or_jump_res > 0
       return snippet
     else
       return "\<CR>"
     endif
+endfunction
+
+" List Commits: {{{1
+function! plugins#list_commits() abort
+  " note: Don't forget that
+  " echo isdirectory('~/projects/viconf')
+  " outputs 0 on windows and
+  " echo isdirectory(glob('~/projects/viconf'))
+  " outputs 1 so we have to glob it to get anything to show up in startify
+    let git = 'git -C ' . glob('~/projects/dynamic_ipython')
+    let commits = systemlist(git . ' log --oneline | head -n10')
+
+    " mapping that lines up commits from this repo
+    let git = 'Git'
+    return map(commits, '{"line": matchstr(v:val, "\\s\\zs.*"), "cmd": "'. git .' show ". matchstr(v:val, "^\\x\\+") }')
 endfunction
 
 

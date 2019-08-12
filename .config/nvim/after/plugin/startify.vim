@@ -15,29 +15,8 @@ if exists('g:did_startify_after_plugin') || &compatible || v:version < 700
 endif
 let g:did_startify_after_plugin = 1
 
-
-" List Commits: {{{1
-function! s:list_commits()
-  " note: Don't forget that
-  " echo isdirectory('~/projects/viconf')
-  " outputs 0 on windows and
-  " echo isdirectory(glob('~/projects/viconf'))
-  " outputs 1 so we have to glob it to get anything to show up in startify
-    let git = 'git -C ' . glob('~/projects/viconf')
-    if empty(g:windows)
-      let commits = systemlist(git . ' log --oneline | head -n10')
-    else
-      " Assume powershell. XXX wait should we just go ahead and assume
-      " that? Wouldn't it make more sense to do if (&shell) ==
-      " 'powershell or even expand('$SHELL') or check both with a '||'
-      " in between?
-      let commits = systemlist(git . ' log --oneline | Get-Content -TotalCount 10')
-    endif
-
-    " mapping that lines up commits from this repo
-    let git = 'Git'
-    return map(commits, '{"line": matchstr(v:val, "\\s\\zs.*"), "cmd": "'. git .' show ". matchstr(v:val, "^\\x\\+") }')
-endfunction
+let s:cpo_save = &cpoptions
+set cpoptions-=C
 
 " Startify Lists: {{{1
 
@@ -45,7 +24,7 @@ let g:startify_lists = [
     \ { 'type': 'files',     'header': ['   MRU']                   },
     \ { 'type': 'dir',       'header': ['   MRU ' . getcwd()]       },
     \ { 'type': 'sessions',  'header': ['   Sessions']              },
-    \ { 'type': function('s:list_commits'),  'header': ['   Viconf']},
+    \ { 'type': function('plugins#list_commits'),  'header': ['   Dynamic IPython']},
     \ { 'type': 'bookmarks', 'header': ['   Bookmarks']             },
     \ { 'type': 'commands',  'header': ['   Commands']              },
     \ ]
@@ -82,6 +61,7 @@ let g:startify_session_dir =  stdpath('config') . '/session'
 " General Options: {{{1
 " TODO: Figure out how to set let g:startify_bookmarks = [ Contents of
 " NERDTreeBookmarks ]
+" TODO: Also set g:startify_commands so more than 2 lists show up
 
 " This might be getting messed up on windows
 " let g:startify_change_to_dir = 1
@@ -95,3 +75,14 @@ let g:startify_session_sort = 1
 " expressions on a per directory basis aka projects / workspaces!
 let g:startify_session_autoload = 1
 let g:startify_session_sort = 1
+
+" Autocommand: {{{1
+
+augroup StartifyConf
+  au!
+  autocmd User Startified setlocal cursorline
+augroup END
+
+" Atexit: {{{1
+let &cpoptions = s:cpo_save
+unlet s:cpo_save
