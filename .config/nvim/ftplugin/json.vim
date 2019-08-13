@@ -26,17 +26,18 @@ setlocal comments=
 " sometimes it does fuck you
 let &commentstring='\\ %s'
 
-" Like what the literal fuck
-setlocal expandtab softtabstop=2 shiftwidth=2
-
 " Let's add in a few more options though. Enforce 2 space tabs
 setlocal expandtab softtabstop=2 shiftwidth=2
 
 set suffixesadd=.json
 
+" Syntax File: {{{2
+
+let g:vim_json_warnings = 1
+
 " Plugins: {{{1
 
-function! ALE_JSON_Conf() abort
+function! s:ALE_JSON_Conf() abort
   " Slowly but surely I'm working towards a uniform way of doing this
 
   if s:debug
@@ -67,13 +68,12 @@ endfunction
 
 let s:debug = 1
 
-augroup alejsonconf
-  au!
-  autocmd Filetype *
-        \ if has_key(plugs, 'ale') && &filetype==#'json'
-        \ call ALE_JSON_Conf()
-        \ endif
-augroup END
+if has_key(plugs, 'ale')
+  augroup alejsonconf
+    au!
+   autocmd Filetype json call s:ALE_JSON_Conf()
+  augroup END
+endif
 
 " Commands: {{{1
 " TODO: Could pretty easily make a command that runs python -m json.fix('%')

@@ -5,6 +5,8 @@
     " Last Modified: Jul 09, 2019
 " ============================================================================
 
+" TODO: Come up with a s:rg_command becausevthe implementation here is inconsistent
+
 " Guards: {{{1
 if !has_key(plugs, 'fzf.vim')
     finish
@@ -51,8 +53,8 @@ let g:fzf_colors =
 
     " Override Colors command. You can safely do this in your .vimrc as fzf.vim
     " will not override existing commands.
-command! -bang Colors
-  \ call fzf#vim#colors({'left': '15%', 'options': '--reverse --margin 30%,0'}, <bang>0)
+command! -bang FZFColors
+  \ call fzf#vim#colors({'left': '85%', 'options': '--reverse --margin 30%,0'}, <bang>0)
 
 " Mappings: {{{1
 " Exported fzf <plug> commands.
@@ -62,9 +64,6 @@ imap <C-x><C-f> <Plug>(fzf-complete-path)
 imap <C-x><C-j> <Plug>(fzf-complete-file-ag)
 " imap <C-x><C-l> <Plug>(fzf-complete-line)
 
-imap <C-k> <Plug>(fzf-complete-word)
-imap <C-f> <Plug>(fzf-complete-path)
-imap <C-j> <Plug>(fzf-complete-file-ag)
 
 " Global line completion (not just open buffers. ripgrep required.)
 imap <expr> <C-x><C-l> fzf#vim#complete(fzf#wrap({
@@ -95,10 +94,10 @@ xmap <Leader><tab>                 <Plug>(fzf-maps-x)
 imap <Leader><tab>                 <Plug>(fzf-maps-i)
 
 " Advanced customization using autoload functions
-inoremap <expr> <C-x><C-k> fzf#vim#complete#word({'left': '15%'})
+inoremap <expr> <C-x><C-k> fzf#vim#complete#word({'left': '45%'})
 
 " Map vim defaults to fzf history commands
-noremap <silent> q:                <Cmd>History:<CR>
+noremap <silent> q:                <Cmd>History:<CR>gnore
 noremap <silent> q/                <Cmd>History/<CR>
 
 " And get the rest of the fzf.vim commands involved.
@@ -157,38 +156,26 @@ endif
 
 " This was an autoloaded funcref so name needs to match path
 " FZF complete word with prefix added for termux
-" function! fzf#vim#complete#word(...)
-"     return fzf#vim#complete(s:extend){
-"         \ 'source': 'cat $_ROOT/share/dict/words'},
-"         \ get(a:000, 0, fzf#wrap())))
-" endfunction
-
-if exists($_ROOT)
-  if filereadable(expand($_ROOT) . '/share/dict/words')
-    inoremap <expr> <C-x><C-k> fzf#complete({
-                \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
-                \ 'options': ' --ansi --multi --cycle', 'left': 30})
-
-    inoremap <expr> <C-k> fzf#complete({
-                \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
-                \ 'options': ' --ansi --multi --cycle', 'left': 30})
-  endif
-endif
 
 " Grepprg And Find: {{{2
 
-" command! -bang -nargs=* Find
-"       \ call fzf#vim#grep(
-"       \ 'rg --no-heading --smart-case --no-ignore ^ ', 1,
-"       \ . shellescape(<q-args>), <bang>0 ? fzf#vim#with_preview('up:60%')
-"       \ : fzf#vim#with_preview('right:50%:hidden', '?'),
-"       \ <bang>0)
+command! -bang -nargs=* Find
+      \ call fzf#vim#grep(
+      \ 'rg --no-heading --smart-case --no--messages ^ '
+      \ . shellescape(<q-args>), 1, <bang>0 ? fzf#vim#with_preview('up:60%')
+      \ : fzf#vim#with_preview('right:50%:hidden', '?'),
+      \ <bang>0)
 
 " Grep: {{{2
 " Unfortunately the bang doesn't move to a new window. TODO
 " Opens matches in a split. Appending ! gives an error.
 " How do we fix that?
-command! -nargs=1 -bang -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
+command! -nargs=1 -bang -bar Grep fzf#run(fzf#wrap({
+      \ 'source': 'silent! grep! <q-args>',
+      \ 'options': ['--multi', '--ansi', '--border'],
+      \ <bang>0 ? fzf#vim#with_preview('up:60%')
+      \ : fzf#vim#with_preview('right:50%:hidden', '?'),
+      \ <bang>0})
 
 
 " GGrep: {{{2
@@ -214,7 +201,7 @@ command! -bang -nargs=* GGrep
 "
 "   :Ag  - Start fzf with hidden preview window that can be enabled with "?" key
 "   :Ag! - Start fzf in fullscreen and display the preview window above
-command! -bang -nargs=* YourAg
+command! -complete=dir -bang -nargs=* YourAg
   \ call fzf#vim#ag(<q-args>,
   \                 <bang>0 ? fzf#vim#with_preview('up:60%')
   \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
@@ -223,18 +210,19 @@ command! -bang -nargs=* YourAg
 " Rg: {{{2
 " Similarly, we can apply it to fzf#vim#grep. To use ripgrep instead of ag:
 " So officially I think this works better than the original!
-command! -bang -nargs=* YourRg
+command! -complete=dir -bang -nargs=* YourRg
   \ call fzf#vim#grep(
-  \   'rg --no-column --no-line-number --no-heading --no-messages --color=always --smart-case . ', 1,
+  \   'rg --no-column --no-line-number --no-heading --no-messages --color=always'
+  \ . ' --smart-case --ansi --multi --border --cycle ' . shellescape(<qargs>), , 1,
   \   <bang>0 ? fzf#vim#with_preview('up:60%')
   \           : fzf#vim#with_preview('right:50%:hidden', '?'),
   \   <bang>0)
 
 " Likewise, Files command with preview window
-command! -bang -nargs=? -complete=dir Files
+command! -bang -nargs=? -complete=dir YourFiles
   \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
-" Make Sentence: {{{2
+" Example of Reducer: {{{2
 
 if filereadable('/usr/share/dict/words')
 
@@ -243,46 +231,54 @@ if filereadable('/usr/share/dict/words')
       return substitute(join(a:lines), '^.', '\=toupper(submatch(0))', '').'.'
   endfunction
 
-  inoremap <expr> <C-x><C-s> fzf#vim#complete({
+  imap <expr> <C-x><C-s> fzf#vim#complete#word({
       \ 'source':  'cat /usr/share/dict/words',
       \ 'reducer': function('<sid>make_sentence'),
       \ 'options': '--multi --reverse --margin 15%,0',
-      \ 'left':    20})
+      \ 'left':    40})
 
   " And add a shorter version
-  inoremap <expr> <C-s> fzf#vim#complete({
-      \ 'source':  'cat /usr/share/dict/words',
-      \ 'reducer': function('<sid>make_sentence'),
-      \ 'options': '--multi --reverse --margin 15%,0',
-      \ 'left':    20})
+  inoremap <C-s> <C-x><C-s>
+  
+  
+  imap <expr> <C-x><C-k> fzf#fzf#vim#complete#word({
+                \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
+                \ 'options': ' --ansi --multi --cycle', 'left': 30})
+
+  inoremap <C-k> <C-x><C-k>
 
 endif
 
 " PlugHelp: {{{1
 " Does this need an f-args?
-command! PlugHelp call fzf#run(fzf#wrap({
+command! -bang -bar YourHelp call fzf#run(fzf#wrap({
   \ 'source': sort(keys(g:plugs)),
-  \ 'sink'  :   function('find_files#plug_help_sink')}))
+  \ 'sink'  :   function('find_files#plug_help_sink')}, <bang>0))
 
 " F: {{{1
 
-let g:ag_command = 'ag --smart-case -u -g " " --'
+let s:ag_command = 'ag --smart-case -u -g " " --'
 
-command! -bang -nargs=* F call fzf#vim#grep(g:ag_command .shellescape(<q-args>), 1, <bang>0)
+command! -bang -nargs=* -complete=dir YourGrepAg call fzf#vim#grep(s:ag_command .
+      \ shellescape(<q-args>), 1, <bang>0)
 
 " FZFBuffers FZFMRU FZFGit: {{{1
 
-command! FZFBuffers call fzf#run({
+" TODO: Make options a list
+command! -bang -complete=buffer -bar FZFBuffers call fzf#run(fzf#wrap({
         \ 'source':  reverse(find_files#buflist()),
         \ 'sink':    function('find_files#bufopen'),
-        \ 'options': '+m',
+        \ 'options': '+m --query --prompt "Buffers" ',
         \ 'down':    len(find_files#buflist()) + 2
-        \ })
+        \ }, <bang>0)
 
-command! FZFMru call FZFMru()
+command! FZFMru -bang -bar call find_files#FZFMru()
 
-command! FZFGit call find_files#FZFGit()
+command! FZFGit -bang -bar call find_files#FZFGit()
 
+  " TODO: The above command should use the fzf funcs 
+  " and also use this
+  " \   {'dir': systemlist('git rev-parse --show-toplevel')[0] }, <bang>0)
 " Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

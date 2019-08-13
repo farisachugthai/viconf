@@ -31,6 +31,7 @@ function! find_files#fzf_statusline() abort
     setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
 endfunction
 
+" Maps
 function! find_files#fzf_maps() abort
     inoremap <expr> <C-x><C-k> fzf#complete({
                 \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
@@ -65,7 +66,7 @@ endfunction
 
 function! find_files#buflist() abort
   redir => s:ls
-  silent s:ls
+  silent! ls
   redir END
   return split(s:ls, '\n')
 endfunction
@@ -76,13 +77,13 @@ endfunction
 
 
 function! find_files#FZFMru() abort
-    call fzf#run({
+    call fzf#run(fzf#wrap({
         \ 'source':   v:oldfiles,
         \ 'sink' :   'edit',
-        \ 'options': '-m --no-sort',
+        \ 'options': ['-m', '--prompt', '--no-sort', '--query'],
         \ 'down':    '40%'
-        \ })
-endfunction
+        \ }, '<bang>0'))
+  endfunction
 
 function! find_files#FZFGit() abort
     " Remove trailing new line to make it work with tmux splits

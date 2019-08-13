@@ -80,6 +80,15 @@ function! pydoc_help#Helptab() abort
 
 endfunction
 
+" Async Pydoc: {{{1
+
+" Dude this actually works
+function! pydoc_help#async_cursor() abort
+
+  call jobstart('pydoc ' . expand('<cWORD>'), {'on_stdout':{j,d,e->append(line('.'),d)}})
+endfunction
+
+
 " Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

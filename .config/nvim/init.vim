@@ -21,20 +21,10 @@ if !has('unix') | runtime winrc.vim | endif
 runtime remote.vim
 
 " Vim Plug And Third Party Packages: {{{1
-let s:plugins = filereadable(expand(stdpath('data') . '/site/autoload/plug.vim'))
+let s:vim_plug = filereadable(glob(fnameescape(stdpath('data') . '/site/autoload/plug.vim')))
 
-if empty(s:plugins)  " bootstrap plug.vim on new systems
-  function! s:InstallPlug() abort
-
-    if empty(executable('curl')) | finish | endif  " what scope does this statement end?
-    try " Successfully executed on termux
-      execute('!curl --progress-bar --create-dirs -Lo '
-            \ . stdpath('data') . '/site/autoload/plug.vim'
-            \ . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
-    catch | echo v:exception | endtry
-  endfunction
-
-  call <SID>InstallPlug()
+if empty(s:vim_plug) && exists('*plugins#InstallPlug')
+    call plugins#InstallPlug()
 endif
 
 runtime junegunn.vim 
@@ -168,11 +158,9 @@ set sidescroll=5                       " Didn't realize the default is 1
 noremap q; q:
 noremap Q @q
 vnoremap <BS> d
-noremap <Leader>cd <Cmd>cd %:p:h<CR><Bar><Cmd>pwd<CR>
 " Save a file as root
 noremap <Leader>W <Cmd>w !sudo tee % > /dev/null<CR>
 noremap <Leader>sp <Cmd>setlocal spell!<CR>
-noremap <Leader>s= z=
 
 noremap <Leader>o o<Esc>
 noremap <Leader>O O<Esc>

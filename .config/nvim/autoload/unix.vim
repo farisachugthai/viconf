@@ -7,7 +7,7 @@
 
 " Guards: {{{1
 let s:cpo_save = &cpoptions
-set cpoptions-=c
+set cpoptions-=C
 
 " ----------------------------------------------------------------------------
 " tmux
@@ -16,7 +16,7 @@ set cpoptions-=c
 
 " Tmux Send: {{{1
 
-function! unix#tmux_send(content, dest) range
+function! unix#tmux_send(content, dest) abort
   let dest = empty(a:dest) ? input('To which pane? ') : a:dest
   let tempfile = tempname()
   call writefile(split(a:content, "\n", 1), tempfile, 'b')
@@ -27,7 +27,7 @@ endfunction
 
 " Tmux Map: {{{1
 
-function! unix#tmux_map(key, dest)
+function! unix#tmux_map(key, dest) abort
   execute printf('nnoremap <silent> %s "tyy:call <SID>tmux_send(@t, "%s")<cr>', a:key, a:dest)
   execute printf('xnoremap <silent> %s "ty:call <SID>tmux_send(@t, "%s")<cr>gv', a:key, a:dest)
 endfunction
@@ -42,7 +42,7 @@ function! unix#UnixOptions() abort
       set dictionary+=/usr/share/dict/words
     endif
 
-    if g:termux
+    if exists($ANDROID_DATA)
       " May 26, 2019: Just ran into my first problem from a filename with a space in the name *sigh*
       noremap <silent> <Leader>ts <Cmd>execute '!termux-share -a send ' . shellescape(expand("%"))<CR>
     endif
@@ -66,11 +66,13 @@ endfunction
 " finger nor does it have read access to /etc/passwd
 if executable('!finger')
   if filereadable('/etc/passwd')
+
     command! -complete=custom,unix#ListUsers -nargs=0 Finger !finger <args>
 
     function! unix#ListUsers(A,L,P)
-        return system('cut -d: -f1 /etc/passwd')
+      return system('cut -d: -f1 /etc/passwd')
     endfun
+
   endif
 endif
 
@@ -86,8 +88,8 @@ endfunction
 " SpecialEdit: {{{1
 
 function! unix#SpecialEdit(files, mods) abort
-  for f in expand(a:files, 0, 1)
-    exe a:mods . ' split ' . f
+  for s:files in expand(a:files, 0, 1)
+    exe a:mods . ' split ' . s:files
   endfor
 endfunction
 

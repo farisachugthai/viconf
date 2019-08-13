@@ -45,7 +45,7 @@ let g:vimsyn_minlines = 300
 "   g:vimsyn_embed =~# 'P' : embed python
 "   g:vimsyn_embed =~# 'r' : embed ruby
 "   g:vimsyn_embed =~# 't' : embed tcl
-let g:vimsyn_embed = 'lmtPr'
+let g:vimsyn_embed = 'Pr'
 " perl removed because its slow and also fuck perl
 
 " Turn off errors because 50% of them are wrong.

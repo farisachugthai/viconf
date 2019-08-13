@@ -33,6 +33,14 @@ command! -bang -complete=buffer -complete=file -nargs=? -range=% Profile call vi
 command! -nargs=? Scriptnames call vimscript#Scriptnames(<f-args>)
 command! -nargs=0 Scriptnamesdict echo vimscript#ScriptnamesDict()
 
+command! NvimAPIFuncs new|put = map(api_info().functions, 'v:val.name')
+command NvimAPI echo keys(api_info())
+
+" Mappings: {{{1
+
+" I would say this is unrelated but this file is aimless
+noremap <Leader>cd <Cmd>cd %:p:h<CR><Bar><Cmd>pwd<CR>
+
 " Atexit: {{{1
 
 let &cpoptions = s:cpo_save

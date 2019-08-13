@@ -28,7 +28,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-surround'
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips'
 Plug 'w0rp/ale', { 'on': 'ALEEnable'}
 
 if !has('unix')
@@ -42,12 +42,7 @@ endif
 
 Plug 'mhinz/vim-startify'
 Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
-Plug 'greyblake/vim-preview', {'on': 'Preview'}
-Plug 'luffah/vim-zim', {'for': ['zimwiki', 'zimindex']}
-Plug 'tomtom/tlib_vim'  " this library is incredible
 
-" It's very frustrating having termux slow down beyond repair but also frustrating
-" not being able to use more than 15 plugins at any point in time
 if !empty(s:ubuntu)
   " I don't know rust but honestly its a model ftplugin so download it for
   " reference
@@ -55,10 +50,15 @@ if !empty(s:ubuntu)
   Plug 'itspriddle/vim-shellcheck', { 'for': ['sh', 'bash'] }
 endif
 
+" It's very frustrating having termux slow down beyond repair but also frustrating
+" not being able to use more than 15 plugins at any point in time
 if empty(s:termux)
   Plug 'chrisbra/csv.vim', {'for': 'csv'}
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
   Plug 'ekalinin/Dockerfile.vim', {'for': 'dockerfile'}
+  Plug 'greyblake/vim-preview', {'on': 'Preview'}
+  Plug 'luffah/vim-zim', {'for': ['zimwiki', 'zimindex']}
+  Plug 'tomtom/tlib_vim'  " this library is incredible
 endif
 
 " I feel like the lazy loaded ones can come out here

@@ -27,6 +27,7 @@ if has('unix')
   if exists($ANDROID_DATA)
     let g:python3_host_prog = exepath('python')
     let g:loaded_python_provider = 1
+    let g:node_provider_host = '/data/data/com.termux/files/usr/bin/neovim-node-host'
   else
     let g:python3_host_prog = exepath('python3')
     let g:python_host_prog = exepath('python')

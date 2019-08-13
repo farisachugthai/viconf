@@ -19,6 +19,11 @@ if exists('*coc#status')
   set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 endif
 
+if exists('g:did_coc_plugin') || &compatible || v:version < 700
+  finish
+endif
+let g:did_coc_plugin = 1
+
 " Mappings: {{{1
 
 " This section primarily focuses on setting up the autocompletion aspect
@@ -27,20 +32,10 @@ inoremap <silent><expr> <C-Space> coc#refresh()
 
 " Set Enter to accept autocompletion. More settings in
 " ~/.config/nvim/coc-settings.json
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
+" inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
 
-inoremap <silent><expr> <C-j>
-  \ pumvisible() ? coc#_select_confirm() :
-  \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-  \ <SID>check_back_space() ? "\<TAB>" :
-  \ coc#refresh()
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : 
+                                           \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 " Shit none of these work
 " nnoremap <silent> [g <Plug>(coc-diagnostic-prev)
 " nnoremap <silent> ]g <Plug>(coc-diagnostic-next)
@@ -69,12 +64,19 @@ nnoremap <F2> <Plug>(coc-rename)
 xnoremap <F2> <Cmd>CocCommand document.renameCurrentWord<CR>
 
 augroup CocConf
+
+  au!
+
   " Setup formatexpr specified filetype(s).
   " autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  
   " Update signature help on jump placeholder
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
   " Highlight symbol under cursor on CursorHold
   autocmd CursorHold * silent call CocActionAsync('highlight')
+
+  " Close the popupmenu when completions done
+  autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 
 augroup end
 
@@ -96,10 +98,9 @@ nnoremap <silent> <C-c>j  <Cmd>CocNext<CR>
 " Do default action for previous item.
 nnoremap <silent> <C-c>k  <Cmd>CocPrev<CR>
 " Resume latest coc list
-nnoremap <silent> <C-c>p  <Cmd>CocListResume<CR>
-" I'm gonna redo the mappings and try this piecemeal
-noremap <silent> <C-c>r <Cmd>CocListResume<CR>
-noremap <silent> <C-c>d <Cmd>CocList diagnostics<CR>
+nnoremap <silent> <C-c><C-r>  <Cmd>CocListResume<CR>
+" noremap <silent> <C-c>r <Cmd>CocListResume<CR>
+noremap <silent> <C-c><C-d> <Cmd>CocList diagnostics<CR>
 
 
 " Remap For Rename Current Word: {{{1
@@ -109,14 +110,14 @@ xmap <C-c>m  <Plug>(coc-format-selected)
 nmap <C-c>m  <Plug>(coc-format-selected)
 
 " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-xmap <C-c>a  <Plug>(coc-codeaction-selected)
+xmap <C-c><C-a>  <Plug>(coc-codeaction-selected)
 " nmap <C-c>a  <Plug>(coc-codeaction-selected)
 
 " Remap for do codeAction of current line
-nmap <C-c>a  <Plug>(coc-codeaction)
+nmap <C-c><C-a>  <Plug>(coc-codeaction)
 
 " Fix autofix problem of current line
-nmap <C-c>f  <Plug>(coc-fix-current)
+nmap <C-c><C-f>  <Plug>(coc-fix-current)
 
 " Dude that is an OBNOXIOUS amount of typing though.
 noremap <silent> <C-c>q <Plug>(coc-fix-current)

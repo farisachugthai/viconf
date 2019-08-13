@@ -35,7 +35,7 @@
     "typeParameter" : "\uf728",
     "default"       : "\uf29c"
   },
-  "suggest.timeout": 300,
+  "suggest.timeout": 800,
   "suggest.acceptSuggestionOnCommitCharacter": true,
   "python.linting.flake8Path": "flake8",
   "python.linting.flake8Args": ["--config-file", "~/AppData/Local/flake8"],
@@ -121,6 +121,7 @@
             },
             "flake8": {
               "enabled": true
+
             },
             "rope_completion": {
               "enabled": true
@@ -134,13 +135,40 @@
     }
   },
 
-  "list.source.grep.defaultArgs": ["-regex"],
-  "list.source.symbols.defaultOptions": ["--interactive", "--number-select"],
   "list.extendedSearchMode": true,
+
+  "list.source.grep.defaultArgs": ["-smartcase", "-regex", "-workspace"],
+  "list.source.grep.defaultOptions": ["--auto-preview", "--normal", "--interactive"],
+  "list.source.grep.args": [
+    "--hidden", "--smart-case", "--no-column", "--no-line-number", 
+    "--no-messages", "--crlf", "--color=never", "--files"
+   ],
+
+  "list.source.symbols.defaultOptions": ["--interactive", "--number-select"],
+
   "list.source.files.command": "rg",
-  "list.source.files.args": ["--hidden", "--smart-case", "--no-column", "--no-line-number", "--no-messages", "--crlf", "--color=never", "--files"],
-  "list.source.files.excludePatterns": ["node_modules/*", ".git/*", "__pycache__/*", "*.pyc"],
+  "list.source.files.args": [
+    "--hidden", "--smart-case", "--no-column", "--no-line-number", 
+    "--no-messages", "--crlf", "--color=never", "--files"
+  ],
+  "list.source.files.excludePatterns": [
+    "**/node_modules/*",
+    "**/.git/*",
+    "**/__pycache__/**",
+    "**/*.pyc"
+  ],
   "list.source.files.defaultOptions": ["--number-select", "--auto-preview", "--top"],
+
+  "list.source.mru.maxLength": 100,
+  "list.source.mru.excludePatterns": [
+    "**/.git/*",
+    "**/node_modules/*",
+    "/tmp/*",
+    "**/__pycache__/**",
+    "**/*.pyc"
+  ],
+  "list.source.mru.defaultOptions": ["--auto-preview", "--normal"],
+
   "list.insertMappings": {
     "<C-r>": "do:refresh",
     "<C-n>": "normal:j",
@@ -165,7 +193,7 @@
   "diagnostic.joinMessageLines": true,
   "diagnostic.virtualText": true,
   "diagnostic.virtualTextPrefix": "Coc Diagnostic: ",
-  "diagnostic.messageTarget": "echo",
+  "diagnostic.messageTarget": "float",
   "diagnostic.refreshAfterSave": true,
   "signature.hideOnTextChange": true,
   "vimlsp.suggest.fromVimruntime": true,

@@ -125,8 +125,8 @@ function! vimscript#ScriptnamesDict() abort  " {{{2
 " From 10,000 lines deep in :he eval
 " Get the output of ":scriptnames" in the scriptnames_output variable.
 " Call by entering `:echo g:ScriptNamesDict()` or the command below.
-  let scriptnames_output = ''
-  redir => scriptnames_output
+  let s:scriptnames_output = ''
+  redir => s:scriptnames_output
   silent scriptnames
   redir END
 
@@ -152,6 +152,31 @@ function! vimscript#ScriptnamesDict() abort  " {{{2
   return scripts
 endfunction
 
+function s:get_scriptnames() abort
+  let s:scriptnames_output = ''
+  redir => s:scriptnames_output
+  silent scriptnames
+  redir END
+  return s:scriptnames_output
+endfunction
+
+
+function! vimscript#fzf_scriptnames() abort
+  call fzf#vim#ag(fzf#wrap({s:get_scriptnames()
+        \ }, <bang>0 ? fzf#vim#with_preview('up:60%')
+        \ : fzf#vim#with_preview('right:50%:hidden', '?'),
+        \ <bang>0))
+endfunction
+
+endfunction
+
+function s:todo
+  call fzf#run(fzf#wrap({
+        \ 'source' : s:get_scriptnames(),
+        \ 'options': '--ansi --multi --border',
+        \ }, <bang>0 ? fzf#vim#with_preview('up:60%')
+        \ : fzf#vim#with_preview('right:50%:hidden', '?'),
+        \ <bang>0))
 
 " Atexit: {{{1
 let &cpoptions = s:cpo_save

@@ -72,6 +72,18 @@ function! plugins#list_commits() abort
     return map(commits, '{"line": matchstr(v:val, "\\s\\zs.*"), "cmd": "'. git .' show ". matchstr(v:val, "^\\x\\+") }')
 endfunction
 
+" Vim Plug: {{{1
+
+function! plugins#InstallPlug() abort
+
+    if empty(executable('curl')) | finish | endif  " what scope does this statement end?
+    try " Successfully executed on termux
+      execute('!curl --progress-bar --create-dirs -Lo '
+            \ . stdpath('data') . '/site/autoload/plug.vim'
+            \ . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
+    catch | echo v:exception | endtry
+  endfunction
+
 
 " Atexit: {{{1
 
