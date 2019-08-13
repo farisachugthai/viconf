@@ -14,20 +14,22 @@ set cpoptions-=C
 " ----------------------------------------------------------------------------
 " URL: https://gist.github.com/junegunn/2f271e4cab544e86a37e239f4be98e74
 
-" Tmux Send: {{{1
 
-function! unix#tmux_send(content, dest) abort
+function! unix#tmux_send(content, dest) abort  " {{{ tmux send: 1
   let dest = empty(a:dest) ? input('To which pane? ') : a:dest
   let tempfile = tempname()
   call writefile(split(a:content, "\n", 1), tempfile, 'b')
-  call system(printf('tmux load-buffer -b vim-tmux %s \; paste-buffer -d -b vim-tmux -t %s',
+
+  call system(printf('tmux load-buffer -b vim-tmux %s \;'
+        \ ' paste-buffer -d -b vim-tmux -t %s',
         \ shellescape(tempfile), shellescape(dest)))
+
   call delete(tempfile)
+
 endfunction
 
-" Tmux Map: {{{1
+function! unix#tmux_map(key, dest) abort " Tmux Map: {{{1
 
-function! unix#tmux_map(key, dest) abort
   execute printf('nnoremap <silent> %s "tyy:call <SID>tmux_send(@t, "%s")<cr>', a:key, a:dest)
   execute printf('xnoremap <silent> %s "ty:call <SID>tmux_send(@t, "%s")<cr>gv', a:key, a:dest)
 endfunction
@@ -54,10 +56,9 @@ function! unix#UnixOptions() abort
     if isdirectory(expand('$_ROOT') . '/include/libcs50')
         let &path = &path .','. expand('$_ROOT') . '/include/libcs50'
     endif
-
 endfunction
 
-" Finger: {{{1
+" Finger: {Command and Function} {{{1
 
 " Example from :he command-complete
 " The following example lists user names to a Finger command
@@ -76,22 +77,40 @@ if executable('!finger')
   endif
 endif
 
-" EditFileComplete: {{{1
-
-function! unix#EditFileComplete(A,L,P)
+function! unix#EditFileComplete(A,L,P)  " EditFileComplete: {{{1
   return split(globpath(&path, a:A), '\n')
 endfunction
 
 " This example does not work for file names with spaces!
 " so wait if that's true can't we just use shellescape...?
-
-" SpecialEdit: {{{1
-
 function! unix#SpecialEdit(files, mods) abort
   for s:files in expand(a:files, 0, 1)
     exe a:mods . ' split ' . s:files
-  endfor
 endfunction
+
+
+function! unix#RmDir(path)  " {{{1
+	" sanity check; make sure it's not empty, /, or $HOME
+	if empty(a:path)
+		echoerr 'Attempted to delete empty path'
+		return 0
+	elseif a:path == '/' || a:path == $HOME
+		echoerr 'Attempted to delete protected path: ' . a:path
+		return 0
+	endif
+	return system("rm -rf " . shellescape(a:path))
+endfunction
+
+" Executes {cmd} with the cwd set to {pwd}, without changing Vim's cwd.
+function! unix#system(pwd, cmd)  " {{{1
+  " If {pwd} is the empty string then it doesn't change the cwd.
+	let cmd = a:cmd
+	if !empty(a:pwd)
+		let cmd = 'cd ' . shellescape(a:pwd) . ' && ' . cmd
+	endif
+	return system(cmd)
+endfunction
+
 
 " Atexit: {{{1
 

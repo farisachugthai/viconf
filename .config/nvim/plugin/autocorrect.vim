@@ -284,10 +284,7 @@ iab Hda Had
 iab Hearign Hearing
 iab Helpfull Helpful
 iab Herat Heart
-iab Hismelf Himself
 iab Hlep Help
-iab Hsa Has
-iab Hsi His
 iab Htere There
 iab Htese These
 iab Hte The
@@ -299,32 +296,18 @@ iab Hvae Have
 iab Hvaing Having
 iab Hwich Which
 ia Id I'd
+ia idk I don't know
 iab Idae Idea
 iab Idaes Ideas
 iab Identofy Identify
 iab Ihs His
 ia Ill I'll
 ia Im I'm
-iab Imediate Immediate
-iab Imediatly Immediately
-iab Immediatly Immediately
-iab Importent Important
-iab Importnat Important
-iab Impossable Impossible
-iab Improvemnt Improvement
-iab Improvment Improvement
-iab Includ Include
-iab Indecate Indicate
-iab Inital Initial
 ia Isnt Isn't
 ia Itd It'd
 iab Itis It Is
 iab Ititial Initial
 ia Itll It Will
-iab Itnerested Interested
-iab Itneresting Interesting
-iab Itnerest Interest
-iab Itnerests Interests
 iab Itwas It Was
 iab Iused Used
 iab Iwll Will
@@ -798,55 +781,14 @@ iab didnt didn't
 iab directiosn direction
 iab disatisfied dissatisfied
 iab discoverd discovered
-iab disign design
-iab dispaly display
-iab dissonent dissonant
-iab distribusion distribution
-iab divsion division
-iab docuement documents
-iab docuemnt document
-iab documetn document
-iab documnet document
-iab documnets documents
-iab doese does
-iab doesnt doesn't
-iab doign doing
-iab doimg doing
-iab doind doing
-iab doller dollars
-iab dollers dollars
-iab donig doing
 iab dont don't
 iab exchagnes exchanges
 iab excitment excitement
-iab exhcange exchange
-iab exhcanges exchanges
-iab experiance experience
-iab experienc experience
-iab exprienced experienced
-iab exprience experience
 iab eyt yet
 iab faeture feature
 iab faetures features
 iab familair familiar
 iab familar familiar
-iab familliar familiar
-iab fammiliar familiar
-iab feild field
-iab feilds fields
-iab fianlly finally
-iab fidn find
-iab finalyl finally
-iab firends friends
-iab firts first
-iab follwo follow
-iab follwoing following
-iab fora for a
-iab foriegn foreign
-iab forthe for the
-iab forwrd forward
-iab forwrds forwards
-iab foudn found
 iab foward forward
 iab fowards forwards
 iab freind friend
@@ -858,31 +800,10 @@ iab fromthe from the
 iab furneral funeral
 iab fwe few
 iab garantee guarantee
-iab gaurd guard
-iab gemeral general
-iab gerat great
-iab geting getting
-iab gettin getting
-iab gievn given
 iab giveing giving
 iab gloabl global
 iab goign going
 iab gonig going
-iab govenment government
-iab goverment government
-iab gruop group
-iab gruops groups
-iab grwo grow
-iab guidlines guidelines
-iab hadbeen had been
-iab haev have
-iab hapened happened
-iab hapen happen
-iab hapening happening
-iab hapens happens
-iab happend happened
-iab hasbeen has been
-iab hasnt hasn't
 iab havebeen have been
 iab haveing having
 ia havent haven't
@@ -1191,6 +1112,5 @@ iab yoiu you
 ia youll you'll
 ia youre you're
 iab youve you've
-iab ytou you
 iab yuor your
 iab yuo you

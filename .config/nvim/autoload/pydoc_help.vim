@@ -48,7 +48,8 @@ function! pydoc_help#Pydoc(module) abort
     if type('g:pydoc_window') == v:t_string
       exec g:pydoc_window
     else
-      throw '/autoload/pydoc_help: g:pydoc_window needs to be one of "split" "vsplit" or "tabe"'
+      throw '/autoload/pydoc_help:'
+            \ . ' g:pydoc_window needs to be one of "split" "vsplit" or "tabe"'
     endif
   else
     split
@@ -86,6 +87,22 @@ endfunction
 function! pydoc_help#async_cursor() abort
 
   call jobstart('pydoc ' . expand('<cWORD>'), {'on_stdout':{j,d,e->append(line('.'),d)}})
+endfunction
+
+function! pydoc_help#scratch_buffer() abort  " {{{1
+ 
+  " From he api-floatwin. Only new versions of Nvim (maybe 0.4+ only?)
+  let buf = nvim_create_buf(v:false, v:true)
+
+  " original: should fill with pydoc output
+  " call nvim_buf_set_lines(buf, 0, -1, v:true, ["test", "text"])
+  let opts = {'relative': 'cursor', 'width': 10, 'height': 2, 'col': 0,
+      \ 'row': 1, 'anchor': 'NW', 'style': 'minimal'}
+  let win = nvim_open_win(buf, 0, opts)
+  " optional: change highlight, otherwise Pmenu is used
+  " call nvim_win_set_option(win, 'winhl', 'Normal:MyHighlight')
+
+  " To close the float, |nvim_win_close()| can be used.
 endfunction
 
 

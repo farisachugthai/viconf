@@ -1,6 +1,8 @@
-" Author:       Lifepillar
-" Maintainer:   Lifepillar
-" License:      Distributed under the same terms as Vim itself. See :help license.
+" Cheat40: Autoloaded Functions
+" Author:              Lifepillar
+" Maintainer:          Faris Chugthai
+" Previous Maintainer: Lifepillar
+" License:             Distributed under the same terms as Vim itself. See :help license.
 
 if exists('g:did_cheat40_autoload_vim') || &compatible || v:version < 700
     finish
@@ -12,21 +14,30 @@ let s:cheat40_dir = fnamemodify(resolve(expand('<sfile>:p')), ':h:h')
 " echomsg 'cheat40dir is' . s:cheat40_dir
 " let s:cheat40_dir = expand('$XDG_CONFIG_HOME') . '/nvim'
 
-" Courtesy of Pathogen
 function! s:slash() abort
+  " Courtesy of Pathogen
   return !exists('+shellslash') || &shellslash ? '/' : '\'
 endfunction
 
 
-" Split a path into a list. Code from Pathogen.
 function! s:split(path) abort
-  if type(a:path) == type([]) | return a:path | endif
-  if empty(a:path) | return [] | endif
+  " Split a path into a list. Code from Pathogen.
+  " Does this function still work with windows paths? Hm.
+
+  if type(a:path) == type([]) 
+    return a:path 
+  endif
+
+  if empty(a:path) 
+    return [] 
+  endif
+
   let split = split(a:path,'\\\@<!\%(\\\\\)*\zs,')
   return map(split,'substitute(v:val,''\\\([\\,]\)'',''\1'',"g")')
 endfunction
 
 function! cheat40#open(newtab)
+  " Wait why the \ like do we actually need those to separate options?
   if a:newtab
     tabnew +setlocal\ buftype=nofile\ bufhidden=hide\ nobuflisted\ noswapfile\ winfixwidth
 

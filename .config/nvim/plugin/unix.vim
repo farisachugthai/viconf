@@ -20,7 +20,7 @@ set cpoptions-=C
 
 " Function named incorrectly.
 if has('unix')
-  call unix#UnixOptions()
+  call unix_options#UnixOptions()
 endif
 
 " Tmux: {{{1
@@ -59,6 +59,8 @@ command! -nargs=+ -complete=file MyEdit
 
 command! -nargs=+ -complete=file Sedit call unix#SpecialEdit(<q-args>, <q-mods>)
 
+" Mkdir: {{{1
+" todo:
 
 " Pure Emacs: {{{1
 " There are more comfortable ways of doing the following in Vim.

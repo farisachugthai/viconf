@@ -193,6 +193,7 @@ Kaspersky
 KeePass
 KeePassX
 KeePassXC
+KernelSpecManager
 Keycode
 Keymappings
 Kleopatra
@@ -226,6 +227,7 @@ MinGW
 MinGW's
 Miniconda
 Mintty
+Mixin
 Monero
 MongoDB
 NDK
@@ -266,6 +268,7 @@ PEP8
 PHP5
 PIA
 PID
+PIL
 PIM
 PPA
 PPAs
@@ -333,6 +336,7 @@ SCADA
 SCM
 SDKs
 SDists
+SDists
 SELinux
 SGR
 SHA
@@ -353,6 +357,7 @@ Scrapy
 Seaborn
 SetEnv
 SharePoint
+ShimModule
 ShimModule
 Shotts
 Showkey
@@ -467,6 +472,7 @@ Zim
 Zim's
 ZimWiki
 ZipRecruiter
+`clientserver`
 aarch64
 abspath
 accessor
@@ -818,6 +824,7 @@ ignorecase
 img
 importlib
 indexeddb
+ini
 init
 inodes
 inoremap
@@ -826,6 +833,7 @@ intellisense
 interactiveshell
 interwiki
 ionice
+iopub
 iostat
 iotop
 ip
@@ -961,6 +969,7 @@ libvirt
 libvirtd
 lighttpd
 linebreak
+linspace
 linter
 linters
 linux
@@ -1039,6 +1048,7 @@ module
 moduleauthor
 modulefinder
 moduletype
+moduletype
 moin
 molokai
 monero
@@ -1050,6 +1060,7 @@ mozilla
 mp3
 mp4
 mpd
+msgpack
 msys
 mycli
 mymodule
@@ -1097,6 +1108,7 @@ normpath
 noscript
 notecard
 notecards
+np
 npm
 npmrc
 nsfw
@@ -1104,6 +1116,7 @@ nslookup
 nsupdate
 nt
 ntfs
+numpy
 numpy
 numpydoc
 nvidia
@@ -1300,6 +1313,7 @@ ripgrep
 rkt
 rmdir
 rmtree
+rpc
 rplugin
 rst
 rst2html
@@ -1342,6 +1356,7 @@ sdc
 sdc1
 sdc2
 sdist
+sdists
 sdists
 sdk
 sdks
@@ -1615,6 +1630,7 @@ wildcards
 wildmenu
 win10
 win32
+win32yank
 win32yank
 win64
 winbatch

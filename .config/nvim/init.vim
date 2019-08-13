@@ -20,6 +20,7 @@ if !has('unix') | runtime winrc.vim | endif
 " Factor out all of the remote hosts stuff.
 runtime remote.vim
 
+let $NVIM_COC_LOG_LEVEL='debug'
 " Vim Plug And Third Party Packages: {{{1
 let s:vim_plug = filereadable(glob(fnameescape(stdpath('data') . '/site/autoload/plug.vim')))
 

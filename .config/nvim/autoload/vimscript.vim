@@ -92,7 +92,7 @@ endfunction
 
 " AH I forgot Junegunn has one written as well!
 
-" Junegunns Profiler: {{{1
+" Profile: {{{1
 
 " Profile a func or file. Oooo I could use XDG_DATA_HOME instead of _ROOT there
 function! vimscript#profile(bang) abort
