@@ -15,10 +15,6 @@ endif
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
-if exists('*coc#status')
-  set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-endif
-
 if exists('g:did_coc_plugin') || &compatible || v:version < 700
   finish
 endif

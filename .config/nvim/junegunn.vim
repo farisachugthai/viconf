@@ -68,6 +68,7 @@ Plug 'ervandew/supertab'
 Plug 'junegunn/vim-peekaboo'
 Plug 'vim-voom/voom'
 Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+let $NVIM_COC_LOG_LEVEL='debug'
 Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
 
 Plug 'ryanoasis/vim-devicons'           " Keep at end!

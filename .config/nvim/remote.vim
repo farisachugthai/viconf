@@ -27,21 +27,20 @@ if has('unix')
   if exists($ANDROID_DATA)
     let g:python3_host_prog = exepath('python')
     let g:loaded_python_provider = 1
-    let g:node_provider_host = '/data/data/com.termux/files/usr/bin/neovim-node-host'
+    let g:node_host_prog = '/data/data/com.termux/files/usr/bin/neovim-node-host'
+    let loaded_ruby_provider = 1
   else
     let g:python3_host_prog = exepath('python3')
     let g:python_host_prog = exepath('python')
+    let g:node_host_prog = exepath('neovim-node-host')
+    let g:ruby_host_prog = exepath('neovim-ruby-host')
   endif
 
 else  " windows not wsl
-  if !empty($CONDA_PREFIX)
-    let g:python3_host_prog = expand($CONDA_PREFIX) . '/python.exe'
-  else
-    let g:python3_host_prog = 'C:/tools/miniconda3/python.exe'
-  endif
+  let g:python3_host_prog = 'C:/tools/miniconda3/envs/neovim/python.exe'
   let g:python_host_prog = 'C:/tools/miniconda3/envs/ansible/python.exe'
   let loaded_ruby_provider = 1
-  let g:node_provider_host = 'C:/Users/faris/AppData/Local/Yarn/global/node_modules/neovim/bin/cli.js'
+  let g:node_host_prog = 'C:/Users/faris/AppData/Local/Yarn/global/node_modules/neovim/bin/cli.js'
 
   let g:clipboard = {
         \   'name': 'winClip',

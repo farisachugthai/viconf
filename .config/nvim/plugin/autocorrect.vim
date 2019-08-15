@@ -734,14 +734,6 @@ iab completly completely
 iab completness completeness
 iab composate composite
 iab comtain contain
-iab comtains contains
-iab comunicate communicate
-iab comunity community
-iab condolances condolences
-iab conected connected
-iab conferance conference
-iab confirmmation confirmation
-iab considerit considerate
 iab considerite considerate
 iab consonent consonant
 iab conspiricy conspiracy
@@ -785,11 +777,6 @@ iab dont don't
 iab exchagnes exchanges
 iab excitment excitement
 iab eyt yet
-iab faeture feature
-iab faetures features
-iab familair familiar
-iab familar familiar
-iab foward forward
 iab fowards forwards
 iab freind friend
 iab freindly friendly
@@ -918,8 +905,6 @@ iab occured occurred
 iab occurence occurrence
 iab occurrance occurrence
 iab ocur occur
-iab oeprator operator
-iab oging going
 iab ohter other
 ia oit out
 iab omre more
@@ -966,10 +951,6 @@ iab resorces resources
 iab respomd respond
 iab respomse response
 iab responce response
-iab responsibile responsible
-iab responsiblity responsibility
-iab restaraunt restaurant
-iab restuarant restaurant
 iab reult result
 iab reveiwing reviewing
 iab reveiw review

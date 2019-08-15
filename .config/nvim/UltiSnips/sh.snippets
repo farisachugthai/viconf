@@ -22,9 +22,10 @@ fi
 $9
 endsnippet
 
+# TODO: Doesn't work
 snippet dirname "Save the dir the script is in" b
 if [[ -h ${VISUAL:"$source"} ]]; then
-	DIRNAME="$( cd -P "$( dirname ${VISUAL:"$source"} )" && pwd )""
+	DIRNAME="$( cd -P "$( dirname ${VISUAL:"$source"} )" && pwd )"
 fi
 endsnippet
 

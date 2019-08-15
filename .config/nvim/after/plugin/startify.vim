@@ -63,9 +63,15 @@ let g:startify_session_dir =  stdpath('config') . '/session'
 " NERDTreeBookmarks ]
 " TODO: Also set g:startify_commands so more than 2 lists show up
 
-" This might be getting messed up on windows
-" let g:startify_change_to_dir = 1
+    let g:startify_commands = [
+        \ {'h': ['Vim Reference', 'h ref'],}
+        \ ]
 
+if has('unix')
+  let g:startify_change_to_dir = 1
+endif
+
+let g:startify_use_env = 1
 let g:startify_fortune_use_unicode = 1
 let g:startify_update_oldfiles = 1
 let g:startify_session_persistence = 1

@@ -187,6 +187,7 @@
   "coc.preferences.extensionUpdateCheck": "daily",
   "coc.preferences.currentFunctionSymbolAutoUpdate": true,
   "coc.preferences.previewAutoClose": true,
+  "coc.preferences.hoverTarget": "preview",
   "diagnostic.checkCurrentLine": true,
   "diagnostic.displayByAle": false,
   "diagnostic.level": "warning",

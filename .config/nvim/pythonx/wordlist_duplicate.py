@@ -18,7 +18,15 @@ It should ignore itself if we go sys.argv[1:] right?
 import logging
 import sys
 
-# import vim
+import vim
+
+
+def vim_api():
+    """Tepidly I'm going to use this now."""
+    # it worked!
+    vim.command("exec 'e ' . stdpath('config') . '/spell/en.utf-8.add'")
+    # this doesnt :/
+    vim.command("sort expand('%')")
 
 
 def fix_spellfile(wordlist):
@@ -37,6 +45,7 @@ def fix_spellfile(wordlist):
     -------
     new_wordlist : list
         Filtered list of words.
+
     """
     new_wordlist = []
     for i, j in enumerate(wordlist):
@@ -63,6 +72,7 @@ def sortfile(spellfile):
     -------
     sorted_spellfile : list
         Sorted list of words.
+
     """
     with open(spellfile, 'rt') as f:
         spellobj = f.readlines()
@@ -95,4 +105,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    # main()
+    vim_api()

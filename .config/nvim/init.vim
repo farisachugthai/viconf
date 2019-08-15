@@ -20,7 +20,6 @@ if !has('unix') | runtime winrc.vim | endif
 " Factor out all of the remote hosts stuff.
 runtime remote.vim
 
-let $NVIM_COC_LOG_LEVEL='debug'
 " Vim Plug And Third Party Packages: {{{1
 let s:vim_plug = filereadable(glob(fnameescape(stdpath('data') . '/site/autoload/plug.vim')))
 
@@ -121,13 +120,13 @@ set pumheight=15
 set ignorecase             " both smartcase and infercase require ignorecase to be set
 set smartcase infercase    " the case when you search for stuff
 
-set path+=**                            " Recursively search dirs with :find
+set path+=**               " Recursively search dirs with :find
 let &path = &path . ',' . stdpath('config')
-let &path = &path . ',' . stdpath('data')
 let &path = &path . ',' . expand('$VIMRUNTIME')
 
 set makeencoding=char         " Used by the makeprg. system locale is used
 set sessionoptions+=unix,slash
+set sessionoptions-=buffers,winsize
 if &formatexpr ==# ''
   setlocal formatexpr=format#Format()  " check the autoload directory
 endif
@@ -151,8 +150,7 @@ set updatetime=100
 set inccommand=split
 let g:tutor_debug = 1
 set terse     " Don't display the message when a search hits the end of file
-set shortmess+=ac
-set shortmess-=tT
+set shortmess=aoOsAc
 set sidescroll=5                       " Didn't realize the default is 1
 
 " Mappings: {{{1
@@ -221,13 +219,13 @@ function! s:statusline_expr() abort
       let csv = '%1*%{&ft=~"csv" ? CSV_WCol() : ""}%*'
   else | let csv = '' | endif
 
-  if exists('*strftime')
-  " Overtakes the whole screen when Termux zooms in
+  if exists('*strftime')  " Overtakes the whole screen when Termux zooms in
     if &columns > 80
       let tstmp = ' ' . '%{strftime("%H:%M %m/%d/%Y", getftime(expand("%:p")))}'  " last modified timestamp
     else | let tstmp = '' | endif
   else | let tstmp = '' | endif
-  return '[%n] %f '. dicons . '%m' . '%r' . ' %y ' . fug . csv . ' ' . ' %{&ff} ' . tstmp . sep . pos . '%*' . ' %P'
+  let co = "%{exists('coc#status') ? get(b:,'coc_current_function','') : ''}"
+  return '[%n] %f '. dicons . '%m' . '%r' . ' %y ' . fug . csv . ' ' . ' %{&ff} ' . co . tstmp . sep . pos . '%*' . ' %P'
 endfunction
 
 let &statusline = <SID>statusline_expr()

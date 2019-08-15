@@ -32,6 +32,7 @@ let g:fzf_action = {
 " June 08, 2019: Changing to stdpath so that it goes to the right dir on Windows
 let g:fzf_history_dir = stdpath('data') . '/fzf-history'
 
+let g:fzf_layout = { 'window': 'enew' }
 " FZF Colors: {{{1
 
 " Gruvbox Hard Coded: {{{2
@@ -62,8 +63,6 @@ command! -bang FZFColors
 imap <C-x><C-k> <Plug>(fzf-complete-word)
 imap <C-x><C-f> <Plug>(fzf-complete-path)
 imap <C-x><C-j> <Plug>(fzf-complete-file-ag)
-" imap <C-x><C-l> <Plug>(fzf-complete-line)
-
 
 " Global line completion (not just open buffers. ripgrep required.)
 imap <expr> <C-x><C-l> fzf#vim#complete(fzf#wrap({
@@ -83,6 +82,9 @@ noremap <silent> <Leader><CR>     <Cmd>Buffers<CR>
 noremap <Leader>bu                <Cmd>Buffers<CR>
 noremap <Leader>bB                <Cmd>Buffers<CR>
 noremap <Leader>f                 <Cmd>Files<CR>
+noremap <silent> <C-x><C-f>       <Cmd>Files<CR>
+noremap! <silent> <C-x><C-f>      <Cmd>Files<CR>
+tnoremap <silent> <C-x><C-f>     <Cmd>Files<CR>
 
 " Mapping for selecting different mappings.
 " Could add one for insert mode but leader tab is gonna happen so often that we need to use
@@ -97,7 +99,7 @@ imap <Leader><tab>                 <Plug>(fzf-maps-i)
 inoremap <expr> <C-x><C-k> fzf#vim#complete#word({'left': '45%'})
 
 " Map vim defaults to fzf history commands
-noremap <silent> q:                <Cmd>History:<CR>gnore
+noremap <silent> q:                <Cmd>History:<CR>
 noremap <silent> q/                <Cmd>History/<CR>
 
 " And get the rest of the fzf.vim commands involved.
@@ -152,12 +154,7 @@ if filereadable('/usr/share/dict/words')
   call find_files#fzf_maps()
 endif
 
-" Complete Word: {{{1
-
-" This was an autoloaded funcref so name needs to match path
-" FZF complete word with prefix added for termux
-
-" Grepprg And Find: {{{2
+" Grepprg And Find: {{{1
 
 command! -bang -nargs=* Find
       \ call fzf#vim#grep(
@@ -166,7 +163,7 @@ command! -bang -nargs=* Find
       \ : fzf#vim#with_preview('right:50%:hidden', '?'),
       \ <bang>0)
 
-" Grep: {{{2
+" Grep: {{{1
 " Unfortunately the bang doesn't move to a new window. TODO
 " Opens matches in a split. Appending ! gives an error.
 " How do we fix that?
@@ -178,7 +175,7 @@ command! -nargs=1 -bang -bar Grep fzf#run(fzf#wrap({
       \ <bang>0})
 
 
-" GGrep: {{{2
+" GGrep: {{{1
 " From fzf-vim.txt
 " fzf-vim-advanced-customization
 " Command for git grep
@@ -188,7 +185,7 @@ command! -bang -nargs=* GGrep
   \   'git grep --line-number '.shellescape(<q-args>), 0,
   \   {'dir': systemlist('git rev-parse --show-toplevel')[0] }, <bang>0)
 
-" Ag: {{{2
+" Ag: {{{1
 
 " :Ag  - Start fzf with hidden preview window that can be enabled with '?' key
 " :Ag! - Start fzf in fullscreen and display the preview window above
@@ -207,7 +204,7 @@ command! -complete=dir -bang -nargs=* YourAg
   \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
   \                 <bang>0)
 
-" Rg: {{{2
+" Rg: {{{1
 " Similarly, we can apply it to fzf#vim#grep. To use ripgrep instead of ag:
 " So officially I think this works better than the original!
 command! -complete=dir -bang -nargs=* YourRg
@@ -218,11 +215,11 @@ command! -complete=dir -bang -nargs=* YourRg
   \           : fzf#vim#with_preview('right:50%:hidden', '?'),
   \   <bang>0)
 
-" Likewise, Files command with preview window
+"  Files command with preview window: {{{1
 command! -bang -nargs=? -complete=dir YourFiles
   \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
-" Example of Reducer: {{{2
+" Example Of Reducer: {{{1
 
 if filereadable('/usr/share/dict/words')
 
@@ -255,7 +252,7 @@ command! -bang -bar YourHelp call fzf#run(fzf#wrap({
   \ 'source': sort(keys(g:plugs)),
   \ 'sink'  :   function('find_files#plug_help_sink')}, <bang>0))
 
-" F: {{{1
+" YourAg: {{{1
 
 let s:ag_command = 'ag --smart-case -u -g " " --'
 
