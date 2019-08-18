@@ -28,7 +28,7 @@ function! find_files#fzf_statusline() abort
     highlight fzf1 ctermfg=81 ctermbg=234
     highlight fzf2 ctermfg=81 ctermbg=234
     highlight fzf3 ctermfg=81 ctermbg=234
-    setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
+    let &l:statusline = '%#fzf1#\ >\ %#fzf2#fz%#fzf3#f'
 endfunction
 
 " Maps

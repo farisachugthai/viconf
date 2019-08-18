@@ -1,7 +1,7 @@
 " ============================================================================
     " File: autoloads.vim
     " Author: Faris Chugthai
-    " Description: Commands and functions defined in thw autoload dir
+    " Description: Commands and functions defined in the autoload dir
     " Last Modified: June 26, 2019
 " ============================================================================
 

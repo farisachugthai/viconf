@@ -107,9 +107,8 @@ function! vimscript#profile(bang) abort
   endif
 endfunction
 
-" Scriptnames: {{{1
 
-function! vimscript#Scriptnames(re) abort  " {{{2
+function! vimscript#Scriptnames(re) abort  " {{{1
 " Command to filter :scriptnames output by a regex
     redir => scriptnames
     silent scriptnames
@@ -152,7 +151,7 @@ function! vimscript#ScriptnamesDict() abort  " {{{2
   return scripts
 endfunction
 
-function s:get_scriptnames() abort
+function s:get_scriptnames() abort  " {{{1
   let s:scriptnames_output = ''
   redir => s:scriptnames_output
   silent scriptnames
@@ -161,16 +160,16 @@ function s:get_scriptnames() abort
 endfunction
 
 
-function! vimscript#fzf_scriptnames() abort
-  call fzf#vim#ag(fzf#wrap({s:get_scriptnames()
-        \ }, <bang>0 ? fzf#vim#with_preview('up:60%')
+function! vimscript#fzf_scriptnames() abort  " {{{1
+  call fzf#vim#ag(fzf#wrap({s:get_scriptnames()}),
+        \ <bang>0 ? fzf#vim#with_preview('up:60%')
         \ : fzf#vim#with_preview('right:50%:hidden', '?'),
         \ <bang>0))
 endfunction
 
 endfunction
 
-function s:todo
+function! s:todo abort  " {{{1
   call fzf#run(fzf#wrap({
         \ 'source' : s:get_scriptnames(),
         \ 'options': '--ansi --multi --border',

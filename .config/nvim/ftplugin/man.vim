@@ -98,6 +98,7 @@ setlocal breakindent
   endif
 
 if exists('g:Man') != 2
+  " TODO: Add a bang argument
   command! -nargs=+ -complete=shellcmd Man call s:GetPage(<q-mods>, <f-args>)
   nmap <Leader>K :call <SID>PreGetPage(0)<CR>
   nmap <Plug>ManPreGetPage :call <SID>PreGetPage(0)<CR>

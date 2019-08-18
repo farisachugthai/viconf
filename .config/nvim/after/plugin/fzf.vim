@@ -33,11 +33,11 @@ let g:fzf_action = {
 let g:fzf_history_dir = stdpath('data') . '/fzf-history'
 
 let g:fzf_layout = { 'window': 'enew' }
+
 " FZF Colors: {{{1
 
 " Gruvbox Hard Coded: {{{2
 
-" Mar 21, 2019:
 let g:fzf_colors =
 \ {  'fg':      ['fg', '#fbf1c7'],
   \  'bg':      ['bg', '#1d2021'],
@@ -55,7 +55,7 @@ let g:fzf_colors =
     " Override Colors command. You can safely do this in your .vimrc as fzf.vim
     " will not override existing commands.
 command! -bang FZFColors
-  \ call fzf#vim#colors({'left': '85%', 'options': '--reverse --margin 30%,0'}, <bang>0)
+  \ call fzf#vim#colors({'left': '35%', 'options': '--reverse --margin 30%,0'}, <bang>0)
 
 " Mappings: {{{1
 " Exported fzf <plug> commands.
@@ -84,7 +84,7 @@ noremap <Leader>bB                <Cmd>Buffers<CR>
 noremap <Leader>f                 <Cmd>Files<CR>
 noremap <silent> <C-x><C-f>       <Cmd>Files<CR>
 noremap! <silent> <C-x><C-f>      <Cmd>Files<CR>
-tnoremap <silent> <C-x><C-f>     <Cmd>Files<CR>
+tnoremap <silent> <C-x><C-f>      <Cmd>Files<CR>
 
 " Mapping for selecting different mappings.
 " Could add one for insert mode but leader tab is gonna happen so often that we need to use
@@ -96,7 +96,7 @@ xmap <Leader><tab>                 <Plug>(fzf-maps-x)
 imap <Leader><tab>                 <Plug>(fzf-maps-i)
 
 " Advanced customization using autoload functions
-inoremap <expr> <C-x><C-k> fzf#vim#complete#word({'left': '45%'})
+inoremap <expr> <C-x><C-k>         fzf#vim#complete#word({'left': '45%'})
 
 " Map vim defaults to fzf history commands
 noremap <silent> q:                <Cmd>History:<CR>
@@ -148,6 +148,8 @@ augroup fzfstatusline
     autocmd FileType fzf set laststatus=0 noshowmode noruler
     \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
     autocmd! FileType fzf call find_files#fzf_statusline()
+    " Holy hell this worked perfectly!
+    autocmd! BufLeave if &ft==fzf | unlet &statusline && runtime plugin/stl.vim | endif
 augroup end
 
 if filereadable('/usr/share/dict/words')
@@ -156,7 +158,11 @@ endif
 
 " Grepprg And Find: {{{1
 
-command! -bang -nargs=* Find
+" Completion behavior				*:command-completion* *E179*
+" ...
+" -complete=file_in_path	file and directory names in |'path'|
+" So that this command behaves similarly to the built in find.
+command! -bang -nargs=* -complete=file_in_path Find
       \ call fzf#vim#grep(
       \ 'rg --no-heading --smart-case --no--messages ^ '
       \ . shellescape(<q-args>), 1, <bang>0 ? fzf#vim#with_preview('up:60%')
@@ -225,7 +231,7 @@ if filereadable('/usr/share/dict/words')
 
   " *fzf-vim-reducer-example*
   function! s:make_sentence(lines) abort
-      return substitute(join(a:lines), '^.', '\=toupper(submatch(0))', '').'.'
+    return substitute(join(a:lines), '^.', '\=toupper(submatch(0))', '').'.'
   endfunction
 
   imap <expr> <C-x><C-s> fzf#vim#complete#word({
@@ -239,7 +245,8 @@ if filereadable('/usr/share/dict/words')
   
   
   imap <expr> <C-x><C-k> fzf#fzf#vim#complete#word({
-                \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
+                \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add'
+                \ ' $_ROOT/share/dict/words 2>/dev/null',
                 \ 'options': ' --ansi --multi --cycle', 'left': 30})
 
   inoremap <C-k> <C-x><C-k>
@@ -269,13 +276,14 @@ command! -bang -complete=buffer -bar FZFBuffers call fzf#run(fzf#wrap({
         \ 'down':    len(find_files#buflist()) + 2
         \ }, <bang>0)
 
-command! FZFMru -bang -bar call find_files#FZFMru()
+command! -bang -bar FzfMru call find_files#FZFMru()
 
-command! FZFGit -bang -bar call find_files#FZFGit()
+command! -bang -bar FzfGit call find_files#FZFGit()
 
   " TODO: The above command should use the fzf funcs 
   " and also use this
   " \   {'dir': systemlist('git rev-parse --show-toplevel')[0] }, <bang>0)
+
 " Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

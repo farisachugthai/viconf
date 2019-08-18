@@ -18,6 +18,7 @@ let g:did_startify_after_plugin = 1
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
+" This takes 4ms to load and I didn't even start on this buffer...
 " Startify Lists: {{{1
 
 let g:startify_lists = [
@@ -35,14 +36,8 @@ function! StartifyEntryFormat()
 endfunction
 
 " Center The Header And Footer: {{{1
-function! s:filter_header(lines) abort
-    let longest_line   = max(map(copy(a:lines), 'strwidth(v:val)'))
-    let centered_lines = map(copy(a:lines),
-        \ 'repeat(" ", (&columns / 2) - (longest_line / 2)) . v:val')
-    return centered_lines
-endfunction
 
-let g:startify_custom_header = s:filter_header(startify#fortune#cowsay())
+let g:startify_custom_header = plugins#filter_header(startify#fortune#cowsay())
 
 " Skiplist: {{{1
 " Don't show these files
@@ -53,19 +48,16 @@ let g:startify_skiplist = [
     \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc', ]
 
 " Session Dir: {{{1
-
-" Here's a way cleaner way of doing this. Now we don't depend on nvim/vim, win or linux.
-" Just make a dir in the config directory that's called session.
 let g:startify_session_dir =  stdpath('config') . '/session'
 
 " General Options: {{{1
 " TODO: Figure out how to set let g:startify_bookmarks = [ Contents of
 " NERDTreeBookmarks ]
-" TODO: Also set g:startify_commands so more than 2 lists show up
 
-    let g:startify_commands = [
-        \ {'h': ['Vim Reference', 'h ref'],}
-        \ ]
+let g:startify_commands = [
+    \ {'h': ['Vim Reference', 'h ref'],},
+    \ {'f': ['FZF!', 'FZF!'],},
+    \ ]
 
 if has('unix')
   let g:startify_change_to_dir = 1

@@ -7,6 +7,7 @@ tlib ~/.local/share/nvim/plugged/tlib_vim/autoload/tlib
 tutorials ~/Dropbox/python/tutorials
 utilities ~/projects/utilities
 viconf ~/projects/viconf/.config/nvim
+fzf ~/.local/share/nvim/plugged/fzf.vim/autoload/fzf
 
 ConEmu C:/Program Files/ConEmu/ConEmu
 WindowsPowerShell ~/Documents/WindowsPowerShell

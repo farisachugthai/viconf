@@ -22,7 +22,7 @@ setlocal tabstop=2
 setlocal softtabstop=2
 setlocal suffixesadd+=.vim
 setlocal nolinebreak
-setlocal nowrap
+setlocal wrap
 
 let &path = &path . ',' . stdpath('data') . '/plugged/*/*/*.vim'
 let &commentstring='" %s'

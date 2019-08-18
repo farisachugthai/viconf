@@ -5,18 +5,14 @@
   " Last Modified: August 01, 2019 
 " ============================================================================
 
-" Guards: {{{1
+" Guards: 
 
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
-" Functions: {{{1
+" UltiSnips: 
 
-" ultisnips#GetAllSnippets: {{{1
-
-" Definitely a TODO
-
-function! plugins#GetAllSnippets() abort
+function! plugins#GetAllSnippets() abort  " 
 
   call UltiSnips#SnippetsInCurrentScope(1)
   let list = []
@@ -32,9 +28,7 @@ function! plugins#GetAllSnippets() abort
   return list
 endfunction
 
-" ultisnips#ExpandPossibleShorterSnippet: {{{1
-
-function! plugins#ExpandPossibleShorterSnippet() abort
+function! plugins#ExpandPossibleShorterSnippet() abort " 
   if len(UltiSnips#SnippetsInCurrentScope()) == 1 "only one candidate...
     let curr_key = keys(UltiSnips#SnippetsInCurrentScope())[0]
     normal diw
@@ -45,7 +39,7 @@ function! plugins#ExpandPossibleShorterSnippet() abort
   return 0
 endfunction
 
-" Expand Snippet Or CR: {{{1
+" Expand Snippet Or CR: 
 " Hopefully will expand snippets or CR. Or it'll destroy deoplete's
 " ability to close the pum. *shrugs*
 function! plugins#ExpandSnippetOrCarriageReturn() abort
@@ -57,7 +51,21 @@ function! plugins#ExpandSnippetOrCarriageReturn() abort
     endif
 endfunction
 
-" List Commits: {{{1
+" Vim Plug: 
+
+function! plugins#InstallPlug() abort  " 
+
+    if empty(executable('curl')) | finish | endif  " what scope does this statement end?
+    try " Successfully executed on termux
+      execute('!curl --progress-bar --create-dirs -Lo '
+            \ . stdpath('data') . '/site/autoload/plug.vim'
+            \ . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
+    catch | echo v:exception | endtry
+  endfunction
+
+" Startify: 
+
+" List Commits: 
 function! plugins#list_commits() abort
   " note: Don't forget that
   " echo isdirectory('~/projects/viconf')
@@ -72,20 +80,14 @@ function! plugins#list_commits() abort
     return map(commits, '{"line": matchstr(v:val, "\\s\\zs.*"), "cmd": "'. git .' show ". matchstr(v:val, "^\\x\\+") }')
 endfunction
 
-" Vim Plug: {{{1
+function! plugins#filter_header(lines) abort  " 
+    let longest_line   = max(map(copy(a:lines), 'strwidth(v:val)'))
+    let centered_lines = map(copy(a:lines),
+        \ 'repeat(" ", (&columns / 2) - (longest_line / 2)) . v:val')
+    return centered_lines
+endfunction
 
-function! plugins#InstallPlug() abort
-
-    if empty(executable('curl')) | finish | endif  " what scope does this statement end?
-    try " Successfully executed on termux
-      execute('!curl --progress-bar --create-dirs -Lo '
-            \ . stdpath('data') . '/site/autoload/plug.vim'
-            \ . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
-    catch | echo v:exception | endtry
-  endfunction
-
-
-" Atexit: {{{1
+" Atexit: 
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

@@ -10,7 +10,7 @@ if exists('g:loaded_autocorrect_plugin') || &compatible || v:version < 700
 endif
 let g:loaded_autocorrect_plugin = 1
 
-iab abbout about
+iab Abbout About
 iab Abbout About
 iab Abotu About
 iab Accross Across
@@ -43,18 +43,10 @@ iab Alwasy Always
 iab Alwats Always
 iab Alway Always
 iab Alwyas Always
-iab Amde Made
-iab Ameria America
 iab Amke Make
 iab Amkes Makes
 iab Anbd And
-iab Appeares Appears
-iab Applicaiton Application
-iab Applicaitons Applications
-iab Applyed Applied
-iab Appointiment Appointment
 iab Appraoch Approach
-iab Approrpiate Appropriate
 ia Arent Aren't
 iab Arguement Argument
 iab Arguements Arguments
@@ -116,20 +108,6 @@ iab Claered Cleared
 iab Claerly Clearly
 iab Cliant Client
 iab Cna Can
-iab Colection Collection
-iab Comanies Companies
-iab Comany Company
-iab Comapnies Companies
-iab Comapny Company
-iab Combintation Combination
-iab Comited Committed
-iab Comittee Committee
-iab Commadn Command
-iab Comming Coming
-iab Commitee Committee
-iab Committe Committee
-iab Committment Commitment
-iab Committments Commitments
 iab Committy Committee
 iab Comntain Contain
 iab Comntains Contains
@@ -141,14 +119,6 @@ iab Completly Completely
 iab Completness Completeness
 iab Composate Composite
 iab Comtain Contain
-iab Comtains Contains
-iab Comunicate Communicate
-iab Comunity Community
-iab Condolances Condolences
-iab Conected Connected
-iab Conferance Conference
-iab Confirmmation Confirmation
-iab Considerit Considerate
 iab Considerite Considerate
 iab Consonent Consonant
 iab Conspiricy Conspiracy
@@ -178,73 +148,14 @@ iab Desicion Decision
 iab Desicions Decisions
 iab Desision Decision
 iab Desisions Decisions
-iab Develeoprs Developers
-iab Devellop Develop
-iab Develloped Developed
-iab Develloper Developer
-iab Devellopers Developers
-iab Developors Developers
-iab Develpment Development
-iab Diaplay Display
 iab Didint Didn't
 iab Didnt Didn't
-iab Differance Difference
-iab Differances Differences
-iab Differant Different
-iab Differemt Different
-iab Differnt Different
-iab Diffrent Different
-iab Directer Director
-iab Directers Directors
 iab Directiosn Direction
 iab Disatisfied Dissatisfied
 iab Discoverd Discovered
-iab Disign Design
-iab Dispaly Display
-iab Dissonent Dissonant
-iab Distribusion Distribution
-iab Divsion Division
-iab Docuement Documents
-iab Docuemnt Document
-iab Documetn Document
-iab Documnet Document
-iab Documnets Documents
-iab Doese Does
-iab Doesnt Doesn't
-iab Doign Doing
-iab Doimg Doing
-iab Doind Doing
-iab Doller Dollars
-iab Dollers Dollars
-iab Donig Doing
 iab Dont Don't
-iab Driveing Driving
-iab Drnik Drink
-iab Efel Feel
-iab Effecient Efficient
-iab Efort Effort
-iab Eforts Efforts
-iab Ehr Her
-iab Eligable Eligible
-iab Embarass Embarrass
-iab Enought Enough
-iab Equippment Equipment
-iab Equivalant Equivalent
-iab Esle Else
-iab Especally Especially
-iab Especialyl Especially
-iab Espesially Especially
-iab Excellant Excellent
-iab Excercise Exercise
-iab Exchagne Exchange
 iab Exchagnes Exchanges
 iab Excitment Excitement
-iab Exhcange Exchange
-iab Exhcanges Exchanges
-iab Experiance Experience
-iab Experienc Experience
-iab Exprienced Experienced
-iab Exprience Experience
 iab Eyt Yet
 iab Faeture Feature
 iab Faetures Features
@@ -315,8 +226,6 @@ iab Iwth With
 ia Ive I've
 iab Jsut Just
 iab Konw Know
-iab Konwn Known
-iab Konws Knows
 ia Lets Let's
 iab Levle Level
 iab Libary Library
@@ -324,7 +233,6 @@ iab Librarry Library
 iab Librery Library
 iab Liekd Liked
 iab Liek Like
-iab Lieutenent Lieutenant
 iab Liev Live
 iab Likly Likely
 iab Lisense License
@@ -339,9 +247,7 @@ iab Maintenence Maintenance
 iab Mainting Maintaining
 iab Makeing Making
 iab Managment Management
-iab Mantain Maintain
 iab Marraige Marriage
-iab Memeber Member
 iab Merchent Merchant
 iab Mesage Message
 iab Mesages Messages
@@ -352,17 +258,9 @@ iab Mkae Make
 iab Mkaes Makes
 iab Mkaing Making
 iab Moeny Money
-iab Morgage Mortgage
 iab Mroe More
 iab Mysefl Myself
 iab Myu My
-iab Necassarily Necessarily
-iab Necassary Necessary
-iab Neccessarily Necessarily
-iab Neccessary Necessary
-iab Necesarily Necessarily
-iab Necesary Necessary
-iab Negotiaing Negotiating
 ia Ngl Not gonna lie
 iab Nkow Know
 iab Nothign Nothing
@@ -376,21 +274,15 @@ iab Occured Occurred
 iab Occurence Occurrence
 iab Occurrance Occurrence
 iab Ocur Occur
-iab Oeprator Operator
-iab Ofthe Of The
 ia Oit Out
 iab Omre More
-iab Oneof One Of
-iab Onthe On The
 iab Onyl Only
-iab Opposate Opposite
 iab Opposible Opposable
 iab Opposit Opposite
 iab Oppotunities Opportunities
 iab Oppotunity Opportunity
 iab Optoin Option
 iab Optoins Options
-iab Orginization Organization
 iab Orginized Organized
 iab Otehr Other
 iab Otu Out
@@ -410,67 +302,34 @@ iab Perhasp Perhaps
 iab Perhpas Perhaps
 iab Permanant Permanent
 iab Perminent Permanent
-iab Personalyl Personally
-iab Pleasent Pleasant
-iab Poeple People
-iab Porblem Problem
-iab Porblems Problems
-iab Porvide Provide
-iab Possable Possible
-iab Postition Position
-iab Potentialy Potentially
-iab Prefered Preferred
-iab Pregnent Pregnant
-iab Presance Presence
-iab Probelm Problem
-iab Probelms Problems
-iab Prominant Prominent
-iab Protoge Protege
-iab Psoition Position
-iab Ptogress Progress
-iab Puting Putting
-iab Pwoer Power
-iab Quater Quarter
-iab Quaters Quarters
-iab Quesion Question
-iab Quesions Questions
-iab Questioms Questions
-iab Questiosn Questions
-iab Questoin Question
-iab Quetion Question
-iab Quetions Questions
-iab Realyl Really
-iab Reccomend Recommend
-iab Reccommend Recommend
+iab reconize recognize
+iab recrod record
+iab religous religious
+iab reluctent reluctant
+iab remeber remember
+iab reommend recommend
+iab represetned represented
+iab represnt represent
+iab reserach research
+iab resollution resolution
 iab Resorces Resources
 iab Respomd Respond
 iab Respomse Response
 iab Responce Response
-iab Responsable Responsible
-iab Responsibile Responsible
-iab Responsiblity Responsibility
-iab Restaraunt Restaurant
-iab Restuarant Restaurant
 iab Reult Result
 iab Reveiwing Reviewing
 iab Reveiw Review
-iab Rumers Rumors
 iab Rwite Write
 iab Shouldnt Shouldn't
 ia Shouldve Should've
 iab Showinf Showing
 iab Signifacnt Significant
 iab Someting Something
-iab Somewaht Somewhat
-iab Somthing Something
-iab Somtimes Sometimes
-iab Soudn Sound
-iab Soudns Sounds
-iab Speach Speech
-iab Successfull Successful
-iab Successfulyl Successfully
-iab Successfuly Successfully
-iab Sucessfull Successful
+iab stnad stand
+iab stopry story
+iab stoyr story
+iab stpo stop
+iab strentgh strength
 iab Sucess Success
 iab Sufficiant Sufficient
 iab Suposed Supposed
@@ -493,7 +352,6 @@ iab Tghis This
 iab Thansk Thanks
 iab Thats That's
 iab Themself Themselves
-iab Thesame The Same
 iab Theyll They'll
 iab Theyve They've
 ia Theyre They're
@@ -543,7 +401,6 @@ iab Understnad Understand
 iab Wokr Work
 ia Wont Won't
 iab Woudl Would
-iab Wouldbe Would Be
 iab Wouldnt Wouldn't
 ia Wouldve Would've
 iab Wriet Write
@@ -560,22 +417,14 @@ iab Yeras Years
 iab Yera Year
 iab Yersa Years
 iab Yoiu You
-iab Youare You Are
 ia Youll You'll
 ia Youre You're
 iab Youve You've
-iab Ytou You
 iab Yuor Your
 iab Yuo You
+iab abbout about
+iab abbout about
 iab abotu about
-iab abouta about a
-iab aboutit about it
-iab aboutthe about the
-iab abscence absence
-iab accesories accessories
-iab accidant accident
-iab accomodate accommodate
-iab accordingto according to
 iab accross across
 iab acheive achieve
 iab acheived achieved
@@ -591,15 +440,6 @@ iab adequite adequate
 iab adn and
 iab advanage advantage
 iab affraid afraid
-iab afterthe after the
-iab aganist against
-iab aggresive aggressive
-iab agian again
-iab agreemeent agreement
-iab agreemeents agreements
-iab agreemnet agreement
-iab agreemnets agreements
-iab agressive aggressive
 iab ahppen happen
 iab ahve have
 iab allready already
@@ -608,7 +448,6 @@ iab allwyas always
 iab almots almost
 iab almsot almost
 iab alomst almost
-iab alot a lot
 iab alraedy already
 iab alreayd already
 iab alreday already
@@ -616,62 +455,23 @@ iab alwasy always
 iab alwats always
 iab alway always
 iab alwyas always
-iab amde made
-iab Ameria America
 iab amke make
 iab amkes makes
 iab anbd and
-iab andone and one
-iab andteh and the
-iab andthe and the
-iab anothe another
-iab anual annual
-iab aplyed applied
-iab apparant apparent
-iab apparrent apparent
-iab appearence appearance
-iab appeares appears
-iab applicaiton application
-iab applicaitons applications
-iab applyed applied
-iab appointiment appointment
 iab appraoch approach
-iab approrpiate appropriate
-iab approrpriate appropriate
-iab aquisition acquisition
-iab aquisitions acquisitions
 ia arent aren't
 iab arguement argument
 iab arguements arguments
 iab arond around
 iab artical article
 iab articel article
-iab asdvertising advertising
-iab assistent assistant
-iab asthe as the
-iab atention attention
-iab atmospher atmosphere
-iab attentioin attention
-iab atthe at the
-iab audeince audience
-iab audiance audience
-iab availalbe available
-iab awya away
-iab aywa away
 iab bakc back
 iab balence balance
 iab ballance balance
-iab baout about
 iab bcak back
 iab beacuse because
 iab becasue because
 iab becaus because
-iab becausea because a
-iab becauseof because of
-iab becausethe because the
-iab becauseyou because you
-iab becomeing becoming
-iab becomming becoming
 iab becuase because
 iab becuse because
 iab befoer before
@@ -690,9 +490,6 @@ iab betwen between
 iab beutiful beautiful
 iab boxs boxes
 iab brodcast broadcast
-iab butthe but the
-iab bve be
-iab caharcter character
 iab calcullated calculated
 iab calulated calculated
 iab candidtae candidate
@@ -747,10 +544,6 @@ iab corruptable corruptible
 iab cotten cotton
 iab coudl could
 iab couldnt couldn't
-iab couldthe could the
-iab cpoy copy
-iab ctaegory category
-iab cusotmer customer
 iab cusotmers customers
 iab cutsomer customer
 iab cutsomers customers
@@ -768,7 +561,6 @@ iab desicions decisions
 iab desision decision
 iab desisions decisions
 iab didint didn't
-iab didnot did not
 iab didnt didn't
 iab directiosn direction
 iab disatisfied dissatisfied
@@ -777,20 +569,37 @@ iab dont don't
 iab exchagnes exchanges
 iab excitment excitement
 iab eyt yet
+iab Faeture Feature
+iab Faetures Features
+iab Familair Familiar
+iab Familar Familiar
+iab Familliar Familiar
+iab Fammiliar Familiar
+iab Feild Field
+iab Feilds Fields
+iab Fianlly Finally
+iab Fidn Find
+iab Finalyl Finally
+iab Firends Friends
+iab Firts First
+iab Follwo Follow
+iab Follwoing Following
+iab Forwrds Forwards
+iab Foudn Found
+iab Foward Forward
 iab fowards forwards
 iab freind friend
 iab freindly friendly
 iab freinds friends
 iab frmo from
 iab fro for
-iab fromthe from the
-iab furneral funeral
-iab fwe few
-iab garantee guarantee
-iab giveing giving
-iab gloabl global
-iab goign going
-iab gonig going
+iab Haev Have
+iab Hapened Happened
+iab Hapen Happen
+iab Hapening Happening
+iab Hapens Happens
+iab Happend Happened
+iab Hasnt Hasn't
 iab havebeen have been
 iab haveing having
 ia havent haven't
@@ -798,13 +607,7 @@ iab hda had
 iab hearign hearing
 iab helpfull helpful
 iab herat heart
-iab hesaid he said
-iab hewas he was
-iab hge he
-iab hismelf himself
 iab hlep help
-iab hsa has
-iab hsi his
 iab htere there
 iab htese these
 iab hte the
@@ -820,43 +623,20 @@ iab idae idea
 iab idaes ideas
 iab identofy identify
 iab ihs his
+ia Ill I'll
 ia im I'm
-iab imediate immediate
-iab imediatly immediately
-iab immediatly immediately
-iab importent important
-iab importnat important
-iab impossable impossible
-iab insted instead
-iab insted intead
-iab insurence insurance
-iab inteh in the
-iab interum interim
-iab inthe in the
-iab inwhich in which
 ia isnt isn't
-iab isthe is the
 ia itd it'd
 iab itis it is
 iab ititial initial
 ia itll it will
-iab itnerested interested
-iab itneresting interesting
-iab itnerest interest
-iab itnerests interests
 iab itwas it was
 iab iused used
 iab iwll will
 iab iwth with
 ia ive I've
 iab jsut just
-iab jugment judgment
-iab knowldge knowledge
-iab knowlege knowledge
-iab knwo know
-iab knwon known
-iab learnign learning
-iab lenght length
+iab Konw Know
 ia lets let's
 iab levle level
 iab libary library
@@ -905,12 +685,9 @@ iab occured occurred
 iab occurence occurrence
 iab occurrance occurrence
 iab ocur occur
-iab ohter other
 ia oit out
 iab omre more
-iab onepoint one point
 iab onyl only
-iab oppasite opposite
 iab opposible opposable
 iab opposit opposite
 iab oppotunities opportunities
@@ -932,7 +709,6 @@ iab peice piece
 iab peices pieces
 iab peolpe people
 iab peopel people
-iab performence performance
 iab perhasp perhaps
 iab perhpas perhaps
 iab permanant permanent
@@ -955,24 +731,10 @@ iab reult result
 iab reveiwing reviewing
 iab reveiw review
 iab rwite write
-iab rythm rhythm
-iab sceduled scheduled
-iab shouldent shouldn't
 iab shouldnt shouldn't
 ia shouldve should've
 iab showinf showing
 iab signifacnt significant
-iab simalar similar
-iab similiar similar
-iab simpyl simply
-iab sincerly sincerely
-iab sitll still
-iab smae same
-iab smoe some
-iab soem some
-iab sohw show
-iab soical social
-iab somethign something
 iab someting something
 iab stnad stand
 iab stopry story
@@ -1000,9 +762,7 @@ iab tghe the
 iab tghis this
 iab thansk thanks
 iab thats that's
-iab themselfs themselves
 iab themself themselves
-iab theri their
 iab theyll they'll
 iab theyve they've
 ia theyre they're
@@ -1049,30 +809,8 @@ iab tyhe the
 ia typinf typing
 iab udnerstand understand
 iab understnad understand
-iab unliek unlike
-iab unpleasently unpleasantly
-iab untilll until
-iab useing using
-iab usualyl usually
-iab veyr very
-iab virtualyl virtually
-iab vrey very
-iab vulnerible vulnerable
-iab waht what
-iab warrent warrant
-iab wasnt wasn't
-iab watn want
-iab wehn when
-iab wierd weird
-iab wihch which
-iab wiht with
-iab wnated wanted
-iab wnats wants
-iab wnat want
-iab wohle whole
-iab woh who
+iab Wokr Work
 ia wont won't
-iab wokr work
 iab woudl would
 iab wouldnt wouldn't
 ia wouldve would've

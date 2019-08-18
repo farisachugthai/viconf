@@ -12,7 +12,7 @@ endif
 let b:did_ftplugin = 1
 
 let s:cpo_save = &cpoptions
-set cpoptions-=c
+set cpoptions-=C
 
 " Options: {{{1
 setlocal expandtab
@@ -27,11 +27,18 @@ setlocal spell!
 setlocal keywordprg=pydoc
 
 augroup rstcompiler
+    au!
     autocmd Filetype rst compiler rst
     echomsg 'rst is now using make to compile sphinx docs'
+    autocmd Filetype rst 
+                \ if executable('sphinx-build')
+                \ let &makeprg = 'sphinx-build -b html '
+                \ endif
 augroup END
 
 " Don't set makeprg!!! That's what the compiler command is for!
+" Is it bad if we set makeprg though because i just opened an rst doc and it
+" wasn't set
 
 " The Official Ftplugin: {{{1
 

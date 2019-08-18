@@ -90,7 +90,7 @@ let g:python_highlight_all = 1
 set foldenable
 " Use 2 columns to indicate fold level and whether a fold is open or closed.
 set foldlevelstart=0 foldlevel=0 foldnestmax=10 foldmethod=marker foldcolumn=2
-set signcolumn=yes    " not fold related but close to column
+set signcolumn=yes
 
 try | set switchbuf=useopen,usetab,newtab | catch | endtry
 
@@ -139,7 +139,7 @@ if has('unix') | set autochdir | else | set wildignorecase | endif
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
 " Filler lines to keep text synced, 3 lines of context on diffs, don't diff hidden files,default foldcolumn is 2
-set diffopt=filler,context:3,hiddenoff,foldcolumn:1
+set diffopt=filler,context:0,hiddenoff,foldcolumn:2,icase,iwhite,indent-heuristic
  if has('patch-8.1.0360') | set diffopt+=internal,algorithm:patience | endif
 
 set modeline
@@ -202,33 +202,6 @@ augroup omnifunc
         \       setlocal omnifunc=syntaxcomplete#Complete |
         \   endif
 augroup END
-
-" Statusline: {{{1
-
-function! s:statusline_expr() abort
-  " Define statusline groups for WebDevIcons, Fugitive and other plugins.
-  " Define empty fallbacks if those plugins aren't installed. Then
-  " use the builtins to fill out the information.
-  if exists('*WebDevIconsGetFileTypeSymbol')
-    let dicons = ' %{WebDevIconsGetFileTypeSymbol()} '
-  else | let dicons = '' | endif
-  let fug = "%{exists('g:loaded_fugitive') ? fugitive#statusline() : ''}"
-  let sep = ' %= '
-  let pos = ' %-12(%l : %c%V%) '
-  if exists('*CSV_WCol')
-      let csv = '%1*%{&ft=~"csv" ? CSV_WCol() : ""}%*'
-  else | let csv = '' | endif
-
-  if exists('*strftime')  " Overtakes the whole screen when Termux zooms in
-    if &columns > 80
-      let tstmp = ' ' . '%{strftime("%H:%M %m/%d/%Y", getftime(expand("%:p")))}'  " last modified timestamp
-    else | let tstmp = '' | endif
-  else | let tstmp = '' | endif
-  let co = "%{exists('coc#status') ? get(b:,'coc_current_function','') : ''}"
-  return '[%n] %f '. dicons . '%m' . '%r' . ' %y ' . fug . csv . ' ' . ' %{&ff} ' . co . tstmp . sep . pos . '%*' . ' %P'
-endfunction
-
-let &statusline = <SID>statusline_expr()
 
 set nohlsearch
 augroup vimrc_incsearch_highlight

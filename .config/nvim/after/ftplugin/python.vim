@@ -37,25 +37,14 @@ setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 setlocal colorcolumn=80,120
 setlocal foldmethod=indent
 
-setlocal keywordprg=pydoc
+setlocal keywordprg=:PydocThis
 
 setlocal suffixesadd+=.py
 
 " Path: {{{2
 
-" Undo ftplugin?
-if isdirectory(expand('$_ROOT') . '/lib/python3')
-    " Double check globbing in vim
-    let &path = &path . ',' . expand('$_ROOT') . '/lib/python3'
-endif
-
-if isdirectory(expand('~/.local/lib/python3.7'))
-    " Double check globbing in vim
-    let &path = &path . ',' . expand('~') . '/.local/lib/python3.7'
-endif
-
-function! PythonPath()
-
+function! PythonPath() abort
+  " Set up the path for python files
   let s:orig_path = &path
 
   if !empty(g:python3_host_prog)
@@ -63,11 +52,10 @@ function! PythonPath()
   else
     return s:orig_path
   endif
+
   let s:site_pack = s:root_dir . '/lib/python3.7/site-packages/**3'  " max out at 3 dir deep
-
-  let &path = &path . ',' . s:site_pack
-
-  return &path
+  let s:path = s:orig_path . ',' . s:site_pack
+  return s:path
 
 endfunction
 
@@ -112,7 +100,7 @@ if executable('yapf')
     endif
   endfunction
 
-  command! -buffer -complete=buffer -nargs=0 YAPF exec '!yapf %'
+  command! -buffer -complete=buffer -nargs=0 YAPF call YAPF()
   command! -buffer -complete=buffer -nargs=0 YAPFI exec '!yapf -i %'
   command! -buffer -complete=buffer -nargs=0 YAPFD cexpr! exec '!yapf -d %'
 
@@ -154,13 +142,13 @@ function! ALE_Python_Conf()
 
     let g:ale_virtualenv_dir_names = []
     if isdirectory(expand('~/virtualenvs'))
-      let g:ale_virtualenv_dir_names += [expand('~/virtualenvs')]
-    elseif isdirectory(expand('~/Anaconda3'))
-      let g:ale_virtualenv_dir_names += [expand('~/Anaconda3')]
+      let g:ale_virtualenv_dir_names += [ expand('~/virtualenvs') ]
+    elseif isdirectory('C:tools/miniconda3')
+      let g:ale_virtualenv_dir_names += [ 'C:/tools/miniconda3' ]
     endif
 
     if isdirectory(expand('~/.local/share/virtualenvs'))
-      let g:ale_virtualenv_dir_names += [expand('~/.local/share/virtualenvs')]
+      let g:ale_virtualenv_dir_names += [ expand('~/.local/share/virtualenvs') ]
     endif
 
   let b:ale_fixers = [

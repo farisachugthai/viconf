@@ -22,60 +22,32 @@ let g:did_coc_plugin = 1
 
 " Mappings: {{{1
 
-" This section primarily focuses on setting up the autocompletion aspect
 " Refresh completions with C-Space
 inoremap <silent><expr> <C-Space> coc#refresh()
-
-" Set Enter to accept autocompletion. More settings in
-" ~/.config/nvim/coc-settings.json
-" inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
 
 inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : 
                                            \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 " Shit none of these work
-" nnoremap <silent> [g <Plug>(coc-diagnostic-prev)
-" nnoremap <silent> ]g <Plug>(coc-diagnostic-next)
-
-" " Remap keys for gotos
-" " Now let's start working with the niceties of an LSP. Docs and symbols
-" nnoremap <silent> gd <Plug>(coc-definition)
-" nnoremap <silent> gy <Plug>(coc-type-definition)
-" nnoremap <silent> gi <Plug>(coc-implementation)
-" nnoremap <silent> gr <Plug>(coc-references)
-
-" Use K to show documentation in preview window
-"nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-" function! s:show_documentation()
-"   " Jun 15, 2019: Added none if we do something like `:r!pydoc thing`
-"   if (index(['vim','help','none'], &filetype) >= 0)
-"     execute 'h ' . expand('<cWORD>')
-"   else
-"     call CocAction('doHover')
-"   endif
-" endfunction
+nnoremap [g <Plug>(coc-diagnostic-prev)
+nnoremap ]g <Plug>(coc-diagnostic-next)
 
 " Remap for rename current word
 nnoremap <F2> <Plug>(coc-rename)
 xnoremap <F2> <Cmd>CocCommand document.renameCurrentWord<CR>
 
 augroup CocConf
-
   au!
 
-  " Setup formatexpr specified filetype(s).
-  " autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-  
   " Update signature help on jump placeholder
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
   " Highlight symbol under cursor on CursorHold
   autocmd CursorHold * silent call CocActionAsync('highlight')
 
-  " Close the popupmenu when completions done
-  autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+  " Close the popupmenu when completions done.
+  " Dude this DOESNT work at all in the cmdwin
+  autocmd CompleteDone * if pumvisible() == 0 | pclose | endif
 
 augroup end
-
 
 " Using CocList: {{{1
 
