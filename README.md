@@ -10,24 +10,26 @@ scripts that I use to run Neovim on Linux, Windows 10, and
 ## How it works
 
 As much of this [init.vim](.config/nvim/init.vim) is set up in a way that it
-can be easily copied and pasted. This is done both to allow anyone using
-Nvim to easily benefit from my modifications, and also to ease things for
-myself when logging into a new remote server.
+will start up as quickly as possible while still maintaining the maximum
+number of features possible.
+
+This is achieved by [autoloading](.config/nvim/autoload) as many functions as
+possible, and determining a few non-portable settings in a relatively quick
+and consistent manner.
 
 ### Set up
 
 The initialization file makes as few assumptions as possible and I've personally
 used it from:
 
-* A 5.5 in. cell phone with no X server configured
+* A 5.5 inch cell phone with no X server configured
 * Windows 10 with ConEmu in a Cmd terminal
 * Windows 10 Powershell (ISE and console)
+* WSL
 * Neovim-QT on both Ubuntu and Windows
 * Bash in a dozen different terminals
 
-The first 100 lines of the init.vim are actually just checks to determine
-the user's setup.
-
+To ensure no assumptions are made that r
 ```vim
 
 let g:termux = isdirectory('/data/data/com.termux')

@@ -506,6 +506,7 @@ apt
 arduino
 arg
 argparse
+argparser
 args
 aria2c
 asc
@@ -528,6 +529,8 @@ autoload
 autoloaded
 autoloads
 automodule
+autosets
+autossh
 autossh
 backlinking
 backlinks
@@ -543,6 +546,7 @@ bdist
 bgcolor
 bibtex
 bittorrent
+blank
 blockquote
 blockquotes
 blockquoting
@@ -1631,7 +1635,6 @@ wildmenu
 win10
 win32
 win32yank
-win32yank
 win64
 winbatch
 windo
@@ -1686,5 +1689,3 @@ zsh
 zshrc
 µBlock
 µMatrix
-blank
-autossh

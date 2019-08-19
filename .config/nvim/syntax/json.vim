@@ -52,7 +52,7 @@ syn match   jsonNumber    "-\=\<\%(0\|[1-9]\d*\)\%(\.\d\+\)\=\%([eE][-+]\=\d\+\)
 " ERROR WARNINGS **********************************************
 if (!exists("g:vim_json_warnings") || g:vim_json_warnings==1)
   " Syntax: Strings should always be enclosed with quotes.
-  syn match   jsonNoQuotesError  "\<[[:alpha:]][[:alnum:]]*\>"
+  " syn match   jsonNoQuotesError  "\<[[:alpha:]][[:alnum:]]*\>"
   syn match   jsonTripleQuotesError  /"""/
 
   " Syntax: An integer part of 0 followed by other digits is not allowed.
@@ -62,8 +62,8 @@ if (!exists("g:vim_json_warnings") || g:vim_json_warnings==1)
   syn match   jsonNumError  "\:\@<=[[:blank:]\r\n]*\zs\.\d\+"
 
   " Syntax: No comments in JSON, see http://stackoverflow.com/questions/244777/can-i-comment-a-json-file
-  " syn match   jsonCommentError  "//.*"
-  " syn match   jsonCommentError  "\(/\*\)\|\(\*/\)"
+  " syn match   jsonCommentError  '//.*'
+  " syn match   jsonCommentError  '\(/\*\)\|\(\*/\)'
 
   " Syntax: No semicolons in JSON
   syn match   jsonSemicolonError  ";"
@@ -110,12 +110,12 @@ hi def link jsonKeyword         Label
 
 if (!exists("g:vim_json_warnings") || g:vim_json_warnings==1)
   hi def link jsonNumError        Error
-  hi def link jsonCommentError    Error
+  " hi def link jsonCommentError    Error
   hi def link jsonSemicolonError  Error
   hi def link jsonTrailingCommaError     Error
   hi def link jsonMissingCommaError      Error
   hi def link jsonStringSQError        	Error
-  hi def link jsonNoQuotesError        	Error
+  " hi def link jsonNoQuotesError        	Error
   hi def link jsonTripleQuotesError     	Error
 endif
 hi def link jsonQuote           Quote

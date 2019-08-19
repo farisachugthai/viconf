@@ -30,6 +30,7 @@ setlocal textwidth=120
 setlocal commentstring=#\ %s
 setlocal tabstop=8 shiftwidth=4 expandtab softtabstop=4
 let b:python_highlight_all = 1
+let g:python_highlight_all = 1
 setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 
 " also let's know where the line needs to end visually but not invoke the

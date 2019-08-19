@@ -91,7 +91,7 @@ endif
 let s:is_dark=(&background ==? 'dark')
 
 " }}}
-" Script Local Mappings Hex Codes And RGB: {{{
+" The actual color pallette: {{{
 
 " setup palette dictionary
 let s:gb = {}
@@ -563,6 +563,9 @@ hi! link ModeMsg GruvboxYellowBold
 hi! link Question GruvboxOrangeBold
 " Warning messages
 hi! link WarningMsg GruvboxRedBold
+
+hi! link Quote              Question
+hi! link Noise              Question
 
 " }}}
 " Gutter: {{{
@@ -1091,6 +1094,8 @@ hi! link netrwVersion GruvboxGreen
 hi def link rstHyperLinkTarget Underlined
 hi def link rstHyperlinkReference Underlined
 hi def link rstFileLink rstHyperlinkReference
+hi! link rstDirectivesh     Question
+hi! link rstDirectivepython Question
 hi! link rstInlineLiteral Identifier
 
 " }}}
@@ -1909,170 +1914,173 @@ hi! link jsonKeyword GruvboxGreen
 hi! link jsonQuote GruvboxGreen
 hi! link jsonBraces GruvboxFg1
 hi! link jsonString GruvboxFg1
+hi! link jsonStringMatch    Question
+hi! link jsonKeywordMatch   Question
+hi! link jsonFold           Question
 
 " }}}
 " Sh: {{{
 
- hi def link bashAdminStatement	shStatement
- hi def link bashSpecialVariables	shShellVariables
- hi def link bashStatement		shStatement
- hi def link shAlias		Identifier
- hi def link shArithRegion	shShellVariables
- hi def link shArithmetic		Special
- hi def link shAstQuote	shDoubleQuote
- hi def link shAtExpr	shSetList
- hi def link shBQComment	shComment
- hi def link shBeginHere	shRedir
- hi def link shBkslshDblQuote	shDOubleQuote
- hi def link shBkslshSnglQuote	shSingleQuote
- hi def link shCaseBar	shConditional
- hi def link shCaseCommandSub	shCommandSub
- hi def link shCaseDoubleQuote	shDoubleQuote
- hi def link shCaseIn	shConditional
- hi def link shCaseSingleQuote	shSingleQuote
- hi def link shCaseStart	shConditional
- hi def link shCharClass		Identifier
- hi def link shCharClass		shSpecial
- hi def link shCmdSubRegion	shShellVariables
- hi def link shColon	shComment
- hi def link shCommandSub		Special
- hi def link shCommandSubBQ		shCommandSub
- hi def link shComment		Comment
- hi def link shConditional		Conditional
- hi def link shCtrlSeq		Special
- hi def link shDeref	shShellVariables
- hi def link shDerefDelim	shOperator
- hi def link shDerefLen		shDerefOff
- hi def link shDerefOff		shDerefOp
- hi def link shDerefOp	shOperator
- hi def link shDerefPOL	shDerefOp
- hi def link shDerefPPS	shDerefOp
- hi def link shDerefPSR	shDerefOp
- hi def link shDerefSimple	shDeref
- hi def link shDerefSpecial	shDeref
- hi def link shDerefString	shDoubleQuote
- hi def link shDerefVar	shDeref
- hi def link shDoubleQuote	shString
- hi def link shEcho	shString
- hi def link shEchoDelim	shOperator
- hi def link shEchoQuote	shString
- hi def link shEmbeddedEcho	shString
- hi def link shEscape	shCommandSub
- hi def link shExDoubleQuote	shDoubleQuote
- hi def link shExSingleQuote	shSingleQuote
- hi def link shExprRegion		Delimiter
- hi def link shForPP	shLoop
- hi def link shFunction	Function
- hi def link shFunctionKey		Function
- hi def link shFunctionName		Function
- hi! link shFunctionOne Identifier
- hi def link shHereDoc	shString
- hi def link shHereDoc01		shRedir
- hi def link shHereDoc02		shRedir
- hi def link shHereDoc03		shRedir
- hi def link shHereDoc04		shRedir
- hi def link shHereDoc05		shRedir
- hi def link shHereDoc06		shRedir
- hi def link shHereDoc07		shRedir
- hi def link shHereDoc08		shRedir
- hi def link shHereDoc09		shRedir
- hi def link shHereDoc10		shRedir
- hi def link shHereDoc11		shRedir
- hi def link shHereDoc12		shRedir
- hi def link shHereDoc13		shRedir
- hi def link shHereDoc14		shRedir
- hi def link shHereDoc15		shRedir
- hi def link shHerePayload	shHereDoc
- hi def link shHereString	shRedir
- hi def link shLoop	shStatement
- hi def link shNoQuote	shDoubleQuote
- hi def link shNumber		Number
- hi def link shOperator		Operator
- hi def link shOption	shCommandSub
- hi def link shParen	shArithmetic
- hi def link shPattern	shString
- hi def link shPosnParm	shShellVariables
- hi def link shQuickComment	shComment
- hi def link shQuote	shOperator
- hi def link shRange	shOperator
- hi def link shRedir	shOperator
- hi def link shRepeat		Repeat
- hi def link shSet		Statement
- hi def link shSetList		Identifier
- hi def link shSetListDelim	shOperator
- hi def link shSetOption	shOption
- hi def link shShellVariables		PreProc
- hi def link shSingleQuote	shString
- hi def link shSnglCase		Statement
- hi def link shSource	shOperator
- hi def link shSpecial		Special
- hi def link shSpecialDQ		Special
- hi def link shSpecialNoZS		shSpecial
- hi def link shSpecialNxt	shSpecial
- hi def link shSpecialSQ		Special
- hi def link shSpecialStart	shSpecial
- hi def link shStatement		Statement
- hi def link shString		String
- hi def link shStringSpecial	shSpecial
- hi def link shSubShRegion	shOperator
- hi def link shTestDoubleQuote	shString
- hi def link shTestOpr	shConditional
- hi def link shTestPattern	shString
- hi def link shTestSingleQuote	shString
- hi def link shTodo		Todo
- hi def link shTouchCmd	shStatement
- hi def link shVariable	shSetList
- hi def link shWrapLineOperator	shOperator
-" }}}
-
-" TODO:
-
-hi! link shOK               Question
-hi! link shCaseEsac         Question
-hi! link shDo               Question
-hi! link shTest             Question
-hi! link shIf               Question
-hi! link shFor              Question
-hi! link shCaseLabel        Question
+hi def link bashAdminStatement	shStatement
+hi def link bashSpecialVariables	shShellVariables
+hi def link bashStatement		shStatement
+hi def link shAlias		Identifier
+hi def link shArithRegion	shShellVariables
+hi def link shArithmetic		Special
+hi def link shAstQuote	shDoubleQuote
+hi def link shAtExpr	shSetList
+hi def link shBQComment	shComment
+hi def link shBeginHere	shRedir
+hi def link shBkslshDblQuote	shDOubleQuote
+hi def link shBkslshSnglQuote	shSingleQuote
+hi def link shCaseBar	shConditional
+hi def link shCaseCommandSub	shCommandSub
+hi def link shCaseDoubleQuote	shDoubleQuote
+hi def link shCaseError		Error
+hi def link shCaseIn	shConditional
+hi def link shCaseSingleQuote	shSingleQuote
+hi def link shCaseStart	shConditional
+hi def link shCharClass		Identifier
+hi def link shCmdSubRegion	shShellVariables
+hi def link shColon	shComment
+hi def link shCommandSub		Special
+hi def link shCommandSubBQ		shCommandSub
+hi def link shComment		Comment
+hi def link shCondError		Error
+hi def link shConditional		Conditional
+hi def link shCtrlSeq		Special
+hi def link shCurlyError		Error
+hi def link shDeref	shShellVariables
+hi def link shDerefDelim	shOperator
+hi def link shDerefLen		shDerefOff
+hi def link shDerefOff		shDerefOp
+hi def link shDerefOp	shOperator
+hi def link shDerefOpError		Error
+hi def link shDerefPOL	shDerefOp
+hi def link shDerefPPS	shDerefOp
+hi def link shDerefPSR	shDerefOp
+hi def link shDerefSimple	shDeref
+hi def link shDerefSpecial	shDeref
+hi def link shDerefString	shDoubleQuote
+hi def link shDerefVar	shDeref
+hi def link shDerefWordError		Error
+hi def link shDoError		Error
+hi def link shDoubleQuote	shString
+hi def link shEcho	shString
+hi def link shEchoDelim	shOperator
+hi def link shEchoQuote	shString
+hi def link shEmbeddedEcho	shString
+hi def link shEsacError		Error
+hi def link shEscape	shCommandSub
+hi def link shExDoubleQuote	shDoubleQuote
+hi def link shExSingleQuote	shSingleQuote
+hi def link shExprRegion		Delimiter
+hi def link shForPP	shLoop
+hi def link shFunction	Function
+hi def link shFunctionKey		Function
+hi def link shFunctionName		Function
+hi def link shHereDoc	shString
+hi def link shHereDoc01		shRedir
+hi def link shHereDoc02		shRedir
+hi def link shHereDoc03		shRedir
+hi def link shHereDoc04		shRedir
+hi def link shHereDoc05		shRedir
+hi def link shHereDoc06		shRedir
+hi def link shHereDoc07		shRedir
+hi def link shHereDoc08		shRedir
+hi def link shHereDoc09		shRedir
+hi def link shHereDoc10		shRedir
+hi def link shHereDoc11		shRedir
+hi def link shHereDoc12		shRedir
+hi def link shHereDoc13		shRedir
+hi def link shHereDoc14		shRedir
+hi def link shHereDoc15		shRedir
+hi def link shHerePayload	shHereDoc
+hi def link shHereString	shRedir
+hi def link shInError		Error
+hi def link shLoop	shStatement
+hi def link shNoQuote	shDoubleQuote
+hi def link shNumber		Number
+hi def link shOperator		Operator
+hi def link shOption	shCommandSub
+hi def link shParen	shArithmetic
+hi def link shParenError		Error
+hi def link shPattern	shString
+hi def link shPosnParm	shShellVariables
+hi def link shQuickComment	shComment
+hi def link shQuote	shOperator
+hi def link shRange	shOperator
+hi def link shRedir	shOperator
+hi def link shRepeat		Repeat
+hi def link shSet		Statement
+hi def link shSetList		Identifier
+hi def link shSetListDelim	shOperator
+hi def link shSetOption	shOption
+hi def link shShellVariables		PreProc
+hi def link shSingleQuote	shString
+hi def link shSnglCase		Statement
+hi def link shSource	shOperator
+hi def link shSource	shOperator
+hi def link shSpecial		Special
+hi def link shSpecialDQ		Special
+hi def link shSpecialNoZS		shSpecial
+hi def link shSpecialNxt	shSpecial
+hi def link shSpecialSQ		Special
+hi def link shSpecialStart	shSpecial
+hi def link shStatement		Statement
+hi def link shString		String
+hi def link shStringSpecial	shSpecial
+hi def link shSubShRegion	shOperator
+hi def link shTestDoubleQuote	shString
+hi def link shTestError		Error
+hi def link shTestOpr	shConditional
+hi def link shTestPattern	shString
+hi def link shTestSingleQuote	shString
+hi def link shTodo		Todo
+hi def link shTouchCmd	shStatement
+hi def link shVariable	shSetList
+hi def link shWrapLineOperator	shOperator
 hi! link shCase             Question
+hi! link shCaseEsac         Question
+hi! link shCaseEsacSync     Question
 hi! link shCaseExSingleQuote Question
+hi! link shCaseLabel        Question
 hi! link shCaseRange        Question
-hi! link shExpr             Question
 hi! link shCmdParenRegion   Question
-hi! link shSubSh            Question
 hi! link shComma            Question
-hi! link shDerefVarArray    Question
+hi! link shCurlyIn          Question
 hi! link shDblBrace         Question
 hi! link shDblParen         Question
-hi! link shFunctionTwo      Question
-hi! link shTouch            Question
-hi! link shSpecialVar       Question
-hi! link shCurlyIn          Question
-hi! link shHereDoc16        Question
-hi! link shVarAssign        Question
-hi! link shFunctionStart    Question
-hi! link shFunctionThree    Question
-hi! link shFunctionFour     Question
-hi! link shDerefPattern     Question
 hi! link shDerefEscape      Question
 hi! link shDerefPPSleft     Question
 hi! link shDerefPPSright    Question
 hi! link shDerefPSRleft     Question
 hi! link shDerefPSRright    Question
-hi! link shCaseEsacSync     Question
+hi! link shDerefPattern     Question
+hi! link shDerefVarArray    Question
+hi! link shDo               Question
 hi! link shDoSync           Question
+hi! link shExpr             Question
+hi! link shFor              Question
 hi! link shForSync          Question
+hi! link shFunctionFour     Question
+hi! link shFunctionOne Identifier
+hi! link shFunctionStart    Question
+hi! link shFunctionThree    Question
+hi! link shFunctionTwo      Question
+hi! link shHereDoc16        Question
+hi! link shIf               Question
 hi! link shIfSync           Question
+hi! link shOK               Question
+hi! link shSpecialVar       Question
+hi! link shSubSh            Question
+hi! link shTest             Question
+hi! link shTouch            Question
 hi! link shUntilSync        Question
+hi! link shVarAssign        Question
 hi! link shWhileSync        Question
-hi! link rstDirectivesh     Question
-hi! link rstDirectivepython Question
-hi! link jsonStringMatch    Question
-hi! link jsonKeywordMatch   Question
-hi! link jsonFold           Question
-hi! link Quote              Question
-hi! link Noise              Question
 
+" }}}
 
 
 " Functions -------------------------------------------------------------------

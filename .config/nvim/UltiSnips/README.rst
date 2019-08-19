@@ -8,13 +8,15 @@ This directory contains the snippets for `UltiSnips`_.
 
 .. highlight:: vim
 
+.. author:: Faris Chugthai
+
+:date: |today|
+
 Notes on Ultisnips
 =======================
 
-
 Changelog
 ---------
-
 Jan 29, 2019:
 
 Just added the `m` option to a bunch of these to eliminate
@@ -28,13 +30,17 @@ have trailing whitespace.
 
 Configuration
 ----------------
-
 First things first, UltiSnips needs to be configured for snippets to work
-correctly. The 2 most important variables to set are ``g:UltiSnipsDirs``
-and ``g:UltiSnipsDirectories`` as they tell UltiSnips where to look for
-your snippets.
+correctly. The 2 most important variables to set are ``g:UltiSnipsSnippetDir``
+and ``g:UltiSnipsSnippetDirectories`` as they tell UltiSnips where to look.
 
-.. todo:: Mention that usp can't be snippets and explain why usps is set to 0
+.. admonition:: If not configured properly, UltiSnips will recursively  
+                search through the entire ``runtimepath`` for
+                directories named UltiSnips.
+
+This makes using the plugin slightly easier as it lends itself to being
+used with no configuration; however, if 30 other plugins are installed,
+this will **immensely** slow down vim.
 
 After configuring ``g:UltiSnipsDirs`` and ``g:UltiSnipsDirectories`` as you
 would like, using the `UltiSnipsEdit` command should open the folder that your
@@ -43,16 +49,12 @@ snippets are housed in.
 
 Options
 --------
-
-A valid snippet should start with::
+A valid snippet should have the form::
 
     snippet trigger_word [ "description" [ options ] ]
-
-and end with:
-
+    {Text to substitute}
     endsnippet
 
-.. i'm assuming there has to be an easy way to turn that into a table
 Snippet options:
 
     b - Beginning of line.
@@ -70,10 +72,12 @@ Basic example:
       	endsnippet
 
 
+Unfortunately none of the options are relevant anymore as I've moved
+to using coc.nvim for code completion and it doesn't support most
+of the built-in Ultisnips options *for now*.
 
 Snippets Options
 ^^^^^^^^^^^^^^^^^^
-
 The following are options to modify the way that snippets behave. My most
 commonly used options are::
 
@@ -102,7 +106,6 @@ commonly used options are::
 
 Important Considerations:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
-
  Write a clear description for every single snippet. Whlie this may sound
  tedious, it pays massive dividends. When there are multiple snippets to
  choose from the only help you'll get is what you write the description you
@@ -114,22 +117,9 @@ For example, in :ref:`vim.snippets`, the header snippet is regularly text
 that has already been written and is commented out. With the ``b`` option, a
 commented out header will not expand.
 
-Usage
------
-
-Here's an example of the generalized syntax of an UltiSnips snippet
-
-.. code-block:: vim
-
-   snippet triggerword <description> <options>
-
-I want to go over a few things that initially confused me about UltiSnips, and
-how I managed to solve any problems I had with the plugin.
-
 
 Finding Your Snippets
 ^^^^^^^^^^^^^^^^^^^^^^^
-
 Memorizing your snippet's names is awful. The vim-snippets repository has
 thousands of snippets in it, and the difference between expanding ``def`` and
 ``deff`` can produce huge differences in output.
@@ -140,7 +130,6 @@ bogged down searching for them is imperative.
 
 FZF
 ^^^^
-
 Make sure you have `https://www.github.com/junegunn/fzf.vim`_ installed.
 I absolutely love this plugin and it's endless configurability.
 
@@ -221,8 +210,7 @@ Programmatic Editing
 --------------------
 
 Vim's Search and Replace
-~~~~~~~~~~~~~~~~~~~~~~~~
-
+^^^^^^^^^^^^^^^^^^^^^^^^
 Frequently I ran into the problem of snippets having the 'b' option
 unnecessarily and sometimes to a detrimental effect.
 
@@ -264,8 +252,7 @@ get into.
 
 
 UltiSnips Patterns
-~~~~~~~~~~~~~~~~~~
-
+^^^^^^^^^^^^^^^^^^
 One of the more useful idioms I've stumbled upon is the snippet
 
 .. code:: vim
@@ -291,39 +278,34 @@ more closely resemble the desired snippets.
 
 Roadmap
 -------
+In the file `python.snippets`_, the last snippet is a postfix, or a snippet
+that can be used after the user has finished typing most of the word.
 
-That feels a lot nicer than **THE WALL OF TODOS** doesn't it?
+Here's an example with the key-presses displayed for you to hack away at.::
 
-In the file `python.snippets`_, the last snippet is a postfix.
+   # pre-expand
+   var.if<Tab>
 
-Here's an example snippet for you to hack away at.
+   # post-expand
+   if(var):
 
-.. code::
+So if you get to the end of the expression and then realize you forgot
+an if statement, you don't need to leave insert mode or move around at all!
 
-   if:
-      # pre-expand
-      var.if<Tab>
+The ``.if`` from above will expand to a regular if statement.
 
-      # post-expand
-      if(var):
+You could make similar expressions with:
 
-So if you get to the end of the expression, then insert
+- ``ifn``
+- ``ifnn``
 
-.. code:: html
-
-   <kbd>.if</kbd><kbd><Tab></kbd>
-
-
-It'll expand to a regular if statement. You could make similar expressions with
-`ifn` and `ifnn` expanding to ``if var is None`` or ``if var is not None``.
+And have them expand to ``if var is None`` or ``if var is not None``.
 
 
 From @SirVer himself.
 
-
 Standing On The Shoulders of Giants
 ===================================
-
 The snippets have been collected from various other project which I want to
 express my gratitude for. My main source for inspiration where the following
 two projects:

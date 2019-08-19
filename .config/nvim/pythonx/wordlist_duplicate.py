@@ -92,7 +92,7 @@ def main():
     """
     args = sys.argv[3:]
     if len(args) < 1:
-        sys.exit('Error. Please provide a path to the file(s) to edit')
+        sys.exit('Error. Please provide a path to the file(s) to edit.\n')
 
     logging.basicConfig(level=logging.DEBUG)
 

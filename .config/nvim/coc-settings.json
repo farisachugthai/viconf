@@ -37,6 +37,7 @@
   },
   "suggest.timeout": 800,
   "suggest.acceptSuggestionOnCommitCharacter": true,
+  "suggest.fixInsertedWord": true,
   "python.linting.flake8Path": "flake8",
   "python.linting.flake8Args": ["--config-file", "~/AppData/Local/flake8"],
   "python.analysis.diagnosticEnabled": true,
@@ -47,7 +48,6 @@
   "python.formatting.provider": "yapf",
   "python.jediEnabled": true,
   "python.jediShortcut": "Jedi",
-  "python.linting.banditEnabled": false,
   "python.linting.flake8Enabled": true,
   "python.linting.pydocstyleEnabled": true,
   "python.linting.pylintEnabled": false,
@@ -169,6 +169,9 @@
   ],
   "list.source.mru.defaultOptions": ["--auto-preview", "--normal"],
 
+  "list.source.lists.defaultOptions": ["--normal", "--top"],
+  // kinda wanna do this for everything
+  "list.source.links.defaultOptions": ["--top", "--normal"],
   "list.insertMappings": {
     "<C-r>": "do:refresh",
     "<C-n>": "normal:j",

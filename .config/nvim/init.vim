@@ -6,17 +6,17 @@
 scriptencoding utf-8
 let s:cpo_save = &cpoptions
 set cpoptions-=C
+language en_US.utf8
 
 let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Evervim. Thanks!
 let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux)
-let s:windows = has('win32') || has('win64')    " TODO: remove all instances of this var !has('unix') is easier
 let s:wsl = !empty($WSL_DISTRO_NAME)
 
 " unabashedly stolen from junegunn dude is too good.
 let s:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/init.vim.local'
 runtime s:local_vimrc
 
-if !has('unix') | runtime winrc.vim | endif
+if !has('unix') | runtime autoload/msdos.vim | endif
 " Factor out all of the remote hosts stuff.
 runtime remote.vim
 
@@ -24,7 +24,7 @@ runtime remote.vim
 let s:vim_plug = filereadable(glob(fnameescape(stdpath('data') . '/site/autoload/plug.vim')))
 
 if empty(s:vim_plug) && exists('*plugins#InstallPlug')
-    call plugins#InstallPlug()
+  call plugins#InstallPlug()
 endif
 
 runtime junegunn.vim 
@@ -85,25 +85,17 @@ if &tabstop > 4 | set tabstop=4 | endif
 if &shiftwidth > 4  | set shiftwidth=4 | endif
 set expandtab smarttab      " On pressing tab, insert 4 spaces
 set softtabstop=4
-let g:python_highlight_all = 1
-
 set foldenable
-" Use 2 columns to indicate fold level and whether a fold is open or closed.
 set foldlevelstart=0 foldlevel=0 foldnestmax=10 foldmethod=marker foldcolumn=2
 set signcolumn=yes
-
 try | set switchbuf=useopen,usetab,newtab | catch | endtry
-
 set hidden
 set splitbelow splitright
-" Resize windows automatically. nvim also autosets equalalways
 set winfixheight winfixwidth
-
-" Admittedly I kinda know why the screen looks so small
 if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif
 set cmdheight=2
 set number relativenumber
-set spelllang=en spellsuggest=5       " Limit suggestions from 'spell suggest'
+set spelllang=en spellsuggest=5
 
 if filereadable(stdpath('config') . '/spell/en.utf-8.add')
   let &spellfile = stdpath('config') . '/spell/en.utf-8.add'
@@ -111,7 +103,7 @@ endif
 
 set wildmode=full:list:longest,full:list
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
-set wildoptions=tagfile   " A list of words that change how command line completion is done.
+set wildoptions+=tagfile   " A list of words that change how command line completion is done.
 set complete+=kspell                    " Autocomplete in insert mode
 " Create a preview window and display all possibilities but don't insert
 set completeopt=menu,menuone,noselect,noinsert,preview
@@ -150,7 +142,7 @@ set updatetime=100
 set inccommand=split
 let g:tutor_debug = 1
 set terse     " Don't display the message when a search hits the end of file
-set shortmess=aoOsAc
+set shortmess=asAItTc
 set sidescroll=5                       " Didn't realize the default is 1
 
 " Mappings: {{{1

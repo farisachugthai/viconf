@@ -1,3 +1,9 @@
+" ============================================================================
+    " File: stl.vim
+    " Author: Faris Chugthai
+    " Description: Statusline
+    " Last Modified: August 18, 2019 
+" ============================================================================
 
 
 " Statusline: {{{1
@@ -38,7 +44,7 @@ function! s:statusline_expr() abort
 
   let cos = ' %{coc#status()} '
 
-  return '[%n] %f '. dicons . '%m' . '%r' . ' %y ' . fug . csv . ' ' . ' %{&ff} ' . tstmp . cos . sep . pos . '%*' . ' %P'
+  return '[%n] %f ' . dicons . '%m' . '%r' . ' %y ' . fug . csv . ' ' . ' %{&ff} ' . tstmp . cos . sep . pos . '%*' . ' %P'
 
 endfunction
 

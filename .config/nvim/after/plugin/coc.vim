@@ -20,6 +20,8 @@ if exists('g:did_coc_plugin') || &compatible || v:version < 700
 endif
 let g:did_coc_plugin = 1
 
+let $NVIM_COC_LOG_LEVEL='debug'
+
 " Mappings: {{{1
 
 " Refresh completions with C-Space

@@ -1,20 +1,20 @@
-config-nvim ~/.config/nvim
-dotfiles ~/projects/dotfiles/unix
-jupyter-extensions ~/.local/share/jupyter
-plugged ~/.local/share/nvim/plugged
-python ~/python
-tlib ~/.local/share/nvim/plugged/tlib_vim/autoload/tlib
-tutorials ~/Dropbox/python/tutorials
-utilities ~/projects/utilities
-viconf ~/projects/viconf/.config/nvim
-fzf ~/.local/share/nvim/plugged/fzf.vim/autoload/fzf
+WindowsPowerShell ~\Documents\WindowsPowerShell
+dotfiles ~\projects\dotfiles\unix
+nvim ~\AppData\Local\nvim
+nvim-data ~\AppData\Local\nvim-data
+python ~\python
+terminal ~\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe
+tools C:\tools
+tutorials ~\Dropbox\python\tutorials
+utilities ~\projects\utilities
+viconf ~\projects\viconf\.config\nvim
+winterm-profiles ~\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\RoamingState\profiles.json
 
 ConEmu C:/Program Files/ConEmu/ConEmu
-WindowsPowerShell ~/Documents/WindowsPowerShell
+config-nvim ~/.config/nvim
+fzf ~/.local/share/nvim/plugged/fzf.vim/autoload/fzf
 jedi-docs ~/.local/share/nvim/plugged/jedi-vim/pythonx/jedi/docs/docs
+jupyter-extensions ~/.local/share/jupyter
 mpl /usr/share/doc/python-matplotlib-doc/tutorials
-nvim ~/AppData/Local/nvim
-nvim-data ~/AppData/Local/nvim-data
-terminal ~/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe
-tools C:/tools
-winterm-profiles ~/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/RoamingState/profiles.json
+plugged ~/.local/share/nvim/plugged
+tlib ~/.local/share/nvim/plugged/tlib_vim/autoload/tlib

@@ -5,7 +5,7 @@
     " Last Modified: Jul 08, 2019
 " ============================================================================
 
-" Guard: 
+" Guard: {{{1
 if !has_key(plugs, 'ale')
     finish
 endif
@@ -18,7 +18,7 @@ let g:did_ale_after_plugin = 1
 let s:cpo_save = &cpoptions
 set cpoptions&vim
 
-" Mappings: 
+" Mappings: {{{1
 
 " e for error t for toggle
 noremap <Leader>et <Cmd>ALEToggleBuffer<CR><bar>echo 'ALE toggled!'<CR>
@@ -36,9 +36,8 @@ noremap <A-a> <Cmd>ALEDetail<CR>
 " This might be a good idea. * is already 'search for <cword>'
 noremap <Leader>* <Cmd>ALEFindReference<CR>
 
-noremap <Leader>a <Cmd>ALEInfo<CR>
 
-" Options: 
+" Options: {{{1
 
 " For buffer specific options, see ../ftplugin/*.vim
 let g:ale_fixers = { '*': [ 'remove_trailing_lines', 'trim_whitespace' ] }
@@ -57,7 +56,7 @@ let g:ale_list_vertical = 1
 let g:ale_set_signs = 1
 let g:ale_sign_column_always = 1
 
-" Virtualenvs: 
+" Virtualenvs: {{{1
 " Checkout ale/autoload/ale/python.vim this is the base definition
 let g:ale_virtualenv_dir_names = [
     \   '.env',
@@ -81,7 +80,7 @@ endif
 
 let g:ale_cache_executable_check_failures = v:true
 
-" Node: 
+" Node: {{{1
 
 if !has('unix')
 
@@ -92,12 +91,12 @@ if !has('unix')
   endif
 endif
 
-" Quickfix: 
+" Quickfix: {{{1
 
 " By default ale uses location list which I never remember
 let g:ale_set_quickfix = 1
 let g:ale_set_loclist = 0
 
-" Atexit: 
+" Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save
