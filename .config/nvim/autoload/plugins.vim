@@ -5,14 +5,14 @@
   " Last Modified: August 01, 2019 
 " ============================================================================
 
-" Guards: 
+" Guards: {{{1
 
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
-" UltiSnips: 
+" UltiSnips: {{{1
 
-function! plugins#GetAllSnippets() abort  " 
+function! plugins#GetAllSnippets() abort  " {{{2
 
   call UltiSnips#SnippetsInCurrentScope(1)
   let list = []
@@ -28,7 +28,7 @@ function! plugins#GetAllSnippets() abort  "
   return list
 endfunction
 
-function! plugins#ExpandPossibleShorterSnippet() abort " 
+function! plugins#ExpandPossibleShorterSnippet() abort   " {{{2
   if len(UltiSnips#SnippetsInCurrentScope()) == 1 "only one candidate...
     let curr_key = keys(UltiSnips#SnippetsInCurrentScope())[0]
     normal diw
@@ -39,7 +39,7 @@ function! plugins#ExpandPossibleShorterSnippet() abort "
   return 0
 endfunction
 
-" Expand Snippet Or CR: 
+" Expand Snippet Or CR: {{{2
 " Hopefully will expand snippets or CR. Or it'll destroy deoplete's
 " ability to close the pum. *shrugs*
 function! plugins#ExpandSnippetOrCarriageReturn() abort
@@ -51,7 +51,7 @@ function! plugins#ExpandSnippetOrCarriageReturn() abort
     endif
 endfunction
 
-" Vim Plug: 
+" Vim Plug: {{{1
 
 function! plugins#InstallPlug() abort  " 
 
@@ -63,9 +63,9 @@ function! plugins#InstallPlug() abort  "
     catch | echo v:exception | endtry
   endfunction
 
-" Startify: 
+" Startify: {{{1
 
-" List Commits: 
+" List Commits: {{{2
 function! plugins#list_commits() abort
   " note: Don't forget that
   " echo isdirectory('~/projects/viconf')
@@ -87,7 +87,35 @@ function! plugins#filter_header(lines) abort  "
     return centered_lines
 endfunction
 
-" Atexit: 
+" Fugitive: {{{1
+
+function! plugins#FugitiveMappings() abort   " {{{2
+
+  noremap <silent> <Leader>gb   <Cmd>Gblame<CR>
+  noremap <silent> <Leader>gc   <Cmd>Gcommit<CR>
+  noremap <silent> <Leader>gd   <Cmd>Gdiff<CR>
+  cabbrev Gd Gdiff
+  noremap <silent> <Leader>gds  <Cmd>Gdiff --staged<CR>
+  cabbrev gds2 Git diff --stat --staged
+  noremap <silent> <Leader>gds2 <Cmd>Git diff --stat --staged<CR>
+  noremap <silent> <Leader>ge   <Cmd>Gedit<Space>
+  noremap <silent> <Leader>gf   <Cmd>Gfetch<CR>
+  cabbrev gL 0Glog --pretty=oneline --graph --decorate --abbrev --all --branches
+  noremap <silent> <Leader>gL   <Cmd>0Glog --pretty=oneline --graph --decorate --abbrev --all --branches<CR>
+  noremap <silent> <Leader>gm   <Cmd>Gmerge<CR>
+  " Make the mapping longer but clear as to whether gp would pull or push
+  noremap <silent> <Leader>gpl  <Cmd>Gpull<CR>
+  noremap <silent> <Leader>gps  <Cmd>Gpush<CR>
+  noremap <silent> <Leader>gq   <Cmd>Gwq<CR>
+  noremap <silent> <Leader>gQ   <Cmd>Gwq!<CR>
+  noremap <silent> <Leader>gR   :Gread<Space>
+  noremap <silent> <Leader>gs   <Cmd>Gstatus<CR>
+  noremap <silent> <Leader>gst  <Cmd>Git diff --stat<CR>
+  noremap <silent> <Leader>gw   <Cmd>Gwrite<CR>
+  noremap <silent> <Leader>gW   <Cmd>Gwrite!<CR>
+
+endfunction
+" Atexit: {{{1
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

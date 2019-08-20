@@ -12,8 +12,8 @@ set cpoptions-=C
 
 " Plugins: {{{1
 let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Evervim. Thanks!
-let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux)
 let s:wsl = !empty($WSL_DISTRO_NAME)
+let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux) && empty(s:wsl)
 
 call plug#begin(stdpath('data') . '/plugged')
 
