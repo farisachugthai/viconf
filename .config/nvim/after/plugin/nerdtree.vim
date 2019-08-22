@@ -7,34 +7,11 @@
 
 " Plugin Guard: {{{1
 
-" Don't do this with a lazy loaded plugin!!!!
-" if !has_key(plugs, 'nerdtree')
-"     finish
-" endif
-
 if exists('g:did_nerdtree_after_plugin') || &compatible || v:version < 700
     finish
 endif
 let g:did_nerdtree_after_plugin = 1
 
-
-" Nerd_Loader Autoload NERDTree: {{{1
-
-augroup nerd_loader
-  autocmd!
-  autocmd VimEnter * silent! autocmd! FileExplorer
-  autocmd BufEnter,BufNew *
-        \  if isdirectory(expand('<amatch>'))
-  " FUCK! This hasn't worked for MONTHS and it's because the plugin is called nerdTree not nerdtree...
-        \|   call plug#load('nerdTree')
-        \|   execute 'NERDTreeToggle'
-        \|   execute 'autocmd! nerd_loader'
-        \| endif
-    autocmd bufenter *
-        \ if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree())
-        \| q
-        \| endif
-augroup END
 
 " Mappings: {{{1
 
@@ -59,7 +36,7 @@ let g:NERDTreeShowLineNumbers = 1
  " Open dir with 1 keys, files with 2
 let g:NERDTreeMouseMode = 2
 
-let g:NERDTreeIgnore = [ '\~$', '\.pyc$', '\.pyo$', '__pycache__$', '\.git$', '\.mypy*', 'node_modules']
+let g:NERDTreeIgnore = [ '\~$', '\.pyc$', '\.pyo$', '__pycache__$', '\.git$', '\.mypy*', '**node_modules**']
 let g:NERDTreeRespectWildIgnore = 1
 
 " Let's give netrw a shot I guess

@@ -24,6 +24,22 @@ let g:plug_window = 'tabe'
 Plug 'junegunn/fzf', { 'dir': expand('~/.fzf'), 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
+augroup nerd_loader
+  autocmd!
+  autocmd VimEnter * silent! autocmd! FileExplorer
+  autocmd BufEnter,BufNew *
+        \  if isdirectory(expand('<amatch>'))
+  " FUCK! This hasn't worked for MONTHS and it's because the plugin is called nerdTree not nerdtree...
+        \|   call plug#load('nerdTree')
+        \|   execute 'NERDTreeToggle'
+        \|   execute 'autocmd! nerd_loader'
+        \| endif
+    autocmd bufenter *
+        \ if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree())
+        \| q
+        \| endif
+augroup END
+
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-rsi'

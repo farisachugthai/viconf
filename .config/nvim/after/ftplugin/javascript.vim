@@ -40,10 +40,12 @@ function! ALE_JS_Conf()
 
 endfunction
 
-augroup alejsconf
+if has_key(plugs, 'ale')
+  augroup alejsconf
     au!
-    autocmd Filetype javascript if has_key(plugs, 'ale') | call ALE_JS_Conf() | endif
-augroup END
+    autocmd Filetype javascript call ALE_JS_Conf()
+  augroup END
+endif
 
 " Atexit: {{{1
 

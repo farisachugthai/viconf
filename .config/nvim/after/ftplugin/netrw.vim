@@ -11,6 +11,9 @@ if exists('g:did_netrw_after_ftplugin') || &compatible || v:version < 700
 endif
 let g:did_netrw_after_ftplugin = 1
 
+let s:cpo_save = &cpoptions
+set cpoptions-=C
+
 " Options: {{{1
 " Can be modified interactively using `:NetrwSettings` !!
 
@@ -37,3 +40,10 @@ let g:netrw_sizestyle = 'h'
 
 " Only display errors as messages
 let g:netrw_errorlvl          = 2
+
+" Mappings: {{{1
+" wth why is this a thing
+unmap <buffer> a
+" Atexit: {{{1
+let &cpoptions = s:cpo_save
+unlet s:cpo_save

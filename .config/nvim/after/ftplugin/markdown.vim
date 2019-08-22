@@ -32,7 +32,7 @@ let g:markdown_folding = 1
 
 " TPope's markdown plugin. Light enough footprint when settings vars to not
 " need a check
-let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
+let g:markdown_fenced_languages = [ 'python', 'bash=sh']
 
 let g:markdown_minlines = 100
 
@@ -40,18 +40,11 @@ setlocal foldtext=MarkdownFoldText()
 
 " Mappings: {{{1
 
-" I don't know if you're supposed to run an initial au! for augroups that
-" only define Filetype events. I think it's supposed to be reserved for when
-" the event is as common as BufReadPre or BufNewFile or something.
-augroup filetype_markdown
-
-    " autocmd!
-    autocmd FileType markdown noremap <buffer> <localleader>1 m`yypVr=``
-    autocmd FileType markdown noremap <buffer> <localleader>2 m`yypVr-``
-    autocmd FileType markdown noremap <buffer> <localleader>3 m`^i### <esc>``4l
-    autocmd FileType markdown noremap <buffer> <localleader>4 m`^i#### <esc>``5l
-    autocmd FileType markdown noremap <buffer> <localleader>5 m`^i##### <esc>``6l
-augroup END
+noremap <buffer> <localleader>1 m`yypVr=``
+noremap <buffer> <localleader>2 m`yypVr-``
+noremap <buffer> <localleader>3 m`^i### <esc>``4l
+noremap <buffer> <localleader>4 m`^i#### <esc>``5l
+noremap <buffer> <localleader>5 m`^i##### <esc>``6l
 
 " Plugins: {{{1
 
@@ -66,15 +59,7 @@ function! MarkdownFoldText()  " TPope
 
 endfunction
 
-function! ALE_Markdown_Conf()
-
-  let b:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
-
-endfunction
-
-if has_key(plugs, 'ale')
-  call ALE_Markdown_Conf()
-endif
+let b:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
 
 " Atexit: {{{1
 

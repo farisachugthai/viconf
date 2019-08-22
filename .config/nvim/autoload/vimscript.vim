@@ -176,7 +176,6 @@ function! s:todo abort  " {{{1
         \ }, <bang>0 ? fzf#vim#with_preview('up:60%')
         \ : fzf#vim#with_preview('right:50%:hidden', '?'),
         \ <bang>0))
-
 " Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

@@ -6,7 +6,6 @@
 scriptencoding utf-8
 let s:cpo_save = &cpoptions
 set cpoptions-=C
-language en_US.utf8
 
 let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Evervim. Thanks!
 let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux)
@@ -117,8 +116,8 @@ let &path = &path . ',' . stdpath('config')
 let &path = &path . ',' . expand('$VIMRUNTIME')
 
 set makeencoding=char         " Used by the makeprg. system locale is used
-set sessionoptions+=unix,slash
-set sessionoptions-=buffers,winsize
+set sessionoptions+=unix,slash viewoptions+=unix,slash
+set sessionoptions-=buffers,winsize viewoptions-=options
 if &formatexpr ==# ''
   setlocal formatexpr=format#Format()  " check the autoload directory
 endif
@@ -135,6 +134,7 @@ set diffopt=filler,context:0,hiddenoff,foldcolumn:2,icase,iwhite,indent-heuristi
  if has('patch-8.1.0360') | set diffopt+=internal,algorithm:patience | endif
 
 set modeline
+if exists('modelineexpr') | set modelineexpr | endif
 set autochdir browsedir="buffer"   " which directory is used for the file browser
 let &showbreak = '↳ '                   " Indent wrapped lines correctly
 set breakindent breakindentopt=sbr
@@ -144,6 +144,8 @@ let g:tutor_debug = 1
 set terse     " Don't display the message when a search hits the end of file
 set shortmess=asAItTc
 set sidescroll=5                       " Didn't realize the default is 1
+
+set title titlestring=%<%F%=%l/%L-%P   " leaves a cool title for tmux
 
 " Mappings: {{{1
 noremap q; q:

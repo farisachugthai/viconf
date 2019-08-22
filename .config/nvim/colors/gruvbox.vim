@@ -441,7 +441,8 @@ endfunction
 " Gruvbox Hi Groups: {{{
 
 " memoize common hi groups
-call s:HL('GruvboxFg0', s:fg0)
+" call s:HL('GruvboxFg0', s:fg0)
+hi GruvboxFg0 ctermfg=229 guifg=#fbf1c7
 call s:HL('GruvboxFg1', s:fg1)
 call s:HL('GruvboxFg2', s:fg2)
 call s:HL('GruvboxFg3', s:fg3)
@@ -536,8 +537,8 @@ hi! link VisualNOS Visual
 call s:HL('Search',    s:yellow, s:bg0, s:inverse)
 call s:HL('IncSearch', s:hls_cursor, s:bg0, s:inverse)
 
-call s:HL('Underlined', s:blue, s:none, s:underline)
-
+" call s:HL('Underlined', s:blue, s:none, s:underline)
+hi Underlined cterm=underline ctermfg=109 gui=underline guifg=#83a598
 call s:HL('StatusLine',   s:bg2, s:fg1, s:inverse)
 call s:HL('StatusLineNC', s:bg1, s:fg4, s:inverse)
 
@@ -578,6 +579,7 @@ call s:HL('SignColumn', s:none, s:sign_column)
 
 " Line used for closed folds
 call s:HL('Folded', s:gray, s:bg1, s:italic)
+
 " Column where folds are displayed
 call s:HL('FoldColumn', s:gray, s:bg1)
 
@@ -623,6 +625,7 @@ hi! link Keyword GruvboxRed
 
 " Variable name
 hi! link Identifier GruvboxBlue
+hi! link IdentifierBold GruvboxBlueBold
 " Function name
 hi! link Function GruvboxGreenBold
 
@@ -693,20 +696,18 @@ call s:HL('DiffText',   s:yellow, s:bg0, s:inverse)
 " }}}
 " Spelling: {{{
 
-if has('spell')
-  " Not capitalised word, or compile warnings
-  if g:gruvbox_improved_warnings == 0
-    call s:HL('SpellCap',   s:none, s:none, s:undercurl, s:red)
-  else
-    call s:HL('SpellCap',   s:green, s:none, s:bold . s:italic)
-  endif
-  " Not recognized word
-  call s:HL('SpellBad',   s:none, s:none, s:undercurl, s:blue)
-  " Wrong spelling for selected region
-  call s:HL('SpellLocal', s:none, s:none, s:undercurl, s:aqua)
-  " Rare word
-  call s:HL('SpellRare',  s:none, s:none, s:undercurl, s:purple)
+" Not capitalised word, or compile warnings
+if g:gruvbox_improved_warnings == 0
+  call s:HL('SpellCap',   s:none, s:none, s:undercurl, s:red)
+else
+  call s:HL('SpellCap',   s:green, s:none, s:bold . s:italic)
 endif
+" Not recognized word
+call s:HL('SpellBad',   s:none, s:none, s:undercurl, s:blue)
+" Wrong spelling for selected region
+call s:HL('SpellLocal', s:none, s:none, s:undercurl, s:aqua)
+" Rare word
+call s:HL('SpellRare',  s:none, s:none, s:undercurl, s:purple)
 
 " }}}
 " Plugin specific -------------------------------------------------------------
@@ -956,14 +957,61 @@ endif
 " CocListRedRed	CocListRedRed
 " CocListFgRed	CocListFgRed
 " CocListBgRed	CocListBgRed
+"CocCodeLens
+" CocCursorRange 
+" CocErrorFloat                                          
+" CocErrorHighlight                                     
+" CocErrorLine                                           
+" CocErrorSign                                         
+" CocErrorVirtualText                                
+" CocFloating v
+" CocGitAddedSign                              
+" CocGitChangeRemovedSign                      
+" CocGitChangedSign                            
+" CocGitRemovedSign                            
+" CocGitTopRemovedSign
+" CocHighlightRead                             
+" CocHighlightText                             
+" CocHighlightWrite                            
+" CocHintFloat                                 
+" CocHintHighlight                             
+" CocHintLine
+" CocHintSign                                   
+" CocHintVirtualText
+" CocInfoFloat                                 
+" CocInfoHighlight
+" CocInfoLine                                  
+" CocInfoSign                                  
+" CocInfoVirtualText
 hi default link CocErrorLine Exception
 hi default link CocWarningLine WarningMsg
 hi default link CocInfoLine GruvboxBlueSign
 hi default link CocHintLine GruvboxGreenSign
 hi default link CocSelectedLine Visual
 
-" Override one of his
+" Override one of his...actually now a few
 hi! link CocInfoSign GruvboxPurpleSign
+hi! link CocErrorHighlight GruvboxRedSign
+hi! link CocWarningHighlight GruvboxOrangeBold
+hi! link CocInfoHighlight GruvboxBlueSign
+hi! link CocHintHighlight GruvboxGreenSign
+hi! link CocGitAddedSign GruvboxYellowBold
+hi! link CocCodeLens GruvboxAquaSign
+hi! link CocErrorSign GruvboxRedSign
+hi! link CocWarningSign GruvboxGreenSign
+hi! link CocHintFloat Float
+hi! link CocHintSign GruvboxAquaSign
+hi! link CocSelectedText Search
+hi! link CocUnderline Underlined
+hi! link CocListFgYellow GruvboxYellow
+hi! link CocListFgBlue GruvboxBlue
+hi! link CocListFgGreen GruvboxGreen
+hi! link CocListFgGrey GruvboxBg4
+hi! link CocListBgGrey GruvboxBg0
+
+hi! link CocListFgRed GruvboxRed
+hi! link CocListFgYellow GruvboxYellow
+hi! link CocListFgCyan GruvboxAqua
 
 " }}}
 
@@ -1008,14 +1056,16 @@ hi! link NERDTreeToggleOff GruvboxRed
 " }}}
 " Asynchronous Lint Engine: {{{
 
-call s:HL('ALEError', s:none, s:none, s:undercurl, s:red)
-call s:HL('ALEWarning', s:none, s:none, s:undercurl, s:yellow)
-call s:HL('ALEInfo', s:none, s:none, s:undercurl, s:blue)
+" call s:HL('ALEError', s:none, s:none, s:undercurl, s:red)
+" call s:HL('ALEWarning', s:none, s:none, s:undercurl, s:yellow)
+" call s:HL('ALEInfo', s:none, s:none, s:undercurl, s:blue)
 
 hi! link ALEErrorSign GruvboxRedSign
 hi! link ALEWarningSign GruvboxYellowSign
 hi! link ALEInfoSign GruvboxBlueSign
-
+hi! link ALEError GruvboxOrangeBold
+hi! link ALEWarning GruvboxYellowBold
+hi! link ALEInfo GruvboxBlueBold
 " }}}
 " GitGutter: {{{
 
@@ -1051,9 +1101,9 @@ highlight default link manOptionDesc     Constant
 highlight default link manReference      PreProc
 highlight default link manSubHeading     Function
 
-highlight default manUnderline cterm=underline gui=underline
-highlight default manBold      cterm=bold      gui=bold
-highlight default manItalic    cterm=italic    gui=italic
+highlight default link manUnderline Underlined
+highlight default link manBold GruvboxYellowBold
+highlight default link manItalic htmlItalic
 
 " And the rest
 hi! link manCError GruvboxRed
@@ -1842,7 +1892,7 @@ hi! link scalaInterpolation GruvboxAqua
 " Markdown: {{{
 
 call s:HL('markdownItalic', s:fg3, s:none, s:italic)
-
+hi! link markdownText Normal
 hi! link markdownH1 GruvboxGreenBold
 hi! link markdownH2 GruvboxGreenBold
 hi! link markdownH3 GruvboxYellowBold
@@ -1920,7 +1970,6 @@ hi! link jsonFold           Question
 
 " }}}
 " Sh: {{{
-
 hi def link bashAdminStatement	shStatement
 hi def link bashSpecialVariables	shShellVariables
 hi def link bashStatement		shStatement
@@ -2081,7 +2130,6 @@ hi! link shVarAssign        Question
 hi! link shWhileSync        Question
 
 " }}}
-
 
 " Functions -------------------------------------------------------------------
 " Search Highlighting Cursor {{{

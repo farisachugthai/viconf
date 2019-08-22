@@ -16,7 +16,7 @@ if exists("b:current_syntax")
 endif
 
 " Get the CTRL-H syntax to handle backspaced text
-runtime! syntax/ctrlh.vim
+runtime $VIMRUNTIME/syntax/ctrlh.vim
 
 syntax case ignore
 syntax match manReference       '\<\zs\(\f\|:\)\+(\([nlpo]\|\d[a-z]*\)\?)\ze\(\W\|$\)'
@@ -52,6 +52,7 @@ syn match  manTitle	      '^\f\+([0-9]\+[a-z]\=).*'
 syn match  manSectionHeading  '^[a-z][a-z -]*[a-z]$'
 syn match  manSubHeading      '^\s\{3\}[a-z][a-z -]*[a-z]$'
 syn match  manOptionDesc      '^\s*[+-][a-z0-9]\S*'
+" TODO: Doesnt handle white space between options IE -v --verbose
 syn match  manLongOptionDesc  '^\s*--[a-z0-9-]\S*'
 syn match  manHistory		'^[a-z].*last change.*$'
 

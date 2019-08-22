@@ -34,10 +34,10 @@ function! ALE_Html_Conf()
 
 endfunction
 
-if has_key(plugs, 'ale') && &filetype==#'html'
+if has_key(plugs, 'ale')
   augroup alehtmlconf
     au!
-    autocmd Filetype| call ALE_Html_Conf()
+    autocmd Filetype html call ALE_Html_Conf()
   augroup END
 endif
 
