@@ -18,9 +18,12 @@ set cpoptions-=C
 
 " Options: {{{1
 
-" Function named incorrectly.
 if has('unix')
   call unix_options#UnixOptions()
+
+" Hey why not use the free if then?
+else
+  runtime autoload/msdos.vim
 endif
 
 " Tmux: {{{1

@@ -8,15 +8,12 @@ let s:cpo_save = &cpoptions
 set cpoptions-=C
 
 let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Evervim. Thanks!
-let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux)
 let s:wsl = !empty($WSL_DISTRO_NAME)
+let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux) && empty(s:wsl)
 
-" unabashedly stolen from junegunn dude is too good.
 let s:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/init.vim.local'
 runtime s:local_vimrc
 
-if !has('unix') | runtime autoload/msdos.vim | endif
-" Factor out all of the remote hosts stuff.
 runtime remote.vim
 
 " Vim Plug And Third Party Packages: {{{1
@@ -29,6 +26,9 @@ endif
 runtime junegunn.vim 
 " Don't assume that the InstallPlug() func worked so ensure it's defined
 if empty('plugs') | let plugs = {} | endif
+" Uh I don't know how this happens but stdpath('config') is no longer the first entry in rtp?
+" So let's move that and stdpath('data')/site up front. Definitely stays after the plugins definition.
+let &rtp = stdpath('config') . ',' . stdpath('data') . '/site,' . &rtp
 
 " Global Options: {{{1
 set synmaxcol=400                       " Lower max syntax highlighting
@@ -142,7 +142,7 @@ set updatetime=100
 set inccommand=split
 let g:tutor_debug = 1
 set terse     " Don't display the message when a search hits the end of file
-set shortmess=asAItTc
+set shortmess=aoOsAItTWAc
 set sidescroll=5                       " Didn't realize the default is 1
 
 set title titlestring=%<%F%=%l/%L-%P   " leaves a cool title for tmux
@@ -186,7 +186,6 @@ augroup omnifunc
     autocmd Filetype css              setlocal omnifunc=csscomplete#CompleteCSS
     autocmd Filetype html,xhtml       setlocal omnifunc=htmlcomplete#CompleteTags | call htmlcomplete#DetectOmniFlavor()
     autocmd Filetype javascript       setlocal omnifunc=javascriptcomplete#CompleteJS
-    autocmd Filetype python           setlocal omnifunc=python3complete#Complete
     autocmd Filetype ruby             setlocal omnifunc=rubycomplete#Complete
     autocmd Filetype xml              setlocal omnifunc=xmlcomplete#CompleteTags
 

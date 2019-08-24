@@ -12,7 +12,7 @@ endif
 let g:did_html_after_ftplugin = 1
 
 let s:cpo_save = &cpoptions
-set cpoptions&vim
+set cpoptions-=C
 
 " Options: {{{1
 
@@ -35,10 +35,7 @@ function! ALE_Html_Conf()
 endfunction
 
 if has_key(plugs, 'ale')
-  augroup alehtmlconf
-    au!
-    autocmd Filetype html call ALE_Html_Conf()
-  augroup END
+  call ALE_Html_Conf()
 endif
 
 " Atexit: {{{1

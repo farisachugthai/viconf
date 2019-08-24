@@ -42,41 +42,21 @@ setlocal keywordprg=:PydocThis
 
 setlocal suffixesadd+=.py
 
+setlocal omnifunc=python3complete#Complete
+
 " Path: {{{2
 
-function! PythonPath() abort
-  " Set up the path for python files
-  let s:orig_path = &path
-
-  if !empty(g:python3_host_prog)
-    let s:root_dir = fnamemodify(g:python3_host_prog, ':h:h')
-  else
-    return s:orig_path
-  endif
-
-  let s:site_pack = s:root_dir . '/lib/python3.7/site-packages/**3'  " max out at 3 dir deep
-  let s:path = s:orig_path . ',' . s:site_pack
-  return s:path
-
-endfunction
-
-let &path = PythonPath()
-
-" Autocmd: Highlight 120 Chars: {{{1
-" augroup pythonchars
-"     autocmd!
-"     autocmd FileType python highlight Excess ctermbg=DarkGrey guibg=Black
-"     autocmd FileType python match Excess /\%120v.*/
-" augroup END
+let &path = pydoc_help#PythonPath()
 
 " Compiler: {{{1
 
 " Well this is neat!
-if executable('pylint')
-  compiler pylint
-  echomsg 'Using pylint as buffer-local compiler. Run `:make %` to use.'
-else
+if executable('pytest')
   compiler pytest
+  echomsg 'Using pytest as a compiler!'
+else
+  compiler pylint
+  echomsg 'Using pylint as a compiler!'
 endif
 
 " Mappings: {{{1
@@ -90,16 +70,6 @@ noremap! <F5> <Cmd>py3f %<CR>
 if executable('yapf')
     setlocal equalprg=yapf
     setlocal formatprg=yapf
-    " Don't forget this advice from usr_41
-    " USER COMMANDS
-    " To add a user command for a specific file type, so that it can only be used in
-    " one buffer, use the "-buffer" argument to |:command|.:
-  function! YAPF() abort
-    if exists(':TBrowseOutput')
-      " Realistically should accept func args
-      :TBrowseOutput !yapf %
-    endif
-  endfunction
 
   command! -buffer -complete=buffer -nargs=0 YAPF call YAPF()
   command! -buffer -complete=buffer -nargs=0 YAPFI exec '!yapf -i %'
@@ -118,58 +88,8 @@ endif
 
 " ALE: {{{1
 
-function! ALE_Python_Conf()
-
-    if s:debug
-        echomsg 'Did the function call?'
-    endif
-
-    let b:ale_linters = ['flake8', 'pydocstyle', 'pyls']
-
-    let b:ale_linters_explicit = 1
-
-    let b:ale_python_pyls_config = {
-          \   'pyls': {
-          \     'plugins': {
-          \       'pycodestyle': {
-          \         'enabled': v:false
-          \       },
-          \       'flake8': {
-          \         'enabled': v:true
-          \       }
-          \     }
-          \   },
-          \ }
-
-    let g:ale_virtualenv_dir_names = []
-    if isdirectory(expand('~/virtualenvs'))
-      let g:ale_virtualenv_dir_names += [ expand('~/virtualenvs') ]
-    elseif isdirectory('C:tools/miniconda3')
-      let g:ale_virtualenv_dir_names += [ 'C:/tools/miniconda3' ]
-    endif
-
-    if isdirectory(expand('~/.local/share/virtualenvs'))
-      let g:ale_virtualenv_dir_names += [ expand('~/.local/share/virtualenvs') ]
-    endif
-
-  let b:ale_fixers = [
-        \ 'remove_trailing_lines',
-        \ 'trim_whitespace',
-        \ 'reorder-python-imports',
-        \ ]
-
-  if executable('yapf')
-      let b:ale_fixers += ['yapf']
-  else
-      if executable('autopep8')
-          let b:ale_fixers += ['autopep8']
-      endif
-  endif
-
-endfunction
-
-if has_key(plugs, 'ale') && &filetype==#'python'
-  call ALE_Python_Conf()
+if has_key(plugs, 'ale')
+  call pydoc_help#ALE_Python_Conf()
 endif
 
 " That'll do. Holy fuck that actually worked....

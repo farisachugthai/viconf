@@ -48,6 +48,30 @@ function! format#Format() abort
     return 0
 endfunc
 
+function! format#MarkdownFoldText() abort " {{{1 Credit to TPope
+
+  let line = getline(v:lnum)
+
+  " Regular headers
+  let depth = match(line, '\(^#\+\)\@<=\( .*$\)\@=')
+  if depth > 0
+    return ">" . depth
+  endif
+
+  " Setext style headings
+  let nextline = getline(v:lnum + 1)
+  if (line =~ '^.\+$') && (nextline =~ '^=\+$')
+    return ">1"
+  endif
+
+  if (line =~ '^.\+$') && (nextline =~ '^-\+$')
+    return ">2"
+  endif
+
+  return "="
+
+endfunction
+
 " Atexit: {{{1
 
 let &cpoptions = s:cpo_save

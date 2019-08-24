@@ -82,6 +82,7 @@ endif
 
 " I feel like the lazy loaded ones can come out here
 Plug 'mbbill/undotree', {'on': 'UndoTreeToggle'}
+nnoremap U :UndotreeToggle<CR>
 Plug 'godlygeek/tabular', {'on': 'Tabularize'}
 Plug 'ervandew/supertab'
 Plug 'junegunn/vim-peekaboo'

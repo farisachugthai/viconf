@@ -36,6 +36,21 @@ if has('unix')
     let g:ruby_host_prog = exepath('neovim-ruby-host')
   endif
 
+  if exists($TMUX)
+
+    let g:clipboard = {
+          \   'name': 'myClipboard',
+          \   'copy': {
+          \      '+': 'tmux load-buffer -',
+          \      '*': 'tmux load-buffer -',
+          \    },
+          \   'paste': {
+          \      '+': 'tmux save-buffer -',
+          \      '*': 'tmux save-buffer -',
+          \   },
+          \   'cache_enabled': 1,
+          \ }
+  endif
 else  " windows not wsl
   let g:python3_host_prog = 'C:/tools/miniconda3/envs/neovim/python.exe'
   let g:python_host_prog = 'C:/tools/miniconda3/envs/ansible/python.exe'
