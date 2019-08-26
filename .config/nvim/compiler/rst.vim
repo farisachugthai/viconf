@@ -42,10 +42,12 @@ CompilerSet errorformat=
       \%DMaking\ %*\\a\ in\ %f
 
 " Makeprg: {{{1
-if filereadable('Makefile')
+let s:cur_dir = fnamemodify('%', ':p:h')
+if filereadable(s:cur_dir . '/Makefile')
   CompilerSet makeprg=make
 else
-  let &makeprg = 'sphinx-build -b html'
+  let &makeprg = 'sphinx-build '
+  echomsg 'Using sphinx as the compiler'
 endif
 
 " Invoke the command with something to the effect of :make -b html . _build

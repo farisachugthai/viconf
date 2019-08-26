@@ -36,7 +36,7 @@ let g:NERDTreeShowLineNumbers = 1
  " Open dir with 1 keys, files with 2
 let g:NERDTreeMouseMode = 2
 
-let g:NERDTreeIgnore = [ '\~$', '\.pyc$', '\.pyo$', '__pycache__$', '\.git$', '\.mypy*', '**node_modules**']
+let g:NERDTreeIgnore = [ '~$', '.pyc$', '.pyo$', '__pycache__$', '.git$', '.mypy*', '**node_modules**']
 let g:NERDTreeRespectWildIgnore = 1
 
 " Let's give netrw a shot I guess

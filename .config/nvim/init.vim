@@ -1,6 +1,6 @@
 " Neovim Configuration:
 " Maintainer: Faris Chugthai
-" Last Change: Jul 06, 2019
+" Last Change: Aug 24, 2019
 
 " Preliminaries: {{{1
 scriptencoding utf-8
@@ -13,8 +13,6 @@ let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux) && empty(s:wsl)
 
 let s:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/init.vim.local'
 runtime s:local_vimrc
-
-runtime remote.vim
 
 " Vim Plug And Third Party Packages: {{{1
 let s:vim_plug = filereadable(glob(fnameescape(stdpath('data') . '/site/autoload/plug.vim')))
@@ -31,6 +29,9 @@ if empty('plugs') | let plugs = {} | endif
 let &rtp = stdpath('config') . ',' . stdpath('data') . '/site,' . &rtp
 
 " Global Options: {{{1
+runtime remote.vim
+
+if !has('unix') | runtime autoload/msdos.vim | endif
 set synmaxcol=400                       " Lower max syntax highlighting
 syntax sync fromstart
 

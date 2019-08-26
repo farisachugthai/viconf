@@ -12,7 +12,7 @@ endif
 let g:did_windows_plugin = 1
 
 let s:cpo_save = &cpoptions
-set cpoptions-=c
+set cpoptions-=C
 
 " EchoRTP: {{{1
 " The nvim API is seriously fantastic.
@@ -34,16 +34,16 @@ function! Buf_Window_Mapping() abort
   noremap <leader>q <Cmd>copen<CR><bar><Cmd>lopen<CR>
 
   " Navigate windows more easily
-  noremap <C-h> <Cmd>wincmd h<CR>
-  noremap <C-j> <Cmd>wincmd j<CR>
-  noremap <C-k> <Cmd>wincmd k<CR>
-  noremap <C-l> <Cmd>wincmd l<CR>
+  noremap <C-h> <Cmd><C-w>h<CR>
+  noremap <C-j> <Cmd><C-w>j<CR>
+  noremap <C-k> <Cmd><C-w>k<CR>
+  noremap <C-l> <Cmd><C-w>l<CR>
 
   " Resize them more easily. Finish more later. TODO
-  noremap <C-w>< <Cmd>5wincmd <<CR>
-  noremap <C-w>> <Cmd>5wincmd ><CR>
-  noremap <C-w>+ <Cmd>5wincmd +<CR>
-  noremap <C-w>- <Cmd>5wincmd -<CR>
+  noremap <C-w>< <Cmd>5<C-w><<CR>
+  noremap <C-w>> <Cmd>5<C-w>><CR>
+  noremap <C-w>+ <Cmd>5<C-w>+<CR>
+  noremap <C-w>- <Cmd>5<C-w>-<CR>
 endfunction
 
 " Command Line: {{{1

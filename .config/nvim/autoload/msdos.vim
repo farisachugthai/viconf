@@ -8,9 +8,6 @@
 " Guards: {{{1
 if has('unix') | finish | endif
 
-if exists('g:autoloaded_msdos') | finish | endif
-let g:autoloaded_msdos = 1
-
 let s:debug = 1
 
 let s:cpo_save = &cpoptions
@@ -31,6 +28,9 @@ endif
 " run vim scripts correctly so holy shit that might explain a hell of a lot
 set fileformats=unix,dos
 
+" So this HAS to be a bad idea; however, all 3 DirChanged autocommands emit
+" errors and that's a little insane
+set eventignore=DirChanged
 
 function! msdos#Cmd() abort  " {{{1
 
@@ -58,7 +58,8 @@ endfunction
 
 command! PowerShell call msdos#Powershell()
 
-cabbrev pwsh PowerShell
+" Holy hell is this annoying don't do this!!
+" cabbrev pwsh PowerShell
 
 " Atexit: {{{1
 

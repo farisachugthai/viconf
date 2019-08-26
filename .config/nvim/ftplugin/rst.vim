@@ -26,20 +26,14 @@ setlocal spell!
 " This works beautifully!
 setlocal keywordprg=pydoc
 
-augroup rstcompiler
-    au!
-    autocmd Filetype rst compiler rst
-    echomsg 'rst is now using make to compile sphinx docs'
+augroup RstCompiler
     autocmd Filetype rst 
-                \ if executable('sphinx-build')
-                \ let &makeprg = 'sphinx-build -b html '
+                \ if executable('sphinx-build') |
+                \ let &makeprg = 'sphinx-build -b html ' |
                 \ endif
 augroup END
 
-" Don't set makeprg!!! That's what the compiler command is for!
-" Is it bad if we set makeprg though because i just opened an rst doc and it
-" wasn't set
-
+command! -buffer Sphinx call pydoc_help#sphinx_build(<q-args>)
 " The Official Ftplugin: {{{1
 
 setlocal comments=fb:.. commentstring=..\ %s
@@ -74,7 +68,6 @@ endif
 " Use fewer code lists it ends up accounting for 50% of startuptime when
 " using rst docs
 let g:rst_syntax_code_list = {
-    \ 'vim': ['vim'],
     \ 'python': ['python', 'python3', 'ipython'],
     \ 'sh': ['sh'],
     \ }

@@ -14,6 +14,12 @@ let g:did_autoloads_vim = 1
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
+" Unrelated functionality but silence the errors from nvim -u NORC by defining
+" this var in the first plugin file loaded
+if !exists('plugs')
+  let plugs = {}
+endif
+
 " Commands: {{{1
 command! Todo call todo#Todo()
 

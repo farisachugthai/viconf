@@ -1,7 +1,11 @@
 # htmldjango
 
 # From the docs on using Vim and Django
-# Vim 7.1 or newer includes support for  "htmldjango" documents out of the box. With {{{filetype on}}} on your {{{~/.vimrc}}} configuration file, vim will automatically tell apart "htmldjango" documents from regular html ones. Just make sure that at least one of the first 10 lines in your html document matches the following regex from the start:
+# Vim 7.1 or newer includes support for  "htmldjango" documents out of the box.
+# With `filetype on` on your `<~/.vimrc>`_ configuration file, vim will
+# automatically tell apart "htmldjango" documents from regular html ones.
+# Just make sure that at least one of the first 10 lines in your html documents
+# matches the following regex from the start:
 
 # {{{
 # {%\s*\(extends\|block\|load\)\>\|{#\s\+
@@ -15,14 +19,17 @@
 # {% load
 # {#
 
-extends html
+# Should we extend jinja as well?
 
-# Generic Tags
-snippet % "" bi
+extends html, jinja, htmljinja
+
+# Generic Tags: {{{1
+
+snippet % "Generic tag" bi
 {% $1 %}$2
 endsnippet
 
-snippet %% "" bi
+snippet %% "Named block" bi
 {% ${1:tag_name} %}
 	$2
 {% end$1 %}
@@ -32,7 +39,7 @@ snippet { "" bi
 {{ $1 }}$2
 endsnippet
 
-# Template Tags
+# Template Tags: {{{1
 
 snippet autoescape "" bi
 {% autoescape ${1:off} %}
@@ -46,7 +53,7 @@ snippet block "" bi
 {% endblock $1 %}
 endsnippet
 
-snippet # "" bi
+snippet # "Comment" bi
 {# ${1:comment} #}
 endsnippet
 
@@ -197,8 +204,10 @@ snippet mediau "" bi
 {{ MEDIA_URL }}
 endsnippet
 
-snippet iblock "" bi
-{% block ${1:blockname} %}${VISUAL}{% endblock $1 %}
+snippet iblock "Named block" ib
+{% block ${1:blockname} %}
+	${0:${VISUAL}}
+{% endblock $1 %}
 endsnippet
 
 snippet csrf "" bi
@@ -207,7 +216,7 @@ endsnippet
 
 snippet blocktrans "" bi
 {% blocktrans %}
-    ${VISUAL}
+	${0:${VISUAL}}
 {% endblocktrans %}
 endsnippet
 
@@ -311,4 +320,4 @@ snippet wordwrap "" bi
 wordwrap:$1
 endsnippet
 
-# vim:ft=snippets:
+# vim:ft=snippets:foldlevel=0:foldlevelstart=0:

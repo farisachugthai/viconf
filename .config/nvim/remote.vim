@@ -53,9 +53,10 @@ if has('unix')
   endif
 else  " windows not wsl
   let g:python3_host_prog = 'C:/tools/miniconda3/envs/neovim/python.exe'
-  let g:python_host_prog = 'C:/tools/miniconda3/envs/ansible/python.exe'
+  let g:python_host_prog = 'C:/Users/faris/.windows-build-tools/python27/python.exe'
+
   let loaded_ruby_provider = 1
-  let g:node_host_prog = 'C:/Users/faris/AppData/Local/Yarn/global/node_modules/neovim/bin/cli.js'
+  let g:node_host_prog = 'C:/Users/faris/AppData/Roaming/npm/neovim-node-host.cmd'
 
   let g:clipboard = {
         \   'name': 'winClip',

@@ -92,8 +92,6 @@ if has_key(plugs, 'ale')
   call pydoc_help#ALE_Python_Conf()
 endif
 
-" That'll do. Holy fuck that actually worked....
-
 " Atexit: {{{1
 
 " A bunch missing. Check :he your-runtime-path somewhere around there is a

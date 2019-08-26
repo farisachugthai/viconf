@@ -1,62 +1,65 @@
-# Functions
-# TODO: Outside of going over this file again, the inconsistent
-# semicolon is gonna drive me nuts
+# ============================================================================
+	# File: javascript.snippets
+	# Author: Faris Chugthai
+	# Description: 
+	# Last Modified: August 24, 2019
+# ============================================================================
+
+# Functions: {{{1
 
 snippet proto "prototype"
-	${1:class_name}.prototype.${2:method_name} = function(${3}) {
-		${0:${VISUAL}}
-	};
+${1:class_name}.prototype.${2:method_name} = function(${3}) {
+	${0:${VISUAL}}
+};
 endsnippet
 
 snippet fun " Function"
-	function ${1:function_name}(${2}) {
-		${0:${VISUAL}}
-	}
+function ${1:function_name}(${2}) {
+	${0:${VISUAL}}
+}
 endsnippet
 
 snippet anf "Anonymous Function" w
-	function(${1}) {
-		${0:${VISUAL}}
-	}
+function(${1}) {
+	${0:${VISUAL}}
+}
 endsnippet
 
 snippet vaf " Anonymous Function assigned to variable"
-	var ${1:function_name} = function(${2}) {
-		${0:${VISUAL}}
-	};
+var ${1:function_name} = function(${2}) {
+	${0:${VISUAL}}
+};
 endsnippet
 
 snippet vf "Function assigned to variable"
-	var ${1:function_name} = function $1(${2}) {
-		${0:${VISUAL}}
-	};
+var ${1:function_name} = function $1(${2}) {
+	${0:${VISUAL}}
+};
 endsnippet
 
 snippet (f "Immediate function"
-	(function(${1}) {
-		${0:${VISUAL}}
-	}(${2}));
+(function(${1}) {
+	${0:${VISUAL}}
+}(${2}));
 endsnippet
 
 snippet ;fe "Minify safe iife"
-	;(function(${1}) {
-		${0:${VISUAL}}
-	}(${2}))
+;(function(${1}) {
+	${0:${VISUAL}}
+}(${2}))
 endsnippet
 
 snippet sdf "self-defining function"
-	var ${1:function_name} = function (${2:argument}) {
-		${3}
+var ${1:function_name} = function (${2:argument}) {
+	${3}
 
-		$1 = function ($2) {
-			${0:${VISUAL}}
-		};
+	$1 = function ($2) {
+		${0:${VISUAL}}
 	};
+};
 endsnippet
 
-##################
-#  Flow Control  #
-##################
+#  Flow Control: {{{1
 
 snippet if "if (condition) { ... }"
 if (${1:true}) {
@@ -122,7 +125,7 @@ endsnippet
 snippet for "for (...) {...}"
 for (var ${1:i} = 0, ${2:len} = ${3:Things.length}; $1 < $2; $1++) {
 	${0:${VISUAL}}
-	}
+}
 endsnippet
 
 snippet forr "reversed for (...) {...}"
@@ -143,29 +146,25 @@ snippet do "do { ... } while (condition)"
 	} while (${1:/* condition */});
 endsnippet
 
-# For in loop
-snippet fori
+snippet fori "For in loop"
 	for (var ${1:prop} in ${2:object}) {
 		${0:$2[$1]}
 	}
 endsnippet
 
-#############
-#  Objects  #
-#############
+#  Objects: {{{1
 
-# Object Method
-snippet :f
-	${1:method_name}: function (${2:attribute}) {
-		${0:${VISUAL}}
-	},
+snippet :f "Object method"
+${1:method_name}: function (${2:attribute}) {
+	${0:${VISUAL}}
+},
 endsnippet
-# hasOwnProperty
-snippet has
-	hasOwnProperty(${0})
+
+snippet has "hasOwnProperty(arg)"
+hasOwnProperty(${0:$VISUAL})
 endsnippet
-# singleton
-snippet sing
+
+snippet sing "singleton function"
 	function ${1:Singleton} (${2:argument}) {
 		// the cached instance
 		var instance;
@@ -189,16 +188,16 @@ snippet sing
 		return instance;
 	}
 endsnippet
-# Crockford's object function
-snippet obj
+
+snippet obj "Crockford's object function"
 	function object(o) {
 		function F() {}
 		F.prototype = o;
 		return new F();
 	}
 endsnippet
-# Define multiple properties
-snippet props
+
+snippet props "Define multiple properties"
 	var ${1:my_object} = Object.defineProperties(
 		${2:new Object()},
 		{
@@ -217,8 +216,8 @@ snippet props
 		}
 	);
 endsnippet
-# Define single property
-snippet prop
+
+snippet prop "Define single property"
 	Object.defineProperty(
 		${1:object},
 		'${2:property}',
@@ -237,12 +236,12 @@ snippet prop
 	);
 # Documentation
 endsnippet
-# docstring
-snippet /**
-	/**
-	 * ${0:description}
-	 *
-	 */
+
+snippet /** "docstring"
+/**
+* ${0:description}
+*
+*/
 endsnippet
 
 snippet @par
@@ -254,57 +253,55 @@ snippet @ret
 endsnippet
 
 
-# JSON
+# JSON: {{{1
+snippet jsonp "JSON.parse"
+JSON.parse(${0:jstr});
+endsnippet
 
+snippet jsons "JSON.stringify"
+JSON.stringify(${0:object});
+endsnippet
 
-# JSON.parse
-snippet jsonp
-	JSON.parse(${0:jstr});
+# DOM Elements: {{{1
+
+snippet get "Get elements"
+getElementsBy${1:TagName}('${0}')
 endsnippet
-# JSON.stringify
-snippet jsons
-	JSON.stringify(${0:object});
-# DOM selectors
+
+snippet gett "Get element"
+getElementBy${1:Id}('${0}')
 endsnippet
-# Get elements
-snippet get
-	getElementsBy${1:TagName}('${0}')
+
+snippet by. "Elements by class"
+${1:document}.getElementsByClassName('${0:class}')
 endsnippet
-# Get element
-snippet gett
-	getElementBy${1:Id}('${0}')
+
+snippet by# "Element by ID"
+${1:document}.getElementById('${0:element ID}')
 endsnippet
-# Elements by class
-snippet by.
-	${1:document}.getElementsByClassName('${0:class}')
+
+snippet qs  "Query selector"
+${1:document}.querySelector('${0:CSS selector}')
 endsnippet
-# Element by ID
-snippet by#
-	${1:document}.getElementById('${0:element ID}')
+
+snippet qsa "Query selector all"
+${1:document}.querySelectorAll('${0:CSS selector}')
 endsnippet
-# Query selector
-snippet qs
-	${1:document}.querySelector('${0:CSS selector}')
-endsnippet
-# Query selector all
-snippet qsa
-	${1:document}.querySelectorAll('${0:CSS selector}')
-endsnippet
-# Debugging
-snippet de
-	debugger;
+
+snippet de "Debugging"
+debugger;
 endsnippet
 
 snippet cl "console.log"
-	console.log(${0});
+console.log(${0});
 endsnippet
 
 snippet cd "console.debug"
-	console.debug(${0});
+console.debug(${0});
 endsnippet
 
 snippet ce "console.error"
-	console.error(${0});
+console.error(${0});
 endsnippet
 
 snippet cw "console.warn"
@@ -367,15 +364,14 @@ snippet ctable "console.table"
 console.table(${1:"${2:value}"});
 endsnippet
 
-############
-#  Misc    #
-############
+#  Misc: {{{1
 
-
-snippet us "use strict"
-'use strict'; endsnippet
+snippet use "use strict"
+${0:use strict};
 endsnippet
 
 snippet timeout "setTimeout function"
-	setTimeout(function () {${0}}${2}, ${1:10});
+setTimeout(function () {${0}}${2}, ${1:10});
 endsnippet
+
+# Vim: set fdm=marker:

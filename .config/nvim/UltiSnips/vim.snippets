@@ -9,14 +9,12 @@
 #    Personal snippets  #
 #########################
 
-# Paths:
-
 snippet path "Refer to a file in the same dir as the script."
 ${1:let ${2:${VISUAL:s:local_vimrc}} = }}fnamemodify(resolve(expand('${3:<sfile>}')), '${4::p:h}')
 endsnippet
 
 snippet gvar "Global / configuration variable" b
-if !exists('g:${1:MyUltraImportantVar}')
+if !exists('g:${1:${VISUAL}}')
 	let g:$1 = ${2:"${3:<tab>}"}
 endif
 endsnippet

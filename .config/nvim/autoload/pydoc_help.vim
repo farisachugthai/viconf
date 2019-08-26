@@ -56,14 +56,28 @@ function! pydoc_help#Pydoc(module) abort
   endif
 
   enew
-  exec ':r! pydoc ' . a:module
+  " exec ':r! pydoc ' . a:module
+  " so the above will have to be modified to allow for py3 if it exists
+  " in the plugin definition i only check for either python3 or python2
+  " so there's no need to throw an error that neither are loaded. they have
+  " to be. however i just loaded py2 docs by accident.
+  " i could go the route of calling provider#python3#Call(); however, I can't
+  " find the docs for it and the source code is outrageously unclear so fuck
+  " it dispatch it to the shell and walk away
+  if has('python3')
+    exec 'r! python3 -m pydoc ' . a:module
+  elseif has('python')  " not sure how to guarantee that python points to py2...
+    exec 'r! python -m pydoc ' . a:module
+  endif
+
   setlocal relativenumber
   setlocal filetype=rst
   setlocal buflisted
-  setlocal nomodified
+  silent setlocal nomodified
+  silent setlocal nomodifiable
+  nnoremap <buffer> <silent> q <Cmd>bd!<CR>
 
-  " If you wanna keep going we can change the status line. We can change how
-  " we invoke python
+  " If you wanna keep going we can change the status line.
 endfunction
 
 " Helptags: {{{1
@@ -178,6 +192,11 @@ function! pydoc_help#ALE_Python_Conf() abort  " {{{2
           let b:ale_fixers += ['autopep8']
       endif
   endif
+endfunction
+
+
+function! pydoc_help#sphinx_build(...) abort  " {{{1
+  " TODO: 
 endfunction
 
 " Atexit: {{{1

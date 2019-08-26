@@ -42,7 +42,7 @@ function! s:statusline_expr() abort
     let tstmp = ''  " ternary expressions should get on the todo list
   endif
 
-  let cos = ' %{coc#status()} '
+  let cos = " %{exists('g:did_coc_loaded') ? coc#status() : ''} "
 
   return '[%n] %f ' . dicons . '%m' . '%r' . ' %y ' . fug . csv . ' ' . ' %{&ff} ' . tstmp . cos . sep . pos . '%*' . ' %P'
 

@@ -27,8 +27,8 @@ let $NVIM_COC_LOG_LEVEL='debug'
 " Refresh completions with C-Space
 inoremap <silent><expr> <C-Space> coc#refresh()
 
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : 
-                                           \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+inoremap <silent><expr> <CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
 " Shit none of these work
 nnoremap [g <Plug>(coc-diagnostic-prev)
 nnoremap ]g <Plug>(coc-diagnostic-next)
@@ -44,11 +44,6 @@ augroup CocConf
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
   " Highlight symbol under cursor on CursorHold
   autocmd CursorHold * silent call CocActionAsync('highlight')
-
-  " Close the popupmenu when completions done.
-  " Dude this DOESNT work at all in the cmdwin
-  autocmd CompleteDone * if pumvisible() == 0 | pclose | endif
-
 augroup end
 
 " Using CocList: {{{1
@@ -89,12 +84,11 @@ nmap <C-c><C-a>  <Plug>(coc-codeaction)
 " Fix autofix problem of current line
 nmap <C-c><C-f>  <Plug>(coc-fix-current)
 
-" Dude that is an OBNOXIOUS amount of typing though.
 noremap <silent> <C-c>q <Plug>(coc-fix-current)
 
 " Commands: {{{1
 
-" Let's start grouping these together by prefixing with C or something
+" Let's group these together by prefixing with C
 
 " Use `:Format` to format current buffer
 command! -nargs=0 CFormat :call CocAction('format')

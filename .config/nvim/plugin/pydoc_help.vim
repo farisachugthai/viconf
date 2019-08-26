@@ -32,13 +32,10 @@ endif
   endif
 
 " Autocmds: {{{1
-
-if &filetype=='man' || &filetype=='help'
-  augroup mantabs
-    au!
-    autocmd Filetype * call pydoc_help#Helptab()
-  augroup END
-endif
+augroup mantabs
+  au!
+  autocmd Filetype man,help call pydoc_help#Helptab()
+augroup END
 
 
 " Commands: {{{1

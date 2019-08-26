@@ -1,13 +1,6 @@
 {
-  "suggest.autoTrigger": "none",
-  "suggest.triggerAfterInsertEnter": true,
-  "suggest.enablePreview": true,
-  "suggest.floatEnable": true,
-  "suggest.noselect": true,
-  "suggest.keepCompleteopt": true,
-  "suggest.minTriggerInputLength": 2,
-  "suggest.snippetIndicator": "[Coc-US]",
-  "suggest.preferCompleteThanJumpPlaceholder": true,
+  "suggest.acceptSuggestionOnCommitCharacter": true,
+  "suggest.autoTrigger": "always",
   "suggest.completionItemKindLabels": {
     "keyword"       : "\uf1de",
     "variable"      : "\ue79b",
@@ -35,19 +28,25 @@
     "typeParameter" : "\uf728",
     "default"       : "\uf29c"
   },
-  "suggest.timeout": 800,
-  "suggest.acceptSuggestionOnCommitCharacter": true,
+  "suggest.detailField": "preview",
+  "suggest.enablePreview": true,
   "suggest.fixInsertedWord": true,
-  "python.linting.flake8Path": "flake8",
+  "suggest.floatEnable": true,
+  "suggest.LowPrioritySourceLimit": 0,
+  "suggest.keepCompleteopt": true,
+  "suggest.minTriggerInputLength": 3,
+  "suggest.noselect": true,
+  "suggest.preferCompleteThanJumpPlaceholder": true,
+  "suggest.snippetIndicator": "[Coc-US]",
+  "suggest.triggerAfterInsertEnter": true,
+  "suggest.timeout": 800,
+
   "python.analysis.diagnosticEnabled": true,
   "python.analysis.logLevel": "Warning",
   "python.analysis.openFilesOnly": false,
   "python.autoComplete.addBrackets": true,
-  "python.formatting.provider": "yapf",
   "python.jediEnabled": true,
   "python.jediShortcut": "Jedi",
-  "python.linting.flake8Enabled": true,
-  "python.linting.pydocstyleEnabled": true,
   "python.linting.pylintEnabled": false,
   "python.terminal.executeInFileDir": true,
   "python.trace.server": "messages",
@@ -75,7 +74,7 @@
           "trace": {
             "server": "verbose"
           },
-          "commandPath": "",
+          "commandPath": "python -m pyls",
           "configurationSources": [
             "flake8"
           ],
@@ -174,12 +173,17 @@
     "<C-p>": "normal:k",
     "<C-t>": "action:tabe",
     "<C-x>": "action:split",
-    "<CR>" : "action:select"
+    "<CR>" : "do:defaultaction",
+    "<A-p>": "action:preview",
+    "<C-h>": "do:help",
+    "<C-d>": "prompt:deleteforward"
   },
   "list.normalMappings": {
+    "<C-r>" : "do:refresh",
     "d"     : "action : delete",
     "<C-x>" : "action : split",
     "<C-t>" : "action : tabe",
+    "<A-p>" : "action:preview",
     "<CR>"  : "action : select"
   },
   "coc.preferences.formatOnSaveFiletypes": ["javascript", "html", "css", "vim", "bash", "powershell", "python"],
