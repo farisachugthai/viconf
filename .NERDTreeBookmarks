@@ -1,16 +1,15 @@
-WindowsPowerShell ~/Documents/WindowsPowerShell
+config-nvim ~/.config/nvim
 dotfiles ~/projects/dotfiles/unix
-nvim ~/AppData/Local/nvim
-nvim-data ~/AppData/Local/nvim-data
+jupyter-extensions ~/.local/share/jupyter
+plugged ~/.local/share/nvim/plugged
 python ~/python
-terminal ~/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe
 tutorials ~/Dropbox/python/tutorials
 utilities ~/projects/utilities
 viconf ~/projects/viconf/.config/nvim
-winterm-profiles ~/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/RoamingState/profiles.json
 
-config-nvim ~/.config/nvim
-jupyter-extensions ~/.local/share/jupyter
+WindowsPowerShell ~/Documents/WindowsPowerShell
 mpl /usr/share/doc/python-matplotlib-doc/tutorials
-plugged ~/.local/share/nvim/plugged
+nvim ~/AppData/Local/nvim
+terminal ~/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe
 tlib ~/.local/share/nvim/plugged/tlib_vim/autoload/tlib
+winterm-profiles ~/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/RoamingState/profiles.json

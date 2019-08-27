@@ -93,11 +93,11 @@ function! plugins#FugitiveMappings() abort   " {{{2
 
   noremap <silent> <Leader>gb   <Cmd>Gblame<CR>
   noremap <silent> <Leader>gc   <Cmd>Gcommit<CR>
-  noremap <silent> <Leader>gd   <Cmd>Gdiff<CR>
-  cabbrev Gd Gdiff
-  noremap <silent> <Leader>gds  <Cmd>Gdiff --staged<CR>
+  noremap <silent> <Leader>gd   <Cmd>Gdiffsplit!<CR>
+  cabbrev Gd Gdiffsplit<Space>
+  noremap <silent> <Leader>gds  <Cmd>Gdiffsplit! --staged<CR>
   cabbrev gds2 Git diff --stat --staged
-  noremap <silent> <Leader>gds2 <Cmd>Git diff --stat --staged<CR>
+  noremap <silent> <Leader>gds2 <Cmd>Git diffsplit! --stat --staged<CR>
   noremap <silent> <Leader>ge   <Cmd>Gedit<Space>
   noremap <silent> <Leader>gf   <Cmd>Gfetch<CR>
   cabbrev gL 0Glog --pretty=oneline --graph --decorate --abbrev --all --branches
@@ -108,9 +108,9 @@ function! plugins#FugitiveMappings() abort   " {{{2
   noremap <silent> <Leader>gps  <Cmd>Gpush<CR>
   noremap <silent> <Leader>gq   <Cmd>Gwq<CR>
   noremap <silent> <Leader>gQ   <Cmd>Gwq!<CR>
-  noremap <silent> <Leader>gR   :Gread<Space>
+  noremap <silent> <Leader>gR   <Cmd>Gread<Space>
   noremap <silent> <Leader>gs   <Cmd>Gstatus<CR>
-  noremap <silent> <Leader>gst  <Cmd>Git diff --stat<CR>
+  noremap <silent> <Leader>gst  <Cmd>Git diffsplit! --stat<CR>
   noremap <silent> <Leader>gw   <Cmd>Gwrite<CR>
   noremap <silent> <Leader>gW   <Cmd>Gwrite!<CR>
 

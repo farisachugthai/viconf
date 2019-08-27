@@ -103,7 +103,8 @@ endif
 
 set wildmode=full:list:longest,full:list
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
-set wildoptions+=tagfile   " A list of words that change how command line completion is done.
+let &wildoptions.='tagfile'
+" A list of words that change how command line completion is done.
 set complete+=kspell                    " Autocomplete in insert mode
 " Create a preview window and display all possibilities but don't insert
 set completeopt=menu,menuone,noselect,noinsert,preview

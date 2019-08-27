@@ -44,6 +44,8 @@ setlocal suffixesadd+=.py
 
 setlocal omnifunc=python3complete#Complete
 
+setlocal iskeyword+=.
+
 " Path: {{{2
 
 let &path = pydoc_help#PythonPath()
@@ -96,7 +98,7 @@ endif
 
 " A bunch missing. Check :he your-runtime-path somewhere around there is a
 " good starter for writing an ftplugin
-let b:undo_ftplugin = 'set lbr< tw< cms< et< sts< ts< sw< cc< fdm< kp< sua<'
+let b:undo_ftplugin = 'set lbr< tw< cms< et< sts< ts< sw< cc< fdm< kp< sua< isk<'
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

@@ -22,15 +22,20 @@ setlocal linebreak
 setlocal foldlevel=2
 setlocal foldlevelstart=2
 setlocal spell!
+setlocal iskeyword+=.
 
 " This works beautifully!
-setlocal keywordprg=pydoc
+if exists(':PydocThis')
+  setlocal keywordprg=:PydocThis
+else
+  setlocal keywordprg=pydoc
+endif
 
 augroup RstCompiler
     autocmd Filetype rst 
                 \ if executable('sphinx-build') |
                 \ let &makeprg = 'sphinx-build -b html ' |
-                \ endif
+                \ endif 
 augroup END
 
 command! -buffer Sphinx call pydoc_help#sphinx_build(<q-args>)
@@ -75,7 +80,7 @@ let g:rst_syntax_code_list = {
 " can't use java in the syntax list anymore this shit takes way too long
 
 " Atexit: {{{1
-let b:undo_ftplugin = 'set et< ts< sw< sts< cms< com< cc< lbr< fdl< fdls< spell< kp<'
+let b:undo_ftplugin = 'set et< ts< sw< sts< cms< com< cc< lbr< fdl< fdls< spell< isk< kp<'
 " can't use unlet! or unlet in the same '' apparently
 
 let &cpoptions = s:cpo_save

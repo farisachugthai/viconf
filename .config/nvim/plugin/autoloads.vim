@@ -42,6 +42,11 @@ imap <C-k> <C-x><C-k>
 imap <C-]> <C-x><C-]>
 imap <C-d> <C-x><C-d>
 imap <C-i> <C-x><C-i>
+imap <C-s> <C-x><C-s>
+imap <C-n> <C-x><C-n>
+imap <C-p> <C-x><C-p>
+
+" Can't do C-v or C-o they're too important
 
 " Atexit: {{{1
 
