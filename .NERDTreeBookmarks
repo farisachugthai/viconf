@@ -1,15 +1,15 @@
+dotfiles ~\projects\dotfiles\unix
+python ~\python
+tutorials ~\Dropbox\python\tutorials
+utilities ~\projects\utilities
+viconf ~\projects\viconf\.config\nvim
+WindowsPowerShell ~\Documents\WindowsPowerShell
+nvim ~\AppData\Local\nvim
+terminal ~\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe
+
 config-nvim ~/.config/nvim
-dotfiles ~/projects/dotfiles/unix
 jupyter-extensions ~/.local/share/jupyter
 plugged ~/.local/share/nvim/plugged
-python ~/python
-tutorials ~/Dropbox/python/tutorials
-utilities ~/projects/utilities
-viconf ~/projects/viconf/.config/nvim
-
-WindowsPowerShell ~/Documents/WindowsPowerShell
 mpl /usr/share/doc/python-matplotlib-doc/tutorials
-nvim ~/AppData/Local/nvim
-terminal ~/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe
 tlib ~/.local/share/nvim/plugged/tlib_vim/autoload/tlib
 winterm-profiles ~/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/RoamingState/profiles.json

@@ -104,14 +104,14 @@ endif
 set wildmode=full:list:longest,full:list
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 let &wildoptions.='tagfile'
-" A list of words that change how command line completion is done.
-set complete+=kspell                    " Autocomplete in insert mode
+set complete+=kspell
 " Create a preview window and display all possibilities but don't insert
 set completeopt=menu,menuone,noselect,noinsert,preview
 " don't show more than 15 choices in the popup menu. defaults to 0
 set pumheight=15
-set ignorecase             " both smartcase and infercase require ignorecase to be set
-set smartcase infercase    " the case when you search for stuff
+" both smartcase and infercase require ignorecase to be set
+set ignorecase
+set smartcase infercase
 
 set path+=**               " Recursively search dirs with :find
 let &path = &path . ',' . stdpath('config')
@@ -126,9 +126,8 @@ endif
 set tags+=./tags,./*/tags
 set tagcase=smart showfulltag
 set mouse=a
-set isfname-==
-" I think autochdir was killing windows. Admittedly the wildignorecase is unrelated but whatever
-if has('unix') | set autochdir | else | set wildignorecase | endif
+set autowrite autochdir
+set wildignorecase
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
 " Filler lines to keep text synced, 3 lines of context on diffs, don't diff hidden files,default foldcolumn is 2
@@ -137,7 +136,7 @@ set diffopt=filler,context:0,hiddenoff,foldcolumn:2,icase,iwhite,indent-heuristi
 
 set modeline
 if exists('modelineexpr') | set modelineexpr | endif
-set autochdir browsedir="buffer"   " which directory is used for the file browser
+set browsedir="buffer"   " which directory is used for the file browser
 let &showbreak = '↳ '                   " Indent wrapped lines correctly
 set breakindent breakindentopt=sbr
 set updatetime=100
@@ -167,44 +166,21 @@ noremap k gk
 " Help docs reminded me I hadn't done this!
 noremap <Up> gk
 noremap <Down> gj
-
+" I mess this up constantly thinking that gI does what gi does
+inoremap gI gi
 " Avoid accidental hits of <F1> while aiming for <Esc>
 noremap! <F1> <Esc>
 " Dude read over :he getcharsearch(). Now ; and , search forward backward no matter what!!!
 noremap <expr> ; getcharsearch().forward ? ';' : ','
 noremap <expr> , getcharsearch().forward ? ',' : ';'
 
-" Runtime: {{{1
 runtime macros/matchit.vim
 set showmatch matchpairs+=<:>
 set matchtime=20  " Show the matching pair for 2 seconds
-
 let g:matchparen_timeout = 500
 let g:matchparen_insert_timeout = 300
 
-augroup omnifunc
-    autocmd!
-    autocmd Filetype c,cpp            setlocal omnifunc=ccomplete#Complete
-    autocmd Filetype css              setlocal omnifunc=csscomplete#CompleteCSS
-    autocmd Filetype html,xhtml       setlocal omnifunc=htmlcomplete#CompleteTags | call htmlcomplete#DetectOmniFlavor()
-    autocmd Filetype javascript       setlocal omnifunc=javascriptcomplete#CompleteJS
-    autocmd Filetype ruby             setlocal omnifunc=rubycomplete#Complete
-    autocmd Filetype xml              setlocal omnifunc=xmlcomplete#CompleteTags
-
-    " If there isn't a default or built-in, use the syntax highlighter
-    autocmd Filetype *
-        \   if &omnifunc == "" |
-        \       setlocal omnifunc=syntaxcomplete#Complete |
-        \   endif
-augroup END
-
-set nohlsearch
-augroup vimrc_incsearch_highlight
-    autocmd!
-    autocmd CmdlineEnter /,\? :set hlsearch
-    autocmd CmdlineLeave /,\? :set nohlsearch
-augroup END
-
+if &omnifunc == "" | setlocal omnifunc=syntaxcomplete#Complete | endif
 " Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

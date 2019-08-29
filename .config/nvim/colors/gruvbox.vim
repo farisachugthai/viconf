@@ -11,7 +11,7 @@
 if exists('g:did_gruvbox_colors') || &compatible || v:version < 700
     finish
 endif
-let g:did_gruvbox_colors = 1
+" let g:did_gruvbox_colors = 1
 
 scriptencoding utf8
 
@@ -482,8 +482,11 @@ call s:HL('GruvboxAquaSign', s:aqua, s:sign_column, s:invert_signs)
 " General UI: {{{
 
 " Normal text
-" call s:HL('Normal', s:fg1, s:bg0)
-hi Normal ctermfg=223 ctermbg=234 guifg=#ebdbb2 guibg=#1d2021  
+call s:HL('Normal', s:fg1, s:bg0)
+
+" And to state it explicitly
+" Normal         xxx ctermfg=223 ctermbg=234 guifg=#ebdbb2 guibg=#1d2021
+" so keep those background colors in mind and use them for everything.
 
 " Correct background (see issue #7):
 " --- Problem with changing between dark and light on 256 color terminal
@@ -536,10 +539,8 @@ call s:HL('IncSearch', s:hls_cursor, s:bg0, s:inverse)
 
 " call s:HL('Underlined', s:blue, s:none, s:underline)
 hi Underlined cterm=underline ctermfg=109 gui=underline guifg=#83a598
-hi StatusLine cterm=reverse ctermfg=239 ctermbg=223 gui=reverse guifg=#504945 guibg=#ebdbb2
-" call s:HL('StatusLine',   s:bg2, s:fg1, s:inverse)
-" call s:HL('StatusLineNC', s:bg1, s:fg4, s:inverse)
-hi StatusLineNC cterm=reverse ctermfg=237 ctermbg=246 gui=reverse guifg=#3c3836 guibg=#a89984
+call s:HL('StatusLine',   s:bg2, s:fg1, s:inverse)
+call s:HL('StatusLineNC', s:bg1, s:fg4, s:inverse)
 
 " The column separating vertically split windows
 call s:HL('VertSplit', s:bg3, s:vert_split)

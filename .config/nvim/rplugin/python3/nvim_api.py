@@ -5,14 +5,20 @@ import atexit
 from io import StringIO
 import logging
 import os
+import sys
 import tempfile
 
-import IPython
+import pynvim
+
+try:
+    import IPython
+except (ImportError, ModuleNotFoundError):
+    sys.exit()
+
 from IPython.core.profiledir import ProfileDir
 from IPython.core.interactiveshell import InteractiveShell
 # from pynvim.api.nvim import NeovimError
 from traitlets.config import Config
-import pynvim
 # import vim  # pylint:disable=import-error,unused-import
 
 logging.getLogger(name=__name__)

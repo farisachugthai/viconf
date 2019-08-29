@@ -30,38 +30,9 @@ setlocal colorcolumn=120
 
 let b:is_bash = 1
 
-" Plugins: {{{1
-"
-" ALE: {{{2
-
-function! ALE_sh_conf() abort
-
-  " if we're using powershell or cmd on windows set ALEs default shell to bash
-  " TODO: set the path to shellcheck.
-  if has('unix')
-    let shell_is_bash = match(expand('$SHELL'), 'bash')
-    if !shell_is_bash
-      let g:ale_sh_shell_default_shell = 1
-    endif
-
-  else
-    let s:bash_location = exepath('bash')
-    if executable(s:bash_location)
-      let g:ale_sh_shell_default_shell = 1
-    endif
-  endif
-
-  let b:ale_linters = ['shell', 'shellcheck']
-  if !has('unix')
-    let b:ale_sh_shellcheck_executable = 'C:/tools/miniconda3/envs/neovim/bin/shellcheck.exe'
-  endif
-
-endfunction
-
-augroup ALEshConf
-    au!
-    au Filetype sh call ALE_sh_conf()
-augroup END
+if has_key(plugs, 'ale')
+  call ftplugins#ALE_sh_conf()
+endif
 
 " Atexit: {{{1
 

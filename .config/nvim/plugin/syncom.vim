@@ -68,6 +68,15 @@ command! -nargs=+ NewGrep execute 'silent grep! <args>' | copen
 command! -nargs=0 -range Title <Cmd>'<,'>s/\v<(.)(\w*)/\u\1\L\2/g
 
 
+" Toggle Search Highlighting: {{{1
+set nohlsearch
+augroup vimrc_incsearch_highlight
+    autocmd!
+    autocmd CmdlineEnter /,\? :set hlsearch
+    autocmd CmdlineLeave /,\? :set nohlsearch
+augroup END
+
+
 " Atexit: {{{1
 
 let &cpoptions = s:cpo_save

@@ -65,7 +65,11 @@ function! pydoc_help#Pydoc(module) abort
   " find the docs for it and the source code is outrageously unclear so fuck
   " it dispatch it to the shell and walk away
   if has('python3')
-    exec 'r! python3 -m pydoc ' . a:module
+    if !has('unix')
+      exec 'r! python.exe -m pydoc ' . a:module
+    else
+      exec 'r! python3 -m pydoc ' . a:module
+    endif
   elseif has('python')  " not sure how to guarantee that python points to py2...
     exec 'r! python -m pydoc ' . a:module
   endif

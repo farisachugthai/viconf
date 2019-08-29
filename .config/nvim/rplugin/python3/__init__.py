@@ -37,4 +37,6 @@ def rplugin_attach():
     return global_nvim
 
 
-nvim = rplugin_attach()
+# Only run this if we don't have an open channel.
+if not os.environ.get('NVIM_LISTEN_ADDRESS'):
+    nvim = rplugin_attach()

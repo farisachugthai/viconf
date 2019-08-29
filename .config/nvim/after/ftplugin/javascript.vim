@@ -21,34 +21,17 @@ setlocal shiftwidth=2
 setlocal softtabstop=2
 setlocal suffixesadd=.html,.css,.js
 
+setlocal omnifunc=javascriptcomplete#CompleteJS
+
 " Set 'comments' to format dashed lists in comments.
 setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
+setlocal commentstring=//\  %s
 
-setlocal commentstring=//%s
-
-" Plugins: {{{1
-
-function! ALE_JS_Conf()
-
-  let g:ale_windows_node_executable_path = 'C:/Program Files/nodejs/node.exe'
-
-  let b:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
-
-  if executable('prettier')
-    let b:ale_fixers += ['prettier']
-  endif
-
-endfunction
-
-if has_key(plugs, 'ale')
-  augroup alejsconf
-    au!
-    autocmd Filetype javascript call ALE_JS_Conf()
-  augroup END
+if has_key(plugs, 'ale') && &filetype==#'javascript'
+  call ftplugins#ALE_JS_Conf()
 endif
 
 " Atexit: {{{1
-
 let b:undo_ftplugin = 'set et< sw< sts< sua< com< cms<'
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

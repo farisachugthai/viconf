@@ -20,26 +20,12 @@ setlocal expandtab
 setlocal shiftwidth=2
 setlocal softtabstop=2
 setlocal suffixesadd=.html,.css
+setlocal omnifunc=csscomplete#CompleteCSS
 
 compiler csslint
 
-" Plugins: {{{1
-
-function! ALE_CSS_Conf()
-
-  let b:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
-
-  if executable('prettier')
-    let b:ale_fixers += ['prettier']
-  endif
-
-endfunction
-
-if has_key(plugs, 'ale')
-  augroup alecssconf
-    au!
-    autocmd Filetype css call ALE_CSS_Conf()
-  augroup END
+if has_key(plugs, 'ale') && &filetype==#'css'
+  call ftplugins#ALE_CSS_Conf()
 endif
 
 " Atexit: {{{1

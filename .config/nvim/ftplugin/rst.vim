@@ -24,7 +24,6 @@ setlocal foldlevelstart=2
 setlocal spell!
 setlocal iskeyword+=.
 
-" This works beautifully!
 if exists(':PydocThis')
   setlocal keywordprg=:PydocThis
 else
@@ -32,6 +31,7 @@ else
 endif
 
 augroup RstCompiler
+    au! Filetype rst
     autocmd Filetype rst 
                 \ if executable('sphinx-build') |
                 \ let &makeprg = 'sphinx-build -b html ' |
@@ -39,6 +39,7 @@ augroup RstCompiler
 augroup END
 
 command! -buffer Sphinx call pydoc_help#sphinx_build(<q-args>)
+
 " The Official Ftplugin: {{{1
 
 setlocal comments=fb:.. commentstring=..\ %s
@@ -64,7 +65,12 @@ if has('patch-7.3.867')  " Introduced the TextChanged event.
 endif
 
 " Syntax Highlighting: {{{1
-" he rst.vim or ft-rst-syntax or syntax 2600. Don't put bash instead of sh.
+" See Also:
+" RESTRUCTURED TEXT			*rst.vim* *ft-rst-syntax*
+" he rst.vim or ft-rst-syntax or syntax 2600.
+
+" Admonition:
+" Don't put bash instead of sh.
 " $VIMRUNTIME/syntax/rst.vim iterates over this var and if it can't find a
 " bash.vim syntax file it will crash.
 
@@ -74,10 +80,12 @@ endif
 " using rst docs
 let g:rst_syntax_code_list = {
     \ 'python': ['python', 'python3', 'ipython'],
-    \ 'sh': ['sh'],
+    \ 'sh': ['sh', 'bash'],
     \ }
 
-" can't use java in the syntax list anymore this shit takes way too long
+let rst_use_emphasis_colors = 1
+
+let rst_fold_enabled = 1
 
 " Atexit: {{{1
 let b:undo_ftplugin = 'set et< ts< sw< sts< cms< com< cc< lbr< fdl< fdls< spell< isk< kp<'

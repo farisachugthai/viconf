@@ -8,9 +8,9 @@
 " TODO: Come up with a s:rg_command becausevthe implementation here is inconsistent
 
 " Guards: {{{1
-if !has_key(plugs, 'fzf.vim')
-    finish
-endif
+if !has_key(plugs, 'fzf.vim') | finish | endif
+
+if empty('g:loaded_fzf') | finish | endif
 
 if exists('g:did_fzf_after_plugin') || &compatible || v:version < 700
     finish
@@ -35,7 +35,6 @@ let g:fzf_history_dir = stdpath('data') . '/fzf-history'
 let g:fzf_layout = { 'window': 'enew' }
 
 " FZF Colors: {{{1
-
 " Gruvbox Hard Coded: {{{2
 
 let g:fzf_colors =
@@ -55,7 +54,8 @@ let g:fzf_colors =
     " Override Colors command. You can safely do this in your .vimrc as fzf.vim
     " will not override existing commands.
 command! -bang FZFColors
-  \ call fzf#vim#colors({'left': '35%', 'options': '--reverse --margin 30%,0'}, <bang>0)
+  \ call fzf#vim#colors({'left': '35%',
+  \ 'options': '--reverse --margin 30%,0'}, <bang>0)
 
 " Mappings: {{{1
 " Exported fzf <plug> commands.
@@ -67,14 +67,14 @@ imap <C-x><C-j> <Plug>(fzf-complete-file-ag)
 " Global line completion (not just open buffers. ripgrep required.)
 imap <expr> <C-x><C-l> fzf#vim#complete(fzf#wrap({
   \ 'prefix': '^.*$',
-  \ 'source': 'rg -n ^ --color always',
-  \ 'options': '--ansi --delimiter : --nth 3..',
-  \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }}))
+  \ 'source'  : 'rg -n ^ --color always --colors=ansi ',
+  \ 'options' : '--ansi --delimiter : --nth 3..',
+  \ 'reducer' : { lines -> join(split(lines[0], ':\zs')[2:], '') }}))
 
 inoremap <C-l> <C-x><C-l>
 
 " The way I remapped Leader, this basically evaluates to \\ lol
-nnoremap <silent> <expr> \<Leader> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
+nnoremap <silent> <expr> <Leader>n (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
 
 " The remainder behave as expected.
 noremap <silent> <Leader>C        <Cmd>Colors<CR>
