@@ -91,17 +91,14 @@ noremap <silent> <C-c>q <Plug>(coc-fix-current)
 " Let's group these together by prefixing with C
 
 " Use `:Format` to format current buffer
-command! -nargs=0 CFormat :call CocAction('format')
+command! -nargs=0 CocFormat :call CocAction('format')
 
 " Use `:Fold` to fold current buffer
-command! -nargs=? CFold :call CocAction('fold', <f-args>)
+command! -nargs=? CocFold :call CocAction('fold', <f-args>)
 
 " use `:OR` for organize import of current buffer
-command! -nargs=0 CSort :call CocAction('runCommand', 'editor.action.organizeImport')
-
-" Just tried this and it worked! So keep checking :CocList commands and add
-" more as we go.
-command! -nargs=0 CPython :call CocActionAsync('runCommand', 'python.startREPL')|
+" Command doesn't work
+" command! -nargs=0 CSort :call CocAction('runCommand', 'editor.action.organizeImport')
 
 " Atexit: {{{1
 let &cpoptions = s:cpo_save

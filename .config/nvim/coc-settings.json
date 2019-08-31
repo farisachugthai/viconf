@@ -37,7 +37,15 @@
   "suggest.minTriggerInputLength": 2,
   "suggest.noselect": true,
   "suggest.preferCompleteThanJumpPlaceholder": true,
+<<<<<<< Updated upstream
   "suggest.snippetIndicator": "[Coc]",
+||||||| merged common ancestors
+  "suggest.snippetIndicator": "[Coc-US]",
+  "suggest.triggerAfterInsertEnter": true,
+=======
+  "suggest.snippetIndicator": "[Coc:]",
+  "suggest.triggerAfterInsertEnter": true,
+>>>>>>> Stashed changes
   "suggest.timeout": 800,
   "suggest.triggerAfterInsertEnter": true,
 
@@ -188,7 +196,10 @@
     "e"     : "action : edit",
     "<C-x>" : "action : split",
     "<C-t>" : "action : tabe",
-    "<A-p>" : "action:preview",
+    "P"     : "action : preview",
+    "l"     : "action : load",
+    "h"     : "action : help",
+    " "    : "action : toggle",
     "<CR>"  : "action : select"
   },
   "coc.preferences.currentFunctionSymbolAutoUpdate": true,
@@ -202,7 +213,11 @@
   "coc.source.buffer.shortcut": "CocBuffer: ",
   "coc.source.file.shortcut": "CocFiles: ",
   "coc.source.file.priority": 80,
-  "coc.source.tag.shortcut": "Coc-Tag:",
+  "coc.source.file.ignoreHidden": false,
+  "coc.source.omni.priority": 99,
+  "coc.source.omni.shortcut": "Coc-Omni:",
+
+  "diagnostic.refreshOnInsertMode": true,
   "diagnostic.checkCurrentLine": true,
   "diagnostic.displayByAle": false,
   "diagnostic.level": "warning",
@@ -210,7 +225,6 @@
   "diagnostic.virtualText": true,
   "diagnostic.virtualTextPrefix": "Coc Diagnostic: ",
   "diagnostic.messageTarget": "float",
-  "diagnostic.refreshOnInsertMode": true,
   "diagnostic.refreshAfterSave": true,
   "signature.hideOnTextChange": true,
   "vimlsp.suggest.fromVimruntime": true,
@@ -220,6 +234,16 @@
   "git.addGlameToVirtualText": true,
   "git.addGlameToBufferVar": true,
   "git.untrackedDecorator": "Untracked:",
+  "git.virtualTextPrefix": "Coc-Git:",
+  "git.enableGlobalStatus": true,
+  "powershell.powerShellExePath": "C:\\pwsh\\7-preview\\pwsh.exe",
+  "powershell.codeFolding.showLastLine": false,
+  "powershell.integratedConsole.showOnStartup": false,
+  "powershell.debugging.createTemporaryIntegratedConsole": false,
+  "powershell.codeFormatting.openBraceOnSameLine": true,
+  "powershell.developer.editorServicesLogLevel": "Error",
+  "powershell.integratedConsole.focusConsoleOnExecute": false,
+  "powershell.codeFormatting.useCorrectCasing": true,
   "codeLens.separator": "‣",
   "codeLens.enable": true,
   "session.directory": "~/.config/nvim/session",
@@ -229,6 +253,5 @@
   ],
   "snippets.extends": {"python": ["rst"]},
   "snippets.snipmate.author": "Faris A. Chugthai",
-  "snippets.trace": "verbose",
   "snippets.triggerCharacters": ["Tab", "C-j"]
 }

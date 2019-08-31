@@ -23,7 +23,9 @@ noremap <Leader>cd <Cmd>cd %:p:h<CR><Bar><Cmd>pwd<CR>
 " WHOA THIS MAPPING IS TOO COOL
 inoremap <nowait> ( ()<C-G>U<Left>
 inoremap <nowait> [ []<C-G>U<Left>
-inoremap <nowait> < <><C-G>U<Left>
+" This one gets horrifically annoying there are so many situations where you
+" don't need it
+" inoremap <nowait> < <><C-G>U<Left>
 
 " Options: {{{1
 if has('+shellslash')
@@ -41,9 +43,12 @@ let &path = &path . ',' . expand('$VIMRUNTIME')
 command -nargs=0 ScratchBuffer call pydoc_help#scratch_buffer()
 
 " Commands: {{{1
+" These 2 commands are for parsing the output of scriptnames though a command
+" like :TBrowseScriptnames would probably be easier to work with
 command! -nargs=? Scriptnames call vimscript#Scriptnames(<f-args>)
 command! -nargs=0 Scriptnamesdict echo vimscript#ScriptnamesDict()
 
+" Useful if you wanna see all available funcs provided by nvim
 command! -nargs=0 NvimAPI
       \ new|put =map(filter(api_info().functions,
       \ '!has_key(v:val,''deprecated_since'')'),

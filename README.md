@@ -29,7 +29,6 @@ used it from:
 * Neovim-QT on both Ubuntu and Windows
 * Bash in a dozen different terminals
 
-To ensure no assumptions are made that r
 ```vim
 
 let g:termux = isdirectory('/data/data/com.termux')
@@ -199,14 +198,33 @@ functionality to your vim editing.  You can learn more about it with
 This repository contains:
 
 - Real time interactive displays for reStructured Text files.
+
   - The plugin [Riv.vim](https://www.github.com/gu-fan/riv.vim) allows one to
   run `docutils` on a buffer and then preview it in a browser.
+
 - Asynchronous linters thanks to the Asynchronous Lint Engine or
-[ALE](https://www.github.com/w0rp/ale).
+  [ALE](https://www.github.com/w0rp/ale).
+
   - Support for specific filetype dependent linters including ReStructured Text
   are configured in my
   [dotfiles](https://www.github.com/farisachugthai/dotfiles) repo.
+
   - Specifically Flake8, pydocstyle, the python-language-server and others.
+
+#### Filetype Detection
+
+- Can't say I ever noticed this before but here's an interesting section from
+  `$VIMRUNTIME/filetype.vim`.
+
+```vim
+
+" Pipenv Pipfiles
+au BufNewFile,BufRead Pipfile			setf config
+au BufNewFile,BufRead Pipfile.lock		setf json
+
+```
+
+TIL that Pipfiles are officially recognized by the filetype detector in Nvim!
 
 ### Sources for all plugins
 
@@ -256,6 +274,8 @@ into as much of my workflow as possible.
 The init.vim file features a handful of snippets that are not only specific
 to Neovim, but require relatively new versions of neovim.
 
+#### Updating to a newer version
+
 Unfortunately the newest version of neovim in the Ubuntu18.04 repositories
 is 0.2.2, which didn't ship with the `stdpath()` function along with many other niceties.
 
@@ -263,6 +283,16 @@ Luckily upgrading is typically as simple as running:
 
     `sudo add-apt-repository ppa:neovim-ppa/unstable  # or`
     `choco install neovim --pre`
+
+#### Use of the `stdpath()`
+
+**Warning:**
+
+In version 0.3.1 Neovim created a function `stdpath()` that will
+return the value of the user's configuration directory regardless
+of platform or OS. It's a phenomenal function and greatly simplifies a huge
+number of complicated tasks; however, there are no checks to ensure the user
+is running a recent enough version of nvim to support this function.
 
 ## License
 

@@ -62,14 +62,6 @@ if !exists('g:gruvbox_guisp_fallback') || index(['fg', 'bg'], g:gruvbox_guisp_fa
   let g:gruvbox_guisp_fallback='NONE'
 endif
 
-if !exists('g:gruvbox_improved_strings')
-  let g:gruvbox_improved_strings=0
-endif
-
-if !exists('g:gruvbox_improved_warnings')
-  let g:gruvbox_improved_warnings=0
-endif
-
 if !exists('g:gruvbox_termcolors')
   let g:gruvbox_termcolors=256
 endif
@@ -527,16 +519,22 @@ endif
 hi! link NonText GruvboxBg2
 hi! link SpecialKey GruvboxFg2
 
-call s:HL('Visual',    s:none,  s:bg3, s:invert_selection)
+" call s:HL('Visual',    s:none,  s:bg3, s:invert_selection)
+hi Visual cterm=reverse gui=reverse guisp=NONE ctermbg=241 ctermfg=NONE guibg=#665c54 guifg=NONE
 hi! link VisualNOS Visual
 
-call s:HL('Search',    s:yellow, s:bg0, s:inverse)
-call s:HL('IncSearch', s:hls_cursor, s:bg0, s:inverse)
+hi Search cterm=reverse ctermfg=214 ctermbg=234 gui=reverse guifg=#fabd2f guibg=#1d2021
+hi IncSearch cterm=reverse ctermfg=208 ctermbg=234 gui=reverse guifg=#fe8019 guibg=#1d2021
+" call s:HL('Search',    s:yellow, s:bg0, s:inverse)
+" call s:HL('IncSearch', s:hls_cursor, s:bg0, s:inverse)
 
 " call s:HL('Underlined', s:blue, s:none, s:underline)
 hi Underlined cterm=underline ctermfg=109 gui=underline guifg=#83a598
-call s:HL('StatusLine',   s:bg2, s:fg1, s:inverse)
-call s:HL('StatusLineNC', s:bg1, s:fg4, s:inverse)
+
+hi StatusLine guifg=#504945 guibg=#ebdbb2 guisp=NONE gui=reverse cterm=reverse ctermfg=239 ctermbg=223
+hi StatusLineNC guifg=#3c3836 guibg=#a89984 guisp=NONE gui=reverse cterm=reverse ctermfg=237 ctermbg=246
+" call s:HL('StatusLine',   s:bg2, s:fg1, s:inverse)
+" call s:HL('StatusLineNC', s:bg1, s:fg4, s:inverse)
 
 " The column separating vertically split windows
 call s:HL('VertSplit', s:bg3, s:vert_split)
@@ -571,19 +569,23 @@ hi! link Noise              Question
 call s:HL('LineNr', s:bg4, s:number_column)
 
 " Column where signs are displayed
-call s:HL('SignColumn', s:none, s:sign_column)
-
+" call s:HL('SignColumn', s:none, s:sign_column)
+hi SignColumn guifg=NONE guibg=NONE guisp=NONE gui=NONE ctermfg=NONE ctermbg=237 guibg=#3c3836
 " Line used for closed folds
-call s:HL('Folded', s:gray, s:bg1, s:italic)
-
+" call s:HL('Folded', s:gray, s:bg1, s:italic)
+hi Folded cterm=italic ctermfg=245 ctermbg=237 gui=italic guifg=#928374 guibg=#3c3836
 " Column where folds are displayed
-call s:HL('FoldColumn', s:gray, s:bg1)
+" call s:HL('FoldColumn', s:gray, s:bg1)
 
+hi CursorLineNr guifg=#fabd2f guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi FoldColumn  guibg=NONE guisp=NONE gui=NONE ctermfg=245 ctermbg=237 guibg=#3c3836 guifg=#928374
+hi VertSplit guifg=#665c54 guibg=NONE guisp=NONE gui=NONE cterm=NONE
 " }}}
 " Cursor: {{{
 
 " Character under cursor
-call s:HL('Cursor', s:none, s:none, s:inverse)
+hi Cursor guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
+" call s:HL('Cursor', s:none, s:none, s:inverse)
 " Visual mode cursor, selection
 hi! link vCursor Cursor
 " Input moder cursor
@@ -593,15 +595,12 @@ hi! link lCursor Cursor
 
 " }}}
 " Syntax Highlighting: {{{
-
-if g:gruvbox_improved_strings == 0
-  hi! link Special GruvboxOrange
-else
-  call s:HL('Special', s:orange, s:none, s:italicize_strings)
-endif
-
-call s:HL('Comment', s:gray, s:none, s:italicize_comments)
-call s:HL('Todo', s:vim_fg, s:vim_bg, s:bold . s:italic)
+hi Special cterm=italic ctermfg=208 ctermbg=bg gui=italic guifg=#fe8019 guibg=bg
+" call s:HL('Special', s:orange, s:none, s:italicize_strings)
+hi Comment cterm=italic ctermfg=245 gui=italic guifg=#928374
+" call s:HL('Comment', s:gray, s:none, s:italicize_comments)
+" call s:HL('Todo', s:vim_fg, s:vim_bg, s:bold . s:italic)
+hi Todo cterm=bold,italic ctermfg=223 ctermbg=234 gui=bold,italic guifg=fg guibg=bg
 call s:HL('Error', s:aqua, s:vim_bg, s:inverse)
 
 " Generic statement
@@ -638,21 +637,26 @@ hi! link PreCondit GruvboxAqua
 
 " Generic constant
 hi! link Constant GruvboxPurple
+hi Constant ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE
+
 " Character constant: 'c', '/n'
-hi! link Character GruvboxPurple
+" hi! link Character GruvboxPurple
+hi Character ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE
+
 " String constant: "this is a string"
-if g:gruvbox_improved_strings == 0
-  call s:HL('String',  s:green, s:none, s:italicize_strings)
-else
-  " May 11, 2019: Don't change the background on strings
-  call s:HL('String',  s:green, s:none, s:italicize_strings)
-endif
+  " call s:HL('String',  s:green, s:none, s:italicize_strings)
+" Why doesnt string link to EVERYTHING OTHER CONSTANT
+hi String ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE
+
 " Boolean constant: TRUE, false
-hi! link Boolean GruvboxPurple
+hi Boolean ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE
+" hi! link Boolean GruvboxPurple
+hi Number ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE
 " Number constant: 234, 0xff
-hi! link Number GruvboxPurple
+" hi! link Number GruvboxPurple
+hi Float ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE
 " Floating point constant: 2.3e10
-hi! link Float GruvboxPurple
+" hi! link Float GruvboxPurple
 
 " Generic type
 hi! link Type GruvboxYellow
@@ -690,21 +694,29 @@ call s:HL('DiffChange', s:aqua, s:bg0, s:inverse)
 call s:HL('DiffText',   s:yellow, s:bg0, s:inverse)
 
 " }}}
+" Redraws: {{{
+" What the hell are these?
+" RedrawDebugClear xxx ctermbg=11 guibg=Yellow
+" RedrawDebugComposed xxx ctermbg=10 guibg=Green 
+" RedrawDebugNormal xxx cterm=reverse gui=reverse        
+" RedrawDebugRecompose xxx ctermbg=9 guibg=Red 
+
 " Spelling: {{{
 
 " Not capitalised word, or compile warnings
-if g:gruvbox_improved_warnings == 0
-  call s:HL('SpellCap',   s:none, s:none, s:undercurl, s:red)
-else
-  call s:HL('SpellCap',   s:green, s:none, s:bold . s:italic)
-endif
+" Don't add guisp=blue that shit looks weird and confusing
+hi SpellCap cterm=underline,italic ctermfg=109 gui=undercurl
+" call s:HL('SpellCap',   s:none, s:none, s:undercurl, s:red)
+" call s:HL('SpellCap',   s:green, s:none, s:bold . s:italic)
 " Not recognized word
-call s:HL('SpellBad',   s:none, s:none, s:undercurl, s:blue)
+" call s:HL('SpellBad',   s:none, s:none, s:undercurl, s:blue)
+hi SpellBad cterm=undercurl gui=undercurl guifg=#83a598 ctermfg=109 guisp=#83a598  
 " Wrong spelling for selected region
-call s:HL('SpellLocal', s:none, s:none, s:undercurl, s:aqua)
+" call s:HL('SpellLocal', s:none, s:none, s:undercurl, s:aqua)
 " Rare word
-call s:HL('SpellRare',  s:none, s:none, s:undercurl, s:purple)
-
+" call s:HL('SpellRare',  s:none, s:none, s:undercurl, s:purple)
+hi SpellLocal guifg=#8ec07c guibg=NONE guisp=#8ec07c gui=italic,undercurl cterm=italic,undercurl
+hi SpellRare guifg=#d3869b guibg=NONE guisp=#d3869b gui=italic,undercurl cterm=italic,undercurl
 " }}}
 " Plugin specific -------------------------------------------------------------
 " AKA Plugins You Don't Have: {{{
@@ -2139,9 +2151,4 @@ function! GruvboxHlsHideCursor()
 endfunction
 
 " }}}
-
-" Atexit: {{{
-
-let &cpoptions = s:cpo_save
-unlet s:cpo_save
 " vim: set sw=2 ts=2 sts=2 et fdm=marker fdls=0:

@@ -2,7 +2,7 @@
     " File: cheat40.vim
     " Author: Faris Chugthai
     " Description: Ftplugin mod for cheat40 window
-    " Last Modified: May 26, 2019
+    " Last Modified: Aug 30, 2019
 " ============================================================================
 
 " Guard: {{{1
@@ -22,6 +22,7 @@ setlocal relativenumber
 setlocal expandtab
 setlocal wrap
 setlocal keywordprg=:help
+setlocal linebreak
 
 " Kinda works. Statusline doesn't revert correctly though.
 " DUDE THIS DOESNT WORK WTH
@@ -29,7 +30,7 @@ setlocal keywordprg=:help
 
 " Atexit: {{{1
 " What is the abbreviation of nowrap? :set nowr<Tab> shows multiple choices.
-let b:undo_ftplugin = 'set nu< rnu< et< wrap< kp<'
+let b:undo_ftplugin = 'set nu< rnu< et< wrap< kp< lbr<'
 "      \ unlet statusline'
 
 let &cpoptions = s:cpo_save

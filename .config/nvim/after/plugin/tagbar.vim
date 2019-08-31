@@ -22,6 +22,7 @@ set cpoptions-=C
 let g:tagbar_left = 1
 let g:tagbar_width = 30
 let g:tagbar_sort = 0
+let g:tagbar_singleclick = 1
 
 " If you set this option the Tagbar window will automatically close when you
 " jump to a tag. This implies |g:tagbar_autofocus|. If enabled the "C" flag will
@@ -39,15 +40,22 @@ let g:tagbar_foldlevel = 2
 " If this variable is set to 1 then moving the cursor in the Tagbar window will
 " automatically show the current tag in the preview window.
 " Dude it takes up a crazy amount of room on termux and is generally quite annoying
+" Don't know why we only went with windows only. that setting is annoying
+" everywhere.
+let g:tagbar_autopreview = 0
+
 if !has('unix')
-  let g:tagbar_autopreview = 1
-  let g:tagbar_ctags_bin = 'C:/tools/miniconda3/envs/neovim/Library/bin/ctags.exe'
+  " let g:tagbar_autopreview = 1
+  if filereadable('C:/tools/miniconda3/envs/neovim/Library/bin/ctags.exe')
+    let g:tagbar_ctags_bin = 'C:/tools/miniconda3/envs/neovim/Library/bin/ctags.exe'
+  endif
 endif
 
 " Mappings: {{{1
 
 noremap <silent> <F8> <Cmd>TagbarToggle<CR>
 noremap! <silent> <F8> <Cmd>TagbarToggle<CR>
+tnoremap <silent> <F8> <Cmd>TagbarToggle<CR>
 
 " Atexit: {{{1
 

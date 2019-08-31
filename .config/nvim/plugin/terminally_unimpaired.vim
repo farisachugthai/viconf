@@ -9,7 +9,7 @@
 if exists('g:did_terminally_unimpaired_vim') || &compatible || v:version < 700
     finish
 endif
-" let g:did_terminally_unimpaired_vim = 1
+let g:did_terminally_unimpaired_vim = 1
 
 let s:cpo_save = &cpoptions
 set cpoptions-=C
@@ -53,10 +53,17 @@ tnoremap <C-w>w <C-><C-N><C-w>w
 " even in vim8.0+. Also requires htop which more than likely rules out Win32.
 
 " Need to use enew in case your previous buffer setl nomodifiable
-noremap <Leader>ah <Cmd>wincmd v<CR><bar><Cmd>enew<CR><bar>term://htop
+if executable('htop')
+  noremap <Leader>ah <Cmd>wincmd v<CR><bar><Cmd>enew<CR><bar>term://htop
+endif
 
 
-" Autocmd For Statusline: {{{1
+" Autocmd For Term Buffers: {{{1
+
+" Vim doesn't have this autocmd event
+if !has('nvim')
+  finish
+endif 
 
 augroup TermGroup
   " Statusline in the terminal

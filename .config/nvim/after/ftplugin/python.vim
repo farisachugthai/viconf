@@ -19,17 +19,12 @@ if &filetype != 'python'
   finish
 endif
 
-" I mean is it not a little ridiculous that I have to do shit like that
-
-let s:debug = 0
-
 " Options: {{{1
 setlocal linebreak
 setlocal textwidth=120
 
 setlocal commentstring=#\ %s
 setlocal tabstop=8 shiftwidth=4 expandtab softtabstop=4
-let b:python_highlight_all = 1
 let g:python_highlight_all = 1
 setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 
@@ -38,17 +33,15 @@ setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 setlocal colorcolumn=80,120
 setlocal foldmethod=indent
 
-setlocal keywordprg=:PydocThis
+" setlocal keywordprg=:PydocThis
+nnoremap K <Cmd>'<,'>PydocThis<CR>
+" Use xnoremap because I wouldn't want this in select mode
+xnoremap K <Cmd>'<,'>PydocThis<CR>
 
-setlocal suffixesadd+=.py
-
+setlocal suffixesadd+=.py,.rst
 setlocal omnifunc=python3complete#Complete
-
 setlocal iskeyword+=.
-
-" Path: {{{2
-
-let &path = pydoc_help#PythonPath()
+let &path = ftplugins#PythonPath()
 
 " Compiler: {{{1
 
@@ -73,7 +66,7 @@ if executable('yapf')
     setlocal equalprg=yapf
     setlocal formatprg=yapf
 
-  command! -buffer -complete=buffer -nargs=0 YAPF call YAPF()
+  command! -buffer -complete=buffer -nargs=0 YAPF call ftplugins#YAPF()
   command! -buffer -complete=buffer -nargs=0 YAPFI exec '!yapf -i %'
   command! -buffer -complete=buffer -nargs=0 YAPFD cexpr! exec '!yapf -d %'
 
@@ -91,14 +84,22 @@ endif
 " ALE: {{{1
 
 if has_key(plugs, 'ale')
-  call pydoc_help#ALE_Python_Conf()
+  call ftplugins#ALE_Python_Conf()
 endif
+
+" Coc: {{{1
+"
+" Just tried this and it worked! So keep checking :CocCommand output
+if !empty(g:did_coc_loaded)
+  command! -nargs=? CocPython call CocActionAsync('runCommand', 'python.startREPL', shellescape(<q-args>))|
+endif
+
 
 " Atexit: {{{1
 
 " A bunch missing. Check :he your-runtime-path somewhere around there is a
 " good starter for writing an ftplugin
-let b:undo_ftplugin = 'set lbr< tw< cms< et< sts< ts< sw< cc< fdm< kp< sua< isk<'
+let b:undo_ftplugin = 'set lbr< tw< cms< et< sts< ts< sw< cc< fdm< sua< isk<'
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

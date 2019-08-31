@@ -6,10 +6,8 @@
 " ============================================================================
 
 augroup YourFTDetect
-
   au!
   " JSON
   au BufNewFile,BufRead *.json,*.jsonp,*.webmanifest,*.code-workspace	setf json
 " Ftdetect for json to add .code-workspace
-
-augroup YourFtDetect
+augroup END

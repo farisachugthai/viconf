@@ -14,7 +14,6 @@ let g:did_ftplugins_vim = 1
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
-
 function! ftplugins#ALE_JSON_Conf() abort  " {{{1
   " Standard fixers defined for JSON
   let b:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
@@ -145,6 +144,96 @@ function! ftplugins#ALE_JS_Conf() abort  " {{{1
     let b:ale_fixers += ['prettier']
   endif
 endfunction
+
+
+function! ftplugins#ALE_Vim_Conf() abort  " {{{1
+  let b:ale_linters = ['ale_custom_linting_rules']
+  let b:ale_linters_explicit = 1
+
+  if executable('vint')
+    let b:ale_linters += ['vint']
+  endif
+endfunction
+
+" Python: {{{1
+
+function! ftplugins#PythonPath() abort  " {{{1
+  " Set up the path for python files
+  let s:orig_path = &path
+
+  if !empty(g:python3_host_prog)
+    " I think it's only the root on unix
+    " Miniconda3 on windows you only go up 1
+    if has('unix')
+      let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h:h')
+    else
+      let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h')
+    endif
+  else
+    return s:orig_path
+  endif
+
+  let s:site_pack = s:root_dir . '/lib/python3.7/site-packages/**3'  " max out at 3 dir deep
+  let s:path =  s:site_pack . ',' . s:orig_path
+  return s:path
+
+endfunction
+
+function! ftplugins#YAPF() abort  " {{{1
+  if exists(':TBrowseOutput')
+    " Realistically should accept func args
+    :TBrowseOutput !yapf %
+  else
+    " save old buffer
+    let s:old_buffer = nvim_get_buffer_lines()
+     call pydoc_help#scratch_buffer()
+  endif
+endfunction
+
+
+function! ftplugins#ALE_Python_Conf() abort  " {{{1
+    let b:ale_linters = ['flake8', 'pydocstyle', 'pyls']
+    let b:ale_linters_explicit = 1
+    let b:ale_python_pyls_config = {
+          \   'pyls': {
+          \     'plugins': {
+          \       'pycodestyle': {
+          \         'enabled': v:false
+          \       },
+          \       'flake8': {
+          \         'enabled': v:true
+          \       }
+          \     }
+          \   },
+          \ }
+
+    let g:ale_virtualenv_dir_names = []
+    if isdirectory(expand('~/virtualenvs'))
+      let g:ale_virtualenv_dir_names += [ expand('~/virtualenvs') ]
+    elseif isdirectory('C:tools/miniconda3')
+      let g:ale_virtualenv_dir_names += [ 'C:/tools/miniconda3' ]
+    endif
+
+    if isdirectory(expand('~/.local/share/virtualenvs'))
+      let g:ale_virtualenv_dir_names += [ expand('~/.local/share/virtualenvs') ]
+    endif
+
+  let b:ale_fixers = [
+        \ 'remove_trailing_lines',
+        \ 'trim_whitespace',
+        \ 'reorder-python-imports',
+        \ ]
+
+  if executable('yapf')
+      let b:ale_fixers += ['yapf']
+  else
+      if executable('autopep8')
+          let b:ale_fixers += ['autopep8']
+      endif
+  endif
+endfunction
+
+
 
 " Atexit: {{{1
 let &cpoptions = s:cpo_save
