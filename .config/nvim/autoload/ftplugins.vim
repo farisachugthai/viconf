@@ -16,8 +16,6 @@ set cpoptions-=C
 
 
 function! ftplugins#ALE_JSON_Conf() abort  " {{{1
-  if s:debug | echomsg 'JSON ftplugin was called' | endif
-
   " Standard fixers defined for JSON
   let b:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
 

@@ -28,10 +28,13 @@ if empty('plugs') | let plugs = {} | endif
 " So let's move that and stdpath('data')/site up front. Definitely stays after the plugins definition.
 let &rtp = stdpath('config') . ',' . stdpath('data') . '/site,' . &rtp
 
-" Global Options: {{{1
-runtime remote.vim
+" Setup the colorscheme early otherwise it'll start colorless
+" AH we have to source the plugins first because otherwise it'll try to source the colo twice
+if &term =~# 'xterm-256color' || &term ==# 'cygwin' || &term ==# 'builtin_tmux'
+      \ || &term ==# 'tmux-256color' || &term ==# 'builtin-vtpcon' || &term==# 'screen-256color'
+  set termguicolors
+endif
 
-if !has('unix') | runtime autoload/msdos.vim | endif
 set synmaxcol=400                       " Lower max syntax highlighting
 syntax sync fromstart
 
@@ -45,11 +48,8 @@ function! Gruvbox() abort
 endfunction
 call Gruvbox()
 
-if &term =~# 'xterm-256color' || &term ==# 'cygwin' || &term ==# 'builtin_tmux'
-      \ || &term ==# 'tmux-256color' || &term ==# 'builtin-vtpcon' || &term==# 'screen-256color'
-  set termguicolors
-endif
-
+runtime remote.vim
+if !has('unix') | runtime autoload/msdos.vim | endif
 let g:loaded_vimballPlugin     = 1
 let g:loaded_getscriptPlugin   = 1
 let g:loaded_2html_plugin      = 1
@@ -113,10 +113,6 @@ set pumheight=15
 set ignorecase
 set smartcase infercase
 
-set path+=**               " Recursively search dirs with :find
-let &path = &path . ',' . stdpath('config')
-let &path = &path . ',' . expand('$VIMRUNTIME')
-
 set makeencoding=char         " Used by the makeprg. system locale is used
 set sessionoptions+=unix,slash viewoptions+=unix,slash
 set sessionoptions-=buffers,winsize viewoptions-=options
@@ -170,9 +166,6 @@ noremap <Down> gj
 inoremap gI gi
 " Avoid accidental hits of <F1> while aiming for <Esc>
 noremap! <F1> <Esc>
-" Dude read over :he getcharsearch(). Now ; and , search forward backward no matter what!!!
-noremap <expr> ; getcharsearch().forward ? ';' : ','
-noremap <expr> , getcharsearch().forward ? ',' : ';'
 
 runtime macros/matchit.vim
 set showmatch matchpairs+=<:>

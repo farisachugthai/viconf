@@ -1,9 +1,8 @@
 # ============================================================================
-    # File: .vintrc
-    # Vim: set ft=yaml:
-    # Author: Faris Chugthai
-    # Description: Linter for vimscript. Written in python
-    # Last Modified: Mar 15, 2019
+# File  : .vintrc
+# Author: Faris Chugthai
+# Description: Linter for vimscript. Written in python
+# Last Modified: Aug 25, 2019
 # ============================================================================
 
 # Vint follows yaml formatting so no more " comments
@@ -25,3 +24,10 @@ policies:
     #     enabled: false
     ProhibitSetNoCompatible:
         enabled: false
+    # gonna set some newly discovered checks to true
+    ProhibitUnnecessaryDoubleQuote:
+        enabled: true
+    ProhibitEqualTildeOperator:
+        enabled: true
+    ProhibitNoAbortFunction:
+        enabled: true

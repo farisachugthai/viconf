@@ -106,6 +106,7 @@ CronTab
 Ctrl
 Cygwin
 Cygwin's
+Cyrille
 DDG
 DEVNULL
 DHCP
@@ -162,6 +163,7 @@ GitHub
 Gitignore
 Google
 Gravatar
+Grinberg's
 Gruvbox
 GuiMacro
 Gvim
@@ -216,6 +218,7 @@ MDN
 MGMT
 MIT600
 MOTW
+MRU
 MRU's
 MSDOS
 MathCAD
@@ -327,9 +330,11 @@ RPC
 ReStructured
 ReStructuredText
 ReadTheDocs
+Redux
 Reitz
 RemoteSigned
 Rewatched
+Rossant
 RubyGems
 RuntimeError
 SCADA
@@ -381,6 +386,7 @@ SubgraphOS
 Subkeys
 Submodules
 Subprocesses
+Subtrees
 SuperUser
 Supima
 TLDP
@@ -658,6 +664,7 @@ dirstat
 distutils
 django
 dlink
+dlink2
 dns
 dnssec
 dockerfile
@@ -1446,8 +1453,11 @@ submodule
 submodules
 subnetting
 subprocess
+subproject's
 subshell
 subshells
+subtree
+subtrees
 sudo
 surrogateescape
 symlink
@@ -1542,6 +1552,7 @@ unicode
 uninstall
 uniq
 unittest
+unittest's
 unittests
 unix
 unmap
@@ -1689,10 +1700,3 @@ zsh
 zshrc
 µBlock
 µMatrix
-Subtrees
-subproject's
-subtrees
-subtree
-dlink2
-Rossant
-Cyrille

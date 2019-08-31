@@ -147,9 +147,8 @@ augroup fzfstatusline
     autocmd! FileType fzf
     autocmd FileType fzf set laststatus=0 noshowmode noruler
     \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
-    autocmd! FileType fzf call find_files#fzf_statusline()
-    " Holy hell this worked perfectly!
-    autocmd! BufLeave if &ft==fzf | unlet &statusline && runtime plugin/stl.vim | endif
+    autocmd FileType fzf call find_files#fzf_statusline()
+    \| autocmd BufLeave <buffer> unlet &statusline && runtime plugin/stl.vim
 augroup end
 
 if filereadable('/usr/share/dict/words')
@@ -170,9 +169,7 @@ command! -bang -nargs=* -complete=file_in_path Find
       \ <bang>0)
 
 " Grep: {{{1
-" Unfortunately the bang doesn't move to a new window. TODO
-" Opens matches in a split. Appending ! gives an error.
-" How do we fix that?
+" TODO: Doesn't work at all anymore
 command! -nargs=1 -bang -bar Grep fzf#run(fzf#wrap({
       \ 'source': 'silent! grep! <q-args>',
       \ 'options': ['--multi', '--ansi', '--border'],
@@ -182,14 +179,15 @@ command! -nargs=1 -bang -bar Grep fzf#run(fzf#wrap({
 
 
 " GGrep: {{{1
-" From fzf-vim.txt
-" fzf-vim-advanced-customization
-" Command for git grep
 " - fzf#vim#grep(command, with_column, [options], [fullscreen])
+"   If you're interested it would be kinda neat to modify that `dir` line
+"   so that it was formatted to accept fzf options
 command! -bang -nargs=* GGrep
   \ call fzf#vim#grep(
-  \   'git grep --line-number '.shellescape(<q-args>), 0,
-  \   {'dir': systemlist('git rev-parse --show-toplevel')[0] }, <bang>0)
+  \   'git grep --line-number --color=always ' . shellescape(<q-args>),
+  \   0,
+  \   {'dir': systemlist('git rev-parse --show-toplevel')[0]},
+  \   <bang>0)
 
 " Ag: {{{1
 

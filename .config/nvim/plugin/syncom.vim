@@ -15,15 +15,44 @@ let s:cpo_save = &cpoptions
 set cpoptions-=C
 
 " Options: {{{1
-
-" Admittedly I kinda know why the screen looks so small
 if &textwidth!=0
   setl colorcolumn=+1
 else
   setl colorcolumn=80
 endif
 
-" Commands: {{{1
+" Should we set a corresponding grepformat?
+if executable('rg')
+    let s:rg = 'rg'
+elseif executable('rg.exe')  " fucking windows
+    let s:rg = 'rg.exe'
+endif
+
+let &grepprg = s:rg . ' --vimgrep --no-messages --color=never --smart-case --no-messages ^'
+
+" Autocmd For Highlighting Searches: {{{1
+
+set nohlsearch
+augroup vimrc_incsearch_highlight
+    autocmd!
+    autocmd CmdlineEnter /,\? :set hlsearch
+    autocmd CmdlineLeave /,\? :set nohlsearch
+augroup END
+
+" While we're setting up stuff for searches
+
+" Search Mappings: {{{1
+
+" Dude read over :he getcharsearch(). Now ; and , search forward backward no matter what!!!
+noremap <expr> ; getcharsearch().forward ? ';' : ','
+noremap <expr> , getcharsearch().forward ? ',' : ';'
+
+" Search mappings: These will make it so that going to the next one in a
+" search will center on the line it's found in.
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+" Highlighting Commands: {{{1
 
 " Did you know that both -complete=color and -complete=highlight are things??
 command! HL call syncom#HL()
@@ -35,6 +64,7 @@ command! HiQF call syncom#HiQF()
 " knew where to check.
 command! SyntaxInfo call g:syncom#get_syn_info()
 
+" Working:
 command! HiTest call g:syncom#hitest()
 
 " Plug Mappings: {{{1
@@ -51,22 +81,14 @@ nnoremap <Plug>SyntaxInfo <Cmd>SyntaxInfo<CR>
 " | endif
 
 " NewGrep: {{{1
-
-" 06/13/2019: Just got moved up so that the grep command down there uses the
-" new grepprg
-" Should we set a corresponding grepformat?
-let &grepprg = 'rg --vimgrep --no-messages --color=never --smart-case --no-messages ^'
-
-" he quickfix
+" From `:he quickfix`
 command! -nargs=+ NewGrep execute 'silent grep! <args>' | copen
-
 
 " Title: {{{1
 " From `:he change`  line 352 tag g?g?
 " Adding range means that the command defaults to current line
 " Need to add a check that we're in visual mode and drop the '<,'> if not.
 command! -nargs=0 -range Title <Cmd>'<,'>s/\v<(.)(\w*)/\u\1\L\2/g
-
 
 " Toggle Search Highlighting: {{{1
 set nohlsearch
@@ -75,7 +97,6 @@ augroup vimrc_incsearch_highlight
     autocmd CmdlineEnter /,\? :set hlsearch
     autocmd CmdlineLeave /,\? :set nohlsearch
 augroup END
-
 
 " Atexit: {{{1
 

@@ -32,22 +32,24 @@
   "suggest.enablePreview": true,
   "suggest.fixInsertedWord": true,
   "suggest.floatEnable": true,
-  "suggest.LowPrioritySourceLimit": 0,
   "suggest.keepCompleteopt": true,
-  "suggest.minTriggerInputLength": 3,
+  "suggest.LowPrioritySourceLimit": 0,
+  "suggest.minTriggerInputLength": 2,
   "suggest.noselect": true,
   "suggest.preferCompleteThanJumpPlaceholder": true,
-  "suggest.snippetIndicator": "[Coc-US]",
-  "suggest.triggerAfterInsertEnter": true,
+  "suggest.snippetIndicator": "[Coc]",
   "suggest.timeout": 800,
+  "suggest.triggerAfterInsertEnter": true,
 
   "python.analysis.diagnosticEnabled": true,
   "python.analysis.logLevel": "Warning",
   "python.analysis.openFilesOnly": false,
   "python.autoComplete.addBrackets": true,
   "python.jediEnabled": true,
+  "python.jediMemoryLimit": -1,
   "python.jediShortcut": "Jedi",
   "python.linting.pylintEnabled": false,
+
   "python.terminal.executeInFileDir": true,
   "python.trace.server": "messages",
   "python.venvFolders": [
@@ -130,17 +132,7 @@
     }
   },
 
-  "list.extendedSearchMode": true,
-
-  "list.source.grep.defaultArgs": ["-smartcase", "-regex", "-workspace"],
-  "list.source.grep.defaultOptions": ["--auto-preview", "--normal", "--interactive"],
-  "list.source.grep.args": [
-    "--hidden", "--smart-case", "--no-column", "--no-line-number", 
-    "--no-messages", "--crlf", "--color=never", "--files"
-   ],
-
-  "list.source.symbols.defaultOptions": ["--interactive", "--number-select"],
-
+  "list.source.folders.defaultOptions": ["--top", "--auto-preview", "--normal", "--interactive"],
   "list.source.files.command": "rg",
   "list.source.files.args": [
     "--hidden", "--smart-case", "--no-column", "--no-line-number", 
@@ -154,6 +146,16 @@
   ],
   "list.source.files.defaultOptions": ["--number-select", "--auto-preview", "--top"],
 
+  "list.source.grep.defaultArgs": ["-smartcase", "-regex", "-workspace"],
+  "list.source.grep.defaultOptions": ["--auto-preview", "--normal", "--interactive"],
+  "list.source.grep.args": [
+    "--hidden", "--smart-case", "--no-column", "--no-line-number", 
+    "--no-messages", "--crlf", "--color=never", "--files"
+   ],
+
+  "list.source.lists.defaultOptions": ["--normal", "--top"],
+  "list.source.links.defaultOptions": ["--top", "--normal"],
+  "list.source.lines.defaultOptions": ["--top", "--interactive", "--normal", "--auto-preview"],
   "list.source.mru.maxLength": 100,
   "list.source.mru.excludePatterns": [
     "**/.git/*",
@@ -164,13 +166,11 @@
   ],
   "list.source.mru.defaultOptions": ["--auto-preview", "--normal"],
 
-  "list.source.lists.defaultOptions": ["--normal", "--top"],
-  // kinda wanna do this for everything
-  "list.source.links.defaultOptions": ["--top", "--normal"],
-  "list.source.lines.defaultOptions": ["--top", "--interactive", "--normal", "--auto-preview"],
+  "list.source.symbols.defaultOptions": ["--interactive", "--number-select"],
 
-  "list.previewHighlightGroup": "IdentifierBold",
+  "list.extendedSearchMode": true,
   "list.limitLines": 500,
+  "list.previewHighlightGroup": "IdentifierBold",
   "list.insertMappings": {
     "<C-r>": "do:refresh",
     "<C-n>": "normal:j",
@@ -185,16 +185,24 @@
   "list.normalMappings": {
     "<C-r>" : "do:refresh",
     "d"     : "action : delete",
+    "e"     : "action : edit",
     "<C-x>" : "action : split",
     "<C-t>" : "action : tabe",
     "<A-p>" : "action:preview",
     "<CR>"  : "action : select"
   },
-  "coc.preferences.formatOnSaveFiletypes": ["javascript", "html", "css", "vim", "bash", "powershell", "python"],
-  "coc.preferences.extensionUpdateCheck": "daily",
   "coc.preferences.currentFunctionSymbolAutoUpdate": true,
-  "coc.preferences.previewAutoClose": true,
+  "coc.preferences.extensionUpdateCheck": "daily",
+  "coc.preferences.formatOnSaveFiletypes": ["javascript", "html", "css", "vim", "bash", "powershell", "python"],
   "coc.preferences.hoverTarget": "preview",
+  "coc.preferences.messageLevel": "error",
+  "coc.preferences.previewAutoClose": true,
+  "coc.preferences.useQuickfixForLocations": true,
+  "coc.source.buffer.firstMatch": false, 
+  "coc.source.buffer.shortcut": "CocBuffer: ",
+  "coc.source.file.shortcut": "CocFiles: ",
+  "coc.source.file.priority": 80,
+  "coc.source.tag.shortcut": "Coc-Tag:",
   "diagnostic.checkCurrentLine": true,
   "diagnostic.displayByAle": false,
   "diagnostic.level": "warning",
@@ -202,10 +210,19 @@
   "diagnostic.virtualText": true,
   "diagnostic.virtualTextPrefix": "Coc Diagnostic: ",
   "diagnostic.messageTarget": "float",
+  "diagnostic.refreshOnInsertMode": true,
   "diagnostic.refreshAfterSave": true,
   "signature.hideOnTextChange": true,
   "vimlsp.suggest.fromVimruntime": true,
+  "vimlsp.suggest.fromRuntimepath": true,
+  "vimlsp.indexes.runtimepath": true,
   "git.enableGutters": true,
+  "git.addGlameToVirtualText": true,
+  "git.addGlameToBufferVar": true,
+  "git.untrackedDecorator": "Untracked:",
+  "codeLens.separator": "‣",
+  "codeLens.enable": true,
+  "session.directory": "~/.config/nvim/session",
   "snippets.ultisnips.directories": [
     "~/.config/nvim/UltiSnips",
     "~/AppData/Local/nvim/UltiSnips"

@@ -70,6 +70,7 @@ if !empty(s:ubuntu)
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
   Plug 'ekalinin/Dockerfile.vim', {'for': 'dockerfile'}
   Plug 'luffah/vim-zim', {'for': ['zimwiki', 'zimindex']}
+  Plug 'fatih/vim-go'  " could add in {'do': ':GoInstallBinaries'}
 endif
 
 " It's very frustrating having termux slow down beyond repair but also frustrating
@@ -89,6 +90,9 @@ Plug 'junegunn/vim-peekaboo'
 Plug 'vim-voom/voom'
 Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
 
+if has('python3') && empty(s:termux)
+  Plug 'jupyter-vim/jupyter-vim'  " This plugin only makes sense when pythons loaded
+endif
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 

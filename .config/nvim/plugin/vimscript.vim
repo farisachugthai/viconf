@@ -30,6 +30,13 @@ if has('+shellslash')
   set shellslash
 endif
 
+" Moved out of init because this should only get sourced one time.
+" That g:did_better... guard at the top will ensure that we don't
+" add these entries to the path multiple times
+set path+=**               " Recursively search dirs with :find
+let &path = &path . ',' . stdpath('config')
+let &path = &path . ',' . expand('$VIMRUNTIME')
+
 " Scratch Buffers: {{{1
 command -nargs=0 ScratchBuffer call pydoc_help#scratch_buffer()
 

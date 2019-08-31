@@ -12,9 +12,22 @@ endif
 let g:did_sh_vim_after_ftplugin = 1
 
 let s:cpo_save = &cpoptions
-set cpoptions&vim
+set cpoptions-=C
+
+if &filetype !=# 'sh'
+  " sh files get sourced in to highlight everything from vim src files to
+  " markdown to rst and a whole bunch of others. so first check that we're not
+  " just being sourced for the syntax groups
+  finish
+endif
 
 " Options: {{{1
+
+" From none other than the shellcheck manpage!
+if executable('shellcheck') || executable('shellcheck.exe')
+  set makeprg=shellcheck\ -f\ gcc\ %
+  echomsg 'Using shellcheck for the compiler!'
+endif
 
 let g:is_bash = 1
 let g:sh_fold_enabled= 4  "   (enable if/do/for folding)

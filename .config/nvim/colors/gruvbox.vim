@@ -482,11 +482,7 @@ call s:HL('GruvboxAquaSign', s:aqua, s:sign_column, s:invert_signs)
 " General UI: {{{
 
 " Normal text
-call s:HL('Normal', s:fg1, s:bg0)
-
-" And to state it explicitly
-" Normal         xxx ctermfg=223 ctermbg=234 guifg=#ebdbb2 guibg=#1d2021
-" so keep those background colors in mind and use them for everything.
+hi! Normal ctermfg=223 ctermbg=234 guifg=#ebdbb2 guibg=#1d2021
 
 " Correct background (see issue #7):
 " --- Problem with changing between dark and light on 256 color terminal

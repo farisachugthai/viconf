@@ -1,8 +1,8 @@
 # ============================================================================
 #   " File: all.snippets
 #   " Author: Faris Chugthai
-#   " Description: all snippets
-#   " Last Modified: March 13, 2019
+#   " Description: Snippets for any filetype and no filetype
+#   " Last Modified: Aug 25, 2019
 # ============================================================================
 
 global !p
@@ -91,26 +91,6 @@ endsnippet
 snippet todo "TODO comment" bw
 `!p snip.rv=get_comment_format()[0]` ${2:TODO}: $0${3: <${4:`!v strftime('%d-%m-%y')`}${5:, `!v g:snips_author`}>} `!p snip.rv=get_comment_format()[2]`
 endsnippet
-
-#######################################################################
-#                              Vim folds                              #
-#######################################################################
-
-
-snippet fold "Insert a vim fold marker" b
-`!p snip.rv = get_comment_format()[0]` ${1:Fold description} `!p snip.rv = foldmarker()[0]`${2:1} `!p snip.rv = get_comment_format()[2]`
-endsnippet
-
-snippet foldc "Insert a vim fold close marker" b
-`!p snip.rv = get_comment_format()[0]` ${2:1}`!p snip.rv = foldmarker()[1]` `!p snip.rv = get_comment_format()[2]`
-endsnippet
-
-snippet foldp "Insert a vim fold marker pair" b
-`!p snip.rv = get_comment_format()[0]` ${1:Fold description} `!p snip.rv = foldmarker()[0]` `!p snip.rv = get_comment_format()[2]`
-${2:${VISUAL:Content}}
-`!p snip.rv = get_comment_format()[0]` `!p snip.rv = foldmarker()[1]` $1 `!p snip.rv = get_comment_format()[2]`
-endsnippet
-
 
 #######################################################################
 #                      Licensing and copyrights                       #
