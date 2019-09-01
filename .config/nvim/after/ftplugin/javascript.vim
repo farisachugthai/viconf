@@ -25,7 +25,7 @@ setlocal omnifunc=javascriptcomplete#CompleteJS
 
 " Set 'comments' to format dashed lists in comments.
 setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
-setlocal commentstring=//\  %s
+let &commentstring='// %s'
 
 if has_key(plugs, 'ale') && &filetype==#'javascript'
   call ftplugins#ALE_JS_Conf()

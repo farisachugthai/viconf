@@ -601,6 +601,7 @@ hi Comment cterm=italic ctermfg=245 gui=italic guifg=#928374
 " call s:HL('Comment', s:gray, s:none, s:italicize_comments)
 " call s:HL('Todo', s:vim_fg, s:vim_bg, s:bold . s:italic)
 hi Todo cterm=bold,italic ctermfg=223 ctermbg=234 gui=bold,italic guifg=fg guibg=bg
+
 call s:HL('Error', s:aqua, s:vim_bg, s:inverse)
 
 " Generic statement
@@ -648,7 +649,6 @@ hi Character ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE
 " Why doesnt string link to EVERYTHING OTHER CONSTANT
 hi String ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE
 
-" Boolean constant: TRUE, false
 hi Boolean ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE
 " hi! link Boolean GruvboxPurple
 hi Number ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE
@@ -661,7 +661,9 @@ hi Float ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE
 " Generic type
 hi! link Type GruvboxYellow
 " static, register, volatile, etc
-hi! link StorageClass GruvboxOrange
+" let's make them natch types
+" hi! link StorageClass GruvboxOrange
+hi StorageClass ctermfg=214 guifg=#fabd2f
 " struct, union, enum, etc.
 hi! link Structure GruvboxAqua
 " typedef

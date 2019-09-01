@@ -44,7 +44,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-surround'
-Plug 'SirVer/ultisnips'
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'w0rp/ale', { 'on': ['ALEEnable', 'ALEDetail'] }  " Follow spacemacs lead and use e for errors
 noremap <Leader>e <Plug>ALEEnable <bar> echomsg 'ALE Enable'
 noremap <Leader>ed <Plug>ALEDetail<CR>

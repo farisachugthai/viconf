@@ -97,8 +97,11 @@ command! -nargs=0 CocFormat :call CocAction('format')
 command! -nargs=? CocFold :call CocAction('fold', <f-args>)
 
 " use `:OR` for organize import of current buffer
-" Command doesn't work
-" command! -nargs=0 CSort :call CocAction('runCommand', 'editor.action.organizeImport')
+" command! -nargs=0 CocSort :call CocAction('runCommand', 'editor.action.organizeImport')
+
+" Just tried this and it worked! So keep checking :CocList commands and add
+" more as we go.
+command! -nargs=0 CocPython :call CocActionAsync('runCommand', 'python.startREPL')|
 
 " Atexit: {{{1
 let &cpoptions = s:cpo_save

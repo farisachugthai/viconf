@@ -6,10 +6,8 @@ dotfiles ~/projects/dotfiles/unix
 jupyter-extensions ~/.local/share/jupyter
 mpl /usr/share/doc/python-matplotlib-doc/tutorials
 nvim ~/AppData/Local/nvim
-nvim ~/AppData/Local/nvim
 plugged ~/.local/share/nvim/plugged
 python ~/python
-terminal ~/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe
 tlib ~/.local/share/nvim/plugged/tlib_vim/autoload/tlib
 tools C:/tools
 tutorials ~/Dropbox/python/tutorials

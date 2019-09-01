@@ -37,15 +37,8 @@
   "suggest.minTriggerInputLength": 2,
   "suggest.noselect": true,
   "suggest.preferCompleteThanJumpPlaceholder": true,
-<<<<<<< Updated upstream
   "suggest.snippetIndicator": "[Coc]",
-||||||| merged common ancestors
-  "suggest.snippetIndicator": "[Coc-US]",
   "suggest.triggerAfterInsertEnter": true,
-=======
-  "suggest.snippetIndicator": "[Coc:]",
-  "suggest.triggerAfterInsertEnter": true,
->>>>>>> Stashed changes
   "suggest.timeout": 800,
   "suggest.triggerAfterInsertEnter": true,
 
@@ -57,7 +50,6 @@
   "python.jediMemoryLimit": -1,
   "python.jediShortcut": "Jedi",
   "python.linting.pylintEnabled": false,
-
   "python.terminal.executeInFileDir": true,
   "python.trace.server": "messages",
   "python.venvFolders": [
@@ -140,42 +132,6 @@
     }
   },
 
-  "list.source.folders.defaultOptions": ["--top", "--auto-preview", "--normal", "--interactive"],
-  "list.source.files.command": "rg",
-  "list.source.files.args": [
-    "--hidden", "--smart-case", "--no-column", "--no-line-number", 
-    "--no-messages", "--crlf", "--color=never", "--files"
-  ],
-  "list.source.files.excludePatterns": [
-    "**/node_modules/*",
-    "**/.git/*",
-    "**/__pycache__/**",
-    "**/*.pyc"
-  ],
-  "list.source.files.defaultOptions": ["--number-select", "--auto-preview", "--top"],
-
-  "list.source.grep.defaultArgs": ["-smartcase", "-regex", "-workspace"],
-  "list.source.grep.defaultOptions": ["--auto-preview", "--normal", "--interactive"],
-  "list.source.grep.args": [
-    "--hidden", "--smart-case", "--no-column", "--no-line-number", 
-    "--no-messages", "--crlf", "--color=never", "--files"
-   ],
-
-  "list.source.lists.defaultOptions": ["--normal", "--top"],
-  "list.source.links.defaultOptions": ["--top", "--normal"],
-  "list.source.lines.defaultOptions": ["--top", "--interactive", "--normal", "--auto-preview"],
-  "list.source.mru.maxLength": 100,
-  "list.source.mru.excludePatterns": [
-    "**/.git/*",
-    "**/node_modules/*",
-    "/tmp/*",
-    "**/__pycache__/**",
-    "**/*.pyc"
-  ],
-  "list.source.mru.defaultOptions": ["--auto-preview", "--normal"],
-
-  "list.source.symbols.defaultOptions": ["--interactive", "--number-select"],
-
   "list.extendedSearchMode": true,
   "list.limitLines": 500,
   "list.previewHighlightGroup": "IdentifierBold",
@@ -188,6 +144,8 @@
     "<CR>" : "do:defaultaction",
     "<A-p>": "action:preview",
     "<C-h>": "do:help",
+	"<C-v>": "eval:@@",
+	"<C-V>": "eval:\"+",
     "<C-d>": "prompt:deleteforward"
   },
   "list.normalMappings": {
@@ -200,15 +158,55 @@
     "l"     : "action : load",
     "h"     : "action : help",
     " "    : "action : toggle",
+    "C" : "action:quickfix",
+    "o" : "action:open",
     "<CR>"  : "action : select"
   },
-  "coc.preferences.currentFunctionSymbolAutoUpdate": true,
-  "coc.preferences.extensionUpdateCheck": "daily",
-  "coc.preferences.formatOnSaveFiletypes": ["javascript", "html", "css", "vim", "bash", "powershell", "python"],
-  "coc.preferences.hoverTarget": "preview",
-  "coc.preferences.messageLevel": "error",
-  "coc.preferences.previewAutoClose": true,
-  "coc.preferences.useQuickfixForLocations": true,
+
+
+  "list.source.files.command": "rg",
+  "list.source.files.args": [
+    "--hidden", "--smart-case", "--no-column", "--no-line-number", 
+    "--no-messages", "--crlf", "--color=never", "--files"
+  ],
+  "list.source.files.excludePatterns": [
+    "**/node_modules/*",
+    "**/.git/*",
+    "**/__pycache__/**",
+    "**/*.pyc"
+  ],
+  "list.source.files.defaultOptions": ["--number-select", "--auto-preview", "--top"],
+  "list.source.folders.defaultOptions": ["--top", "--auto-preview", "--normal", "--interactive"],
+  "list.source.grep.defaultArgs": ["-smartcase", "-regex", "-workspace"],
+  "list.source.grep.defaultOptions": ["--auto-preview", "--normal", "--interactive"],
+  "list.source.grep.args": [
+    "--hidden", "--smart-case", "--no-column", "--no-line-number", 
+    "--no-messages", "--crlf", "--color=never", "--files"
+   ],
+
+  "list.source.helptags.defaultOptions": ["--top", "--normal"],
+  "list.source.lines.defaultOptions": ["--top", "--interactive", "--normal", "--auto-preview"],
+  "list.source.links.defaultOptions": ["--top", "--normal"],
+  "list.source.lists.defaultOptions": ["--normal", "--top"],
+
+
+  "list.source.mru.excludePatterns": [
+    "**/.git/*",
+    "**/node_modules/*",
+    "/tmp/*",
+    "**/__pycache__/**",
+    "**/*.pyc"
+  ],
+  "list.source.mru.defaultOptions": ["--auto-preview", "--normal"],
+
+  "list.source.symbols.defaultOptions": ["--interactive", "--number-select"],
+  "list.source.tags.defaultOptions": ["--top", "--normal"],
+
+  "list.source.words.defaultArgs": "--word",
+  "list.source.words.defaultOptions": ["--top", "--interactive", "--normal", "--auto-preview"],
+
+  "lists.disabledLists": ["colors", "filetypes", "snippets"],
+
   "coc.source.buffer.firstMatch": false, 
   "coc.source.buffer.shortcut": "CocBuffer: ",
   "coc.source.file.shortcut": "CocFiles: ",
@@ -217,7 +215,17 @@
   "coc.source.omni.priority": 99,
   "coc.source.omni.shortcut": "Coc-Omni:",
 
+
+  "coc.preferences.currentFunctionSymbolAutoUpdate": true,
+  "coc.preferences.extensionUpdateCheck": "daily",
+  "coc.preferences.formatOnSaveFiletypes": ["javascript", "html", "css", "vim", "bash", "powershell", "python"],
+  "coc.preferences.hoverTarget": "preview",
+  "coc.preferences.messageLevel": "error",
+  "coc.preferences.previewAutoClose": true,
+  "coc.preferences.useQuickfixForLocations": true,
   "diagnostic.refreshOnInsertMode": true,
+  "coc.preferences.jumpCommand": "edit",
+  "codeLens.separator": "‣",
   "diagnostic.checkCurrentLine": true,
   "diagnostic.displayByAle": false,
   "diagnostic.level": "warning",
@@ -226,6 +234,7 @@
   "diagnostic.virtualTextPrefix": "Coc Diagnostic: ",
   "diagnostic.messageTarget": "float",
   "diagnostic.refreshAfterSave": true,
+  "diagnostic.virtualTextLineSeparator": " \\ ",
   "signature.hideOnTextChange": true,
   "vimlsp.suggest.fromVimruntime": true,
   "vimlsp.suggest.fromRuntimepath": true,
@@ -235,6 +244,7 @@
   "git.addGlameToBufferVar": true,
   "git.untrackedDecorator": "Untracked:",
   "git.virtualTextPrefix": "Coc-Git:",
+  "git.branchCharacter": "",
   "git.enableGlobalStatus": true,
   "powershell.powerShellExePath": "C:\\pwsh\\7-preview\\pwsh.exe",
   "powershell.codeFolding.showLastLine": false,
@@ -244,9 +254,9 @@
   "powershell.developer.editorServicesLogLevel": "Error",
   "powershell.integratedConsole.focusConsoleOnExecute": false,
   "powershell.codeFormatting.useCorrectCasing": true,
-  "codeLens.separator": "‣",
-  "codeLens.enable": true,
-  "session.directory": "~/.config/nvim/session",
+  "typescript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
+  "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+  "refactor.openCommand": "vsplit",
   "snippets.ultisnips.directories": [
     "~/.config/nvim/UltiSnips",
     "~/AppData/Local/nvim/UltiSnips"

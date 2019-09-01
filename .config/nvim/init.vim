@@ -131,7 +131,7 @@ set diffopt=filler,context:0,hiddenoff,foldcolumn:2,icase,iwhite,indent-heuristi
  if has('patch-8.1.0360') | set diffopt+=internal,algorithm:patience | endif
 
 set modeline
-if exists('modelineexpr') | set modelineexpr | endif
+if exists('&modelineexpr') | set modelineexpr | endif
 set browsedir="buffer"   " which directory is used for the file browser
 let &showbreak = '↳ '                   " Indent wrapped lines correctly
 set breakindent breakindentopt=sbr

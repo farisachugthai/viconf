@@ -107,12 +107,15 @@ Ctrl
 Cygwin
 Cygwin's
 Cyrille
+Cyrille
+Cyrille
 DDG
 DEVNULL
 DHCP
 DOCSIS
 DataFrame
 DataFrames
+DataSource
 Datatypes
 Devicons
 Dicts
@@ -335,6 +338,8 @@ Reitz
 RemoteSigned
 Rewatched
 Rossant
+Rossant
+Rossant
 RubyGems
 RuntimeError
 SCADA
@@ -386,6 +391,8 @@ SubgraphOS
 Subkeys
 Submodules
 Subprocesses
+Subtrees
+Subtrees
 Subtrees
 SuperUser
 Supima
@@ -665,6 +672,8 @@ distutils
 django
 dlink
 dlink2
+dlink2
+dlink2
 dns
 dnssec
 dockerfile
@@ -720,6 +729,7 @@ ext3
 ext4
 fallback
 faris
+farischugthai
 fd
 fdupes
 ffmpeg
@@ -793,6 +803,7 @@ gtk3
 gufw
 gui
 guibg
+guido
 guifg
 gvimrc
 gztar
@@ -1454,9 +1465,15 @@ submodules
 subnetting
 subprocess
 subproject's
+subproject's
+subproject's
 subshell
 subshells
 subtree
+subtree
+subtree
+subtrees
+subtrees
 subtrees
 sudo
 surrogateescape

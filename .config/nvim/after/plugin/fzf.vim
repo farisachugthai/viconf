@@ -163,14 +163,13 @@ endif
 " So that this command behaves similarly to the built in find.
 command! -bang -nargs=* -complete=file_in_path Find
       \ call fzf#vim#grep(
-      \ 'rg --no-heading --smart-case --no--messages ^ '
+      \ 'rg --no-heading --smart-case --no-messages ^ '
       \ . shellescape(<q-args>), 1, <bang>0 ? fzf#vim#with_preview('up:60%')
       \ : fzf#vim#with_preview('right:50%:hidden', '?'),
       \ <bang>0)
 
 " Grep: {{{1
-" TODO: Doesn't work at all anymore
-command! -nargs=1 -bang -bar Grep fzf#run(fzf#wrap({
+command! -nargs=? -bang -bar Grep fzf#run(fzf#wrap({
       \ 'source': 'silent! grep! <q-args>',
       \ 'options': ['--multi', '--ansi', '--border'],
       \ <bang>0 ? fzf#vim#with_preview('up:60%')
