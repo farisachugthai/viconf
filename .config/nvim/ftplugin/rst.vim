@@ -21,13 +21,12 @@ setlocal colorcolumn=80
 setlocal linebreak
 setlocal foldlevel=2
 setlocal foldlevelstart=2
-setlocal spell!
 setlocal iskeyword+=.
 
 if exists(':PydocThis')
   setlocal keywordprg=:PydocThis
 else
-  setlocal keywordprg=pydoc
+  setlocal keywordprg=!pydoc
 endif
 
 augroup RstCompiler

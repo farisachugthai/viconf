@@ -111,7 +111,8 @@ function! TabMaps() abort
 
   " Opens a new tab with the current buffer's path
   " Super useful when editing files in the same directory
-  nnoremap <Leader>te <Cmd>tabedit <c-r>=expand("%:p:h")<CR>
+  " TODO: Doesn't work as expected
+  " nnoremap <Leader>te <Cmd>tabedit <c-r>=expand("%:p:h")<CR>
 
   " It should also be easier to edit the config. Bind similarly to tmux
   nnoremap <Leader>ed <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>

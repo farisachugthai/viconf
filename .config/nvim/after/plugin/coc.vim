@@ -34,8 +34,8 @@ nnoremap [g <Plug>(coc-diagnostic-prev)
 nnoremap ]g <Plug>(coc-diagnostic-next)
 
 " Remap for rename current word
-nnoremap <F2> <Plug>(coc-rename)
-xnoremap <F2> <Cmd>CocCommand document.renameCurrentWord<CR>
+nnoremap <F2> <Plug>(coc-refactor)
+xnoremap <F2> <Cmd>'<,'>CocCommand document.renameCurrentWord<CR>
 
 augroup CocConf
   au!
@@ -50,6 +50,7 @@ augroup end
 
 " Show all diagnostics
 nnoremap <silent> <C-c><C-d> <Cmd>CocList diagnostics<CR>
+command! -nargs=0 CocDiagnostics <Cmd>CocList diagnostics<CR>
 " Manage extensions
 nnoremap <silent> <C-c><C-e> <Cmd>CocList extensions<CR>
 " Show commands

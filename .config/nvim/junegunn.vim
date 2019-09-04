@@ -18,23 +18,27 @@ let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux) && empty(s:wsl)
 call plug#begin(stdpath('data') . '/plugged')
 
 Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
-let $NVIM_COC_LOG_LEVEL='debug'
+let $NVIM_COC_LOG_FILE = stdpath('data')  . '/coc.log'
+let $NVIM_COC_LOG_LEVEL = 'error'
+
+" Plug 'junegunn/vim-plug'
 let g:plug_window = 'tabe'
-" Wait is the fact that I didn't use expand the reason FZF hasn't been working?
+
 Plug 'junegunn/fzf', { 'dir': expand('~/.fzf'), 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+
 Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
 augroup nerd_loader
   autocmd!
+  " So I think this deletes FileExplorer which is netRW.
   autocmd VimEnter * silent! autocmd! FileExplorer
   autocmd BufEnter,BufNew *
         \  if isdirectory(expand('<amatch>'))
   " FUCK! This hasn't worked for MONTHS and it's because the plugin is called nerdTree not nerdtree...
         \|   call plug#load('nerdTree')
         \|   execute 'NERDTreeToggle'
-        \|   execute 'autocmd! nerd_loader'
         \| endif
-    autocmd bufenter *
+    autocmd BufEnter *  " can't say i know what that b:NERDTree.isTabTree() is doing
         \ if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree())
         \| q
         \| endif
@@ -45,14 +49,9 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-surround'
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-Plug 'w0rp/ale', { 'on': ['ALEEnable', 'ALEDetail'] }  " Follow spacemacs lead and use e for errors
-noremap <Leader>e <Plug>ALEEnable <bar> echomsg 'ALE Enable'
-noremap <Leader>ed <Plug>ALEDetail<CR>
-
-if !has('unix')
-  " might not be necessary because of coc-powershell
-  Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
-endif
+Plug 'w0rp/ale', { 'on': ['ALEEnable', 'ALEToggle'] }  " Follow spacemacs lead and use e for errors
+noremap <Leader>e <Cmd>ALEEnable<CR><Cmd>echomsg 'ALE Enabled'<CR>
+noremap <Leader>a <Cmd>ALEToggle<CR><Cmd>echomsg 'ALE Toggled'<CR>
 
 if exists('$TMUX')
     Plug 'christoomey/vim-tmux-navigator'
@@ -66,7 +65,6 @@ if !empty(s:ubuntu)
   " I don't know rust but honestly its a model ftplugin so download it for
   " reference
   Plug 'rust-lang/rust.vim'
-  Plug 'itspriddle/vim-shellcheck', { 'for': ['sh', 'bash'] }
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
   Plug 'ekalinin/Dockerfile.vim', {'for': 'dockerfile'}
   Plug 'luffah/vim-zim', {'for': ['zimwiki', 'zimindex']}
@@ -79,6 +77,8 @@ if empty(s:termux)
   Plug 'chrisbra/csv.vim', {'for': 'csv'}
   Plug 'greyblake/vim-preview', {'on': 'Preview'}
   Plug 'tomtom/tlib_vim'  " this library is incredible
+  Plug 'itspriddle/vim-shellcheck', { 'for': ['sh', 'bash'] }
+  Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
 endif
 
 " I feel like the lazy loaded ones can come out here
@@ -88,11 +88,13 @@ Plug 'godlygeek/tabular', {'on': 'Tabularize'}
 Plug 'ervandew/supertab'
 Plug 'junegunn/vim-peekaboo'
 Plug 'vim-voom/voom'
-Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
 
 if has('python3') && empty(s:termux)
   Plug 'jupyter-vim/jupyter-vim'  " This plugin only makes sense when pythons loaded
+  Plug 'mustache/vim-mustache-handlebars'
+  Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
 endif
+
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 

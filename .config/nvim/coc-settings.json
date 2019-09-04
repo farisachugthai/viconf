@@ -33,12 +33,12 @@
   "suggest.fixInsertedWord": true,
   "suggest.floatEnable": true,
   "suggest.keepCompleteopt": true,
-  "suggest.LowPrioritySourceLimit": 0,
+  // why is this producing an error?
+  // "suggest.LowPrioritySourceLimit": 0,
   "suggest.minTriggerInputLength": 2,
   "suggest.noselect": true,
-  "suggest.preferCompleteThanJumpPlaceholder": true,
-  "suggest.snippetIndicator": "[Coc]",
-  "suggest.triggerAfterInsertEnter": true,
+  "suggest.preferCompleteThanJumpPlaceholder": false,
+  "suggest.snippetIndicator": "[Coc:]",
   "suggest.timeout": 800,
   "suggest.triggerAfterInsertEnter": true,
 
@@ -54,14 +54,15 @@
   "python.trace.server": "messages",
   "python.venvFolders": [
     "~/virtualenvs",
-    "~/.local/share/virtualenvs/"
+    "~/.local/share/virtualenvs/",
+    "~/.virtualenvs",
+    "~/miniconda3/envs"
   ],
   "python.terminal.launchArgs": ["-c", "IPython"],
   "languageserver": {
     "python": {
       "command": "python",
       "args": [
-        "-m pyls",
         "-vv",
         "--log-file",
         "~/.local/share/nvim/site/lsp_python.log"
@@ -97,7 +98,6 @@
               "enabled": true,
               "all_scopes": true
             },
-
             "mccabe": {
               "enabled": true,
               "threshold": 15
@@ -118,7 +118,6 @@
             },
             "flake8": {
               "enabled": true
-
             },
             "rope_completion": {
               "enabled": true
@@ -132,9 +131,6 @@
     }
   },
 
-  "list.extendedSearchMode": true,
-  "list.limitLines": 500,
-  "list.previewHighlightGroup": "IdentifierBold",
   "list.insertMappings": {
     "<C-r>": "do:refresh",
     "<C-n>": "normal:j",
@@ -151,22 +147,40 @@
   "list.normalMappings": {
     "<C-r>" : "do:refresh",
     "d"     : "action : delete",
+    "D"     : "action : delete",
     "e"     : "action : edit",
-    "<C-x>" : "action : split",
-    "<C-t>" : "action : tabe",
+    "E"     : "action : edit",
+    "s"     : "action : split",
+    "S"     : "action : split",
+    "T"     : "action : tabe",
     "P"     : "action : preview",
+    "p"     : "action : preview",
     "l"     : "action : load",
+    "L"     : "action : load",
     "h"     : "action : help",
-    " "    : "action : toggle",
-    "C" : "action:quickfix",
-    "o" : "action:open",
+    "H"     : "action : help",
+    " "     : "action : toggle",
+    "C"     : "action : quickfix",
+    "c"     : "action : quickfix",
+    "o"     : "action : open",
+    "O"     : "action : open",
     "<CR>"  : "action : select"
   },
 
+  "list.source.actions.defaultArgs": ["-quickfix"],
+  "list.source.actions.defaultOptions": [
+    "--interactive", "--top", "--normal", "--number-select"
+  ],
+  "list.source.branches.defaultOptions": [
+    "--interactive", "--top", "--normal", "--number-select"
+  ],
+
+  "list.source.diagnostics.defaultOptions": ["--top", "--normal"],
+  "list.source.extensions.defaultOptions": ["--top", "--normal"],
 
   "list.source.files.command": "rg",
   "list.source.files.args": [
-    "--hidden", "--smart-case", "--no-column", "--no-line-number", 
+    "--hidden", "--smart-case", "--no-column", "--no-line-number",
     "--no-messages", "--crlf", "--color=never", "--files"
   ],
   "list.source.files.excludePatterns": [
@@ -175,21 +189,38 @@
     "**/__pycache__/**",
     "**/*.pyc"
   ],
-  "list.source.files.defaultOptions": ["--number-select", "--auto-preview", "--top"],
-  "list.source.folders.defaultOptions": ["--top", "--auto-preview", "--normal", "--interactive"],
+  "list.source.files.defaultOptions": [
+    "--number-select", "--auto-preview", "--top", "--normal"
+  ],
+  "list.source.folders.defaultOptions": [
+    "--top", "--auto-preview", "--normal", "--interactive"
+  ],
+
+  "list.source.grep.useLiteral": false,
   "list.source.grep.defaultArgs": ["-smartcase", "-regex", "-workspace"],
-  "list.source.grep.defaultOptions": ["--auto-preview", "--normal", "--interactive"],
+  "list.source.grep.defaultOptions": [
+    "--auto-preview", "--normal", "--interactive", "--top"
+  ],
   "list.source.grep.args": [
-    "--hidden", "--smart-case", "--no-column", "--no-line-number", 
+    "--hidden", "--smart-case", "--no-column", "--no-line-number",
     "--no-messages", "--crlf", "--color=never", "--files"
    ],
 
-  "list.source.helptags.defaultOptions": ["--top", "--normal"],
-  "list.source.lines.defaultOptions": ["--top", "--interactive", "--normal", "--auto-preview"],
+  "list.source.helptags.defaultOptions": [
+    "--top", "--auto-preview", "--normal", "--interactive"
+  ],
+  "list.source.lines.defaultOptions": [
+    "--top", "--interactive", "--normal", "--auto-preview"
+  ],
   "list.source.links.defaultOptions": ["--top", "--normal"],
+
   "list.source.lists.defaultOptions": ["--normal", "--top"],
 
-
+  "list.source.mru.maxLength": 100,
+  "list.source.mru.defaultOptions": [
+    "--auto-preview", "--normal", "--top"
+  ],
+  "list.source.mru.ignoreGitIgnore": true,
   "list.source.mru.excludePatterns": [
     "**/.git/*",
     "**/node_modules/*",
@@ -197,15 +228,45 @@
     "**/__pycache__/**",
     "**/*.pyc"
   ],
-  "list.source.mru.defaultOptions": ["--auto-preview", "--normal"],
+  "list.source.output.defaultOptions": [
+    "--auto-preview", "--interactive", "--no-sort", "--top", "--normal" 
+  ],
 
-  "list.source.symbols.defaultOptions": ["--interactive", "--number-select"],
+  "list.source.sessions.defaultOptions": [
+    "--normal", "--top", "--number-select"
+  ],
+  "list.source.services.defaultOptions": ["--normal", "--top"],
+  "list.source.symbols.defaultOptions": [
+    "--interactive", "--number-select", "--normal", "--top"
+  ],
+
+  // as weird as it looks don't use an array
+  "list.source.tags.command":
+    "ctags -R --options=~/projects/dynamic_ipython/tools/ctagsOptions.cnf .",
   "list.source.tags.defaultOptions": ["--top", "--normal"],
 
-  "list.source.words.defaultArgs": "--word",
-  "list.source.words.defaultOptions": ["--top", "--interactive", "--normal", "--auto-preview"],
+  "list.source.words.defaultArgs": ["--word"],
+  "list.source.words.defaultOptions": [
+    "--top", "--interactive", "--normal", "--auto-preview" 
+  ],
 
-  "lists.disabledLists": ["colors", "filetypes", "snippets"],
+  // Disable them because FZF or Fugitive already does it
+  "lists.disabledLists": ["colors", "filetypes", "snippets", "bcommits",
+  "buffers", "filetypes", "maps", "vimcommands"],
+  "list.extendedSearchMode": true,
+  "list.limitLines": 500,
+  "list.previewHighlightGroup": "IdentifierBold",
+
+  "coc.preferences.currentFunctionSymbolAutoUpdate": true,
+  "coc.preferences.extensionUpdateCheck": "daily",
+  "coc.preferences.formatOnSaveFiletypes": [
+    "javascript", "html", "css", "vim", "bash", "sh", "powershell", "python"
+  ],
+  "coc.preferences.hoverTarget": "preview",
+  "coc.preferences.jumpCommand": "edit",
+  "coc.preferences.messageLevel": "error",
+  "coc.preferences.previewAutoClose": true,
+  "coc.preferences.useQuickfixForLocations": true,
 
   "coc.source.buffer.firstMatch": false, 
   "coc.source.buffer.shortcut": "CocBuffer: ",
@@ -213,39 +274,34 @@
   "coc.source.file.priority": 80,
   "coc.source.file.ignoreHidden": false,
   "coc.source.omni.priority": 99,
-  "coc.source.omni.shortcut": "Coc-Omni:",
 
-
-  "coc.preferences.currentFunctionSymbolAutoUpdate": true,
-  "coc.preferences.extensionUpdateCheck": "daily",
-  "coc.preferences.formatOnSaveFiletypes": ["javascript", "html", "css", "vim", "bash", "powershell", "python"],
-  "coc.preferences.hoverTarget": "preview",
-  "coc.preferences.messageLevel": "error",
-  "coc.preferences.previewAutoClose": true,
-  "coc.preferences.useQuickfixForLocations": true,
   "diagnostic.refreshOnInsertMode": true,
-  "coc.preferences.jumpCommand": "edit",
-  "codeLens.separator": "‣",
   "diagnostic.checkCurrentLine": true,
   "diagnostic.displayByAle": false,
   "diagnostic.level": "warning",
   "diagnostic.joinMessageLines": true,
   "diagnostic.virtualText": true,
-  "diagnostic.virtualTextPrefix": "Coc Diagnostic: ",
-  "diagnostic.messageTarget": "float",
   "diagnostic.refreshAfterSave": true,
+  "diagnostic.refreshOnInsertMode": true,
   "diagnostic.virtualTextLineSeparator": " \\ ",
   "signature.hideOnTextChange": true,
+  "signature.floatMaxWidth": 20,
+  "signature.preferShownAbove": false,
+  "signature.triggerSignatureWait": 300,
   "vimlsp.suggest.fromVimruntime": true,
   "vimlsp.suggest.fromRuntimepath": true,
   "vimlsp.indexes.runtimepath": true,
-  "git.enableGutters": true,
+  "yaml.format.enable": true,
   "git.addGlameToVirtualText": true,
   "git.addGlameToBufferVar": true,
+  "git.branchCharacter": "",
+  "git.changedDecorator": "⎇",
+  "git.enableGlobalStatus": true,
   "git.untrackedDecorator": "Untracked:",
   "git.virtualTextPrefix": "Coc-Git:",
-  "git.branchCharacter": "",
-  "git.enableGlobalStatus": true,
+  "codeLens.separator": "‣",
+  "codeLens.enable": true,
+  "session.directory": "~/.config/nvim/session",
   "powershell.powerShellExePath": "C:\\pwsh\\7-preview\\pwsh.exe",
   "powershell.codeFolding.showLastLine": false,
   "powershell.integratedConsole.showOnStartup": false,
@@ -263,5 +319,6 @@
   ],
   "snippets.extends": {"python": ["rst"]},
   "snippets.snipmate.author": "Faris A. Chugthai",
+  "snippets.trace": "verbose",
   "snippets.triggerCharacters": ["Tab", "C-j"]
 }
