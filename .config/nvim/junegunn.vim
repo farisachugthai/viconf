@@ -28,22 +28,6 @@ Plug 'junegunn/fzf', { 'dir': expand('~/.fzf'), 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
 Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
-augroup nerd_loader
-  autocmd!
-  " So I think this deletes FileExplorer which is netRW.
-  autocmd VimEnter * silent! autocmd! FileExplorer
-  autocmd BufEnter,BufNew *
-        \  if isdirectory(expand('<amatch>'))
-  " FUCK! This hasn't worked for MONTHS and it's because the plugin is called nerdTree not nerdtree...
-        \|   call plug#load('nerdTree')
-        \|   execute 'NERDTreeToggle'
-        \| endif
-    autocmd BufEnter *  " can't say i know what that b:NERDTree.isTabTree() is doing
-        \ if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree())
-        \| q
-        \| endif
-augroup END
-
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-rsi'

@@ -30,8 +30,9 @@ command! -nargs=0 EchoRTP echo buffers#EchoRTP()
 function! Buf_Window_Mapping() abort
   " To make navigating the location list and quickfiz easier
   " Also check ./unimpaired.vim
-  noremap <leader>c <Cmd>cclose<CR><bar><Cmd>lclose<CR>
-  noremap <leader>q <Cmd>copen<CR><bar><Cmd>lopen<CR>
+  " Sep 05, 2019: This doesnt need to be 2 commands!! cwindow does both!
+  noremap <leader>c <Cmd>cwindow<CR><bar><Cmd>lwindow<CR>
+  " noremap <leader>q <Cmd>copen<CR><bar><Cmd>lopen<CR>
 
   " Navigate windows more easily
   noremap <C-h> <Cmd><C-w>h<CR>
@@ -76,7 +77,7 @@ endfunction
 
 " Navigate Buffers More Easily: {{{1
 
-function! g:SpaceBuffers() abort
+function! SpaceBuffers() abort
   noremap <Leader>bb <Cmd>buffers<CR>
   noremap <Leader>bd <Cmd>bdelete<CR>
   noremap <Leader>bn <Cmd>bnext<CR>
@@ -166,7 +167,7 @@ endfunction
 if !exists('no_plugin_maps') && !exists('no_windows_vim_maps')
   call Buf_Window_Mapping()
   call Alt_Key_Navigation()
-  call g:SpaceBuffers()
+  call SpaceBuffers()
   call TabMaps()
   call UnImpairedWindows()
   call SpaceWindows()

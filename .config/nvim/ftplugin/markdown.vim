@@ -8,7 +8,7 @@
 " Needed to autoload the funcs and drop the runtime! to a runtime html call
 
 " Guard: {{{1
-if exists("b:did_ftplugin")
+if exists('b:did_ftplugin')
   finish
 endif
 
@@ -17,7 +17,7 @@ set cpoptions-=C
 
 " Options: {{{1
 
-runtime! ftplugin/html.vim ftplugin/html_*.vim ftplugin/html/*.vim
+runtime ftplugin/html.vim ftplugin/html_*.vim ftplugin/html/*.vim
 
 setlocal comments=fb:*,fb:-,fb:+,n:> commentstring=>\ %s
 setlocal formatoptions+=tcqln formatoptions-=r formatoptions-=o
@@ -30,13 +30,13 @@ else
 endif
 
 " Enable spellchecking.
-setlocal spell!
+" setlocal spell!
 
 " Automatically wrap at 80 characters after whitespace
 setlocal textwidth=80
 setlocal colorcolumn=80
 " Then break lines if they're too long.
-" setlocal linebreak
+setlocal linebreak
 
 " Fix tabs so that we can have ordered lists render properly
 setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
@@ -59,7 +59,7 @@ noremap <buffer> <localleader>5 m`^i##### <esc>``6l
 
 " Atexit: {{{1
 
-let b:undo_ftplugin .= ' spell< cc< tw< et< ts< sts< sw< fdl< fdls<'
+let b:undo_ftplugin .= 'setl spell< cc< tw< lbr< et< ts< sts< sw< fdl< fdls<'
 let g:markdown_folding = 1
 
 if has("folding") && exists("g:markdown_folding")

@@ -7,12 +7,12 @@
 
 " Guards: {{{1
 if exists('g:did_ultisnips_after_plugin') || &compatible || v:version < 700
-    finish
+  finish
 endif
 let g:did_ultisnips_after_plugin = 1
 
 if !has_key(plugs, 'ultisnips')
-    finish
+  finish
 endif
 
 let s:cpo_save = &cpoptions
@@ -56,29 +56,14 @@ let g:UltiSnipsEditSplit = 'context'  " context is an interesting option. it's a
 " Defining it and limiting it to 1 directory means that UltiSnips doesn't
 " iterate through every dir in &rtp which saves an immense amount of time
 " on startup.
-let g:UltiSnipsSnippetDirectories = [ expand('~') . '/.config/nvim/UltiSnips' ]
+let g:UltiSnipsSnippetDirectories = [ stdpath('config') . '/UltiSnips' ]
 
 " Functions And Commands: {{{1
 
-" From the help docs
-function! ExpandPossibleShorterSnippet()
-  if len(UltiSnips#SnippetsInCurrentScope()) == 1 "only one candidate...
-    let curr_key = keys(UltiSnips#SnippetsInCurrentScope())[0]
-    normal diw
-    execute 'normal a' . curr_key
-    execute 'normal a '
-    return 1
-  " not from help docs but tell me what you got regardless
-  else
-    echo UltiSnips#SnippetsInCurrentScope()
-    return 0
-  endif
-  return 0
-endfunction
-
 " Changed the mapping to Alt-S for snippets.
-inoremap <silent> <M-s> <C-R>=(ExpandPossibleShorterSnippet() == 0? '': UltiSnips#ExpandSnippet())<CR>
+inoremap <silent> <M-s> <C-R>=(plugins#ExpandPossibleShorterSnippet() == 0? '': UltiSnips#ExpandSnippet())<CR>
 
+command! UltiSnipsListSnippets call UltiSnips#ListSnippets()
 
 " Atexit: {{{1
 
