@@ -51,7 +51,6 @@ if !empty(s:ubuntu)
   Plug 'rust-lang/rust.vim'
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
   Plug 'ekalinin/Dockerfile.vim', {'for': 'dockerfile'}
-  Plug 'luffah/vim-zim', {'for': ['zimwiki', 'zimindex']}
   Plug 'fatih/vim-go'  " could add in {'do': ':GoInstallBinaries'}
 endif
 
@@ -76,7 +75,7 @@ Plug 'vim-voom/voom'
 if has('python3') && empty(s:termux)
   Plug 'jupyter-vim/jupyter-vim'  " This plugin only makes sense when pythons loaded
   Plug 'mustache/vim-mustache-handlebars'
-  Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
+  Plug 'raimon49/requirements.txt.vim'
 endif
 
 Plug 'ryanoasis/vim-devicons'           " Keep at end!

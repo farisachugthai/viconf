@@ -5,11 +5,13 @@ ALE's
 ALLUSERSPROFILE
 AMD64
 ARP
+AST
 AdaBoost
 Adblock
 AirVPN
 Akonadi
 AliasManager
+Alibaba
 AngularJS
 Anisa
 Ansi
@@ -164,10 +166,12 @@ GUID
 GVim
 GitHub
 Gitignore
+Gitter
 Google
 Gravatar
 Grinberg's
 Gruvbox
+GruvboxPurple
 GuiMacro
 Gvim
 HLS
@@ -188,6 +192,7 @@ ISO9660
 Importlib
 InteractiveShell
 JQuery
+JetBrains
 Jinja2
 Junegunn
 Junegunn's
@@ -205,6 +210,7 @@ Kleopatra
 Kochan
 Kubernetes
 LOCALAPPDATA
+LTS
 LVM
 LaTex
 LanguageClient
@@ -365,6 +371,7 @@ SciPy
 Scikit
 Scrapy
 Seaborn
+SemVer
 SetEnv
 SharePoint
 ShimModule
@@ -650,6 +657,7 @@ cygwin
 cython
 datatypes
 datetime
+debconf
 debian
 deleters
 delphi
@@ -1059,6 +1067,7 @@ miniconda2
 miniconda3
 mit600
 mitm
+mixin
 mixins
 mkdir
 mklink
@@ -1717,5 +1726,3 @@ zsh
 zshrc
 µBlock
 µMatrix
-debconf
-GruvboxPurple

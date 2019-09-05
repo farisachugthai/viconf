@@ -62,6 +62,8 @@ command! -bang FZFColors
 " For this first one go down to the advanced functions. Eh we can leave it mapped. It uses imap.
 imap <C-x><C-k> <Plug>(fzf-complete-word)
 imap <C-x><C-f> <Plug>(fzf-complete-path)
+" Yeah files isn't working the way I want
+inoremap <silent> <C-f> <C-x><C-f>
 imap <C-x><C-j> <Plug>(fzf-complete-file-ag)
 
 " Global line completion (not just open buffers. ripgrep required.)
@@ -82,9 +84,8 @@ noremap <silent> <Leader><CR>     <Cmd>Buffers<CR>
 noremap <Leader>bu                <Cmd>Buffers<CR>
 noremap <Leader>bB                <Cmd>Buffers<CR>
 noremap <Leader>f                 <Cmd>Files<CR>
-noremap <silent> <C-x><C-f>       <Cmd>Files<CR>
-noremap! <silent> <C-x><C-f>      <Cmd>Files<CR>
-tnoremap <silent> <C-x><C-f>      <Cmd>Files<CR>
+" noremap <silent> <C-x><C-f>       <Cmd>Files<CR>  literally why
+" tnoremap <silent> <C-x><C-f>      <Cmd>Files<CR>
 
 " Mapping for selecting different mappings.
 " Could add one for insert mode but leader tab is gonna happen so often that we need to use
