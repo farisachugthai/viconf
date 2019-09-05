@@ -606,7 +606,7 @@ call s:HL('Error', s:aqua, s:vim_bg, s:inverse)
 
 " Generic statement
 hi! link Statement GruvboxRed
-" if, then, else, endif, swicth, etc.
+" if, then, else, endif, switch, etc.
 hi! link Conditional GruvboxRed
 " for, do, while, etc.
 hi! link Repeat GruvboxRed
@@ -707,18 +707,18 @@ call s:HL('DiffText',   s:yellow, s:bg0, s:inverse)
 
 " Not capitalised word, or compile warnings
 " Don't add guisp=blue that shit looks weird and confusing
-hi SpellCap cterm=underline,italic ctermfg=109 gui=undercurl
+hi SpellCap cterm=underline,italic ctermfg=109 gui=undercurl ctermbg=NONE guibg=NONE guisp=NONE
 " call s:HL('SpellCap',   s:none, s:none, s:undercurl, s:red)
 " call s:HL('SpellCap',   s:green, s:none, s:bold . s:italic)
 " Not recognized word
 " call s:HL('SpellBad',   s:none, s:none, s:undercurl, s:blue)
-hi SpellBad cterm=undercurl gui=undercurl guifg=#83a598 ctermfg=109 guisp=#83a598  
+hi SpellBad cterm=undercurl guibg=NONE gui=undercurl guifg=#83a598 ctermfg=109 ctermbg=NONE guisp=NONE
 " Wrong spelling for selected region
 " call s:HL('SpellLocal', s:none, s:none, s:undercurl, s:aqua)
 " Rare word
 " call s:HL('SpellRare',  s:none, s:none, s:undercurl, s:purple)
-hi SpellLocal guifg=#8ec07c guibg=NONE guisp=#8ec07c gui=italic,undercurl cterm=italic,undercurl
-hi SpellRare guifg=#d3869b guibg=NONE guisp=#d3869b gui=italic,undercurl cterm=italic,undercurl
+hi SpellLocal guifg=#8ec07c guibg=NONE guisp=#8ec07c gui=italic,undercurl cterm=italic,undercurl ctermbg=NONE
+hi SpellRare guifg=#d3869b guibg=NONE guisp=#d3869b gui=italic,undercurl cterm=italic,undercurl ctermbg=NONE
 " }}}
 " Plugin specific -------------------------------------------------------------
 " AKA Plugins You Don't Have: {{{
