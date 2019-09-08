@@ -7,13 +7,15 @@ import os
 import sys
 
 try:
-    import pynvim as vim
+    import pynvim
+    from pynvim import api, attach
 except ImportError:
     import vim  # noqa pylint:disable=import-error,unused-import
 
+
 __docformat__ = 'reStructuredText'
 
-logging.getLogger(__name__).addHandler(logging.NullHandler())
+logging.getLogger(__name__).addHandler(logging.StreamHandler())
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 

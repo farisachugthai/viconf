@@ -129,12 +129,12 @@ snippet class "class global attribute"
 class="$1"
 endsnippet
 
-snippet comment "comments"
-<!--${1:VISUAL}-->
+snippet comment "comment in html. expand visual" b
+<!--${0:${VISUAL}}-->
 endsnippet
 
-snippet <! "comments"
-<!--${1:VISUAL}-->
+snippet <! "comment in html. expand visual" b
+<!--${0:${VISUAL}}-->
 endsnippet
 
 snippet code "<code>" w
@@ -263,11 +263,6 @@ snippet header "<header>"
 <header>
 	${1:header content}
 </header>
-endsnippet
-
-# TODO: ????
-snippet hr "<hr>"
-<hr>
 endsnippet
 
 snippet html "HTML basic structure" b

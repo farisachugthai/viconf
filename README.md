@@ -7,6 +7,8 @@ initialization files, plugin modifications and syntax highlighting Vim
 scripts that I use to run Neovim on Linux, Windows 10, and
 [Termux](https://www.github.com/termux/termuxapp) on Android.
 
+😎😎😎😎
+
 ## How it works
 
 As much of this [init.vim](.config/nvim/init.vim) is set up in a way that it
@@ -53,7 +55,7 @@ Luckily upgrading is typically as simple as running:
 The [init.vim](./.config/nvim/init.vim) will immediately check that the
 plug.vim file is there, and it will automatically download it if not.
 
-## Plugins Used
+## Start up time
 
 The configuration for the plugins used by Neovim are currently being refactored
 out of the [init.vim](./.config/nvim/init.vim) and moved into the directory
@@ -65,7 +67,6 @@ configuration file runs `finish` immediately.
 
 This allows for extensive modification to the way that Neovim handles files and
 allows for startup time to remain the realm of 200 milliseconds.
-
 
 ## Features
 
@@ -159,10 +160,11 @@ Close fold directly under cursor | <kbd>zc</kbd>
 Update diff and syntax highlighting in windows | `:diffupdate`
 Toggle diff under cursor | <kbd>za</kbd>
 
-### Plugins Used
+## Plugins Used
 
 Currently, lazily loaded modification files exist for:
 
+- [coc.nvim](./.config/nvim/after/plugin/coc.vim)
 - [airline.vim](./.config/nvim/after/plugin/airline.vim)
 - [deoplete.vim](./.config/nvim/after/plugin/deoplete.vim)
 - [fzf.vim](./.config/nvim/after/plugin/fzf.vim)
@@ -192,6 +194,20 @@ In addition, configurations exist for:
 NERDTree is a file explorer plugin that provides "project drawer"
 functionality to your vim editing.  You can learn more about it with
 `:help NERDTree`.
+
+### Coc
+
+This is an outstandingly useful plugin and one that now has close to 1000 lines
+dedicated to it in this repository alone.
+
+Settings can be easily set up using the
+[coc-settings.json](./.config/nvim/coc-settings.json) file, which will probably
+prove to be much easier for most than learning VimScript.
+
+In addition to connecting Vim to any LSP servers it can, it also *amusingly*
+adds emoji support with packages like `coc-emoji`.
+
+🎺!
 
 ### Filetype Plugins
 

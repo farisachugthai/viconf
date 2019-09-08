@@ -35,14 +35,9 @@ inoremap <expr> <CR> pumvisible() ? "<C-R>=ultisnips#ExpandSnippetOrCarriageRetu
 " Gotta be honest this doesn't have much to do with anything but oh well.
 " Autocompletion: {{{1
 
-" Complete whole filenames/lines with a quicker shortcut key in insert mode
-imap <C-f> <C-x><C-f>
-imap <C-l> <C-x><C-l>
-imap <C-k> <C-x><C-k>
 imap <C-]> <C-x><C-]>
 imap <C-d> <C-x><C-d>
 imap <C-i> <C-x><C-i>
-imap <C-s> <C-x><C-s>
 imap <C-n> <C-x><C-n>
 imap <C-p> <C-x><C-p>
 

@@ -437,7 +437,19 @@ For example, :kbd:`C-f` only in insert mode invokes FZF.
 
 That code can be found `here.`_
 
+Different Shells
+================
 
+Inexplicably, nvim started a terminal buffer using *powershell* with no prompting!
+:envvar:`SHELL` was set to pwsh and it automatically set things up correctly!::
+
+   set shell=powershell
+   set shellcmdflag-=c
+   set shellredir=>
+   set shellpipe=| tee
+   set shellquote=
+
+And seemingly nothing else. I think most of those are the bash defaults too!
 .. _`here.`: after/plugin/fzf.vim
 .. _`after/ftplugin/gitcommit.vim`: ./after/ftplugin/gitcommit.vim
 .. _`after/ftplugin/`: ./after/ftplugin/

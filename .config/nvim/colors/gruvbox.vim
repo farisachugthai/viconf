@@ -2123,12 +2123,12 @@ hi! link shExpr             Question
 hi! link shFor              Question
 hi! link shForSync          Question
 hi! link shFunctionFour     Question
-hi! link shFunctionOne Identifier
+hi! link shFunctionOne      Identifier
 hi! link shFunctionStart    Question
 hi! link shFunctionThree    Question
 hi! link shFunctionTwo      Question
 hi! link shHereDoc16        Question
-hi! link shIf               Question
+hi! link shIf               Identifier
 hi! link shIfSync           Question
 hi! link shOK               Question
 hi! link shSpecialVar       Question

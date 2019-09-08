@@ -1,6 +1,7 @@
 {
   "coc.preferences.currentFunctionSymbolAutoUpdate": true,
   "coc.preferences.extensionUpdateCheck": "daily",
+  "coc.preferences.formatOnType": true,
   "coc.preferences.formatOnSaveFiletypes": [
     "javascript",
     "html",
@@ -14,6 +15,7 @@
   "coc.preferences.jumpCommand": "edit",
   "coc.preferences.messageLevel": "error",
   "coc.preferences.previewAutoClose": true,
+  "coc.preferences.snippetStatusText": "",
   "coc.preferences.useQuickfixForLocations": true,
   "coc.source.around.shortcut": "Coc-Around:",
   "coc.source.buffer.firstMatch": false,
@@ -41,6 +43,7 @@
   "diagnostic.checkCurrentLine": true,
   "diagnostic.displayByAle": false,
   "diagnostic.enableMessage": "never",
+  "diagnostic.filetypeMap": {"default": "bufferType"},
   "diagnostic.joinMessageLines": true,
   "diagnostic.level": "warning",
   "diagnostic.messageTarget": "float",
@@ -49,12 +52,15 @@
   "diagnostic.virtualText": true,
   "diagnostic.virtualTextLineSeparator": " \\ ",
   "diagnostic.virtualTextPrefix": "Coc-Diagnostic: ",
+  "diagnostic.virtualTextLines": 3,
   "git.addGlameToBufferVar": true,
   "git.addGlameToVirtualText": true,
   "git.branchCharacter": "",
   "git.enableGlobalStatus": true,
   "git.enableGutters": true,
+  "git.stagedDecorator": " - Staged",
   "git.untrackedDecorator": "Untracked:",
+  "git.conflictedDecorator": "Merge conflict",
   "git.virtualTextPrefix": "Coc-Git:",
   "languageserver": {
     "python": {
@@ -148,7 +154,7 @@
     "<C-r>": "do:refresh",
     "<C-t>": "action : tabe",
     "<C-x>": "action : split",
-    "<CR>": "action : select",
+    "<CR>" : "do : defaultaction",
     "C": "action:quickfix",
     "D": "action : delete",
     "E": "action : edit",
@@ -171,7 +177,6 @@
   "list.source.actions.defaultOptions": [
     "--normal",
     "--top",
-    "--interactive",
     "--auto-preview"
   ],
   "list.source.commands.defaultOptions": [
@@ -322,7 +327,7 @@
   "python.linting.pylintEnabled": false,
   "python.terminal.executeInFileDir": true,
   "python.terminal.launchArgs": [
-    "-c",
+    "-m",
     "IPython"
   ],
   "python.trace.server": "messages",
@@ -353,7 +358,6 @@
     "~/.config/nvim/UltiSnips",
     "~/AppData/Local/nvim/UltiSnips"
   ],
-  "suggest.LowPrioritySourceLimit": 0,
   "suggest.acceptSuggestionOnCommitCharacter": true,
   "suggest.autoTrigger": "always",
   "suggest.completionItemKindLabels": {

@@ -23,10 +23,11 @@ let g:did_coc_plugin = 1
 " Options: {{{1
 
 let $NVIM_COC_LOG_LEVEL='debug'
-
-let  g:WorkspaceFolders = [stdpath('config'), '$HOME/projects/dynamic_ipython', '$HOME/projects/viconf' ]
+" May have to extend after a has('unix') check.
+let g:WorkspaceFolders = [stdpath('config'), '$HOME/projects/dynamic_ipython', '$HOME/projects/viconf', '$HOME/python/tutorials' ]
 
 let g:coc_quickfix_open_command = 'cwindow'
+
 " Mappings: {{{1
 
 " Refresh completions with C-Space
@@ -39,8 +40,8 @@ nnoremap [g <Plug>(coc-diagnostic-prev)
 nnoremap ]g <Plug>(coc-diagnostic-next)
 
 " Remap for rename current word
-nnoremap <F2> <Plug>(coc-rename)
-xnoremap <F2> <Cmd>CocCommand document.renameCurrentWord<CR>
+nnoremap <F2> <Plug>(coc-refactor)
+xnoremap <F2> <Cmd>'<,'>CocCommand document.renameCurrentWord<CR>
 
 augroup CocConf
   au!
@@ -54,6 +55,7 @@ augroup end
 " Using CocList: {{{1
 
 " Show all diagnostics
+command! -nargs=0 CocDiagnostics <Cmd>CocList diagnostics<CR>
 nnoremap <silent> <C-c> <C-d> <Cmd>CocList diagnostics<CR>
 " Manage extensions
 nnoremap <silent> <C-c> <C-e> <Cmd>CocList extensions<CR>
@@ -96,17 +98,17 @@ noremap <silent> <C-c> q <Plug>(coc-fix-current)
 " Let's group these together by prefixing with C
 
 " Use `:Format` to format current buffer
-command! -nargs=0 CocFormat :call CocAction('format')
+command! -nargs=0 CocFormat call CocAction('format')
 
 " Use `:Fold` to fold current buffer
-command! -nargs=? CocFold :call CocAction('fold', <f-args>)
+command! -nargs=? CocFold call CocAction('fold', <f-args>)
 
 " use `:OR` for organize import of current buffer
 " command! -nargs=0 CocSort :call CocAction('runCommand', 'editor.action.organizeImport')
 
 " Just tried this and it worked! So keep checking :CocList commands and add
 " more as we go.
-command! -nargs=0 CocPython :call CocActionAsync('runCommand', 'python.startREPL')|
+command! -nargs=0 CocPython call CocActionAsync('runCommand', 'python.startREPL')|
 
 " Atexit: {{{1
 let &cpoptions = s:cpo_save

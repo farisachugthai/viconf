@@ -24,23 +24,24 @@ setlocal suffixesadd+=.vim
 setlocal nolinebreak
 setlocal wrap
 
+" TODO: Probably needs to be a function. Should checj if we already added
+" this and don't do it more than once
 let &path = &path . ',' . stdpath('data') . '/plugged/*/*/*.vim'
 let &commentstring='" %s'
 
 " So that you can cleanly jump around inside of autoloaded func names
 setlocal iskeyword-=#
-" This is the absolute worst way to implement this
-" setlocal comments="
 
 " Syntax Highlighting: {{{1
-" Let's add a little meat in here shall we?
 
-" From he syntax
-" VIM			*vim.vim*		*ft-vim-syntax*
+" From `:he syntax`
 " 			*g:vimsyn_minlines*	*g:vimsyn_maxlines*
 " Support embedded lua python nd ruby syntax highlighting in vim ftypes.
 let g:vimsyn_minlines = 300
 
+let g:vimsyn_maxlines = 500  " why is the default 60???
+
+" Embedding: {{{2
 " Allows users to specify the type of embedded script highlighting
 " they want:  (perl/python/ruby/tcl support)
 "   g:vimsyn_embed == 0   : don't embed any scripts
@@ -50,13 +51,12 @@ let g:vimsyn_minlines = 300
 "   g:vimsyn_embed =~# 'P' : embed python
 "   g:vimsyn_embed =~# 'r' : embed ruby
 "   g:vimsyn_embed =~# 't' : embed tcl
-let g:vimsyn_embed = 'Pr'
-" perl removed because its slow and also fuck perl
+let g:vimsyn_embed = 'P'
 
 " Turn off errors because 50% of them are wrong.
 let g:vimsyn_noerror = 1
 
-						" *g:vimsyn_folding*
+" *g:vimsyn_folding* {{{2
 
 " Some folding is now supported with syntax/vim.vim:
 
@@ -67,7 +67,6 @@ let g:vimsyn_noerror = 1
 
 let g:vimsyn_folding = 'afP'
 
-let g:vimsyn_maxlines = 500  " why is the default 60???
 
 " ALE: {{{1
 

@@ -37,22 +37,23 @@ let g:fzf_layout = { 'window': 'enew' }
 " FZF Colors: {{{1
 " Gruvbox Hard Coded: {{{2
 
-let g:fzf_colors =
-\ {  'fg':      ['fg', '#fbf1c7'],
-  \  'bg':      ['bg', '#1d2021'],
-  \  'hl':      ['fg', '#83a598'],
-  \  'fg+':     ['fg', '#ebdbb2', '#3c3836'],
-  \  'bg+':     ['bg', '#ec3836', '#3c3836'],
-  \  'hl+':     ['fg', '#fb4934'],
-  \  'info':    ['fg', '#fabd2f'],
-  \  'prompt':  ['fg', '#fe8019'],
-  \  'pointer': ['fg', '#fb4934'],
-  \  'marker':  ['fg', '#fb4934'],
-  \  'spinner': ['fg', '#b8bb26'],
-  \  'header':  ['fg', '#83a598'] }
+let g:fzf_colors =  { 
+      \  'fg':      ['fg', '#fbf1c7'],
+      \  'bg':      ['bg', '#1d2021'],
+      \  'hl':      ['fg', '#83a598'],
+      \  'fg+':     ['fg', '#ebdbb2', '#3c3836'],
+      \  'bg+':     ['bg', '#ec3836', '#3c3836'],
+      \  'hl+':     ['fg', '#fb4934'],
+      \  'info':    ['fg', '#fabd2f'],
+      \  'prompt':  ['fg', '#fe8019'],
+      \  'pointer': ['fg', '#fb4934'],
+      \  'marker':  ['fg', '#fb4934'],
+      \  'spinner': ['fg', '#b8bb26'],
+      \  'header':  ['fg', '#83a598']
+      \ }
 
-    " Override Colors command. You can safely do this in your .vimrc as fzf.vim
-    " will not override existing commands.
+" Override Colors command. You can safely do this in your .vimrc as fzf.vim
+" will not override existing commands.
 command! -bang FZFColors
   \ call fzf#vim#colors({'left': '35%',
   \ 'options': '--reverse --margin 30%,0'}, <bang>0)
@@ -66,25 +67,24 @@ imap <C-x><C-j> <Plug>(fzf-complete-file-ag)
 
 " Global line completion (not just open buffers. ripgrep required.)
 imap <expr> <C-x><C-l> fzf#vim#complete(fzf#wrap({
-  \ 'prefix': '^.*$',
+  \ 'prefix'  : '^.*$',
   \ 'source'  : 'rg -n ^ --color always --colors=ansi ',
   \ 'options' : '--ansi --delimiter : --nth 3..',
   \ 'reducer' : { lines -> join(split(lines[0], ':\zs')[2:], '') }}))
 
 inoremap <C-l> <C-x><C-l>
 
-" The way I remapped Leader, this basically evaluates to \\ lol
 nnoremap <silent> <expr> <Leader>n (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
 
-" The remainder behave as expected.
 noremap <silent> <Leader>C        <Cmd>Colors<CR>
 noremap <silent> <Leader><CR>     <Cmd>Buffers<CR>
 noremap <Leader>bu                <Cmd>Buffers<CR>
 noremap <Leader>bB                <Cmd>Buffers<CR>
 noremap <Leader>f                 <Cmd>Files<CR>
-noremap <silent> <C-x><C-f>       <Cmd>Files<CR>
-noremap! <silent> <C-x><C-f>      <Cmd>Files<CR>
-tnoremap <silent> <C-x><C-f>      <Cmd>Files<CR>
+inoremap <silent> <C-f>           <C-x><C-f> 
+
+" Make fzf behave the same in a real shell and nvims.
+tnoremap <C-t>                    <Cmd>FZF! <CR>
 
 " Mapping for selecting different mappings.
 " Could add one for insert mode but leader tab is gonna happen so often that we need to use

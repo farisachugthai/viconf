@@ -111,7 +111,7 @@ function! pydoc_help#async_cursor() abort
   call jobstart('pydoc ' . expand('<cWORD>'), {'on_stdout':{j,d,e->append(line('.'),d)}})
 endfunction
 
-function! pydoc_help#scratch_buffer() abort  " {{{1
+function! pydoc_help#broken_scratch_buffer() abort  " {{{1
  
   " From he api-floatwin. Only new versions of Nvim (maybe 0.4+ only?)
   let buf = nvim_create_buf(v:false, v:true)
@@ -129,6 +129,16 @@ endfunction
 
 function! pydoc_help#sphinx_build(...) abort  " {{{1
   " TODO: 
+endfunction
+
+function! pydoc_help#the_curse_of_nvims_floating_wins() abort  " {{{1 No seriously they're difficult to work with
+  " Keep working out the 
+  let s:opts = {'relative': 'cursor', 'width': 10, 'height': 2, 'col': 0, 'row': 1, 'anchor': 'NW', 'style': 'minimal', 'focusable': v:true }
+  let s:win_handle = nvim_open_win(bufnr('%'), 0, s:opts)
+  let floating_winnr  = nvim_win_get_number(s:win_handle)
+  " So now we finally have a winnr which we can work with in a more reasonable
+  " fashion. Sweet!!
+  call nvim_win_set_option(s:win_handle, 'winhl', 'Special')
 endfunction
 
 " Atexit: {{{1
