@@ -9,7 +9,7 @@
 if exists('g:did_better_profiler_vim_plugin') || &compatible || v:version < 700
   finish
 endif
-let g:did_better_profiler_vim_plugin = 1
+" let g:did_better_profiler_vim_plugin = 1
 
 let s:cpo_save = &cpoptions
 set cpoptions-=C
@@ -40,7 +40,7 @@ let &path = &path . ',' . stdpath('config')
 let &path = &path . ',' . expand('$VIMRUNTIME')
 
 " Scratch Buffers: {{{1
-command -nargs=0 ScratchBuffer call pydoc_help#scratch_buffer()
+command! -nargs=0 ScratchBuffer call pydoc_help#scratch_buffer()
 
 " Commands: {{{1
 " These 2 commands are for parsing the output of scriptnames though a command
@@ -56,6 +56,16 @@ command! -nargs=0 NvimAPI
 
 " Easier mkdir and cross platform!
 command! -complete=dir -nargs=1 Mkdir call mkdir(shellescape('<q-args>'), 'p', '0700')
+
+" QuickFix: {{{1
+
+" From :he *:cadde* *:caddexpr*
+" Evaluate {expr} and add the resulting lines to the current quickfix list.
+" If a quickfix list is not present, then a new list is created. The current
+" cursor position will not be changed. See |:cexpr| for more information.
+" g/mypattern/caddexpr expand("%") . ":" . line(".") .  ":" . getline(".")
+" command! -nargs=? QFSearch execute 'g/' . shellescape(<q-args>) . '/ caddexpr ' . expand('%') . ":" . line(".") . ":" . getline(".")
+" Doesn't work and tried like 20 times to debug it.
 
 " Keep Profiling At End: {{{1
 " Because you have this check and it could stop everything else from getting

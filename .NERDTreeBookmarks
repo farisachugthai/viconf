@@ -1,6 +1,7 @@
-coc-cheatsheet ~/.local/share/nvim/plugged/coc.nvim/data/schema.json
+config-nvim ~/.config/nvim
 dotfiles ~/projects/dotfiles/unix
 jupyter-extensions ~/.local/share/jupyter
+mpl /usr/share/doc/python-matplotlib-doc/tutorials
 plugged ~/.local/share/nvim/plugged
 python ~/python
 tutorials ~/Dropbox/python/tutorials

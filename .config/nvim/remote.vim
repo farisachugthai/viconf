@@ -22,13 +22,15 @@ set pastetoggle=<F7>
 " Remote Hosts: {{{1
 
 if has('unix')
-  " This is still gonna be tough because exepath('python') on termux ==
-  " python3 and on wsl == python2...
+
+  " Termux
   if exists($ANDROID_DATA)
     let g:python3_host_prog = exepath('python')
     let g:loaded_python_provider = 1
     let g:node_host_prog = '/data/data/com.termux/files/usr/bin/neovim-node-host'
     let loaded_ruby_provider = 1
+
+  " Ubuntu like or WSL
   else
     let g:python3_host_prog = exepath('python3')
     let g:python_host_prog = exepath('python')
@@ -37,7 +39,6 @@ if has('unix')
   endif
 
   if exists($TMUX)
-
     let g:clipboard = {
           \   'name': 'myClipboard',
           \   'copy': {
@@ -51,6 +52,7 @@ if has('unix')
           \   'cache_enabled': 1,
           \ }
   endif
+
 else  " windows not wsl
   let g:python3_host_prog = 'C:/tools/miniconda3/envs/neovim/python.exe'
   let g:python_host_prog = 'C:/Users/faris/.windows-build-tools/python27/python.exe'

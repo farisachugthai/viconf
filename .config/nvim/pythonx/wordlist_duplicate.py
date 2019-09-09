@@ -21,6 +21,21 @@ import sys
 import vim
 
 
+def vim_bufnr():
+    """No params returns the current bufnr."""
+    return vim.current.buffer
+
+
+def nvim_listen_address():
+    return os.environ.get('NVIM_LISTEN_ADDRESS')
+
+
+def attach_nvim(how='socket', path=None):
+    """Ensure you don't execute this from inside neovim or it'll emit an error."""
+    from pynvim import attach
+    return attach('socket', path=nvim_listen_address())
+
+
 def vim_api():
     """Tepidly I'm going to use this now."""
     # it worked!
@@ -99,11 +114,11 @@ def main():
     logging.debug('Args: ', args)
     for i in args[0:]:
         spell_list = sortfile(i)
+        # vim_api()
         fixed = fix_spellfile(spell_list)
         with open(i, 'wt') as f:
             f.writelines(fixed)
 
 
 if __name__ == '__main__':
-    # main()
-    vim_api()
+    main()

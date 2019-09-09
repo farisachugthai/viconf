@@ -42,7 +42,7 @@
   "codeLens.separator": "‣",
   "diagnostic.checkCurrentLine": true,
   "diagnostic.displayByAle": false,
-  "diagnostic.enableMessage": "never",
+  "diagnostic.enableMessage": "always",
   "diagnostic.filetypeMap": {"default": "bufferType"},
   "diagnostic.joinMessageLines": true,
   "diagnostic.level": "warning",
@@ -65,7 +65,6 @@
   "languageserver": {
     "python": {
       "args": [
-        "-m pyls",
         "-vv",
         "--log-file",
         "~/.local/share/nvim/site/lsp_python.log"
@@ -74,13 +73,17 @@
       "filetypes": [
         "python"
       ],
+      "shell": true,
       "settings": {
         "pyls": {
-          "commandPath": "",
+          "commandPath": "python -m pyls",
           "configurationSources": [
             "flake8"
           ],
           "enable": true,
+          "trace": {
+            "server": "verbose"
+          },
           "plugins": {
             "flake8": {
               "enabled": true
@@ -130,8 +133,7 @@
             "server": "verbose"
           }
         }
-      },
-      "trace.server": "verbose"
+      }
     }
   },
   "list.extendedSearchMode": true,
@@ -187,6 +189,8 @@
     "--top",
     "--normal"
   ],
+  "list.source.folders.defaultOptions": ["--top", "--auto-preview", "--normal", "--interactive"],
+  "list.source.files.command": "rg",
   "list.source.files.args": [
     "--hidden",
     "--smart-case",
@@ -197,7 +201,6 @@
     "--color=never",
     "--files"
   ],
-  "list.source.files.command": "rg",
   "list.source.files.defaultOptions": [
     "--number-select",
     "--auto-preview",
@@ -262,6 +265,7 @@
     "--auto-preview",
     "--normal"
   ],
+  "list.source.mru.maxLength": 100,
   "list.source.mru.excludePatterns": [
     "**/.git/*",
     "**/node_modules/*",
@@ -321,7 +325,6 @@
   "python.analysis.logLevel": "Warning",
   "python.analysis.openFilesOnly": false,
   "python.autoComplete.addBrackets": true,
-  "python.jediEnabled": true,
   "python.jediMemoryLimit": -1,
   "python.jediShortcut": "Jedi",
   "python.linting.pylintEnabled": false,
@@ -388,14 +391,20 @@
     "variable": ""
   },
   "suggest.detailField": "preview",
+  "suggest.disableMenu": true,
+  "suggest.disableMenuShortcut": true,
   "suggest.enablePreview": true,
+  "suggest.enablePreselect": false,
   "suggest.fixInsertedWord": true,
   "suggest.floatEnable": true,
   "suggest.keepCompleteopt": true,
+  "suggest.lowPrioritySourceLimit": 50,
+  "suggest.highPrioritySourceLimit": 99,
+  "suggest.maxCompleteItemCount": 100,
   "suggest.minTriggerInputLength": 2,
   "suggest.noselect": true,
-  "suggest.preferCompleteThanJumpPlaceholder": true,
-  "suggest.snippetIndicator": "[Coc]",
+  "suggest.preferCompleteThanJumpPlaceholder": false,
+  "suggest.snippetIndicator": "[Coc-Snippets:]",
   "suggest.timeout": 800,
   "suggest.triggerAfterInsertEnter": true,
   "tsserver.implicitProjectConfig.checkJs": true,

@@ -44,16 +44,20 @@ endfunction
 
 command! Cmd call msdos#Cmd()
 
-function! msdos#PowerShell() abort
+function! msdos#PowerShell() abort  " {{{1
 
   " 07/23/2019: Just found out that even when using powershell comspec is
   " supposed to be set to cmd. Explains a few things
   if !empty($SHELL) | unlet! $SHELL | endif
   let $SHELL = 'C:/pwsh/7-preview/pwsh.exe'
   set shell=pwsh.exe
+  set shellquote=(
   set shellpipe=\| shellredir=> shellxquote=
-  let &shellcmdflag = '-NoProfile -NoLogo -ExecutionPolicy RemoteSigned $* '
+  let &shellcmdflag = '-NoProfile -NoLogo -ExecutionPolicy RemoteSigned -Command '
+  set shellredir=\|\ Out-File\ -Encoding\ UTF8
 
+   echomsg 'Using powershell as the system shell.'
+   return
 endfunction
 
 command! PowerShell call msdos#Powershell()

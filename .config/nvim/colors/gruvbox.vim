@@ -283,30 +283,26 @@ let s:gb.orange = s:orange
 " }}}
 " Setup Terminal Colors For Neovim: {{{
 
+let g:terminal_ansi_colors = ['#1d2021', '#cc241d', '#98971a', '#d79921',
+      \ '#458588', '#b16286', '#689d6a', '#a89984', '#928374', '#fb4934',
+      \ '#b8bb26', '#fabd2f', '#83a598', '#d3869b', '#8ec07c', '#ebdbb2']
 if has('nvim')
-  let g:terminal_color_0 = s:bg0[0]
-  let g:terminal_color_8 = s:gray[0]
-
-  let g:terminal_color_1 = s:gb.neutral_red[0]
-  let g:terminal_color_9 = s:red[0]
-
-  let g:terminal_color_2 = s:gb.neutral_green[0]
-  let g:terminal_color_10 = s:green[0]
-
-  let g:terminal_color_3 = s:gb.neutral_yellow[0]
-  let g:terminal_color_11 = s:yellow[0]
-
-  let g:terminal_color_4 = s:gb.neutral_blue[0]
-  let g:terminal_color_12 = s:blue[0]
-
-  let g:terminal_color_5 = s:gb.neutral_purple[0]
-  let g:terminal_color_13 = s:purple[0]
-
-  let g:terminal_color_6 = s:gb.neutral_aqua[0]
-  let g:terminal_color_14 = s:aqua[0]
-
-  let g:terminal_color_7 = s:fg4[0]
-  let g:terminal_color_15 = s:fg1[0]
+  let g:terminal_color_0 = '#1d2021'
+  let g:terminal_color_1 = '#cc241d'
+  let g:terminal_color_2 = '#98971a'
+  let g:terminal_color_3 = '#d79921'
+  let g:terminal_color_4 = '#458588'
+  let g:terminal_color_5 = '#b16286'
+  let g:terminal_color_6 = '#689d6a'
+  let g:terminal_color_7 = '#a89984'
+  let g:terminal_color_8 = '#928374'
+  let g:terminal_color_9 = '#fb4934'
+  let g:terminal_color_10 = '#b8bb26'
+  let g:terminal_color_11 = '#fabd2f'
+  let g:terminal_color_12 = '#83a598'
+  let g:terminal_color_13 = '#d3869b'
+  let g:terminal_color_14 = '#8ec07c'
+  let g:terminal_color_15 = '#ebdbb2'
 endif
 
 " }}}
@@ -522,6 +518,7 @@ hi! link SpecialKey GruvboxFg2
 " call s:HL('Visual',    s:none,  s:bg3, s:invert_selection)
 hi Visual cterm=reverse gui=reverse guisp=NONE ctermbg=241 ctermfg=NONE guibg=#665c54 guifg=NONE
 hi! link VisualNOS Visual
+" TODO: VisualNC?
 
 hi Search cterm=reverse ctermfg=214 ctermbg=234 gui=reverse guifg=#fabd2f guibg=#1d2021
 hi IncSearch cterm=reverse ctermfg=208 ctermbg=234 gui=reverse guifg=#fe8019 guibg=#1d2021
@@ -645,10 +642,10 @@ hi Constant ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE
 hi Character ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE
 
 " String constant: "this is a string"
-  " call s:HL('String',  s:green, s:none, s:italicize_strings)
-" Why doesnt string link to EVERYTHING OTHER CONSTANT
-hi String ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE
-
+" call s:HL('String',  s:green, s:none, s:italicize_strings)
+" actually looks weird as shit don't do that
+" hi String ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE
+hi String ctermfg=142 ctermbg=NONE guifg=#b8bb26 guibg=NONE guisp=NONE
 hi Boolean ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE
 " hi! link Boolean GruvboxPurple
 hi Number ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE
@@ -696,7 +693,7 @@ call s:HL('DiffChange', s:aqua, s:bg0, s:inverse)
 call s:HL('DiffText',   s:yellow, s:bg0, s:inverse)
 
 " }}}
-" Redraws: {{{
+" Other: {{{
 " What the hell are these?
 " RedrawDebugClear xxx ctermbg=11 guibg=Yellow
 " RedrawDebugComposed xxx ctermbg=10 guibg=Green 
@@ -707,19 +704,26 @@ call s:HL('DiffText',   s:yellow, s:bg0, s:inverse)
 
 " Not capitalised word, or compile warnings
 " Don't add guisp=blue that shit looks weird and confusing
-hi SpellCap cterm=underline,italic ctermfg=109 gui=undercurl ctermbg=NONE guibg=NONE guisp=NONE
 " call s:HL('SpellCap',   s:none, s:none, s:undercurl, s:red)
 " call s:HL('SpellCap',   s:green, s:none, s:bold . s:italic)
 " Not recognized word
 " call s:HL('SpellBad',   s:none, s:none, s:undercurl, s:blue)
-hi SpellBad cterm=undercurl guibg=NONE gui=undercurl guifg=#83a598 ctermfg=109 ctermbg=NONE guisp=NONE
 " Wrong spelling for selected region
 " call s:HL('SpellLocal', s:none, s:none, s:undercurl, s:aqua)
 " Rare word
 " call s:HL('SpellRare',  s:none, s:none, s:undercurl, s:purple)
-hi SpellLocal guifg=#8ec07c guibg=NONE guisp=#8ec07c gui=italic,undercurl cterm=italic,undercurl ctermbg=NONE
-hi SpellRare guifg=#d3869b guibg=NONE guisp=#d3869b gui=italic,undercurl cterm=italic,undercurl ctermbg=NONE
 " }}}
+" More:
+
+hi NormalMode guifg=#a89984 guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse
+hi InsertMode guifg=#83a598 guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse
+hi ReplaceMode guifg=#8ec07c guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse
+hi VisualMode guifg=#fe8019 guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse
+hi CommandMode guifg=#d3869b guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse
+hi Warnings guifg=#fe8019 guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse
+" }}}
+
+
 " Plugin specific -------------------------------------------------------------
 " AKA Plugins You Don't Have: {{{
 
@@ -970,8 +974,6 @@ endif
 "CocCodeLens
 " CocCursorRange 
 " CocErrorFloat                                          
-" CocErrorHighlight                                     
-" CocErrorLine                                           
 " CocErrorSign                                         
 " CocErrorVirtualText                                
 " CocFloating v
@@ -985,13 +987,10 @@ endif
 " CocHighlightWrite                            
 " CocHintFloat                                 
 " CocHintHighlight                             
-" CocHintLine
 " CocHintSign                                   
 " CocHintVirtualText
 " CocInfoFloat                                 
 " CocInfoHighlight
-" CocInfoLine                                  
-" CocInfoSign                                  
 " CocInfoVirtualText
 hi default link CocErrorLine Exception
 hi default link CocWarningLine WarningMsg

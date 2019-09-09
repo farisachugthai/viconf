@@ -31,7 +31,7 @@ let g:coc_quickfix_open_command = 'cwindow'
 " Mappings: {{{1
 
 " Refresh completions with C-Space
-inoremap <silent><expr> <C-Space> coc#refresh()
+inoremap <silent><expr> <C-Space> <Plug>coc#refresh
 
 inoremap <silent><expr> <CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
@@ -56,30 +56,30 @@ augroup end
 
 " Show all diagnostics
 command! -nargs=0 CocDiagnostics <Cmd>CocList diagnostics<CR>
-nnoremap <silent> <C-c> <C-d> <Cmd>CocList diagnostics<CR>
+nnoremap <silent> <C-c> <C-d>  <Cmd>CocList diagnostics<CR>
 " Manage extensions
-nnoremap <silent> <C-c> <C-e> <Cmd>CocList extensions<CR>
+nnoremap <silent> <C-c> <C-e>  <Cmd>CocList extensions<CR>
 " Show commands
 nnoremap <silent> <C-c> <C-c>  <Cmd>CocList commands<CR>
 " Find symbol of current document
 nnoremap <silent> <C-c> <C-o>  <Cmd>CocList outline<CR>
 " Search workspace symbols
-nnoremap <silent> <C-c> <C-s> <Cmd>CocList -I symbols<CR>
+nnoremap <silent> <C-c> <C-s>  <Cmd>CocList -I symbols<CR>
 " Do default action for next item.
-nnoremap <silent> <C-c> j  <Cmd>CocNext<CR>
+nnoremap <silent> <C-c> j      <Cmd>CocNext<CR>
 " Do default action for previous item.
-nnoremap <silent> <C-c> k  <Cmd>CocPrev<CR>
+nnoremap <silent> <C-c> k      <Cmd>CocPrev<CR>
 " Resume latest coc list
 nnoremap <silent> <C-c> <C-r>  <Cmd>CocListResume<CR>
 " noremap <silent> <C-c>r <Cmd>CocListResume<CR>
-noremap <silent> <C-c> <C-d> <Cmd>CocList diagnostics<CR>
+noremap <silent> <C-c> <C-d>   <Cmd>CocList diagnostics<CR>
 
 
 " Remap For Rename Current Word: {{{1
 
 " Remap for format selected region. e for errors and visual selection
 xmap <C-c> m  <Plug>(coc-format-selected)
-nmap <C-c> qm  <Plug>(coc-format-selected)
+nmap <C-c> m  <Plug>(coc-format-selected)
 
 " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
 xmap <C-c> <C-a>  <Plug>(coc-codeaction-selected)
