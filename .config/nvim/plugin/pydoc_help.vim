@@ -38,6 +38,12 @@ augroup mantabs
 augroup END
 
 
+" Maopings: {{{1
+
+" Avoid accidental hits of <F1> while aiming for <Esc>
+noremap! <F1> <Esc>
+
+
 " Commands: {{{1
 " Apr 23, 2019: Didn't know complete help was a thing.
 " Oh holy shit that's awesome
@@ -52,6 +58,15 @@ if has('python') || has('python3')
   command! -nargs=0 PydocSplit call pydoc_help#SplitPydocCword()
 
   command! -nargs=? Pydoc call pydoc_help#Pydoc(<f-args>)
+
+  command! -nargs=1 PydocMod call pydoc_help#ShowPyDoc('<args>', 1)
+
+  command! -nargs=* PydocModSearch call pydoc_help#ShowPyDoc('<args>', 0)
+
+  cabbrev pyd Pydoc
+
+  cabbrev pyds PydocSearch
+ 
 endif
 
 " Atexit: {{{1

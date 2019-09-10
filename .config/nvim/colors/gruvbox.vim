@@ -2139,6 +2139,25 @@ hi! link shVarAssign        Question
 hi! link shWhileSync        Question
 
 " }}}
+" QF: {{{
+hi def link qfFileName	Directory
+hi def link qfLineNr	LineNr
+hi def link qfError	Error
+
+" Django: {{{
+hi def link djangoTagBlock PreProc
+hi def link djangoVarBlock PreProc
+hi def link djangoStatement Statement
+hi def link djangoFilter Identifier
+hi def link djangoArgument Constant
+hi def link djangoTagError Error
+hi def link djangoVarError Error
+hi def link djangoError Error
+hi def link djangoComment Comment
+hi def link djangoComBlock Comment
+hi def link djangoTodo Todo
+" }}}
+
 
 " Functions -------------------------------------------------------------------
 " Search Highlighting Cursor {{{

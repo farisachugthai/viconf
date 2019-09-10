@@ -31,7 +31,7 @@ let g:coc_quickfix_open_command = 'cwindow'
 " Mappings: {{{1
 
 " Refresh completions with C-Space
-inoremap <silent><expr> <C-Space> <Plug>coc#refresh
+inoremap <silent><expr> <C-Space> <Plug> coc#refresh
 
 inoremap <silent><expr> <CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 

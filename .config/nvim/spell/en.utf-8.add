@@ -1,3 +1,6 @@
+AC1750
+ACL
+ACLs
 ACPI
 ADB
 AICHE
@@ -108,8 +111,6 @@ CronTab
 Ctrl
 Cygwin
 Cygwin's
-Cyrille
-Cyrille
 Cyrille
 DDG
 DEVNULL
@@ -344,14 +345,11 @@ Reitz
 RemoteSigned
 Rewatched
 Rossant
-Rossant
-Rossant
 RubyGems
 RuntimeError
 SCADA
 SCM
 SDKs
-SDists
 SDists
 SELinux
 SGR
@@ -375,7 +373,6 @@ SemVer
 SetEnv
 SharePoint
 ShimModule
-ShimModule
 Shotts
 Showkey
 SimpleHTTPRequestHandler
@@ -398,8 +395,6 @@ SubgraphOS
 Subkeys
 Submodules
 Subprocesses
-Subtrees
-Subtrees
 Subtrees
 SuperUser
 Supima
@@ -472,6 +467,7 @@ WindowsEnvironment
 WindowsPowerShell
 X11
 XDA
+XDA
 XDG
 XFCE
 XKB
@@ -484,7 +480,6 @@ XenServer
 Xenial
 Xorg
 Xresources
-YIQ
 YouCompleteMe
 YouTube
 ZeroNet
@@ -492,7 +487,6 @@ Zim
 Zim's
 ZimWiki
 ZipRecruiter
-`clientserver`
 aarch64
 abspath
 accessor
@@ -526,7 +520,6 @@ apt
 arduino
 arg
 argparse
-argparser
 args
 aria2c
 asc
@@ -551,7 +544,6 @@ autoloads
 automodule
 autosets
 autossh
-autossh
 backlinking
 backlinks
 bacopa
@@ -566,7 +558,6 @@ bdist
 bgcolor
 bibtex
 bittorrent
-blank
 blockquote
 blockquotes
 blockquoting
@@ -679,9 +670,6 @@ dirstat
 distutils
 django
 dlink
-dlink2
-dlink2
-dlink2
 dns
 dnssec
 dockerfile
@@ -694,7 +682,6 @@ doctests
 docutils
 dokuwiki
 domwidget
-dont/!
 doozy
 dosbatch
 doskey
@@ -737,7 +724,6 @@ ext3
 ext4
 fallback
 faris
-farischugthai
 fd
 fdupes
 ffmpeg
@@ -765,7 +751,6 @@ ftplugin
 ftplugins
 fullscreen
 func
-funcional/!
 function
 fzf
 gbt
@@ -789,7 +774,6 @@ github
 gitignore
 gitmodules
 gitrevisions
-gitrevisons/!
 gksu
 gksudo
 gnupg
@@ -853,6 +837,8 @@ ifconfig
 ignorecase
 img
 importlib
+importlib
+indexeddb
 indexeddb
 ini
 init
@@ -1029,7 +1015,6 @@ macchanger
 macos
 macrokernel
 mailfile
-mainfest
 makedirs
 makemigrations
 makepasswd
@@ -1044,7 +1029,6 @@ mathematica
 matlab
 matplotlib
 mawk
-maxdays/!
 maya
 mccabe
 md
@@ -1056,7 +1040,6 @@ metacharacters
 metadata
 metakernel
 metapackage
-meth
 microkernel
 microkernels
 microservices
@@ -1078,7 +1061,6 @@ modelines
 module
 moduleauthor
 modulefinder
-moduletype
 moduletype
 moin
 molokai
@@ -1139,7 +1121,6 @@ normpath
 noscript
 notecard
 notecards
-np
 npm
 npmrc
 nsfw
@@ -1147,7 +1128,6 @@ nslookup
 nsupdate
 nt
 ntfs
-numpy
 numpy
 numpydoc
 nvidia
@@ -1254,6 +1234,7 @@ protonmail
 ps1
 pstree
 psutil
+ptpython
 ptpython's
 pushd
 pwd
@@ -1358,7 +1339,6 @@ rustup
 rvm
 rw
 samsung
-sas
 savefig
 sbin
 scala
@@ -1387,8 +1367,6 @@ sdc
 sdc1
 sdc2
 sdist
-sdists
-sdists
 sdk
 sdks
 seaborn
@@ -1407,6 +1385,7 @@ sha256sum
 sha384
 sha512
 shada
+shapeshift
 shapeshift
 sharepoint
 shellcheck
@@ -1455,7 +1434,6 @@ staticmethod
 statusbar
 statusline
 statuslines
-stdeb
 stderr
 stdin
 stdlib
@@ -1473,17 +1451,8 @@ submodule
 submodules
 subnetting
 subprocess
-subproject's
-subproject's
-subproject's
 subshell
 subshells
-subtree
-subtree
-subtree
-subtrees
-subtrees
-subtrees
 sudo
 surrogateescape
 symlink
@@ -1674,7 +1643,6 @@ win32yank
 win64
 winbatch
 windo
-winrc
 wombat256
 workflow
 worktree
@@ -1721,7 +1689,11 @@ zim
 zimwiki
 zipimport
 zlib
+zlib
+zsh
 zsh
 zshrc
 µBlock
 µMatrix
+µTP
+µTorrent

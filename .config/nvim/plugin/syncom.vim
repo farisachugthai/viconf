@@ -24,22 +24,12 @@ endif
 " Should we set a corresponding grepformat?
 if executable('rg')
     let s:rg = 'rg'
+    let &grepprg = s:rg . ' --vimgrep --no-messages --color=never --smart-case --no-messages ^'
 elseif executable('rg.exe')  " fucking windows
     let s:rg = 'rg.exe'
+    let &grepprg = s:rg . ' --vimgrep --no-messages --color=never --smart-case --no-messages ^'
 endif
 
-let &grepprg = s:rg . ' --vimgrep --no-messages --color=never --smart-case --no-messages ^'
-
-" Autocmd For Highlighting Searches: {{{1
-
-set nohlsearch
-augroup vimrc_incsearch_highlight
-    autocmd!
-    autocmd CmdlineEnter /,\? :set hlsearch
-    autocmd CmdlineLeave /,\? :set nohlsearch
-augroup END
-
-" While we're setting up stuff for searches
 
 " Search Mappings: {{{1
 

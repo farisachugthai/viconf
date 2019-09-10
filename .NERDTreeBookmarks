@@ -1,9 +1,10 @@
 config-nvim ~/.config/nvim
 dotfiles ~/projects/dotfiles/unix
 jupyter-extensions ~/.local/share/jupyter
-mpl /usr/share/doc/python-matplotlib-doc/tutorials
 plugged ~/.local/share/nvim/plugged
 python ~/python
 tutorials ~/Dropbox/python/tutorials
 utilities ~/projects/utilities
 viconf ~/projects/viconf/.config/nvim
+
+mpl /usr/share/doc/python-matplotlib-doc/tutorials

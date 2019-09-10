@@ -102,6 +102,34 @@ function! find_files#FZFGit() abort
     endif
 endfunction
 
+" *fzf-vim-reducer-example*
+function! s:make_sentence(lines) abort
+  return substitute(join(a:lines), '^.', '\=toupper(submatch(0))', '').'.'
+endfunction
+
+function! find_files#fzf_spell() abort
+
+  imap <expr> <C-x><C-s> fzf#vim#complete#word({
+      \ 'source':  'cat /usr/share/dict/words',
+      \ 'reducer': function('<sid>make_sentence'),
+      \ 'options': '--multi --reverse --margin 15%,0',
+      \ 'left':    40})
+
+  " And add a shorter version
+  inoremap <C-s> <C-x><C-s>
+
+endfunction
+
+function! find_files#fzf_dict() abort
+
+  imap <expr> <C-x><C-k> fzf#fzf#vim#complete#word({
+                \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add'
+                \ ' $_ROOT/share/dict/words 2>/dev/null',
+                \ 'options': ' --ansi --multi --cycle', 'left': 30})
+
+  inoremap <C-k> <C-x><C-k>
+endfunction
+
 " Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

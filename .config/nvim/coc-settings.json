@@ -1,4 +1,5 @@
 {
+  "css.trace.server": "messages",
   "coc.preferences.currentFunctionSymbolAutoUpdate": true,
   "coc.preferences.extensionUpdateCheck": "daily",
   "coc.preferences.formatOnType": true,
@@ -81,9 +82,6 @@
             "flake8"
           ],
           "enable": true,
-          "trace": {
-            "server": "verbose"
-          },
           "plugins": {
             "flake8": {
               "enabled": true
@@ -157,16 +155,20 @@
     "<C-t>": "action : tabe",
     "<C-x>": "action : split",
     "<CR>" : "do : defaultaction",
+    "A": "action:append",
     "C": "action:quickfix",
     "D": "action : delete",
     "E": "action : edit",
+    "G": "action:prepend",
     "H": "action : help",
     "L": "action : load",
     "O": "action:open",
     "P": "action : preview",
+    "a": "action:append",
     "c": "action:quickfix",
     "d": "action : delete",
     "e": "action : edit",
+    "g": "action:prepend",
     "h": "action : help",
     "l": "action : load",
     "o": "action:open",
@@ -189,7 +191,6 @@
     "--top",
     "--normal"
   ],
-  "list.source.folders.defaultOptions": ["--top", "--auto-preview", "--normal", "--interactive"],
   "list.source.files.command": "rg",
   "list.source.files.args": [
     "--hidden",
@@ -263,6 +264,7 @@
   ],
   "list.source.mru.defaultOptions": [
     "--auto-preview",
+    "--top",
     "--normal"
   ],
   "list.source.mru.maxLength": 100,
@@ -287,6 +289,8 @@
   ],
   "list.source.symbols.defaultOptions": [
     "--interactive",
+    "--top",
+    "--normal",
     "--number-select"
   ],
   "list.source.tags.defaultOptions": [
@@ -301,6 +305,14 @@
     "--interactive",
     "--normal",
     "--auto-preview"
+  ],
+  "list.source.yank.defaultOptions": [
+    "--top",
+    "--normal",
+    "--auto-preview"
+  ],
+  "list.source.yank.defaultArgs": [
+    "line"
   ],
   "lists.disabledLists": [
     "buffers",
@@ -341,10 +353,13 @@
   "refactor.afterContext": 0,
   "refactor.beforeContext": 0,
   "refactor.openCommand": "vsplit",
+  "session.directory": "~/.config/nvim/session",
+  "session.restartOnSessionLoad": true,
   "signature.hideOnTextChange": true,
   "signature.preferShownAbove": false,
   "signature.target": "float",
   "signature.triggerSignatureWait": 300,
+  "snippets.editSnippetsCommand": "tabe",
   "snippets.extends": {
     "python": [
       "rst"
@@ -352,6 +367,7 @@
   },
   "snippets.shortcut": "Coc-Snippets",
   "snippets.snipmate.author": "Faris A. Chugthai",
+  "snippets.snipmate.enable": false,
   "snippets.trace": "verbose",
   "snippets.triggerCharacters": [
     "Tab",
@@ -359,6 +375,8 @@
   ],
   "snippets.ultisnips.directories": [
     "~/.config/nvim/UltiSnips",
+    "~/.config/coc",
+    "~/AppData/Local/coc/ultiSnips",
     "~/AppData/Local/nvim/UltiSnips"
   ],
   "suggest.acceptSuggestionOnCommitCharacter": true,
@@ -413,7 +431,10 @@
   "tsserver.log": "normal",
   "typescript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
   "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+  "vimlsp.debug": true,
   "vimlsp.indexes.runtimepath": true,
   "vimlsp.suggest.fromRuntimepath": true,
-  "vimlsp.suggest.fromVimruntime": true
+  "vimlsp.suggest.fromVimruntime": true,
+  "yaml.format.enable": true,
+  "yank.limit": 10
 }

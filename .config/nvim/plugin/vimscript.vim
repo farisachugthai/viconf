@@ -9,7 +9,7 @@
 if exists('g:did_better_profiler_vim_plugin') || &compatible || v:version < 700
   finish
 endif
-" let g:did_better_profiler_vim_plugin = 1
+let g:did_better_profiler_vim_plugin = 1
 
 let s:cpo_save = &cpoptions
 set cpoptions-=C
@@ -56,6 +56,10 @@ command! -nargs=0 NvimAPI
 
 " Easier mkdir and cross platform!
 command! -complete=dir -nargs=1 Mkdir call mkdir(shellescape('<q-args>'), 'p', '0700')
+
+" Omnifunc: {{{1
+
+if &omnifunc == "" | setlocal omnifunc=syntaxcomplete#Complete | endif
 
 " QuickFix: {{{1
 
