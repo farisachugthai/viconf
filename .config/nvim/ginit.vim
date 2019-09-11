@@ -1,24 +1,43 @@
-" header
+" ============================================================================
+  " File: ginit.vim
+  " Author: Faris Chugthai
+  " Description: 
+  " Last Modified: September 09, 2019
+" ============================================================================
 
-" We need to distinguish between other gui programs and this one
-if !has('nvim')
+" Guard: {{{1
+" Same way it's implemented in nvim_gui_shim. OH but don't forget.
+" ONLY LOAD if g:GuiLoaded exists. Probably not being reread
+if !has('nvim') || !exists('g:GuiLoaded')
   finish
 endif
 
+" But let's set something up in case it does get reread
+if exists('g:did_ginit_vim') || &compatible || v:version < 700
+  finish
+endif
+let g:did_ginit_vim = 1
+
+let s:cpo_save = &cpoptions
+set cpoptions-=C
+
+" Options: {{{1
 runtime nvim_gui_shim
-
-if empty(':GuiTabline')
-  echoerr 'Messed up the ginit guard'
-  finish
-endif
-
-" Also don't load this multiple times
 
 " Holy hell we get the tabline back!!!
 GuiTabline v:false
 
-GuiLinespace 1
+" This looks reasonable with the font
+GuiLinespace 1.5
 
-GuiFont Hack
+GuiFont Hack:h12
 
 call GuiClipboard()
+
+" LOLOLOLOLOL we need to map something to GuiTreeviewToggle!
+noremap <Leader>? <Cmd>GuiTreeviewToggle<CR><bar>execute 'echomsg ' . 'Opening up Nvim_Explorer.exe'
+
+
+" Atexit: {{{1
+let &cpoptions = s:cpo_save
+unlet s:cpo_save

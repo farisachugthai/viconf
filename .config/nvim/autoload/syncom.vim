@@ -54,8 +54,7 @@ function! syncom#HiQF() abort
 
 endfunction
 
-" SyntaxInfo: {{{1
-function! g:syncom#get_syn_id(transparent) abort
+function! g:syncom#get_syn_id(transparent) abort  " {{{1
 
   " Display syntax infomation on under the current cursor
   let synid = synID(line('.'), col('.'), 1)
@@ -67,7 +66,7 @@ function! g:syncom#get_syn_id(transparent) abort
 
 endfunction
 
-function! g:syncom#get_syn_attr(synid) abort
+function! g:syncom#get_syn_attr(synid) abort  " {{{1
 
   let name = synIDattr(a:synid, 'name')
   let ctermfg = synIDattr(a:synid, 'fg', 'cterm')
@@ -83,7 +82,7 @@ function! g:syncom#get_syn_attr(synid) abort
 
 endfunction
 
-function! g:syncom#get_syn_info() abort
+function! g:syncom#get_syn_info() abort  " {{{1
 
   let baseSyn = g:get_syn_attr(g:get_syn_id(0))
   echo 'name: ' . baseSyn.name .
@@ -112,6 +111,21 @@ function! g:syncom#hitest() abort
 
 endfunction
 
+function! syncom#grepprg() abort  " {{{1
+  " executable check was in ../plugin/syncom.vim but we haven't figured out
+  " if we're using rg.exe or rg.exe
+  if executable('rg')
+    let s:rg = 'rg'
+  elseif executable('rg.exe')
+    let s:rg = 'rg.exe'
+  else
+    throw 'syncom#grepprg: Rg not executable but grepprg set to it.'
+  endif
+
+  let s:grep = s:rg . ' --vimgrep --no-messages --color=always --colors=ansi --smart-case --no-messages ^'
+
+  return s:grep
+endfunction
 " Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

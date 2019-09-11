@@ -21,7 +21,6 @@ setlocal colorcolumn=80
 setlocal linebreak
 setlocal foldlevel=2
 setlocal foldlevelstart=2
-setlocal spell!
 setlocal iskeyword+=.
 
 if exists(':PydocThis')

@@ -72,7 +72,7 @@ Plug 'junegunn/vim-peekaboo'
 Plug 'vim-voom/voom'
 
 if has('python3') && empty(s:termux)
-  Plug 'jupyter-vim/jupyter-vim'  " This plugin only makes sense when pythons loaded
+  " Plug 'jupyter-vim/jupyter-vim'  " This plugin only makes sense when pythons loaded
   Plug 'mustache/vim-mustache-handlebars'
   Plug 'raimon49/requirements.txt.vim'
 endif

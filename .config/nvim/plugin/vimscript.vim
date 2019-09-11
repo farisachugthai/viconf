@@ -57,9 +57,17 @@ command! -nargs=0 NvimAPI
 " Easier mkdir and cross platform!
 command! -complete=dir -nargs=1 Mkdir call mkdir(shellescape('<q-args>'), 'p', '0700')
 
-" Omnifunc: {{{1
+" Omnifuncs: {{{1
 
+" I just wanted to move this farther back in the queue
 if &omnifunc == "" | setlocal omnifunc=syntaxcomplete#Complete | endif
+
+" Formatexpr: {{{1
+" Same with this
+
+if &formatexpr ==# ''
+  setlocal formatexpr=format#Format()  " check the autoload directory
+endif
 
 " QuickFix: {{{1
 

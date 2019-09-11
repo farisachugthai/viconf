@@ -28,18 +28,10 @@ if empty('plugs') | let plugs = {} | endif
 " So let's move that and stdpath('data')/site up front. Definitely stays after the plugins definition.
 let &rtp = stdpath('config') . ',' . stdpath('data') . '/site,' . &rtp
 
-" Setup the colorscheme early otherwise it'll start colorless
-" AH we have to source the plugins first because otherwise it'll try to source the colo twice
-if &term =~# 'xterm-256color' || &term ==# 'cygwin' || &term ==# 'builtin_tmux'
-      \ || &term ==# 'tmux-256color' || &term ==# 'builtin-vtpcon' || &term==# 'screen-256color'
-  set termguicolors
-endif
-
-set synmaxcol=400                       " Lower max syntax highlighting
+set synmaxcol=400 termguicolors
 syntax sync fromstart
 
 function! Gruvbox() abort
-  " Define Gruvbox parameters and then set the colorscheme.
   let g:gruvbox_contrast_hard = 1
   let g:gruvbox_contrast_soft = 0
   let g:gruvbox_improved_strings = 1
@@ -86,10 +78,10 @@ set signcolumn=yes
 try | set switchbuf=useopen,usetab,newtab | catch | endtry
 set hidden foldopen=quickfix,search,tag,undo
 set splitbelow splitright sidescroll=5
+set splitbelow splitright
 set winfixheight winfixwidth
 if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif
-set cmdheight=2
-set number relativenumber
+set number relativenumber cmdheight=1
 set spelllang=en spellsuggest=5
 
 if filereadable(stdpath('config') . '/spell/en.utf-8.add')
@@ -115,23 +107,24 @@ if &formatexpr ==# ''
   setlocal formatexpr=format#Format()  " check the autoload directory
 endif
 set tags+=./tags,./*/tags tagcase=smart showfulltag
-set mouse=a
+set mouse=a modeline
 set autowrite autochdir
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
 " Filler lines to keep text synced, 3 lines of context on diffs, don't diff hidden files,default foldcolumn is 2
 set diffopt=filler,context:0,hiddenoff,foldcolumn:2,icase,iwhite,indent-heuristic
- if has('patch-8.1.0360') | set diffopt+=internal,algorithm:patience | endif
+if has('patch-8.1.0360') | set diffopt+=internal,algorithm:patience | endif
 
-set modeline
 if exists('&modelineexpr') | set modelineexpr | endif
 set browsedir="buffer"   " which directory is used for the file browser
 let &showbreak = '↳ '                   " Indent wrapped lines correctly
 set breakindent breakindentopt=sbr
-set updatetime=100
+set updatetime=100 lazyredraw
 set inccommand=split
 let g:tutor_debug = 1
 set terse shortmess=aoOsAItTWAc
+set shortmess=aoOsAItTWAc
+set sidescroll=5                       " Didn't realize the default is 1
 set title titlestring=%<%F%=%l/%L-%P   " leaves a cool title for tmux
 
 " Mappings: {{{1

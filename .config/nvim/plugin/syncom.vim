@@ -6,15 +6,16 @@
 " ============================================================================
 
 " Guards: {{{1
-if exists('g:did_syncom_plugin') || &compatible || v:version < 700
+if exists('g:loaded_syncom_plugin') || &compatible || v:version < 700
     finish
 endif
-let g:did_syncom_plugin = 1
+let g:loaded_syncom_plugin = 1
 
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
 " Options: {{{1
+
 if &textwidth!=0
   setl colorcolumn=+1
 else
@@ -29,7 +30,6 @@ elseif executable('rg.exe')  " fucking windows
     let s:rg = 'rg.exe'
     let &grepprg = s:rg . ' --vimgrep --no-messages --color=never --smart-case --no-messages ^'
 endif
-
 
 " Search Mappings: {{{1
 
@@ -65,10 +65,7 @@ nnoremap <Plug>HiC <Cmd>HiC<CR>
 nnoremap <Plug>HiQF <Cmd>HiQF<CR>
 nnoremap <Plug>SyntaxInfo <Cmd>SyntaxInfo<CR>
 
-" TODO: when i come up with some default mappings for this, remember to
-" use this idiom:
-" if !exists('no_plugin_maps') && !exists('no_windows_vim_maps') | call funcs
-" | endif
+nnoremap <Leader>h <Plug>HL
 
 " NewGrep: {{{1
 " From `:he quickfix`

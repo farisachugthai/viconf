@@ -20,16 +20,20 @@
   "coc.preferences.useQuickfixForLocations": true,
   "coc.source.around.shortcut": "Coc-Around:",
   "coc.source.buffer.firstMatch": false,
-  "coc.source.buffer.shortcut": "CocBuffer: ",
+  "coc.source.buffer.shortcut": "Coc-Buffer:",
+  "coc.source.dictionary.shortcut": "Coc-Dict:",
   "coc.source.file.ignoreHidden": false,
   "coc.source.file.priority": 80,
-  "coc.source.file.shortcut": "CocFiles: ",
+  "coc.source.file.shortcut": "Coc-Files: ",
   "coc.source.issues.shortcut": "Coc-Issues:",
   "coc.source.omni.priority": 99,
   "coc.source.omni.shortcut": "Coc-Omni:",
   "coc.source.omni.triggerCharacters": [
     "Tab"
   ],
+  "coc.source.syntax.shortcut": "Coc-Syn:",
+  "coc.source.tag.priority": 50,
+  "coc.source.tag.shortcut": "Coc-Tag:",
   "coc.source.ultisnips.filetypes": [
     "python",
     "html",
@@ -39,8 +43,10 @@
     "typescript"
   ],
   "coc.source.ultisnips.shortcut": "Coc-UltiSnips:",
+
   "codeLens.enable": true,
   "codeLens.separator": "‣",
+
   "diagnostic.checkCurrentLine": true,
   "diagnostic.displayByAle": false,
   "diagnostic.enableMessage": "always",
@@ -54,6 +60,7 @@
   "diagnostic.virtualTextLineSeparator": " \\ ",
   "diagnostic.virtualTextPrefix": "Coc-Diagnostic: ",
   "diagnostic.virtualTextLines": 3,
+
   "git.addGlameToBufferVar": true,
   "git.addGlameToVirtualText": true,
   "git.branchCharacter": "",
@@ -63,6 +70,9 @@
   "git.untrackedDecorator": "Untracked:",
   "git.conflictedDecorator": "Merge conflict",
   "git.virtualTextPrefix": "Coc-Git:",
+
+  "json.trace.server": "messages",
+  "json.format.enable": true,
   "languageserver": {
     "python": {
       "args": [
@@ -126,14 +136,12 @@
             "yapf": {
               "enabled": true
             }
-          },
-          "trace": {
-            "server": "verbose"
           }
         }
       }
     }
   },
+
   "list.extendedSearchMode": true,
   "list.insertMappings": {
     "<A-p>": "action:preview",
@@ -183,6 +191,10 @@
     "--top",
     "--auto-preview"
   ],
+  "list.source.cmdhistory.defaultOptions": [
+    "--top",
+    "--normal"
+  ],
   "list.source.commands.defaultOptions": [
     "--top",
     "--normal"
@@ -207,6 +219,10 @@
     "--auto-preview",
     "--top"
   ],
+  "list.source.extensions.defaultOptions": [
+    "--top",
+    "--normal"
+  ],
   "list.source.files.excludePatterns": [
     "**/node_modules/*",
     "**/.git/*",
@@ -229,6 +245,7 @@
     "--color=never",
     "--files"
   ],
+  "list.source.grep.command": "rg",
   "list.source.grep.defaultArgs": [
     "-smartcase",
     "-regex",
@@ -238,6 +255,12 @@
     "--auto-preview",
     "--normal",
     "--interactive"
+  ],
+  "list.source.grep.excludePatterns": [
+    "**/node_modules/*",
+    "**/.git/*",
+    "**/__pycache__/**",
+    "**/*.pyc"
   ],
   "list.source.grep.useLiteral": false,
   "list.source.helptags.defaultOptions": [
@@ -256,9 +279,14 @@
   ],
   "list.source.lists.defaultOptions": [
     "--normal",
+    "--tab",
     "--top"
   ],
   "list.source.location.defaultOptions": [
+    "--top",
+    "--normal"
+  ],
+  "list.source.locationlist.defaultOptions": [
     "--top",
     "--normal"
   ],
@@ -275,9 +303,17 @@
     "**/__pycache__/**",
     "**/*.pyc"
   ],
+  "list.source.outline.defaultOptions": [
+    "--top",
+    "--normal"
+  ],
   "list.source.output.defaultOptions": [
     "--normal",
     "--top"
+  ],
+  "list.source.sessions.defaultOptions": [
+    "--top",
+    "--normal"
   ],
   "list.source.services.defaultOptions": [
     "--top",
@@ -288,12 +324,16 @@
     "--normal"
   ],
   "list.source.symbols.defaultOptions": [
-    "--interactive",
     "--top",
     "--normal",
+    "--interactive",
     "--number-select"
   ],
   "list.source.tags.defaultOptions": [
+    "--top",
+    "--normal"
+  ],
+  "list.source.quickfix.defaultOptions": [
     "--top",
     "--normal"
   ],
@@ -306,25 +346,31 @@
     "--normal",
     "--auto-preview"
   ],
-  "list.source.yank.defaultOptions": [
-    "--top",
-    "--normal",
-    "--auto-preview"
-  ],
   "list.source.yank.defaultArgs": [
     "line"
   ],
+  "list.source.yank.defaultOptions": [
+    "--top",
+    "--regex",
+    "--normal",
+    "--number-select"
+  ],
+
   "lists.disabledLists": [
     "buffers",
+    "bcommits",
+    "branches",
     "bcommits",
     "commits",
     "colors",
     "filetypes",
+    "maps",
     "marks",
     "snippets",
     "vimcommands",
     "windows"
   ],
+
   "powershell.codeFolding.showLastLine": false,
   "powershell.codeFormatting.openBraceOnSameLine": true,
   "powershell.codeFormatting.useCorrectCasing": true,
@@ -333,13 +379,16 @@
   "powershell.integratedConsole.focusConsoleOnExecute": false,
   "powershell.integratedConsole.showOnStartup": false,
   "powershell.powerShellExePath": "C:\\pwsh\\7-preview\\pwsh.exe",
+
   "python.analysis.diagnosticEnabled": true,
+  "python.analysis.downloadChannel": "daily",
   "python.analysis.logLevel": "Warning",
   "python.analysis.openFilesOnly": false,
   "python.autoComplete.addBrackets": true,
   "python.jediMemoryLimit": -1,
   "python.jediShortcut": "Jedi",
   "python.linting.pylintEnabled": false,
+  "python.linting.flake8Path": "python -m flake8",
   "python.terminal.executeInFileDir": true,
   "python.terminal.launchArgs": [
     "-m",
@@ -350,6 +399,8 @@
     "~/virtualenvs",
     "~/.local/share/virtualenvs/"
   ],
+  "python.venvPath": "~/.local/share/virtualenvs",
+
   "refactor.afterContext": 0,
   "refactor.beforeContext": 0,
   "refactor.openCommand": "vsplit",
@@ -432,9 +483,12 @@
   "typescript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
   "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
   "vimlsp.debug": true,
+  "vimlsp.trace.server": "messages",
   "vimlsp.indexes.runtimepath": true,
   "vimlsp.suggest.fromRuntimepath": true,
   "vimlsp.suggest.fromVimruntime": true,
   "yaml.format.enable": true,
-  "yank.limit": 10
+  "yaml.format.proseWrap": "always",
+  "yaml.trace.server": "messages",
+  "yank.limit": 30
 }
