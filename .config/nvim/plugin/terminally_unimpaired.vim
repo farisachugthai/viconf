@@ -15,10 +15,8 @@ let s:cpo_save = &cpoptions
 set cpoptions-=C
 
 " Mappings: {{{1
-" hmmm. this file unimpaired.vim and windows.vim all serve the same purpose...
-
-" IPython in a Vim terminal acts oddly. If you hit i or a it doesn't move to where
-" your cursor is. It moves relative to its old positon.
+" TODO: Move this to an autoloaded function that only gets called if we're
+" actually in a terminal
 
 " If running a terminal in Vim, go into Normal mode with Esc
 tnoremap <Esc> <C-\><C-n>

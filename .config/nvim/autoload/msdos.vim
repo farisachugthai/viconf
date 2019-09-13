@@ -14,12 +14,6 @@ let s:cpo_save = &cpoptions
 set cpoptions-=C
 
 " Options: {{{1
-" ...shit this shouldn't be in a windows specific file...ubuntu has nvim-qt
-" too....
-if exists(':GuiFont') == 2
-  execute 'GuiFont Source Code Pro:h12:cANSI'
-endif
-
 if exists('+shellslash')   " don't drop the +!
   set shellslash
 endif
@@ -27,6 +21,12 @@ endif
 " In usr_41 it's mentioned that files formatted with dos formatting won't
 " run vim scripts correctly so holy shit that might explain a hell of a lot
 set fileformats=unix,dos
+
+" slash" and "unix" are useful on Windows when sharing view files
+" with Unix.  The Unix version of Vim cannot source dos format scripts,
+" but the Windows version of Vim can source unix format scripts.
+set sessionoptions+=unix,slash viewoptions+=unix,slash
+
 
 " So this HAS to be a bad idea; however, all 3 DirChanged autocommands emit
 " errors and that's a little insane

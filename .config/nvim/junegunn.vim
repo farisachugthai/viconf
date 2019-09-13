@@ -70,6 +70,7 @@ Plug 'godlygeek/tabular', {'on': 'Tabularize'}
 Plug 'ervandew/supertab'
 Plug 'junegunn/vim-peekaboo'
 Plug 'vim-voom/voom'
+Plug 'romainl/vim-qf'
 
 if has('python3') && empty(s:termux)
   " Plug 'jupyter-vim/jupyter-vim'  " This plugin only makes sense when pythons loaded

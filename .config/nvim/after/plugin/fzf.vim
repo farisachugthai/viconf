@@ -19,6 +19,7 @@ let s:cpo_save = &cpoptions
 set cpoptions-=C
 
 " Options: {{{1
+"
 
 let g:fzf_action = {
   \ 'ctrl-q': function('find_files#build_quickfix_list'),
@@ -95,17 +96,19 @@ command! -bang FZFColors
 " Exported fzf <plug> commands.
 " For this first one go down to the advanced functions. Eh we can leave it mapped. It uses imap.
 imap <C-x><C-k> <Plug>(fzf-complete-word)
-imap <C-x><C-f> <Plug>(fzf-complete-path)
-imap <C-x><C-j> <Plug>(fzf-complete-file-ag)
+imap <c-x><c-f> <plug>(fzf-complete-path)
+imap <c-x><c-j> <plug>(fzf-complete-file-ag)
+imap <c-x><c-l> <plug>(fzf-complete-line)
+
 
 " Global line completion (not just open buffers. ripgrep required.)
-imap <expr> <C-x><C-l> fzf#vim#complete(fzf#wrap({
-  \ 'prefix'  : '^.*$',
-  \ 'source'  : s:rg ,
-  \ 'options' : s:fzf_options,
-  \ 'reducer' : { lines -> join(split(lines[0], ':\zs')[2:], '') }}))
+" imap <expr> <C-x><C-l> fzf#vim#complete(fzf#wrap({
+"   \ 'prefix'  : '^.*$',
+"   \ 'source'  : s:rg ,
+"   \ 'options' : s:fzf_options,
+"   \ 'reducer' : { lines -> join(split(lines[0], ':\zs')[2:], '') }}))
 
-inoremap <C-l> <C-x><C-l>
+" inoremap <C-l> <C-x><C-l>
 
 nnoremap <silent> <expr> <Leader>n (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
 
@@ -114,7 +117,6 @@ noremap <silent> <Leader><CR>     <Cmd>Buffers<CR>
 noremap <Leader>bu                <Cmd>Buffers<CR>
 noremap <Leader>bB                <Cmd>Buffers<CR>
 noremap <Leader>f                 <Cmd>Files<CR>
-inoremap <silent> <C-f>           <C-x><C-f> 
 
 " Make fzf behave the same in a real shell and nvims.
 tnoremap <C-t>                    <Cmd>FZF! <CR>
@@ -167,6 +169,7 @@ augroup end
 
 if filereadable('/usr/share/dict/words')
   call find_files#fzf_maps()
+  inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'left': '15%'})
 endif
 
 " Grepprg And Find: {{{1

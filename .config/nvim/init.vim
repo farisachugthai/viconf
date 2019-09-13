@@ -101,11 +101,7 @@ set ignorecase
 set smartcase infercase
 
 set makeencoding=char         " Used by the makeprg. system locale is used
-set sessionoptions+=unix,slash viewoptions+=unix,slash
 set sessionoptions-=buffers,winsize viewoptions-=options
-if &formatexpr ==# ''
-  setlocal formatexpr=format#Format()  " check the autoload directory
-endif
 set tags+=./tags,./*/tags tagcase=smart showfulltag
 set mouse=a modeline
 set autowrite autochdir
@@ -149,7 +145,7 @@ noremap <Down> gj
 inoremap gI gi
 
 runtime macros/matchit.vim
-set showmatch matchpairs+=<:>
+set showmatch matchpairs+=<:> lazyredraw
 set matchtime=20  " Show the matching pair for 2 seconds
 let g:matchparen_timeout = 500
 let g:matchparen_insert_timeout = 300

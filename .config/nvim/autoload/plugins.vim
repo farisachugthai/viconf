@@ -1,7 +1,7 @@
 " ============================================================================
   " File: ultisnips.vim
   " Author: Faris Chugthai
-  " Description: UltiSnips autoloaded functions
+  " Description: Plugin related autoloaded functions
   " Last Modified: August 01, 2019 
 " ============================================================================
 
@@ -53,20 +53,21 @@ endfunction
 
 " Vim Plug: {{{1
 
-function! plugins#InstallPlug() abort  " 
+function! plugins#InstallPlug() abort  " {{{1
 
-    if empty(executable('curl')) | finish | endif  " what scope does this statement end?
-    try " Successfully executed on termux
-      execute('!curl --progress-bar --create-dirs -Lo '
+  " Unsure of how to capture return code
+  if empty(executable('curl')) | return | endif
+  try " Successfully executed on termux
+    execute('!curl --progress-bar --create-dirs -Lo '
             \ . stdpath('data') . '/site/autoload/plug.vim'
             \ . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
-    catch | echo v:exception | endtry
+  catch | echo v:exception | endtry
+  echomsg 'Now using a homebrewed solution to get Vim-plug'
   endfunction
 
 " Startify: {{{1
 
-" List Commits: {{{2
-function! plugins#list_commits() abort
+function! plugins#list_commits() abort  " {{{2
   " note: Don't forget that
   " echo isdirectory('~/projects/viconf')
   " outputs 0 on windows and
@@ -80,7 +81,7 @@ function! plugins#list_commits() abort
     return map(commits, '{"line": matchstr(v:val, "\\s\\zs.*"), "cmd": "'. git .' show ". matchstr(v:val, "^\\x\\+") }')
 endfunction
 
-function! plugins#filter_header(lines) abort  " 
+function! plugins#filter_header(lines) abort  " {{{2
     let longest_line   = max(map(copy(a:lines), 'strwidth(v:val)'))
     let centered_lines = map(copy(a:lines),
         \ 'repeat(" ", (&columns / 2) - (longest_line / 2)) . v:val')
@@ -94,7 +95,7 @@ function! plugins#FugitiveMappings() abort   " {{{2
   noremap <silent> <Leader>gb   <Cmd>Gblame<CR>
   noremap <silent> <Leader>gc   <Cmd>Gcommit<CR>
   noremap <silent> <Leader>gd   <Cmd>Gdiffsplit!<CR>
-  cabbrev Gd Gdiffsplit<Space>
+  cabbrev Gd Gdiffsplit!<Space>
   noremap <silent> <Leader>gds  <Cmd>Gdiffsplit! --staged<CR>
   cabbrev gds2 Git diff --stat --staged
   noremap <silent> <Leader>gds2 <Cmd>Git diffsplit! --stat --staged<CR>

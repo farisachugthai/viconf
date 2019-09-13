@@ -38,6 +38,16 @@ function! todo#Todo() abort  " {{{1
     endif
 endfunction
 
+function! todo#fzf() abort  " {{{1
+  call fzf#run(fzf#wrap({
+        \ 'source' : s:get_scriptnames(),
+        \ 'options': '--ansi --multi --border',}
+        \ <bang>0 ? fzf#vim#with_preview('up:60%')
+        \ : fzf#vim#with_preview('right:50%:hidden', '?'),
+        \ <bang>0))
+endfunction
+
+
 " Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save
