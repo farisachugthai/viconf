@@ -5,8 +5,6 @@
     " Last Modified: Jul 09, 2019
 " ============================================================================
 
-" TODO: Come up with a s:rg_command becausevthe implementation here is inconsistent
-
 " Guards: {{{1
 if !has_key(plugs, 'fzf.vim') | finish | endif
 
@@ -20,7 +18,8 @@ let g:did_fzf_after_plugin = 1
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
-" General Setup: {{{1
+" Options: {{{1
+"
 
 let g:fzf_action = {
   \ 'ctrl-q': function('find_files#build_quickfix_list'),
@@ -34,25 +33,61 @@ let g:fzf_history_dir = stdpath('data') . '/fzf-history'
 
 let g:fzf_layout = { 'window': 'enew' }
 
+let s:ag_command = 'ag --smart-case -u -g " " --'
+
+let s:rg = 'rg --hidden --max-columns=300 --max-depth=8 --max-count=50 --color=ansi --no-column --no-line-number  --no-heading --auto-hybrid-regex --max-columns-preview --no-messages --smart-case '
+
+if has('unix')
+  let s:rg = s:rg . ' --path-separator="/" '
+else
+  let s:rg = s:rg . ' --path-separator="\" '
+endif
+
+let s:fzf_options = ['--ansi', '--multi', '--tiebreak=index', '--layout=reverse-list',
+  \   '--inline-info', '--prompt', '> ', '--bind=ctrl-s:toggle-sort',
+  \   '--header', ':: Press CTRL-S to toggle sort, CTRL-Y to yank commit hashes',
+  \   '--expect=ctrl-y', '--bind', 'alt-a:select-all,alt-d:deselect-all',
+  \ '--border', '--smart-case', '--cycle'
+  \ ]
+
+
+" [[B]Commits] Customize the options used by 'git log':
+let g:fzf_commits_log_options = ' --graph'
+      \ . ' --color=always --all --branches --pretty'
+      \ . ' --format="h%d %s $*n"'
+
+" [Buffers] Jump to the existing window if possible
+let g:fzf_buffers_jump = 1
+
+" [Tags] Command to generate tags file
+let g:fzf_tags_command = 'ctags -R --options='
+      \ . expand('~')
+      \ . '/projects/dynamic_ipython/tools/ctagsOptions.cnf'
+
+" [Commands] --expect expression for directly executing the command
+let g:fzf_commands_expect = 'alt-enter,ctrl-x'
+
+
 " FZF Colors: {{{1
 " Gruvbox Hard Coded: {{{2
 
-let g:fzf_colors =
-\ {  'fg':      ['fg', '#fbf1c7'],
-  \  'bg':      ['bg', '#1d2021'],
-  \  'hl':      ['fg', '#83a598'],
-  \  'fg+':     ['fg', '#ebdbb2', '#3c3836'],
-  \  'bg+':     ['bg', '#ec3836', '#3c3836'],
-  \  'hl+':     ['fg', '#fb4934'],
-  \  'info':    ['fg', '#fabd2f'],
-  \  'prompt':  ['fg', '#fe8019'],
-  \  'pointer': ['fg', '#fb4934'],
-  \  'marker':  ['fg', '#fb4934'],
-  \  'spinner': ['fg', '#b8bb26'],
-  \  'header':  ['fg', '#83a598'] }
+let g:fzf_colors =  { 
+      \  'fg':      ['fg', '#fbf1c7'],
+      \  'bg':      ['bg', '#1d2021'],
+      \  'hl':      ['fg', '#83a598'],
+      \  'fg+':     ['fg', '#ebdbb2', '#3c3836'],
+      \  'bg+':     ['bg', '#ec3836', '#3c3836'],
+      \  'hl+':     ['fg', '#fb4934'],
+      \  'info':    ['fg', '#fabd2f'],
+      \  'prompt':  ['fg', '#fe8019'],
+      \  'pointer': ['fg', '#fb4934'],
+      \  'marker':  ['fg', '#fb4934'],
+      \  'spinner': ['fg', '#b8bb26'],
+      \  'header':  ['fg', '#83a598']
+      \ }
 
-    " Override Colors command. You can safely do this in your .vimrc as fzf.vim
-    " will not override existing commands.
+" Override Colors command. You can safely do this in your .vimrc as fzf.vim
+" will not override existing commands.
 command! -bang FZFColors
   \ call fzf#vim#colors({'left': '35%',
   \ 'options': '--reverse --margin 30%,0'}, <bang>0)
@@ -61,31 +96,30 @@ command! -bang FZFColors
 " Exported fzf <plug> commands.
 " For this first one go down to the advanced functions. Eh we can leave it mapped. It uses imap.
 imap <C-x><C-k> <Plug>(fzf-complete-word)
-imap <C-x><C-f> <Plug>(fzf-complete-path)
-" Yeah files isn't working the way I want
-inoremap <silent> <C-f> <C-x><C-f>
-imap <C-x><C-j> <Plug>(fzf-complete-file-ag)
+imap <c-x><c-f> <plug>(fzf-complete-path)
+imap <c-x><c-j> <plug>(fzf-complete-file-ag)
+imap <c-x><c-l> <plug>(fzf-complete-line)
+
 
 " Global line completion (not just open buffers. ripgrep required.)
-imap <expr> <C-x><C-l> fzf#vim#complete(fzf#wrap({
-  \ 'prefix': '^.*$',
-  \ 'source'  : 'rg -n ^ --color always --colors=ansi ',
-  \ 'options' : '--ansi --delimiter : --nth 3..',
-  \ 'reducer' : { lines -> join(split(lines[0], ':\zs')[2:], '') }}))
+" imap <expr> <C-x><C-l> fzf#vim#complete(fzf#wrap({
+"   \ 'prefix'  : '^.*$',
+"   \ 'source'  : s:rg ,
+"   \ 'options' : s:fzf_options,
+"   \ 'reducer' : { lines -> join(split(lines[0], ':\zs')[2:], '') }}))
 
-inoremap <C-l> <C-x><C-l>
+" inoremap <C-l> <C-x><C-l>
 
-" The way I remapped Leader, this basically evaluates to \\ lol
 nnoremap <silent> <expr> <Leader>n (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
 
-" The remainder behave as expected.
 noremap <silent> <Leader>C        <Cmd>Colors<CR>
 noremap <silent> <Leader><CR>     <Cmd>Buffers<CR>
 noremap <Leader>bu                <Cmd>Buffers<CR>
 noremap <Leader>bB                <Cmd>Buffers<CR>
 noremap <Leader>f                 <Cmd>Files<CR>
-" noremap <silent> <C-x><C-f>       <Cmd>Files<CR>  literally why
-" tnoremap <silent> <C-x><C-f>      <Cmd>Files<CR>
+
+" Make fzf behave the same in a real shell and nvims.
+tnoremap <C-t>                    <Cmd>FZF! <CR>
 
 " Mapping for selecting different mappings.
 " Could add one for insert mode but leader tab is gonna happen so often that we need to use
@@ -119,28 +153,9 @@ noremap <Leader>gl                 <Cmd>Commits<CR>
 
 cabbrev Gl Commits
 
-" [[B]Commits] Customize the options used by 'git log':
-let g:fzf_commits_log_options = ' --graph'
-      \ . ' --color=always --all --branches --pretty'
-      \ . ' --format="h%d %s $*n"'
-
 noremap <Leader>GS <Cmd>GFiles?<CR>
 
 cabbrev GS GFiles?
-
-" Command Local Options: {{{2
-
-" [Buffers] Jump to the existing window if possible
-let g:fzf_buffers_jump = 1
-
-" [Tags] Command to generate tags file
-let g:fzf_tags_command = 'ctags -R --options='
-      \ . expand('~')
-      \ . '/projects/dynamic_ipython/tools/ctagsOptions.cnf'
-
-" [Commands] --expect expression for directly executing the command
-" let g:fzf_commands_expect = 'alt-enter,ctrl-x'
-
 
 " Custom FZF Statusline Function: {{{1
 
@@ -154,6 +169,7 @@ augroup end
 
 if filereadable('/usr/share/dict/words')
   call find_files#fzf_maps()
+  inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'left': '15%'})
 endif
 
 " Grepprg And Find: {{{1
@@ -209,12 +225,16 @@ command! -complete=dir -bang -nargs=* YourAg
   \                 <bang>0)
 
 " Rg: {{{1
+
+
 " Similarly, we can apply it to fzf#vim#grep. To use ripgrep instead of ag:
 " So officially I think this works better than the original!
+
+" Doesnt work anymore
 command! -complete=dir -bang -nargs=* YourRg
   \ call fzf#vim#grep(
   \   'rg --no-column --no-line-number --no-heading --no-messages --color=always'
-  \ . ' --smart-case --ansi --multi --border --cycle ' . shellescape(<qargs>), , 1,
+  \ . ' --smart-case --ansi --multi --border --cycle ' . shellescape(<q-args>),
   \   <bang>0 ? fzf#vim#with_preview('up:60%')
   \           : fzf#vim#with_preview('right:50%:hidden', '?'),
   \   <bang>0)
@@ -225,30 +245,12 @@ command! -bang -nargs=? -complete=dir YourFiles
 
 " Example Of Reducer: {{{1
 
-if filereadable('/usr/share/dict/words')
+if filereadable('/usr/share/dict/words') 
+  call find_files#fzf_spell()
+endif
 
-  " *fzf-vim-reducer-example*
-  function! s:make_sentence(lines) abort
-    return substitute(join(a:lines), '^.', '\=toupper(submatch(0))', '').'.'
-  endfunction
-
-  imap <expr> <C-x><C-s> fzf#vim#complete#word({
-      \ 'source':  'cat /usr/share/dict/words',
-      \ 'reducer': function('<sid>make_sentence'),
-      \ 'options': '--multi --reverse --margin 15%,0',
-      \ 'left':    40})
-
-  " And add a shorter version
-  inoremap <C-s> <C-x><C-s>
-  
-  
-  imap <expr> <C-x><C-k> fzf#fzf#vim#complete#word({
-                \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add'
-                \ ' $_ROOT/share/dict/words 2>/dev/null',
-                \ 'options': ' --ansi --multi --cycle', 'left': 30})
-
-  inoremap <C-k> <C-x><C-k>
-
+if filereadable(expand($_ROOT) . '/share/dict/words')
+  call find_files#fzf_dict()
 endif
 
 " PlugHelp: {{{1
@@ -259,10 +261,17 @@ command! -bang -bar YourHelp call fzf#run(fzf#wrap({
 
 " YourAg: {{{1
 
-let s:ag_command = 'ag --smart-case -u -g " " --'
-
+" Doesnt work
 command! -bang -nargs=* -complete=dir YourGrepAg call fzf#vim#grep(s:ag_command .
       \ shellescape(<q-args>), 1, <bang>0)
+
+" FBuf: {{{1
+" Dude he not only wrote this command, he put 4 different versions in the
+" docs like jesus christ
+
+command! -bang Buffers call fzf#run(fzf#wrap('buffers',
+    \ {'source': map(range(1, bufnr('$')), 'bufname(v:val)')}, <bang>0))
+
 
 " FZFBuffers FZFMRU FZFGit: {{{1
 

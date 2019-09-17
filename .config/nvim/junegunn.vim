@@ -26,8 +26,7 @@ let g:plug_window = 'tabe'
 
 Plug 'junegunn/fzf', { 'dir': expand('~/.fzf'), 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-
-Plug 'scrooloose/nerdTree', { 'on': 'NERDTreeToggle' }
+Plug 'scrooloose/nerdTree', { 'on': ['NERDTreeToggle', 'NERDTreeVCS'] }
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-rsi'
@@ -50,6 +49,8 @@ if !empty(s:ubuntu)
   " reference
   Plug 'rust-lang/rust.vim'
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
+  Plug 'itspriddle/vim-shellcheck', { 'for': ['sh', 'bash'] }
+  Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
   Plug 'ekalinin/Dockerfile.vim', {'for': 'dockerfile'}
   Plug 'fatih/vim-go'  " could add in {'do': ':GoInstallBinaries'}
 endif
@@ -59,9 +60,7 @@ endif
 if empty(s:termux)
   Plug 'chrisbra/csv.vim', {'for': 'csv'}
   Plug 'greyblake/vim-preview', {'on': 'Preview'}
-  Plug 'tomtom/tlib_vim'  " this library is incredible
-  Plug 'itspriddle/vim-shellcheck', { 'for': ['sh', 'bash'] }
-  Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
+  Plug 'mitsuhiko/vim-jinja'
 endif
 
 " I feel like the lazy loaded ones can come out here
@@ -71,9 +70,10 @@ Plug 'godlygeek/tabular', {'on': 'Tabularize'}
 Plug 'ervandew/supertab'
 Plug 'junegunn/vim-peekaboo'
 Plug 'vim-voom/voom'
+Plug 'romainl/vim-qf'
 
 if has('python3') && empty(s:termux)
-  Plug 'jupyter-vim/jupyter-vim'  " This plugin only makes sense when pythons loaded
+  " Plug 'jupyter-vim/jupyter-vim'  " This plugin only makes sense when pythons loaded
   Plug 'mustache/vim-mustache-handlebars'
   Plug 'raimon49/requirements.txt.vim'
 endif

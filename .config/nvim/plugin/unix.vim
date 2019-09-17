@@ -26,18 +26,6 @@ else
   runtime autoload/msdos.vim
 endif
 
-" Tmux: {{{1
-
-" Doesn't work. Fuck the way Vim namespaces shit holy hell.
-" call <SID>unix#tmux_map('<leader>tt', '')
-" call <SID>unix#tmux_map('<leader>th', '.left')
-" call <SID>unix#tmux_map('<leader>tj', '.bottom')
-" call <SID>unix#tmux_map('<leader>tk', '.top')
-" call <SID>unix#tmux_map('<leader>tl', '.right')
-" call <SID>unix#tmux_map('<leader>ty', '.top-left')
-" call <SID>unix#tmux_map('<leader>to', '.top-right')
-" call <SID>unix#tmux_map('<leader>tn', '.bottom-left')
-" call <SID>unix#tmux_map('<leader>t.', '.bottom-right')
 
 " Alternative Edit Implementation: {{{1
 " Completes filenames from the directories specified in the 'path' option:
@@ -62,8 +50,6 @@ command! -nargs=+ -complete=file MyEdit
 
 command! -nargs=+ -complete=file Sedit call unix#SpecialEdit(<q-args>, <q-mods>)
 
-" Mkdir: {{{1
-" todo:
 
 " Pure Emacs: {{{1
 " There are more comfortable ways of doing the following in Vim.

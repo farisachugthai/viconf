@@ -28,18 +28,10 @@ if empty('plugs') | let plugs = {} | endif
 " So let's move that and stdpath('data')/site up front. Definitely stays after the plugins definition.
 let &rtp = stdpath('config') . ',' . stdpath('data') . '/site,' . &rtp
 
-" Setup the colorscheme early otherwise it'll start colorless
-" AH we have to source the plugins first because otherwise it'll try to source the colo twice
-if &term =~# 'xterm-256color' || &term ==# 'cygwin' || &term ==# 'builtin_tmux'
-      \ || &term ==# 'tmux-256color' || &term ==# 'builtin-vtpcon' || &term==# 'screen-256color'
-  set termguicolors
-endif
-
-set synmaxcol=400                       " Lower max syntax highlighting
+set synmaxcol=400 termguicolors
 syntax sync fromstart
 
 function! Gruvbox() abort
-  " Define Gruvbox parameters and then set the colorscheme.
   let g:gruvbox_contrast_hard = 1
   let g:gruvbox_contrast_soft = 0
   let g:gruvbox_improved_strings = 1
@@ -75,33 +67,28 @@ set backupext='.bak'
 set writebackup        " protect against crash-during-write
 set nobackup           " but do not persist backup after successful write
 set backupcopy=auto    " use rename-and-write-new method whenever safe
-" patch required to honor double slash at end
-if has('patch-8.1.0251')
-	" consolidate the writebackups -- they usually get deleted
-  let &backupdir=stdpath('config') . '/undodir//'
-end
+" patch required to honor double slash at end consolidate the writebackups -- they usually get deleted
+if has('patch-8.1.0251') | let &backupdir=stdpath('config') . '/undodir//' | end
 
 if &tabstop > 4 | set tabstop=4 | endif
 if &shiftwidth > 4  | set shiftwidth=4 | endif
-set expandtab smarttab      " On pressing tab, insert 4 spaces
-set softtabstop=4
-set foldenable
-set foldlevelstart=0 foldlevel=0 foldnestmax=10 foldmethod=marker foldcolumn=2
+set expandtab smarttab softtabstop=4
+set foldenable foldlevelstart=0 foldlevel=0 foldnestmax=10 foldmethod=marker foldcolumn=2
 set signcolumn=yes
 try | set switchbuf=useopen,usetab,newtab | catch | endtry
-set hidden
+set hidden foldopen=quickfix,search,tag,undo
+set splitbelow splitright sidescroll=5
 set splitbelow splitright
 set winfixheight winfixwidth
 if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif
-set cmdheight=2
-set number relativenumber
+set number relativenumber cmdheight=1
 set spelllang=en spellsuggest=5
 
 if filereadable(stdpath('config') . '/spell/en.utf-8.add')
   let &spellfile = stdpath('config') . '/spell/en.utf-8.add'
 endif
 
-set wildmode=full:list:longest,full:list
+set wildignorecase wildmode=full:list:longest,full:list
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 let &wildoptions.='tagfile'
 set complete+=kspell
@@ -114,34 +101,26 @@ set ignorecase
 set smartcase infercase
 
 set makeencoding=char         " Used by the makeprg. system locale is used
-set sessionoptions+=unix,slash viewoptions+=unix,slash
 set sessionoptions-=buffers,winsize viewoptions-=options
-if &formatexpr ==# ''
-  setlocal formatexpr=format#Format()  " check the autoload directory
-endif
-set tags+=./tags,./*/tags
-set tagcase=smart showfulltag
-set mouse=a
+set tags+=./tags,./*/tags tagcase=smart showfulltag
+set mouse=a modeline
 set autowrite autochdir
-set wildignorecase
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
 " Filler lines to keep text synced, 3 lines of context on diffs, don't diff hidden files,default foldcolumn is 2
 set diffopt=filler,context:0,hiddenoff,foldcolumn:2,icase,iwhite,indent-heuristic
- if has('patch-8.1.0360') | set diffopt+=internal,algorithm:patience | endif
+if has('patch-8.1.0360') | set diffopt+=internal,algorithm:patience | endif
 
-set modeline
 if exists('&modelineexpr') | set modelineexpr | endif
 set browsedir="buffer"   " which directory is used for the file browser
 let &showbreak = '↳ '                   " Indent wrapped lines correctly
 set breakindent breakindentopt=sbr
-set updatetime=100
+set updatetime=100 lazyredraw
 set inccommand=split
 let g:tutor_debug = 1
-set terse     " Don't display the message when a search hits the end of file
+set terse shortmess=aoOsAItTWAc
 set shortmess=aoOsAItTWAc
 set sidescroll=5                       " Didn't realize the default is 1
-
 set title titlestring=%<%F%=%l/%L-%P   " leaves a cool title for tmux
 
 " Mappings: {{{1
@@ -164,16 +143,13 @@ noremap <Up> gk
 noremap <Down> gj
 " I mess this up constantly thinking that gI does what gi does
 inoremap gI gi
-" Avoid accidental hits of <F1> while aiming for <Esc>
-noremap! <F1> <Esc>
 
 runtime macros/matchit.vim
-set showmatch matchpairs+=<:>
+set showmatch matchpairs+=<:> lazyredraw
 set matchtime=20  " Show the matching pair for 2 seconds
 let g:matchparen_timeout = 500
 let g:matchparen_insert_timeout = 300
 
-if &omnifunc == "" | setlocal omnifunc=syntaxcomplete#Complete | endif
 " Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

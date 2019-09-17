@@ -17,23 +17,23 @@ set cpoptions-=C
 
 " FZF: {{{1
 " An action can be a reference to a function that processes selected lines
-function! find_files#build_quickfix_list(lines) abort
+function! find_files#build_quickfix_list(lines) abort  " {{{1
   call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
   copen
   cc
 endfunction
 
-function! find_files#fzf_statusline() abort
+function! find_files#fzf_statusline() abort  " {{{1
     " Override statusline as you like
     highlight fzf1 ctermfg=81 ctermbg=234
     highlight fzf2 ctermfg=81 ctermbg=234
     highlight fzf3 ctermfg=81 ctermbg=234
-    let s:stl = '%#fzf1# > %#fzf2#fz%#fzf3#f'
-    return s:stl
+    let l:stl = '%#fzf1# > %#fzf2#fz%#fzf3#f'
+    return l:stl
 endfunction
 
 " Maps
-function! find_files#fzf_maps() abort
+function! find_files#fzf_maps() abort  " {{{1
     inoremap <expr> <C-x><C-k> fzf#complete({
                 \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
                 \ 'options': '--preview=bat --ansi --multi --cycle', 'left': 30})
@@ -50,7 +50,7 @@ endfunction
 " docs. That's not a great explanation but honestly easier to explain
 " with a picture.
 " TODO: Screenshot usage.
-function! find_files#plug_help_sink(line)
+function! find_files#plug_help_sink(line)  " {{{1
   let dir = g:plugs[a:line].dir
   for pat in ['doc/*.txt', 'README.md']
     let match = get(split(globpath(dir, pat), "\n"), 0, '')
@@ -63,21 +63,19 @@ function! find_files#plug_help_sink(line)
   execute 'Explore' dir
 endfunction
 
-" FZFBuffers: {{{1
-
-function! find_files#buflist() abort
+function! find_files#buflist() abort  " {{{1
   redir => s:ls
   silent! ls
   redir END
   return split(s:ls, '\n')
 endfunction
 
-function! find_files#bufopen(e) abort
+function! find_files#bufopen(e) abort  " {{{1
   execute 'buffer' matchstr(a:e, '^[ 0-9]*')
 endfunction
 
 
-function! find_files#FZFMru() abort
+function! find_files#FZFMru() abort  " {{{1
     call fzf#run(fzf#wrap({
         \ 'source':   v:oldfiles,
         \ 'sink' :   'edit',
@@ -86,20 +84,48 @@ function! find_files#FZFMru() abort
         \ }, '<bang>0'))
   endfunction
 
-function! find_files#FZFGit() abort
+function! find_files#FZFGit() abort  " {{{1
     " Remove trailing new line to make it work with tmux splits
     let directory = substitute(system('git rev-parse --show-toplevel'), '\n$', '', '')
     if !v:shell_error
         lcd `=directory`
-        call fzf#run({
+        call fzf#run(fzf#wrap({
             \ 'sink': 'edit',
             \ 'dir': directory,
             \ 'source': 'git ls-files',
             \ 'down': '40%'
-            \ })
+            \ }))
     else
         FZF
     endif
+endfunction
+
+" *fzf-vim-reducer-example*
+function! s:make_sentence(lines) abort  " {{{1
+  return substitute(join(a:lines), '^.', '\=toupper(submatch(0))', '').'.'
+endfunction
+
+function! find_files#fzf_spell() abort  " {{{1
+
+  imap <expr> <C-x><C-s> fzf#vim#complete#word({
+      \ 'source':  'cat /usr/share/dict/words',
+      \ 'reducer': function('<sid>make_sentence'),
+      \ 'options': '--multi --reverse --margin 15%,0',
+      \ 'left':    40})
+
+  " And add a shorter version
+  inoremap <C-s> <C-x><C-s>
+
+endfunction
+
+function! find_files#fzf_dict() abort  " {{{1
+
+  imap <expr> <C-x><C-k> fzf#fzf#vim#complete#word({
+                \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add'
+                \ ' $_ROOT/share/dict/words 2>/dev/null',
+                \ 'options': ' --ansi --multi --cycle', 'left': 30})
+
+  inoremap <C-k> <C-x><C-k>
 endfunction
 
 " Atexit: {{{1

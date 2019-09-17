@@ -40,3 +40,12 @@ let g:NERDTreeRespectWildIgnore = 1
 
 " Let's give netrw a shot I guess
 let g:NERDTreeHijackNetrw = 0
+
+" Options Observed in src: {{{1
+
+let g:NERDTreeStatusline = "%{exists('b:NERDTree')?b:NERDTree.root.path.str():''}"
+
+let g:NERDTreeMapToggleZoom = 'Z'  " Z is for Zoom why the hell is the default A?
+
+let g:NERDTreeGlyphReadOnly = 'U+237A'  " literally never gonna remember i
+" did this but oh well

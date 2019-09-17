@@ -33,8 +33,9 @@ setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 setlocal colorcolumn=80,120
 setlocal foldmethod=indent
 
-" setlocal keywordprg=:PydocThis
-nnoremap K <Cmd>'<,'>PydocThis<CR>
+" setlocal keywordprg=pydoc
+let &keywordprg = ':PydocThis' . expand('<cWORD>')
+
 " Use xnoremap because I wouldn't want this in select mode
 xnoremap K <Cmd>'<,'>PydocThis<CR>
 
@@ -57,14 +58,14 @@ endif
 " Mappings: {{{1
 
 " Don't know how I haven't done this yet.
-noremap <F5> <Cmd>py3f %<CR>
-noremap! <F5> <Cmd>py3f %<CR>
+noremap <buffer> <F5> <Cmd>py3f %<CR>
+noremap! <buffer> <F5> <Cmd>py3f %<CR>
 
 " Formatters: {{{1
 
 if executable('yapf')
-    setlocal equalprg=yapf
-    setlocal formatprg=yapf
+  setlocal equalprg=yapf
+  setlocal formatprg=yapf
 
   command! -buffer -complete=buffer -nargs=0 YAPF call ftplugins#YAPF()
   command! -buffer -complete=buffer -nargs=0 YAPFI exec '!yapf -i %'

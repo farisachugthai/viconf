@@ -40,6 +40,9 @@ class VimBuffer(object):
     def __len__(self):
         return len(vim.current.buffer)
 
+    def __repr__(self):
+        return '{}    #{}    {}'.format('Vim Buffer:', self.number, self.filetypes)
+
     @property
     def line_till_cursor(self):  # pylint:disable=no-self-use
         """Return the text before the cursor."""

@@ -5,6 +5,14 @@
     " Last Modified: August 18, 2019 
 " ============================================================================
 
+" Guard: {{{1
+if exists('b:did_stl_vim') || &compatible || v:version < 700
+  finish
+endif
+let b:did_stl_vim = 1
+
+let s:cpo_save = &cpoptions
+set cpoptions-=C
 
 " Statusline: {{{1
 
@@ -44,8 +52,14 @@ function! s:statusline_expr() abort
 
   let cos = " %{exists('g:did_coc_loaded') ? coc#status() : ''} "
 
-  return '[%n] %f ' . dicons . '%m' . '%r' . ' %y ' . fug . csv . ' ' . ' %{&ff} ' . tstmp . cos . sep . pos . '%*' . ' %P'
+  let cog = ' %{exists("g:coc_git_status") ? g:coc_git_status : ""} '
+
+  return '[%n] %f ' . dicons . '%m' . '%r' . ' %y ' . fug . csv . 
+        \ ' %{&ff} ' . tstmp . cos . cog . sep . pos . '%*' . ' %P'
 
 endfunction
 
 let &statusline = <SID>statusline_expr()
+
+let &cpoptions = s:cpo_save
+unlet s:cpo_save

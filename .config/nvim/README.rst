@@ -440,7 +440,7 @@ That code can be found `here.`_
 Different Shells
 ================
 
-Inexplicabily, nvim started a terminal buffer using *powershell* with no prompting!
+Inexplicably, nvim started a terminal buffer using *powershell* with no prompting!
 :envvar:`SHELL` was set to pwsh and it automatically set things up correctly!::
 
    set shell=powershell

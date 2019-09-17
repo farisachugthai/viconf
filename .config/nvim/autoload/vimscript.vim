@@ -51,9 +51,7 @@ function! vimscript#after_ft() abort
 endfunction
 
 
-" BetterProfiler: {{{1
-
-function! vimscript#BetterProfiler(fname) abort
+function! vimscript#BetterProfiler(fname) abort  " {{{1
   " Because Vim's built in profiling capabilities are nonsensical like wtf?
 
   " Toggle debugging
@@ -118,9 +116,8 @@ function! vimscript#Scriptnames(re) abort  " {{{1
     echo join(filtered, ' \n ')
 endfunction
 
-" Scriptnamesdict: {{{1
 
-function! vimscript#ScriptnamesDict() abort  " {{{2
+function! vimscript#ScriptnamesDict() abort  " {{{1
 " From 10,000 lines deep in :he eval
 " Get the output of ":scriptnames" in the scriptnames_output variable.
 " Call by entering `:echo g:ScriptNamesDict()` or the command below.
@@ -161,21 +158,16 @@ endfunction
 
 
 function! vimscript#fzf_scriptnames() abort  " {{{1
-  call fzf#vim#ag(fzf#wrap({s:get_scriptnames()}),
+  " TODO: Why is the LSP complaining?
+  call fzf#vim#run(fzf#wrap({s:get_scriptnames()},
+        \ 0,
+        \ 0,
         \ <bang>0 ? fzf#vim#with_preview('up:60%')
         \ : fzf#vim#with_preview('right:50%:hidden', '?'),
         \ <bang>0))
 endfunction
 
-endfunction
 
-function! s:todo abort  " {{{1
-  call fzf#run(fzf#wrap({
-        \ 'source' : s:get_scriptnames(),
-        \ 'options': '--ansi --multi --border',
-        \ }, <bang>0 ? fzf#vim#with_preview('up:60%')
-        \ : fzf#vim#with_preview('right:50%:hidden', '?'),
-        \ <bang>0))
 " Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save
