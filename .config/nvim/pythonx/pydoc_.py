@@ -84,7 +84,7 @@ import sys
 
 try:
     import pynvim
-except ModuleNotFoundError:
+except ImportError:  # let's not use ModuleNotFoundError because that limit us to 3.7
     sys.exit("Pynvim isn't installed. Exiting.")
 else:
     # forgot this was a thing!
@@ -94,7 +94,6 @@ else:
 @pynvim.plugin
 class Pydoc:
     """Read output from :mod:`pydoc` into a buffer."""
-
     def __init__(self, vim, env=None):
         """Initialize the class."""
         self.vim = vim
@@ -110,17 +109,6 @@ class Pydoc:
         self.vim.command('r!pydoc ' + args[0])
         self.vim.command('set ft=man')
 
-    @pynvim.autocmd('BufEnter',
-                    pattern='Filetype=man',
-                    eval='expand("<afile>")')
-    def check_buffer_output(self):
-        """Make sure the first line isn't an error message."""
-        line0 = self.vim.getline(1)  # yes we need to 0 index it!
-        nodoc = re.compile('^[nN]o Python documentation.*$')
-        matched = nodoc.search(line0)
-        if matched:  # damn
-            self.vim.command('%d')
-
 
 if __name__ == "__main__":
     # should check for xdg data home existing too. probably should make this
@@ -128,10 +116,8 @@ if __name__ == "__main__":
     if not os.environ.get('NVIM_PYTHON_LOG_FILE'):
         os.environ.putenv(
             'NVIM_PYTHON_LOG_FILE',
-            os.path.join(
-                os.environ.get('XDG_DATA_HOME'), '', 'nvim', 'python.log'
-            )
-        )
-    setup_logging(name='rplugin/python3/pydoc')
+            os.path.join(os.environ.get('XDG_DATA_HOME'), '', 'nvim',
+                         'python.log'))
+    setup_logging(name='rplugin.python3.pydoc')
 
     pydoc_plugin = Pydoc()

@@ -21,11 +21,12 @@ set cpoptions-=C
 
 " Options: {{{1
 
-if !has('unix')
-  let g:fugitive_git_executable = 'git.exe'
-else
-  let g:fugitive_git_executable = 'git'
-endif
+" Surprisingly git.exe didn't work
+" if !has('unix')
+"   let g:fugitive_git_executable = 'git.exe'
+" else
+"   let g:fugitive_git_executable = 'git'
+" endif
 
 " Mappings: {{{1
 

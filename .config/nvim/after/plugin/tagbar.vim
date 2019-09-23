@@ -2,7 +2,7 @@
     " File: tagbar.vim
     " Author: Faris Chugthai
     " Description: Tagbar configuration
-    " Last Modified: March 19, 2019
+    " Last Modified: Sep 14, 2019
 " ============================================================================
 
 " Guard: {{{1
@@ -19,6 +19,7 @@ let s:cpo_save = &cpoptions
 set cpoptions-=C
 
 " Options: {{{1
+
 let g:tagbar_left = 1
 let g:tagbar_width = 30
 let g:tagbar_sort = 0
@@ -34,7 +35,9 @@ let g:tagbar_autoclose = 1
 " Well that just feels like the courteous thing to do right?
 let g:tagbar_show_linenumbers = -1
 
-let g:tagbar_foldlevel = 2
+" Actually let's fold this a bit more.
+" Default is 99 btw
+let g:tagbar_foldlevel = 1
 
 
 " If this variable is set to 1 then moving the cursor in the Tagbar window will
@@ -49,13 +52,26 @@ if !has('unix')
   if filereadable('C:/tools/miniconda3/envs/neovim/Library/bin/ctags.exe')
     let g:tagbar_ctags_bin = 'C:/tools/miniconda3/envs/neovim/Library/bin/ctags.exe'
   endif
+
+  " Icon Chars
+        " let g:tagbar_iconchars = ['▶', '▼']  (default on Linux and Mac OS X)
+        " let g:tagbar_iconchars = ['▸', '▾']
+        " let g:tagbar_iconchars = ['▷', '◢']
+        " let g:tagbar_iconchars = ['+', '-']  (default on Windows)
+  " Uh so all of these displayed correctly even on windows so give me some
+  " cooler ones
+  let g:tagbar_iconchars = ['▸', '▾']
+
 endif
 
-" Mappings: {{{1
 
-noremap <silent> <F8> <Cmd>TagbarToggle<CR>
-noremap! <silent> <F8> <Cmd>TagbarToggle<CR>
-tnoremap <silent> <F8> <Cmd>TagbarToggle<CR>
+" Setting this option will result in Tagbar omitting the short help at the
+" top of the window and the blank lines in between top-level scopes in order to
+" save screen real estate.
+" Termux needs this
+if exists($ANDROID_ROOT)
+  let g:tagbar_compact = 1
+endif
 
 " Atexit: {{{1
 

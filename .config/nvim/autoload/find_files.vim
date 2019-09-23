@@ -23,14 +23,6 @@ function! find_files#build_quickfix_list(lines) abort  " {{{1
   cc
 endfunction
 
-function! find_files#fzf_statusline() abort  " {{{1
-    " Override statusline as you like
-    highlight fzf1 ctermfg=81 ctermbg=234
-    highlight fzf2 ctermfg=81 ctermbg=234
-    highlight fzf3 ctermfg=81 ctermbg=234
-    let l:stl = '%#fzf1# > %#fzf2#fz%#fzf3#f'
-    return l:stl
-endfunction
 
 " Maps
 function! find_files#fzf_maps() abort  " {{{1
@@ -77,11 +69,11 @@ endfunction
 
 function! find_files#FZFMru() abort  " {{{1
     call fzf#run(fzf#wrap({
-        \ 'source':   v:oldfiles,
-        \ 'sink' :   'edit',
-        \ 'options': ['-m', '--prompt', '--no-sort', '--query'],
-        \ 'down':    '40%'
-        \ }, '<bang>0'))
+        \ 'source'  :   v:oldfiles,
+        \ 'sink'    :   'edit',
+        \ 'options' : ['-m', '--prompt', '--no-sort', '--query'],
+        \ 'down'    :    '40%'
+        \ }, <bang>0))
   endfunction
 
 function! find_files#FZFGit() abort  " {{{1
@@ -90,23 +82,22 @@ function! find_files#FZFGit() abort  " {{{1
     if !v:shell_error
         lcd `=directory`
         call fzf#run(fzf#wrap({
-            \ 'sink': 'edit',
-            \ 'dir': directory,
+            \ 'sink'  : 'edit',
+            \ 'dir'   : directory,
             \ 'source': 'git ls-files',
-            \ 'down': '40%'
-            \ }))
+            \ 'down'  : '40%'
+            \ }, <bang>0))
     else
         FZF
     endif
 endfunction
 
-" *fzf-vim-reducer-example*
 function! s:make_sentence(lines) abort  " {{{1
+  " *fzf-vim-reducer-example*
   return substitute(join(a:lines), '^.', '\=toupper(submatch(0))', '').'.'
 endfunction
 
 function! find_files#fzf_spell() abort  " {{{1
-
   imap <expr> <C-x><C-s> fzf#vim#complete#word({
       \ 'source':  'cat /usr/share/dict/words',
       \ 'reducer': function('<sid>make_sentence'),
@@ -115,18 +106,8 @@ function! find_files#fzf_spell() abort  " {{{1
 
   " And add a shorter version
   inoremap <C-s> <C-x><C-s>
-
 endfunction
 
-function! find_files#fzf_dict() abort  " {{{1
-
-  imap <expr> <C-x><C-k> fzf#fzf#vim#complete#word({
-                \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add'
-                \ ' $_ROOT/share/dict/words 2>/dev/null',
-                \ 'options': ' --ansi --multi --cycle', 'left': 30})
-
-  inoremap <C-k> <C-x><C-k>
-endfunction
 
 " Atexit: {{{1
 let &cpoptions = s:cpo_save

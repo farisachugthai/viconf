@@ -44,6 +44,18 @@ setlocal omnifunc=python3complete#Complete
 setlocal iskeyword+=.
 let &path = ftplugins#PythonPath()
 
+
+" *'shiftround'* *'sr'* *'noshiftround'* *'nosr'*
+" 'shiftround' 'sr'	boolean	(default off) global
+	" Round indent to multiple of 'shiftwidth'.  Applies to > and <
+	" commands.  CTRL-T and CTRL-D in Insert mode always round the indent to
+	" a multiple of 'shiftwidth' (this is Vi compatible).
+set shiftround
+" Possibly chalk this up to one of the many tab related and necessary option
+" python requires you set
+
+
+
 " Compiler: {{{1
 
 " Well this is neat!

@@ -82,9 +82,9 @@ let g:rst_syntax_code_list = {
     \ 'sh': ['sh', 'bash'],
     \ }
 
-let rst_use_emphasis_colors = 1
+let g:rst_use_emphasis_colors = 1
 
-let rst_fold_enabled = 1
+let g:rst_fold_enabled = 1
 
 " Atexit: {{{1
 let b:undo_ftplugin = 'set et< ts< sw< sts< cms< com< cc< lbr< fdl< fdls< spell< isk< kp<'

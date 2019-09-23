@@ -15,9 +15,7 @@ let g:did_buffers_vim = 1
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
-" EchoRTP: {{{1
-
-function! buffers#EchoRTP()
+function! buffers#EchoRTP()  " {{{1
 
   for directory in nvim_list_runtime_paths()   
     echo directory
@@ -25,12 +23,12 @@ function! buffers#EchoRTP()
 
 endfunction
 
-" PreviewWord: {{{1
+
+function! buffers#PreviewWord() abort  " {{{1
 
 " Open a tag for the word under the cursor in the preview window.
 " TODO: Could definitely do with a mapping
 
-function! buffers#PreviewWord() abort
 " From :he cursorhold-example
   if &previewwindow			" don't do this in the preview window
     return
@@ -67,6 +65,37 @@ function! buffers#PreviewWord() abort
     endif
   endif
 endfunction
+
+
+function! buffers#terminals() abort  " {{{1
+
+  " If running a terminal in Vim, go into Normal mode with Esc
+  tnoremap <Esc> <C-\><C-n>
+
+  " From he term. Alt-R is better because this causes us to lose C-r in every
+  " command we run from nvim
+  tnoremap <expr> <A-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
+
+  " From :he terminal
+  tnoremap <A-h> <C-\><C-N><C-w>h
+  tnoremap <A-j> <C-\><C-N><C-w>j
+  tnoremap <A-k> <C-\><C-N><C-w>k
+  tnoremap <A-l> <C-\><C-N><C-w>l
+  inoremap <A-h> <C-\><C-N><C-w>h
+  inoremap <A-j> <C-\><C-N><C-w>j
+  inoremap <A-k> <C-\><C-N><C-w>k
+  inoremap <A-l> <C-\><C-N><C-w>l
+
+  " Move around the line
+  tnoremap <A-A> <Esc>A
+  tnoremap <A-b> <Esc>b
+  tnoremap <A-d> <Esc>d
+  tnoremap <A-f> <Esc>f
+
+  " Other window
+  tnoremap <C-w>w <C-><C-N><C-w>w
+endfunction
+
 
 " Atexit: {{{1
 let &cpoptions = s:cpo_save

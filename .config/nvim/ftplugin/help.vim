@@ -26,13 +26,20 @@ if has("conceal")
   setlocal cole=2 cocu=nc
 endif
 
-unlet! b:did_ftplugin
+" Helpfiles won't follow tags correctly without this one
+" Now context-functions will probably go to the tag I want and not simply functions...
+setlocal iskeyword+=-
 
+unlet! b:did_ftplugin
+" Source mine in
 runtime ftplugin/man.vim
+
 
 " Mappings: {{{1
 
 " Oh shit i found duplicated code.
+" NOTE: I mean code duplicated in the neovim source code.
+" autoload/man.vim and ftplugin/man.vim have 1 function copy pasted
 " nnoremap <silent><buffer> gO <Cmd>call pydoc_help#show_toc()<CR>
 
 " Atexit: {{{1

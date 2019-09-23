@@ -1,6 +1,9 @@
-" Neovim Configuration:
-" Maintainer: Faris Chugthai
-" Last Change: Aug 24, 2019
+" ============================================================================
+  " File: init.vim
+  " Author: Faris Chugthai
+  " Description: Neovim configuration
+  " Last Modified: September 23, 2019 
+" ============================================================================
 
 " Preliminaries: {{{1
 scriptencoding utf-8
@@ -29,14 +32,14 @@ if empty('plugs') | let plugs = {} | endif
 let &rtp = stdpath('config') . ',' . stdpath('data') . '/site,' . &rtp
 
 set synmaxcol=400 termguicolors
-syntax sync fromstart
+syntax sync fromstart linebreaks=1
 
 function! Gruvbox() abort
   let g:gruvbox_contrast_hard = 1
   let g:gruvbox_contrast_soft = 0
   let g:gruvbox_improved_strings = 1
   let g:gruvbox_italic = 1
-  colorscheme gruvbox
+  colo gruvbox
 endfunction
 call Gruvbox()
 
@@ -52,7 +55,6 @@ let g:maplocalleader = '<Space>'
 map <Space> <Leader>
 
 if has('nvim-0.4')   " Fun new features!
-  set wildoptions+=pum   " Insert mode style completion...in Ex mode holy fuck
   let &shadafile = stdpath('data') . '/shada/main.shada'
   set pumblend=80   " toggle transparency in the pum
   try | set pyxversion=3 | catch /^Vim:E518:*/ | endtry
@@ -60,10 +62,7 @@ endif
 
 " Protect changes between writes. Default values of updatecount
 " (200 keystrokes) and updatetime (4 seconds) are fine
-set swapfile undofile
-" persist the undo tree for each file
-let &undodir = stdpath('config') . '/undodir'
-set backupext='.bak'
+set swapfile undofile backupext='.bak'
 set writebackup        " protect against crash-during-write
 set nobackup           " but do not persist backup after successful write
 set backupcopy=auto    " use rename-and-write-new method whenever safe
@@ -90,7 +89,6 @@ endif
 
 set wildignorecase wildmode=full:list:longest,full:list
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
-let &wildoptions.='tagfile'
 set complete+=kspell
 " Create a preview window and display all possibilities but don't insert
 set completeopt=menu,menuone,noselect,noinsert,preview
@@ -101,7 +99,7 @@ set ignorecase
 set smartcase infercase
 
 set makeencoding=char         " Used by the makeprg. system locale is used
-set sessionoptions-=buffers,winsize viewoptions-=options
+set sessionoptions-=buffers,winsize viewoptions-=options sessionoptions+=globals
 set tags+=./tags,./*/tags tagcase=smart showfulltag
 set mouse=a modeline
 set autowrite autochdir
@@ -144,7 +142,6 @@ noremap <Down> gj
 " I mess this up constantly thinking that gI does what gi does
 inoremap gI gi
 
-runtime macros/matchit.vim
 set showmatch matchpairs+=<:> lazyredraw
 set matchtime=20  " Show the matching pair for 2 seconds
 let g:matchparen_timeout = 500

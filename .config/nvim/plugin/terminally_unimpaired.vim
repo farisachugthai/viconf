@@ -2,7 +2,7 @@
     " File: terminally_unimpaired.vim
     " Author: Faris Chugthai
     " Description: Configuring the terminal
-    " Last Modified: April 14, 2019
+    " Last Modified: Sep 13, 2019
 " ============================================================================
 
 " Guard: {{{1
@@ -14,49 +14,14 @@ let g:did_terminally_unimpaired_vim = 1
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
-" Mappings: {{{1
-" TODO: Move this to an autoloaded function that only gets called if we're
-" actually in a terminal
 
-" If running a terminal in Vim, go into Normal mode with Esc
-tnoremap <Esc> <C-\><C-n>
+if executable('htop')  " {{{1
+  " Leader -- applications -- htop. Requires nvim for <Cmd> which tmk doesn't exist
+  " even in vim8.0+. Also requires htop which more than likely rules out Win32.
 
-" From he term. Alt-R is better because this causes us to lose C-r in every
-" command we run from nvim
-tnoremap <expr> <A-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
-
-" From :he terminal
-tnoremap <A-h> <C-\><C-N><C-w>h
-tnoremap <A-j> <C-\><C-N><C-w>j
-tnoremap <A-k> <C-\><C-N><C-w>k
-tnoremap <A-l> <C-\><C-N><C-w>l
-inoremap <A-h> <C-\><C-N><C-w>h
-inoremap <A-j> <C-\><C-N><C-w>j
-inoremap <A-k> <C-\><C-N><C-w>k
-inoremap <A-l> <C-\><C-N><C-w>l
-
-" Move around the line
-tnoremap <A-A> <Esc>A
-tnoremap <A-b> <Esc>b
-tnoremap <A-d> <Esc>d
-tnoremap <A-f> <Esc>f
-
-" Other window
-tnoremap <C-w>w <C-><C-N><C-w>w
-
-" Functions: {{{1
-
-" Htop: {{{2
-" Leader -- applications -- htop. Requires nvim for <Cmd> which tmk doesn't exist
-" even in vim8.0+. Also requires htop which more than likely rules out Win32.
-
-" Need to use enew in case your previous buffer setl nomodifiable
-if executable('htop')
+  " Need to use enew in case your previous buffer setl nomodifiable
   noremap <Leader>ah <Cmd>wincmd v<CR><bar><Cmd>enew<CR><bar>term://htop
 endif
-
-
-" Autocmd For Term Buffers: {{{1
 
 " Vim doesn't have this autocmd event
 if !has('nvim')
@@ -64,7 +29,7 @@ if !has('nvim')
 endif 
 
 augroup TermGroup
-  " Statusline in the terminal
+  " Statusline in the terminal: {{{1
   autocmd TermOpen * setlocal statusline=%{b:term_title}
 
   " `set nomodified` so Nvim stops prompting you when you

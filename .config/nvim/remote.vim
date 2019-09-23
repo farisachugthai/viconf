@@ -54,11 +54,24 @@ if has('unix')
   endif
 
 else  " windows not wsl
-  let g:python3_host_prog = 'C:/tools/miniconda3/envs/neovim/python.exe'
+  if !empty(exepath('python.exe'))
+    let g:python3_host_prog = exepath('python.exe')
+  elseif !empty(exepath('python3.exe'))
+    let g:python3_host_prog = exepath('python3.exe')
+  elseif executable('C:/tools/miniconda3/python.exe')  " fuck it
+    let g:python3_host_prog = 'C:/tools/miniconda3/python.exe'
+  else
+    let g:loaded_python3_provider = 1
+    echoerr 'Could not find the remote python3 host.'
+  endif
+
   let g:python_host_prog = 'C:/Users/faris/.windows-build-tools/python27/python.exe'
 
   let loaded_ruby_provider = 1
-  let g:node_host_prog = 'C:/Users/faris/AppData/Roaming/npm/neovim-node-host.cmd'
+
+  if !empty(exepath('neovim-node-host'))
+    let g:node_host_prog = exepath('neovim-node-host')
+  endif
 
   let g:clipboard = {
         \   'name': 'winClip',

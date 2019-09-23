@@ -201,14 +201,11 @@ iab Htis This
 iab Hvae Have
 iab Hvaing Having
 iab Hwich Which
-ia Id I'd
 ia idk I don't know
 iab Idae Idea
 iab Idaes Ideas
 iab Identofy Identify
 iab Ihs His
-ia Ill I'll
-ia Im I'm
 ia Isnt Isn't
 ia Itd It'd
 iab Itis It Is
@@ -283,16 +280,6 @@ iab Otehr Other
 iab Otu Out
 iab Owrk Work
 iab Owuld Would
-iab Oxident Oxidant
-iab Papaer Paper
-iab Parliment Parliament
-iab Paymetn Payment
-iab Paymetns Payments
-iab Pciture Picture
-iab Peice Piece
-iab Peices Pieces
-iab Peolpe People
-iab Peopel People
 iab Perhasp Perhaps
 iab Perhpas Perhaps
 iab Permanant Permanent

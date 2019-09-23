@@ -6,7 +6,7 @@
 " ============================================================================
 
 " Plugin Guard: {{{1
-if !has_key(plugs, 'vim-startify')
+if !exists('g:loaded_startify')
     finish
 endif
 

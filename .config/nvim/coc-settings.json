@@ -1,8 +1,6 @@
 {
-  "css.trace.server": "messages",
   "coc.preferences.currentFunctionSymbolAutoUpdate": true,
   "coc.preferences.extensionUpdateCheck": "daily",
-  "coc.preferences.formatOnType": true,
   "coc.preferences.formatOnSaveFiletypes": [
     "javascript",
     "html",
@@ -12,11 +10,12 @@
     "powershell",
     "python"
   ],
+  "coc.preferences.formatOnType": true,
   "coc.preferences.hoverTarget": "preview",
   "coc.preferences.jumpCommand": "edit",
   "coc.preferences.messageLevel": "error",
   "coc.preferences.previewAutoClose": true,
-  "coc.preferences.snippetStatusText": "",
+  "coc.preferences.snippetStatusText": "Coc",
   "coc.preferences.useQuickfixForLocations": true,
   "coc.source.around.shortcut": "Coc-Around:",
   "coc.source.buffer.firstMatch": false,
@@ -43,39 +42,40 @@
     "typescript"
   ],
   "coc.source.ultisnips.shortcut": "Coc-UltiSnips:",
-
   "codeLens.enable": true,
   "codeLens.separator": "‣",
-
+  "css.trace.server": "messages",
+  "cursors.nextKey": "<Tab>",
+  "cursors.previousKey": "<S-Tab>",
   "diagnostic.checkCurrentLine": true,
   "diagnostic.displayByAle": false,
   "diagnostic.enableMessage": "always",
-  "diagnostic.filetypeMap": {"default": "bufferType"},
+  "diagnostic.filetypeMap": {
+    "default": "bufferType"
+  },
   "diagnostic.joinMessageLines": true,
   "diagnostic.level": "warning",
   "diagnostic.messageTarget": "float",
   "diagnostic.refreshAfterSave": true,
-  "diagnostic.refreshOnInseptMode": true,
+  "diagnostic.refreshOnInsertMode": true,
   "diagnostic.virtualText": true,
   "diagnostic.virtualTextLineSeparator": " \\ ",
-  "diagnostic.virtualTextPrefix": "Coc-Diagnostic: ",
   "diagnostic.virtualTextLines": 3,
-
+  "diagnostic.virtualTextPrefix": "Coc-Diagnostic: ",
   "git.addGlameToBufferVar": true,
   "git.addGlameToVirtualText": true,
   "git.branchCharacter": "",
+  "git.conflictedDecorator": " ** Merge conflict ** ",
   "git.enableGlobalStatus": true,
   "git.enableGutters": true,
-  "git.stagedDecorator": " + Staged + ",
-  "git.untrackedDecorator": " : Untracked : ",
-  "git.conflictedDecorator": " ** Merge conflict ** ",
   "git.virtualTextPrefix": "Coc-Git:",
-
-  "json.trace.server": "messages",
+  "git.virtualTextLineSeparator": "",
   "json.format.enable": true,
+  "json.trace.server": "messages",
   "languageserver": {
     "python": {
       "args": [
+        "--nolazy",
         "-vv",
         "--log-file",
         "~/.local/share/nvim/site/lsp_python.log"
@@ -84,7 +84,6 @@
       "filetypes": [
         "python"
       ],
-      "shell": true,
       "settings": {
         "pyls": {
           "commandPath": "python -m pyls",
@@ -138,10 +137,13 @@
             }
           }
         }
-      }
-    }
+      },
+      "shell": true
+    },
+    // "prettier": {
+    // needs property key like command or filetypes
+    // }
   },
-
   "list.extendedSearchMode": true,
   "list.insertMappings": {
     "<A-p>": "action:preview",
@@ -162,7 +164,7 @@
     "<C-r>": "do:refresh",
     "<C-t>": "action : tabe",
     "<C-x>": "action : split",
-    "<CR>" : "do : defaultaction",
+    "<CR>": "do : defaultaction",
     "A": "action:append",
     "C": "action:quickfix",
     "D": "action : delete",
@@ -203,7 +205,10 @@
     "--top",
     "--normal"
   ],
-  "list.source.files.command": "rg",
+  "list.source.extensions.defaultOptions": [
+    "--top",
+    "--normal"
+  ],
   "list.source.files.args": [
     "--hidden",
     "--smart-case",
@@ -214,14 +219,11 @@
     "--color=never",
     "--files"
   ],
+  "list.source.files.command": "rg",
   "list.source.files.defaultOptions": [
     "--number-select",
     "--auto-preview",
     "--top"
-  ],
-  "list.source.extensions.defaultOptions": [
-    "--top",
-    "--normal"
   ],
   "list.source.files.excludePatterns": [
     "**/node_modules/*",
@@ -295,7 +297,6 @@
     "--top",
     "--normal"
   ],
-  "list.source.mru.maxLength": 100,
   "list.source.mru.excludePatterns": [
     "**/.git/*",
     "**/node_modules/*",
@@ -303,6 +304,7 @@
     "**/__pycache__/**",
     "**/*.pyc"
   ],
+  "list.source.mru.maxLength": 100,
   "list.source.outline.defaultOptions": [
     "--top",
     "--normal"
@@ -311,11 +313,15 @@
     "--normal",
     "--top"
   ],
-  "list.source.sessions.defaultOptions": [
+  "list.source.quickfix.defaultOptions": [
     "--top",
     "--normal"
   ],
   "list.source.services.defaultOptions": [
+    "--top",
+    "--normal"
+  ],
+  "list.source.sessions.defaultOptions": [
     "--top",
     "--normal"
   ],
@@ -330,10 +336,6 @@
     "--number-select"
   ],
   "list.source.tags.defaultOptions": [
-    "--top",
-    "--normal"
-  ],
-  "list.source.quickfix.defaultOptions": [
     "--top",
     "--normal"
   ],
@@ -355,7 +357,6 @@
     "--normal",
     "--number-select"
   ],
-
   "lists.disabledLists": [
     "buffers",
     "bcommits",
@@ -370,7 +371,7 @@
     "vimcommands",
     "windows"
   ],
-
+  "highlight.trace.server": "messages",
   "powershell.codeFolding.showLastLine": false,
   "powershell.codeFormatting.openBraceOnSameLine": true,
   "powershell.codeFormatting.useCorrectCasing": true,
@@ -379,16 +380,26 @@
   "powershell.integratedConsole.focusConsoleOnExecute": false,
   "powershell.integratedConsole.showOnStartup": false,
   "powershell.powerShellExePath": "C:\\pwsh\\7-preview\\pwsh.exe",
-
   "python.analysis.diagnosticEnabled": true,
   "python.analysis.downloadChannel": "daily",
   "python.analysis.logLevel": "Warning",
   "python.analysis.openFilesOnly": false,
   "python.autoComplete.addBrackets": true,
+  "python.condaPath": "C:\\tools\\miniconda3\\Scripts\\conda.exe",
+
+  "python.workspaceSymbols.tagFilePath": "${workspaceFolder}/tags",
+  "python.workspaceSymbols.exclusionPatterns": [
+    "**/site-packages/**",
+    "node_modules",
+    "build",
+    "dist",
+    ".tox",
+    ".venv"
+  ],
   "python.jediMemoryLimit": -1,
   "python.jediShortcut": "Jedi",
-  "python.linting.pylintEnabled": false,
   "python.linting.flake8Path": "python -m flake8",
+  "python.linting.pylintEnabled": false,
   "python.terminal.executeInFileDir": true,
   "python.terminal.launchArgs": [
     "-m",
@@ -396,11 +407,14 @@
   ],
   "python.trace.server": "messages",
   "python.venvFolders": [
-    "~/virtualenvs",
+    "~/.virtualenvs",
+    "envs",
+    ".pyenv",
+    ".direnv",
+    ".venv",
     "~/.local/share/virtualenvs/"
   ],
   "python.venvPath": "~/.local/share/virtualenvs",
-
   "refactor.afterContext": 0,
   "refactor.beforeContext": 0,
   "refactor.openCommand": "vsplit",
@@ -416,7 +430,7 @@
       "rst"
     ]
   },
-  "snippets.shortcut": "Coc-Snippets",
+  "snippets.shortcut": "<tab>",
   "snippets.snipmate.author": "Faris A. Chugthai",
   "snippets.snipmate.enable": false,
   "snippets.trace": "verbose",
@@ -462,15 +476,14 @@
   "suggest.detailField": "preview",
   "suggest.disableMenu": true,
   "suggest.disableMenuShortcut": true,
-  "suggest.enablePreview": true,
   "suggest.enablePreselect": false,
+  "suggest.enablePreview": true,
   "suggest.fixInsertedWord": true,
   "suggest.floatEnable": true,
+  "suggest.highPrioritySourceLimit": 99,
   "suggest.keepCompleteopt": true,
   "suggest.lowPrioritySourceLimit": 50,
-  "suggest.highPrioritySourceLimit": 99,
   "suggest.maxCompleteItemCount": 100,
-  "suggest.minTriggerInputLength": 2,
   "suggest.noselect": true,
   "suggest.preferCompleteThanJumpPlaceholder": false,
   "suggest.snippetIndicator": "[Coc-Snippets:]",
@@ -483,10 +496,11 @@
   "typescript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
   "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
   "vimlsp.debug": true,
-  "vimlsp.trace.server": "messages",
   "vimlsp.indexes.runtimepath": true,
   "vimlsp.suggest.fromRuntimepath": true,
   "vimlsp.suggest.fromVimruntime": true,
+  "vimlsp.trace.server": "messages",
+  "workspace.ignoredFiletypes": ["markdown","log","txt","help", "python"],
   "yaml.format.enable": true,
   "yaml.format.proseWrap": "always",
   "yaml.trace.server": "messages",
