@@ -43,6 +43,10 @@ augroup TermGroup
   " Jul 17, 2019: It's been like 3 months and I only recently realized
   " that I didn't mention to leave insert mode when the terminal closes...
   autocmd TermClose * stopinsert
+
+  " Set up mappings
+  autocmd TermOpen * call buffers#terminals()
+
 augroup END
 
 

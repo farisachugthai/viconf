@@ -11,7 +11,9 @@
 import logging
 import os
 import sys
+import pkg_resources
 
+pkg_resources.declare_namespace(__name__)
 # new neovim module and fallback
 try:
     import pynvim

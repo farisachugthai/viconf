@@ -11,9 +11,9 @@ scripts that I use to run Neovim on Linux, Windows 10, and
 
 ## How it works
 
-As much of this [init.vim](.config/nvim/init.vim) is set up in a way that it
-will start up as quickly as possible while still maintaining the maximum
-number of features possible.
+As much of this [init.vim](.config/nvim/init.vim) is set up so that it
+will start up as quickly as possible while still maintaining a plethora 
+of features.
 
 This is achieved by [autoloading](.config/nvim/autoload) as many functions as
 possible, and determining a few non-portable settings in a relatively quick
@@ -21,39 +21,34 @@ and consistent manner.
 
 ### Set up
 
-The initialization file makes as few assumptions as possible and I've personally
-used it from:
+The initialization file has largely been refactored out of existence.
 
-* A 5.5 inch cell phone with no X server configured
-* Windows 10 with ConEmu in a Cmd terminal
-* Windows 10 Powershell (ISE and console)
-* WSL
-* Neovim-QT on both Ubuntu and Windows
-* Bash in a dozen different terminals
+The use (and inevitable abuse) of the `runtimepath` or `&rtp` variable
+allows for more logical namespaces to be utilized, and typically debugging
+has proven easier with almost all functionality broken up into
+the respective <./.config/nvim/plugin>,  <./.config/nvim/after/plugin>,
+and <./.config/nvim/autoload> directories.
 
-```vim
-
-let g:termux = isdirectory('/data/data/com.termux')
-let g:ubuntu = has('unix') && !has('macunix')
-let g:windows = has('win32') || has('win64')
-let g:wsl = has('wsl')
-
-```
-
-
-This repository strives for maximum portability so long as 1 assumption remain
-true:
+The only remaining assumption as a result of the restructuring is:
 
 - [vim-plug](https://www.github.com/junegunn/vim-plug) is the plugin manager
   that you'd like to use.
 
 Luckily upgrading is typically as simple as running:
 
-    `sudo add-apt-repository ppa:neovim-ppa/unstable  # or`
+    `sudo add-apt-repository ppa:neovim-ppa/unstable`
+
+On ubuntu or:
+
     `choco install neovim --pre`
+
+On Windows.
 
 The [init.vim](./.config/nvim/init.vim) will immediately check that the
 plug.vim file is there, and it will automatically download it if not.
+
+If that proves too much effort, I `git sub-tree add`ed vim-plug to this
+repo as well.
 
 ## Start up time
 
@@ -61,9 +56,9 @@ The configuration for the plugins used by Neovim are currently being refactored
 out of the [init.vim](./.config/nvim/init.vim) and moved into the directory
 [after/plugin](./.config/nvim/after/plugin)
 
-By factoring these files out of the init.vim, it becomes easier to check that
-Vim-Plug actually loaded the plugin. If the plugin was not loaded, the
-configuration file runs `finish` immediately.
+By factoring these files out of the init.vim, it becomes easier to
+check that Vim-Plug actually loaded the plugin. If the plugin 
+was not loaded, the configuration file runs `finish` immediately.
 
 This allows for extensive modification to the way that Neovim handles files and
 allows for startup time to remain the realm of 200 milliseconds.
@@ -95,25 +90,22 @@ As a result of my modifications, this setup currently has:
   This has been accomplished by falling back to Nvim's builtin functions for
   highlighting certain syntax groups.
 
+### Tmux integration
 
+[Tmux](https://github.com/tmux/tmux/wiki) configuration files live at
+[tmuxline.vim](./.config/nvim/after/plugin/tmuxline.vim).
+
+  - Keybindings for both Nvim and tmux correspond so that jumping from a Nvim
+    window to a Tmux pane uses the same keys.
+  - The configuration for Tmux is displayed at [dotfiles](https://www.github.com/farisachugthai/dotfiles).
 ### Other
 
 - [Personally configured](./.config/nvim/after/ftplugin/) filetype plugins and
-added [filetype detection](./.config/nvim/ftdetect).
+  added [filetype detection](./.config/nvim/ftdetect).
 
 - Lightly configured embedded terminal.
   [20+ convenience mappings](.config/nvim/plugin/terminally_unimpaired.vim)
   are provided to ease navigation between Nvim windows and the embedded terminal.
-
-- Seamless Tmux integration.
-  - Keybindings for both Nvim and tmux correspond so that jumping from a Nvim
-    window to a Tmux pane uses the same keys.
-  - The configuration for Tmux is displayed at [dotfiles](https://www.github.com/farisachugthai/dotfiles).
-
-
-- Syntax highlighting for files from [Zim
-wiki](https://github.com/jaap-karssenberg/zim-desktop-wiki) found at
-[zimwiki.vim](./.config/nvim/syntax/zimwiki.vim)
 
 - Spell-checking with dictionaries that have been personally compiled and reviewed.
   - For the full list of words check

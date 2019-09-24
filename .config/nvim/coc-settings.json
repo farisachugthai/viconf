@@ -15,7 +15,7 @@
   "coc.preferences.jumpCommand": "edit",
   "coc.preferences.messageLevel": "error",
   "coc.preferences.previewAutoClose": true,
-  "coc.preferences.snippetStatusText": "Coc",
+  "coc.preferences.snippetStatusText": "",
   "coc.preferences.useQuickfixForLocations": true,
   "coc.source.around.shortcut": "Coc-Around:",
   "coc.source.buffer.firstMatch": false,
@@ -42,7 +42,6 @@
     "typescript"
   ],
   "coc.source.ultisnips.shortcut": "Coc-UltiSnips:",
-  "codeLens.enable": true,
   "codeLens.separator": "‣",
   "css.trace.server": "messages",
   "cursors.nextKey": "<Tab>",
@@ -68,8 +67,12 @@
   "git.conflictedDecorator": " ** Merge conflict ** ",
   "git.enableGlobalStatus": true,
   "git.enableGutters": true,
+  "git.stagedDecorator": " + Staged + ",
+  "git.untrackedDecorator": " : Untracked : ",
   "git.virtualTextPrefix": "Coc-Git:",
   "git.virtualTextLineSeparator": "",
+
+  "json.trace.server": "messages",
   "json.format.enable": true,
   "json.trace.server": "messages",
   "languageserver": {
@@ -139,10 +142,10 @@
         }
       },
       "shell": true
+      }
     },
-    // "prettier": {
-    // needs property key like command or filetypes
-    // }
+      "shell": true
+    }
   },
   "list.extendedSearchMode": true,
   "list.insertMappings": {
@@ -385,8 +388,6 @@
   "python.analysis.logLevel": "Warning",
   "python.analysis.openFilesOnly": false,
   "python.autoComplete.addBrackets": true,
-  "python.condaPath": "C:\\tools\\miniconda3\\Scripts\\conda.exe",
-
   "python.workspaceSymbols.tagFilePath": "${workspaceFolder}/tags",
   "python.workspaceSymbols.exclusionPatterns": [
     "**/site-packages/**",
@@ -500,7 +501,8 @@
   "vimlsp.suggest.fromRuntimepath": true,
   "vimlsp.suggest.fromVimruntime": true,
   "vimlsp.trace.server": "messages",
-  "workspace.ignoredFiletypes": ["markdown","log","txt","help", "python"],
+  "workspace.ignoredFiletypes": ["markdown","log","txt","help"],
+  "vimlsp.trace.server": "messages",
   "yaml.format.enable": true,
   "yaml.format.proseWrap": "always",
   "yaml.trace.server": "messages",

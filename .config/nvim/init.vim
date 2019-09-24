@@ -32,7 +32,7 @@ if empty('plugs') | let plugs = {} | endif
 let &rtp = stdpath('config') . ',' . stdpath('data') . '/site,' . &rtp
 
 set synmaxcol=400 termguicolors
-syntax sync fromstart linebreaks=1
+syntax sync fromstart linebreaks=2
 
 function! Gruvbox() abort
   let g:gruvbox_contrast_hard = 1
@@ -115,10 +115,7 @@ let &showbreak = '↳ '                   " Indent wrapped lines correctly
 set breakindent breakindentopt=sbr
 set updatetime=100 lazyredraw
 set inccommand=split
-let g:tutor_debug = 1
-set terse shortmess=aoOsAItTWAc
-set shortmess=aoOsAItTWAc
-set sidescroll=5                       " Didn't realize the default is 1
+set terse shortmess=aoOsAItTWAcF
 set title titlestring=%<%F%=%l/%L-%P   " leaves a cool title for tmux
 
 " Mappings: {{{1

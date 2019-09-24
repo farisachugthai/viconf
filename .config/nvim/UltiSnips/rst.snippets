@@ -1,6 +1,5 @@
 # Rst.snippets:
 # -*- coding: utf-8 -*-
-# Vim: set et:set ts=3:set sts=3:set sw=3:
 
 extends snippets
 extends python
@@ -11,7 +10,7 @@ extends python
 
 global !p
 
-from snippets_helper import make_items,
+from snippets_helper import make_items
 
 endglobal
 
@@ -19,24 +18,24 @@ endglobal
 #  Inline      #
 ################
 
-snippet * "Italics"
+snippet * "Italics" w
 *${1:${VISUAL:Emphasis}}* $0
 endsnippet
 
-snippet ** "Bold"
+snippet ** "Bold" w
 **${1:${VISUAL:Strong emphasis}}** $0
 endsnippet
 
-snippet bold "bold"
+snippet bold "bold" w
 **${1:${VISUAL:Strong emphasis}}** $0
 endsnippet
 
-snippet kbd "Add the kbd directive to your doc"
-:kbd:\`${1:${VISUAL}}\`
+snippet kbd "Add the kbd directive to your doc" w
+:kbd:\`${1:${VISUAL}}\` $0
 endsnippet
 
-snippet rep "Replace"
-.. |$1| replace:: $2
+snippet rep "Replace" b
+.. |${1:replace}| replace:: ${2:${VISUAL}} $0
 endsnippet
 
 snippet ref  "Links that follow labelled objects. Expand 'lab or labhe'" w
@@ -73,7 +72,7 @@ endsnippet
 #  links  #
 ###########
 
-snippet external "link to an external URL. Simpler." w
+snippet ext "link to an external URL. Simpler." w
 \`${1:Optional Link text} <${2:${VISUAL:Link destination}>}\`_ $0
 endsnippet
 
@@ -85,7 +84,7 @@ snippet lab "Marks all headers as the destination for links" w
 .. _${0:${VISUAL}}:
 endsnippet
 
-snippet labhe "Label and header tied together." w
+snippet header "Label and header tied together." w
 .. _${1}:
 
 ${1:${VISUAL}}
@@ -116,7 +115,7 @@ snippet img "image link directive" w
 .. |${1:alias}| image:: ${2:img}
 endsnippet
 
-snippet fig: "Figure directive" w
+snippet fig "Figure directive" w
 .. figure:: ${1:img}
    :alt: ${2:alter text}
 
@@ -131,8 +130,8 @@ snippet contents "content directive" w
    $0
 endsnippet
 
-snippet coded "Code block directive." w
-.. code:: ${1:type}
+snippet code "Code block directive." w
+.. code-block:: ${1:type}
 
    ${0:${VISUAL:code}}
 endsnippet
@@ -143,7 +142,7 @@ snippet tip "Tips or anyone in need of a directive!" w
    ${0:${VISUAL:Tip for anyone having trouble.}}
 endsnippet
 
-snippet coded "Code block directive." w
+snippet code "Code block directive." w
 .. code:: ${1:type}
 
    ${0:${VISUAL:write some code}}
@@ -161,7 +160,7 @@ snippet warn "Warning directive"
    ${0:${VISUAL:Warning:}}
 endsnippet
 
-snippet important "Important directive" w
+snippet imp "Important directive" w
 .. important::
 
    ${0:${VISUAL:Important notice:}}
@@ -231,7 +230,7 @@ ${1:${VISUAL:Section name}}
 `!p snip.rv = len(t[1])*'='`
 endsnippet
 
-snippet title- "Title with -" b
+snippet title "Title with -" b
 ${1:${VISUAL:Subsection name}}
 `!p snip.rv = len(t[1])*'-'`
 endsnippet
@@ -302,7 +301,9 @@ endsnippet
 ############
 
 # Keep Sphinx specific stuff separate for now.
+
 # Utilize "gf" here!
+
 # /data/data/com.termux/files/home/virtualenvs/utilities/lib/python3.7/site-packages/sphinx/directives
 # That's the list of every directive sphinx added...
 # directives.register_directive('default-role', DefaultRole)
@@ -324,7 +325,6 @@ endsnippet
 # directives.register_directive('centered', Centered)
 # directives.register_directive('acks', Acks)
 # directives.register_directive('hlist', HList)
-# directives.register_directive('only', Only)
 # directives.register_directive('include', Include)
 
 # register the standard rst class directive under a different name
@@ -340,28 +340,51 @@ endsnippet
 # directives.register_directive('list-table', ListTable)
 # directives.register_directive('math', MathDirective)
 
+# Drom directives/codw
+# directives.register_directive('highlight', Highlight)
+# directives.register_directive('highlightlang', HighlightLang)
+# directives.register_directive('code-block', CodeBlock)
+# directives.register_directive('sourcecode', CodeBlock)
+# directives.register_directive('literalinclude', LiteralInclude)
+
+# For the inline roles
+# specific_docroles = {
+# # links to download references
+# 'download': XRefRole(nodeclass=addnodes.download_reference),
+# # links to anything
+# 'any': AnyXRefRole(warn_dangling=True),
+
+# 'pep': PEP(),
+# 'rfc': RFC(),
+# 'guilabel': GUILabel(),
+# 'menuselection': MenuSelection(),
+# 'file': EmphasizedLiteral(),
+# 'samp': EmphasizedLiteral(),
+# 'abbr': Abbreviation(),
+# 'index': Index(),
+# }  # type: Dict[str, RoleFunction]
 ###################
 #  Sphinx Inline  #
 ###################
 
-snippet com "command inline" s
-:command:\`${1:$VISUAL}\`
+snippet com "command inline"
+:command:\`${1:${VISUAL}}\` $0
 endsnippet
 
-snippet math "math inline" s
-:math:\`${1:$VISUAL}\`
+snippet math "math inline"
+:math:\`${1:${VISUAL}}\` $0
 endsnippet
 
-snippet file "file inline" s
-:file:\`${1:$VISUAL}\`
+snippet file "file inline"
+:file:\`${1:${VISUAL}}\` $0
 endsnippet
 
-snippet pep "pep inline" s
-:pep:\`${1:$VISUAL}\`
+snippet pep "pep inline"
+:pep:\`${1:${VISUAL}}\` $0
 endsnippet
 
-snippet doc "doc inline" s
-:doc:\`${1:$VISUAL}\`
+snippet doc "doc inline"
+:doc:\`${1:${VISUAL}}\` $0
 endsnippet
 
 ######################
@@ -375,51 +398,25 @@ snippet sid "SideBar" b
    ${2:${VISUAL:SideBar Content}}
 endsnippet
 
-snippet cb "Code Block. Must have 1 blank line surrounding!" bs
-.. code-block:: ${1:python3}
-
-   ${2:${VISUAL:code}}
-
-$0
-endsnippet
-
-snippet codeb "code block duplicated" bs
-.. code-block:: ${1:python}
-
-   ${2:${VISUAL:code}}
-endsnippet
-
-snippet cb "Code Block. Must have 1 blank line surrounding!" bs
-.. code-block:: ${1:python3}
-
-   ${2:${VISUAL:code}}
-
-$0
-endsnippet
-
-snippet codeb "code block duplicated" bs
-.. code-block:: ${1:python}
-
-   ${2:${VISUAL:code}}
-endsnippet
-
-snippet hi "Set a highlight directive to establish the base for code block directives" ms
+snippet hi "Set a highlight directive to establish the base for code block directives"
 .. highlight::
    ${1::linenos:}
    ${2::linenothreshold:}
    ${3::emphasize-lines: 1,2,3}
 
-${0:Optional arguments above}
+   ${0:${VISUAL:Optional content}}
 endsnippet
 
 snippet toctree "directive_toctree" b
 .. toctree::
-   :maxdepth: ${1:2}
+   :maxdepth: ${1:1}
+   ${2::glob:}
 
-   ${2:FILES}
+   ${3:${VISUAL}}
 endsnippet
 
-snippet table "table from sphinx cheatsheet"
+# TODO
+snippet table "table from sphinx cheatsheet" b
 ==================   ============
 Name                 Age
 ==================   ============
@@ -429,13 +426,23 @@ And Still More       42
 ==================   ============
 endsnippet
 
-snippet env "Environment variables" s
-:envvar:\`${1:${VISUAL}}\`
+snippet env "Environment variables"
+:envvar:\`${1:${VISUAL}}\` $0
 endsnippet
 
-snippet only "Only create directive based on certain parameters" s
+snippet only "Only create directive based on certain parameters" b
 .. only:: html
 
    :Release: |version|
    :Date: |today|
 endsnippet
+
+# Numpydoc
+
+snippet see "See also the numpy way" b
+See Also
+--------
+${0:${VISUAL}}
+endsnippet
+
+# Vim: set noet:set ts=3:set sts=3:set sw=3:

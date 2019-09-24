@@ -52,7 +52,7 @@ function! s:statusline_expr() abort
 
   let cos = " %{exists('g:did_coc_loaded') ? coc#status() : ''} "
 
-  let cog = ' %{exists("g:coc_git_status") ? g:coc_git_status : ""} '
+  let cog = ' %{exists("b:coc_git_status") ? "Git Status: " . b:coc_git_status : ""} '
 
   return '[%n] %f ' . dicons . '%m' . '%r' . ' %y ' . fug . csv . 
         \ ' %{&ff} ' . tstmp . cos . cog . sep . pos . '%*' . ' %P'

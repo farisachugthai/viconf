@@ -13,20 +13,19 @@ if !exists('g:loaded_coc')  | finish | endif
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
-if exists('g:did_coc_plugin') || &compatible || v:version < 700
-  finish
-endif
-" let g:did_coc_plugin = 1
 
 " Options: {{{1
 
 let $NVIM_COC_LOG_LEVEL='debug'
+let $NVIM_COC_LOG_FILE =stdpath('data') . '/site/coc.log'
+
 " May have to extend after a has('unix') check.
 let g:WorkspaceFolders = [
       \ stdpath('config'),
-      \ '$HOME/projects/dynamic_ipython',
-      \ '$HOME/projects/viconf',
-      \ '$HOME/python/tutorials' ]
+      \ expand('$HOME/projects/dynamic_ipython')
+      \ expand('$HOME/projects/viconf'),
+      \ expand('$HOME/python/tutorials'),
+      \ ]
 
 let g:coc_quickfix_open_command = 'cwindow'
 
@@ -47,7 +46,7 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 " Refresh completions with C-Space
-inoremap <expr> <C-Space> <Plug>coc#refresh
+inoremap <silent><expr> <C-Space> <Plug>coc#refresh()
 
 inoremap <expr> <CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
@@ -100,22 +99,12 @@ xmap <C-c><C-a>  <Plug>(coc-codeaction-selected)
 " nmap <C-c>a  <Plug>(coc-codeaction-selected)
 
 " Remap for do codeAction of current line
-nmap <C-c><C-a>  <Plug>(coc-codeaction)
+noremap <expr><buffer> <C-c><C-a>  <Plug>(coc-codeaction)
 
 " Fix autofix problem of current line
 nmap <C-c><C-f>  <Plug>(coc-fix-current)
 
 noremap <silent> <C-c>q <Plug>(coc-fix-current)
-" Not the most useful autocmds
-augroup CocConf
-  au!
-
-  " Update signature help on jump placeholder
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-  " Highlight symbol under cursor on CursorHold
-  autocmd CursorHold * silent call CocActionAsync('highlight')
-augroup end
-
 " Using CocList: {{{1
 
 " Show all diagnostics
@@ -137,8 +126,17 @@ nnoremap <silent> <C-c>k      <Cmd>CocPrev<CR>
 nnoremap <silent> <C-c><C-r>  <Cmd>CocListResume<CR>
 " noremap <silent> <C-c>r <Cmd>CocListResume<CR>
 noremap <silent> <C-c><C-d>   <Cmd>CocList diagnostics<CR>
+noremap <silent> <C-c> <C-d>   <Cmd>CocList diagnostics<CR>
+xmap <C-c>m  <Plug>(coc-format-selected)
+nmap <C-c>m  <Plug>(coc-format-selected)
 
+" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
+xmap <C-c><C-a>  <Plug>(coc-codeaction-selected)
+" nmap <C-c>a  <Plug>(coc-codeaction-selected)
 
+" Fix autofix problem of current line
+nmap <C-c><C-f>  <Plug>(coc-fix-current)
+noremap <silent> <C-c>q <Plug>(coc-fix-current)
 
 " Commands: {{{1
 
@@ -148,10 +146,10 @@ noremap <silent> <C-c><C-d>   <Cmd>CocList diagnostics<CR>
 command! -nargs=0 CocFormat call CocAction('format')
 
 " Use `:Fold` to fold current buffer
-command! -nargs=? CocFold call CocAction('fold', <f-args>)
+command! -nargs=? CocFold call CocActionAsync('fold', <f-args>)
 
 " use `:OR` for organize import of current buffer
-" command! -nargs=0 CocSort :call CocAction('runCommand', 'editor.action.organizeImport')
+command! -nargs=0 CocSort :call CocAction('runCommand', 'editor.action.organizeImport')
 
 " Just tried this and it worked! So keep checking :CocList commands and add
 " more as we go.

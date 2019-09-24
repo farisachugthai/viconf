@@ -67,8 +67,10 @@ function! buffers#PreviewWord() abort  " {{{1
 endfunction
 
 
-function! buffers#terminals() abort  " {{{1
+" Terminal Buffers: {{{1
 
+function! buffers#terminals() abort
+    
   " If running a terminal in Vim, go into Normal mode with Esc
   tnoremap <Esc> <C-\><C-n>
 
@@ -94,8 +96,8 @@ function! buffers#terminals() abort  " {{{1
 
   " Other window
   tnoremap <C-w>w <C-><C-N><C-w>w
-endfunction
 
+endfunction
 
 " Atexit: {{{1
 let &cpoptions = s:cpo_save

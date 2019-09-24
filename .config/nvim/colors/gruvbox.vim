@@ -448,14 +448,18 @@ call s:HL('GruvboxGreen', s:green)
 call s:HL('GruvboxGreenBold', s:green, s:none, s:bold)
 call s:HL('GruvboxYellow', s:yellow)
 call s:HL('GruvboxYellowBold', s:yellow, s:none, s:bold)
-
 " call s:HL('GruvboxBlue', s:blue)
 hi GruvboxBlue ctermfg=109 guifg=#83a598 guibg=NONE ctermbg=NONE guisp=NONE gui=NONE cterm=NONE
+" call s:HL('GruvboxBlue', s:blue)
+" Mostly green?
+" call s:HL('GruvboxBlue', s:blue)
 call s:HL('GruvboxBlueBold', s:blue, s:none, s:bold)
 call s:HL('GruvboxPurple', s:purple)
 call s:HL('GruvboxPurpleBold', s:purple, s:none, s:bold)
-call s:HL('GruvboxAqua', s:aqua)
-call s:HL('GruvboxAquaBold', s:aqua, s:none, s:bold)
+" Aqua is the real blue
+" call s:HL('GruvboxAqua', s:aqua)
+hi GruvboxAqua ctermfg=108 guifg=#8ec0e1 cterm=bold gui=bold ctermfg=108 guifg=#8ec0e1
+" call s:HL('GruvboxAquaBold', s:aqua, s:none, s:bold)
 call s:HL('GruvboxOrange', s:orange)
 call s:HL('GruvboxOrangeBold', s:orange, s:none, s:bold)
 
@@ -468,7 +472,6 @@ call s:HL('GruvboxAquaSign', s:aqua, s:sign_column, s:invert_signs)
 
 " }}}
 " }}}
-
 " Vanilla colorscheme ------------------------------------------------------ {{{
 
 " General UI: {{{
@@ -834,7 +837,6 @@ hi SpellRare guifg=#d3869b guibg=NONE guisp=#d3869b gui=italic,undercurl cterm=i
 
 " }}}
 " }}}
-
 " Plugin specific -------------------------------------------------------- {{{
 " AKA Plugins You Don't Have: {{{
 
@@ -972,9 +974,7 @@ call s:HL('multiple_cursors_cursor', s:none, s:none, s:inverse)
 call s:HL('multiple_cursors_visual', s:none, s:bg2)
 
 " }}}
-
 endif
-
 " }}}
 " Plugins You Have: {{{
 
@@ -1199,7 +1199,7 @@ hi! link gitcommitSelectedFile GruvboxGreen
 hi! link gitcommitDiscardedFile GruvboxRed
 
 " }}}
-" Tagbar: {{{2
+" Tagbar: {{{
 hi! link TagbarSignature Question
 hi! link TagbarTitle Title
 " I mean this is whats displayed at the top of the buffer so why not title?
@@ -1212,9 +1212,7 @@ hi! fzf1 ctermfg=161 ctermbg=238 guifg=#E12672 guibg=#565656 cterm=bold,underlin
 hi! fzf2 ctermfg=151 ctermbg=238 guifg=#BCDDBD guibg=#565656 cterm=bold,underline
 hi! fzf3 ctermfg=252 ctermbg=238 guifg=#D9D9D9 guibg=#565656 cterm=bold,underline
 " }}}
-
-" }}}
-
+" }}}" }}}}
 " Filetype specific ------------------------------------------------------- {{{
 " Man.vim: {{{
 " Define the default highlighting.
@@ -1751,6 +1749,9 @@ hi! link javaScriptMember GruvboxBlue
 hi! link javaScriptNull GruvboxPurple
 hi! link javaScriptNumber GruvboxPurple
 hi! link javaScriptParens GruvboxFg3
+
+
+" Wait who fucked up the casing here???
 hi! link javascriptArrayMethod GruvboxFg2
 hi! link javascriptArrayStaticMethod GruvboxFg2
 hi! link javascriptArrowFunc GruvboxYellow
@@ -1807,6 +1808,46 @@ hi! link javascriptTemplateSubstitution GruvboxFg0
 hi! link javascriptURLUtilsProp GruvboxFg2
 hi! link javascriptVariable GruvboxRed
 hi! link javascriptYield GruvboxRed
+
+" From the vim syn file
+
+hi def link javaScriptComment		Comment
+hi def link javaScriptLineComment		Comment
+hi def link javaScriptCommentTodo		Todo
+hi def link javaScriptSpecial		Special
+hi def link javaScriptStringS		String
+hi def link javaScriptStringD		String
+hi def link javaScriptStringT		String
+hi def link javaScriptCharacter		Character
+hi def link javaScriptSpecialCharacter	javaScriptSpecial
+hi def link javaScriptNumber		javaScriptValue
+hi def link javaScriptConditional		Conditional
+hi def link javaScriptRepeat		Repeat
+hi def link javaScriptBranch		Conditional
+hi def link javaScriptOperator		Operator
+hi def link javaScriptType			Type
+hi def link javaScriptStatement		Statement
+hi def link javaScriptFunction		Function
+hi def link javaScriptBraces		Function
+hi def link javaScriptError		Error
+hi def link javaScrParenError		javaScriptError
+hi def link javaScriptNull			Keyword
+hi def link javaScriptBoolean		Boolean
+hi def link javaScriptRegexpString		String
+
+hi def link javaScriptIdentifier		Identifier
+hi def link javaScriptLabel		Label
+hi def link javaScriptException		Exception
+hi def link javaScriptMessage		Keyword
+hi def link javaScriptGlobal		Keyword
+hi def link javaScriptMember		Keyword
+hi def link javaScriptDeprecated		Exception 
+hi def link javaScriptReserved		Keyword
+hi def link javaScriptDebug		Debug
+hi def link javaScriptConstant		Label
+hi def link javaScriptEmbed		Special
+
+
 
 " }}}
 " PanglossJS: {{{
@@ -1876,45 +1917,48 @@ hi! link coffeeParen GruvboxFg3
 hi! link coffeeBracket GruvboxOrange
 
 " }}}
-" React:
-      hi jsxRegion guifg=#83a598 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi jsxTagName guifg=#83a598 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi jsxComponentName guifg=#fabd2f guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi jsxEndComponentName guifg=#fabd2f guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi jsxEscapeJsAttributes guifg=#83a598 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi jsxEscapeJsContent guifg=#83a598 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi jsxAttrib guifg=#fabd2f guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi jsxAttributeBraces guifg=#ebdbb2 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi jsxEqual guifg=#8ec07c guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi jsxString guifg=#b8bb26 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi jsxCloseTag guifg=#83a598 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi jsxEndTag guifg=#83a598 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi jsxEndString guifg=#83a598 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi jsxCloseString guifg=#83a598 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi jsxIfOperator guifg=#8ec07c guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi jsxElseOperator guifg=#8ec07c guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi jsxDot guifg=#ebdbb2 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi jsxNamespace guifg=#83a598 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi jsxPunct guifg=#8ec07c guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi jsxRegion ctermfg=23 ctermbg=NONE cterm=NONE
-    hi jsxTagName ctermfg=23 ctermbg=NONE cterm=NONE
-    hi jsxComponentName ctermfg=172 ctermbg=NONE cterm=NONE
-    hi jsxEndComponentName ctermfg=172 ctermbg=NONE cterm=NONE
-    hi jsxEscapeJsAttributes ctermfg=23 ctermbg=NONE cterm=NONE
-    hi jsxEscapeJsContent ctermfg=23 ctermbg=NONE cterm=NONE
-    hi jsxAttrib ctermfg=172 ctermbg=NONE cterm=NONE
-    hi jsxAttributeBraces ctermfg=237 ctermbg=NONE cterm=NONE
-    hi jsxEqual ctermfg=29 ctermbg=NONE cterm=NONE
-    hi jsxString ctermfg=100 ctermbg=NONE cterm=NONE
-    hi jsxCloseTag ctermfg=23 ctermbg=NONE cterm=NONE
-    hi jsxEndTag ctermfg=23 ctermbg=NONE cterm=NONE
-    hi jsxEndString ctermfg=23 ctermbg=NONE cterm=NONE
-    hi jsxCloseString ctermfg=23 ctermbg=NONE cterm=NONE
-    hi jsxIfOperator ctermfg=29 ctermbg=NONE cterm=NONE
-    hi jsxElseOperator ctermfg=29 ctermbg=NONE cterm=NONE
-    hi jsxDot ctermfg=237 ctermbg=NONE cterm=NONE
-    hi jsxNamespace ctermfg=23 ctermbg=NONE cterm=NONE
-    hi jsxPunct ctermfg=29 ctermbg=NONE cterm=NONE
+" React: {{{
+"
+hi jsxRegion guifg=#83a598 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi jsxTagName guifg=#83a598 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi jsxComponentName guifg=#fabd2f guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi jsxEndComponentName guifg=#fabd2f guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi jsxEscapeJsAttributes guifg=#83a598 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi jsxEscapeJsContent guifg=#83a598 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi jsxAttrib guifg=#fabd2f guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi jsxAttributeBraces guifg=#ebdbb2 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi jsxEqual guifg=#8ec07c guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi jsxString guifg=#b8bb26 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi jsxCloseTag guifg=#83a598 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi jsxEndTag guifg=#83a598 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi jsxEndString guifg=#83a598 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi jsxCloseString guifg=#83a598 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi jsxIfOperator guifg=#8ec07c guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi jsxElseOperator guifg=#8ec07c guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi jsxDot guifg=#ebdbb2 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi jsxNamespace guifg=#83a598 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi jsxPunct guifg=#8ec07c guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi jsxRegion ctermfg=23 ctermbg=NONE cterm=NONE
+hi jsxTagName ctermfg=23 ctermbg=NONE cterm=NONE
+hi jsxComponentName ctermfg=172 ctermbg=NONE cterm=NONE
+hi jsxEndComponentName ctermfg=172 ctermbg=NONE cterm=NONE
+hi jsxEscapeJsAttributes ctermfg=23 ctermbg=NONE cterm=NONE
+hi jsxEscapeJsContent ctermfg=23 ctermbg=NONE cterm=NONE
+hi jsxAttrib ctermfg=172 ctermbg=NONE cterm=NONE
+hi jsxAttributeBraces ctermfg=237 ctermbg=NONE cterm=NONE
+hi jsxEqual ctermfg=29 ctermbg=NONE cterm=NONE
+hi jsxString ctermfg=100 ctermbg=NONE cterm=NONE
+hi jsxCloseTag ctermfg=23 ctermbg=NONE cterm=NONE
+hi jsxEndTag ctermfg=23 ctermbg=NONE cterm=NONE
+hi jsxEndString ctermfg=23 ctermbg=NONE cterm=NONE
+hi jsxCloseString ctermfg=23 ctermbg=NONE cterm=NONE
+hi jsxIfOperator ctermfg=29 ctermbg=NONE cterm=NONE
+hi jsxElseOperator ctermfg=29 ctermbg=NONE cterm=NONE
+hi jsxDot ctermfg=237 ctermbg=NONE cterm=NONE
+hi jsxNamespace ctermfg=23 ctermbg=NONE cterm=NONE
+hi jsxPunct ctermfg=29 ctermbg=NONE cterm=NONE
+
+" }}}
 " Ruby: {{{
 
 hi! link rubyStringDelimiter GruvboxGreen
@@ -2033,17 +2077,14 @@ hi! link javaParen3 GruvboxFg3
 hi! link javaParen4 GruvboxFg3
 hi! link javaParen5 GruvboxFg3
 hi! link javaOperator GruvboxOrange
-
 hi! link javaVarArg GruvboxGreen
 
 " }}}
 " Elixir: {{{
 
 hi! link elixirDocString Comment
-
 hi! link elixirStringDelimiter GruvboxGreen
 hi! link elixirInterpolationDelimiter GruvboxAqua
-
 hi! link elixirModuleDeclaration GruvboxYellow
 
 " }}}
@@ -2110,31 +2151,29 @@ hi! link markdownError markdownText
 " hi! link haskellConditional GruvboxAqua
 " hi! link haskellLet GruvboxOrange
 "
-hi! link haskellType GruvboxFg1
-hi! link haskellIdentifier GruvboxFg1
-hi! link haskellSeparator GruvboxFg1
-hi! link haskellDelimiter GruvboxFg4
-hi! link haskellOperators GruvboxBlue
+
 "
-hi! link haskellBacktick GruvboxOrange
-hi! link haskellStatement GruvboxOrange
-hi! link haskellConditional GruvboxOrange
-
-hi! link haskellLet GruvboxAqua
-hi! link haskellDefault GruvboxAqua
-hi! link haskellWhere GruvboxAqua
-hi! link haskellBottom GruvboxAqua
-hi! link haskellBlockKeywords GruvboxAqua
-hi! link haskellImportKeywords GruvboxAqua
-hi! link haskellDeclKeyword GruvboxAqua
-hi! link haskellDeriving GruvboxAqua
 hi! link haskellAssocType GruvboxAqua
-
-hi! link haskellNumber GruvboxPurple
-hi! link haskellPragma GruvboxPurple
-
-hi! link haskellString GruvboxGreen
+hi! link haskellBacktick GruvboxOrange
+hi! link haskellBlockKeywords GruvboxAqua
+hi! link haskellBottom GruvboxAqua
 hi! link haskellChar GruvboxGreen
+hi! link haskellConditional GruvboxOrange
+hi! link haskellDeclKeyword GruvboxAqua
+hi! link haskellDefault GruvboxAqua
+hi! link haskellDelimiter GruvboxFg4
+hi! link haskellDeriving GruvboxAqua
+hi! link haskellIdentifier GruvboxFg1
+hi! link haskellImportKeywords GruvboxAqua
+hi! link haskellLet GruvboxAqua
+hi! link haskellNumber GruvboxPurple
+hi! link haskellOperators GruvboxBlue
+hi! link haskellPragma GruvboxPurple
+hi! link haskellSeparator GruvboxFg1
+hi! link haskellStatement GruvboxOrange
+hi! link haskellString GruvboxGreen
+hi! link haskellType GruvboxFg1
+hi! link haskellWhere GruvboxAqua
 
 " }}}
 " Json: {{{
@@ -2327,20 +2366,28 @@ hi def link djangoError Error
 hi def link djangoComment Comment
 hi def link djangoComBlock Comment
 hi def link djangoTodo Todo
-" }}}
 
 " }}}
-
-" Functions -------------------------------------------------------------------
-" Search Highlighting Cursor {{{
-
-function! GruvboxHlsShowCursor()
-  call s:HL('Cursor', s:bg0, s:hls_cursor)
-endfunction
-
-function! GruvboxHlsHideCursor()
-  call s:HL('Cursor', s:none, s:none, s:inverse)
-endfunction
+" Tutor: {{{ 
+hi! tutorLink cterm=underline gui=underline ctermfg=lightblue guifg=#0088ff
+hi! link tutorLinkBands Delimiter
+hi! link tutorLinkAnchor Underlined
+hi! link tutorInternalAnchor Underlined
+hi! link tutorURL tutorLink
+hi! link tutorEmail tutorLink
+hi! link tutorSection Title
+hi! link tutorSectionBullet Delimiter
+hi! link tutorTOC Directory
+hi! tutorMarks cterm=bold gui=bold
+hi! tutorEmphasis gui=italic cterm=italic
+hi! tutorBold gui=bold cterm=bold
+hi! link tutorExpect Special
+hi! tutorOK ctermfg=green guifg=#00ff88 cterm=bold gui=bold
+hi! tutorX ctermfg=red guifg=#ff2000  cterm=bold gui=bold
+hi! link tutorInlineOK tutorOK
+hi! link tutorInlineX tutorX
+hi! link tutorShellPrompt Delimiter
 
 " }}}
+
 " vim: set sw=2 ts=2 sts=2 et fdm=marker fdls=0 fdl=0:

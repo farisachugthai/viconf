@@ -73,6 +73,61 @@ if exists($ANDROID_ROOT)
   let g:tagbar_compact = 1
 endif
 
+" Filetype Implementations:
+
+let g:tagbar_type_css = {
+    \ 'ctagstype' : 'Css',
+    \ 'kinds'     : [
+    \ 'c:classes',
+    \ 's:selectors',
+    \ 'i:identities'
+    \ ]
+    \ }
+
+let g:tagbar_type_ansible = {
+	\ 'ctagstype' : 'ansible',
+	\ 'kinds' : [
+	\ 't:tasks'
+	\ ],
+	\ 'sort' : 0
+  \ }
+
+let g:tagbar_type_rst = {
+    \ 'ctagstype': 'rst',
+    \ 'ctagsbin' : expand('$HOME/src/rst2ctags/rst2ctags.py'),
+    \ 'ctagsargs' : '-f - --sort=yes',
+    \ 'kinds' : [
+    \ 's:sections',
+    \ 'i:images'
+    \ ],
+    \ 'sro' : '|',
+    \ 'kind2scope' : {
+    \ 's' : 'section',
+    \ },
+    \ 'sort': 0,
+    \ }
+
+let g:tagbar_type_typescript = {
+  \ 'ctagstype': 'typescript',
+  \ 'kinds': [
+  \ 'c:classes',
+  \ 'n:modules',
+  \ 'f:functions',
+  \ 'v:variables',
+  \ 'v:varlambdas',
+  \ 'm:members',
+  \ 'i:interfaces',
+  \ 'e:enums',
+  \ ]
+  \ }
+
+let g:tagbar_type_snippets = {
+    \ 'ctagstype' : 'snippets',
+    \ 'kinds' : [
+    \ 's:snippets',
+    \ ]
+    \ }
+
 " Atexit: {{{1
 
 let &cpoptions = s:cpo_save

@@ -42,8 +42,9 @@ let g:NERDTreeRespectWildIgnore = 1
 let g:NERDTreeHijackNetrw = 0
 
 " Options Observed in src: {{{1
+let s:stl = &statusline
 
-let g:NERDTreeStatusline = "%{exists('b:NERDTree')?b:NERDTree.root.path.str():''}"
+let g:NERDTreeStatusline = "%{exists('b:NERDTree') ? b:NERDTree.root.path.str() : s:stl }"
 
 let g:NERDTreeMapToggleZoom = 'Z'  " Z is for Zoom why the hell is the default A?
 
