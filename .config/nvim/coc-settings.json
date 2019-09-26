@@ -70,11 +70,8 @@
   "git.stagedDecorator": " + Staged + ",
   "git.untrackedDecorator": " : Untracked : ",
   "git.virtualTextPrefix": "Coc-Git:",
-  "git.virtualTextLineSeparator": "",
-
   "json.trace.server": "messages",
   "json.format.enable": true,
-  "json.trace.server": "messages",
   "languageserver": {
     "python": {
       "args": [
@@ -141,9 +138,6 @@
           }
         }
       },
-      "shell": true
-      }
-    },
       "shell": true
     }
   },
@@ -487,7 +481,6 @@
   "suggest.maxCompleteItemCount": 100,
   "suggest.noselect": true,
   "suggest.preferCompleteThanJumpPlaceholder": false,
-  "suggest.snippetIndicator": "[Coc-Snippets:]",
   "suggest.timeout": 800,
   "suggest.triggerAfterInsertEnter": true,
   "tsserver.implicitProjectConfig.checkJs": true,
@@ -501,8 +494,12 @@
   "vimlsp.suggest.fromRuntimepath": true,
   "vimlsp.suggest.fromVimruntime": true,
   "vimlsp.trace.server": "messages",
-  "workspace.ignoredFiletypes": ["markdown","log","txt","help"],
-  "vimlsp.trace.server": "messages",
+  "workspace.ignoredFiletypes": [
+    "markdown",
+    "log",
+    "txt",
+    "help"
+  ],
   "yaml.format.enable": true,
   "yaml.format.proseWrap": "always",
   "yaml.trace.server": "messages",

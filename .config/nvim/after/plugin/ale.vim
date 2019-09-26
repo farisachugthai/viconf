@@ -6,9 +6,10 @@
 " ============================================================================
 
 " Guard: {{{1
-if !has_key(plugs, 'ale')
-    finish
-endif
+" Remember! Don't do this when we lazy load
+" if !has_key(plugs, 'ale')
+"     finish
+" endif
 
 if exists('g:did_ale_after_plugin') || &compatible || v:version < 700
     finish
@@ -19,9 +20,6 @@ let s:cpo_save = &cpoptions
 set cpoptions&vim
 
 " Mappings: {{{1
-
-" e for error t for toggle
-noremap <Leader>et <Cmd>ALEToggleBuffer<CR><bar>echo 'ALE toggled!'<CR>
 
 " Follow the lead of vim-unimpaired with a for ale
 noremap ]a <Cmd>ALENextWrap<CR>
@@ -43,7 +41,10 @@ noremap <Leader>* <Cmd>ALEFindReference<CR>
 let g:ale_fixers = { '*': [ 'remove_trailing_lines', 'trim_whitespace' ] }
 let g:ale_fix_on_save = 1
 
-let g:ale_linter_aliases = {'ps1': 'powershell'}
+let g:ale_linters_explicit = 1
+let g:ale_linter_aliases = {
+      \ 'ps1': 'powershell'
+      \ }
 
 " Now because you fix the trailing whitespace and trailing lines
 let g:ale_warn_about_trailing_whitespace = 0
@@ -54,8 +55,8 @@ let g:ale_warn_about_trailing_blank_lines = 0
 let g:ale_list_vertical = 1
 
 let g:ale_set_signs = 1
-let g:ale_sign_column_always = 1
-
+" let g:ale_sign_column_always = 1
+let g:ale_change_sign_column_color = 1
 " Virtualenvs: {{{1
 " Checkout ale/autoload/ale/python.vim this is the base definition
 let g:ale_virtualenv_dir_names = [
@@ -94,8 +95,15 @@ endif
 " Quickfix: {{{1
 
 " By default ale uses location list which I never remember
-let g:ale_set_quickfix = 1
-let g:ale_set_loclist = 0
+" let g:ale_set_quickfix = 1
+" let g:ale_set_loclist = 0
+" Yeah but theres a reason they do it.
+
+let g:ale_virtualtext_cursor = 1
+let g:ale_sign_highlight_linenrs = 1
+
+let g:ale_pattern_options = {'\.min.js$': {'ale_enabled': 0}}
+
 
 " Atexit: {{{1
 let &cpoptions = s:cpo_save

@@ -148,6 +148,7 @@ ia Didnt Didn't
 iab Directiosn Direction
 iab Disatisfied Dissatisfied
 iab Discoverd Discovered
+ia Doesnt Doesn't
 ia Dont Don't
 iab Exchagnes Exchanges
 iab Excitment Excitement
@@ -531,7 +532,8 @@ iab didnt didn't
 iab directiosn direction
 iab disatisfied dissatisfied
 iab discoverd discovered
-iab dont don't
+ia doesnt doesn't
+ia dont don't
 iab exchagnes exchanges
 iab excitment excitement
 iab eyt yet

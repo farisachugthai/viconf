@@ -60,22 +60,33 @@ command! HiTest call g:syncom#hitest()
 " Plug Mappings: {{{1
 " To attempt making this a little more modular.
 
-nnoremap <Plug>HL <Cmd>HL<CR>
+nnoremap <Plug>(HL) call syncom#HL()
 nnoremap <Plug>HiC <Cmd>HiC<CR>
 nnoremap <Plug>HiQF <Cmd>HiQF<CR>
 nnoremap <Plug>SyntaxInfo <Cmd>SyntaxInfo<CR>
 
-nnoremap <Leader>h <Plug>HL
+if !hasmapto('<Plug>HL')
+  nnoremap <Leader>h <Plug>HL()
+endif
 
-" NewGrep: {{{1
+" QuickFi Window {{{1
+
 " From `:he quickfix`
 command! -nargs=+ NewGrep execute 'silent grep! <args>' | copen
 
+" But now I need way more mappings
+
+nnoremap <silent> <Leader>l <Cmd>botright lwindow<CR>
+nnoremap <silent> <C-Down> <Cmd>llast<CR>
+
+
 " Title: {{{1
+
 " From `:he change`  line 352 tag g?g?
+
 " Adding range means that the command defaults to current line
 " Need to add a check that we're in visual mode and drop the '<,'> if not.
-command! -nargs=0 -range Title <Cmd>'<,'>s/\v<(.)(\w*)/\u\1\L\2/g
+command! -nargs=0 -range Title execute 'normal! ' . "'<,'>s/\v<(.)(\w*)/\u\1\L\2/g"
 
 " Toggle Search Highlighting: {{{1
 set nohlsearch

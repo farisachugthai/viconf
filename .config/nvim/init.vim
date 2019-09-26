@@ -2,7 +2,7 @@
   " File: init.vim
   " Author: Faris Chugthai
   " Description: Neovim configuration
-  " Last Modified: September 23, 2019 
+  " Last Modified: September 23, 2019
 " ============================================================================
 
 " Preliminaries: {{{1
@@ -24,7 +24,7 @@ if empty(s:vim_plug) && exists('*plugins#InstallPlug')
   call plugins#InstallPlug()
 endif
 
-runtime junegunn.vim 
+runtime junegunn.vim
 " Don't assume that the InstallPlug() func worked so ensure it's defined
 if empty('plugs') | let plugs = {} | endif
 " Uh I don't know how this happens but stdpath('config') is no longer the first entry in rtp?
@@ -78,7 +78,6 @@ try | set switchbuf=useopen,usetab,newtab | catch | endtry
 set hidden foldopen=quickfix,search,tag,undo
 set splitbelow splitright sidescroll=5
 set splitbelow splitright
-set winfixheight winfixwidth
 if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif
 set number relativenumber cmdheight=1
 set spelllang=en spellsuggest=5

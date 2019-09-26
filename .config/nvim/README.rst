@@ -83,14 +83,14 @@ Turn it off with ``:set virtualedit=.``
 Environment Variables
 =====================
 
-Do not ever redefine `$VIMRUNTIME`! This variable is used by both Neovim and
+Do not ever redefine :envvar:`$VIMRUNTIME`! This variable is used by both Neovim and
 Vim; however, both define the var differently.
 
 If this is set in a startup file like `.bash_profile` or `.bashrc`, it will
 create compatibility issues between the two.
 
-Nvim defines `$VIMRUNTIME` as /usr/share/nvim/runtime/, in comparison to Vim's
-/usr/share/vim/runtime/ definition. Therefore, defining `$VIMRUNTIME`
+Nvim defines :envvar:`$VIMRUNTIME` as /usr/share/nvim/runtime/, in
+comparison to Vim's /usr/share/vim/runtime/ definition. Therefore, defining `$VIMRUNTIME`
 as /usr/share/vim/runtime/ in a startup file will cause unexpected behavior
 in Neovim's startup.
 

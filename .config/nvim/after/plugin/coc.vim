@@ -22,7 +22,7 @@ let $NVIM_COC_LOG_FILE =stdpath('data') . '/site/coc.log'
 " May have to extend after a has('unix') check.
 let g:WorkspaceFolders = [
       \ stdpath('config'),
-      \ expand('$HOME/projects/dynamic_ipython')
+      \ expand('$HOME/projects/dynamic_ipython'),
       \ expand('$HOME/projects/viconf'),
       \ expand('$HOME/python/tutorials'),
       \ ]
@@ -33,7 +33,7 @@ let g:coc_snippet_next = '<tab>'
 
 let g:coc_snippet_prev = '<S-Tab>'
 
-" Mappings: {{{1
+" Mappings:- {{{1
 
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? coc#_select_confirm() :
@@ -45,14 +45,20 @@ function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
+
 " Refresh completions with C-Space
 inoremap <silent><expr> <C-Space> <Plug>coc#refresh()
 
+" As a heads up theres also a coc#select#snippet
 inoremap <expr> <CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
+inoremap <buffer><expr> gK <Plug>coc
 " Shit none of these work
 nnoremap [g <Plug>(coc-diagnostic-prev)
 nnoremap ]g <Plug>(coc-diagnostic-next)
+
+nnoremap <expr> [c  <Plug>(coc-git-prevchunk)
+nnoremap <expr> ]c  <Plug>(coc-git-nextchunk)
 
 " Remap for rename current word
 nnoremap <expr> <F2> <Plug>(coc-refactor)
@@ -95,7 +101,7 @@ xmap <C-c>m  <Plug>(coc-format-selected)
 nmap <C-c>m  <Plug>(coc-format-selected)
 
 " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-xmap <C-c><C-a>  <Plug>(coc-codeaction-selected)
+ xmap <C-c><C-a>  <Plug>(coc-codeaction-selected)
 " nmap <C-c>a  <Plug>(coc-codeaction-selected)
 
 " Remap for do codeAction of current line
