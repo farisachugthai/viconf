@@ -82,6 +82,8 @@ if has('python3') && empty(s:termux)
   Plug 'raimon49/requirements.txt.vim'
   Plug 'michaeljsmith/vim-indent-object'
   Plug 'ntpeters/vim-better-whitespace'
+  Plug 'plasticboy/vim-markdown'
+
 endif
 
 Plug 'ryanoasis/vim-devicons'           " Keep at end!

@@ -2,7 +2,7 @@
     " File: coc.vim
     " Author: Faris Chugthai
     " Description: Coc plugin mods
-    " Last Modified: Jul 15, 2019
+    " Last Modified: Sep 26, 2019
 " ============================================================================
 
 " Global options are in ../../coc_settings.json
@@ -16,8 +16,8 @@ set cpoptions-=C
 
 " Options: {{{1
 
-let $NVIM_COC_LOG_LEVEL='debug'
-let $NVIM_COC_LOG_FILE =stdpath('data') . '/site/coc.log'
+let $NVIM_COC_LOG_LEVEL = 'debug'
+let $NVIM_COC_LOG_FILE = stdpath('data') . '/site/coc.log'
 
 " May have to extend after a has('unix') check.
 let g:WorkspaceFolders = [
@@ -29,12 +29,13 @@ let g:WorkspaceFolders = [
 
 let g:coc_quickfix_open_command = 'cwindow'
 
-let g:coc_snippet_next = '<tab>'
+let g:coc_snippet_next = '<Tab>'
 
 let g:coc_snippet_prev = '<S-Tab>'
 
 " Mappings:- {{{1
 
+" Basics: {{{2
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? coc#_select_confirm() :
       \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
@@ -66,17 +67,20 @@ nnoremap <expr> ]c  <Plug>(coc-git-nextchunk)
 nnoremap <expr> <F2> <Plug>(coc-refactor)
 xnoremap <F2> <Cmd>'<,'>CocCommand document.renameCurrentWord<CR>
 
-" Easier Grep: {{{2
-"
+nnoremap <silent> <Leader>cw  <Cmd>execute 'CocList -I --normal --input=' 
+      \. expand('<cword>') . ' words'<CR>
+
+" Easier Grep: {{{2 Mnenomic CocFind
 " Keymapping for grep word under cursor with interactive mode
-nnoremap <silent> <Leader>cf <Cmd>exe 'CocList -I --input='.expand('<cword>').' grep'<CR>
+nnoremap <silent> <Leader>cf <Cmd>exe 'CocList -I --input=' 
+      \. expand('<cword>') . ' grep'<CR>
 
+" Mnemonic: CocSelect {{{2
+" Don't use vmap I don't want this in select mode!
 " Q: How to grep by motion?
-
 " A: Create custom keymappings like:
-
-vnoremap <leader>cg :<C-u>call <SID>GrepFromSelected(visualmode())<CR>
-nnoremap <leader>cg :<C-u>set operatorfunc=<SID>GrepFromSelected<CR>g@
+xnoremap <leader>cs :<C-u>call <SID>GrepFromSelected(visualmode())<CR>
+nnoremap <leader>cs :<C-u>set operatorfunc=<SID>GrepFromSelected<CR>g@
 
 function! s:GrepFromSelected(type)
   let saved_unnamed_register = @@
@@ -92,9 +96,6 @@ function! s:GrepFromSelected(type)
   let @@ = saved_unnamed_register
   execute 'CocList grep ' . word
 endfunction
-
-nnoremap <silent> <Leader>w  <Cmd>execute 'CocList -I --normal --input='.expand('<cword>').' words'<CR>
-
 
 " Remap For Rename Current Word: {{{2
 
@@ -136,7 +137,8 @@ nnoremap <silent> <C-c>k      <Cmd>CocPrev<CR>
 nnoremap <silent> <C-c><C-r>  <Cmd>CocListResume<CR>
 " noremap <silent> <C-c>r <Cmd>CocListResume<CR>
 noremap <silent> <C-c><C-d>   <Cmd>CocList diagnostics<CR>
-noremap <silent> <C-c> <C-d>   <Cmd>CocList diagnostics<CR>
+xmap <C-c>m  <Plug>(coc-format-selected)
+nmap <C-c>m  <Plug>(coc-format-selected)
 
 " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
 xmap <C-c><C-a>  <Plug>(coc-codeaction-selected)

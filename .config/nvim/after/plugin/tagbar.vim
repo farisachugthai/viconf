@@ -73,7 +73,15 @@ if exists($ANDROID_ROOT)
   let g:tagbar_compact = 1
 endif
 
-" Filetype Implementations:
+" Filetype Implementations: {{{1
+
+let g:tagbar_type_ansible = {
+	\ 'ctagstype' : 'ansible',
+	\ 'kinds' : [
+	\ 't:tasks'
+	\ ],
+	\ 'sort' : 0
+  \ }
 
 let g:tagbar_type_css = {
     \ 'ctagstype' : 'Css',
@@ -84,13 +92,12 @@ let g:tagbar_type_css = {
     \ ]
     \ }
 
-let g:tagbar_type_ansible = {
-	\ 'ctagstype' : 'ansible',
-	\ 'kinds' : [
-	\ 't:tasks'
-	\ ],
-	\ 'sort' : 0
-  \ }
+let g:tagbar_type_make = {
+            \ 'kinds':[
+            \ 'm:macros',
+            \ 't:targets'
+            \ ]
+            \ }
 
 let g:tagbar_type_javascript = {
       \ 'ctagstype': 'javascript',

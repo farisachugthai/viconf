@@ -4,8 +4,3 @@ python ~/python
 tutorials ~/Dropbox/python/tutorials
 utilities ~/projects/utilities
 viconf ~/projects/viconf/.config/nvim
-
-nvim ~/AppData/Local/nvim
-WindowsPowerShell ~/Documents/WindowsPowerShell
-ConEmu C:/Program Files/ConEmu/ConEmu
-terminal ~/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe

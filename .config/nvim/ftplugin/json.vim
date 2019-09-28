@@ -33,7 +33,22 @@ set suffixesadd=.json
 " Got this from the syntax file
 let g:vim_json_warnings = 1
 
+" ALE: {{{1
+" If this got sourced for some other filetype like md or javascript stop now
+
+if &filetype!=#'json'
+  finish
+endif
+
 if has_key(plugs, 'ale')
+  " Load my configs
+  call ftplugins#ALE_JSON_Conf()
+else
+  " JSON is the only filetype where i always want ALE enabled
+  let b:ale_enabled = 1
+  " And i seriously doubt this is a very smart way of doing this but whatever
+  call plug#load('ale')
+  call ale#toggle#EnableBuffer('%')
   call ftplugins#ALE_JSON_Conf()
 endif
 

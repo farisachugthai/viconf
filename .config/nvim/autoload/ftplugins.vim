@@ -2,7 +2,7 @@
     " File: ftplugins.vim
     " Author: Faris Chugthai
     " Description: Ftplugin specific autoloaded functions
-    " Last Modified: August 28, 2019 
+    " Last Modified: August 28, 2019
 " ============================================================================
 
 " Guard: {{{1
@@ -24,11 +24,17 @@ function! ftplugins#ALE_JSON_Conf() abort  " {{{1
 
   if executable('jq')
     let b:ale_fixers += ['jq']
+    let b:ale_json_jq_options = '-SM'
+    let b:ale_json_jq_filters = '.'
   endif
 
-  " Jul 17, 2019: Only json linter available
   if executable('fixjson')
-    let b:ale_linters = ['fixjson']
+    let b:ale_fixers += ['fixjson']
+  endif
+
+  if executable('jsonlint')
+  " Jul 17, 2019: Only json linter available
+    let b:ale_linters = ['jsonlint']
     let b:ale_linters_explicit = 1
   endif
 endfunction

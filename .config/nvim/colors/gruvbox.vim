@@ -19,6 +19,7 @@ scriptencoding utf8
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 " }}}
+
 " Supporting Code: -------------------------------------------------------- {{{
 " Initialisation: {{{
 
@@ -473,6 +474,7 @@ call s:HL('GruvboxAquaSign', s:aqua, s:sign_column, s:invert_signs)
 " }}}
 " }}}
 " Vanilla colorscheme ------------------------------------------------------ {{{
+
 " General UI: {{{
 
 if s:is_dark
@@ -570,7 +572,7 @@ hi IncSearch cterm=reverse ctermfg=208 ctermbg=234 gui=reverse guifg=#fe8019 gui
 " call s:HL('Underlined', s:blue, s:none, s:underline)
 " hi Underlined cterm=underline ctermfg=109 gui=underline guifg=#83a598
 " ALTERNATIVE:
-hi Underlined cterm=underline ctermfg=23 gui=underline guifg=#83a598 ctermbg=NONE guisp=#ebdbb2 guibg=NONE
+hi Underlined cterm=underline ctermfg=23 gui=underline guifg=#83a598 ctermbg=NONE guisp=NONE guibg=NONE
 
 " call s:HL('StatusLine',   s:bg2, s:fg1, s:inverse)
 hi StatusLine guifg=#504945 guibg=#ebdbb2 guisp=NONE gui=reverse cterm=reverse ctermfg=239 ctermbg=223
@@ -590,6 +592,7 @@ hi WildMenu guifg=#83a598 guibg=#504945 guisp=NONE gui=bold cterm=bold
 
 " Titles for output from :set all, :autocmd, etc.
 " hi! link Title GruvboxGreenBold
+" DUDE DON"T UNDERLINE ITS SO HARD TO READ IN RST
 hi Title guifg=#b8bb26 guibg=NONE guisp=NONE gui=bold cterm=bold ctermfg=100 ctermbg=NONE
 
 hi Directory guifg=#79740e guibg=NONE guisp=NONE gui=bold cterm=bold
