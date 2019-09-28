@@ -119,3 +119,74 @@ please check the following items:
 - Split a window with `:split` and `:vsplit`.  Are the status lines and vertical separators clearly visible?
 - In the GUI, is it easy to find the cursor, also in a file with lots of syntax highlighting?
 - Do not use hard coded escape sequences, these will not work in other terminals.  Always use color names or #RRGGBB for the GUI.
+
+
+Help on ``hi cterm``
+---------------------
+
+The different attributes that can be set are:
+
+		bold
+		underline
+		undercurl	curly underline
+		reverse
+		inverse		same as reverse
+		italic
+		standout
+		strikethrough
+		NONE		no attributes used (used to reset it)
+
+guisp={color-name}					*highlight-guisp*
+	These give the foreground (guifg), background (guibg) and special
+	(guisp) color to use in the GUI.  "guisp" is used for undercurl
+	and underline.
+	There are a few special names:
+		NONE		no color (transparent)
+		bg		use normal background color
+		background	use normal background color
+		fg		use normal foreground color
+		foreground	use normal foreground color
+	To use a color name with an embedded space or other special character,
+	put it in single quotes.  The single quote cannot be used then.
+	Example: >
+	    :hi comment guifg='salmon pink'
+<
+							*gui-colors*
+	Suggested color names (these are available on most systems):
+	    Red		LightRed	DarkRed
+	    Green	LightGreen	DarkGreen	SeaGreen
+	    Blue	LightBlue	DarkBlue	SlateBlue
+	    Cyan	LightCyan	DarkCyan
+	    Magenta	LightMagenta	DarkMagenta
+	    Yellow	LightYellow	Brown		DarkYellow
+	    Gray	LightGray	DarkGray
+	    Black	White
+	    Orange	Purple		Violet
+
+	You can also specify a color by its RGB (red, green, blue) values.
+	The format is "#rrggbb", where
+		"rr"	is the Red value
+		"gg"	is the Green value
+		"bb"	is the Blue value
+	All values are hexadecimal, range from "00" to "ff".  Examples: >
+  :highlight Comment guifg=#11f0c3 guibg=#ff00ff
+<
+
+
+Possible nvim specific option
+-----------------------------
+
+blend={integer}					*highlight-blend*
+	Override the blend level for a highlight group within the popupmenu
+	or floating windows. Only takes effect if 'pumblend' or 'winblend'
+	is set for the menu or window. See the help at the respective option.
+
+
+*highlight-groups* *highlight-default*
+-------------------------------------------
+
+And remember that tag if you want descriptions for each highlight group
+These are the builtin highlighting groups.  Note that the highlighting depends
+on the value of 'background'.  You can see the current settings with the
+":highlight" command.
+

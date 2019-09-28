@@ -7,6 +7,7 @@
 " Last Modified: Jul 13, 2019
 " -----------------------------------------------------------------------------
 
+" Go to line 475 for where it starts
 " Guards: {{{
 if exists('g:did_gruvbox_colors') || &compatible || v:version < 700
     finish
@@ -18,7 +19,6 @@ scriptencoding utf8
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 " }}}
-
 " Supporting Code: -------------------------------------------------------- {{{
 " Initialisation: {{{
 
@@ -430,7 +430,7 @@ endfunction
 
 " memoize common hi groups
 " call s:HL('GruvboxFg0', s:fg0)
-hi GruvboxFg0 ctermfg=229 guifg=#fbf1c7
+hi GruvboxFg0 ctermfg=229 guifg=#fbf1c7 gui=NONE cterm=NONE guisp=NONE ctermbg=NONE guibg=NONE
 call s:HL('GruvboxFg1', s:fg1)
 call s:HL('GruvboxFg2', s:fg2)
 call s:HL('GruvboxFg3', s:fg3)
@@ -473,7 +473,6 @@ call s:HL('GruvboxAquaSign', s:aqua, s:sign_column, s:invert_signs)
 " }}}
 " }}}
 " Vanilla colorscheme ------------------------------------------------------ {{{
-
 " General UI: {{{
 
 if s:is_dark
@@ -484,50 +483,33 @@ endif
 
 if v:version >= 700
 " }}}
-  " Completions: {{{
-  " Popup menu: normal item
-  " call s:HL('Pmenu', s:fg1, s:bg2)
-
-  " " Popup menu: selected item
-  " call s:HL('PmenuSel', s:bg2, s:blue, s:bold)
-
-  " " Popup menu: scrollbar
-  " call s:HL('PmenuSbar', s:none, s:bg2)
-
-  " " Popup menu: scrollbar thumb
-  " call s:HL('PmenuThumb', s:none, s:bg4)
-
-  " TODO: Merge this
-    hi Pmenu guifg=#ebdbb2 guibg=#504945 guisp=NONE gui=NONE cterm=NONE
-    hi PmenuSbar guifg=NONE guibg=#504945 guisp=NONE gui=NONE cterm=NONE
-    hi PmenuSel guifg=#504945 guibg=#83a598 guisp=NONE gui=bold cterm=bold
-    hi PmenuThumb guifg=NONE guibg=#7c6f64 guisp=NONE gui=NONE cterm=NONE
-  hi Pmenu ctermfg=237 ctermbg=187 cterm=NONE
-  hi PmenuSbar ctermfg=NONE ctermbg=187 cterm=NONE
-  hi PmenuSel ctermfg=187 ctermbg=23 cterm=bold
-  hi PmenuThumb ctermfg=NONE ctermbg=137 cterm=NONE
+" Completions: {{{
+    hi Pmenu guifg=#ebdbb2 guibg=#504945 guisp=NONE gui=NONE cterm=NONE ctermfg=237 ctermbg=187
+    hi PmenuSbar guifg=NONE guibg=#504945 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=187
+    hi PmenuSel guifg=#504945 guibg=#83a598 guisp=NONE gui=bold cterm=bold ctermfg=187 ctermbg=23
+    hi PmenuThumb guifg=NONE guibg=#7c6f64 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=137
   " }}}
-  " Cursorline And Tabline: {{{
+" Cursorline And Tabline: {{{
   " Screen line that the cursor is
   " call s:HL('CursorLine',   s:none, s:bg1)
   hi CursorLine ctermbg=237 guibg=#3c3836 guifg=NONE ctermfg=NONE cterm=NONE gui=NONE guisp=NONE
 
   " Line number of CursorLine
   " call s:HL('CursorLineNr', s:yellow, s:bg1)
-  hi CursorLineNr guifg=#fabd2f guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
+  hi CursorLineNr guifg=#fabd2f guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE ctermbg=237
 
   " Screen column that the cursor is
   hi! link CursorColumn CursorLine
 
   " Tab pages line filler
   " call s:HL('TabLineFill', s:bg4, s:bg1, s:invert_tabline)
-  hi TablineFill ctermfg=243 ctermbg=237 guifg=#7c6f64 guibg=#3c3836
+  hi TablineFill ctermfg=243 ctermbg=237 guifg=#7c6f64 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
 
   " Active tab page label
   " call s:HL('TabLineSel', s:green, s:bg1, s:invert_tabline)
-  hi TabLineSel ctermfg=142 ctermbg=237 guifg=#b8bb26 guibg=#3c3836
+  hi TabLineSel ctermfg=142 ctermbg=237 guifg=#b8bb26 guibg=#3c3836 cterm=NONE gui=NONE guisp=NONE
 
-  " Not active tab page label
+  " Not active tab page label. Can you add stuff after the fact?
   hi! link TabLine TabLineFill
 
   " Match paired bracket under the cursor
@@ -554,7 +536,7 @@ if v:version >= 703
 
   " Highlighted screen columns
   " call s:HL('ColorColumn',  s:none, s:color_column)
-  hi ColorColumn ctermbg=237 guibg=#3c3836
+  hi ColorColumn ctermbg=237 guibg=#3c3836 ctermfg=NONE guifg=NONE cterm=NONE gui=NONE guisp=None
 
   " Concealed element: \lambda → λ
   " call s:HL('Conceal', s:blue, s:none)
@@ -567,14 +549,15 @@ endif
 " }}}
 " Unsorted highlight groups: {{{
 " Normal text
-hi Normal ctermfg=223 ctermbg=234 guifg=#ebdbb2 guibg=#1d2021
-hi NormalNC ctermfg=223 ctermbg=234 guifg=#ebdbb2 guibg=#1d2021
+hi Normal ctermfg=223 ctermbg=234 guifg=#ebdbb2 guibg=#1d2021 guisp=NONE gui=NONE cterm=NONE
+hi NormalNC ctermfg=223 ctermbg=234 guifg=#ebdbb2 guibg=#1d2021 guisp=NONE gui=NONE cterm=NONE
 
 " hi! link NonText GruvboxBg2
-hi NonText guifg=#d5c4a1 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi NonText guifg=#d5c4a1 guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermfg=239 ctermbg=NONE
 
 " call s:HL('Visual',    s:none,  s:bg3, s:invert_selection)
 hi Visual cterm=reverse gui=reverse guisp=NONE ctermbg=241 ctermfg=NONE guibg=#665c54 guifg=NONE
+
 hi default link VisualNOS Visual
 hi default link VisualNC Visual
 
@@ -587,7 +570,7 @@ hi IncSearch cterm=reverse ctermfg=208 ctermbg=234 gui=reverse guifg=#fe8019 gui
 " call s:HL('Underlined', s:blue, s:none, s:underline)
 " hi Underlined cterm=underline ctermfg=109 gui=underline guifg=#83a598
 " ALTERNATIVE:
-hi Underlined cterm=underline ctermfg=23 gui=underline guifg=#83a598 ctermbg=NONE guisp=NONE guibg=NONE
+hi Underlined cterm=underline ctermfg=23 gui=underline guifg=#83a598 ctermbg=NONE guisp=#ebdbb2 guibg=NONE
 
 " call s:HL('StatusLine',   s:bg2, s:fg1, s:inverse)
 hi StatusLine guifg=#504945 guibg=#ebdbb2 guisp=NONE gui=reverse cterm=reverse ctermfg=239 ctermbg=223
@@ -598,6 +581,7 @@ hi! link StatusLineTerm StatusLine
 
 " The column separating vertically split windows
 " call s:HL('VertSplit', s:bg3, s:vert_split)
+" TODO: cterms?
 hi VertSplit guifg=#665c54 guibg=#1d2021 guisp=NONE gui=NONE cterm=NONE
 
 " Current match in wildmenu completion
@@ -606,7 +590,7 @@ hi WildMenu guifg=#83a598 guibg=#504945 guisp=NONE gui=bold cterm=bold
 
 " Titles for output from :set all, :autocmd, etc.
 " hi! link Title GruvboxGreenBold
-hi Title guifg=#b8bb26 guibg=NONE guisp=NONE gui=bold,underline cterm=bold,underline ctermfg=100 ctermbg=NONE
+hi Title guifg=#b8bb26 guibg=NONE guisp=NONE gui=bold cterm=bold ctermfg=100 ctermbg=NONE
 
 hi Directory guifg=#79740e guibg=NONE guisp=NONE gui=bold cterm=bold
 
@@ -690,7 +674,7 @@ hi Debug guifg=#fb4934 guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermbg=NONE ct
 hi Special cterm=italic ctermfg=208 ctermbg=bg gui=italic guifg=#fe8019 guibg=bg
 hi! link Tag Special
 
-hi Comment cterm=italic ctermfg=245 gui=italic guifg=#928374
+hi Comment cterm=italic ctermfg=245 gui=italic guifg=#928374 ctermbg=NONE guibg=NONE
 " call s:HL('Comment', s:gray, s:none, s:italicize_comments)
 
 " call s:HL('Todo', s:vim_fg, s:vim_bg, s:bold . s:italic)
@@ -698,27 +682,27 @@ hi Todo cterm=bold,italic ctermfg=NONE ctermbg=NONE gui=bold,italic guifg=NONE g
 
 " Generic statement
 " hi! link Statement GruvboxRed
-hi Statement  ctermfg=167 guifg=#fb4934
+hi Statement  ctermfg=167 guifg=#fb4934 ctermbg=NONE guibg=NONE
 
 " if, then, else, endif, switch, etc.
 " hi! link Conditional GruvboxRed
-hi Conditional ctermfg=167 guifg=#fb4934
+hi Conditional ctermfg=167 guifg=#fb4934 ctermbg=NONE guibg=NONE
 
 " for, do, while, etc.
 " hi! link Repeat GruvboxRed
-hi Repeat ctermfg=167 guifg=#fb4934
+hi Repeat ctermfg=167 guifg=#fb4934 ctermbg=NONE guibg=NONE
 
 " case, default, etc.
 " hi! link Label GruvboxRed
-hi Label ctermfg=167 guifg=#fb4934
+hi Label ctermfg=167 guifg=#fb4934 ctermbg=NONE guibg=NONE
 
 " sizeof, "+", "*", etc.
 " hi! link Operator GruvboxRed
-hi Operator ctermfg=167 guifg=#fb4934
+hi Operator ctermfg=167 guifg=#fb4934 ctermbg=NONE guibg=NONE
 
 " Any other keyword
 " hi! link Keyword GruvboxRed
-hi Keyword ctermfg=167 guifg=#fb4934
+hi Keyword ctermfg=167 guifg=#fb4934 ctermbg=NONE guibg=NONE
 
 " Variable name
 " hi! link Identifier GruvboxBlue
@@ -729,7 +713,7 @@ hi IdentifierBold ctermfg=172 ctermbg=229 cterm=bold gui=bold guisp=NONE guifg=#
 
 " Function name
 " hi! link Function GruvboxGreenBold
-hi Function cterm=bold ctermfg=142 gui=bold guifg=#b8bb26
+hi Function cterm=bold ctermfg=142 gui=bold guifg=#b8bb26 ctermbg=NONE guibg=NONE
 
 " Generic preprocessor
 " hi! link PreProc GruvboxAqua
@@ -749,11 +733,11 @@ hi PreCondit guifg=#8ec07c guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermfg=108
 
 " Generic constant
 " hi! link Constant GruvboxPurple
-hi Constant ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE
+hi Constant ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE guisp=NONE gui=NONE cterm=NONE
 
 " Character constant: 'c', '/n'
 " hi! link Character GruvboxPurple
-hi Character ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE
+hi Character ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE guisp=NONE gui=NONE cterm=NONE
 
 " String constant: "this is a string"
 " call s:HL('String',  s:green, s:none, s:italicize_strings)
@@ -761,12 +745,12 @@ hi Character ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE
 " hi String ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE
 hi String ctermfg=142 ctermbg=NONE guifg=#b8bb26 guibg=NONE guisp=NONE gui=italic
 
-hi Boolean ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE
+hi Boolean ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE guisp=NONE gui=NONE cterm=NONE
 " hi! link Boolean GruvboxPurple
-hi Number ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE
+hi Number ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE guisp=NONE gui=NONE cterm=NONE
 " Number constant: 234, 0xff
 " hi! link Number GruvboxPurple
-hi Float ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE
+hi Float ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE guisp=NONE gui=NONE cterm=NONE
 " Floating point constant: 2.3e10
 " hi! link Float GruvboxPurple
 
@@ -780,7 +764,7 @@ hi Type guifg=#fabd2f guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermfg=214 cter
 " static, register, volatile, etc
 " let's make them natch types
 " hi! link StorageClass GruvboxOrange
-hi StorageClass ctermfg=214 guifg=#fabd2f
+hi StorageClass ctermfg=214 guifg=#fabd2f guisp=NONE gui=NONE cterm=NONE
 
 " struct, union, enum, etc.
 " hi! link Structure GruvboxAqua
@@ -806,11 +790,6 @@ hi DiffText guifg=#fabd2f guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse cte
 " RedrawDebugRecompose xxx ctermbg=9 guibg=Red 
 
 " Spelling: {{{
-hi SpellLocal gui=undercurl cterm=undercurl
-hi SpellRare gui=undercurl cterm=undercurl
-
-" Not capitalised word, or compile warnings
-
 " Don't add guisp=blue that shit looks weird and confusing
 " call s:HL('SpellCap',   s:none, s:none, s:undercurl, s:red)
 " call s:HL('SpellCap',   s:green, s:none, s:bold . s:italic)
@@ -827,14 +806,12 @@ hi SpellBad gui=undercurl cterm=undercurl ctermfg=109 ctermbg=237 guibg=#3c3836 
 " call s:HL('SpellLocal', s:none, s:none, s:undercurl, s:aqua)
 hi SpellLocal guifg=#8ec07c guibg=NONE guisp=#8ec07c gui=italic,undercurl cterm=italic,undercurl
 
-
 " Rare word
 " call s:HL('SpellRare',  s:none, s:none, s:undercurl, s:purple)
 hi SpellRare guifg=#d3869b guibg=NONE guisp=#d3869b gui=italic,undercurl cterm=italic,undercurl
 
 
 " }}}
-
 " }}}
 " }}}
 " Plugin specific -------------------------------------------------------- {{{
@@ -1089,7 +1066,6 @@ endif
 " CocErrorFloat                                          
 " CocErrorSign                                         
 " CocErrorVirtualText                                
-" CocFloating v
 " CocGitAddedSign                              
 " CocGitChangeRemovedSign                      
 " CocGitChangedSign                            
@@ -1134,6 +1110,9 @@ hi! link CocListBgGrey GruvboxBg0
 hi! link CocListFgRed GruvboxRed
 hi! link CocListFgYellow GruvboxYellow
 hi! link CocListFgCyan GruvboxAqua
+
+" Ooo its a good idea to define the pum
+" CocFloating
 
 " }}}
 
@@ -1264,13 +1243,38 @@ hi! link netrwVersion GruvboxGreen
 " Rst: {{{ TODO
 " Ugh this hasn't been implemented at all and riv keeps overtaking random syn groups
 
-hi def link rstHyperLinkTarget Underlined
-hi def link rstHyperlinkReference Underlined
-hi def link rstFileLink rstHyperlinkReference
 hi! link rstDirectivesh     Question
 hi! link rstDirectivepython Question
 hi! link rstInlineLiteral Identifier
 
+" Well heres the built in syntax file
+hi def link rstCitation                     String
+hi def link rstCitationReference            Identifier
+hi def link rstCodeBlock                    String
+hi def link rstComment                      Comment
+hi def link rstDelimiter                    Delimiter
+hi def link rstDirective                    Keyword
+hi def link rstDoctestBlock                 PreProc
+hi def link rstExDirective                  String
+hi def link rstExplicitMarkup               rstDirective
+hi def link rstFileLink rstHyperlinkReference
+hi def link rstFootnote                     String
+hi def link rstFootnoteReference            Identifier
+hi def link rstHyperLinkReference           Identifier
+hi def link rstHyperlinkTarget              String
+hi def link rstInlineInternalTargets        Identifier
+hi def link rstInlineLiteral                String
+hi def link rstInterpretedTextOrHyperlinkReference  Identifier
+hi def link rstLiteralBlock                 String
+hi def link rstQuotedLiteralBlock           String
+hi def link rstSections                     Title
+hi def link rstSimpleTableLines             rstTableLines
+hi def link rstStandaloneHyperlink          Identifier
+hi def link rstSubstitutionDefinition       rstDirective
+hi def link rstSubstitutionReference        PreProc
+hi def link rstTableLines                   rstDelimiter
+hi def link rstTodo                         Todo
+hi def link rstTransition                   rstSections
 " }}}
 " Tmux: {{{
 
@@ -1353,8 +1357,6 @@ hi! link xmlEntity GruvboxOrange
 hi! link xmlEntityPunct GruvboxOrange
 " }}}
 " Vim: {{{ TODO
-
-
 " Defined In Syntax File: {{{
 hi! link vimAbb	vimCommand
 hi! link vimAddress	vimMark
@@ -1413,7 +1415,7 @@ hi! link vimHiGuiRgb	vimNumber
 hi! link vimHiNmbr	Number
 hi! link vimHiStartStop	vimHiTerm
 hi! link vimHiTerm	Type
-hi! link vimHighlight	vimCommand
+hi! link vimHighlight	Operator
 hi! link vimInsert	vimString
 
 " vimIsCommand is a terrible regex honestly don't match it with anything
@@ -1516,7 +1518,6 @@ hi! link vimVar	Identifier
 hi! link vimWarn	WarningMsg
 
 " }}}
-
 " And yours: {{{
 " Vim Errors: {{{
 hi def link vimBehaveError	vimError
@@ -1535,6 +1536,7 @@ hi def link vimKeyCodeError	vimError
 hi def link vimMapModErr	vimError
 hi def link vimSubstFlagErr	vimError
 hi def link vimSynCaseError	vimError
+hi link vimSynError Exception
 
 " }}}
 " Nvim Specific: {{{
@@ -1544,6 +1546,7 @@ if has('nvim')
   hi! NvimInternalError guibg=NONE ctermfg=108 ctermbg=234 gui=reverse guifg=#8ec0e1 guibg=bg             
   hi def link nvimAutoEvent	vimAutoEvent
   hi def link nvimHLGroup	vimHLGroup
+  hi link nvimInvalid Exception
   hi def link nvimMap	vimMap
   hi def link nvimUnmap	vimUnmap
 
@@ -1553,7 +1556,7 @@ endif
 
 
 " }}}
-"
+
 " Here's everything from VIMRUNTIME/syntax/vim.vim:
 " vimAuSyntax	vimAuSyntax
 
@@ -1561,12 +1564,9 @@ endif
 highlight default link vimAugroup	vimAugroupKey
 " vimAutoCmdSfxList	vimAutoCmdSfxList
 " vimAutoCmdSpace	vimAutoCmdSpace
-
 " Lmao the comma between BufEnter,BufReadPre
 hi default link vimAutoEventList vimAutoEvent
-
 " vimClusterName	vimClusterName
-"
 hi default link vimCmdSep vimCommand
 " vimCollClass	vimCollClass
 " vimCollClassErr	vimCollClassErr
@@ -1576,6 +1576,7 @@ hi default link vimEcho	String
 " vimErrSetting	vimErrSetting
 " vimEscapeBrace	vimEscapeBrace
 " vimExecute	vimExecute
+" hi def link vimExecute 
 " vimExtCmd	vimExtCmd
 " vimFiletype	vimFiletype
 " vimFilter	vimFilter
@@ -1622,22 +1623,22 @@ hi default link vimSetEqual	Operator
 " vimSynKeyRegion	vimSynKeyRegion
 " vimSynLine	vimSynLine
 " vimSynMatchRegion	vimSynMatchRegion
+hi def link vimHiAttribList vimHighlight
 " vimSynMtchCchar	vimSynMtchCchar
 " vimSynMtchGroup	vimSynMtchGroup
 " vimSynPatMod	vimSynPatMod
+hi def link vimSynRegion Visual
 " vimSynRegion	vimSynRegion
 " vimSyncLinebreak	vimSyncLinebreak
 " vimSyncLinecont	vimSyncLinecont
 " vimSyncLines	vimSyncLines
+hi def link vimSyncLines Number
 " vimSyncMatch	vimSyncMatch
 " vimSyncRegion	vimSyncRegion
 " vimTermOption	vimTermOption
-
 " Here are a few more xxx cleared syn groups
 
 hi def link vimPythonRegion Identifier
-" pythonSync pythonSync
-
 " }}}
 " }}}
 " Clojure: {{{
@@ -1847,8 +1848,6 @@ hi def link javaScriptDebug		Debug
 hi def link javaScriptConstant		Label
 hi def link javaScriptEmbed		Special
 
-
-
 " }}}
 " PanglossJS: {{{
 
@@ -2052,9 +2051,26 @@ hi! link goBuiltins GruvboxOrange
 " }}}
 " Lua: {{{
 
-hi! link luaIn GruvboxRed
-hi! link luaFunction GruvboxAqua
-hi! link luaTable GruvboxOrange
+hi def link luaStatement		Statement
+hi def link luaRepeat		Repeat
+hi def link luaFor			Repeat
+hi def link luaString		String
+hi def link luaString2		String
+hi def link luaNumber		Number
+hi def link luaOperator		Operator
+hi def link luaIn			Operator
+hi def link luaConstant		Constant
+hi def link luaCond		Conditional
+hi def link luaElse		Conditional
+hi def link luaFunction		Function
+hi def link luaComment		Comment
+hi def link luaTodo		Todo
+hi def link luaTable		Structure
+hi def link luaError		Error
+hi def link luaParenError		Error
+hi def link luaBraceError		Error
+hi def link luaSpecial		SpecialChar
+hi def link luaFunc		Identifier
 
 " }}}
 " MoonScript: {{{
@@ -2150,9 +2166,6 @@ hi! link markdownError markdownText
 " hi! link haskellOperators GruvboxOrange
 " hi! link haskellConditional GruvboxAqua
 " hi! link haskellLet GruvboxOrange
-"
-
-"
 hi! link haskellAssocType GruvboxAqua
 hi! link haskellBacktick GruvboxOrange
 hi! link haskellBlockKeywords GruvboxAqua
@@ -2178,13 +2191,14 @@ hi! link haskellWhere GruvboxAqua
 " }}}
 " Json: {{{
 
-hi! link jsonKeyword GruvboxGreen
-hi! link jsonQuote GruvboxGreen
-hi! link jsonBraces GruvboxFg1
-hi! link jsonString GruvboxFg1
-hi! link jsonStringMatch    Question
+hi! link jsonBraces         Operator
+hi! link jsonCommentError   NONE
+hi! link jsonFold           Folded
+hi! link jsonKeyword        Label
 hi! link jsonKeywordMatch   Question
-hi! link jsonFold           Question
+hi! link jsonQuote          GruvboxGreen
+hi! link jsonString         String
+hi! link jsonStringMatch    Question
 
 " }}}
 " Sh: {{{
@@ -2389,5 +2403,6 @@ hi! link tutorInlineX tutorX
 hi! link tutorShellPrompt Delimiter
 
 " }}}
+" }}}
 
-" vim: set sw=2 ts=2 sts=2 et fdm=marker fdls=0 fdl=0:
+" vim: set sw=2 ts=2 sts=2 et fdm=marker fdls=1 fdl=1:

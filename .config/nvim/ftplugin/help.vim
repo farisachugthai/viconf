@@ -6,10 +6,10 @@
 " ============================================================================
 
 " Guard: {{{1
-if exists('g:did_help_vim') || &compatible || v:version < 700
+if exists('b:did_help_vim') || &compatible || v:version < 700
   finish
 endif
-let g:did_help_vim = 1
+let b:did_help_vim = 1
 
 if exists('b:did_ftplugin') | finish | endif
 let b:did_ftplugin = 1
@@ -17,7 +17,6 @@ let b:did_ftplugin = 1
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
-let b:undo_ftplugin = "setl fo< tw< cole< cocu< keywordprg<"
 
 " Options: {{{1
 
@@ -29,6 +28,7 @@ endif
 " Helpfiles won't follow tags correctly without this one
 " Now context-functions will probably go to the tag I want and not simply functions...
 setlocal iskeyword+=-
+let b:undo_ftplugin = "setl fo< tw< cole< cocu< keywordprg<"
 
 unlet! b:did_ftplugin
 " Source mine in

@@ -47,12 +47,14 @@ function! s:check_back_space() abort
 endfunction
 
 " Refresh completions with C-Space
-inoremap <silent><expr> <C-Space> <Plug>coc#refresh()
+inoremap <silent><expr> <C-Space> coc#refresh()
 
 " As a heads up theres also a coc#select#snippet
 inoremap <expr> <CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
-inoremap <buffer><expr> gK <Plug>coc
+" Did they need <expr>
+inoremap <buffer><expr> gK <Plug>(coc-definition)
+
 " Shit none of these work
 nnoremap [g <Plug>(coc-diagnostic-prev)
 nnoremap ]g <Plug>(coc-diagnostic-next)
@@ -67,14 +69,14 @@ xnoremap <F2> <Cmd>'<,'>CocCommand document.renameCurrentWord<CR>
 " Easier Grep: {{{2
 "
 " Keymapping for grep word under cursor with interactive mode
-nnoremap <silent> <Leader>cf :exe 'CocList -I --input='.expand('<cword>').' grep'<CR>
+nnoremap <silent> <Leader>cf <Cmd>exe 'CocList -I --input='.expand('<cword>').' grep'<CR>
 
 " Q: How to grep by motion?
 
 " A: Create custom keymappings like:
 
-vnoremap <leader>g :<C-u>call <SID>GrepFromSelected(visualmode())<CR>
-nnoremap <leader>g :<C-u>set operatorfunc=<SID>GrepFromSelected<CR>g@
+vnoremap <leader>cg :<C-u>call <SID>GrepFromSelected(visualmode())<CR>
+nnoremap <leader>cg :<C-u>set operatorfunc=<SID>GrepFromSelected<CR>g@
 
 function! s:GrepFromSelected(type)
   let saved_unnamed_register = @@
@@ -88,7 +90,7 @@ function! s:GrepFromSelected(type)
   let word = substitute(@@, '\n$', '', 'g')
   let word = escape(word, '| ')
   let @@ = saved_unnamed_register
-  execute 'CocList grep '.word
+  execute 'CocList grep ' . word
 endfunction
 
 nnoremap <silent> <Leader>w  <Cmd>execute 'CocList -I --normal --input='.expand('<cword>').' words'<CR>
@@ -111,10 +113,12 @@ noremap <expr><buffer> <C-c><C-a>  <Plug>(coc-codeaction)
 nmap <C-c><C-f>  <Plug>(coc-fix-current)
 
 noremap <silent> <C-c>q <Plug>(coc-fix-current)
+
 " Using CocList: {{{1
 
 " Show all diagnostics
 command! -nargs=0 CocDiagnostics <Cmd>CocList diagnostics<CR>
+
 nnoremap <silent> <C-c><C-d>  <Cmd>CocList diagnostics<CR>
 " Manage extensions
 nnoremap <silent> <C-c><C-e>  <Cmd>CocList extensions<CR>
@@ -133,20 +137,21 @@ nnoremap <silent> <C-c><C-r>  <Cmd>CocListResume<CR>
 " noremap <silent> <C-c>r <Cmd>CocListResume<CR>
 noremap <silent> <C-c><C-d>   <Cmd>CocList diagnostics<CR>
 noremap <silent> <C-c> <C-d>   <Cmd>CocList diagnostics<CR>
-xmap <C-c>m  <Plug>(coc-format-selected)
-nmap <C-c>m  <Plug>(coc-format-selected)
 
 " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
 xmap <C-c><C-a>  <Plug>(coc-codeaction-selected)
 " nmap <C-c>a  <Plug>(coc-codeaction-selected)
 
-" Fix autofix problem of current line
-nmap <C-c><C-f>  <Plug>(coc-fix-current)
-noremap <silent> <C-c>q <Plug>(coc-fix-current)
+" Autofix problem of current line
+nnoremap <C-c><C-f>  <Plug>(coc-fix-current)
+nnoremap <silent> <C-c>q <Plug>(coc-fix-current)
+
+" Format visually selected text
+xmap <C-c>m  <Plug>(coc-format-selected)
 
 " Commands: {{{1
 
-" Let's group these together by prefixing with C
+" Let's group these together by prefixing with Coc
 
 " Use `:Format` to format current buffer
 command! -nargs=0 CocFormat call CocAction('format')

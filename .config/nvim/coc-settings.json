@@ -1,6 +1,6 @@
 {
   "coc.preferences.currentFunctionSymbolAutoUpdate": true,
-  "coc.preferences.extensionUpdateCheck": "daily",
+  "coc.preferences.extensionUpdateCheck": "never",
   "coc.preferences.formatOnSaveFiletypes": [
     "javascript",
     "html",
@@ -64,83 +64,14 @@
   "git.addGlameToBufferVar": true,
   "git.addGlameToVirtualText": true,
   "git.branchCharacter": "",
-  "git.conflictedDecorator": " ** Merge conflict ** ",
+  "git.conflictedDecorator": "U+2620",
   "git.enableGlobalStatus": true,
   "git.enableGutters": true,
-  "git.stagedDecorator": " + Staged + ",
+  "git.stagedDecorator": "U+231A",
   "git.untrackedDecorator": " : Untracked : ",
   "git.virtualTextPrefix": "Coc-Git:",
   "json.trace.server": "messages",
   "json.format.enable": true,
-  "languageserver": {
-    "python": {
-      "args": [
-        "--nolazy",
-        "-vv",
-        "--log-file",
-        "~/.local/share/nvim/site/lsp_python.log"
-      ],
-      "command": "python",
-      "filetypes": [
-        "python"
-      ],
-      "settings": {
-        "pyls": {
-          "commandPath": "python -m pyls",
-          "configurationSources": [
-            "flake8"
-          ],
-          "enable": true,
-          "plugins": {
-            "flake8": {
-              "enabled": true
-            },
-            "jedi_completion": {
-              "enabled": true
-            },
-            "jedi_hover": {
-              "enabled": true
-            },
-            "jedi_references": {
-              "enabled": true
-            },
-            "jedi_signature_help": {
-              "enabled": true
-            },
-            "jedi_symbols": {
-              "all_scopes": true,
-              "enabled": true
-            },
-            "mccabe": {
-              "enabled": true,
-              "threshold": 15
-            },
-            "preload": {
-              "enabled": true
-            },
-            "pycodestyle": {
-              "enabled": false
-            },
-            "pydocstyle": {
-              "enabled": true,
-              "match": "(?!test_).*\\.py",
-              "matchDir": "[^\\.].*"
-            },
-            "pyflakes": {
-              "enabled": true
-            },
-            "rope_completion": {
-              "enabled": true
-            },
-            "yapf": {
-              "enabled": true
-            }
-          }
-        }
-      },
-      "shell": true
-    }
-  },
   "list.extendedSearchMode": true,
   "list.insertMappings": {
     "<A-p>": "action:preview",
@@ -240,7 +171,6 @@
     "--no-column",
     "--no-line-number",
     "--no-messages",
-    "--crlf",
     "--color=never",
     "--files"
   ],
@@ -420,12 +350,13 @@
   "signature.target": "float",
   "signature.triggerSignatureWait": 300,
   "snippets.editSnippetsCommand": "tabe",
-  "snippets.extends": {
+  "snippets.extends": {  "suggest.snippetIndicator": "\u26a1 ",  "suggest.snippetIndicator": "\u26a1 ",
     "python": [
       "rst"
     ]
   },
-  "snippets.shortcut": "<tab>",
+  "snippets.shortcut": "<Tab>",
+  "suggest.snippetIndicator": "\u26a1 ",
   "snippets.snipmate.author": "Faris A. Chugthai",
   "snippets.snipmate.enable": false,
   "snippets.trace": "verbose",

@@ -46,6 +46,9 @@ endif
 " oh shit it's a separate module!!!
 " :py3 from json import tool
 
+" Highlighting: {{{1
+" hi match jsonComment
+
 " Atexit: {{{1
 let b:undo_ftplugin = 'setlocal fo< com< cms< et< sts< sw< sua<'
 

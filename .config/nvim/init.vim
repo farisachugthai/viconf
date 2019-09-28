@@ -18,20 +18,24 @@ let s:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/init.vim
 runtime s:local_vimrc
 
 " Vim Plug And Third Party Packages: {{{1
+
 let s:vim_plug = filereadable(glob(fnameescape(stdpath('data') . '/site/autoload/plug.vim')))
 
 if empty(s:vim_plug) && exists('*plugins#InstallPlug')
   call plugins#InstallPlug()
 endif
 
-runtime junegunn.vim
+runtime junegunn.vim  " Load my plugins
 " Don't assume that the InstallPlug() func worked so ensure it's defined
 if empty('plugs') | let plugs = {} | endif
 " Uh I don't know how this happens but stdpath('config') is no longer the first entry in rtp?
 " So let's move that and stdpath('data')/site up front. Definitely stays after the plugins definition.
 let &rtp = stdpath('config') . ',' . stdpath('data') . '/site,' . &rtp
 
-set synmaxcol=400 termguicolors
+" Add some packages
+packadd justify cfilter matchit
+
+set synmaxcol=400 termguicolors  " Set up the colorscheme
 syntax sync fromstart linebreaks=2
 
 function! Gruvbox() abort
@@ -39,7 +43,7 @@ function! Gruvbox() abort
   let g:gruvbox_contrast_soft = 0
   let g:gruvbox_improved_strings = 1
   let g:gruvbox_italic = 1
-  colo gruvbox
+  colorscheme gruvbox
 endfunction
 call Gruvbox()
 
@@ -96,7 +100,7 @@ set pumheight=15
 " both smartcase and infercase require ignorecase to be set
 set ignorecase
 set smartcase infercase
-
+set completefunc=syntaxcomplete#Complete
 set makeencoding=char         " Used by the makeprg. system locale is used
 set sessionoptions-=buffers,winsize viewoptions-=options sessionoptions+=globals
 set tags+=./tags,./*/tags tagcase=smart showfulltag
@@ -110,8 +114,10 @@ if has('patch-8.1.0360') | set diffopt+=internal,algorithm:patience | endif
 
 if exists('&modelineexpr') | set modelineexpr | endif
 set browsedir="buffer"   " which directory is used for the file browser
-let &showbreak = '↳ '                   " Indent wrapped lines correctly
+let &g:listchars = "tab:\u21e5\u00b7,trail:\u2423,extends:\u21c9,precedes:\u21c7,nbsp:\u00b7"
+let &g:fillchars = "vert:\u250b,fold:\u00b7"
 set breakindent breakindentopt=sbr
+let &showbreak = '↳ '                   " Indent wrapped lines correctly
 set updatetime=100 lazyredraw
 set inccommand=split
 set terse shortmess=aoOsAItTWAcF
@@ -121,8 +127,6 @@ set title titlestring=%<%F%=%l/%L-%P   " leaves a cool title for tmux
 noremap q; q:
 noremap Q @q
 vnoremap <BS> d
-" Save a file as root
-noremap <Leader>W <Cmd>w !sudo tee % > /dev/null<CR>
 noremap <Leader>sp <Cmd>setlocal spell!<CR>
 
 noremap <Leader>o o<Esc>
