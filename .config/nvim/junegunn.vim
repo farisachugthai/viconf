@@ -37,8 +37,7 @@ Plug 'tpope/vim-surround'
 
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'w0rp/ale', { 'on': ['ALEEnable', 'ALEToggle'] }  " Follow spacemacs lead and use e for errors
-noremap <Leader>e <Cmd>ALEEnable<CR><Cmd>echomsg 'ALE Enabled'<CR>
-noremap <Leader>a <Cmd>ALEToggle<CR><Cmd>echomsg 'ALE Toggled'<CR>
+noremap <Leader>a <Cmd>ALEEnable<CR><Cmd>echomsg 'ALE Enabled'<CR>
 
 if exists('$TMUX')
     Plug 'christoomey/vim-tmux-navigator'

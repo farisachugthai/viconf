@@ -1,43 +1,38 @@
 # sh.snippets
 
 # Shebang. Good place to start
-snippet #! "#!/usr/bin/env (!env)" b
-`!p snip.rv = '#!/bin/bash' + "\n# Maintainer: Faris Chugthai \n" `
-# set -euo pipefail
-endsnippet
-
-snippet # "dupe" b
-#!/usr/bin/env bash
+snippet #! "#!/bin/bash" b
+#!/bin/bash
 # Maintainer: Faris Chugthai
 
 # set -euo pipefail
 endsnippet
 
-# Check command line arguments
-snippet ifemptystr "If loop echoes help guide if no CLAs" b
-if [[ -z "${VISUAL:1}" ]]; then
-	echo -e "Usage: $0 [options] commands"
-	break
-fi
-$9
+snippet # "dupe" b
+#!/bin/bash
+# Maintainer: Faris Chugthai
+
+# set -euo pipefail
 endsnippet
 
-# TODO: Doesn't work
-snippet dirname "Save the dir the script is in" b
-if [[ -h ${VISUAL:"$source"} ]]; then
-	DIRNAME="$( cd -P "$( dirname ${VISUAL:"$source"} )" && pwd )"
+# Check command line arguments. Make the expandchar easier to remember
+snippet [[ "If var is empty; echo help guide; break" b
+if [[ -z "${VISUAL:${1}}" ]]; then
+	${3:echo -e "Usage: $2 [options] commands"
+	break}
 fi
+$0
 endsnippet
 
 snippet source "Var = bash source" b
-${VISUAL:source}="${BASH_SOURCE[0]}"
+${VISUAL:${1:source}}="${BASH_SOURCE[0]}"
 endsnippet
 
-snippet echo "Echo a statement"
+snippet echo "Echo a statement" w
 echo -e ${VISUAL:$1}
 endsnippet
 
-snippet read "Read input from a user" b
+snippet read "Read input from a user" w
 read ${VISUAL:$1}
 endsnippet
 
@@ -138,19 +133,6 @@ printline() {
 }
 endsnippet
 
-snippet credits "Shameless plug" b
-printline
-echo -e "\nEnjoy your script! If any problems arise don't hesistate to create an \
-	issue, fork the repo, or reach out.\n"
-printline
-printline
-printf "\n${BLUE} [*] Email   :${YELLOW}    farischugthaigmail.com\n"
-printf "$BLUE [*] Website :${YELLOW}    https://www.github.com\farisachugthai\n"
-printline
-printf "$RESET"
-fi
-endsnippet
-
 
 snippet sbash "safe bash options"
 #!/usr/bin/env bash
@@ -223,45 +205,6 @@ endsnippet
 # Set SCRIPT_DIR variable to directory script is located.
 snippet dirname "get dir script is in"
 ${1:SCRIPT_DIR}="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-endsnippet
-
-# todo could write a func to increment version on every BufWritePre.
-# there should be one at the top of `:he eval`
-snippet header "A full fledged header for your bash script."
-__`!p snip.rv = snip.fn`="${1:version X.x}"
-
-#===  FUNCTION  ================================================================
-#         NAME:  `!p snip.rv = snip.fn`
-#  DESCRIPTION:  Display usage information.
-#===============================================================================
-function usage ()
-{
-	echo "Usage :  ${2} [options] [--]
-
-	Options:
-	-h|help       Display this message
-	-v|version    Display script version"
-
-}    # ----------  end of function usage  ----------
-
-#-----------------------------------------------------------------------
-#  Handle command line arguments
-#-----------------------------------------------------------------------
-
-while getopts ":hv" opt
-do
-	case $opt in
-
-	h|help     )  usage; exit 0   ;;
-
-	v|version  )  echo "${3} -- Version ${4:ScriptVersion}; exit 0   ;;
-
-	* )  echo -e "\n  Option does not exist : $OPTARG\n"
-		usage; exit 1   ;;
-
-	esac    # --- end of case ---
-done
-shift $(($OPTIND-1))
 endsnippet
 
 snippet root "Check if a user's ID is equal to 0 and exec sudo"

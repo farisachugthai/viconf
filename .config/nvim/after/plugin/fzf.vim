@@ -26,7 +26,7 @@ let g:fzf_command_prefix = 'FZF'
 " '/plugged/fzf.vim/plugin/fzf.vim' ! There's a statusline option!!! That's
 " awesome because there's kinda no reason to have all those autocmds anyway
 " TODO: Wait how do we use it tho
-" let g:fzf_nvim_statusline = 
+" let g:fzf_nvim_statusline =
 
 
 let g:fzf_action = {
@@ -50,7 +50,7 @@ else
   let s:rg = s:rg . ' --path-separator="\" '
 endif
 
-let s:fzf_options = [ 
+let s:fzf_options = [
       \   '--ansi', '--multi', '--tiebreak=index', '--layout=reverse-list',
       \   '--inline-info', '--prompt', '> ', '--bind=ctrl-s:toggle-sort',
       \   '--header', ' Press CTRL-S to toggle sort, CTRL-Y to yank commit hashes',
@@ -77,7 +77,7 @@ let g:fzf_commands_expect = 'alt-enter,ctrl-x'
 
 " FZF Colors: {{{1
 
-let g:fzf_colors =  { 
+let g:fzf_colors =  {
       \  'fg':      ['fg', '#fbf1c7'],
       \  'bg':      ['bg', '#1d2021'],
       \  'hl':      ['fg', '#83a598'],

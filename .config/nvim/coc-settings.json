@@ -1,6 +1,6 @@
 {
   "coc.preferences.currentFunctionSymbolAutoUpdate": true,
-  "coc.preferences.extensionUpdateCheck": "never",
+  "coc.preferences.extensionUpdateCheck": "daily",
   "coc.preferences.formatOnSaveFiletypes": [
     "javascript",
     "html",
@@ -350,7 +350,7 @@
   "signature.target": "float",
   "signature.triggerSignatureWait": 300,
   "snippets.editSnippetsCommand": "tabe",
-  "snippets.extends": {  "suggest.snippetIndicator": "\u26a1 ",  "suggest.snippetIndicator": "\u26a1 ",
+  "snippets.extends": {
     "python": [
       "rst"
     ]

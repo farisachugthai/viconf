@@ -450,6 +450,7 @@ Inexplicably, nvim started a terminal buffer using *powershell* with no promptin
    set shellquote=
 
 And seemingly nothing else. I think most of those are the bash defaults too!
+
 .. _`here.`: after/plugin/fzf.vim
 .. _`after/ftplugin/gitcommit.vim`: ./after/ftplugin/gitcommit.vim
 .. _`after/ftplugin/`: ./after/ftplugin/
