@@ -17,7 +17,6 @@ if exists('b:did_ftplugin')
 endif
 let b:did_ftplugin = 1
 
-
 setlocal formatoptions-=t
 
 " JSON has no comments.
@@ -26,12 +25,15 @@ setlocal comments=
 " sometimes it does fuck you
 let &commentstring='\\ %s'
 
+" My Additions: {{{1
 " Let's add in a few more options though. Enforce 2 space tabs
 setlocal expandtab softtabstop=2 shiftwidth=2
 
-set suffixesadd=.json
+setlocal suffixesadd=.json
 " Got this from the syntax file
 let g:vim_json_warnings = 1
+
+setlocal foldmethod=indent
 
 " ALE: {{{1
 " If this got sourced for some other filetype like md or javascript stop now
@@ -65,7 +67,7 @@ endif
 " hi match jsonComment
 
 " Atexit: {{{1
-let b:undo_ftplugin = 'setlocal fo< com< cms< et< sts< sw< sua<'
+let b:undo_ftplugin = 'setlocal fo< com< cms< et< sts< sw< sua< fdm<'
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

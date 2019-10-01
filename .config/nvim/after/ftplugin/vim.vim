@@ -26,7 +26,7 @@ setlocal wrap
 
 " TODO: Probably needs to be a function. Should checj if we already added
 " this and don't do it more than once
-let &path = &path . ',' . stdpath('data') . '/plugged/*/*/*.vim'
+" let &path = &path . ',' . stdpath('data') . '/plugged/*/*/*.vim'
 let &commentstring='" %s'
 
 " So that you can cleanly jump around inside of autoloaded func names

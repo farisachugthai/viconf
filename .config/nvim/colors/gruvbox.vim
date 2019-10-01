@@ -629,8 +629,8 @@ hi! link Noise              Question
 " Missing Highlight Groups: {{{
 
 " Sep 23, 2019: Realized allllll these were missing
-hi SpecialChar guifg=#fb4934 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-hi SpecialComment guifg=#fb4934 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi SpecialChar guifg=#fb4934 guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermbg=NONE
+hi SpecialComment guifg=#fb4934 guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermbg=NONE
 hi SpecialKey ctermfg=81 guifg=#504945 ctermbg=NONE guibg=NONE gui=NONE cterm=NONE guisp=NONE
 
 " TODO: new ignore
@@ -641,12 +641,12 @@ hi ToolbarButton guifg=#fbf1c7 guibg=#665c54 guisp=NONE gui=bold cterm=bold cter
 hi NormalMode guifg=#a89984 guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermbg=234
 hi InsertMode guifg=#83a598 guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermbg=234
 hi ReplaceMode guifg=#8ec07c guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermbg=234
-hi VisualMode guifg=#fe8019 guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermbg=234
+hi VisualMode guifg=#fe8019 guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermbg=234 ctermfg=208
 hi CommandMode guifg=#d3869b guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermbg=234
-hi Warnings guifg=#fe8019 guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermbg=234
+hi Warnings guifg=#fe8019 guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermbg=234 ctermfg=208
 " Damn where did delimiter go?
-hi Delimiter guifg=#fe8019 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-hi EndOfBuffer guifg=#f9f5d7 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Delimiter guifg=#fe8019 guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermfg=208 ctermbg=NONE
+hi EndOfBuffer guifg=#f9f5d7 guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermbg=NONE
 
 " }}}
 " Gutter: {{{
@@ -677,10 +677,11 @@ hi Debug guifg=#fb4934 guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermbg=NONE ct
 " Syntax Highlighting: {{{
 
 " call s:HL('Special', s:orange, s:none, s:italicize_strings)
-hi Special cterm=italic ctermfg=208 ctermbg=bg gui=italic guifg=#fe8019 guibg=bg
+hi Special cterm=italic ctermfg=208 ctermbg=NONE gui=italic guifg=#fe8019 guibg=NONE guisp=NONE
+
 hi! link Tag Special
 
-hi Comment cterm=italic ctermfg=245 gui=italic guifg=#928374 ctermbg=NONE guibg=NONE
+hi Comment cterm=italic ctermfg=245 gui=italic guifg=#928374 ctermbg=NONE guibg=NONE guisp=NONE
 " call s:HL('Comment', s:gray, s:none, s:italicize_comments)
 
 " call s:HL('Todo', s:vim_fg, s:vim_bg, s:bold . s:italic)
@@ -690,26 +691,21 @@ hi Todo cterm=bold,italic ctermfg=223 ctermbg=234 gui=bold,italic guifg=#ebdbb2 
 " hi! link Statement GruvboxRed
 hi Statement  ctermfg=167 guifg=#fb4934 ctermbg=NONE guibg=NONE cterm=NONE gui=NONE guisp=NONE
 
-
 " if, then, else, endif, switch, etc.
 " hi! link Conditional GruvboxRed
 hi Conditional ctermfg=167 guifg=#fb4934 ctermbg=NONE guibg=NONE cterm=NONE gui=NONE guisp=NONE
-
 
 " for, do, while, etc.
 " hi! link Repeat GruvboxRed
 hi Repeat ctermfg=167 guifg=#fb4934 ctermbg=NONE guibg=NONE cterm=NONE gui=NONE guisp=NONE
 
-
 " case, default, etc.
 " hi! link Label GruvboxRed
 hi Label ctermfg=167 guifg=#fb4934 ctermbg=NONE guibg=NONE cterm=NONE gui=NONE guisp=NONE
 
-
 " sizeof, "+", "*", etc.
 " hi! link Operator GruvboxRed
 hi Operator ctermfg=167 guifg=#fb4934 ctermbg=NONE guibg=NONE cterm=NONE gui=NONE guisp=NONE
-
 
 " Any other keyword
 " hi! link Keyword GruvboxRed
@@ -723,8 +719,8 @@ hi Identifier ctermfg=172 ctermbg=234 guifg=#83a598 cterm=NONE gui=NONE guisp=NO
 hi IdentifierBold ctermfg=172 ctermbg=234 cterm=bold gui=bold guisp=NONE guifg=#83a598 guibg=#1d2021
 
 " Function name
-" hi! link Function GruvboxGreenBold
-hi Function cterm=bold ctermfg=142 gui=bold guifg=#b8bb26 ctermbg=NONE guibg=NONE guisp=NONE
+" Yeah this is the color you want
+hi Function cterm=italic ctermfg=234 gui=italic guifg=#83a598 ctermbg=NONE guibg=NONE guisp=NONE
 
 " Generic preprocessor
 " hi! link PreProc GruvboxAqua
@@ -754,7 +750,7 @@ hi Character ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE guisp=NONE gui=NON
 " call s:HL('String',  s:green, s:none, s:italicize_strings)
 " actually looks weird as shit don't do that
 " hi String ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE
-hi String ctermfg=142 ctermbg=NONE guifg=#b8bb26 guibg=NONE guisp=NONE gui=italic
+hi String ctermfg=142 ctermbg=NONE guifg=#b8bb26 guibg=NONE guisp=NONE gui=italic cterm=italic
 
 hi Boolean ctermfg=13 ctermbg=NONE guifg=#ffa0a0 guibg=NONE guisp=NONE gui=NONE cterm=NONE
 " hi! link Boolean GruvboxPurple
@@ -775,7 +771,7 @@ hi Type guifg=#fabd2f guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermfg=214 cter
 " static, register, volatile, etc
 " let's make them natch types
 " hi! link StorageClass GruvboxOrange
-hi StorageClass ctermfg=214 guifg=#fabd2f guisp=NONE gui=NONE cterm=NONE
+hi StorageClass ctermfg=214 guifg=#fabd2f guisp=NONE gui=NONE cterm=NONE guibg=NONE ctermbg=NONE
 
 " struct, union, enum, etc.
 " hi! link Structure GruvboxAqua
@@ -783,7 +779,7 @@ hi Structure guifg=#8ec07c guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermfg=29 
 
 " typedef
 " hi! link Typedef GruvboxYellow
-hi Typedef guifg=#fabd2f guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermfg=172
+hi Typedef guifg=#fabd2f guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermfg=172 ctermbg=NONE
 
 " }}}
 " Diffs: {{{
@@ -1313,31 +1309,74 @@ hi! link diffLine GruvboxBlue
 " }}}
 " Html: {{{
 
-hi! link htmlTag Tag
-hi! link htmlEndTag Tag
+hi link htmlScriptTag Tag
 
-hi! link htmlTagName Tag
-hi! link htmlArg GruvboxAqua
+" Default syntax
+hi link htmlTag                     Function
+hi link htmlEndTag                  Identifier
+hi link htmlArg                     Type
+hi link htmlTagName                 htmlStatement
+hi link htmlSpecialTagName          Exception
+hi link htmlValue                     String
+hi link htmlSpecialChar             Special
 
-hi! link htmlScriptTag Tag
-" Literally why is this Fg1. Filepaths inside of <> change colors randomly
-hi! link htmlSpecialTagName Tag
+if !exists("html_no_rendering")
+  hi link htmlH1                      Title
+  hi link htmlH2                      htmlH1
+  hi link htmlH3                      htmlH2
+  hi link htmlH4                      htmlH3
+  hi link htmlH5                      htmlH4
+  hi link htmlH6                      htmlH5
+  hi link htmlHead                    PreProc
+  hi link htmlTitle                   Title
+  hi link htmlBoldItalicUnderline     htmlBoldUnderlineItalic
+  hi link htmlUnderlineBold           htmlBoldUnderline
+  hi link htmlUnderlineItalicBold     htmlBoldUnderlineItalic
+  hi link htmlUnderlineBoldItalic     htmlBoldUnderlineItalic
+  hi link htmlItalicUnderline         htmlUnderlineItalic
+  hi link htmlItalicBold              htmlBoldItalic
+  hi link htmlItalicBoldUnderline     htmlBoldUnderlineItalic
+  hi link htmlItalicUnderlineBold     htmlBoldUnderlineItalic
+  hi link htmlLink                    Underlined
+  hi link htmlLeadingSpace            None
+  if !exists("html_my_rendering")
+    hi def htmlBold                term=bold cterm=bold gui=bold
+    hi def htmlBoldUnderline       term=bold,underline cterm=bold,underline gui=bold,underline
+    hi def htmlBoldItalic          term=bold,italic cterm=bold,italic gui=bold,italic
+    hi def htmlBoldUnderlineItalic term=bold,italic,underline cterm=bold,italic,underline gui=bold,italic,underline
+    hi def htmlUnderline           term=underline cterm=underline gui=underline
+    hi def htmlUnderlineItalic     term=italic,underline cterm=italic,underline gui=italic,underline
+    hi def htmlItalic              term=italic cterm=italic gui=italic
+    if v:version > 800 || v:version == 800 && has("patch1038")
+        hi def htmlStrike              term=strikethrough cterm=strikethrough gui=strikethrough
+    else
+        hi def htmlStrike              term=underline cterm=underline gui=underline
+    endif
+  endif
+endif
 
-call s:HL('htmlLink', s:fg4, s:none, s:underline)
+hi link htmlPreStmt            PreProc
+hi link htmlPreError           Error
+hi link htmlPreProc            PreProc
+hi link htmlPreAttr            String
+hi link htmlPreProcAttrName    PreProc
+hi link htmlPreProcAttrError   Error
+hi link htmlSpecial            Special
+hi link htmlSpecialChar        Special
+hi link htmlString             String
+hi link htmlStatement          Statement
+hi link htmlComment            Comment
+hi link htmlCommentPart        Comment
+hi link htmlValue              String
+hi link htmlCommentError       htmlError
+hi link htmlTagError           htmlError
+hi link htmlEvent              javaScript
+hi link htmlError              Error
 
-hi! link htmlSpecialChar GruvboxOrange
-hi link htmlString String
-hi link htmlStrike Label
-
-call s:HL('htmlBold', s:vim_fg, s:vim_bg, s:bold)
-call s:HL('htmlBoldUnderline', s:vim_fg, s:vim_bg, s:bold . s:underline)
-call s:HL('htmlBoldItalic', s:vim_fg, s:vim_bg, s:bold . s:italic)
-call s:HL('htmlBoldUnderlineItalic', s:vim_fg, s:vim_bg, s:bold . s:underline . s:italic)
-
-call s:HL('htmlUnderline', s:vim_fg, s:vim_bg, s:underline)
-call s:HL('htmlUnderlineItalic', s:vim_fg, s:vim_bg, s:underline . s:italic)
-call s:HL('htmlItalic', s:vim_fg, s:vim_bg, s:italic)
-
+hi link javaScript             Special
+hi link javaScriptExpression   javaScript
+hi link htmlCssStyleComment    Comment
+hi link htmlCssDefinition      Special
 " }}}
 " Xml: {{{
 
@@ -1642,8 +1681,9 @@ hi def link vimHiAttribList vimHighlight
 " vimSynMtchCchar	vimSynMtchCchar
 " vimSynMtchGroup	vimSynMtchGroup
 " vimSynPatMod	vimSynPatMod
-hi def link vimSynRegion Visual
-" vimSynRegion	vimSynRegion
+
+" This syntax group is literally whitespace...
+hi def link vimSynRegion Nontext
 " vimSyncLinebreak	vimSyncLinebreak
 " vimSyncLinecont	vimSyncLinecont
 " vimSyncLines	vimSyncLines
@@ -1694,68 +1734,165 @@ hi! link cStructure GruvboxOrange
 
 " }}}
 " Python: {{{
-" Idk why it seems so many aren't linked anymore.
-hi default link pythonMatrixMultiply Number
-hi def link pythonAttribute Identifier
-hi def link pythonComment Comment
-hi def link pythonAsync Statement
-hi def link pythonNumber Number
 
-hi! link pythonBoolean GruvboxPurple
-hi! link pythonBuiltin GruvboxOrange
-hi! link pythonBuiltinFunc GruvboxOrange
-hi! link pythonBuiltinObj GruvboxOrange
-hi! link pythonCoding Identifier
-hi! link pythonConditional WarningMsg
-hi! link pythonDecorator WarningMsg
-hi! link pythonDot GruvboxFg3
-hi! link pythonDottedName GruvboxGreenBold
-hi! link pythonException WarningMsg
-hi! link pythonExceptions GruvboxPurple
-hi! link pythonFunction GruvboxAqua
-hi! link pythonImport Identifier
-hi! link pythonInclude Identifier
-hi! link pythonOperator WarningMsg
-hi! link pythonRepeat WarningMsg
-hi! link pythonRun Identifier
-hi! link pythonSync IdentifierBold
+hi link pythonAsync			Statement
+hi link pythonAttribute Identifier
+hi link pythonBoolean Boolean
+hi link pythonBuiltin Keyword
+hi link pythonBuiltinFunc GruvboxOrange
+hi link pythonBuiltinObj GruvboxOrange
+hi link pythonCoding Identifier
+hi link pythonComment		Comment
+hi link pythonConditional		Conditional
+hi link pythonDecorator		Define
+hi link pythonDecoratorName		Function
+hi link pythonDoctest		Special
+hi link pythonDoctestValue	Define
+hi link pythonDot GruvboxFg3
+hi link pythonDottedName GruvboxGreenBold
+hi link pythonEscape		Special
+hi link pythonException		Exception
+hi link pythonExceptions		Structure
+hi link pythonFunction		Function
+hi link pythonImport Identifier
+hi link pythonInclude		Include
+hi link pythonMatrixMultiply Number
+hi link pythonNumber Number
+hi link pythonOperator		Operator
+hi link pythonQuotes		String
+hi link pythonRawString		String
+hi link pythonRepeat		Repeat
+hi link pythonRun Identifier
+hi link pythonSpaceError		Error
+hi link pythonStatement		Statement
+hi link pythonString		String
+hi link pythonSync IdentifierBold
+hi link pythonTodo			Todo
+hi link pythonTripleQuotes		pythonQuotes
 
 " }}}
 " CSS: {{{
 
-" Literally why the hell is everything aqua
-hi! link cssAnimationProp GruvboxAqua
-hi! link cssBackgroundProp GruvboxAqua
-hi! link cssBorderOutlineProp GruvboxAqua
-hi! link cssBoxProp GruvboxAqua
-hi! link cssBraces GruvboxBlue
-hi! link cssClassName GruvboxGreen
-hi! link cssColor GruvboxBlue
-hi! link cssColorProp GruvboxAqua
-hi! link cssDimensionProp GruvboxAqua
-hi! link cssFlexibleBoxProp GruvboxAqua
-hi! link cssFontDescriptorProp GruvboxAqua
-hi! link cssFontProp GruvboxAqua
-hi! link cssFunctionName GruvboxYellow
-hi! link cssGeneratedContentProp GruvboxAqua
-hi! link cssIdentifier GruvboxOrange
-hi! link cssImportant GruvboxGreen
-hi! link cssListProp GruvboxAqua
-hi! link cssMarginProp GruvboxAqua
-hi! link cssPaddingProp GruvboxAqua
-hi! link cssPositioningProp GruvboxYellow
-hi! link cssPrintProp GruvboxAqua
-hi! link cssRenderProp GruvboxAqua
-hi link cssSelectorOp Tag
-" hi! link cssSelectorOp GruvboxBlue
-hi! link cssSelectorOp2 GruvboxBlue
-hi! link cssTableProp GruvboxAqua
-hi! link cssTextProp GruvboxAqua
-hi! link cssTransformProp GruvboxAqua
-hi! link cssTransitionProp GruvboxAqua
-hi! link cssUIProp GruvboxYellow
-hi! link cssVendor GruvboxFg1
-
+hi link cssAnimationAttr cssAttr
+hi link cssAnimationProp cssProp
+hi link cssAtKeyword PreProc
+hi link cssAtRule Include
+hi link cssAtRuleLogical Statement
+hi link cssAttr Constant
+hi link cssAttrComma Special
+hi link cssAttributeSelector String
+hi link cssAuralAttr cssAttr
+hi link cssAuralProp cssProp
+hi link cssBackgroundAttr cssAttr
+hi link cssBackgroundProp cssProp
+hi link cssBorderAttr cssAttr
+hi link cssBorderOutlineProp GruvboxAqua
+hi link cssBorderProp cssProp
+hi link cssBoxAttr cssAttr
+hi link cssBoxProp cssProp
+hi link cssBraceError Error
+hi link cssBraces Function
+hi link cssCascadeAttr cssAttr
+hi link cssCascadeProp cssProp
+hi link cssClassName Function
+hi link cssClassNameDot Function
+hi link cssColor Constant
+hi link cssColorProp cssProp
+hi link cssComment Comment
+hi link cssCommonAttr cssAttr
+hi link cssContentForPagedMediaAttr cssAttr
+hi link cssContentForPagedMediaProp cssProp
+hi link cssCustomProp Special
+hi link cssDeprecated Error
+hi link cssDimensionAttr cssAttr
+hi link cssDimensionProp cssProp
+hi link cssError Error
+hi link cssFlexibleBoxAttr cssAttr
+hi link cssFlexibleBoxProp cssProp
+hi link cssFontAttr cssAttr
+hi link cssFontDescriptor Special
+hi link cssFontDescriptorAttr cssAttr
+hi link cssFontDescriptorProp cssProp
+hi link cssFontProp cssProp
+hi link cssFunction Constant
+hi link cssFunctionComma Function
+hi link cssFunctionName Function
+hi link cssGeneratedContentAttr cssAttr
+hi link cssGeneratedContentProp cssProp
+hi link cssGradientAttr cssAttr
+hi link cssGridAttr cssAttr
+hi link cssGridProp cssProp
+hi link cssHacks Comment
+hi link cssHyerlinkAttr cssAttr
+hi link cssHyerlinkProp cssProp
+hi link cssIEUIAttr cssAttr
+hi link cssIEUIProp cssProp
+hi link cssIdentifier Function
+hi link cssImportant Special
+hi link cssInteractAttr cssAttr
+hi link cssInteractProp cssProp
+hi link cssKeyFrameProp Constant
+hi link cssLineboxAttr cssAttr
+hi link cssLineboxProp cssProp
+hi link cssListAttr cssAttr
+hi link cssListProp cssProp
+hi link cssMarginAttr cssAttr
+hi link cssMarqueeAttr cssAttr
+hi link cssMarqueeProp cssProp
+hi link cssMediaAttr cssAttr
+hi link cssMediaComma Normal
+hi link cssMediaProp cssProp
+hi link cssMediaType Special
+hi link cssMobileTextProp cssProp
+hi link cssMultiColumnAttr cssAttr
+hi link cssMultiColumnProp cssProp
+hi link cssNoise Noise
+hi link cssPaddingAttr cssAttr
+hi link cssPaddingProp GruvboxAqua
+hi link cssPageMarginProp cssAtKeyword
+hi link cssPageProp cssProp
+hi link cssPagePseudo PreProc
+hi link cssPagedMediaAttr cssAttr
+hi link cssPagedMediaProp cssProp
+hi link cssPositioningAttr cssAttr
+hi link cssPositioningProp cssProp
+hi link cssPrintAttr cssAttr
+hi link cssPrintProp cssProp
+hi link cssProp StorageClass
+hi link cssPseudoClassId PreProc
+hi link cssPseudoClassLang Constant
+hi link cssRenderAttr cssAttr
+hi link cssRenderProp cssProp
+hi link cssRubyAttr cssAttr
+hi link cssRubyProp cssProp
+hi link cssSelectorOp Special
+hi link cssSelectorOp2 Special
+hi link cssSpeechAttr cssAttr
+hi link cssSpeechProp cssProp
+hi link cssStringQ String
+hi link cssStringQQ String
+hi link cssTableAttr cssAttr
+hi link cssTableProp cssProp
+hi link cssTagName Statement
+hi link cssTextAttr cssAttr
+hi link cssTextProp cssProp
+hi link cssTransformAttr cssAttr
+hi link cssTransformProp cssProp
+hi link cssTransitionAttr cssAttr
+hi link cssTransitionProp cssProp
+hi link cssUIAttr cssAttr
+hi link cssUIProp cssProp
+hi link cssURL String
+hi link cssUnicodeEscape Special
+hi link cssUnicodeRange Constant
+hi link cssUnitDecorators Number
+hi link cssValueAngle Number
+hi link cssValueFrequency Number
+hi link cssValueInteger Number
+hi link cssValueLength Number
+hi link cssValueNumber Number
+hi link cssValueTime Number
+hi link cssVendor Comment
 " }}}
 " JavaScript: {{{
 
@@ -2459,8 +2596,61 @@ hi! link makeCommandError Exception
 
 " }}}
 " Help: {{{
-hi link helpNormal Normal
+
+" Default syntax
+hi link helpBacktick	Ignore
+hi link helpBar		Ignore
+hi link helpBoolean		Boolean
+hi link helpCharacter	Character
+hi link helpCommand		Comment
+hi link helpComment		Comment
+hi link helpConditional	Conditional
+hi link helpConstant	Constant
+hi link helpDebug		Debug
+hi link helpDefine		Define
+hi link helpDelimiter	Delimiter
+hi link helpDeprecated	Todo
+hi link helpError		Error
+hi link helpExample		Comment
+hi link helpException	Exception
+hi link helpFloat		Float
+hi link helpFunction	Function
 hi link helpGraphic CursorLineNr
+hi link helpHeader		PreProc
+hi link helpHeadline	Statement
+hi link helpHyperTextEntry	String
+hi link helpHyperTextJump	Identifier
+hi link helpIdentifier	Identifier
+hi link helpIgnore		Ignore
+hi link helpInclude		Include
+hi link helpKeyword		Keyword
+hi link helpLabel		Label
+hi link helpMacro		Macro
+hi link helpNormal Normal
+hi link helpNote		Todo
+hi link helpNumber		Number
+hi link helpOperator	Operator
+hi link helpOption		Type
+hi link helpPreCondit	PreCondit
+hi link helpPreProc		PreProc
+hi link helpRepeat		Repeat
+hi link helpSectionDelim	PreProc
+hi link helpSpecial		Special
+hi link helpSpecialChar	SpecialChar
+hi link helpSpecialComment	SpecialComment
+hi link helpStar		Ignore
+hi link helpStatement	Statement
+hi link helpStorageClass	StorageClass
+hi link helpString		String
+hi link helpStructure	Structure
+hi link helpTag		Tag
+hi link helpTodo		Todo
+hi link helpType		Type
+hi link helpTypedef		Typedef
+hi link helpURL		String
+hi link helpUnderlined	Underlined
+hi link helpVim		Identifier
+hi link helpWarning		Todo
 " }}}
 
 " }}}

@@ -421,9 +421,6 @@
   "typescript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
   "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
   "vimlsp.debug": true,
-  "vimlsp.indexes.runtimepath": true,
-  "vimlsp.suggest.fromRuntimepath": true,
-  "vimlsp.suggest.fromVimruntime": true,
   "vimlsp.trace.server": "messages",
   "workspace.ignoredFiletypes": [
     "markdown",
