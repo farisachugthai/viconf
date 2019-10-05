@@ -2,7 +2,7 @@
     " File: junegunn.vim
     " Author: Faris Chugthai
     " Description: Isolate where I define my plugins.
-    " Last Modified: June 09, 2019
+    " Last Modified: Oct 01, 2019
 " ============================================================================
 
 " Guard: {{{1
@@ -36,7 +36,7 @@ Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-surround'
 
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-Plug 'w0rp/ale', { 'on': ['ALEEnable', 'ALEToggle'] }  " Follow spacemacs lead and use e for errors
+Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }  " Follow spacemacs lead and use e for errors
 noremap <Leader>a <Cmd>ALEEnable<CR><Cmd>echomsg 'ALE Enabled'<CR>
 
 if exists('$TMUX')
@@ -69,19 +69,22 @@ endif
 " I feel like the lazy loaded ones can come out here
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 nnoremap U :UndotreeToggle<CR>
-Plug 'godlygeek/tabular', {'on': 'Tabularize'}
+
+" The 'tabular' plugin must come _before_ 'vim-markdown'.
+Plug 'godlygeek/tabular'
 Plug 'ervandew/supertab'
 Plug 'junegunn/vim-peekaboo'
 Plug 'vim-voom/voom'
 Plug 'romainl/vim-qf'
 
-if has('python3') && empty(s:termux)
+if empty(s:termux)
   Plug 'jupyter-vim/jupyter-vim'  " This plugin only makes sense when pythons loaded
   Plug 'mustache/vim-mustache-handlebars'
   Plug 'raimon49/requirements.txt.vim'
   Plug 'michaeljsmith/vim-indent-object'
   Plug 'ntpeters/vim-better-whitespace'
   Plug 'plasticboy/vim-markdown'
+Plug 'elzr/vim-json'
 
 endif
 

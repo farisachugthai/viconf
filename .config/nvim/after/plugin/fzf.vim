@@ -242,14 +242,14 @@ command! -complete=dir -bang -nargs=* FZAg
 
 " Rg: {{{2
 command! -complete=dir -bang -nargs=* FZRg
-  \ call fzf#vim#grep({
+  \ call fzf#run(fzf#wrap({
   \   'source': 'rg --no-column --no-line-number --no-heading --no-messages --color=always'
   \   . ' --smart-case ' . shellescape(<q-args>),
   \   'sink': 'vsplit',
-  \   'options': ['--ansi', '--multi', '--border', '--cycle'],}
-  \   <bang>0 ? fzf#vim#with_preview('up:60%')
-  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \   <bang>0)
+  \   'options': ['--ansi', '--multi', '--border', '--cycle'],}))
+  " \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  " \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+  " \   <bang>0))
 
 " Files With Preview Window: {{{2
 command! -bang -nargs=? -complete=dir YourFiles

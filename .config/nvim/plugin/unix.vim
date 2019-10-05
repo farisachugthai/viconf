@@ -71,6 +71,16 @@ endif
 
 noremap <silent> <C-x>o <Cmd>wincmd W<CR>
 
+" Control A And Incrementing: {{{2
+" Both Tmux and Readline utilize C-a. It's a useful keybinding and
+" my preferred manner of going to col-0 in insert mode. Cue vim-rsi
+" a la Tim Pope. Cool. It'd be kinda cool to have that in normal mode.
+nnoremap C-a ^
+" But now I can't increment stuff.
+" I just realized today {Oct 01, 2019} that the + key in normal mode does
+" nothing different than <CR>. Wtf???
+nnoremap + C-a
+
 " Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

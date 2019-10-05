@@ -322,7 +322,6 @@ book Practical Vim.
 Derek Wyatt's videos also deserve some praise here.
 
 Steve Losh's [Learn VimScript the Hard Way](https://github.com/sjl/learnvimscriptthehardway)
-is a book I only recently picked up; however, it's been open sourced and
-clearly
+is a book I only recently picked up; however, it's been open sourced and clearly
 explains some of Vim's stickier points like type coercion in an interesting
 and fun way. As a result, I would highly recommend it!

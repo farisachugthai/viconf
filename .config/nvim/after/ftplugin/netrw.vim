@@ -34,7 +34,12 @@ let g:netrw_list_hide = netrw_gitignore#Hide() . '.*\.swp$'
 " TODO: Make sure to test on windows
 if !has('win32')
     let g:netrw_localmkdir = 'mkdir -pv'
+    let g:netrw_browsex_viewer= 'xdg-open'
+else
+    let g:netrw_browsex_viewer= 'firefox %s'
 endif
+
+" TODO:               *netrw_filehandler*
 
 let g:netrw_sizestyle = 'h'
 
@@ -42,8 +47,10 @@ let g:netrw_sizestyle = 'h'
 let g:netrw_errorlvl          = 2
 
 " Mappings: {{{1
+"
 " wth why is this a thing
 unmap <buffer> a
+
 " Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

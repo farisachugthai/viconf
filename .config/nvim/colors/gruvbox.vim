@@ -1,5 +1,3 @@
-" -----------------------------------------------------------------------------
-" File: gruvbox.vim
 " Description: Retro groove color scheme for Vim
 " Maintainer: Faris Chugthai
 " Previous Maintainer: morhetz <morhetz@gmail.com>
@@ -7,7 +5,8 @@
 " Last Modified: Sep 29, 2019
 " -----------------------------------------------------------------------------
 
-" Go to line 475 for where it starts
+" Go to line 475 for where my section starts.
+" Areas to note are that the color pallette is on line87.
 " Guards: {{{
 if exists('g:did_gruvbox_colors') || &compatible || v:version < 700
     finish
@@ -437,9 +436,9 @@ call s:HL('GruvboxFg3', s:fg3)
 call s:HL('GruvboxFg4', s:fg4)
 call s:HL('GruvboxGray', s:gray)
 call s:HL('GruvboxBg0', s:bg0)
-call s:HL('GruvboxBg1', s:bg1)
+" call s:HL('GruvboxBg1', s:bg1)
 call s:HL('GruvboxBg2', s:bg2)
-call s:HL('GruvboxBg3', s:bg3)
+" call s:HL('GruvboxBg3', s:bg3)
 call s:HL('GruvboxBg4', s:bg4)
 
 call s:HL('GruvboxRed', s:red)
@@ -456,12 +455,12 @@ hi GruvboxBlue ctermfg=109 guifg=#83a598 guibg=NONE ctermbg=NONE guisp=NONE gui=
 " Mostly green?
 " call s:HL('GruvboxBlue', s:blue)
 " call s:HL('GruvboxBlueBold', s:blue, s:none, s:bold)
-hi GruvboxBlueBold cterm=bold ctermfg=109 gui=bold guifg=#83a598
+" hi GruvboxBlueBold cterm=bold ctermfg=109 gui=bold guifg=#83a598
 call s:HL('GruvboxPurple', s:purple)
-call s:HL('GruvboxPurpleBold', s:purple, s:none, s:bold)
+" call s:HL('GruvboxPurpleBold', s:purple, s:none, s:bold)
 " Aqua is the real blue
 " call s:HL('GruvboxAqua', s:aqua)
-hi GruvboxAqua ctermfg=108 guifg=#8ec0e1 cterm=bold gui=bold ctermfg=108 guifg=#8ec0e1
+" hi GruvboxAqua ctermfg=108 guifg=#8ec0e1 cterm=bold gui=bold ctermfg=108 guifg=#8ec0e1
 " call s:HL('GruvboxAquaBold', s:aqua, s:none, s:bold)
 call s:HL('GruvboxOrange', s:orange)
 call s:HL('GruvboxOrangeBold', s:orange, s:none, s:bold)
@@ -469,10 +468,16 @@ call s:HL('GruvboxOrangeBold', s:orange, s:none, s:bold)
 " call s:HL('GruvboxRedSign', s:red, s:sign_column, s:invert_signs)
 hi GruvboxRedSign ctermfg=167 ctermbg=237 guifg=#fb4934 guibg=#3c3836 cterm=NONE gui=NONE guisp=NONE
 call s:HL('GruvboxGreenSign', s:green, s:sign_column, s:invert_signs)
-call s:HL('GruvboxYellowSign', s:yellow, s:sign_column, s:invert_signs)
-call s:HL('GruvboxBlueSign', s:blue, s:sign_column, s:invert_signs)
-call s:HL('GruvboxPurpleSign', s:purple, s:sign_column, s:invert_signs)
-call s:HL('GruvboxAquaSign', s:aqua, s:sign_column, s:invert_signs)
+
+" Let's replace GruvboxYellowSign with QuickFixLine
+" call s:HL('GruvboxYellowSign', s:yellow, s:sign_column, s:invert_signs)
+" hi GruvboxYellowSign ctermfg=214 ctermbg=237 guifg=#fabd2f guibg=#3c3836
+
+" hi GruvboxBlueSign ctermfg=109 ctermbg=237 guifg=#83a598 guibg=#3c3836
+" call s:HL('GruvboxBlueSign', s:blue, s:sign_column, s:invert_signs)
+" hi GruvboxPurpleSign  ctermfg=175 ctermbg=237 guifg=#d3869b guibg=#3c3836
+" call s:HL('GruvboxPurpleSign', s:purple, s:sign_column, s:invert_signs)
+" call s:HL('GruvboxAquaSign', s:aqua, s:sign_column, s:invert_signs)
 
 " }}}
 " }}}
@@ -489,7 +494,7 @@ endif
 if v:version >= 700
 " }}}
 " Completions: {{{
-    hi Pmenu guifg=#ebdbb2 guibg=#504945 guisp=NONE gui=NONE cterm=NONE ctermfg=237 ctermbg=187
+    hi Pmenu guifg=#ebdbb2 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE ctermfg=223 ctermbg=237
     hi PmenuSbar guifg=NONE guibg=#504945 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=187
     hi PmenuSel guifg=#504945 guibg=#83a598 guisp=NONE gui=bold cterm=bold ctermfg=187 ctermbg=23
     hi PmenuThumb guifg=NONE guibg=#7c6f64 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=137
@@ -590,14 +595,15 @@ hi VertSplit guifg=#665c54 guibg=#1d2021 guisp=NONE gui=NONE cterm=NONE ctermbg=
 
 " Current match in wildmenu completion
 " call s:HL('WildMenu', s:blue, s:bg2, s:bold)
-hi WildMenu guifg=#83a598 guibg=#504945 guisp=NONE gui=bold cterm=bold ctermbg=81 ctermfg=23
+hi WildMenu guifg=#83a598 guibg=#504945 guisp=NONE gui=bold cterm=bold ctermbg=81 ctermfg=109
 
 " Titles for output from :set all, :autocmd, etc.
 " hi! link Title GruvboxGreenBold
 " DUDE DON"T UNDERLINE ITS SO HARD TO READ IN RST
 hi Title guifg=#b8bb26 guibg=NONE guisp=NONE gui=bold cterm=bold ctermfg=100 ctermbg=NONE
 
-hi Directory guifg=#83a598 guibg=NONE guisp=NONE gui=bold cterm=bold ctermfg=109 ctermbg=NONE
+" Directory: Replacement for GruvboxAquaBold!
+hi Directory ctermfg=108 guifg=#8ec0e1 cterm=bold gui=bold ctermfg=108 guifg=#8ec0e1
 
 " Error messages on the command line
 " call s:HL('rrror', s:aqua, s:vim_bg, s:inverse)
@@ -609,45 +615,56 @@ hi ErrorMsg cterm=bold,italic,reverse ctermfg=234 ctermbg=167 gui=bold,italic,re
 
 " try, catch, throw
 " hi! link Exception GruvboxRed
-hi Exception ctermfg=167 guifg=#fb4934 ctermbg=NONE guibg=NONE gui=BOLD cterm=BOLD
-" hi ModeMsg guifg=#b57614 guibg=NONE guisp=NONE gui=bold cterm=bold
-" hi MoreMsg guifg=#b57614 guibg=NONE guisp=NONE gui=bold cterm=bold
+hi Exception ctermfg=167 guifg=#fb4934 ctermbg=NONE guibg=NONE gui=BOLD cterm=BOLD guisp=NONE
 
-" I have GruvboxYellowBold as  cterm=bold ctermfg=214 gui=bold guifg=#fabd2f
 " More prompt: -- More --
-hi! link MoreMsg GruvboxYellowBold
-" Current mode message: -- INSERT --
-hi! link ModeMsg GruvboxYellowBold
-" 'Press enter' prompt and yes/no questions
-hi! link Question GruvboxOrangeBold
-" Warning messages
-hi! WarningMsg cterm=bold ctermfg=167 gui=bold guifg=#fb4934 ctermbg=NONE guibg=NONE guisp=NONE
+" hi! link MoreMsg GruvboxYellowBold
+hi MoreMsg cterm=bold ctermfg=214 gui=bold guifg=#fabd2f guisp=NONE guibg=NONE ctermbg=NONE
 
-hi! link Quote              Question
-hi! link Noise              Question
+" Current mode message: -- INSERT --
+" hi! link ModeMsg GruvboxYellowBold
+hi  ModeMsg cterm=bold ctermfg=214 gui=bold guifg=#fabd2f guisp=NONE guibg=NONE ctermbg=NONE
+
+" 'Press enter' prompt and yes/no questions
+" hi! link Question GruvboxOrangeBold
+hi  Question cterm=bold ctermfg=214 gui=bold guifg=#fabd2f guisp=NONE guibg=NONE ctermbg=NONE
+
+" Warning messages
+hi WarningMsg cterm=bold ctermfg=167 gui=bold guifg=#fb4934 ctermbg=NONE guibg=NONE guisp=NONE
+
+hi link Quote              Question
+hi link Noise              Question
+
 " }}}
 " Missing Highlight Groups: {{{
 
 " Sep 23, 2019: Realized allllll these were missing
-hi SpecialChar guifg=#fb4934 guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermbg=NONE
-hi SpecialComment guifg=#fb4934 guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermbg=NONE
-hi SpecialKey ctermfg=81 guifg=#504945 ctermbg=NONE guibg=NONE gui=NONE cterm=NONE guisp=NONE
 
-" TODO: new ignore
-" hi Ignore guifg=fg guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi SpecialChar ctermfg=142 ctermbg=237 guifg=#b8bb26 guibg=#3c3836 gui=NONE guisp=NONE cterm=NONE
+hi SpecialComment ctermfg=142 ctermbg=237 guifg=#b8bb26 guibg=#3c3836 gui=NONE guisp=NONE cterm=NONE
+
+							" *hl-SpecialKey* SpecialKey	Unprintable characters: text displayed differently from what
+		" it really is. But not 'listchars' whitespace. |hl-Whitespace|
+" hi SpecialKey ctermfg=81 guifg=#504945 ctermbg=NONE guibg=NONE gui=NONE cterm=NONE guisp=NONE
+
+hi Ignore guifg=bg guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermfg=bg ctermbg=NONE
 hi CursorIM guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
-hi ToolbarLine guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermbg=241
-hi ToolbarButton guifg=#fbf1c7 guibg=#665c54 guisp=NONE gui=bold cterm=bold ctermbg=241
+hi ToolbarLine guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermbg=241 ctermfg=NONE
+hi ToolbarButton guifg=#fbf1c7 guibg=#665c54 guisp=NONE gui=bold cterm=bold ctermbg=241 ctermfg=NONE
 hi NormalMode guifg=#a89984 guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermbg=234
 hi InsertMode guifg=#83a598 guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermbg=234
 hi ReplaceMode guifg=#8ec07c guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermbg=234
 hi VisualMode guifg=#fe8019 guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermbg=234 ctermfg=208
 hi CommandMode guifg=#d3869b guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermbg=234
 hi Warnings guifg=#fe8019 guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermbg=234 ctermfg=208
-" Damn where did delimiter go?
 hi Delimiter guifg=#fe8019 guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermfg=208 ctermbg=NONE
-hi EndOfBuffer guifg=#f9f5d7 guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermbg=NONE
+hi QuickFixLine ctermfg=214 ctermbg=237 guifg=#fabd2f guibg=#3c3836 guisp=NONE cterm=NONE gui=NONE
 
+
+" EndOfBuffer: New replacement for GruvboxBlueSign
+" hi EndOfBuffer guifg=#f9f5d7 guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermbg=NONE ctermfg=230
+" NO DON'T MAKE A SEPARATE BACKGROUND IT LOOKS WEIRD WHEN THE FILE ENDS
+hi EndOfBuffer ctermfg=109 ctermbg=NONE guifg=#83a598 guibg=NONE cterm=italic gui=italic guisp=NONE
 " }}}
 " Gutter: {{{
 
@@ -658,11 +675,11 @@ hi LineNr guifg=#7c6f64 guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermbg=NONE c
 
 " Column where signs are displayed
 " call s:HL('SignColumn', s:none, s:sign_column)
-hi SignColumn guifg=NONE guibg=#3c3836 guisp=NONE gui=NONE ctermfg=NONE ctermbg=237
+hi SignColumn guifg=NONE guibg=#3c3836 guisp=NONE gui=NONE ctermfg=NONE ctermbg=237 cterm=NONE
 
 " Line used for closed folds
 " call s:HL('Folded', s:gray, s:bg1, s:italic)
-hi Folded cterm=italic ctermfg=245 ctermbg=237 gui=italic guifg=#928374 guibg=#3c3836
+hi Folded cterm=italic ctermfg=245 ctermbg=237 gui=italic guifg=#928374 guibg=#3c3836 guisp=NONE
 
 " Column where folds are displayed
 " call s:HL('FoldColumn', s:gray, s:bg1)
@@ -732,7 +749,9 @@ hi Include guifg=#8ec07c guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermfg=108 c
 
 " Same as Define
 " hi! link Macro GruvboxAqua
-hi Macro guifg=#8ec07c guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermfg=108 ctermbg=NONE
+" Macro: Replacement for GruvboxAquaSign
+" TODO: shouldn't have a keyword with a background tho :/
+hi Macro ctermfg=108 ctermbg=237 guifg=#8ec0e1 guibg=#3c3836 gui=bold cterm=bold guisp=NONE
 
 " Preprocessor #if, #else, #endif, etc.
 " hi! link PreCondit GruvboxAqua
@@ -800,22 +819,26 @@ hi DiffText guifg=#fabd2f guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse cte
 " Don't add guisp=blue that shit looks weird and confusing
 " call s:HL('SpellCap',   s:none, s:none, s:undercurl, s:red)
 " call s:HL('SpellCap',   s:green, s:none, s:bold . s:italic)
-hi SpellCap cterm=underline,italic ctermfg=109 gui=undercurl,italic guifg=NONE ctermbg=NONE guisp=NONE
+hi SpellCap cterm=underline,italic ctermfg=109 gui=undercurl,italic guifg=#83a598 ctermbg=NONE guisp=NONE
 
 " Not recognized word
-" Let's go with GruvboxBlueSign
+" Let's go with GruvboxBlueSign. Uh? Somewhere it defines guisp=Red so now
+" it's still red. Idk where that got defined but I honestly might leave it.
 hi SpellBad gui=undercurl cterm=undercurl ctermfg=109 ctermbg=237 guifg=#83a598 guibg=#3c3836
 
 " call s:HL('SpellBad',   s:none, s:none, s:undercurl, s:blue)
-hi SpellBad gui=undercurl cterm=undercurl ctermfg=109 ctermbg=237 guibg=#3c3836 guifg=#fb4934
+hi SpellBad gui=undercurl cterm=undercurl ctermbg=237 guibg=#3c3836 guifg=#fb4934 ctermfg=167
 
 " Wrong spelling for selected region
 " call s:HL('SpellLocal', s:none, s:none, s:undercurl, s:aqua)
-hi SpellLocal guifg=#8ec07c guibg=NONE guisp=#8ec07c gui=italic,undercurl cterm=italic,undercurl
+" TODO: ctermfg  ctermbg
+hi SpellLocal guifg=#8ec07c guibg=NONE guisp=NONE gui=italic,undercurl cterm=italic,undercurl
 
 " Rare word
 " call s:HL('SpellRare',  s:none, s:none, s:undercurl, s:purple)
-hi SpellRare guifg=#d3869b guibg=NONE guisp=#d3869b gui=italic,undercurl cterm=italic,undercurl
+" Replacement for GruvboxPurpleSign
+" TODO: ctermfg  ctermbg
+hi SpellRare guifg=#d3869b guibg=NONE guisp=NONE gui=italic,undercurl cterm=italic,undercurl
 
 
 " }}}
@@ -898,21 +921,21 @@ if 0
   call s:HL('SyntasticError', s:none, s:none, s:undercurl, s:red)
   call s:HL('SyntasticWarning', s:none, s:none, s:undercurl, s:yellow)
 
-  hi! link SyntasticErrorSign GruvboxRedSign
-  hi! link SyntasticWarningSign GruvboxYellowSign
+  hi link SyntasticErrorSign GruvboxRedSign
+  hi link SyntasticWarningSign QuickFixLine
 
   " }}}
   " Signature: {{{
-  hi! link SignatureMarkText   GruvboxBlueSign
-  hi! link SignatureMarkerText GruvboxPurpleSign
+  hi! link SignatureMarkText   SpellCap
+  hi! link SignatureMarkerText SpellRare
 
   " }}}
   " ShowMarks: {{{
 
-  hi! link ShowMarksHLl GruvboxBlueSign
-  hi! link ShowMarksHLu GruvboxBlueSign
-  hi! link ShowMarksHLo GruvboxBlueSign
-  hi! link ShowMarksHLm GruvboxBlueSign
+  hi! link ShowMarksHLl EndOfBuffer
+  hi! link ShowMarksHLu EndOfBuffer
+  hi! link ShowMarksHLo EndOfBuffer
+  hi! link ShowMarksHLm EndOfBuffer
 
   " }}}
   " CtrlP: {{{
@@ -948,8 +971,8 @@ if 0
   " }}}
   " Dirvish: {{{
 
-  hi! link DirvishPathTail GruvboxAqua
-  hi! link DirvishArg GruvboxYellow
+  hi! link DirvishPathTail Macro
+  hi! link DirvishArg Typedef
 
   " }}}
 " Vim Multiple Cursors: {{{
@@ -1090,22 +1113,22 @@ endif
 " CocInfoVirtualText
 hi default link CocErrorLine Exception
 hi default link CocWarningLine WarningMsg
-hi default link CocInfoLine GruvboxBlueSign
+hi default link CocInfoLine EndOfBuffer
 hi default link CocHintLine GruvboxGreenSign
 hi default link CocSelectedLine Visual
 
 " Override one of his...actually now a few
-hi! link CocInfoSign GruvboxPurpleSign
+hi! link CocInfoSign SpellRare
 hi! link CocErrorHighlight Error
 hi! link CocWarningHighlight GruvboxOrangeBold
-hi! link CocInfoHighlight GruvboxBlueSign
+hi link CocInfoHighlight EndOfBuffer
 hi! link CocHintHighlight GruvboxGreenSign
 hi! link CocGitAddedSign GruvboxYellowBold
-hi! link CocCodeLens GruvboxAquaSign
+hi! link CocCodeLens Macro
 hi! link CocErrorSign Error
 hi! link CocWarningSign GruvboxGreenSign
 hi! link CocHintFloat Float
-hi! link CocHintSign GruvboxAquaSign
+hi! link CocHintSign Macro
 hi! link CocSelectedText Search
 hi! link CocUnderline Underlined
 hi! link CocListFgYellow GruvboxYellow
@@ -1116,7 +1139,7 @@ hi! link CocListBgGrey GruvboxBg0
 
 hi! link CocListFgRed GruvboxRed
 hi! link CocListFgYellow GruvboxYellow
-hi! link CocListFgCyan GruvboxAqua
+hi! link CocListFgCyan Macro
 
 " Ooo its a good idea to define the pum
 " CocFloating
@@ -1126,31 +1149,31 @@ hi! link CocListFgCyan GruvboxAqua
 " Signify: {{{
 
 hi! link SignifySignAdd GruvboxGreenSign
-hi! link SignifySignChange GruvboxAquaSign
+hi! link SignifySignChange Macro
 hi! link SignifySignDelete GruvboxRedSign
 
 " }}}
 " Startify: {{{
-
-hi! link StartifyBracket GruvboxFg3
-hi! link StartifyFile GruvboxFg1
-hi! link StartifyNumber GruvboxBlue
-hi! link StartifyPath GruvboxGray
-hi! link StartifySlash GruvboxGray
-hi! link StartifySection GruvboxYellow
-hi! link StartifySpecial GruvboxBlue
-hi! link StartifyHeader GruvboxOrange
-hi! link StartifyFooter GruvboxBg2
+hi! link StartifyBracket Delimiter
+hi! link StartifyFile Identifier
+hi! link StartifyNumber Number
+hi! link StartifyPath Directory
+hi! link StartifySlash Delimiter
+hi! link StartifySection Statement
+hi! link StartifySpecial pecial
+hi! link StartifyHeader Title
+hi! link StartifyFooter Title
 
 " }}}
 " NERDTree: {{{
 
-hi link NERDTreeDir Directory
-hi link NERDTreeDirSlash Operator
-hi! link NERDTreeFile Structure
-hi link hideBracketsInNERDTree Conceal
-hi link NERDTreeNodeDelimeters Delimiter
 hi link NERDTreeBookmarks Typedef
+hi link NERDTreeCWD Underlined
+hi link NERDTreeDir Directory
+hi link NERDTreeDirSlash Delimiter
+hi link NERDTreeNodeDelimeters Delimiter
+hi link hideBracketsInNERDTree Conceal
+hi! link NERDTreeFile Structure
 
 " }}}
 " Asynchronous Lint Engine: {{{
@@ -1159,26 +1182,26 @@ hi link NERDTreeBookmarks Typedef
 " call s:HL('ALEWarning', s:none, s:none, s:undercurl, s:yellow)
 " call s:HL('ALEInfo', s:none, s:none, s:undercurl, s:blue)
 
-hi! link ALEErrorSign Error
-hi! link ALEWarningSign GruvboxYellowSign
-hi! link ALEInfoSign GruvboxBlueSign
-hi! link ALEError Error
-hi! link ALEWarning GruvboxYellowBold
-hi! link ALEInfo GruvboxBlueBold
+hi link ALEErrorSign Error
+hi link ALEWarningSign QuickFixLine
+hi link ALEInfoSign Directory
+hi link ALEError Error
+hi link ALEWarning QuickFixLine
+hi link ALEInfo Macro
 
 " }}}
 " GitGutter: {{{
 
-hi! link GitGutterAdd GruvboxGreenSign
-hi! link GitGutterChange GruvboxAquaSign
-hi! link GitGutterDelete GruvboxRedSign
-hi! link GitGutterChangeDelete GruvboxAquaSign
+hi link GitGutterAdd GruvboxGreenSign
+hi link GitGutterChange Macro
+hi link GitGutterDelete GruvboxRedSign
+hi link GitGutterChangeDelete Macro
 
 " }}}
 " GitCommit: "{{{
 " Do I have this plugin? Is this a fugitive thing?
-hi! link gitcommitSelectedFile GruvboxGreen
-hi! link gitcommitDiscardedFile GruvboxRed
+hi link gitcommitSelectedFile GruvboxGreen
+hi link gitcommitDiscardedFile GruvboxRed
 
 " }}}
 " Tagbar: {{{
@@ -1212,7 +1235,7 @@ highlight default link manItalic htmlItalic
 
 " And the rest
 hi! link manCError Error
-hi! link manEmail GruvboxAqua
+hi! link manEmail Directory
 hi! link manEnvVar Identifier
 hi! link manEnvVarFile Identifier
 hi! link manEnvVarFile Identifier
@@ -1231,16 +1254,20 @@ hi! link manURL GruvboxGreen
 " Netrw: {{{
 " Hate to be that guy but Netrw is considered an ftplugin
 
-hi! link netrwDir GruvboxAqua
-hi! link netrwClassify GruvboxAqua
-hi! link netrwLink GruvboxGray
-hi! link netrwSymLink GruvboxAqua
-hi! link netrwExe GruvboxYellow
-hi! link netrwComment GruvboxGray
-hi! link netrwList GruvboxBlue
-hi! link netrwHelpCmd GruvboxAqua
-hi! link netrwCmdSep GruvboxFg3
-hi! link netrwVersion GruvboxGreen
+hi link netrwClassify Directory
+hi link netrwCmdSep VertSplit
+hi link netrwComma Delimiter
+hi link netrwComment Comment
+hi link netrwDir Directory
+hi link netrwExe Macro
+hi link netrwGray Folded
+hi link netrwHelpCmd Directory
+hi link netrwLink Underlined
+hi link netrwList PreCondit
+hi link netrwPlain String
+hi link netrwSlash Delimiter
+hi link netrwSymLink Special
+hi link netrwVersion Float
 
 " }}}
 " Rst: {{{
@@ -1299,7 +1326,7 @@ hi def link tmuxVariableExpansion Identifier
 
 hi! link diffAdded GruvboxGreen
 hi! link diffRemoved GruvboxRed
-hi! link diffChanged GruvboxAqua
+hi! link diffChanged Directory
 
 hi! link diffFile GruvboxOrange
 hi! link diffNewFile GruvboxYellow
@@ -1393,7 +1420,7 @@ hi! link xmlCdataCdata GruvboxPurple
 hi! link dtdFunction GruvboxGray
 hi! link dtdTagName GruvboxPurple
 
-hi! link xmlAttrib GruvboxAqua
+hi! link xmlAttrib Directory
 hi! link xmlProcessingDelim GruvboxGray
 hi! link dtdParamEntityPunct GruvboxGray
 hi! link dtdParamEntityDPunct GruvboxGray
@@ -1589,14 +1616,14 @@ hi link vimSynError Exception
 if has('nvim')
   " How does a nice light blue sound?
   hi! NvimInternalError guibg=NONE ctermfg=108 ctermbg=234 gui=reverse guifg=#8ec0e1 guisp=NONE
-  hi def link nvimAutoEvent	vimAutoEvent
-  hi def link nvimHLGroup	vimHLGroup
+  hi link nvimAutoEvent	vimAutoEvent
+  hi link nvimHLGroup	vimHLGroup
   hi link nvimInvalid Exception
-  hi def link nvimMap	vimMap
-  hi def link nvimUnmap	vimUnmap
+  hi link nvimMap	vimMap
+  hi link nvimUnmap	vimUnmap
 
-  hi! link TermCursor Cursor
-  hi TermCursorNC ctermfg=237 ctermbg=187 guifg=#3c3836 guibg=#ebdbb2 guisp=NONE cterm=NONE gui=NONE
+  hi link TermCursor Cursor
+  hi TermCursorNC ctermfg=237 ctermbg=223 guifg=#3c3836 guibg=#ebdbb2 guisp=NONE cterm=NONE gui=NONE
 
   " *hl-NormalFloat* NormalFloat	Normal text in floating windows.
   hi NormalFloat ctermfg=223 ctermbg=234 guifg=#ebdbb2 guibg=#1d2021 guisp=NONE gui=undercurl cterm=undercurl
@@ -1605,96 +1632,58 @@ if has('nvim')
   " IncSearch	'incsearch' highlighting; also used for the text replaced with ':s///c'
   hi IncSearch cterm=reverse ctermfg=208 ctermbg=234 gui=reverse guifg=#fe8019 guibg=#1d2021 guisp=NONE
 
+  " From he nvim-terminal-emulator
+  hi debugPC term=reverse ctermbg=darkblue guibg=darkblue
+  hi debugBreakpoint term=reverse ctermbg=red guibg=red
 endif
 
 
 " }}}
 
-" Here's everything from VIMRUNTIME/syntax/vim.vim:
-" vimAuSyntax	vimAuSyntax
-
+" Here's every highlighting group I've ran into and a note with what it represents
 " The last letter of an autocmd like wth
-highlight default link vimAugroup	vimAugroupKey
-" vimAutoCmdSfxList	vimAutoCmdSfxList
-" vimAutoCmdSpace	vimAutoCmdSpace
+hi link vimAugroup	vimAugroupKey
+
 " Lmao the comma between BufEnter,BufReadPre
-hi default link vimAutoEventList vimAutoEvent
+hi link vimAutoEventList vimAutoEvent
 
 hi link vimClusterName WildMenu
-hi default link vimCmdSep vimCommand
-" vimCollClass	vimCollClass
-" vimCollClassErr	vimCollClassErr
-" vimCollection	vimCollection
-hi default link vimCommentTitleLeader	vimCommentTitle
-hi default link vimEcho	String
-" vimErrSetting	vimErrSetting
-" vimEscapeBrace	vimEscapeBrace
-" vimExecute	vimExecute
-hi def link vimExecute DiffText
-" vimExtCmd	vimExtCmd
-" vimFiletype	vimFiletype
-" vimFilter	vimFilter
-" vimFuncBlank	vimFuncBlank
-" vimGlobal	vimGlobal
-" vimGroupList	vimGroupList
+hi link vimCmdSep vimCommand
+hi link vimCommentTitleLeader	vimCommentTitle
+hi link vimEcho	String
+
+" the spaces between words in an execute statement like wth
+hi link vimExecute Label
+
 hi link vimHiAttribList Underlined
 hi link vimHiCtermColor Underlined
 hi link vimHiFontname Underlined
-" vimHiGuiFontname	vimHiGuiFontname
 hi link vimHiKeyList Keyword
-" vimHiLink	vimHiLink
-" vimHiTermcap	vimHiTermcap
-" vimLuaRegion	vimLuaRegion
+
 hi link vimIskSep Keyword
 hi link vimMapModErr Exception
 
-" Vim notation was the only reason that mappings were getting highlighted
-" Randomly they wouldn't
-hi default link vimMapLhs vimNotation
-hi default link vimMapRhs vimNotation
-hi default link vimMapRhsExtend	vimNotation
-" vimMenuBang	vimMenuBang
-" vimMenuMap	vimMenuMap
-" vimMenuPriority	vimMenuPriority
-" vimMenuRhs	vimMenuRhs
-" vimNormCmds	vimNormCmds
-hi default link vimOnlyHLGroup VisualNOS
-hi default link vimOnlyCommand vimCommand
-hi default link vimOnlyOption GruvboxGreen
-" vimOperParen	vimOperParen
-" vimPatRegion	vimPatRegion
-" vimRegion	vimRegion
-hi default link vimSet vimSetEqual
+hi link vimMapLhs vimNotation
+hi link vimMapRhs vimNotation
+hi link vimMapRhsExtend	vimNotation
+hi link vimOnlyHLGroup VisualNOS
+hi link vimOnlyCommand vimCommand
+hi link vimOnlyOption GruvboxGreen
+hi link vimSet vimSetEqual
 
 " There's a highlighting group for the equals sign in a set option statement...
-hi default link vimSetEqual	Operator
-" vimSubst2	vimSubst2
-" vimSubstFlagErr	vimSubstFlagErr
-" vimSubstPat	vimSubstPat
-" vimSubstRange	vimSubstRange
-" vimSubstRep	vimSubstRep
-" vimSubstRep4	vimSubstRep4
+hi link vimSetEqual	Operator
 hi link vimSynKeyRegion Keyword
-" vimSynLine	vimSynLine
-" vimSynMatchRegion	vimSynMatchRegion
-hi def link vimHiAttribList vimHighlight
-" vimSynMtchCchar	vimSynMtchCchar
-" vimSynMtchGroup	vimSynMtchGroup
-" vimSynPatMod	vimSynPatMod
+hi link vimHiAttribList vimHighlight
 
 " This syntax group is literally whitespace...
-hi def link vimSynRegion Nontext
-" vimSyncLinebreak	vimSyncLinebreak
-" vimSyncLinecont	vimSyncLinecont
-" vimSyncLines	vimSyncLines
-hi def link vimSyncLines Number
-" vimSyncMatch	vimSyncMatch
-" vimSyncRegion	vimSyncRegion
-" vimTermOption	vimTermOption
-" Here are a few more xxx cleared syn groups
-hi default link vimUserFunc Function
+hi link vimSynRegion Nontext
+hi link vimSyncLines Number
 
-hi def link vimPythonRegion Identifier
+" Here are a few more xxx cleared syn groups
+hi link vimUserFunc Function
+
+hi link vimPythonRegion Identifier
 " }}}
 " }}}
 " Clojure: {{{
@@ -1706,12 +1695,12 @@ hi! link clojureDefine GruvboxOrange
 
 hi! link clojureFunc GruvboxYellow
 hi! link clojureRepeat GruvboxYellow
-hi! link clojureCharacter GruvboxAqua
-hi! link clojureStringEscape GruvboxAqua
+hi! link clojureCharacter Directory
+hi! link clojureStringEscape Directory
 hi! link clojureException GruvboxRed
 
-hi! link clojureRegexp GruvboxAqua
-hi! link clojureRegexpEscape GruvboxAqua
+hi! link clojureRegexp Directory
+hi! link clojureRegexpEscape Directory
 call s:HL('clojureRegexpCharClass', s:fg3, s:none, s:bold)
 hi! link clojureRegexpMod clojureRegexpCharClass
 hi! link clojureRegexpQuantifier clojureRegexpCharClass
@@ -1786,7 +1775,7 @@ hi link cssAuralProp cssProp
 hi link cssBackgroundAttr cssAttr
 hi link cssBackgroundProp cssProp
 hi link cssBorderAttr cssAttr
-hi link cssBorderOutlineProp GruvboxAqua
+hi link cssBorderOutlineProp Directory
 hi link cssBorderProp cssProp
 hi link cssBoxAttr cssAttr
 hi link cssBoxProp cssProp
@@ -1848,7 +1837,7 @@ hi link cssMultiColumnAttr cssAttr
 hi link cssMultiColumnProp cssProp
 hi link cssNoise Noise
 hi link cssPaddingAttr cssAttr
-hi link cssPaddingProp GruvboxAqua
+hi link cssPaddingProp Directory
 hi link cssPageMarginProp cssAtKeyword
 hi link cssPageProp cssProp
 hi link cssPagePseudo PreProc
@@ -1897,7 +1886,7 @@ hi link cssVendor Comment
 " JavaScript: {{{
 
 hi! link javaScriptBraces GruvboxFg0
-hi! link javaScriptFunction GruvboxAqua
+hi! link javaScriptFunction Directory
 hi! link javaScriptIdentifier GruvboxRed
 hi! link javaScriptMember GruvboxBlue
 hi! link javaScriptNull GruvboxPurple
@@ -1909,7 +1898,7 @@ hi! link javaScriptParens GruvboxFg3
 hi! link javascriptArrayMethod GruvboxFg2
 hi! link javascriptArrayStaticMethod GruvboxFg2
 hi! link javascriptArrowFunc GruvboxYellow
-hi! link javascriptAsyncFunc GruvboxAqua
+hi! link javascriptAsyncFunc Directory
 hi! link javascriptAsyncFuncKeyword Keyword
 hi! link javascriptAwaitFuncKeyword Keyword
 hi! link javascriptBOMLocationMethod GruvboxFg2
@@ -1918,7 +1907,7 @@ hi! link javascriptBOMWindowMethod GruvboxFg2
 hi! link javascriptBOMWindowProp GruvboxFg2
 hi! link javascriptBrackets GruvboxFg0
 hi! link javascriptCacheMethod GruvboxFg2
-hi! link javascriptClassExtends GruvboxAqua
+hi! link javascriptClassExtends Directory
 hi! link javascriptClassKeyword Keyword
 hi! link javascriptClassName GruvboxYellow
 hi! link javascriptClassStatic GruvboxOrange
@@ -1931,14 +1920,14 @@ hi! link javascriptDOMEventMethod GruvboxFg0
 hi! link javascriptDOMNodeMethod GruvboxFg0
 hi! link javascriptDOMStorageMethod GruvboxFg0
 hi! link javascriptDateMethod GruvboxFg2
-hi! link javascriptDefault GruvboxAqua
+hi! link javascriptDefault Directory
 hi! link javascriptDocNamedParamType GruvboxFg4
 hi! link javascriptDocNotation GruvboxFg4
 hi! link javascriptDocParamName GruvboxFg4
 hi! link javascriptDocTags GruvboxFg4
 hi! link javascriptEndColons GruvboxFg2
 hi! link javascriptExceptions GruvboxRed
-hi! link javascriptExport GruvboxAqua
+hi! link javascriptExport Directory
 hi! link javascriptForOperator GruvboxRed
 hi! link javascriptFuncArg GruvboxFg2
 hi! link javascriptFuncKeyword Keyword
@@ -1946,7 +1935,7 @@ hi! link javascriptGlobal GruvboxYellow
 hi! link javascriptGlobalMethod GruvboxFg2
 hi! link javascriptHeadersMethod GruvboxFg0
 hi! link javascriptIdentifier GruvboxOrange
-hi! link javascriptImport GruvboxAqua
+hi! link javascriptImport Directory
 hi! link javascriptLabel GruvboxBlue
 hi! link javascriptLogicSymbols GruvboxFg0
 hi! link javascriptMathStaticMethod GruvboxFg2
@@ -1957,7 +1946,7 @@ hi! link javascriptOperator GruvboxRed
 hi! link javascriptProp GruvboxFg2
 hi! link javascriptPropertyName GruvboxBlue
 hi! link javascriptStringMethod GruvboxFg2
-hi! link javascriptTemplateSB GruvboxAqua
+hi! link javascriptTemplateSB Directory
 hi! link javascriptTemplateSubstitution GruvboxFg0
 hi! link javascriptURLUtilsProp GruvboxFg2
 hi! link javascriptVariable GruvboxRed
@@ -2006,11 +1995,11 @@ hi def link javaScriptEmbed		Special
 
 hi! link jsClassKeyword Keyword
 hi! link jsExtendsKeyword Keyword
-hi! link jsExportDefault GruvboxAqua
-hi! link jsTemplateBraces GruvboxAqua
+hi! link jsExportDefault Directory
+hi! link jsTemplateBraces Directory
 hi! link jsGlobalNodeObjects GruvboxFg1
 hi! link jsGlobalObjects GruvboxFg1
-hi! link jsFunction GruvboxAqua
+hi! link jsFunction Directory
 hi! link jsFuncParens GruvboxFg3
 hi! link jsParens GruvboxFg3
 hi! link jsNull GruvboxPurple
@@ -2020,12 +2009,12 @@ hi! link jsClassDefinition GruvboxYellow
 " }}}
 " TypeScript: {{{
 
-hi! link typeScriptReserved GruvboxAqua
-hi! link typeScriptLabel GruvboxAqua
+hi! link typeScriptReserved Directory
+hi! link typeScriptLabel Directory
 hi! link typeScriptFuncKeyword Keyword
 hi! link typeScriptIdentifier GruvboxOrange
-hi! link typeScriptBraces GruvboxFg1
-hi! link typeScriptEndColons GruvboxFg1
+hi! link typeScriptBraces Operator
+hi! link typeScriptEndColons Operator
 hi! link typeScriptDOMObjects GruvboxFg1
 hi! link typeScriptAjaxMethods GruvboxFg1
 hi! link typeScriptLogicSymbols GruvboxFg1
@@ -2033,31 +2022,31 @@ hi! link typeScriptDocSeeTag Comment
 hi! link typeScriptDocParam Comment
 hi! link typeScriptDocTags vimCommentTitle
 hi! link typeScriptGlobalObjects GruvboxFg1
-hi! link typeScriptParens GruvboxFg3
+hi! link typeScriptParens Operator
 hi! link typeScriptOpSymbols GruvboxFg3
 hi! link typeScriptHtmlElemProperties GruvboxFg1
 hi! link typeScriptNull GruvboxPurple
-hi! link typeScriptInterpolationDelimiter GruvboxAqua
+hi! link typeScriptInterpolationDelimiter Directory
 
 " }}}
 " PureScript: {{{
 
 hi! link purescriptModuleKeyword Keyword
 hi! link purescriptModuleName GruvboxFg1
-hi! link purescriptWhere GruvboxAqua
+hi! link purescriptWhere Directory
 hi! link purescriptDelimiter GruvboxFg4
 hi! link purescriptType GruvboxFg1
 hi! link purescriptImportKeyword Keyword
 hi! link purescriptHidingKeyword Keyword
 hi! link purescriptAsKeyword Keyword
-hi! link purescriptStructure GruvboxAqua
+hi! link purescriptStructure Directory
 hi! link purescriptOperator GruvboxBlue
 
-hi! link purescriptTypeVar GruvboxFg1
-hi! link purescriptConstructor GruvboxFg1
-hi! link purescriptFunction GruvboxFg1
-hi! link purescriptConditional GruvboxOrange
-hi! link purescriptBacktick GruvboxOrange
+hi! link purescriptTypeVar Type
+hi! link purescriptConstructor Typedef
+hi! link purescriptFunction Function
+hi! link purescriptConditional Conditional
+hi! link purescriptBacktick Operator
 
 " }}}
 " CoffeeScript: {{{
@@ -2069,52 +2058,10 @@ hi! link coffeeParen GruvboxFg3
 hi! link coffeeBracket GruvboxOrange
 
 " }}}
-" React: {{{
-"
-hi jsxRegion guifg=#83a598 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-hi jsxTagName guifg=#83a598 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-hi jsxComponentName guifg=#fabd2f guibg=NONE guisp=NONE gui=NONE cterm=NONE
-hi jsxEndComponentName guifg=#fabd2f guibg=NONE guisp=NONE gui=NONE cterm=NONE
-hi jsxEscapeJsAttributes guifg=#83a598 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-hi jsxEscapeJsContent guifg=#83a598 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-hi jsxAttrib guifg=#fabd2f guibg=NONE guisp=NONE gui=NONE cterm=NONE
-hi jsxAttributeBraces guifg=#ebdbb2 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-hi jsxEqual guifg=#8ec07c guibg=NONE guisp=NONE gui=NONE cterm=NONE
-hi jsxString guifg=#b8bb26 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-hi jsxCloseTag guifg=#83a598 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-hi jsxEndTag guifg=#83a598 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-hi jsxEndString guifg=#83a598 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-hi jsxCloseString guifg=#83a598 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-hi jsxIfOperator guifg=#8ec07c guibg=NONE guisp=NONE gui=NONE cterm=NONE
-hi jsxElseOperator guifg=#8ec07c guibg=NONE guisp=NONE gui=NONE cterm=NONE
-hi jsxDot guifg=#ebdbb2 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-hi jsxNamespace guifg=#83a598 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-hi jsxPunct guifg=#8ec07c guibg=NONE guisp=NONE gui=NONE cterm=NONE
-hi jsxRegion ctermfg=23 ctermbg=NONE cterm=NONE
-hi jsxTagName ctermfg=23 ctermbg=NONE cterm=NONE
-hi jsxComponentName ctermfg=172 ctermbg=NONE cterm=NONE
-hi jsxEndComponentName ctermfg=172 ctermbg=NONE cterm=NONE
-hi jsxEscapeJsAttributes ctermfg=23 ctermbg=NONE cterm=NONE
-hi jsxEscapeJsContent ctermfg=23 ctermbg=NONE cterm=NONE
-hi jsxAttrib ctermfg=172 ctermbg=NONE cterm=NONE
-hi jsxAttributeBraces ctermfg=237 ctermbg=NONE cterm=NONE
-hi jsxEqual ctermfg=29 ctermbg=NONE cterm=NONE
-hi jsxString ctermfg=100 ctermbg=NONE cterm=NONE
-hi jsxCloseTag ctermfg=23 ctermbg=NONE cterm=NONE
-hi jsxEndTag ctermfg=23 ctermbg=NONE cterm=NONE
-hi jsxEndString ctermfg=23 ctermbg=NONE cterm=NONE
-hi jsxCloseString ctermfg=23 ctermbg=NONE cterm=NONE
-hi jsxIfOperator ctermfg=29 ctermbg=NONE cterm=NONE
-hi jsxElseOperator ctermfg=29 ctermbg=NONE cterm=NONE
-hi jsxDot ctermfg=237 ctermbg=NONE cterm=NONE
-hi jsxNamespace ctermfg=23 ctermbg=NONE cterm=NONE
-hi jsxPunct ctermfg=29 ctermbg=NONE cterm=NONE
-
-" }}}
 " Ruby: {{{
 
 hi! link rubyStringDelimiter GruvboxGreen
-hi! link rubyInterpolationDelimiter GruvboxAqua
+hi! link rubyInterpolationDelimiter Directory
 " So TPope defined all of these but they got wiped in the hi clear. So copy
 " paste it is?
 hi def link rubyASCIICode		Character
@@ -2195,7 +2142,7 @@ hi! link objcDirective GruvboxBlue
 " }}}
 " Go: {{{
 
-hi! link goDirective GruvboxAqua
+hi! link goDirective Directory
 hi! link goConstants GruvboxPurple
 hi! link goDeclaration GruvboxRed
 hi! link goDeclType GruvboxBlue
@@ -2237,7 +2184,7 @@ hi! link moonObject GruvboxYellow
 " Java: {{{
 
 hi! link javaAnnotation GruvboxBlue
-hi! link javaDocTags GruvboxAqua
+hi! link javaDocTags Directory
 hi! link javaCommentTitle vimCommentTitle
 hi! link javaParen GruvboxFg3
 hi! link javaParen1 GruvboxFg3
@@ -2253,7 +2200,7 @@ hi! link javaVarArg GruvboxGreen
 
 hi! link elixirDocString Comment
 hi! link elixirStringDelimiter GruvboxGreen
-hi! link elixirInterpolationDelimiter GruvboxAqua
+hi! link elixirInterpolationDelimiter Directory
 hi! link elixirModuleDeclaration GruvboxYellow
 
 " }}}
@@ -2268,30 +2215,31 @@ hi! link scalaTypeExtension GruvboxFg1
 hi! link scalaKeyword Keyword
 hi! link scalaKeywordModifier Keyword
 
-hi! link scalaSpecial GruvboxAqua
+hi! link scalaSpecial Directory
 hi! link scalaOperator GruvboxFg1
 
 hi! link scalaTypeDeclaration GruvboxYellow
 hi! link scalaTypeTypePostDeclaration GruvboxYellow
 
 hi! link scalaInstanceDeclaration GruvboxFg1
-hi! link scalaInterpolation GruvboxAqua
+hi! link scalaInterpolation Directory
 
 " }}}
 " Markdown: {{{
 
-call s:HL('markdownItalic', s:fg3, s:none, s:italic)
+" call s:HL('markdownItalic', s:fg3, s:none, s:italic)
+hi markdownItalic cterm=italic gui=italic
 hi! link markdownText Normal
 hi! link markdownH1 GruvboxGreenBold
 hi! link markdownH2 GruvboxGreenBold
-hi! link markdownH3 GruvboxYellowBold
-hi! link markdownH4 GruvboxYellowBold
+hi! link markdownH3 Title
+hi! link markdownH4 Title
 hi! link markdownH5 GruvboxYellow
 hi! link markdownH6 GruvboxYellow
 
-hi! link markdownCode GruvboxAqua
-hi! link markdownCodeBlock GruvboxAqua
-hi! link markdownCodeDelimiter GruvboxAqua
+hi! link markdownCode Directory
+hi! link markdownCodeBlock Directory
+hi! link markdownCodeDelimiter Directory
 
 hi! link markdownBlockquote GruvboxGray
 hi! link markdownListMarker GruvboxGray
@@ -2303,11 +2251,12 @@ hi! link markdownUrlDelimiter GruvboxFg3
 hi! link markdownLinkDelimiter GruvboxFg3
 hi! link markdownLinkTextDelimiter GruvboxFg3
 
-hi! link markdownHeadingDelimiter GruvboxOrange
-hi! link markdownUrl GruvboxPurple
-hi! link markdownUrlTitleDelimiter GruvboxGreen
+hi link markdownHeadingDelimiter Delimiter
+hi! link markdownUrl Underlined
+hi! link markdownUrlTitleDelimiter Underlined
 
-call s:HL('markdownLinkText', s:gray, s:none, s:underline)
+" call s:HL('markdownLinkText', s:gray, s:none, s:underline)
+hi link markdownLinkText Underlined
 hi! link markdownIdDeclaration markdownLinkText
 
 " I hate the built-in definition of a markdown error so sorry
@@ -2323,50 +2272,23 @@ hi link mkdCodeEnd       String
 hi link mkdCodeStart     String
 hi link mkdDelimiter     Delimiter
 hi link mkdFootnote      TablineSel
-hi link mkdFootnotes     htmlLink
+hi link mkdFootnotes     Underlined
 hi link mkdHeading       Tag
 hi link mkdID            Identifier
-hi link mkdInlineURL     htmlLink
-hi link mkdLineBreak     Visual
-hi link mkdLink          htmlLink
+hi link mkdInlineURL     Underlined
+" This appears to be trailing whitespace
+hi link mkdLineBreak     Whitespace
+hi link mkdLink          Underlined
 hi link mkdLinkDef       mkdID
 hi link mkdLinkDefTarget mkdURL
 hi link mkdLinkTitle     htmlString
 hi link mkdListItem      Identifier
 hi link mkdNonListItemBlock Normal
 hi link mkdRule          Identifier
+" hi link mkdSnippetJS    Label
 hi link mkdSnippetVIM    Label
 hi link mkdString        String
-hi link mkdURL           TablineSel
-
-" }}}
-" Haskell: {{{
-
-" hi! link haskellType GruvboxYellow
-" hi! link haskellOperators GruvboxOrange
-" hi! link haskellConditional GruvboxAqua
-" hi! link haskellLet GruvboxOrange
-hi! link haskellAssocType GruvboxAqua
-hi! link haskellBacktick GruvboxOrange
-hi! link haskellBlockKeywords Keyword
-hi! link haskellBottom GruvboxAqua
-hi! link haskellChar GruvboxGreen
-hi! link haskellConditional GruvboxOrange
-hi! link haskellDeclKeyword Keyword
-hi! link haskellDefault GruvboxAqua
-hi! link haskellDelimiter GruvboxFg4
-hi! link haskellDeriving GruvboxAqua
-hi! link haskellIdentifier GruvboxFg1
-hi! link haskellImportKeywords Keyword
-hi! link haskellLet GruvboxAqua
-hi! link haskellNumber GruvboxPurple
-hi! link haskellOperators GruvboxBlue
-hi! link haskellPragma GruvboxPurple
-hi! link haskellSeparator GruvboxFg1
-hi! link haskellStatement GruvboxOrange
-hi! link haskellString GruvboxGreen
-hi! link haskellType GruvboxFg1
-hi! link haskellWhere GruvboxAqua
+hi link mkdURL           Underlined
 
 " }}}
 " Json: {{{
@@ -2382,164 +2304,164 @@ hi! link jsonStringMatch    Question
 
 " }}}
 " Sh: {{{
-hi def link bashAdminStatement	shStatement
-hi def link bashSpecialVariables	shShellVariables
-hi def link bashStatement		shStatement
-hi def link shAlias		Identifier
-hi def link shArithRegion	shShellVariables
-hi def link shArithmetic		Special
-hi def link shAstQuote	shDoubleQuote
-hi def link shAtExpr	shSetList
-hi def link shBQComment	shComment
-hi def link shBeginHere	shRedir
-hi def link shBkslshDblQuote	shDOubleQuote
-hi def link shBkslshSnglQuote	shSingleQuote
-hi def link shCaseBar	shConditional
-hi def link shCaseCommandSub	shCommandSub
-hi def link shCaseDoubleQuote	shDoubleQuote
-hi def link shCaseError		Error
-hi def link shCaseIn	shConditional
-hi def link shCaseSingleQuote	shSingleQuote
-hi def link shCaseStart	shConditional
-hi def link shCharClass		Identifier
-hi def link shCmdSubRegion	shShellVariables
-hi def link shColon	shComment
-hi def link shCommandSub		Special
-hi def link shCommandSubBQ		shCommandSub
-hi def link shComment		Comment
-hi def link shCondError		Error
-hi def link shConditional		Conditional
-hi def link shCtrlSeq		Special
-hi def link shCurlyError		Error
-hi def link shDeref	shShellVariables
-hi def link shDerefDelim	shOperator
-hi def link shDerefLen		shDerefOff
-hi def link shDerefOff		shDerefOp
-hi def link shDerefOp	shOperator
-hi def link shDerefOpError		Error
-hi def link shDerefPOL	shDerefOp
-hi def link shDerefPPS	shDerefOp
-hi def link shDerefPSR	shDerefOp
-hi def link shDerefSimple	shDeref
-hi def link shDerefSpecial	shDeref
-hi def link shDerefString	shDoubleQuote
-hi def link shDerefVar	shDeref
-hi def link shDerefWordError		Error
-hi def link shDoError		Error
-hi def link shDoubleQuote	shString
-hi def link shEcho	shString
-hi def link shEchoDelim	shOperator
-hi def link shEchoQuote	shString
-hi def link shEmbeddedEcho	shString
-hi def link shEsacError		Error
-hi def link shEscape	shCommandSub
-hi def link shExDoubleQuote	shDoubleQuote
-hi def link shExSingleQuote	shSingleQuote
-hi def link shExprRegion		Delimiter
-hi def link shForPP	shLoop
-hi def link shFunction	Function
-hi def link shFunctionKey		Keyword
-hi def link shFunctionName		Function
-hi def link shHereDoc	shString
-hi def link shHereDoc01		shRedir
-hi def link shHereDoc02		shRedir
-hi def link shHereDoc03		shRedir
-hi def link shHereDoc04		shRedir
-hi def link shHereDoc05		shRedir
-hi def link shHereDoc06		shRedir
-hi def link shHereDoc07		shRedir
-hi def link shHereDoc08		shRedir
-hi def link shHereDoc09		shRedir
-hi def link shHereDoc10		shRedir
-hi def link shHereDoc11		shRedir
-hi def link shHereDoc12		shRedir
-hi def link shHereDoc13		shRedir
-hi def link shHereDoc14		shRedir
-hi def link shHereDoc15		shRedir
-hi def link shHerePayload	shHereDoc
-hi def link shHereString	shRedir
-hi def link shInError		Error
-hi def link shLoop	shStatement
-hi def link shNoQuote	shDoubleQuote
-hi def link shNumber		Number
-hi def link shOperator		Operator
-hi def link shOption	shCommandSub
-hi def link shParen	shArithmetic
-hi def link shParenError		Error
-hi def link shPattern	shString
-hi def link shPosnParm	shShellVariables
-hi def link shQuickComment	shComment
-hi def link shQuote	shOperator
-hi def link shRange	shOperator
-hi def link shRedir	shOperator
-hi def link shRepeat		Repeat
-hi def link shSet		Statement
-hi def link shSetList		Identifier
-hi def link shSetListDelim	shOperator
-hi def link shSetOption	shOption
-hi def link shShellVariables		PreProc
-hi def link shSingleQuote	shString
-hi def link shSnglCase		Statement
-hi def link shSource	shOperator
-hi def link shSource	shOperator
-hi def link shSpecial		Special
-hi def link shSpecialDQ		Special
-hi def link shSpecialNoZS		shSpecial
-hi def link shSpecialNxt	shSpecial
-hi def link shSpecialSQ		Special
-hi def link shSpecialStart	shSpecial
-hi def link shStatement		Statement
-hi def link shString		String
-hi def link shStringSpecial	shSpecial
-hi def link shSubShRegion	shOperator
-hi def link shTestDoubleQuote	shString
-hi def link shTestError		Error
-hi def link shTestOpr	shConditional
-hi def link shTestPattern	shString
-hi def link shTestSingleQuote	shString
-hi def link shTodo		Todo
-hi def link shTouchCmd	shStatement
-hi def link shVariable	shSetList
-hi def link shWrapLineOperator	shOperator
-hi! link shCase             Question
-hi! link shCaseEsac         Question
-hi! link shCaseEsacSync     Question
-hi! link shCaseExSingleQuote Question
-hi! link shCaseLabel        Question
-hi! link shCaseRange        Question
-hi! link shCmdParenRegion   Question
-hi! link shComma            Question
-hi! link shCurlyIn          Question
-hi! link shDblBrace         Question
-hi! link shDblParen         Question
-hi! link shDerefEscape      Question
-hi! link shDerefPPSleft     Question
-hi! link shDerefPPSright    Question
-hi! link shDerefPSRleft     Question
-hi! link shDerefPSRright    Question
-hi! link shDerefPattern     Question
-hi! link shDerefVarArray    Question
-hi! link shDo               Question
-hi! link shDoSync           Question
-hi! link shExpr             Question
-hi! link shFor              Question
-hi! link shForSync          Question
-hi! link shFunctionFour     Question
-hi! link shFunctionOne      Identifier
-hi! link shFunctionStart    Question
-hi! link shFunctionThree    Question
-hi! link shFunctionTwo      Question
-hi! link shHereDoc16        Question
-hi! link shIf               Identifier
-hi! link shIfSync           Question
-hi! link shOK               Question
-hi! link shSpecialVar       Question
-hi! link shSubSh            Question
-hi! link shTest             Question
-hi! link shTouch            Question
-hi! link shUntilSync        Question
-hi! link shVarAssign        Question
-hi! link shWhileSync        Question
+hi link bashAdminStatement	shStatement
+hi link bashSpecialVariables	shShellVariables
+hi link bashStatement		shStatement
+hi link shAlias		Identifier
+hi link shArithRegion	shShellVariables
+hi link shArithmetic		Special
+hi link shAstQuote	shDoubleQuote
+hi link shAtExpr	shSetList
+hi link shBQComment	shComment
+hi link shBeginHere	shRedir
+hi link shBkslshDblQuote	shDoubleQuote
+hi link shBkslshSnglQuote	shSingleQuote
+hi link shCase             Question
+hi link shCaseBar	shConditional
+hi link shCaseCommandSub	shCommandSub
+hi link shCaseDoubleQuote	shDoubleQuote
+hi link shCaseError		Error
+hi link shCaseEsac         Question
+hi link shCaseEsacSync     Question
+hi link shCaseExSingleQuote Question
+hi link shCaseIn	shConditional
+hi link shCaseLabel        Question
+hi link shCaseRange        Question
+hi link shCaseSingleQuote	shSingleQuote
+hi link shCaseStart	shConditional
+hi link shCharClass		Identifier
+hi link shCmdParenRegion   Question
+hi link shCmdSubRegion	shShellVariables
+hi link shColon	shComment
+hi link shComma            Question
+hi link shCommandSub		Special
+hi link shCommandSubBQ		shCommandSub
+hi link shComment		Comment
+hi link shCondError		Error
+hi link shConditional		Conditional
+hi link shCtrlSeq		Special
+hi link shCurlyError		Error
+hi link shCurlyIn          Question
+hi link shDblBrace         Question
+hi link shDblParen         Question
+hi link shDeref	shShellVariables
+hi link shDerefDelim	shOperator
+hi link shDerefEscape      Question
+hi link shDerefLen		shDerefOff
+hi link shDerefOff		shDerefOp
+hi link shDerefOp	shOperator
+hi link shDerefOpError		Error
+hi link shDerefPOL	shDerefOp
+hi link shDerefPPS	shDerefOp
+hi link shDerefPPSleft     Question
+hi link shDerefPPSright    Question
+hi link shDerefPSR	shDerefOp
+hi link shDerefPSRleft     Question
+hi link shDerefPSRright    Question
+hi link shDerefPattern     Question
+hi link shDerefSimple	shDeref
+hi link shDerefSpecial	shDeref
+hi link shDerefString	shDoubleQuote
+hi link shDerefVar	shDeref
+hi link shDerefVarArray    Question
+hi link shDerefWordError		Error
+hi link shDo               Question
+hi link shDoError		Error
+hi link shDoSync           Question
+hi link shDoubleQuote	shString
+hi link shEcho	shString
+hi link shEchoDelim	shOperator
+hi link shEchoQuote	shString
+hi link shEmbeddedEcho	shString
+hi link shEsacError		Error
+hi link shEscape	shCommandSub
+hi link shExDoubleQuote	shDoubleQuote
+hi link shExSingleQuote	shSingleQuote
+hi link shExpr             Question
+hi link shExprRegion		Delimiter
+hi link shFor              Question
+hi link shForPP	shLoop
+hi link shForSync          Question
+hi link shFunction	Function
+hi link shFunctionFour     Question
+hi link shFunctionKey		Keyword
+hi link shFunctionName		Function
+hi link shFunctionOne      Identifier
+hi link shFunctionStart    Question
+hi link shFunctionThree    Question
+hi link shFunctionTwo      Question
+hi link shHereDoc	shString
+hi link shHereDoc01		shRedir
+hi link shHereDoc02		shRedir
+hi link shHereDoc03		shRedir
+hi link shHereDoc04		shRedir
+hi link shHereDoc05		shRedir
+hi link shHereDoc06		shRedir
+hi link shHereDoc07		shRedir
+hi link shHereDoc08		shRedir
+hi link shHereDoc09		shRedir
+hi link shHereDoc10		shRedir
+hi link shHereDoc11		shRedir
+hi link shHereDoc12		shRedir
+hi link shHereDoc13		shRedir
+hi link shHereDoc14		shRedir
+hi link shHereDoc15		shRedir
+hi link shHereDoc16        Question
+hi link shHerePayload	shHereDoc
+hi link shHereString	shRedir
+hi link shIf               Identifier
+hi link shIfSync           Question
+hi link shInError		Error
+hi link shLoop	shStatement
+hi link shNoQuote	shDoubleQuote
+hi link shNumber		Number
+hi link shOK               Question
+hi link shOperator		Operator
+hi link shOption	shCommandSub
+hi link shParen	shArithmetic
+hi link shParenError		Error
+hi link shPattern	shString
+hi link shPosnParm	shShellVariables
+hi link shQuickComment	shComment
+hi link shQuote	shOperator
+hi link shRange	shOperator
+hi link shRedir	shOperator
+hi link shRepeat		Repeat
+hi link shSet		Statement
+hi link shSetList		Identifier
+hi link shSetListDelim	shOperator
+hi link shSetOption	shOption
+hi link shShellVariables		PreProc
+hi link shSingleQuote	shString
+hi link shSnglCase		Statement
+hi link shSource	shOperator
+hi link shSource	shOperator
+hi link shSpecial		Special
+hi link shSpecialDQ		Special
+hi link shSpecialNoZS		shSpecial
+hi link shSpecialNxt	shSpecial
+hi link shSpecialSQ		Special
+hi link shSpecialStart	shSpecial
+hi link shSpecialVar       Question
+hi link shStatement		Statement
+hi link shString		String
+hi link shStringSpecial	shSpecial
+hi link shSubSh            Question
+hi link shSubShRegion	shOperator
+hi link shTest             Question
+hi link shTestDoubleQuote	shString
+hi link shTestError		Error
+hi link shTestOpr	shConditional
+hi link shTestPattern	shString
+hi link shTestSingleQuote	shString
+hi link shTodo		Todo
+hi link shTouch            Question
+hi link shTouchCmd	shStatement
+hi link shUntilSync        Question
+hi link shVarAssign        Question
+hi link shVariable	shSetList
+hi link shWhileSync        Question
+hi link shWrapLineOperator	shOperator
 
 " }}}
 " QF: {{{
@@ -2563,25 +2485,27 @@ hi def link djangoTodo Todo
 
 " }}}
 " Tutor: {{{
-hi! tutorLink cterm=underline gui=underline ctermfg=lightblue guifg=#0088ff
-hi! link tutorLinkBands Delimiter
-hi! link tutorLinkAnchor Underlined
-hi! link tutorInternalAnchor Underlined
-hi! link tutorURL tutorLink
-hi! link tutorEmail tutorLink
-hi! link tutorSection Title
-hi! link tutorSectionBullet Delimiter
-hi! link tutorTOC Directory
-hi! tutorMarks cterm=bold gui=bold
-hi! tutorEmphasis gui=italic cterm=italic
-hi! tutorBold gui=bold cterm=bold
-hi! link tutorExpect Special
-hi! tutorOK ctermfg=green guifg=#00ff88 cterm=bold gui=bold
-hi! tutorX ctermfg=red guifg=#ff2000  cterm=bold gui=bold
-hi! link tutorInlineOK tutorOK
-hi! link tutorInlineX tutorX
-hi! link tutorShellPrompt Delimiter
-
+hi link tutorEmail tutorLink
+hi link tutorEmphasis htmlItalic
+hi link tutorExpect Special
+hi link tutorInlineOK tutorOK
+hi link tutorInlineX tutorX
+hi link tutorInternalAnchor Underlined
+hi link tutorLink PmenuSel
+hi link tutorLinkAnchor Underlined
+hi link tutorLinkBands Delimiter
+hi link tutorMarks htmlBold
+hi link tutorSection Title
+hi link tutorSectionBullet Delimiter
+hi link tutorShellPrompt Delimiter
+hi link tutorTOC Directory
+hi link tutorURL tutorLink
+hi link tutorBold htmlBold
+" TODO:
+hi tutorOK ctermfg=green guifg=#00ff88 cterm=bold gui=bold
+hi tutorX ctermfg=red guifg=#ff2000  cterm=bold gui=bold
+" tutorURL       xxx links to tutorLink
+" tutorEmail     xxx links to tutorLink
 " }}}
 " CSV: {{{
 
@@ -2650,7 +2574,7 @@ hi link helpTypedef		Typedef
 hi link helpURL		String
 hi link helpUnderlined	Underlined
 hi link helpVim		Identifier
-hi link helpWarning		Todo
+hi link helpWarning WarningMsg
 " }}}
 
 " }}}

@@ -50,28 +50,35 @@ syn match   jsonEscape    "\\u\x\{4}" contained
 syn match   jsonNumber    "-\=\<\%(0\|[1-9]\d*\)\%(\.\d\+\)\=\%([eE][-+]\=\d\+\)\=\>\ze[[:blank:]\r\n]*[,}\]]"
 
 " ERROR WARNINGS **********************************************
+
 if (!exists("g:vim_json_warnings") || g:vim_json_warnings==1)
-  " Syntax: Strings should always be enclosed with quotes.
+
+  " Strings should always be enclosed with quotes.
   " syn match   jsonNoQuotesError  "\<[[:alpha:]][[:alnum:]]*\>"
   syn match   jsonTripleQuotesError  /"""/
 
-  " Syntax: An integer part of 0 followed by other digits is not allowed.
+  " An integer part of 0 followed by other digits is not allowed.
   syn match   jsonNumError  "-\=\<0\d\.\d*\>"
 
-  " Syntax: Decimals smaller than one should begin with 0 (so .1 should be 0.1).
+  " Decimals smaller than one should begin with 0 (so .1 should be 0.1).
   syn match   jsonNumError  "\:\@<=[[:blank:]\r\n]*\zs\.\d\+"
 
-  " Syntax: No comments in JSON, see http://stackoverflow.com/questions/244777/can-i-comment-a-json-file
+  " No comments in JSON, see http://stackoverflow.com/questions/244777/can-i-comment-a-json-file
   " syn match   jsonCommentError  '//.*'
   " syn match   jsonCommentError  '\(/\*\)\|\(\*/\)'
 
-  " Syntax: No semicolons in JSON
+  " jsonc has comments and that's good enough for me.
+  syn region  jsoncLineComment    start=+\/\/+ end=+$+ keepend
+  syn region  jsoncLineComment    start=+^\s*\/\/+ skip=+\n\s*\/\/+ end=+$+ keepend fold
+  syn region  jsoncComment        start="/\*"  end="\*/" fold
+
+  " No semicolons in JSON
   syn match   jsonSemicolonError  ";"
 
-  " Syntax: No trailing comma after the last element of arrays or objects
+  " No trailing comma after the last element of arrays or objects
   syn match   jsonTrailingCommaError  ",\_s*[}\]]"
 
-  " Syntax: Watch out for missing commas between elements
+  " Watch out for missing commas between elements
   syn match   jsonMissingCommaError /\("\|\]\|\d\)\zs\_s\+\ze"/
   syn match   jsonMissingCommaError /\(\]\|\}\)\_s\+\ze"/ "arrays/objects as values
   syn match   jsonMissingCommaError /}\_s\+\ze{/ "objects as elements in an array

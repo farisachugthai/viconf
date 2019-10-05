@@ -25,17 +25,10 @@ if has('unix')
 
   " Termux
   if exists($ANDROID_DATA)
-    let g:python3_host_prog = exepath('python')
-    let g:loaded_python_provider = 1
-    let g:node_host_prog = '/data/data/com.termux/files/usr/bin/neovim-node-host'
-    let loaded_ruby_provider = 1
-
+    call find_files#termux_remote()
   " Ubuntu like or WSL
   else
-    let g:python3_host_prog = exepath('python3')
-    let g:python_host_prog = exepath('python')
-    let g:node_host_prog = exepath('neovim-node-host')
-    let g:ruby_host_prog = exepath('neovim-ruby-host')
+    call find_files#ubuntu_remote()
   endif
 
   if exists($TMUX)
@@ -54,37 +47,7 @@ if has('unix')
   endif
 
 else  " windows not wsl
-  if !empty(exepath('python.exe'))
-    let g:python3_host_prog = exepath('python.exe')
-  elseif !empty(exepath('python3.exe'))
-    let g:python3_host_prog = exepath('python3.exe')
-  elseif executable('C:/tools/miniconda3/python.exe')  " fuck it
-    let g:python3_host_prog = 'C:/tools/miniconda3/python.exe'
-  else
-    let g:loaded_python3_provider = 1
-    echoerr 'Could not find the remote python3 host.'
-  endif
-
-  let g:python_host_prog = 'C:/Users/faris/.windows-build-tools/python27/python.exe'
-
-  let loaded_ruby_provider = 1
-
-  if !empty(exepath('neovim-node-host'))
-    let g:node_host_prog = exepath('neovim-node-host')
-  endif
-
-  let g:clipboard = {
-        \   'name': 'winClip',
-        \   'copy': {
-        \      '+': 'win32yank.exe -i --crlf',
-        \      '*': 'win32yank.exe -i --crlf',
-        \    },
-        \   'paste': {
-        \      '+': 'win32yank.exe -o --lf',
-        \      '*': 'win32yank.exe -o --lf',
-        \   },
-        \   'cache_enabled': 1,
-        \ }
+  call find_files#msdos_remote()
 endif
 
 " Atexit: {{{1

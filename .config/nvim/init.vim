@@ -76,7 +76,7 @@ if has('patch-8.1.0251') | let &backupdir=stdpath('config') . '/undodir//' | end
 if &tabstop > 4 | set tabstop=4 | endif
 if &shiftwidth > 4  | set shiftwidth=4 | endif
 set expandtab smarttab softtabstop=4
-set foldenable foldlevelstart=0 foldlevel=0 foldnestmax=10 foldmethod=marker foldcolumn=2
+set foldenable foldlevelstart=1 foldlevel=1 foldnestmax=10 foldmethod=marker foldcolumn=2
 set signcolumn=yes
 try | set switchbuf=useopen,usetab,newtab | catch | endtry
 set hidden foldopen=quickfix,search,tag,undo
@@ -114,7 +114,7 @@ if has('patch-8.1.0360') | set diffopt+=internal,algorithm:patience | endif
 
 if exists('&modelineexpr') | set modelineexpr | endif
 set browsedir="buffer"   " which directory is used for the file browser
-let &g:listchars = "tab:\u21e5\u00b7,trail:\u2423,extends:\u21c9,precedes:\u21c7,nbsp:\u00b7"
+let &g:listchars = "tab:\u21e5\u00b7,extends:\u21c9,precedes:\u21c7,nbsp:\u00b7"  " trail:\u2423 doesn't work with hack as font
 let &g:fillchars = "vert:\u250b,fold:\u00b7"
 set breakindent breakindentopt=sbr
 let &showbreak = '↳ '                   " Indent wrapped lines correctly
@@ -122,6 +122,7 @@ set updatetime=100 lazyredraw
 set inccommand=split
 set terse shortmess=aoOsAItTWAcF
 set title titlestring=%<%F%=%l/%L-%P   " leaves a cool title for tmux
+set conceallevel=2 concealcursor=nc    " enable concealing
 
 " Mappings: {{{1
 noremap q; q:
@@ -136,7 +137,6 @@ vnoremap > >gv
 " I just realized these were set to nnoremap. Meaning visual mode doesn't get this mapping
 noremap j gj
 noremap k gk
-" Help docs reminded me I hadn't done this!
 noremap <Up> gk
 noremap <Down> gj
 " I mess this up constantly thinking that gI does what gi does

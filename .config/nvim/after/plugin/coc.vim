@@ -48,8 +48,7 @@ inoremap <silent><expr> <C-Space> coc#refresh()
 " As a heads up theres also a coc#select#snippet
 inoremap <expr> <CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
-" Did they need <expr>
-inoremap <buffer><expr> gK <Plug>(coc-definition)
+inoremap <buffer> gK <Plug>(coc-definition)
 
 " Shit none of these work
 nnoremap [g <Plug>(coc-diagnostic-prev)
@@ -62,12 +61,12 @@ nnoremap <expr> ]c  <Plug>(coc-git-nextchunk)
 nnoremap <expr> <F2> <Plug>(coc-refactor)
 xnoremap <F2> <Cmd>'<,'>CocCommand document.renameCurrentWord<CR>
 
-nnoremap <silent> <Leader>cw  <Cmd>execute 'CocList -I --normal --input=' 
+nnoremap <silent> <Leader>cw  <Cmd>execute 'CocList -I --normal --input='
       \. expand('<cword>') . ' words'<CR>
 
 " Easier Grep: {{{2 Mnenomic CocFind
 " Keymapping for grep word under cursor with interactive mode
-nnoremap <silent> <Leader>cf <Cmd>exe 'CocList -I --input=' 
+nnoremap <silent> <Leader>cf <Cmd>exe 'CocList -I --input='
       \. expand('<cword>') . ' grep'<CR>
 
 " Mnemonic: CocSelect {{{2

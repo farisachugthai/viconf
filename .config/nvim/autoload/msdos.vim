@@ -27,6 +27,8 @@ set fileformats=unix,dos
 " but the Windows version of Vim can source unix format scripts.
 set sessionoptions+=unix,slash viewoptions+=unix,slash
 
+" ConEmu is complaining but it stops if we do this
+if !empty($TERM) | unlet $TERM | endif
 
 " So this HAS to be a bad idea; however, all 3 DirChanged autocommands emit
 " errors and that's a little insane
@@ -64,6 +66,18 @@ command! PowerShell call msdos#Powershell()
 
 " Holy hell is this annoying don't do this!!
 " cabbrev pwsh PowerShell
+
+function! msdos#pwsh_help(helppage) abort
+
+  echomsg 'Setting the shell to powershell.'
+  call msdos#PowerShell()
+  r!pwsh -noprofile -nologo -command get-help a:helppage
+
+  echomsg 'Note that shell was not restored'
+
+endfunction
+
+command! PwshHelp call msdos#pwsh_help(shellescape(<f-args>))
 
 " Atexit: {{{1
 

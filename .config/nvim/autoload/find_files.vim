@@ -6,10 +6,10 @@
 " ============================================================================
 
 " Guards: {{{1
-if exists('g:did_find_files_vim') || &compatible || v:version < 700
+if exists('g:did_autoload_find_files') || &compatible || v:version < 700
   finish
 endif
-let g:did_find_files_vim = 1
+let g:did_autoload_files = 1
 
 let s:cpo_save = &cpoptions
 set cpoptions-=C
@@ -71,9 +71,8 @@ function! find_files#FZFMru() abort  " {{{1
     call fzf#run(fzf#wrap({
         \ 'source'  :   v:oldfiles,
         \ 'sink'    :   'edit',
-        \ 'options' : ['-m', '--prompt', '--no-sort', '--query'],
-        \ 'down'    :    '40%'
-        \ }, <bang>0))
+        \ 'options' :  ['--multi', '--ansi'],
+        \ 'down'    :    '40%'}))
   endfunction
 
 function! find_files#FZFGit() abort  " {{{1
@@ -108,6 +107,61 @@ function! find_files#fzf_spell() abort  " {{{1
   inoremap <C-s> <C-x><C-s>
 endfunction
 
+function! find_files#termux_remote() abort  " {{{1
+
+  let g:python3_host_prog = exepath('python')
+  let g:loaded_python_provider = 1
+  let g:node_host_prog = '/data/data/com.termux/files/usr/bin/neovim-node-host'
+  let g:loaded_ruby_provider = 1
+
+endfunction
+
+function! find_files#ubuntu_remote() abort  " {{{1
+
+    let g:python3_host_prog = exepath('python3')
+    let g:python_host_prog = exepath('python')
+    let g:node_host_prog = exepath('neovim-node-host')
+    let g:ruby_host_prog = exepath('neovim-ruby-host')
+
+endfunction
+
+function! find_files#msdos_remote() abort  " {{{1
+
+  " if !empty(exepath('python.exe'))
+  "   let g:python3_host_prog = exepath('python.exe')
+  " elseif !empty(exepath('python3.exe'))
+  "   let g:python3_host_prog = exepath('python3.exe')
+  " elseif executable('C:/tools/miniconda3/python.exe')  " fuck it
+  "   let g:python3_host_prog = 'C:/tools/miniconda3/python.exe'
+  " else
+  "   let g:loaded_python3_provider = 1
+  "   echoerr 'Could not find the remote python3 host.'
+  " endif
+  let g:python3_host_prog = 'C:/tools/miniconda3/envs/neovim/python.exe'
+
+  let g:python_host_prog = 'C:/tools/miniconda3/envs/py2/python.exe'
+
+  let g:loaded_ruby_provider = 1
+
+  if !empty(exepath('neovim-node-host'))
+    let g:node_host_prog = exepath('neovim-node-host')
+  else
+    let g:loaded_node_provider = 1
+  endif
+
+  let g:clipboard = {
+        \   'name': 'winClip',
+        \   'copy': {
+        \      '+': 'win32yank.exe -i --crlf',
+        \      '*': 'win32yank.exe -i --crlf',
+        \    },
+        \   'paste': {
+        \      '+': 'win32yank.exe -o --lf',
+        \      '*': 'win32yank.exe -o --lf',
+        \   },
+        \   'cache_enabled': 1,
+        \ }
+endfunction
 
 " Atexit: {{{1
 let &cpoptions = s:cpo_save

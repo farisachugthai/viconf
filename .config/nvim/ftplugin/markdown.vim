@@ -45,7 +45,10 @@ setlocal foldlevel=1 foldlevelstart=1
 
 " TPope's markdown plugin. Light enough footprint when settings vars to not
 " need a check
-let g:markdown_fenced_languages = [ 'python', 'bash=sh']
+let g:markdown_fenced_languages = [
+      \ 'python', 'bash=sh', 'c++=cpp', 'viml=vim',
+      \ 'bash=sh', 'ini=dosini'
+      \ ]
 
 let g:markdown_minlines = 100
 
@@ -56,6 +59,31 @@ noremap <buffer> <localleader>2 m`yypVr-``
 noremap <buffer> <localleader>3 m`^i### <esc>``4l
 noremap <buffer> <localleader>4 m`^i#### <esc>``5l
 noremap <buffer> <localleader>5 m`^i##### <esc>``6l
+
+" Plugins: {{{1
+if has_key(plugs, 'vim-markdown')
+  let g:vim_markdown_folding_style_pythonic = 1
+
+  " Folding level is a number between 1 and 6. By default, if not specified, it
+  " is set to 1.
+  let g:vim_markdown_folding_level = 2
+
+  " Allow for the TOC window to auto-fit when it's possible for it to shrink.
+  " It never increases its default size (half screen), it only shrinks.
+  let g:vim_markdown_toc_autofit = 1
+
+  let g:vim_markdown_math = 1
+
+  let g:vim_markdown_follow_anchor = 1
+
+  let g:vim_markdown_frontmatter = 1
+
+  let g:vim_markdown_toml_frontmatter = 1
+
+  let g:vim_markdown_json_frontmatter = 1
+
+  let g:vim_markdown_strikethrough = 1
+endif
 
 " Atexit: {{{1
 
