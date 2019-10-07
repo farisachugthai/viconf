@@ -112,6 +112,15 @@ function! unix#system(pwd, cmd)  " {{{1
 endfunction
 
 
+function! unix#shell() abort  " {{{1
+
+    " This function sets the shell to bash. Shouldn't do anything particularly
+    " helpful on unix systems but may be necessary to call on windows with WSL
+    " installed.
+    set shell=bash
+
+endfunction
+
 " Atexit: {{{1
 
 let &cpoptions = s:cpo_save

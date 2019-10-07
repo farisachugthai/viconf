@@ -64,6 +64,10 @@ xnoremap <F2> <Cmd>'<,'>CocCommand document.renameCurrentWord<CR>
 nnoremap <silent> <Leader>cw  <Cmd>execute 'CocList -I --normal --input='
       \. expand('<cword>') . ' words'<CR>
 
+" CocOpenLog: {{{2
+" C-m only moves you down a line in normal mode. Pointless
+nnoremap <expr> <C-m> coc#client#open_log()
+
 " Easier Grep: {{{2 Mnenomic CocFind
 " Keymapping for grep word under cursor with interactive mode
 nnoremap <silent> <Leader>cf <Cmd>exe 'CocList -I --input='

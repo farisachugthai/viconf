@@ -451,6 +451,24 @@ Inexplicably, nvim started a terminal buffer using *powershell* with no promptin
 
 And seemingly nothing else. I think most of those are the bash defaults too!
 
+Jumps
+======
+
+Are something I never utilize frequently enough.
+
+							*CTRL-O*
+CTRL-O			Go to [count] Older cursor position in jump list
+			(not a motion command).
+
+<Tab>		or					*CTRL-I* *<Tab>*
+CTRL-I			Go to [count] newer cursor position in jump list
+			(not a motion command).
+
+
+That's legitimately wonderful to know!
+
+Now I just need to work that in, and make a few utility mappings for the qf.
+
 .. _`here.`: after/plugin/fzf.vim
 .. _`after/ftplugin/gitcommit.vim`: ./after/ftplugin/gitcommit.vim
 .. _`after/ftplugin/`: ./after/ftplugin/

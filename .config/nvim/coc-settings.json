@@ -72,6 +72,14 @@
   "git.virtualTextPrefix": "Coc-Git:",
   "json.trace.server": "messages",
   "json.format.enable": true,
+ "languageserver": {
+    "clangd": {
+      "command": "clangd",
+      "args": ["--background-index"],
+      "rootPatterns": ["compile_flags.txt", "compile_commands.json", ".vim/", ".git/", ".hg/"],
+      "filetypes": ["c", "cpp", "objc", "objcpp"]
+    }
+  },
   "list.extendedSearchMode": true,
   "list.insertMappings": {
     "<A-p>": "action:preview",
@@ -119,7 +127,6 @@
   "list.source.actions.defaultOptions": [
     "--normal",
     "--top",
-    "--auto-preview"
   ],
   "list.source.cmdhistory.defaultOptions": [
     "--top",

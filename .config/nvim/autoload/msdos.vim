@@ -18,6 +18,8 @@ if exists('+shellslash')   " don't drop the +!
   set shellslash
 endif
 
+" I'm running pwsh but honestly the support is too sloppy.
+
 " In usr_41 it's mentioned that files formatted with dos formatting won't
 " run vim scripts correctly so holy shit that might explain a hell of a lot
 set fileformats=unix,dos
@@ -41,7 +43,9 @@ function! msdos#Cmd() abort  " {{{1
   set shellcmdflag=/s\ /c
   set shellpipe=>%s\ 2>&1
   set shellredir=>%s\ 2>&1
-  set shellxquote="
+  " Is this necessary? Or should it be empty?
+  set shellxquote=(
+
 endfunction
 
 command! Cmd call msdos#Cmd()
@@ -53,10 +57,12 @@ function! msdos#PowerShell() abort  " {{{1
   if !empty($SHELL) | unlet! $SHELL | endif
   let $SHELL = 'C:/pwsh/7-preview/pwsh.exe'
   set shell=pwsh.exe
-  set shellquote=(
+  set shellquote=
+  set shellxquote=
   set shellpipe=\| shellredir=> shellxquote=
   let &shellcmdflag = '-NoProfile -NoLogo -ExecutionPolicy RemoteSigned -Command '
-  set shellredir=\|\ Out-File\ -Encoding\ UTF8
+  set shellredir=\|\ Out-File\ -Encoding\ UTF8\ %s
+  set shellpipe=\|\ Out-File\ -Encoding\ UTF8\ %s
 
    echomsg 'Using powershell as the system shell.'
    return

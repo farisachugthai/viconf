@@ -69,7 +69,7 @@ if !hasmapto('<Plug>HL')
   nnoremap <Leader>h <Plug>HL()
 endif
 
-" QuickFi Window {{{1
+" QuickFix Window: {{{1
 
 " From `:he quickfix`
 command! -nargs=+ NewGrep execute 'silent grep! <args>' | copen
@@ -77,8 +77,8 @@ command! -nargs=+ NewGrep execute 'silent grep! <args>' | copen
 " But now I need way more mappings
 
 nnoremap <silent> <Leader>l <Cmd>botright lwindow<CR>
-nnoremap <silent> <C-Down> <Cmd>llast<CR>
-
+nnoremap <silent> <C-Down> <Cmd>llast<CR><bar><Cmd>clast<CR>
+nnoremap <silent> <C-Up> <Cmd>lfirst<CR><bar><Cmd>cfirst<CR>
 
 " Title: {{{1
 
@@ -89,6 +89,7 @@ nnoremap <silent> <C-Down> <Cmd>llast<CR>
 command! -nargs=0 -range Title execute 'normal! ' . "'<,'>s/\v<(.)(\w*)/\u\1\L\2/g"
 
 " Toggle Search Highlighting: {{{1
+
 set nohlsearch
 augroup vimrc_incsearch_highlight
     autocmd!

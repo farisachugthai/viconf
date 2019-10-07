@@ -47,8 +47,11 @@ function! Gruvbox() abort
 endfunction
 call Gruvbox()
 
+" Setup neovim's python and node hosts. Optionally clipboards etc
 runtime remote.vim
-if !has('unix') | runtime autoload/msdos.vim | endif
+" Set shell correctly
+if !has('unix') | runtime autoload/msdos.vim | call msdos#Cmd() | endif
+
 let g:loaded_vimballPlugin     = 1
 let g:loaded_getscriptPlugin   = 1
 let g:loaded_2html_plugin      = 1

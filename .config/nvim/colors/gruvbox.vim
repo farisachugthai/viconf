@@ -9,7 +9,7 @@
 " Areas to note are that the color pallette is on line87.
 " Guards: {{{
 if exists('g:did_gruvbox_colors') || &compatible || v:version < 700
-    finish
+		finish
 endif
 " let g:did_gruvbox_colors = 1
 
@@ -22,10 +22,10 @@ set cpoptions-=C
 " Initialisation: {{{
 
 if v:version > 580
-  hi clear
-  if exists('syntax_on')
-    syntax reset
-  endif
+	hi clear
+	if exists('syntax_on')
+		syntax reset
+	endif
 endif
 
 let g:colors_name='gruvbox'
@@ -34,49 +34,49 @@ let g:colors_name='gruvbox'
 " Global Settings: {{{
 
 if !exists('g:gruvbox_bold')
-  let g:gruvbox_bold = 1
+	let g:gruvbox_bold = 1
 endif
 
 if !exists('g:gruvbox_italic')
-  if has('gui_running') || $TERM_ITALICS ==? 'true'
-    let g:gruvbox_italic = 1
-  else
-    let g:gruvbox_italic = 0
-  endif
+	if has('gui_running') || $TERM_ITALICS ==? 'true'
+		let g:gruvbox_italic = 1
+	else
+		let g:gruvbox_italic = 0
+	endif
 endif
 
 if !exists('g:gruvbox_undercurl')
-  let g:gruvbox_undercurl=1
+	let g:gruvbox_undercurl=1
 endif
 
 if !exists('g:gruvbox_underline')
-  let g:gruvbox_underline=1
+	let g:gruvbox_underline=1
 endif
 
 if !exists('g:gruvbox_inverse')
-  let g:gruvbox_inverse=1
+	let g:gruvbox_inverse=1
 endif
 
 if !exists('g:gruvbox_guisp_fallback') || index(['fg', 'bg'], g:gruvbox_guisp_fallback) == -1
-  let g:gruvbox_guisp_fallback='NONE'
+	let g:gruvbox_guisp_fallback='NONE'
 endif
 
 if !exists('g:gruvbox_termcolors')
-  let g:gruvbox_termcolors=256
+	let g:gruvbox_termcolors=256
 endif
 
 if !exists('g:gruvbox_invert_indent_guides')
-  let g:gruvbox_invert_indent_guides=0
+	let g:gruvbox_invert_indent_guides=0
 endif
 
 if exists('g:gruvbox_contrast')
-  echo 'g:gruvbox_contrast is deprecated; use g:gruvbox_contrast_light and g:gruvbox_contrast_dark instead'
+	echo 'g:gruvbox_contrast is deprecated; use g:gruvbox_contrast_light and g:gruvbox_contrast_dark instead'
 endif
 
 if !exists('g:gruvbox_contrast_dark')
-  let g:gruvbox_contrast_dark='medium'
+	let g:gruvbox_contrast_dark='medium'
 elseif !exists('g:gruvbox_contrast_light')
-  let g:gruvbox_contrast_light='medium'
+	let g:gruvbox_contrast_light='medium'
 endif
 
 let s:is_dark=(&background ==? 'dark')
@@ -144,27 +144,27 @@ let s:gb.faded_orange   = ['#af3a03', 130]     " 175-58-3
 
 let s:bold = 'bold,'
 if g:gruvbox_bold == 0
-  let s:bold = ''
+	let s:bold = ''
 endif
 
 let s:italic = 'italic,'
 if g:gruvbox_italic == 0
-  let s:italic = ''
+	let s:italic = ''
 endif
 
 let s:underline = 'underline,'
 if g:gruvbox_underline == 0
-  let s:underline = ''
+	let s:underline = ''
 endif
 
 let s:undercurl = 'undercurl,'
 if g:gruvbox_undercurl == 0
-  let s:undercurl = ''
+	let s:undercurl = ''
 endif
 
 let s:inverse = 'inverse,'
 if g:gruvbox_inverse == 0
-  let s:inverse = ''
+	let s:inverse = ''
 endif
 
 " }}}
@@ -176,82 +176,82 @@ let s:none = ['NONE', 'NONE']
 
 " determine relative colors
 if s:is_dark
-  let s:bg0  = s:gb.dark0
-  if g:gruvbox_contrast_dark ==? 'soft'
-    let s:bg0  = s:gb.dark0_soft
-  elseif g:gruvbox_contrast_dark ==? 'hard'
-    let s:bg0  = s:gb.dark0_hard
-  endif
+	let s:bg0  = s:gb.dark0
+	if g:gruvbox_contrast_dark ==? 'soft'
+		let s:bg0  = s:gb.dark0_soft
+	elseif g:gruvbox_contrast_dark ==? 'hard'
+		let s:bg0  = s:gb.dark0_hard
+	endif
 
-  let s:bg1  = s:gb.dark1
-  let s:bg2  = s:gb.dark2
-  let s:bg3  = s:gb.dark3
-  let s:bg4  = s:gb.dark4
+	let s:bg1  = s:gb.dark1
+	let s:bg2  = s:gb.dark2
+	let s:bg3  = s:gb.dark3
+	let s:bg4  = s:gb.dark4
 
-  let s:gray = s:gb.gray_245
+	let s:gray = s:gb.gray_245
 
-  let s:fg0 = s:gb.light0
-  let s:fg1 = s:gb.light1
-  let s:fg2 = s:gb.light2
-  let s:fg3 = s:gb.light3
-  let s:fg4 = s:gb.light4
+	let s:fg0 = s:gb.light0
+	let s:fg1 = s:gb.light1
+	let s:fg2 = s:gb.light2
+	let s:fg3 = s:gb.light3
+	let s:fg4 = s:gb.light4
 
-  let s:fg4_256 = s:gb.light4_256
+	let s:fg4_256 = s:gb.light4_256
 
-  let s:red    = s:gb.bright_red
-  let s:green  = s:gb.bright_green
-  let s:yellow = s:gb.bright_yellow
-  let s:blue   = s:gb.bright_blue
-  let s:purple = s:gb.bright_purple
-  let s:aqua   = s:gb.bright_aqua
-  let s:orange = s:gb.bright_orange
+	let s:red    = s:gb.bright_red
+	let s:green  = s:gb.bright_green
+	let s:yellow = s:gb.bright_yellow
+	let s:blue   = s:gb.bright_blue
+	let s:purple = s:gb.bright_purple
+	let s:aqua   = s:gb.bright_aqua
+	let s:orange = s:gb.bright_orange
 else
-  let s:bg0  = s:gb.light0
-  if g:gruvbox_contrast_light ==? 'soft'
-    let s:bg0  = s:gb.light0_soft
-  elseif g:gruvbox_contrast_light ==? 'hard'
-    let s:bg0  = s:gb.light0_hard
-  endif
+	let s:bg0  = s:gb.light0
+	if g:gruvbox_contrast_light ==? 'soft'
+		let s:bg0  = s:gb.light0_soft
+	elseif g:gruvbox_contrast_light ==? 'hard'
+		let s:bg0  = s:gb.light0_hard
+	endif
 
-  let s:bg1  = s:gb.light1
-  let s:bg2  = s:gb.light2
-  let s:bg3  = s:gb.light3
-  let s:bg4  = s:gb.light4
+	let s:bg1  = s:gb.light1
+	let s:bg2  = s:gb.light2
+	let s:bg3  = s:gb.light3
+	let s:bg4  = s:gb.light4
 
-  let s:gray = s:gb.gray_244
+	let s:gray = s:gb.gray_244
 
-  let s:fg0 = s:gb.dark0
-  let s:fg1 = s:gb.dark1
-  let s:fg2 = s:gb.dark2
-  let s:fg3 = s:gb.dark3
-  let s:fg4 = s:gb.dark4
+	let s:fg0 = s:gb.dark0
+	let s:fg1 = s:gb.dark1
+	let s:fg2 = s:gb.dark2
+	let s:fg3 = s:gb.dark3
+	let s:fg4 = s:gb.dark4
 
-  let s:fg4_256 = s:gb.dark4_256
+	let s:fg4_256 = s:gb.dark4_256
 
-  let s:red    = s:gb.faded_red
-  " 06/08/2019: This is showing up white on WSL...?
-  " GruvboxGreenBold xxx cterm=bold ctermfg=142 gui=bold guifg=#b8bb26
+	let s:red    = s:gb.faded_red
+	" 06/08/2019: This is showing up white on WSL...?
+	" GruvboxGreenBold xxx cterm=bold ctermfg=142 gui=bold guifg=#b8bb26
 
-  let s:green  = s:gb.faded_green
-  let s:yellow = s:gb.faded_yellow
-  let s:blue   = s:gb.faded_blue
-  let s:purple = s:gb.faded_purple
-  let s:aqua   = s:gb.faded_aqua
-  let s:orange = s:gb.faded_orange
+	let s:green  = s:gb.faded_green
+	let s:yellow = s:gb.faded_yellow
+	let s:blue   = s:gb.faded_blue
+	let s:purple = s:gb.faded_purple
+	let s:aqua   = s:gb.faded_aqua
+	let s:orange = s:gb.faded_orange
 endif
 
 " reset to 16 colors fallback
 if g:gruvbox_termcolors == 16
-  let s:bg0[1]    = 0
-  let s:fg4[1]    = 7
-  let s:gray[1]   = 8
-  let s:red[1]    = 9
-  let s:green[1]  = 10
-  let s:yellow[1] = 11
-  let s:blue[1]   = 12
-  let s:purple[1] = 13
-  let s:aqua[1]   = 14
-  let s:fg1[1]    = 15
+	let s:bg0[1]    = 0
+	let s:fg4[1]    = 7
+	let s:gray[1]   = 8
+	let s:red[1]    = 9
+	let s:green[1]  = 10
+	let s:yellow[1] = 11
+	let s:blue[1]   = 12
+	let s:purple[1] = 13
+	let s:aqua[1]   = 14
+	let s:fg1[1]    = 15
 endif
 
 " save current relative colors back to palette dictionary
@@ -283,25 +283,25 @@ let s:gb.orange = s:orange
 " Setup Terminal Colors For Neovim: {{{
 
 let g:terminal_ansi_colors = ['#1d2021', '#cc241d', '#98971a', '#d79921',
-      \ '#458588', '#b16286', '#689d6a', '#a89984', '#928374', '#fb4934',
-      \ '#b8bb26', '#fabd2f', '#83a598', '#d3869b', '#8ec07c', '#ebdbb2']
+			\ '#458588', '#b16286', '#689d6a', '#a89984', '#928374', '#fb4934',
+			\ '#b8bb26', '#fabd2f', '#83a598', '#d3869b', '#8ec07c', '#ebdbb2']
 if has('nvim')
-  let g:terminal_color_0 = '#1d2021'
-  let g:terminal_color_1 = '#cc241d'
-  let g:terminal_color_2 = '#98971a'
-  let g:terminal_color_3 = '#d79921'
-  let g:terminal_color_4 = '#458588'
-  let g:terminal_color_5 = '#b16286'
-  let g:terminal_color_6 = '#689d6a'
-  let g:terminal_color_7 = '#a89984'
-  let g:terminal_color_8 = '#928374'
-  let g:terminal_color_9 = '#fb4934'
-  let g:terminal_color_10 = '#b8bb26'
-  let g:terminal_color_11 = '#fabd2f'
-  let g:terminal_color_12 = '#83a598'
-  let g:terminal_color_13 = '#d3869b'
-  let g:terminal_color_14 = '#8ec07c'
-  let g:terminal_color_15 = '#ebdbb2'
+	let g:terminal_color_0 = '#1d2021'
+	let g:terminal_color_1 = '#cc241d'
+	let g:terminal_color_2 = '#98971a'
+	let g:terminal_color_3 = '#d79921'
+	let g:terminal_color_4 = '#458588'
+	let g:terminal_color_5 = '#b16286'
+	let g:terminal_color_6 = '#689d6a'
+	let g:terminal_color_7 = '#a89984'
+	let g:terminal_color_8 = '#928374'
+	let g:terminal_color_9 = '#fb4934'
+	let g:terminal_color_10 = '#b8bb26'
+	let g:terminal_color_11 = '#fabd2f'
+	let g:terminal_color_12 = '#83a598'
+	let g:terminal_color_13 = '#d3869b'
+	let g:terminal_color_14 = '#8ec07c'
+	let g:terminal_color_15 = '#ebdbb2'
 endif
 
 " }}}
@@ -309,119 +309,119 @@ endif
 
 let s:hls_cursor = s:orange
 if exists('g:gruvbox_hls_cursor')
-  let s:hls_cursor = get(s:gb, g:gruvbox_hls_cursor)
+	let s:hls_cursor = get(s:gb, g:gruvbox_hls_cursor)
 endif
 
 let s:number_column = s:none
 if exists('g:gruvbox_number_column')
-  let s:number_column = get(s:gb, g:gruvbox_number_column)
+	let s:number_column = get(s:gb, g:gruvbox_number_column)
 endif
 
 let s:sign_column = s:bg1
 
 if exists('g:gitgutter_override_sign_column_highlight') &&
-      \ g:gitgutter_override_sign_column_highlight == 1
-  let s:sign_column = s:number_column
+			\ g:gitgutter_override_sign_column_highlight == 1
+	let s:sign_column = s:number_column
 else
-  let g:gitgutter_override_sign_column_highlight = 0
+	let g:gitgutter_override_sign_column_highlight = 0
 
-  if exists('g:gruvbox_sign_column')
-    let s:sign_column = get(s:gb, g:gruvbox_sign_column)
-  endif
+	if exists('g:gruvbox_sign_column')
+		let s:sign_column = get(s:gb, g:gruvbox_sign_column)
+	endif
 endif
 
 let s:color_column = s:bg1
 if exists('g:gruvbox_color_column')
-  let s:color_column = get(s:gb, g:gruvbox_color_column)
+	let s:color_column = get(s:gb, g:gruvbox_color_column)
 endif
 
 let s:vert_split = s:bg0
 if exists('g:gruvbox_vert_split')
-  let s:vert_split = get(s:gb, g:gruvbox_vert_split)
+	let s:vert_split = get(s:gb, g:gruvbox_vert_split)
 endif
 
 let s:invert_signs = ''
 if exists('g:gruvbox_invert_signs')
-  if g:gruvbox_invert_signs == 1
-    let s:invert_signs = s:inverse
-  endif
+	if g:gruvbox_invert_signs == 1
+		let s:invert_signs = s:inverse
+	endif
 endif
 
 let s:invert_selection = s:inverse
 if exists('g:gruvbox_invert_selection')
-  if g:gruvbox_invert_selection == 0
-    let s:invert_selection = ''
-  endif
+	if g:gruvbox_invert_selection == 0
+		let s:invert_selection = ''
+	endif
 endif
 
 let s:invert_tabline = ''
 if exists('g:gruvbox_invert_tabline')
-  if g:gruvbox_invert_tabline == 1
-    let s:invert_tabline = s:inverse
-  endif
+	if g:gruvbox_invert_tabline == 1
+		let s:invert_tabline = s:inverse
+	endif
 endif
 
 let s:italicize_comments = s:italic
 if exists('g:gruvbox_italicize_comments')
-  if g:gruvbox_italicize_comments == 0
-    let s:italicize_comments = ''
-  endif
+	if g:gruvbox_italicize_comments == 0
+		let s:italicize_comments = ''
+	endif
 endif
 
 let s:italicize_strings = ''
 if exists('g:gruvbox_italicize_strings')
-  if g:gruvbox_italicize_strings == 1
-    let s:italicize_strings = s:italic
-  endif
+	if g:gruvbox_italicize_strings == 1
+		let s:italicize_strings = s:italic
+	endif
 endif
 
 " }}}
 " Highlighting Function: {{{
 
 function! s:HL(group, fg, ...)
-  " Arguments: group, guifg, guibg, gui, guisp
+	" Arguments: group, guifg, guibg, gui, guisp
 
-  " foreground
-  let fg = a:fg
+	" foreground
+	let fg = a:fg
 
-  " background
-  if a:0 >= 1
-    let bg = a:1
-  else
-    let bg = s:none
-  endif
+	" background
+	if a:0 >= 1
+		let bg = a:1
+	else
+		let bg = s:none
+	endif
 
-  " emphasis
-  if a:0 >= 2 && strlen(a:2)
-    let emstr = a:2
-  else
-    let emstr = 'NONE,'
-  endif
+	" emphasis
+	if a:0 >= 2 && strlen(a:2)
+		let emstr = a:2
+	else
+		let emstr = 'NONE,'
+	endif
 
-  " special fallback
-  if a:0 >= 3
-    if g:gruvbox_guisp_fallback !=? 'NONE'
-      let fg = a:3
-    endif
+	" special fallback
+	if a:0 >= 3
+		if g:gruvbox_guisp_fallback !=? 'NONE'
+			let fg = a:3
+		endif
 
-    " bg fallback mode should invert higlighting
-    if g:gruvbox_guisp_fallback ==? 'bg'
-      let emstr .= 'inverse,'
-    endif
-  endif
+		" bg fallback mode should invert higlighting
+		if g:gruvbox_guisp_fallback ==? 'bg'
+			let emstr .= 'inverse,'
+		endif
+	endif
 
-  let histring = [ 'hi', a:group,
-        \ 'guifg=' . fg[0], 'ctermfg=' . fg[1],
-        \ 'guibg=' . bg[0], 'ctermbg=' . bg[1],
-        \ 'gui=' . emstr[:-2], 'cterm=' . emstr[:-2]
-        \ ]
+	let histring = [ 'hi', a:group,
+				\ 'guifg=' . fg[0], 'ctermfg=' . fg[1],
+				\ 'guibg=' . bg[0], 'ctermbg=' . bg[1],
+				\ 'gui=' . emstr[:-2], 'cterm=' . emstr[:-2]
+				\ ]
 
-  " special
-  if a:0 >= 3
-    call add(histring, 'guisp=' . a:3[0])
-  endif
+	" special
+	if a:0 >= 3
+		call add(histring, 'guisp=' . a:3[0])
+	endif
 
-  execute join(histring, ' ')
+	execute join(histring, ' ')
 endfunction
 
 " }}}
@@ -482,49 +482,48 @@ call s:HL('GruvboxGreenSign', s:green, s:sign_column, s:invert_signs)
 " }}}
 " }}}
 " Vanilla colorscheme ------------------------------------------------------ {{{
-
 " General UI: {{{
 
 if s:is_dark
-  set background=dark
+	set background=dark
 else
-  set background=light
+	set background=light
 endif
 
 if v:version >= 700
 " }}}
 " Completions: {{{
-    hi Pmenu guifg=#ebdbb2 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE ctermfg=223 ctermbg=237
-    hi PmenuSbar guifg=NONE guibg=#504945 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=187
-    hi PmenuSel guifg=#504945 guibg=#83a598 guisp=NONE gui=bold cterm=bold ctermfg=187 ctermbg=23
-    hi PmenuThumb guifg=NONE guibg=#7c6f64 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=137
-  " }}}
+		hi Pmenu guifg=#ebdbb2 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE ctermfg=223 ctermbg=237
+		hi PmenuSbar guifg=NONE guibg=#504945 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=187
+		hi PmenuSel guifg=#504945 guibg=#83a598 guisp=NONE gui=bold cterm=bold ctermfg=187 ctermbg=23
+		hi PmenuThumb guifg=NONE guibg=#7c6f64 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=137
+	" }}}
 " Cursorline And Tabline: {{{
-  " Screen line that the cursor is
-  " call s:HL('CursorLine',   s:none, s:bg1)
-  hi CursorLine ctermbg=237 guibg=#3c3836 guifg=NONE ctermfg=NONE cterm=NONE gui=NONE guisp=NONE
+	" Screen line that the cursor is
+	" call s:HL('CursorLine',   s:none, s:bg1)
+	hi CursorLine ctermbg=237 guibg=#3c3836 guifg=NONE ctermfg=NONE cterm=NONE gui=NONE guisp=NONE
 
-  " Line number of CursorLine
-  " call s:HL('CursorLineNr', s:yellow, s:bg1)
-  hi CursorLineNr guifg=#fabd2f guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE ctermbg=237
+	" Line number of CursorLine
+	" call s:HL('CursorLineNr', s:yellow, s:bg1)
+	hi CursorLineNr guifg=#fabd2f guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE ctermbg=237
 
-  " Screen column that the cursor is
-  hi! link CursorColumn CursorLine
+	" Screen column that the cursor is
+	hi! link CursorColumn CursorLine
 
-  " Tab pages line filler
-  " call s:HL('TabLineFill', s:bg4, s:bg1, s:invert_tabline)
-  hi TablineFill ctermfg=243 ctermbg=237 guifg=#7c6f64 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
+	" Tab pages line filler
+	" call s:HL('TabLineFill', s:bg4, s:bg1, s:invert_tabline)
+	hi TablineFill ctermfg=243 ctermbg=237 guifg=#7c6f64 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
 
-  " Active tab page label
-  " call s:HL('TabLineSel', s:green, s:bg1, s:invert_tabline)
-  hi TabLineSel ctermfg=142 ctermbg=237 guifg=#b8bb26 guibg=#3c3836 cterm=NONE gui=NONE guisp=NONE
+	" Active tab page label
+	" call s:HL('TabLineSel', s:green, s:bg1, s:invert_tabline)
+	hi TabLineSel ctermfg=142 ctermbg=237 guifg=#b8bb26 guibg=#3c3836 cterm=NONE gui=NONE guisp=NONE
 
-  " Not active tab page label. Can you add stuff after the fact?
-  hi! link TabLine TabLineFill
+	" Not active tab page label. Can you add stuff after the fact?
+	hi! link TabLine TabLineFill
 
-  " Match paired bracket under the cursor
-  " call s:HL('MatchParen', s:none, s:bg3, s:bold)
-  hi MatchParen cterm=bold ctermbg=241 gui=bold guibg=#665c54 guisp=NONE ctermfg=NONE guifg=NONE
+	" Match paired bracket under the cursor
+	" call s:HL('MatchParen', s:none, s:bg3, s:bold)
+	hi MatchParen cterm=bold ctermbg=241 gui=bold guibg=#665c54 guisp=NONE ctermfg=NONE guifg=NONE
 endif
 
 " Moved cursor things up to be with the cursorlines:
@@ -544,15 +543,15 @@ hi! link lCursor Cursor
 
 if v:version >= 703
 
-  " Highlighted screen columns
-  " call s:HL('ColorColumn',  s:none, s:color_column)
-  hi ColorColumn ctermbg=237 guibg=#3c3836 ctermfg=NONE guifg=NONE cterm=NONE gui=NONE guisp=None
+	" Highlighted screen columns
+	" call s:HL('ColorColumn',  s:none, s:color_column)
+	hi ColorColumn ctermbg=237 guibg=#3c3836 ctermfg=NONE guifg=NONE cterm=NONE gui=NONE guisp=None
 
-  " Concealed element: \lambda → λ
-  " call s:HL('Conceal', s:blue, s:none)
-  hi Conceal guifg=#83a598 guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermbg=NONE ctermfg=23
-  " ALTERNATIVE:
-  " hi Conceal guifg=#076678 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+	" Concealed element: \lambda → λ
+	" call s:HL('Conceal', s:blue, s:none)
+	hi Conceal guifg=#83a598 guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermbg=NONE ctermfg=23
+	" ALTERNATIVE:
+	" hi Conceal guifg=#076678 guibg=NONE guisp=NONE gui=NONE cterm=NONE
 
 endif
 
@@ -848,133 +847,32 @@ hi SpellRare guifg=#d3869b guibg=NONE guisp=NONE gui=italic,undercurl cterm=ital
 " AKA Plugins You Don't Have: {{{
 
 if 0
-  " EasyMotion: {{{
+	" EasyMotion: {{{
 
-  hi! link EasyMotionTarget Search
-  hi! link EasyMotionShade Comment
+	hi! link EasyMotionTarget Search
+	hi! link EasyMotionShade Comment
 
-  " }}}
-  " Sneak: {{{
+	" }}}
+	" Sneak: {{{
 
-  hi! link Sneak Search
-  hi! link SneakLabel Search
+	hi! link Sneak Search
+	hi! link SneakLabel Search
 
-  " }}}
-  " Indent Guides: {{{
+	" }}}
+	" BufTabLine: {{{
 
-  if !exists('g:indent_guides_auto_colors')
-    let g:indent_guides_auto_colors = 0
-  endif
+	call s:HL('BufTabLineCurrent', s:bg0, s:fg4)
+	call s:HL('BufTabLineActive', s:fg4, s:bg2)
+	call s:HL('BufTabLineHidden', s:bg4, s:bg1)
+	call s:HL('BufTabLineFill', s:bg0, s:bg0)
 
-  if g:indent_guides_auto_colors == 0
-    if g:gruvbox_invert_indent_guides == 0
-      call s:HL('IndentGuidesOdd', s:vim_bg, s:bg2)
-      call s:HL('IndentGuidesEven', s:vim_bg, s:bg1)
-    else
-      call s:HL('IndentGuidesOdd', s:vim_bg, s:bg2, s:inverse)
-      call s:HL('IndentGuidesEven', s:vim_bg, s:bg3, s:inverse)
-    endif
-  endif
+	" }}}
+	" Dirvish: {{{
 
-  " }}}
-  " IndentLine: {{{
+	hi! link DirvishPathTail Macro
+	hi! link DirvishArg Typedef
 
-  if !exists('g:indentLine_color_term')
-    let g:indentLine_color_term = s:bg2[1]
-  endif
-  if !exists('g:indentLine_color_gui')
-    let g:indentLine_color_gui = s:bg2[0]
-  endif
-
-  " }}}
-  " Rainbow Parentheses: {{{
-
-  if !exists('g:rbpt_colorpairs')
-    let g:rbpt_colorpairs =
-      \ [
-        \ ['blue', '#458588'], ['magenta', '#b16286'],
-        \ ['red',  '#cc241d'], ['166',     '#d65d0e']
-      \ ]
-  endif
-
-  let g:rainbow_guifgs = [ '#d65d0e', '#cc241d', '#b16286', '#458588' ]
-  let g:rainbow_ctermfgs = [ '166', 'red', 'magenta', 'blue' ]
-
-  if !exists('g:rainbow_conf')
-     let g:rainbow_conf = {}
-  endif
-
-  if !has_key(g:rainbow_conf, 'guifgs')
-     let g:rainbow_conf['guifgs'] = g:rainbow_guifgs
-  endif
-
-  if !has_key(g:rainbow_conf, 'ctermfgs')
-     let g:rainbow_conf['ctermfgs'] = g:rainbow_ctermfgs
-  endif
-
-  let g:niji_dark_colours = g:rbpt_colorpairs
-  let g:niji_light_colours = g:rbpt_colorpairs
-
-  "}}}
-  " Syntastic: {{{
-
-  call s:HL('SyntasticError', s:none, s:none, s:undercurl, s:red)
-  call s:HL('SyntasticWarning', s:none, s:none, s:undercurl, s:yellow)
-
-  hi link SyntasticErrorSign GruvboxRedSign
-  hi link SyntasticWarningSign QuickFixLine
-
-  " }}}
-  " Signature: {{{
-  hi! link SignatureMarkText   SpellCap
-  hi! link SignatureMarkerText SpellRare
-
-  " }}}
-  " ShowMarks: {{{
-
-  hi! link ShowMarksHLl EndOfBuffer
-  hi! link ShowMarksHLu EndOfBuffer
-  hi! link ShowMarksHLo EndOfBuffer
-  hi! link ShowMarksHLm EndOfBuffer
-
-  " }}}
-  " CtrlP: {{{
-
-  hi! link CtrlPMatch GruvboxYellow
-  hi! link CtrlPNoEntries GruvboxRed
-  hi! link CtrlPPrtBase GruvboxBg2
-  hi! link CtrlPPrtCursor GruvboxBlue
-  hi! link CtrlPLinePre GruvboxBg2
-
-  call s:HL('CtrlPMode1', s:blue, s:bg2, s:bold)
-  call s:HL('CtrlPMode2', s:bg0, s:blue, s:bold)
-  call s:HL('CtrlPStats', s:fg4, s:bg2, s:bold)
-
-  " }}}
-  " Vimshell: {{{
-
-  let g:vimshell_escape_colors = [
-    \ s:bg4[0], s:red[0], s:green[0], s:yellow[0],
-    \ s:blue[0], s:purple[0], s:aqua[0], s:fg4[0],
-    \ s:bg0[0], s:red[0], s:green[0], s:orange[0],
-    \ s:blue[0], s:purple[0], s:aqua[0], s:fg0[0]
-    \ ]
-
-  " }}}
-  " BufTabLine: {{{
-
-  call s:HL('BufTabLineCurrent', s:bg0, s:fg4)
-  call s:HL('BufTabLineActive', s:fg4, s:bg2)
-  call s:HL('BufTabLineHidden', s:bg4, s:bg1)
-  call s:HL('BufTabLineFill', s:bg0, s:bg0)
-
-  " }}}
-  " Dirvish: {{{
-
-  hi! link DirvishPathTail Macro
-  hi! link DirvishArg Typedef
-
-  " }}}
+	" }}}
 " Vim Multiple Cursors: {{{
 
 call s:HL('multiple_cursors_cursor', s:none, s:none, s:inverse)
@@ -992,105 +890,6 @@ endif
 
 " Coc: {{{
 
-" CocListBlackBlack	CocListBlackBlack
-" CocListBlackBlue	CocListBlackBlue
-" CocListBlackGreen	CocListBlackGreen
-" CocListBlackGrey	CocListBlackGrey
-" CocListBlackWhite	CocListBlackWhite
-" CocListBlackCyan	CocListBlackCyan
-" CocListBlackYellow	CocListBlackYellow
-" CocListBlackMagenta	CocListBlackMagenta
-" CocListBlackRed	CocListBlackRed
-" CocListFgBlack	CocListFgBlack
-" CocListBgBlack	CocListBgBlack
-" CocListBlueBlack	CocListBlueBlack
-" CocListBlueBlue	CocListBlueBlue
-" CocListBlueGreen	CocListBlueGreen
-" CocListBlueGrey	CocListBlueGrey
-" CocListBlueWhite	CocListBlueWhite
-" CocListBlueCyan	CocListBlueCyan
-" CocListBlueYellow	CocListBlueYellow
-" CocListBlueMagenta	CocListBlueMagenta
-" CocListBlueRed	CocListBlueRed
-" CocListFgBlue	CocListFgBlue
-" CocListBgBlue	CocListBgBlue
-" CocListGreenBlack	CocListGreenBlack
-" CocListGreenBlue	CocListGreenBlue
-" CocListGreenGreen	CocListGreenGreen
-" CocListGreenGrey	CocListGreenGrey
-" CocListGreenWhite	CocListGreenWhite
-" CocListGreenCyan	CocListGreenCyan
-" CocListGreenYellow	CocListGreenYellow
-" CocListGreenMagenta	CocListGreenMagenta
-" CocListGreenRed	CocListGreenRed
-" CocListFgGreen	CocListFgGreen
-" CocListBgGreen	CocListBgGreen
-" CocListGreyBlack	CocListGreyBlack
-" CocListGreyBlue	CocListGreyBlue
-" CocListGreyGreen	CocListGreyGreen
-" CocListGreyGrey	CocListGreyGrey
-" CocListGreyWhite	CocListGreyWhite
-" CocListGreyCyan	CocListGreyCyan
-" CocListGreyYellow	CocListGreyYellow
-" CocListGreyMagenta	CocListGreyMagenta
-" CocListGreyRed	CocListGreyRed
-" CocListFgGrey	CocListFgGrey
-" CocListBgGrey	CocListBgGrey
-" CocListWhiteBlack	CocListWhiteBlack
-" CocListWhiteBlue	CocListWhiteBlue
-" CocListWhiteGreen	CocListWhiteGreen
-" CocListWhiteGrey	CocListWhiteGrey
-" CocListWhiteWhite	CocListWhiteWhite
-" CocListWhiteCyan	CocListWhiteCyan
-" CocListWhiteYellow	CocListWhiteYellow
-" CocListWhiteMagenta	CocListWhiteMagenta
-" CocListWhiteRed	CocListWhiteRed
-" CocListFgWhite	CocListFgWhite
-" CocListBgWhite	CocListBgWhite
-" CocListCyanBlack	CocListCyanBlack
-" CocListCyanBlue	CocListCyanBlue
-" CocListCyanGreen	CocListCyanGreen
-" CocListCyanGrey	CocListCyanGrey
-" CocListCyanWhite	CocListCyanWhite
-" CocListCyanCyan	CocListCyanCyan
-" CocListCyanYellow	CocListCyanYellow
-" CocListCyanMagenta	CocListCyanMagenta
-" CocListCyanRed	CocListCyanRed
-" CocListFgCyan	CocListFgCyan
-" CocListBgCyan	CocListBgCyan
-" CocListYellowBlack	CocListYellowBlack
-" CocListYellowBlue	CocListYellowBlue
-" CocListYellowGreen	CocListYellowGreen
-" CocListYellowGrey	CocListYellowGrey
-" CocListYellowWhite	CocListYellowWhite
-" CocListYellowCyan	CocListYellowCyan
-" CocListYellowYellow	CocListYellowYellow
-" CocListYellowMagenta	CocListYellowMagenta
-" CocListYellowRed	CocListYellowRed
-" CocListFgYellow	CocListFgYellow
-" CocListBgYellow	CocListBgYellow
-" CocListMagentaBlack	CocListMagentaBlack
-" CocListMagentaBlue	CocListMagentaBlue
-" CocListMagentaGreen	CocListMagentaGreen
-" CocListMagentaGrey	CocListMagentaGrey
-" CocListMagentaWhite	CocListMagentaWhite
-" CocListMagentaCyan	CocListMagentaCyan
-" CocListMagentaYellow	CocListMagentaYellow
-" CocListMagentaMagenta	CocListMagentaMagenta
-" CocListMagentaRed	CocListMagentaRed
-" CocListFgMagenta	CocListFgMagenta
-" CocListBgMagenta	CocListBgMagenta
-" CocListRedBlack	CocListRedBlack
-" CocListRedBlue	CocListRedBlue
-" CocListRedGreen	CocListRedGreen
-" CocListRedGrey	CocListRedGrey
-" CocListRedWhite	CocListRedWhite
-" CocListRedCyan	CocListRedCyan
-" CocListRedYellow	CocListRedYellow
-" CocListRedMagenta	CocListRedMagenta
-" CocListRedRed	CocListRedRed
-" CocListFgRed	CocListFgRed
-" CocListBgRed	CocListBgRed
 " CocCodeLens
 " CocCursorRange
 " CocErrorFloat
@@ -1104,18 +903,14 @@ endif
 " CocHighlightRead
 " CocHighlightText
 " CocHighlightWrite
-" CocHintFloat
-" CocHintHighlight
-" CocHintSign
 " CocHintVirtualText
 " CocInfoFloat
-" CocInfoHighlight
 " CocInfoVirtualText
-hi default link CocErrorLine Exception
-hi default link CocWarningLine WarningMsg
-hi default link CocInfoLine EndOfBuffer
-hi default link CocHintLine GruvboxGreenSign
-hi default link CocSelectedLine Visual
+hi link CocErrorLine Exception
+hi link CocWarningLine WarningMsg
+hi link CocInfoLine EndOfBuffer
+hi link CocHintLine GruvboxGreenSign
+hi link CocSelectedLine Visual
 
 " Override one of his...actually now a few
 hi! link CocInfoSign SpellRare
@@ -1145,7 +940,6 @@ hi! link CocListFgCyan Macro
 " CocFloating
 
 " }}}
-
 " Signify: {{{
 
 hi! link SignifySignAdd GruvboxGreenSign
@@ -1156,13 +950,13 @@ hi! link SignifySignDelete GruvboxRedSign
 " Startify: {{{
 hi! link StartifyBracket Delimiter
 hi! link StartifyFile Identifier
+hi! link StartifyFooter Title
+hi! link StartifyHeader Delimiter
 hi! link StartifyNumber Number
 hi! link StartifyPath Directory
-hi! link StartifySlash Delimiter
 hi! link StartifySection Statement
-hi! link StartifySpecial pecial
-hi! link StartifyHeader Title
-hi! link StartifyFooter Title
+hi! link StartifySlash Delimiter
+hi! link StartifySpecial Special
 
 " }}}
 " NERDTree: {{{
@@ -1274,36 +1068,38 @@ hi link netrwVersion Float
 
 hi! link rstDirectivesh     Question
 hi! link rstDirectivepython Question
-hi! link rstInlineLiteral Identifier
+hi! link rstInlineLiteral   Identifier
 
 " Well heres the built in syntax file
-hi def link rstCitation                     String
-hi def link rstCitationReference            Identifier
-hi def link rstCodeBlock                    String
-hi def link rstComment                      Comment
-hi def link rstDelimiter                    Delimiter
-hi def link rstDirective                    Keyword
-hi def link rstDoctestBlock                 PreProc
-hi def link rstExDirective                  String
-hi def link rstExplicitMarkup               rstDirective
-hi def link rstFileLink rstHyperlinkReference
-hi def link rstFootnote                     String
-hi def link rstFootnoteReference            Identifier
-hi def link rstHyperLinkReference           Identifier
-hi def link rstHyperlinkTarget              String
-hi def link rstInlineInternalTargets        Identifier
-hi def link rstInlineLiteral                String
-hi def link rstInterpretedTextOrHyperlinkReference  Identifier
-hi def link rstLiteralBlock                 String
-hi def link rstQuotedLiteralBlock           String
-hi def link rstSections                     Title
-hi def link rstSimpleTableLines             rstTableLines
-hi def link rstStandaloneHyperlink          Identifier
-hi def link rstSubstitutionDefinition       rstDirective
-hi def link rstSubstitutionReference        PreProc
-hi def link rstTableLines                   rstDelimiter
-hi def link rstTodo                         Todo
-hi def link rstTransition                   rstSections
+hi link rstCitation                     String
+hi link rstCitationReference            Identifier
+hi link rstCodeBlock                    String
+hi link rstComment                      Comment
+hi link rstDelimiter                    Delimiter
+hi link rstDirective                    Keyword
+hi link rstDoctestBlock                 PreProc
+" hi link rstExDirective                  String
+" Blends in with the rest of the string
+hi link rstExDirective                  Identifier
+hi link rstExplicitMarkup               rstDirective
+hi link rstFileLink                     rstHyperlinkReference
+hi link rstFootnote                     String
+hi link rstFootnoteReference            Identifier
+hi link rstHyperLinkReference           Identifier
+hi link rstHyperlinkTarget              String
+hi link rstInlineInternalTargets        Identifier
+hi link rstInlineLiteral                String
+hi link rstInterpretedTextOrHyperlinkReference  Identifier
+hi link rstLiteralBlock                 String
+hi link rstQuotedLiteralBlock           String
+hi link rstSections                     Title
+hi link rstSimpleTableLines             rstTableLines
+hi link rstStandaloneHyperlink          Identifier
+hi link rstSubstitutionDefinition       rstDirective
+hi link rstSubstitutionReference        PreProc
+hi link rstTableLines                   rstDelimiter
+hi link rstTodo                         Todo
+hi link rstTransition                   rstSections
 " }}}
 " Tmux: {{{
 
@@ -1347,39 +1143,36 @@ hi link htmlSpecialTagName          Exception
 hi link htmlValue                     String
 hi link htmlSpecialChar             Special
 
-if !exists("html_no_rendering")
-  hi link htmlH1                      Title
-  hi link htmlH2                      htmlH1
-  hi link htmlH3                      htmlH2
-  hi link htmlH4                      htmlH3
-  hi link htmlH5                      htmlH4
-  hi link htmlH6                      htmlH5
-  hi link htmlHead                    PreProc
-  hi link htmlTitle                   Title
-  hi link htmlBoldItalicUnderline     htmlBoldUnderlineItalic
-  hi link htmlUnderlineBold           htmlBoldUnderline
-  hi link htmlUnderlineItalicBold     htmlBoldUnderlineItalic
-  hi link htmlUnderlineBoldItalic     htmlBoldUnderlineItalic
-  hi link htmlItalicUnderline         htmlUnderlineItalic
-  hi link htmlItalicBold              htmlBoldItalic
-  hi link htmlItalicBoldUnderline     htmlBoldUnderlineItalic
-  hi link htmlItalicUnderlineBold     htmlBoldUnderlineItalic
-  hi link htmlLink                    Underlined
-  hi link htmlLeadingSpace            None
-  if !exists("html_my_rendering")
-    hi def htmlBold                term=bold cterm=bold gui=bold
-    hi def htmlBoldUnderline       term=bold,underline cterm=bold,underline gui=bold,underline
-    hi def htmlBoldItalic          term=bold,italic cterm=bold,italic gui=bold,italic
-    hi def htmlBoldUnderlineItalic term=bold,italic,underline cterm=bold,italic,underline gui=bold,italic,underline
-    hi def htmlUnderline           term=underline cterm=underline gui=underline
-    hi def htmlUnderlineItalic     term=italic,underline cterm=italic,underline gui=italic,underline
-    hi def htmlItalic              term=italic cterm=italic gui=italic
-    if v:version > 800 || v:version == 800 && has("patch1038")
-        hi def htmlStrike              term=strikethrough cterm=strikethrough gui=strikethrough
-    else
-        hi def htmlStrike              term=underline cterm=underline gui=underline
-    endif
-  endif
+hi htmlBold                cterm=bold gui=bold
+hi htmlBoldUnderline       cterm=bold,underline gui=bold,underline
+hi htmlBoldItalic          cterm=bold,italic gui=bold,italic
+hi htmlBoldUnderlineItalic  cterm=bold,italic,underline gui=bold,italic,underline
+hi htmlUnderline           cterm=underline gui=underline
+hi htmlUnderlineItalic     cterm=italic,underline gui=italic,underline
+hi htmlItalic              cterm=italic gui=italic
+hi link htmlH1                      Title
+hi link htmlH2                      htmlH1
+hi link htmlH3                      htmlH2
+hi link htmlH4                      htmlH3
+hi link htmlH5                      htmlH4
+hi link htmlH6                      htmlH5
+hi link htmlHead                    PreProc
+hi link htmlTitle                   Title
+hi link htmlBoldItalicUnderline     htmlBoldUnderlineItalic
+hi link htmlUnderlineBold           htmlBoldUnderline
+hi link htmlUnderlineItalicBold     htmlBoldUnderlineItalic
+hi link htmlUnderlineBoldItalic     htmlBoldUnderlineItalic
+hi link htmlItalicUnderline         htmlUnderlineItalic
+hi link htmlItalicBold              htmlBoldItalic
+hi link htmlItalicBoldUnderline     htmlBoldUnderlineItalic
+hi link htmlItalicUnderlineBold     htmlBoldUnderlineItalic
+hi link htmlLink                    Underlined
+hi link htmlLeadingSpace            None
+
+if v:version > 800 || v:version == 800 && has("patch1038")
+		hi def htmlStrike              term=strikethrough cterm=strikethrough gui=strikethrough
+else
+		hi def htmlStrike              term=underline cterm=underline gui=underline
 endif
 
 hi link htmlPreStmt            PreProc
@@ -1592,49 +1385,50 @@ hi! link vimWarn	WarningMsg
 " }}}
 " And yours: {{{
 " Vim Errors: {{{
-hi def link vimBehaveError	vimError
-hi def link vimBufnrWarn	vimWarn
-hi def link vimCollClassErr	vimError
-hi def link vimEmbedError	vimError
-hi def link vimErrSetting	vimError
-hi def link vimFTError	vimError
-hi def link vimFunc         	vimError
-hi def link vimFuncBody Function
-hi def link vimFunctionError	vimError
-hi def link vimHiAttribList	vimError
-hi def link vimHiCtermError	vimError
-hi def link vimHiKeyError	vimError
-hi def link vimKeyCodeError	vimError
-hi def link vimMapModErr	vimError
-hi def link vimSubstFlagErr	vimError
-hi def link vimSynCaseError	vimError
+hi link vimBehaveError	vimError
+hi link vimBufnrWarn	vimWarn
+hi link vimCollClassErr	vimError
+hi link vimEmbedError	vimError
+hi link vimErrSetting	vimError
+hi link vimFTError	vimError
+hi link vimFunc         	vimError
+hi link vimFuncBody Function
+hi link vimFunctionError	vimError
+hi link vimHiAttribList	vimError
+hi link vimHiCtermError	vimError
+hi link vimHiKeyError	vimError
+hi link vimKeyCodeError	vimError
+hi link vimMapModErr	vimError
+hi link vimSubstFlagErr	vimError
+hi link vimSynCaseError	vimError
 hi link vimSynError Exception
 
 " }}}
 " Nvim Specific: {{{
 
 if has('nvim')
-  " How does a nice light blue sound?
-  hi! NvimInternalError guibg=NONE ctermfg=108 ctermbg=234 gui=reverse guifg=#8ec0e1 guisp=NONE
-  hi link nvimAutoEvent	vimAutoEvent
-  hi link nvimHLGroup	vimHLGroup
-  hi link nvimInvalid Exception
-  hi link nvimMap	vimMap
-  hi link nvimUnmap	vimUnmap
+	" How does a nice light blue sound?
+	hi! NvimInternalError guibg=NONE ctermfg=108 ctermbg=234 gui=reverse guifg=#8ec0e1 guisp=NONE
+	hi link nvimAutoEvent	vimAutoEvent
+	hi link nvimHLGroup	vimHLGroup
+  hi link NvimIdentifierKey IdentifierBold
+	hi link nvimInvalid Exception
+	hi link nvimMap	vimMap
+	hi link nvimUnmap	vimUnmap
 
-  hi link TermCursor Cursor
-  hi TermCursorNC ctermfg=237 ctermbg=223 guifg=#3c3836 guibg=#ebdbb2 guisp=NONE cterm=NONE gui=NONE
+	hi link TermCursor Cursor
+	hi TermCursorNC ctermfg=237 ctermbg=223 guifg=#3c3836 guibg=#ebdbb2 guisp=NONE cterm=NONE gui=NONE
 
-  " *hl-NormalFloat* NormalFloat	Normal text in floating windows.
-  hi NormalFloat ctermfg=223 ctermbg=234 guifg=#ebdbb2 guibg=#1d2021 guisp=NONE gui=undercurl cterm=undercurl
+	" *hl-NormalFloat* NormalFloat	Normal text in floating windows.
+	hi NormalFloat ctermfg=223 ctermbg=234 guifg=#ebdbb2 guibg=#1d2021 guisp=NONE gui=undercurl cterm=undercurl
 
-  " *hl-IncSearch*
-  " IncSearch	'incsearch' highlighting; also used for the text replaced with ':s///c'
-  hi IncSearch cterm=reverse ctermfg=208 ctermbg=234 gui=reverse guifg=#fe8019 guibg=#1d2021 guisp=NONE
+	" *hl-IncSearch*
+	" IncSearch	'incsearch' highlighting; also used for the text replaced with ':s///c'
+	hi IncSearch cterm=reverse ctermfg=208 ctermbg=234 gui=reverse guifg=#fe8019 guibg=#1d2021 guisp=NONE
 
-  " From he nvim-terminal-emulator
-  hi debugPC term=reverse ctermbg=darkblue guibg=darkblue
-  hi debugBreakpoint term=reverse ctermbg=red guibg=red
+	" From he nvim-terminal-emulator
+	hi debugPC term=reverse ctermbg=darkblue guibg=darkblue
+	hi debugBreakpoint term=reverse ctermbg=red guibg=red
 endif
 
 
@@ -1686,40 +1480,10 @@ hi link vimUserFunc Function
 hi link vimPythonRegion Identifier
 " }}}
 " }}}
-" Clojure: {{{
-
-hi! link clojureKeyword Keyword
-hi! link clojureCond GruvboxOrange
-hi! link clojureSpecial GruvboxOrange
-hi! link clojureDefine GruvboxOrange
-
-hi! link clojureFunc GruvboxYellow
-hi! link clojureRepeat GruvboxYellow
-hi! link clojureCharacter Directory
-hi! link clojureStringEscape Directory
-hi! link clojureException GruvboxRed
-
-hi! link clojureRegexp Directory
-hi! link clojureRegexpEscape Directory
-call s:HL('clojureRegexpCharClass', s:fg3, s:none, s:bold)
-hi! link clojureRegexpMod clojureRegexpCharClass
-hi! link clojureRegexpQuantifier clojureRegexpCharClass
-
-hi! link clojureParen GruvboxFg3
-hi! link clojureAnonArg GruvboxYellow
-hi! link clojureVariable GruvboxBlue
-hi! link clojureMacro GruvboxOrange
-
-hi! link clojureMeta GruvboxYellow
-hi! link clojureDeref GruvboxYellow
-hi! link clojureQuote GruvboxYellow
-hi! link clojureUnquote GruvboxYellow
-
-" }}}
 " C: {{{
 
-hi! link cOperator GruvboxPurple
-hi! link cStructure GruvboxOrange
+hi link cOperator Operator
+hi! link cStructure Structure
 
 " }}}
 " Python: {{{
@@ -1727,7 +1491,7 @@ hi! link cStructure GruvboxOrange
 hi link pythonAsync			Statement
 hi link pythonAttribute Identifier
 hi link pythonBoolean Boolean
-hi link pythonBuiltin Keyword
+hi link pythonBuiltin		Function
 hi link pythonBuiltinFunc GruvboxOrange
 hi link pythonBuiltinObj GruvboxOrange
 hi link pythonCoding Identifier
@@ -1954,41 +1718,41 @@ hi! link javascriptYield GruvboxRed
 
 " From the vim syn file
 
-hi def link javaScriptComment		Comment
-hi def link javaScriptLineComment		Comment
-hi def link javaScriptCommentTodo		Todo
-hi def link javaScriptSpecial		Special
-hi def link javaScriptStringS		String
-hi def link javaScriptStringD		String
-hi def link javaScriptStringT		String
-hi def link javaScriptCharacter		Character
-hi def link javaScriptSpecialCharacter	javaScriptSpecial
-hi def link javaScriptNumber		javaScriptValue
-hi def link javaScriptConditional		Conditional
-hi def link javaScriptRepeat		Repeat
-hi def link javaScriptBranch		Conditional
-hi def link javaScriptOperator		Operator
-hi def link javaScriptType			Type
-hi def link javaScriptStatement		Statement
-hi def link javaScriptFunction		Function
-hi def link javaScriptBraces		Function
-hi def link javaScriptError		Error
-hi def link javaScrParenError		javaScriptError
-hi def link javaScriptNull			Keyword
-hi def link javaScriptBoolean		Boolean
-hi def link javaScriptRegexpString		String
+hi link javaScriptComment		Comment
+hi link javaScriptLineComment		Comment
+hi link javaScriptCommentTodo		Todo
+hi link javaScriptSpecial		Special
+hi link javaScriptStringS		String
+hi link javaScriptStringD		String
+hi link javaScriptStringT		String
+hi link javaScriptCharacter		Character
+hi link javaScriptSpecialCharacter	javaScriptSpecial
+hi link javaScriptNumber		javaScriptValue
+hi link javaScriptConditional		Conditional
+hi link javaScriptRepeat		Repeat
+hi link javaScriptBranch		Conditional
+hi link javaScriptOperator		Operator
+hi link javaScriptType			Type
+hi link javaScriptStatement		Statement
+hi link javaScriptFunction		Function
+hi link javaScriptBraces		Function
+hi link javaScriptError		Error
+hi link javaScrParenError		javaScriptError
+hi link javaScriptNull			Keyword
+hi link javaScriptBoolean		Boolean
+hi link javaScriptRegexpString		String
 
-hi def link javaScriptIdentifier		Identifier
-hi def link javaScriptLabel		Label
-hi def link javaScriptException		Exception
-hi def link javaScriptMessage		Keyword
-hi def link javaScriptGlobal		Keyword
-hi def link javaScriptMember		Keyword
-hi def link javaScriptDeprecated		Exception
-hi def link javaScriptReserved		Keyword
-hi def link javaScriptDebug		Debug
-hi def link javaScriptConstant		Label
-hi def link javaScriptEmbed		Special
+hi link javaScriptIdentifier		Identifier
+hi link javaScriptLabel		Label
+hi link javaScriptException		Exception
+hi link javaScriptMessage		Keyword
+hi link javaScriptGlobal		Keyword
+hi link javaScriptMember		Keyword
+hi link javaScriptDeprecated		Exception
+hi link javaScriptReserved		Keyword
+hi link javaScriptDebug		Debug
+hi link javaScriptConstant		Label
+hi link javaScriptEmbed		Special
 
 " }}}
 " PanglossJS: {{{
@@ -2012,7 +1776,7 @@ hi! link jsClassDefinition GruvboxYellow
 hi! link typeScriptReserved Directory
 hi! link typeScriptLabel Directory
 hi! link typeScriptFuncKeyword Keyword
-hi! link typeScriptIdentifier GruvboxOrange
+hi! link typeScriptIdentifier Identifier
 hi! link typeScriptBraces Operator
 hi! link typeScriptEndColons Operator
 hi! link typeScriptDOMObjects GruvboxFg1
@@ -2060,78 +1824,74 @@ hi! link coffeeBracket GruvboxOrange
 " }}}
 " Ruby: {{{
 
-hi! link rubyStringDelimiter GruvboxGreen
+hi! link rubyStringDelimiter Delimiter
 hi! link rubyInterpolationDelimiter Directory
 " So TPope defined all of these but they got wiped in the hi clear. So copy
 " paste it is?
-hi def link rubyASCIICode		Character
-hi def link rubyBoolean			Boolean
-hi def link rubyClass			rubyDefine
-hi def link rubyConditional		Conditional
-hi def link rubyConditionalModifier	rubyConditional
-hi def link rubyControl			Statement
-hi def link rubyDefine			Define
-hi def link rubyException		Exception
-hi def link rubyExceptional		rubyConditional
-hi def link rubyFloat			Float
-hi def link rubyFunction		Function
-hi def link rubyInclude			Include
-hi def link rubyInteger			Number
-hi def link rubyMethodExceptional	rubyDefine
-hi def link rubyModule			rubyDefine
-hi def link rubyOptionalDo		rubyRepeat
-hi def link rubyRepeat			Repeat
-hi def link rubyRepeatModifier		rubyRepeat
+hi link rubyASCIICode		Character
+hi link rubyBoolean			Boolean
+hi link rubyClass			rubyDefine
+hi link rubyConditional		Conditional
+hi link rubyConditionalModifier	rubyConditional
+hi link rubyControl			Statement
+hi link rubyDefine			Define
+hi link rubyException		Exception
+hi link rubyExceptional		rubyConditional
+hi link rubyFloat			Float
+hi link rubyFunction		Function
+hi link rubyInclude			Include
+hi link rubyInteger			Number
+hi link rubyMethodExceptional	rubyDefine
+hi link rubyModule			rubyDefine
+hi link rubyOptionalDo		rubyRepeat
+hi link rubyRepeat			Repeat
+hi link rubyRepeatModifier		rubyRepeat
 
-if !exists('ruby_no_identifiers')
-  hi def link rubyIdentifier		Identifier
-else
-  hi def link rubyIdentifier		NONE
-endif
+hi link rubyIdentifier		Identifier
 
 " hi def link rubyInterpolationDelimiter	Delimiter
 " hi def link rubyStringDelimiter		Delimiter
-hi def link rubyAccess			Statement
-hi def link rubyAttribute		Statement
-hi def link rubyBeginEnd		Statement
-hi def link rubyBlockParameter		rubyIdentifier
-hi def link rubyCapitalizedMethod	rubyLocalVariableOrMethod
-hi def link rubyClassVariable		rubyIdentifier
-hi def link rubyComment			Comment
-hi def link rubyConstant		Type
-hi def link rubyData			Comment
-hi def link rubyDataDirective		Delimiter
-hi def link rubyDocumentation		Comment
-hi def link rubyError			Error
-hi def link rubyEval			Statement
-hi def link rubyGlobalVariable		rubyIdentifier
-hi def link rubyHeredoc			rubyString
-hi def link rubyInstanceVariable	rubyIdentifier
-hi def link rubyInvalidVariable		Error
-hi def link rubyKeyword			Keyword
-hi def link rubyNoInterpolation		rubyString
-hi def link rubyOperator		Operator
-hi def link rubyPredefinedConstant	rubyPredefinedIdentifier
-hi def link rubyPredefinedIdentifier	rubyIdentifier
-hi def link rubyPredefinedVariable	rubyPredefinedIdentifier
-hi def link rubyPseudoVariable		Constant
-hi def link rubyQuoteEscape		rubyStringEscape
-hi def link rubyRegexp			rubyString
-hi def link rubyRegexpAnchor		rubyRegexpSpecial
-hi def link rubyRegexpCharClass		rubyRegexpSpecial
-hi def link rubyRegexpComment		Comment
-hi def link rubyRegexpDelimiter		rubyStringDelimiter
-hi def link rubyRegexpDot		rubyRegexpCharClass
-hi def link rubyRegexpEscape		rubyRegexpSpecial
-hi def link rubyRegexpQuantifier	rubyRegexpSpecial
-hi def link rubyRegexpSpecial		Special
-hi def link rubySharpBang		PreProc
-hi def link rubySpaceError		rubyError
-hi def link rubyString			String
-hi def link rubyStringEscape		Special
-hi def link rubySymbol			Constant
-hi def link rubySymbolDelimiter		rubySymbol
-hi def link rubyTodo			Todo
+hi link rubyAccess			Statement
+hi link rubyAttribute		Statement
+hi link rubyBeginEnd		Statement
+hi link rubyBlockParameter		rubyIdentifier
+hi link rubyCapitalizedMethod	rubyLocalVariableOrMethod
+hi link rubyClassVariable		rubyIdentifier
+hi link rubyComment			Comment
+hi link rubyConstant		Type
+hi link rubyData			Comment
+hi link rubyDataDirective		Delimiter
+hi link rubyDocumentation		Comment
+hi link rubyError			Error
+hi link rubyEval			Statement
+hi link rubyGlobalVariable		rubyIdentifier
+hi link rubyHeredoc			rubyString
+hi link rubyInstanceVariable	rubyIdentifier
+hi link rubyInvalidVariable		Error
+hi link rubyKeyword			Keyword
+hi link rubyNoInterpolation		rubyString
+hi link rubyOperator		Operator
+hi link rubyPredefinedConstant	rubyPredefinedIdentifier
+hi link rubyPredefinedIdentifier	rubyIdentifier
+hi link rubyPredefinedVariable	rubyPredefinedIdentifier
+hi link rubyPseudoVariable		Constant
+hi link rubyQuoteEscape		rubyStringEscape
+hi link rubyRegexp			rubyString
+hi link rubyRegexpAnchor		rubyRegexpSpecial
+hi link rubyRegexpCharClass		rubyRegexpSpecial
+hi link rubyRegexpComment		Comment
+hi link rubyRegexpDelimiter		rubyStringDelimiter
+hi link rubyRegexpDot		rubyRegexpCharClass
+hi link rubyRegexpEscape		rubyRegexpSpecial
+hi link rubyRegexpQuantifier	rubyRegexpSpecial
+hi link rubyRegexpSpecial		Special
+hi link rubySharpBang		PreProc
+hi link rubySpaceError		rubyError
+hi link rubyString			String
+hi link rubyStringEscape		Special
+hi link rubySymbol			Constant
+hi link rubySymbolDelimiter		rubySymbol
+hi link rubyTodo			Todo
 
 " }}}
 " ObjectiveC: {{{
@@ -2151,26 +1911,26 @@ hi! link goBuiltins GruvboxOrange
 " }}}
 " Lua: {{{
 
-hi def link luaStatement		Statement
-hi def link luaRepeat		Repeat
-hi def link luaFor			Repeat
-hi def link luaString		String
-hi def link luaString2		String
-hi def link luaNumber		Number
-hi def link luaOperator		Operator
-hi def link luaIn			Operator
-hi def link luaConstant		Constant
-hi def link luaCond		Conditional
-hi def link luaElse		Conditional
-hi def link luaFunction		Function
-hi def link luaComment		Comment
-hi def link luaTodo		Todo
-hi def link luaTable		Structure
-hi def link luaError		Error
-hi def link luaParenError		Error
-hi def link luaBraceError		Error
-hi def link luaSpecial		SpecialChar
-hi def link luaFunc		Identifier
+hi link luaStatement		Statement
+hi link luaRepeat		Repeat
+hi link luaFor			Repeat
+hi link luaString		String
+hi link luaString2		String
+hi link luaNumber		Number
+hi link luaOperator		Operator
+hi link luaIn			Operator
+hi link luaConstant		Constant
+hi link luaCond		Conditional
+hi link luaElse		Conditional
+hi link luaFunction		Function
+hi link luaComment		Comment
+hi link luaTodo		Todo
+hi link luaTable		Structure
+hi link luaError		Error
+hi link luaParenError		Error
+hi link luaBraceError		Error
+hi link luaSpecial		SpecialChar
+hi link luaFunc		Identifier
 
 " }}}
 " MoonScript: {{{
@@ -2465,23 +2225,23 @@ hi link shWrapLineOperator	shOperator
 
 " }}}
 " QF: {{{
-hi def link qfFileName	Directory
-hi def link qfLineNr	LineNr
-hi def link qfError	Error
+hi link qfFileName	Directory
+hi link qfLineNr	LineNr
+hi link qfError	Error
 
 " }}}
 " Django: {{{
-hi def link djangoTagBlock PreProc
-hi def link djangoVarBlock PreProc
-hi def link djangoStatement Statement
-hi def link djangoFilter Identifier
-hi def link djangoArgument Constant
-hi def link djangoTagError Error
-hi def link djangoVarError Error
-hi def link djangoError Error
-hi def link djangoComment Comment
-hi def link djangoComBlock Comment
-hi def link djangoTodo Todo
+hi link djangoTagBlock PreProc
+hi link djangoVarBlock PreProc
+hi link djangoStatement Statement
+hi link djangoFilter Identifier
+hi link djangoArgument Constant
+hi link djangoTagError Error
+hi link djangoVarError Error
+hi link djangoError Error
+hi link djangoComment Comment
+hi link djangoComBlock Comment
+hi link djangoTodo Todo
 
 " }}}
 " Tutor: {{{
@@ -2576,7 +2336,5 @@ hi link helpUnderlined	Underlined
 hi link helpVim		Identifier
 hi link helpWarning WarningMsg
 " }}}
-
 " }}}
-
 " vim: set sw=2 ts=2 sts=2 et fdm=marker fdls=1 fdl=1:

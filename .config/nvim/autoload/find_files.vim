@@ -2,7 +2,7 @@
   " File: find_files.vim
   " Author: Faris Chugthai
   " Description: Find files autoload
-  " Last Modified: August 02, 2019 
+  " Last Modified: August 02, 2019
 " ============================================================================
 
 " Guards: {{{1

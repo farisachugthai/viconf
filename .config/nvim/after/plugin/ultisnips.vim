@@ -19,7 +19,6 @@ let s:cpo_save = &cpoptions
 set cpoptions-=C
 
 " Mappings: {{{1
-
 noremap <F4> <Cmd>UltiSnipsEdit<CR>
 noremap! <F4> <Cmd>UltiSnipsEdit<CR>
 
@@ -42,9 +41,9 @@ endif
 " well poop i didn't realize i never set this
 let g:UltiSnipsUsePythonVersion = 3
 
-let g:UltiSnipsExpandTrigger = '<Tab>'
-" TODO: Mapped in ConEmu and I don't know how to unmap a system keybinding...
-let g:UltiSnipsListSnippets = '<C-Tab>'
+" let g:UltiSnipsExpandTrigger = '<Tab>'
+" " TODO: Mapped in ConEmu and I don't know how to unmap a system keybinding...
+" let g:UltiSnipsListSnippets = '<C-Tab>'
 let g:UltiSnipsJumpForwardTrigger = '<C-j>'
 let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
 let g:ultisnips_python_style = 'numpy'

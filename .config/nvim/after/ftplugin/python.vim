@@ -15,9 +15,9 @@ let s:cpo_save = &cpoptions
 set cpoptions-=C
 
 " Options: {{{1
-" Globalsq
+" Globals
 let g:python_highlight_all = 1
-
+let g:python_space_error_highlight = 1
 
 " Oddly I don't have an ftplugin guard setup. But rst sourced this in so...
 if &filetype != 'python'

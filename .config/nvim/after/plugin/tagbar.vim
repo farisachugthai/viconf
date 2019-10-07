@@ -54,13 +54,12 @@ if !has('unix')
   endif
 
   " Icon Chars
-        " let g:tagbar_iconchars = ['▶', '▼']  (default on Linux and Mac OS X)
         " let g:tagbar_iconchars = ['▸', '▾']
         " let g:tagbar_iconchars = ['▷', '◢']
         " let g:tagbar_iconchars = ['+', '-']  (default on Windows)
   " Uh so all of these displayed correctly even on windows so give me some
   " cooler ones
-  let g:tagbar_iconchars = ['▸', '▾']
+  let g:tagbar_iconchars = ['▶', '▼']
 
 endif
 
