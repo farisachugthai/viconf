@@ -36,6 +36,13 @@ let g:coc_snippet_prev = '<S-Tab>'
 " Mappings:- {{{1
 
 " Basics: {{{2
+" I mean not the most basic but it expands a snippet, or jumps, or confirms a
+" selection, or refreshes.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
 
 function! s:check_back_space() abort
   let col = col('.') - 1

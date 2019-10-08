@@ -44,19 +44,35 @@ let g:startify_custom_header = plugins#filter_header(startify#fortune#cowsay())
 
 let g:startify_skiplist = [
     \ 'COMMIT_EDITMSG',
-    \ glob( stdpath('data') . 'plugged/*/doc'),
+    \ glob(stdpath('data') . '/plugged/**/doc/*'),
     \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc', ]
 
 " Session Dir: {{{1
 let g:startify_session_dir =  stdpath('config') . '/session'
 
 " General Options: {{{1
-" TODO: Figure out how to set let g:startify_bookmarks = [ Contents of
-" NERDTreeBookmarks ]
+" TODO: Check this works
+function! Startify_bm() abort
+  let g:nerdbookmarks = readfile(expand($HOME) . '/.NERDTreeBookmarks')
+  " let g:startify_bookmarks = {}
+  let g:startify_bookmarks = []
+  for g:idx_str in g:nerdbookmarks
+    if empty(g:idx_str)
+      return
+    else
+      " dict isn't working. try list unpacking.
+      let [_, g:idx_dir] = split(g:idx_str)
+      " let bookmarksdict = {g:idx_list[0]: g:idx_list[1]}
+      " call extend(g:startify_bookmarks, bookmarksdict)
+      call extend(g:startify_bookmarks, [g:idx_dir])
+    endif
+  endfor
+endfunction
 
 let g:startify_commands = [
     \ {'h': ['Vim Reference', 'h ref'],},
     \ {'f': ['FZF!', 'FZF!'],},
+    \ {'g': ['Git status!', 'Gstatus'],},
     \ ]
 
 if has('unix')

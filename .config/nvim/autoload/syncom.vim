@@ -126,6 +126,33 @@ function! syncom#grepprg() abort  " {{{1
 
   return s:grep
 endfunction
+
+function! syncom#gruvbox() abort
+  if empty(globpath(&rtp, 'colors/gruvbox.vim'))
+    return v:false
+  else
+    let g:gruvbox_contrast_hard = 1
+    let g:gruvbox_contrast_soft = 0
+    let g:gruvbox_improved_strings = 1
+    let g:gruvbox_italic = 1
+    colorscheme gruvbox
+    return v:true
+  endif
+endfunction
+
+function! syncom#gruvbox_material() abort
+  " TODO:
+  if empty(globpath(&rtp, 'colors/gruvbox-material.vim'))
+    return v:false
+  else
+    let g:gruvbox_material_transparent_background = 1
+    let g:gruvbox_material_enable_bold = 1
+    let g:gruvbox_material_background = 'hard'
+    colo gruvbox-material
+    return v:true
+  endif
+endfunction
+
 " Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

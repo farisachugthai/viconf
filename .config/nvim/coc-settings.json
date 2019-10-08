@@ -11,7 +11,7 @@
     "python"
   ],
   "coc.preferences.formatOnType": true,
-  "coc.preferences.hoverTarget": "preview",
+  "coc.preferences.hoverTarget": "float",
   "coc.preferences.jumpCommand": "edit",
   "coc.preferences.messageLevel": "error",
   "coc.preferences.previewAutoClose": true,
@@ -333,10 +333,6 @@
   "python.linting.flake8Path": "python -m flake8",
   "python.linting.pylintEnabled": false,
   "python.terminal.executeInFileDir": true,
-  "python.terminal.launchArgs": [
-    "-m",
-    "IPython"
-  ],
   "python.trace.server": "messages",
   "python.venvFolders": [
     "~/.virtualenvs",

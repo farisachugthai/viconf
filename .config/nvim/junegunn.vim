@@ -78,13 +78,12 @@ Plug 'vim-voom/voom'
 Plug 'romainl/vim-qf'
 
 if empty(s:termux)
-  Plug 'jupyter-vim/jupyter-vim'  " This plugin only makes sense when pythons loaded
   Plug 'mustache/vim-mustache-handlebars'
   Plug 'raimon49/requirements.txt.vim'
   Plug 'michaeljsmith/vim-indent-object'
   Plug 'ntpeters/vim-better-whitespace'
   Plug 'plasticboy/vim-markdown'
-Plug 'elzr/vim-json'
+  Plug 'elzr/vim-json'
 
 endif
 

@@ -17,6 +17,9 @@ text=auto
 
 *.png   binary
 *.jpg   binary
+*.svg binary
+*.pdf binary
+*.jp[e]?g binary
 
 *.py diff=python
 *.ipy diff=python

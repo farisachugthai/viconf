@@ -56,20 +56,22 @@ function! pydoc_help#Pydoc(module) abort
   endif
 
   enew
-  " exec ':r! pydoc ' . a:module
-  " so the above will have to be modified to allow for py3 if it exists
-  " in the plugin definition i only check for either python3 or python2
-  " so there's no need to throw an error that neither are loaded. they have
-  " to be. however i just loaded py2 docs by accident.
-  " i could go the route of calling provider#python3#Call(); however, I can't
-  " find the docs for it and the source code is outrageously unclear so fuck
-  " it dispatch it to the shell and walk away
   if has('python3')
-    if !has('unix')
-      exec 'r! python.exe -m pydoc ' . a:module
-    else
-      exec 'r! python3 -m pydoc ' . a:module
-    endif
+    " I realize i could do that EOF bullshit but i don't like it.
+    " I've never tried importing from the pythonx dir before and I don't know
+    " how that works but i'd rather that then embedding python directly in a
+    " vim file
+    execute 'py3 import pydoc'
+    execute 'py3 pydoc.ttypager(' . a:module . ')'
+
+
+    " Uhhhhhh let's not do it this way?
+    " On neovim, has('python3') == 'g:python3_host_prog'
+    " if !has('unix')
+    "   exec 'r! python.exe -m pydoc ' . a:module
+    " else
+    "   exec 'r! python3 -m pydoc ' . a:module
+    " endif
   elseif has('python')  " not sure how to guarantee that python points to py2...
     exec 'r! python -m pydoc ' . a:module
   endif

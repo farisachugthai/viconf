@@ -38,14 +38,8 @@ packadd justify cfilter matchit
 set synmaxcol=400 termguicolors  " Set up the colorscheme
 syntax sync fromstart linebreaks=2
 
-function! Gruvbox() abort
-  let g:gruvbox_contrast_hard = 1
-  let g:gruvbox_contrast_soft = 0
-  let g:gruvbox_improved_strings = 1
-  let g:gruvbox_italic = 1
-  colorscheme gruvbox
-endfunction
-call Gruvbox()
+let s:material_gruvbox =  syncom#gruvbox_material()
+if s:material_gruvbox == v:false | call syncom#gruvbox() | endif
 
 " Setup neovim's python and node hosts. Optionally clipboards etc
 runtime remote.vim
@@ -63,7 +57,7 @@ map <Space> <Leader>
 
 if has('nvim-0.4')   " Fun new features!
   let &shadafile = stdpath('data') . '/shada/main.shada'
-  set pumblend=80   " toggle transparency in the pum
+  set pumblend=20   " toggle transparency in the pum
   try | set pyxversion=3 | catch /^Vim:E518:*/ | endtry
 endif
 
@@ -80,7 +74,7 @@ if &tabstop > 4 | set tabstop=4 | endif
 if &shiftwidth > 4  | set shiftwidth=4 | endif
 set expandtab smarttab softtabstop=4
 set foldenable foldlevelstart=1 foldlevel=1 foldnestmax=10 foldmethod=marker foldcolumn=2
-set signcolumn=yes
+set signcolumn=auto:2  " this might be a nvim 4 thing
 try | set switchbuf=useopen,usetab,newtab | catch | endtry
 set hidden foldopen=quickfix,search,tag,undo
 set splitbelow splitright sidescroll=5
