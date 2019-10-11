@@ -2,7 +2,7 @@
   " File: unix_options.vim
   " Author: Faris Chugthai
   " Description: Autoloaded Unix only options
-  " Last Modified: August 12, 2019 
+  " Last Modified: August 12, 2019
 " ============================================================================
 
 " Guard: {{{1

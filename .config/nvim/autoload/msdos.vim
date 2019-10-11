@@ -40,11 +40,13 @@ function! msdos#Cmd() abort  " {{{1
 
   " All the defaults when running cmd as comspec on windows 10
   set shell=cmd.exe
-  set shellcmdflag=/s\ /c
+  " set shellcmdflag=/s\ /c
   set shellpipe=>%s\ 2>&1
   set shellredir=>%s\ 2>&1
   " Is this necessary? Or should it be empty?
   set shellxquote=(
+  set shellxescape=^
+  " What about setting shellquote to "" so that cmd gets the args quoted?
 
 endfunction
 

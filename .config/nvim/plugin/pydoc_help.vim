@@ -49,24 +49,8 @@ noremap! <F1> <Esc>
 " Oh holy shit that's awesome
 command! -nargs=1 -complete=help Help call pydoc_help#Helptab()
 
-if has('python') || has('python3')
-
-  command! -nargs=0 -range PydocThis call pydoc_help#PydocCword()
-
-  " This should be able to take the argument '-bang' and allow to open in a new
-  " separate window like fzf does.
-  command! -nargs=0 PydocSplit call pydoc_help#SplitPydocCword()
-
-  command! -nargs=? Pydoc call pydoc_help#Pydoc(<f-args>)
-
-  command! -nargs=1 PydocMod call pydoc_help#ShowPyDoc('<args>', 1)
-
-  command! -nargs=* PydocModSearch call pydoc_help#ShowPyDoc('<args>', 0)
-
-  cabbrev pyd Pydoc
-
-  cabbrev pyds PydocSearch
- 
+if &filetype ==# 'python'
+  runtime autoload/pydoc_help.vim
 endif
 
 " Atexit: {{{1

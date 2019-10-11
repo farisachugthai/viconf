@@ -2,7 +2,7 @@
   " File: ultisnips.vim
   " Author: Faris Chugthai
   " Description: Plugin related autoloaded functions
-  " Last Modified: August 01, 2019 
+  " Last Modified: August 01, 2019
 " ============================================================================
 
 " Guards: {{{1
@@ -53,7 +53,7 @@ endfunction
 
 " Vim Plug: {{{1
 
-function! plugins#InstallPlug() abort  " {{{1
+function! plugins#InstallPlug() abort  " {{{2
 
   " Unsure of how to capture return code
   if empty(executable('curl')) | return | endif
@@ -88,6 +88,28 @@ function! plugins#filter_header(lines) abort  " {{{2
     return centered_lines
 endfunction
 
+function! plugins#startify_bookmarks() abort  " {{{2
+
+  let s:nerdbookmarks = readfile(expand($HOME) . '/.NERDTreeBookmarks')
+  if !filereadable(s:nerdbookmarks) | return | endif
+
+  if empty(g:startify_bookmarks)
+    let g:startify_bookmarks = []
+  endif
+  for s:idx_str in s:nerdbookmarks
+    if empty(s:idx_str)
+      return
+    else
+      " dict isn't working. try list unpacking.
+      let [_, s:idx_dir] = split(s:idx_str)
+      " let bookmarksdict = {g:idx_list[0]: g:idx_list[1]}
+      " call extend(g:startify_bookmarks, bookmarksdict)
+      call extend(g:startify_bookmarks, [s:idx_dir])
+    endif
+  endfor
+endfunction
+
+
 " Fugitive: {{{1
 
 function! plugins#FugitiveMappings() abort   " {{{2
@@ -116,6 +138,7 @@ function! plugins#FugitiveMappings() abort   " {{{2
   noremap <silent> <Leader>gW   <Cmd>Gwrite!<CR>
 
 endfunction
+
 " Atexit: {{{1
 
 let &cpoptions = s:cpo_save

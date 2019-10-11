@@ -19,6 +19,9 @@ let s:cpo_save = &cpoptions
 set cpoptions-=C
 
 " This takes 4ms to load and I didn't even start on this buffer...
+" Does this fix it?
+if empty("b:startify") | finish | endif
+
 " Startify Lists: {{{1
 
 let g:startify_lists = [
@@ -31,13 +34,13 @@ let g:startify_lists = [
     \ ]
 
 " Setup_devicons: {{{1
-function! StartifyEntryFormat()
+function! StartifyEntryFormat() abort
   return 'WebDevIconsGetFileTypeSymbol(absolute_path) ." ". entry_path'
 endfunction
 
 " Center The Header And Footer: {{{1
 
-let g:startify_custom_header = plugins#filter_header(startify#fortune#cowsay())
+" let g:startify_custom_header = plugins#filter_header(startify#fortune#cowsay())
 
 " Skiplist: {{{1
 " Don't show these files
@@ -52,23 +55,6 @@ let g:startify_session_dir =  stdpath('config') . '/session'
 
 " General Options: {{{1
 " TODO: Check this works
-function! Startify_bm() abort
-  let g:nerdbookmarks = readfile(expand($HOME) . '/.NERDTreeBookmarks')
-  " let g:startify_bookmarks = {}
-  let g:startify_bookmarks = []
-  for g:idx_str in g:nerdbookmarks
-    if empty(g:idx_str)
-      return
-    else
-      " dict isn't working. try list unpacking.
-      let [_, g:idx_dir] = split(g:idx_str)
-      " let bookmarksdict = {g:idx_list[0]: g:idx_list[1]}
-      " call extend(g:startify_bookmarks, bookmarksdict)
-      call extend(g:startify_bookmarks, [g:idx_dir])
-    endif
-  endfor
-endfunction
-
 let g:startify_commands = [
     \ {'h': ['Vim Reference', 'h ref'],},
     \ {'f': ['FZF!', 'FZF!'],},
@@ -89,13 +75,6 @@ let g:startify_session_sort = 1
 " expressions on a per directory basis aka projects / workspaces!
 let g:startify_session_autoload = 1
 let g:startify_session_sort = 1
-
-" Autocommand: {{{1
-
-augroup StartifyConf
-  au!
-  autocmd User Startified setlocal cursorline
-augroup END
 
 " Atexit: {{{1
 let &cpoptions = s:cpo_save

@@ -1,4 +1,3 @@
-
 " ============================================================================
   " File: buffers.vim
   " Author: Faris Chugthai
@@ -7,25 +6,31 @@
 " ============================================================================
 
 " Guard: {{{1
-if exists('g:did_buffers_vim') || &compatible || v:version < 700
+if exists('g:did_autoload_buffers_vim') || &compatible || v:version < 700
   finish
 endif
-let g:did_buffers_vim = 1
+let g:did_autoload_buffers_vim = 1
 
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
 function! buffers#EchoRTP()  " {{{1
 
-  for directory in nvim_list_runtime_paths()   
-    echo directory
-  endfor
+  " Huh son of a bitch. I actually figured out an easier way to do this
+  " let's do a check that this function exists then and do it the non-nvim way
+  " otherwise
+  if exists('*nvim_list_runtime_paths')
+    for directory in nvim_list_runtime_paths()
+      echo directory
+    endfor
+  else
+    for i in split(&rtp, ',') | echo i | endfor
+  endif
 
 endfunction
 
 
 function! buffers#PreviewWord() abort  " {{{1
-
 " Open a tag for the word under the cursor in the preview window.
 " TODO: Could definitely do with a mapping
 
@@ -70,7 +75,7 @@ endfunction
 " Terminal Buffers: {{{1
 
 function! buffers#terminals() abort
-    
+
   " If running a terminal in Vim, go into Normal mode with Esc
   tnoremap <Esc> <C-\><C-n>
 

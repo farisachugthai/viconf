@@ -1703,3 +1703,8 @@ hashtables
 Soundfolding
 trie
 mousemodel
+GuiLoaded
+ginit
+tabline
+GuiTreeviewToggle
+Atexit

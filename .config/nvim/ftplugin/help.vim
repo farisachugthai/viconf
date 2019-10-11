@@ -2,7 +2,7 @@
   " File: help.vim
   " Author: Faris Chugthai
   " Description: Help files basically don't have an ftplugin
-  " Last Modified: September 10, 2019 
+  " Last Modified: September 10, 2019
 " ============================================================================
 
 " Guard: {{{1
@@ -19,8 +19,9 @@ set cpoptions-=C
 
 
 " Options: {{{1
-
 setlocal formatoptions+=tcroql textwidth=78
+
+" Just saying... I have this set globally too. W/e.
 if has("conceal")
   setlocal cole=2 cocu=nc
 endif

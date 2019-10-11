@@ -58,9 +58,11 @@ endif
 " It's very frustrating having termux slow down beyond repair but also frustrating
 " not being able to use more than 15 plugins at any point in time
 if empty(s:termux)
-  Plug 'chrisbra/csv.vim', {'for': 'csv'}
+  " Plug 'chrisbra/csv.vim', {'for': 'csv'}
   Plug 'greyblake/vim-preview', {'on': 'Preview'}
   Plug 'mitsuhiko/vim-jinja'
+
+  " needed if for nothing else but the ftdetect
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
   Plug 'itspriddle/vim-shellcheck', { 'for': ['sh', 'bash'] }
@@ -78,12 +80,12 @@ Plug 'vim-voom/voom'
 Plug 'romainl/vim-qf'
 
 if empty(s:termux)
-  Plug 'mustache/vim-mustache-handlebars'
+  " Plug 'mustache/vim-mustache-handlebars'
   Plug 'raimon49/requirements.txt.vim'
   Plug 'michaeljsmith/vim-indent-object'
   Plug 'ntpeters/vim-better-whitespace'
-  Plug 'plasticboy/vim-markdown'
-  Plug 'elzr/vim-json'
+  Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
+  Plug 'elzr/vim-json', { 'for': 'json' }
 
 endif
 

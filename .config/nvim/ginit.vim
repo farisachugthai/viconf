@@ -1,7 +1,7 @@
 " ============================================================================
   " File: ginit.vim
   " Author: Faris Chugthai
-  " Description: 
+  " Description: Gui nvim initialization
   " Last Modified: September 09, 2019
 " ============================================================================
 
@@ -22,7 +22,7 @@ let s:cpo_save = &cpoptions
 set cpoptions-=C
 
 " Options: {{{1
-runtime nvim_gui_shim
+runtime plugin/nvim_gui_shim.vim
 
 " Holy hell we get the tabline back!!!
 GuiTabline v:false
@@ -34,7 +34,7 @@ GuiFont Hack:h12
 
 call GuiClipboard()
 
-" LOLOLOLOLOL we need to map something to GuiTreeviewToggle!
+" We need to map something to GuiTreeviewToggle!
 noremap <Leader>? <Cmd>GuiTreeviewToggle<CR><bar>execute 'echomsg ' . 'Opening up Nvim_Explorer.exe'
 
 

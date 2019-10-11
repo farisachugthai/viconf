@@ -91,11 +91,11 @@ command! -nargs=0 -range Title execute 'normal! ' . "'<,'>s/\v<(.)(\w*)/\u\1\L\2
 " Toggle Search Highlighting: {{{1
 
 set nohlsearch
-augroup vimrc_incsearch_highlight
-    autocmd!
-    autocmd CmdlineEnter /,\? :set hlsearch
-    autocmd CmdlineLeave /,\? :set nohlsearch
-augroup END
+" augroup vimrc_incsearch_highlight
+    " autocmd!
+    " autocmd CmdlineEnter /,\? :set hlsearch
+    " autocmd CmdlineLeave /,\? :set nohlsearch
+" augroup END
 
 " Atexit: {{{1
 

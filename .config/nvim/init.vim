@@ -91,6 +91,7 @@ set wildignorecase wildmode=full:list:longest,full:list
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 set complete+=kspell
 " Create a preview window and display all possibilities but don't insert
+" dude what am i doing wrong that i don't get the cool autocompletion that NORC gets??
 set completeopt=menu,menuone,noselect,noinsert,preview
 " don't show more than 15 choices in the popup menu. defaults to 0
 set pumheight=15

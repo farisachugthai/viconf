@@ -118,7 +118,7 @@ function! pydoc_help#async_cursor() abort
 endfunction
 
 function! pydoc_help#broken_scratch_buffer() abort  " {{{1
- 
+
   " From he api-floatwin. Only new versions of Nvim (maybe 0.4+ only?)
   let buf = nvim_create_buf(v:false, v:true)
 
@@ -134,11 +134,11 @@ function! pydoc_help#broken_scratch_buffer() abort  " {{{1
 endfunction
 
 function! pydoc_help#sphinx_build(...) abort  " {{{1
-  " TODO: 
+  " TODO:
 endfunction
 
 function! pydoc_help#the_curse_of_nvims_floating_wins() abort  " {{{1 No seriously they're difficult to work with
-  " Keep working out the 
+  " Keep working out the
   let s:opts = {'relative': 'cursor', 'width': 10, 'height': 2, 'col': 0, 'row': 1, 'anchor': 'NW', 'style': 'minimal', 'focusable': v:true }
   let s:win_handle = nvim_open_win(bufnr('%'), 0, s:opts)
   let floating_winnr  = nvim_win_get_number(s:win_handle)
@@ -146,57 +146,33 @@ function! pydoc_help#the_curse_of_nvims_floating_wins() abort  " {{{1 No serious
   " fashion. Sweet!!
   call nvim_win_set_option(s:win_handle, 'winhl', 'Special')
 endfunction
- 
-" Pydoc.vim: {{{1
-" Don't redefine the functions if this ftplugin has been executed previously
-" and before finish create the local mappings in the current buffer
-if !has('python3') |  finish | endif
 
-if exists('*s:ShowPyDoc') && g:pydoc_perform_mappings
-    call s:PerformMappings()
-    finish
-endif
- 
-if !exists('g:pydoc_perform_mappings')
-    let g:pydoc_perform_mappings = 1
-endif
- 
-if !exists('g:pydoc_highlight')
-    let g:pydoc_highlight = 1
-endif
- 
-if !exists('g:pydoc_cmd')
-    let g:pydoc_cmd = ':python3 -m pydoc'
-endif
- 
-if !exists('g:pydoc_open_cmd')
-    let g:pydoc_open_cmd = 'split'
-endif
- 
-highlight pydoc cterm=reverse gui=reverse
- 
-function! s:GetWindowLine(value)   " {{{2
-    if a:value < 1
-        return float2nr(winheight(0)*a:value)
-    else
-        return a:value
-    endif
-endfunction
- 
+if has('python') || has('python3')  " {{{ Define commands
+
+  command! -nargs=0 -range PydocThis call pydoc_help#PydocCword()
+
+  " This should be able to take the argument '-bang' and allow to open in a new
+  " separate window like fzf does.
+  command! -nargs=0 PydocSplit call pydoc_help#SplitPydocCword()
+
+  command! -nargs=? Pydoc call pydoc_help#Pydoc(<f-args>)
+
+  " i just messed that function up pretty bad
+  " command! -nargs=1 PydocMod call pydoc_help#ShowPyDoc('<args>', 1)
+
+  " command! -nargs=* PydocModSearch call pydoc_help#ShowPyDoc('<args>', 0)
+
+  cabbrev pyd Pydoc
+
+  cabbrev pyds PydocSearch
+
+endif  " }}}
+
 " Args: name: lookup; type: 0: search, 1: lookup
-function! pydoc_help#ShowPyDoc(name, type) abort  " {{{2
+function! pydoc_help#ShowPyDoc(name, type) abort  " {{{1
     if a:name == ''
         return
     endif
- 
-    if g:pydoc_open_cmd == 'split'
-        if exists('g:pydoc_window_lines')
-            let l:pydoc_wh = s:GetWindowLine(g:pydoc_window_lines)
-        else
-            let l:pydoc_wh = 10
-        endif
-    endif
- 
     if bufloaded("__doc__")
         let l:buf_is_new = 0
         if bufname("%") == "__doc__"
@@ -215,18 +191,15 @@ function! pydoc_help#ShowPyDoc(name, type) abort  " {{{2
     else
         let l:buf_is_new = 1
         execute g:pydoc_open_cmd '__doc__'
-        if g:pydoc_perform_mappings
-            call s:PerformMappings()
-        endif
     endif
- 
+
     setlocal modifiable
     setlocal noswapfile
     setlocal buftype=nofile
     setlocal bufhidden=delete
     setlocal syntax=man
     setlocal nolist
- 
+
     normal ggdG
     " Remove function/method arguments
     let s:name2 = substitute(a:name, '(.*', '', 'g' )
@@ -242,15 +215,15 @@ function! pydoc_help#ShowPyDoc(name, type) abort  " {{{2
     endif
     execute  "silent read !" s:cmd
     normal 1G
- 
+
     if exists('l:pydoc_wh') && l:pydoc_wh != -1
         execute "resize" l:pydoc_wh
     end
- 
+
     if g:pydoc_highlight == 1
         execute 'syntax match pydoc' "'" . s:name2 . "'"
     endif
- 
+
     let l:line = getline(2)
     if l:line =~ "^no Python documentation found for.*$"
         if l:buf_is_new
@@ -267,8 +240,8 @@ function! pydoc_help#ShowPyDoc(name, type) abort  " {{{2
         setlocal nomodifiable
     endif
 endfunction
- 
-function! s:ReplaceModuleAlias()  " {{{2
+
+function! s:ReplaceModuleAlias()  " {{{1
     " Replace module aliases with their own name.
     "
     " For example:
@@ -293,7 +266,7 @@ function! s:ReplaceModuleAlias()  " {{{2
     call cursor(l:cur_line, l:cur_col)
     return join(l:module_names, ".")
 endfunction
- 
+
 function! s:ExpandModulePath()  " {{{2
     " Extract the 'word' at the cursor, expanding leftwards across identifiers
     " and the . operator, and rightwards across the identifier only.
@@ -308,22 +281,19 @@ function! s:ExpandModulePath()  " {{{2
     let l:suf = l:line[col("."):]
     return matchstr(pre, "[A-Za-z0-9_.]*$") . matchstr(suf, "^[A-Za-z0-9_]*")
 endfunction
- 
+
 " Mappings
-function! s:PerformMappings()  " {{{2
+function! pydoc_help#PerformMappings()  " {{{2
     nnoremap <silent> <buffer> <Leader>pw :call <SID>ShowPyDoc('<C-R><C-W>', 1)<CR>
     nnoremap <silent> <buffer> <Leader>pW :call <SID>ShowPyDoc('<C-R><C-A>', 1)<CR>
     nnoremap <silent> <buffer> <Leader>pk :call <SID>ShowPyDoc('<C-R><C-W>', 0)<CR>
     nnoremap <silent> <buffer> <Leader>pK :call <SID>ShowPyDoc('<C-R><C-A>', 0)<CR>
- 
+
     " remap the K (or 'help') key
     nnoremap <silent> <buffer> K :call <SID>ShowPyDoc(<SID>ReplaceModuleAlias(), 1)<CR>
 endfunction
- 
-if g:pydoc_perform_mappings
-    call s:PerformMappings()
-endif
- 
+
+
 function! pydoc_help#show_toc() abort
   let bufname = bufname('%')
   let info = getloclist(0, {'winid': 1})

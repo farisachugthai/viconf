@@ -507,6 +507,7 @@ hi! link netrwList Aqua
 hi! link netrwHelpCmd Blue
 hi! link netrwCmdSep LightGrey
 hi! link netrwVersion Orange
+hi! link NERDTreeBookmarksLeader Conceal
 hi! link NERDTreeDir Green
 hi! link NERDTreeDirSlash Aqua
 hi! link NERDTreeOpenable Orange
