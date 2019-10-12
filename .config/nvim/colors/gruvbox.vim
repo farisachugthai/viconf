@@ -663,7 +663,10 @@ hi QuickFixLine ctermfg=214 ctermbg=237 guifg=#fabd2f guibg=#3c3836 guisp=NONE c
 " EndOfBuffer: New replacement for GruvboxBlueSign
 " hi EndOfBuffer guifg=#f9f5d7 guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermbg=NONE ctermfg=230
 " NO DON'T MAKE A SEPARATE BACKGROUND IT LOOKS WEIRD WHEN THE FILE ENDS
-hi EndOfBuffer ctermfg=109 ctermbg=NONE guifg=#83a598 guibg=NONE cterm=italic gui=italic guisp=NONE
+" hi EndOfBuffer ctermfg=109 ctermbg=NONE guifg=#83a598 guibg=NONE cterm=italic gui=italic guisp=NONE
+" I was stuck in a tty for a few days so trust me when i say you want cterm
+" and term to be normal
+hi! link EndOfBuffer Normal
 " }}}
 " Gutter: {{{
 
@@ -1049,18 +1052,39 @@ hi! link manURL GruvboxGreen
 " Hate to be that guy but Netrw is considered an ftplugin
 
 hi link netrwClassify Directory
+hi link netrwCmdNote Directory
 hi link netrwCmdSep VertSplit
 hi link netrwComma Delimiter
 hi link netrwComment Comment
+if has('nvim')
+  hi link netrwCopyTgt IncSearch
+else
+  " Is this canoniccal vim?
+  hi link netrwCopyTgt StorageClass
+endif
+
+hi link netrwDateSep Delimiter
 hi link netrwDir Directory
 hi link netrwExe Macro
 hi link netrwGray Folded
 hi link netrwHelpCmd Directory
+hi link netrwHide Conceal
+hi link netrwHidePat Folded
+hi link netrwLib Directory
 hi link netrwLink Underlined
 hi link netrwList PreCondit
 hi link netrwPlain String
+hi link netrwQHTopic Number
+hi link netrwSizeDate Delimiter
 hi link netrwSlash Delimiter
+hi link netrwSortBy Title
+hi link netrwSortSeq netrwList
+hi link netrwSpecial netrwClassify
 hi link netrwSymLink Special
+hi link netrwTime Delimiter
+hi link netrwTimeSep Delimiter
+hi link netrwTreeBar Special
+hi link netrwTreeBarSpace Special
 hi link netrwVersion Float
 
 " }}}

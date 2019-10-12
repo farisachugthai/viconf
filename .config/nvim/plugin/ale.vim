@@ -1,8 +1,8 @@
 " ============================================================================
     " File: ale.vim
     " Author: Faris Chugthai
-    " Description: Ale configuration
-    " Last Modified: Sep 29, 2019
+    " Description: Ale configuration. Had to be moved out of after/plugin
+    " Last Modified: Oct 06, 2019
 " ============================================================================
 
 " Guard: {{{1
@@ -31,8 +31,8 @@ noremap <A-a> <Cmd>ALEDetail<CR>zz
 noremap <A-r> <Cmd>ALEFindReference<CR>
 
 " Dude why can't i get plug mappings right???
-noremap <A-i> <Plug>(ale-info)zzza
-" noremap <A-i> <Cmd>ALEInfo<CR>
+" noremap <A-i> <Plug>(ale-info)zzza
+noremap <A-i> <Cmd>ALEInfo<CR>
 
 " Options: {{{1
 
@@ -42,7 +42,9 @@ let g:ale_fix_on_save = 1
 
 " let g:ale_linters_explicit = 1
 let g:ale_linter_aliases = {
-      \ 'ps1': 'powershell'
+      \ 'ps1': 'powershell',
+      \ 'htmljinja': 'html',
+      \ 'htmldjango': 'html'
       \ }
 
 " Now because you fix the trailing whitespace and trailing lines
@@ -103,8 +105,30 @@ endif
 let g:ale_virtualtext_cursor = 1
 let g:ale_sign_highlight_linenrs = 1
 
+let g:ale_pattern_options_enabled = 1
 let g:ale_pattern_options = {'\.min.js$': {'ale_enabled': 0}}
 
+" Example from the help page
+"
+  " Use just ESLint for linting and fixing files which end in '.foo.js'
+  " let g:ale_pattern_options = {
+  " \   '\.foo\.js$': {
+  " \       'ale_linters': ['eslint'],
+  " \       'ale_fixers': ['eslint'],
+  " \   },
+  " \}
+"
+" Let's try this out
+" let g:ale_cursor_detail = 1
+" let g:ale_close_preview_on_insert = 1
+
+let g:ale_sign_warning = 'W'
+let g:ale_sign_highlight_linenrs = 1
+
+let g:ale_python_auto_pipenv = 1
+let g:ale_python_pydocstyle_auto_pipenv = 1
+let g:ale_python_flake8_auto_pipenv = 1
+let g:ale_python_pyls_auto_pipenv = 1
 
 " Atexit: {{{1
 let &cpoptions = s:cpo_save

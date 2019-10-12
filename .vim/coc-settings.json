@@ -1,4 +1,4 @@
 {
   "python.linting.flake8Enabled": true,
-  "python.jediEnabled": true,
+  "python.jediEnabled": false,
 }

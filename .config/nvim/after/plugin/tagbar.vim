@@ -30,7 +30,6 @@ let g:tagbar_singleclick = 1
 " be shown in the statusline of the Tagbar window.
 let g:tagbar_autoclose = 1
 
-
 " -1: Use the global line number settings.
 " Well that just feels like the courteous thing to do right?
 let g:tagbar_show_linenumbers = -1
@@ -38,7 +37,6 @@ let g:tagbar_show_linenumbers = -1
 " Actually let's fold this a bit more.
 " Default is 99 btw
 let g:tagbar_foldlevel = 1
-
 
 " If this variable is set to 1 then moving the cursor in the Tagbar window will
 " automatically show the current tag in the preview window.
@@ -167,6 +165,8 @@ let g:tagbar_type_typescript = {
   \ 'e:enums',
   \ ]
   \ }
+"
+let g:tagbar_hide_nonpublic = 1
 
 let g:tagbar_type_snippets = {
     \ 'ctagstype' : 'snippets',

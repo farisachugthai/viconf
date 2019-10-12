@@ -21,13 +21,7 @@ nnoremap <Leader>rt call buffers#EchoRTP()
 
 command! -nargs=0 EchoRTP echo buffers#EchoRTP()
 
-" General Mappings: {{{1
-" This is specifically for ftplugins but why not add a check here regardless?
-" <						*no_plugin_maps*
-" 4. Disable defining mappings for all filetypes by setting a variable: >
-" 	:let no_plugin_maps = 1
-
-function! Buf_Window_Mapping() abort
+function! Buf_Window_Mapping() abort  " {{{1
   " To make navigating the location list and quickfiz easier
   " Also check ./unimpaired.vim
   " Sep 05, 2019: This doesnt need to be 2 commands!! cwindow does both!
@@ -40,11 +34,10 @@ function! Buf_Window_Mapping() abort
   noremap <C-k> <Cmd>wincmd k<CR>
   noremap <C-l> <Cmd>wincmd l<CR>
 
-  " Resize them more easily. Finish more later. TODO
-  nnoremap <C-w>< <Cmd>5wincmd < <CR>
-  nnoremap <C-w>> <Cmd>5wincmd > <CR>
-  nnoremap <C-w>+ <Cmd>5wincmd + <CR>
-  nnoremap <C-w>- <Cmd>5wincmd - <CR>
+  nnoremap <C-w>< 5<C-w><
+  nnoremap <C-w>> 5<C-w>>
+  nnoremap <C-w>+ 5<C-w>+
+  nnoremap <C-w>- 5<C-w>-
 endfunction
 
 " Command Line: {{{1

@@ -82,7 +82,7 @@ set splitbelow splitright
 if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif
 set number relativenumber cmdheight=1
 set spelllang=en spellsuggest=5
-
+set isfname-==
 if filereadable(stdpath('config') . '/spell/en.utf-8.add')
   let &spellfile = stdpath('config') . '/spell/en.utf-8.add'
 endif

@@ -9,7 +9,7 @@
 if exists('g:did_netrw_after_ftplugin') || &compatible || v:version < 700
     finish
 endif
-let g:did_netrw_after_ftplugin = 1
+let b:did_netrw_after_ftplugin = 1
 
 let s:cpo_save = &cpoptions
 set cpoptions-=C
@@ -51,6 +51,10 @@ let g:netrw_errorlvl          = 2
 " wth why is this a thing
 unmap <buffer> a
 
+noremap <buffer> ^ <Plug>NetrwBrowseUpDir<Space>
+
 " Atexit: {{{1
+let b:undo_ftplugin = '| unmap <buffer> ^'
+
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

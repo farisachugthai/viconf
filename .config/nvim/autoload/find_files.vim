@@ -119,7 +119,7 @@ endfunction
 function! find_files#ubuntu_remote() abort  " {{{1
 
     let g:python3_host_prog = exepath('python3')
-    let g:python_host_prog = exepath('python')
+    let g:python_host_prog = '/usr/bin/python2'
     let g:node_host_prog = exepath('neovim-node-host')
     let g:ruby_host_prog = exepath('neovim-ruby-host')
 

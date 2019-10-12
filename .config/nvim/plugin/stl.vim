@@ -2,14 +2,14 @@
     " File: stl.vim
     " Author: Faris Chugthai
     " Description: Statusline
-    " Last Modified: August 18, 2019 
+    " Last Modified: August 18, 2019
 " ============================================================================
 
 " Guard: {{{1
 if exists('b:did_stl_vim') || &compatible || v:version < 700
   finish
 endif
-let b:did_stl_vim = 1
+" let b:did_stl_vim = 1
 
 let s:cpo_save = &cpoptions
 set cpoptions-=C
@@ -54,7 +54,8 @@ function! s:statusline_expr() abort
 
   let cog = ' %{exists("b:coc_git_status") ? b:coc_git_status : ""} '
 
-let ale_stl = '%{exists("g:ale_running") ? "[ALE]" : ""}'
+  " shit g:ale_enabled == 0 returns True
+let ale_stl = '%{exists("g:ale_enabled") ? "[ALE]" : ""}'
 
 
   return '[%n] %f ' . dicons . '%m' . '%r' . ' %y '
@@ -69,6 +70,8 @@ let ale_stl = '%{exists("g:ale_running") ? "[ALE]" : ""}'
 endfunction
 
 let &statusline = <SID>statusline_expr()
+
+command! ReloadStatusline call <SID>statusline_expr()
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

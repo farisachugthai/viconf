@@ -6,12 +6,10 @@
 " ============================================================================
 
 " Guards: {{{1
-
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
 " UltiSnips: {{{1
-
 function! plugins#GetAllSnippets() abort  " {{{2
 
   call UltiSnips#SnippetsInCurrentScope(1)
@@ -52,7 +50,6 @@ function! plugins#ExpandSnippetOrCarriageReturn() abort
 endfunction
 
 " Vim Plug: {{{1
-
 function! plugins#InstallPlug() abort  " {{{2
 
   " Unsure of how to capture return code
@@ -66,7 +63,6 @@ function! plugins#InstallPlug() abort  " {{{2
   endfunction
 
 " Startify: {{{1
-
 function! plugins#list_commits() abort  " {{{2
   " note: Don't forget that
   " echo isdirectory('~/projects/viconf')
@@ -111,7 +107,6 @@ endfunction
 
 
 " Fugitive: {{{1
-
 function! plugins#FugitiveMappings() abort   " {{{2
 
   noremap <silent> <Leader>gb   <Cmd>Gblame<CR>
@@ -140,6 +135,5 @@ function! plugins#FugitiveMappings() abort   " {{{2
 endfunction
 
 " Atexit: {{{1
-
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

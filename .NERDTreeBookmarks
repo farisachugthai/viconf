@@ -1,6 +1,4 @@
-config-nvim ~/.config/nvim
-dotfiles ~/projects/dotfiles/unix
 python ~/python
+startup ~/.ipython/profile_default/startup
 tutorials ~/Dropbox/python/tutorials
-utilities ~/projects/utilities
 viconf ~/projects/viconf/.config/nvim

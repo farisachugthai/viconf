@@ -121,11 +121,6 @@ imap <C-x><C-k> <Plug>(fzf-complete-word)
 imap <C-x><C-f> <plug>(fzf-complete-path)
 imap <C-x><C-l> <plug>(fzf-complete-line)
 
-
-if filereadable(expand($_ROOT) . '/share/dict/words')
-  call find_files#fzf_dict()
-endif
-
 if filereadable('/usr/share/dict/words')
   call find_files#fzf_spell()
   call find_files#fzf_maps()
