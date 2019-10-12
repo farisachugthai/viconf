@@ -16,9 +16,20 @@ It should ignore itself if we go sys.argv[1:] right?
 
 """
 import logging
+from pathlib import Path
 import sys
 
 import vim
+
+
+class Target:
+    """Create a class for our target buffer.
+
+    We can just allow other users to change the class attribute
+    as necessary.
+    """
+    _target_file = Path('../spell/en.utf-8.add').resolve()
+    target_file = str(_target_file)
 
 
 def vim_bufnr():
@@ -41,7 +52,7 @@ def vim_api():
     # it worked!
     vim.command("exec 'e ' . stdpath('config') . '/spell/en.utf-8.add'")
     # this doesnt :/
-    vim.command("sort expand('%')")
+    # vim.command("sort expand('%')")
 
 
 def fix_spellfile(wordlist):
@@ -107,7 +118,9 @@ def main():
     """
     args = sys.argv[3:]
     if len(args) < 1:
-        sys.exit('Error. Please provide a path to the file(s) to edit.\n')
+        # don't use sys.exit. Kills the channel between you and the remote host that powers everything.
+        # besides you have to manually assign to sys.argv anyway.
+        args = [Target().target_file]
 
     logging.basicConfig(level=logging.DEBUG)
 

@@ -61,16 +61,16 @@ function! pydoc_help#Pydoc(module) abort
     " I've never tried importing from the pythonx dir before and I don't know
     " how that works but i'd rather that then embedding python directly in a
     " vim file
-    execute 'py3 import pydoc'
-    execute 'py3 pydoc.ttypager(' . a:module . ')'
-
+    " doesn't work
+    " execute 'py3 import pydoc'
+    " execute 'py3 pydoc.ttypager(' . a:module . ')'
+    exec 'r! python3 -m pydoc ' . a:module
 
     " Uhhhhhh let's not do it this way?
     " On neovim, has('python3') == 'g:python3_host_prog'
     " if !has('unix')
     "   exec 'r! python.exe -m pydoc ' . a:module
     " else
-    "   exec 'r! python3 -m pydoc ' . a:module
     " endif
   elseif has('python')  " not sure how to guarantee that python points to py2...
     exec 'r! python -m pydoc ' . a:module

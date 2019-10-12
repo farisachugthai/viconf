@@ -1,9 +1,6 @@
 config-nvim ~/.config/nvim
 dotfiles ~/projects/dotfiles/unix
-gruvbox.vim ~/AppData/Local/nvim/colors/gruvbox.vim
 python ~/python
 tutorials ~/Dropbox/python/tutorials
 utilities ~/projects/utilities
 viconf ~/projects/viconf/.config/nvim
-runtime ~/src/neovim/runtime
-
