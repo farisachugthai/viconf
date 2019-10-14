@@ -59,7 +59,63 @@ let g:ale_set_signs = 1
 let g:ale_sign_column_always = 1
 let g:ale_change_sign_column_color = 1
 
-" Virtualenvs: {{{1
+" Python specific globals: {{{1
+" Probably makes more sense to have these activated regardless of ft
+
+let g:ale_python_pyls_config = {
+      \   'pyls': {
+      \     'plugins': {
+      \       'flake8': {
+      \         'enabled': v:true
+      \       },
+      \ 'jedi_completion': {
+      \   'enabled': v:true
+      \ },
+      \ 'jedi_hover': {
+      \   'enabled': v:true
+      \ },
+      \ 'jedi_references': {
+      \   'enabled': v:true
+      \ },
+      \ 'jedi_signature_help': {
+      \   'enabled': v:true
+      \ },
+      \ 'jedi_symbols': {
+      \   'all_scopes': v:true,
+      \ 'enabled': v:true
+      \ },
+      \ 'mccabe': {
+      \   'enabled': v:true,
+      \   'threshold': 15
+      \ },
+      \ 'preload': {
+      \   'enabled': v:true
+      \ },
+      \ 'pycodestyle': {
+      \   'enabled': v:false
+      \ },
+      \ 'pydocstyle': {
+      \   'enabled': v:true,
+      \   'match': '(?!test_).*\\.py',
+      \   'matchDir': '[^\\.].*'
+      \ },
+      \ 'pyflakes': {
+      \   'enabled': v:true
+      \ },
+      \ 'rope_completion': {
+      \   'enabled': v:true
+      \ },
+      \ 'yapf': {
+      \   'enabled': v:true
+      \ }
+      \     }
+      \   }
+      \ }
+
+let g:ale_python_auto_pipenv = 1
+let g:ale_python_pydocstyle_auto_pipenv = 1
+let g:ale_python_flake8_auto_pipenv = 1
+let g:ale_python_pyls_auto_pipenv = 1
 
 " Checkout ale/autoload/ale/python.vim this is the base definition
 let g:ale_virtualenv_dir_names = [
@@ -80,6 +136,10 @@ if isdirectory(expand('~/miniconda3'))
   let g:ale_virtualenv_dir_names +=  [expand('~/miniconda3')]
 elseif isdirectory('C:/tools/miniconda3')
   let g:ale_virtualenv_dir_names += ['C:/tools/miniconda3']
+endif
+
+if isdirectory(expand('~/.local/share/virtualenvs'))
+  let g:ale_virtualenv_dir_names += [ expand('~/.local/share/virtualenvs') ]
 endif
 
 let g:ale_cache_executable_check_failures = v:true

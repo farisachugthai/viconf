@@ -198,68 +198,9 @@ endfunction
 
 
 function! ftplugins#ALE_Python_Conf() abort  " {{{1
-    let b:ale_linters = ['flake8', 'pydocstyle', 'pyls']
-    let b:ale_linters_explicit = 1
-    let b:ale_python_pyls_config = {
-          \   'pyls': {
-          \     'plugins': {
-          \       'flake8': {
-          \         'enabled': v:true
-          \       },
-          \ 'jedi_completion': {
-          \   'enabled': v:true
-          \ },
-          \ 'jedi_hover': {
-          \   'enabled': v:true
-          \ },
-          \ 'jedi_references': {
-          \   'enabled': v:true
-          \ },
-          \ 'jedi_signature_help': {
-          \   'enabled': v:true
-          \ },
-          \ 'jedi_symbols': {
-          \   'all_scopes': v:true,
-          \ 'enabled': v:true
-          \ },
-          \ 'mccabe': {
-          \   'enabled': v:true,
-          \   'threshold': 15
-          \ },
-          \ 'preload': {
-          \   'enabled': v:true
-          \ },
-          \ 'pycodestyle': {
-          \   'enabled': v:false
-          \ },
-          \ 'pydocstyle': {
-          \   'enabled': v:true,
-          \   'match': '(?!test_).*\\.py',
-          \   'matchDir': '[^\\.].*'
-          \ },
-          \ 'pyflakes': {
-          \   'enabled': v:true
-          \ },
-          \ 'rope_completion': {
-          \   'enabled': v:true
-          \ },
-          \ 'yapf': {
-          \   'enabled': v:true
-          \ }
-          \     }
-          \   }
-          \ }
 
-    let g:ale_virtualenv_dir_names = []
-    if isdirectory(expand('~/virtualenvs'))
-      let g:ale_virtualenv_dir_names += [ expand('~/virtualenvs') ]
-    elseif isdirectory('C:tools/miniconda3')
-      let g:ale_virtualenv_dir_names += [ 'C:/tools/miniconda3' ]
-    endif
-
-    if isdirectory(expand('~/.local/share/virtualenvs'))
-      let g:ale_virtualenv_dir_names += [ expand('~/.local/share/virtualenvs') ]
-    endif
+  let b:ale_linters = ['flake8', 'pydocstyle', 'pyls']
+  let b:ale_linters_explicit = 1
 
   let b:ale_fixers = [
         \ 'remove_trailing_lines',
@@ -275,7 +216,6 @@ function! ftplugins#ALE_Python_Conf() abort  " {{{1
       endif
   endif
 endfunction
-
 
 
 " Atexit: {{{1

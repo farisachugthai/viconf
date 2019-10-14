@@ -68,11 +68,11 @@ set writebackup        " protect against crash-during-write
 set nobackup           " but do not persist backup after successful write
 set backupcopy=auto    " use rename-and-write-new method whenever safe
 " patch required to honor double slash at end consolidate the writebackups -- they usually get deleted
-if has('patch-8.1.0251') | let &backupdir=stdpath('config') . '/undodir//' | end
+if has('patch-8.1.0251') | let &backupdir=stdpath('config') . '/undodir//' | endif
 
-if &tabstop > 4 | set tabstop=4 | endif
-if &shiftwidth > 4  | set shiftwidth=4 | endif
-set expandtab smarttab softtabstop=4
+if &tabstop > 4 | setlocal tabstop=4 | endif
+if &shiftwidth > 4  | setlocal shiftwidth=4 | endif
+setlocal expandtab smarttab softtabstop=4
 set foldenable foldlevelstart=1 foldlevel=1 foldnestmax=10 foldmethod=marker foldcolumn=2
 set signcolumn=auto:2  " this might be a nvim 4 thing
 try | set switchbuf=useopen,usetab,newtab | catch | endtry
@@ -101,7 +101,8 @@ set smartcase infercase
 set completefunc=syntaxcomplete#Complete
 set makeencoding=char         " Used by the makeprg. system locale is used
 set sessionoptions-=buffers,winsize viewoptions-=options sessionoptions+=globals
-set tags+=./tags,./*/tags tagcase=smart showfulltag
+set tags+=./tags,./*/tags
+set tags^=./.git/tags tagcase=smart showfulltag
 set mouse=a modeline
 set autowrite autochdir
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping

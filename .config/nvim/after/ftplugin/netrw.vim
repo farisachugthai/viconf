@@ -2,11 +2,11 @@
     " File: netrw.vim
     " Author: Faris Chugthai
     " Description: Yes netrw is a ftplugin
-    " Last Modified: April 30, 2019
+    " Last Modified: Oct 14, 2019
 " ============================================================================
 
 " Guards: {{{1
-if exists('g:did_netrw_after_ftplugin') || &compatible || v:version < 700
+if exists('b:did_netrw_after_ftplugin') || &compatible || v:version < 700
     finish
 endif
 let b:did_netrw_after_ftplugin = 1
@@ -52,6 +52,12 @@ let g:netrw_errorlvl          = 2
 unmap <buffer> a
 
 noremap <buffer> ^ <Plug>NetrwBrowseUpDir<Space>
+
+" I have no idea why but this line isn't working and its generating an error
+" that netrw buffers aren't modifiable....
+" nnoremap <buffer> <F1>			:he netrw-quickhelp<cr>
+" ....wtf?
+nnoremap <buffer> <F1> <Cmd>help netrw-quickhelp<CR>
 
 " Atexit: {{{1
 let b:undo_ftplugin = '| unmap <buffer> ^'

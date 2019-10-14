@@ -6,10 +6,7 @@
 " ============================================================================
 
 " Guard: {{{1
-
-if !has_key(plugs, 'supertab')
-  finish
-endif
+if !exists('g:loaded_supertab') | finish | endif
 
 if exists('g:did_supertab_after_plugin') || &compatible || v:version < 700
   finish
@@ -21,7 +18,7 @@ set cpoptions-=c
 
 " Culmination Of The Help Docs: {{{1
 
-" Pretty much a copy paste of the last section of the help docs except 
+" Pretty much a copy paste of the last section of the help docs except
 " I added the autocmd to it's own augroup.
 " We may have been premature in deciding that.
 "
@@ -30,7 +27,15 @@ set cpoptions-=c
 " Context Dependent Completion: {{{2
 let g:SuperTabDefaultCompletionType = 'context'
 
-" let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
+" Note: once the buffer has been initialized, changing the value of this setting
+" will not change the default complete type used. If you want to change the
+" default completion type for the current buffer after it has been set, perhaps
+" in an ftplugin, you'll need to call *SuperTabSetDefaultCompletionType* like so,
+" supplying the completion type you wish to switch to:
+
+" Are we allowed to do this?
+call SuperTabSetDefaultCompletionType('coc#refresh()')
+
 let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
 let g:SuperTabContextDiscoverDiscovery =
         \ ["&completefunc:<c-x><c-u>", "&omnifunc:<c-x><c-o>"]

@@ -126,7 +126,7 @@
   ],
   "list.source.actions.defaultOptions": [
     "--normal",
-    "--top",
+    "--top"
   ],
   "list.source.cmdhistory.defaultOptions": [
     "--top",
@@ -342,7 +342,6 @@
     ".venv",
     "~/.local/share/virtualenvs/"
   ],
-  "python.venvPath": "~/.local/share/virtualenvs",
   "refactor.afterContext": 0,
   "refactor.beforeContext": 0,
   "refactor.openCommand": "vsplit",

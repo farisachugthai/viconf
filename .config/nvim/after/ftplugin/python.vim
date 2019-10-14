@@ -36,6 +36,8 @@ setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 setlocal colorcolumn=80,120
 setlocal foldmethod=indent
 
+runtime autoload/pydoc_help.vim
+
 " setlocal keywordprg=pydoc
 let &keywordprg = ':PydocThis' . expand('<cWORD>')
 
@@ -45,8 +47,8 @@ xnoremap K <Cmd>'<,'>PydocThis<CR>
 setlocal suffixesadd+=.py,.rst
 setlocal omnifunc=python3complete#Complete
 setlocal iskeyword+=.
-let &path = ftplugins#PythonPath()
 
+let &path = ftplugins#PythonPath()
 
 " *'shiftround'* *'sr'* *'noshiftround'* *'nosr'*
 " 'shiftround' 'sr'	boolean	(default off) global

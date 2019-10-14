@@ -38,20 +38,16 @@ augroup mantabs
 augroup END
 
 
-" Maopings: {{{1
+" Mappings: {{{1
 
 " Avoid accidental hits of <F1> while aiming for <Esc>
 noremap! <F1> <Esc>
 
-
 " Commands: {{{1
+"
 " Apr 23, 2019: Didn't know complete help was a thing.
 " Oh holy shit that's awesome
 command! -nargs=1 -complete=help Help call pydoc_help#Helptab()
-
-if &filetype ==# 'python'
-  runtime autoload/pydoc_help.vim
-endif
 
 " Atexit: {{{1
 

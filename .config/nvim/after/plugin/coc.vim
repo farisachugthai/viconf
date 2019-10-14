@@ -38,11 +38,11 @@ let g:coc_snippet_prev = '<S-Tab>'
 " Basics: {{{2
 " I mean not the most basic but it expands a snippet, or jumps, or confirms a
 " selection, or refreshes.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? coc#_select_confirm() :
-      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
+" inoremap <silent><expr> <TAB>
+"       \ pumvisible() ? coc#_select_confirm() :
+"       \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      " \ <SID>check_back_space() ? "\<TAB>" :
+      " \ coc#refresh()
 
 function! s:check_back_space() abort
   let col = col('.') - 1
@@ -53,7 +53,8 @@ endfunction
 inoremap <silent><expr> <C-Space> coc#refresh()
 
 " As a heads up theres also a coc#select#snippet
-inoremap <expr> <CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+" I think supertab does the <CR> thing for us
+" inoremap <expr> <CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 inoremap <buffer> gK <Plug>(coc-definition)
 
