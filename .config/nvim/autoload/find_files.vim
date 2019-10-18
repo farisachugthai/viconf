@@ -81,14 +81,15 @@ function! find_files#FZFGit() abort  " {{{1
     if !v:shell_error
         lcd `=directory`
         call fzf#run(fzf#wrap({
-            \ 'sink'  : 'edit',
             \ 'dir'   : directory,
             \ 'source': 'git ls-files',
-            \ 'down'  : '40%'
-            \ }, <bang>0))
+            \ 'sink'  : 'e',
+            \ 'window': '50vnew'}))
     else
         FZF
     endif
+    " 'source': 'git ls-files',
+    " 'down'  : '40%'
 endfunction
 
 function! s:make_sentence(lines) abort  " {{{1

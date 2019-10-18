@@ -18,6 +18,40 @@ let g:colors_name = 'gruvbox-material'
 let s:t_Co = exists('&t_Co') && !empty(&t_Co) && &t_Co > 1 ? &t_Co : 2
 let s:italics = (((&t_ZH != '' && &t_ZH != '[7m') || has('gui_running')) && !has('iOS')) || has('nvim')
 
+" Additions: {{{
+hi link manEmail Directory
+hi link manHeaderFile Statement
+" hi link manHighlight
+hi link VisualNC Visual
+
+if has('nvim')
+	" How does a nice light blue sound?
+	hi! NvimInternalError guibg=NONE ctermfg=108 ctermbg=234 gui=reverse guifg=#8ec0e1 guisp=NONE
+	hi link nvimAutoEvent	vimAutoEvent
+	hi link nvimHLGroup	vimHLGroup
+  hi link NvimIdentifierKey IdentifierBold
+	hi link nvimInvalid Exception
+	hi link nvimMap	vimMap
+	hi link nvimUnmap	vimUnmap
+
+	hi link TermCursor Cursor
+	hi TermCursorNC ctermfg=237 ctermbg=223 guifg=#3c3836 guibg=#ebdbb2 guisp=NONE cterm=NONE gui=NONE
+
+	" *hl-NormalFloat* NormalFloat	Normal text in floating windows.
+	hi NormalFloat ctermfg=223 ctermbg=234 guifg=#ebdbb2 guibg=#1d2021 guisp=NONE gui=undercurl cterm=undercurl
+
+	" *hl-IncSearch*
+	" IncSearch	'incsearch' highlighting; also used for the text replaced with ':s///c'
+	hi IncSearch cterm=reverse ctermfg=208 ctermbg=234 gui=reverse guifg=#fe8019 guibg=#1d2021 guisp=NONE
+
+	" From he nvim-terminal-emulator
+	hi debugPC term=reverse ctermbg=darkblue guibg=darkblue
+	hi debugBreakpoint term=reverse ctermbg=red guibg=red
+endif
+
+" }}}
+
+" Original: {{{
 hi! link markdownH5 Yellow
 hi! link markdownH6 Yellow
 hi! link markdownCode Green

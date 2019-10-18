@@ -46,10 +46,15 @@ let g:netrw_sizestyle = 'h'
 " Only display errors as messages
 let g:netrw_errorlvl          = 2
 
+setlocal statusline=%f\ %{WebDevIconsGetFileTypeSymbol()}\ %h%w%m%r\ %=%(%l,%c%V\ %Y\ %=\ %P%)
+
+" From the help
+let g:netrw_bufsettings='noma nomod nobl nowrap ro rnu'
+
 " Mappings: {{{1
 "
 " wth why is this a thing
-unmap <buffer> a
+unmap! <buffer> a
 
 noremap <buffer> ^ <Plug>NetrwBrowseUpDir<Space>
 
@@ -61,6 +66,7 @@ nnoremap <buffer> <F1> <Cmd>help netrw-quickhelp<CR>
 
 " Atexit: {{{1
 let b:undo_ftplugin = '| unmap <buffer> ^'
+let b:undo_ftplugin .= 'set stl< '
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

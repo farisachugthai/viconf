@@ -570,8 +570,8 @@ hi NonText guifg=#d5c4a1 guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermfg=239 c
 " call s:HL('Visual',    s:none,  s:bg3, s:invert_selection)
 hi Visual cterm=reverse gui=reverse guisp=NONE ctermbg=241 ctermfg=NONE guibg=#665c54 guifg=NONE
 
-hi default link VisualNOS Visual
-hi default link VisualNC Visual
+hi link VisualNOS Visual
+hi link VisualNC Visual
 
 " call s:HL('Search',    s:yellow, s:bg0, s:inverse)
 hi Search cterm=reverse ctermfg=214 ctermbg=234 gui=reverse guifg=#fabd2f guibg=#1d2021 guisp=NONE

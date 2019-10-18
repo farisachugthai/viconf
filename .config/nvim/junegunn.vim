@@ -30,10 +30,11 @@ Plug 'junegunn/fzf', { 'dir': expand('~/.fzf'), 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdTree', { 'on': ['NERDTreeToggle', 'NERDTreeVCS'] }
 
-Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-vinegar'
 
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }  " Follow spacemacs lead and use e for errors
@@ -60,12 +61,10 @@ endif
 if empty(s:termux)
   " Plug 'chrisbra/csv.vim', {'for': 'csv'}
   Plug 'greyblake/vim-preview', {'on': 'Preview'}
-  Plug 'mitsuhiko/vim-jinja'
 
   " needed if for nothing else but the ftdetect
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
-  Plug 'itspriddle/vim-shellcheck', { 'for': ['sh', 'bash'] }
 endif
 
 " I feel like the lazy loaded ones can come out here
@@ -74,6 +73,8 @@ nnoremap U :UndotreeToggle<CR>
 
 " The 'tabular' plugin must come _before_ 'vim-markdown'.
 Plug 'godlygeek/tabular'
+Plug 'itspriddle/vim-shellcheck', { 'for': ['sh', 'bash'] }
+  Plug 'mitsuhiko/vim-jinja'
 Plug 'ervandew/supertab'
 Plug 'junegunn/vim-peekaboo'
 Plug 'vim-voom/voom'

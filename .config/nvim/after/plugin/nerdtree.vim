@@ -42,6 +42,7 @@ let g:NERDTreeRespectWildIgnore = 1
 let g:NERDTreeHijackNetrw = 0
 
 " Options Observed in src: {{{1
+" That nerdtree.root.path.str() is too long to see on Termux tho
 let s:stl = &statusline
 
 let g:NERDTreeStatusline = "%{exists('b:NERDTree') ? b:NERDTree.root.path.str() : s:stl }"

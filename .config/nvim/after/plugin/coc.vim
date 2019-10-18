@@ -135,7 +135,14 @@ nnoremap <silent> <C-c><C-c>  <Cmd>CocList commands<CR>
 nnoremap <silent> <C-c><C-o>  <Cmd>CocList outline<CR>
 " Search workspace symbols
 nnoremap <silent> <C-c><C-s>  <Cmd>CocList -I symbols<CR>
+
+" Amazingly leader j k and p aren't taken. From the readme
+nnoremap <silent> <Leader>j  :<C-u>CocNext<CR>
+nnoremap <silent> <Leader>k  :<C-u>CocPrev<CR>
+nnoremap <silent> <Leader>p  :<C-u>CocListResume<CR>
+
 " Do default action for next item.
+nnoremap <silent> <C-c>j      <Cmd>CocNext<CR>
 nnoremap <silent> <C-c>j      <Cmd>CocNext<CR>
 " Do default action for previous item.
 nnoremap <silent> <C-c>k      <Cmd>CocPrev<CR>

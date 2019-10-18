@@ -345,7 +345,7 @@
   "refactor.afterContext": 0,
   "refactor.beforeContext": 0,
   "refactor.openCommand": "vsplit",
-  "session.directory": "~/.config/nvim/session",
+  "session.directory": "~/.local/share/nvim/session",
   "session.restartOnSessionLoad": true,
   "signature.hideOnTextChange": true,
   "signature.preferShownAbove": false,

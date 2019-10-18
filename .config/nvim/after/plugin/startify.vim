@@ -74,7 +74,7 @@ let g:startify_session_sort = 1
 " Configured correctly this could be a phenomenal way to store commands and
 " expressions on a per directory basis aka projects / workspaces!
 let g:startify_session_autoload = 1
-let g:startify_session_sort = 1
+" let g:startify_session_sort = 1
 
 " Atexit: {{{1
 let &cpoptions = s:cpo_save

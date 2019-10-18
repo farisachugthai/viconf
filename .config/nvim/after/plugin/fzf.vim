@@ -6,8 +6,6 @@
 " ============================================================================
 
 " Guards: {{{1
-if !has_key(plugs, 'fzf.vim') | finish | endif
-
 if empty('g:loaded_fzf') | finish | endif
 
 if exists('g:did_fzf_after_plugin') || &compatible || v:version < 700
@@ -28,6 +26,7 @@ let g:fzf_command_prefix = 'FZF'
 " TODO: Wait how do we use it tho
 " let g:fzf_nvim_statusline =
 
+" Builtins:  {{{2
 
 let g:fzf_action = {
   \ 'ctrl-q': function('find_files#build_quickfix_list'),
@@ -40,6 +39,7 @@ let g:fzf_history_dir = stdpath('data') . '/fzf-history'
 
 let g:fzf_layout = { 'window': 'split' }
 
+" Standardized vars: {{{2
 let s:ag_command = 'ag --smart-case -u -g " " --'
 
 let s:rg = 'rg --hidden --max-columns=300 --max-depth=8 --max-count=50 --color=ansi --no-column --no-line-number  --no-heading --auto-hybrid-regex --max-columns-preview --no-messages --smart-case '
@@ -58,6 +58,7 @@ let s:fzf_options = [
       \   '--border', '--cycle'
       \ ]
 
+" Fzf.vim: {{{2
 
 " [[B]Commits] Customize the options used by 'git log':
 let g:fzf_commits_log_options = ' --graph'
@@ -75,7 +76,7 @@ let g:fzf_tags_command = 'ctags -R --options='
 " [Commands] --expect expression for directly executing the command
 let g:fzf_commands_expect = 'alt-enter,ctrl-x'
 
-" FZF Colors: {{{1
+" FZF Colors: {{{2
 
 let g:fzf_colors =  {
       \  'fg':      ['fg', '#fbf1c7'],
@@ -97,7 +98,10 @@ hi! fzf1 ctermfg=161 ctermbg=238 guifg=#E12672 guibg=#565656 cterm=bold,underlin
 hi! fzf2 ctermfg=151 ctermbg=238 guifg=#BCDDBD guibg=#565656 cterm=bold,underline
 hi! fzf3 ctermfg=252 ctermbg=238 guifg=#D9D9D9 guibg=#565656 cterm=bold,underline
 
-" FZF Complete: {{{1
+" Mappings: {{{1
+
+" FZF Complete: {{{2
+
 " Yo check out the source code for this
 " if s:is_win
 "   inoremap <expr> <plug>(fzf-complete-path)      fzf#vim#complete#path('dir /s/b')
@@ -117,11 +121,11 @@ else
   imap <C-x><C-f> <plug>(fzf-complete-path)
 endif
 
-imap <C-x><C-k> <Plug>(fzf-complete-word)
-imap <C-x><C-f> <plug>(fzf-complete-path)
-imap <C-x><C-l> <plug>(fzf-complete-line)
+" imap <C-x><C-k> <Plug>(fzf-complete-word)
+" imap <C-x><C-f> <plug>(fzf-complete-path)
+" imap <C-x><C-l> <plug>(fzf-complete-line)
 
-if filereadable('/usr/share/dict/words')
+if filereadable(expand('$_ROOT/share/dict/words'))
   call find_files#fzf_spell()
   call find_files#fzf_maps()
   " Advanced customization using autoload functions
@@ -130,7 +134,8 @@ if filereadable('/usr/share/dict/words')
   inoremap <expr> <C-x><C-k>         fzf#vim#complete#word({'left': '45%'})
 endif
 
-" Maps: {{{1
+" Remappable: {{{2
+
 " Mapping for selecting different mappings.
 " Could add one for insert mode but leader tab is gonna happen so often that we need to use
 " something else. Or we could just use \<tab>....hm.
@@ -139,6 +144,8 @@ nmap <Leader><tab>                 <Plug>(fzf-maps-n)
 omap <Leader><tab>                 <Plug>(fzf-maps-o)
 xmap <Leader><tab>                 <Plug>(fzf-maps-x)
 imap <Leader><tab>                 <Plug>(fzf-maps-i)
+
+" Ag and History: {{{2
 
 " Map vim defaults to fzf history commands
 noremap <silent> q:                <Cmd>History:<CR>
@@ -180,6 +187,7 @@ tnoremap <C-t>                    <Cmd>FZF! <CR>
 
 " Commands: {{{1
 
+" Grep Signature: {{{2
 " here's the call signature for fzf#vim#grep
 " - fzf#vim#grep(command, with_column, [options], [fullscreen])
 "   If you're interested it would be kinda neat to modify that `dir` line
@@ -269,14 +277,17 @@ command! -bang FZColors
   \ call fzf#vim#colors({'left': '35%',
   \ 'options': '--reverse --margin 30%,0'}, <bang>0)
 
-" FBuf: {{{2
+" FZBuffers: {{{2
+
 " Dude he not only wrote this command, he put 4 different versions in the
 " docs like jesus christ
-command! -bang FZBuffers call fzf#run(fzf#wrap('buffers',
+"
+command! -complete=buffer -bang FZBuf call fzf#run(fzf#wrap('buffers',
     \ {'source': map(range(1, bufnr('$')), 'bufname(v:val)')}, <bang>0))
 
-
-" Use Of s:fzf_options: {{{2
+" Use Of s:fzf_options: {{{3
+"
+" As  of Oct 15, 2019: this works
 command! -bang -complete=buffer -bar FZBuffers call fzf#run(fzf#wrap({
         \ 'source':  reverse(find_files#buflist()),
         \ 'sink':    function('find_files#bufopen'),
@@ -288,7 +299,9 @@ command! -bang -complete=buffer -bar FZBuffers call fzf#run(fzf#wrap({
 command! -bang -bar FZMru call find_files#FZFMru()
 
 " FZGit: {{{2
-command! -bang -bar FZGit call find_files#FZFGit()
+
+" Oct 15, 2019: Works!
+command! -complete=file FZGit call find_files#FZFGit()
 
   " TODO: The above command should use the fzf funcs 
   " and also use this
