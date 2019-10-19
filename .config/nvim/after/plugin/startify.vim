@@ -15,6 +15,9 @@ if exists('g:did_startify_after_plugin') || &compatible || v:version < 700
 endif
 let g:did_startify_after_plugin = 1
 
+" Temporarily turn this off
+finish
+
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 

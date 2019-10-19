@@ -15,27 +15,52 @@ let s:cpo_save = &cpoptions
 set cpoptions-=C
 
 " Options: {{{1
+
+" Globals: {{{2
+" Things that should get defined everywhere anyways so define them first.
+
+let g:rst_style = 1
+
+" See Also:
+" RESTRUCTURED TEXT			*rst.vim* *ft-rst-syntax*
+" he rst.vim or ft-rst-syntax or syntax 2600.
+
+" Admonition:
+" Don't put bash instead of sh.
+" $VIMRUNTIME/syntax/rst.vim iterates over this var and if it can't find a
+" bash.vim syntax file it will crash.
+
+" May 13, 2019: Updated. Grabbed this directly from $VIMRUNTIME/syntax/rst.vim
+"
+" Use fewer code lists it ends up accounting for 50% of startuptime when
+" using rst docs
+let g:rst_syntax_code_list = {
+    \ 'python': ['python', 'python3', 'ipython'],
+    \ 'sh': ['sh', 'bash'],
+    \ }
+
+let g:rst_use_emphasis_colors = 1
+
+let g:rst_fold_enabled = 1
+
+" Rst specific
 setlocal expandtab
 
 setlocal colorcolumn=80
 setlocal linebreak
-setlocal foldlevel=2
-setlocal foldlevelstart=2
+setlocal foldlevel=0
+setlocal foldlevelstart=0
 setlocal iskeyword+=.
 
-if exists(':PydocThis')
-  setlocal keywordprg=:PydocThis
-else
+" Doesn't work
+" if exists(':PydocThis')
+"   setlocal keywordprg=:PydocThis
+" else
   setlocal keywordprg=!pydoc
-endif
+" endif
 
-augroup RstCompiler
-    au! Filetype rst
-    autocmd Filetype rst 
-                \ if executable('sphinx-build') |
-                \ let &makeprg = 'sphinx-build -b html ' |
-                \ endif 
-augroup END
+" don't do the executable(sphinx-build) check here its in ../compiler/rst.vim
+compiler rst
 
 command! -buffer Sphinx call pydoc_help#sphinx_build(<q-args>)
 
@@ -58,33 +83,11 @@ if has('patch-7.3.867')  " Introduced the TextChanged event.
   setlocal foldmethod=expr
   setlocal foldexpr=RstFold#GetRstFold()
   setlocal foldtext=RstFold#GetRstFoldText()
-  augroup RstFold
-    autocmd TextChanged,InsertLeave <buffer> unlet! b:RstFoldCache
-  augroup END
+  " augroup RstFold
+  "   autocmd TextChanged,InsertLeave <buffer> unlet! b:RstFoldCache
+  " augroup END
 endif
 
-" Syntax Highlighting: {{{1
-" See Also:
-" RESTRUCTURED TEXT			*rst.vim* *ft-rst-syntax*
-" he rst.vim or ft-rst-syntax or syntax 2600.
-
-" Admonition:
-" Don't put bash instead of sh.
-" $VIMRUNTIME/syntax/rst.vim iterates over this var and if it can't find a
-" bash.vim syntax file it will crash.
-
-" May 13, 2019: Updated. Grabbed this directly from $VIMRUNTIME/syntax/rst.vim
-"
-" Use fewer code lists it ends up accounting for 50% of startuptime when
-" using rst docs
-let g:rst_syntax_code_list = {
-    \ 'python': ['python', 'python3', 'ipython'],
-    \ 'sh': ['sh', 'bash'],
-    \ }
-
-let g:rst_use_emphasis_colors = 1
-
-let g:rst_fold_enabled = 1
 
 " Atexit: {{{1
 let b:undo_ftplugin = 'set et< ts< sw< sts< cms< com< cc< lbr< fdl< fdls< spell< isk< kp<'

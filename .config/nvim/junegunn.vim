@@ -59,7 +59,7 @@ endif
 " It's very frustrating having termux slow down beyond repair but also frustrating
 " not being able to use more than 15 plugins at any point in time
 if empty(s:termux)
-  " Plug 'chrisbra/csv.vim', {'for': 'csv'}
+  Plug 'chrisbra/csv.vim', {'for': ['csv', 'tsv']}
   Plug 'greyblake/vim-preview', {'on': 'Preview'}
 
   " needed if for nothing else but the ftdetect

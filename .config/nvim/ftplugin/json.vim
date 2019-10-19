@@ -42,16 +42,25 @@ if &filetype!=#'json'
   finish
 endif
 
-if has_key(plugs, 'ale')
+" JSON is the only filetype where i always want ALE enabled
+if empty('g:loaded_ale')
+  if exists('*plug#load')
+    call plug#load('ale')
+    echomsg 'ftplugin/json: Calling plug#load(ale)'
+  endif
+endif
+
+" Still check if that worked though
+if !empty('g:loaded_ale')
+  if exists('*ale#toggle#Enable')
+    call ale#toggle#Enable()
+  else
+    echoerr 'Vim-plug loaded ale but ale#toggle#Enable still didnt work'
+  endif
   " Load my configs
   call ftplugins#ALE_JSON_Conf()
 else
-  " JSON is the only filetype where i always want ALE enabled
-  let b:ale_enabled = 1
-  " And i seriously doubt this is a very smart way of doing this but whatever
-  call plug#load('ale')
-  call ale#toggle#EnableBuffer('%')
-  call ftplugins#ALE_JSON_Conf()
+  echoerr 'ftplugin/json: Vim-Plug did not load ale'
 endif
 
 " Commands: {{{1

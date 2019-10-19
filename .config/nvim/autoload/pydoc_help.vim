@@ -1,8 +1,8 @@
 " ============================================================================
-  " File: man.vim
+  " File: pydoc_help
   " Author: Faris Chugthai
   " Description: Autoloaded functions for working with help buffers
-  " Last Modified: July 23, 2019
+  " Last Modified: Oct 20, 2019
 " ============================================================================
 
 " Guards: {{{1
@@ -147,29 +147,8 @@ function! pydoc_help#the_curse_of_nvims_floating_wins() abort  " {{{1 No serious
   call nvim_win_set_option(s:win_handle, 'winhl', 'Special')
 endfunction
 
-if has('python') || has('python3')  " {{{ Define commands
-
-  command! -nargs=0 -range PydocThis call pydoc_help#PydocCword()
-
-  " This should be able to take the argument '-bang' and allow to open in a new
-  " separate window like fzf does.
-  command! -nargs=0 PydocSplit call pydoc_help#SplitPydocCword()
-
-  command! -nargs=? Pydoc call pydoc_help#Pydoc(<f-args>)
-
-  " i just messed that function up pretty bad
-  " command! -nargs=1 PydocMod call pydoc_help#ShowPyDoc('<args>', 1)
-
-  " command! -nargs=* PydocModSearch call pydoc_help#ShowPyDoc('<args>', 0)
-
-  cabbrev pyd Pydoc
-
-  cabbrev pyds PydocSearch
-
-endif  " }}}
-
-" Args: name: lookup; type: 0: search, 1: lookup
 function! pydoc_help#ShowPyDoc(name, type) abort  " {{{1
+  " Args: name: lookup; type: 0: search, 1: lookup
     if a:name == ''
         return
     endif

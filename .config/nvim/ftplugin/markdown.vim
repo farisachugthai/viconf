@@ -41,7 +41,7 @@ setlocal linebreak
 " Fix tabs so that we can have ordered lists render properly
 setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
 
-setlocal foldlevel=1 foldlevelstart=1
+setlocal foldlevel=0 foldlevelstart=0
 
 " TPope's markdown plugin. Light enough footprint when settings vars to not
 " need a check
@@ -52,6 +52,14 @@ let g:markdown_fenced_languages = [
 
 let g:markdown_minlines = 100
 
+let g:markdown_folding = 1
+
+if has("folding") && exists("g:markdown_folding")
+  setlocal foldexpr=format#MarkdownFoldText()
+  setlocal foldmethod=expr
+  let b:undo_ftplugin .= " foldexpr< foldmethod<"
+endif
+
 " Mappings: {{{1
 
 noremap <buffer> <localleader>1 m`yypVr=``
@@ -61,6 +69,16 @@ noremap <buffer> <localleader>4 m`^i#### <esc>``5l
 noremap <buffer> <localleader>5 m`^i##### <esc>``6l
 
 " Plugins: {{{1
+
+" So Vim-markdown doesn't have a  plugin/* dir. So we don't have a
+" g:loaded_vim_markdown var to check. We have to assume vim-plug being used.
+
+" Don't freak out a bare nvim config though.
+
+if !exists('plugs')
+  finish
+endif
+
 if has_key(plugs, 'vim-markdown')
   let g:vim_markdown_folding_style_pythonic = 1
 
@@ -83,18 +101,20 @@ if has_key(plugs, 'vim-markdown')
   let g:vim_markdown_json_frontmatter = 1
 
   let g:vim_markdown_strikethrough = 1
+
+  " Oct 16, 2019: Dude we gotta disable his autocmds he has them listed on ALL
+  " bufenters, winenters, bufleaves, InsertLeave, InsertEnters like wtf do you
+  " need to refresh the syntax for in EVERY BUFFER????
+  " And in case you were wondering yes:
+  " exists('#autocmd group') is the syntax used here.
+  if exists('#Mkd')
+    au! Mkd
+  endif
+
 endif
 
 " Atexit: {{{1
 
 let b:undo_ftplugin .= 'setl spell< cc< tw< lbr< et< ts< sts< sw< fdl< fdls<'
-let g:markdown_folding = 1
-
-if has("folding") && exists("g:markdown_folding")
-  setlocal foldexpr=format#MarkdownFoldText()
-  setlocal foldmethod=expr
-  let b:undo_ftplugin .= " foldexpr< foldmethod<"
-endif
-
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

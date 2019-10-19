@@ -1,8 +1,8 @@
 " ============================================================================
-  " File: windows.vim
+  " File: buffers.vim
   " Author: Faris Chugthai
   " Description: Plugin with functions and commands for vim windows
-  " Last Modified: Jul 19, 2019
+  " Last Modified: Oct 20, 2019
 " ============================================================================
 
 " Guard:
@@ -22,10 +22,13 @@ nnoremap <Leader>rt call buffers#EchoRTP()
 command! -nargs=0 EchoRTP echo buffers#EchoRTP()
 
 function! Buf_Window_Mapping() abort  " {{{1
-  " To make navigating the location list and quickfiz easier
+  " To make navigating the location list and quickfix easier
   " Also check ./unimpaired.vim
   " Sep 05, 2019: This doesnt need to be 2 commands!! cwindow does both!
-  noremap <leader>c <Cmd>cwindow<CR><bar><Cmd>lwindow<CR>
+  " Oct 18, 2019: I just ran into llist and lwindow showing different things
+  " and lwindow didn't show the location list i had the at the time so
+  " switching again
+  noremap <Leader>c <Cmd>clist!<CR><bar><Cmd>llist!<CR>
   " noremap <leader>q <Cmd>copen<CR><bar><Cmd>lopen<CR>
 
   " Navigate windows more easily
@@ -48,7 +51,8 @@ cnoremap <C-g> <Esc>
 
 " From he cedit. Open the command window with F1 because it being bound to
 " help is SO annoying.
-execute 'set cedit=<F1>'
+" This doesn't work though.
+" execute 'set cedit=<F1>'
 
 " In the same line of thinking:
 " Avoid accidental hits of <F1> while aiming for <Esc>
@@ -85,7 +89,11 @@ endfunction
 
 " Navigate Tabs More Easily: {{{1
 
-function! TabMaps() abort
+function! NvimTabMaps() abort
+  if !exists('*nvim_list_tabpages')  " we might be in vim
+    return
+  endif
+
   " First check we have more than 1 tho.
   if len(nvim_list_tabpages()) > 1
       noremap  <A-Right>  <Cmd>tabnext<CR>
@@ -98,6 +106,10 @@ function! TabMaps() abort
       noremap! <A-Right>  <Cmd>wincmd l<CR>
       noremap! <A-Left>   <Cmd>wincmd h<CR>
   endif
+
+endfunction
+
+function TabMaps() abort
 
   nnoremap <Leader>tn <Cmd>tabnext<CR>
   nnoremap <Leader>tp <Cmd>tabprev<CR>
@@ -128,7 +140,13 @@ function! SpaceWindows()
   " Split and edit file under the cursor
   noremap <Leader>wf <Cmd>wincmd f<CR>
   " Split and open the word under the cursor as a tag
-  noremap <Leader>w] <Cmd>wincmd ]<CR>
+  " noremap <Leader>w] <Cmd>wincmd ]<CR>
+
+  " Thank you index.txt! From:
+  " 2.2 Window commands						*CTRL-W*
+  " |CTRL-W_g_CTRL-]| CTRL-W g CTRL-]  split window and do |:tjump| to tag
+  " under cursor
+  noremap <Leader>w] <C-w>g<C-]>
   noremap <Leader>wc <Cmd>wincmd c<CR>
   noremap <Leader>wo <Cmd>wincmd o<CR>
 endfunction
@@ -161,6 +179,7 @@ if !exists('no_plugin_maps') && !exists('no_windows_vim_maps')
   call Buf_Window_Mapping()
   call Alt_Key_Navigation()
   call SpaceBuffers()
+  call NvimTabMaps()
   call TabMaps()
   call UnImpairedWindows()
   call SpaceWindows()

@@ -34,7 +34,7 @@ if !empty($TERM) | unlet $TERM | endif
 
 " So this HAS to be a bad idea; however, all 3 DirChanged autocommands emit
 " errors and that's a little insane
-set eventignore=DirChanged
+" set eventignore=DirChanged
 
 function! msdos#Cmd() abort  " {{{1
 

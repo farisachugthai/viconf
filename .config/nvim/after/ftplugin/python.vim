@@ -2,7 +2,7 @@
     " File: python.vim
     " Author: Faris Chugthai
     " Description: python ftplugin
-    " Last Modified: Jun 13, 2019
+    " Last Modified: Oct 18, 2019
 " ============================================================================
 
 " Guards: {{{1
@@ -15,6 +15,7 @@ let s:cpo_save = &cpoptions
 set cpoptions-=C
 
 " Options: {{{1
+
 " Globals
 let g:python_highlight_all = 1
 let g:python_space_error_highlight = 1
@@ -36,13 +37,13 @@ setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 setlocal colorcolumn=80,120
 setlocal foldmethod=indent
 
-runtime autoload/pydoc_help.vim
+" runtime autoload/pydoc_help.vim
 
 " setlocal keywordprg=pydoc
 let &keywordprg = ':PydocThis' . expand('<cWORD>')
 
 " Use xnoremap because I wouldn't want this in select mode
-xnoremap K <Cmd>'<,'>PydocThis<CR>
+" xnoremap K <Cmd>'<,'>PydocThis<CR>
 
 setlocal suffixesadd+=.py,.rst
 setlocal omnifunc=python3complete#Complete
@@ -99,14 +100,14 @@ endif
 
 " ALE: {{{1
 
-if has_key(plugs, 'ale')
+if !empty('g:loaded_ale')
   call ftplugins#ALE_Python_Conf()
 endif
 
 " Coc: {{{1
 "
 " Just tried this and it worked! So keep checking :CocCommand output
-if !empty(g:did_coc_loaded)
+if !empty('g:did_coc_loaded')
   command! -nargs=? CocPython call CocActionAsync('runCommand', 'python.startREPL', shellescape(<q-args>))|
 endif
 

@@ -572,6 +572,8 @@ hi! link ALEVirtualTextWarning Grey
 hi! link ALEVirtualTextInfo Grey
 hi! link ALEVirtualTextStyleError ALEVirtualTextError
 hi! link ALEVirtualTextStyleWarning ALEVirtualTextWarning
+
+" Coc: {{{1
 hi! link CocErrorSign ALEErrorSign
 hi! link CocWarningSign ALEWarningSign
 hi! link CocInfoSign ALEInfoSign
@@ -603,6 +605,11 @@ hi! link CocExplorerFileSize Blue
 hi! link CocExplorerTimeAccessed Aqua
 hi! link CocExplorerTimeCreated Aqua
 hi! link CocExplorerTimeModified Aqua
+
+" Which element do you have selected
+hi link CocListsLine Visual
+" }}}
+
 hi! link QuickmenuOption Green
 hi! link QuickmenuNumber Red
 hi! link QuickmenuBracket Grey

@@ -73,15 +73,22 @@ if has('patch-8.1.0251') | let &backupdir=stdpath('config') . '/undodir//' | end
 if &tabstop > 4 | setlocal tabstop=4 | endif
 if &shiftwidth > 4  | setlocal shiftwidth=4 | endif
 setlocal expandtab smarttab softtabstop=4
-set foldenable foldlevelstart=1 foldlevel=1 foldnestmax=10 foldmethod=marker foldcolumn=2
+
+set foldenable foldlevelstart=1 foldlevel=1
+set foldnestmax=10 foldmethod=marker foldcolumn=2
+set foldopen=quickfix,search,tag,undo
 set signcolumn=auto:2  " this might be a nvim 4 thing
+
 try | set switchbuf=useopen,usetab,newtab | catch | endtry
-set hidden foldopen=quickfix,search,tag,undo
+
+set hidden
 set splitbelow splitright sidescroll=5
-set splitbelow splitright
+
 if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif
+
 set number relativenumber cmdheight=1
-set spelllang=en spellsuggest=5
+
+
 set isfname-==
 if filereadable(stdpath('config') . '/spell/en.utf-8.add')
   let &spellfile = stdpath('config') . '/spell/en.utf-8.add'
@@ -89,30 +96,43 @@ endif
 
 set wildignorecase wildmode=full:list:longest,full:list
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
-set complete+=kspell
+
+" C-n and C-p now use the same input that every other C-x does combined!
+set complete+=kspell,i,d,k complete-=u
+
 " Create a preview window and display all possibilities but don't insert
 " dude what am i doing wrong that i don't get the cool autocompletion that NORC gets??
 set completeopt=menu,menuone,noselect,noinsert,preview
 " don't show more than 15 choices in the popup menu. defaults to 0
 set pumheight=15
+
+set completefunc=syntaxcomplete#Complete
+
 " both smartcase and infercase require ignorecase to be set
 set ignorecase
 set smartcase infercase
-set completefunc=syntaxcomplete#Complete
+
 set makeencoding=char         " Used by the makeprg. system locale is used
 set sessionoptions-=buffers,winsize viewoptions-=options sessionoptions+=globals
+
 set tags+=./tags,./*/tags
 set tags^=./.git/tags tagcase=smart showfulltag
-set mouse=a modeline
+
+set mouse=a
 set autowrite autochdir
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set nojoinspaces
-" Filler lines to keep text synced, 3 lines of context on diffs, don't diff hidden files,default foldcolumn is 2
+
+" Filler lines to keep text synced, 3 lines of context on diffs,
+" don't diff hidden files,default foldcolumn is 2
 set diffopt=filler,context:0,hiddenoff,foldcolumn:2,icase,iwhite,indent-heuristic
 if has('patch-8.1.0360') | set diffopt+=internal,algorithm:patience | endif
 
+set modeline
 if exists('&modelineexpr') | set modelineexpr | endif
+
 set browsedir="buffer"   " which directory is used for the file browser
+
 let &g:listchars = "tab:\u21e5\u00b7,extends:\u21c9,precedes:\u21c7,nbsp:\u00b7"  " trail:\u2423 doesn't work with hack as font
 let &g:fillchars = "vert:\u250b,fold:\u00b7"
 set breakindent breakindentopt=sbr
@@ -123,10 +143,11 @@ set terse shortmess=aoOsAItTWAcF
 set title titlestring=%<%F%=%l/%L-%P   " leaves a cool title for tmux
 set conceallevel=2 concealcursor=nc    " enable concealing
 
-" Mappings: {{{1
 noremap q; q:
 noremap Q @q
 vnoremap <BS> d
+
+set spelllang=en spellsuggest=5
 noremap <Leader>sp <Cmd>setlocal spell!<CR>
 
 noremap <Leader>o o<Esc>

@@ -47,8 +47,10 @@ let g:tagbar_autopreview = 0
 
 if !has('unix')
   " let g:tagbar_autopreview = 1
-  if filereadable('C:/tools/miniconda3/envs/neovim/Library/bin/ctags.exe')
-    let g:tagbar_ctags_bin = 'C:/tools/miniconda3/envs/neovim/Library/bin/ctags.exe'
+  if filereadable(expand('$HOME/bin/ctags.exe'))
+    let g:tagbar_ctags_bin = expand('$HOME/bin/ctags.exe')
+  elseif executable(exepath('ctags'))
+      let g:tagbar_ctags_bin = exepath('ctags')
   endif
 
   " Icon Chars
@@ -137,15 +139,19 @@ let g:tagbar_type_ps1 = {
     \ ]
 \ }
 
+
+    " \ 'ctagsargs' : ['-f', 'tags', '--encoding="utf-8"',
+    "                \ '--sort=yes', '--sro="»"'],
+
 let g:tagbar_type_rst = {
     \ 'ctagstype': 'rst',
     \ 'ctagsbin' : expand('$HOME/src/rst2ctags/rst2ctags.py'),
-    \ 'ctagsargs' : '-f - --sort=yes',
+        \ 'ctagsargs' : '-f - --sort=yes --sro=»',
     \ 'kinds' : [
     \ 's:sections',
     \ 'i:images'
     \ ],
-    \ 'sro' : '|',
+    \ 'sro' : '»',
     \ 'kind2scope' : {
     \ 's' : 'section',
     \ },

@@ -70,7 +70,8 @@ let g:vimsyn_folding = 'afP'
 
 " ALE: {{{1
 
-if has_key(plugs, 'ale')
+" Don't drop the quotes because if the var isn't defined it'll raise errors
+if !empty('g:loaded_ale')
   call ftplugins#ALE_Vim_Conf()
 endif
 

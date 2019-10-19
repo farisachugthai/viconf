@@ -51,10 +51,36 @@ setlocal statusline=%f\ %{WebDevIconsGetFileTypeSymbol()}\ %h%w%m%r\ %=%(%l,%c%V
 " From the help
 let g:netrw_bufsettings='noma nomod nobl nowrap ro rnu'
 
+" WTH! Yes I want this.
+  " *g:netrw_usetab*		if this variable exists and is non-zero, then
+				" the <tab> map supporting shrinking/expanding a
+				" Lexplore or netrw window will be enabled.
+				" (see |netrw-c-tab|)
+let g:netrw_usetab = 1
+" Unfortnately though, the <tab> map means <C-Tab>. Can we also get <Tab>?
+nnoremap <buffer> <Tab>	<Plug>NetrwShrink
+
+let g:netrw_preview = 1
+
+" Defaults to 50%
+let g:netrw_winsize = 30
+
 " Mappings: {{{1
 "
-" wth why is this a thing
-unmap! <buffer> a
+" wth why is this a thing.
+nunmap! <buffer> a
+" dude you'll wish your problems were limited to randomly hiding shit.
+" Check this out
+nunmap! <buffer> D
+vunmap! <buffer> D
+nunmap! <buffer> <Del>
+vunmap! <buffer> <Del>
+nunmap! <buffer> <RightMouse>
+vunmap! <buffer> <RightMouse>
+
+" So what were all those?
+" THE DEFAULT MAPPINGS TO RMDIR THE DIR YOU'RE CURRENTLY IN WHAT THE FUCK
+" NETRW
 
 noremap <buffer> ^ <Plug>NetrwBrowseUpDir<Space>
 

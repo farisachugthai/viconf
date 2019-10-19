@@ -214,7 +214,6 @@
     "--normal"
   ],
   "list.source.lists.defaultOptions": [
-    "--normal",
     "--tab",
     "--top"
   ],
@@ -239,12 +238,19 @@
     "**/*.pyc"
   ],
   "list.source.mru.maxLength": 100,
+  "list.source.outline.ctagsFilestypes": [
+    "rst",
+    "markdown",
+    "text"
+  ],
   "list.source.outline.defaultOptions": [
     "--top",
     "--normal"
   ],
   "list.source.output.defaultOptions": [
-    "--normal",
+    "--input",
+    "--number-select",
+    "--no-sort",
     "--top"
   ],
   "list.source.quickfix.defaultOptions": [
