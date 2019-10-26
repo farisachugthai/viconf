@@ -8,11 +8,10 @@
 " Global options are in ../../coc_settings.json
 
 " Guard: {{{1
-if !exists('g:loaded_coc')  | finish | endif
+if !exists('g:did_coc_loaded')  | finish | endif
 
 let s:cpo_save = &cpoptions
 set cpoptions-=C
-
 
 " Options: {{{1
 
@@ -29,9 +28,9 @@ let g:WorkspaceFolders = [
 
 let g:coc_quickfix_open_command = 'cwindow'
 
-let g:coc_snippet_next = '<Tab>'
+let g:coc_snippet_next = '<C-j>'
 
-let g:coc_snippet_prev = '<S-Tab>'
+let g:coc_snippet_prev = '<C-k>'
 
 " Mappings:- {{{1
 
@@ -122,6 +121,9 @@ nmap <C-c><C-f>  <Plug>(coc-fix-current)
 noremap <silent> <C-c>q <Plug>(coc-fix-current)
 
 " Using CocList: {{{1
+
+" How have I not mapped the most basic Coc command?
+nnoremap <C-m> <Cmd>CocList<CR>
 
 " Show all diagnostics
 command! -nargs=0 CocDiagnostics <Cmd>CocList diagnostics<CR>

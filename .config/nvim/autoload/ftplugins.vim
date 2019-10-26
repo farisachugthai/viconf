@@ -16,7 +16,7 @@ set cpoptions-=C
 
 function! ftplugins#ALE_JSON_Conf() abort  " {{{1
   " Standard fixers defined for JSON
-  let b:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
+  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
 
   if executable('prettier')
     let b:ale_fixers += ['prettier']
@@ -38,7 +38,6 @@ function! ftplugins#ALE_JSON_Conf() abort  " {{{1
     let b:ale_linters_explicit = 1
   endif
 endfunction
-
 
 function! ftplugins#FormatFile() abort  " {{{1
   let l:lines='all'
@@ -101,7 +100,8 @@ endfunction
 
 
 function! ftplugins#ALE_CSS_Conf() abort  " {{{1
-  let b:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
+
+  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
 
   if executable('prettier')
     let b:ale_fixers += ['prettier']
@@ -125,7 +125,10 @@ function! ftplugins#ALE_sh_conf() abort  " {{{1
     endif
   endif
 
+  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
+
   let b:ale_linters = ['shell', 'shellcheck']
+
   if !has('unix')
     let b:ale_sh_shellcheck_executable = 'C:/tools/miniconda3/envs/neovim/bin/shellcheck.exe'
   endif
@@ -133,22 +136,27 @@ endfunction
 
 
 function! ftplugins#ALE_Html_Conf() abort  " {{{1
-  if executable('prettier')
-    let b:ale_fixers = ['prettier']
-  endif
-endfunction
 
-
-function! ftplugins#ALE_JS_Conf() abort  " {{{1
-  if !has('unix')
-    let g:ale_windows_node_executable_path = fnameescape('C:/Program Files/nodejs/node.exe')
-  endif
-
-  let b:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
+  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
 
   if executable('prettier')
     let b:ale_fixers += ['prettier']
   endif
+
+endfunction
+
+function! ftplugins#ALE_JS_Conf() abort  " {{{1
+
+  if !has('unix')
+    let g:ale_windows_node_executable_path = fnameescape('C:/Program Files/nodejs/node.exe')
+  endif
+
+  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
+
+  if executable('prettier')
+    let b:ale_fixers += ['prettier']
+  endif
+
 endfunction
 
 
@@ -160,8 +168,6 @@ function! ftplugins#ALE_Vim_Conf() abort  " {{{1
     let b:ale_linters += ['vint']
   endif
 endfunction
-
-" Python: {{{1
 
 function! ftplugins#PythonPath() abort  " {{{1
   " Set up the path for python files
@@ -202,18 +208,15 @@ function! ftplugins#ALE_Python_Conf() abort  " {{{1
   let b:ale_linters = ['flake8', 'pydocstyle', 'pyls']
   let b:ale_linters_explicit = 1
 
-  let b:ale_fixers = [
-        \ 'remove_trailing_lines',
-        \ 'trim_whitespace',
-        \ 'reorder-python-imports',
-        \ ]
+  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
+  let b:ale_fixers += [ 'reorder-python-imports' ]
 
   if executable('yapf')
-      let b:ale_fixers += ['yapf']
+    let b:ale_fixers += ['yapf']
   else
-      if executable('autopep8')
-          let b:ale_fixers += ['autopep8']
-      endif
+    if executable('autopep8')
+        let b:ale_fixers += ['autopep8']
+    endif
   endif
 endfunction
 
@@ -221,3 +224,5 @@ endfunction
 " Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save
+
+" Vim: fdl=0:fdls=0:

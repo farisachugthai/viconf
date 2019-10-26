@@ -17,7 +17,7 @@ set cpoptions-=C
 " Options: {{{1
 
 " Idk if i did this right
-let g:requirements#detect_filename_pattern = 'Pipfile[.lock]?'
+let g:requirements#detect_filename_pattern = 'Pipfile'
 
 " Autocmds: {{{1
 augroup YourFTDetect
@@ -29,6 +29,9 @@ augroup YourFTDetect
 
   " JSON
   au BufNewFile,BufRead *.json,*.jsonp,*.webmanifest,*.code-workspace setf json
+
+  au BufNewFile,BufRead *.bash,.bashrc,.profile setf bash
+
 augroup END
 
 " Atexit: {{{1

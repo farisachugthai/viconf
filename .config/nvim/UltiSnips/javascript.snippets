@@ -1,8 +1,8 @@
 # ============================================================================
-	# File: javascript.snippets
-	# Author: Faris Chugthai
-	# Description: 
-	# Last Modified: August 24, 2019
+# File: javascript.snippets
+# Author: Faris Chugthai
+# Description: Javascript snippets
+# Last Modified: August 24, 2019
 # ============================================================================
 
 # Functions: {{{1
@@ -129,21 +129,21 @@ for (var ${1:i} = 0, ${2:len} = ${3:Things.length}; $1 < $2; $1++) {
 endsnippet
 
 snippet forr "reversed for (...) {...}"
-	for (var ${2:i} = ${1:Things.length} - 1; $2 >= 0; $2--) {
-		${0:${VISUAL}}
-	}
+for (var ${2:i} = ${1:Things.length} - 1; $2 >= 0; $2--) {
+    ${0:${VISUAL}}
+}
 endsnippet
 
 snippet wh "(condition) { ... }"
-	while (${1:/* condition */}) {
-		${0:${VISUAL}}
-	}
+while (${1:/* condition */}) {
+    ${0:${VISUAL}}
+}
 endsnippet
 
 snippet do "do { ... } while (condition)"
-	do {
-		${0:${VISUAL}}
-	} while (${1:/* condition */});
+do {
+    ${0:${VISUAL}}
+} while (${1:/* condition */});
 endsnippet
 
 snippet fori "For in loop"
@@ -165,75 +165,75 @@ hasOwnProperty(${0:$VISUAL})
 endsnippet
 
 snippet sing "singleton function"
-	function ${1:Singleton} (${2:argument}) {
-		// the cached instance
-		var instance;
+function ${1:Singleton} (${2:argument}) {
+    // the cached instance
+    var instance;
 
-		// rewrite the constructor
-		$1 = function $1($2) {
-			return instance;
-		};
+    // rewrite the constructor
+    $1 = function $1($2) {
+        return instance;
+    };
 
-		// carry over the prototype properties
-		$1.prototype = this;
+    // carry over the prototype properties
+    $1.prototype = this;
 
-		// the instance
-		instance = new $1();
+    // the instance
+    instance = new $1();
 
-		// reset the constructor pointer
-		instance.constructor = $1;
+    // reset the constructor pointer
+    instance.constructor = $1;
 
-		${0}
+    ${0}
 
-		return instance;
-	}
+    return instance;
+}
 endsnippet
 
 snippet obj "Crockford's object function"
-	function object(o) {
-		function F() {}
-		F.prototype = o;
-		return new F();
-	}
+function object(o) {
+    function F() {}
+    F.prototype = o;
+    return new F();
+}
 endsnippet
 
 snippet props "Define multiple properties"
-	var ${1:my_object} = Object.defineProperties(
-		${2:new Object()},
-		{
-			${3:property} : {
-				get : function $1_$3_getter() {
-					// getter code
-				},
-				set : function $1_$3_setter(value) {
-					// setter code
-				},
-				value        : ${4:value},
-				writeable    : ${5:boolean},
-				enumerable   : ${6:boolean},
-				configurable : ${0:boolean}
-			}
-		}
-	);
+var ${1:my_object} = Object.defineProperties(
+    ${2:new Object()},
+    {
+        ${3:property} : {
+            get : function $1_$3_getter() {
+                // getter code
+            },
+            set : function $1_$3_setter(value) {
+                // setter code
+            },
+            value        : ${4:value},
+            writeable    : ${5:boolean},
+            enumerable   : ${6:boolean},
+            configurable : ${0:boolean}
+        }
+    }
+);
 endsnippet
 
 snippet prop "Define single property"
-	Object.defineProperty(
-		${1:object},
-		'${2:property}',
-		{
-			get : function $1_$2_getter() {
-				// getter code
-			},
-			set : function $1_$2_setter(value) {
-				// setter code
-			},
-			value        : ${3:value},
-			writeable    : ${4:boolean},
-			enumerable   : ${5:boolean},
-			configurable : ${0:boolean}
-		}
-	);
+Object.defineProperty(
+    ${1:object},
+    '${2:property}',
+    {
+        get : function $1_$2_getter() {
+            // getter code
+        },
+        set : function $1_$2_setter(value) {
+            // setter code
+        },
+        value        : ${3:value},
+        writeable    : ${4:boolean},
+        enumerable   : ${5:boolean},
+        configurable : ${0:boolean}
+    }
+);
 # Documentation
 endsnippet
 
@@ -374,4 +374,4 @@ snippet timeout "setTimeout function"
 setTimeout(function () {${0}}${2}, ${1:10});
 endsnippet
 
-# Vim: set fdm=marker:
+# Vim: set et:fdl=0:fdls=0:

@@ -22,9 +22,10 @@ endif
 
 " In usr_41 it's mentioned that files formatted with dos formatting won't
 " run vim scripts correctly so holy shit that might explain a hell of a lot
-set fileformats=unix,dos
+" Comment this out because we now define ffs as only unix in $MYVIMRC
+" set fileformats=unix,dos
 
-" slash" and "unix" are useful on Windows when sharing view files
+" 'slash' and 'unix' are useful on Windows when sharing view files
 " with Unix.  The Unix version of Vim cannot source dos format scripts,
 " but the Windows version of Vim can source unix format scripts.
 set sessionoptions+=unix,slash viewoptions+=unix,slash
@@ -34,7 +35,9 @@ if !empty($TERM) | unlet $TERM | endif
 
 " So this HAS to be a bad idea; however, all 3 DirChanged autocommands emit
 " errors and that's a little insane
-" set eventignore=DirChanged
+" Oct 22, 2019: Somehow I've observed literally 0 problems with this and the
+" error is still emitted when the dir changes soooo
+set eventignore=DirChanged
 
 function! msdos#Cmd() abort  " {{{1
 

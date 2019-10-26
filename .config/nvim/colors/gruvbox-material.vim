@@ -19,6 +19,9 @@ let s:t_Co = exists('&t_Co') && !empty(&t_Co) && &t_Co > 1 ? &t_Co : 2
 let s:italics = (((&t_ZH != '' && &t_ZH != '[7m') || has('gui_running')) && !has('iOS')) || has('nvim')
 
 " Additions: {{{
+let g:gruvbox_material_transparent_background = 1
+let g:gruvbox_material_enable_bold = 1
+let g:gruvbox_material_background = 'hard'
 hi link manEmail Directory
 hi link manHeaderFile Statement
 " hi link manHighlight
@@ -497,20 +500,6 @@ hi! link SignifySignAdd GitGutterAdd
 hi! link SignifySignChange GitGutterChange
 hi! link SignifySignDelete GitGutterDelete
 hi! link SignifySignChangeDelete GitGutterChangeDelete
-let g:fzf_colors = {
-      \ 'fg':      ['fg', 'Normal'],
-      \ 'bg':      ['bg', 'Normal'],
-      \ 'hl':      ['fg', 'Green'],
-      \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-      \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-      \ 'hl+':     ['fg', 'Aqua'],
-      \ 'info':    ['fg', 'Aqua'],
-      \ 'prompt':  ['fg', 'Orange'],
-      \ 'pointer': ['fg', 'Blue'],
-      \ 'marker':  ['fg', 'Yellow'],
-      \ 'spinner': ['fg', 'Yellow'],
-      \ 'header':  ['fg', 'Grey']
-      \ }
 hi! link CtrlPNoEntries Red
 hi! link CtrlPPrtCursor Blue
 if !exists('g:Lf_StlColorscheme')
@@ -605,9 +594,8 @@ hi! link CocExplorerFileSize Blue
 hi! link CocExplorerTimeAccessed Aqua
 hi! link CocExplorerTimeCreated Aqua
 hi! link CocExplorerTimeModified Aqua
-
-" Which element do you have selected
-hi link CocListsLine Visual
+" Which element do you have selected. Nope it's every element.
+hi! link CocListsLine Blue
 " }}}
 
 hi! link QuickmenuOption Green

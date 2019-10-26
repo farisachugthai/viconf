@@ -72,57 +72,87 @@
   "git.virtualTextPrefix": "Coc-Git:",
   "json.trace.server": "messages",
   "json.format.enable": true,
- "languageserver": {
+  "languageserver": {
     "clangd": {
       "command": "clangd",
       "args": ["--background-index"],
       "rootPatterns": ["compile_flags.txt", "compile_commands.json", ".vim/", ".git/", ".hg/"],
       "filetypes": ["c", "cpp", "objc", "objcpp"]
+    },
+  "vimls": {
+    "module": "C:/Users/faris/AppData/Local/coc/extensions/node_modules/vim-language-server/bin/index.js",
+    "args": ["--node-ipc"],
+    "initializationOptions": {
+      "iskeyword": "@,48-57,_,192-255",
+      "vimruntime": "C:/Neovim/share/nvim/runtime",
+      "runtimepath": "&rtp",
+      "diagnostic": {
+        "enable": true
+      },
+      "indexes": {
+        "runtimepath": true,      // if index runtimepath's vim files this will effect the suggest
+        "gap": 100,               // index time gap between next file
+        "count": 3                // count of files index at the same time
+      },
+      "suggest": {
+        "fromVimruntime": true,   // completionItems from vimruntime's vim files
+        "fromRuntimepath": false  // completionItems from runtimepath's vim files, if this is true that fromVimruntime is true
+      }
+    },
+    "filetypes": [ "vim" ]
     }
   },
   "list.extendedSearchMode": true,
   "list.insertMappings": {
     "<A-p>": "action:preview",
-    "<C-V>": "eval:\"+",
+   "<C-b>": "feedkeys:\\<C-b>",
     "<C-d>": "prompt:deleteforward",
-    "<C-h>": "do:help",
+    "<C-f>": "feedkeys:\\<C-f>",
+    "<C-h>": "action : doc",
     "<C-n>": "normal:j",
     "<C-p>": "normal:k",
     "<C-r>": "do:refresh",
     "<C-t>": "action:tabe",
     "<C-v>": "eval:@@",
     "<C-x>": "action:split",
+    "<C-V>": "eval:@@",
+    "<C-H>": "action:doc",
+    "<BS>": "prompt:deleteforward",
     "<CR>": "do:defaultaction"
   },
   "list.limitLines": 500,
   "list.normalMappings": {
-    " ": "action : toggle",
+    " ": "action:toggle",
+    "?": "action:help",
     "<C-r>": "do:refresh",
-    "<C-t>": "action : tabe",
-    "<C-x>": "action : split",
-    "<CR>": "do : defaultaction",
+    "<C-t>": "action:tabe",
+    "<C-x>": "action:split",
+    "<C-V>": "eval:@@",
+    "<C-H>": "action:doc",
+    "<BS>": "prompt:deleteforward",
+    "<CR>": "do:defaultaction",
     "A": "action:append",
     "C": "action:quickfix",
-    "D": "action : delete",
-    "E": "action : edit",
+    "D": "action:delete",
+    "E": "action:edit",
     "G": "action:prepend",
-    "H": "action : help",
-    "L": "action : load",
+    "H": "action:help",
+    "L": "action:load",
     "O": "action:open",
-    "P": "action : preview",
+    "P": "action:preview",
     "a": "action:append",
     "c": "action:quickfix",
-    "d": "action : delete",
-    "e": "action : edit",
+    "d": "action:delete",
+    "e": "action:edit",
     "g": "action:prepend",
-    "h": "action : help",
-    "l": "action : load",
+    "h": "action:help",
+    "l": "action:load",
     "o": "action:open",
-    "p": "action : preview"
+    "p": "action:preview"
   },
   "list.previewHighlightGroup": "IdentifierBold",
   "list.source.actions.defaultArgs": [
-    "-quickfix"
+    "quickfix"
   ],
   "list.source.actions.defaultOptions": [
     "--normal",
@@ -137,8 +167,11 @@
     "--normal"
   ],
   "list.source.diagnostics.defaultOptions": [
-    "--top",
+    "--auto-preview",
     "--normal"
+  ],
+  "list.source.extensions.defaultArgs": [
+    "toggle"
   ],
   "list.source.extensions.defaultOptions": [
     "--top",
@@ -201,6 +234,8 @@
   "list.source.grep.useLiteral": false,
   "list.source.helptags.defaultOptions": [
     "--top",
+    "--auto-preview",
+    "--tab",
     "--normal"
   ],
   "list.source.lines.defaultOptions": [
@@ -325,6 +360,7 @@
   "python.analysis.logLevel": "Warning",
   "python.analysis.openFilesOnly": false,
   "python.autoComplete.addBrackets": true,
+  "python.condaPath": "C:\\tools\\miniconda3\\Scripts\\conda",
   "python.workspaceSymbols.tagFilePath": "${workspaceFolder}/tags",
   "python.workspaceSymbols.exclusionPatterns": [
     "**/site-packages/**",
@@ -335,6 +371,7 @@
     ".venv"
   ],
   "python.jediMemoryLimit": -1,
+  "python.jediEnabled": false,
   "python.jediShortcut": "Jedi",
   "python.linting.flake8Path": "python -m flake8",
   "python.linting.pylintEnabled": false,

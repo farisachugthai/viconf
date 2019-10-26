@@ -62,6 +62,8 @@ command! -complete=dir -nargs=1 Mkdir call mkdir(shellescape('<q-args>'), 'p', '
 " I just wanted to move this farther back in the queue
 if &omnifunc == "" | setlocal omnifunc=syntaxcomplete#Complete | endif
 
+if &completefunc == "" | setlocal completefunc=syntaxcomplete#Complete | endif
+
 " Formatexpr: {{{1
 " Same with this
 

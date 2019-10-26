@@ -7,6 +7,7 @@
 
 " Preliminaries: {{{1
 scriptencoding utf-8
+set fileformat=unix fileformats=unix,dos  " don't let DOS fuck up the EOL
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
@@ -87,8 +88,6 @@ set splitbelow splitright sidescroll=5
 if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif
 
 set number relativenumber cmdheight=1
-
-
 set isfname-==
 if filereadable(stdpath('config') . '/spell/en.utf-8.add')
   let &spellfile = stdpath('config') . '/spell/en.utf-8.add'
@@ -103,10 +102,9 @@ set complete+=kspell,i,d,k complete-=u
 " Create a preview window and display all possibilities but don't insert
 " dude what am i doing wrong that i don't get the cool autocompletion that NORC gets??
 set completeopt=menu,menuone,noselect,noinsert,preview
+
 " don't show more than 15 choices in the popup menu. defaults to 0
 set pumheight=15
-
-set completefunc=syntaxcomplete#Complete
 
 " both smartcase and infercase require ignorecase to be set
 set ignorecase
@@ -170,3 +168,4 @@ let g:matchparen_insert_timeout = 300
 " Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save
+" Vim set ff=unix:

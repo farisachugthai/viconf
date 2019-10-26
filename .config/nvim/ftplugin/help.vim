@@ -43,6 +43,15 @@ runtime ftplugin/man.vim
 " autoload/man.vim and ftplugin/man.vim have 1 function copy pasted
 " nnoremap <silent><buffer> gO <Cmd>call pydoc_help#show_toc()<CR>
 
+" Plugins: {{{1
+
+" ALE as always
+" I think this is probably the best way to define the buffer local fixers
+" based on the global ones.
+let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
+
+let b:ale_fixers += ['align_help_tags'] " Align help tags to the right margin
+
 " Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save
