@@ -15,15 +15,11 @@ if exists('g:did_startify_after_plugin') || &compatible || v:version < 700
 endif
 let g:did_startify_after_plugin = 1
 
-" Temporarily turn this off
-finish
-
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
-" This takes 4ms to load and I didn't even start on this buffer...
-" Does this fix it?
-if empty("b:startify") | finish | endif
+" Literally jams nvim
+finish
 
 " Startify Lists: {{{1
 
@@ -37,6 +33,14 @@ let g:startify_lists = [
     \ ]
 
 " Setup_devicons: {{{1
+let entry_format = "'   ['. index .']'. repeat(' ', (3 - strlen(index)))"
+
+if exists('*WebDevIconsGetFileTypeSymbol')  " support for vim-devicons
+    let entry_format .= ". WebDevIconsGetFileTypeSymbol(entry_path) .' '.  entry_path"
+else
+    let entry_format .= '. entry_path'
+endif
+
 function! StartifyEntryFormat() abort
   return 'WebDevIconsGetFileTypeSymbol(absolute_path) ." ". entry_path'
 endfunction

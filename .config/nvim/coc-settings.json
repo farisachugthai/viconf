@@ -21,6 +21,9 @@
   "coc.source.buffer.firstMatch": false,
   "coc.source.buffer.shortcut": "Coc-Buffer:",
   "coc.source.dictionary.shortcut": "Coc-Dict:",
+  "coc.source.emoji.shortcut": "Coc-Emoji: ",
+  "coc.source.emoji.triggerCharacters": [":"],
+  "coc.source.emoji.priority": 99,
   "coc.source.file.ignoreHidden": false,
   "coc.source.file.priority": 80,
   "coc.source.file.shortcut": "Coc-Files: ",
@@ -42,6 +45,8 @@
     "typescript"
   ],
   "coc.source.ultisnips.shortcut": "Coc-UltiSnips:",
+  "coc.source.word.filetypes": ["rst", "md"],
+  "coc.source.word.shortcut": "Coc-Word: ",
   "codeLens.separator": "‣",
   "css.trace.server": "messages",
   "cursors.nextKey": "<Tab>",
@@ -63,11 +68,11 @@
   "diagnostic.virtualTextPrefix": "Coc-Diagnostic: ",
   "git.addGlameToBufferVar": true,
   "git.addGlameToVirtualText": true,
-  "git.branchCharacter": "",
-  "git.conflictedDecorator": "U+2620",
+  "git.branchCharacter": "  ",
+  "git.conflictedDecorator": "::",
   "git.enableGlobalStatus": true,
   "git.enableGutters": true,
-  "git.stagedDecorator": "U+231A",
+  "git.stagedDecorator": " Ξ ",
   "git.untrackedDecorator": " : Untracked : ",
   "git.virtualTextPrefix": "Coc-Git:",
   "json.trace.server": "messages",
@@ -80,19 +85,20 @@
       "filetypes": ["c", "cpp", "objc", "objcpp"]
     },
   "vimls": {
-    "module": "C:/Users/faris/AppData/Local/coc/extensions/node_modules/vim-language-server/bin/index.js",
-    "args": ["--node-ipc"],
+    "command": "vim-language-server",
+    "args": ["--stdio"],
     "initializationOptions": {
-      "iskeyword": "@,48-57,_,192-255",
-      "vimruntime": "C:/Neovim/share/nvim/runtime",
-      "runtimepath": "&rtp",
+      "iskeyword": "@,48-57,_,192-255,-#", // vim iskeyword option
+      "vimruntime": "$VIMRUNTIME",                    // $VIMRUNTIME option
+      "runtimepath": "&rtp",                   // vim runtime path separate by `,`
       "diagnostic": {
         "enable": true
       },
       "indexes": {
         "runtimepath": true,      // if index runtimepath's vim files this will effect the suggest
         "gap": 100,               // index time gap between next file
-        "count": 3                // count of files index at the same time
+        "count": 3,               // count of files index at the same time
+        "workDirPatterns" : ["strange-root-pattern", ".git", "autoload", "plugin"] // Names of files used as the mark of project root. If empty, the default value [".git", "autoload", "plugin"] will be used
       },
       "suggest": {
         "fromVimruntime": true,   // completionItems from vimruntime's vim files
@@ -100,7 +106,7 @@
       }
     },
     "filetypes": [ "vim" ]
-    }
+  }
   },
   "list.extendedSearchMode": true,
   "list.insertMappings": {
@@ -422,7 +428,7 @@
     "color": "",
     "constant": "",
     "default": "",
-    "enum": "",
+    "enum": "Ψ",
     "enumMember": "",
     "event": "鬒",
     "field": "料",
@@ -433,7 +439,7 @@
     "keyword": "",
     "method": "",
     "module": "",
-    "operator": "Ψ",
+    "operator": "",
     "property": "",
     "reference": "渚",
     "snippet": "",

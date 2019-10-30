@@ -9,7 +9,7 @@
 if exists('b:did_after_vim_ftplugin') || &compatible || v:version < 700
   finish
 endif
-let b:did_after_vim_ftplugin = 1
+" let b:did_after_vim_ftplugin = 1
 
 let s:cpo_save = &cpoptions
 set cpoptions-=C
@@ -26,8 +26,10 @@ setlocal wrap
 
 " TODO: Probably needs to be a function. Should checj if we already added
 " this and don't do it more than once
-" let &path = &path . ',' . stdpath('data') . '/plugged/*/*/*.vim'
-let &commentstring='" %s'
+
+let &l:path = ftplugins#VimPath()
+
+let &l:commentstring='" %s'
 
 " So that you can cleanly jump around inside of autoloaded func names
 setlocal iskeyword-=#
@@ -76,7 +78,7 @@ if !empty('g:loaded_ale')
 endif
 
 " Atexit: {{{1
-let b:undo_ftplugin = 'set com< cms< et< sw< ts< sts< lbr< sua< wrap< isk<'
+let b:undo_ftplugin = 'set com< cms< et< sw< ts< sts< lbr< sua< wrap< isk<  path<'
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

@@ -52,6 +52,15 @@ if has('nvim')
 	hi debugBreakpoint term=reverse ctermbg=red guibg=red
 endif
 
+" Rst: {{{1
+
+hi! link rstSimpleTable Orange
+hi! link rstSimpleTableLines OrangeBold
+hi! link rstTable Orange
+hi! link rstDirectivesh     Question
+hi! link rstDirectivepython Question
+hi! link rstInlineLiteral   Identifier
+
 " }}}
 
 " Original: {{{
@@ -163,8 +172,8 @@ hi! link javaScriptIdentifier Red
 hi! link javaScriptMember Blue
 hi! link javaScriptNumber Purple
 hi! link javaScriptNull Purple
-hi! link javaScriptParens White
-hi! link javaScriptBraces White
+hi! link javaScriptParens Blue
+hi! link javaScriptBraces Blue
 hi! link javascriptImport Aqua
 hi! link javascriptExport Aqua
 hi! link javascriptClassKeyword Aqua
@@ -832,7 +841,11 @@ if (has('termguicolors') && &termguicolors) || has('gui_running')
     hi Typedef guifg=#e3a84e guibg=NONE guisp=NONE gui=NONE cterm=NONE
     hi Type guifg=#e3a84e guibg=NONE guisp=NONE gui=NONE cterm=NONE
     hi StorageClass guifg=#e78a4e guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Delimiter guifg=#dfbf8e guibg=NONE guisp=NONE gui=NONE cterm=NONE
+
+    " Nah this is impossible to notice
+    " hi Delimiter guifg=#dfbf8e guibg=NONE guisp=NONE gui=NONE cterm=NONE
+    hi! link Delimiter BlueBold
+
     hi Special guifg=#e78a4e guibg=NONE guisp=NONE gui=NONE cterm=NONE
     hi Tag guifg=#e78a4e guibg=NONE guisp=NONE gui=NONE cterm=NONE
     hi Operator guifg=#e78a4e guibg=NONE guisp=NONE gui=NONE cterm=NONE

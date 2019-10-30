@@ -2,7 +2,7 @@
     " File: rst.vim
     " Author: Faris Chugthai
     " Description: ReStructured Text ftplugin
-    " Last Modified: May 19, 2019
+    " Last Modified: Oct 27, 2019
 " ============================================================================
 
 " Guard: {{{1
@@ -43,9 +43,9 @@ let g:rst_use_emphasis_colors = 1
 
 let g:rst_fold_enabled = 1
 
-" Rst specific
+" Rst specific: {{{2
 setlocal expandtab
-
+setlocal spell!
 setlocal colorcolumn=80
 setlocal linebreak
 setlocal foldlevel=0
@@ -56,27 +56,60 @@ setlocal iskeyword+=.
 " if exists(':PydocThis')
 "   setlocal keywordprg=:PydocThis
 " else
-  setlocal keywordprg=!pydoc
+" setlocal keywordprg=!pydoc
 " endif
+
+" let &l:keywordprg = pydoc_help#SplitPydocCword()
 
 " don't do the executable(sphinx-build) check here its in ../compiler/rst.vim
 compiler rst
 
+if filereadable('./conf.py')
+  let &l:makeprg = ' . ../build/html '
+elseif glob('../conf.py')
+  let &l:makeprg = ' .. ../../build/html '
+endif
+
+" Actually from the python ftplugin: {{{2
+
+setlocal cindent
+setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
+
+setlocal cinkeys-=0#
+setlocal indentkeys-=0#
+setlocal include=^\\s*\\(from\\\|import\\)
+setlocal shiftround
+setlocal suffixesadd+=.py
+
+let &l:path = ftplugins#PythonPath()
+
+" Sphinx Command: {{{1
 command! -buffer Sphinx call pydoc_help#sphinx_build(<q-args>)
 
 " The Official Ftplugin: {{{1
 
 setlocal comments=fb:.. commentstring=..\ %s
 
+" Let's redo the undo ftplugin
+
+let b:undo_ftplugin = 'setlocal cms< com< cc< lbr< fdl< fdls< '
+      \ . '|setlocal spell< isk< kp< mp< sua< sr< '
+      \ . '|setlocal cin< cinw< path< '
+      \ . '|setlocal include<'
+      \ . '|setlocal indentkeys<'
+      \ . '|setlocal cinkeys<'
+      \ . '|unlet! b:undo_ftplugin'
+
 " reStructuredText standard recommends that tabs be expanded to 8 spaces
 " The choice of 3-space indentation is to provide slightly better support for
 " directives (..) and ordered lists (1.), although it can cause problems for
 " many other cases.
-"
-" More sophisticated indentation rules should be revisted in the future.
+
+" More sophisticated indentation rules should be revisited in the future.
 
 if !exists('g:rst_style') || g:rst_style != 0
-    setlocal expandtab shiftwidth=3 softtabstop=3 tabstop=8
+  setlocal expandtab shiftwidth=3 softtabstop=3 tabstop=8
+  let b:undo_ftplugin .= 'setlocal  ts< sw< sts<'
 endif
 
 if has('patch-7.3.867')  " Introduced the TextChanged event.
@@ -86,12 +119,12 @@ if has('patch-7.3.867')  " Introduced the TextChanged event.
   " augroup RstFold
   "   autocmd TextChanged,InsertLeave <buffer> unlet! b:RstFoldCache
   " augroup END
+  let b:undo_ftplugin .= 'setlocal fdm< foldexpr< foldtext<'
 endif
 
 
 " Atexit: {{{1
-let b:undo_ftplugin = 'set et< ts< sw< sts< cms< com< cc< lbr< fdl< fdls< spell< isk< kp<'
-" can't use unlet! or unlet in the same '' apparently
+" Can't use unlet! Or unlet in the same '' apparently
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

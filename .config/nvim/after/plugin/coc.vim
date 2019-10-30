@@ -34,15 +34,6 @@ let g:coc_snippet_prev = '<C-k>'
 
 " Mappings:- {{{1
 
-" Basics: {{{2
-" I mean not the most basic but it expands a snippet, or jumps, or confirms a
-" selection, or refreshes.
-" inoremap <silent><expr> <TAB>
-"       \ pumvisible() ? coc#_select_confirm() :
-"       \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-      " \ <SID>check_back_space() ? "\<TAB>" :
-      " \ coc#refresh()
-
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
@@ -57,35 +48,32 @@ inoremap <silent><expr> <C-Space> coc#refresh()
 
 inoremap <buffer> gK <Plug>(coc-definition)
 
+" Bracket maps: {{{2
 " Shit none of these work
 nnoremap [g <Plug>(coc-diagnostic-prev)
 nnoremap ]g <Plug>(coc-diagnostic-next)
 
-nnoremap <expr> [c  <Plug>(coc-git-prevchunk)
-nnoremap <expr> ]c  <Plug>(coc-git-nextchunk)
+" Note: Tried adding <expr> and didn't work
+nnoremap [c  <Plug>(coc-git-prevchunk)
+nnoremap ]c  <Plug>(coc-git-nextchunk)
 
-" Remap for rename current word
+" Remap for rename current word: {{{2
 nnoremap <expr> <F2> <Plug>(coc-refactor)
 xnoremap <F2> <Cmd>'<,'>CocCommand document.renameCurrentWord<CR>
 
-nnoremap <silent> <Leader>cw  <Cmd>execute 'CocList -I --normal --input='
-      \. expand('<cword>') . ' words'<CR>
+" Easier Grep: {{{2
+nnoremap ,cw <Cmd>execute 'CocList -I --normal --input=' . expand('<cword>') . ' words'<CR>
 
-" CocOpenLog: {{{2
-" C-m only moves you down a line in normal mode. Pointless
-nnoremap <expr> <C-m> coc#client#open_log()
-
-" Easier Grep: {{{2 Mnenomic CocFind
+" Mnenomic CocFind
 " Keymapping for grep word under cursor with interactive mode
-nnoremap <silent> <Leader>cf <Cmd>exe 'CocList -I --input='
-      \. expand('<cword>') . ' grep'<CR>
+nnoremap <silent> ,cf <Cmd>exe 'CocList -I --input=' . expand('<cword>') . ' grep'<CR>
 
 " Mnemonic: CocSelect {{{2
 " Don't use vmap I don't want this in select mode!
 " Q: How to grep by motion?
 " A: Create custom keymappings like:
-xnoremap <leader>cs :<C-u>call <SID>GrepFromSelected(visualmode())<CR>
-nnoremap <leader>cs :<C-u>set operatorfunc=<SID>GrepFromSelected<CR>g@
+xnoremap ,cs :<C-u>call <SID>GrepFromSelected(visualmode())<CR>
+nnoremap ,cs :<C-u>set operatorfunc=<SID>GrepFromSelected<CR>g@
 
 function! s:GrepFromSelected(type)
   let saved_unnamed_register = @@
@@ -102,69 +90,47 @@ function! s:GrepFromSelected(type)
   execute 'CocList grep ' . word
 endfunction
 
-" Remap For Rename Current Word: {{{2
-
-" Remap for format selected region. e for errors and visual selection
-xmap <C-c>m  <Plug>(coc-format-selected)
-nmap <C-c>m  <Plug>(coc-format-selected)
-
-" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
- xmap <C-c><C-a>  <Plug>(coc-codeaction-selected)
-" nmap <C-c>a  <Plug>(coc-codeaction-selected)
-
-" Remap for do codeAction of current line
-noremap <expr><buffer> <C-c><C-a>  <Plug>(coc-codeaction)
-
-" Fix autofix problem of current line
-nmap <C-c><C-f>  <Plug>(coc-fix-current)
-
-noremap <silent> <C-c>q <Plug>(coc-fix-current)
 
 " Using CocList: {{{1
 
 " How have I not mapped the most basic Coc command?
-nnoremap <C-m> <Cmd>CocList<CR>
+nnoremap <C-g> <Cmd>CocList<CR>
 
 " Show all diagnostics
-command! -nargs=0 CocDiagnostics <Cmd>CocList diagnostics<CR>
+command! -nargs=? CocDiagnostics <Cmd>CocList diagnostics <q-args> <CR>
 
-nnoremap <silent> <C-c><C-d>  <Cmd>CocList diagnostics<CR>
+nnoremap <silent> ,d  <Cmd>CocList diagnostics<CR>
 " Manage extensions
-nnoremap <silent> <C-c><C-e>  <Cmd>CocList extensions<CR>
+nnoremap <silent> ,e  <Cmd>CocList extensions<CR>
 " Show commands
-nnoremap <silent> <C-c><C-c>  <Cmd>CocList commands<CR>
+nnoremap <silent> ,c  <Cmd>CocList commands<CR>
 " Find symbol of current document
-nnoremap <silent> <C-c><C-o>  <Cmd>CocList outline<CR>
+nnoremap <silent> ,o  <Cmd>CocList outline<CR>
 " Search workspace symbols
-nnoremap <silent> <C-c><C-s>  <Cmd>CocList -I symbols<CR>
+nnoremap <silent> ,s  <Cmd>CocList -I symbols<CR>
 
 " Amazingly leader j k and p aren't taken. From the readme
 nnoremap <silent> <Leader>j  :<C-u>CocNext<CR>
+nnoremap <silent> ,j  :<C-u>CocNext<CR>
 nnoremap <silent> <Leader>k  :<C-u>CocPrev<CR>
-nnoremap <silent> <Leader>p  :<C-u>CocListResume<CR>
+nnoremap <silent> ,k  :<C-u>CocPrev<CR>
+nnoremap <silent> <Leader>r  :<C-u>CocListResume<CR>
+nnoremap <silent> ,r  :<C-u>CocListResume<CR>
 
-" Do default action for next item.
-nnoremap <silent> <C-c>j      <Cmd>CocNext<CR>
-nnoremap <silent> <C-c>j      <Cmd>CocNext<CR>
-" Do default action for previous item.
-nnoremap <silent> <C-c>k      <Cmd>CocPrev<CR>
-" Resume latest coc list
-nnoremap <silent> <C-c><C-r>  <Cmd>CocListResume<CR>
-" noremap <silent> <C-c>r <Cmd>CocListResume<CR>
-noremap <silent> <C-c><C-d>   <Cmd>CocList diagnostics<CR>
-xmap <C-c>m  <Plug>(coc-format-selected)
-nmap <C-c>m  <Plug>(coc-format-selected)
+xmap ,m  <Plug>(coc-format-selected)
+nmap ,m  <Plug>(coc-format-selected)
 
 " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-xmap <C-c><C-a>  <Plug>(coc-codeaction-selected)
-" nmap <C-c>a  <Plug>(coc-codeaction-selected)
+xmap ,a  <Plug>(coc-codeaction-selected)
+" Remap for do codeAction of current line
+nnoremap ,a  <Plug>(coc-codeaction)
 
 " Autofix problem of current line
-nnoremap <C-c><C-f>  <Plug>(coc-fix-current)
-nnoremap <silent> <C-c>q <Plug>(coc-fix-current)
+nnoremap <silent> ,f  <Plug>(coc-fix-current)
+nnoremap <silent> ,q <Plug>(coc-fix-current)
 
 " Format visually selected text
-xmap <C-c>m  <Plug>(coc-format-selected)
+xmap <silent> ,m  <Plug>(coc-format-selected)
 
 " Commands: {{{1
 

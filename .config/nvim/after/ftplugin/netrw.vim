@@ -68,15 +68,15 @@ let g:netrw_winsize = 30
 " Mappings: {{{1
 "
 " wth why is this a thing.
-nunmap! <buffer> a
+nunmap <buffer> a
 " dude you'll wish your problems were limited to randomly hiding shit.
 " Check this out
-nunmap! <buffer> D
-vunmap! <buffer> D
-nunmap! <buffer> <Del>
-vunmap! <buffer> <Del>
-nunmap! <buffer> <RightMouse>
-vunmap! <buffer> <RightMouse>
+nunmap <buffer> D
+vunmap <buffer> D
+nunmap <buffer> <Del>
+vunmap <buffer> <Del>
+nunmap <buffer> <RightMouse>
+vunmap <buffer> <RightMouse>
 
 " So what were all those?
 " THE DEFAULT MAPPINGS TO RMDIR THE DIR YOU'RE CURRENTLY IN WHAT THE FUCK

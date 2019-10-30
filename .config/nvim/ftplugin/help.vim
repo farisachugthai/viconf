@@ -26,6 +26,8 @@ if has("conceal")
   setlocal cole=2 cocu=nc
 endif
 
+let &l:path .=  &path .  ',' . expand('$VIMRUNTIME') . '/doc/*.txt'
+
 " Helpfiles won't follow tags correctly without this one
 " Now context-functions will probably go to the tag I want and not simply functions...
 setlocal iskeyword+=-
@@ -35,6 +37,7 @@ unlet! b:did_ftplugin
 " Source mine in
 runtime ftplugin/man.vim
 
+let b:undo_ftplugin = "setl fo< tw< cole< cocu< keywordprg<"
 
 " Mappings: {{{1
 
@@ -53,5 +56,8 @@ let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_wh
 let b:ale_fixers += ['align_help_tags'] " Align help tags to the right margin
 
 " Atexit: {{{1
+
+let b:undo_ftplugin += 'path< '
 let &cpoptions = s:cpo_save
+
 unlet s:cpo_save

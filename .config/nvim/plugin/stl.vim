@@ -72,9 +72,9 @@ function! Statusline_expr() abort
   " from he 'statusline'.
   " Each status line item is of the form:
   " %-0{minwid}.{maxwid}{item}
-  let cos = "%{exists('g:did_coc_loaded') ? coc#status() : ''}"
+  let cos = " %{exists('g:did_coc_loaded') ? coc#status() : ''} "
 
-  let cog = '%{exists("coc_git_status") ? coc_git_status : ""} '
+  let cog = ' %{exists("coc_git_status") ? coc_git_status : ""} '
 
   " shit g:ale_enabled == 0 returns True
   let ale_stl = '%{exists("g:ale_enabled") ? "[ALE]" : ""}'

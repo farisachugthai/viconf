@@ -30,7 +30,7 @@ GuiTabline v:false
 " This looks reasonable with the font
 GuiLinespace 1.5
 
-GuiFont Hack:h12
+GuiFont 'FuraMono Nerd Font Mono:h14'
 
 call GuiClipboard()
 

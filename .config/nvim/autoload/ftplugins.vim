@@ -6,11 +6,6 @@
 " ============================================================================
 
 " Guard: {{{1
-if exists('g:did_ftplugins_vim') || &compatible || v:version < 700
-    finish
-endif
-let g:did_ftplugins_vim = 1
-
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
@@ -186,10 +181,40 @@ function! ftplugins#PythonPath() abort  " {{{1
   endif
 
   let s:site_pack = s:root_dir . '/lib/python3.7/site-packages/**3'  " max out at 3 dir deep
-  let s:path =  s:site_pack . ',' . s:orig_path
+  " let s:path =  s:site_pack . ',' . s:orig_path
+  " The current path and the buffer's dir. Also recursively search downwards
+  let s:path = '.,,**,' . s:site_pack
+
+  " I'm gonna go ahead and assume a conda installation on windows.
+  if !has('unix')
+    let s:path = s:path . ',' . s:root_dir . '/lib/*.py'
+    let s:path = s:path . ',' . s:root_dir . '/lib/**/*.py'
+  else
+    let s:path = s:path . ',' . s:root_dir . '/lib/python3.7/*.py'
+    let s:path = s:path . ',' . s:root_dir . '/lib/python3.7/**/*.py'
+  endif
+
   return s:path
 
 endfunction
+
+function! ftplugins#VimPath() abort  " {{{1
+
+  let s:path='.,**,,'
+  let s:path = s:path . ',' . expand('$VIMRUNTIME')
+
+  if !exists('*stdpath')
+    " honestly this is too hard without this
+    return s:path
+  endif
+
+  " let s:path = s:path . ',' . stdpath('data') . '/plugged/**4'
+  let s:path = s:path . ',' . &rtp
+  let s:path = s:path . ',' . stdpath('config') . '/**3'
+  return s:path
+
+endfunction
+
 
 function! ftplugins#YAPF() abort  " {{{1
   if exists(':TBrowseOutput')

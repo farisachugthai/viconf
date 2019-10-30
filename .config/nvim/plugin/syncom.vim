@@ -25,11 +25,12 @@ endif
 " Should we set a corresponding grepformat?
 if executable('rg')
     let s:rg = 'rg'
-    let &grepprg = s:rg . ' --vimgrep --no-messages --color=never --smart-case --no-messages ^'
 elseif executable('rg.exe')  " fucking windows
     let s:rg = 'rg.exe'
-    let &grepprg = s:rg . ' --vimgrep --no-messages --color=never --smart-case --no-messages ^'
 endif
+
+let &grepprg = s:rg . ' --vimgrep --no-messages --color=ansi '
+      \. ' --smart-case --no-messages ' . shellescape('<q-args>')
 
 " Search Mappings: {{{1
 
