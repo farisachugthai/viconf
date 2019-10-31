@@ -25,3 +25,4 @@ text=auto
 *.ipy diff=python
 
 *.sh    text eol=lf
+*.vim    text eol=lf
