@@ -28,7 +28,8 @@ function! Buf_Window_Mapping() abort  " {{{1
   " Oct 18, 2019: I just ran into llist and lwindow showing different things
   " and lwindow didn't show the location list i had the at the time so
   " switching again
-  noremap <Leader>c <Cmd>clist!<CR><bar><Cmd>llist!<CR>
+  " llist throws an error if no location. *sigh*
+  noremap <Leader>c <Cmd>cwindow<CR><bar><Cmd>lwindow<CR>
   " noremap <leader>q <Cmd>copen<CR><bar><Cmd>lopen<CR>
 
   " Navigate windows more easily

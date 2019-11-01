@@ -25,7 +25,7 @@ if empty(s:vim_plug) && exists('*plugins#InstallPlug')
   call plugins#InstallPlug()
 endif
 
-runtime junegunn.vim  " Load my plugins
+" runtime junegunn.vim  " Load my plugins. 10/30/19 commented because in plugins
 " Don't assume that the InstallPlug() func worked so ensure it's defined
 if empty('plugs') | let plugs = {} | endif
 " Uh I don't know how this happens but stdpath('config') is no longer the first entry in rtp?
@@ -42,7 +42,7 @@ let s:material_gruvbox =  syncom#gruvbox_material()
 if s:material_gruvbox == v:false | call syncom#gruvbox() | endif
 
 " Setup neovim's python and node hosts. Optionally clipboards etc
-runtime remote.vim
+" runtime remote.vim
 " Set shell correctly
 if !has('unix') | runtime autoload/msdos.vim | call msdos#Cmd() | endif
 
@@ -76,7 +76,7 @@ setlocal expandtab smarttab softtabstop=4
 
 set foldenable foldlevelstart=1 foldlevel=1
 set foldnestmax=10 foldmethod=marker foldcolumn=2
-set foldopen=quickfix,search,tag,undo
+set foldopen=quickfix,search,tag,undo,jump
 set signcolumn=auto:2  " this might be a nvim 4 thing
 
 try | set switchbuf=useopen,usetab,newtab | catch | endtry
@@ -87,8 +87,6 @@ set splitbelow splitright sidescroll=5
 if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif
 
 set number relativenumber cmdheight=1
-
-
 set isfname-==
 if filereadable(stdpath('config') . '/spell/en.utf-8.add')
   let &spellfile = stdpath('config') . '/spell/en.utf-8.add'
@@ -96,9 +94,8 @@ endif
 
 set wildignorecase wildmode=full:list:longest,full:list
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
-
 " C-n and C-p now use the same input that every other C-x does combined!
-set complete+=kspell,i,d,k complete-=u
+set complete+=kspell,d,k complete-=u,i
 
 " Create a preview window and display all possibilities but don't insert
 " dude what am i doing wrong that i don't get the cool autocompletion that NORC gets??

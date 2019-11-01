@@ -161,7 +161,11 @@ function! ftplugins#ALE_Vim_Conf() abort  " {{{1
   endif
 endfunction
 
-" Python: {{{1
+function! ftplugins#VimPath() abort  " {{{1
+  let s:orig_path = &path
+  let s:path = s:path . ',' . stdpath('data') . '/plugged/*/*/*.vim'
+  return s:path
+endfunction
 
 function! ftplugins#PythonPath() abort  " {{{1
   " Set up the path for python files

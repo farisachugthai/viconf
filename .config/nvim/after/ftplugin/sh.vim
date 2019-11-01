@@ -49,7 +49,8 @@ if executable('shellcheck') || executable('shellcheck.exe')
 endif
 
 " Plugins: {{{1
-if has_key(plugs, 'ale')
+
+if !empty('g:loaded_ale')
   call ftplugins#ALE_sh_conf()
 endif
 

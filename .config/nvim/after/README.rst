@@ -82,3 +82,61 @@ FZF Mappings
 +------------------+-----------------------------------------------------------+
 | `Filetypes`      | File types                                                |
 +------------------+-----------------------------------------------------------+
+
+
+Special Shoutout to netrw
+-------------------------
+
+I had no idea you could do this.
+
+.. todo:: can you use help as an identifier for the code directive?
+
+.. sourcecode:: help
+
+   * One may mark files with the cursor atop a filename and
+    then pressing "mf".
+
+   * With gvim, in addition one may mark files with
+    <s-leftmouse>. (see |netrw-mouse|)
+
+   * One may use the :MF command, which takes a list of
+    files (for local directories, the list may include
+    wildcards -- see |glob()|) >
+
+          :MF *.c
+   <
+    (Note that :MF uses |<f-args>| to break the line
+    at spaces)
+
+   * Mark files using the |argument-list| (|netrw-mA|)
+
+   * Mark files based upon a |location-list| (|netrw-qL|)
+
+   * Mark files based upon the quickfix list (|netrw-qF|)
+    (|quickfix-error-lists|)
+
+   The following netrw maps make use of marked files:
+
+   |netrw-a|	Hide marked files/directories
+   |netrw-D|	Delete marked files/directories
+   |netrw-ma|	Move marked files' names to |arglist|
+   |netrw-mA|	Move |arglist| filenames to marked file list
+   |netrw-mb|	Append marked files to bookmarks
+   |netrw-mB|	Delete marked files from bookmarks
+   |netrw-mc|	Copy marked files to target
+   |netrw-md|	Apply vimdiff to marked files
+   |netrw-me|	Edit marked files
+   |netrw-mF|	Unmark marked files
+   |netrw-mg|	Apply vimgrep to marked files
+   |netrw-mm|	Move marked files to target
+   |netrw-mp|	Print marked files
+   |netrw-ms|	Netrw will source marked files
+   |netrw-mt|	Set target for |netrw-mm| and |netrw-mc|
+   |netrw-mT|	Generate tags using marked files
+   |netrw-mv|	Apply vim command to marked files
+   |netrw-mx|	Apply shell command to marked files
+   |netrw-mX|	Apply shell command to marked files, en bloc
+   |netrw-mz|	Compress/Decompress marked files
+   |netrw-O|	Obtain marked files
+   |netrw-R|	Rename marked files
+

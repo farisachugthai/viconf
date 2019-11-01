@@ -26,7 +26,7 @@ The initialization file has largely been refactored out of existence.
 The use (and inevitable abuse) of the `runtimepath` or `&rtp` variable
 allows for more logical namespaces to be utilized, and typically debugging
 has proven easier with almost all functionality broken up into
-the respective <./.config/nvim/plugin>,  <./.config/nvim/after/plugin>,
+the respective (.config/nvim/plugin),  <./.config/nvim/after/plugin>,
 and <./.config/nvim/autoload> directories.
 
 The only remaining assumption as a result of the restructuring is:

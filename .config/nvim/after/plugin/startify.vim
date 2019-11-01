@@ -15,8 +15,6 @@ if exists('g:did_startify_after_plugin') || &compatible || v:version < 700
 endif
 let g:did_startify_after_plugin = 1
 
-" Temporarily turn this off
-finish
 
 let s:cpo_save = &cpoptions
 set cpoptions-=C
@@ -27,6 +25,8 @@ if empty("b:startify") | finish | endif
 
 " Startify Lists: {{{1
 
+finish
+
 let g:startify_lists = [
     \ { 'type': 'files',     'header': ['   MRU']                   },
     \ { 'type': 'dir',       'header': ['   MRU ' . getcwd()]       },
@@ -35,6 +35,11 @@ let g:startify_lists = [
     \ { 'type': 'bookmarks', 'header': ['   Bookmarks']             },
     \ { 'type': 'commands',  'header': ['   Commands']              },
     \ ]
+
+" Temporarily turn this off
+" Slowly work parts in and see what changes
+" Jesus I just went from 300ms to 500ms
+" finish
 
 " Setup_devicons: {{{1
 function! StartifyEntryFormat() abort

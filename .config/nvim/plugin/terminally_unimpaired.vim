@@ -23,10 +23,13 @@ if executable('htop')  " {{{1
   noremap <Leader>ah <Cmd>wincmd v<CR><bar><Cmd>enew<CR><bar>term://htop
 endif
 
-" Vim doesn't have this autocmd event
-if !has('nvim')
-  finish
-endif 
+set wildcharm=<C-z>  " {{{1
+nnoremap ,e :e **/*<C-z><S-Tab>
+
+set path-=/usr/include
+nnoremap ,f :find **/*<C-z><S-Tab>
+
+if !has('nvim') | finish | endif  " {{{1
 
 augroup TermGroup
   " Statusline in the terminal: {{{1

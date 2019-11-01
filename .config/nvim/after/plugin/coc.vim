@@ -8,11 +8,10 @@
 " Global options are in ../../coc_settings.json
 
 " Guard: {{{1
-if !exists('g:loaded_coc')  | finish | endif
+if !exists('g:did_coc_loaded')  | finish | endif
 
 let s:cpo_save = &cpoptions
 set cpoptions-=C
-
 
 " Options: {{{1
 
@@ -29,9 +28,11 @@ let g:WorkspaceFolders = [
 
 let g:coc_quickfix_open_command = 'cwindow'
 
-let g:coc_snippet_next = '<Tab>'
+" let g:coc_snippet_next = '<Tab>'
+let g:coc_snippet_next = '<Ctrl-j>'
 
-let g:coc_snippet_prev = '<S-Tab>'
+" let g:coc_snippet_prev = '<S-Tab>'
+let g:coc_snippet_prev = '<Ctrl-k>'
 
 " Mappings:- {{{1
 
@@ -73,8 +74,10 @@ nnoremap <silent> <Leader>cw  <Cmd>execute 'CocList -I --normal --input='
       \. expand('<cword>') . ' words'<CR>
 
 " CocOpenLog: {{{2
-" C-m only moves you down a line in normal mode. Pointless
-nnoremap <expr> <C-m> coc#client#open_log()
+" C-m only moves you down a line in normal mode. Pointless.
+" fuck it also maps to CR
+" nnoremap <expr> <C-m> coc#client#open_log()
+nnoremap <expr> <C-g> coc#client#open_log()
 
 " Easier Grep: {{{2 Mnenomic CocFind
 " Keymapping for grep word under cursor with interactive mode

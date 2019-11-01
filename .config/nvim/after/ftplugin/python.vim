@@ -31,6 +31,10 @@ setlocal textwidth=120
 setlocal commentstring=#\ %s
 setlocal tabstop=8 shiftwidth=4 expandtab softtabstop=4
 setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
+setlocal cinkeys-=0#
+
+setlocal indentkeys-=0#
+setlocal include=^\\s*\\(from\\\|import\\)
 
 " also let's know where the line needs to end visually but not invoke the
 " linters to react.
@@ -116,7 +120,7 @@ endif
 
 " A bunch missing. Check :he your-runtime-path somewhere around there is a
 " good starter for writing an ftplugin
-let b:undo_ftplugin = 'set lbr< tw< cms< et< sts< ts< sw< cc< fdm< sua< isk<'
+let b:undo_ftplugin = 'set lbr< tw< cms< et< sts< ts< sw< cc< fdm< sua< isk< cink< cinw<'
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

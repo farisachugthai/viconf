@@ -14,7 +14,6 @@ let g:did_better_profiler_vim_plugin = 1
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
-
 " Mappings: {{{1
 
 " I would say this is unrelated but this file is aimless
@@ -36,8 +35,11 @@ endif
 " That g:did_better... guard at the top will ensure that we don't
 " add these entries to the path multiple times
 set path+=**               " Recursively search dirs with :find
-let &path = &path . ',' . stdpath('config')
 let &path = &path . ',' . expand('$VIMRUNTIME')
+
+if exists('*stdpath')  " fuckin vim
+  let &path = &path . ',' . stdpath('config')
+endif
 
 " Scratch Buffers: {{{1
 command! -nargs=0 ScratchBuffer call pydoc_help#scratch_buffer()
