@@ -4,7 +4,6 @@
   " Description: Quickfix mods
   " Last Modified: October 26, 2019 
 " ============================================================================
-
 " Guards: {{{1
 let s:cpo_save = &cpoptions
 set cpoptions-=C

@@ -31,6 +31,7 @@ AsciiDoc
 Asciidoc
 AssertionErrors
 AsyncIO
+Atexit
 Atlassian
 AttributeError
 Autocompletion
@@ -66,6 +67,7 @@ CLI
 CS50
 CTRL
 CalledProcessError
+CategoryInfo
 CentOS
 Ch4
 Ch5
@@ -79,6 +81,7 @@ Chugthai
 Cmder
 Colab
 ColorColumn
+CommandNotFoundException
 CommonMark
 Commonmark
 Compiler
@@ -109,6 +112,7 @@ Configurator
 Coursera
 CrOS
 CronTab
+Cruzer
 Ctrl
 Cygwin
 Cygwin's
@@ -153,12 +157,14 @@ FAT32
 FZF
 Facebook
 Faris
+FileSystem
 Filetype
 Firefox
 Fn
 FreeNAS
 Freenode
 Frontend
+FullyQualifiedErrorId
 GID
 GNOME's
 GPG
@@ -174,8 +180,13 @@ Gravatar
 Grinberg's
 Gruvbox
 GruvboxPurple
+GuiLoaded
 GuiMacro
+GuiTreeviewToggle
 Gvim
+HKCU
+HKEY
+HKLM
 HLS
 HMAC
 HSV
@@ -258,6 +269,7 @@ Newbuntu
 NextCloud
 NixOS
 NodeJS
+Nosetests
 NotebookApp
 NteractApp
 NumLock
@@ -272,6 +284,7 @@ OSI
 OSINT
 OTR
 OWASP
+ObjectNotFound
 Omnicompletion
 OpenDNS
 OpenSSH
@@ -289,6 +302,7 @@ PPAs
 PS1
 PS2
 PS3
+PSDrive
 PSModulePath
 PSReadline
 PackageKit
@@ -308,10 +322,12 @@ PurePath
 PyCharm
 PyCon
 PyData
+PyGTK
 PyMOTW
 PyPI
 PyPy
 PyQt
+PyQt4
 PyUtils
 Pydoc
 Pydocs
@@ -366,6 +382,7 @@ SSH1
 SSID
 STDOUT
 SVG
+SanDisk
 SciPy
 Scikit
 Scrapy
@@ -385,6 +402,7 @@ SoHo
 SocketServer
 Solarized
 Sophos
+Soundfolding
 SpaceMacs
 Spc
 Spotify
@@ -399,6 +417,7 @@ Subprocesses
 Subtrees
 SuperUser
 Supima
+System32
 TLDP
 TLDR
 TOC
@@ -407,13 +426,16 @@ TPM
 TabBar
 TableOfContents
 Tagbar
+TerminalIPythonApp
 Termux
 Termux's
 TestCase
 Texinfo
+TextChanged
 TextMate
 Thunar
 TiddlyWiki
+Tk
 ToC
 Todo
 Torrenting
@@ -456,6 +478,7 @@ WRT1900AC
 WRT54G
 WSGI
 WSL
+WSMan
 WebExtension
 WebGL
 Webpack's
@@ -542,6 +565,7 @@ autoindenting
 autoload
 autoloaded
 autoloads
+automagic
 automodule
 autosets
 autossh
@@ -603,6 +627,7 @@ cmake
 cmd
 cmd's
 cmder
+cmdlet
 cmdline
 cmds
 cnoremap
@@ -766,6 +791,7 @@ getenv
 getenvb
 getfilesystemencoding
 gif
+ginit
 gists
 git
 gitattributes
@@ -808,6 +834,7 @@ h5
 h6
 haml
 hashable
+hashtables
 haskell
 helpgrep
 homie
@@ -1070,6 +1097,7 @@ monerod
 monokai
 monospaced
 mortem
+mousemodel
 mozilla
 mp3
 mp4
@@ -1077,6 +1105,7 @@ mpd
 msgpack
 msys
 mycli
+mydir
 mymodule
 mypy
 mysql
@@ -1233,6 +1262,7 @@ proc
 prolog
 protonmail
 ps1
+psdrive
 pstree
 psutil
 ptpython
@@ -1294,6 +1324,7 @@ reCaptcha
 reST
 reStructured
 reStructuredText
+readline
 readline
 readlines
 readlink
@@ -1411,6 +1442,7 @@ spacemacs
 spellchecker
 spellfile
 spellinfo
+sphinxext
 sphinxify
 spiceworks
 spl
@@ -1467,6 +1499,7 @@ syslog
 syslogd
 systemctl
 systemd
+tabline
 tabstop
 tabview
 tasklist
@@ -1519,6 +1552,7 @@ traceback
 tracebacks
 traceroute
 traitlets
+trie
 tronscript
 tty
 tty2
@@ -1654,6 +1688,7 @@ wpa
 writefile
 writethedocs
 www
+wxPython
 wysiwyg
 x509
 xargs
@@ -1699,13 +1734,3 @@ zshrc
 µMatrix
 µTP
 µTorrent
-hashtables
-Soundfolding
-trie
-mousemodel
-GuiLoaded
-ginit
-tabline
-GuiTreeviewToggle
-Atexit
-readline

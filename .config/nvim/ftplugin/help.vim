@@ -26,6 +26,8 @@ if has("conceal")
   setlocal cole=2 cocu=nc
 endif
 
+let &l:path .=  &path .  ',' . expand('$VIMRUNTIME') . '/doc/*.txt'
+
 " Helpfiles won't follow tags correctly without this one
 " Now context-functions will probably go to the tag I want and not simply functions...
 setlocal iskeyword+=-
@@ -35,6 +37,7 @@ unlet! b:did_ftplugin
 " Source mine in
 runtime ftplugin/man.vim
 
+let b:undo_ftplugin = "setl fo< tw< cole< cocu< keywordprg<"
 
 " Mappings: {{{1
 
@@ -43,6 +46,18 @@ runtime ftplugin/man.vim
 " autoload/man.vim and ftplugin/man.vim have 1 function copy pasted
 " nnoremap <silent><buffer> gO <Cmd>call pydoc_help#show_toc()<CR>
 
+" Plugins: {{{1
+
+" ALE as always
+" I think this is probably the best way to define the buffer local fixers
+" based on the global ones.
+let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
+
+let b:ale_fixers += ['align_help_tags'] " Align help tags to the right margin
+
 " Atexit: {{{1
+
+let b:undo_ftplugin += 'path< '
 let &cpoptions = s:cpo_save
+
 unlet s:cpo_save

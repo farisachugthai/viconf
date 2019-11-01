@@ -27,11 +27,21 @@ setlocal omnifunc=javascriptcomplete#CompleteJS
 setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
 let &l:commentstring='// %s'
 
-if has_key(plugs, 'ale') && &filetype==#'javascript'
+" From /r/vim
+setlocal include=require(
+
+" So here's the example from :he 'define'
+let &l:define = '^\s*\ze\k\+\s*=\s*function('
+
+if exists('g:loaded_ale') && &filetype==#'javascript'
   call ftplugins#ALE_JS_Conf()
 endif
 
 " Atexit: {{{1
-let b:undo_ftplugin = 'set et< sw< sts< sua< ofu< com< cms<'
+let b:undo_ftplugin = 'setlocal et< sw< sts< sua< com< cms< ofu< '
+      \ . '|setlocal define'
+      \ . '|setlocal include'
+      \ . '|unlet! b:undo_ftplugin'
+
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

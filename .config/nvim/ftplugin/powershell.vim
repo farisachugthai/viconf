@@ -2,10 +2,19 @@
     " File: powershell.vim
     " Author: Faris Chugthai
     " Description: Powershell modifications
-    " Last Modified: May 19, 2019
+    " Last Modified: Oct 22, 2019
 " ============================================================================
 
 " Guard: {{{1
+if exists("b:did_ftplugin")
+  finish
+endif
+let b:did_ftplugin = 1
+
+if exists('b:loaded_after_powershell') || &compatible || v:version < 700
+  finish
+endif
+let b:loaded_after_powershell = 1
 
 let s:cpo_save = &cpoptions
 set cpoptions-=C
@@ -26,34 +35,9 @@ setlocal suffixesadd+=.ps1
 
 " So this'll be tricky to do period and it's gonna {probably} be a bitch to
 " implement in any sort of portable manner...but how can we set up keywordprg
+setlocal foldmethod=syntax
 
-" Functions: {{{1
-
-let s:debug = 1
-
-function! ALE_PowerShell_Conf() abort
-
-  if s:debug
-    echomsg 'Func was called'
-  endif
-
-  let b:ale_fixers = ['powershell']
-
-  if s:debug
-    echomsg string(g:ale_fixers)
-  endif
-
-endfunction
-
-" Autocmds: {{{1
-
-if has_key(plugs, 'ale') && &filetype=='ps1'
-
-  augroup powershell
-    autocmd Filetype * call ALE_PowerShell_Conf()
-  augroup END
-
-endif
+let b:ale_fixers = ['powershell']
 
 " Atexit: {{{1
 

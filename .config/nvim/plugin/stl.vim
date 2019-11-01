@@ -16,12 +16,28 @@ set cpoptions-=C
 
 " Statusline: {{{1
 
+function! StatusDiagnostic() abort
+
+  if !exists('g:loaded_coc') | return '' | endif
+
+  let info = get(b:, 'coc_diagnostic_info', {})
+  if empty(info) | return '' | endif
+  let msgs = []
+  if get(info, 'error', 0)
+    call add(msgs, 'E' . info['error'])
+  endif
+  if get(info, 'warning', 0)
+    call add(msgs, 'W' . info['warning'])
+  endif
+  return join(msgs, ' ') . ' ' . get(g:, 'coc_status', '')
+endfunction
+
 function! Statusline_expr() abort
   " Define statusline groups for WebDevIcons, Fugitive and other plugins.
   " Define empty fallbacks if those plugins aren't installed. Then
   " use the builtins to fill out the information.
   if exists('*WebDevIconsGetFileTypeSymbol')
-    let dicons = ' %{WebDevIconsGetFileTypeSymbol()} '
+    let dicons = '%{WebDevIconsGetFileTypeSymbol()}'
   else
     let dicons = ''
   endif
@@ -44,7 +60,7 @@ function! Statusline_expr() abort
   if exists('*strftime')
     " Overtakes the whole screen when Termux zooms in
     if &columns > 80
-      let tstmp = ' %{strftime("%H:%M %m-%d", getftime(expand("%:p")))}'
+      let tstmp = ' %{strftime("%H:%M %m-%d-%Y", getftime(expand("%:p")))}'
       " last modified timestamp
     else
       let tstmp = ''
@@ -58,16 +74,18 @@ function! Statusline_expr() abort
   " %-0{minwid}.{maxwid}{item}
   let cos = " %{exists('g:did_coc_loaded') ? coc#status() : ''} "
 
-  let cog = ' %{exists("b:coc_git_status") ? b:coc_git_status : ""} '
+  let cog = ' %{exists("coc_git_status") ? coc_git_status : ""} '
 
   " shit g:ale_enabled == 0 returns True
   let ale_stl = '%{exists("g:ale_enabled") ? "[ALE]" : ""}'
 
 
-  return '[%n] %f ' . dicons . '%m' . '%r' . ' %y '
+  return '[%n] ' . dicons . '%m' . '%r' . ' %y '
         \. fug . csv
         \. ' %{&ff} ' . tstmp
         \. cos . cog
+        \. StatusDiagnostic()
+        \. ' %f'
         \. sep
         \. ale_stl
         \. pos . '%*' . ' %P'

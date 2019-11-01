@@ -28,11 +28,19 @@ endif
 setlocal linebreak
 setlocal textwidth=120
 
+setlocal comments=b:#,fb:-
 setlocal commentstring=#\ %s
-setlocal tabstop=8 shiftwidth=4 expandtab softtabstop=4
+setlocal tabstop=4 shiftwidth=4 expandtab softtabstop=4
+
+" I guess i should set cindent if both of these are set right?
+setlocal cindent
 setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 setlocal cinkeys-=0#
 
+setlocal indentkeys-=0#
+setlocal include=^\\s*\\(from\\\|import\\)
+
+setlocal cinkeys-=0#
 setlocal indentkeys-=0#
 setlocal include=^\\s*\\(from\\\|import\\)
 
@@ -44,23 +52,24 @@ setlocal foldmethod=indent
 " runtime autoload/pydoc_help.vim
 
 " setlocal keywordprg=pydoc
-let &keywordprg = ':PydocThis' . expand('<cWORD>')
+" let &l:keywordprg = ':PydocThis' . expand('<cWORD>')
+" let &l:keywordprg = pydoc_help#SplitPydocCword()
 
 " Use xnoremap because I wouldn't want this in select mode
 " xnoremap K <Cmd>'<,'>PydocThis<CR>
 
-setlocal suffixesadd+=.py,.rst
+setlocal suffixesadd+=.py
 setlocal omnifunc=python3complete#Complete
 setlocal iskeyword+=.
 
-let &path = ftplugins#PythonPath()
+let &l:path = ftplugins#PythonPath()
 
 " *'shiftround'* *'sr'* *'noshiftround'* *'nosr'*
 " 'shiftround' 'sr'	boolean	(default off) global
 	" Round indent to multiple of 'shiftwidth'.  Applies to > and <
 	" commands.  CTRL-T and CTRL-D in Insert mode always round the indent to
 	" a multiple of 'shiftwidth' (this is Vi compatible).
-set shiftround
+setlocal shiftround
 " Possibly chalk this up to one of the many tab related and necessary option
 " python requires you set
 
@@ -117,10 +126,15 @@ endif
 
 
 " Atexit: {{{1
-
-" A bunch missing. Check :he your-runtime-path somewhere around there is a
-" good starter for writing an ftplugin
-let b:undo_ftplugin = 'set lbr< tw< cms< et< sts< ts< sw< cc< fdm< sua< isk< cink< cinw<'
+" For a reference go to $VIMRUNTIME/ftplugin/python.vim
+let b:undo_ftplugin = 'setlocal lbr< tw< cms< et< sts< ts< sw< cc< fdm< kp<'
+      \ . '|setlocal sr< sua< isk< ep< fp< path< cinw<'
+      \ . '|setlocal comments<'
+      \ . '|setlocal include<'
+      \ . '|setlocal indentkeys<'
+      \ . '|setlocal omnifunc<'
+      \ . '|setlocal cinkeys<'
+      \ . '|unlet! b:undo_ftplugin'
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

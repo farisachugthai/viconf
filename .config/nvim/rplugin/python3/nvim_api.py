@@ -76,7 +76,6 @@ our :class:`jedi.Script()` object.
 *PHEW* we're getting closer.
 
 """
-"""
 import sys
 
 try:
@@ -89,7 +88,7 @@ else:
 
 
 @pynvim.plugin
-class Limit(object):
+class Limit:
     """From `:he remote-plugin-host`."""
 
     def __init__(self, vim, calls=0):

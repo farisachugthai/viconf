@@ -31,6 +31,14 @@ function! Buf_Window_Mapping() abort  " {{{1
   " llist throws an error if no location. *sigh*
   noremap <Leader>c <Cmd>cwindow<CR><bar><Cmd>lwindow<CR>
   " noremap <leader>q <Cmd>copen<CR><bar><Cmd>lopen<CR>
+  " To make navigating the location list and quickfix easier
+  " Also check ./unimpaired.vim
+  " Sep 05, 2019: This doesnt need to be 2 commands!! cwindow does both!
+  " Oct 18, 2019: I just ran into llist and lwindow showing different things
+  " and lwindow didn't show the location list i had the at the time so
+  " switching again
+  noremap <Leader>c <Cmd>clist!<CR><bar><Cmd>llist!<CR>
+  " noremap <leader>q <Cmd>copen<CR><bar><Cmd>lopen<CR>
 
   " Navigate windows more easily
   noremap <C-h> <Cmd>wincmd h<CR>

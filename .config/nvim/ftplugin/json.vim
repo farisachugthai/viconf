@@ -2,7 +2,7 @@
   " File: json.vim
   " Author: Faris Chugthai
   " Description: JSON ftplugin
-  " Last Modified: June 23, 2019
+  " Last Modified: Oct 20, 2019
 " ============================================================================
 
 " Guards: {{{1
@@ -42,26 +42,8 @@ if &filetype!=#'json'
   finish
 endif
 
-" JSON is the only filetype where i always want ALE enabled
-if empty('g:loaded_ale')
-  if exists('*plug#load')
-    call plug#load('ale')
-    echomsg 'ftplugin/json: Calling plug#load(ale)'
-  endif
-endif
-
-" Still check if that worked though
-if !empty('g:loaded_ale')
-  if exists('*ale#toggle#Enable')
-    call ale#toggle#Enable()
-  else
-    echoerr 'Vim-plug loaded ale but ale#toggle#Enable still didnt work'
-  endif
   " Load my configs
-  call ftplugins#ALE_JSON_Conf()
-else
-  echoerr 'ftplugin/json: Vim-Plug did not load ale'
-endif
+call ftplugins#ALE_JSON_Conf()
 
 " Commands: {{{1
 " TODO: Could pretty easily make a command that runs python -m json.fix('%')
@@ -73,7 +55,10 @@ endif
 " :py3 from json import tool
 
 " Highlighting: {{{1
-" hi match jsonComment
+
+syntax match jsonComment +\/\/.\+$+
+
+highlight link jsonComment Comment
 
 " Atexit: {{{1
 let b:undo_ftplugin = 'setlocal fo< com< cms< et< sts< sw< sua< fdm<'

@@ -117,7 +117,18 @@ function! pydoc_help#async_cursor() abort
   call jobstart('pydoc ' . expand('<cWORD>'), {'on_stdout':{j,d,e->append(line('.'),d)}})
 endfunction
 
+function! pydoc_help#async_cexpr() abort
+	"<cexpr>    is replaced with the word under the cursor, including more
+	"	   to form a C expression.  E.g., when the cursor is on "arg"
+	"	   of "ptr->arg" then the result is "ptr->arg"; when the
+	"	   cursor is on "]" of "list[idx]" then the result is
+	"	   "list[idx]".  This is used for |v:beval_text|.
+
+  call jobstart('pydoc ' . expand('<cexpr>'), {'on_stdout':{j,d,e->append(line('.'),d)}})
+endfunction
+
 function! pydoc_help#broken_scratch_buffer() abort  " {{{1
+  " Not actually broken i just need to debug the commented out lines
 
   " From he api-floatwin. Only new versions of Nvim (maybe 0.4+ only?)
   let buf = nvim_create_buf(v:false, v:true)

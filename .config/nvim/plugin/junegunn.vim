@@ -50,11 +50,14 @@ if exists('$TMUX')
 endif
 
 Plug 'mhinz/vim-startify'
+
 Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
 noremap <silent> <F8> <Cmd>TagbarToggle<CR>
 noremap! <silent> <F8> <Cmd>TagbarToggle<CR>
 tnoremap <silent> <F8> <Cmd>TagbarToggle<CR>
-
+if !has('unix')  " this really fucks up on windows
+  Plug 'jszakmeister/rst2ctags', {'dir': expand('~/src/rst2ctags')}
+endif
 
 if !empty(s:ubuntu)
   Plug 'ekalinin/Dockerfile.vim', {'for': 'dockerfile'}
@@ -78,7 +81,7 @@ Plug 'greyblake/vim-preview', {'on': 'Preview'}
 " The 'tabular' plugin must come _before_ 'vim-markdown'.
 Plug 'godlygeek/tabular'
 Plug 'itspriddle/vim-shellcheck', { 'for': ['sh', 'bash'] }
-  Plug 'mitsuhiko/vim-jinja'
+Plug 'mitsuhiko/vim-jinja'
 Plug 'ervandew/supertab'
 Plug 'junegunn/vim-peekaboo'
 Plug 'vim-voom/voom'
@@ -93,6 +96,10 @@ if empty(s:termux)
   Plug 'elzr/vim-json', { 'for': 'json' }
 
 endif
+
+Plug 'tomtom/tlib_vim'
+
+Plug 'omnisharp/omnisharp-vim', {'for': 'cs'}
 
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()

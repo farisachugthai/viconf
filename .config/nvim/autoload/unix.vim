@@ -2,7 +2,7 @@
   " File: unix.vim
   " Author: Faris Chugthai
   " Description: Autoloaded unix style functions
-  " Last Modified: July 24, 2019 
+  " Last Modified: Oct 27, 2019
 " ============================================================================
 
 " Guards: {{{1
@@ -109,16 +109,6 @@ function! unix#system(pwd, cmd)  " {{{1
 		let cmd = 'cd ' . shellescape(a:pwd) . ' && ' . cmd
 	endif
 	return system(cmd)
-endfunction
-
-
-function! unix#shell() abort  " {{{1
-
-    " This function sets the shell to bash. Shouldn't do anything particularly
-    " helpful on unix systems but may be necessary to call on windows with WSL
-    " installed.
-    set shell=bash
-
 endfunction
 
 " Atexit: {{{1

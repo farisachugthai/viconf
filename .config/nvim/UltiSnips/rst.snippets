@@ -67,6 +67,9 @@ snippet `` "Double backticks. Best used in visual mode." w
 \`\`${0:${VISUAL}}\`\`
 endsnippet
 
+snippet file "Inline file directive" w
+:file:\`${0:${VISUAL}}\`
+endsnippet
 
 ###########
 #  links  #
@@ -363,6 +366,7 @@ endsnippet
 # 'abbr': Abbreviation(),
 # 'index': Index(),
 # }  # type: Dict[str, RoleFunction]
+
 ###################
 #  Sphinx Inline  #
 ###################

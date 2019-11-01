@@ -46,8 +46,11 @@ setlocal foldlevel=0 foldlevelstart=0
 " TPope's markdown plugin. Light enough footprint when settings vars to not
 " need a check
 let g:markdown_fenced_languages = [
-      \ 'python', 'bash=sh', 'c++=cpp', 'viml=vim',
-      \ 'bash=sh', 'ini=dosini'
+      \ 'python', 'bash=sh',
+      \ 'c++=cpp', 'viml=vim',
+      \ 'bash=sh', 'ini=dosini',
+      \ 'vim',
+      \ 'help',
       \ ]
 
 let g:markdown_minlines = 100

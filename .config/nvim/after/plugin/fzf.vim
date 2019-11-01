@@ -18,7 +18,7 @@ set cpoptions-=C
 
 " Options: {{{1
 
-let g:fzf_command_prefix = 'FZF'
+let g:fzf_command_prefix = 'FZ'
 
 " Sep 15, 2019: Look what i found in stdpath('data') .
 " '/plugged/fzf.vim/plugin/fzf.vim' ! There's a statusline option!!! That's
@@ -37,7 +37,7 @@ let g:fzf_action = {
 " NOTE: Use of stdpath() requires nvim0.3>
 let g:fzf_history_dir = stdpath('data') . '/fzf-history'
 
-let g:fzf_layout = { 'window': 'split' }
+let g:fzf_layout = { 'window': '-tabnew' }
 
 " Standardized vars: {{{2
 let s:ag_command = 'ag --smart-case -u -g " " --'
@@ -58,6 +58,10 @@ let s:fzf_options = [
       \   '--border', '--cycle'
       \ ]
 
+if exists('$TMUX')
+  let g:fzf_prefer_tmux = 1
+endif
+
 " Fzf.vim: {{{2
 
 " [[B]Commits] Customize the options used by 'git log':
@@ -75,6 +79,9 @@ let g:fzf_tags_command = 'ctags -R --options='
 
 " [Commands] --expect expression for directly executing the command
 let g:fzf_commands_expect = 'alt-enter,ctrl-x'
+
+" FOUND ONE
+let g:fzf_files_options = s:fzf_options
 
 " FZF Colors: {{{2
 
@@ -113,17 +120,20 @@ hi! fzf3 ctermfg=252 ctermbg=238 guifg=#D9D9D9 guibg=#565656 cterm=bold,underlin
 " inoremap <expr> <plug>(fzf-complete-file-ag)     fzf#vim#complete#path('ag -l -g ""')
 
 
-" If you have executable('ag') then don't ever use dir or find!!!
+" If you have executable('ag') then don't ever use fzf-complete-path or file!
 if executable('ag')
-  imap <C-x><C-f> <plug>(fzf-complete-file-ag)
-  imap <C-x><C-j> <plug>(fzf-complete-file-ag)
+  imap <C-x><C-f> <Plug>(fzf-complete-file-ag)
+  imap <C-x><C-j> <Plug>(fzf-complete-file-ag)
 else
-  imap <C-x><C-f> <plug>(fzf-complete-path)
+  imap <C-x><C-f> <Plug>(fzf-complete-file)
+  imap <C-x><C-j> <Plug>(fzf-complete-path)
 endif
 
-" imap <C-x><C-k> <Plug>(fzf-complete-word)
-" imap <C-x><C-f> <plug>(fzf-complete-path)
-" imap <C-x><C-l> <plug>(fzf-complete-line)
+" Holy shit this works well
+inoremap <expr> <C-x><C-l> fzf#vim#complete#line()
+
+" Uhhh C-b for buffer?
+inoremap <expr> <C-x><C-b> fzf#vim#complete#buffer_line()
 
 if filereadable(expand('$_ROOT/share/dict/words'))
   call find_files#fzf_spell()
@@ -303,7 +313,7 @@ command! -bang -bar FZMru call find_files#FZFMru()
 " Oct 15, 2019: Works!
 command! -complete=file FZGit call find_files#FZFGit()
 
-  " TODO: The above command should use the fzf funcs 
+  " TODO: The above command should use the fzf funcs
   " and also use this
   " \   {'dir': systemlist('git rev-parse --show-toplevel')[0] }, <bang>0)
 

@@ -20,22 +20,13 @@ let g:webdevicons_enable = 1
 let g:webdevicons_enable_nerdtree = 1               " adding the flags to NERDTree
 let g:airline_powerline_fonts = 1
 let g:DevIconsEnableFoldersOpenClose = 1
-" For startify
-let entry_format = "'   ['. index .']'. repeat(' ', (3 - strlen(index)))"
-
-if exists('*WebDevIconsGetFileTypeSymbol')  " support for vim-devicons
-    let entry_format .= ". WebDevIconsGetFileTypeSymbol(entry_path) .' '.  entry_path"
-else
-    let entry_format .= '. entry_path'
-endif
-let g:did_webdevicons_after_plugin = 1
 
 " change the default character when no match found
 " let g:WebDevIconsUnicodeDecorateFileNodesDefaultSymbol = 'ƛ'
 " Heres the original
 " let g:WebDevIconsUnicodeDecorateFileNodesDefaultSymbol = ''
 
-" Heres a neat one!
+" Heres a neat one! Fuck
 let g:WebDevIconsUnicodeDecorateFileNodesDefaultSymbol = ''
 
 

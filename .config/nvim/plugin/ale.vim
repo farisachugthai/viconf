@@ -47,9 +47,10 @@ let g:ale_linter_aliases = {
       \ 'htmldjango': 'html'
       \ }
 
-" Now because you fix the trailing whitespace and trailing lines
-" let g:ale_warn_about_trailing_whitespace = 0
-" let g:ale_warn_about_trailing_blank_lines = 0
+" When ale is linting C# only use OmniSharp
+let g:ale_linters = {
+\ 'cs': ['OmniSharp']
+\}
 
 " forgot how annoying open list was
 " let g:ale_open_list = 1
