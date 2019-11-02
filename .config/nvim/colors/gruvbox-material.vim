@@ -17,9 +17,9 @@ endif
 let g:colors_name = 'gruvbox-material'
 
 let s:t_Co = exists('&t_Co') && !empty(&t_Co) && &t_Co > 1 ? &t_Co : 2
-let s:italics = (((&t_ZH != '' && &t_ZH != '[7m') || has('gui_running')) && !has('iOS')) || has('nvim')
+let s:italics = (((&t_ZH !=# '' && &t_ZH != '[7m') || has('gui_running')) && !has('iOS')) || has('nvim')
 
-" Additions: {{{
+" My Additions: {{{
 let g:gruvbox_material_transparent_background = 1
 let g:gruvbox_material_enable_bold = 1
 let g:gruvbox_material_background = 'hard'
@@ -63,8 +63,45 @@ hi! link rstDirectivepython Question
 hi! link rstInlineLiteral   Identifier
 
 " }}}
+" Python: {{{1
+hi link pythonAsync			Statement
+hi link pythonAttribute TypeDef
+hi link pythonBoolean Boolean
+hi! link pythonBoolean Purple
+hi! link pythonBuiltin Orange
+hi! link pythonBuiltinFunc Orange
+hi! link pythonBuiltinObj Orange
+hi link pythonComment		Comment
+hi! link pythonCoding Blue
+hi! link pythonConditional Red
+hi! link pythonDecorator Red
+hi link pythonComment		Comment
+hi! link pythonDot Grey
+hi! link pythonDottedName GreenBold
+hi link pythonEscape		Special
+hi! link pythonException Red
+hi! link pythonExceptions Purple
+hi! link pythonFunction Aqua
+hi! link pythonImport Blue
+hi! link pythonInclude Blue
+hi link pythonMatrixMultiply Number
+hi link pythonNumber Number
+hi! link pythonOperator Orange
+hi link pythonQuotes		String
+hi link pythonRawString		String
+hi! link pythonRepeat Red
+hi! link pythonRun Blue
+hi link pythonSpaceError		Error
+hi link pythonStatement		Statement
+hi link pythonString		String
+hi link pythonSync IdentifierBold
+hi link pythonTodo			Todo
+hi link pythonTripleQuotes		pythonQuotes
 
+" }}}
 " Original: {{{
+"
+" Filetypes: {{{
 hi! link markdownH5 Yellow
 hi! link markdownH6 Yellow
 hi! link markdownCode Green
@@ -122,42 +159,6 @@ hi! link cStructure Orange
 hi! link objcTypeModifier Red
 hi! link objcDirective Blue
 
-" Python: {{{1
-hi link pythonAsync			Statement
-hi link pythonAttribute TypeDef
-hi link pythonBoolean Boolean
-hi! link pythonBoolean Purple
-hi! link pythonBuiltin Orange
-hi! link pythonBuiltinFunc Orange
-hi! link pythonBuiltinObj Orange
-hi link pythonComment		Comment
-hi! link pythonCoding Blue
-hi! link pythonConditional Red
-hi! link pythonDecorator Red
-hi link pythonComment		Comment
-hi! link pythonDot Grey
-hi! link pythonDottedName GreenBold
-hi link pythonEscape		Special
-hi! link pythonException Red
-hi! link pythonExceptions Purple
-hi! link pythonFunction Aqua
-hi! link pythonImport Blue
-hi! link pythonInclude Blue
-hi link pythonMatrixMultiply Number
-hi link pythonNumber Number
-hi! link pythonOperator Orange
-hi link pythonQuotes		String
-hi link pythonRawString		String
-hi! link pythonRepeat Red
-hi! link pythonRun Blue
-hi link pythonSpaceError		Error
-hi link pythonStatement		Statement
-hi link pythonString		String
-hi link pythonSync IdentifierBold
-hi link pythonTodo			Todo
-hi link pythonTripleQuotes		pythonQuotes
-
-" }}}
 hi! link cssBraces White
 hi! link cssFunctionName Yellow
 hi! link cssIdentifier Orange
@@ -506,6 +507,9 @@ hi! link helpCommand Orange
 hi! link helpHeadline Title
 hi! link helpHeader Aqua
 hi! link helpSpecial Yellow
+
+" }}}
+" Plugins: {{{
 hi! link plug2 Green
 hi! link plugBracket Grey
 hi! link plugName Aqua
@@ -592,7 +596,7 @@ hi! link ALEVirtualTextInfo Grey
 hi! link ALEVirtualTextStyleError ALEVirtualTextError
 hi! link ALEVirtualTextStyleWarning ALEVirtualTextWarning
 
-" Coc: {{{1
+" Coc: {{{
 hi! link CocErrorSign ALEErrorSign
 hi! link CocWarningSign ALEWarningSign
 hi! link CocInfoSign ALEInfoSign
@@ -644,7 +648,8 @@ hi! link UndotreeBranch Yellow
 hi! link UndotreeCurrent Aqua
 hi! link UndotreeSavedSmall Purple
 
-if (has('termguicolors') && &termguicolors) || has('gui_running')
+" }}}
+if (has('termguicolors') && &termguicolors) || has('gui_running')  " {{{
   if &background ==# 'dark'
     let g:terminal_ansi_colors = ['#665c54', '#ea6962', '#a9b665', '#e78a4e',
           \ '#7daea3', '#d3869b', '#89b482', '#dfbf8e', '#928374', '#ea6962',
@@ -755,7 +760,7 @@ if (has('termguicolors') && &termguicolors) || has('gui_running')
         hi CursorLineNr guifg=#a89984 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
       endif
     endif
-    if &background ==#'light'
+    if &background ==#'light'  " {{{
       hi PmenuSel guifg=#3c3836 guibg=#a89984 guisp=NONE gui=NONE cterm=NONE
       hi TabLineSel guifg=#3c3836 guibg=#a89984 guisp=NONE gui=bold cterm=bold
       hi WildMenu guifg=#3c3836 guibg=#a89984 guisp=NONE gui=NONE cterm=NONE
@@ -789,9 +794,11 @@ if (has('termguicolors') && &termguicolors) || has('gui_running')
         hi SignColumn guifg=NONE guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
         hi StatusLineNC guifg=#a89984 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
         hi StatusLineTermNC guifg=#a89984 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-      endif
-    else
-      hi PmenuSel guifg=#282828 guibg=#a89984 guisp=NONE gui=NONE cterm=NONE
+      endif  " }}}
+    else  " {{{
+      " Got this from `:he 'pumblend'
+      hi PmenuSel guifg=#282828 guibg=#a89984 guisp=NONE gui=NONE cterm=NONE blend=0
+      " Yeah. Blend is 0
       hi TabLineSel guifg=#282828 guibg=#a89984 guisp=NONE gui=bold cterm=bold
       hi WildMenu guifg=#282828 guibg=#a89984 guisp=NONE gui=NONE cterm=NONE
       if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
@@ -825,7 +832,8 @@ if (has('termguicolors') && &termguicolors) || has('gui_running')
         hi StatusLineNC guifg=#a89984 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
         hi StatusLineTermNC guifg=#a89984 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
       endif
-    endif
+    endif  "  }}}
+
     hi Conceal guifg=#7daea3 guibg=NONE guisp=NONE gui=NONE cterm=NONE
     hi Cursor guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
     hi lCursor guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
@@ -1574,9 +1582,8 @@ if (has('termguicolors') && &termguicolors) || has('gui_running')
   hi UndotreeSavedBig guifg=#945e80 guibg=NONE guisp=NONE gui=bold cterm=bold
   unlet s:t_Co s:italics
   finish
-endif
-
-if s:t_Co >= 256
+endif  " }}}
+if s:t_Co >= 256  "  {{{
   if &background ==# 'dark'
     hi White ctermfg=223 ctermbg=NONE cterm=NONE
     hi LightGrey ctermfg=246 ctermbg=NONE cterm=NONE

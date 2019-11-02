@@ -75,7 +75,7 @@ endif
 
 " I feel like the lazy loaded ones can come out here
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
-nnoremap U :UndotreeToggle<CR>
+nnoremap U <Cmd>UndotreeToggle<CR>
 
 Plug 'greyblake/vim-preview', {'on': 'Preview'}
 " The 'tabular' plugin must come _before_ 'vim-markdown'.

@@ -22,6 +22,7 @@ setlocal cindent
 if filereadable('Makefile')
   setlocal makeprg=make\ %<.o
 endif
+if executable('gcc') | compiler gcc | endif
 
 setlocal keywordprg=:Man
 

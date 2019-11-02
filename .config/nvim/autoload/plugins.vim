@@ -134,6 +134,24 @@ function! plugins#FugitiveMappings() abort   " {{{2
 
 endfunction
 
+" Coc: {{{1
+
+function! plugins#GrepFromSelected(type)
+  let saved_unnamed_register = @@
+  if a:type ==# 'v'
+    normal! `<v`>y
+  elseif a:type ==# 'char'
+    normal! `[v`]y
+  else
+    return
+  endif
+  let word = substitute(@@, '\n$', '', 'g')
+  let word = escape(word, '| ')
+  let @@ = saved_unnamed_register
+  execute 'CocList grep ' . word
+endfunction
+
+
 " Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

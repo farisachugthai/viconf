@@ -1,5 +1,4 @@
 " ============================================================================
-
     " File: riv.vim
     " Author: Faris Chugthai
     " Description: Plugin modifications for riv.vim

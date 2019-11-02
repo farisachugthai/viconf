@@ -83,21 +83,23 @@ command! -nargs=0 NvimAPI
 " Easier mkdir and cross platform!
 command! -complete=dir -nargs=1 Mkdir call mkdir(shellescape('<q-args>'), 'p', '0700')
 
-" Omnifuncs: {{{1
+" Last Call For Options: {{{1
+
+" Omnifuncs: {{{2
 
 " I just wanted to move this farther back in the queue
 if &omnifunc == "" | setlocal omnifunc=syntaxcomplete#Complete | endif
 
 if &completefunc == "" | setlocal completefunc=syntaxcomplete#Complete | endif
 
-" Formatexpr: {{{1
+" Formatexpr: {{{2
 " Same with this
 
 if &formatexpr ==# ''
   setlocal formatexpr=format#Format()  " check the autoload directory
 endif
 
-" QuickFix: {{{1
+" QuickFix: {{{2
 
 " From :he *:cadde* *:caddexpr*
 " Evaluate {expr} and add the resulting lines to the current quickfix list.
@@ -107,7 +109,7 @@ endif
 " command! -nargs=? QFSearch execute 'g/' . shellescape(<q-args>) . '/ caddexpr ' . expand('%') . ":" . line(".") . ":" . getline(".")
 " Doesn't work and tried like 20 times to debug it.
 
-" Keep Profiling At End: {{{1
+" Keep Profiling At End: {{{2
 " Because you have this check and it could stop everything else from getting
 " defined for no reason
 if !has('profile') || !has('reltime')  " timing functionality

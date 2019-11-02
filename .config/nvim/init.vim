@@ -26,7 +26,7 @@ if empty(s:vim_plug) && exists('*plugins#InstallPlug')
   call plugins#InstallPlug()
 endif
 
-" runtime junegunn.vim  " Load my plugins. 10/30/19 commented because in plugins
+runtime junegunn.vim  " Load my plugins.
 " Don't assume that the InstallPlug() func worked so ensure it's defined
 if empty('plugs') | let plugs = {} | endif
 " Uh I don't know how this happens but stdpath('config') is no longer the first entry in rtp?
@@ -58,7 +58,7 @@ map <Space> <Leader>
 
 if has('nvim-0.4')   " Fun new features!
   let &shadafile = stdpath('data') . '/shada/main.shada'
-  set pumblend=20   " toggle transparency in the pum
+  set pumblend=20  " toggle transparency in the pum
   try | set pyxversion=3 | catch /^Vim:E518:*/ | endtry
 endif
 
@@ -75,7 +75,7 @@ if &tabstop > 4 | setlocal tabstop=4 | endif
 if &shiftwidth > 4  | setlocal shiftwidth=4 | endif
 setlocal expandtab smarttab softtabstop=4
 
-set foldenable foldlevelstart=1 foldlevel=1
+set foldenable foldlevelstart=0 foldlevel=0
 set foldnestmax=10 foldmethod=marker foldcolumn=2
 set foldopen=quickfix,search,tag,undo,jump
 set signcolumn=auto:2  " this might be a nvim 4 thing
@@ -96,14 +96,12 @@ endif
 set wildignorecase wildmode=full:list:longest,full:list
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 " C-n and C-p now use the same input that every other C-x does combined!
+" Remove includes they're pretty slow
 set complete+=kspell,d,k complete-=u,i
 
 " Create a preview window and display all possibilities but don't insert
 " dude what am i doing wrong that i don't get the cool autocompletion that NORC gets??
 set completeopt=menu,menuone,noselect,noinsert,preview
-
-" don't show more than 15 choices in the popup menu. defaults to 0
-set pumheight=15
 
 " both smartcase and infercase require ignorecase to be set
 set ignorecase
@@ -111,22 +109,16 @@ set smartcase infercase
 
 set makeencoding=char         " Used by the makeprg. system locale is used
 set sessionoptions-=buffers,winsize viewoptions-=options sessionoptions+=globals
-
 set tags+=./tags,./*/tags
 set tags^=./.git/tags tagcase=smart showfulltag
-
-set mouse=a
-set autowrite autochdir
+set mouse=a nojoinspaces autowrite autochdir modeline
+if exists('&modelineexpr') | set modelineexpr | endif
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
-set nojoinspaces
 
 " Filler lines to keep text synced, 3 lines of context on diffs,
 " don't diff hidden files,default foldcolumn is 2
 set diffopt=filler,context:0,hiddenoff,foldcolumn:2,icase,iwhite,indent-heuristic
 if has('patch-8.1.0360') | set diffopt+=internal,algorithm:patience | endif
-
-set modeline
-if exists('&modelineexpr') | set modelineexpr | endif
 
 set browsedir="buffer"   " which directory is used for the file browser
 
@@ -142,7 +134,7 @@ set conceallevel=2 concealcursor=nc    " enable concealing
 
 noremap q; q:
 noremap Q @q
-vnoremap <BS> d
+xnoremap <BS> d
 
 set spelllang=en spellsuggest=5
 noremap <Leader>sp <Cmd>setlocal spell!<CR>
