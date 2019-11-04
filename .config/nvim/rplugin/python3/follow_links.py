@@ -15,32 +15,26 @@ Well now you can open up nvim and run::
 
 And it'll execute without errors which is nice.
 
+Nov 03, 2019:
+
+    Holy shit I may have gotten this working.
+
 """
 import logging
 import os
 from pathlib import Path
-
 import pynvim
 
 logger = logging.getLogger(name=__name__)
 
 
-# @pynvim.plugin
+@pynvim.plugin
 class FileLink:
-    """FileLink because it may be an IPython class.
-
-    Could we have files display with an embedded link?
-
-    .. note::
-
-        nvim.__init_subclass__() can not take any keyword arguments.
-
-    """
-
     def __init__(self, nvim, logger=None):
         """Initialize a file object."""
         self.nvim = nvim
-        self.path_obj = self.nvim.current.buffer.name
+        # Damnit why isnt it recognizing this as a func? this is the missing link
+        self.path_obj = nvim.call('nvim_get_current_buf()')
         if logger is not None:
             self.logger = logger
 
@@ -66,7 +60,7 @@ class FileLink:
         if real_file:
             return real_file.parent
 
-    # @pynvim.command(name='Follow', nargs=1, complete='file')
+    @pynvim.command(name='Follow', nargs=1, complete='file')
     def true_file(self, path_obj):
         """Implement a command that opens and resolves a symlink."""
         if self._is_symlink:
@@ -99,7 +93,7 @@ def _setup_logging(level):
     return logger
 
 
-# @pynvim.autocmd('BufEnter')
+@pynvim.autocmd('BufEnter')
 def main():
     """Set everything up."""
     log_levels = {
@@ -110,12 +104,12 @@ def main():
         'critical': logging.CRITICAL,
     }
     LOGGER = _setup_logging(log_levels['warning'])
-    if os.environ.get('NVIM_LISTEN_ADDRESS'):
-        nvim = pynvim.attach('socket', path=os.environ['NVIM_LISTEN_ADDRESS'])
-    else:
-        nvim = None
+    # if os.environ.get('NVIM_LISTEN_ADDRESS'):
+    #     nvim = pynvim.attach('socket', path=os.environ['NVIM_LISTEN_ADDRESS'])
+    # else:
+    #     nvim = None
 
-    cur_file = FileLink(nvim, logger=LOGGER)
+    cur_file = FileLink(pynvim.Nvim, logger=LOGGER)
 
     if cur_file.is_symlink:
         cur_file.true_file()

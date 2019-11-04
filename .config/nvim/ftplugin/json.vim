@@ -19,13 +19,17 @@ let b:did_ftplugin = 1
 
 setlocal formatoptions-=t
 
+" My Additions: {{{1
+"
 " JSON has no comments.
-setlocal comments=
+" setlocal comments=
 " setlocal commentstring=
 " sometimes it does fuck you
 let &commentstring='\\ %s'
 
-" My Additions: {{{1
+setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
+
+
 " Let's add in a few more options though. Enforce 2 space tabs
 setlocal expandtab softtabstop=2 shiftwidth=2
 

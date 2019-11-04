@@ -35,6 +35,10 @@ setlocal tabstop=4 shiftwidth=4 expandtab softtabstop=4
 " I guess i should set cindent if both of these are set right?
 setlocal cindent
 setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
+setlocal cinkeys-=0#
+
+setlocal indentkeys-=0#
+setlocal include=^\\s*\\(from\\\|import\\)
 
 setlocal cinkeys-=0#
 setlocal indentkeys-=0#

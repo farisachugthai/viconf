@@ -15,7 +15,7 @@ As much of this [init.vim](.config/nvim/init.vim) is set up so that it
 will start up as quickly as possible while still maintaining a plethora 
 of features.
 
-This is achieved by [autoloading](.config/nvim/autoload) as many functions as
+This is achieved by [auto-loading](.config/nvim/autoload) as many functions as
 possible, and determining a few non-portable settings in a relatively quick
 and consistent manner.
 
@@ -26,29 +26,54 @@ The initialization file has largely been refactored out of existence.
 The use (and inevitable abuse) of the `runtimepath` or `&rtp` variable
 allows for more logical namespaces to be utilized, and typically debugging
 has proven easier with almost all functionality broken up into
-the respective <./.config/nvim/plugin>,  <./.config/nvim/after/plugin>,
-and <./.config/nvim/autoload> directories.
+the respective (.config/nvim/plugin), (.config/nvim/after/plugin),
+and (.config/nvim/autoload) directories.
 
 The only remaining assumption as a result of the restructuring is:
 
 - [vim-plug](https://www.github.com/junegunn/vim-plug) is the plugin manager
   that you'd like to use.
 
-Luckily upgrading is typically as simple as running:
-
-    `sudo add-apt-repository ppa:neovim-ppa/unstable`
-
-On ubuntu or:
-
-    `choco install neovim --pre`
-
-On Windows.
+Largely this is being refactored; however, its been slow as manually
+checking for the presence of every plugin is a pain point.
 
 The [init.vim](./.config/nvim/init.vim) will immediately check that the
 plug.vim file is there, and it will automatically download it if not.
 
 If that proves too much effort, I `git sub-tree add`ed vim-plug to this
 repo as well.
+
+## Requirements
+
+By and large I do assume that anyone using this code is using a very new copy
+of Neovim. Generally I make as many checks as possible to ensure backwards
+compatibility...except for when I don't.
+
+### Updating to a newer version
+
+Unfortunately the newest version of neovim in the Ubuntu 18.04 repositories
+is 0.2.2, which didn't ship with the `stdpath()` function along with many other niceties.
+
+Luckily upgrading is typically as simple as running:
+
+    sudo add-apt-repository ppa:neovim-ppa/unstable
+
+On ubuntu or:
+
+    choco install neovim --pre
+
+On Windows.
+
+
+#### Use of the `stdpath()`
+
+**Warning:**
+
+In version 0.3.1 Neovim created a function `stdpath()` that will
+return the value of the user's configuration directory regardless
+of platform or OS. It's a phenomenal function and greatly simplifies a huge
+number of complicated tasks; however, I frequently don't check if that
+function exists before use.
 
 ## Start up time
 
@@ -170,18 +195,26 @@ Currently, lazily loaded modification files exist for:
 In addition, configurations exist for:
 
 - [coc.nvim](https://www.github.com/neoclide/coc.nvim).
-  - Automatic autocompletion for any filetype Vim supports via
-  - This plugin depends on node.js and Yarn being installed.
-- Snippet integration/expansion for 24 different filetypes. Well over [1000
-  snippets](./.config/nvim/UltiSnips) are included.
-  - Nvim's Python integration is utilized to expand some snippets.
-    Over [20 functions](./.config/nvim/pythonx/snippets_helper.py) are imported and used throughout the varying snippet files.
-- [Fugitive](https://www.github.com/tpope/vim-fugitive).
- Git integration with aliases via Tim Pope's plugin.
 
-### NERDTree
+  - Automatic autocompletion for any filetype Vim supports via
+
+  - This plugin depends on node.js and Yarn being installed.
+
+- Snippet integration/expansion for 24 different filetypes.
+
+  - Well over [1000 snippets](./.config/nvim/UltiSnips) are included.
+
+  - Nvim's Python integration is utilized to expand some snippets.
+
+    - Over [20 functions](./.config/nvim/pythonx/snippets_helper.py) are imported and used throughout the varying snippet files.
+
+- [Fugitive](https://www.github.com/tpope/vim-fugitive).
+
+  - Git integration with aliases via Tim Pope's plugin.
 
 - [NERDTree](https://www.github.com/scrooloose/nerdTree)
+
+### NERDTree
 
 NERDTree is a file explorer plugin that provides "project drawer"
 functionality to your vim editing.  You can learn more about it with
@@ -234,6 +267,21 @@ au BufNewFile,BufRead Pipfile.lock		setf json
 
 TIL that Pipfiles are officially recognized by the filetype detector in Nvim!
 
+#### Loading a personal filetype file
+
+**Note:**
+
+```vim
+
+if exists("myfiletypefile") && filereadable(expand(myfiletypefile))
+  execute "source " . myfiletypefile
+endif
+
+```
+
+Would setting ``&myfiletypefile`` to the file at
+./.config/nvim/ftdetect/filetype.vim be redundant? 
+
 ### Sources for all plugins
 
 Here's a current list of all my plugins, a summary of their usage, and notes
@@ -276,31 +324,6 @@ features that have been built into every version of Neovim.
 
 Neovim is my primary text editor and as a result, I've attempted integrating it
 into as much of my workflow as possible.
-
-### Neovim Specific Features
-
-The init.vim file features a handful of snippets that are not only specific
-to Neovim, but require relatively new versions of neovim.
-
-#### Updating to a newer version
-
-Unfortunately the newest version of neovim in the Ubuntu18.04 repositories
-is 0.2.2, which didn't ship with the `stdpath()` function along with many other niceties.
-
-Luckily upgrading is typically as simple as running:
-
-    `sudo add-apt-repository ppa:neovim-ppa/unstable  # or`
-    `choco install neovim --pre`
-
-#### Use of the `stdpath()`
-
-**Warning:**
-
-In version 0.3.1 Neovim created a function `stdpath()` that will
-return the value of the user's configuration directory regardless
-of platform or OS. It's a phenomenal function and greatly simplifies a huge
-number of complicated tasks; however, there are no checks to ensure the user
-is running a recent enough version of nvim to support this function.
 
 ## License
 

@@ -1,13 +1,15 @@
-" It feels a little silly to do too much for this one line of code so let's
-" not.
+" header
+" It feels a little silly to do too much for this one line of code so let's not.
 
 " Guard: {{{1
-if exists('g:did_after_syntax_python') || &compatible || v:version < 700
+if exists('b:did_after_syntax_python') || &compatible || v:version < 700
   finish
 endif
-let g:did_after_syntax_python = 1
+let b:did_after_syntax_python = 1
 
 " Original: {{{1
+let g:python_space_error_highlight = 1
+
 runtime syntax/python.vim
 
 " Personal Overrides: {{{1

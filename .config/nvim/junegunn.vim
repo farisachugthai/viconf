@@ -15,8 +15,12 @@ let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Everv
 let s:wsl = !empty($WSL_DISTRO_NAME)                   " Windows is !has('unix') but WSL checks explicitly
 let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux) && empty(s:wsl)
 
-call plug#begin(stdpath('data') . '/plugged')
-
+" if has('*stdpath')
+  call plug#begin(stdpath('data') . '/plugged')
+" TODO:
+" else
+  " if
+" endif
 Plug 'neoclide/coc.nvim' ", {'do': 'yarn install --frozen-lockfile'}
 let $NVIM_COC_LOG_FILE = stdpath('data')  . '/site/coc.log'
 " Don't set to debug that is WAY too much
@@ -63,7 +67,6 @@ endif
 " not being able to use more than 15 plugins at any point in time
 if empty(s:termux)
   Plug 'chrisbra/csv.vim', {'for': ['csv', 'tsv']}
-  Plug 'greyblake/vim-preview', {'on': 'Preview'}
 
   " needed if for nothing else but the ftdetect
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
@@ -72,8 +75,9 @@ endif
 
 " I feel like the lazy loaded ones can come out here
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
-nnoremap U :UndotreeToggle<CR>
+nnoremap U <Cmd>UndotreeToggle<CR>
 
+Plug 'greyblake/vim-preview', {'on': 'Preview'}
 " The 'tabular' plugin must come _before_ 'vim-markdown'.
 Plug 'godlygeek/tabular'
 Plug 'itspriddle/vim-shellcheck', { 'for': ['sh', 'bash'] }
@@ -83,11 +87,11 @@ Plug 'junegunn/vim-peekaboo'
 Plug 'vim-voom/voom'
 Plug 'romainl/vim-qf'
 
+  Plug 'raimon49/requirements.txt.vim'
+  Plug 'ntpeters/vim-better-whitespace'
 if empty(s:termux)
   " Plug 'mustache/vim-mustache-handlebars'
-  Plug 'raimon49/requirements.txt.vim'
   Plug 'michaeljsmith/vim-indent-object'
-  Plug 'ntpeters/vim-better-whitespace'
   Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
   Plug 'elzr/vim-json', { 'for': 'json' }
 

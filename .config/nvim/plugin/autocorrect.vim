@@ -2,14 +2,22 @@
     " File: autocorrect.vim
     " Author: Faris Chugthai
     " Description: Autocorrect
-    " Last Modified: March 14, 2019
+    " Last Modified: Nov 02, 2019
 " ============================================================================
 
+" Guards: {{{
 if exists('g:loaded_autocorrect_plugin') || &compatible || v:version < 700
     finish
 endif
 let g:loaded_autocorrect_plugin = 1
 
+" This loads slowly. How many more can we come up with?
+if has('spell')
+  if &spell == v:false
+    finish
+  endif
+endif
+" Wordlist: {{{
 iab Abbout About
 iab Abbout About
 iab Abotu About

@@ -6,10 +6,10 @@
 " ============================================================================
 
 " Guard: {{{1
-if exists('g:did_js_after_ftplugin') || &compatible || v:version < 700
+if exists('b:did_js_after_ftplugin') || &compatible || v:version < 700
   finish
 endif
-let g:did_js_after_ftplugin = 1
+let b:did_js_after_ftplugin = 1
 
 let s:cpo_save = &cpoptions
 set cpoptions&vim
@@ -19,7 +19,7 @@ set cpoptions&vim
 setlocal expandtab
 setlocal shiftwidth=2
 setlocal softtabstop=2
-setlocal suffixesadd=.html,.css,.js
+setlocal suffixesadd+=.html,.css,.js
 
 setlocal omnifunc=javascriptcomplete#CompleteJS
 
@@ -38,7 +38,6 @@ if exists('g:loaded_ale') && &filetype==#'javascript'
 endif
 
 " Atexit: {{{1
-
 let b:undo_ftplugin = 'setlocal et< sw< sts< sua< com< cms< ofu< '
       \ . '|setlocal define'
       \ . '|setlocal include'

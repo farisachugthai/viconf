@@ -90,7 +90,6 @@ else:
 @pynvim.plugin
 class Limit:
     """From `:he remote-plugin-host`."""
-
     def __init__(self, vim, calls=0):
         """Initialize the plugin.
 
@@ -109,13 +108,13 @@ class Limit:
     def command_handler(self, args, range):
         self._increment_calls()
         self.vim.current.line = (
-            'Command: Called %d times, args: %s, range: %s' % (self.calls, args, range))
+            'Command: Called %d times, args: %s, range: %s' %
+            (self.calls, args, range))
 
 
 @pynvim.plugin
 class Pydoc:
     """Read output from :mod:`pydoc` into a buffer."""
-
     def __init__(self, vim, env=None):
         """Initialize the class."""
         self.vim = vim

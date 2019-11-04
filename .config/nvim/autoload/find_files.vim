@@ -115,7 +115,7 @@ function! find_files#termux_remote() abort  " {{{1
   let g:python3_host_prog = exepath('python')
   let g:loaded_python_provider = 1
   let g:node_host_prog = '/data/data/com.termux/files/usr/bin/neovim-node-host'
-  let g:loaded_ruby_provider = 1
+  let g:ruby_host_prog = '/data/data/com.termux/files/home/.gem/bin/neovim-ruby-host'
 
 endfunction
 

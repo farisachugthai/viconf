@@ -96,6 +96,12 @@ except (ImportError, ModuleNotFoundError) as e:
     sys.exit(e)
 
 
+class UnsetEnvvarException(Exception):
+    """Exception for trying to cal an unset envvar/one with no value."""
+    def __init__(self, *args, **kwargs):
+        super().__init__(self, *args, **kwargs)
+
+
 # @pynvim.plugin
 class App:
     """Instantiate an object and bind functions to it's ns as properties.
@@ -105,7 +111,6 @@ class App:
     away and add a ton of built-in methods for use with our class.
 
     """
-
     def __init__(self, _vim):
         """Instantiate the remote python process for neovim."""
         self.vim = _vim
@@ -136,8 +141,6 @@ class Instance(App):
 
     Since it doesn't really require self, do we call it a class method?
     Could it be a property?
-
-
     """
 
     # we'll need to do an env check for NVIM_LISTEN_ADDRESS, then attach and
@@ -182,12 +185,11 @@ def check_and_set_envvar(envvar, default=None):
     if not os.environ.get(envvar):
         logging.debug(envvar + " not set.")
         if default:
-            os.environ.setdefault(envvar, default)
+            os.environ.setdefault(str(envvar), default)
             logging.info(envvar + " set to: " + default)
     else:
-        logging.debug(
-            envvar + " already set to value of: " + os.environ.get(envvar)
-        )
+        logging.debug(envvar + " already set to value of: " +
+                      os.environ.get(envvar))
 
 
 def main():

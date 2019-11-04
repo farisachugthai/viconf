@@ -15,10 +15,16 @@ set cpoptions-=C
 
 " Options: {{{1
 
+" Env vars: {{{2
 let $NVIM_COC_LOG_LEVEL = 'debug'
 let $NVIM_COC_LOG_FILE = stdpath('data') . '/site/coc.log'
 
+" General: {{{2
+
+" TODO:
 " May have to extend after a has('unix') check.
+" Yeah probably need to make system checks to get rid of incorrect
+" non portable definitions in the JSON file.
 let g:WorkspaceFolders = [
       \ stdpath('config'),
       \ expand('$HOME/projects/dynamic_ipython'),
@@ -27,13 +33,23 @@ let g:WorkspaceFolders = [
       \ ]
 
 let g:coc_quickfix_open_command = 'cwindow'
-
 let g:coc_snippet_next = '<C-j>'
-
 let g:coc_snippet_prev = '<C-k>'
 
-" Mappings:- {{{1
+	" call coc#config('coc.preferences', {
+	" 	\ 'timeout': 1000,
+	" 	\})
+	" call coc#config('languageserver', {
+	" 	\ 'ccls': {
+	" 	\   "command": "ccls",
+	" 	\   "trace.server": "verbose",
+	" 	\   "filetypes": ["c", "cpp", "objc", "objcpp"]
+	" 	\ }
+	" 	\})
 
+" Mappings: {{{1
+
+" Basic: {{{2
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
@@ -44,7 +60,7 @@ inoremap <silent><expr> <C-Space> coc#refresh()
 
 " As a heads up theres also a coc#select#snippet
 " I think supertab does the <CR> thing for us
-" inoremap <expr> <CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+inoremap <expr> <CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 inoremap <buffer> gK <Plug>(coc-definition)
 
@@ -64,31 +80,22 @@ xnoremap <F2> <Cmd>'<,'>CocCommand document.renameCurrentWord<CR>
 " Easier Grep: {{{2
 nnoremap ,cw <Cmd>execute 'CocList -I --normal --input=' . expand('<cword>') . ' words'<CR>
 
-" Mnenomic CocFind
+" CocOpenLog: {{{2
+" C-m only moves you down a line in normal mode. Pointless.
+" fuck it also maps to CR
+" nnoremap <expr> <C-m> coc#client#open_log()
+nnoremap <expr> <C-g> coc#client#open_log()
+
+" Easier Grep: {{{2 Mnenomic CocFind
 " Keymapping for grep word under cursor with interactive mode
 nnoremap <silent> ,cf <Cmd>exe 'CocList -I --input=' . expand('<cword>') . ' grep'<CR>
 
-" Mnemonic: CocSelect {{{2
+" Grep By Motion: Mnemonic CocSelect {{{2
 " Don't use vmap I don't want this in select mode!
 " Q: How to grep by motion?
 " A: Create custom keymappings like:
-xnoremap ,cs :<C-u>call <SID>GrepFromSelected(visualmode())<CR>
-nnoremap ,cs :<C-u>set operatorfunc=<SID>GrepFromSelected<CR>g@
-
-function! s:GrepFromSelected(type)
-  let saved_unnamed_register = @@
-  if a:type ==# 'v'
-    normal! `<v`>y
-  elseif a:type ==# 'char'
-    normal! `[v`]y
-  else
-    return
-  endif
-  let word = substitute(@@, '\n$', '', 'g')
-  let word = escape(word, '| ')
-  let @@ = saved_unnamed_register
-  execute 'CocList grep ' . word
-endfunction
+xnoremap ,cs :<C-u>call plugins#GrepFromSelected(visualmode())<CR>
+nnoremap ,cs :<C-u>set operatorfunc=plugins#GrepFromSelected<CR>g@
 
 
 " Using CocList: {{{1
@@ -97,8 +104,9 @@ endfunction
 nnoremap <C-g> <Cmd>CocList<CR>
 
 " Show all diagnostics
-command! -nargs=? CocDiagnostics <Cmd>CocList diagnostics <q-args> <CR>
+command! -nargs=0 CocDiagnostics <Cmd>CocList diagnostics<CR>
 
+" Maps For CocList X: {{{2
 nnoremap <silent> ,d  <Cmd>CocList diagnostics<CR>
 " Manage extensions
 nnoremap <silent> ,e  <Cmd>CocList extensions<CR>

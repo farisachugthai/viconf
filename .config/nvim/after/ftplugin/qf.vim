@@ -1,18 +1,16 @@
 " ============================================================================
   " File: qf.vim
   " Author: Faris Chugthai
-  " Description: QF mods
-  " Last Modified: October 26, 2019
+  " Description: Quickfix mods
+  " Last Modified: October 26, 2019 
 " ============================================================================
-
 " Guards: {{{1
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
 " Mappings: {{{1
-"
-nnoremap <buffer> <Left> <Cmd>colder<CR>
-nnoremap <buffer> <Right> <Cmd>cnewer<CR>
+nnoremap <buffer> <Left> :colder<CR>
+nnoremap <buffer> <Right> :cnewer<CR>
 
 " Stl: {{{1
 if !get(g:, 'qf_disable_statusline')

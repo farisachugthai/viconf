@@ -14,11 +14,7 @@ if exists('g:did_startify_after_plugin') || &compatible || v:version < 700
     finish
 endif
 let g:did_startify_after_plugin = 1
-
-let s:cpo_save = &cpoptions
-set cpoptions-=C
-
-" Literally jams nvim
+" Temporarily turn this off
 finish
 
 " Startify Lists: {{{1
@@ -31,6 +27,11 @@ let g:startify_lists = [
     \ { 'type': 'bookmarks', 'header': ['   Bookmarks']             },
     \ { 'type': 'commands',  'header': ['   Commands']              },
     \ ]
+
+" Temporarily turn this off
+" Slowly work parts in and see what changes
+" Jesus I just went from 300ms to 500ms
+" finish
 
 " Setup_devicons: {{{1
 let entry_format = "'   ['. index .']'. repeat(' ', (3 - strlen(index)))"

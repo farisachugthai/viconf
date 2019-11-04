@@ -6,11 +6,6 @@
 " ============================================================================
 
 " Guards: {{{1
-
-if !has_key(plugs, 'vim-fugitive')
-    finish
-endif
-
 if exists('g:did_fugitive_after_plugin') || &compatible || v:version < 700
     finish
 endif
@@ -29,12 +24,9 @@ set cpoptions-=C
 " endif
 
 " Mappings: {{{1
-
-if !exists('no_plugin_maps') && !exists('no_fugitive_vim_maps')
-  " Forgot an important one!
-  if g:loaded_fugitive == 1  " lol make sure fugitive was loaded!!!
-    call plugins#FugitiveMappings()
-  endif
+" Forgot an important one!
+if exists('g:loaded_fugitive')
+  call plugins#FugitiveMappings()
 endif
 
 " Atexit: {{{1

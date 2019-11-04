@@ -17,6 +17,7 @@ set cpoptions-=C
 " Options: {{{1
 " Can be modified interactively using `:NetrwSettings` !!
 
+" UI: {{{2
 " Hide that weird looking banner
 let g:netrw_banner = 0
 
@@ -26,21 +27,26 @@ let g:netrw_keepdir = 0
 " Open windows from netrw in a preview window. Can be achieved by pressing 'P'
 let g:netrw_browse_split = 4
 
-" 1: long listing (one file per line with time stamp information and file size)
+  " *g:netrw_liststyle*		Set the default listing style:
+  "                               = 0: thin listing (one file per line)
+  "                               = 1: long listing (one file per line with time
+				     " stamp information and file size)
+				" = 2: wide listing (multiple files in columns)
+				" = 3: tree style listing
 let g:netrw_liststyle = 1
 
 let g:netrw_list_hide = netrw_gitignore#Hide() . '.*\.swp$'
 
 " TODO: Make sure to test on windows
 if !has('win32')
-    let g:netrw_localmkdir = 'mkdir -pv'
+    let g:netrw_localmkdir = 'mkdir'
+    let g:netrw_localmkdiropt = '-pv '
     let g:netrw_browsex_viewer= 'xdg-open'
 else
     let g:netrw_browsex_viewer= 'firefox %s'
 endif
 
 " TODO:               *netrw_filehandler*
-
 let g:netrw_sizestyle = 'h'
 
 " Only display errors as messages
@@ -51,26 +57,31 @@ setlocal statusline=%f\ %{WebDevIconsGetFileTypeSymbol()}\ %h%w%m%r\ %=%(%l,%c%V
 " From the help
 let g:netrw_bufsettings='noma nomod nobl nowrap ro rnu'
 
+" Window Settings: {{{2
 " WTH! Yes I want this.
   " *g:netrw_usetab*		if this variable exists and is non-zero, then
 				" the <tab> map supporting shrinking/expanding a
 				" Lexplore or netrw window will be enabled.
 				" (see |netrw-c-tab|)
 let g:netrw_usetab = 1
+
 " Unfortnately though, the <tab> map means <C-Tab>. Can we also get <Tab>?
 nnoremap <buffer> <Tab>	<Plug>NetrwShrink
 
 let g:netrw_preview = 1
 
 " Defaults to 50%
-let g:netrw_winsize = 30
+let g:netrw_winsize = 80
+
+" Long as hell but a bool indicating that theres special HL
+let g:netrw_special_syntax    = v:true
 
 " Mappings: {{{1
 "
 " wth why is this a thing.
 nunmap <buffer> a
-" dude you'll wish your problems were limited to randomly hiding shit.
-" Check this out
+" dudeyou'll wish your problems were limited to randomly hiding shit.
+" Chec this out
 nunmap <buffer> D
 vunmap <buffer> D
 nunmap <buffer> <Del>
