@@ -160,18 +160,17 @@ function! ftplugins#ALE_Vim_Conf() abort  " {{{1
   endif
 endfunction
 
-" Python: {{{1
 function! ftplugins#PythonPath() abort  " {{{1
   " Set up the path for python files
   let s:orig_path = &path
 
-  if !empty(g:python3_host_prog)
+  if !empty('g:python3_host_prog')
     " I think it's only the root on unix
     " Miniconda3 on windows you only go up 1
     if has('unix')
-      let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h:h')
+      let s:root_dir = fnamemodify('g:python3_host_prog', ':p:h:h')
     else
-      let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h')
+      let s:root_dir = fnamemodify('g:python3_host_prog', ':p:h')
     endif
   else
     return s:orig_path
@@ -206,7 +205,8 @@ function! ftplugins#VimPath() abort  " {{{1
   endif
 
   " let s:path = s:path . ',' . stdpath('data') . '/plugged/**4'
-  let s:path = s:path . ',' . &rtp
+  " let s:path = s:path . ',' . &rtp
+  " rtp adds way too many things but add all my files
   let s:path = s:path . ',' . stdpath('config') . '/**3'
   return s:path
 

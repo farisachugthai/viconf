@@ -26,8 +26,8 @@ inoremap <nowait> [ []<C-G>U<Left>
 " don't need it
 " inoremap <nowait> < <><C-G>U<Left>
 " Let's give this a whirl
-
-inoremap <nowait> ' ''<C-G>U<Left>
+" Awful
+" inoremap <nowait> ' ''<C-G>U<Left>
 
 " Options: {{{1
 if has('+shellslash')

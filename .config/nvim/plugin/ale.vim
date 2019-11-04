@@ -36,11 +36,43 @@ noremap <A-i> <Cmd>ALEInfo<CR>
 
 " Options: {{{1
 
+" Quickfix: {{{2
+
+" By default ale uses location list which I never remember
+" let g:ale_set_quickfix = 1
+" let g:ale_set_loclist = 0
+" Yeah but theres a reason they do it. Location list is window specific so you
+" only want linting information for your current buffer to populate the list.
+" More importantly, you don't want every buffer to wipe your quickfix list
+" while you're in the middle of recompiling something.
+
+let g:ale_virtualtext_cursor = 1
+let g:ale_virtualtext_prefix =  'ALE: '
+let g:ale_virtualtext_delay = 200
+let g:ale_sign_highlight_linenrs = 1
+
+" But lets try opening the preview window when the cursor moves to something
+let g:ale_cursor_detail = 1
+let g:ale_close_preview_on_insert = 1
+let g:ale_echo_cursor = 1
+
+" Signs: {{{2
+
+let g:ale_set_signs = 1
+let g:ale_sign_column_always = 1
+let g:ale_change_sign_column_color = 1
+let g:ale_sign_warning = 'W'
+let g:ale_sign_highlight_linenrs = 1
+
+
+" More: {{{2
+let g:ale_pattern_options_enabled = 1
+let g:ale_pattern_options = {'\.min.js$': {'ale_enabled': 0}}
+
 " For buffer specific options, see ../ftplugin/*.vim
 let g:ale_fixers = { '*': [ 'remove_trailing_lines', 'trim_whitespace' ] }
 let g:ale_fix_on_save = 1
 
-" let g:ale_linters_explicit = 1
 let g:ale_linter_aliases = {
       \ 'ps1': 'powershell',
       \ 'htmljinja': 'html',
@@ -49,19 +81,14 @@ let g:ale_linter_aliases = {
 
 " When ale is linting C# only use OmniSharp
 let g:ale_linters = {
-\ 'cs': ['OmniSharp']
-\}
+      \ 'cs': ['OmniSharp']
+      \ }
 
 " forgot how annoying open list was
 " let g:ale_open_list = 1
 let g:ale_list_vertical = 1
 
-let g:ale_set_signs = 1
-let g:ale_sign_column_always = 1
-let g:ale_change_sign_column_color = 1
-
 " Python specific globals: {{{1
-" Probably makes more sense to have these activated regardless of ft
 
 let g:ale_python_pyls_config = {
       \   'pyls': {
@@ -108,7 +135,7 @@ let g:ale_python_pyls_config = {
       \ },
       \ 'yapf': {
       \   'enabled': v:true
-      \ }
+      \       }
       \     }
       \   }
       \ }
@@ -153,43 +180,15 @@ if !has('unix')
   endif
 endif
 
-" Quickfix: {{{1
-
-" By default ale uses location list which I never remember
-" let g:ale_set_quickfix = 1
-" let g:ale_set_loclist = 0
-" Yeah but theres a reason they do it. Location list is window specific so you
-" only want linting information for your current buffer to populate the list.
-" More importantly, you don't want every buffer to wipe your quickfix list
-" while you're in the middle of recompiling something.
-
-let g:ale_virtualtext_cursor = 1
-let g:ale_sign_highlight_linenrs = 1
-
-let g:ale_pattern_options_enabled = 1
-let g:ale_pattern_options = {'\.min.js$': {'ale_enabled': 0}}
-
 " Example from the help page
 "
   " Use just ESLint for linting and fixing files which end in '.foo.js'
-  " let g:ale_pattern_options = {
-  " \   '\.foo\.js$': {
-  " \       'ale_linters': ['eslint'],
-  " \       'ale_fixers': ['eslint'],
-  " \   },
-  " \}
-"
-" Let's try this out
-" let g:ale_cursor_detail = 1
-" let g:ale_close_preview_on_insert = 1
-
-let g:ale_sign_warning = 'W'
-let g:ale_sign_highlight_linenrs = 1
-
-let g:ale_python_auto_pipenv = 1
-let g:ale_python_pydocstyle_auto_pipenv = 1
-let g:ale_python_flake8_auto_pipenv = 1
-let g:ale_python_pyls_auto_pipenv = 1
+let g:ale_pattern_options = {
+\   '\.foo\.js$': {
+\       'ale_linters': ['eslint'],
+\       'ale_fixers': ['eslint'],
+\   },
+\}
 
 " Atexit: {{{1
 let &cpoptions = s:cpo_save

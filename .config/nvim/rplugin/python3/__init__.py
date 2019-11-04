@@ -28,14 +28,15 @@ except (ImportError, ModuleNotFoundError):
 # except Exception as e:
 #     print(e)
 
-
 # So we haven't exited yet so let's go.
 
 logging.basicConfig(level=logging.INFO)
 
+
 def rplugin_attach():
     """Let's define a basic function to initialize everything."""
-    global_nvim = pynvim.attach('socket', path=os.environ['NVIM_LISTEN_ADDRESS'])
+    global_nvim = pynvim.attach('socket',
+                                path=os.environ['NVIM_LISTEN_ADDRESS'])
     return global_nvim
 
 
