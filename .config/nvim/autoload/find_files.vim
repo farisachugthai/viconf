@@ -26,15 +26,21 @@ endfunction
 
 " Maps
 function! find_files#fzf_maps() abort  " {{{1
-  if executable('bat')
-    inoremap <expr> <C-x><C-k> fzf#complete({
-                \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
-                \ 'options': '--preview=bat --ansi --multi --cycle', 'left': 30})
 
-    inoremap <expr> <C-k> fzf#complete({
+  imap <expr> <C-x><C-s> fzf#vim#complete#word({
+      \ 'source':  'cat /usr/share/dict/words',
+      \ 'reducer': function('<sid>make_sentence'),
+      \ 'options': '--multi --reverse --margin 15%,0',
+      \ 'left':    40})
+
+  " And add a shorter version
+  inoremap <C-s> <C-x><C-s>
+
+    imap <expr> <C-x><C-k> fzf#complete({
                 \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
-                \ 'options': '--preview=bat --ansi --multi --cycle', 'left': 30})
-  endif
+                \ 'options': '-ansi --multi --cycle', 'left': 30})
+
+    inoremap <C-k> <C-x><C-k>
 endfunction
 
 " Explore PlugHelp: {{{
@@ -97,17 +103,6 @@ endfunction
 function! s:make_sentence(lines) abort  " {{{1
   " *fzf-vim-reducer-example*
   return substitute(join(a:lines), '^.', '\=toupper(submatch(0))', '').'.'
-endfunction
-
-function! find_files#fzf_spell() abort  " {{{1
-  imap <expr> <C-x><C-s> fzf#vim#complete#word({
-      \ 'source':  'cat /usr/share/dict/words',
-      \ 'reducer': function('<sid>make_sentence'),
-      \ 'options': '--multi --reverse --margin 15%,0',
-      \ 'left':    40})
-
-  " And add a shorter version
-  inoremap <C-s> <C-x><C-s>
 endfunction
 
 function! find_files#termux_remote() abort  " {{{1

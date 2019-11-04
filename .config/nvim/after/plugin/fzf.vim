@@ -18,7 +18,7 @@ set cpoptions-=C
 
 " Options: {{{1
 
-let g:fzf_command_prefix = 'FZ'
+let g:fzf_command_prefix = 'F'
 
 " Sep 15, 2019: Look what i found in stdpath('data') .
 " '/plugged/fzf.vim/plugin/fzf.vim' ! There's a statusline option!!! That's
@@ -44,11 +44,6 @@ let s:ag_command = 'ag --smart-case -u -g " " --'
 
 let s:rg = 'rg --hidden --max-columns=300 --max-depth=8 --max-count=50 --color=ansi --no-column --no-line-number  --no-heading --auto-hybrid-regex --max-columns-preview --no-messages --smart-case '
 
-if has('unix')
-  let s:rg = s:rg . ' --path-separator="/" '
-else
-  let s:rg = s:rg . ' --path-separator="\" '
-endif
 
 let s:fzf_options = [
       \   '--ansi', '--multi', '--tiebreak=index', '--layout=reverse-list',
@@ -67,7 +62,7 @@ endif
 " [[B]Commits] Customize the options used by 'git log':
 let g:fzf_commits_log_options = ' --graph'
       \ . ' --color=always --all --branches --pretty'
-      \ . ' --format="h%d %s $*n"'
+      \ . ' --format="h%d %s $* " '
 
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1
@@ -136,11 +131,10 @@ inoremap <expr> <C-x><C-l> fzf#vim#complete#line()
 inoremap <expr> <C-x><C-b> fzf#vim#complete#buffer_line()
 
 if filereadable(expand('$_ROOT/share/dict/words'))
-  call find_files#fzf_spell()
   call find_files#fzf_maps()
-  " Advanced customization using autoload functions
-  " HOWEVER! It should only get remapped if that file exists because it
-  " implicitly depends on it
+
+  " Note: This is dependant on /usr/share/dict/words existing because this
+  " function implicitly depends on it.
   inoremap <expr> <C-x><C-k>         fzf#vim#complete#word({'left': '45%'})
 endif
 
@@ -174,15 +168,13 @@ nnoremap <silent> <Leader>`        <Cmd>Marks<CR>
 " FZF beat fugitive out on this one. Might take git log too.
 noremap <Leader>gg                 <Cmd>GGrep<Space>
 noremap <Leader>gl                 <Cmd>Commits<CR>
+noremap <Leader>GS                 <Cmd>GFiles?<CR>
 
-cabbrev Gl Commits
-
-noremap <Leader>GS <Cmd>GFiles?<CR>
-
-cabbrev GS GFiles?
 
 " Buffers Windows Files: {{{2
 
+" NERDTree Mapping: Dude I forgot I had this. Make sure :Files works but this
+" mapping is amazing.
 nnoremap <silent><expr> <Leader>n (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
 
 noremap <silent> <Leader>C        <Cmd>Colors<CR>
@@ -234,7 +226,7 @@ command! -bang -nargs=* FZGGrep
   \   {'dir': systemlist('git rev-parse --show-toplevel')[0]},
   \   <bang>0)
 
-" Ag: {{{2
+" Ag: FZF With a Preview Window {{{2
 
 " :Ag  - Start fzf with hidden preview window that can be enabled with '?' key
 " :Ag! - Start fzf in fullscreen and display the preview window above
@@ -247,7 +239,7 @@ command! -bang -nargs=* FZGGrep
 "
 "   :Ag  - Start fzf with hidden preview window that can be enabled with "?" key
 "   :Ag! - Start fzf in fullscreen and display the preview window above
-command! -complete=dir -bang -nargs=* FZAg
+command! -complete=dir -bang -nargs=* FZAgPreview
   \ call fzf#vim#ag(<q-args>,
   \                 <bang>0 ? fzf#vim#with_preview('up:60%')
   \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
