@@ -212,6 +212,22 @@ function! ftplugins#VimPath() abort  " {{{1
 
 endfunction
 
+function! ftplugins#CPath() abort  " {{{1
+
+  let s:path='.,**,,'
+
+  " TODO: whats the func for if a directory is readable? i think there's a
+  " section in the help index for functions that work with the filesystem
+  " if
+  let s:path += '/usr/include,/usr/local/include,'
+
+  " is this it?
+  " if isdirectory
+  let s:path += expand('$HOME') . '/.local/include'
+
+  return s:path
+
+endfunction
 
 function! ftplugins#YAPF() abort  " {{{1
   if exists(':TBrowseOutput')
