@@ -120,6 +120,7 @@ if has('patch-7.3.867')  " Introduced the TextChanged event.
   "   autocmd TextChanged,InsertLeave <buffer> unlet! b:RstFoldCache
   " augroup END
   let b:undo_ftplugin .= 'setlocal fdm< foldexpr< foldtext<'
+                    \ . '|unlet! b:RstFoldCache'
 endif
 
 

@@ -14,6 +14,42 @@ If executed in the spell directory, one can run::
 It should ignore itself if we go sys.argv[1:] right?
 
 
+Windows Path Separators
+------------------------
+Fuck. Just got this output.
+
+    :py3file C:/Users/faris/projects/viconf/pythonx/wordlist_duplicate.py en.utf-8.add
+
+    Error detected while processing function provider#python3#Call:
+    line   18:
+
+    Error invoking 'python_execute_file' on channel 4 (python3-script-host):
+
+    error caught in request handler 'python_execute_file
+
+    ['C:/Users/faris/projects/viconf/pythonx/wordlist_duplicate.py en.utf-8.add', 1115, 1115]':
+
+    Traceback (most recent call last):
+
+    File "C:\tools\miniconda3\envs\working\lib\site-packages\pynvim\plugin\script_host.py", line 101, in python_execute_file
+
+        with open(file_path) as f:
+        FileNotFoundError: [Errno 2] No such file or directory:
+        'C:/Users/faris/projects/viconf/pythonx/wordlist_duplicate.py en.utf-8.add'
+
+    Press ENTER or type command to continue]))])
+
+So that's shitty. I opened 2 buffers with ``nvim en.utf-8.add``
+and inside nvim did ``:vs ../pythonx/wordlist_duplicate.py``.
+
+Then I did ``:py3file #2 %`` to save typing.
+
+``:set shellslash`` means that the backslashes were autoconverted to forward slashes and when that value was passed
+to the shell, it didn't recognize the charactesr as path separators.
+
+I guess the solution is to write a command that mimics the steps
+that I took above but goddamn this is annoying.
+
 """
 import logging
 from pathlib import Path

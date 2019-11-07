@@ -6,11 +6,6 @@
 " ============================================================================
 
 " Guards: {{{1
-if exists('g:loaded_syncom_plugin') || &compatible || v:version < 700
-    finish
-endif
-let g:loaded_syncom_plugin = 1
-
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
@@ -30,7 +25,7 @@ elseif executable('rg.exe')  " fucking windows
 endif
 
 let &grepprg = s:rg . ' --vimgrep --no-messages --color=ansi '
-      \. ' --smart-case --no-messages ' . shellescape('<q-args>')
+      \. ' --smart-case $* '
 
 " Search Mappings: {{{1
 

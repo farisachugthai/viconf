@@ -25,7 +25,7 @@ setlocal formatoptions-=t
 " setlocal comments=
 " setlocal commentstring=
 " sometimes it does fuck you
-let &commentstring='\\ %s'
+let &commentstring='// %s'
 
 setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
 

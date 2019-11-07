@@ -140,6 +140,7 @@ EHD
 Eich
 Envs
 Esc
+ExceptionHook
 ExecutionPolicy
 F1
 F10
@@ -190,6 +191,7 @@ HKLM
 HLS
 HMAC
 HSV
+HTML5
 HTTPServer
 Harleysville
 Hettinger
@@ -1110,6 +1112,7 @@ mymodule
 mypy
 mysql
 namespace
+namespaces
 namespacing
 nano
 nbconvert
@@ -1356,6 +1359,7 @@ rfakeroot
 rg
 ripgrep
 rkt
+rlcompleter
 rmdir
 rmtree
 rpc
@@ -1734,6 +1738,3 @@ zshrc
 µMatrix
 µTP
 µTorrent
-namespaces
-ExceptionHook
-rlcompleter

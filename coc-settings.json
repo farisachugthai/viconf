@@ -383,14 +383,6 @@
   "python.linting.pylintEnabled": false,
   "python.terminal.executeInFileDir": true,
   "python.trace.server": "messages",
-  "python.venvFolders": [
-    "~/.virtualenvs",
-    "envs",
-    ".pyenv",
-    ".direnv",
-    ".venv",
-    "~/.local/share/virtualenvs/"
-  ],
   "refactor.afterContext": 0,
   "refactor.beforeContext": 0,
   "refactor.openCommand": "vsplit",
