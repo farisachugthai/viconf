@@ -38,7 +38,11 @@ setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 setlocal cinkeys-=0#
 
 setlocal indentkeys-=0#
+
 setlocal include=^\\s*\\(from\\\|import\\)
+" this is in the help docs for `:he includeexpr` and states for java but i bet
+" itd work for python
+setlocal includeexpr=substitute(v:fname,'\\.','/','g')
 
 setlocal cinkeys-=0#
 setlocal indentkeys-=0#

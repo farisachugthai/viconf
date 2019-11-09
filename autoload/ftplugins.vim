@@ -216,14 +216,15 @@ function! ftplugins#CPath() abort  " {{{1
 
   let s:path='.,**,,'
 
+  if !has('unix') | return s:path | endif
   " TODO: whats the func for if a directory is readable? i think there's a
   " section in the help index for functions that work with the filesystem
   " if
-  let s:path += '/usr/include,/usr/local/include,'
+  let s:path = s:path . ',/usr/include,/usr/local/include,'
 
   " is this it?
   " if isdirectory
-  let s:path += expand('$HOME') . '/.local/include'
+  let s:path = s:path . ',' .  expand('$HOME') . '/.local/include'
 
   return s:path
 

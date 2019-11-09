@@ -43,7 +43,7 @@ let s:material_gruvbox =  syncom#gruvbox_material()
 if s:material_gruvbox == v:false | call syncom#gruvbox() | endif
 
 " Setup neovim's python and node hosts. Optionally clipboards etc
-" runtime remote.vim
+runtime remote.vim
 " Set shell correctly
 if !has('unix') | runtime autoload/msdos.vim | call msdos#Cmd() | endif
 
@@ -77,7 +77,7 @@ setlocal expandtab smarttab softtabstop=4
 
 set foldenable foldlevelstart=0 foldlevel=0
 set foldnestmax=10 foldmethod=marker foldcolumn=2
-set foldopen=quickfix,search,tag,undo,jump
+set foldopen=quickfix,search,tag,undo,jump foldclose=all  " close folds automatically when you move out of them
 set signcolumn=auto:2  " this might be a nvim 4 thing
 
 try | set switchbuf=useopen,usetab,newtab | catch | endtry
@@ -107,7 +107,7 @@ set completeopt=menu,menuone,noselect,noinsert,preview
 set ignorecase
 set smartcase infercase
 
-set makeencoding=char         " Used by the makeprg. system locale is used
+set makeencoding=utf-8         " Used by the makeprg. system locale is used. actually let's just force utf8
 set sessionoptions-=buffers,winsize viewoptions-=options sessionoptions+=globals
 set tags+=./tags,./*/tags
 set tags^=./.git/tags tagcase=smart showfulltag
@@ -123,7 +123,11 @@ if has('patch-8.1.0360') | set diffopt+=internal,algorithm:patience | endif
 set browsedir="buffer"   " which directory is used for the file browser
 
 let &g:listchars = "tab:\u21e5\u00b7,extends:\u21c9,precedes:\u21c7,nbsp:\u00b7"  " trail:\u2423 doesn't work with hack as font
-let &g:fillchars = "vert:\u250b,fold:\u00b7"
+" Keep statusline overflow to simply empty spaces no matter if higlighting
+" is on or off. use some unicode for cooler lines and use periods not --- for
+" deleted diff lines. It makes diff buffers very visually noisy.
+let &g:fillchars = "stl:' ',stlnc:' ',vert:\u250b,fold:\u00b7,diff:'.'"
+
 set breakindent breakindentopt=sbr
 let &showbreak = '↳ '                   " Indent wrapped lines correctly
 set updatetime=100 lazyredraw

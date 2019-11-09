@@ -2,17 +2,26 @@
   " File: qf.vim
   " Author: Faris Chugthai
   " Description: Quickfix mods
-  " Last Modified: October 26, 2019 
+  " Last Modified: October 26, 2019
 " ============================================================================
+
 " Guards: {{{1
+
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
+" Options: {{{1
+
+" set makeef=##  should set this to something i guess. and errorfile is dumb
+" too. should have more qf settings i guess
+
 " Mappings: {{{1
+"
 nnoremap <buffer> <Left> :colder<CR>
 nnoremap <buffer> <Right> :cnewer<CR>
 
 " Stl: {{{1
+"
 if !get(g:, 'qf_disable_statusline')
   let b:undo_ftplugin = "set stl<"
 

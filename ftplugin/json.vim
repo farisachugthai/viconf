@@ -31,9 +31,9 @@ setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
 
 
 " Let's add in a few more options though. Enforce 2 space tabs
-setlocal expandtab softtabstop=2 shiftwidth=2
+setlocal expandtab softtabstop=2 shiftwidth=2 tabstop=2
 
-setlocal suffixesadd=.json
+setlocal suffixesadd=.json,.js,.jsx
 " Got this from the syntax file
 let g:vim_json_warnings = 1
 
@@ -65,7 +65,7 @@ syntax match jsonComment +\/\/.\+$+
 highlight link jsonComment Comment
 
 " Atexit: {{{1
-let b:undo_ftplugin = 'setlocal fo< com< cms< et< sts< sw< sua< fdm<'
+let b:undo_ftplugin = 'setlocal fo< com< cms< et< sts< sw< ts< sua< fdm<'
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

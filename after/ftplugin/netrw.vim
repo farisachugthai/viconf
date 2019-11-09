@@ -21,6 +21,9 @@ set cpoptions-=C
 " Hide that weird looking banner
 let g:netrw_banner = 0
 
+" Netrw calls itself netrw in the statusline like be less weird
+let g:NetrwTopLvlMenu = 'File Explorer'
+
 " Keep the current directory the same as the browsing directory
 let g:netrw_keepdir = 0
 

@@ -140,3 +140,44 @@ I had no idea you could do this.
    |netrw-O|	Obtain marked files
    |netrw-R|	Rename marked files
 
+
+Coc Inspiration
+---------------
+
+Here's a butt-ton of functions to map to AND commands to write.
+
+Btw I wanna just state how well a ``:Tabularize /:`` just worked right now like wow.
+
+n  <Plug>(coc-refactor) *              : <C-U>call       CocActionAsync('refactor')<CR>
+n  <Plug>(coc-command-repeat) *        : <C-U>call       CocAction('repeatCommand')<CR>
+n  <Plug>(coc-float-jump) *            : <C-U>call       coc#util#float_jump()<CR>
+n  <Plug>(coc-float-hide) *            : <C-U>call       coc#util#float_hide()<CR>
+n  <Plug>(coc-fix-current) *           : <C-U>call       CocActionAsync('doQuickfix')<CR>
+n  <Plug>(coc-openlink) *              : <C-U>call       CocActionAsync('openLink')<CR>
+n  <Plug>(coc-references) *            : <C-U>call       CocAction('jumpReferences')<CR>
+n  <Plug>(coc-type-definition) *       : <C-U>call       CocAction('jumpTypeDefinition')<CR>
+n  <Plug>(coc-implementation) *        : <C-U>call       CocAction('jumpImplementation')<CR>
+n  <Plug>(coc-declaration) *           : <C-U>call       CocAction('jumpDeclaration')<CR>
+n  <Plug>(coc-definition) *            : <C-U>call       CocAction('jumpDefinition')<CR>
+n  <Plug>(coc-diagnostic-prev-error) * : <C-U>call       CocActionAsync('diagnosticPrevious', 'error')<CR>
+n  <Plug>(coc-diagnostic-next-error) * : <C-U>call       CocActionAsync('diagnosticNext',     'error')<CR>
+n  <Plug>(coc-diagnostic-prev) *       : <C-U>call       CocActionAsync('diagnosticPrevious')<CR>
+n  <Plug>(coc-diagnostic-next) *       : <C-U>call       CocActionAsync('diagnosticNext')<CR>
+n  <Plug>(coc-diagnostic-info) *       : <C-U>call       CocActionAsync('diagnosticInfo')<CR>
+n  <Plug>(coc-format) *                : <C-U>call       CocActionAsync('format')<CR>
+n  <Plug>(coc-format-selected) *       : <C-U>set        operatorfunc=<SNR>39_FormatFromSelected<CR>g@
+n  <Plug>(coc-rename) *                : <C-U>call       CocActionAsync('rename')<CR>
+n  <Plug>(coc-codeaction) *            : <C-U>call       CocActionAsync('codeAction',         '')<CR>
+n  <Plug>(coc-codeaction-selected) *   : <C-U>set        operatorfunc=<SNR>39_CodeActionFromSelected<CR>g@
+v  <Plug>(coc-codeaction-selected) *   : <C-U>call       CocActionAsync('codeAction',         visualmode())<CR>
+v  <Plug>(coc-format-selected) *       : <C-U>call       CocActionAsync('formatSelected',     visualmode())<CR>
+n  <Plug>(coc-codelens-action) *       : <C-U>call       CocActionAsync('codeLensAction')<CR>
+n  <Plug>(coc-range-select) *          : <C-U>call       CocAction('rangeSelect',     '', v                     : true)<CR>
+v  <Plug>(coc-range-select-backword) * : <C-U>call       CocAction('rangeSelect',     visualmode(), v           : false)<CR>
+v  <Plug>(coc-range-select) *          : <C-U>call       CocAction('rangeSelect',     visualmode(), v           : true)<CR>
+
+Also check out these git ones!
+
+<Plug>(coc-git-chunk-inner)  <Plug>(coc-git-chunkinfo)    <Plug>(coc-git-nextchunk)
+<Plug>(coc-git-chunk-outer)  <Plug>(coc-git-commit)       <Plug>(coc-git-prevchunk)
+

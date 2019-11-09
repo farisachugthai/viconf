@@ -23,15 +23,21 @@ let g:requirements#detect_filename_pattern = 'Pipfile'
 augroup YourFTDetect
   au!
 
+  " *********
+  " NOTE:
+  " *********
+  " setf only sets a filetype if it hasn't been set already
+
   " requirements. this is actually unnecessary if you use the var
   " g:requirements#detect_filename_pattern
   " au BufNewFile,BufRead Pipfile,Pipfile.lock setf requirements
 
   " JSON
-  au BufNewFile,BufRead *.json,*.jsonp,*.webmanifest,*.code-workspace setf json
+  au BufNewFile,BufRead *.json,*.jsonp,*.webmanifest,*.code-workspace set filetype=json
 
-  au BufNewFile,BufRead *.bash,.bashrc,.profile setf bash
+  au BufNewFile,BufRead *.bash,.bashrc,.profile set filetype=bash
 
+  au BufNewFile,BufRead *.sip set filetype=cpp
 augroup END
 
 " Atexit: {{{1

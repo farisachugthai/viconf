@@ -1,15 +1,15 @@
 " ============================================================================
   " File: buffers.vim
   " Author: Faris Chugthai
-  " Description: Plugin with functions and commands for vim windows
+  " Description: Plugin with functions and commands for vim buffers and windows
   " Last Modified: Oct 20, 2019
 " ============================================================================
 
 " Guard:
-if exists('g:did_windows_plugin') || &compatible || v:version < 700
+if exists('g:loaded_plugin_buffers') || &compatible || v:version < 700
   finish
 endif
-let g:did_windows_plugin = 1
+let g:loaded_plugin_buffers = 1
 
 let s:cpo_save = &cpoptions
 set cpoptions-=C
@@ -78,27 +78,8 @@ function! Alt_Key_Navigation() abort
   noremap! <A-j> <C-w>j
   noremap! <A-k> <C-w>k
   noremap! <A-l> <C-w>l
-endfunction
 
 
-" Navigate Buffers More Easily: {{{1
-
-function! SpaceBuffers() abort
-  noremap <Leader>bb <Cmd>buffers<CR>
-  noremap <Leader>bd <Cmd>bdelete<CR>
-  noremap <Leader>bn <Cmd>bnext<CR>
-  noremap <Leader>bp <Cmd>bprev<CR>
-  noremap <Leader>bf <Cmd>bfirst<CR>
-  noremap <Leader>bl <Cmd>blast<CR>
-  noremap <Leader>bY <Cmd>"+%y<CR>
-  noremap <Leader>bP <Cmd>"+P<CR>
-  " Sunovabitch bonly isn't a command?? Why is
-  " noremap <Leader>bo <Cmd>bonly<CR>
-endfunction
-
-" Navigate Tabs More Easily: {{{1
-
-function! NvimTabMaps() abort
   if !exists('*nvim_list_tabpages')  " we might be in vim
     return
   endif
@@ -118,26 +99,44 @@ function! NvimTabMaps() abort
 
 endfunction
 
-function TabMaps() abort
+
+" Navigate Buffers More Easily: {{{1
+
+function! SpaceBuffers() abort
+  noremap <Leader>bb <Cmd>buffers<CR>
+  noremap <Leader>bd <Cmd>bdelete<CR>
+  noremap <Leader>bn <Cmd>bnext<CR>
+  noremap <Leader>bp <Cmd>bprev<CR>
+  noremap <Leader>bf <Cmd>bfirst<CR>
+  noremap <Leader>bl <Cmd>blast<CR>
+	" aka yank the whole buffer
+  noremap <Leader>bY <Cmd>"+%y<CR>
+	" and then paste it
+  noremap <Leader>bP <Cmd>"+P<CR>
+  " Sunovabitch bonly isn't a command?? Why is
+  " noremap <Leader>bo <Cmd>bonly<CR>
+endfunction
+
+
+function TabMaps() abort  " {{{1
 
   nnoremap <Leader>tn <Cmd>tabnext<CR>
   nnoremap <Leader>tp <Cmd>tabprev<CR>
   nnoremap <Leader>tq <Cmd>tabclose<CR>
+  nnoremap <Leader>te <Cmd>tabedit<CR>
+	" ngl pretty surprised that that cword didn't need an expand()
+	nnoremap <Leader>t# <Cmd>tabedit <cword><CR>
+	" Need to decide between many options
+	" nnoremap <Leader>tg <Cmd>tabedit
+	" poop can't do this
+	" nnoremap <Leader>tn <Cmd>tabnew<CR>
+	nnoremap <Leader>tf <Cmd>tabfirst<CR>
+	nnoremap <Leader>tl <Cmd>tablast<CR>
 
-  " Opens a new tab with the current buffer's path
-  " Super useful when editing files in the same directory
-  " TODO: Doesn't work as expected
-  " nnoremap <Leader>te <Cmd>tabedit <c-r>=expand("%:p:h")<CR>
-
-  " It should also be easier to edit the config. Bind similarly to tmux
-  nnoremap <Leader>ed <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
-
-  noremap <F9> <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
+  noremap <F9> <Cmd>tabe ~/projects/viconf/init.vim<CR>
   " Don't forget to add in mappings when in insert/cmd mode
-  noremap! <F9> <Cmd>tabe ~/projects/viconf/.config/nvim/init.vim<CR>
-
-  " Now reload it
-  noremap <Leader>re <Cmd>so $MYVIMRC<CR><Cmd>echo 'Vimrc reloaded!'<CR>
+  noremap! <F9> <Cmd>tabe ~/projects/viconf/init.vim<CR>
+  tnoremap <F9> <Cmd>tabe ~/projects/viconf/init.vim<CR>
 
 endfunction
 
@@ -188,7 +187,6 @@ if !exists('no_plugin_maps') && !exists('no_windows_vim_maps')
   call Buf_Window_Mapping()
   call Alt_Key_Navigation()
   call SpaceBuffers()
-  call NvimTabMaps()
   call TabMaps()
   call UnImpairedWindows()
   call SpaceWindows()

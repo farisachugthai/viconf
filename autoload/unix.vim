@@ -44,11 +44,6 @@ function! unix#UnixOptions() abort
       set dictionary+=/usr/share/dict/words
     endif
 
-    if exists($ANDROID_DATA)
-      " May 26, 2019: Just ran into my first problem from a filename with a space in the name *sigh*
-      noremap <silent> <Leader>ts <Cmd>execute '!termux-share -a send ' . shellescape(expand("%"))<CR>
-    endif
-
     if isdirectory(expand('$_ROOT/local/include/'))
         let &path = &path . ',' . expand('$_ROOT/local/include')
     endif

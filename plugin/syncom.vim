@@ -24,8 +24,10 @@ elseif executable('rg.exe')  " fucking windows
     let s:rg = 'rg.exe'
 endif
 
-let &grepprg = s:rg . ' --vimgrep --no-messages --color=ansi '
-      \. ' --smart-case $* '
+if executable('rg') || executable('rg.exe')
+  let &grepprg = s:rg . ' --vimgrep --no-messages --color=ansi '
+        \. ' --smart-case $* '
+endif
 
 " Search Mappings: {{{1
 
@@ -73,6 +75,7 @@ command! -nargs=+ NewGrep execute 'silent grep! <args>' | copen
 " But now I need way more mappings
 
 nnoremap <silent> <Leader>l <Cmd>botright lwindow<CR>
+" These need to catch E776 no location list
 nnoremap <silent> <C-Down> <Cmd>llast<CR><bar><Cmd>clast<CR>
 nnoremap <silent> <C-Up> <Cmd>lfirst<CR><bar><Cmd>cfirst<CR>
 

@@ -16,7 +16,7 @@ set cpoptions&vim
 
 " Options: {{{1
 
-setlocal suffixesadd=.c,.h
+setlocal suffixesadd=.c,.h,.cpp
 setlocal cindent
 if filereadable('Makefile')
   setlocal makeprg=make\ %<.o
@@ -34,7 +34,7 @@ endif
 setlocal omnifunc=ccomplete#Complete
 
 " Path: {{{2
-"
+
 " TODO:
 " setlocal include
 " setlocal define
@@ -82,7 +82,10 @@ endif
 " Atexit: {{{1
 
 " Oh shit the unmaps for this are gonna be annoying
-let b:undo_ftplugin = 'set sua< makeprg< cin< ofu<'
+let b:undo_ftplugin = 'set sua< cin< makeprg< ofu< kp< '
+      \ . '|unlet! l&:path'
+      \ . '|unlet! b:undo_ftplugin'
+
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save
