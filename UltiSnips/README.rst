@@ -8,7 +8,7 @@ This directory contains the snippets for `UltiSnips`_.
 
 .. highlight:: vim
 
-.. author:: Faris Chugthai
+:author: Faris Chugthai
 
 :date: |today|
 
@@ -34,10 +34,6 @@ First things first, UltiSnips needs to be configured for snippets to work
 correctly. The 2 most important variables to set are ``g:UltiSnipsSnippetDir``
 and ``g:UltiSnipsSnippetDirectories`` as they tell UltiSnips where to look.
 
-.. admonition:: If not configured properly, UltiSnips will recursively  
-                search through the entire ``runtimepath`` for
-                directories named UltiSnips.
-
 This makes using the plugin slightly easier as it lends itself to being
 used with no configuration; however, if 30 other plugins are installed,
 this will **immensely** slow down vim.
@@ -45,6 +41,11 @@ this will **immensely** slow down vim.
 After configuring ``g:UltiSnipsDirs`` and ``g:UltiSnipsDirectories`` as you
 would like, using the `UltiSnipsEdit` command should open the folder that your
 snippets are housed in.
+
+.. admonition:: &rtp and UltiSnips
+
+   If not configured properly, UltiSnips will recursively search through
+   the entire ``runtimepath`` for directories named UltiSnips.
 
 
 Options
@@ -57,12 +58,17 @@ A valid snippet should have the form::
 
 Snippet options:
 
-    b - Beginning of line.
-    i - In-word expansion.
-    w - Word boundary.
-    r - Regular expression
-    e - Custom context snippet
-    A - Snippet will be triggered automatically, when condition matches.
+.. option::    b - Beginning of line.
+
+.. option:: i - In-word expansion.
+
+.. option:: w - Word boundary.
+
+.. option:: r - Regular expression
+
+.. option:: e - Custom context snippet
+
+.. option:: A - Snippet will be triggered automatically, when condition matches.
 
 Basic example:
 

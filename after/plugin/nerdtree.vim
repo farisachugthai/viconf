@@ -9,7 +9,7 @@
 if exists('g:did_nerdtree_after_plugin') || &compatible || v:version < 700
     finish
 endif
-let g:did_nerdtree_after_plugin = 1
+" let g:did_nerdtree_after_plugin = 1
 
 let s:cpo_save = &cpoptions
 set cpoptions-=C
@@ -19,7 +19,8 @@ set cpoptions-=C
 " Simple way to speed up startup
 noremap <Leader>nt <Cmd>NERDTreeToggle<CR>
 " Switch NERDTree root to dir of currently focused window.
-noremap <Leader>ncd <Cmd>NERDTreeCWD<CR>
+" Make mapping match Spacemacs.
+noremap <Leader>0 <Cmd>NERDTreeCWD<CR>
 
 " Options: {{{1
 
@@ -52,8 +53,8 @@ let g:NERDTreeMouseMode = 2
 let g:NERDTreeIgnore = [ '.pyc$', '.pyo$', '__pycache__$', '.git$', '.mypy', 'node_modules']
 let g:NERDTreeRespectWildIgnore = 1
 
-" Let's give netrw a shot I guess
-let g:NERDTreeHijackNetrw = 0
+" Let's give netrw a shot I guess. No lets not.
+let g:NERDTreeHijackNetrw = 1
 
 let g:NERDTreeAutoDeleteBuffer = 1
 

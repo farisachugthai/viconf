@@ -55,7 +55,13 @@ import logging
 from pathlib import Path
 import sys
 
-import vim
+try:
+    import vim
+except ImportError:  # i guess were not in vim
+    try:
+        import pynvim
+    except ImportError:
+        sys.exit()
 
 
 class Target:

@@ -1,8 +1,8 @@
 # ============================================================================
-	# File: vim.snippets
-	# Author: Faris Chugthai
-	# Description: Vim Snippets:
-	# Last Modified: April 27, 2019
+# File: vim.snippets
+# Author: Faris Chugthai
+# Description: Vim Snippets:
+# Last Modified: April 27, 2019
 # ============================================================================
 
 #########################
@@ -25,6 +25,8 @@ if exists('${1:g:did_`!p snip.rv = snip.fn.replace('.','_')`}') || ${2:&compatib
 	finish
 endif
 let $1 = ${4:1}
+
+cpo$0
 endsnippet
 
 snippet plugin "Plugin reload guard." b
@@ -65,13 +67,13 @@ snippet header "standard Vim script file header" b
 " ============================================================================
 endsnippet
 
-snippet ft "Ftplugin guard" b
+# Yay! First successful use of a regex
+snippet "ft(plugin)?" "Ftplugin guard" br
+" Guard: {{{1
 if exists('b:did_ftplugin') | finish | endif
 let b:did_ftplugin = 1
 
-$1
-
-let b:undo_ftplugin = '${2:setl cms< com< fo<}' $0
+cpo$0
 endsnippet
 
 snippet syntax "Syntax file guard" b
@@ -251,7 +253,7 @@ endsnippet
 #  mapping  #
 #############
 
-snippet m "map var var CR" b
+snippet map "map var var CR" b
 map ${<Leader>${1}} ${2}${3:<CR>}
 endsnippet
 

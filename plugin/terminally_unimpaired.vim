@@ -29,6 +29,10 @@ nnoremap ,e :e **/*<C-z><S-Tab>
 set path-=/usr/include
 nnoremap ,f :find **/*<C-z><S-Tab>
 
+if exists($ANDROID_DATA)
+  " May 26, 2019: Just ran into my first problem from a filename with a space in the name *sigh*
+  noremap <silent> <Leader>ts <Cmd>execute '!termux-share -a send ' . shellescape(expand("%"))<CR>
+endif
 if !has('nvim') | finish | endif  " {{{1
 
 augroup TermGroup

@@ -55,7 +55,8 @@ let g:netrw_sizestyle = 'h'
 " Only display errors as messages
 let g:netrw_errorlvl          = 2
 
-setlocal statusline=%f\ %{WebDevIconsGetFileTypeSymbol()}\ %h%w%m%r\ %=%(%l,%c%V\ %Y\ %=\ %P%)
+" setlocal statusline=%f\ %{WebDevIconsGetFileTypeSymbol()}\ %h%w%m%r\ %=%(%l,%c%V\ %Y\ %=\ %P%)
+let &l:stl = NetrwStatusLine()
 
 " From the help
 let g:netrw_bufsettings='noma nomod nobl nowrap ro rnu'
