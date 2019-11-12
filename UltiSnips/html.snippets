@@ -1,13 +1,11 @@
 # html.snippets
 
-extends markdown
-
 global !p
 def x(snip):
-	if snip.ft.startswith("x"):
-		snip.rv = '/'
-	else:
-		snip.rv = ""
+				if snip.ft.startswith("x"):
+								snip.rv = '/'
+				else:
+								snip.rv = ""
 endglobal
 
 snippet doctype "HTML - 5.0 (doctype)" b
@@ -80,13 +78,13 @@ endsnippet
 
 snippet article "<article>"
 <article>
-	${VISUAL:{1:article content}}
+				${VISUAL:{1:article content}}
 </article>
 endsnippet
 
 snippet aside "<aside>"
 <aside>
-	${1:aside content}
+				${1:aside content}
 </aside>
 endsnippet
 
@@ -105,7 +103,7 @@ endsnippet
 
 snippet body "<body>"
 <body>
-	${0:${VISUAL}}
+				${0:${VISUAL}}
 </body>
 endsnippet
 
@@ -148,7 +146,7 @@ endsnippet
 
 snippet datalist "<datalist>"
 <datalist id="$1" name="$2">
-	opt$3
+				opt$3
 </datalist>
 endsnippet
 
@@ -166,25 +164,25 @@ endsnippet
 
 snippet div "<div>" w
 <div>
-	${0:${VISUAL}}
+				${0:${VISUAL}}
 </div>
 endsnippet
 
 snippet div# "<div> with ID & class" w
 <div`!p snip.rv=' id="' if t[1] else ""`${1:name}`!p snip.rv = '"' if t[1] else ""``!p snip.rv=' class="' if t[2] else ""`${2:name}`!p snip.rv = '"' if t[2] else ""`>
-	${0:${VISUAL}}
+				${0:${VISUAL}}
 </div>
 endsnippet
 
 snippet div. "<div> with class" w
 <div`!p snip.rv=' class="' if t[1] else ""`${1:name}`!p snip.rv = '"' if t[1] else ""`>
-	${0:${VISUAL}}
+				${0:${VISUAL}}
 </div>
 endsnippet
 
 snippet dl "<dl>"
 <dl>
-	${1:Definition list}
+				${1:Definition list}
 </dl>
 endsnippet
 
@@ -198,8 +196,8 @@ endsnippet
 
 snippet fieldset "Fieldset" w
 <fieldset id="${1/[\w\d]+|( )/(?1:_:\L$0\E)/g}" ${2:class="${3:}"}>
-	<legend>${1:text${VISUAL}}/legend>
-	${0:${VISUAL}}
+				<legend>${1:text${VISUAL}}/legend>
+				${0:${VISUAL}}
 </fieldset>
 endsnippet
 
@@ -216,7 +214,7 @@ endsnippet
 
 snippet footer "<footer>"
 <footer>
-	${1:footer content}
+				${1:footer content}
 </footer>
 endsnippet
 
@@ -224,7 +222,7 @@ snippet form "HTML <form>" w
 <form action="${1:`!p
 snip.rv = (snip.basename or 'unnamed') + '_submit'
 `}" method="${2:get}" accept-charset="utf-8">
-	${0:${VISUAL}}
+				${0:${VISUAL}}
 </form>
 endsnippet
 
@@ -254,43 +252,43 @@ endsnippet
 
 snippet head "HTML <head>"
 <head>
-	<meta charset="utf-8">
-	<title>${1:`!p snip.rv = snip.basename or "Page Title"`}</title>
-	${0:${VISUAL}}
+				<meta charset="utf-8">
+				<title>${1:`!p snip.rv = snip.basename or "Page Title"`}</title>
+				${0:${VISUAL}}
 </head>
 endsnippet
 
 snippet header "<header>"
 <header>
-	${1:header content}
+				${1:header content}
 </header>
 endsnippet
 
 snippet html "HTML basic structure" b
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<title>${1:`!p snip.rv = snip.basename.replace('-', ' ').capitalize()`}</title>
-	</head>
-	<body>
-		${0:body}
-	</body>
+				<head>
+								<meta charset="UTF-8" />
+								<meta name="viewport" content="width=device-width" />
+								<title>${1:`!p snip.rv = snip.basename.replace('-', ' ').capitalize()`}</title>
+				</head>
+				<body>
+								${0:body}
+				</body>
 </html>
 endsnippet
 
 snippet htmll "HTML basic structure with the lang attribute" b
 <!DOCTYPE html>
 <html lang="${1:es}">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<title>${2:`!p snip.rv = snip.basename.replace('-', ' ').capitalize()`}</title>
-	</head>
-	<body>
-		${0:body}
-	</body>
+				<head>
+								<meta charset="UTF-8" />
+								<meta name="viewport" content="width=device-width" />
+								<title>${2:`!p snip.rv = snip.basename.replace('-', ' ').capitalize()`}</title>
+				</head>
+				<body>
+								${0:body}
+				</body>
 </html>
 endsnippet
 
@@ -344,7 +342,7 @@ endsnippet
 
 snippet main "<main>"
 <main>
-	${1:main content}
+				${1:main content}
 </main>
 endsnippet
 
@@ -362,7 +360,7 @@ endsnippet
 
 snippet nav "<nav>"
 <nav>
-	${1:navigation links}
+				${1:navigation links}
 </nav>
 endsnippet
 
@@ -372,13 +370,13 @@ endsnippet
 
 snippet ol "<ol>"
 <ol>
-	<li>${1:text${VISUAL}}/li>
+				<li>${1:text${VISUAL}}/li>
 </ol>
 endsnippet
 
 snippet optgroup "<optgroup>"
 <optgroup label="$1">
-	opt$2
+				opt$2
 </optgroup>
 endsnippet
 
@@ -396,7 +394,7 @@ endsnippet
 
 snippet picture "<picture>"
 <picture>
-	${1:image sources}
+				${1:image sources}
 </picture>
 endsnippet
 
@@ -422,7 +420,7 @@ endsnippet
 
 snippet script "HTML <script>" w
 <script charset="utf-8">
-	${0:${VISUAL}}
+				${0:${VISUAL}}
 </script>
 endsnippet
 
@@ -432,7 +430,7 @@ endsnippet
 
 snippet select "Select Box" w
 <select name="${1:some_name}" id="${2:$1}"${3:${4: multiple}${5: size="${6:1}"}}>
-	${0:${VISUAL}}
+				${0:${VISUAL}}
 </select>
 endsnippet
 
@@ -458,7 +456,7 @@ endsnippet
 
 snippet style "HTML <style>" w
 <style type="text/css" media="screen">
-	${0:${VISUAL}}
+				${0:${VISUAL}}
 </style>
 endsnippet
 
@@ -472,7 +470,7 @@ endsnippet
 
 snippet table "HTML <table>" w
 <table>
-	${0:${VISUAL}}
+				${0:${VISUAL}}
 </table>
 endsnippet
 
@@ -520,7 +518,7 @@ endsnippet
 
 snippet ul "unordered list" w
 <ul>
-	${0:${VISUAL}}
+				${0:${VISUAL}}
 </ul>
 endsnippet
 

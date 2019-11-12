@@ -9,9 +9,7 @@ extends python
 #######################################################################
 
 global !p
-
-from snippets_helper import make_items
-
+from snippets_helper import make_items, complete, TEXT_ROLES, TEXT_ROLES_REGEX, SPECIFIC_ADMONITIONS, DIRECTIVES, DIRECTIVES_WITHOUT_TITLE, DIRECTIVES_FOR_SUBSTITUTION, CHART_TYPES
 endglobal
 
 ################
@@ -447,6 +445,74 @@ snippet see "See also the numpy way" b
 See Also
 --------
 ${0:${VISUAL}}
+endsnippet
+
+
+# match snippets :
+# img, inc, fig
+snippet id "Includable Directives" b
+`!p
+real_name=real_filename(os.path.basename(t[2]))
+di=t[1][:2]
+
+link=""
+content=""
+
+if di == 'im':
+	link = "|{0}|".format(real_name)
+
+if di == 'fi':
+	content="""
+	:alt: {0}
+
+	{0}""".format(real_name)
+`
+..`!p snip.rv = " %s" % link if link else ""` $1`!p
+snip.rv=complete(t[1], INCLUDABLE_DIRECTIVES)
+`:: ${2:${VISUAL:file}}`!p
+if content:
+	snip.rv +="    "+content`
+`!p
+# Tip of whether file is exist in comment type
+if not check_file_exist(path, t[2]):
+	snip.rv='.. FILE {0} does not exist'.format(t[2])
+else:
+	snip.rv=""
+`$0
+endsnippet
+
+snippet di "Directives" b
+.. $1`!p snip.rv=complete(t[1], DIRECTIVES)`:: $2
+
+	${3:${VISUAL:Content}}
+$0
+endsnippet
+
+snippet dt "Directives without title" b
+.. $1`!p snip.rv=complete(t[1], DIRECTIVES_WITHOUT_TITLE)`::
+
+	${2:${VISUAL:Content}}
+$0
+endsnippet
+
+snippet ds "Directives for subscription" b
+.. |$1| $2`!p snip.rv=complete(t[2], DIRECTIVES_FOR_SUBSTITUTION)`:: ${3:Content}
+$0
+endsnippet
+
+snippet sa "Specific Admonitions" b
+.. $1`!p snip.rv =complete(t[1], SPECIFIC_ADMONITIONS)`:: $2
+
+	${3:${VISUAL:Content}}
+
+$0
+endsnippet
+
+# it will be trigger at start of line or after a word
+snippet ro "Text Roles" w
+\ :$1`!p snip.rv=complete(t[1],
+							   TEXT_ROLES+look_up_directives(TEXT_ROLES_REGEX,
+														path))`:\`$2\`\
 endsnippet
 
 # Vim: set noet:set ts=3:set sts=3:set sw=3:

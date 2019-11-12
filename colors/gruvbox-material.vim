@@ -200,13 +200,20 @@ hi link rstInterpretedTextOrHyperlinkReference  Identifier
 hi link rstLiteralBlock                 String
 hi link rstQuotedLiteralBlock           String
 hi link rstSections                     Title
-hi link rstSimpleTableLines             rstTableLines
+hi! link rstSimpleTable Orange
+hi! link rstSimpleTableLines OrangeBold
 hi link rstStandaloneHyperlink          Identifier
 hi link rstSubstitutionDefinition       rstDirective
 hi link rstSubstitutionReference        PreProc
+hi! link rstTable Orange
 hi link rstTableLines                   rstDelimiter
 hi link rstTodo                         Todo
 hi link rstTransition                   rstSections
+
+hi! link rstDirectivesh     Question
+hi! link rstDirectivepython Question
+hi! link rstInlineLiteral   Identifier
+
 " }}}
 " Tmux: {{{
 
@@ -329,6 +336,167 @@ hi! link xmlAttribPunct GruvboxGray
 hi! link xmlEntity GruvboxOrange
 hi! link xmlEntityPunct GruvboxOrange
 " }}}
+" Sh: {{{
+hi link bashAdminStatement	shStatement
+hi link bashSpecialVariables	shShellVariables
+hi link bashStatement		shStatement
+hi link shAlias		Identifier
+hi link shArithRegion	shShellVariables
+hi link shArithmetic		Special
+hi link shAstQuote	shDoubleQuote
+hi link shAtExpr	shSetList
+hi link shBQComment	shComment
+hi link shBeginHere	shRedir
+hi link shBkslshDblQuote	shDoubleQuote
+hi link shBkslshSnglQuote	shSingleQuote
+hi link shCase             Question
+hi link shCaseBar	shConditional
+hi link shCaseCommandSub	shCommandSub
+hi link shCaseDoubleQuote	shDoubleQuote
+hi link shCaseError		Error
+hi link shCaseEsac         Question
+hi link shCaseEsacSync     Question
+hi link shCaseExSingleQuote Question
+hi link shCaseIn	shConditional
+hi link shCaseLabel        Question
+hi link shCaseRange        Question
+hi link shCaseSingleQuote	shSingleQuote
+hi link shCaseStart	shConditional
+hi link shCharClass		Identifier
+hi link shCmdParenRegion   Question
+hi link shCmdSubRegion	shShellVariables
+hi link shColon	shComment
+hi link shComma            Question
+hi link shCommandSub		Special
+hi link shCommandSubBQ		shCommandSub
+hi link shComment		Comment
+hi link shCondError		Error
+hi link shConditional		Conditional
+hi link shCtrlSeq		Special
+hi link shCurlyError		Error
+hi link shCurlyIn          Question
+hi link shDblBrace         Question
+hi link shDblParen         Question
+hi link shDeref	shShellVariables
+hi link shDerefDelim	shOperator
+hi link shDerefEscape      Question
+hi link shDerefLen		shDerefOff
+hi link shDerefOff		shDerefOp
+hi link shDerefOp	shOperator
+hi link shDerefOpError		Error
+hi link shDerefPOL	shDerefOp
+hi link shDerefPPS	shDerefOp
+hi link shDerefPPSleft     Question
+hi link shDerefPPSright    Question
+hi link shDerefPSR	shDerefOp
+hi link shDerefPSRleft     Question
+hi link shDerefPSRright    Question
+hi link shDerefPattern     Question
+hi link shDerefSimple	shDeref
+hi link shDerefSpecial	shDeref
+hi link shDerefString	shDoubleQuote
+hi link shDerefVar	shDeref
+hi link shDerefVarArray    Question
+hi link shDerefWordError		Error
+hi link shDo               Question
+hi link shDoError		Error
+hi link shDoSync           Question
+hi link shDoubleQuote	shString
+hi link shEcho	shString
+hi link shEchoDelim	shOperator
+hi link shEchoQuote	shString
+hi link shEmbeddedEcho	shString
+hi link shEsacError		Error
+hi link shEscape	shCommandSub
+hi link shExDoubleQuote	shDoubleQuote
+hi link shExSingleQuote	shSingleQuote
+hi link shExpr             Question
+hi link shExprRegion		Delimiter
+hi link shFor              Question
+hi link shForPP	shLoop
+hi link shForSync          Question
+hi link shFunction	Function
+hi link shFunctionFour     Question
+hi link shFunctionKey		Keyword
+hi link shFunctionName		Function
+hi link shFunctionOne      Identifier
+hi link shFunctionStart    Question
+hi link shFunctionThree    Question
+hi link shFunctionTwo      Question
+hi link shHereDoc	shString
+hi link shHereDoc01		shRedir
+hi link shHereDoc02		shRedir
+hi link shHereDoc03		shRedir
+hi link shHereDoc04		shRedir
+hi link shHereDoc05		shRedir
+hi link shHereDoc06		shRedir
+hi link shHereDoc07		shRedir
+hi link shHereDoc08		shRedir
+hi link shHereDoc09		shRedir
+hi link shHereDoc10		shRedir
+hi link shHereDoc11		shRedir
+hi link shHereDoc12		shRedir
+hi link shHereDoc13		shRedir
+hi link shHereDoc14		shRedir
+hi link shHereDoc15		shRedir
+hi link shHereDoc16        Question
+hi link shHerePayload	shHereDoc
+hi link shHereString	shRedir
+hi link shIf               Identifier
+hi link shIfSync           Question
+hi link shInError		Error
+hi link shLoop	shStatement
+hi link shNoQuote	shDoubleQuote
+hi link shNumber		Number
+hi link shOK               Question
+hi link shOperator		Operator
+hi link shOption	shCommandSub
+hi link shParen	shArithmetic
+hi link shParenError		Error
+hi link shPattern	shString
+hi link shPosnParm	shShellVariables
+hi link shQuickComment	shComment
+hi link shQuote	shOperator
+hi link shRange	shOperator
+hi link shRedir	shOperator
+hi link shRepeat		Repeat
+hi link shSet		Statement
+hi link shSetList		Identifier
+hi link shSetListDelim	shOperator
+hi link shSetOption	shOption
+hi link shShellVariables		PreProc
+hi link shSingleQuote	shString
+hi link shSnglCase		Statement
+hi link shSource	shOperator
+hi link shSource	shOperator
+hi link shSpecial		Special
+hi link shSpecialDQ		Special
+hi link shSpecialNoZS		shSpecial
+hi link shSpecialNxt	shSpecial
+hi link shSpecialSQ		Special
+hi link shSpecialStart	shSpecial
+hi link shSpecialVar       Question
+hi link shStatement		Statement
+hi link shString		String
+hi link shStringSpecial	shSpecial
+hi link shSubSh            Question
+hi link shSubShRegion	shOperator
+hi link shTest             Question
+hi link shTestDoubleQuote	shString
+hi link shTestError		Error
+hi link shTestOpr	shConditional
+hi link shTestPattern	shString
+hi link shTestSingleQuote	shString
+hi link shTodo		Todo
+hi link shTouch            Question
+hi link shTouchCmd	shStatement
+hi link shUntilSync        Question
+hi link shVarAssign        Question
+hi link shVariable	shSetList
+hi link shWhileSync        Question
+hi link shWrapLineOperator	shOperator
+
+" }}}
 if has('nvim')
 	" How does a nice light blue sound?
 	hi! NvimInternalError guibg=NONE ctermfg=108 ctermbg=234 gui=reverse guifg=#8ec0e1 guisp=NONE
@@ -354,16 +522,6 @@ if has('nvim')
 	hi debugBreakpoint term=reverse ctermbg=red guibg=red
 endif
 
-" Rst: {{{1
-
-hi! link rstSimpleTable Orange
-hi! link rstSimpleTableLines OrangeBold
-hi! link rstTable Orange
-hi! link rstDirectivesh     Question
-hi! link rstDirectivepython Question
-hi! link rstInlineLiteral   Identifier
-
-" }}}
 " Python: {{{1
 hi link pythonAsync			Statement
 hi link pythonAttribute TypeDef
@@ -2783,1002 +2941,3 @@ if s:t_Co >= 256  "  {{{
   unlet s:t_Co s:italics
   finish
 endif
-
-if s:t_Co >= 8
-  if &background ==# 'dark'
-    if get(g:, 'gruvbox_material_transparent_background', 0)
-      hi Normal ctermfg=White ctermbg=NONE cterm=NONE
-      hi Terminal ctermfg=White ctermbg=NONE cterm=NONE
-      hi DiffText ctermfg=NONE ctermbg=NONE cterm=reverse
-      hi VertSplit ctermfg=DarkGrey ctermbg=NONE cterm=NONE
-      hi QuickFixLine ctermfg=Yellow ctermbg=NONE cterm=reverse
-      hi EndOfBuffer ctermfg=Grey ctermbg=NONE cterm=NONE
-      hi FoldColumn ctermfg=Grey ctermbg=NONE cterm=NONE
-      hi Folded ctermfg=Grey ctermbg=NONE cterm=bold
-      hi CursorColumn ctermfg=NONE ctermbg=NONE cterm=NONE
-      hi CursorLine ctermfg=NONE ctermbg=NONE cterm=NONE
-      hi CursorLineNr ctermfg=LightGrey ctermbg=NONE cterm=NONE
-      hi MatchParen ctermfg=NONE ctermbg=NONE cterm=bold
-    else
-      if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-        hi Normal ctermfg=White ctermbg=Black cterm=NONE
-        hi Terminal ctermfg=White ctermbg=Black cterm=NONE
-        hi DiffText ctermfg=NONE ctermbg=Black cterm=reverse
-        hi EndOfBuffer ctermfg=Black ctermbg=Black cterm=NONE
-        hi VertSplit ctermfg=DarkGrey ctermbg=Black cterm=NONE
-        hi QuickFixLine ctermfg=Yellow ctermbg=Black cterm=reverse
-        hi MatchParen ctermfg=NONE ctermbg=Black cterm=bold
-        hi FoldColumn ctermfg=Grey ctermbg=Black cterm=NONE
-        hi Folded ctermfg=Grey ctermbg=Black cterm=NONE
-        hi CursorColumn ctermfg=NONE ctermbg=Black cterm=NONE
-        hi CursorLine ctermfg=NONE ctermbg=Black cterm=NONE
-        hi CursorLineNr ctermfg=LightGrey ctermbg=Black cterm=NONE
-      elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-        hi Normal ctermfg=White ctermbg=Black cterm=NONE
-        hi Terminal ctermfg=White ctermbg=Black cterm=NONE
-        hi DiffText ctermfg=NONE ctermbg=Black cterm=reverse
-        hi EndOfBuffer ctermfg=Black ctermbg=Black cterm=NONE
-        hi VertSplit ctermfg=DarkGrey ctermbg=Black cterm=NONE
-        hi QuickFixLine ctermfg=Yellow ctermbg=Black cterm=reverse
-        hi MatchParen ctermfg=NONE ctermbg=DarkGrey cterm=bold
-        hi FoldColumn ctermfg=Grey ctermbg=Black cterm=NONE
-        hi Folded ctermfg=Grey ctermbg=Black cterm=NONE
-        hi CursorColumn ctermfg=NONE ctermbg=Black cterm=NONE
-        hi CursorLine ctermfg=NONE ctermbg=Black cterm=NONE
-        hi CursorLineNr ctermfg=LightGrey ctermbg=Black cterm=NONE
-      elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-        hi Normal ctermfg=White ctermbg=Black cterm=NONE
-        hi Terminal ctermfg=White ctermbg=Black cterm=NONE
-        hi DiffText ctermfg=NONE ctermbg=Black cterm=reverse
-        hi EndOfBuffer ctermfg=Black ctermbg=Black cterm=NONE
-        hi VertSplit ctermfg=DarkGrey ctermbg=Black cterm=NONE
-        hi QuickFixLine ctermfg=Yellow ctermbg=Black cterm=reverse
-        hi MatchParen ctermfg=NONE ctermbg=DarkGrey cterm=bold
-        hi FoldColumn ctermfg=Grey ctermbg=DarkGrey cterm=NONE
-        hi Folded ctermfg=Grey ctermbg=DarkGrey cterm=NONE
-        hi CursorColumn ctermfg=NONE ctermbg=DarkGrey cterm=NONE
-        hi CursorLine ctermfg=NONE ctermbg=DarkGrey cterm=NONE
-        hi CursorLineNr ctermfg=LightGrey ctermbg=DarkGrey cterm=NONE
-      endif
-    endif
-    if &background ==#'light'
-      hi PmenuSel ctermfg=DarkGrey ctermbg=LightGrey cterm=NONE
-      hi TabLineSel ctermfg=DarkGrey ctermbg=LightGrey cterm=bold
-      hi WildMenu ctermfg=DarkGrey ctermbg=LightGrey cterm=NONE
-      if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-        hi Pmenu ctermfg=White ctermbg=Black cterm=NONE
-        hi StatusLine ctermfg=White ctermbg=DarkGrey cterm=NONE
-        hi StatusLineTerm ctermfg=White ctermbg=DarkGrey cterm=NONE
-        hi TabLine ctermfg=White ctermbg=DarkGrey cterm=NONE
-        hi TabLineFill ctermfg=White ctermbg=Black cterm=NONE
-        hi ColorColumn ctermfg=NONE ctermbg=Black cterm=NONE
-        hi SignColumn ctermfg=NONE ctermbg=Black cterm=NONE
-        hi StatusLineNC ctermfg=LightGrey ctermbg=Black cterm=NONE
-        hi StatusLineTermNC ctermfg=LightGrey ctermbg=Black cterm=NONE
-      elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-        hi Pmenu ctermfg=White ctermbg=DarkGrey cterm=NONE
-        hi StatusLine ctermfg=White ctermbg=DarkGrey cterm=NONE
-        hi StatusLineTerm ctermfg=White ctermbg=DarkGrey cterm=NONE
-        hi TabLine ctermfg=White ctermbg=DarkGrey cterm=NONE
-        hi TabLineFill ctermfg=White ctermbg=Black cterm=NONE
-        hi ColorColumn ctermfg=NONE ctermbg=Black cterm=NONE
-        hi SignColumn ctermfg=NONE ctermbg=Black cterm=NONE
-        hi StatusLineNC ctermfg=LightGrey ctermbg=Black cterm=NONE
-        hi StatusLineTermNC ctermfg=LightGrey ctermbg=Black cterm=NONE
-      elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-        hi Pmenu ctermfg=White ctermbg=DarkGrey cterm=NONE
-        hi StatusLine ctermfg=White ctermbg=DarkGrey cterm=NONE
-        hi StatusLineTerm ctermfg=White ctermbg=DarkGrey cterm=NONE
-        hi TabLine ctermfg=White ctermbg=DarkGrey cterm=NONE
-        hi TabLineFill ctermfg=White ctermbg=DarkGrey cterm=NONE
-        hi ColorColumn ctermfg=NONE ctermbg=DarkGrey cterm=NONE
-        hi SignColumn ctermfg=NONE ctermbg=DarkGrey cterm=NONE
-        hi StatusLineNC ctermfg=LightGrey ctermbg=DarkGrey cterm=NONE
-        hi StatusLineTermNC ctermfg=LightGrey ctermbg=DarkGrey cterm=NONE
-      endif
-    else
-      hi PmenuSel ctermfg=Black ctermbg=LightGrey cterm=NONE
-      hi TabLineSel ctermfg=Black ctermbg=LightGrey cterm=bold
-      hi WildMenu ctermfg=Black ctermbg=LightGrey cterm=NONE
-      if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-        hi Pmenu ctermfg=White ctermbg=DarkGrey cterm=NONE
-        hi StatusLine ctermfg=White ctermbg=DarkGrey cterm=NONE
-        hi StatusLineTerm ctermfg=White ctermbg=DarkGrey cterm=NONE
-        hi TabLine ctermfg=White ctermbg=DarkGrey cterm=NONE
-        hi TabLineFill ctermfg=White ctermbg=Black cterm=NONE
-        hi ColorColumn ctermfg=NONE ctermbg=Black cterm=NONE
-        hi SignColumn ctermfg=NONE ctermbg=Black cterm=NONE
-        hi StatusLineNC ctermfg=LightGrey ctermbg=Black cterm=NONE
-        hi StatusLineTermNC ctermfg=LightGrey ctermbg=Black cterm=NONE
-      elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-        hi Pmenu ctermfg=White ctermbg=DarkGrey cterm=NONE
-        hi StatusLine ctermfg=White ctermbg=DarkGrey cterm=NONE
-        hi StatusLineTerm ctermfg=White ctermbg=DarkGrey cterm=NONE
-        hi TabLine ctermfg=White ctermbg=DarkGrey cterm=NONE
-        hi TabLineFill ctermfg=White ctermbg=Black cterm=NONE
-        hi ColorColumn ctermfg=NONE ctermbg=Black cterm=NONE
-        hi SignColumn ctermfg=NONE ctermbg=Black cterm=NONE
-        hi StatusLineNC ctermfg=LightGrey ctermbg=Black cterm=NONE
-        hi StatusLineTermNC ctermfg=LightGrey ctermbg=Black cterm=NONE
-      elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-        hi Pmenu ctermfg=White ctermbg=DarkGrey cterm=NONE
-        hi StatusLine ctermfg=White ctermbg=DarkGrey cterm=NONE
-        hi StatusLineTerm ctermfg=White ctermbg=DarkGrey cterm=NONE
-        hi TabLine ctermfg=White ctermbg=DarkGrey cterm=NONE
-        hi TabLineFill ctermfg=White ctermbg=DarkGrey cterm=NONE
-        hi ColorColumn ctermfg=NONE ctermbg=DarkGrey cterm=NONE
-        hi SignColumn ctermfg=NONE ctermbg=DarkGrey cterm=NONE
-        hi StatusLineNC ctermfg=LightGrey ctermbg=DarkGrey cterm=NONE
-        hi StatusLineTermNC ctermfg=LightGrey ctermbg=DarkGrey cterm=NONE
-      endif
-    endif
-    hi Conceal ctermfg=Blue ctermbg=NONE cterm=NONE
-    hi Cursor ctermfg=NONE ctermbg=NONE cterm=reverse
-    hi lCursor ctermfg=NONE ctermbg=NONE cterm=reverse
-    hi LineNr ctermfg=DarkGrey ctermbg=NONE cterm=NONE
-    hi Directory ctermfg=Green ctermbg=NONE cterm=NONE
-    hi ErrorMsg ctermfg=Red ctermbg=NONE cterm=bold,underline
-    hi WarningMsg ctermfg=Yellow ctermbg=NONE cterm=bold
-    hi ModeMsg ctermfg=White ctermbg=NONE cterm=bold
-    hi MoreMsg ctermfg=Yellow ctermbg=NONE cterm=bold
-    hi IncSearch ctermfg=NONE ctermbg=NONE cterm=bold,reverse
-    hi Search ctermfg=NONE ctermbg=NONE cterm=reverse,underline
-    hi NonText ctermfg=Grey ctermbg=NONE cterm=NONE
-    hi PmenuSbar ctermfg=NONE ctermbg=DarkGrey cterm=NONE
-    hi PmenuThumb ctermfg=NONE ctermbg=DarkGrey cterm=NONE
-    hi Question ctermfg=DarkYellow ctermbg=NONE cterm=bold
-    hi SpellBad ctermfg=Red ctermbg=NONE cterm=italic,underline
-    hi SpellCap ctermfg=Blue ctermbg=NONE cterm=italic,underline
-    hi SpellLocal ctermfg=Cyan ctermbg=NONE cterm=italic,underline
-    hi SpellRare ctermfg=Magenta ctermbg=NONE cterm=italic,underline
-    hi Visual ctermfg=NONE ctermbg=NONE cterm=reverse
-    hi VisualNOS ctermfg=NONE ctermbg=NONE cterm=reverse
-    hi Todo ctermfg=Grey ctermbg=NONE cterm=bold,italic
-    hi CursorIM ctermfg=NONE ctermbg=NONE cterm=reverse
-    hi ToolbarLine ctermfg=NONE ctermbg=DarkGrey cterm=NONE
-    hi ToolbarButton ctermfg=White ctermbg=DarkGrey cterm=bold
-    hi Debug ctermfg=DarkYellow ctermbg=NONE cterm=NONE
-    hi Title ctermfg=Green ctermbg=NONE cterm=bold
-    hi Conditional ctermfg=Red ctermbg=NONE cterm=NONE
-    hi Repeat ctermfg=Red ctermbg=NONE cterm=NONE
-    hi Label ctermfg=Red ctermbg=NONE cterm=NONE
-    hi Exception ctermfg=Red ctermbg=NONE cterm=NONE
-    hi Keyword ctermfg=Red ctermbg=NONE cterm=NONE
-    hi Statement ctermfg=Red ctermbg=NONE cterm=NONE
-    hi Typedef ctermfg=Yellow ctermbg=NONE cterm=NONE
-    hi Type ctermfg=Yellow ctermbg=NONE cterm=NONE
-    hi StorageClass ctermfg=DarkYellow ctermbg=NONE cterm=NONE
-    hi Delimiter ctermfg=White ctermbg=NONE cterm=NONE
-    hi Special ctermfg=DarkYellow ctermbg=NONE cterm=NONE
-    hi Tag ctermfg=DarkYellow ctermbg=NONE cterm=NONE
-    hi Operator ctermfg=DarkYellow ctermbg=NONE cterm=NONE
-    hi SpecialChar ctermfg=DarkYellow ctermbg=NONE cterm=NONE
-    hi String ctermfg=Green ctermbg=NONE cterm=NONE
-    hi PreProc ctermfg=Cyan ctermbg=NONE cterm=NONE
-    hi Macro ctermfg=Cyan ctermbg=NONE cterm=NONE
-    hi Define ctermfg=Cyan ctermbg=NONE cterm=NONE
-    hi Include ctermfg=Cyan ctermbg=NONE cterm=NONE
-    hi PreCondit ctermfg=Cyan ctermbg=NONE cterm=NONE
-    hi Structure ctermfg=Cyan ctermbg=NONE cterm=NONE
-    hi Identifier ctermfg=Blue ctermbg=NONE cterm=NONE
-    hi Underlined ctermfg=Blue ctermbg=NONE cterm=underline
-    hi Constant ctermfg=Magenta ctermbg=NONE cterm=NONE
-    hi Boolean ctermfg=Magenta ctermbg=NONE cterm=NONE
-    hi Character ctermfg=Magenta ctermbg=NONE cterm=NONE
-    hi Number ctermfg=Magenta ctermbg=NONE cterm=NONE
-    hi Float ctermfg=Magenta ctermbg=NONE cterm=NONE
-    hi SpecialKey ctermfg=Blue ctermbg=NONE cterm=NONE
-    hi Ignore ctermfg=White ctermbg=NONE cterm=NONE
-    if !s:italics
-      hi SpellBad cterm=underline
-      hi SpellCap cterm=underline
-      hi SpellLocal cterm=underline
-      hi SpellRare cterm=underline
-      hi Todo cterm=bold
-    endif
-    if get(g:, 'gruvbox_material_disable_italic_comment', 0)
-      hi Comment ctermfg=Grey ctermbg=NONE cterm=NONE
-      hi SpecialComment ctermfg=Grey ctermbg=NONE cterm=NONE
-    else
-      hi Comment ctermfg=Grey ctermbg=NONE cterm=italic
-      hi SpecialComment ctermfg=Grey ctermbg=NONE cterm=italic
-      if !s:italics
-        hi Comment cterm=NONE
-        hi SpecialComment cterm=NONE
-      endif
-    endif
-    if get(g:, 'gruvbox_material_enable_bold', 0)
-      hi Function ctermfg=Green ctermbg=NONE cterm=bold
-    else
-      hi Function ctermfg=Green ctermbg=NONE cterm=NONE
-    endif
-    if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-      hi DiffAdd ctermfg=NONE ctermbg=DarkGreen cterm=NONE
-      hi DiffChange ctermfg=NONE ctermbg=DarkBlue cterm=NONE
-      hi DiffDelete ctermfg=NONE ctermbg=DarkRed cterm=NONE
-      hi Error ctermfg=NONE ctermbg=DarkRed cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-      hi DiffAdd ctermfg=NONE ctermbg=DarkGreen cterm=NONE
-      hi DiffChange ctermfg=NONE ctermbg=DarkBlue cterm=NONE
-      hi DiffDelete ctermfg=NONE ctermbg=DarkRed cterm=NONE
-      hi Error ctermfg=NONE ctermbg=DarkRed cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-      hi DiffAdd ctermfg=NONE ctermbg=DarkGreen cterm=NONE
-      hi DiffChange ctermfg=NONE ctermbg=DarkBlue cterm=NONE
-      hi DiffDelete ctermfg=NONE ctermbg=DarkRed cterm=NONE
-      hi Error ctermfg=NONE ctermbg=DarkRed cterm=NONE
-    endif
-    hi markdownH1 ctermfg=Green ctermbg=NONE cterm=bold
-    hi markdownH2 ctermfg=Green ctermbg=NONE cterm=bold
-    hi markdownH3 ctermfg=Yellow ctermbg=NONE cterm=bold
-    hi markdownH4 ctermfg=Yellow ctermbg=NONE cterm=bold
-    hi markdownUrl ctermfg=Magenta ctermbg=NONE cterm=underline
-    hi markdownItalic ctermfg=NONE ctermbg=NONE cterm=italic
-    hi markdownBold ctermfg=NONE ctermbg=NONE cterm=bold
-    hi markdownItalicDelimiter ctermfg=Grey ctermbg=NONE cterm=italic
-    hi mkdURL ctermfg=Magenta ctermbg=NONE cterm=underline
-    hi mkdInlineURL ctermfg=Magenta ctermbg=NONE cterm=underline
-    hi mkdItalic ctermfg=Grey ctermbg=NONE cterm=italic
-    hi htmlLink ctermfg=LightGrey ctermbg=NONE cterm=underline
-    hi htmlBold ctermfg=NONE ctermbg=NONE cterm=bold
-    hi htmlBoldUnderline ctermfg=NONE ctermbg=NONE cterm=bold,underline
-    hi htmlBoldItalic ctermfg=NONE ctermbg=NONE cterm=bold,italic
-    hi htmlBoldUnderlineItalic ctermfg=NONE ctermbg=NONE cterm=bold,italic,underline
-    hi htmlUnderline ctermfg=NONE ctermbg=NONE cterm=underline
-    hi htmlUnderlineItalic ctermfg=NONE ctermbg=NONE cterm=italic,underline
-    hi htmlItalic ctermfg=NONE ctermbg=NONE cterm=italic
-    hi vimCommentTitle ctermfg=LightGrey ctermbg=NONE cterm=bold,italic
-    hi helpURL ctermfg=Cyan ctermbg=NONE cterm=underline
-    hi helpNote ctermfg=Magenta ctermbg=NONE cterm=bold
-    hi plug1 ctermfg=DarkYellow ctermbg=NONE cterm=bold
-    hi plugNumber ctermfg=Yellow ctermbg=NONE cterm=bold
-    if !s:italics
-      hi markdownItalic cterm=NONE
-      hi markdownItalicDelimiter cterm=NONE
-      hi mkdItalic cterm=NONE
-      hi htmlBoldItalic cterm=bold
-      hi htmlBoldUnderlineItalic cterm=bold,underline
-      hi htmlUnderlineItalic cterm=underline
-      hi htmlItalic cterm=NONE
-      hi vimCommentTitle cterm=bold
-    endif
-    if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-      if get(g:, 'indent_guides_auto_colors', 0)
-        if get(g:, 'gruvbox_material_invert_indent_guides', 0)
-          hi IndentGuidesOdd ctermfg=Black ctermbg=DarkGrey cterm=reverse
-          hi IndentGuidesEven ctermfg=Black ctermbg=DarkGrey cterm=reverse
-        else
-          hi IndentGuidesOdd ctermfg=Black ctermbg=DarkGrey cterm=NONE
-          hi IndentGuidesEven ctermfg=Black ctermbg=DarkGrey cterm=NONE
-        endif
-      endif
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-      if get(g:, 'indent_guides_auto_colors', 0)
-        if get(g:, 'gruvbox_material_invert_indent_guides', 0)
-          hi IndentGuidesOdd ctermfg=Black ctermbg=DarkGrey cterm=reverse
-          hi IndentGuidesEven ctermfg=Black ctermbg=DarkGrey cterm=reverse
-        else
-          hi IndentGuidesOdd ctermfg=Black ctermbg=DarkGrey cterm=NONE
-          hi IndentGuidesEven ctermfg=Black ctermbg=DarkGrey cterm=NONE
-        endif
-      endif
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-      if get(g:, 'indent_guides_auto_colors', 0)
-        if get(g:, 'gruvbox_material_invert_indent_guides', 0)
-          hi IndentGuidesOdd ctermfg=Black ctermbg=DarkGrey cterm=reverse
-          hi IndentGuidesEven ctermfg=Black ctermbg=DarkGrey cterm=reverse
-        else
-          hi IndentGuidesOdd ctermfg=Black ctermbg=DarkGrey cterm=NONE
-          hi IndentGuidesEven ctermfg=Black ctermbg=DarkGrey cterm=NONE
-        endif
-      endif
-    endif
-    if !exists('g:indentLine_color_term')
-      let g:indentLine_color_term = 239
-    endif
-    if !exists('g:indentLine_color_gui')
-      let g:indentLine_color_gui = '#504945'
-    endif
-    " Rainbow Parentheses
-    if !exists('g:rbpt_colorpairs')
-      let g:rbpt_colorpairs = [['blue', '#7daea3'], ['magenta', '#d3869b'],
-            \ ['red', '#ea6962'], ['208', '#e78a4e']]
-    endif
-
-    let g:rainbow_guifgs = [ '#e78a4e', '#ea6962', '#d3869b', '#7daea3' ]
-    let g:rainbow_ctermfgs = [ '208', 'red', 'magenta', 'blue' ]
-
-    if !exists('g:rainbow_conf')
-      let g:rainbow_conf = {}
-    endif
-    if !has_key(g:rainbow_conf, 'guifgs')
-      let g:rainbow_conf['guifgs'] = g:rainbow_guifgs
-    endif
-    if !has_key(g:rainbow_conf, 'ctermfgs')
-      let g:rainbow_conf['ctermfgs'] = g:rainbow_ctermfgs
-    endif
-
-    let g:niji_dark_colours = g:rbpt_colorpairs
-    let g:niji_light_colours = g:rbpt_colorpairs
-    if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-      hi GitGutterAdd ctermfg=Green ctermbg=Black cterm=NONE
-      hi GitGutterChange ctermfg=Blue ctermbg=Black cterm=NONE
-      hi GitGutterDelete ctermfg=Red ctermbg=Black cterm=NONE
-      hi GitGutterChangeDelete ctermfg=Magenta ctermbg=Black cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-      hi GitGutterAdd ctermfg=Green ctermbg=Black cterm=NONE
-      hi GitGutterChange ctermfg=Blue ctermbg=Black cterm=NONE
-      hi GitGutterDelete ctermfg=Red ctermbg=Black cterm=NONE
-      hi GitGutterChangeDelete ctermfg=Magenta ctermbg=Black cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-      hi GitGutterAdd ctermfg=Green ctermbg=DarkGrey cterm=NONE
-      hi GitGutterChange ctermfg=Blue ctermbg=DarkGrey cterm=NONE
-      hi GitGutterDelete ctermfg=Red ctermbg=DarkGrey cterm=NONE
-      hi GitGutterChangeDelete ctermfg=Magenta ctermbg=DarkGrey cterm=NONE
-    endif
-    if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-      hi SignatureMarkText ctermfg=Blue ctermbg=Black cterm=NONE
-      hi SignatureMarkerText ctermfg=Magenta ctermbg=Black cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-      hi SignatureMarkText ctermfg=Blue ctermbg=Black cterm=NONE
-      hi SignatureMarkerText ctermfg=Magenta ctermbg=Black cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-      hi SignatureMarkText ctermfg=Blue ctermbg=DarkGrey cterm=NONE
-      hi SignatureMarkerText ctermfg=Magenta ctermbg=DarkGrey cterm=NONE
-    endif
-    if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-      hi ShowMarksHLl ctermfg=Blue ctermbg=Black cterm=NONE
-      hi ShowMarksHLu ctermfg=Blue ctermbg=Black cterm=NONE
-      hi ShowMarksHLo ctermfg=Blue ctermbg=Black cterm=NONE
-      hi ShowMarksHLm ctermfg=Blue ctermbg=Black cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-      hi ShowMarksHLl ctermfg=Blue ctermbg=Black cterm=NONE
-      hi ShowMarksHLu ctermfg=Blue ctermbg=Black cterm=NONE
-      hi ShowMarksHLo ctermfg=Blue ctermbg=Black cterm=NONE
-      hi ShowMarksHLm ctermfg=Blue ctermbg=Black cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-      hi ShowMarksHLl ctermfg=Blue ctermbg=DarkGrey cterm=NONE
-      hi ShowMarksHLu ctermfg=Blue ctermbg=DarkGrey cterm=NONE
-      hi ShowMarksHLo ctermfg=Blue ctermbg=DarkGrey cterm=NONE
-      hi ShowMarksHLm ctermfg=Blue ctermbg=DarkGrey cterm=NONE
-    endif
-    hi CtrlPMatch ctermfg=Green ctermbg=NONE cterm=bold
-    hi CtrlPPrtBase ctermfg=DarkGrey ctermbg=NONE cterm=NONE
-    hi CtrlPLinePre ctermfg=DarkGrey ctermbg=NONE cterm=NONE
-    hi CtrlPMode1 ctermfg=Blue ctermbg=DarkGrey cterm=bold
-    hi CtrlPMode2 ctermfg=Black ctermbg=Blue cterm=bold
-    hi CtrlPStats ctermfg=LightGrey ctermbg=DarkGrey cterm=bold
-    hi Lf_hl_match ctermfg=Green ctermbg=NONE cterm=bold
-    hi Lf_hl_match0 ctermfg=Green ctermbg=NONE cterm=bold
-    hi Lf_hl_match1 ctermfg=Cyan ctermbg=NONE cterm=bold
-    hi Lf_hl_match2 ctermfg=Blue ctermbg=NONE cterm=bold
-    hi Lf_hl_match3 ctermfg=Magenta ctermbg=NONE cterm=bold
-    hi Lf_hl_match4 ctermfg=DarkYellow ctermbg=NONE cterm=bold
-    hi Lf_hl_matchRefine ctermfg=Red ctermbg=NONE cterm=bold
-    let g:vimshell_escape_colors = [
-          \ '#7c6f64', '#ea6962', '#a9b665', '#e3a84e',
-          \ '#7daea3', '#d3869b', '#89b482', '#a89984',
-          \ '#282828', '#ea6962', '#a9b665', '#e78a4e',
-          \ '#7daea3', '#d3869b', '#89b482', '#dfbf8e'
-          \ ]
-    hi ALEError ctermfg=NONE ctermbg=NONE cterm=underline
-    hi ALEWarning ctermfg=NONE ctermbg=NONE cterm=underline
-    hi ALEInfo ctermfg=NONE ctermbg=NONE cterm=underline
-    if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-      hi ALEErrorSign ctermfg=Red ctermbg=Black cterm=NONE
-      hi ALEWarningSign ctermfg=Yellow ctermbg=Black cterm=NONE
-      hi ALEInfoSign ctermfg=Blue ctermbg=Black cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-      hi ALEErrorSign ctermfg=Red ctermbg=Black cterm=NONE
-      hi ALEWarningSign ctermfg=Yellow ctermbg=Black cterm=NONE
-      hi ALEInfoSign ctermfg=Blue ctermbg=Black cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-      hi ALEErrorSign ctermfg=Red ctermbg=DarkGrey cterm=NONE
-      hi ALEWarningSign ctermfg=Yellow ctermbg=DarkGrey cterm=NONE
-      hi ALEInfoSign ctermfg=Blue ctermbg=DarkGrey cterm=NONE
-    endif
-    hi multiple_cursors_cursor ctermfg=NONE ctermbg=NONE cterm=reverse
-    hi multiple_cursors_visual ctermfg=NONE ctermbg=DarkGrey cterm=NONE
-    hi CocHighlightText ctermfg=NONE ctermbg=NONE cterm=bold
-    hi CocHoverRange ctermfg=NONE ctermbg=NONE cterm=bold,underline
-    if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-      hi CocHintSign ctermfg=Cyan ctermbg=Black cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-      hi CocHintSign ctermfg=Cyan ctermbg=Black cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-      hi CocHintSign ctermfg=Cyan ctermbg=DarkGrey cterm=NONE
-    endif
-    hi MatchParenCur ctermfg=NONE ctermbg=NONE cterm=bold
-    hi MatchWord ctermfg=NONE ctermbg=NONE cterm=underline
-    hi MatchWordCur ctermfg=NONE ctermbg=NONE cterm=underline
-    hi UndotreeSavedBig ctermfg=Magenta ctermbg=NONE cterm=bold
-    unlet s:t_Co s:italics
-    finish
-  endif
-  " Light background
-  hi White ctermfg=Black ctermbg=NONE cterm=NONE
-  hi LightGrey ctermfg=Grey ctermbg=NONE cterm=NONE
-  hi Grey ctermfg=LightGrey ctermbg=NONE cterm=NONE
-  hi Red ctermfg=Red ctermbg=NONE cterm=NONE
-  hi Orange ctermfg=DarkYellow ctermbg=NONE cterm=NONE
-  hi Yellow ctermfg=Yellow ctermbg=NONE cterm=NONE
-  hi Green ctermfg=Green ctermbg=NONE cterm=NONE
-  hi Aqua ctermfg=Cyan ctermbg=NONE cterm=NONE
-  hi Blue ctermfg=Blue ctermbg=NONE cterm=NONE
-  hi Purple ctermfg=Magenta ctermbg=NONE cterm=NONE
-  if get(g:, 'gruvbox_material_enable_bold', 0)
-    hi WhiteBold ctermfg=Black ctermbg=NONE cterm=bold
-    hi LightGreyBold ctermfg=Grey ctermbg=NONE cterm=bold
-    hi GreyBold ctermfg=LightGrey ctermbg=NONE cterm=bold
-    hi RedBold ctermfg=Red ctermbg=NONE cterm=bold
-    hi OrangeBold ctermfg=DarkYellow ctermbg=NONE cterm=bold
-    hi YellowBold ctermfg=Yellow ctermbg=NONE cterm=bold
-    hi GreenBold ctermfg=Green ctermbg=NONE cterm=bold
-    hi AquaBold ctermfg=Cyan ctermbg=NONE cterm=bold
-    hi BlueBold ctermfg=Blue ctermbg=NONE cterm=bold
-    hi PurpleBold ctermfg=Magenta ctermbg=NONE cterm=bold
-  else
-    hi WhiteBold ctermfg=Black ctermbg=NONE cterm=NONE
-    hi LightGreyBold ctermfg=Grey ctermbg=NONE cterm=NONE
-    hi GreyBold ctermfg=LightGrey ctermbg=NONE cterm=NONE
-    hi RedBold ctermfg=Red ctermbg=NONE cterm=NONE
-    hi OrangeBold ctermfg=DarkYellow ctermbg=NONE cterm=NONE
-    hi YellowBold ctermfg=Yellow ctermbg=NONE cterm=NONE
-    hi GreenBold ctermfg=Green ctermbg=NONE cterm=NONE
-    hi AquaBold ctermfg=Cyan ctermbg=NONE cterm=NONE
-    hi BlueBold ctermfg=Blue ctermbg=NONE cterm=NONE
-    hi PurpleBold ctermfg=Magenta ctermbg=NONE cterm=NONE
-  endif
-  if get(g:, 'gruvbox_material_transparent_background', 0)
-    hi Normal ctermfg=Black ctermbg=NONE cterm=NONE
-    hi Terminal ctermfg=Black ctermbg=NONE cterm=NONE
-    hi DiffText ctermfg=NONE ctermbg=NONE cterm=reverse
-    hi VertSplit ctermfg=LightGrey ctermbg=NONE cterm=NONE
-    hi QuickFixLine ctermfg=Yellow ctermbg=NONE cterm=reverse
-    hi EndOfBuffer ctermfg=LightGrey ctermbg=NONE cterm=NONE
-    hi FoldColumn ctermfg=LightGrey ctermbg=NONE cterm=NONE
-    hi Folded ctermfg=LightGrey ctermbg=NONE cterm=bold
-    hi CursorColumn ctermfg=NONE ctermbg=NONE cterm=NONE
-    hi CursorLine ctermfg=NONE ctermbg=NONE cterm=NONE
-    hi CursorLineNr ctermfg=Grey ctermbg=NONE cterm=NONE
-    hi MatchParen ctermfg=NONE ctermbg=NONE cterm=bold
-  else
-    if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-      hi Normal ctermfg=Black ctermbg=White cterm=NONE
-      hi Terminal ctermfg=Black ctermbg=White cterm=NONE
-      hi DiffText ctermfg=NONE ctermbg=White cterm=reverse
-      hi EndOfBuffer ctermfg=White ctermbg=White cterm=NONE
-      hi VertSplit ctermfg=LightGrey ctermbg=White cterm=NONE
-      hi QuickFixLine ctermfg=Yellow ctermbg=White cterm=reverse
-      hi MatchParen ctermfg=NONE ctermbg=White cterm=bold
-      hi FoldColumn ctermfg=LightGrey ctermbg=White cterm=NONE
-      hi Folded ctermfg=LightGrey ctermbg=White cterm=NONE
-      hi CursorColumn ctermfg=NONE ctermbg=White cterm=NONE
-      hi CursorLine ctermfg=NONE ctermbg=White cterm=NONE
-      hi CursorLineNr ctermfg=Grey ctermbg=White cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-      hi Normal ctermfg=Black ctermbg=White cterm=NONE
-      hi Terminal ctermfg=Black ctermbg=White cterm=NONE
-      hi DiffText ctermfg=NONE ctermbg=White cterm=reverse
-      hi EndOfBuffer ctermfg=White ctermbg=White cterm=NONE
-      hi VertSplit ctermfg=LightGrey ctermbg=White cterm=NONE
-      hi QuickFixLine ctermfg=Yellow ctermbg=White cterm=reverse
-      hi MatchParen ctermfg=NONE ctermbg=LightGrey cterm=bold
-      hi FoldColumn ctermfg=LightGrey ctermbg=White cterm=NONE
-      hi Folded ctermfg=LightGrey ctermbg=White cterm=NONE
-      hi CursorColumn ctermfg=NONE ctermbg=White cterm=NONE
-      hi CursorLine ctermfg=NONE ctermbg=White cterm=NONE
-      hi CursorLineNr ctermfg=Grey ctermbg=White cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-      hi Normal ctermfg=Black ctermbg=White cterm=NONE
-      hi Terminal ctermfg=Black ctermbg=White cterm=NONE
-      hi DiffText ctermfg=NONE ctermbg=White cterm=reverse
-      hi EndOfBuffer ctermfg=White ctermbg=White cterm=NONE
-      hi VertSplit ctermfg=LightGrey ctermbg=White cterm=NONE
-      hi QuickFixLine ctermfg=Yellow ctermbg=White cterm=reverse
-      hi MatchParen ctermfg=NONE ctermbg=LightGrey cterm=bold
-      hi FoldColumn ctermfg=LightGrey ctermbg=LightGrey cterm=NONE
-      hi Folded ctermfg=LightGrey ctermbg=LightGrey cterm=NONE
-      hi CursorColumn ctermfg=NONE ctermbg=LightGrey cterm=NONE
-      hi CursorLine ctermfg=NONE ctermbg=LightGrey cterm=NONE
-      hi CursorLineNr ctermfg=Grey ctermbg=LightGrey cterm=NONE
-    endif
-  endif
-  if &background ==#'light'
-    hi PmenuSel ctermfg=LightGrey ctermbg=Grey cterm=NONE
-    hi TabLineSel ctermfg=LightGrey ctermbg=Grey cterm=bold
-    hi WildMenu ctermfg=LightGrey ctermbg=Grey cterm=NONE
-    if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-      hi Pmenu ctermfg=DarkGrey ctermbg=White cterm=NONE
-      hi StatusLine ctermfg=DarkGrey ctermbg=LightGrey cterm=NONE
-      hi StatusLineTerm ctermfg=DarkGrey ctermbg=LightGrey cterm=NONE
-      hi TabLine ctermfg=DarkGrey ctermbg=LightGrey cterm=NONE
-      hi TabLineFill ctermfg=DarkGrey ctermbg=White cterm=NONE
-      hi ColorColumn ctermfg=NONE ctermbg=White cterm=NONE
-      hi SignColumn ctermfg=NONE ctermbg=White cterm=NONE
-      hi StatusLineNC ctermfg=Grey ctermbg=White cterm=NONE
-      hi StatusLineTermNC ctermfg=Grey ctermbg=White cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-      hi Pmenu ctermfg=DarkGrey ctermbg=LightGrey cterm=NONE
-      hi StatusLine ctermfg=DarkGrey ctermbg=LightGrey cterm=NONE
-      hi StatusLineTerm ctermfg=DarkGrey ctermbg=LightGrey cterm=NONE
-      hi TabLine ctermfg=DarkGrey ctermbg=LightGrey cterm=NONE
-      hi TabLineFill ctermfg=DarkGrey ctermbg=White cterm=NONE
-      hi ColorColumn ctermfg=NONE ctermbg=White cterm=NONE
-      hi SignColumn ctermfg=NONE ctermbg=White cterm=NONE
-      hi StatusLineNC ctermfg=Grey ctermbg=White cterm=NONE
-      hi StatusLineTermNC ctermfg=Grey ctermbg=White cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-      hi Pmenu ctermfg=DarkGrey ctermbg=LightGrey cterm=NONE
-      hi StatusLine ctermfg=DarkGrey ctermbg=LightGrey cterm=NONE
-      hi StatusLineTerm ctermfg=DarkGrey ctermbg=LightGrey cterm=NONE
-      hi TabLine ctermfg=DarkGrey ctermbg=LightGrey cterm=NONE
-      hi TabLineFill ctermfg=DarkGrey ctermbg=LightGrey cterm=NONE
-      hi ColorColumn ctermfg=NONE ctermbg=LightGrey cterm=NONE
-      hi SignColumn ctermfg=NONE ctermbg=LightGrey cterm=NONE
-      hi StatusLineNC ctermfg=Grey ctermbg=LightGrey cterm=NONE
-      hi StatusLineTermNC ctermfg=Grey ctermbg=LightGrey cterm=NONE
-    endif
-  else
-    hi PmenuSel ctermfg=White ctermbg=Grey cterm=NONE
-    hi TabLineSel ctermfg=White ctermbg=Grey cterm=bold
-    hi WildMenu ctermfg=White ctermbg=Grey cterm=NONE
-    if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-      hi Pmenu ctermfg=Black ctermbg=LightGrey cterm=NONE
-      hi StatusLine ctermfg=Black ctermbg=LightGrey cterm=NONE
-      hi StatusLineTerm ctermfg=Black ctermbg=LightGrey cterm=NONE
-      hi TabLine ctermfg=Black ctermbg=LightGrey cterm=NONE
-      hi TabLineFill ctermfg=Black ctermbg=White cterm=NONE
-      hi ColorColumn ctermfg=NONE ctermbg=White cterm=NONE
-      hi SignColumn ctermfg=NONE ctermbg=White cterm=NONE
-      hi StatusLineNC ctermfg=Grey ctermbg=White cterm=NONE
-      hi StatusLineTermNC ctermfg=Grey ctermbg=White cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-      hi Pmenu ctermfg=Black ctermbg=LightGrey cterm=NONE
-      hi StatusLine ctermfg=Black ctermbg=LightGrey cterm=NONE
-      hi StatusLineTerm ctermfg=Black ctermbg=LightGrey cterm=NONE
-      hi TabLine ctermfg=Black ctermbg=LightGrey cterm=NONE
-      hi TabLineFill ctermfg=Black ctermbg=White cterm=NONE
-      hi ColorColumn ctermfg=NONE ctermbg=White cterm=NONE
-      hi SignColumn ctermfg=NONE ctermbg=White cterm=NONE
-      hi StatusLineNC ctermfg=Grey ctermbg=White cterm=NONE
-      hi StatusLineTermNC ctermfg=Grey ctermbg=White cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-      hi Pmenu ctermfg=Black ctermbg=LightGrey cterm=NONE
-      hi StatusLine ctermfg=Black ctermbg=LightGrey cterm=NONE
-      hi StatusLineTerm ctermfg=Black ctermbg=LightGrey cterm=NONE
-      hi TabLine ctermfg=Black ctermbg=LightGrey cterm=NONE
-      hi TabLineFill ctermfg=Black ctermbg=LightGrey cterm=NONE
-      hi ColorColumn ctermfg=NONE ctermbg=LightGrey cterm=NONE
-      hi SignColumn ctermfg=NONE ctermbg=LightGrey cterm=NONE
-      hi StatusLineNC ctermfg=Grey ctermbg=LightGrey cterm=NONE
-      hi StatusLineTermNC ctermfg=Grey ctermbg=LightGrey cterm=NONE
-    endif
-  endif
-  hi Conceal ctermfg=Blue ctermbg=NONE cterm=NONE
-  hi Cursor ctermfg=NONE ctermbg=NONE cterm=reverse
-  hi lCursor ctermfg=NONE ctermbg=NONE cterm=reverse
-  hi LineNr ctermfg=LightGrey ctermbg=NONE cterm=NONE
-  hi Directory ctermfg=Green ctermbg=NONE cterm=NONE
-  hi ErrorMsg ctermfg=Red ctermbg=NONE cterm=bold,underline
-  hi WarningMsg ctermfg=Yellow ctermbg=NONE cterm=bold
-  hi ModeMsg ctermfg=Black ctermbg=NONE cterm=bold
-  hi MoreMsg ctermfg=Yellow ctermbg=NONE cterm=bold
-  hi IncSearch ctermfg=NONE ctermbg=NONE cterm=bold,reverse
-  hi Search ctermfg=NONE ctermbg=NONE cterm=reverse,underline
-  hi NonText ctermfg=LightGrey ctermbg=NONE cterm=NONE
-  hi PmenuSbar ctermfg=NONE ctermbg=LightGrey cterm=NONE
-  hi PmenuThumb ctermfg=NONE ctermbg=LightGrey cterm=NONE
-  hi Question ctermfg=DarkYellow ctermbg=NONE cterm=bold
-  hi SpellBad ctermfg=Red ctermbg=NONE cterm=italic,underline
-  hi SpellCap ctermfg=Blue ctermbg=NONE cterm=italic,underline
-  hi SpellLocal ctermfg=Cyan ctermbg=NONE cterm=italic,underline
-  hi SpellRare ctermfg=Magenta ctermbg=NONE cterm=italic,underline
-  hi Visual ctermfg=NONE ctermbg=NONE cterm=reverse
-  hi VisualNOS ctermfg=NONE ctermbg=NONE cterm=reverse
-  hi Todo ctermfg=LightGrey ctermbg=NONE cterm=bold,italic
-  hi CursorIM ctermfg=NONE ctermbg=NONE cterm=reverse
-  hi ToolbarLine ctermfg=NONE ctermbg=LightGrey cterm=NONE
-  hi ToolbarButton ctermfg=Black ctermbg=LightGrey cterm=bold
-  hi Debug ctermfg=DarkYellow ctermbg=NONE cterm=NONE
-  hi Title ctermfg=Green ctermbg=NONE cterm=bold
-  hi Conditional ctermfg=Red ctermbg=NONE cterm=NONE
-  hi Repeat ctermfg=Red ctermbg=NONE cterm=NONE
-  hi Label ctermfg=Red ctermbg=NONE cterm=NONE
-  hi Exception ctermfg=Red ctermbg=NONE cterm=NONE
-  hi Keyword ctermfg=Red ctermbg=NONE cterm=NONE
-  hi Statement ctermfg=Red ctermbg=NONE cterm=NONE
-  hi Typedef ctermfg=Yellow ctermbg=NONE cterm=NONE
-  hi Type ctermfg=Yellow ctermbg=NONE cterm=NONE
-  hi StorageClass ctermfg=DarkYellow ctermbg=NONE cterm=NONE
-  hi Delimiter ctermfg=Black ctermbg=NONE cterm=NONE
-  hi Special ctermfg=DarkYellow ctermbg=NONE cterm=NONE
-  hi Tag ctermfg=DarkYellow ctermbg=NONE cterm=NONE
-  hi Operator ctermfg=DarkYellow ctermbg=NONE cterm=NONE
-  hi SpecialChar ctermfg=DarkYellow ctermbg=NONE cterm=NONE
-  hi String ctermfg=Green ctermbg=NONE cterm=NONE
-  hi PreProc ctermfg=Cyan ctermbg=NONE cterm=NONE
-  hi Macro ctermfg=Cyan ctermbg=NONE cterm=NONE
-  hi Define ctermfg=Cyan ctermbg=NONE cterm=NONE
-  hi Include ctermfg=Cyan ctermbg=NONE cterm=NONE
-  hi PreCondit ctermfg=Cyan ctermbg=NONE cterm=NONE
-  hi Structure ctermfg=Cyan ctermbg=NONE cterm=NONE
-  hi Identifier ctermfg=Blue ctermbg=NONE cterm=NONE
-  hi Underlined ctermfg=Blue ctermbg=NONE cterm=underline
-  hi Constant ctermfg=Magenta ctermbg=NONE cterm=NONE
-  hi Boolean ctermfg=Magenta ctermbg=NONE cterm=NONE
-  hi Character ctermfg=Magenta ctermbg=NONE cterm=NONE
-  hi Number ctermfg=Magenta ctermbg=NONE cterm=NONE
-  hi Float ctermfg=Magenta ctermbg=NONE cterm=NONE
-  hi SpecialKey ctermfg=Blue ctermbg=NONE cterm=NONE
-  hi Ignore ctermfg=Black ctermbg=NONE cterm=NONE
-  if !s:italics
-    hi SpellBad cterm=underline
-    hi SpellCap cterm=underline
-    hi SpellLocal cterm=underline
-    hi SpellRare cterm=underline
-    hi Todo cterm=bold
-  endif
-  if get(g:, 'gruvbox_material_disable_italic_comment', 0)
-    hi Comment ctermfg=LightGrey ctermbg=NONE cterm=NONE
-    hi SpecialComment ctermfg=LightGrey ctermbg=NONE cterm=NONE
-  else
-    hi Comment ctermfg=LightGrey ctermbg=NONE cterm=italic
-    hi SpecialComment ctermfg=LightGrey ctermbg=NONE cterm=italic
-    if !s:italics
-      hi Comment cterm=NONE
-      hi SpecialComment cterm=NONE
-    endif
-  endif
-  if get(g:, 'gruvbox_material_enable_bold', 0)
-    hi Function ctermfg=Green ctermbg=NONE cterm=bold
-  else
-    hi Function ctermfg=Green ctermbg=NONE cterm=NONE
-  endif
-  if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-    hi DiffAdd ctermfg=NONE ctermbg=DarkGreen cterm=NONE
-    hi DiffChange ctermfg=NONE ctermbg=DarkBlue cterm=NONE
-    hi DiffDelete ctermfg=NONE ctermbg=DarkRed cterm=NONE
-    hi Error ctermfg=NONE ctermbg=DarkRed cterm=NONE
-  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-    hi DiffAdd ctermfg=NONE ctermbg=DarkGreen cterm=NONE
-    hi DiffChange ctermfg=NONE ctermbg=DarkBlue cterm=NONE
-    hi DiffDelete ctermfg=NONE ctermbg=DarkRed cterm=NONE
-    hi Error ctermfg=NONE ctermbg=DarkRed cterm=NONE
-  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-    hi DiffAdd ctermfg=NONE ctermbg=DarkGreen cterm=NONE
-    hi DiffChange ctermfg=NONE ctermbg=DarkBlue cterm=NONE
-    hi DiffDelete ctermfg=NONE ctermbg=DarkRed cterm=NONE
-    hi Error ctermfg=NONE ctermbg=DarkRed cterm=NONE
-  endif
-  hi markdownH1 ctermfg=Green ctermbg=NONE cterm=bold
-  hi markdownH2 ctermfg=Green ctermbg=NONE cterm=bold
-  hi markdownH3 ctermfg=Yellow ctermbg=NONE cterm=bold
-  hi markdownH4 ctermfg=Yellow ctermbg=NONE cterm=bold
-  hi markdownUrl ctermfg=Magenta ctermbg=NONE cterm=underline
-  hi markdownItalic ctermfg=NONE ctermbg=NONE cterm=italic
-  hi markdownBold ctermfg=NONE ctermbg=NONE cterm=bold
-  hi markdownItalicDelimiter ctermfg=LightGrey ctermbg=NONE cterm=italic
-  hi mkdURL ctermfg=Magenta ctermbg=NONE cterm=underline
-  hi mkdInlineURL ctermfg=Magenta ctermbg=NONE cterm=underline
-  hi mkdItalic ctermfg=LightGrey ctermbg=NONE cterm=italic
-  hi htmlLink ctermfg=Grey ctermbg=NONE cterm=underline
-  hi htmlBold ctermfg=NONE ctermbg=NONE cterm=bold
-  hi htmlBoldUnderline ctermfg=NONE ctermbg=NONE cterm=bold,underline
-  hi htmlBoldItalic ctermfg=NONE ctermbg=NONE cterm=bold,italic
-  hi htmlBoldUnderlineItalic ctermfg=NONE ctermbg=NONE cterm=bold,italic,underline
-  hi htmlUnderline ctermfg=NONE ctermbg=NONE cterm=underline
-  hi htmlUnderlineItalic ctermfg=NONE ctermbg=NONE cterm=italic,underline
-  hi htmlItalic ctermfg=NONE ctermbg=NONE cterm=italic
-  hi vimCommentTitle ctermfg=Grey ctermbg=NONE cterm=bold,italic
-  hi helpURL ctermfg=Cyan ctermbg=NONE cterm=underline
-  hi helpNote ctermfg=Magenta ctermbg=NONE cterm=bold
-  hi plug1 ctermfg=DarkYellow ctermbg=NONE cterm=bold
-  hi plugNumber ctermfg=Yellow ctermbg=NONE cterm=bold
-  if !s:italics
-    hi markdownItalic cterm=NONE
-    hi markdownItalicDelimiter cterm=NONE
-    hi mkdItalic cterm=NONE
-    hi htmlBoldItalic cterm=bold
-    hi htmlBoldUnderlineItalic cterm=bold,underline
-    hi htmlUnderlineItalic cterm=underline
-    hi htmlItalic cterm=NONE
-    hi vimCommentTitle cterm=bold
-  endif
-  if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-    if get(g:, 'indent_guides_auto_colors', 0)
-      if get(g:, 'gruvbox_material_invert_indent_guides', 0)
-        hi IndentGuidesOdd ctermfg=White ctermbg=LightGrey cterm=reverse
-        hi IndentGuidesEven ctermfg=White ctermbg=LightGrey cterm=reverse
-      else
-        hi IndentGuidesOdd ctermfg=White ctermbg=LightGrey cterm=NONE
-        hi IndentGuidesEven ctermfg=White ctermbg=LightGrey cterm=NONE
-      endif
-    endif
-  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-    if get(g:, 'indent_guides_auto_colors', 0)
-      if get(g:, 'gruvbox_material_invert_indent_guides', 0)
-        hi IndentGuidesOdd ctermfg=White ctermbg=LightGrey cterm=reverse
-        hi IndentGuidesEven ctermfg=White ctermbg=LightGrey cterm=reverse
-      else
-        hi IndentGuidesOdd ctermfg=White ctermbg=LightGrey cterm=NONE
-        hi IndentGuidesEven ctermfg=White ctermbg=LightGrey cterm=NONE
-      endif
-    endif
-  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-    if get(g:, 'indent_guides_auto_colors', 0)
-      if get(g:, 'gruvbox_material_invert_indent_guides', 0)
-        hi IndentGuidesOdd ctermfg=White ctermbg=LightGrey cterm=reverse
-        hi IndentGuidesEven ctermfg=White ctermbg=LightGrey cterm=reverse
-      else
-        hi IndentGuidesOdd ctermfg=White ctermbg=LightGrey cterm=NONE
-        hi IndentGuidesEven ctermfg=White ctermbg=LightGrey cterm=NONE
-      endif
-    endif
-  endif
-  if !exists('g:indentLine_color_term')
-    let g:indentLine_color_term = 250
-  endif
-  if !exists('g:indentLine_color_gui')
-    let g:indentLine_color_gui = '#d5c4a1'
-  endif
-  " Rainbow Parentheses
-  if !exists('g:rbpt_colorpairs')
-    let g:rbpt_colorpairs = [['blue', '#47747e'], ['magenta', '#945e80'],
-          \ ['red', '#c74545'], ['130', '#c55b03']]
-  endif
-
-  let g:rainbow_guifgs = [ '#c55b03', '#c74545', '#945e80', '#47747e' ]
-  let g:rainbow_ctermfgs = [ '130', 'red', 'magenta', 'blue' ]
-
-  if !exists('g:rainbow_conf')
-    let g:rainbow_conf = {}
-  endif
-  if !has_key(g:rainbow_conf, 'guifgs')
-    let g:rainbow_conf['guifgs'] = g:rainbow_guifgs
-  endif
-  if !has_key(g:rainbow_conf, 'ctermfgs')
-    let g:rainbow_conf['ctermfgs'] = g:rainbow_ctermfgs
-  endif
-
-  let g:niji_dark_colours = g:rbpt_colorpairs
-  let g:niji_light_colours = g:rbpt_colorpairs
-  if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-    hi GitGutterAdd ctermfg=Green ctermbg=White cterm=NONE
-    hi GitGutterChange ctermfg=Blue ctermbg=White cterm=NONE
-    hi GitGutterDelete ctermfg=Red ctermbg=White cterm=NONE
-    hi GitGutterChangeDelete ctermfg=Magenta ctermbg=White cterm=NONE
-  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-    hi GitGutterAdd ctermfg=Green ctermbg=White cterm=NONE
-    hi GitGutterChange ctermfg=Blue ctermbg=White cterm=NONE
-    hi GitGutterDelete ctermfg=Red ctermbg=White cterm=NONE
-    hi GitGutterChangeDelete ctermfg=Magenta ctermbg=White cterm=NONE
-  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-    hi GitGutterAdd ctermfg=Green ctermbg=LightGrey cterm=NONE
-    hi GitGutterChange ctermfg=Blue ctermbg=LightGrey cterm=NONE
-    hi GitGutterDelete ctermfg=Red ctermbg=LightGrey cterm=NONE
-    hi GitGutterChangeDelete ctermfg=Magenta ctermbg=LightGrey cterm=NONE
-  endif
-  if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-    hi SignatureMarkText ctermfg=Blue ctermbg=White cterm=NONE
-    hi SignatureMarkerText ctermfg=Magenta ctermbg=White cterm=NONE
-  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-    hi SignatureMarkText ctermfg=Blue ctermbg=White cterm=NONE
-    hi SignatureMarkerText ctermfg=Magenta ctermbg=White cterm=NONE
-  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-    hi SignatureMarkText ctermfg=Blue ctermbg=LightGrey cterm=NONE
-    hi SignatureMarkerText ctermfg=Magenta ctermbg=LightGrey cterm=NONE
-  endif
-  if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-    hi ShowMarksHLl ctermfg=Blue ctermbg=White cterm=NONE
-    hi ShowMarksHLu ctermfg=Blue ctermbg=White cterm=NONE
-    hi ShowMarksHLo ctermfg=Blue ctermbg=White cterm=NONE
-    hi ShowMarksHLm ctermfg=Blue ctermbg=White cterm=NONE
-  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-    hi ShowMarksHLl ctermfg=Blue ctermbg=White cterm=NONE
-    hi ShowMarksHLu ctermfg=Blue ctermbg=White cterm=NONE
-    hi ShowMarksHLo ctermfg=Blue ctermbg=White cterm=NONE
-    hi ShowMarksHLm ctermfg=Blue ctermbg=White cterm=NONE
-  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-    hi ShowMarksHLl ctermfg=Blue ctermbg=LightGrey cterm=NONE
-    hi ShowMarksHLu ctermfg=Blue ctermbg=LightGrey cterm=NONE
-    hi ShowMarksHLo ctermfg=Blue ctermbg=LightGrey cterm=NONE
-    hi ShowMarksHLm ctermfg=Blue ctermbg=LightGrey cterm=NONE
-  endif
-  hi CtrlPMatch ctermfg=Green ctermbg=NONE cterm=bold
-  hi CtrlPPrtBase ctermfg=LightGrey ctermbg=NONE cterm=NONE
-  hi CtrlPLinePre ctermfg=LightGrey ctermbg=NONE cterm=NONE
-  hi CtrlPMode1 ctermfg=Blue ctermbg=LightGrey cterm=bold
-  hi CtrlPMode2 ctermfg=White ctermbg=Blue cterm=bold
-  hi CtrlPStats ctermfg=Grey ctermbg=LightGrey cterm=bold
-  hi Lf_hl_match ctermfg=Green ctermbg=NONE cterm=bold
-  hi Lf_hl_match0 ctermfg=Green ctermbg=NONE cterm=bold
-  hi Lf_hl_match1 ctermfg=Cyan ctermbg=NONE cterm=bold
-  hi Lf_hl_match2 ctermfg=Blue ctermbg=NONE cterm=bold
-  hi Lf_hl_match3 ctermfg=Magenta ctermbg=NONE cterm=bold
-  hi Lf_hl_match4 ctermfg=DarkYellow ctermbg=NONE cterm=bold
-  hi Lf_hl_matchRefine ctermfg=Red ctermbg=NONE cterm=bold
-  let g:vimshell_escape_colors = [
-        \ '#a89984', '#c74545', '#6c782e', '#b47109',
-        \ '#47747e', '#945e80', '#4c7a5d', '#7c6f64',
-        \ '#fbf1c7', '#c74545', '#6c782e', '#c55b03',
-        \ '#47747e', '#945e80', '#4c7a5d', '#764e37'
-        \ ]
-  hi ALEError ctermfg=NONE ctermbg=NONE cterm=underline
-  hi ALEWarning ctermfg=NONE ctermbg=NONE cterm=underline
-  hi ALEInfo ctermfg=NONE ctermbg=NONE cterm=underline
-  if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-    hi ALEErrorSign ctermfg=Red ctermbg=White cterm=NONE
-    hi ALEWarningSign ctermfg=Yellow ctermbg=White cterm=NONE
-    hi ALEInfoSign ctermfg=Blue ctermbg=White cterm=NONE
-  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-    hi ALEErrorSign ctermfg=Red ctermbg=White cterm=NONE
-    hi ALEWarningSign ctermfg=Yellow ctermbg=White cterm=NONE
-    hi ALEInfoSign ctermfg=Blue ctermbg=White cterm=NONE
-  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-    hi ALEErrorSign ctermfg=Red ctermbg=LightGrey cterm=NONE
-    hi ALEWarningSign ctermfg=Yellow ctermbg=LightGrey cterm=NONE
-    hi ALEInfoSign ctermfg=Blue ctermbg=LightGrey cterm=NONE
-  endif
-  hi multiple_cursors_cursor ctermfg=NONE ctermbg=NONE cterm=reverse
-  hi multiple_cursors_visual ctermfg=NONE ctermbg=LightGrey cterm=NONE
-  hi CocHighlightText ctermfg=NONE ctermbg=NONE cterm=bold
-  hi CocHoverRange ctermfg=NONE ctermbg=NONE cterm=bold,underline
-  if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-    hi CocHintSign ctermfg=Cyan ctermbg=White cterm=NONE
-  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-    hi CocHintSign ctermfg=Cyan ctermbg=White cterm=NONE
-  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-    hi CocHintSign ctermfg=Cyan ctermbg=LightGrey cterm=NONE
-  endif
-  hi MatchParenCur ctermfg=NONE ctermbg=NONE cterm=bold
-  hi MatchWord ctermfg=NONE ctermbg=NONE cterm=underline
-  hi MatchWordCur ctermfg=NONE ctermbg=NONE cterm=underline
-  hi UndotreeSavedBig ctermfg=Magenta ctermbg=NONE cterm=bold
-  unlet s:t_Co s:italics
-  finish
-endif
-
-if s:t_Co >= 2
-  hi Normal term=NONE
-  hi ColorColumn term=reverse
-  hi Conceal term=NONE
-  hi Cursor term=NONE
-  hi CursorColumn term=reverse
-  hi CursorLine term=underline
-  hi CursorLineNr term=bold,italic,reverse,underline
-  hi DiffAdd term=reverse,underline
-  hi DiffChange term=reverse,underline
-  hi DiffDelete term=reverse,underline
-  hi DiffText term=bold,reverse,underline
-  hi Directory term=NONE
-  hi EndOfBuffer term=NONE
-  hi ErrorMsg term=bold,italic,reverse
-  hi FoldColumn term=reverse
-  hi Folded term=italic,reverse,underline
-  hi IncSearch term=bold,italic,reverse
-  hi LineNr term=reverse
-  hi MatchParen term=bold,underline
-  hi ModeMsg term=NONE
-  hi MoreMsg term=NONE
-  hi NonText term=NONE
-  hi Pmenu term=reverse
-  hi PmenuSbar term=NONE
-  hi PmenuSel term=NONE
-  hi PmenuThumb term=NONE
-  hi Question term=standout
-  hi Search term=italic,underline
-  hi SignColumn term=reverse
-  hi SpecialKey term=bold
-  hi SpellBad term=italic,underline
-  hi SpellCap term=italic,underline
-  hi SpellLocal term=italic,underline
-  hi SpellRare term=italic,underline
-  hi StatusLine term=bold,reverse
-  hi StatusLineNC term=reverse
-  hi TabLine term=italic,reverse,underline
-  hi TabLineFill term=reverse,underline
-  hi TabLineSel term=bold
-  hi Title term=bold
-  hi VertSplit term=reverse
-  hi Visual term=reverse
-  hi VisualNOS term=NONE
-  hi WarningMsg term=standout
-  hi WildMenu term=bold
-  hi Comment term=italic
-  hi Constant term=bold,italic
-  hi Error term=reverse
-  hi Identifier term=italic
-  hi Ignore term=NONE
-  hi PreProc term=italic
-  hi Special term=bold,italic
-  hi Statement term=bold
-  hi Todo term=bold,underline
-  hi Type term=bold
-  hi Underlined term=underline
-  hi CursorIM term=NONE
-  hi ToolbarLine term=reverse
-  hi ToolbarButton term=bold,reverse
-  if !s:italics
-    hi CursorLineNr term=bold,reverse,underline
-    hi ErrorMsg term=bold,reverse
-    hi Folded term=reverse,underline
-    hi IncSearch term=bold,reverse
-    hi Search term=underline
-    hi SpellBad term=underline
-    hi SpellCap term=underline
-    hi SpellLocal term=underline
-    hi SpellRare term=underline
-    hi TabLine term=reverse,underline
-    hi Comment term=NONE
-    hi Constant term=bold
-    hi Identifier term=NONE
-    hi PreProc term=NONE
-    hi Special term=bold
-  endif
-  unlet s:t_Co s:italics
-  finish
-endif
-
-" Background:             dark
-" Color: dark0_hard       #1d2021         234             Black
-" Color: dark0_medium     #282828         235             Black
-" Color: dark0_soft       #32302f         236             Black
-" Color: dark1            #3c3836         237             DarkGrey
-" Color: dark2            #504945         239             DarkGrey
-" Color: dark3            #665c54         241             DarkGrey
-" Color: dark4            #7c6f64         243             DarkGrey
-" Color: grey             #928374         245             Grey
-" Color: lightgrey        #a89984         246             LightGrey
-" Color: light            #dfbf8e         223             White
-" Color: light_alt        #dfbf8e         223             White
-" Color: red              #ea6962         167             Red
-" Color: orange           #e78a4e         208             DarkYellow
-" Color: yellow           #e3a84e         214             Yellow
-" Color: green            #a9b665         142             Green
-" Color: aqua             #89b482         108             Cyan
-" Color: blue             #7daea3         109             Blue
-" Color: purple           #d3869b         175             Magenta
-" Color: darkgreen_hard   #32361a         22              DarkGreen
-" Color: darkred_hard     #3c1f1e         52              DarkRed
-" Color: darkblue_hard    #0d3138         17              DarkBlue
-" Color: darkgreen_medium #34381b         22              DarkGreen
-" Color: darkred_medium   #402120         52              DarkRed
-" Color: darkblue_medium  #0e363e         17              DarkBlue
-" Color: darkgreen_soft   #3d4220         22              DarkGreen
-" Color: darkred_soft     #472322         52              DarkRed
-" Color: darkblue_soft    #0f3a42         17              DarkBlue
-" Term colors: dark3 red green orange blue purple aqua light
-" Term colors: grey red green yellow blue purple aqua light
-" Background:             light
-" Color: dark0_hard       #f9f5d7         230             White
-" Color: dark0_medium     #fbf1c7         229             White
-" Color: dark0_soft       #f2e5bc         228             White
-" Color: dark1            #ebdbb2         223             LightGrey
-" Color: dark2            #d5c4a1         250             LightGrey
-" Color: dark3            #bdae93         248             LightGrey
-" Color: dark4            #a89984         246             LightGrey
-" Color: grey             #928374         245             LightGrey
-" Color: lightgrey        #7c6f64         243             Grey
-" Color: light            #764e37         237             Black
-" Color: light_alt        #504945         239             DarkGrey
-" Color: red              #c74545         88              Red
-" Color: orange           #c55b03         130             DarkYellow
-" Color: yellow           #b47109         136             Yellow
-" Color: green            #6c782e         100             Green
-" Color: aqua             #4c7a5d         165             Cyan
-" Color: blue             #47747e         24              Blue
-" Color: purple           #945e80         96              Magenta
-" Color: darkgreen_hard   #e3f6b4         ~               DarkGreen
-" Color: darkred_hard     #ffdbcc         ~               DarkRed
-" Color: darkblue_hard    #cff1f6         ~               DarkBlue
-" Color: darkgreen_medium #daf0a7         ~               DarkGreen
-" Color: darkred_medium   #fbcdb9         ~               DarkRed
-" Color: darkblue_medium  #c6eaf0         ~               DarkBlue
-" Color: darkgreen_soft   #d1ea9b         ~               DarkGreen
-" Color: darkred_soft     #fbcab5         ~               DarkRed
-" Color: darkblue_soft    #bee4ea         ~               DarkBlue
-" Term colors: dark3 red green orange blue purple aqua light
-" Term colors: grey red green yellow blue purple aqua light
-" Background: any
-" vim: et ts=2 sw=2

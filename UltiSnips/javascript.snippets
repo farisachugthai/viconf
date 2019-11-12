@@ -9,53 +9,53 @@
 
 snippet proto "prototype"
 ${1:class_name}.prototype.${2:method_name} = function(${3}) {
-	${0:${VISUAL}}
+  ${0:${VISUAL}}
 };
 endsnippet
 
 snippet fun " Function"
 function ${1:function_name}(${2}) {
-	${0:${VISUAL}}
+  ${0:${VISUAL}}
 }
 endsnippet
 
 snippet anf "Anonymous Function" w
 function(${1}) {
-	${0:${VISUAL}}
+  ${0:${VISUAL}}
 }
 endsnippet
 
 snippet vaf " Anonymous Function assigned to variable"
 var ${1:function_name} = function(${2}) {
-	${0:${VISUAL}}
+        ${0:${VISUAL}}
 };
 endsnippet
 
 snippet vf "Function assigned to variable"
 var ${1:function_name} = function $1(${2}) {
-	${0:${VISUAL}}
+        ${0:${VISUAL}}
 };
 endsnippet
 
 snippet (f "Immediate function"
 (function(${1}) {
-	${0:${VISUAL}}
+        ${0:${VISUAL}}
 }(${2}));
 endsnippet
 
 snippet ;fe "Minify safe iife"
 ;(function(${1}) {
-	${0:${VISUAL}}
+        ${0:${VISUAL}}
 }(${2}))
 endsnippet
 
 snippet sdf "self-defining function"
 var ${1:function_name} = function (${2:argument}) {
-	${3}
+        ${3}
 
-	$1 = function ($2) {
-		${0:${VISUAL}}
-	};
+        $1 = function ($2) {
+                ${0:${VISUAL}}
+        };
 };
 endsnippet
 
@@ -63,15 +63,15 @@ endsnippet
 
 snippet if "if (condition) { ... }"
 if (${1:true}) {
-	${0:${VISUAL}}
+        ${0:${VISUAL}}
 }
 endsnippet
 
 snippet ife "if (condition) { ... } else { ... }"
 if (${1:true}) {
-	${0:${VISUAL}}
+        ${0:${VISUAL}}
 } else {
-	${2}
+        ${2}
 }
 endsnippet
 
@@ -81,36 +81,36 @@ endsnippet
 
 snippet switch "switch case break default"
 switch (${1:expression}) {
-	case "${3:case}":
-		${4}
-		break;
-	${0}
-	default:
-		${2}
+        case "${3:case}":
+                ${4}
+                break;
+        ${0}
+        default:
+                ${2}
 }
 endsnippet
 
 snippet case "case xyz: ... break"
 case '${1:case}':
-	${0:${VISUAL}}
-	break;
+        ${0:${VISUAL}}
+        break;
 endsnippet
 
 snippet try "try { ... } catch(e) { ... }"
 try {
-	${0:${VISUAL}}
+        ${0:${VISUAL}}
 } catch (${1:e}) {
-	${2:/* handle error */}
+        ${2:/* handle error */}
 }
 endsnippet
 
 snippet tryf "try { ... } catch(e) { ... } finally { ... }"
 try {
-	${0:${VISUAL}}
+        ${0:${VISUAL}}
 } catch (${1:e}) {
-	${2:/* handle error */}
+        ${2:/* handle error */}
 } finally {
-	${3:/* be executed regardless of the try / catch result*/}
+        ${3:/* be executed regardless of the try / catch result*/}
 }
 endsnippet
 
@@ -124,7 +124,7 @@ endsnippet
 
 snippet for "for (...) {...}"
 for (var ${1:i} = 0, ${2:len} = ${3:Things.length}; $1 < $2; $1++) {
-	${0:${VISUAL}}
+        ${0:${VISUAL}}
 }
 endsnippet
 
@@ -147,16 +147,16 @@ do {
 endsnippet
 
 snippet fori "For in loop"
-	for (var ${1:prop} in ${2:object}) {
-		${0:$2[$1]}
-	}
+        for (var ${1:prop} in ${2:object}) {
+                ${0:$2[$1]}
+        }
 endsnippet
 
 #  Objects: {{{1
 
 snippet :f "Object method"
 ${1:method_name}: function (${2:attribute}) {
-	${0:${VISUAL}}
+        ${0:${VISUAL}}
 },
 endsnippet
 
@@ -374,4 +374,4 @@ snippet timeout "setTimeout function"
 setTimeout(function () {${0}}${2}, ${1:10});
 endsnippet
 
-# Vim: set et:fdl=0:fdls=0:
+# Vim: et:fdl=0:fdls=0:ts=2:sts=2:sw=2:
