@@ -64,7 +64,13 @@ function! pydoc_help#Pydoc(module) abort
     " doesn't work
     " execute 'py3 import pydoc'
     " execute 'py3 pydoc.ttypager(' . a:module . ')'
-    exec 'r! python3 -m pydoc ' . a:module
+    if has('unix')
+      exec 'r! python3 -m pydoc ' . a:module
+    else
+      " exec 'r! python -m pydoc ' . a:module
+      get_documents(a:module)
+
+    endif
 
     " Uhhhhhh let's not do it this way?
     " On neovim, has('python3') == 'g:python3_host_prog'
@@ -84,6 +90,26 @@ function! pydoc_help#Pydoc(module) abort
   nnoremap <buffer> <silent> q <Cmd>bd!<CR>
 
   " If you wanna keep going we can change the status line.
+endfunction
+
+function! Get_docs_from_python() abort
+
+      python3 << EOF
+
+      import inspect, vim, sys, os, pydoc
+      import importlib
+
+      def get_documents(mod):
+          """I'm not even sure if this is close to how we have to do this."""
+          try:
+              importlib.import_module(mod)
+          except ImportError:
+              return False
+          else:
+              vim.current.buffer(inspect.getdoc(mod))
+
+      EOF
+
 endfunction
 
 " Helptags: {{{1

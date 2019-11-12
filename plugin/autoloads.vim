@@ -31,12 +31,30 @@ command! -nargs=1 -bang -complete=file Rename f <args>|w<bang>za
 " Autocompletion: {{{1
 
 imap <C-]> <C-x><C-]>
-imap <C-d> <C-x><C-d>
+" vim-rsi got this one
+" imap <C-d> <C-x><C-d>
 imap <C-i> <C-x><C-i>
 imap <C-n> <C-x><C-n>
 imap <C-p> <C-x><C-p>
 
 " Can't do C-v or C-o they're too important
+
+" G Commands: {{{1
+
+vnoremap < <gv
+vnoremap > >gv
+" I just realized these were set to nnoremap. Meaning visual mode doesn't get this mapping
+noremap j gj
+noremap k gk
+noremap <Up> gk
+noremap <Down> gj
+" I mess this up constantly thinking that gI does what gi does
+inoremap gI gi
+
+" Nov 12, 2019:
+" Holy actual shit. I can't believe I didn't know about this and now it's the
+" only way i want to join lines.
+nnoremap J gJ
 
 " Atexit: {{{1
 

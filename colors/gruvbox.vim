@@ -1183,8 +1183,6 @@ hi link cssSelectorOp Special
 hi link cssSelectorOp2 Special
 hi link cssSpeechAttr cssAttr
 hi link cssSpeechProp cssProp
-hi link cssStringQ String
-hi link cssStringQQ String
 hi link cssTableAttr cssAttr
 hi link cssTableProp cssProp
 hi link cssTagName Statement
@@ -1898,4 +1896,3 @@ hi link helpVim		Identifier
 hi link helpWarning WarningMsg
 " }}}
 " }}}
-" vim: set sw=2 ts=2 sts=2 et fdm=marker fdls=1 fdl=1:

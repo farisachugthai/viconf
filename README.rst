@@ -469,6 +469,16 @@ That's legitimately wonderful to know!
 
 Now I just need to work that in, and make a few utility mappings for the qf.
 
+
+Folds
+===========
+
+.. admonition::  foldclose=all  " close folds automatically when you move out of them
+
+
+Jesus Christ is this setting annoying. Don't set it!
+
+
 .. _`here.`: after/plugin/fzf.vim
 .. _`after/ftplugin/gitcommit.vim`: ./after/ftplugin/gitcommit.vim
 .. _`after/ftplugin/`: ./after/ftplugin/

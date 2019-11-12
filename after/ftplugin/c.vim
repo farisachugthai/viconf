@@ -37,6 +37,7 @@ setlocal omnifunc=ccomplete#Complete
 
 " TODO:
 " setlocal include
+setlocal include=^\s*#\s*include
 " setlocal define
 " setlocal includexpr
 " setlocal cinwords cinkeys etc etc
@@ -82,8 +83,8 @@ endif
 " Atexit: {{{1
 
 " Oh shit the unmaps for this are gonna be annoying
-let b:undo_ftplugin = 'set sua< cin< makeprg< ofu< kp< '
-      \ . '|unlet! l&:path'
+let b:undo_ftplugin = 'set sua< cin< makeprg< ofu< kp< include<'
+      \ . '|unlet! &l:path'
       \ . '|unlet! b:undo_ftplugin'
 
 

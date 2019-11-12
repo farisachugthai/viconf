@@ -123,6 +123,8 @@ function TabMaps() abort  " {{{1
   nnoremap <Leader>tn <Cmd>tabnext<CR>
   nnoremap <Leader>tp <Cmd>tabprev<CR>
   nnoremap <Leader>tq <Cmd>tabclose<CR>
+  nnoremap <Leader>tc <Cmd>tabclose<CR>
+  nnoremap <Leader>T  <Cmd>tabs<CR>
   nnoremap <Leader>te <Cmd>tabedit<CR>
 	" ngl pretty surprised that that cword didn't need an expand()
 	nnoremap <Leader>t# <Cmd>tabedit <cword><CR>

@@ -6,10 +6,9 @@
 " ============================================================================
 
 " Guards: {{{
-if exists('g:loaded_autocorrect_plugin') || &compatible || v:version < 700
-    finish
-endif
-let g:loaded_autocorrect_plugin = 1
+let s:cpo_save = &cpoptions
+set cpoptions-=C
+
 
 " This loads slowly. How many more can we come up with?
 if has('spell')
@@ -802,3 +801,7 @@ ia youre you're
 ia youve you've
 iab yuor your
 iab yuo you
+
+" Atexit:
+let &cpoptions = s:cpo_save
+unlet s:cpo_save

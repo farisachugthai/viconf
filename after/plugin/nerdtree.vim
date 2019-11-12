@@ -20,7 +20,11 @@ set cpoptions-=C
 noremap <Leader>nt <Cmd>NERDTreeToggle<CR>
 " Switch NERDTree root to dir of currently focused window.
 " Make mapping match Spacemacs.
-noremap <Leader>0 <Cmd>NERDTreeCWD<CR>
+if exists(':GuiTreeviewToggle')
+  noremap <Leader>0 <Cmd>GuiTreeviewToggle<CR>
+else
+  noremap <Leader>0 <Cmd>NERDTreeCWD<CR>
+endif
 
 " Options: {{{1
 

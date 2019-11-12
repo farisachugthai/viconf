@@ -161,37 +161,68 @@ function! ftplugins#ALE_Vim_Conf() abort  " {{{1
 endfunction
 
 function! ftplugins#PythonPath() abort  " {{{1
+
   " Set up the path for python files
+  " Somehow this still doesn't solve my  imports on windows so I might end up
+  " doing this in python
+  " AND THAT DOESN"T WORK AT ALL EITHER. Somehow that function returns 0????
+  " if !has('unix')
+  "   let s:ret_val = ftplugins#python_serves_python()
+  "   return s:ret_val
+  " endif
+
   let s:orig_path = &path
 
   if !empty('g:python3_host_prog')
     " I think it's only the root on unix
     " Miniconda3 on windows you only go up 1
-    if has('unix')
+    " if has('unix')
       let s:root_dir = fnamemodify('g:python3_host_prog', ':p:h:h')
-    else
-      let s:root_dir = fnamemodify('g:python3_host_prog', ':p:h')
-    endif
+      let s:site_pack = s:root_dir . '/Lib/python3.7/site-packages/**3'  " max out at 3 dir deep
+    " else
+    "   " i have no idea why but don't wrap this in a string. then nvim won't
+    "   " expand it for some reason and it just feeds you the cwd
+    "   let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h')
+
+    "   " If you're using conda the dirs don't line up either
+    "   let s:site_pack = s:root_dir . '/Lib/site-packages/**3'  " max out at 3 dir deep
+    " endif
   else
     return s:orig_path
   endif
 
-  let s:site_pack = s:root_dir . '/lib/python3.7/site-packages/**3'  " max out at 3 dir deep
   " let s:path =  s:site_pack . ',' . s:orig_path
   " The current path and the buffer's dir. Also recursively search downwards
   let s:path = '.,,**,' . s:site_pack
 
   " I'm gonna go ahead and assume a conda installation on windows.
-  if !has('unix')
-    let s:path = s:path . ',' . s:root_dir . '/lib/*.py'
-    let s:path = s:path . ',' . s:root_dir . '/lib/**/*.py'
-  else
+  " if !has('unix')
+  "   let s:path = s:path . ',' . s:root_dir . '/Lib/*.py'
+  "   let s:path = s:path . ',' . s:root_dir . '/Lib/**/*.py'
+  " else
     let s:path = s:path . ',' . s:root_dir . '/lib/python3.7/*.py'
     let s:path = s:path . ',' . s:root_dir . '/lib/python3.7/**/*.py'
-  endif
+  " endif
 
   return s:path
 
+endfunction
+
+function! ftplugins#python_serves_python() abort  " {{{1
+
+  python << EOF
+  import site, sys, vim
+  def setup_vim_path():
+      vim_path = '.,**,,'
+      vim_path += sys.prefix + ','
+
+      for i in site.getsitepackages():
+          vim_path += i + ','
+
+      print(vim_path)
+      return vim_path
+
+EOF
 endfunction
 
 function! ftplugins#VimPath() abort  " {{{1
@@ -207,7 +238,7 @@ function! ftplugins#VimPath() abort  " {{{1
   " let s:path = s:path . ',' . stdpath('data') . '/plugged/**4'
   " let s:path = s:path . ',' . &rtp
   " rtp adds way too many things but add all my files
-  let s:path = s:path . ',' . stdpath('config') . '/**3'
+  let s:path = s:path . ',' . stdpath('config') . '/**'
   return s:path
 
 endfunction
@@ -216,15 +247,18 @@ function! ftplugins#CPath() abort  " {{{1
 
   let s:path='.,**,,'
 
-  if !has('unix') | return s:path | endif
-  " TODO: whats the func for if a directory is readable? i think there's a
-  " section in the help index for functions that work with the filesystem
-  " if
-  let s:path = s:path . ',/usr/include,/usr/local/include,'
+  if has('unix')
+    let s:path = s:path . ',/usr/include,/usr/local/include'
 
-  " is this it?
-  " if isdirectory
-  let s:path = s:path . ',' .  expand('$HOME') . '/.local/include'
+    if isdirectory(expand('$HOME/.local/include'))
+      let s:path = s:path . ',' .  expand('$HOME') . '/.local/include'
+    endif
+
+  else
+    let s:path = s:path . ',C:/tools/miniconda3/envs/working/Library/include'
+    let s:path = s:path . ',C:/tools/miniconda3/envs/working/include'
+
+  endif
 
   return s:path
 

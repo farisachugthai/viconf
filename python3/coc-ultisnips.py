@@ -27,7 +27,7 @@ _VisualContent = namedtuple('_VisualContent', ['mode', 'text'])
 _Position = namedtuple('_Position', ['line', 'col'])
 
 
-class _SnippetUtilCursor(object):
+class _SnippetUtilCursor:
 
     def __init__(self, cursor):
         self._cursor = [cursor[0] - 1, cursor[1]]
@@ -64,7 +64,7 @@ class _SnippetUtilCursor(object):
         return str((self._cursor[0], self._cursor[1]))
 
 
-class IndentUtil(object):
+class IndentUtil:
     """Utility class for dealing properly with indentation."""
 
     def __init__(self):
@@ -100,7 +100,7 @@ class IndentUtil(object):
         return indent
 
 
-class SnippetUtil(object):
+class SnippetUtil:
     """Provides easy access to indentation, etc.
 
     This is the 'snip' object in python code.
@@ -188,7 +188,6 @@ class SnippetUtil(object):
         """The return value.
 
         The text to insert at the location of the placeholder.
-
         """
         return self._rv
 
@@ -251,16 +250,12 @@ class SnippetUtil(object):
 
     @property
     def snippet_start(self):
-        """
-        Returns start of the snippet in format (line, column).
-        """
+        """Returns start of the snippet in format (line, column)."""
         return self._start
 
     @property
     def snippet_end(self):
-        """
-        Returns end of the snippet in format (line, column).
-        """
+        """Returns end of the snippet in format (line, column)."""
         return self._end
 
     @property
@@ -268,7 +263,7 @@ class SnippetUtil(object):
         return vim.buf
 
 
-class ContextSnippet(object):
+class ContextSnippet:
 
     def __init__(self):
         self.buffer = vim.current.buffer

@@ -75,9 +75,8 @@ if &tabstop > 4 | setlocal tabstop=4 | endif
 if &shiftwidth > 4  | setlocal shiftwidth=4 | endif
 setlocal expandtab smarttab softtabstop=4
 
-set foldenable foldlevelstart=0 foldlevel=0
+set foldenable foldlevelstart=0 foldlevel=0 foldopen=quickfix,search,tag,undo,jump
 set foldnestmax=10 foldmethod=marker foldcolumn=2
-set foldopen=quickfix,search,tag,undo,jump foldclose=all  " close folds automatically when you move out of them
 set signcolumn=auto:2  " this might be a nvim 4 thing
 
 try | set switchbuf=useopen,usetab,newtab | catch | endtry
@@ -145,15 +144,6 @@ noremap <Leader>sp <Cmd>setlocal spell!<CR>
 
 noremap <Leader>o o<Esc>
 noremap <Leader>O O<Esc>
-vnoremap < <gv
-vnoremap > >gv
-" I just realized these were set to nnoremap. Meaning visual mode doesn't get this mapping
-noremap j gj
-noremap k gk
-noremap <Up> gk
-noremap <Down> gj
-" I mess this up constantly thinking that gI does what gi does
-inoremap gI gi
 
 set showmatch matchpairs+=<:> lazyredraw
 set matchtime=20  " Show the matching pair for 2 seconds

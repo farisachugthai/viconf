@@ -1,31 +1,33 @@
+# c.snippets
+# Vim: set foldmethod=marker:foldlevelstart=0:foldlevel=0:
+priority 70
 
 snippet def "#define ..."
-#define $1
+#define ${VISUAL:$0}
 endsnippet
 
-snippet #ifndef "#ifndef ... #define ... #endif"
+# this behaves oddly
+snippet ifndef "#ifndef ... #define ... #endif"
 #ifndef ${1/([A-Za-z0-9_]+).*/$1/}
 #define ${1:SYMBOL} ${2:value}
 #endif /* ifndef $1 */
 endsnippet
 
-snippet #if "#if #endif" b
-#if ${1:0}
-${VISUAL}$0
+snippet if "#if #endif" b
+#if ${1:${0}}
+${VISUAL:${1}}
 #endif
 endsnippet
 
 snippet mark "#pragma mark (mark)"
-#if 0
+#if $0
 ${1:#pragma mark -
 }#pragma mark $2
 #endif
-
-$0
 endsnippet
 
-snippet main "main() (main)"
-int main(int argc, char *argv[])
+snippet main "main() (main)" b
+int main(${1:int argc}, ${2:char *argv[]})
 {
 	${VISUAL}$0
 	return 0;

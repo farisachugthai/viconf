@@ -32,7 +32,12 @@ GuiLinespace 1.5
 
 " Doesn't work
 " GuiFont 'FuraMono Nerd Font Mono:h14'
-GuiFont Hack:h11
+" works but meh
+" GuiFont Hack:h11
+" Throws an error because not fixed pitch
+" GuiFont Monoisome:h11
+" holy fuck this does work
+GuiFont FuraMono\ Nerd\ Font\ Mono:h12
 
 call GuiClipboard()
 

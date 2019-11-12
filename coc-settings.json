@@ -21,8 +21,11 @@
   "coc.source.around.shortcut": "Coc-Around:",
   "coc.source.buffer.firstMatch": false,
   "coc.source.buffer.shortcut": "Coc-Buffer:",
+  "coc.source.dictionary.priority": 40,
+  "coc.source.dictionary.filetypes": ["rst", "md", "text", "json", "help", "html"],
   "coc.source.dictionary.shortcut": "Coc-Dict:",
   "coc.source.emoji.shortcut": "Coc-Emoji: ",
+  "coc.source.emoji.filetypes": ["rst", "md", "txt", "help", "html"],
   "coc.source.emoji.triggerCharacters": [":"],
   "coc.source.emoji.priority": 99,
   "coc.source.file.ignoreHidden": false,
@@ -45,8 +48,10 @@
     "powershell",
     "typescript"
   ],
+  "coc.source.ultisnips.priority": 99,
   "coc.source.ultisnips.shortcut": "Coc-UltiSnips:",
-  "coc.source.word.filetypes": ["rst", "md"],
+  "coc.source.word.filetypes": ["rst", "md", "txt", "help", "html"],
+  "coc.source.word.priority": 30,
   "coc.source.word.shortcut": "Coc-Word: ",
   "codeLens.enable": true,
   "codeLens.separator": "‣",
@@ -77,6 +82,8 @@
   "git.stagedDecorator": " Ξ ",
   "git.untrackedDecorator": " : Untracked : ",
   "git.virtualTextPrefix": "Coc-Git:",
+  "html.format.enable": true,
+  "html.filetypes": ["html", "handlebars", "htmldjango", "htmljinja", "smarty"],
   "javascript.showUnused": true,
   "javascript.suggest.names": true,
   "javascript.referencesCodeLens.enable": true,
@@ -141,7 +148,7 @@
     "--normal"
   ],
   "list.source.extensions.defaultArgs": [
-    "toggle"
+    "doc"
   ],
   "list.source.extensions.defaultOptions": [
     "--top",
@@ -295,13 +302,15 @@
     "--auto-preview"
   ],
   "list.source.yank.defaultArgs": [
-    "line"
+    "preview"
   ],
   "list.source.yank.defaultOptions": [
     "--top",
+    "--tab",
+    "--ignore-case",
     "--regex",
     "--normal",
-    "--number-select"
+    "--auto-preview"
   ],
   "lists.disabledLists": [
     "buffers",

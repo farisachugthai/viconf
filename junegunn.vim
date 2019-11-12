@@ -82,7 +82,7 @@ Plug 'greyblake/vim-preview', {'on': 'Preview'}
 Plug 'godlygeek/tabular'
 Plug 'itspriddle/vim-shellcheck', { 'for': ['sh', 'bash'] }
 Plug 'mitsuhiko/vim-jinja'
-Plug 'ervandew/supertab'
+" Plug 'ervandew/supertab'
 Plug 'junegunn/vim-peekaboo'
 Plug 'vim-voom/voom'
 Plug 'romainl/vim-qf'

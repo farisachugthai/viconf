@@ -41,9 +41,10 @@ endif
 " well poop i didn't realize i never set this
 let g:UltiSnipsUsePythonVersion = 3
 
-" let g:UltiSnipsExpandTrigger = '<Tab>'
+let g:UltiSnipsExpandTrigger = '<C-j>'
 " " TODO: Mapped in ConEmu and I don't know how to unmap a system keybinding...
-" let g:UltiSnipsListSnippets = '<C-Tab>'
+" Literally listed in the help docs as unused. Why not?
+let g:UltiSnipsListSnippets = '<C-\>'
 let g:UltiSnipsJumpForwardTrigger = '<C-j>'
 let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
 let g:ultisnips_python_style = 'numpy'

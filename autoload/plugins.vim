@@ -152,6 +152,7 @@ function! plugins#GrepFromSelected(type)
 endfunction
 
 
+
 " Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

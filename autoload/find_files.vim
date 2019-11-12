@@ -125,27 +125,13 @@ endfunction
 
 function! find_files#msdos_remote() abort  " {{{1
 
-  " if !empty(exepath('python.exe'))
-  "   let g:python3_host_prog = exepath('python.exe')
-  " elseif !empty(exepath('python3.exe'))
-  "   let g:python3_host_prog = exepath('python3.exe')
-  " elseif executable('C:/tools/miniconda3/python.exe')  " fuck it
-  "   let g:python3_host_prog = 'C:/tools/miniconda3/python.exe'
-  " else
-  "   let g:loaded_python3_provider = 1
-  "   echoerr 'Could not find the remote python3 host.'
-  " endif
-  let g:python3_host_prog = 'C:/tools/miniconda3/envs/neovim/python.exe'
+  let g:python3_host_prog = 'C:/tools/miniconda3/envs/working/python.exe'
 
   let g:python_host_prog = 'C:/tools/miniconda3/envs/py2/python.exe'
 
   let g:loaded_ruby_provider = 1
 
-  if !empty(exepath('neovim-node-host'))
-    let g:node_host_prog = exepath('neovim-node-host')
-  else
-    let g:loaded_node_provider = 1
-  endif
+  let g:node_host_prog = 'C:/tools/nvm/v13.0.1/neovim-node-host'
 
   let g:clipboard = {
         \   'name': 'winClip',

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # encoding: utf-8
 """Wrapper functionality around the functions we need from Vim.
 
@@ -6,6 +6,11 @@ This is copied directly from UltiSnips so we may need to change a couple of thin
 
 Really useful seemingly universal functions for working with Vim though.
 
+Dude! Go to line 178 there's a function for making scratch buffers.
+That's awesome because we could use it to A) replcae the one in
+autoload/pydoc_help.vim or B) change this one ot make it asynchronous and try
+to improve or speed up a few things that we've gotten accustomed to taking for
+granted.
 
 """
 from contextlib import contextmanager
@@ -16,7 +21,7 @@ from UltiSnips.compatibility import col2byte, byte2col, as_unicode, as_vimencodi
 from UltiSnips.position import Position
 
 
-class VimBuffer(object):
+class VimBuffer:
     """Wrapper around the current Vim buffer."""
 
     def __getitem__(self, idx):

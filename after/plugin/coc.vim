@@ -77,22 +77,28 @@ nnoremap <expr><buffer> gu <Plug>(coc-usages)<CR>
 
 " Bracket maps: {{{2
 " Shit none of these work
-nnoremap [g <Plug>(coc-diagnostic-prev)
-nnoremap ]g <Plug>(coc-diagnostic-next)
+nnoremap [g <Plug>(coc-diagnostic-prev)<CR>
+nnoremap ]g <Plug>(coc-diagnostic-next)<CR>
 
 " Note: Tried adding <expr> and didn't work
-nnoremap [c  <Plug>(coc-git-prevchunk)
-nnoremap ]c  <Plug>(coc-git-nextchunk)
+nnoremap [c  <Plug>(coc-git-prevchunk)<CR>
+nnoremap ]c  <Plug>(coc-git-nextchunk)<CR>
 
 " Remap for rename current word: {{{2
-nnoremap <expr> <F2> <Plug>(coc-refactor)
+nnoremap <expr> <F2> <Plug>(coc-refactor)<CR>
+
+" Instead of actually writing a '<,'> are we allowed to use the * char?
 xnoremap <F2> <Cmd>'<,'>CocCommand document.renameCurrentWord<CR>
 
 " CocOpenLog: {{{2
 " C-m only moves you down a line in normal mode. Pointless.
 " fuck it also maps to CR
 " nnoremap <expr> <C-m> coc#client#open_log()
-nnoremap <C-g> <Cmd>CocOpenLog<CR>
+nnoremap ,l <Cmd>CocOpenLog<CR>
+
+" And let's add one in for CocInfo
+nnoremap ,i <Cmd>CocInfo<CR>
+
 
 " Grep By Motion: Mnemonic CocSelect {{{2
 " Don't use vmap I don't want this in select mode!
@@ -102,90 +108,94 @@ xnoremap ,cs :<C-u>call plugins#GrepFromSelected(visualmode())<CR>
 nnoremap ,cs :<C-u>set operatorfunc=plugins#GrepFromSelected<CR>g@
 
 " Show all diagnostics
-command! -nargs=0 CocDiagnostic :<C-u>call CocActionAsync('diagnosticInfo')<CR>
+command! -nargs=0 CocDiagnostic call CocActionAsync('diagnosticInfo')
 
 " Maps For CocList X: {{{2
-nnoremap <silent> ,d  <Cmd>CocList diagnostics<CR>
+
+nnoremap <C-g> <Cmd>CocList<CR>
+
+nnoremap ,d  <Cmd>CocList diagnostics<CR>
+
 " Orrrrr
 " nnoremap ,d <Plug>(coc-diagnostic-info)<CR>
 
 " Manage extensions
-nnoremap <silent> ,e  <Cmd>CocList extensions<CR>
+nnoremap ,e  <Cmd>CocList extensions<CR>
 " Show commands
-nnoremap <silent> ,c  <Cmd>CocList commands<CR>
+nnoremap ,c  <Cmd>CocList commands<CR>
 " Find symbol of current document
-nnoremap <silent> ,o  <Cmd>CocList outline<CR>
+nnoremap ,o  <Cmd>CocList outline<CR>
 " Search workspace symbols
-nnoremap <silent> ,s  <Cmd>CocList -I symbols<CR>
+nnoremap ,s  <Cmd>CocList -I symbols<CR>
 
 " Easier Grep Using CocList Words:
-nnoremap ,cw <Cmd>execute 'CocList -I --normal --input=' . expand('<cword>') . ' words'<CR>
+nnoremap ,w <Cmd>execute 'CocList -I --normal --input=' . expand('<cword>') . ' words'<CR>
 
-command! -nargs=0 CocWords <Cmd>execute 'CocList -I --normal --input=' . expand('<cword>') . ' words'<CR>
+command! -nargs=0 CocWords execute 'CocList -I --normal --input=' . expand('<cword>') . ' words'
 
 " Keymapping for grep word under cursor with interactive mode
-nnoremap <silent> ,cg <Cmd>exe 'CocList -I --input=' . expand('<cword>') . ' grep'<CR>
+nnoremap ,g <Cmd>exe 'CocList -I --input=' . expand('<cword>') . ' grep'<CR>
 
 " TODO: Figure out the ternary operator, change nargs to ? and if arg then
 " input=arg else expand(cword)
-command! -nargs=0 CocGrep <Cmd>exe 'CocList -I --input=' . expand('<cword>') . ' grep'<CR>
+command! -nargs=0 CocGrep execute 'CocList -I --input=' . expand('<cword>') . ' grep'
 
 " CocResume: {{{2
 " Amazingly leader j k and p aren't taken. From the readme
-nnoremap <silent> <Leader>j  :<C-u>CocNext<CR>
-nnoremap <silent> ,j  :<C-u>CocNext<CR>
-nnoremap <silent> <Leader>k  :<C-u>CocPrev<CR>
-nnoremap <silent> ,k  :<C-u>CocPrev<CR>
-nnoremap <silent> <Leader>r  :<C-u>CocListResume<CR>
-nnoremap <silent> ,r  :<C-u>CocListResume<CR>
+nnoremap <Leader>j  :<C-u>CocNext<CR>
+nnoremap ,j  :<C-u>CocNext<CR>
+nnoremap <Leader>k  :<C-u>CocPrev<CR>
+nnoremap ,k  :<C-u>CocPrev<CR>
+nnoremap <Leader>r  :<C-u>CocListResume<CR>
+nnoremap ,r  :<C-u>CocListResume<CR>
 
 " Other Mappings: {{{2
-xmap ,m  <Plug>(coc-format-selected)
-nmap ,m  <Plug>(coc-format-selected)
+xmap ,m  <Plug>(coc-format-selected)<CR>
+nmap ,m  <Plug>(coc-format-selected)<CR>
 
 " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-xmap ,a  <Plug>(coc-codeaction-selected)
+xmap ,a  <Plug>(coc-codeaction-selected)<CR>
 " Remap for do codeAction of current line
-nnoremap ,a  <Plug>(coc-codeaction)
+nnoremap ,a  <Plug>(coc-codeaction)<CR>
 
-" Now codeLens
-nnoremap ,l <Plug>(coc-codelens-action)
+" Now codeLens. No reason for h outside of it not being bound.
+nnoremap ,h <Plug>(coc-codelens-action)<CR>
 
 " Open the URL in the same way as netrw
 nnoremap gx <Plug>(coc-openlink)<CR>
 
 " Coc Usages
-nnoremap ,u <Plug>(coc-references)
+nnoremap ,u <Plug>(coc-references)<CR>
 
-command! -nargs=0 CocReferences :<C-U>call CocAction('jumpReferences')<CR>
+command! -nargs=0 CocReferences call CocAction('jumpReferences')
 
 nnoremap ,. <Plug>(coc-command-repeat)<CR>
 
-command! -nargs=0 CocRepeat :<C-u>call CocAction('repeatCommand')<CR>
+command! -nargs=0 CocRepeat call CocAction('repeatCommand')
 
 " Autofix problem of current line
 nnoremap ,f  <Plug>(coc-fix-current)<CR>
 nnoremap ,q  <Plug>(coc-fix-current)<CR>
 
-" Format visually selected text
-xmap <silent> ,m  <Plug>(coc-format-selected)<CR>
-
 " Commands: {{{1
 
 " Let's group these together by prefixing with Coc
-
 " Use `:Format` to format current buffer
-command! -nargs=0 CocFormat :<C-U>call CocAction('format')<CR>
+command! -nargs=0 CocFormat call CocAction('format')
 
 " Use `:Fold` to fold current buffer
-command! -nargs=? CocFold :<C-U>call CocActionAsync('fold', <f-args>)<CR>
+command! -nargs=? CocFold call CocActionAsync('fold', <f-args>)
 
 " use `:OR` for organize import of current buffer
-command! -nargs=0 CocSort :<C-U>call CocAction('runCommand', 'editor.action.organizeImport')<CR>
+command! -nargs=0 CocSort call CocAction('runCommand', 'editor.action.organizeImport')
 
 " Just tried this and it worked! So keep checking :CocList commands and add
 " more as we go.
 command! -nargs=0 CocPython call CocActionAsync('runCommand', 'python.startREPL')|
+
+" Let's also get some information here.
+" call CocAction('commands') is a lamer version of CocCommand
+" similar deal with CocFix and CocAction() -quickfix
 
 " Autocmds: {{{1
 

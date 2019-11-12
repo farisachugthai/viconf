@@ -6,9 +6,10 @@
 " ============================================================================
 
 " Guard: {{{1
-if !has_key(plugs, 'tagbar')
-    finish
-endif
+" Actually this is a bad idea we lazy load this
+" if !exists('g:loaded_tagbar')
+"   finish
+" endif
 
 if exists('g:loaded_tagbar_conf') || &compatible || v:version < 700
     finish
@@ -20,10 +21,21 @@ set cpoptions-=C
 
 " Options: {{{1
 
+" Vim Options: {{{2
 let g:tagbar_left = 1
 let g:tagbar_width = 30
 let g:tagbar_sort = 0
 let g:tagbar_singleclick = 1
+let g:tagbar_hide_nonpublic = 0
+let g:tagbar_autoshowtag = 1
+
+
+" Literally ruins my ability to see any other messages i might care about
+let g:tagbar_silent = 1
+
+" This gets really fucky so suck it up and dont autoload
+" let g:tagbar_status_func = 'TagbarStatusFunc'
+" Doesn't work
 
 " If you set this option the Tagbar window will automatically close when you
 " jump to a tag. This implies |g:tagbar_autofocus|. If enabled the "C" flag will
@@ -45,6 +57,7 @@ let g:tagbar_foldlevel = 1
 " everywhere.
 let g:tagbar_autopreview = 0
 
+" Find the ctags executable: {{{2
 if !has('unix')
   " let g:tagbar_autopreview = 1
   if filereadable(expand('$HOME/bin/ctags.exe'))
@@ -53,6 +66,9 @@ if !has('unix')
       let g:tagbar_ctags_bin = exepath('ctags')
   endif
 
+  if filereadable(expand('$HOME/.ctags/universal_ctags.ctags'))
+    let g:tagbar_ctags_options = [expand('~/.ctags/universal_ctags.ctags')]
+  endif
   " Icon Chars
         " let g:tagbar_iconchars = ['▸', '▾']
         " let g:tagbar_iconchars = ['▷', '◢']
@@ -72,7 +88,7 @@ if exists($ANDROID_ROOT)
   let g:tagbar_compact = 1
 endif
 
-" Filetype Implementations: {{{1
+" Filetype Implementations: {{{2
 
 let g:tagbar_type_ansible = {
 	\ 'ctagstype' : 'ansible',
@@ -115,12 +131,6 @@ let g:tagbar_type_javascript = {
       \ 'S:styled components',
       \ ]}
 
-let g:tagbar_type_make = {
-            \ 'kinds':[
-            \ 'm:macros',
-            \ 't:targets',
-            \ ]}
-
 let g:tagbar_type_markdown = {
     \ 'ctagstype' : 'markdown',
     \ 'kinds' : [
@@ -142,21 +152,20 @@ let g:tagbar_type_ps1 = {
 
     " \ 'ctagsargs' : ['-f', 'tags', '--encoding="utf-8"',
     "                \ '--sort=yes', '--sro="»"'],
-
 let g:tagbar_type_rst = {
     \ 'ctagstype': 'rst',
     \ 'ctagsbin' : expand('$HOME/src/rst2ctags/rst2ctags.py'),
-        \ 'ctagsargs' : '-f - --sort=yes --sro=»',
+    \ 'ctagsargs' : '-f - --sort=yes',
     \ 'kinds' : [
-    \ 's:sections',
-    \ 'i:images'
+        \ 's:sections',
+        \ 'i:images'
     \ ],
-    \ 'sro' : '»',
+    \ 'sro' : '|',
     \ 'kind2scope' : {
-    \ 's' : 'section',
+        \ 's' : 'section',
     \ },
     \ 'sort': 0,
-    \ }
+\ }
 
 let g:tagbar_type_typescript = {
   \ 'ctagstype': 'typescript',
@@ -171,8 +180,7 @@ let g:tagbar_type_typescript = {
   \ 'e:enums',
   \ ]
   \ }
-"
-let g:tagbar_hide_nonpublic = 1
+
 
 let g:tagbar_type_snippets = {
     \ 'ctagstype' : 'snippets',

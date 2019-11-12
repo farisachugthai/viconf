@@ -51,6 +51,9 @@ augroup TermGroup
   " that I didn't mention to leave insert mode when the terminal closes...
   autocmd TermClose * stopinsert
 
+  " Except for when coc randomly opens terminals
+  autocmd User CocTerminalOpen stopinsert
+
   " Set up mappings
   autocmd TermOpen * call buffers#terminals()
 

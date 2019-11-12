@@ -25,7 +25,7 @@ elseif executable('rg.exe')  " fucking windows
 endif
 
 if executable('rg') || executable('rg.exe')
-  let &grepprg = s:rg . ' --vimgrep --no-messages --color=ansi '
+  let &grepprg = s:rg . ' --vimgrep --no-messages --color=never '
         \. ' --smart-case $* '
 endif
 

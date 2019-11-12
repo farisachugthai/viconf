@@ -42,11 +42,13 @@ CompilerSet errorformat=
       \%DMaking\ %*\\a\ in\ %f
 
 " Makeprg: {{{1
-if filereadable('Makefile')
-  CompilerSet makeprg=make
-else
+" if filereadable('Makefile')
+"   CompilerSet makeprg=make
+" else
   let &makeprg = 'sphinx-build -b html'
-endif
+" endif
+
+" Don't do this. We set compiler to rst for sphinx-build
 
 " Invoke the command with something to the effect of :make -b html . _build
 
