@@ -56,7 +56,7 @@ function! s:check_back_space() abort
 endfunction
 
 " Refresh completions with C-Space
-inoremap <silent><expr> <C-Space> coc#refresh()
+inoremap <expr> <C-Space> coc#refresh()
 
 " As a heads up theres also a coc#select#snippet
 " I think supertab does the <CR> thing for us
@@ -69,11 +69,13 @@ inoremap <silent><expr> <C-Space> coc#refresh()
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
 
 "Cycle through completion entries with tab/shift+tab
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<Tab>"
+" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<Tab>"
 
-nnoremap <expr><buffer> gK <Plug>(coc-definition)<CR>
-nnoremap <expr><buffer> gu <Plug>(coc-usages)<CR>
+nnoremap <expr> gK <Plug>(coc-definition)<CR>
+" The gu<text object> operation is too important
+" nnoremap <expr><buffer> gu <Plug>(coc-usages)<CR>
+nnoremap g} <Plug>(coc-usages)<CR>
 
 " Bracket maps: {{{2
 " Shit none of these work

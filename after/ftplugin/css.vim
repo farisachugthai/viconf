@@ -6,11 +6,6 @@
 " ============================================================================
 
 " Guard: {{{1
-if exists('g:did_css_after_ftplugin') || &compatible || v:version < 700
-  finish
-endif
-let g:did_css_after_ftplugin = 1
-
 let s:cpo_save = &cpoptions
 set cpoptions&vim
 
@@ -24,12 +19,14 @@ setlocal omnifunc=csscomplete#CompleteCSS
 
 compiler csslint
 
-if has_key(plugs, 'ale') && &filetype==#'css'
+if !empty('g:loaded_ale') && &filetype==#'css'
   call ftplugins#ALE_CSS_Conf()
 endif
 
 " Atexit: {{{1
 
-let b:undo_ftplugin = 'set et< sw< sts< sua<'
+let b:undo_ftplugin = 'setlocal et< sw< sts< sua< ofu< mp< efm< '
+      \ . '|unlet! b:undo_ftplugin'
+
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

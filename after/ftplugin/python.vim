@@ -46,14 +46,11 @@ setlocal includeexpr=substitute(v:fname,'\\.','/','g')
 
 setlocal cinkeys-=0#
 setlocal indentkeys-=0#
-setlocal include=^\\s*\\(from\\\|import\\)
 
 " also let's know where the line needs to end visually but not invoke the
 " linters to react.
 setlocal colorcolumn=80,120
 setlocal foldmethod=indent
-
-" runtime autoload/pydoc_help.vim
 
 " setlocal keywordprg=pydoc
 " let &l:keywordprg = ':PydocThis' . expand('<cWORD>')
@@ -66,7 +63,7 @@ setlocal suffixesadd+=.py
 setlocal omnifunc=python3complete#Complete
 setlocal iskeyword+=.
 
-let &l:path = ftplugins#PythonPath()
+let &l:path = py#PythonPath()
 
 " *'shiftround'* *'sr'* *'noshiftround'* *'nosr'*
 " 'shiftround' 'sr'	boolean	(default off) global
@@ -79,6 +76,7 @@ setlocal shiftround
 
 " Compiler: {{{1
 
+" TODO: how do we undo_ftplugin for a compiler?
 " Well this is neat!
 if executable('pytest')
   compiler pytest
@@ -100,7 +98,7 @@ if executable('yapf')
   setlocal equalprg=yapf
   setlocal formatprg=yapf
 
-  command! -buffer -complete=buffer -nargs=0 YAPF call ftplugins#YAPF()
+  command! -buffer -complete=buffer -nargs=0 YAPF call py#YAPF()
   command! -buffer -complete=buffer -nargs=0 YAPFI exec '!yapf -i %'
   command! -buffer -complete=buffer -nargs=0 YAPFD cexpr! exec '!yapf -d %'
 
@@ -117,8 +115,8 @@ endif
 
 " ALE: {{{1
 
-if !empty('g:loaded_ale')
-  call ftplugins#ALE_Python_Conf()
+if !empty('g:loaded_ale') && &filetype==#'python'
+  call py#ALE_Python_Conf()
 endif
 
 " Coc: {{{1
@@ -133,11 +131,13 @@ endif
 " For a reference go to $VIMRUNTIME/ftplugin/python.vim
 let b:undo_ftplugin = 'setlocal lbr< tw< cms< et< sts< ts< sw< cc< fdm< kp<'
       \ . '|setlocal sr< sua< isk< ep< fp< path< cinw<'
+      \ . '|setlocal mp< efm<'
       \ . '|setlocal comments<'
       \ . '|setlocal include<'
       \ . '|setlocal indentkeys<'
       \ . '|setlocal omnifunc<'
       \ . '|setlocal cinkeys<'
+      \ . '|unmap <buffer> <F5>'
       \ . '|unlet! b:undo_ftplugin'
 
 let &cpoptions = s:cpo_save

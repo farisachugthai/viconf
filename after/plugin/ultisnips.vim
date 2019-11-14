@@ -41,7 +41,7 @@ endif
 " well poop i didn't realize i never set this
 let g:UltiSnipsUsePythonVersion = 3
 
-let g:UltiSnipsExpandTrigger = '<C-j>'
+let g:UltiSnipsExpandTrigger = '<Tab>'
 " " TODO: Mapped in ConEmu and I don't know how to unmap a system keybinding...
 " Literally listed in the help docs as unused. Why not?
 let g:UltiSnipsListSnippets = '<C-\>'

@@ -11,11 +11,6 @@ if exists("b:did_ftplugin")
 endif
 let b:did_ftplugin = 1
 
-if exists('b:loaded_after_powershell') || &compatible || v:version < 700
-  finish
-endif
-let b:loaded_after_powershell = 1
-
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
@@ -24,7 +19,7 @@ setlocal expandtab
 setlocal shiftwidth=4
 setlocal softtabstop=4
 setlocal commentstring=#\ %s
-setlocal textwidth=0
+setlocal textwidth=120
 
 " Recognize powershell's goofy ass hyphenated commands
 " Actually it's easier to have this off. Maybe. Maybe make a buffer local
@@ -41,7 +36,9 @@ let b:ale_fixers = ['powershell']
 
 " Atexit: {{{1
 
-let b:undo_ftplugin = 'set et< sw< sts< cms< tw< isk< sua<'
+let b:undo_ftplugin = 'setlocal et< sw< sts< cms< tw< isk< sua< fdm< '
+      \ . '|unlet! b:ale_fixers'
+      \ . '|unlet! b:undo_ftplugin'
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

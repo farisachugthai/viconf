@@ -63,6 +63,25 @@ if !empty(s:ubuntu)
   Plug 'ekalinin/Dockerfile.vim', {'for': 'dockerfile'}
 endif
 
+Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
+nnoremap U <Cmd>UndotreeToggle<CR>
+
+if has('ruby')
+  Plug 'greyblake/vim-preview', {'on': 'Preview'}
+endif
+" The 'tabular' plugin must come _before_ 'vim-markdown'.
+Plug 'godlygeek/tabular'
+Plug 'itspriddle/vim-shellcheck', { 'for': ['sh', 'bash'] }
+Plug 'mitsuhiko/vim-jinja'
+Plug 'ervandew/supertab'
+Plug 'junegunn/vim-peekaboo'
+Plug 'vim-voom/voom'
+Plug 'romainl/vim-qf'
+
+Plug 'raimon49/requirements.txt.vim'
+
+Plug 'ntpeters/vim-better-whitespace'
+
 " It's very frustrating having termux slow down beyond repair but also frustrating
 " not being able to use more than 15 plugins at any point in time
 if empty(s:termux)
@@ -71,25 +90,6 @@ if empty(s:termux)
   " needed if for nothing else but the ftdetect
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
-endif
-
-" I feel like the lazy loaded ones can come out here
-Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
-nnoremap U <Cmd>UndotreeToggle<CR>
-
-Plug 'greyblake/vim-preview', {'on': 'Preview'}
-" The 'tabular' plugin must come _before_ 'vim-markdown'.
-Plug 'godlygeek/tabular'
-Plug 'itspriddle/vim-shellcheck', { 'for': ['sh', 'bash'] }
-Plug 'mitsuhiko/vim-jinja'
-" Plug 'ervandew/supertab'
-Plug 'junegunn/vim-peekaboo'
-Plug 'vim-voom/voom'
-Plug 'romainl/vim-qf'
-
-  Plug 'raimon49/requirements.txt.vim'
-  Plug 'ntpeters/vim-better-whitespace'
-if empty(s:termux)
   " Plug 'mustache/vim-mustache-handlebars'
   Plug 'michaeljsmith/vim-indent-object'
   Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }

@@ -6,38 +6,36 @@
 " ============================================================================
 
 " Guards: {{{
-if exists('g:loaded_pydoc_plugin') || &compatible
-    finish
-endif
-let g:loaded_pydoc_plugin = 1
-
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
 " }}}
 " Options: {{{
 
-if !exists('g:pydoc_window')
-  " Check in <../autoload/pydoc_help.vim> for function definitions
-  let g:pydoc_window = 'split'  " should this be an int or str. hm.
-endif
+" if !exists('g:pydoc_window')
+"   " Check in <../autoload/pydoc_help.vim> for function definitions
+"   let g:pydoc_window = 'split'  " should this be an int or str. hm.
+" endif
 
-if g:pydoc_window == 'split'
-  let s:pydoc_action = 'split'
-elseif g:pydoc_window == 'vert'
-  let s:pydoc_action = 'vert'
-elseif g:pydoc_window == 'tab'
-  let s:pydoc_action = 'tab'
-else
-  throw 'pydoc_help: plugin: Option not recognized.'
-endif
+" if g:pydoc_window == 'split'
+"   let s:pydoc_action = 'split'
+" elseif g:pydoc_window == 'vert'
+"   let s:pydoc_action = 'vert'
+" elseif g:pydoc_window == 'tab'
+"   let s:pydoc_action = 'tab'
+" else
+"   throw 'pydoc_help: plugin: Option not recognized.'
+" endif
 
 " }}}
 " Autocmds: {{{
 
 augroup mantabs
   au!
-  autocmd Filetype man,help call pydoc_help#Helptab()
+  autocmd Filetype man,help setlocal number relativenumber
+  autocmd Filetype man,help  if winnr('$') > 1
+        \| wincmd T
+        \| endif
 augroup END
 
 " }}}

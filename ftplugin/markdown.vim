@@ -46,12 +46,12 @@ setlocal foldlevel=0 foldlevelstart=0
 " TPope's markdown plugin. Light enough footprint when settings vars to not
 " need a check
 let g:markdown_fenced_languages = [
-      \ 'python', 'bash=sh',
-      \ 'c++=cpp', 'viml=vim',
-      \ 'bash=sh', 'ini=dosini',
-      \ 'vim',
-      \ 'help',
-      \ ]
+      \. 'python', 'bash=sh',
+      \. 'c++=cpp', 'viml=vim',
+      \. 'bash=sh', 'ini=dosini',
+      \. 'vim',
+      \. 'help',
+      \. ]
 
 let g:markdown_minlines = 100
 
@@ -60,16 +60,22 @@ let g:markdown_folding = 1
 if has("folding") && exists("g:markdown_folding")
   setlocal foldexpr=format#MarkdownFoldText()
   setlocal foldmethod=expr
-  let b:undo_ftplugin .= " foldexpr< foldmethod<"
+  let b:undo_ftplugin .= "setlocal foldexpr< foldmethod<"
 endif
 
 " Mappings: {{{1
 
-noremap <buffer> <localleader>1 m`yypVr=``
-noremap <buffer> <localleader>2 m`yypVr-``
-noremap <buffer> <localleader>3 m`^i### <esc>``4l
-noremap <buffer> <localleader>4 m`^i#### <esc>``5l
-noremap <buffer> <localleader>5 m`^i##### <esc>``6l
+noremap <buffer> <Leader>1 m`yypVr=``
+noremap <buffer> <Leader>2 m`yypVr-``
+noremap <buffer> <Leader>3 m`^i### <esc>``4l
+noremap <buffer> <Leader>4 m`^i#### <esc>``5l
+noremap <buffer> <Leader>5 m`^i##### <esc>``6l
+
+let b:undo_ftplugin .= 'unmap <buffer> <Leader>1'
+let b:undo_ftplugin .= 'unmap <buffer> <Leader>2'
+let b:undo_ftplugin .= 'unmap <buffer> <Leader>3'
+let b:undo_ftplugin .= 'unmap <buffer> <Leader>4'
+let b:undo_ftplugin .= 'unmap <buffer> <Leader>5'
 
 " Plugins: {{{1
 

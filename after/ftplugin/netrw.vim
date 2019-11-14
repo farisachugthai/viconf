@@ -75,7 +75,9 @@ nnoremap <buffer> <Tab>	<Plug>NetrwShrink
 let g:netrw_preview = 1
 
 " Defaults to 50%
-let g:netrw_winsize = 80
+" let g:netrw_winsize = 70
+" This is the wrong way
+let g:netrw_winsize = 30
 
 " Long as hell but a bool indicating that theres special HL
 let g:netrw_special_syntax    = v:true

@@ -92,24 +92,12 @@ if filereadable(stdpath('config') . '/spell/en.utf-8.add')
   let &spellfile = stdpath('config') . '/spell/en.utf-8.add'
 endif
 
-set wildignorecase wildmode=full:list:longest,full:list
-set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
-" C-n and C-p now use the same input that every other C-x does combined!
-" Remove includes they're pretty slow
-set complete+=kspell,d,k complete-=u,i
-
-" Create a preview window and display all possibilities but don't insert
-" dude what am i doing wrong that i don't get the cool autocompletion that NORC gets??
-set completeopt=menu,menuone,noselect,noinsert,preview
-
 " both smartcase and infercase require ignorecase to be set
 set ignorecase
 set smartcase infercase
 
-set makeencoding=utf-8         " Used by the makeprg. system locale is used. actually let's just force utf8
+" set makeencoding=utf-8         " Used by the makeprg. system locale is used. actually let's just force utf8
 set sessionoptions-=buffers,winsize viewoptions-=options sessionoptions+=globals
-set tags+=./tags,./*/tags
-set tags^=./.git/tags tagcase=smart showfulltag
 set mouse=a nojoinspaces autowrite autochdir modeline
 if exists('&modelineexpr') | set modelineexpr | endif
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping

@@ -6,16 +6,6 @@
 " ============================================================================
 
 " Guard: {{{1
-" Actually this is a bad idea we lazy load this
-" if !exists('g:loaded_tagbar')
-"   finish
-" endif
-
-if exists('g:loaded_tagbar_conf') || &compatible || v:version < 700
-    finish
-endif
-let g:loaded_tagbar_conf = 1
-
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
@@ -79,7 +69,6 @@ if !has('unix')
 
 endif
 
-
 " Setting this option will result in Tagbar omitting the short help at the
 " top of the window and the blank lines in between top-level scopes in order to
 " save screen real estate.
@@ -88,7 +77,10 @@ if exists($ANDROID_ROOT)
   let g:tagbar_compact = 1
 endif
 
-" Filetype Implementations: {{{2
+" Mappings: {{{1
+let g:tagbar_map_zoomwin = 'z'
+
+" Filetype Implementations: {{{1
 
 let g:tagbar_type_ansible = {
 	\ 'ctagstype' : 'ansible',

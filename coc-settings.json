@@ -93,6 +93,8 @@
   "languageserver": {
     "clangd": {
       "command": "clangd",
+      "shell": true,
+      "trace.server": "messages",
       "args": ["--background-index"],
       "rootPatterns": ["compile_flags.txt", "compile_commands.json", ".git/", ".hg/"],
       "filetypes": ["c", "cpp", "objc", "objcpp"]
@@ -141,7 +143,8 @@
   ],
   "list.source.commands.defaultOptions": [
     "--top",
-    "--normal"
+    "--no-sort",
+    "--ignore-case"
   ],
   "list.source.diagnostics.defaultOptions": [
     "--auto-preview",
@@ -343,7 +346,6 @@
   "python.autoComplete.addBrackets": true,
   "python.autoComplete.showAdvancedMembers": true,
   "python.autoUpdateLanguageServer": true,
-  "python.condaPath": "C:\\tools\\miniconda3\\Scripts\\conda",
   "python.jediMemoryLimit": -1,
   "python.jediEnabled": false,
   "python.jediShortcut": "Jedi",

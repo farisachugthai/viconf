@@ -6,16 +6,10 @@
 " ============================================================================
 
 " Guard: {{{1
-if exists('b:did_js_after_ftplugin') || &compatible || v:version < 700
-  finish
-endif
-let b:did_js_after_ftplugin = 1
-
 let s:cpo_save = &cpoptions
 set cpoptions&vim
 
 " Options: {{{1
-
 setlocal expandtab
 setlocal shiftwidth=2
 setlocal softtabstop=2
@@ -33,14 +27,20 @@ setlocal include=require(
 " So here's the example from :he 'define'
 let &l:define = '^\s*\ze\k\+\s*=\s*function('
 
+if !has('unix')
+  let &l:path = ',.,**,,C:\\tools\\nodejs\\node_modules\\**,'
+" else TODO
+endif
+
 if exists('g:loaded_ale') && &filetype==#'javascript'
   call ftplugins#ALE_JS_Conf()
 endif
 
 " Atexit: {{{1
 let b:undo_ftplugin = 'setlocal et< sw< sts< sua< com< cms< ofu< '
-      \ . '|setlocal define'
-      \ . '|setlocal include'
+      \ . '|setlocal define< '
+      \ . '|setlocal path< '
+      \ . '|setlocal include< '
       \ . '|unlet! b:undo_ftplugin'
 
 let &cpoptions = s:cpo_save

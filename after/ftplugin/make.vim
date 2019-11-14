@@ -6,11 +6,6 @@
 " ============================================================================
 
 " Guard: {{{1
-if exists('g:did_make_after_ftplugin') || &compatible || v:version < 700
-  finish
-endif
-let g:did_make_after_ftplugin = 1
-
 let s:cpo_save = &cpoptions
 set cpoptions&vim
 
@@ -22,9 +17,10 @@ setlocal tabstop=8
 setlocal softtabstop=8
 setlocal shiftwidth=8
 
-" atexit: {{{1
+" Atexit: {{{1
 
-let b:undo_ftplugin = 'set et< ts< sts< sw<'
+let b:undo_ftplugin = 'setlocal et< ts< sts< sw<'
+      \ . '|unlet! b:undo_ftplugin'
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

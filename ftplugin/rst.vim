@@ -5,19 +5,14 @@
     " Last Modified: Oct 27, 2019
 " ============================================================================
 
-" Guard: {{{1
-if exists('b:did_ftplugin') || &compatible || v:version < 700
-  finish
-endif
-let b:did_ftplugin = 1
-
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
-" Options: {{{1
-
-" Globals: {{{2
 " Things that should get defined everywhere anyways so define them first.
+
+" Yes we do the b:did_ftplugin later but define the global vars first
+
+" Options: {{{1
 
 let g:rst_style = 1
 
@@ -43,13 +38,19 @@ let g:rst_use_emphasis_colors = 1
 
 let g:rst_fold_enabled = 1
 
-" Rst specific: {{{2
+" Guard: {{{1
+if exists('b:did_ftplugin') || &compatible || v:version < 700
+  finish
+endif
+let b:did_ftplugin = 1
+
+" Rst specific: {{{1
 setlocal expandtab
 setlocal spell!
 setlocal colorcolumn=80
 setlocal linebreak
-setlocal foldlevel=0
-setlocal foldlevelstart=0
+setlocal foldlevel=1
+setlocal foldlevelstart=1
 setlocal iskeyword+=.
 
 " Doesn't work
@@ -64,10 +65,10 @@ setlocal iskeyword+=.
 " don't do the executable(sphinx-build) check here its in ../compiler/rst.vim
 compiler rst
 
-if filereadable('./conf.py')
-  let &l:makeprg = ' . ../build/html '
+if filereadable('conf.py')
+  let &l:makeprg .= ' . ../build/html '
 elseif glob('../conf.py')
-  let &l:makeprg = ' .. ../../build/html '
+  let &l:makeprg .= ' .. ../../build/html '
 endif
 
 " Actually from the python ftplugin: {{{2
@@ -79,9 +80,9 @@ setlocal cinkeys-=0#
 setlocal indentkeys-=0#
 setlocal include=^\\s*\\(from\\\|import\\)
 setlocal shiftround
-setlocal suffixesadd+=.py
+setlocal suffixesadd=.py,.rst
 
-let &l:path = ftplugins#PythonPath()
+let &l:path = py#PythonPath()
 
 " Sphinx Command: {{{1
 command! -buffer Sphinx call pydoc_help#sphinx_build(<q-args>)
@@ -93,7 +94,7 @@ setlocal comments=fb:.. commentstring=..\ %s
 " Let's redo the undo ftplugin
 
 let b:undo_ftplugin = 'setlocal cms< com< cc< lbr< fdl< fdls< '
-      \ . '|setlocal spell< isk< kp< mp< sua< sr< '
+      \ . '|setlocal spell< isk< kp< mp< efm< sua< sr< '
       \ . '|setlocal cin< cinw< path< '
       \ . '|setlocal include<'
       \ . '|setlocal indentkeys<'

@@ -478,6 +478,66 @@ Folds
 
 Jesus Christ is this setting annoying. Don't set it!
 
+Includes and the Path
+---------------------
+
+Setting the path the way that you want is hard; however, I seem to have found
+a method for doing so that works. Should be functional on both windows and linux,
+for any python installation and regardless of whether python was installed from
+a package manager or Anaconda.
+
+In addition, it still works quickly as recursive includes can get out of
+control very quickly.
+
+.. code-block:: vim
+
+   function py#PythonPath() abort  " {{{1
+
+   " Note: the path option is to find directories so it's usually unnecesssary
+   " to glob if you have the /usr/lib/python dir in hand.
+   " let s:orig_path = &path
+
+   " The current path and the buffer's dir. Also recursively search downwards
+   let s:path = '.,,**,'
+
+   if !empty('g:python3_host_prog')
+
+      if has('unix')
+         let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h:h')
+         " max out at 3 dir deep
+         " don't go 3 dir in includes start going REALLY slowly
+         let s:site_pack = s:root_dir . '/lib/python3.7/site-packages/**'
+
+         let s:path = s:path . s:site_pack
+         let s:path = ',' . s:root_dir . '/lib/python3.7/*' . s:path . ','
+         let s:path =  ',' . s:root_dir . '/lib/python3.7/**/*' . s:path . ','
+
+      " sunovabitch conda doesn't put stuff in the same spot
+      else
+         let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h')
+
+         let s:site_pack = s:root_dir . '/lib/site-packages/**2/'
+         let s:path = s:path . s:site_pack
+
+         " This option requires that the **# either is at the end of the path or
+         " ends with a '/'
+         " let s:path =  ',' . s:root_dir . '/lib/**1/' . s:path . ','
+         " make this last. its the standard lib and we prepend it to the path so
+         " it should be first in the option AKA last in the function
+         let s:path = s:root_dir . '/lib' . s:path
+      endif
+
+   " else
+      " Todo i guess. lol sigh
+      " return s:orig_path
+
+   endif
+
+   return s:path
+   " if this still doesn't work keep wailing at python_serves_python
+
+   endfunction
+
 
 .. _`here.`: after/plugin/fzf.vim
 .. _`after/ftplugin/gitcommit.vim`: ./after/ftplugin/gitcommit.vim

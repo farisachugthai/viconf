@@ -20,10 +20,13 @@ set cpoptions-=C
 nnoremap <buffer> <Left> :colder<CR>
 nnoremap <buffer> <Right> :cnewer<CR>
 
+let b:undo_ftplugin = 'unmap <buffer> <Left>'
+      \ . '|unmap <buffer> <Right>'
+
 " Stl: {{{1
 "
 if !get(g:, 'qf_disable_statusline')
-  let b:undo_ftplugin = "set stl<"
+  let b:undo_ftplugin .= "setlocal stl<"
 
   " Display the command that produced the list in the quickfix window:
   setlocal stl=%t%{exists('w:quickfix_title')?\ '\ '.w:quickfix_title\ :\ ''}\ %=%-15(%l,%c%V%)\ %P

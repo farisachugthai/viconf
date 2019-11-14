@@ -6,11 +6,6 @@
 " ============================================================================
 
 " Guard: {{{1
-if exists('g:did_html_after_ftplugin') || &compatible || v:version < 700
-  finish
-endif
-let g:did_html_after_ftplugin = 1
-
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
@@ -35,6 +30,8 @@ if has_key(plugs, 'ale') && &filetype==#'html'
 endif
 
 " Atexit: {{{1
-let b:undo_ftplugin = 'set et< sw< sts< sua<'
+let b:undo_ftplugin = 'setlocal et< sw< sts< sua< ofu<'
+      \ . '|unlet! b:undo_ftplugin'
+
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

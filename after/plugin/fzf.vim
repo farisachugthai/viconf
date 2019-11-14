@@ -8,17 +8,12 @@
 " Guards: {{{1
 if empty('g:loaded_fzf') | finish | endif
 
-if exists('g:did_fzf_after_plugin') || &compatible || v:version < 700
-    finish
-endif
-" let g:did_fzf_after_plugin = 1
-
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
 " Options: {{{1
 
-let g:fzf_command_prefix = 'F'
+let g:fzf_command_prefix = 'FZ'
 
 " Sep 15, 2019: Look what i found in stdpath('data') .
 " '/plugged/fzf.vim/plugin/fzf.vim' ! There's a statusline option!!! That's
@@ -40,12 +35,14 @@ let g:fzf_history_dir = stdpath('data') . '/fzf-history'
 let g:fzf_layout = { 'window': '-tabnew' }
 
 " Standardized vars: {{{2
-let s:ag_command = 'ag --smart-case -u -g " " --'
-
-let s:rg = 'rg --hidden --max-columns=300 --max-depth=8 --max-count=50 --color=ansi --no-column --no-line-number  --no-heading --auto-hybrid-regex --max-columns-preview --no-messages --smart-case '
+let g:ag_options = ' --smart-case -u -g " " --'
 
 
-let s:fzf_options = [
+
+let g:rg_options = ' --hidden --max-columns 300 --max-depth 8 --max-count 50 --color ansi --no-column --no-line-number  --no-heading --auto-hybrid-regex --max-columns-preview --no-messages --smart-case '
+
+
+let g:fzf_options = [
       \   '--ansi', '--multi', '--tiebreak=index', '--layout=reverse-list',
       \   '--inline-info', '--prompt', '> ', '--bind=ctrl-s:toggle-sort',
       \   '--header', ' Press CTRL-S to toggle sort, CTRL-Y to yank commit hashes',
@@ -76,7 +73,9 @@ let g:fzf_tags_command = 'ctags -R --options='
 let g:fzf_commands_expect = 'alt-enter,ctrl-x'
 
 " FOUND ONE
-let g:fzf_files_options = s:fzf_options
+let g:fzf_files_options = g:fzf_options
+" found another one. What is this???
+" nnoremap <plug>(-fzf-vim-do) :execute g:__fzf_command<cr>
 
 " FZF Colors: {{{2
 
@@ -136,6 +135,9 @@ if filereadable(expand('$_ROOT/share/dict/words'))
   " Note: This is dependant on /usr/share/dict/words existing because this
   " function implicitly depends on it.
   inoremap <expr> <C-x><C-k>         fzf#vim#complete#word({'left': '45%'})
+
+" else
+" TODO: dictionary isn't set on windows
 endif
 
 " Remappable: {{{2
@@ -180,7 +182,7 @@ nnoremap <silent><expr> <Leader>n (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" :
 noremap <silent> <Leader>C        <Cmd>Colors<CR>
 noremap <silent> <Leader><CR>     <Cmd>Buffers<CR>
 noremap <Leader>bu                <Cmd>Buffers<CR>
-noremap <Leader>bB                <Cmd>Buffers<CR>
+noremap <Leader>B                <Cmd>Buffers<CR>
 noremap <Leader>f                 <Cmd>Files<CR>
 
 " Make fzf behave the same in a real shell and nvims.

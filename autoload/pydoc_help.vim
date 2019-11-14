@@ -10,20 +10,27 @@ let s:cpo_save = &cpoptions
 set cpoptions-=C
 
 " Pydoc Cword: {{{1
-function! pydoc_help#PydocCword() abort
 
-  " Holy shit it works!!!
-  let s:temp_cword = expand('<cWORD>')
-  enew
-  exec ':r! pydoc ' . s:temp_cword
+function! s:temp_buffer() abort
+
   setlocal relativenumber
   setlocal filetype=rst
   setlocal nomodified
   setlocal buflisted
   silent setlocal nomodifiable
 
+endfunction
+
+function! pydoc_help#PydocCword() abort
+
+  " Holy shit it works!!!
+  let s:temp_cword = expand('<cWORD>')
+  enew
+  exec ':r! pydoc ' . s:temp_cword
   " If you wanna keep going we can change the status line. We can change how
   " we invoke python
+  call s:temp_buffer()
+
 endfunction
 
 " Pydoc Split Cword: {{{1
@@ -32,11 +39,7 @@ function! pydoc_help#SplitPydocCword() abort
   split
   enew
   exec ':r! pydoc ' . s:temp_cword
-  setlocal relativenumber
-  setlocal filetype=rst
-  setlocal nomodified
-  setlocal buflisted
-  silent setlocal nomodifiable
+  call s:temp_buffer()
 endfunction
 
 " Pydoc Arg: {{{1
@@ -58,92 +61,44 @@ function! pydoc_help#Pydoc(module) abort
   enew
   if has('python3')
     " I realize i could do that EOF bullshit but i don't like it.
-    " I've never tried importing from the pythonx dir before and I don't know
-    " how that works but i'd rather that then embedding python directly in a
-    " vim file
-    " doesn't work
-    " execute 'py3 import pydoc'
-    " execute 'py3 pydoc.ttypager(' . a:module . ')'
     if has('unix')
       exec 'r! python3 -m pydoc ' . a:module
     else
       " exec 'r! python -m pydoc ' . a:module
-      get_documents(a:module)
+      call s:get_documents(a:module)
 
     endif
 
-    " Uhhhhhh let's not do it this way?
-    " On neovim, has('python3') == 'g:python3_host_prog'
-    " if !has('unix')
-    "   exec 'r! python.exe -m pydoc ' . a:module
-    " else
-    " endif
   elseif has('python')  " not sure how to guarantee that python points to py2...
     exec 'r! python -m pydoc ' . a:module
   endif
 
-  setlocal relativenumber
-  setlocal filetype=rst
-  setlocal buflisted
-  silent setlocal nomodified
-  silent setlocal nomodifiable
-  nnoremap <buffer> <silent> q <Cmd>bd!<CR>
-
-  " If you wanna keep going we can change the status line.
+  call s:temp_buffer()
 endfunction
 
-function! Get_docs_from_python() abort
+function! pydoc_help#doc() abort  " {{{1 use pydoc in a here-script
 
-      python3 << EOF
+python3 << EOF
 
-      import inspect, vim, sys, os, pydoc
-      import importlib
+import inspect, vim, sys, os, pydoc
+import importlib
 
-      def get_documents(mod):
-          """I'm not even sure if this is close to how we have to do this."""
-          try:
-              importlib.import_module(mod)
-          except ImportError:
-              return False
-          else:
-              vim.current.buffer(inspect.getdoc(mod))
+def get_documents(obj):
+    """Definitely the wrong method from pydoc but a start."""
+    vim.current.window.buffer(pydoc.writedocs(obj))
 
-      EOF
+EOF
+" DON'T FORGET TO LEFT ALIGN THE EOF
 
 endfunction
 
-" Helptags: {{{1
-
-function! pydoc_help#Helptab() abort
-  setlocal number relativenumber
-  if exists('*nvim_list_wins')
-    if len(nvim_list_wins()) > 1
-      wincmd T
-    endif
-  else
-    return
-  endif
-
-  setlocal nomodified
-  setlocal buflisted
-  " Complains that we can't modify any buffer.
-  " But its a local option so yes we can
-  " Fuck it use a try catch to shut it up
-  try
-    silent setlocal nomodifiable
-  catch /^Vim:E788:*/
-  endtry
-endfunction
-
-" Async Pydoc: {{{1
-
-" Dude this actually works
-function! pydoc_help#async_cursor() abort
+function! pydoc_help#async_cursor() abort " Async Pydoc: {{{1
 
   call jobstart('pydoc ' . expand('<cWORD>'), {'on_stdout':{j,d,e->append(line('.'),d)}})
+
 endfunction
 
-function! pydoc_help#async_cexpr() abort
+function! pydoc_help#async_cexpr() abort  " {{{1
 	"<cexpr>    is replaced with the word under the cursor, including more
 	"	   to form a C expression.  E.g., when the cursor is on "arg"
 	"	   of "ptr->arg" then the result is "ptr->arg"; when the
@@ -155,6 +110,8 @@ endfunction
 
 function! pydoc_help#broken_scratch_buffer() abort  " {{{1
   " Not actually broken i just need to debug the commented out lines
+  " basically how do i put the info i want into a list that can be properly
+  " parsed by this API
 
   " From he api-floatwin. Only new versions of Nvim (maybe 0.4+ only?)
   let buf = nvim_create_buf(v:false, v:true)
@@ -174,9 +131,20 @@ function! pydoc_help#sphinx_build(...) abort  " {{{1
   " TODO:
 endfunction
 
-function! pydoc_help#the_curse_of_nvims_floating_wins() abort  " {{{1 No seriously they're difficult to work with
-  " Keep working out the
-  let s:opts = {'relative': 'cursor', 'width': 10, 'height': 2, 'col': 0, 'row': 1, 'anchor': 'NW', 'style': 'minimal', 'focusable': v:true }
+function! pydoc_help#the_curse_of_nvims_floating_wins() abort  " {{{1
+  " No seriously they're difficult to work with
+
+  let s:opts = {
+        \ 'relative': 'cursor',
+        \ 'width': 10,
+        \ 'height': 2,
+        \ 'col': 0,
+        \ 'row': 1,
+        \ 'anchor': 'NW',
+        \ 'style': 'minimal',
+        \ 'focusable': v:true
+        \ }
+
   let s:win_handle = nvim_open_win(bufnr('%'), 0, s:opts)
   let floating_winnr  = nvim_win_get_number(s:win_handle)
   " So now we finally have a winnr which we can work with in a more reasonable
@@ -257,8 +225,7 @@ function! pydoc_help#ShowPyDoc(name, type) abort  " {{{1
     endif
 endfunction
 
-function! s:ReplaceModuleAlias()  " {{{1
-    " Replace module aliases with their own name.
+function! s:ReplaceModuleAlias()  " {{{1 Replace module aliases with their own name.
     "
     " For example:
     "   import foo as bar
@@ -283,7 +250,7 @@ function! s:ReplaceModuleAlias()  " {{{1
     return join(l:module_names, ".")
 endfunction
 
-function! s:ExpandModulePath()  " {{{2
+function! s:ExpandModulePath()  " {{{1
     " Extract the 'word' at the cursor, expanding leftwards across identifiers
     " and the . operator, and rightwards across the identifier only.
     "
@@ -298,19 +265,7 @@ function! s:ExpandModulePath()  " {{{2
     return matchstr(pre, "[A-Za-z0-9_.]*$") . matchstr(suf, "^[A-Za-z0-9_]*")
 endfunction
 
-" Mappings
-function! pydoc_help#PerformMappings()  " {{{2
-    nnoremap <silent> <buffer> <Leader>pw :call <SID>ShowPyDoc('<C-R><C-W>', 1)<CR>
-    nnoremap <silent> <buffer> <Leader>pW :call <SID>ShowPyDoc('<C-R><C-A>', 1)<CR>
-    nnoremap <silent> <buffer> <Leader>pk :call <SID>ShowPyDoc('<C-R><C-W>', 0)<CR>
-    nnoremap <silent> <buffer> <Leader>pK :call <SID>ShowPyDoc('<C-R><C-A>', 0)<CR>
-
-    " remap the K (or 'help') key
-    nnoremap <silent> <buffer> K :call <SID>ShowPyDoc(<SID>ReplaceModuleAlias(), 1)<CR>
-endfunction
-
-
-function! pydoc_help#show_toc() abort
+function! pydoc_help#show_toc() abort  " {{{1
   let bufname = bufname('%')
   let info = getloclist(0, {'winid': 1})
   if !empty(info) && getwinvar(info.winid, 'qf_toc') ==# bufname
@@ -378,8 +333,6 @@ function! pydoc_help#show_toc() abort
   let w:qf_toc = bufname
 
 endfunction
-
-
 
 " Atexit: {{{1
 let &cpoptions = s:cpo_save

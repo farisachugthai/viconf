@@ -6,11 +6,6 @@
 " ============================================================================
 "
 " Guard: {{{1
-if exists('b:did_sh_vim_after_ftplugin') || &compatible || v:version < 700
-    finish
-endif
-let b:did_sh_vim_after_ftplugin = 1
-
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
@@ -22,7 +17,7 @@ let g:sh_fold_enabled= 4  "   (enable if/do/for folding)
 let g:sh_fold_enabled= 3  "   (enables function and heredoc folding)
 
 " highlighting readline options
-let readline_has_bash = 1
+let g:readline_has_bash = 1
 
 " Sh Bash Specific: {{{1
 if &filetype !=# 'sh' || &filetype !=# 'bash'
@@ -37,20 +32,33 @@ setlocal shiftwidth=4 expandtab softtabstop=4
 
 setlocal colorcolumn=120
 
-let b:undo_ftplugin = 'set cms< sw< et< sts< cc< '
+let b:undo_ftplugin = 'setlocal cms< sw< et< sts< cc< '
+      \ . '|unlet! b:undo_ftplugin'
 
 " Compiler: {{{1
 
 " From none other than the shellcheck manpage!
 if executable('shellcheck') || executable('shellcheck.exe')
-  set makeprg=shellcheck\ -f\ gcc\ %
+  " could also do
+  if globpath(&rtp, "compiler/shellcheck.vim")
+    compiler shellcheck
+  else
+    setlocal makeprg=shellcheck\ -f\ gcc\ %
+  endif
   echomsg 'Using shellcheck for the compiler!'
-  let b:undo_ftplugin .= ' makeprg<'
+
+  noremap <buffer> <F5> <Cmd>make %<CR>
+  noremap! <buffer> <F5> <Cmd>make %<CR>
+
+  let b:undo_ftplugin .= 'setlocal makeprg<'
+      \ . '|unmap <buffer> <F5>'
+      \ . '|unmap! <buffer> <F5>'
+
 endif
 
 " Plugins: {{{1
 
-if !empty('g:loaded_ale')
+if !empty('g:loaded_ale') && &filetype==#'sh' || &filetype==#'bash'
   call ftplugins#ALE_sh_conf()
 endif
 

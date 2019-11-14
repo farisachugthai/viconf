@@ -1,5 +1,5 @@
 " ============================================================================
-    " File: powershell.vim
+    " File: bash.vim
     " Author: Faris Chugthai
     " Description: The original ftplugin is so odd and it does nothing of value
     " Last Modified: Oct 22, 2019
@@ -9,15 +9,28 @@
 if exists("b:did_ftplugin")
   finish
 endif
-let b:did_ftplugin = 1
 
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
-runtime ftplugin/sh.vim after/ftplugin/sh.vim
+" Options: {{{1
 
-if executable('shellcheck') | compiler shellcheck | setlocal makeprg=shellcheck | endif
+runtime ftplugin/sh.vim after/ftplugin/sh.vim
+let b:did_ftplugin = 1
+
+" Just in case i didn't get them fro the sh plugin
+let g:is_bash = 1
+let g:sh_fold_enabled= 4  "   (enable if/do/for folding)
+let g:sh_fold_enabled= 3  "   (enables function and heredoc folding)
+
+" highlighting readline options
+let g:readline_has_bash = 1
+
+setlocal syntax=sh
 
 " Atexit: {{{1
+let b:undo_ftplugin = 'setlocal syntax< '
+      \ . '|unlet! b:undo_ftplugin'
+
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

@@ -160,71 +160,6 @@ function! ftplugins#ALE_Vim_Conf() abort  " {{{1
   endif
 endfunction
 
-function! ftplugins#PythonPath() abort  " {{{1
-
-  " Set up the path for python files
-  " Somehow this still doesn't solve my  imports on windows so I might end up
-  " doing this in python
-  " AND THAT DOESN"T WORK AT ALL EITHER. Somehow that function returns 0????
-  " if !has('unix')
-  "   let s:ret_val = ftplugins#python_serves_python()
-  "   return s:ret_val
-  " endif
-
-  let s:orig_path = &path
-
-  if !empty('g:python3_host_prog')
-    " I think it's only the root on unix
-    " Miniconda3 on windows you only go up 1
-    " if has('unix')
-      let s:root_dir = fnamemodify('g:python3_host_prog', ':p:h:h')
-      let s:site_pack = s:root_dir . '/Lib/python3.7/site-packages/**3'  " max out at 3 dir deep
-    " else
-    "   " i have no idea why but don't wrap this in a string. then nvim won't
-    "   " expand it for some reason and it just feeds you the cwd
-    "   let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h')
-
-    "   " If you're using conda the dirs don't line up either
-    "   let s:site_pack = s:root_dir . '/Lib/site-packages/**3'  " max out at 3 dir deep
-    " endif
-  else
-    return s:orig_path
-  endif
-
-  " let s:path =  s:site_pack . ',' . s:orig_path
-  " The current path and the buffer's dir. Also recursively search downwards
-  let s:path = '.,,**,' . s:site_pack
-
-  " I'm gonna go ahead and assume a conda installation on windows.
-  " if !has('unix')
-  "   let s:path = s:path . ',' . s:root_dir . '/Lib/*.py'
-  "   let s:path = s:path . ',' . s:root_dir . '/Lib/**/*.py'
-  " else
-    let s:path = s:path . ',' . s:root_dir . '/lib/python3.7/*.py'
-    let s:path = s:path . ',' . s:root_dir . '/lib/python3.7/**/*.py'
-  " endif
-
-  return s:path
-
-endfunction
-
-function! ftplugins#python_serves_python() abort  " {{{1
-
-  python << EOF
-  import site, sys, vim
-  def setup_vim_path():
-      vim_path = '.,**,,'
-      vim_path += sys.prefix + ','
-
-      for i in site.getsitepackages():
-          vim_path += i + ','
-
-      print(vim_path)
-      return vim_path
-
-EOF
-endfunction
-
 function! ftplugins#VimPath() abort  " {{{1
 
   let s:path='.,**,,'
@@ -263,36 +198,6 @@ function! ftplugins#CPath() abort  " {{{1
   return s:path
 
 endfunction
-
-function! ftplugins#YAPF() abort  " {{{1
-  if exists(':TBrowseOutput')
-    " Realistically should accept func args
-    :TBrowseOutput !yapf %
-  else
-    " save old buffer
-    let s:old_buffer = nvim_get_buffer_lines()
-     call pydoc_help#scratch_buffer()
-  endif
-endfunction
-
-
-function! ftplugins#ALE_Python_Conf() abort  " {{{1
-
-  let b:ale_linters = ['flake8', 'pydocstyle', 'pyls']
-  let b:ale_linters_explicit = 1
-
-  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
-  let b:ale_fixers += [ 'reorder-python-imports' ]
-
-  if executable('yapf')
-    let b:ale_fixers += ['yapf']
-  else
-    if executable('autopep8')
-        let b:ale_fixers += ['autopep8']
-    endif
-  endif
-endfunction
-
 
 " Atexit: {{{1
 let &cpoptions = s:cpo_save

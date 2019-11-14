@@ -33,7 +33,7 @@ augroup YourFTDetect
   " au BufNewFile,BufRead Pipfile,Pipfile.lock setf requirements
 
   " JSON
-  au BufNewFile,BufRead *.json,*.jsonp,*.webmanifest,*.code-workspace set filetype=json
+  au BufNewFile,BufRead *.json,*.jsonp,*.webmanifest,*.code-workspace,*.jupyterlab-settings set filetype=json
 
   au BufNewFile,BufRead *.bash,.bashrc,.profile set filetype=bash
 

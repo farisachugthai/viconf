@@ -2,15 +2,10 @@
     " File: vim.vim
     " Author: Faris Chugthai
     " Description: vim ftplugin
-    " Last Modified: May 09, 2019
+    " Last Modified: Nov 14, 2019
 " ============================================================================
 
 " Guard: {{{1
-if exists('b:did_after_vim_ftplugin') || &compatible || v:version < 700
-  finish
-endif
-" let b:did_after_vim_ftplugin = 1
-
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
@@ -20,7 +15,7 @@ setlocal expandtab
 setlocal shiftwidth=2
 setlocal tabstop=2
 setlocal softtabstop=2
-setlocal suffixesadd+=.vim
+setlocal suffixesadd=.vim
 setlocal nolinebreak
 setlocal wrap
 
@@ -33,7 +28,8 @@ let &l:path = ftplugins#VimPath()
 " So that you can cleanly jump around inside of autoloaded func names
 setlocal iskeyword-=#
 
-setlocal include=^\\s*[^\/]\\+\\(from\\\|require(['\"]\\)
+" Wait what.
+" setlocal include=^\\s*[^\/]\\+\\(from\\\|require(['\"]\\)
 
 " Syntax Highlighting: {{{1
 
@@ -79,7 +75,9 @@ if !empty('g:loaded_ale')
 endif
 
 " Atexit: {{{1
-let b:undo_ftplugin = 'set com< cms< et< sw< ts< sts< lbr< sua< wrap< isk<  path<'
+let b:undo_ftplugin = 'setlocal com< cms< et< sw< ts< sts< lbr< sua< wrap< isk<'
+      \ . '|setlocal path<'
+      \ . '|unlet! b:undo_ftplugin'
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save
