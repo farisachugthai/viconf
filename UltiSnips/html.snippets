@@ -1,11 +1,13 @@
 # html.snippets
 
+priority 20
+
 global !p
 def x(snip):
-				if snip.ft.startswith("x"):
-								snip.rv = '/'
-				else:
-								snip.rv = ""
+if snip.ft.startswith("x"):
+    snip.rv = '/'
+else:
+    snip.rv = ""
 endglobal
 
 snippet doctype "HTML - 5.0 (doctype)" b
@@ -533,3 +535,5 @@ endsnippet
 snippet wbr "<wbr>" w
 <wbr>${1:text${VISUAL}}/wbr>
 endsnippet
+
+# Vim: set et:ts=4:sts=4:sw=4:

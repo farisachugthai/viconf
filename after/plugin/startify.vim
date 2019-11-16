@@ -10,15 +10,21 @@ if !exists('g:loaded_startify')
     finish
 endif
 
-if exists('g:did_startify_after_plugin') || &compatible || v:version < 700
-    finish
-endif
-let g:did_startify_after_plugin = 1
-" Temporarily turn this off
-finish
 
 " Startify Lists: {{{1
 
+let g:startify_commands = [
+    \ {'h': ['Vim Reference', 'h ref'],},
+    \ {'f': ['FZF!', 'FZF!'],},
+    \ {'g': ['Git status!', 'Gstatus'],},
+    \ ]
+
+" Temporarily turn this off
+finish
+
+" What the fuck! Its still reading everyrhing perfectly.
+"
+" In fact, if i comment out the finish it STOPS working...what the hell?
 let g:startify_lists = [
     \ { 'type': 'files',     'header': ['   MRU']                   },
     \ { 'type': 'dir',       'header': ['   MRU ' . getcwd()]       },
@@ -63,12 +69,6 @@ let g:startify_session_dir =  stdpath('config') . '/session'
 
 " General Options: {{{1
 " TODO: Check this works
-let g:startify_commands = [
-    \ {'h': ['Vim Reference', 'h ref'],},
-    \ {'f': ['FZF!', 'FZF!'],},
-    \ {'g': ['Git status!', 'Gstatus'],},
-    \ ]
-
 if has('unix')
   let g:startify_change_to_dir = 1
 endif

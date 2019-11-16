@@ -2,72 +2,49 @@
     " File: syncom.vim
     " Author: Faris Chugthai
     " Description: Syntax commands
-    " Last Modified: Jul 15, 2019
+    " Last Modified: Nov 13, 2019
 " ============================================================================
 "
 " Guards: {{{1
-
-if exists('g:did_autoload_syncom_vim') || &compatible || v:version < 700
-    finish
-endif
-let g:did_autoload_syncom_vim = 1
-
 let s:cpo_save = &cpoptions
 set cpoptions-=c
 
-" Syntax Highlighting Functions: {{{1
-
-" HL: Whats the highlighting group under my cursor? {{{1
-function! syncom#HL() abort
-
+function! syncom#HL() abort  " HL: Whats the highlighting group under my cursor? {{{1
   echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
+endfunction
+
+function! syncom#HiC() abort  " HiC: Show hl group and fg color {{{1
+  " This function could be expanded by expanding the hl groups
+  echomsg 'Highlighting group: ' . synIDattr(synID(line('.'), col('.'), 1), 'name')
+  echomsg 'Foreground color: ' . synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'fg')
 
 endfunction
 
-
-" HiC: Show hl group and fg color {{{1
-function! syncom#HiC() abort
-  " This function could be expanded with groups 
-  echo 'Highlighting group: ' . synIDattr(synID(line('.'), col('.'), 1), 'name')
-  echo 'Foreground color: ' . synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'fg')
-
-endfunction
-
-
-" HiDebug: {{{1
-
-function! syncom#HiD() abort
-
+function syncom#HiD() abort  " HiDebug: {{{1
   " TODO: Debug
   echo join(map(synstack(line('.'), col('.')),) synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'fg')
-
 endfunction
 
-" HiAll: Now utilize quickfix {{{1
 
-function! syncom#HiQF() abort
-
+function syncom#HiQF() abort  " HiAll: Now utilize quickfix {{{1
   " synstack returns a list. takes lnum and col.
   " map is crazy specific in its argument requirements. map(list, string)
   " cexpr evals a command and adds it to the quickfist list
   cexpr! map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-
 endfunction
 
-function! g:syncom#get_syn_id(transparent) abort  " {{{1
-
+function! syncom#get_syn_id(transparent) abort  " {{{1
   " Display syntax infomation on under the current cursor
   let synid = synID(line('.'), col('.'), 1)
+  " Wait are arguments allowed to be optional
   if a:transparent
     return synIDtrans(synid)
   else
     return synid
   endif
-
 endfunction
 
-function! g:syncom#get_syn_attr(synid) abort  " {{{1
-
+function! syncom#get_syn_attr(synid) abort  " {{{1
   let name = synIDattr(a:synid, 'name')
   let ctermfg = synIDattr(a:synid, 'fg', 'cterm')
   let ctermbg = synIDattr(a:synid, 'bg', 'cterm')
@@ -79,12 +56,10 @@ function! g:syncom#get_syn_attr(synid) abort  " {{{1
         \ 'ctermbg': ctermbg,
         \ 'guifg': guifg,
         \ 'guibg': guibg}
-
 endfunction
 
-function! g:syncom#get_syn_info() abort  " {{{1
-
-  let baseSyn = g:get_syn_attr(g:get_syn_id(0))
+function! syncom#get_syn_info() abort  " {{{1
+  let baseSyn = syncom#get_syn_attr(g:get_syn_id(0))
   echo 'name: ' . baseSyn.name .
         \ ' CTERMFG: ' . baseSyn.ctermfg .
         \ ' ctermbg: ' . baseSyn.ctermbg .
@@ -97,18 +72,15 @@ function! g:syncom#get_syn_info() abort  " {{{1
         \ ' ctermbg: ' . linkedSyn.ctermbg .
         \ ' guifg: ' . linkedSyn.guifg .
         \ ' guibg: ' . linkedSyn.guibg
-
 endfunction
 
-" Hitest: An easier way of sourcing hitest {{{1
-
-function! g:syncom#hitest() abort
-
-  try
-    so $VIMRUNTIME/syntax/hitest.vim
+function! syncom#hitest() abort  " Hitest: An easier way of sourcing hitest {{{1
+  try  " or just use runtime???
+    " so $VIMRUNTIME/syntax/hitest.vim
+    runtime $VIMRUNTIME/syntax/hitest.vim
   catch E403
   endtry
-
+  return v:true
 endfunction
 
 function! syncom#grepprg() abort  " {{{1
@@ -122,12 +94,16 @@ function! syncom#grepprg() abort  " {{{1
     throw 'syncom#grepprg: Rg not executable but grepprg set to it.'
   endif
 
-  let s:grep = s:rg . ' --vimgrep --no-messages --color=always --colors=ansi --smart-case --no-messages ^'
+  " actually between this coc and fzf maybe i should make rg options global
+  let s:rg_options = ' --vimgrep --no-messages --smart-case --no-messages --hidden --no-heading --max-columsn 300 --max-columns-preview --no-ignore-messages --trim ^'
+  " Well Im not gonna do it now.
+
+  let s:grep = s:rg . s:rg_options
 
   return s:grep
 endfunction
 
-function! syncom#gruvbox() abort
+function syncom#gruvbox() abort  " {{{1 old colorscheme
   if empty(globpath(&rtp, 'colors/gruvbox.vim'))
     return v:false
   else
@@ -140,7 +116,7 @@ function! syncom#gruvbox() abort
   endif
 endfunction
 
-function! syncom#gruvbox_material() abort
+function syncom#gruvbox_material() abort  " {{{1 new colorscheme
   " TODO:
   if empty(globpath(&rtp, 'colors/gruvbox-material.vim'))
     return v:false

@@ -34,7 +34,7 @@ class FileLink:
         """Initialize a file object."""
         self.nvim = nvim
         # Damnit why isnt it recognizing this as a func? this is the missing link
-        self.path_obj = nvim.call('nvim_get_current_buf()')
+        self.path_obj = self.nvim.call('nvim_get_current_buf()')
         if logger is not None:
             self.logger = logger
 
@@ -109,7 +109,7 @@ def main():
     # else:
     #     nvim = None
 
-    cur_file = FileLink(pynvim.Nvim, logger=LOGGER)
+    cur_file = FileLink(pynvim.api.nvim.Nvim, logger=LOGGER)
 
     if cur_file.is_symlink:
         cur_file.true_file()

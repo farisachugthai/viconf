@@ -37,8 +37,6 @@ let g:fzf_layout = { 'window': '-tabnew' }
 " Standardized vars: {{{2
 let g:ag_options = ' --smart-case -u -g " " --'
 
-
-
 let g:rg_options = ' --hidden --max-columns 300 --max-depth 8 --max-count 50 --color ansi --no-column --no-line-number  --no-heading --auto-hybrid-regex --max-columns-preview --no-messages --smart-case '
 
 
@@ -83,7 +81,7 @@ let g:fzf_colors =  {
       \  'fg':      ['fg', '#fbf1c7'],
       \  'bg':      ['bg', '#1d2021'],
       \  'hl':      ['fg', '#83a598'],
-      \  'fg+':     ['fg', '#ebdbb2', '#3c3836'],
+      \  'fg+':     ['fg', '#ec3836', '#3c3836', '#ebdbb2'],
       \  'bg+':     ['bg', '#ec3836', '#3c3836'],
       \  'hl+':     ['fg', '#fb4934'],
       \  'info':    ['fg', '#fabd2f'],
@@ -241,7 +239,7 @@ command! -bang -nargs=* FZGGrep
 "
 "   :Ag  - Start fzf with hidden preview window that can be enabled with "?" key
 "   :Ag! - Start fzf in fullscreen and display the preview window above
-command! -complete=dir -bang -nargs=* FZAgPreview
+command! -complete=dir -bang -nargs=* FZPreviewAg
   \ call fzf#vim#ag(<q-args>,
   \                 <bang>0 ? fzf#vim#with_preview('up:60%')
   \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
@@ -259,7 +257,7 @@ command! -complete=dir -bang -nargs=* FZRg
   " \   <bang>0))
 
 " Files With Preview Window: {{{2
-command! -bang -nargs=? -complete=dir YourFiles
+command! -bang -nargs=? -complete=dir FZPreviewFiles
   \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
 " PlugHelp: {{{2
@@ -277,7 +275,7 @@ command! -bang -nargs=* -complete=dir FZAgrep call fzf#vim#grep(s:ag_command .
 " Colors: {{{2
 " Override Colors command. You can safely do this in your .vimrc as fzf.vim
 " will not override existing commands.
-command! -bang FZColors
+command! -bang -nargs=0 -complete=color FZColors
   \ call fzf#vim#colors({'left': '35%',
   \ 'options': '--reverse --margin 30%,0'}, <bang>0)
 

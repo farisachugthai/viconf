@@ -6,10 +6,10 @@
 " ============================================================================
 
 " Guard: {{{1
-if exists('g:did_autoloads_vim') || &compatible || v:version < 700
+if exists('g:loaded_plugin_autoloads') || &compatible || v:version < 700
     finish
 endif
-let g:did_autoloads_vim = 1
+let g:loaded_plugin_autoloads = 1
 
 let s:cpo_save = &cpoptions
 set cpoptions-=C
@@ -35,6 +35,7 @@ set wildignorecase wildmode=full:list:longest,full:list
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 " C-n and C-p now use the same input that every other C-x does combined!
 " Remove includes they're pretty slow
+set wildcharm=<C-z>
 set complete+=kspell,d,k complete-=u,i
 
 " Create a preview window and display all possibilities but don't insert
@@ -54,8 +55,8 @@ imap <C-p> <C-x><C-p>
 
 " G Commands: {{{1
 
-vnoremap < <gv
-vnoremap > >gv
+xnoremap < <gv
+xnoremap > >gv
 " I just realized these were set to nnoremap. Meaning visual mode doesn't get this mapping
 noremap j gj
 noremap k gk
@@ -86,11 +87,12 @@ set tags^=./.git/tags tagcase=smart showfulltag
 " it out here!
 
 " Just realized this isn't mapped either
-nnoremap <C-}> [I:let nr = input("Choose an include: ")<Bar>exe "normal " . nr ."[\t"<CR>
+nnoremap <C-}> [I:let nr = input("Choose an include: ")<Bar>exe "normal! " . nr ."[\t"<CR>
 
-" Tagfunc
+" Tagfunc: {{{2
 
 " Lol literally what is this option?
+" well fuck. just errored on nvim4
 function! TagFunc(pattern, flags, info)
   function! CompareFilenames(item1, item2)
     let f1 = a:item1['filename']
@@ -104,8 +106,16 @@ function! TagFunc(pattern, flags, info)
 
   return result
 endfunc
-set tagfunc=TagFunc
 
+if has('nvim-0.5')
+  set tagfunc=TagFunc
+endif
+
+
+" Compiling:
+
+" just cuz
+command! -complete=compiler -nargs=? -buffer Make make <q-args> %
 " Atexit: {{{1
 
 let &cpoptions = s:cpo_save

@@ -1,6 +1,7 @@
 {
   "coc.preferences.bracketEnterImprove": true,
   "coc.preferences.currentFunctionSymbolAutoUpdate": true,
+  "coc.preferences.enableFloatHighlight": true,
   "coc.preferences.extensionUpdateCheck": "daily",
   "coc.preferences.formatOnSaveFiletypes": [
     "javascript",
@@ -18,19 +19,40 @@
   "coc.preferences.previewAutoClose": true,
   "coc.preferences.snippetStatusText": "",
   "coc.preferences.useQuickfixForLocations": true,
+  "coc.source.around.firstMatch": false,
   "coc.source.around.shortcut": "Coc-Around:",
   "coc.source.buffer.firstMatch": false,
+  "coc.source.buffer.ignoreGitignore": false,
   "coc.source.buffer.shortcut": "Coc-Buffer:",
+  "coc.source.dictionary.filetypes": [
+    "rst",
+    "md",
+    "text",
+    "json",
+    "help",
+    "html"
+  ],
   "coc.source.dictionary.priority": 40,
-  "coc.source.dictionary.filetypes": ["rst", "md", "text", "json", "help", "html"],
   "coc.source.dictionary.shortcut": "Coc-Dict:",
-  "coc.source.emoji.shortcut": "Coc-Emoji: ",
-  "coc.source.emoji.filetypes": ["rst", "md", "txt", "help", "html"],
-  "coc.source.emoji.triggerCharacters": [":"],
+  "coc.source.emoji.filetypes": [
+    "rst",
+    "md",
+    "txt",
+    "help",
+    "html"
+  ],
   "coc.source.emoji.priority": 99,
+  "coc.source.emoji.shortcut": "Coc-Emoji: ",
+  "coc.source.emoji.triggerCharacters": [
+    ":"
+  ],
   "coc.source.file.ignoreHidden": false,
   "coc.source.file.priority": 80,
   "coc.source.file.shortcut": "Coc-Files: ",
+  "coc.source.file.trimSameExts": [
+    ".ts",
+    ".js"
+  ],
   "coc.source.issues.shortcut": "Coc-Issues:",
   "coc.source.omni.priority": 99,
   "coc.source.omni.shortcut": "Coc-Omni:",
@@ -50,7 +72,13 @@
   ],
   "coc.source.ultisnips.priority": 99,
   "coc.source.ultisnips.shortcut": "Coc-UltiSnips:",
-  "coc.source.word.filetypes": ["rst", "md", "txt", "help", "html"],
+  "coc.source.word.filetypes": [
+    "rst",
+    "md",
+    "txt",
+    "help",
+    "html"
+  ],
   "coc.source.word.priority": 30,
   "coc.source.word.shortcut": "Coc-Word: ",
   "codeLens.enable": true,
@@ -82,54 +110,80 @@
   "git.stagedDecorator": " Ξ ",
   "git.untrackedDecorator": " : Untracked : ",
   "git.virtualTextPrefix": "Coc-Git:",
+  "highlight.trace.server": "messages",
+  "html.filetypes": [
+    "html",
+    "handlebars",
+    "htmldjango",
+    "htmljinja",
+    "smarty"
+  ],
   "html.format.enable": true,
-  "html.filetypes": ["html", "handlebars", "htmldjango", "htmljinja", "smarty"],
+  "javascript.referencesCodeLens.enable": true,
   "javascript.showUnused": true,
   "javascript.suggest.names": true,
-  "javascript.referencesCodeLens.enable": true,
   "javascript.suggestionActions.enabled": true,
-  "json.trace.server": "messages",
   "json.format.enable": true,
+  "json.trace.server": "messages",
   "languageserver": {
     "clangd": {
+      "args": [
+        "--background-index"
+      ],
       "command": "clangd",
+      "filetypes": [
+        "c",
+        "cpp",
+        "objc",
+        "objcpp"
+      ],
+      "rootPatterns": [
+        "compile_flags.txt",
+        "compile_commands.json",
+        ".git/",
+        ".hg/"
+      ],
       "shell": true,
-      "trace.server": "messages",
-      "args": ["--background-index"],
-      "rootPatterns": ["compile_flags.txt", "compile_commands.json", ".git/", ".hg/"],
-      "filetypes": ["c", "cpp", "objc", "objcpp"]
+      "trace.server": "messages"
     },
-  "vimlsp": {
-    "command": "vim-language-server",
-    "args": [
-      "--stdio"
-    ],
-    "initializationOptions": {
-      "iskeyword": "@,48-57,_,192-255,-#", // vim iskeyword option
-      "vimruntime": "$VIMRUNTIME",                    // $VIMRUNTIME option
-      "runtimepath": "&rtp",                   // vim runtime path separate by `,`
-      "diagnostic": {
-        "enable": true
-      },
-      "indexes": {
-        "runtimepath": true,      // if index runtimepath's vim files this will effect the suggest
-        "gap": 100,               // index time gap between next file
-        "count": 3,               // count of files index at the same time
-        "workDirPatterns" : [".git", "autoload", "plugin"] // Names of files used as the mark of project root. If empty, the default value [".git", "autoload", "plugin"] will be used
-      },
-      "suggest": {
-        "fromVimruntime": true,   // completionItems from vimruntime's vim files
-        "fromRuntimepath": false  // completionItems from runtimepath's vim files, if this is true that fromVimruntime is true
+    "vimlsp": {
+      "args": [
+        "--stdio"
+      ],
+      "command": "vim-language-server",
+      "filetypes": [
+        "vim"
+      ],
+      "initializationOptions": {
+        "diagnostic": {
+          "enable": true
+        },
+        "indexes": {
+          "count": 3,
+          "gap": 100,
+          "runtimepath": true,
+          "workDirPatterns": [
+            ".git",
+            "autoload",
+            "plugin"
+          ]
+        },
+        "iskeyword": "@,48-57,_,192-255,-#",
+        "runtimepath": "&rtp",
+        "suggest": {
+          "fromRuntimepath": false,
+          "fromVimruntime": true
+        },
+        "vimruntime": "$VIMRUNTIME"
       }
-    },
-    "filetypes": [ "vim" ]
-  }
+    }
   },
   "list.extendedSearchMode": true,
   "list.indicator": "COC: ",
   "list.limitLines": 500,
   "list.previewHighlightGroup": "IdentifierBold",
   "list.selectedSignText": "****",
+  "list.signOffset": 20,
   "list.source.actions.defaultArgs": [
     "quickfix"
   ],
@@ -329,7 +383,6 @@
     "vimcommands",
     "windows"
   ],
-  "highlight.trace.server": "messages",
   "powershell.codeFolding.showLastLine": false,
   "powershell.codeFormatting.openBraceOnSameLine": true,
   "powershell.codeFormatting.useCorrectCasing": true,
@@ -346,16 +399,14 @@
   "python.autoComplete.addBrackets": true,
   "python.autoComplete.showAdvancedMembers": true,
   "python.autoUpdateLanguageServer": true,
-  "python.jediMemoryLimit": -1,
   "python.jediEnabled": false,
+  "python.jediMemoryLimit": -1,
   "python.jediShortcut": "Jedi",
   "python.linting.flake8Path": "python -m flake8",
   "python.linting.pylintEnabled": false,
   "python.terminal.activateEnvironment": true,
   "python.terminal.executeInFileDir": true,
   "python.trace.server": "messages",
-  "python.workspaceSymbols.rebuildOnStart": true,
-  "python.workspaceSymbols.tagFilePath": "${workspaceFolder}/tags",
   "python.workspaceSymbols.exclusionPatterns": [
     "**/site-packages/**",
     "node_modules",
@@ -364,14 +415,16 @@
     ".tox",
     ".venv"
   ],
+  "python.workspaceSymbols.rebuildOnStart": true,
+  "python.workspaceSymbols.tagFilePath": "${workspaceFolder}/tags",
   "refactor.afterContext": 0,
   "refactor.beforeContext": 0,
   "refactor.openCommand": "vsplit",
   "session.directory": "~/.local/share/nvim/session",
   "session.restartOnSessionLoad": true,
-  "signature.maxWindowHeight": 14,
   "signature.enable": true,
   "signature.hideOnTextChange": true,
+  "signature.maxWindowHeight": 14,
   "signature.preferShownAbove": false,
   "signature.target": "float",
   "signature.triggerSignatureWait": 300,
@@ -382,8 +435,6 @@
     ]
   },
   "snippets.shortcut": "<Tab>",
-  "snippets.ultisnips.pythonVersion": 3,
-  "suggest.snippetIndicator": "\u26a1 ",
   "snippets.snipmate.author": "Faris A. Chugthai",
   "snippets.snipmate.enable": false,
   "snippets.trace": "verbose",
@@ -397,6 +448,7 @@
     "~/AppData/Local/coc/ultiSnips",
     "~/AppData/Local/nvim/UltiSnips"
   ],
+  "snippets.ultisnips.pythonVersion": 3,
   "suggest.acceptSuggestionOnCommitCharacter": true,
   "suggest.autoTrigger": "always",
   "suggest.completionItemKindLabels": {
@@ -439,13 +491,10 @@
   "suggest.maxCompleteItemCount": 100,
   "suggest.noselect": true,
   "suggest.preferCompleteThanJumpPlaceholder": false,
+  "suggest.snippetIndicator": "⚡ ",
   "suggest.timeout": 800,
   "suggest.triggerAfterInsertEnter": true,
   "suggest.triggerCompletionWait": 50,
-  "typescript.showUnused": true,
-  "typescript.referencesCodeLens.enable": true,
-  "typescript.suggest.completeFunctionCalls": true,
-  "typescript.suggest.autoImports": true,
   "tslint.enable": true,
   "tsserver.implicitProjectConfig.checkJs": true,
   "tsserver.implicitProjectConfig.experimentalDecorators": true,
@@ -453,13 +502,17 @@
   "tsserver.log": "normal",
   "typescript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
   "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+  "typescript.referencesCodeLens.enable": true,
+  "typescript.showUnused": true,
+  "typescript.suggest.autoImports": true,
+  "typescript.suggest.completeFunctionCalls": true,
   "vimlsp.debug": true,
-  "vimlsp.trace.server": "messages",
   "vimlsp.diagnostic.enable": true,
-  "vimlsp.suggest.fromVimruntime": true,
-  "vimlsp.suggest.fromRuntimepath": true,
+  "vimlsp.indexes.count": 3,
   "vimlsp.indexes.runtimepath": true,
-  "list.signOffset": 20,
+  "vimlsp.suggest.fromRuntimepath": true,
+  "vimlsp.suggest.fromVimruntime": true,
+  "vimlsp.trace.server": "messages",
   "workspace.ignoredFiletypes": [
     "markdown",
     "log",
@@ -469,7 +522,7 @@
   "yaml.format.enable": true,
   "yaml.format.proseWrap": "always",
   "yaml.trace.server": "messages",
-  "yank.priority": 95,
   "yank.enableCompletion": true,
-  "yank.limit": 30
+  "yank.limit": 30,
+  "yank.priority": 95
 }

@@ -32,7 +32,7 @@ function! StatusDiagnostic() abort
   return join(msgs, ' ') . ' ' . get(g:, 'coc_status', '')
 endfunction
 
-function! Statusline_expr() abort
+function! s:Statusline() abort
   " Define statusline groups for WebDevIcons, Fugitive and other plugins.
   " Define empty fallbacks if those plugins aren't installed. Then
   " use the builtins to fill out the information.
@@ -91,6 +91,11 @@ function! Statusline_expr() abort
         \. pos . '%*' . ' %P'
 
 
+endfunction
+
+function! Statusline_expr() abort
+  " Lets give a nicer clean entry point.
+  return s:Statusline()
 endfunction
 
 augroup YourStatusline

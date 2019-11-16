@@ -79,7 +79,7 @@ set foldenable foldlevelstart=0 foldlevel=0 foldopen=quickfix,search,tag,undo,ju
 set foldnestmax=10 foldmethod=marker foldcolumn=2
 set signcolumn=auto:2  " this might be a nvim 4 thing
 
-try | set switchbuf=useopen,usetab,newtab | catch | endtry
+try | set switchbuf=useopen,usetab,split | catch | endtry
 
 set hidden
 set splitbelow splitright sidescroll=5

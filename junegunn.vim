@@ -27,7 +27,7 @@ let $NVIM_COC_LOG_FILE = stdpath('data')  . '/site/coc.log'
 " let $NVIM_COC_LOG_LEVEL = 'DEBUG'
 let $NVIM_COC_LOG_LEVEL = 'ERROR'
 
-" Plug 'junegunn/vim-plug'
+Plug 'junegunn/vim-plug', {'dir': './vim-plug'}
 let g:plug_window = 'tabe'
 
 Plug 'junegunn/fzf', { 'dir': expand('~/.fzf'), 'do': './install --all' }
@@ -66,9 +66,11 @@ endif
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 nnoremap U <Cmd>UndotreeToggle<CR>
 
-if has('ruby')
+" Dude checkijg the remote hosts is blocking and doing it this early is murder
+" to startuptime. Just went from 280ms to 800.
+" if has('ruby')
   Plug 'greyblake/vim-preview', {'on': 'Preview'}
-endif
+" endif
 " The 'tabular' plugin must come _before_ 'vim-markdown'.
 Plug 'godlygeek/tabular'
 Plug 'itspriddle/vim-shellcheck', { 'for': ['sh', 'bash'] }

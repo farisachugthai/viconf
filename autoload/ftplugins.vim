@@ -99,6 +99,7 @@ endfunction
 
 
 function! ftplugins#ALE_sh_conf() abort  " {{{1
+  " this is probably a waste of time when compiler shellcheck exists
   " if we're using powershell or cmd on windows set ALEs default shell to bash
   " TODO: set the path to shellcheck.
   if has('unix')
@@ -163,17 +164,14 @@ endfunction
 function! ftplugins#VimPath() abort  " {{{1
 
   let s:path='.,**,,'
-  let s:path = s:path . ',' . expand('$VIMRUNTIME')
+  let s:path = s:path . ',' . expand('$VIMRUNTIME') . '/*,'
 
   if !exists('*stdpath')
     " honestly this is too hard without this
     return s:path
   endif
 
-  " let s:path = s:path . ',' . stdpath('data') . '/plugged/**4'
-  " let s:path = s:path . ',' . &rtp
-  " rtp adds way too many things but add all my files
-  let s:path = s:path . ',' . stdpath('config') . '/**'
+  let s:path =  stdpath('config') . ',' . s:path
   return s:path
 
 endfunction
