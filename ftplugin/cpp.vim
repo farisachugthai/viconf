@@ -5,9 +5,9 @@
 " Last Change: Nov 06, 2019
 
 " Only do this when not done yet for this buffer
-if exists("b:did_ftplugin")
-  finish
-endif
+" if exists("b:did_ftplugin")
+"   finish
+" endif
 
 " Behaves just like C
 " But don't use the exclamation mark

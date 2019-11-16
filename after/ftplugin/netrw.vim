@@ -5,15 +5,6 @@
     " Last Modified: Oct 14, 2019
 " ============================================================================
 
-" Guards: {{{1
-if exists('b:did_netrw_after_ftplugin') || &compatible || v:version < 700
-    finish
-endif
-let b:did_netrw_after_ftplugin = 1
-
-let s:cpo_save = &cpoptions
-set cpoptions-=C
-
 " Options: {{{1
 " Can be modified interactively using `:NetrwSettings` !!
 
@@ -70,19 +61,27 @@ let g:netrw_bufsettings='noma nomod nobl nowrap ro rnu'
 let g:netrw_usetab = 1
 
 " Unfortnately though, the <tab> map means <C-Tab>. Can we also get <Tab>?
-nnoremap <buffer> <Tab>	<Plug>NetrwShrink
+
+" Jump down to mappings to see more
 
 let g:netrw_preview = 1
 
 " Defaults to 50%
 " let g:netrw_winsize = 70
 " This is the wrong way
+" still massive wth
 let g:netrw_winsize = 30
 
 " Long as hell but a bool indicating that theres special HL
 let g:netrw_special_syntax    = v:true
 
 " Mappings: {{{1
+
+if &filetype !=# 'netrw'
+  finish
+endif
+
+" let's fix these fucking mappings like wth
 "
 " wth why is this a thing.
 nunmap <buffer> a
@@ -99,13 +98,18 @@ vunmap <buffer> <RightMouse>
 " THE DEFAULT MAPPINGS TO RMDIR THE DIR YOU'RE CURRENTLY IN WHAT THE FUCK
 " NETRW
 
-noremap <buffer> ^ <Plug>NetrwBrowseUpDir<Space>
+
+"Don't worry about this guy just make sure vinegar is installed
+" noremap <buffer> ^ <Plug>NetrwBrowseUpDir<Space>
 
 " I have no idea why but this line isn't working and its generating an error
 " that netrw buffers aren't modifiable....
 " nnoremap <buffer> <F1>			:he netrw-quickhelp<cr>
 " ....wtf?
 nnoremap <buffer> <F1> <Cmd>help netrw-quickhelp<CR>
+
+" See g:netrw_preview above
+nnoremap <buffer> <Tab>	<Plug>NetrwShrink
 
 " Atexit: {{{1
 let b:undo_ftplugin = '| unmap <buffer> ^'

@@ -6,11 +6,6 @@
 " ============================================================================
 
 " Guard: {{{1
-if exists('g:did_better_whitespace_vim') || &compatible || v:version < 700
-  finish
-endif
-let g:did_better_whitespace_vim = 1
-
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 

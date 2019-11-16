@@ -6,14 +6,6 @@
 " ============================================================================
 
 " Guard: {{{1
-if exists('b:did_help_vim') || &compatible || v:version < 700
-  finish
-endif
-let b:did_help_vim = 1
-
-if exists('b:did_ftplugin') | finish | endif
-let b:did_ftplugin = 1
-
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
@@ -26,18 +18,18 @@ if has("conceal")
   setlocal cole=2 cocu=nc
 endif
 
-let &l:path .=  &path .  ',' . expand('$VIMRUNTIME') . '/doc/*.txt'
-
 " Helpfiles won't follow tags correctly without this one
 " Now context-functions will probably go to the tag I want and not simply functions...
 setlocal iskeyword+=-
-let b:undo_ftplugin = "setl fo< tw< cole< cocu< keywordprg<"
 
-unlet! b:did_ftplugin
-" Source mine in
+" we previously set the path var but that didn't make sense. set tags
+" also note that this doesn't work at all
+" let &l:tags = globpath(&rtp, '*tags')
+
+let b:undo_ftplugin = "setlocal fo< tw< cole< cocu< keywordprg< tags<"
+
 runtime ftplugin/man.vim
 
-let b:undo_ftplugin = "setl fo< tw< cole< cocu< keywordprg<"
 
 " Mappings: {{{1
 
@@ -51,13 +43,14 @@ let b:undo_ftplugin = "setl fo< tw< cole< cocu< keywordprg<"
 " ALE as always
 " I think this is probably the best way to define the buffer local fixers
 " based on the global ones.
-let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
+" wait why the hell do i set this most help docs arent modifiable
+if &modifiable
+  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
 
-let b:ale_fixers += ['align_help_tags'] " Align help tags to the right margin
+  let b:ale_fixers += ['align_help_tags'] " Align help tags to the right margin
+endif
 
 " Atexit: {{{1
 
-let b:undo_ftplugin += 'path< '
 let &cpoptions = s:cpo_save
-
 unlet s:cpo_save

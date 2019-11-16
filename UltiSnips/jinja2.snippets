@@ -9,25 +9,23 @@ priority 80
 # unicode support, an optional integrated sandboxed execution
 # environment, widely used and BSD licensed.
 
-# extends html
-# extends htmljinja
+extends htmljinja, html, html_minimal
 
 snippet comment "Add a jinja comment" b
-{# ${1:${VISUAL}} #} $0
+{# ${1:${VISUAL}} #}
 endsnippet
 
 snippet jinjablock "Block" b
-{% block ${1:name} %}
-		$2
+{% block ${1:${VISUAL}} %}
 {% endblock $1 %}
 endsnippet
 
 snippet {{ "variable" b
-{{ ${0:${VISUAL:var}} }}
+{{ ${0:${VISUAL}} }}
 endsnippet
 
 snippet var "variable" b
-{{ ${0:${VISUAL:var}} }}
+{{ ${0:${VISUAL}} }}
 endsnippet
 
 snippet {# "comment" b
@@ -41,29 +39,29 @@ endsnippet
 
 snippet raw "escaped block" b
 {% raw %}
-		$1
+${0:${VISUAL}}
 {% endraw %}
 endsnippet
 
 snippet extends "extends" b
-{% extends "${1:template}" %}
+{% extends "${1:${VISUAL}}" %}
 endsnippet
 
 snippet include "include" b
-{% include "${1:template}" %}
+{% include "${1:${VISUAL}}" %}
 endsnippet
 
 snippet import "import" b
-{% import "${1:template}" %}
+{% import "${1:${VISUAL}}" %}
 endsnippet
 
 snippet from "from/import/as" b
-{% from "${1:template}" import ${2:name}${3: as ${4:$2}} %}
+{% from "${1:${VISUAL}}" import ${2:name}${3: as ${4:$2}} %}
 endsnippet
 
 snippet filter "filter" b
-{% filter ${1:filter} %}
-	$2
+{% filter ${1:${VISUAL}} %}
+	$0
 {% endfilter %}
 endsnippet
 
@@ -72,28 +70,28 @@ endsnippet
 
 # Uh I'd agree
 snippet for "for" b
-{% for ${1:item} in ${2:sequence} %}
+{% for ${1:${VISUAL}} in ${2:sequence} %}
 	3${4:
 {% else %}
-    $5}
+	$5}
 {% endfor %}
 endsnippet
 
 # snippet for "for" b
 # {% for ${1:item} in ${2:sequence} %}
-# 	$3
+#	$3
 # {% endfor %}
 # endsnippet
 
 
 snippet if "if" b
-{% if ${1:expr} %}
+{% if ${1:${VISUAL}} %}
 	$2
 {% endif %}
 endsnippet
 
 snippet if "if/else" b
-{% if ${1:expr} %}
+{% if ${1:${VISUAL}} %}
 	$2
 {% else %}
 	$3
@@ -101,7 +99,7 @@ snippet if "if/else" b
 endsnippet
 
 snippet if "if/elif/else" b
-{% if ${1:expr} %}
+{% if ${1:${VISUAL}} %}
 	$2
 {% elif %}
 	$3
@@ -128,19 +126,19 @@ endsnippet
 
 snippet trans "translation" b
 {% trans %}
-	$1
+	${0:${VISUAL}}
 {% endtrans %}
 endsnippet
 
 snippet with "with" b
 {% with %}
-	$1
+	${0:${VISUAL}}
 {% endwith %}
 endsnippet
 
 snippet autoescape "autoescape" b
 {% autoescape ${1:true} %}
-	$2
+	${2:${VISUAL}}
 {% endautoescape %}
 endsnippet
 
@@ -148,7 +146,7 @@ endsnippet
 # @todo: expand only when snippet is preceeded by a |
 
 snippet batch "batch items" w
-batch(linecount=$1, fill_with=${2:None})
+batch(linecount=${1:${VISUAL}}, fill_with=${2:None})
 endsnippet
 
 snippet dictsort "sort and yield (key, value) pairs" w
@@ -182,3 +180,5 @@ endsnippet
 snippet indent "indent" w
 indent(width=${1:4}, indentfirst=${2:False})
 endsnippet
+
+# Vim: et:sts=4:sw=4:ft=snippets:

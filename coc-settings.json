@@ -83,9 +83,8 @@
   "coc.source.word.shortcut": "Coc-Word: ",
   "codeLens.enable": true,
   "codeLens.separator": "‣",
-  "css.trace.server": "messages",
-  "cursors.nextKey": "<Tab>",
-  "cursors.previousKey": "<S-Tab>",
+  "cursors.nextKey": "<M-Tab>",
+  "cursors.previousKey": "<M-S-Tab>",
   "diagnostic.checkCurrentLine": true,
   "diagnostic.displayByAle": false,
   "diagnostic.enableMessage": "always",
@@ -144,7 +143,10 @@
         ".hg/"
       ],
       "shell": true,
-      "trace.server": "messages"
+      "trace.server": "messages",
+      "args": ["--background-index"],
+      "rootPatterns": ["compile_flags.txt", "compile_commands.json", ".git/", ".hg/"],
+      "filetypes": ["c", "cpp", "objc", "objcpp"]
     },
     "vimlsp": {
       "args": [
@@ -407,6 +409,9 @@
   "python.terminal.activateEnvironment": true,
   "python.terminal.executeInFileDir": true,
   "python.trace.server": "messages",
+  "python.workspaceSymbols.rebuildOnStart": true,
+  "python.workspaceSymbols.tagFilePath": "${workspaceFolder}/tags",
+  "python.venvFolders": ["~/.virtualenvs"],
   "python.workspaceSymbols.exclusionPatterns": [
     "**/site-packages/**",
     "node_modules",
@@ -435,9 +440,46 @@
     ]
   },
   "snippets.shortcut": "<Tab>",
+  "snippets.shortcut": "<Tab>",
+  "snippets.ultisnips.pythonVersion": 3,
+  "suggest.snippetIndicator": "\u26a1 ",
+  "snippets.shortcut": "SNIP",
+  "snippets.ultisnips.pythonVersion": 3,
+  "suggest.defaultSortMethod": "length",
+  "suggest.minTriggerInputLength": 3,
+  "suggest.removeDuplicateItems": true,
+  "snippets.autoTrigger": true,
+  "snippets.priority": 90,
+  "snippets.userSnippetsDirectory": "~/projects/viconf/UltiSnips",
+  "list.nextKeymap": "<C-n>",
+  "list.previewSplitRight": true,
+  "list.maxHeight": 20,
+  "list.autoResize": true,
+  "list.previousKeymap": "<C-p>",
+  "list.maxPreviewHeight": 25,
+  "list.interactiveDebounceTime": 200,
+  "list.source.mru.ignoreGitIgnore": true,
+  "yank.list.maxsize": 300,
+  "git.removedSign.text": "_",
+  "git.changedDecorator": "*",
+  "python.linting.pydocstyleEnabled": true,
+  "python.analysis.diagnosticPublishDelay": 300,
+  "python.terminal.launchArgs": ["-U" ],
+  "list.source.tags.command": "~/bin/ctags.exe -R --options=~/.ctags/universal_ctags.ctags .",
+  "list.source.searchhistory.defaultOptions": ["--top", "--tab", "--regex"],
+  "emmet.showAbbreviationSuggestions": true,
+  "emmet.showExpandedAbbreviation": "inMarkupAndStylesheetFilesOnly",
+  "emmet.preferences": {
+    "profile.allowCompactBoolean": false,
+    "filter.commentTrigger": [
+      "id",
+      "class"
+    ]
+  },
+  "suggest.languageSourcePriority": 99,
+  "suggest.snippetIndicator": "\u26a1 ",
   "snippets.snipmate.author": "Faris A. Chugthai",
   "snippets.snipmate.enable": false,
-  "snippets.trace": "verbose",
   "snippets.triggerCharacters": [
     "Tab",
     "C-j"
@@ -478,7 +520,7 @@
     "value": "",
     "variable": ""
   },
-  "suggest.detailField": "preview",
+  "suggest.detailField": "menu",
   "suggest.disableMenu": true,
   "suggest.disableMenuShortcut": true,
   "suggest.enablePreselect": false,
@@ -496,6 +538,7 @@
   "suggest.triggerAfterInsertEnter": true,
   "suggest.triggerCompletionWait": 50,
   "tslint.enable": true,
+  "tsserver.enable": true,
   "tsserver.implicitProjectConfig.checkJs": true,
   "tsserver.implicitProjectConfig.experimentalDecorators": true,
   "tsserver.locale": "utf8",
@@ -507,6 +550,8 @@
   "typescript.suggest.autoImports": true,
   "typescript.suggest.completeFunctionCalls": true,
   "vimlsp.debug": true,
+  "vimlsp.debug": true,
+  "vimlsp.trace.server": "messages",
   "vimlsp.diagnostic.enable": true,
   "vimlsp.indexes.count": 3,
   "vimlsp.indexes.runtimepath": true,
@@ -522,6 +567,9 @@
   "yaml.format.enable": true,
   "yaml.format.proseWrap": "always",
   "yaml.trace.server": "messages",
+  "yaml.trace.server": "messages",
+  "yank.priority": 95,
+  "yank.priority": 95,
   "yank.enableCompletion": true,
   "yank.limit": 30,
   "yank.priority": 95

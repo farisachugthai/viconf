@@ -6,6 +6,8 @@
 " ============================================================================
 
 " Guards: {{{1
+" is did_load_filetypes already taken? then why is that the example in the
+" help?
 if exists("b:loaded_your_filetypes")
   finish
 endif
@@ -18,6 +20,9 @@ set cpoptions-=C
 
 " Idk if i did this right
 let g:requirements#detect_filename_pattern = 'Pipfile'
+
+let g:is_bash = 1
+
 
 " Autocmds: {{{1
 augroup YourFTDetect
@@ -38,6 +43,7 @@ augroup YourFTDetect
   au BufNewFile,BufRead *.bash,.bashrc,.profile set filetype=bash
 
   au BufNewFile,BufRead *.sip set filetype=cpp
+
 augroup END
 
 " Atexit: {{{1

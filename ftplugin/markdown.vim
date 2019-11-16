@@ -6,15 +6,6 @@
 " ============================================================================
 
 " Needed to autoload the funcs and drop the runtime! to a runtime html call
-
-" Guard: {{{1
-if exists('b:did_ftplugin')
-  finish
-endif
-
-let s:cpo_save = &cpoptions
-set cpoptions-=C
-
 " Options: {{{1
 
 runtime ftplugin/html.vim ftplugin/html_*.vim ftplugin/html/*.vim
@@ -46,12 +37,12 @@ setlocal foldlevel=0 foldlevelstart=0
 " TPope's markdown plugin. Light enough footprint when settings vars to not
 " need a check
 let g:markdown_fenced_languages = [
-      \. 'python', 'bash=sh',
-      \. 'c++=cpp', 'viml=vim',
-      \. 'bash=sh', 'ini=dosini',
-      \. 'vim',
-      \. 'help',
-      \. ]
+      \ 'ipython=python',
+      \ 'bash=sh',
+      \ 'c++=cpp',
+      \ 'viml=vim',
+      \ 'ini=dosini',
+      \ ]
 
 let g:markdown_minlines = 100
 
@@ -122,8 +113,5 @@ if has_key(plugs, 'vim-markdown')
 
 endif
 
-" Atexit: {{{1
 
 let b:undo_ftplugin .= 'setl spell< cc< tw< lbr< et< ts< sts< sw< fdl< fdls<'
-let &cpoptions = s:cpo_save
-unlet s:cpo_save

@@ -33,3 +33,17 @@ want to use.  They do not contain personal preferences, like the value of
 
 If you want to do additional settings, or overrule the default filetype
 plugin, you can create your own plugin file.  See `:help ftplugin` in Vim.
+
+Guards
+-------
+
+I don't know what I'm doing wrong but when I prepend the files in this directory
+with the standard::
+
+   if exists("b:did_ftplugin")
+      finish
+   endif
+   let b:did_ftplugin = 1
+
+That file immediately stops executing anything. So are my ftplugins being loaded
+after the ones in ``$VIMRUNTIME``? Why?

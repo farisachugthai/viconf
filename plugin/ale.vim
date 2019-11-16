@@ -52,9 +52,10 @@ let g:ale_virtualtext_delay = 200
 let g:ale_sign_highlight_linenrs = 1
 
 " But lets try opening the preview window when the cursor moves to something
-let g:ale_cursor_detail = 1
+" let g:ale_cursor_detail = 1
+" holy fuck no
 let g:ale_close_preview_on_insert = 1
-let g:ale_echo_cursor = 1
+let g:ale_echo_cursor = 0
 
 " Signs: {{{2
 

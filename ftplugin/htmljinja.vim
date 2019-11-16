@@ -6,18 +6,18 @@
 " ============================================================================
 
 " Guards: {{{1
-if exists('b:did_ftplugin_htmljinja_vim') || &compatible || v:version < 700
-  finish
-endif
-let b:did_ftplugin_htmljinja_vim = 1
+" if exists('b:did_ftplugin_htmljinja_vim') || &compatible || v:version < 700
+"   finish
+" endif
+" let b:did_ftplugin_htmljinja_vim = 1
 
 " Override any builtin ftplugin:
 " There isn't one distributed for nvim or vim and Armin's is only the
 " did_ftplugin check with a runtime! ftplugin/html.vim
 " But runtime! takes too long.
-if exists("b:did_ftplugin")
-  finish
-endif
+" if exists("b:did_ftplugin")
+"   finish
+" endif
 
 let s:cpo_save = &cpoptions
 set cpoptions-=C
@@ -30,6 +30,8 @@ runtime ftplugin/html.vim
 
 " Atexit: {{{1
 
-let b:undo_ftplugin = 'set sw< et< sts< '
+let b:undo_ftplugin = 'setlocal sw< et< sts< '
+      \ . '|unlet! b:undo_ftplugin'
+
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

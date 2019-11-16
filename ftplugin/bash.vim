@@ -6,9 +6,12 @@
 " ============================================================================
 
 " Guard: {{{1
-if exists("b:did_ftplugin")
-  finish
-endif
+" if exists("b:did_ftplugin")
+"   finish
+" endif
+" let b:did_ftplugin = 1
+" So I am apparently doing something very wrong because you lose sh syntax
+" highlighting when you uncomment those. go figure
 
 let s:cpo_save = &cpoptions
 set cpoptions-=C
@@ -16,7 +19,6 @@ set cpoptions-=C
 " Options: {{{1
 
 runtime ftplugin/sh.vim after/ftplugin/sh.vim
-let b:did_ftplugin = 1
 
 " Just in case i didn't get them fro the sh plugin
 let g:is_bash = 1

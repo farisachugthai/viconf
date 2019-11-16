@@ -431,6 +431,7 @@ class ItalicWrapper(TextTag):
         return "<i>{}</i>".format(self._wrapped.render())
 
 
+
 def create_table(snip):
     """Create a table. Used for markdown snippets.
 
@@ -499,6 +500,19 @@ def split_line(text):
 	snip.buffer.append(output, snip_line + 1)
 	del snip.buffer[snip_line]
 
+
 def get_args(arglist):
 	args = [arg.strip() for arg in arglist.split(',') if arg]
 	return args
+
+
+def x(snip):
+    """From html.snippets."""
+    if snip.ft.startswith("x"):
+        snip.rv = '/'
+    else:
+        snip.rv = ""
+        if snip.ft.startswith("x"):
+            snip.rv = '/'
+        else:
+            snip.rv = ""

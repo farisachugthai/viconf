@@ -1,4 +1,4 @@
-" ============================================================================
+" ============================================================================{{{}}}
     " File: c.vim
     " Author: Faris Chugthai
     " Description: The C Programming Language
@@ -10,16 +10,24 @@ let s:cpo_save = &cpoptions
 set cpoptions&vim
 
 " Options: {{{1
+" GCC					*quickfix-gcc*	*compiler-gcc*
+
+" There's one variable you can set for the GCC compiler:
+
+" 				Ignore lines that don't match any patterns
+" 				defined for GCC.  Useful if output from
+" 				commands run from make are generating false
+				" positives.
+let g:compiler_gcc_ignore_unmatched_lines = 1
 
 setlocal suffixesadd=.c,.h,.cpp
 setlocal cindent
 if filereadable('Makefile')
   setlocal makeprg=make\ %<.o
-endif
-
-if executable('gcc')  " Because of windows
+elseif executable('gcc')  " Because of windows
   compiler gcc
-  echomsg 'ftplugin/cpp.vim: Using gcc as the compiler'
+  setlocal makeprg=gcc\ %<.o
+  echomsg 'after/ftplugin/c.vim: Using gcc as the compiler'
 endif
 
 if exists(':Man') == 2
@@ -39,49 +47,54 @@ setlocal include=^\s*#\s*include
 
 let &l:path=ftplugins#CPath()
 
+let b:undo_ftplugin = 'setlocal sua< cin< mp< ofu< kp< include<'
+      \ . '|unlet! &l:path'
+      \ . '|unlet! b:undo_ftplugin'
+
 " Cscope Mappings: {{{1
 if has('cscope') && executable('cscope')
   " Reasonably good inspiration for other ftplugins
 
-  nnoremap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
-  nnoremap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
-  nnoremap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
-  nnoremap <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>
-  nnoremap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>
-  nnoremap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
-  nnoremap <C-\>i :cs find i <C-R>=expand("<cfile>")<CR><CR>
+  nnoremap <buffer> <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+  nnoremap <buffer> <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+  nnoremap <buffer> <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+  nnoremap <buffer> <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+  nnoremap <buffer> <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+  nnoremap <buffer> <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+  nnoremap <buffer> <C-\>i :cs find i <C-R>=expand("<cfile>")<CR><CR>
   "nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+  " TODO:
+  let b:undo_ftplugin .= 'nunmap <buffer> <C-\>s'
+        \ . | 'nunmap <buffer> <C-\>g'
+        \ . | 'nunmap <buffer> <C-\>c'
+
 
   " Using 'CTRL-spacebar', the result is displayed in new horizontal window.
-  nnoremap <C-@>s :scs find s <C-R>=expand("<cword>")<CR><CR>
-  nnoremap <C-@>g :scs find g <C-R>=expand("<cword>")<CR><CR>
-  nnoremap <C-@>c :scs find c <C-R>=expand("<cword>")<CR><CR>
-  nnoremap <C-@>t :scs find t <C-R>=expand("<cword>")<CR><CR>
-  nnoremap <C-@>e :scs find e <C-R>=expand("<cword>")<CR><CR>
-  nnoremap <C-@>f :scs find f <C-R>=expand("<cfile>")<CR><CR>
-  nnoremap <C-@>i :scs find i <C-R>=expand("<cfile>")<CR><CR>
+  nnoremap <buffer> <C-@>s :scs find s <C-R>=expand("<cword>")<CR><CR>
+  nnoremap <buffer> <C-@>g :scs find g <C-R>=expand("<cword>")<CR><CR>
+  nnoremap <buffer> <C-@>c :scs find c <C-R>=expand("<cword>")<CR><CR>
+  nnoremap <buffer> <C-@>t :scs find t <C-R>=expand("<cword>")<CR><CR>
+  nnoremap <buffer> <C-@>e :scs find e <C-R>=expand("<cword>")<CR><CR>
+  nnoremap <buffer> <C-@>f :scs find f <C-R>=expand("<cfile>")<CR><CR>
+  nnoremap <buffer> <C-@>i :scs find i <C-R>=expand("<cfile>")<CR><CR>
   "nmap <C-@>d :scs find d <C-R>=expand("<cword>")<CR><CR>
   " Hitting CTRL-space *twice*, the result is displayed in new vertical window.
-  nnoremap <C-@><C-@>s :vert scs find s <C-R>=expand("<cword>")<CR><CR>
-  nnoremap <C-@><C-@>g :vert scs find g <C-R>=expand("<cword>")<CR><CR>
-  nnoremap <C-@><C-@>c :vert scs find c <C-R>=expand("<cword>")<CR><CR>
-  nnoremap <C-@><C-@>t :vert scs find t <C-R>=expand("<cword>")<CR><CR>
-  nnoremap <C-@><C-@>e :vert scs find e <C-R>=expand("<cword>")<CR><CR>
-  nnoremap <C-@><C-@>f :vert scs find f <C-R>=expand("<cfile>")<CR><CR>
-  nnoremap <C-@><C-@>i :vert scs find i <C-R>=expand("<cfile>")<CR><CR>
+  nnoremap <buffer> <C-@><C-@>s :vert scs find s <C-R>=expand("<cword>")<CR><CR>
+  nnoremap <buffer> <C-@><C-@>g :vert scs find g <C-R>=expand("<cword>")<CR><CR>
+  nnoremap <buffer> <C-@><C-@>c :vert scs find c <C-R>=expand("<cword>")<CR><CR>
+  nnoremap <buffer> <C-@><C-@>t :vert scs find t <C-R>=expand("<cword>")<CR><CR>
+  nnoremap <buffer> <C-@><C-@>e :vert scs find e <C-R>=expand("<cword>")<CR><CR>
+  nnoremap <buffer> <C-@><C-@>f :vert scs find f <C-R>=expand("<cfile>")<CR><CR>
+  nnoremap <buffer> <C-@><C-@>i :vert scs find i <C-R>=expand("<cfile>")<CR><CR>
   "nmap <C-@><C-@>d :vert scs find d <C-R>=expand("<cword>")<CR><CR>
-  nnoremap <2-LeftMouse> :cs find d <C-R>=expand("<cword>")<CR>:<C-R>=line('.')<CR>:%<CR>
-  nnoremap <C-LeftMouse> :cs find d <C-R>=expand("<cword>")<CR>:<C-R>=line('.')<CR>:%<CR>
+  nnoremap <buffer> <2-LeftMouse> :cs find d <C-R>=expand("<cword>")<CR>:<C-R>=line('.')<CR>:%<CR>
+  nnoremap <buffer> <C-LeftMouse> :cs find d <C-R>=expand("<cword>")<CR>:<C-R>=line('.')<CR>:%<CR>
 endif
 
 
 " Atexit: {{{1
 
 " Oh shit the unmaps for this are gonna be annoying
-let b:undo_ftplugin = 'set sua< cin< makeprg< ofu< kp< include<'
-      \ . '|unlet! &l:path'
-      \ . '|unlet! b:undo_ftplugin'
-
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

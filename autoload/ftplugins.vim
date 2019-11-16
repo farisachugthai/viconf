@@ -57,8 +57,8 @@ function! ftplugins#FormatFile() abort  " {{{1
 " autocmd BufWritePre *.h,*.cc,*.cpp call Formatonsave()
 endfunction
 
+function! ftplugins#ClangCheckimpl(cmd) abort  " {{{1
 " This is honestly really useful if you simply swap out the filetype
-function! ftplugins#ClangCheckimpl(cmd)
   if &autowrite | wall | endif
   echo "running " . a:cmd . " ..."
   let l:output = system(a:cmd)
@@ -71,7 +71,7 @@ function! ftplugins#ClangCheckimpl(cmd)
   let g:clang_check_last_cmd = a:cmd
 endfunction
 
-function! ftplugins#ClangCheck()
+function! ftplugins#ClangCheck()  abort  " {{{1
   let l:filename = expand('%')
   if l:filename =~ '\.\(cpp\|cxx\|cc\|c\)$'
     call ClangCheckImpl("clang-check " . l:filename)
@@ -86,7 +86,6 @@ function! ftplugins#ClangCheck()
 " Idk why <CR> is  there twice and idk if it was a typo on the part of the
 " Clang people but its in their official documentation..
 endfunction
-
 
 function! ftplugins#ALE_CSS_Conf() abort  " {{{1
 
@@ -167,7 +166,6 @@ function! ftplugins#VimPath() abort  " {{{1
   let s:path = s:path . ',' . expand('$VIMRUNTIME') . '/*,'
 
   if !exists('*stdpath')
-    " honestly this is too hard without this
     return s:path
   endif
 

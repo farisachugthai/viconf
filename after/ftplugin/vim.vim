@@ -20,10 +20,15 @@ setlocal nolinebreak
 setlocal wrap
 
 let &l:commentstring='" %s'
-"v TODO: Probably needs to be a function. Should checj if we already added
+" TODO: Probably needs to be a function. Should checj if we already added
 " this and don't do it more than once
 " let &path = &path . ',' . stdpath('data') . '/plugged/*/*/*.vim'
 let &l:path = ftplugins#VimPath()
+
+setlocal includeexpr=substitute(v:fname,'\\#','/','g')
+
+" I FIGURED OUT WHY 'gf' didn't work!
+setlocal isfname-=#
 
 " So that you can cleanly jump around inside of autoloaded func names
 setlocal iskeyword-=#
@@ -76,7 +81,7 @@ endif
 
 " Atexit: {{{1
 let b:undo_ftplugin = 'setlocal com< cms< et< sw< ts< sts< lbr< sua< wrap< isk<'
-      \ . '|setlocal path<'
+      \ . '|setlocal path< isf<'
       \ . '|unlet! b:undo_ftplugin'
 
 let &cpoptions = s:cpo_save

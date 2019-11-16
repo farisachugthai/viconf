@@ -5,15 +5,18 @@
     " Last Modified: Sep 15, 2019
 " ============================================================================
 
-" Guards: {{{1
-if empty('g:loaded_fzf') | finish | endif
-
-let s:cpo_save = &cpoptions
-set cpoptions-=C
-
 " Options: {{{1
 
-let g:fzf_command_prefix = 'FZ'
+" idk why this has been necessary
+if !exists(':FZF')
+  call plug#load('fzf')
+endif
+
+let g:fzf_command_prefix = 'Fuf'
+
+if !exists(':FufRg')
+  call plug#load('fzf.vim')
+endif
 
 " Sep 15, 2019: Look what i found in stdpath('data') .
 " '/plugged/fzf.vim/plugin/fzf.vim' ! There's a statusline option!!! That's
@@ -32,12 +35,16 @@ let g:fzf_action = {
 " NOTE: Use of stdpath() requires nvim0.3>
 let g:fzf_history_dir = stdpath('data') . '/fzf-history'
 
-let g:fzf_layout = { 'window': '-tabnew' }
+" let g:fzf_layout = { 'window': '-tabnew' }
+let g:fzf_layout = { 'window': '10new' }
 
 " Standardized vars: {{{2
-let g:ag_options = ' --smart-case -u -g " " --'
+let g:fzf_ag_options = ' --smart-case -u -g " " --'
 
-let g:rg_options = ' --hidden --max-columns 300 --max-depth 8 --max-count 50 --color ansi --no-column --no-line-number  --no-heading --auto-hybrid-regex --max-columns-preview --no-messages --smart-case '
+" TODO: Might wanna consider turning this into a list
+let g:fzf_rg_options = ' --hidden --max-columns 300 --max-depth 8 --max-count 50 '
+      \. '--color ansi --no-column --no-line-number  --no-heading '
+      \. ' --auto-hybrid-regex --max-columns-preview --no-messages --smart-case '
 
 
 let g:fzf_options = [
@@ -92,10 +99,10 @@ let g:fzf_colors =  {
       \  'header':  ['fg', '#83a598']
       \ }
 
-" Defaults:
-hi! fzf1 ctermfg=161 ctermbg=238 guifg=#E12672 guibg=#565656 cterm=bold,underline
-hi! fzf2 ctermfg=151 ctermbg=238 guifg=#BCDDBD guibg=#565656 cterm=bold,underline
-hi! fzf3 ctermfg=252 ctermbg=238 guifg=#D9D9D9 guibg=#565656 cterm=bold,underline
+" Highlighting: {{{2
+hi! fzf1 ctermfg=161 ctermbg=238 guifg=#E12672 guibg=#565656 cterm=bold,underline guisp=NONE gui=bold,underline
+hi! fzf2 ctermfg=151 ctermbg=238 guifg=#BCDDBD guibg=#565656 cterm=bold,underline guisp=NONE gui=bold,underline
+hi! fzf3 ctermfg=252 ctermbg=238 guifg=#D9D9D9 guibg=#565656 cterm=bold,underline guisp=NONE gui=bold,underline
 
 " Mappings: {{{1
 
@@ -113,16 +120,25 @@ hi! fzf3 ctermfg=252 ctermbg=238 guifg=#D9D9D9 guibg=#565656 cterm=bold,underlin
 
 
 " If you have executable('ag') then don't ever use fzf-complete-path or file!
-if executable('ag')
-  imap <C-x><C-f> <Plug>(fzf-complete-file-ag)
-  imap <C-x><C-j> <Plug>(fzf-complete-file-ag)
+" actually shit doesn't work otherwise on windows :/
+if has('unix')
+  if executable('ag')
+    imap <C-x><C-f> <Plug>(fzf-complete-file-ag)
+    imap <C-x><C-j> <Plug>(fzf-complete-file-ag)
+  else
+    imap <C-x><C-f> <Plug>(fzf-complete-file)
+    imap <C-x><C-j> <Plug>(fzf-complete-path)
+  endif
 else
-  imap <C-x><C-f> <Plug>(fzf-complete-file)
-  imap <C-x><C-j> <Plug>(fzf-complete-path)
+    imap <C-x><C-f> <Plug>(fzf-complete-file)
+    imap <C-x><C-j> <Plug>(fzf-complete-path)
+    inoremap <C-f> <C-x><C-f>
+    inoremap <C-j> <C-x><C-j>
 endif
 
 " Holy shit this works well
 inoremap <expr> <C-x><C-l> fzf#vim#complete#line()
+inoremap <expr> <C-l> fzf#vim#complete#line()
 
 " Uhhh C-b for buffer?
 inoremap <expr> <C-x><C-b> fzf#vim#complete#buffer_line()
@@ -134,8 +150,13 @@ if filereadable(expand('$_ROOT/share/dict/words'))
   " function implicitly depends on it.
   inoremap <expr> <C-x><C-k>         fzf#vim#complete#word({'left': '45%'})
 
-" else
-" TODO: dictionary isn't set on windows
+else
+" dictionary isn't set on windows
+  imap <C-x><C-k> <C-x><C-u>
+  " Supertab should've made that mapping pretty sweet.
+  " In addition the stub at `:he i_CTRL_K` said that it's used for inserting
+  " digraphs like fuck that
+  inoremap <C-k> <C-x><C-k>
 endif
 
 " Remappable: {{{2
@@ -186,10 +207,19 @@ noremap <Leader>f                 <Cmd>Files<CR>
 " Make fzf behave the same in a real shell and nvims.
 tnoremap <C-t>                    <Cmd>FZF! <CR>
 
+" Might need to wrap this in a `if &shell ==# 'bash'
+" tnoremap <A-c>                    __fzf_cd__
+
+
+" Come up with a mappings to see your mappings obviously
+" A) This is horribly done but B) dude <Leader>tab in everymode
+" try
+"   nnoremap <F1> <Cmd>Maps<CR>
+" catch v:shell_error
+" endtry
 
 " Commands: {{{1
 
-" Grep Signature: {{{2
 " here's the call signature for fzf#vim#grep
 " - fzf#vim#grep(command, with_column, [options], [fullscreen])
 "   If you're interested it would be kinda neat to modify that `dir` line
@@ -308,7 +338,3 @@ command! -complete=file FZGit call find_files#FZFGit()
   " TODO: The above command should use the fzf funcs
   " and also use this
   " \   {'dir': systemlist('git rev-parse --show-toplevel')[0] }, <bang>0)
-
-" Atexit: {{{1
-let &cpoptions = s:cpo_save
-unlet s:cpo_save

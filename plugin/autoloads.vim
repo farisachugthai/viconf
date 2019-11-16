@@ -6,11 +6,6 @@
 " ============================================================================
 
 " Guard: {{{1
-if exists('g:loaded_plugin_autoloads') || &compatible || v:version < 700
-    finish
-endif
-let g:loaded_plugin_autoloads = 1
-
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
@@ -77,6 +72,8 @@ inoremap gI gi
 "
 " Seeing as how I randomly decided this file would be the one that holds
 " autocompletion info, why not add tags too?
+" See Also: ../autoload/buffers.vim
+" There's a good buffers#PreviewWord that shows some stuff i'm sure you wanna do
 
 set tags+=./tags,./*/tags
 set tags^=./.git/tags tagcase=smart showfulltag
@@ -107,15 +104,15 @@ function! TagFunc(pattern, flags, info)
   return result
 endfunc
 
-if has('nvim-0.5')
+if exists('&tagfunc')
   set tagfunc=TagFunc
 endif
 
-
 " Compiling:
 
-" just cuz
+" just cuz. plus isn't the complete compiler option kinda cool?
 command! -complete=compiler -nargs=? -buffer Make make <q-args> %
+
 " Atexit: {{{1
 
 let &cpoptions = s:cpo_save

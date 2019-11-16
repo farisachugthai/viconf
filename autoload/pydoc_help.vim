@@ -99,7 +99,10 @@ function! pydoc_help#async_cursor() abort " Async Pydoc: {{{1
 endfunction
 
 function! pydoc_help#async_cexpr() abort  " {{{1
-	"<cexpr>    is replaced with the word under the cursor, including more
+  " this function POURS output into the current buf so make sure you're
+  " switched to a scratch buffer.
+  " However... **THIS WORKS**
+	"    <cexpr>    is replaced with the word under the cursor, including more
 	"	   to form a C expression.  E.g., when the cursor is on "arg"
 	"	   of "ptr->arg" then the result is "ptr->arg"; when the
 	"	   cursor is on "]" of "list[idx]" then the result is
@@ -116,19 +119,31 @@ function! pydoc_help#broken_scratch_buffer() abort  " {{{1
   " From he api-floatwin. Only new versions of Nvim (maybe 0.4+ only?)
   let buf = nvim_create_buf(v:false, v:true)
 
+  " and the help for that function
+" nvim_create_buf({listed}, {scratch})                       *nvim_create_buf()*
+"                 Creates a new, empty, unnamed buffer.
+
+"                 Parameters: ~
+"                     {listed}   Sets 'buflisted'
+"                     {scratch}  Creates a "throwaway" |scratch-buffer| for
+"                                temporary work (always 'nomodified')
+
+
   " original: should fill with pydoc output
+  " TODO: this is the "broken" line
   " call nvim_buf_set_lines(buf, 0, -1, v:true, ["test", "text"])
+
   let opts = {'relative': 'cursor', 'width': 10, 'height': 2, 'col': 0,
       \ 'row': 1, 'anchor': 'NW', 'style': 'minimal'}
+
   let win = nvim_open_win(buf, 0, opts)
   " optional: change highlight, otherwise Pmenu is used
-  " call nvim_win_set_option(win, 'winhl', 'Normal:MyHighlight')
+  call nvim_win_set_option(win, 'winhl', 'Normal:MyHighlight')
 
   " To close the float, |nvim_win_close()| can be used.
-endfunction
+  " 0 for the current window, v:false is for don't force
+  nnoremap <buffer> q <Cmd>nvim_win_close(0, v:false)<CR>
 
-function! pydoc_help#sphinx_build(...) abort  " {{{1
-  " TODO:
 endfunction
 
 function! pydoc_help#the_curse_of_nvims_floating_wins() abort  " {{{1

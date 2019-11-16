@@ -12,10 +12,10 @@ set cpoptions-=C
 " Original Implementation: {{{1
 
 " This is all they have for the ftplugin for json...
-if exists('b:did_ftplugin')
-  finish
-endif
-let b:did_ftplugin = 1
+" if exists('b:did_ftplugin')
+"   finish
+" endif
+" let b:did_ftplugin = 1
 
 setlocal formatoptions-=t
 

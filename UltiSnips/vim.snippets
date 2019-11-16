@@ -168,9 +168,9 @@ elseif ${1}
 	${0:${VISUAL:body}}
 endsnippet
 
-snippet ife "if ... else statement"
-if ${1}
-	${2:${VISUAL:body}}
+snippet ife "if ... else statement" mw
+if ${1:${VISUAL}}
+	$2
 else
 	$0
 endif
@@ -183,7 +183,7 @@ augroup ${1:AU_NAME}
 augroup end
 endsnippet
 
-snippet au "bare autocmd" bs
+snippet au "bare autocmd" b
 autocmd ${2:BufRead,BufNewFile} ${3:*.ext,*.ext3|<buffer[=N]>} ${0}
 endsnippet
 
@@ -292,3 +292,5 @@ endsnippet
 snippet exe "execute(var)" b
 execute('${0:${VISUAL}}')
 endsnippet
+
+# Vim: set et ts=4 sts=4 sw=4:

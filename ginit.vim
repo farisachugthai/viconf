@@ -12,15 +12,6 @@ if !has('nvim') || !exists('g:GuiLoaded')
   finish
 endif
 
-" But let's set something up in case it does get reread
-if exists('g:did_ginit_vim') || &compatible || v:version < 700
-  finish
-endif
-let g:did_ginit_vim = 1
-
-let s:cpo_save = &cpoptions
-set cpoptions-=C
-
 " Options: {{{1
 runtime plugin/nvim_gui_shim.vim
 
@@ -28,14 +19,19 @@ runtime plugin/nvim_gui_shim.vim
 GuiTabline v:false
 
 " This looks reasonable with the font
-GuiLinespace 1.5
+GuiLinespace 1
 
 " Doesn't work
 " GuiFont 'FuraMono Nerd Font Mono:h14'
+" can't quote
 " works but meh
 " GuiFont Hack:h11
 " Throws an error because not fixed pitch
 " GuiFont Monoisome:h11
+" the info for set guifont isn't true of our command here
+" GuiFont FuraMono_Nerd_Font_Mono:h12
+" doesn't work
+
 " holy fuck this does work
 GuiFont FuraMono\ Nerd\ Font\ Mono:h12
 
@@ -43,8 +39,3 @@ call GuiClipboard()
 
 " We need to map something to GuiTreeviewToggle!
 noremap <Leader>? <Cmd>GuiTreeviewToggle<CR><bar>execute 'echomsg ' . 'Opening up Nvim_Explorer.exe'
-
-
-" Atexit: {{{1
-let &cpoptions = s:cpo_save
-unlet s:cpo_save

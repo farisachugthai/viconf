@@ -2,17 +2,18 @@
     " File: startify.vim
     " Author: Faris Chugthai
     " Description: Vim_Startify configuration
-    " Last Modified: June 22, 2019
+    " Last Modified: Nov 16, 2019
 " ============================================================================
 
-" Plugin Guard: {{{1
+" Guard: {{{1
 if !exists('g:loaded_startify')
-    finish
+  finish
 endif
 
+let s:cpo_save = &cpoptions
+set cpoptions-=C
 
-" Startify Lists: {{{1
-
+" Options: {{{1
 let g:startify_commands = [
     \ {'h': ['Vim Reference', 'h ref'],},
     \ {'f': ['FZF!', 'FZF!'],},
@@ -34,11 +35,6 @@ let g:startify_lists = [
     \ { 'type': 'commands',  'header': ['   Commands']              },
     \ ]
 
-" Temporarily turn this off
-" Slowly work parts in and see what changes
-" Jesus I just went from 300ms to 500ms
-" finish
-
 " Setup_devicons: {{{1
 let entry_format = "'   ['. index .']'. repeat(' ', (3 - strlen(index)))"
 
@@ -51,8 +47,6 @@ endif
 function! StartifyEntryFormat() abort
   return 'WebDevIconsGetFileTypeSymbol(absolute_path) ." ". entry_path'
 endfunction
-
-" Center The Header And Footer: {{{1
 
 " let g:startify_custom_header = plugins#filter_header(startify#fortune#cowsay())
 
@@ -67,8 +61,6 @@ let g:startify_skiplist = [
 " Session Dir: {{{1
 let g:startify_session_dir =  stdpath('config') . '/session'
 
-" General Options: {{{1
-" TODO: Check this works
 if has('unix')
   let g:startify_change_to_dir = 1
 endif

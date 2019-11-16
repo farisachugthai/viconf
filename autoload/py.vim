@@ -5,9 +5,6 @@
   " Last Modified: November 14, 2019
 " ============================================================================
 
-let s:cpo_save = &cpoptions
-set cpoptions-=C
-
 function py#taglist() abort  " {{{1
 " Still pretty shaky but getting better
   " call a vim function from python. tagfiles() is a builtin that displays the
@@ -74,19 +71,31 @@ endfunction
 
 function py#python_serves_python() abort  " {{{1
 
-  python << EOF
-  import site, sys, vim
-  def setup_vim_path():
-      vim_path = '.,**,,'
-      vim_path += sys.prefix + ','
+python3 << EOF
+import site, sys, vim
+import os
+def setup_vim_path():
+    vim_path = '.,**,,'
+    vim_path += sys.prefix + ','
 
-      for i in site.getsitepackages():
-          vim_path += i + ','
+    for i in site.getsitepackages():
+        vim_path += i + ','
 
-      print(vim_path)
-      return vim_path
+    print(vim_path)
+    return vim_path
 
+
+def pure_python_path():
+    """Attempt 2."""
+    for p in sys.path:
+    # Add each directory in sys.path, if it exists.
+        if os.path.isdir(p):
+            # Command 'set' needs backslash before each space.
+            vim.command(r"set path+=%s" % (p.replace(" ", r"\ ")))
 EOF
+
+call pure_python_path()
+
 endfunction
 
 function py#YAPF() abort  " {{{1
@@ -121,7 +130,3 @@ function py#ALE_Python_Conf() abort  " {{{1
     endif
   endif
 endfunction
-
-
-let &cpoptions = s:cpo_save
-unlet s:cpo_save

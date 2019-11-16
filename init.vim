@@ -75,7 +75,10 @@ if &tabstop > 4 | setlocal tabstop=4 | endif
 if &shiftwidth > 4  | setlocal shiftwidth=4 | endif
 setlocal expandtab smarttab softtabstop=4
 
-set foldenable foldlevelstart=0 foldlevel=0 foldopen=quickfix,search,tag,undo,jump
+" set foldenable foldlevelstart=0 foldlevel=0
+" foldopen=quickfix,search,tag,undo,jump
+" yo soethings  really messed up with the default setting
+set foldopen+=insert
 set foldnestmax=10 foldmethod=marker foldcolumn=2
 set signcolumn=auto:2  " this might be a nvim 4 thing
 

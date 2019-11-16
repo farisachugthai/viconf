@@ -27,7 +27,9 @@ let $NVIM_COC_LOG_FILE = stdpath('data')  . '/site/coc.log'
 " let $NVIM_COC_LOG_LEVEL = 'DEBUG'
 let $NVIM_COC_LOG_LEVEL = 'ERROR'
 
-Plug 'junegunn/vim-plug', {'dir': './vim-plug'}
+" So you can't use dir: ./vim-plug because it'll put vim-plug in the cwd not
+" this one
+Plug 'junegunn/vim-plug', {'dir': expand('~/projects/viconf/vim-plug')}
 let g:plug_window = 'tabe'
 
 Plug 'junegunn/fzf', { 'dir': expand('~/.fzf'), 'do': './install --all' }
@@ -66,7 +68,7 @@ endif
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 nnoremap U <Cmd>UndotreeToggle<CR>
 
-" Dude checkijg the remote hosts is blocking and doing it this early is murder
+" Dude checking the remote hosts is blocking and doing it this early is murder
 " to startuptime. Just went from 280ms to 800.
 " if has('ruby')
   Plug 'greyblake/vim-preview', {'on': 'Preview'}
@@ -110,8 +112,3 @@ call plug#end()
 
 " I utilize this command so often I may as well save the characters
 command! -nargs=0 Plugins echo keys(plugs)
-
-
-" Atexit: {{{1
-let &cpoptions = s:cpo_save
-unlet s:cpo_save

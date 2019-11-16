@@ -3,11 +3,7 @@
 priority 20
 
 global !p
-def x(snip):
-if snip.ft.startswith("x"):
-    snip.rv = '/'
-else:
-    snip.rv = ""
+from snippets_helper import x
 endglobal
 
 snippet doctype "HTML - 5.0 (doctype)" b
@@ -536,4 +532,4 @@ snippet wbr "<wbr>" w
 <wbr>${1:text${VISUAL}}/wbr>
 endsnippet
 
-# Vim: set et:ts=4:sts=4:sw=4:
+# Vim: set et ts=4 sts=4 sw=4:
