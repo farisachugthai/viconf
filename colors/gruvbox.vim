@@ -340,13 +340,6 @@ hi Structure guifg=#8ec07c guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermfg=29 
 hi Typedef guifg=#fabd2f guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermfg=172 ctermbg=NONE
 
 " }}}
-" Diffs: {{{
-
-hi DiffAdd guifg=#b8bb26 guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermfg=100 ctermbg=234
-hi DiffChange guifg=#8ec07c guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermfg=29 ctermbg=234
-hi DiffDelete guifg=#fb4934 guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermfg=124 ctermbg=234
-hi DiffText guifg=#fabd2f guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermfg=172 ctermbg=234
-" }}}
 " Other: {{{
 " What the hell are these?
 " RedrawDebugClear xxx ctermbg=11 guibg=Yellow

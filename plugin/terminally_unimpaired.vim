@@ -5,16 +5,6 @@
     " Last Modified: Sep 13, 2019
 " ============================================================================
 
-" Guard: {{{1
-if exists('g:did_terminally_unimpaired_vim') || &compatible || v:version < 700
-    finish
-endif
-let g:did_terminally_unimpaired_vim = 1
-
-let s:cpo_save = &cpoptions
-set cpoptions-=C
-
-
 if executable('htop')  " {{{1
   " Leader -- applications -- htop. Requires nvim for <Cmd> which tmk doesn't exist
   " even in vim8.0+. Also requires htop which more than likely rules out Win32.
@@ -51,16 +41,7 @@ augroup TermGroup
   " that I didn't mention to leave insert mode when the terminal closes...
   autocmd TermClose * stopinsert
 
-  " Except for when coc randomly opens terminals
-  autocmd User CocTerminalOpen stopinsert
-
   " Set up mappings
   autocmd TermOpen * call buffers#terminals()
 
 augroup END
-
-
-" Atexit: {{{1
-
-let &cpoptions = s:cpo_save
-unlet s:cpo_save

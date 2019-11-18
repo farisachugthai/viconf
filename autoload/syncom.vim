@@ -129,6 +129,34 @@ function syncom#gruvbox_material() abort  " {{{1 new colorscheme
   endif
 endfunction
 
+function syncom#rainbow_paren() abort
+
+  highlight! link RBP1 Red
+  highlight! link RBP2 Yellow
+  highlight! link RBP3 Green
+  highlight! link RBP4 Blue
+  let g:rainbow_levels = 4
+  function! RainbowParens(cmdline)
+    let ret = []
+    let i = 0
+    let lvl = 0
+    while i < len(a:cmdline)
+      if a:cmdline[i] is# '('
+        call add(ret, [i, i + 1, 'RBP' . ((lvl % g:rainbow_levels) + 1)])
+        let lvl += 1
+      elseif a:cmdline[i] is# ')'
+        let lvl -= 1
+        call add(ret, [i, i + 1, 'RBP' . ((lvl % g:rainbow_levels) + 1)])
+      endif
+      let i += 1
+    endwhile
+    return ret
+  endfunction
+  call input({'prompt':'>','highlight':'RainbowParens'})
+
+  " From he input
+endfunction
+
 " Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

@@ -5,22 +5,8 @@
   " Last Modified: Oct 20, 2019
 " ============================================================================
 
-" Guards: {{{1
-let s:cpo_save = &cpoptions
-set cpoptions-=C
-
-" Original Implementation: {{{1
-
-" This is all they have for the ftplugin for json...
-" if exists('b:did_ftplugin')
-"   finish
-" endif
-" let b:did_ftplugin = 1
-
 setlocal formatoptions-=t
 
-" My Additions: {{{1
-"
 " JSON has no comments.
 " setlocal comments=
 " setlocal commentstring=
@@ -28,7 +14,6 @@ setlocal formatoptions-=t
 let &commentstring='// %s'
 
 setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
-
 
 " Let's add in a few more options though. Enforce 2 space tabs
 setlocal expandtab softtabstop=2 shiftwidth=2 tabstop=2
@@ -66,6 +51,3 @@ highlight link jsonComment Comment
 
 " Atexit: {{{1
 let b:undo_ftplugin = 'setlocal fo< com< cms< et< sts< sw< ts< sua< fdm<'
-
-let &cpoptions = s:cpo_save
-unlet s:cpo_save

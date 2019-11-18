@@ -17,21 +17,23 @@ function! ftplugins#ALE_JSON_Conf() abort  " {{{1
     let b:ale_fixers += ['prettier']
   endif
 
-  if executable('jq')
+  " if executable('jq')
+  " actually i don't care add this no matter what
     let b:ale_fixers += ['jq']
     let b:ale_json_jq_options = '-SM'
     let b:ale_json_jq_filters = '.'
-  endif
+  " endif
 
   if executable('fixjson')
     let b:ale_fixers += ['fixjson']
   endif
 
-  if executable('jsonlint')
-  " Jul 17, 2019: Only json linter available
+  " if executable('jsonlint')
+  " Jul 17, 2019: Only json linter available. So  enabled it no matter what
+  " then? Like what other choice do you have right?
     let b:ale_linters = ['jsonlint']
     let b:ale_linters_explicit = 1
-  endif
+  " endif
 endfunction
 
 function! ftplugins#FormatFile() abort  " {{{1

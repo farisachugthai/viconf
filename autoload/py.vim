@@ -33,15 +33,24 @@ function py#PythonPath() abort  " {{{1
 
   if !empty('g:python3_host_prog')
 
+    " Note: Regardless of whether its unix or not, add dirs in reverse order
+    " as we're appending them to the set option
     if has('unix')
+
+      " So this doesn't pick up 100% of things. Oddly i'm missing lots of
+      " 'private' {aka starting with _} modules
+
       let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h:h')
+
       " max out at 3 dir deep
       " don't go 3 dir in includes start going REALLY slowly
-      let s:site_pack = s:root_dir . '/lib/python3.7/site-packages/**'
+      let s:site_pack = s:root_dir . '/lib/python3.7/site-packages,'
 
       let s:path = s:path . s:site_pack
+      " Oh don't forget the usr lib one
+      let s:path = s:path . '/usr/lib/python3.7,'
+
       let s:path = ',' . s:root_dir . '/lib/python3.7/*' . s:path . ','
-      let s:path =  ',' . s:root_dir . '/lib/python3.7/**/*' . s:path . ','
 
     " sunovabitch conda doesn't put stuff in the same spot
     else
@@ -92,6 +101,16 @@ def pure_python_path():
         if os.path.isdir(p):
             # Command 'set' needs backslash before each space.
             vim.command(r"set path+=%s" % (p.replace(" ", r"\ ")))
+
+
+def Importer(mod):
+    """Totally preliminary but this might be really useful.
+
+    Check the docstring with your pydoc command.
+    """
+    from importlib.util import find_spec
+    return find_spec(mod)
+
 EOF
 
 call pure_python_path()

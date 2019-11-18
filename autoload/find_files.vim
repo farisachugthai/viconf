@@ -125,7 +125,7 @@ endfunction
 
 function! find_files#msdos_remote() abort  " {{{1
 
-  let g:python3_host_prog = 'C:/tools/miniconda3/envs/working/python.exe'
+  let g:python3_host_prog = 'C:/tools/miniconda3/envs/neovim/python.exe'
 
   let g:python_host_prog = 'C:/tools/miniconda3/envs/py2/python.exe'
 

@@ -234,6 +234,10 @@ hi def link tmuxVariableExpansion Identifier
 " }}}
 " Diff: {{{
 
+hi DiffAdd guifg=#b8bb26 guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermfg=100 ctermbg=234
+hi DiffChange guifg=#8ec07c guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermfg=29 ctermbg=234
+hi DiffDelete guifg=#fb4934 guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermfg=124 ctermbg=234
+hi DiffText guifg=#fabd2f guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermfg=172 ctermbg=234
 hi! link diffAdded GruvboxGreen
 hi! link diffRemoved GruvboxRed
 hi! link diffChanged Directory

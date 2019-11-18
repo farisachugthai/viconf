@@ -13,8 +13,15 @@ set cpoptions-=C
 
 function! s:temp_buffer() abort
 
+  if exists(':StripWhitespace')
+    exec ':StripWhitespace'
+  endif
+
+  hi! link Whitespace NONE
   setlocal relativenumber
   setlocal filetype=rst
+  " Because i have it on in my rst filetype.
+  setlocal nospell
   setlocal nomodified
   setlocal buflisted
   silent setlocal nomodifiable

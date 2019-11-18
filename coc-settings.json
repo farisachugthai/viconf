@@ -21,8 +21,10 @@
   "coc.preferences.useQuickfixForLocations": true,
   "coc.source.around.firstMatch": false,
   "coc.source.around.shortcut": "Coc-Around:",
+  "coc.source.around.priority": 60,
   "coc.source.buffer.firstMatch": false,
   "coc.source.buffer.ignoreGitignore": false,
+  "coc.source.buffer.priority": 30,
   "coc.source.buffer.shortcut": "Coc-Buffer:",
   "coc.source.dictionary.filetypes": [
     "rst",
@@ -41,20 +43,20 @@
     "help",
     "html"
   ],
-  "coc.source.emoji.priority": 99,
+  "coc.source.emoji.priority": 40,
   "coc.source.emoji.shortcut": "Coc-Emoji: ",
   "coc.source.emoji.triggerCharacters": [
     ":"
   ],
   "coc.source.file.ignoreHidden": false,
-  "coc.source.file.priority": 80,
+  "coc.source.file.priority": 20,
   "coc.source.file.shortcut": "Coc-Files: ",
   "coc.source.file.trimSameExts": [
     ".ts",
     ".js"
   ],
   "coc.source.issues.shortcut": "Coc-Issues:",
-  "coc.source.omni.priority": 99,
+  "coc.source.omni.priority": 10,
   "coc.source.omni.shortcut": "Coc-Omni:",
   "coc.source.omni.triggerCharacters": [
     "Tab"
@@ -125,6 +127,12 @@
   "json.format.enable": true,
   "json.trace.server": "messages",
   "languageserver": {
+    "bash": {
+      "command": "bash-language-server",
+      "args": ["start"],
+      "filetypes": ["sh", "bash"],
+      "ignoredRootPaths": ["~"]
+    },
     "clangd": {
       "args": [
         "--background-index"
@@ -139,14 +147,10 @@
       "rootPatterns": [
         "compile_flags.txt",
         "compile_commands.json",
-        ".git/",
-        ".hg/"
+        ".git/"
       ],
       "shell": true,
-      "trace.server": "messages",
-      "args": ["--background-index"],
-      "rootPatterns": ["compile_flags.txt", "compile_commands.json", ".git/", ".hg/"],
-      "filetypes": ["c", "cpp", "objc", "objcpp"]
+      "trace.server": "messages"
     },
     "vimlsp": {
       "args": [
@@ -181,7 +185,6 @@
     }
   },
   "list.extendedSearchMode": true,
-  "list.indicator": "COC: ",
   "list.limitLines": 500,
   "list.previewHighlightGroup": "IdentifierBold",
   "list.selectedSignText": "****",
@@ -314,6 +317,8 @@
   ],
   "list.source.outline.defaultOptions": [
     "--top",
+    "--input",
+    "--interactive",
     "--normal"
   ],
   "list.source.output.defaultOptions": [
@@ -326,6 +331,9 @@
     "--top",
     "--normal"
   ],
+  "list.source.quickfix.defaultArgs": [
+    "preview"
+  ],
   "list.source.services.defaultOptions": [
     "--top",
     "--normal"
@@ -333,6 +341,11 @@
   "list.source.sessions.defaultOptions": [
     "--top",
     "--normal"
+  ],
+  "list.source.snippets.defaultOptions": [
+    "--auto-preview",
+    "--top",
+    "--ignore-case"
   ],
   "list.source.sources.defaultArgs": [
     "-refresh"
@@ -420,8 +433,6 @@
     ".tox",
     ".venv"
   ],
-  "python.workspaceSymbols.rebuildOnStart": true,
-  "python.workspaceSymbols.tagFilePath": "${workspaceFolder}/tags",
   "refactor.afterContext": 0,
   "refactor.beforeContext": 0,
   "refactor.openCommand": "vsplit",
@@ -439,12 +450,7 @@
       "rst"
     ]
   },
-  "snippets.shortcut": "<Tab>",
-  "snippets.shortcut": "<Tab>",
-  "snippets.ultisnips.pythonVersion": 3,
-  "suggest.snippetIndicator": "\u26a1 ",
   "snippets.shortcut": "SNIP",
-  "snippets.ultisnips.pythonVersion": 3,
   "suggest.defaultSortMethod": "length",
   "suggest.minTriggerInputLength": 3,
   "suggest.removeDuplicateItems": true,
@@ -457,12 +463,12 @@
   "list.autoResize": true,
   "list.previousKeymap": "<C-p>",
   "list.maxPreviewHeight": 25,
+  "list.indicator": ">>> $: ",
   "list.interactiveDebounceTime": 200,
   "list.source.mru.ignoreGitIgnore": true,
   "yank.list.maxsize": 300,
   "git.removedSign.text": "_",
   "git.changedDecorator": "*",
-  "python.linting.pydocstyleEnabled": true,
   "python.analysis.diagnosticPublishDelay": 300,
   "python.terminal.launchArgs": ["-U" ],
   "list.source.tags.command": "~/bin/ctags.exe -R --options=~/.ctags/universal_ctags.ctags .",
@@ -477,7 +483,6 @@
     ]
   },
   "suggest.languageSourcePriority": 99,
-  "suggest.snippetIndicator": "\u26a1 ",
   "snippets.snipmate.author": "Faris A. Chugthai",
   "snippets.snipmate.enable": false,
   "snippets.triggerCharacters": [
@@ -549,9 +554,6 @@
   "typescript.showUnused": true,
   "typescript.suggest.autoImports": true,
   "typescript.suggest.completeFunctionCalls": true,
-  "vimlsp.debug": true,
-  "vimlsp.debug": true,
-  "vimlsp.trace.server": "messages",
   "vimlsp.diagnostic.enable": true,
   "vimlsp.indexes.count": 3,
   "vimlsp.indexes.runtimepath": true,
@@ -567,9 +569,6 @@
   "yaml.format.enable": true,
   "yaml.format.proseWrap": "always",
   "yaml.trace.server": "messages",
-  "yaml.trace.server": "messages",
-  "yank.priority": 95,
-  "yank.priority": 95,
   "yank.enableCompletion": true,
   "yank.limit": 30,
   "yank.priority": 95
