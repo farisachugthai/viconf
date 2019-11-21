@@ -15,12 +15,8 @@ let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Everv
 let s:wsl = !empty($WSL_DISTRO_NAME)                   " Windows is !has('unix') but WSL checks explicitly
 let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux) && empty(s:wsl)
 
-" if has('*stdpath')
-  call plug#begin(stdpath('data') . '/plugged')
-" TODO:
-" else
-  " if
-" endif
+call plug#begin(stdpath('data') . '/plugged')
+
 Plug 'neoclide/coc.nvim' ", {'do': 'yarn install --frozen-lockfile'}
 let $NVIM_COC_LOG_FILE = stdpath('data')  . '/site/coc.log'
 " Don't set to debug that is WAY too much
@@ -29,7 +25,7 @@ let $NVIM_COC_LOG_LEVEL = 'ERROR'
 
 " So you can't use dir: ./vim-plug because it'll put vim-plug in the cwd not
 " this one
-Plug 'junegunn/vim-plug', {'dir': expand('~/projects/viconf/vim-plug')}
+Plug 'junegunn/vim-plug' ", {'dir': expand('~/projects/viconf/vim-plug')}
 let g:plug_window = 'tabe'
 
 Plug 'junegunn/fzf', { 'dir': expand('~/.fzf'), 'do': './install --all' }
@@ -47,8 +43,8 @@ Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }  " Follow spacem
 noremap <Leader>a <Cmd>ALEEnable<CR><Cmd>echomsg 'ALE Enabled'<CR>
 
 if exists('$TMUX')
-    Plug 'christoomey/vim-tmux-navigator'
-    Plug 'edkolev/tmuxline.vim'
+  Plug 'christoomey/vim-tmux-navigator'
+  Plug 'edkolev/tmuxline.vim'
 endif
 
 Plug 'mhinz/vim-startify'
@@ -57,6 +53,7 @@ Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
 noremap <silent> <F8> <Cmd>TagbarToggle<CR>
 noremap! <silent> <F8> <Cmd>TagbarToggle<CR>
 tnoremap <silent> <F8> <Cmd>TagbarToggle<CR>
+
 if !has('unix')  " this really fucks up on windows
   Plug 'jszakmeister/rst2ctags', {'dir': expand('~/src/rst2ctags')}
 endif
@@ -71,7 +68,7 @@ nnoremap U <Cmd>UndotreeToggle<CR>
 " Dude checking the remote hosts is blocking and doing it this early is murder
 " to startuptime. Just went from 280ms to 800.
 " if has('ruby')
-  Plug 'greyblake/vim-preview', {'on': 'Preview'}
+Plug 'greyblake/vim-preview', {'on': 'Preview'}
 " endif
 " The 'tabular' plugin must come _before_ 'vim-markdown'.
 Plug 'godlygeek/tabular'
@@ -106,6 +103,7 @@ Plug 'tomtom/tlib_vim'
 Plug 'omnisharp/omnisharp-vim', {'for': 'cs'}
 
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
+
 call plug#end()
 
 " Commands: {{{1

@@ -1,3 +1,5 @@
+.. _ultisnips-readme:
+
 ======
 README
 ======
@@ -19,12 +21,12 @@ Changelog
 ---------
 Jan 29, 2019:
 
-Just added the `m` option to a bunch of these to eliminate
+Just added the :kbd:`m` option to a bunch of these to eliminate
 trailing whitespace. Also adding ``$0`` to a couple. I've noticed that if you
-press `UltiSnipsNextTrigger` on the last one that it deletes the word.
+press ``UltiSnipsNextTrigger`` on the last one that it deletes the word.
 
 Adding a bare ``$0`` on the last line of the snippet ensures that we can tab all
-the way over and not delete anything. Then the `m` option ensures we don't
+the way over and not delete anything. Then the :kbd:`m` option ensures we don't
 have trailing whitespace.
 
 
@@ -39,7 +41,7 @@ used with no configuration; however, if 30 other plugins are installed,
 this will **immensely** slow down vim.
 
 After configuring ``g:UltiSnipsDirs`` and ``g:UltiSnipsDirectories`` as you
-would like, using the `UltiSnipsEdit` command should open the folder that your
+would like, using the ``UltiSnipsEdit`` command should open the folder that your
 snippets are housed in.
 
 .. admonition:: &rtp and UltiSnips
@@ -52,38 +54,40 @@ Options
 --------
 A valid snippet should have the form::
 
-    snippet trigger_word [ "description" [ options ] ]
-    {Text to substitute}
-    endsnippet
+   snippet trigger_word [ "description" [ options ] ]
+   {Text to substitute}
+   endsnippet
 
 Snippet options:
 
-.. option::    b - Beginning of line.
+.. option::    -b Beginning of line.
 
-.. option:: i - In-word expansion.
+.. option:: -i In-word expansion.
 
-.. option:: w - Word boundary.
+.. option:: -w Word boundary.
 
-.. option:: r - Regular expression
+.. option:: -r Regular expression
 
-.. option:: e - Custom context snippet
+.. option:: -e Custom context snippet
 
-.. option:: A - Snippet will be triggered automatically, when condition matches.
+.. option:: -A Snippet will be triggered automatically, when condition matches.
 
-Basic example:
+Basic example::
 
-      	snippet emitter "emitter properties" b
-      	private readonly ${1} = new Emitter<$2>()
-      	public readonly ${1/^_(.*)/$1/}: Event<$2> = this.$1.event
-      	endsnippet
+   snippet emitter "emitter properties" b
+   private readonly ${1} = new Emitter<$2>()
+   public readonly ${1/^_(.*)/$1/}: Event<$2> = this.$1.event
+   endsnippet
 
 
 Unfortunately none of the options are relevant anymore as I've moved
 to using coc.nvim for code completion and it doesn't support most
 of the built-in Ultisnips options *for now*.
 
+
 Snippets Options
-^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~
+
 The following are options to modify the way that snippets behave. My most
 commonly used options are::
 
@@ -111,7 +115,7 @@ commonly used options are::
 
 
 Important Considerations:
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~
  Write a clear description for every single snippet. Whlie this may sound
  tedious, it pays massive dividends. When there are multiple snippets to
  choose from the only help you'll get is what you write the description you
@@ -125,7 +129,8 @@ commented out header will not expand.
 
 
 Finding Your Snippets
-^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------
+
 Memorizing your snippet's names is awful. The vim-snippets repository has
 thousands of snippets in it, and the difference between expanding ``def`` and
 ``deff`` can produce huge differences in output.
@@ -135,7 +140,7 @@ bogged down searching for them is imperative.
 
 
 FZF
-^^^^
+----
 Make sure you have `https://www.github.com/junegunn/fzf.vim`_ installed.
 I absolutely love this plugin and it's endless configurability.
 
@@ -144,8 +149,9 @@ terminal that greps all snippets configured for the filetype.
 
 .. note::
 
-   I personally use Ag, the Silver-Searcher for the backend of FZF. It's substantially
-   faster and I've generally found it much more accessible than GNU Grep.
+   I personally use ripgrep or fd for the backend of FZF.
+   It's substantially faster and I've generally found it much more
+   accessible than GNU grep or GNU find.
 
 FZF can also be configured to display a preview window peer at the exact
 snippet; in addition to the fact that it allows you to write a header! I'd
@@ -154,7 +160,7 @@ advise throwing reminders to yourself for useful keybindings.
 If you need to extend the available snippets only one time, use
 ``UltiSnipsAddFileType``.
 
-For persistent changes use `extends {filetype to be added}` at the top of the
+For persistent changes use ``extends {filetype to be added}`` at the top of the
 snippets file you would like extending the target.
 
 Now let's look at a snippet.
@@ -171,11 +177,11 @@ repeating anything that's already in the UltiSnips documentation, I'll gloss
 over this part.
 
 The API for UltiSnips is quite interesting, as it exposes
-:vim:func:`UltiSnips#ListSnippets()`.
+:vim:func:`UltiSnips#ListSnippets`.
 
 This function displays what snippets you could expand to using a greedy
 search through your snippet files. As in, typing "doc" and then running
-:vim:func:`UltiSnips#ListSnippets()` will display doc, docs, docstring if
+:vim:func:`UltiSnips#ListSnippets` will display doc, docs, docstring if
 you have them defined. If you've defined the same word in different
 snippet files, (I.E. I have doc defined in most snippet files), then
 it will display:
@@ -201,14 +207,14 @@ somewhat like this.
 Isn't bound to anything in insert mode; however,
 it is bound to delete a fairly large amount of text in normal mode.
 
-Be careful of that, and possibly disable it by remapping it to :kbd:`nop`.
+Be careful of that, and possibly disable it by remapping it to :kbd:`<nop>`.
 
-Just added the `m` option to a bunch of these to eliminate
+Just added the :kbd:`m` option to a bunch of these to eliminate
 trailing whitespace. Also adding ``$0`` to a couple. I've noticed that if you
-press `UltiSnipsNextTrigger` on the last one that it deletes the word.
+press ``UltiSnipsNextTrigger`` on the last one that it deletes the word.
 
 Adding a bare ``$0`` on the last line of the snippet ensures that we can tab all
-the way over and not delete anything. Then the `m` option ensures we don't
+the way over and not delete anything. Then the :kbd:`m` option ensures we don't
 have trailing whitespace.
 
 
@@ -216,7 +222,8 @@ Programmatic Editing
 --------------------
 
 Vim's Search and Replace
-^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~
+
 Frequently I ran into the problem of snippets having the 'b' option
 unnecessarily and sometimes to a detrimental effect.
 
@@ -234,34 +241,37 @@ as necessary will suffice.
 
 
 .. code:: vim
+
    '<,'>s/ b$/sw/gc
 
 The command above limits the search to the visually selected area as indicated
-by '<,'>. `s` is the search command. Then we move to the text to find.
+by ``'<,'>``. :kbd:`s` is the search command. Then we move to the text to find.
 
-/<Space>b$
+.. code-block:: vim
+
+   /<Space>b$
 
 This indicates that if there is one preceding whitespace, the letter b, and an
-end of line character, find it and delete it.
+end of line character, find it and delete it.::
 
-/sw
+   /sw
 
-Replace the text with sw. You may choose any option you find useful.
+Replace the text with sw. You may choose any option you find useful.::
 
-/gc
+   /gc
 
-`g` simply indicates to Vim to replace all instances of `<Space>b$`. It's not
-necessary here; however, it's a good habit to get into.
+:kbd:`g` simply indicates to Vim to replace all instances of ``<Space>b$``.
+It's not necessary here; however, it's a good habit to get into.
 
-`c` means "require confirmation. Once again, not necessary but a good habit to
+``c`` means "require confirmation. Once again, not necessary but a good habit to
 get into.
 
 
 UltiSnips Patterns
-^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~
 One of the more useful idioms I've stumbled upon is the snippet
 
-.. code:: vim
+.. code-block:: vim
 
    snippet foo
    ${0:{$VISUAL:placeholder text}}
@@ -284,6 +294,7 @@ more closely resemble the desired snippets.
 
 Roadmap
 -------
+
 In the file `python.snippets`_, the last snippet is a postfix, or a snippet
 that can be used after the user has finished typing most of the word.
 
@@ -308,10 +319,28 @@ You could make similar expressions with:
 And have them expand to ``if var is None`` or ``if var is not None``.
 
 
-From @SirVer himself.
+Chaining Filetypes
+------------------
+
+If you have multiple filetypes that you want to combine, then you can use
+a dotted syntax. Refer to the root of the directory at :envvar:`VIMRUNTIME`
+with the file named ``ftplugin.vim``.:
+
+   When there is a dot it is used to separate filetype names.  Thus for
+   "aaa.bbb" load "aaa" and then "bbb".
+
+That's not a bad suggestion, and for snippets one might be able to put::
+
+   Vim: set ft=snippets.rst
+
+In a snippets file for reStructuredText.
+
+
+Lastly, I wanted to end on a note from from ``@SirVer`` himself.
 
 Standing On The Shoulders of Giants
 ===================================
+
 The snippets have been collected from various other project which I want to
 express my gratitude for. My main source for inspiration where the following
 two projects:

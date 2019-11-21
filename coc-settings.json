@@ -20,8 +20,8 @@
   "coc.preferences.snippetStatusText": "",
   "coc.preferences.useQuickfixForLocations": true,
   "coc.source.around.firstMatch": false,
-  "coc.source.around.shortcut": "Coc-Around:",
   "coc.source.around.priority": 60,
+  "coc.source.around.shortcut": "Coc-Around:",
   "coc.source.buffer.firstMatch": false,
   "coc.source.buffer.ignoreGitignore": false,
   "coc.source.buffer.priority": 30,
@@ -102,12 +102,23 @@
   "diagnostic.virtualTextLineSeparator": " \\ ",
   "diagnostic.virtualTextLines": 0,
   "diagnostic.virtualTextPrefix": "Coc-Diagnostic: ",
+  "emmet.preferences": {
+    "filter.commentTrigger": [
+      "id",
+      "class"
+    ],
+    "profile.allowCompactBoolean": false
+  },
+  "emmet.showAbbreviationSuggestions": true,
+  "emmet.showExpandedAbbreviation": "inMarkupAndStylesheetFilesOnly",
   "git.addGlameToBufferVar": true,
   "git.addGlameToVirtualText": true,
   "git.branchCharacter": "  ",
+  "git.changedDecorator": "*",
   "git.conflictedDecorator": "::",
   "git.enableGlobalStatus": true,
   "git.enableGutters": true,
+  "git.removedSign.text": "_",
   "git.stagedDecorator": " Ξ ",
   "git.untrackedDecorator": " : Untracked : ",
   "git.virtualTextPrefix": "Coc-Git:",
@@ -128,10 +139,17 @@
   "json.trace.server": "messages",
   "languageserver": {
     "bash": {
+      "args": [
+        "start"
+      ],
       "command": "bash-language-server",
-      "args": ["start"],
-      "filetypes": ["sh", "bash"],
-      "ignoredRootPaths": ["~"]
+      "filetypes": [
+        "sh",
+        "bash"
+      ],
+      "ignoredRootPaths": [
+        "~"
+      ]
     },
     "clangd": {
       "args": [
@@ -184,9 +202,17 @@
       }
     }
   },
+  "list.autoResize": true,
   "list.extendedSearchMode": true,
+  "list.indicator": ">>> $: ",
+  "list.interactiveDebounceTime": 200,
   "list.limitLines": 500,
+  "list.maxHeight": 20,
+  "list.maxPreviewHeight": 25,
+  "list.nextKeymap": "<C-n>",
   "list.previewHighlightGroup": "IdentifierBold",
+  "list.previewSplitRight": true,
+  "list.previousKeymap": "<C-p>",
   "list.selectedSignText": "****",
   "list.signOffset": 20,
   "list.source.actions.defaultArgs": [
@@ -238,8 +264,13 @@
     "**/__pycache__/**",
     "**/*.pyc"
   ],
+  "list.source.folders.defaultArgs": [
+    "newfile"
+  ],
   "list.source.folders.defaultOptions": [
     "--top",
+    "--input",
+    "--tab",
     "--number-select"
   ],
   "list.source.grep.args": [
@@ -309,6 +340,7 @@
     "**/__pycache__/**",
     "**/*.pyc"
   ],
+  "list.source.mru.ignoreGitIgnore": true,
   "list.source.mru.maxLength": 100,
   "list.source.outline.ctagsFilestypes": [
     "rst",
@@ -327,12 +359,17 @@
     "--no-sort",
     "--top"
   ],
+  "list.source.quickfix.defaultArgs": [
+    "preview"
+  ],
   "list.source.quickfix.defaultOptions": [
     "--top",
     "--normal"
   ],
-  "list.source.quickfix.defaultArgs": [
-    "preview"
+  "list.source.searchhistory.defaultOptions": [
+    "--top",
+    "--tab",
+    "--regex"
   ],
   "list.source.services.defaultOptions": [
     "--top",
@@ -360,6 +397,7 @@
     "--interactive",
     "--number-select"
   ],
+  "list.source.tags.command": "~/bin/ctags.exe -R --options=~/.ctags/universal_ctags.ctags .",
   "list.source.tags.defaultOptions": [
     "--top",
     "--normal"
@@ -406,7 +444,9 @@
   "powershell.integratedConsole.focusConsoleOnExecute": false,
   "powershell.integratedConsole.showOnStartup": false,
   "powershell.powerShellExePath": "C:\\pwsh\\7-preview\\pwsh.exe",
+  "powershell.startAutomatically": false,
   "python.analysis.diagnosticEnabled": true,
+  "python.analysis.diagnosticPublishDelay": 300,
   "python.analysis.downloadChannel": "daily",
   "python.analysis.logLevel": "Warning",
   "python.analysis.openFilesOnly": false,
@@ -421,10 +461,13 @@
   "python.linting.pylintEnabled": false,
   "python.terminal.activateEnvironment": true,
   "python.terminal.executeInFileDir": true,
+  "python.terminal.launchArgs": [
+    "-U"
+  ],
   "python.trace.server": "messages",
-  "python.workspaceSymbols.rebuildOnStart": true,
-  "python.workspaceSymbols.tagFilePath": "${workspaceFolder}/tags",
-  "python.venvFolders": ["~/.virtualenvs"],
+  "python.venvFolders": [
+    "~/.virtualenvs"
+  ],
   "python.workspaceSymbols.exclusionPatterns": [
     "**/site-packages/**",
     "node_modules",
@@ -433,6 +476,8 @@
     ".tox",
     ".venv"
   ],
+  "python.workspaceSymbols.rebuildOnStart": true,
+  "python.workspaceSymbols.tagFilePath": "${workspaceFolder}/tags",
   "refactor.afterContext": 0,
   "refactor.beforeContext": 0,
   "refactor.openCommand": "vsplit",
@@ -444,45 +489,15 @@
   "signature.preferShownAbove": false,
   "signature.target": "float",
   "signature.triggerSignatureWait": 300,
+  "snippets.autoTrigger": true,
   "snippets.editSnippetsCommand": "tabe",
   "snippets.extends": {
     "python": [
       "rst"
     ]
   },
-  "snippets.shortcut": "SNIP",
-  "suggest.defaultSortMethod": "length",
-  "suggest.minTriggerInputLength": 3,
-  "suggest.removeDuplicateItems": true,
-  "snippets.autoTrigger": true,
   "snippets.priority": 90,
-  "snippets.userSnippetsDirectory": "~/projects/viconf/UltiSnips",
-  "list.nextKeymap": "<C-n>",
-  "list.previewSplitRight": true,
-  "list.maxHeight": 20,
-  "list.autoResize": true,
-  "list.previousKeymap": "<C-p>",
-  "list.maxPreviewHeight": 25,
-  "list.indicator": ">>> $: ",
-  "list.interactiveDebounceTime": 200,
-  "list.source.mru.ignoreGitIgnore": true,
-  "yank.list.maxsize": 300,
-  "git.removedSign.text": "_",
-  "git.changedDecorator": "*",
-  "python.analysis.diagnosticPublishDelay": 300,
-  "python.terminal.launchArgs": ["-U" ],
-  "list.source.tags.command": "~/bin/ctags.exe -R --options=~/.ctags/universal_ctags.ctags .",
-  "list.source.searchhistory.defaultOptions": ["--top", "--tab", "--regex"],
-  "emmet.showAbbreviationSuggestions": true,
-  "emmet.showExpandedAbbreviation": "inMarkupAndStylesheetFilesOnly",
-  "emmet.preferences": {
-    "profile.allowCompactBoolean": false,
-    "filter.commentTrigger": [
-      "id",
-      "class"
-    ]
-  },
-  "suggest.languageSourcePriority": 99,
+  "snippets.shortcut": "SNIP",
   "snippets.snipmate.author": "Faris A. Chugthai",
   "snippets.snipmate.enable": false,
   "snippets.triggerCharacters": [
@@ -496,6 +511,7 @@
     "~/AppData/Local/nvim/UltiSnips"
   ],
   "snippets.ultisnips.pythonVersion": 3,
+  "snippets.userSnippetsDirectory": "~/projects/viconf/UltiSnips",
   "suggest.acceptSuggestionOnCommitCharacter": true,
   "suggest.autoTrigger": "always",
   "suggest.completionItemKindLabels": {
@@ -525,6 +541,7 @@
     "value": "",
     "variable": ""
   },
+  "suggest.defaultSortMethod": "length",
   "suggest.detailField": "menu",
   "suggest.disableMenu": true,
   "suggest.disableMenuShortcut": true,
@@ -534,10 +551,13 @@
   "suggest.floatEnable": true,
   "suggest.highPrioritySourceLimit": 99,
   "suggest.keepCompleteopt": true,
+  "suggest.languageSourcePriority": 99,
   "suggest.lowPrioritySourceLimit": 50,
   "suggest.maxCompleteItemCount": 100,
+  "suggest.minTriggerInputLength": 3,
   "suggest.noselect": true,
   "suggest.preferCompleteThanJumpPlaceholder": false,
+  "suggest.removeDuplicateItems": true,
   "suggest.snippetIndicator": "⚡ ",
   "suggest.timeout": 800,
   "suggest.triggerAfterInsertEnter": true,
@@ -571,5 +591,6 @@
   "yaml.trace.server": "messages",
   "yank.enableCompletion": true,
   "yank.limit": 30,
+  "yank.list.maxsize": 300,
   "yank.priority": 95
 }

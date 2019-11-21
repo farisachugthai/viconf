@@ -44,13 +44,13 @@ function py#PythonPath() abort  " {{{1
 
       " max out at 3 dir deep
       " don't go 3 dir in includes start going REALLY slowly
-      let s:site_pack = s:root_dir . '/lib/python3.7/site-packages,'
+      let s:site_pack = s:root_dir . '/lib/python3.8/site-packages,'
 
       let s:path = s:path . s:site_pack
       " Oh don't forget the usr lib one
-      let s:path = s:path . '/usr/lib/python3.7,'
+      let s:path = s:path . '/usr/lib/python3.8,'
 
-      let s:path = ',' . s:root_dir . '/lib/python3.7/*' . s:path . ','
+      let s:path = ',' . s:root_dir . '/lib/python3.8/*' . s:path . ','
 
     " sunovabitch conda doesn't put stuff in the same spot
     else

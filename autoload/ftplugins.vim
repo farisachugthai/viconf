@@ -41,9 +41,12 @@ function! ftplugins#FormatFile() abort  " {{{1
   " 'pyf expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
   let b:ale_fixers = [ 'clang-format' ]
   " Should add a mapping
+  if filereadable('C:/tools/vs/2019/Community/VC/Tools/Llvm/bin/clang-format.exe')
+    let g:clang_format_path = 'C:/tools/vs/2019/Community/VC/Tools/Llvm/bin/clang-format.exe'
+  endif
   " let g:clang_format_path =  expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
-  " noremap <Leader><C-c>f <Cmd>pyfile expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
-  " noremap! <Leader><C-c>f <Cmd>pyfile expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
+  noremap <Leader><C-c>f <Cmd>pyfile expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
+  noremap! <Leader><C-c>f <Cmd>pyfile expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
 " With this integration you can press the bound key and clang-format will
 " format the current line in NORMAL and INSERT mode or the selected region in
 " VISUAL mode. The line or region is extended to the next bigger syntactic
@@ -76,17 +79,13 @@ endfunction
 function! ftplugins#ClangCheck()  abort  " {{{1
   let l:filename = expand('%')
   if l:filename =~ '\.\(cpp\|cxx\|cc\|c\)$'
-    call ClangCheckImpl("clang-check " . l:filename)
+    call ftplugins#ClangCheckImpl("clang-check " . l:filename)
   elseif exists("g:clang_check_last_cmd")
-    call ClangCheckImpl(g:clang_check_last_cmd)
+    call ftplugins#ClangCheckImpl(g:clang_check_last_cmd)
   else
     echo "Can't detect file's compilation arguments and no previous clang-check invocation!"
   endif
 
-" nmap <silent> <F5> :call ClangCheck()<CR><CR>
-
-" Idk why <CR> is  there twice and idk if it was a typo on the part of the
-" Clang people but its in their official documentation..
 endfunction
 
 function! ftplugins#ALE_CSS_Conf() abort  " {{{1

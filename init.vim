@@ -75,10 +75,6 @@ if &tabstop > 4 | setlocal tabstop=4 | endif
 if &shiftwidth > 4  | setlocal shiftwidth=4 | endif
 setlocal expandtab smarttab softtabstop=4
 
-" set foldenable foldlevelstart=0 foldlevel=0
-" foldopen=quickfix,search,tag,undo,jump
-" yo soethings  really messed up with the default setting
-set foldopen+=insert
 set foldnestmax=10 foldmethod=marker foldcolumn=2
 set signcolumn=auto:2  " this might be a nvim 4 thing
 
@@ -107,7 +103,7 @@ set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 
 " Filler lines to keep text synced, 3 lines of context on diffs,
 " don't diff hidden files,default foldcolumn is 2
-set diffopt=filler,context:0,hiddenoff,foldcolumn:2,icase,iwhite,indent-heuristic
+set diffopt=filler,context:0,hiddenoff,foldcolumn:2,icase,indent-heuristic,horizontal
 if has('patch-8.1.0360') | set diffopt+=internal,algorithm:patience | endif
 
 set browsedir="buffer"   " which directory is used for the file browser
