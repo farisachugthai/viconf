@@ -22,8 +22,10 @@ let g:compiler_gcc_ignore_unmatched_lines = 1
 
 setlocal suffixesadd=.c,.h,.cpp
 setlocal cindent
+
 if filereadable('Makefile')
   setlocal makeprg=make\ %<.o
+
 elseif executable('gcc')  " Because of windows
   compiler gcc
   setlocal makeprg=gcc\ %<.o
@@ -44,8 +46,7 @@ setlocal include=^\s*#\s*include
 " setlocal define
 " setlocal includexpr
 " setlocal cinwords cinkeys etc etc
-
-let &l:path=ftplugins#CPath()
+llet &l:path=ftplugins#CPath()
 
 let b:undo_ftplugin = 'setlocal sua< cin< mp< ofu< kp< include<'
       \ . '|unlet! &l:path'
@@ -65,8 +66,12 @@ if has('cscope') && executable('cscope')
   "nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
   " TODO:
   let b:undo_ftplugin .= 'nunmap <buffer> <C-\>s'
-        \ . | 'nunmap <buffer> <C-\>g'
-        \ . | 'nunmap <buffer> <C-\>c'
+        \ . '| nunmap <buffer> <C-\>g'
+        \ . '| nunmap <buffer> <C-\>c'
+        \ . '| nunmap <buffer> <C-\>t'
+        \ . '| nunmap <buffer> <C-\>e'
+        \ . '| nunmap <buffer> <C-\>f'
+        \ . '| nunmap <buffer> <C-\>i'
 
 
   " Using 'CTRL-spacebar', the result is displayed in new horizontal window.
@@ -89,8 +94,24 @@ if has('cscope') && executable('cscope')
   "nmap <C-@><C-@>d :vert scs find d <C-R>=expand("<cword>")<CR><CR>
   nnoremap <buffer> <2-LeftMouse> :cs find d <C-R>=expand("<cword>")<CR>:<C-R>=line('.')<CR>:%<CR>
   nnoremap <buffer> <C-LeftMouse> :cs find d <C-R>=expand("<cword>")<CR>:<C-R>=line('.')<CR>:%<CR>
-endif
 
+  let b:undo_ftplugin .= 'nunmap <buffer> <C-@>s'
+        \ . '| nunmap <buffer> <C-@>g'
+        \ . '| nunmap <buffer> <C-@>c'
+        \ . '| nunmap <buffer> <C-@>t'
+        \ . '| nunmap <buffer> <C-@>e'
+        \ . '| nunmap <buffer> <C-@>f'
+        \ . '| nunmap <buffer> <C-@>i'
+        \ . '| nunmap <buffer> <C-@><C-@>g'
+        \ . '| nunmap <buffer> <C-@><C-@>c'
+        \ . '| nunmap <buffer> <C-@><C-@>t'
+        \ . '| nunmap <buffer> <C-@><C-@>e'
+        \ . '| nunmap <buffer> <C-@><C-@>f'
+        \ . '| nunmap <buffer> <C-@><C-@>i'
+        \ . '| nunmap <buffer> <2-LeftMouse>'
+        \ . '| nunmap <buffer> <C-LeftMouse'
+
+endif
 
 " Atexit: {{{1
 

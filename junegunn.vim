@@ -15,26 +15,29 @@ let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Everv
 let s:wsl = !empty($WSL_DISTRO_NAME)                   " Windows is !has('unix') but WSL checks explicitly
 let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux) && empty(s:wsl)
 
-" if has('*stdpath')
-  call plug#begin(stdpath('data') . '/plugged')
-" TODO:
-" else
-  " if
-" endif
+call plug#begin(stdpath('data') . '/plugged')
+
 Plug 'neoclide/coc.nvim' ", {'do': 'yarn install --frozen-lockfile'}
 let $NVIM_COC_LOG_FILE = stdpath('data')  . '/site/coc.log'
-" Don't set to debug that is WAY too much
-" let $NVIM_COC_LOG_LEVEL = 'DEBUG'
 let $NVIM_COC_LOG_LEVEL = 'ERROR'
 
 " So you can't use dir: ./vim-plug because it'll put vim-plug in the cwd not
 " this one
-Plug 'junegunn/vim-plug', {'dir': expand('~/projects/viconf/vim-plug')}
+" doesnt work either
+" Plug 'junegunn/vim-plug', {'dir': expand('~/projects/viconf/vim-plug')}
 let g:plug_window = 'tabe'
 
 Plug 'junegunn/fzf', { 'dir': expand('~/.fzf'), 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdTree', { 'on': ['NERDTreeToggle', 'NERDTreeVCS'] }
+noremap <Leader>nt <Cmd>NERDTreeToggle<CR>
+" Switch NERDTree root to dir of currently focused window.
+" Make mapping match Spacemacs.
+if exists(':GuiTreeviewToggle')
+  noremap <Leader>0 <Cmd>GuiTreeviewToggle<CR>
+else
+  noremap <Leader>0 <Cmd>NERDTreeCWD<CR>
+endif
 
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
@@ -57,6 +60,7 @@ Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
 noremap <silent> <F8> <Cmd>TagbarToggle<CR>
 noremap! <silent> <F8> <Cmd>TagbarToggle<CR>
 tnoremap <silent> <F8> <Cmd>TagbarToggle<CR>
+
 if !has('unix')  " this really fucks up on windows
   Plug 'jszakmeister/rst2ctags', {'dir': expand('~/src/rst2ctags')}
 endif
@@ -94,16 +98,15 @@ if empty(s:termux)
   " needed if for nothing else but the ftdetect
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
-  " Plug 'mustache/vim-mustache-handlebars'
-  Plug 'michaeljsmith/vim-indent-object'
+  Plug 'mustache/vim-mustache-handlebars'
   Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
   Plug 'elzr/vim-json', { 'for': 'json' }
+  Plug 'omnisharp/omnisharp-vim', {'for': 'cs'}
 
 endif
 
+Plug 'michaeljsmith/vim-indent-object'
 Plug 'tomtom/tlib_vim'
-
-Plug 'omnisharp/omnisharp-vim', {'for': 'cs'}
 
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()

@@ -14,12 +14,18 @@ granted.
 
 """
 from contextlib import contextmanager
+import xml.dom.minidom as md
 
+import json
 import vim  # pylint:disable=import-error
 
 from UltiSnips.compatibility import col2byte, byte2col, as_unicode, as_vimencoding
 from UltiSnips.position import Position
 
+try:
+    import yaml
+except (ImportError, ModuleNotFoundError):
+    yaml = None
 
 class VimBuffer:
     """Wrapper around the current Vim buffer."""
@@ -348,3 +354,34 @@ def _unmap_select_mode_mapping():
                     # This case should be rare enough to not bother us
                     # though.
                     pass
+
+
+##### Unrelated formatting code
+
+
+def pretty_xml(x):
+    """Make xml string `x` nicely formatted."""
+    # Hat tip to http://code.activestate.com/recipes/576750/
+    new_xml = md.parseString(x.strip()).toprettyxml(indent=' '*2)
+    return '\n'.join(line for line in new_xml.split('\n') if line.strip())
+
+def pretty_json(j):
+    """Make json string `j` nicely formatted."""
+    return json.dumps(json.loads(j), sort_keys=True, indent=4)
+
+def interpret_yaml(y):
+    if yaml is not None:
+        return json.dumps(yaml.safe_load(y), sort_keys=True, indent=4)
+
+prettiers = {
+    'xml': pretty_xml,
+    'json': pretty_json,
+    'yaml': interpret_yaml,
+}
+
+def pretty_it(datatype):
+    r = vim.current.range
+    content = "\n".join(r)
+    content = prettiers[datatype](content)
+    r[:] = str(content).split('\n')
+

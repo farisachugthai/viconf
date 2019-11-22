@@ -72,6 +72,17 @@ function! format#MarkdownFoldText() abort " {{{1 Credit to TPope
 
 endfunction
 
+" Python Functions: {{{1
+
+" Is this how we do this?
+py3 << EOF
+from _vim import pretty_it
+EOF
+
+command! -range=% Pxml :<line1>,<line2>python pretty_it('xml')
+command! -range=% Pjson :<line1>,<line2>python pretty_it('json')
+command! -range=% Pyaml :<line1>,<line2>python pretty_it('yaml')
+
 " Atexit: {{{1
 
 let &cpoptions = s:cpo_save
