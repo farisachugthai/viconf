@@ -52,7 +52,13 @@ let b:undo_ftplugin = 'setlocal sua< cin< mp< ofu< kp< include<'
       \ . '|unlet! &l:path'
       \ . '|unlet! b:undo_ftplugin'
 
-" Cscope Mappings: {{{1
+" Mappings: {{{1
+nnoremap <buffer> <F5> :call ftplugins#ClangCheck()<CR><CR>
+
+" Idk why <CR> is  there twice and idk if it was a typo on the part of the
+" Clang people but its in their official documentation..
+"
+" Cscope: {{{2
 if has('cscope') && executable('cscope')
   " Reasonably good inspiration for other ftplugins
 

@@ -264,8 +264,13 @@
     "**/__pycache__/**",
     "**/*.pyc"
   ],
+  "list.source.folders.defaultArgs": [
+    "newfile"
+  ],
   "list.source.folders.defaultOptions": [
     "--top",
+    "--input",
+    "--tab",
     "--number-select"
   ],
   "list.source.grep.args": [
@@ -439,6 +444,7 @@
   "powershell.integratedConsole.focusConsoleOnExecute": false,
   "powershell.integratedConsole.showOnStartup": false,
   "powershell.powerShellExePath": "C:\\pwsh\\7-preview\\pwsh.exe",
+  "powershell.startAutomatically": false,
   "python.analysis.diagnosticEnabled": true,
   "python.analysis.diagnosticPublishDelay": 300,
   "python.analysis.downloadChannel": "daily",

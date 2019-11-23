@@ -38,12 +38,6 @@ let g:rst_use_emphasis_colors = 1
 
 let g:rst_fold_enabled = 1
 
-" Guard: {{{1
-if exists('b:did_ftplugin') || &compatible || v:version < 700
-  finish
-endif
-let b:did_ftplugin = 1
-
 " Rst specific: {{{1
 setlocal expandtab
 setlocal spell!

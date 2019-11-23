@@ -25,6 +25,7 @@ let $NVIM_COC_LOG_LEVEL = 'ERROR'
 " this one
 " doesnt work either
 " Plug 'junegunn/vim-plug', {'dir': expand('~/projects/viconf/vim-plug')}
+Plug 'junegunn/vim-plug' ", {'dir': expand('~/projects/viconf/vim-plug')}
 let g:plug_window = 'tabe'
 
 Plug 'junegunn/fzf', { 'dir': expand('~/.fzf'), 'do': './install --all' }
@@ -50,8 +51,8 @@ Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }  " Follow spacem
 noremap <Leader>a <Cmd>ALEEnable<CR><Cmd>echomsg 'ALE Enabled'<CR>
 
 if exists('$TMUX')
-    Plug 'christoomey/vim-tmux-navigator'
-    Plug 'edkolev/tmuxline.vim'
+  Plug 'christoomey/vim-tmux-navigator'
+  Plug 'edkolev/tmuxline.vim'
 endif
 
 Plug 'mhinz/vim-startify'
@@ -75,7 +76,7 @@ nnoremap U <Cmd>UndotreeToggle<CR>
 " Dude checking the remote hosts is blocking and doing it this early is murder
 " to startuptime. Just went from 280ms to 800.
 " if has('ruby')
-  Plug 'greyblake/vim-preview', {'on': 'Preview'}
+Plug 'greyblake/vim-preview', {'on': 'Preview'}
 " endif
 " The 'tabular' plugin must come _before_ 'vim-markdown'.
 Plug 'godlygeek/tabular'
@@ -107,8 +108,8 @@ endif
 
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'tomtom/tlib_vim'
-
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
+
 call plug#end()
 
 " Commands: {{{1

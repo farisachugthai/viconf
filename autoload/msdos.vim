@@ -50,7 +50,8 @@ function! msdos#Cmd() abort  " {{{1
   set shellxquote=(
   set shellxescape=^
   " What about setting shellquote to "" so that cmd gets the args quoted?
-
+  echomsg 'Using cmd as the system shell.'
+  return
 endfunction
 
 command! Cmd call msdos#Cmd()
@@ -69,11 +70,11 @@ function! msdos#PowerShell() abort  " {{{1
   set shellredir=\|\ Out-File\ -Encoding\ UTF8\ %s
   set shellpipe=\|\ Out-File\ -Encoding\ UTF8\ %s
 
-   echomsg 'Using powershell as the system shell.'
-   return
+  echomsg 'Using powershell as the system shell.'
+  return
 endfunction
 
-command! PowerShell call msdos#Powershell()
+command! PowerShell call msdos#PowerShell()
 
 " Holy hell is this annoying don't do this!!
 " cabbrev pwsh PowerShell
