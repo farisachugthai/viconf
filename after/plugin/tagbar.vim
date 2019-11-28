@@ -78,7 +78,7 @@ if exists($ANDROID_ROOT)
 endif
 
 " Mappings: {{{1
-let g:tagbar_map_zoomwin = 'z'
+let g:tagbar_map_zoomwin = 'Z'
 
 " Filetype Implementations: {{{1
 

@@ -397,7 +397,8 @@
     "--interactive",
     "--number-select"
   ],
-  "list.source.tags.command": "~/bin/ctags.exe -R --options=~/.ctags/universal_ctags.ctags .",
+  // so obviously only do this on windows. shit there are so many things that we need to configure
+  // "list.source.tags.command": "~/bin/ctags.exe -R --options=~/.ctags/universal_ctags.ctags .",
   "list.source.tags.defaultOptions": [
     "--top",
     "--normal"
@@ -436,15 +437,15 @@
     "vimcommands",
     "windows"
   ],
-  "powershell.codeFolding.showLastLine": false,
+  "powershell.codeFolding.showLastLine": true,
   "powershell.codeFormatting.openBraceOnSameLine": true,
   "powershell.codeFormatting.useCorrectCasing": true,
   "powershell.debugging.createTemporaryIntegratedConsole": false,
   "powershell.developer.editorServicesLogLevel": "Error",
+  "powershell.helpCompletion": "LineComment",
   "powershell.integratedConsole.focusConsoleOnExecute": false,
   "powershell.integratedConsole.showOnStartup": false,
   "powershell.powerShellExePath": "C:\\pwsh\\7-preview\\pwsh.exe",
-  "powershell.startAutomatically": false,
   "python.analysis.diagnosticEnabled": true,
   "python.analysis.diagnosticPublishDelay": 300,
   "python.analysis.downloadChannel": "daily",

@@ -42,6 +42,9 @@ setlocal indentkeys-=0#
 setlocal include=^\\s*\\(from\\\|import\\)
 " this is in the help docs for `:he includeexpr` and states for java but i bet
 " itd work for python
+" TODO: from .thisdir import something
+" is broken as it changes the single . to a / need to implement if only .[a-z]
+" then ./
 setlocal includeexpr=substitute(v:fname,'\\.','/','g')
 
 setlocal cinkeys-=0#
@@ -61,7 +64,8 @@ setlocal foldmethod=indent
 
 setlocal suffixesadd+=.py
 setlocal omnifunc=python3complete#Complete
-setlocal iskeyword+=.
+" Makes moving too hard to add it
+setlocal iskeyword-=.
 
 let &l:path = py#PythonPath()
 

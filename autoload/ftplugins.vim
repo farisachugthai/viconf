@@ -180,15 +180,35 @@ function! ftplugins#CPath() abort  " {{{1
   let s:path='.,**,,'
 
   if has('unix')
-    let s:path = s:path . ',/usr/include,/usr/local/include'
+    let s:path = s:path . '/usr/include,/usr/local/include,'
 
     if isdirectory(expand('$HOME/.local/include'))
       let s:path = s:path . ',' .  expand('$HOME') . '/.local/include'
     endif
 
   else
-    let s:path = s:path . ',C:/tools/miniconda3/envs/working/Library/include'
-    let s:path = s:path . ',C:/tools/miniconda3/envs/working/include'
+    " we did it.
+    if exists('$INCLUDE')
+      let s:path = s:path . expand('$INCLUDE')
+      return s:path
+    endif
+
+    if isdirectory('C:/tools/miniconda3/envs/neovim/Library/include')
+      let s:path = s:path . 'C:/tools/miniconda3/envs/neovim/Library/include,'
+      let s:path = s:path . 'C:/tools/miniconda3/envs/neovim/include,'
+    endif
+
+    if isdirectory('C:/tools/vs/2019/BuildTools/VC/Tools/MSVC/14.23.28105/include')
+      let s:path = s:path . 'C:/tools/vs/2019/BuildTools/VC/Tools/MSVC/14.23.28105/include,'
+    endif
+
+    if isdirectory('C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include')
+      let s:path = s:path . 'C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include,'
+    endif
+
+    if exists('$INCLUDEDIR')
+      let s:path = s:path . expand('$INCLUDEDIR')
+    endif
 
   endif
 

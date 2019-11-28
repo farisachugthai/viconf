@@ -76,7 +76,7 @@ let g:ale_fix_on_save = 1
 
 let g:ale_linter_aliases = {
       \ 'ps1': 'powershell',
-      \ 'htmljinja': 'html',
+      \ 'htmljinja': ['html', 'handlebars'],
       \ 'htmldjango': 'html'
       \ }
 
@@ -90,6 +90,8 @@ let g:ale_linters = {
 let g:ale_list_vertical = 1
 
 " Python specific globals: {{{1
+
+" Goddamn this is so long I might wanna autoload this no?
 
 let g:ale_python_pyls_config = {
       \   'pyls': {
@@ -172,6 +174,8 @@ if isdirectory(expand('~/.local/share/virtualenvs'))
 endif
 
 let g:ale_cache_executable_check_failures = v:true
+
+let g:ale_linters_ignore = {'python': ['pylint']}
 
 " Node: {{{1
 

@@ -38,6 +38,9 @@ runtime ftplugin/man.vim
 " autoload/man.vim and ftplugin/man.vim have 1 function copy pasted
 " nnoremap <silent><buffer> gO <Cmd>call pydoc_help#show_toc()<CR>
 
+" Back on track. I mess up this binding too often
+nnoremap <buffer> go gO
+
 " Plugins: {{{1
 
 " ALE as always

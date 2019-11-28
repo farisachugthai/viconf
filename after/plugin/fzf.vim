@@ -338,3 +338,8 @@ command! -complete=file FZGit call find_files#FZFGit()
   " TODO: The above command should use the fzf funcs
   " and also use this
   " \   {'dir': systemlist('git rev-parse --show-toplevel')[0] }, <bang>0)
+  "
+" Rg that Updates: {{{1
+"
+
+command! -nargs=* -bang FZUpRg call find_files#RipgrepFzf(<q-args>, <bang>0)

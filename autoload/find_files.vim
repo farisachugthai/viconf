@@ -147,6 +147,30 @@ function! find_files#msdos_remote() abort  " {{{1
         \ }
 endfunction
 
+function! find_files#RipgrepFzf(query, fullscreen)
+
+" In the default implementation of `Rg`, ripgrep process starts only once with
+" the initial query (e.g. `:Rg foo`) and fzf filters the output of the process.
+
+" This is okay in most cases because fzf is quite performant even with millions
+" of lines, but we can make fzf completely delegate its search responsibliity to
+" ripgrep process by making it restart ripgrep whenever the query string is
+" updated. In this scenario, fzf becomes a simple selector interface rather than
+" a "fuzzy finder".
+
+" - `--bind 'change:reload:rg ... {q}'` will make fzf restart ripgrep process
+"   whenever the query string, denoted by `{q}`, is changed.
+" - With `--phony` option, fzf will no longer perform search. The query string
+"   you type on fzf prompt is only used for restarting ripgrep process.
+" - Also note that we enabled previewer with `fzf#vim#with_preview`.
+
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  let reload_command = printf(command_fmt, '{q}')
+  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+
+endfunction
 " Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

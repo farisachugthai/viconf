@@ -200,13 +200,13 @@ hi link rstInterpretedTextOrHyperlinkReference  Identifier
 hi link rstLiteralBlock                 String
 hi link rstQuotedLiteralBlock           String
 hi link rstSections                     Title
-hi! link rstSimpleTable Orange
-hi! link rstSimpleTableLines OrangeBold
+hi! link rstSimpleTable                 Orange
+hi! link rstSimpleTableLines            OrangeBold
 hi link rstStandaloneHyperlink          Identifier
 hi link rstSubstitutionDefinition       rstDirective
 hi link rstSubstitutionReference        PreProc
-hi! link rstTable Orange
-hi link rstTableLines                   rstDelimiter
+hi! link rstTable                       Orange
+hi! link rstTableLines                   Orange
 hi link rstTodo                         Todo
 hi link rstTransition                   rstSections
 
