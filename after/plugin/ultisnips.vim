@@ -5,7 +5,6 @@
     " Last Modified: Jun 29, 2019
 " ============================================================================
 
-" Guards: {{{1
 " Mappings: {{{1
 noremap <F4> <Cmd>UltiSnipsEdit<CR>
 noremap! <F4> <Cmd>UltiSnipsEdit<CR>
@@ -36,7 +35,10 @@ let g:UltiSnipsUsePythonVersion = 3
 let g:UltiSnipsExpandTrigger = '<Tab>'
 " " TODO: Mapped in ConEmu and I don't know how to unmap a system keybinding...
 " Literally listed in the help docs as unused. Why not?
-let g:UltiSnipsListSnippets = '<C-\>'
+if !exists('$TMUX')
+   let g:UltiSnipsListSnippets = '<C-\>'
+endif
+" used by tmux so can we make it conditional
 let g:UltiSnipsJumpForwardTrigger = '<C-j>'
 let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
 let g:ultisnips_python_style = 'numpy'

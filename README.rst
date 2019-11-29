@@ -32,21 +32,6 @@ the base options like so:
 let vs. set
 ------------
 
-``set`` allows one to set useful configurations and is easier to read than
-some corresponding ``let`` statements, but it only allows one to
-define a variable to one literal value.
-
-The set keyword in vim is best used when setting an option to a well defined
-string.
-
-``let`` allows for scoping variables, and as Vim has an incredibly unintuitive
-system for coercing types, this will frequently come in handy.
-
-In addition, let is best used when an  expression requires evaluating a variable
-of some sort.
-
-.. todo::  Show the example of setting python_prog_host based on  :envvar:`VIRTUAL_ENV`
-
 Whitespace in Options
 ---------------------
 

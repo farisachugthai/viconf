@@ -32,4 +32,8 @@ augroup YourFTDetect
   au BufNewFile,BufRead *.sip set filetype=cpp
 
   au BufNewFile,BufRead setup.cfg set filetype=dosini
+
+  au BufNewFile,BufRead .xonshrc set filetype=xonsh
+  au BufNewFile,BufRead *.xsh set filetype=xonsh
+
 augroup END

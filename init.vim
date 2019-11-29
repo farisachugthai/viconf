@@ -5,7 +5,6 @@
   " Last Modified: September 23, 2019
 " ============================================================================
 
-" Preliminaries: {{{1
 scriptencoding utf-8
 set fileformat=unix fileformats=unix,dos  " don't let DOS fuck up the EOL
 let s:cpo_save = &cpoptions
@@ -18,32 +17,23 @@ let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux) && empty(s:wsl)
 let s:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/init.vim.local'
 runtime s:local_vimrc
 
-" Vim Plug And Third Party Packages: {{{1
-
 let s:vim_plug = filereadable(glob(fnameescape(stdpath('data') . '/site/autoload/plug.vim')))
 
-if empty(s:vim_plug) && exists('*plugins#InstallPlug')
-  call plugins#InstallPlug()
-endif
-
+if empty(s:vim_plug) && exists('*plugins#InstallPlug') | call plugins#InstallPlug() | endif
 runtime junegunn.vim  " Load my plugins.
+
 " Don't assume that the InstallPlug() func worked so ensure it's defined
 if empty('plugs') | let plugs = {} | endif
-" Uh I don't know how this happens but stdpath('config') is no longer the first entry in rtp?
-" So let's move that and stdpath('data')/site up front. Definitely stays after the plugins definition.
 let &rtp = stdpath('config') . ',' . stdpath('data') . '/site,' . &rtp
 
-" Add some packages
-packadd justify cfilter matchit
-
+packadd justify cfilter matchit  " Add some packages
 set synmaxcol=400 termguicolors  " Set up the colorscheme
 syntax sync fromstart linebreaks=2
 
 let s:material_gruvbox =  syncom#gruvbox_material()
 if s:material_gruvbox == v:false | call syncom#gruvbox() | endif
 
-" Setup neovim's python and node hosts. Optionally clipboards etc
-runtime remote.vim
+runtime remote.vim  " Setup neovim's python and node hosts. Optionally clipboards etc
 " Set shell correctly
 if !has('unix') | runtime autoload/msdos.vim | call msdos#Cmd() | endif
 
@@ -74,28 +64,21 @@ if has('patch-8.1.0251') | let &backupdir=stdpath('config') . '/undodir//' | end
 if &tabstop > 4 | setlocal tabstop=4 | endif
 if &shiftwidth > 4  | setlocal shiftwidth=4 | endif
 setlocal expandtab smarttab softtabstop=4
-
-set foldnestmax=10 foldmethod=marker foldcolumn=2
+set foldnestmax=10 foldmethod=marker foldcolumn=2 foldopen+=jump,insert
 set signcolumn=auto:2  " this might be a nvim 4 thing
-
 try | set switchbuf=useopen,usetab,split | catch | endtry
-
 set hidden
 set splitbelow splitright sidescroll=5
-
-if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif
-
+if &textwidth!=0 | set colorcolumn=+1 | else | set colorcolumn=80 | endif
 set number relativenumber cmdheight=1
 set isfname-==
 if filereadable(stdpath('config') . '/spell/en.utf-8.add')
   let &spellfile = stdpath('config') . '/spell/en.utf-8.add'
 endif
-
 " both smartcase and infercase require ignorecase to be set
 set ignorecase
 set smartcase infercase
 
-" set makeencoding=utf-8         " Used by the makeprg. system locale is used. actually let's just force utf8
 set sessionoptions-=buffers,winsize viewoptions-=options sessionoptions+=globals
 set mouse=a nojoinspaces autowrite autochdir modeline
 if exists('&modelineexpr') | set modelineexpr | endif
@@ -105,13 +88,8 @@ set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 " don't diff hidden files,default foldcolumn is 2
 set diffopt=filler,context:0,hiddenoff,foldcolumn:2,icase,indent-heuristic,horizontal
 if has('patch-8.1.0360') | set diffopt+=internal,algorithm:patience | endif
-
 set browsedir="buffer"   " which directory is used for the file browser
-
 let &g:listchars = "tab:\u21e5\u00b7,extends:\u21c9,precedes:\u21c7,nbsp:\u00b7"  " trail:\u2423 doesn't work with hack as font
-" Keep statusline overflow to simply empty spaces no matter if higlighting
-" is on or off. use some unicode for cooler lines and use periods not --- for
-" deleted diff lines. It makes diff buffers very visually noisy.
 let &g:fillchars = "stl:' ',stlnc:' ',vert:\u250b,fold:\u00b7,diff:'.'"
 
 set breakindent breakindentopt=sbr
@@ -128,16 +106,12 @@ xnoremap <BS> d
 
 set spelllang=en spellsuggest=5
 noremap <Leader>sp <Cmd>setlocal spell!<CR>
-
 noremap <Leader>o o<Esc>
 noremap <Leader>O O<Esc>
 
-set showmatch matchpairs+=<:> lazyredraw
-set matchtime=20  " Show the matching pair for 2 seconds
+set showmatch matchpairs+=<:> lazyredraw matchtime=20  " Show the matching pair for 2 seconds
 let g:matchparen_timeout = 500
 let g:matchparen_insert_timeout = 300
 
-" Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save
-" Vim set ff=unix:

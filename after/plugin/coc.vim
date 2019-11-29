@@ -79,15 +79,16 @@ nnoremap g} <Plug>(coc-usages)<CR>
 
 " Bracket maps: {{{2
 " Shit none of these work
-nnoremap [g <Plug>(coc-diagnostic-prev)<CR>
-nnoremap ]g <Plug>(coc-diagnostic-next)<CR>
+" oh also these are builtin mappings
+" nnoremap [g <Plug>(coc-diagnostic-prev)<CR>
+" nnoremap ]g <Plug>(coc-diagnostic-next)<CR>
 
 " Note: Tried adding <expr> and didn't work
-nnoremap [c  <Plug>(coc-git-prevchunk)<CR>
-nnoremap ]c  <Plug>(coc-git-nextchunk)<CR>
+" nnoremap [c  <Plug>(coc-git-prevchunk)<CR>
+" nnoremap ]c  <Plug>(coc-git-nextchunk)<CR>
 
 " Remap for rename current word: {{{2
-nnoremap <expr> <F2> <Plug>(coc-refactor)<CR>
+nnoremap <F2> <Plug>(coc-refactor)<CR>
 
 " Instead of actually writing a '<,'> are we allowed to use the * char?
 xnoremap <F2> <Cmd>'<,'>CocCommand document.renameCurrentWord<CR>
@@ -148,7 +149,8 @@ nnoremap <Leader>j  :<C-u>CocNext<CR>
 nnoremap ,j  :<C-u>CocNext<CR>
 nnoremap <Leader>k  :<C-u>CocPrev<CR>
 nnoremap ,k  :<C-u>CocPrev<CR>
-nnoremap <Leader>r  :<C-u>CocListResume<CR>
+" ranger nabbed this one
+" nnoremap <Leader>r  :<C-u>CocListResume<CR>
 nnoremap ,r  :<C-u>CocListResume<CR>
 
 " Other Mappings: {{{2

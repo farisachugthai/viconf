@@ -25,9 +25,9 @@ if &filetype != 'python'
   finish
 endif
 
-setlocal linebreak
+setlocal nolinebreak  " Dont set this on itll create syntaxerors
 setlocal textwidth=120
-
+setlocal tagcase=smart
 setlocal comments=b:#,fb:-
 setlocal commentstring=#\ %s
 setlocal tabstop=4 shiftwidth=4 expandtab softtabstop=4
