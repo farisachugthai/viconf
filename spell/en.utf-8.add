@@ -1541,7 +1541,6 @@ tmux
 tnoremap
 toctree
 todo
-todotxt
 toolchain
 toolstack
 torbirdy
@@ -1739,3 +1738,4 @@ zshrc
 µBlock
 µMatrix
 µTP
+Tools

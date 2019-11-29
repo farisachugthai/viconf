@@ -30,7 +30,8 @@ let g:tagbar_silent = 1
 " If you set this option the Tagbar window will automatically close when you
 " jump to a tag. This implies |g:tagbar_autofocus|. If enabled the "C" flag will
 " be shown in the statusline of the Tagbar window.
-let g:tagbar_autoclose = 1
+" Actually I like having it open
+let g:tagbar_autoclose = 0
 
 " -1: Use the global line number settings.
 " Well that just feels like the courteous thing to do right?

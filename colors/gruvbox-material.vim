@@ -1789,7 +1789,7 @@ if (has('termguicolors') && &termguicolors) || has('gui_running')  " {{{
   hi SpellRare guifg=#945e80 guibg=NONE guisp=#945e80 gui=italic,undercurl cterm=italic,undercurl
   hi Visual guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
   hi VisualNOS guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
-  hi Todo guifg=#928374 guibg=NONE guisp=NONE gui=bold,italic cterm=bold,italic
+  hi Todo guifg=#928374 guibg=NONE guisp=NONE gui=bold,italic,reverse cterm=bold,italic,reverse
   hi CursorIM guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
   hi ToolbarLine guifg=NONE guibg=#bdae93 guisp=NONE gui=NONE cterm=NONE
   hi ToolbarButton guifg=#764e37 guibg=#bdae93 guisp=NONE gui=bold cterm=bold

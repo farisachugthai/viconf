@@ -48,7 +48,7 @@ map <Space> <Leader>
 
 if has('nvim-0.4')   " Fun new features!
   let &shadafile = stdpath('data') . '/shada/main.shada'
-  set pumblend=20  " toggle transparency in the pum
+  set pumblend=20 winblend=20  " toggle transparency in the pum and windows
   try | set pyxversion=3 | catch /^Vim:E518:*/ | endtry
 endif
 

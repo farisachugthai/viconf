@@ -65,7 +65,8 @@ setlocal foldmethod=indent
 setlocal suffixesadd+=.py
 setlocal omnifunc=python3complete#Complete
 " Makes moving too hard to add it
-setlocal iskeyword-=.
+" setlocal iskeyword-=.
+" Man this really fucks up the path damnit
 
 let &l:path = py#PythonPath()
 

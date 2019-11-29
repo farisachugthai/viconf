@@ -299,6 +299,7 @@
     "**/__pycache__/**",
     "**/*.pyc"
   ],
+  "list.source.grep.maxColumns": 2000,
   "list.source.grep.useLiteral": false,
   "list.source.helptags.defaultOptions": [
     "--top",
@@ -359,9 +360,9 @@
     "--no-sort",
     "--top"
   ],
-  "list.source.quickfix.defaultArgs": [
-    "preview"
-  ],
+  // "list.source.quickfix.defaultArgs": [
+  //   "preview"
+  // ],
   "list.source.quickfix.defaultOptions": [
     "--top",
     "--normal"

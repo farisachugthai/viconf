@@ -27,7 +27,7 @@ augroup YourFTDetect
   " JSON
   au BufNewFile,BufRead *.json,*.jsonp,*.webmanifest,*.code-workspace,*.jupyterlab-settings set filetype=json
 
-  au BufNewFile,BufRead *.bash,.bashrc,.profile set filetype=bash
+  au BufNewFile,BufRead *.bash,*.bashrc,*.profile,*.bash_profile set filetype=bash
 
   au BufNewFile,BufRead *.sip set filetype=cpp
 

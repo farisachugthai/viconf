@@ -63,6 +63,8 @@ let g:ale_set_signs = 1
 let g:ale_sign_column_always = 1
 let g:ale_change_sign_column_color = 1
 let g:ale_sign_warning = 'W'
+let g:ale_sign_info = 'I'
+let g:ale_sign_error = 'E'
 let g:ale_sign_highlight_linenrs = 1
 
 

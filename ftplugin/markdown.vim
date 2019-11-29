@@ -115,3 +115,4 @@ endif
 
 
 let b:undo_ftplugin .= 'setl spell< cc< tw< lbr< et< ts< sts< sw< fdl< fdls<'
+      \ . '|unlet! b:undo_ftplugin'

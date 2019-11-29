@@ -2,7 +2,7 @@
   " File: help.vim
   " Author: Faris Chugthai
   " Description: Help files basically don't have an ftplugin
-  " Last Modified: September 10, 2019 
+  " Last Modified: September 10, 2019
 " ============================================================================
 
 " Guard: {{{1
@@ -56,6 +56,7 @@ if !exists('g:no_plugin_maps') && !exists('g:no_man_maps')
   " allow dot and dash in manual page name.
   setlocal iskeyword+=\.,-
   let b:undo_ftplugin = 'setlocal isk< buftype< swf< bufhidden< mod< ro< ma< et< ts< sts< sw< wrap< breakindent< '
+      \ . '|unlet! b:undo_ftplugin'
 
 endif
 

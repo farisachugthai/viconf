@@ -1,8 +1,8 @@
 " Vim syntax file for xonsh
 " Language: Xonsh Shell Script
-" Maintainer: Abhishek Mukherjee
-" Latest Revision: 05 January 2016
-
+" Maintainer: Faris Chugthai
+" Previous Maintainer: Abhishek Mukherjee
+" Latest Revision: Nov 28, 2019
 
 if exists("b:current_syntax")
   finish
@@ -15,26 +15,23 @@ if exists("xsh_highlight_all")
   let xsh_highlight_space_errors = 1
 endif
 
+" Include python files goddamn
+runtime! syntax/python.vim
+unlet b:current_syntax
+
 syn keyword xshStatement    as assert break continue del except exec finally
 syn keyword xshStatement    global lambda pass print raise return try with
 syn keyword xshStatement    yield
-syn match xshEnvironmentVariable "\v\$[a-zA-Z0-9_]+"
-
 syn keyword xshStatement    def class nextgroup=xshFunction skipwhite
-
-syn match xshFunction    "[a-zA-Z_][a-zA-Z0-9_]*" contained
-
 syn keyword xshRepeat    for while
-
 syn keyword xshConditional    if elif else
-
 syn keyword xshOperator    and in is not or
-
 syn keyword xshPreCondit    import from
+syn keyword xshTodo    TODO FIXME XXX contained
 
 syn match xshComment    "#.*$" contains=xshTodo
-
-syn keyword xshTodo    TODO FIXME XXX contained
+syn match xshFunction    "[a-zA-Z_][a-zA-Z0-9_]*" contained
+syn match xshEnvironmentVariable "\v\$[a-zA-Z0-9_]+"
 
 syn region xshString    matchgroup=Normal start=+[uU]\='+ end=+'+ skip=+\\\\\|\\'+ contains=xshEscape
 syn region xshString    matchgroup=Normal start=+[uU]\="+ end=+"+ skip=+\\\\\|\\"+ contains=xshEscape
@@ -52,18 +49,16 @@ syn match xshEscape    "\(\\u\x\{4}\|\\U\x\{8}\)" contained
 
 syn match xshEscape    "\\$"
 
-
-if exists("xsh_highlight_numbers")
+" if exists("xsh_highlight_numbers")
   syn match xshNumber    "\<0x\x\+[Ll]\=\>"
   syn match xshNumber    "\<\d\+[LljJ]\=\>"
   syn match xshNumber    "\.\d\+\([eE][+-]\=\d\+\)\=[jJ]\=\>"
   syn match xshNumber    "\<\d\+\.\([eE][+-]\=\d\+\)\=[jJ]\=\>"
   syn match xshNumber    "\<\d\+\.\d\+\([eE][+-]\=\d\+\)\=[jJ]\=\>"
+" endif
 
-endif
 
-
-if exists("xsh_highlight_builtins")
+" if exists("xsh_highlight_builtins")
   syn keyword xshBuiltin    Ellipsis False None NotImplemented True __debug__
   syn keyword xshBuiltin    __import__ abs all any apply basestring bin bool
   syn keyword xshBuiltin    buffer bytearray bytes callable chr classmethod
@@ -77,11 +72,10 @@ if exists("xsh_highlight_builtins")
   syn keyword xshBuiltin    raw_input reduce reload repr reversed round set
   syn keyword xshBuiltin    setattr slice sorted staticmethod str sum super
   syn keyword xshBuiltin    tuple type unichr unicode vars xrange zip
+" endif
 
-endif
 
-
-if exists("xsh_highlight_exceptions")
+" if exists("xsh_highlight_exceptions")
   syn keyword xshException    ArithmeticError AssertionError AttributeError
   syn keyword xshException    BaseException BufferError BytesWarning
   syn keyword xshException    DeprecationWarning EOFError EnvironmentError
@@ -99,54 +93,50 @@ if exists("xsh_highlight_exceptions")
   syn keyword xshException    UnicodeTranslateError UnicodeWarning
   syn keyword xshException    UserWarning ValueError Warning
   syn keyword xshException    ZeroDivisionError
+" endif
 
-endif
 
-
-if exists("xsh_highlight_space_errors")
+" if exists("xsh_highlight_space_errors")
   syn match xshSpaceError    display excludenl "\S\s\+$"ms=s+1
   syn match xshSpaceError    display " \+\t"
   syn match xshSpaceError    display "\t\+ "
+" endif
 
-endif
+hi def link xshComment Comment
+hi def link xshConditional Conditional
+hi def link xshEscape Special
+hi def link xshFunction Function
+hi def link xshOperator Operator
+hi def link xshPreCondit PreCondit
+hi def link xshRepeat Repeat
+hi def link xshStatement Statement
+hi def link xshString String
+hi def link xshTodo Todo
 
+  " if exists("xsh_highlight_numbers")
+hi def link xshNumber Number
+  " endif
+hi def link xshEnvironmentVariable Number
 
-  hi def link xshStatement Statement
-  hi def link xshStatement Statement
-  hi def link xshFunction Function
-  hi def link xshRepeat Repeat
-  hi def link xshConditional Conditional
-  hi def link xshOperator Operator
-  hi def link xshPreCondit PreCondit
-  hi def link xshComment Comment
-  hi def link xshTodo Todo
-  hi def link xshString String
-  hi def link xshEscape Special
-  hi def link xshEscape Special
+  " if exists("xsh_highlight_builtins")
+hi def link xshBuiltin Function
+  " endif
 
-  if exists("xsh_highlight_numbers")
-    hi def link xshNumber Number
-  endif
-  hi def link xshEnvironmentVariable Number
+  " if exists("xsh_highlight_exceptions")
+hi def link xshException Exception
+  " endif
 
-  if exists("xsh_highlight_builtins")
-    hi def link xshBuiltin Function
-  endif
-
-  if exists("xsh_highlight_exceptions")
-    hi def link xshException Exception
-  endif
-
-  if exists("xsh_highlight_space_errors")
-    hi def link xshSpaceError Error
-  endif
+  " if exists("xsh_highlight_space_errors")
+hi def link xshSpaceError Error
+  " endif
 
 
 " Uncomment the 'minlines' statement line and comment out the 'maxlines'
 " statement line; changes behaviour to look at least 2000 lines previously for
 " syntax matches instead of at most 200 lines
-syn sync match xshSync grouphere NONE "):$"
-syn sync maxlines=200
+" syn sync match xshSync grouphere NONE "):$"
+" syn sync maxlines=200
 "syn sync minlines=2000
+syn sync fromstart
 
 let b:current_syntax = "xsh"

@@ -6,8 +6,6 @@
 " ============================================================================
 
 " Options: {{{1
-
-" idk why this has been necessary
 if !exists(':FZF')
   call plug#load('fzf')
 endif
@@ -45,6 +43,7 @@ let g:fzf_ag_options = ' --smart-case -u -g " " --'
 let g:fzf_rg_options = ' --hidden --max-columns 300 --max-depth 8 --max-count 50 '
       \. '--color ansi --no-column --no-line-number  --no-heading '
       \. ' --auto-hybrid-regex --max-columns-preview --no-messages --smart-case '
+      \. '--glob "!{.git,node_modules,*.txt,*.csv,*.json,*.html}" '
 
 
 let g:fzf_options = [
@@ -232,13 +231,21 @@ tnoremap <C-t>                    <Cmd>FZF! <CR>
 " -complete=file_in_path	file and directory names in |'path'|
 
 " So that this command behaves similarly to the built in find.
+" Doesn't work
+command! -bang -nargs=* -complete=file_in_path FZRgFind
+      \ call fzf#vim#grep(
+      \ 'rg --no-heading --smart-case --no-messages ^ '
+      \ . shellescape(<q-args>), 1, <bang>0 ? fzf#vim#with_preview({'dir': system('git rev-parse --show-toplevel 2&>/dev/null')[:-2]}, 'up:60%')
+      \ : fzf#vim#with_preview({'dir': system('git rev-parse --show-toplevel 2&>/dev/null')[:-2]}, 'right:50%:hidden', '?'),
+      \ <bang>0)
+
+" Damn sitll doesn't work
 command! -bang -nargs=* -complete=file_in_path FZFind
       \ call fzf#vim#grep(
       \ 'rg --no-heading --smart-case --no-messages ^ '
       \ . shellescape(<q-args>), 1, <bang>0 ? fzf#vim#with_preview('up:60%')
       \ : fzf#vim#with_preview('right:50%:hidden', '?'),
       \ <bang>0)
-
 " Grep: {{{2
 command! -nargs=? -bang -bar FZGrep fzf#run(fzf#wrap({
       \ 'source': 'silent! grep! <q-args>',

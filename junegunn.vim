@@ -104,6 +104,8 @@ if empty(s:termux)
   Plug 'elzr/vim-json', { 'for': 'json' }
   Plug 'omnisharp/omnisharp-vim', {'for': 'cs'}
 
+  Plug 'ludovicchabant/vim-gutentags'
+
 endif
 
 Plug 'michaeljsmith/vim-indent-object'
@@ -115,4 +117,4 @@ call plug#end()
 " Commands: {{{1
 
 " I utilize this command so often I may as well save the characters
-command! -nargs=0 Plugins echo keys(plugs)
+command! -nargs=0 Plugins echo map(keys(plugs), 'v:index"\t" v:val . "\n"')
