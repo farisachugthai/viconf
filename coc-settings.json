@@ -580,7 +580,6 @@
   "vimlsp.indexes.runtimepath": true,
   "vimlsp.suggest.fromRuntimepath": true,
   "vimlsp.suggest.fromVimruntime": true,
-  "vimlsp.trace.server": "messages",
   "workspace.ignoredFiletypes": [
     "markdown",
     "log",

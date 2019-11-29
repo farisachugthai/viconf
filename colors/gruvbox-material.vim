@@ -27,15 +27,19 @@ let g:gruvbox_material_transparent_background = 1
 let g:gruvbox_material_enable_bold = 1
 let g:gruvbox_material_background = 'hard'
 
+
+" From ned batchelder.
+match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
+
 " These got cleared somehow.
-	" Screen line that the cursor is
-	hi CursorLine ctermbg=237 guibg=#3c3836 guifg=NONE ctermfg=NONE cterm=NONE gui=NONE guisp=NONE
+" Screen line that the cursor is
+hi CursorLine ctermbg=237 guibg=#3c3836 guifg=NONE ctermfg=NONE cterm=NONE gui=NONE guisp=NONE
 
-	" Line number of CursorLine
-	hi CursorLineNr guifg=#fabd2f guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE ctermbg=237
+" Line number of CursorLine
+hi CursorLineNr guifg=#fabd2f guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE ctermbg=237
 
-	" Screen column that the cursor is
-	hi! link CursorColumn CursorLine
+" Screen column that the cursor is
+hi! link CursorColumn CursorLine
 
 " Additional Links
 

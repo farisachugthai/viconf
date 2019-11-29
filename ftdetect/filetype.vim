@@ -5,24 +5,11 @@
   " Last Modified: Oct 10, 2019
 " ============================================================================
 
-" Guards: {{{1
-" is did_load_filetypes already taken? then why is that the example in the
-" help?
-if exists("b:loaded_your_filetypes")
-  finish
-endif
-let b:loaded_your_filetypes = 1
-
-let s:cpo_save = &cpoptions
-set cpoptions-=C
-
 " Options: {{{1
 
-" Idk if i did this right
 let g:requirements#detect_filename_pattern = 'Pipfile'
 
 let g:is_bash = 1
-
 
 " Autocmds: {{{1
 augroup YourFTDetect
@@ -44,9 +31,5 @@ augroup YourFTDetect
 
   au BufNewFile,BufRead *.sip set filetype=cpp
 
+  au BufNewFile,BufRead setup.cfg set filetype=dosini
 augroup END
-
-" Atexit: {{{1
-
-let &cpoptions = s:cpo_save
-unlet s:cpo_save
