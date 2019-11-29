@@ -88,6 +88,9 @@ nnoremap C-a ^
 " nothing different than <CR>. Wtf???
 nnoremap + C-a
 
+command! -bar RangerChooser call vim_file_chooser#RangeChooser()
+nnoremap <leader>r :<C-U>vim_file_chooser#RangerChooser<CR>
+
 " Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

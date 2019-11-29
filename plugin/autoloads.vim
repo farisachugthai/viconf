@@ -76,7 +76,7 @@ inoremap gI gi
 " There's a good buffers#PreviewWord that shows some stuff i'm sure you wanna do
 
 set tags+=./tags,./*/tags
-set tags^=./.git/tags tagcase=smart showfulltag
+setglobal tags^=./.git/tags tagcase=smart showfulltag
 
 " So I just realized that I have almost no mappings or settings
 " for the: paths, includes, defines, the clist or llist, tagstack or preview

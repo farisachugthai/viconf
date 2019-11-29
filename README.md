@@ -325,6 +325,32 @@ features that have been built into every version of Neovim.
 Neovim is my primary text editor and as a result, I've attempted integrating it
 into as much of my workflow as possible.
 
+## Settings
+
+### set vs let
+
+`set` allows one to set useful configurations and is easier to read than
+some corresponding `let` statements, but it only allows one to
+define a variable to one literal value.
+
+The set keyword in vim is best used when setting an option to a well defined
+string or a boolean of some sort.
+
+`let` allows for scoping variables, and as Vim has an incredibly unintuitive
+system for coercing types, this will frequently come in handy.
+
+In addition, `let` is best used when an expression requires evaluating a 
+external value, such as an environment variable of some sort.
+
+### Options of note
+
+```vim
+" Keep statusline overflow to simply empty spaces no matter if higlighting
+" is on or off. use some unicode for cooler lines and use periods not --- for
+" deleted diff lines. It makes diff buffers very visually noisy.
+let &g:fillchars = "stl:' ',stlnc:' ',vert:\u250b,fold:\u00b7,diff:'.'"
+```
+
 ## License
 
 This project is licensed under the MIT License.
