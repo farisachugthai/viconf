@@ -6,29 +6,36 @@
 " ============================================================================
 
 " Guard: {{{1
+
 if exists('b:did_ftplugin') | finish | endif
-let b:did_ftplugin = 1
 
 
+" Sourcing Everything: {{{1
 runtime $VIMRUNTIME/ftplugin/python.vim
 unlet! b:did_ftplugin
+
 runtime ftplugin/python.vim
 unlet! b:did_ftplugin
+
 runtime ftplugin/python/*.vim
 unlet! b:did_ftplugin
+
 runtime after/ftplugin/python.vim
 unlet! b:did_ftplugin
+
 runtime after/ftplugin/python/*.vim
 unlet! b:did_ftplugin
 
 runtime $VIMRUNTIME/syntax/python.vim
-" Is this a thing?
-" unlet b:did_syntax
+
+" Options: {{{1
 setlocal syntax=xonsh
 
 syntax sync fromstart
 
 setlocal foldmethod=indent
+setlocal suffixesadd+=,.xsh,.xonshrc,
 
-let b:undo_ftplugin = 'setlocal foldmethod< '
-      \ . '|unlet! b:undo_ftplugin'
+" Atexit: {{{1
+let b:undo_ftplugin = 'setlocal foldmethod< syntax< sua< '
+            \ . '|unlet! b:undo_ftplugin'

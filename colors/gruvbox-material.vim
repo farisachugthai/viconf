@@ -1266,7 +1266,10 @@ if (has('termguicolors') && &termguicolors) || has('gui_running')  " {{{
       " Got this from `:he 'pumblend'
       hi PmenuSel guifg=#282828 guibg=#a89984 guisp=NONE gui=NONE cterm=NONE blend=0
       " Yeah. Blend is 0
-      hi TabLineSel guifg=#282828 guibg=#a89984 guisp=NONE gui=bold cterm=bold
+      " Yo tablinesel sets this way is pretty awful
+      " hi TabLineSel guifg=#282828 guibg=#a89984 guisp=NONE gui=bold cterm=bold
+      " Actually the lightbg one is pretty solid
+      hi TabLineSel guifg=#ebdbb2 guibg=#7c6f64 guisp=NONE gui=bold cterm=bold
       hi WildMenu guifg=#282828 guibg=#a89984 guisp=NONE gui=NONE cterm=NONE
       if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
         hi Pmenu guifg=#dfbf8e guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
@@ -1322,7 +1325,7 @@ if (has('termguicolors') && &termguicolors) || has('gui_running')  " {{{
     hi SpellRare guifg=#d3869b guibg=NONE guisp=#d3869b gui=italic,undercurl cterm=italic,undercurl
     hi Visual guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
     hi VisualNOS guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
-    hi Todo guifg=#928374 guibg=NONE guisp=NONE gui=bold,italic cterm=bold,italic
+    hi Todo guifg=#928374 guibg=NONE guisp=NONE gui=bold,italic,underline cterm=bold,italic,underline
     hi CursorIM guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
     hi ToolbarLine guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE
     hi ToolbarButton guifg=#dfbf8e guibg=#665c54 guisp=NONE gui=bold cterm=bold
@@ -1734,7 +1737,8 @@ if (has('termguicolors') && &termguicolors) || has('gui_running')  " {{{
     endif
   else
     hi PmenuSel guifg=#fbf1c7 guibg=#7c6f64 guisp=NONE gui=NONE cterm=NONE
-    hi TabLineSel guifg=#fbf1c7 guibg=#7c6f64 guisp=NONE gui=bold cterm=bold
+    " hi TabLineSel guifg=#fbf1c7 guibg=#7c6f64 guisp=NONE gui=bold cterm=bold
+    hi TabLineSel guifg=#ebdbb2 guibg=#7c6f64 guisp=NONE gui=bold cterm=bold
     hi WildMenu guifg=#fbf1c7 guibg=#7c6f64 guisp=NONE gui=NONE cterm=NONE
     if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
       hi Pmenu guifg=#764e37 guibg=#ebdbb2 guisp=NONE gui=NONE cterm=NONE
@@ -2189,7 +2193,8 @@ if s:t_Co >= 256  "  {{{
       endif
     else
       hi PmenuSel ctermfg=235 ctermbg=246 cterm=NONE
-      hi TabLineSel ctermfg=235 ctermbg=246 cterm=bold
+      " hi TabLineSel ctermfg=235 ctermbg=246 cterm=bold
+      hi TabLineSel ctermfg=237 ctermbg=246 cterm=bold
       hi WildMenu ctermfg=235 ctermbg=246 cterm=NONE
       if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
         hi Pmenu ctermfg=223 ctermbg=237 cterm=NONE
@@ -2244,7 +2249,7 @@ if s:t_Co >= 256  "  {{{
     hi SpellRare ctermfg=175 ctermbg=NONE cterm=italic,underline
     hi Visual ctermfg=NONE ctermbg=NONE cterm=reverse
     hi VisualNOS ctermfg=NONE ctermbg=NONE cterm=reverse
-    hi Todo ctermfg=245 ctermbg=NONE cterm=bold,italic
+    hi Todo ctermfg=245 ctermbg=NONE cterm=bold,italic,underline
     hi CursorIM ctermfg=NONE ctermbg=NONE cterm=reverse
     hi ToolbarLine ctermfg=NONE ctermbg=241 cterm=NONE
     hi ToolbarButton ctermfg=223 ctermbg=241 cterm=bold
@@ -2632,7 +2637,8 @@ if s:t_Co >= 256  "  {{{
     endif
   else
     hi PmenuSel ctermfg=229 ctermbg=243 cterm=NONE
-    hi TabLineSel ctermfg=229 ctermbg=243 cterm=bold
+    " hi TabLineSel ctermfg=229 ctermbg=243 cterm=bold
+      hi TabLineSel ctermfg=237 ctermbg=246 cterm=bold
     hi WildMenu ctermfg=229 ctermbg=243 cterm=NONE
     if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
       hi Pmenu ctermfg=237 ctermbg=223 cterm=NONE
@@ -2687,7 +2693,7 @@ if s:t_Co >= 256  "  {{{
   hi SpellRare ctermfg=96 ctermbg=NONE cterm=italic,underline
   hi Visual ctermfg=NONE ctermbg=NONE cterm=reverse
   hi VisualNOS ctermfg=NONE ctermbg=NONE cterm=reverse
-  hi Todo ctermfg=245 ctermbg=NONE cterm=bold,italic
+  hi Todo ctermfg=245 ctermbg=NONE cterm=bold,italic,underline
   hi CursorIM ctermfg=NONE ctermbg=NONE cterm=reverse
   hi ToolbarLine ctermfg=NONE ctermbg=248 cterm=NONE
   hi ToolbarButton ctermfg=237 ctermbg=248 cterm=bold

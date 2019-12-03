@@ -73,7 +73,9 @@ setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 setlocal cinkeys-=0#
 setlocal indentkeys-=0#
 setlocal include=^\\s*\\(from\\\|import\\)
-setlocal shiftround
+" This really fucks stuff up if you're indenting rst blocks as 3 spaces and
+" python as 4
+setlocal noshiftround
 setlocal suffixesadd=.py,.rst
 
 let &l:path = py#PythonPath()

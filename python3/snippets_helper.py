@@ -23,24 +23,24 @@ from collections import Counter
 
 # http://docutils.sourceforge.net/docs/ref/rst/roles.html
 TEXT_ROLES = ['emphasis', 'literal', 'code', 'math',
-			  'pep-reference', 'rfc-reference',
-			  'strong', 'subscript', 'superscript',
-			  'title-reference', 'raw']
+                          'pep-reference', 'rfc-reference',
+                          'strong', 'subscript', 'superscript',
+                          'title-reference', 'raw']
 TEXT_ROLES_REGEX = r'\.\.\srole::?\s(w+)'
 
 # http://docutils.sourceforge.net/docs/ref/rst/directives.html#specific-admonitions
 SPECIFIC_ADMONITIONS = ["attention", "caution", "danger",
-						"error", "hint", "important", "note",
-						"tip", "warning"]
+                                                "error", "hint", "important", "note",
+                                                "tip", "warning"]
 # http://docutils.sourceforge.net/docs/ref/rst/directives.html
 DIRECTIVES = ['code', 'contents', 'admonition', 'table', 'csv-table', 'list-table',
-			  'class', 'container', 'sidebar', 'topic', 'title',
-			  'role', 'default-role', 'raw']
+              'class', 'container', 'sidebar', 'topic', 'title',
+              'role', 'default-role', 'raw']
 
 # DIRECTIVES_WITHOUT_TITLE means directive arguments equal None
 DIRECTIVES_WITHOUT_TITLE = ['math', 'meta', 'parsed-literal', 'line-block',
-							'header', 'compound', 'highlights', 'pull-quote',
-							'footer', 'epigraph', 'rubric', 'sectnum']
+                            'header', 'compound', 'highlights', 'pull-quote',
+                            'footer', 'epigraph', 'rubric', 'sectnum']
 
 INCLUDABLE_DIRECTIVES = ['image', 'figure', 'include']
 
@@ -48,27 +48,28 @@ INCLUDABLE_DIRECTIVES = ['image', 'figure', 'include']
 DIRECTIVES_FOR_SUBSTITUTION = ['replace', 'unicode', 'date']
 
 # http://www.pygal.org/en/stable/documentation/types/index.html
-CHART_TYPES = ["Line", "StackedLine", "HorizontalLine", "Bar", "StackedBar", "HorizontalBar", "Histogram", "XY", "DateLine", "TimeLine", "TimeDeltaLine", "DateTimeLine", "Pie", "Radar", "Box", "Dot", "Funnel", "Gauge", "SolidGauge", "Pyramid", "Treemap"]
+CHART_TYPES = ["Line", "StackedLine", "HorizontalLine", "Bar", "StackedBar", "HorizontalBar", "Histogram", "XY", "DateLine",
+               "TimeLine", "TimeDeltaLine", "DateTimeLine", "Pie", "Radar", "Box", "Dot", "Funnel", "Gauge", "SolidGauge", "Pyramid", "Treemap"]
 
 
 # Tests for the existence of a variable declared by Vim's filetype detection
 # suggesting the type of shell script of the current file
 def testShell(scope, shell):
-	return vim.eval("exists('" + scope + ":is_" + shell + "')")
+    return vim.eval("exists('" + scope + ":is_" + shell + "')")
 
 
 # Loops over the possible variables, checking for global variables
 # first since they indicate an override by the user.
 def getShell():
-	for scope in ["g", "b"]:
-		for shell in ["bash", "posix", "sh", "kornshell"]:
-			if testShell(scope, shell) == "1":
-				if shell == "kornshell":
-					return "ksh"
-				if shell == "posix":
-					return "sh"
-				return shell
-	return "sh"
+    for scope in ["g", "b"]:
+        for shell in ["bash", "posix", "sh", "kornshell"]:
+            if testShell(scope, shell) == "1":
+                if shell == "kornshell":
+                    return "ksh"
+                if shell == "posix":
+                    return "sh"
+                return shell
+    return "sh"
 
 
 def complete(tab, opts):
@@ -158,6 +159,7 @@ def make_box(twidth, bwidth=None):
 
         :func:`get_comment_format`
     """
+    b, m, e, i = (s.strip() for s in get_comment_format())
     bwidth_inner = bwidth - 3 - max(
         len(b), len(i + e)
     ) if bwidth else twidth + 2
@@ -431,7 +433,6 @@ class ItalicWrapper(TextTag):
         return "<i>{}</i>".format(self._wrapped.render())
 
 
-
 def create_table(snip):
     """Create a table. Used for markdown snippets.
 
@@ -466,7 +467,6 @@ def create_table(snip):
     snip.expand_anon(anon_snippet_table)
 
 
-
 def make_items(times, leading='+'):
     """Make lines with leading char multiple times.
 
@@ -491,19 +491,19 @@ def make_items(times, leading='+'):
 
 
 def split_line(text):
-	import textwrap
-	lines = textwrap.wrap(text, 78 - 19)
-	output = list()
-	for line in lines:
-		output.append('*' + ' '*19 + line)
-	snip_line = snip.tabstops[4].end[0]
-	snip.buffer.append(output, snip_line + 1)
-	del snip.buffer[snip_line]
+    import textwrap
+    lines = textwrap.wrap(text, 78 - 19)
+    output = list()
+    for line in lines:
+        output.append('*' + ' '*19 + line)
+    snip_line = snip.tabstops[4].end[0]
+    snip.buffer.append(output, snip_line + 1)
+    del snip.buffer[snip_line]
 
 
 def get_args(arglist):
-	args = [arg.strip() for arg in arglist.split(',') if arg]
-	return args
+    args = [arg.strip() for arg in arglist.split(',') if arg]
+    return args
 
 
 def x(snip):

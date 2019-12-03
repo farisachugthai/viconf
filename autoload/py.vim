@@ -67,9 +67,10 @@ function py#PythonPath() abort  " {{{1
       let s:path = s:root_dir . '/lib' . s:path
     endif
 
-  " else
+  else
+    echoerr 'autoload/py.vim: g:python3_host_prog is not set'
     " Todo i guess. lol sigh
-    " return s:orig_path
+    return s:path
 
   endif
 
@@ -141,11 +142,16 @@ function py#ALE_Python_Conf() abort  " {{{1
   let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
   let b:ale_fixers += [ 'reorder-python-imports' ]
 
+  if executable('black')
+    let b:ale_fixers+=['black']
+  endif
+
   if executable('yapf')
     let b:ale_fixers += ['yapf']
-  else
-    if executable('autopep8')
-        let b:ale_fixers += ['autopep8']
-    endif
   endif
+
+  if executable('autopep8')
+      let b:ale_fixers += ['autopep8']
+  endif
+
 endfunction

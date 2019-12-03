@@ -2,7 +2,7 @@
   " File: pytest.vim
   " Author: Faris Chugthai
   " Description: Pytest compiler for Vim
-  " Last Modified: July 19, 2019 
+  " Last Modified: July 19, 2019
 " ============================================================================
 
 " Guards: {{{1
@@ -14,12 +14,12 @@ let current_compiler = 'pytest'
 if exists(':CompilerSet') != 2 " older Vim always used :setlocal
   command! -nargs=* CompilerSet setlocal <args>
 endif
- 
+
 let s:cpo_save = &cpoptions
 set cpoptions-=C
- 
-CompilerSet makeprg=py.test\ --tb=short\ -q
- 
+
+CompilerSet makeprg=py.test\ --tb=short\ -q\ --color=no
+
 CompilerSet errorformat=
       \%-G=%#\ ERRORS\ =%#,
       \%-G=%#\ FAILURES\ =%#,
@@ -35,6 +35,6 @@ CompilerSet errorformat=
       \%C%.%#,
       \%-G%.%#\ seconds,
       \%-G%.%#,
- 
+
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

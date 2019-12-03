@@ -172,23 +172,23 @@ imap <Leader><tab>                 <Plug>(fzf-maps-i)
 " Ag and History: {{{2
 
 " Map vim defaults to fzf history commands
-noremap <silent> q:                <Cmd>History:<CR>
-noremap <silent> q/                <Cmd>History/<CR>
+noremap <silent> q:                <Cmd>FufHistory:<CR>
+noremap <silent> q/                <Cmd>FufHistory/<CR>
 
 " And get the rest of the fzf.vim commands involved.
-noremap <silent> <Leader>L         <Cmd>Lines<CR>
-noremap <silent> <Leader>ag        <Cmd>Ag <C-R><C-W><CR>
-noremap <silent> <Leader>AG        <Cmd>Ag <C-R><C-A><CR>
-xnoremap <silent> <Leader>ag       y<Cmd>Ag <C-R>"<CR>
-nnoremap <silent> <Leader>`        <Cmd>Marks<CR>
+noremap <silent> <Leader>L         <Cmd>FufLines<CR>
+noremap <silent> <Leader>ag        <Cmd>FufAg <C-R><C-W><CR>
+noremap <silent> <Leader>AG        <Cmd>FufAg <C-R><C-A><CR>
+xnoremap <silent> <Leader>ag       y<Cmd>FufAg <C-R>"<CR>
+nnoremap <silent> <Leader>`        <Cmd>FufMarks<CR>
 
 " If you want help with that, remember that :he fzf and :he fzf-vim give 2
 " different docs
 
 " FZF beat fugitive out on this one. Might take git log too.
-noremap <Leader>gg                 <Cmd>GGrep<Space>
-noremap <Leader>gl                 <Cmd>Commits<CR>
-noremap <Leader>GS                 <Cmd>GFiles?<CR>
+noremap <Leader>gg                 <Cmd>FufGGrep<Space>
+noremap <Leader>gl                 <Cmd>FufCommits<CR>
+noremap <Leader>GS                 <Cmd>FufGFiles?<CR>
 
 
 " Buffers Windows Files: {{{2
@@ -197,14 +197,14 @@ noremap <Leader>GS                 <Cmd>GFiles?<CR>
 " mapping is amazing.
 nnoremap <silent><expr> <Leader>n (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
 
-noremap <silent> <Leader>C        <Cmd>Colors<CR>
-noremap <silent> <Leader><CR>     <Cmd>Buffers<CR>
-noremap <Leader>bu                <Cmd>Buffers<CR>
-noremap <Leader>B                <Cmd>Buffers<CR>
-noremap <Leader>f                 <Cmd>Files<CR>
+noremap <silent> <Leader>C        <Cmd>FufColors<CR>
+noremap <silent> <Leader><CR>     <Cmd>FufBuffers<CR>
+noremap <Leader>bu                <Cmd>FufBuffers<CR>
+noremap <Leader>B                 <Cmd>FufBuffers<CR>
+noremap <Leader>f                 <Cmd>FufFiles<CR>
 
 " Make fzf behave the same in a real shell and nvims.
-tnoremap <C-t>                    <Cmd>FZF! <CR>
+tnoremap <C-t>                    <Cmd>FufFZF! <CR>
 
 " Might need to wrap this in a `if &shell ==# 'bash'
 " tnoremap <A-c>                    __fzf_cd__

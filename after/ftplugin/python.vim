@@ -6,11 +6,6 @@
 " ============================================================================
 
 " Guards: {{{1
-if exists('b:did_python_vim') || &compatible || v:version < 700
-  finish
-endif
-let b:did_python_vim = 1
-
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
@@ -21,7 +16,7 @@ let g:python_highlight_all = 1
 let g:python_space_error_highlight = 1
 
 " Oddly I don't have an ftplugin guard setup. But rst sourced this in so...
-if &filetype != 'python'
+if &filetype !=# 'python' || &filetype !=# 'xonsh'
   finish
 endif
 
@@ -142,8 +137,10 @@ let b:undo_ftplugin = 'setlocal lbr< tw< cms< et< sts< ts< sw< cc< fdm< kp<'
       \ . '|setlocal indentkeys<'
       \ . '|setlocal omnifunc<'
       \ . '|setlocal cinkeys<'
-      \ . '|unmap <buffer> <F5>'
       \ . '|unlet! b:undo_ftplugin'
 
+" Dude i think that this just starts autofiring if you have ale or coc enabled
+" jesus christ is it annoying
+      " \ . '|unmap <buffer> <F5>'
 let &cpoptions = s:cpo_save
 unlet s:cpo_save
