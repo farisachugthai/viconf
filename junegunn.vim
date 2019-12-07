@@ -106,6 +106,8 @@ if empty(s:termux)
 
   Plug 'ludovicchabant/vim-gutentags'
 
+  " Well this looks sweet
+  Plug 'psf/black', {'for': 'python'}
 endif
 
 Plug 'michaeljsmith/vim-indent-object'

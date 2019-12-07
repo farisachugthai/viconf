@@ -11,6 +11,7 @@ set cpoptions-=C
 
 " Options: {{{1
 
+setlocal foldmethod=syntax
 setlocal expandtab
 setlocal shiftwidth=2
 setlocal tabstop=2
@@ -20,12 +21,8 @@ setlocal nolinebreak
 setlocal wrap
 
 let &l:commentstring='" %s'
-" TODO: Probably needs to be a function. Should checj if we already added
-" this and don't do it more than once
-" let &path = &path . ',' . stdpath('data') . '/plugged/*/*/*.vim'
-let &l:path = ftplugins#VimPath()
 
-setlocal includeexpr=substitute(v:fname,'\\#','/','g')
+let &l:path = ftplugins#VimPath()
 
 " I FIGURED OUT WHY 'gf' didn't work!
 setlocal isfname-=#
@@ -80,7 +77,7 @@ if !empty('g:loaded_ale')
 endif
 
 " Atexit: {{{1
-let b:undo_ftplugin = 'setlocal com< cms< et< sw< ts< sts< lbr< sua< wrap< isk<'
+let b:undo_ftplugin = 'setlocal fdm< com< cms< et< sw< ts< sts< lbr< sua< wrap< isk<'
       \ . '|setlocal path< isf<'
       \ . '|unlet! b:undo_ftplugin'
 

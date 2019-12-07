@@ -183,6 +183,10 @@ nnoremap ,q  <Plug>(coc-fix-current)<CR>
 
 " Commands: {{{1
 
+" Dec 05, 2019: Got a new one for ya!
+command! CocExtensionStats :py3 from pprint import pprint; pprint(vim.eval('CocAction("extensionStats")'))
+
+
 " Let's group these together by prefixing with Coc
 " Use `:Format` to format current buffer
 command! -nargs=0 CocFormat call CocAction('format')
@@ -205,9 +209,23 @@ command! -nargs=0 CocPython call CocActionAsync('runCommand', 'python.startREPL'
 
 " Use autocmd to force lightline update.
 " Well I have my own statusline function but you're close
-if exists('*Statusline_expr')
-  autocmd User CocStatusChange,CocDiagnosticChange call Statusline_expr()
-endif
+augroup CocUserAutocmds
+  au!
+  autocmd User CocStatusChange,CocDiagnosticChange
+          \| if exists('*Statusline_expr')
+          \| call Statusline_expr()
+          \| endif
+
+	autocmd User CocJumpPlaceholder call
+				\ CocActionAsync('showSignatureHelp')
+
+
+  " This happens with coc-powershell all the time
+  autocmd User CocTerminalOpen stopinsert
+
+	autocmd CursorHold * silent call CocActionAsync('highlight')
+
+augroup END
 
 " Atexit: {{{1
 let &cpoptions = s:cpo_save

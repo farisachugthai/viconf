@@ -9,23 +9,15 @@ scriptencoding utf-8
 set fileformat=unix fileformats=unix,dos  " don't let DOS fuck up the EOL
 let s:cpo_save = &cpoptions
 set cpoptions-=C
+setglobal cpoptions-=c,e,_  " couple options that bugged me
 
 let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Evervim. Thanks!
 let s:wsl = !empty($WSL_DISTRO_NAME)
 let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux) && empty(s:wsl)
 
-let s:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/init.vim.local'
-runtime s:local_vimrc
-
-let s:vim_plug = filereadable(glob(fnameescape(stdpath('data') . '/site/autoload/plug.vim')))
-
-if empty(s:vim_plug) && exists('*plugins#InstallPlug') | call plugins#InstallPlug() | endif
-runtime junegunn.vim  " Load my plugins.
-
-" Don't assume that the InstallPlug() func worked so ensure it's defined
-if empty('plugs') | let plugs = {} | endif
-let &rtp = stdpath('config') . ',' . stdpath('data') . '/site,' . &rtp
-
+" let s:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/init.vim.local'
+" runtime s:local_vimrc
+let myfiletypefile='ftdetect/filetype.vim'
 packadd justify cfilter matchit  " Add some packages
 set synmaxcol=400 termguicolors  " Set up the colorscheme
 syntax sync fromstart linebreaks=2
@@ -112,6 +104,15 @@ noremap <Leader>O O<Esc>
 set showmatch matchpairs+=<:> lazyredraw matchtime=20  " Show the matching pair for 2 seconds
 let g:matchparen_timeout = 500
 let g:matchparen_insert_timeout = 300
+
+let s:vim_plug = filereadable(glob(fnameescape(stdpath('data') . '/site/autoload/plug.vim')))
+
+if empty(s:vim_plug) && exists('*plugins#InstallPlug') | call plugins#InstallPlug() | endif
+runtime junegunn.vim  " Load my plugins.
+
+" Don't assume that the InstallPlug() func worked so ensure it's defined
+if empty('plugs') | let plugs = {} | endif
+let &rtp = stdpath('config') . ',' . stdpath('data') . '/site,' . &rtp
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

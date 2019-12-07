@@ -59,9 +59,7 @@ setlocal foldmethod=indent
 
 setlocal suffixesadd+=.py
 setlocal omnifunc=python3complete#Complete
-" Makes moving too hard to add it
-" setlocal iskeyword-=.
-" Man this really fucks up the path damnit
+setlocal isfname+=.
 
 let &l:path = py#PythonPath()
 
@@ -130,7 +128,7 @@ endif
 " Atexit: {{{1
 " For a reference go to $VIMRUNTIME/ftplugin/python.vim
 let b:undo_ftplugin = 'setlocal lbr< tw< cms< et< sts< ts< sw< cc< fdm< kp<'
-      \ . '|setlocal sr< sua< isk< ep< fp< path< cinw<'
+      \ . '|setlocal sr< sua< isf< ep< fp< path< cinw<'
       \ . '|setlocal mp< efm<'
       \ . '|setlocal comments<'
       \ . '|setlocal include<'

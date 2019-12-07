@@ -1,8 +1,8 @@
 python ~/python
 startup ~/.ipython/profile_default/startup
 tutorials ~/Dropbox/python/tutorials
+
 WindowsKits C:/Program Files (x86)/Windows Kits/10
 msvcincludes C:/tools/vs/2019/Community/VC/Tools/MSVC/14.23.28105/include
-
 freshpy3_lib ~/AppData/Roaming/microsoft-visual-cpp-build-tools/14.0.25420.1/library
 viconf ~/projects/viconf/.config/nvim

@@ -6,10 +6,7 @@
 " ============================================================================
 
 " Guard: {{{1
-if exists('b:did_stl_vim') || &compatible || v:version < 700
-  finish
-endif
-let b:did_stl_vim = 1
+let b:loaded_plugin_stl = 1
 
 let s:cpo_save = &cpoptions
 set cpoptions-=C
@@ -79,6 +76,7 @@ function! s:Statusline() abort
   " shit g:ale_enabled == 0 returns True
   let ale_stl = '%{exists("g:ale_enabled") ? "[ALE]" : ""}'
 
+  let s:gutentags = '%{exists("g:gutentags_enabled") ? gutentags#statusline() : ""}'
 
   return '[%n] ' . dicons . '%m' . '%r' . ' %y '
         \. fug . csv
@@ -88,6 +86,7 @@ function! s:Statusline() abort
         \. ' %f'
         \. sep
         \. ale_stl
+        \. s:gutentags
         \. pos . '%*' . ' %P'
 
 

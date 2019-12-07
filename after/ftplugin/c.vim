@@ -45,8 +45,8 @@ setlocal omnifunc=ccomplete#Complete
 setlocal include=^\s*#\s*include
 " setlocal define
 " setlocal includexpr
-" setlocal cinwords cinkeys etc etc
-llet &l:path=ftplugins#CPath()
+" setlocal cinwords cinkeys etc tc
+let &l:path=ftplugins#CPath()
 
 let b:undo_ftplugin = 'setlocal sua< cin< mp< ofu< kp< include<'
       \ . '|unlet! &l:path'
@@ -81,6 +81,7 @@ if has('cscope') && executable('cscope')
 
 
   " Using 'CTRL-spacebar', the result is displayed in new horizontal window.
+  " This simply prints Nul when you run `:map`???
   nnoremap <buffer> <C-@>s :scs find s <C-R>=expand("<cword>")<CR><CR>
   nnoremap <buffer> <C-@>g :scs find g <C-R>=expand("<cword>")<CR><CR>
   nnoremap <buffer> <C-@>c :scs find c <C-R>=expand("<cword>")<CR><CR>
