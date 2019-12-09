@@ -113,9 +113,9 @@ endif
 
 " ALE: {{{1
 
-if !empty('g:loaded_ale') && &filetype==#'python'
-  call py#ALE_Python_Conf()
-endif
+" Ive actually noticed things working bettwr when called unconditionally
+call py#ALE_Python_Conf()
+
 
 " Coc: {{{1
 "

@@ -16,30 +16,26 @@ pprint(vim.call('tagfiles'))
 
 EOF
 endfunction
-
 function py#nvim_taglist() abort  " {{{1
   " Or if you wanna see a different way
   call nvim_call_function('tagfiles')
 endfunction
-
 function py#PythonPath() abort  " {{{1
 
   " Note: the path option is to find directories so it's usually unnecesssary
   " to glob if you have the /usr/lib/python dir in hand.
-  " let s:orig_path = &path
 
   " The current path and the buffer's dir. Also recursively search downwards
   let s:path = '.,,**,'
 
+  " Set path based on nvims dynamically defined remote python host.
   if !empty('g:python3_host_prog')
 
     " Note: Regardless of whether its unix or not, add dirs in reverse order
     " as we're appending them to the set option
     if has('unix')
 
-      " So this doesn't pick up 100% of things. Oddly i'm missing lots of
-      " 'private' {aka starting with _} modules
-
+      " #1) use the remote python's site packages
       let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h:h')
 
       " max out at 3 dir deep
@@ -47,11 +43,19 @@ function py#PythonPath() abort  " {{{1
       let s:site_pack = s:root_dir . '/lib/python3.8/site-packages,'
 
       let s:path = s:path . s:site_pack
-      " Oh don't forget the usr lib one
-      let s:path = s:path . '/usr/lib/python3.8,'
 
+      " #2) use the system python's std library modules
+      " Oh don't forget the usr/lib one. Ugh. But android.
+      if exists('$ANDROID_DATA')
+        let s:path = s:path . expand('$PREFIX/lib/python3.8') . ','
+      else
+        let s:path = s:path . '/usr/lib/python3.8,'
+      endif
+
+      " #3) use the remote pythons std lib modules
       let s:path = ',' . s:root_dir . '/lib/python3.8/*' . s:path . ','
 
+    " then do it all over again for windows.
     " sunovabitch conda doesn't put stuff in the same spot
     else
       let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h')
@@ -70,15 +74,16 @@ function py#PythonPath() abort  " {{{1
   else
     echoerr 'autoload/py.vim: g:python3_host_prog is not set'
     " Todo i guess. lol sigh
+    let &l:path = s:path
     return s:path
 
   endif
 
+  let &l:path = s:path
   return s:path
   " if this still doesn't work keep wailing at python_serves_python
 
 endfunction
-
 function py#python_serves_python() abort  " {{{1
 
 python3 << EOF
@@ -117,7 +122,6 @@ EOF
 call pure_python_path()
 
 endfunction
-
 function py#YAPF() abort  " {{{1
   if exists(':TBrowseOutput')
     " Realistically should accept func args
@@ -132,8 +136,6 @@ function py#YAPF() abort  " {{{1
     call nvim_buf_set_lines('%', 0, '$', 0, '!yapf -i s:old_buffer')
   endif
 endfunction
-
-
 function py#ALE_Python_Conf() abort  " {{{1
 
   let b:ale_linters = ['flake8', 'pydocstyle', 'pyls']

@@ -9,33 +9,16 @@
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
-" }}}
-" Options: {{{
-
-" if !exists('g:pydoc_window')
-"   " Check in <../autoload/pydoc_help.vim> for function definitions
-"   let g:pydoc_window = 'split'  " should this be an int or str. hm.
-" endif
-
-" if g:pydoc_window == 'split'
-"   let s:pydoc_action = 'split'
-" elseif g:pydoc_window == 'vert'
-"   let s:pydoc_action = 'vert'
-" elseif g:pydoc_window == 'tab'
-"   let s:pydoc_action = 'tab'
-" else
-"   throw 'pydoc_help: plugin: Option not recognized.'
-" endif
-
-" }}}
 " Autocmds: {{{
 
-augroup mantabs
+augroup PydocHelp
   au!
   autocmd Filetype man,help setlocal number relativenumber
   autocmd Filetype man,help  if winnr('$') > 1
         \| wincmd T
         \| endif
+  autocmd Filetype python call py#ALE_Python_Conf()
+  autocmd Filetype python call py#PythonPath()
 augroup END
 
 " }}}
@@ -45,11 +28,11 @@ augroup END
 " Oh holy shit that's awesome
 command! -nargs=1 -complete=help Help call pydoc_help#Helptab()
 " if has('python') || has('python3')
-  command! -nargs=0 -range PydocThis call pydoc_help#PydocCword()
-  " This should be able to take the argument '-bang' and allow to open in a new
-  " separate window like fzf does.
-  command! -nargs=0 PydocSplit call pydoc_help#SplitPydocCword()
-  command! -nargs=? Pydoc call pydoc_help#Pydoc(<f-args>)
+command! -nargs=0 -range PydocThis call pydoc_help#PydocCword()
+" This should be able to take the argument '-bang' and allow to open in a new
+" separate window like fzf does.
+command! -nargs=0 PydocSplit call pydoc_help#SplitPydocCword()
+command! -nargs=? Pydoc call pydoc_help#Pydoc(<f-args>)
 
   " i just messed that function up pretty bad
   " command! -nargs=1 PydocMod call pydoc_help#ShowPyDoc('<args>', 1)
