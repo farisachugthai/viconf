@@ -9,6 +9,7 @@ scriptencoding utf-8
 set fileformat=unix fileformats=unix,dos  " don't let DOS fuck up the EOL
 let s:cpo_save = &cpoptions
 set cpoptions-=C
+setglobal cpoptions-=c,e,_  " couple options that bugged me
 
 let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Evervim. Thanks!
 let s:wsl = !empty($WSL_DISTRO_NAME)
@@ -25,20 +26,17 @@ runtime junegunn.vim  " Load my plugins.
 " Don't assume that the InstallPlug() func worked so ensure it's defined
 if empty('plugs') | let plugs = {} | endif
 
-let s:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/init.vim.local'
-runtime s:local_vimrc
 let s:material_gruvbox =  syncom#gruvbox_material()
 if s:material_gruvbox == v:false | call syncom#gruvbox() | endif
 
-" Set shell correctly
+" Set shell correctly. TODO: do i still need this?
 " if !has('unix') | runtime autoload/msdos.vim | call msdos#Cmd() | endif
 if has('unnamedplus') | set clipboard+=unnamed,unnamedplus | else | set clipboard+=unnamed | endif
 set pastetoggle=<F7>
-
-let g:loaded_vimballPlugin     = 1
-let g:loaded_getscriptPlugin   = 1
-let g:loaded_2html_plugin      = 1
-let g:loaded_logiPat           = 1
+let g:loaded_vimballPlugin = 1
+let g:loaded_getscriptPlugin = 1
+let g:loaded_2html_plugin = 1
+let g:loaded_logiPat = 1
 
 noremap <Space> <nop>
 let g:maplocalleader = '<Space>'
@@ -96,15 +94,13 @@ set inccommand=split
 set terse shortmess=aoOsAItTWAcF
 set title titlestring=%<%F%=%l/%L-%P   " leaves a cool title for tmux
 set conceallevel=2 concealcursor=nc    " enable concealing
-
-noremap q; q:
-noremap Q @q
+nnoremap q; q:
+nnoremap Q @q
 xnoremap <BS> d
-
 set spelllang=en spellsuggest=5
-noremap <Leader>sp <Cmd>setlocal spell!<CR>
-noremap <Leader>o o<Esc>
-noremap <Leader>O O<Esc>
+nnoremap <Leader>sp <Cmd>setlocal spell!<CR>
+nnoremap <Leader>o o<Esc>
+nnoremap <Leader>O O<Esc>
 
 set showmatch matchpairs+=<:> lazyredraw matchtime=20  " Show the matching pair for 2 seconds
 let g:matchparen_timeout = 500

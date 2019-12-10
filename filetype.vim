@@ -36,6 +36,10 @@ augroup YourFTDetect
   au BufNewFile,BufRead .xonshrc set filetype=xonsh
   au BufNewFile,BufRead *.xsh set filetype=xonsh
 
+  au BufNewFile,BufRead *.tmux set filetype=tmux
+  au BufNewFile,BufRead .tmux.conf set filetype=tmux
+  au BufNewFile,BufRead *.rst.txt set filetype=rst.txt
+
 augroup END
 
 " Alright now that we did mine should we do his?

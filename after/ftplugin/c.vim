@@ -1,4 +1,4 @@
-" ============================================================================{{{}}}
+" ============================================================================
     " File: c.vim
     " Author: Faris Chugthai
     " Description: The C Programming Language
@@ -40,8 +40,7 @@ setlocal omnifunc=ccomplete#Complete
 
 " Path: {{{2
 
-" TODO:
-" setlocal include
+" TODO: setlocal include
 setlocal include=^\s*#\s*include
 " setlocal define
 " setlocal includexpr
@@ -83,6 +82,7 @@ if has('cscope') && executable('cscope')
 
 
   " Using 'CTRL-spacebar', the result is displayed in new horizontal window.
+  " This simply prints Nul when you run `:map`???
   nnoremap <buffer> <C-@>s :scs find s <C-R>=expand("<cword>")<CR><CR>
   nnoremap <buffer> <C-@>g :scs find g <C-R>=expand("<cword>")<CR><CR>
   nnoremap <buffer> <C-@>c :scs find c <C-R>=expand("<cword>")<CR><CR>

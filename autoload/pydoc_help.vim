@@ -8,9 +8,6 @@
 " Guards: {{{1
 let s:cpo_save = &cpoptions
 set cpoptions-=C
-
-" Pydoc Cword: {{{1
-
 function! s:temp_buffer() abort
 
   if exists(':StripWhitespace')
@@ -27,7 +24,6 @@ function! s:temp_buffer() abort
   silent setlocal nomodifiable
 
 endfunction
-
 function! pydoc_help#PydocCword() abort
 
   " Holy shit it works!!!
@@ -39,8 +35,6 @@ function! pydoc_help#PydocCword() abort
   call s:temp_buffer()
 
 endfunction
-
-" Pydoc Split Cword: {{{1
 function! pydoc_help#SplitPydocCword() abort
   let s:temp_cword = expand('<cWORD>')
   split
@@ -48,10 +42,7 @@ function! pydoc_help#SplitPydocCword() abort
   exec ':r! pydoc ' . s:temp_cword
   call s:temp_buffer()
 endfunction
-
-" Pydoc Arg: {{{1
-
-function! pydoc_help#Pydoc(module) abort
+function s:handle_user_config() abort
 
   " Look at me handling user configured arguments!
   if exists('g:pydoc_window')
@@ -65,6 +56,10 @@ function! pydoc_help#Pydoc(module) abort
     split
   endif
 
+endfunction
+function! pydoc_help#Pydoc(module) abort
+
+  call s:handle_user_config()
   enew
   if has('python3')
     " I realize i could do that EOF bullshit but i don't like it.
@@ -82,29 +77,11 @@ function! pydoc_help#Pydoc(module) abort
 
   call s:temp_buffer()
 endfunction
-
-function! pydoc_help#doc() abort  " {{{1 use pydoc in a here-script
-
-python3 << EOF
-
-import inspect, vim, sys, os, pydoc
-import importlib
-
-def get_documents(obj):
-    """Definitely the wrong method from pydoc but a start."""
-    vim.current.window.buffer(pydoc.writedocs(obj))
-
-EOF
-" DON'T FORGET TO LEFT ALIGN THE EOF
-
-endfunction
-
 function! pydoc_help#async_cursor() abort " Async Pydoc: {{{1
 
   call jobstart('pydoc ' . expand('<cWORD>'), {'on_stdout':{j,d,e->append(line('.'),d)}})
 
 endfunction
-
 function! pydoc_help#async_cexpr() abort  " {{{1
   " this function POURS output into the current buf so make sure you're
   " switched to a scratch buffer.
@@ -117,7 +94,6 @@ function! pydoc_help#async_cexpr() abort  " {{{1
 
   call jobstart('pydoc ' . expand('<cexpr>'), {'on_stdout':{j,d,e->append(line('.'),d)}})
 endfunction
-
 function! pydoc_help#broken_scratch_buffer() abort  " {{{1
   " Not actually broken i just need to debug the commented out lines
   " basically how do i put the info i want into a list that can be properly
@@ -152,7 +128,6 @@ function! pydoc_help#broken_scratch_buffer() abort  " {{{1
   nnoremap <buffer> q <Cmd>nvim_win_close(0, v:false)<CR>
 
 endfunction
-
 function! pydoc_help#the_curse_of_nvims_floating_wins() abort  " {{{1
   " No seriously they're difficult to work with
 
@@ -173,7 +148,6 @@ function! pydoc_help#the_curse_of_nvims_floating_wins() abort  " {{{1
   " fashion. Sweet!!
   call nvim_win_set_option(s:win_handle, 'winhl', 'Special')
 endfunction
-
 function! pydoc_help#ShowPyDoc(name, type) abort  " {{{1
   " Args: name: lookup; type: 0: search, 1: lookup
     if a:name == ''
@@ -246,7 +220,6 @@ function! pydoc_help#ShowPyDoc(name, type) abort  " {{{1
         setlocal nomodifiable
     endif
 endfunction
-
 function! s:ReplaceModuleAlias()  " {{{1 Replace module aliases with their own name.
     "
     " For example:
@@ -271,7 +244,6 @@ function! s:ReplaceModuleAlias()  " {{{1 Replace module aliases with their own n
     call cursor(l:cur_line, l:cur_col)
     return join(l:module_names, ".")
 endfunction
-
 function! s:ExpandModulePath()  " {{{1
     " Extract the 'word' at the cursor, expanding leftwards across identifiers
     " and the . operator, and rightwards across the identifier only.
@@ -286,7 +258,6 @@ function! s:ExpandModulePath()  " {{{1
     let l:suf = l:line[col("."):]
     return matchstr(pre, "[A-Za-z0-9_.]*$") . matchstr(suf, "^[A-Za-z0-9_]*")
 endfunction
-
 function! pydoc_help#show_toc() abort  " {{{1
   let bufname = bufname('%')
   let info = getloclist(0, {'winid': 1})
@@ -355,7 +326,6 @@ function! pydoc_help#show_toc() abort  " {{{1
   let w:qf_toc = bufname
 
 endfunction
-
 " Atexit: {{{1
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

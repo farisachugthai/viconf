@@ -2,14 +2,12 @@
   " File: ultisnips.vim
   " Author: Faris Chugthai
   " Description: Plugin related autoloaded functions
-  " Last Modified: August 01, 2019
+  " Last Modified: Dec 05, 2019
 " ============================================================================
 
-" Guards: {{{1
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
-" UltiSnips: {{{1
 function! plugins#GetAllSnippets() abort  " {{{2
 
   call UltiSnips#SnippetsInCurrentScope(1)
@@ -25,7 +23,6 @@ function! plugins#GetAllSnippets() abort  " {{{2
   endfor
   return list
 endfunction
-
 function! plugins#ExpandPossibleShorterSnippet() abort   " {{{2
   if len(UltiSnips#SnippetsInCurrentScope()) == 1 "only one candidate...
     let curr_key = keys(UltiSnips#SnippetsInCurrentScope())[0]
@@ -36,11 +33,9 @@ function! plugins#ExpandPossibleShorterSnippet() abort   " {{{2
   endif
   return 0
 endfunction
-
-" Expand Snippet Or CR: {{{2
+function! plugins#ExpandSnippetOrCarriageReturn() abort
 " Hopefully will expand snippets or CR. Or it'll destroy deoplete's
 " ability to close the pum. *shrugs*
-function! plugins#ExpandSnippetOrCarriageReturn() abort
   let snippet = UltiSnips#ExpandSnippetOrJump()
     if g:ulti_expand_or_jump_res > 0
       return snippet
@@ -48,8 +43,6 @@ function! plugins#ExpandSnippetOrCarriageReturn() abort
       return "\<CR>"
     endif
 endfunction
-
-" Vim Plug: {{{1
 function! plugins#InstallPlug() abort  " {{{2
 
   " Unsure of how to capture return code
@@ -61,8 +54,6 @@ function! plugins#InstallPlug() abort  " {{{2
   catch | echo v:exception | endtry
   echomsg 'Now using a homebrewed solution to get Vim-plug'
   endfunction
-
-" Startify: {{{1
 function! plugins#list_commits() abort  " {{{2
   " note: Don't forget that
   " echo isdirectory('~/projects/viconf')
@@ -76,14 +67,12 @@ function! plugins#list_commits() abort  " {{{2
     let git = 'Git'
     return map(commits, '{"line": matchstr(v:val, "\\s\\zs.*"), "cmd": "'. git .' show ". matchstr(v:val, "^\\x\\+") }')
 endfunction
-
 function! plugins#filter_header(lines) abort  " {{{2
     let longest_line   = max(map(copy(a:lines), 'strwidth(v:val)'))
     let centered_lines = map(copy(a:lines),
         \ 'repeat(" ", (&columns / 2) - (longest_line / 2)) . v:val')
     return centered_lines
 endfunction
-
 function! plugins#startify_bookmarks() abort  " {{{2
 
   let s:nerdbookmarks = readfile(expand($HOME) . '/.NERDTreeBookmarks')
@@ -104,38 +93,6 @@ function! plugins#startify_bookmarks() abort  " {{{2
     endif
   endfor
 endfunction
-
-
-" Fugitive: {{{1
-function! plugins#FugitiveMappings() abort   " {{{2
-
-  noremap <silent> <Leader>gb   <Cmd>Gblame<CR>
-  noremap <silent> <Leader>gc   <Cmd>Gcommit<CR>
-  noremap <silent> <Leader>gd   <Cmd>Gdiffsplit!<CR>
-  cabbrev Gd Gdiffsplit!<Space>
-  noremap <silent> <Leader>gds  <Cmd>Gdiffsplit! --staged<CR>
-  cabbrev gds2 Git diff --stat --staged
-  noremap <silent> <Leader>gds2 <Cmd>Git diffsplit! --stat --staged<CR>
-  noremap <silent> <Leader>ge   <Cmd>Gedit<Space>
-  noremap <silent> <Leader>gf   <Cmd>Gfetch<CR>
-  cabbrev gL 0Glog --pretty=oneline --graph --decorate --abbrev --all --branches
-  noremap <silent> <Leader>gL   <Cmd>0Glog --pretty=oneline --graph --decorate --abbrev --all --branches<CR>
-  noremap <silent> <Leader>gm   <Cmd>Gmerge<CR>
-  " Make the mapping longer but clear as to whether gp would pull or push
-  noremap <silent> <Leader>gpl  <Cmd>Gpull<CR>
-  noremap <silent> <Leader>gps  <Cmd>Gpush<CR>
-  noremap <silent> <Leader>gq   <Cmd>Gwq<CR>
-  noremap <silent> <Leader>gQ   <Cmd>Gwq!<CR>
-  noremap <silent> <Leader>gR   <Cmd>Gread<Space>
-  noremap <silent> <Leader>gs   <Cmd>Gstatus<CR>
-  noremap <silent> <Leader>gst  <Cmd>Git diffsplit! --stat<CR>
-  noremap <silent> <Leader>gw   <Cmd>Gwrite<CR>
-  noremap <silent> <Leader>gW   <Cmd>Gwrite!<CR>
-
-endfunction
-
-" Coc: {{{1
-
 function! plugins#GrepFromSelected(type)
   let saved_unnamed_register = @@
   if a:type ==# 'v'
@@ -150,8 +107,6 @@ function! plugins#GrepFromSelected(type)
   let @@ = saved_unnamed_register
   execute 'CocList grep ' . word
 endfunction
-
-
 
 " Atexit: {{{1
 let &cpoptions = s:cpo_save

@@ -6,7 +6,6 @@
 " ============================================================================
 
 " Global options are in ../../coc_settings.json
-
 " Guard: {{{1
 " Can't do this anymore we load before coc
 " if !exists('g:did_coc_loaded')  | finish | endif
@@ -161,11 +160,11 @@ nnoremap ,k  :<C-u>CocPrev<CR>
 nnoremap ,r  :<C-u>CocListResume<CR>
 
 " Other Mappings: {{{2
-xmap ,m  <Plug>(coc-format-selected)<CR>
-nmap ,m  <Plug>(coc-format-selected)<CR>
+xnoremap ,m  <Plug>(coc-format-selected)<CR>
+nnoremap ,m  <Plug>(coc-format-selected)<CR>
 
 " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-xmap ,a  <Plug>(coc-codeaction-selected)<CR>
+xnoremap ,a  <Plug>(coc-codeaction-selected)<CR>
 " Remap for do codeAction of current line
 nnoremap ,a  <Plug>(coc-codeaction)<CR>
 
@@ -189,6 +188,10 @@ nnoremap ,f  <Plug>(coc-fix-current)<CR>
 nnoremap ,q  <Plug>(coc-fix-current)<CR>
 
 " Commands: {{{1
+
+" Dec 05, 2019: Got a new one for ya!
+command! CocExtensionStats :py3 from pprint import pprint; pprint(vim.eval('CocAction("extensionStats")'))
+
 
 " Let's group these together by prefixing with Coc
 " Use `:Format` to format current buffer
@@ -220,15 +223,13 @@ augroup CocUser
         \| endif
 
 	autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-
+  " This happens with coc-powershell all the time
   autocmd User CocTerminalOpen stopinsert
 
   autocmd CompleteDone * pclose
-
 	autocmd CursorHold * silent call CocActionAsync('highlight')
-
 augroup END
 
-" Atexit: {{{1
+" Atexit:
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

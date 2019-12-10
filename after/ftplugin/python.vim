@@ -15,6 +15,8 @@ set cpoptions-=C
 let g:python_highlight_all = 1
 let g:python_space_error_highlight = 1
 
+if &filetype !=#'python' && &filetype !=#'xonsh' | finish | endif
+
 runtime! $VIMRUNTIME/ftplugin/python.vim
 if exists('b:did_ftplugin') | unlet! b:did_ftplugin | endif
 
@@ -57,9 +59,7 @@ setlocal foldmethod=indent
 
 setlocal suffixesadd+=.py
 setlocal omnifunc=python3complete#Complete
-" Makes moving too hard to add it
-" setlocal iskeyword-=.
-" Man this really fucks up the path damnit
+setlocal isfname+=.
 
 " *'shiftround'* *'sr'* *'noshiftround'* *'nosr'*
 " 'shiftround' 'sr'	boolean	(default off) global
@@ -109,6 +109,11 @@ else
     endif
 endif
 
+" ALE: {{{1
+
+" Ive actually noticed things working bettwr when called unconditionally
+call py#ALE_Python_Conf()
+
 " Coc: {{{1
 "
 " Just tried this and it worked! So keep checking :CocCommand output
@@ -120,7 +125,7 @@ endif
 " Atexit: {{{1
 " For a reference go to $VIMRUNTIME/ftplugin/python.vim
 let b:undo_ftplugin = 'setlocal lbr< tw< cms< et< sts< ts< sw< cc< fdm< kp<'
-      \ . '|setlocal sr< sua< isk< ep< fp< path< cinw<'
+      \ . '|setlocal sr< sua< isf< ep< fp< path< cinw<'
       \ . '|setlocal mp< efm<'
       \ . '|setlocal comments<'
       \ . '|setlocal include<'
@@ -132,5 +137,6 @@ let b:undo_ftplugin = 'setlocal lbr< tw< cms< et< sts< ts< sw< cc< fdm< kp<'
 " Dude i think that this just starts autofiring if you have ale or coc enabled
 " jesus christ is it annoying
       " \ . '|unmap <buffer> <F5>'
+
 let &cpoptions = s:cpo_save
 unlet s:cpo_save
