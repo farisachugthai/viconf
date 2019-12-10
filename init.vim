@@ -14,28 +14,26 @@ let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Everv
 let s:wsl = !empty($WSL_DISTRO_NAME)
 let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux) && empty(s:wsl)
 
-let s:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/init.vim.local'
-runtime s:local_vimrc
+set synmaxcol=400 termguicolors  " Set up the colorscheme
+syntax sync fromstart linebreaks=2
 
+" So loading plugins almost immediately is definitely the best way to go
 let s:vim_plug = filereadable(glob(fnameescape(stdpath('data') . '/site/autoload/plug.vim')))
-
 if empty(s:vim_plug) && exists('*plugins#InstallPlug') | call plugins#InstallPlug() | endif
 runtime junegunn.vim  " Load my plugins.
 
 " Don't assume that the InstallPlug() func worked so ensure it's defined
 if empty('plugs') | let plugs = {} | endif
-let &rtp = stdpath('config') . ',' . stdpath('data') . '/site,' . &rtp
 
-packadd justify cfilter matchit  " Add some packages
-set synmaxcol=400 termguicolors  " Set up the colorscheme
-syntax sync fromstart linebreaks=2
-
+let s:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/init.vim.local'
+runtime s:local_vimrc
 let s:material_gruvbox =  syncom#gruvbox_material()
 if s:material_gruvbox == v:false | call syncom#gruvbox() | endif
 
-runtime remote.vim  " Setup neovim's python and node hosts. Optionally clipboards etc
 " Set shell correctly
-if !has('unix') | runtime autoload/msdos.vim | call msdos#Cmd() | endif
+" if !has('unix') | runtime autoload/msdos.vim | call msdos#Cmd() | endif
+if has('unnamedplus') | set clipboard+=unnamed,unnamedplus | else | set clipboard+=unnamed | endif
+set pastetoggle=<F7>
 
 let g:loaded_vimballPlugin     = 1
 let g:loaded_getscriptPlugin   = 1
@@ -84,12 +82,11 @@ set mouse=a nojoinspaces autowrite autochdir modeline
 if exists('&modelineexpr') | set modelineexpr | endif
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 
-" Filler lines to keep text synced, 3 lines of context on diffs,
-" don't diff hidden files,default foldcolumn is 2
 set diffopt=filler,context:0,hiddenoff,foldcolumn:2,icase,indent-heuristic,horizontal
 if has('patch-8.1.0360') | set diffopt+=internal,algorithm:patience | endif
 set browsedir="buffer"   " which directory is used for the file browser
-let &g:listchars = "tab:\u21e5\u00b7,extends:\u21c9,precedes:\u21c7,nbsp:\u00b7"  " trail:\u2423 doesn't work with hack as font
+let &g:listchars = "tab:\u21e5\u00b7,extends:\u21c9,precedes:\u21c7,nbsp:\u00b7"
+" trail:\u2423 doesn't work with hack as font
 let &g:fillchars = "stl:' ',stlnc:' ',vert:\u250b,fold:\u00b7,diff:'.'"
 
 set breakindent breakindentopt=sbr
@@ -112,6 +109,7 @@ noremap <Leader>O O<Esc>
 set showmatch matchpairs+=<:> lazyredraw matchtime=20  " Show the matching pair for 2 seconds
 let g:matchparen_timeout = 500
 let g:matchparen_insert_timeout = 300
+packadd justify cfilter matchit  " Add some packages
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

@@ -30,8 +30,8 @@ let g:plug_window = 'tabe'
 
 Plug 'junegunn/fzf', { 'dir': expand('~/.fzf'), 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'scrooloose/nerdTree', { 'on': ['NERDTreeToggle', 'NERDTreeVCS'] }
-noremap <Leader>nt <Cmd>NERDTreeToggle<CR>
+Plug 'scrooloose/nerdTree', { 'on': ['NERDTreeCWD', 'NERDTreeVCS'] }
+noremap <Leader>nt <Cmd>NERDTreeCWD<CR>zz
 " Switch NERDTree root to dir of currently focused window.
 " Make mapping match Spacemacs.
 if exists(':GuiTreeviewToggle')
@@ -48,7 +48,6 @@ Plug 'tpope/vim-vinegar'
 
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }  " Follow spacemacs lead and use e for errors
-noremap <Leader>a <Cmd>ALEEnable<CR><Cmd>echomsg 'ALE Enabled'<CR>
 
 if exists('$TMUX')
   Plug 'christoomey/vim-tmux-navigator'
@@ -117,4 +116,4 @@ call plug#end()
 " Commands: {{{1
 
 " I utilize this command so often I may as well save the characters
-command! -nargs=0 Plugins echo map(keys(plugs), 'v:index"\t" v:val . "\n"')
+command! -nargs=0 Plugins echo map(keys(plugs), '"\n" . v:val')

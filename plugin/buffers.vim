@@ -5,51 +5,44 @@
   " Last Modified: Oct 20, 2019
 " ============================================================================
 
-" Guard:
-if exists('g:loaded_plugin_buffers') || &compatible || v:version < 700
-  finish
-endif
-let g:loaded_plugin_buffers = 1
-
-let s:cpo_save = &cpoptions
-set cpoptions-=C
-
 " EchoRTP: {{{1
 " The nvim API is seriously fantastic.
 
 nnoremap <Leader>rt call buffers#EchoRTP()
-
 command! -nargs=0 EchoRTP echo buffers#EchoRTP()
 
 function! Buf_Window_Mapping() abort  " {{{1
-  " To make navigating the location list and quickfix easier
-  " Also check ./unimpaired.vim
-  " Sep 05, 2019: This doesnt need to be 2 commands!! cwindow does both!
-  " Oct 18, 2019: I just ran into llist and lwindow showing different things
-  " and lwindow didn't show the location list i had the at the time so
-  " switching again
-  " llist throws an error if no location. *sigh*
-  noremap <Leader>c <Cmd>cwindow<CR><bar><Cmd>lwindow<CR>
-  " noremap <leader>q <Cmd>copen<CR><bar><Cmd>lopen<CR>
-  " To make navigating the location list and quickfix easier
-  " Also check ./unimpaired.vim
-  " Sep 05, 2019: This doesnt need to be 2 commands!! cwindow does both!
-  " Oct 18, 2019: I just ran into llist and lwindow showing different things
-  " and lwindow didn't show the location list i had the at the time so
-  " switching again
-  noremap <Leader>c <Cmd>clist!<CR><bar><Cmd>llist!<CR>
-  " noremap <leader>q <Cmd>copen<CR><bar><Cmd>lopen<CR>
-
   " Navigate windows more easily
-  noremap <C-h> <Cmd>wincmd h<CR>
-  noremap <C-j> <Cmd>wincmd j<CR>
-  noremap <C-k> <Cmd>wincmd k<CR>
-  noremap <C-l> <Cmd>wincmd l<CR>
-
+  nnoremap <C-h> <Cmd>wincmd h<CR>
+  nnoremap <C-j> <Cmd>wincmd j<CR>
+  nnoremap <C-k> <Cmd>wincmd k<CR>
+  nnoremap <C-l> <Cmd>wincmd l<CR>
+  " Move windows a little faster the command bythemselves don't do anything
   nnoremap <C-w>< 5<C-w><
   nnoremap <C-w>> 5<C-w>>
   nnoremap <C-w>+ 5<C-w>+
   nnoremap <C-w>- 5<C-w>-
+  " Also don't make me hit the shift key
+  nnoremap <C-w>, 5<C-w><
+  nnoremap <C-w>. 5<C-w>>
+endfunction
+
+function! QuickfixMappings() abort
+
+  " To make navigating the location list and quickfix easier
+  " Also check ./unimpaired.vim
+  " Sep 05, 2019: This doesnt need to be 2 commands!! cwindow does both!
+  " Oct 18, 2019: I just ran into llist and lwindow showing different things
+  " and lwindow didn't show the location list i had at the time so switching again
+  " November llist throws an error if no location. *sigh*
+  noremap <Leader>cc <Cmd>cwindow<CR><bar>
+  " Leader l is currently botright lwindow
+  nnoremap <Leader>lc <Cmd>lwindow<CR>
+  nnoremap <Leader>cl <Cmd>clist!<CR>
+  nnoremap <Leader>ll <Cmd>llist!<CR>
+  nnoremap <leader>co <Cmd>copen<CR>
+  nnoremap <Leader>lo <Cmd>lopen<CR>
+
 endfunction
 
 " Command Line: {{{1
@@ -57,13 +50,6 @@ endfunction
 cnoremap <Esc> <nop>
 " However I still need the functionality
 cnoremap <C-g> <Esc>
-
-" From he cedit. Open the command window with F1 because it being bound to
-" help is SO annoying.
-" This doesn't work though.
-" execute 'set cedit=<F1>'
-
-" In the same line of thinking:
 " Avoid accidental hits of <F1> while aiming for <Esc>
 noremap! <F1> <Esc>
 
@@ -78,30 +64,25 @@ function! Alt_Key_Navigation() abort
   noremap! <A-j> <C-w>j
   noremap! <A-k> <C-w>k
   noremap! <A-l> <C-w>l
+  " we might be in vim
+  if !exists('*nvim_list_tabpages') | return | endif
 
-
-  if !exists('*nvim_list_tabpages')  " we might be in vim
-    return
-  endif
-
-  " First check we have more than 1 tho.
+  " First check we have more than 1 tab.
   if len(nvim_list_tabpages()) > 1
-      noremap  <A-Right>  <Cmd>tabnext<CR>
-      noremap  <A-Left>   <Cmd>tabprev<CR>
-      noremap! <A-Right>  <Cmd>tabnext<CR>
-      noremap! <A-Left>   <Cmd>tabprev<CR>
+    noremap  <A-Right>  <Cmd>tabnext<CR>
+    noremap  <A-Left>   <Cmd>tabprev<CR>
+    noremap! <A-Right>  <Cmd>tabnext<CR>
+    noremap! <A-Left>   <Cmd>tabprev<CR>
   elseif len(nvim_list_wins()) > 1
-      noremap  <A-Right>  <Cmd>wincmd l<CR>
-      noremap  <A-Left>   <Cmd>wincmd h<CR>
-      noremap! <A-Right>  <Cmd>wincmd l<CR>
-      noremap! <A-Left>   <Cmd>wincmd h<CR>
+    noremap  <A-Right>  <Cmd>wincmd l<CR>
+    noremap  <A-Left>   <Cmd>wincmd h<CR>
+    noremap! <A-Right>  <Cmd>wincmd l<CR>
+    noremap! <A-Left>   <Cmd>wincmd h<CR>
   endif
 
 endfunction
 
-
 " Navigate Buffers More Easily: {{{1
-
 function! SpaceBuffers() abort
   noremap <Leader>bb <Cmd>buffers<CR>
   noremap <Leader>bd <Cmd>bdelete<CR>
@@ -117,9 +98,7 @@ function! SpaceBuffers() abort
   " noremap <Leader>bo <Cmd>bonly<CR>
 endfunction
 
-
-function TabMaps() abort  " {{{1
-
+function! TabMaps() abort  " {{{1
   nnoremap <Leader>tn <Cmd>tabnext<CR>
   nnoremap <Leader>tp <Cmd>tabprev<CR>
   nnoremap <Leader>tq <Cmd>tabclose<CR>
@@ -143,7 +122,7 @@ function TabMaps() abort  " {{{1
 endfunction
 
 " Navigate Windows More Easily: {{{1
-function! SpaceWindows()
+function! SpaceWindows() abort
   noremap <Leader>ws <Cmd>wincmd s<CR>
   noremap <Leader>wv <Cmd>wincmd v<CR>
   noremap <Leader>ww <Cmd>wincmd w<CR>
@@ -184,7 +163,6 @@ function! UnImpairedWindows() abort
 endfunction
 
 " Call Functions: {{{1
-
 if !exists('no_plugin_maps') && !exists('no_windows_vim_maps')
   call Buf_Window_Mapping()
   call Alt_Key_Navigation()
@@ -192,9 +170,5 @@ if !exists('no_plugin_maps') && !exists('no_windows_vim_maps')
   call TabMaps()
   call UnImpairedWindows()
   call SpaceWindows()
+  call QuickfixMappings()
 endif
-
-" Atexit: {{{1
-
-let &cpoptions = s:cpo_save
-unlet s:cpo_save

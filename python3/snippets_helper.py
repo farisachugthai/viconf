@@ -315,6 +315,7 @@ def write_docstring_args(args, snip):
 
 
 def write_google_docstring_args(args, snip):
+    args = [Arg(arg) for arg in args]
     kwargs = [arg for arg in args if arg.is_kwarg()]
     args = [arg for arg in args if not arg.is_kwarg()]
 
@@ -461,7 +462,8 @@ def create_table(snip):
                 for col in range(1, columns_amount + 1)
             ]
         ) + "\n"
-    anon_snippet_table = anon_snippet_title + anon_snippet_delimiter + anon_snippet_body
+    anon_snippet_table = anon_snippet_title + \
+        anon_snippet_delimiter + anon_snippet_body
 
     # expand anonymous snippet
     snip.expand_anon(anon_snippet_table)

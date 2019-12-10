@@ -8,22 +8,7 @@
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
-" Things that should get defined everywhere anyways so define them first.
-
-" Yes we do the b:did_ftplugin later but define the global vars first
-
-" Options: {{{1
-
 let g:rst_style = 1
-
-" See Also:
-" RESTRUCTURED TEXT			*rst.vim* *ft-rst-syntax*
-" he rst.vim or ft-rst-syntax or syntax 2600.
-
-" Admonition:
-" Don't put bash instead of sh.
-" $VIMRUNTIME/syntax/rst.vim iterates over this var and if it can't find a
-" bash.vim syntax file it will crash.
 
 " May 13, 2019: Updated. Grabbed this directly from $VIMRUNTIME/syntax/rst.vim
 "
@@ -35,7 +20,6 @@ let g:rst_syntax_code_list = {
     \ }
 
 let g:rst_use_emphasis_colors = 1
-
 let g:rst_fold_enabled = 1
 
 " Rst specific: {{{1
@@ -47,15 +31,6 @@ setlocal foldlevel=1
 setlocal foldlevelstart=1
 setlocal iskeyword+=.
 
-" Doesn't work
-" if exists(':PydocThis')
-"   setlocal keywordprg=:PydocThis
-" else
-" setlocal keywordprg=!pydoc
-" endif
-
-" let &l:keywordprg = pydoc_help#SplitPydocCword()
-
 " don't do the executable(sphinx-build) check here its in ../compiler/rst.vim
 compiler rst
 
@@ -66,10 +41,8 @@ elseif glob('../conf.py')
 endif
 
 " Actually from the python ftplugin: {{{2
-
 setlocal cindent
 setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
-
 setlocal cinkeys-=0#
 setlocal indentkeys-=0#
 setlocal include=^\\s*\\(from\\\|import\\)
@@ -78,7 +51,7 @@ setlocal include=^\\s*\\(from\\\|import\\)
 setlocal noshiftround
 setlocal suffixesadd=.py,.rst
 
-let &l:path = py#PythonPath()
+let &l:path = PythonPath()
 
 " Sphinx Command: {{{1
 command! -buffer Sphinx call pydoc_help#sphinx_build(<q-args>)
@@ -122,7 +95,5 @@ endif
 
 
 " Atexit: {{{1
-" Can't use unlet! Or unlet in the same '' apparently
-
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

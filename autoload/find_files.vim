@@ -6,11 +6,6 @@
 " ============================================================================
 
 " Guards: {{{1
-if exists('g:did_autoload_find_files') || &compatible || v:version < 700
-  finish
-endif
-let g:did_autoload_files = 1
-
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
@@ -112,27 +107,53 @@ function! find_files#termux_remote() abort  " {{{1
   let g:node_host_prog = '/data/data/com.termux/files/usr/bin/neovim-node-host'
   let g:ruby_host_prog = '/data/data/com.termux/files/home/.gem/bin/neovim-ruby-host'
 
+  if exists('$TMUX')
+    let g:clipboard = {
+          \   'name': 'myclipboard',
+          \   'copy': {
+          \      '+': 'tmux load-buffer -',
+          \      '*': 'tmux load-buffer -',
+          \    },
+          \   'paste': {
+          \      '+': 'tmux save-buffer -',
+          \      '*': 'tmux save-buffer -',
+          \   },
+          \   'cache_enabled': 1,
+          \ }
+  endif
+
+
 endfunction
 
 function! find_files#ubuntu_remote() abort  " {{{1
 
-    let g:python3_host_prog = exepath('python3')
-    let g:python_host_prog = '/usr/bin/python2'
-    let g:node_host_prog = exepath('neovim-node-host')
-    let g:ruby_host_prog = exepath('neovim-ruby-host')
+  let g:python3_host_prog = exepath('python3')
+  let g:python_host_prog = '/usr/bin/python2'
+  let g:node_host_prog = exepath('neovim-node-host')
+  let g:loaded_ruby_provider = 1
+
+  if exists('$TMUX')
+    let g:clipboard = {
+          \   'name': 'myclipboard',
+          \   'copy': {
+          \      '+': 'tmux load-buffer -',
+          \      '*': 'tmux load-buffer -',
+          \    },
+          \   'paste': {
+          \      '+': 'tmux save-buffer -',
+          \      '*': 'tmux save-buffer -',
+          \   },
+          \   'cache_enabled': 1,
+          \ }
+  endif
 
 endfunction
 
 function! find_files#msdos_remote() abort  " {{{1
-
   let g:python3_host_prog = 'C:/tools/miniconda3/envs/neovim/python.exe'
-
   let g:python_host_prog = 'C:/tools/miniconda3/envs/py2/python.exe'
-
   let g:loaded_ruby_provider = 1
-
   let g:node_host_prog = 'C:/tools/nvm/v13.0.1/neovim-node-host'
-
   let g:clipboard = {
         \   'name': 'winClip',
         \   'copy': {

@@ -49,18 +49,19 @@ let g:startify_commands = [
     \ ]
 
 " Temporarily turn this off
-finish
+" finish
 
 " What the fuck! Its still reading everyrhing perfectly.
 "
 " In fact, if i comment out the finish it STOPS working...what the hell?
+" Keep MRU below the current directorys MRU. But those are inheritently longer
+" than everything else so keep them below everything else.
 let g:startify_lists = [
     \ { 'type': 'commands',  'header': ['   Commands']              },
     \ { 'type': 'sessions',  'header': ['   Sessions']              },
-    \ { 'type': function('plugins#list_commits'),  'header': ['   Dynamic IPython']},
     \ { 'type': 'bookmarks', 'header': ['   Bookmarks']             },
-    \ { 'type': 'files',     'header': ['   MRU']                   },
     \ { 'type': 'dir',       'header': ['   MRU ' . getcwd()]       },
+    \ { 'type': 'files',     'header': ['   MRU']                   },
     \ ]
 
 " Setup_devicons: {{{1

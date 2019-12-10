@@ -37,3 +37,6 @@ augroup YourFTDetect
   au BufNewFile,BufRead *.xsh set filetype=xonsh
 
 augroup END
+
+" Alright now that we did mine should we do his?
+" Nope it actually sources with no problem seemingly

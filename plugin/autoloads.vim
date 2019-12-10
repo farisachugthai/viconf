@@ -86,6 +86,8 @@ setglobal tags^=./.git/tags tagcase=smart showfulltag
 " Just realized this isn't mapped either
 nnoremap <C-}> [I:let nr = input("Choose an include: ")<Bar>exe "normal! " . nr ."[\t"<CR>
 
+command! Tags echo gettagstack(expand('%'))
+
 " Tagfunc: {{{2
 
 " Lol literally what is this option?
@@ -108,10 +110,42 @@ if exists('&tagfunc')
   set tagfunc=TagFunc
 endif
 
-" Compiling:
+" Compiling: {{{1
 
 " just cuz. plus isn't the complete compiler option kinda cool?
 command! -complete=compiler -nargs=? -buffer Make make <q-args> %
+
+" Remotes: {{{1
+" lol this got really random didn't it?
+
+if has('unix')
+  " Termux
+  if exists($ANDROID_DATA)
+    call find_files#termux_remote()
+  " Ubuntu like or WSL
+  else
+    call find_files#ubuntu_remote()
+  endif
+
+  if exists($TMUX)
+    let g:clipboard = {
+          \   'name': 'myClipboard',
+          \   'copy': {
+          \      '+': 'tmux load-buffer -',
+          \      '*': 'tmux load-buffer -',
+          \    },
+          \   'paste': {
+          \      '+': 'tmux save-buffer -',
+          \      '*': 'tmux save-buffer -',
+          \   },
+          \   'cache_enabled': 1,
+          \ }
+  endif
+
+else  " windows not wsl
+  call find_files#msdos_remote()
+endif
+
 
 " Atexit: {{{1
 

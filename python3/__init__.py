@@ -15,7 +15,7 @@ except ImportError:
 
 __docformat__ = 'reStructuredText'
 
-logging.getLogger(__name__).addHandler(logging.StreamHandler())
+logger = logging.getLogger(__name__).addHandler(logging.StreamHandler())
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -83,6 +83,7 @@ def setup_logging(debug=True, logfile=None):
     for handler in handlers:
         handler.setLevel(log_level)
         handler.setFormatter(formatter)
+        handler.addFilter(logging.Filter())
         root_logger.addHandler(handler)
 
-    root_logger.setLevel(0)
+    root_logger.setLevel(10)

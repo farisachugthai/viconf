@@ -9,35 +9,7 @@
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
-" Options: {{{1
-
-setlocal expandtab
-setlocal shiftwidth=2
-setlocal tabstop=2
-setlocal softtabstop=2
-setlocal suffixesadd=.vim
-setlocal nolinebreak
-setlocal wrap
-
-let &l:commentstring='" %s'
-" TODO: Probably needs to be a function. Should checj if we already added
-" this and don't do it more than once
-" let &path = &path . ',' . stdpath('data') . '/plugged/*/*/*.vim'
-let &l:path = ftplugins#VimPath()
-
-setlocal includeexpr=substitute(v:fname,'\\#','/','g')
-
-" I FIGURED OUT WHY 'gf' didn't work!
-setlocal isfname-=#
-
-" So that you can cleanly jump around inside of autoloaded func names
-setlocal iskeyword-=#
-
-" Wait what.
-" setlocal include=^\\s*[^\/]\\+\\(from\\\|require(['\"]\\)
-
-" Syntax Highlighting: {{{1
-
+" Globals: {{{1
 " From `:he syntax`
 " 			*g:vimsyn_minlines*	*g:vimsyn_maxlines*
 " Support embedded lua python nd ruby syntax highlighting in vim ftypes.
@@ -72,12 +44,42 @@ let g:vimsyn_noerror = 1
 let g:vimsyn_folding = 'afP'
 
 
+" Options: {{{1
+
+if &filetype !=# 'vim'
+  finish
+endif
+
+setlocal expandtab
+setlocal shiftwidth=2
+setlocal tabstop=2
+setlocal softtabstop=2
+setlocal suffixesadd=.vim
+setlocal nolinebreak
+setlocal wrap
+
+let &l:commentstring='" %s'
+" TODO: Probably needs to be a function. Should checj if we already added
+" this and don't do it more than once
+" let &path = &path . ',' . stdpath('data') . '/plugged/*/*/*.vim'
+let &l:path = ftplugins#VimPath()
+
+setlocal includeexpr=substitute(v:fname,'\\#','/','g')
+
+" I FIGURED OUT WHY 'gf' didn't work!
+setlocal isfname-=#
+
+" So that you can cleanly jump around inside of autoloaded func names
+setlocal iskeyword-=#
+
+" Wait what.
+" setlocal include=^\\s*[^\/]\\+\\(from\\\|require(['\"]\\)
 " ALE: {{{1
 
 " Don't drop the quotes because if the var isn't defined it'll raise errors
-if !empty('g:loaded_ale')
-  call ftplugins#ALE_Vim_Conf()
-endif
+" if !empty('g:loaded_ale')
+call ftplugins#ALE_Vim_Conf()
+" endif
 
 " Atexit: {{{1
 let b:undo_ftplugin = 'setlocal com< cms< et< sw< ts< sts< lbr< sua< wrap< isk<'

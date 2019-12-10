@@ -5,20 +5,12 @@
     " Last Modified: Oct 06, 2019
 " ============================================================================
 
-" Guard: {{{1
-if exists('g:did_ale_after_plugin') || &compatible || v:version < 700
-    finish
-endif
-let g:did_ale_after_plugin = 1
-
-let s:cpo_save = &cpoptions
-set cpoptions&vim
-
 " Mappings: {{{1
+noremap <Leader>a <Cmd>ALEEnable<CR><Cmd>normal! zz <CR><Cmd>echomsg 'ALE Enabled'<CR>
 
 " Follow the lead of vim-unimpaired with a for ale
-noremap ]a <Cmd>ALENextWrap<CR>zv
-noremap [a <Cmd>ALEPreviousWrap<CR>zv
+noremap ]a <Cmd>ALENextWrap<CR>zz
+noremap [a <Cmd>ALEPreviousWrap<CR>zz
 
 " `:ALEInfoToFile` will write the ALE runtime information to a given filename.
 " The filename works just like |:w|.
@@ -196,7 +188,3 @@ let g:ale_pattern_options = {
 \       'ale_fixers': ['eslint'],
 \   },
 \}
-
-" Atexit: {{{1
-let &cpoptions = s:cpo_save
-unlet s:cpo_save

@@ -98,6 +98,7 @@ except (ImportError, ModuleNotFoundError) as e:
 
 class UnsetEnvvarException(Exception):
     """Exception for trying to cal an unset envvar/one with no value."""
+
     def __init__(self, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
 
@@ -107,10 +108,11 @@ class App:
     """Instantiate an object and bind functions to it's ns as properties.
 
     We can bind the :func:`os.environ` to the namespace and maybe also
-    :class:`pathlib.Path()` so that we can simply have those abstracted
+    :class:`pathlib.Path` so that we can simply have those abstracted
     away and add a ton of built-in methods for use with our class.
 
     """
+
     def __init__(self, _vim):
         """Instantiate the remote python process for neovim."""
         self.vim = _vim
@@ -150,7 +152,7 @@ class Instance(App):
 
 
 # @pynvim.command('ListBuf', nargs=0)
-def list_buf():
+def list_buf(vim):
     """Return the Vimscript function :func:`nvim_list_bufs()`.
 
     Returns
@@ -167,7 +169,7 @@ def list_buf():
         " Note that this could be any list of integers
 
     """
-    bufnrs = vim.command('call nvim_list_bufs()')
+    bufnrs = vim.command("call nvim_list_bufs()")
     return bufnrs
 
 
@@ -188,8 +190,7 @@ def check_and_set_envvar(envvar, default=None):
             os.environ.setdefault(str(envvar), default)
             logging.info(envvar + " set to: " + default)
     else:
-        logging.debug(envvar + " already set to value of: " +
-                      os.environ.get(envvar))
+        logging.debug(envvar + " already set to value of: " + os.environ.get(envvar))
 
 
 def main():
@@ -201,17 +202,20 @@ def main():
 
     """
     home = Path.home()
-    if sys.platform == 'linux':
-        xdg_data_default = str(home.joinpath('.local/share/'))
-    elif sys.platform.startswith('win'):
-        xdg_data_default = str(home.joinpath('AppData/Local/'))
-    check_and_set_envvar('XDG_DATA_HOME', default=xdg_data_default)
+    if sys.platform == "linux":
+        xdg_data_default = str(home.joinpath(".local/share/"))
+    elif sys.platform.startswith("win"):
+        xdg_data_default = str(home.joinpath("AppData/Local/"))
+    else:
+        raise NotImplementedError("Windows, Android and Linux only.")
 
-    nvim_log_file = Path(xdg_data_default).joinpath('nvim/python.log')
-    check_and_set_envvar('NVIM_PYTHON_LOG_FILE', default=nvim_log_file)
+    check_and_set_envvar("XDG_DATA_HOME", default=xdg_data_default)
+
+    nvim_log_file = Path(xdg_data_default).joinpath("nvim/python.log")
+    check_and_set_envvar("NVIM_PYTHON_LOG_FILE", default=nvim_log_file)
 
     nvim_log_level = 20
-    check_and_set_envvar('NVIM_PYTHON_LOG_LEVEL', default=nvim_log_level)
+    check_and_set_envvar("NVIM_PYTHON_LOG_LEVEL", default=nvim_log_level)
 
 
 if __name__ == "__main__":

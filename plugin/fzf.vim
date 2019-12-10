@@ -6,6 +6,8 @@
 " ============================================================================
 
 " Options: {{{1
+"
+" Preliminary Setup: {{{2
 if !exists(':FZF')
   call plug#load('fzf')
 endif
@@ -15,6 +17,14 @@ let g:fzf_command_prefix = 'Fuf'
 if !exists(':FufRg')
   call plug#load('fzf.vim')
 endif
+
+if !exists('$FZF_DEFAULT_COMMAND')  || !has('unix')
+  let $FZF_DEFAULT_COMMAND = 'rg --hidden -M 200 -m 200 --smart-case --passthru --files . '
+endif
+
+" if !exists('$FZF_DEFAULT_OPTS')  || !has('unix')
+"   let $FZF_DEFAULT_OPTS = ' --multi --cycle --reverse --prompt "Query: " --tiebreak begin,length,index --ansi --filepath-word --border --header "FZF: File Browser" '
+" endif
 
 " Sep 15, 2019: Look what i found in stdpath('data') .
 " '/plugged/fzf.vim/plugin/fzf.vim' ! There's a statusline option!!! That's
@@ -69,15 +79,15 @@ let g:fzf_commits_log_options = ' --graph'
 let g:fzf_buffers_jump = 1
 
 " [Tags] Command to generate tags file
-let g:fzf_tags_command = 'ctags -R --options='
-      \ . expand('~')
-      \ . '/projects/dynamic_ipython/tools/ctagsOptions.cnf'
+" let g:fzf_tags_command = 'ctags -R --options='
+"       \ . expand('~')
+"       \ . '/projects/dynamic_ipython/tools/ctagsOptions.cnf'
 
 " [Commands] --expect expression for directly executing the command
 let g:fzf_commands_expect = 'alt-enter,ctrl-x'
 
 " FOUND ONE
-let g:fzf_files_options = g:fzf_options
+" let g:fzf_files_options = g:fzf_options
 " found another one. What is this???
 " nnoremap <plug>(-fzf-vim-do) :execute g:__fzf_command<cr>
 
@@ -99,11 +109,21 @@ let g:fzf_colors =  {
       \ }
 
 " Highlighting: {{{2
-hi! fzf1 ctermfg=161 ctermbg=238 guifg=#E12672 guibg=#565656 cterm=bold,underline guisp=NONE gui=bold,underline
-hi! fzf2 ctermfg=151 ctermbg=238 guifg=#BCDDBD guibg=#565656 cterm=bold,underline guisp=NONE gui=bold,underline
-hi! fzf3 ctermfg=252 ctermbg=238 guifg=#D9D9D9 guibg=#565656 cterm=bold,underline guisp=NONE gui=bold,underline
+" hi! fzf1 ctermfg=161 ctermbg=238 guifg=#E12672 guibg=#565656 cterm=bold,underline guisp=NONE gui=bold,underline
+" hi! fzf2 ctermfg=151 ctermbg=238 guifg=#BCDDBD guibg=#565656 cterm=bold,underline guisp=NONE gui=bold,underline
+" hi! fzf3 ctermfg=252 ctermbg=238 guifg=#D9D9D9 guibg=#565656 cterm=bold,underline guisp=NONE gui=bold,underline
+hi! fzf1 cterm=bold,underline,reverse gui=bold,underline,reverse guifg=#7daea3
+hi! link fzf2 fzf1
+hi! link fzf3 fzf1
 
 " Mappings: {{{1
+
+" Snippets: {{{2
+
+noremap <F6> <Cmd>FufSnippets<CR>
+noremap! <F6> <Cmd>FufSnippets<CR>
+" I suppose for continuity
+tnoremap <F6> <Cmd>FufSnippets<CR>
 
 " FZF Complete: {{{2
 
@@ -138,6 +158,7 @@ endif
 " Holy shit this works well
 inoremap <expr> <C-x><C-l> fzf#vim#complete#line()
 inoremap <expr> <C-l> fzf#vim#complete#line()
+
 
 " Uhhh C-b for buffer?
 inoremap <expr> <C-x><C-b> fzf#vim#complete#buffer_line()
@@ -204,7 +225,8 @@ noremap <Leader>B                 <Cmd>FufBuffers<CR>
 noremap <Leader>f                 <Cmd>FufFiles<CR>
 
 " Make fzf behave the same in a real shell and nvims.
-tnoremap <C-t>                    <Cmd>FufFZF! <CR>
+" FZF now runs in a terminal
+" tnoremap <C-t>                    <Cmd>FZF!<CR>
 
 " Might need to wrap this in a `if &shell ==# 'bash'
 " tnoremap <A-c>                    __fzf_cd__

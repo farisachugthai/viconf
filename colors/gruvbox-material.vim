@@ -33,10 +33,10 @@ match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 
 " These got cleared somehow.
 " Screen line that the cursor is
-hi CursorLine ctermbg=237 guibg=#3c3836 guifg=NONE ctermfg=NONE cterm=NONE gui=NONE guisp=NONE
+hi! CursorLine ctermbg=237 guibg=#3c3836 guifg=NONE ctermfg=NONE cterm=NONE gui=NONE guisp=NONE
 
 " Line number of CursorLine
-hi CursorLineNr guifg=#fabd2f guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE ctermbg=237
+hi! CursorLineNr guifg=#fabd2f guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE ctermbg=237
 
 " Screen column that the cursor is
 hi! link CursorColumn CursorLine
@@ -234,6 +234,7 @@ hi def link tmuxString            String
 hi def link tmuxTodo              Todo
 hi def link tmuxVariable          Identifier
 hi def link tmuxVariableExpansion Identifier
+hi! link tmuxColor SpecialKey
 
 " }}}
 " Diff: {{{

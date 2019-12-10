@@ -12,20 +12,24 @@ autoload/pydoc_help.vim or B) change this one ot make it asynchronous and try
 to improve or speed up a few things that we've gotten accustomed to taking for
 granted.
 
+Dec 07, 2019: Double checked that this passes a cursory `:py3f %` test and it did.
+
 """
 from contextlib import contextmanager
 import xml.dom.minidom as md
-
+from pprint import pprint
 import json
+
 import vim  # pylint:disable=import-error
 
-from UltiSnips.compatibility import col2byte, byte2col, as_unicode, as_vimencoding
+from UltiSnips.compatibility import col2byte, byte2col
 from UltiSnips.position import Position
 
 try:
     import yaml
 except (ImportError, ModuleNotFoundError):
     yaml = None
+
 
 class VimBuffer:
     """Wrapper around the current Vim buffer."""
@@ -356,7 +360,7 @@ def _unmap_select_mode_mapping():
                     pass
 
 
-##### Unrelated formatting code
+# Unrelated formatting code
 
 
 def pretty_xml(x):
@@ -365,13 +369,16 @@ def pretty_xml(x):
     new_xml = md.parseString(x.strip()).toprettyxml(indent=' '*2)
     return '\n'.join(line for line in new_xml.split('\n') if line.strip())
 
+
 def pretty_json(j):
     """Make json string `j` nicely formatted."""
     return json.dumps(json.loads(j), sort_keys=True, indent=4)
 
+
 def interpret_yaml(y):
     if yaml is not None:
         return json.dumps(yaml.safe_load(y), sort_keys=True, indent=4)
+
 
 prettiers = {
     'xml': pretty_xml,
@@ -379,9 +386,16 @@ prettiers = {
     'yaml': interpret_yaml,
 }
 
+
 def pretty_it(datatype):
     r = vim.current.range
     content = "\n".join(r)
     content = prettiers[datatype](content)
     r[:] = str(content).split('\n')
 
+
+def my_plugins():
+    """This was way too hard to do in Vimscript and took me 10 seconds to write in python."""
+    res = {idx: j for idx, j in enumerate(vim.eval("plugs").keys())}
+    print(res)
+    return res

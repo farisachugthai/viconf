@@ -38,10 +38,16 @@ setlocal shiftwidth=8
 setlocal breakindent
 setlocal number relativenumber
 
+  let b:undo_ftplugin = 'setlocal isk< buftype< swf< bufhidden< mod< ro< ma< et< ts< sts< sw< wrap< breakindent< '
+      \ . '|unlet! b:undo_ftplugin'
+
 if !exists('g:no_plugin_maps') && !exists('g:no_man_maps')
   noremap <buffer> q <Cmd>bd<CR>
   " Check the rplugin/python3/pydoc.py file
   noremap <buffer> P <Cmd>call pydoc_help#PydocThis<CR>
+
+  let b:undo_ftplugin .= 'nunmap <buffer> q'
+	\ . '|nunmap <buffer> P'
 endif
 
 "Filetype  Nvim Official Ftplugin: {{{1
@@ -53,10 +59,14 @@ if !exists('g:no_plugin_maps') && !exists('g:no_man_maps')
   nnoremap <silent> <buffer> K          :Man<CR>
   nnoremap <silent> <buffer> <C-T>      :call man#pop_tag()<CR>
 
+  let b:undo_ftplugin .= 'nunmap <buffer> j'
+	\ . '|nunmap <buffer> k'
+	\ . '|nunmap <buffer> gO'
+	\ . '|nunmap <buffer> <C-]>'
+	\ . '|nunmap <buffer> K'
+	\ . '|nunmap <buffer> <C-T>'
   " allow dot and dash in manual page name.
   setlocal iskeyword+=\.,-
-  let b:undo_ftplugin = 'setlocal isk< buftype< swf< bufhidden< mod< ro< ma< et< ts< sts< sw< wrap< breakindent< '
-      \ . '|unlet! b:undo_ftplugin'
 
 endif
 

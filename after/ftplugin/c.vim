@@ -46,7 +46,7 @@ setlocal include=^\s*#\s*include
 " setlocal define
 " setlocal includexpr
 " setlocal cinwords cinkeys etc etc
-llet &l:path=ftplugins#CPath()
+let &l:path=ftplugins#CPath()
 
 let b:undo_ftplugin = 'setlocal sua< cin< mp< ofu< kp< include<'
       \ . '|unlet! &l:path'
@@ -54,6 +54,8 @@ let b:undo_ftplugin = 'setlocal sua< cin< mp< ofu< kp< include<'
 
 " Mappings: {{{1
 nnoremap <buffer> <F5> :call ftplugins#ClangCheck()<CR><CR>
+
+let b:undo_ftplugin .= 'nunmap <buffer> <F5>'
 
 " Idk why <CR> is  there twice and idk if it was a typo on the part of the
 " Clang people but its in their official documentation..

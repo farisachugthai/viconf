@@ -52,14 +52,15 @@ that I took above but goddamn this is annoying.
 
 """
 import logging
+import os
 from pathlib import Path
 import sys
 
 try:
-    import vim
-except ImportError:  # i guess were not in vim
+    import pynvim
+except ImportError:  # i guess were not in nvim
     try:
-        import pynvim
+        import vim
     except ImportError:
         sys.exit()
 

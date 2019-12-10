@@ -9,11 +9,12 @@
 noremap <F4> <Cmd>UltiSnipsEdit<CR>
 noremap! <F4> <Cmd>UltiSnipsEdit<CR>
 
-noremap <F6> <Cmd>Snippets<CR>
-noremap! <F6> <Cmd>Snippets<CR>
+noremap <F6> <Cmd>FufSnippets<CR>
+noremap! <F6> <Cmd>FufSnippets<CR>
 
-" Seriously why does this not work yet
-inoremap <C-Tab> * <Cmd>call ultisnips#listsnippets()<CR>
+" C-@ is repeat last inserted text. But so is <C-Spc>. And <C-a> in insert
+" mode. Fuck <C-S-2> is open a new tab in microsoft terminal. Hm.
+inoremap <C-@> * <Cmd>echo UltiSnips#ListSnippets()<CR>
 
 " Options: {{{1
 

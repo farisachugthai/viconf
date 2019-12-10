@@ -15,10 +15,8 @@ set cpoptions-=C
 let g:python_highlight_all = 1
 let g:python_space_error_highlight = 1
 
-" Oddly I don't have an ftplugin guard setup. But rst sourced this in so...
-if &filetype !=# 'python' || &filetype !=# 'xonsh'
-  finish
-endif
+runtime! $VIMRUNTIME/ftplugin/python.vim
+if exists('b:did_ftplugin') | unlet! b:did_ftplugin | endif
 
 setlocal nolinebreak  " Dont set this on itll create syntaxerors
 setlocal textwidth=120
@@ -62,8 +60,6 @@ setlocal omnifunc=python3complete#Complete
 " Makes moving too hard to add it
 " setlocal iskeyword-=.
 " Man this really fucks up the path damnit
-
-let &l:path = py#PythonPath()
 
 " *'shiftround'* *'sr'* *'noshiftround'* *'nosr'*
 " 'shiftround' 'sr'	boolean	(default off) global
@@ -111,12 +107,6 @@ else
         " command! -nargs=0 Autopep8 exec '!autopep8 -i %'
         " command! -nargs=0 Autopep8 cexpr! exec '!autopep8 -d %'
     endif
-endif
-
-" ALE: {{{1
-
-if !empty('g:loaded_ale') && &filetype==#'python'
-  call py#ALE_Python_Conf()
 endif
 
 " Coc: {{{1

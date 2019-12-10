@@ -1,9 +1,12 @@
 # c.snippets
-# Vim: set foldmethod=marker:foldlevelstart=0:foldlevel=0:
 priority 70
 
 snippet def "#define ..."
-#define ${VISUAL:$0}
+#define ${VISUAL:${0}}
+endsnippet
+
+snippet # "#include" b
+#${1:include} <${VISUAL:${0}}>
 endsnippet
 
 # this behaves oddly
@@ -131,3 +134,5 @@ ${1}($2){
 	${0}
 }
 endsnippet
+
+# Vim: foldmethod=marker foldlevelstart=0 foldlevel=0:

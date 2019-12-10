@@ -17,13 +17,21 @@ pprint(vim.call('tagfiles'))
 EOF
 endfunction
 
+function! py#PythonPath() abort  " {{{1
+
+  let s:path = s:_PythonPath()
+  let &l:path = s:path
+  return s:path
+
+endfunction
 function py#nvim_taglist() abort  " {{{1
   " Or if you wanna see a different way
   call nvim_call_function('tagfiles')
 endfunction
 
-function py#PythonPath() abort  " {{{1
-
+function! s:_PythonPath() abort  " {{{1
+  " I know you don't wanna define functions in plugins but i genuinely need
+  " this globally available
   " Note: the path option is to find directories so it's usually unnecesssary
   " to glob if you have the /usr/lib/python dir in hand.
   " let s:orig_path = &path
@@ -74,11 +82,33 @@ function py#PythonPath() abort  " {{{1
 
   endif
 
+  " The path doesn't actually update automatically so let's try this
+  let &l:path = s:path
   return s:path
   " if this still doesn't work keep wailing at python_serves_python
 
 endfunction
+function! py#ALE_Python_Conf() abort  " {{{1
 
+  let b:ale_linters = ['flake8', 'pydocstyle', 'pyls']
+  let b:ale_linters_explicit = 1
+
+  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
+  let b:ale_fixers += [ 'reorder-python-imports' ]
+
+  if executable('black')
+    let b:ale_fixers+=['black']
+  endif
+
+  if executable('yapf')
+    let b:ale_fixers += ['yapf']
+  endif
+
+  if executable('autopep8')
+      let b:ale_fixers += ['autopep8']
+  endif
+
+endfunction
 function py#python_serves_python() abort  " {{{1
 
 python3 << EOF
@@ -134,24 +164,3 @@ function py#YAPF() abort  " {{{1
 endfunction
 
 
-function py#ALE_Python_Conf() abort  " {{{1
-
-  let b:ale_linters = ['flake8', 'pydocstyle', 'pyls']
-  let b:ale_linters_explicit = 1
-
-  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
-  let b:ale_fixers += [ 'reorder-python-imports' ]
-
-  if executable('black')
-    let b:ale_fixers+=['black']
-  endif
-
-  if executable('yapf')
-    let b:ale_fixers += ['yapf']
-  endif
-
-  if executable('autopep8')
-      let b:ale_fixers += ['autopep8']
-  endif
-
-endfunction

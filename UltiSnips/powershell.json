@@ -1,64 +1,63 @@
-// The "Requires *" snippets should be removed if-and-when intellisense is implemented for the script requirement directive syntax.
 {
     "ModuleManifest": {
         "prefix": "manifest",
         "body": [
-          "@{",
-          "\t# If authoring a script module, the RootModule is the name of your .psm1 file",
-          "\tRootModule = '${module:MyModule}.psm1'",
-          "",
-          "\tAuthor = '${author:Cool Person <coolperson@email.local>}'",
-          "",
-          "\tCompanyName = '${company:Contoso Inc.}'",
-          "",
-          "\tModuleVersion = '${ModuleVersion:0.1}'",
-          "",
-          "\t# Use the New-Guid command to generate a GUID, and copy/paste into the next line",
-          "\tGUID = '<pasteNewGUIDhere>'",
-          "",
-          "\tCopyright = '2017 ${company:Copyright Holder}'",
-          "",
-          "\tDescription = '${Description:What does this module do?}'",
-          "",
-          "\t# Minimum PowerShell version supported by this module (optional, recommended)",
-          "\t# PowerShellVersion = ''",
-          "",
-          "\t# Which PowerShell Editions does this module work with? (Core, Desktop)",
-          "\tCompatiblePSEditions = @('Desktop', 'Core')",
-          "",
-          "\t# Which PowerShell functions are exported from your module? (eg. Get-CoolObject)",
-          "\tFunctionsToExport = @('')",
-          "",
-          "\t# Which PowerShell aliases are exported from your module? (eg. gco)",
-          "\tAliasesToExport = @('')",
-          "",
-          "\t# Which PowerShell variables are exported from your module? (eg. Fruits, Vegetables)",
-          "\tVariablesToExport = @('')",
-          "",
-          "\t# PowerShell Gallery: Define your module's metadata",
-          "\tPrivateData = @{",
-          "\t\tPSData = @{",
-          "\t\t\t# What keywords represent your PowerShell module? (eg. cloud, tools, framework, vendor)",
-          "\t\t\tTags = @('${tag1:cooltag1}', '${tag2:cooltag2}')",
-          "",
-          "\t\t\t# What software license is your code being released under? (see https://opensource.org/licenses)",
-          "\t\t\tLicenseUri = ''",
-          "",
-          "\t\t\t# What is the URL to your project's website?",
-          "\t\t\tProjectUri = ''",
-          "",
-          "\t\t\t# What is the URI to a custom icon file for your project? (optional)",
-          "\t\t\tIconUri = ''",
-          "",
-          "\t\t\t# What new features, bug fixes, or deprecated features, are part of this release?",
-          "\t\t\tReleaseNotes = @'",
-          "'@",
-          "\t\t}",
-          "\t}",
-          "",
-          "\t# If your module supports updateable help, what is the URI to the help archive? (optional)",
-          "\t# HelpInfoURI = ''",
-          "}"
+            "@{",
+            "\t# If authoring a script module, the RootModule is the name of your .psm1 file",
+            "\tRootModule = '${module:MyModule}.psm1'",
+            "",
+            "\tAuthor = '${author:Cool Person <coolperson@email.local>}'",
+            "",
+            "\tCompanyName = '${company:Contoso Inc.}'",
+            "",
+            "\tModuleVersion = '${ModuleVersion:0.1}'",
+            "",
+            "\t# Use the New-Guid command to generate a GUID, and copy/paste into the next line",
+            "\tGUID = '<pasteNewGUIDhere>'",
+            "",
+            "\tCopyright = '2017 ${company:Copyright Holder}'",
+            "",
+            "\tDescription = '${Description:What does this module do?}'",
+            "",
+            "\t# Minimum PowerShell version supported by this module (optional, recommended)",
+            "\t# PowerShellVersion = ''",
+            "",
+            "\t# Which PowerShell Editions does this module work with? (Core, Desktop)",
+            "\tCompatiblePSEditions = @('Desktop', 'Core')",
+            "",
+            "\t# Which PowerShell functions are exported from your module? (eg. Get-CoolObject)",
+            "\tFunctionsToExport = @('')",
+            "",
+            "\t# Which PowerShell aliases are exported from your module? (eg. gco)",
+            "\tAliasesToExport = @('')",
+            "",
+            "\t# Which PowerShell variables are exported from your module? (eg. Fruits, Vegetables)",
+            "\tVariablesToExport = @('')",
+            "",
+            "\t# PowerShell Gallery: Define your module's metadata",
+            "\tPrivateData = @{",
+            "\t\tPSData = @{",
+            "\t\t\t# What keywords represent your PowerShell module? (eg. cloud, tools, framework, vendor)",
+            "\t\t\tTags = @('${tag1:cooltag1}', '${tag2:cooltag2}')",
+            "",
+            "\t\t\t# What software license is your code being released under? (see https://opensource.org/licenses)",
+            "\t\t\tLicenseUri = ''",
+            "",
+            "\t\t\t# What is the URL to your project's website?",
+            "\t\t\tProjectUri = ''",
+            "",
+            "\t\t\t# What is the URI to a custom icon file for your project? (optional)",
+            "\t\t\tIconUri = ''",
+            "",
+            "\t\t\t# What new features, bug fixes, or deprecated features, are part of this release?",
+            "\t\t\tReleaseNotes = @'",
+            "'@",
+            "\t\t}",
+            "\t}",
+            "",
+            "\t# If your module supports updateable help, what is the URI to the help archive? (optional)",
+            "\t# HelpInfoURI = ''",
+            "}"
         ],
         "description": "Basic skeleton for a PowerShell module manifest, complete with PowerShell Gallery metadata."
     },
@@ -467,7 +466,7 @@
         "prefix": "class",
         "body": [
             "class ${1:ClassName} {",
-            "\t${0:$TM_SELECTED_TEXT}",
+            "\t$0",
             "}"
         ],
         "description": "Class definition snippet"
@@ -476,7 +475,7 @@
         "prefix": "ctor",
         "body": [
             "${1:ClassName}(${2:OptionalParameters}) {",
-            "\t${0:$TM_SELECTED_TEXT}",
+            "\t$0",
             "}"
         ],
         "description": "Class constructor definition snippet"
@@ -499,7 +498,7 @@
         "prefix": "method",
         "body": [
             "[${1:void}] ${2:MethodName}($${3:OptionalParameters}) {",
-            "\t${0:$TM_SELECTED_TEXT}",
+            "\t$0",
             "}"
         ],
         "description": "Class method definition snippet"
@@ -508,16 +507,13 @@
         "prefix": "enum",
         "body": [
             "enum ${1:EnumName} {",
-            "\t${0:$TM_SELECTED_TEXT}",
+            "\t$0",
             "}"
         ],
         "description": "Enum definition snippet"
     },
-    "Function-Advanced": {
-        "prefix": [
-            "function-advanced",
-            "cmdlet"
-        ],
+    "Cmdlet": {
+        "prefix": "cmdlet",
         "body": [
             "function ${1:Verb-Noun} {",
             "\t[CmdletBinding()]",
@@ -526,21 +522,39 @@
             "\t)",
             "\t",
             "\tbegin {",
-            "\t\t",
             "\t}",
             "\t",
             "\tprocess {",
-            "\t\t$TM_SELECTED_TEXT",
             "\t}",
             "\t",
             "\tend {",
-            "\t\t",
+            "\t}",
+            "}"
+        ],
+        "description": "Script cmdlet definition snippet"
+    },
+    "Function-Advanced": {
+        "prefix": "function-advanced",
+        "body": [
+            "function ${1:Verb-Noun} {",
+            "\t[CmdletBinding()]",
+            "\tparam (",
+            "\t\t$0",
+            "\t)",
+            "\t",
+            "\tbegin {",
+            "\t}",
+            "\t",
+            "\tprocess {",
+            "\t}",
+            "\t",
+            "\tend {",
             "\t}",
             "}"
         ],
         "description": "Script advanced function definition snippet"
     },
-    "Comment-Help": {
+    "Cmdlet-Comment-Help": {
         "prefix": "comment-help",
         "body": [
             "<#",
@@ -559,7 +573,7 @@
             "\tGeneral notes",
             "#>"
         ],
-        "description": "Comment-based help for an advanced function snippet"
+        "description": "Comment-based help snippet"
     },
     "Parameter": {
         "prefix": "parameter",
@@ -655,7 +669,7 @@
             "\t",
             "\t# Gets the resource's current state.",
             "\t[${ResourceName:NameOfResource}] Get() {",
-            "\t\t${0:$TM_SELECTED_TEXT}",
+            "\t\t$0",
             "\t\treturn \\$this",
             "\t}",
             "\t",
@@ -679,7 +693,7 @@
             "\tparam (",
             "\t)",
             "\t",
-            "\t${0:$TM_SELECTED_TEXT}",
+            "\t$0",
             "}",
             "function Set-TargetResource {",
             "\tparam (",
@@ -698,7 +712,7 @@
         "prefix": "comment",
         "body": [
             "<#",
-            " # ${0:$TM_SELECTED_TEXT}",
+            " # $0",
             " #>"
         ],
         "description": "Comment block snippet"
@@ -707,7 +721,7 @@
         "prefix": "do-until",
         "body": [
             "do {",
-            "\t${0:$TM_SELECTED_TEXT}",
+            "\t$0",
             "} until (${1:condition})"
         ],
         "description": "do-until loop snippet"
@@ -716,7 +730,7 @@
         "prefix": "do-while",
         "body": [
             "do {",
-            "\t${0:$TM_SELECTED_TEXT}",
+            "\t$0",
             "} while (${1:condition})"
         ],
         "description": "do-while loop snippet"
@@ -725,7 +739,7 @@
         "prefix": "while",
         "body": [
             "while (${1:condition}) {",
-            "\t${0:$TM_SELECTED_TEXT}",
+            "\t$0",
             "}"
         ],
         "description": "while loop snippet"
@@ -734,7 +748,7 @@
         "prefix": "for",
         "body": [
             "for ($${1:i} = 0; $${1:i} -lt $${2:array}.Count; $${1:i}++) {",
-            "\t${0:$TM_SELECTED_TEXT}",
+            "\t$0",
             "}"
         ],
         "description": "for loop snippet"
@@ -743,7 +757,7 @@
         "prefix": "forr",
         "body": [
             "for ($${1:i} = $${2:array}.Count - 1; $${1:i} -ge 0 ; $${1:i}--) {",
-            "\t${0:$TM_SELECTED_TEXT}",
+            "\t$0",
             "}"
         ],
         "description": "reversed for loop snippet"
@@ -752,7 +766,7 @@
         "prefix": "foreach",
         "body": [
             "foreach ($${1:item} in $${2:collection}) {",
-            "\t${0:$TM_SELECTED_TEXT}",
+            "\t$0",
             "}"
         ],
         "description": "foreach loop snippet"
@@ -764,7 +778,7 @@
             "\tparam (",
             "\t\t${2:OptionalParameters}",
             "\t)",
-            "\t${0:$TM_SELECTED_TEXT}",
+            "\t$0",
             "}"
         ],
         "description": "Function definition snippet that contains a param block"
@@ -773,7 +787,7 @@
         "prefix": "Function-Inline",
         "body": [
             "function ${1:FunctionName} (${2:OptionalParameters}) {",
-            "\t${0:$TM_SELECTED_TEXT}",
+            "\t$0",
             "}"
         ],
         "description": "Function definition snippet that does not contain a param block, but defines parameters inline. This syntax is commonly used in other languages"
@@ -782,7 +796,7 @@
         "prefix": "if",
         "body": [
             "if (${1:condition}) {",
-            "\t${0:$TM_SELECTED_TEXT}",
+            "\t$0",
             "}"
         ],
         "description": "if statement snippet"
@@ -791,7 +805,7 @@
         "prefix": "elseif",
         "body": [
             "elseif (${1:condition}) {",
-            "\t${0:$TM_SELECTED_TEXT}",
+            "\t$0",
             "}"
         ],
         "description": "elseif statement snippet"
@@ -800,7 +814,7 @@
         "prefix": "else",
         "body": [
             "else {",
-            "\t${0:$TM_SELECTED_TEXT}",
+            "\t$0",
             "}"
         ],
         "description": "else statement snippet"
@@ -809,7 +823,7 @@
         "prefix": "switch",
         "body": [
             "switch (${1:\\$x}) {",
-            "\t${2:condition} { ${0:$TM_SELECTED_TEXT} }",
+            "\t${2:condition} { $0 }",
             "\tDefault {}",
             "}"
         ],
@@ -819,7 +833,7 @@
         "prefix": "try",
         "body": [
             "try {",
-            "\t${0:$TM_SELECTED_TEXT}",
+            "\t$0",
             "}",
             "catch {",
             "\t",
@@ -831,7 +845,7 @@
         "prefix": "trycf",
         "body": [
             "try {",
-            "\t${0:$TM_SELECTED_TEXT}",
+            "\t$0",
             "}",
             "catch {",
             "\t",
@@ -846,7 +860,7 @@
         "prefix": "tryf",
         "body": [
             "try {",
-            "\t${0:$TM_SELECTED_TEXT}",
+            "\t$0",
             "}",
             "finally {",
             "\t",
@@ -861,7 +875,7 @@
             "\tparam (",
             "\t)",
             "",
-            "\t${0:$TM_SELECTED_TEXT}",
+            "\t$0",
             "}"
         ],
         "description": "workflow snippet"
@@ -870,7 +884,7 @@
         "prefix": "workflow foreach-parallel",
         "body": [
             "foreach -parallel ($${variable:item} in $${collection:collection}) {",
-            "\t${0:$TM_SELECTED_TEXT}",
+            "\t$0",
             "}"
         ],
         "description": "foreach-parallel snippet (for use inside a workflow)"
@@ -879,7 +893,7 @@
         "prefix": "workflow inlinescript",
         "body": [
             "inlineScript {",
-            "\t${0:$TM_SELECTED_TEXT}",
+            "\t$0",
             "}"
         ],
         "description": "inlinescript snippet (for use inside a workflow)"
@@ -888,7 +902,7 @@
         "prefix": "workflow parallel",
         "body": [
             "parallel {",
-            "\t${0:$TM_SELECTED_TEXT}",
+            "\t$0",
             "}"
         ],
         "description": "parallel snippet (for use inside a workflow)"
@@ -897,31 +911,31 @@
         "prefix": "workflow sequence",
         "body": [
             "sequence {",
-            "\t${0:$TM_SELECTED_TEXT}",
+            "\t$0",
             "}"
         ],
         "description": "sequence snippet (for use inside a workflow)"
     },
     "Suppress PSScriptAnalyzer Rule": {
-		"prefix": "suppress-message-rule",
-		"description": "Suppress a built-in PSScriptAnalyzer rule using the SuppressMessageAttribute",
-		"body": [
-			"[Diagnostics.CodeAnalysis.SuppressMessageAttribute('${1:PSUseDeclaredVarsMoreThanAssignments}', '')]"
-		]
-	},
+        "prefix": "suppress-message-rule",
+        "description": "Suppress a built-in PSScriptAnalyzer rule using the SuppressMessageAttribute",
+        "body": [
+            "[Diagnostics.CodeAnalysis.SuppressMessageAttribute('${1:PSUseDeclaredVarsMoreThanAssignments}', '')]"
+        ]
+    },
     "Suppress PSScriptAnalyzer Rule on Parameter": {
-		"prefix": "suppress-message-rule-for-parameter",
-		"description": "Suppress a built-in PSScriptAnalyzer rule on a parameter using the SuppressMessageAttribute",
-		"body": [
-			"[Diagnostics.CodeAnalysis.SuppressMessageAttribute('${1:PSUseDeclaredVarsMoreThanAssignments}', '${2:ParamName}')]"
-		]
-	},
-	"Suppress PSScriptAnalyzer Rule in Scope": {
-		"prefix": "suppress-message-rule-for-scope",
-		"description": "Suppress a built-in PSScriptAnalyzer rule for functions or classes in a specific scope using the SuppressMessageAttribute",
-		"body": [
-			"[Diagnostics.CodeAnalysis.SuppressMessageAttribute('${1:PSProvideDefaultParameterValue}', '', Scope='Function', Target='${2:*}')]"
-		]
+        "prefix": "suppress-message-rule-for-parameter",
+        "description": "Suppress a built-in PSScriptAnalyzer rule on a parameter using the SuppressMessageAttribute",
+        "body": [
+            "[Diagnostics.CodeAnalysis.SuppressMessageAttribute('${1:PSUseDeclaredVarsMoreThanAssignments}', '${2:ParamName}')]"
+        ]
+    },
+    "Suppress PSScriptAnalyzer Rule in Scope": {
+        "prefix": "suppress-message-rule-for-scope",
+        "description": "Suppress a built-in PSScriptAnalyzer rule for functions or classes in a specific scope using the SuppressMessageAttribute",
+        "body": [
+            "[Diagnostics.CodeAnalysis.SuppressMessageAttribute('${1:PSProvideDefaultParameterValue}', '', Scope='Function', Target='${2:*}')]"
+        ]
     },
     "PSCustomObject": {
         "prefix": "PSCustomObject",
@@ -945,7 +959,7 @@
         "prefix": "#region",
         "body": [
             "#region ${1}",
-            "${0:$TM_SELECTED_TEXT}",
+            "$0",
             "#endregion"
         ],
         "description": "Region Block for organizing and folding of your code"
@@ -954,7 +968,7 @@
         "prefix": "IfShouldProcess",
         "body": [
             "if (\\$PSCmdlet.ShouldProcess(\"${1:Target}\", \"${2:Operation}\")) {",
-                "\t${0:$TM_SELECTED_TEXT}",
+            "\t$0",
             "}"
         ],
         "description": "Creates ShouldProcess block"
@@ -962,7 +976,7 @@
     "CalculatedProperty": {
         "prefix": "Calculated-Property",
         "body": [
-            "@{name='${1:PropertyName}';expression={${2:${TM_SELECTED_TEXT:\\$_.PropertyValue}}}}$0"
+            "@{name='${1:PropertyName}';expression={${2:\\$_.PropertyValue}}}$0"
         ],
         "description": "Creates a Calculated Property typically used with Select-Object."
     },
@@ -970,11 +984,11 @@
         "prefix": "Describe-Context-It-Pester",
         "body": [
             "Describe \"${1:DescribeName}\" {",
-                "\tContext \"${2:ContextName}\" {",
-                    "\t\tIt \"${3:ItName}\" {",
-                        "\t\t\t${4:${TM_SELECTED_TEXT:Assertion}}",
-                    "\t\t}$0",
-                "\t}",
+            "\tContext \"${2:ContextName}\" {",
+            "\t\tIt \"${3:ItName}\" {",
+            "\t\t\t${4:Assertion}",
+            "\t\t}$0",
+            "\t}",
             "}"
         ],
         "description": "Pester Describe block with nested Context & It blocks"
@@ -983,7 +997,7 @@
         "prefix": "Describe-Pester",
         "body": [
             "Describe \"${1:DescribeName}\" {",
-                "\t${0:TM_SELECTED_TEXT}",
+            "\t$0",
             "}"
         ],
         "description": "Pester Describe block"
@@ -992,9 +1006,9 @@
         "prefix": "Context-It-Pester",
         "body": [
             "Context \"${1:ContextName}\" {",
-                "\tIt \"${2:ItName}\" {",
-                    "\t\t${3:${TM_SELECTED_TEXT:Assertion}}",
-                "\t}$0",
+            "\tIt \"${2:ItName}\" {",
+            "\t\t${3:Assertion}",
+            "\t}$0",
             "}"
         ],
         "description": "Pester - Context block with nested It block"
@@ -1003,7 +1017,7 @@
         "prefix": "Context-Pester",
         "body": [
             "Context \"${1:ContextName}\" {",
-                "\t${0:$TM_SELECTED_TEXT}",
+            "\t$0",
             "}"
         ],
         "description": "Pester - Context block"
@@ -1012,7 +1026,7 @@
         "prefix": "It-Pester",
         "body": [
             "It \"${1:ItName}\" {",
-                "\t${2:${TM_SELECTED_TEXT:Assertion}}",
+            "\t${2:Assertion}",
             "}$0"
         ],
         "description": "Pester - It block"

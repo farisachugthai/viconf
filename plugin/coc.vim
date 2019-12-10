@@ -8,7 +8,8 @@
 " Global options are in ../../coc_settings.json
 
 " Guard: {{{1
-if !exists('g:did_coc_loaded')  | finish | endif
+" Can't do this anymore we load before coc
+" if !exists('g:did_coc_loaded')  | finish | endif
 
 let s:cpo_save = &cpoptions
 set cpoptions-=C
@@ -50,6 +51,12 @@ let g:coc_snippet_prev = '<C-k>'
 " Mappings: {{{1
 
 " Basic: {{{2
+"
+" TODO: Might need to open a pull request he states that these are mapped by
+" default. omap af and omap if didn't show anything
+onoremap af <Plug>(coc-funcobj-a)
+onoremap if <Plug>(coc-funcobj-i)
+
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
@@ -205,9 +212,22 @@ command! -nargs=0 CocPython call CocActionAsync('runCommand', 'python.startREPL'
 
 " Use autocmd to force lightline update.
 " Well I have my own statusline function but you're close
-if exists('*Statusline_expr')
-  autocmd User CocStatusChange,CocDiagnosticChange call Statusline_expr()
-endif
+augroup CocUser
+  au!
+  autocmd User CocStatusChange,CocDiagnosticChange
+        \| if exists('*Statusline_expr')
+        \| call Statusline_expr()
+        \| endif
+
+	autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+
+  autocmd User CocTerminalOpen stopinsert
+
+  autocmd CompleteDone * pclose
+
+	autocmd CursorHold * silent call CocActionAsync('highlight')
+
+augroup END
 
 " Atexit: {{{1
 let &cpoptions = s:cpo_save

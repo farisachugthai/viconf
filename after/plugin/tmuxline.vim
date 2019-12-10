@@ -6,14 +6,18 @@
 " ============================================================================
 
 " Guard: {{{1
-if !has_key(plugs, 'tmuxline.vim')
+" Dude he doesn't set a g:loaded_* or anything we have to do this manually
+if exists('plugs')
+  if !has_key(plugs, 'tmuxline.vim')
     finish
+  endif
+else
+  finish
 endif
 
-if exists('g:did_tmuxline_conf') || &compatible || v:version < 700
-    finish
+if !exists('$TMUX')
+  finish
 endif
-let g:did_tmuxline_conf = 1
 
 let s:cpo_save = &cpoptions
 set cpoptions-=C
@@ -21,7 +25,7 @@ set cpoptions-=C
 " Tmuxline Presets: {{{1
 let g:tmuxline_powerline_separators = 0
 
-if !has('unix')
+if !has('unix')  " Wait did i ever check if this works? Does WSL show !has('unix') wth?
   let g:tmuxline_preset = {
       \'a'       : '#S',
       \'b'       : '#W',
@@ -64,7 +68,7 @@ let g:tmuxline_separators = {
 " Doesn't work as you typically open to Startify where nomodifiable is set :/
 " augroup Tmuxline
 "   au!
-"   autocmd VimEnter * <Cmd>Tmuxline vim_statusline_3<CR> 
+"   autocmd VimEnter * <Cmd>Tmuxline vim_statusline_3<CR>
 " augroup END
 
 " Atexit: {{{1

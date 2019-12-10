@@ -32,15 +32,6 @@ the base options like so:
 let vs. set
 ------------
 
-Whitespace in Options
----------------------
-
-The ``set`` command is whitespace sensitive which can become quickly
-cumbersome. The ``let`` command, in comparison, is not as strict.
-
-It's absolutely still whitespace sensitive, but
-``let`` allows for whitespace before and after the operator.
-
 How do we utilize ``let`` for a built-in vim variables?
 
 .. code-block:: vim
@@ -64,6 +55,19 @@ If you enter characters or insert a visual block, Vim will add whatever
 spaces are required to the left of the inserted characters to keep
 them in place. Virtual edit mode makes it simple to edit tabular data.
 Turn it off with ``:set virtualedit=.``
+
+Diffopts
+---------
+
+My current ``&diffopt``.::
+
+   " Filler lines to keep text synced, 0 lines of context on diffs,
+   " don't diff hidden files,default foldcolumn is 2, case insensitive
+   set diffopt=filler,context:0,hiddenoff,foldcolumn:2,icase,indent-heuristic,horizontal
+   if has('patch-8.1.0360') | set diffopt+=internal,algorithm:patience | endif
+
+.. todo:: Annotate the rest
+
 
 Environment Variables
 =====================

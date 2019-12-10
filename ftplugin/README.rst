@@ -47,3 +47,15 @@ with the standard::
 
 That file immediately stops executing anything. So are my ftplugins being loaded
 after the ones in ``$VIMRUNTIME``? Why?
+
+.. seealso::
+
+   RESTRUCTURED TEXT			*rst.vim* *ft-rst-syntax*
+   he rst.vim or ft-rst-syntax or syntax 2600.
+
+.. admonition:: g:rst_syntax_code_list
+
+   Don't put bash instead of sh.
+   $VIMRUNTIME/syntax/rst.vim iterates over this var and if it can't find a
+   bash.vim syntax file it will crash.
+
