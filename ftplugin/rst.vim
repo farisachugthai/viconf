@@ -5,6 +5,7 @@
     " Last Modified: Oct 27, 2019
 " ============================================================================
 
+" Globals: {{{1
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
@@ -23,13 +24,20 @@ let g:rst_use_emphasis_colors = 1
 let g:rst_fold_enabled = 1
 
 " Rst specific: {{{1
+setlocal textwidth=80
 setlocal expandtab
 setlocal spell!
 setlocal colorcolumn=80
 setlocal linebreak
 setlocal foldlevel=1
 setlocal foldlevelstart=1
+
 setlocal iskeyword+=.
+
+" Only because I want to follow module names the same way as python
+setlocal include=^\\s*\\(from\\\|import\\)
+
+setlocal includeexpr=substitute(v:fname,'\\.','/','g')
 
 " don't do the executable(sphinx-build) check here its in ../compiler/rst.vim
 compiler rst
@@ -49,9 +57,9 @@ setlocal include=^\\s*\\(from\\\|import\\)
 " This really fucks stuff up if you're indenting rst blocks as 3 spaces and
 " python as 4
 setlocal noshiftround
-setlocal suffixesadd=.py,.rst
+setlocal suffixesadd=.py,.rst,.rst.txt
 
-let &l:path = PythonPath()
+let &l:path = py#PythonPath()
 
 " Sphinx Command: {{{1
 command! -buffer Sphinx call pydoc_help#sphinx_build(<q-args>)
@@ -62,7 +70,7 @@ setlocal comments=fb:.. commentstring=..\ %s
 
 " Let's redo the undo ftplugin
 
-let b:undo_ftplugin = 'setlocal cms< com< cc< lbr< fdl< fdls< '
+let b:undo_ftplugin = 'setlocal tw< cms< com< cc< lbr< fdl< fdls< '
       \ . '|setlocal spell< isk< kp< mp< efm< sua< sr< '
       \ . '|setlocal cin< cinw< path< '
       \ . '|setlocal include<'

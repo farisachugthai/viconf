@@ -59,3 +59,22 @@ after the ones in ``$VIMRUNTIME``? Why?
    $VIMRUNTIME/syntax/rst.vim iterates over this var and if it can't find a
    bash.vim syntax file it will crash.
 
+
+Difference between ``&isfname`` and ``&iskeyword``
+==================================================
+
+This just happened to me so I suppose it'd be a good idea to jot it down.
+
+What's the difference between these 2 options?
+
+``iskeyword`` is used for movements like :kbd:`w`, :kbd:`e` and many other
+things on top of it.
+
+``isfname`` is used for includes, defines, and paths. While that sounds really
+C specific, for a Vim user with reasonable ftplugin specific configurations,
+``:find`` is a more convenient way to navigate than ``:e`` and :kbd:`gf` is
+a completely necessary part of my workflow these days.
+
+In my reStructured text ftplugin, I added :kbd:`.` to ``iskeyword`` in order
+to have dotted packages, *I.E. IPython.core.interactiveshell*, recognized
+as 1 word.

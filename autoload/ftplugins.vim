@@ -163,14 +163,20 @@ endfunction
 
 function! ftplugins#VimPath() abort  " {{{1
 
-  let s:path='.,**,,'
+  " I know you may be thinking, there are no include or defines in a vim file
+  " what the hell do you need to muck with the path for.
+  " autoloaded functions!
+  let s:path='.,**'
   let s:path = s:path . ',' . expand('$VIMRUNTIME') . '/*,'
 
   if !exists('*stdpath')
     return s:path
   endif
 
-  let s:path =  stdpath('config') . ',' . s:path
+  let s:path = s:path . stdpath('config') . '/**,'
+
+  " Idk if this is gonna glob the way I want.
+  let s:path = s:path . stdpath('data') . '/**1/autoload/*.vim'
   return s:path
 
 endfunction

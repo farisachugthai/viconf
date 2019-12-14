@@ -59,7 +59,7 @@ let &l:commentstring='" %s'
 let &l:path = ftplugins#VimPath()
 
 " Make 'gf' work
-setlocal isfname-=#
+setlocal isfname+=#
 " So that you can cleanly jump around inside of autoloaded func names
 setlocal iskeyword-=#
 

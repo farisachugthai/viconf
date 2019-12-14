@@ -5,7 +5,7 @@
   " Last Modified: November 14, 2019
 " ============================================================================
 
-function py#taglist() abort  " {{{1
+function! py#taglist() abort  " {{{1
 " Still pretty shaky but getting better
   " call a vim function from python. tagfiles() is a builtin that displays the
   " included tags files for the buffer.
@@ -16,14 +16,7 @@ pprint(vim.call('tagfiles'))
 
 EOF
 endfunction
-function! py#PythonPath() abort  " {{{1
-
-  let s:path = s:_PythonPath()
-  let &l:path = s:path
-  return s:path
-
-endfunction
-function py#nvim_taglist() abort  " {{{1
+function! py#nvim_taglist() abort  " {{{1
   " Or if you wanna see a different way
   call nvim_call_function('tagfiles')
 endfunction
@@ -69,7 +62,7 @@ function! s:_PythonPath() abort  " {{{1
     else
       let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h')
 
-      let s:site_pack = s:root_dir . '/lib/site-packages/**2/'
+      let s:site_pack = s:root_dir . '/lib/site-packages'
       let s:path = s:path . s:site_pack
 
       " This option requires that the '**' either is at the end of the path or
@@ -78,7 +71,10 @@ function! s:_PythonPath() abort  " {{{1
 
       " make this last. its the standard lib and we prepend it to the path so
       " it should be first in the option AKA last in the function
-      let s:path = s:root_dir . '/lib' . s:path
+      " UGHHHHHHH VIM WHYYYYY. If you write this as s:root_dir . '/lib/*'
+      " it only matches 1 letter and doesn't include the std lib as a result.
+      " Shave off the glob to add more in. Yeah ikr?
+      let s:path = s:root_dir . '/lib,' . s:path
     endif
 
   else
@@ -88,6 +84,14 @@ function! s:_PythonPath() abort  " {{{1
     return s:path
 
   endif
+  return s:path
+
+endfunction
+function! py#PythonPath() abort  " {{{1
+
+  let s:path = s:_PythonPath()
+  let &l:path = s:path
+  return s:path
 
 endfunction
 function py#python_serves_python() abort  " {{{1

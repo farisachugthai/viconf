@@ -75,8 +75,8 @@ inoremap gI gi
 " See Also: ../autoload/buffers.vim
 " There's a good buffers#PreviewWord that shows some stuff i'm sure you wanna do
 
-set tags+=./tags,./*/tags
-setglobal tags^=./.git/tags tagcase=smart showfulltag
+setglobal tags=tags,**/tags
+setglobal tagcase=smart showfulltag
 
 " So I just realized that I have almost no mappings or settings
 " for the: paths, includes, defines, the clist or llist, tagstack or preview

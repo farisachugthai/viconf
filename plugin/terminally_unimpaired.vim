@@ -13,16 +13,16 @@ if executable('htop')  " {{{1
   noremap <Leader>ah <Cmd>wincmd v<CR><bar><Cmd>enew<CR><bar>term://htop
 endif
 
-" Autocompletion on the cmdline: {{{1
-set wildcharm=<C-z>  " {{{1
+set wildcharm=<C-z>  "  Autocompletion on the cmdline: {{{1
 nnoremap ,e :e **/*<C-z><S-Tab>
 
 set path-=/usr/include
 nnoremap ,f :find **/*<C-z><S-Tab>
 
-if exists($ANDROID_DATA)
+if !empty('$ANDROID_DATA')
   " May 26, 2019: Just ran into my first problem from a filename with a space in the name *sigh*
-  nnoremap <silent> <Leader>ts <Cmd>execute '!termux-share -a send ' . shellescape(expand("%"))<CR>
+  nnoremap <Leader>ts :<C-u>execute '!termux-share -a send ' . shellescape(expand('%'))<CR>
+  command TSend :<C-u>execute '!termux-share -a send ' . shellescape(expand('%'))<CR>
 endif
 
 " MSDOS terminal accomodations: {{{1
@@ -56,8 +56,11 @@ if !has('unix')
   set eventignore=DirChanged
 
   " Set the shell: {{{2
-  command! Cmd call msdos#Cmd()
+  command! SetCmd call msdos#set_shell_cmd()
+  call msdos#set_shell_cmd()
 
+  command! -nargs=? TermInvokeCmd call msdos#invoke_cmd(<q-args>)
+  command! -nargs=? TermCmd call msdos#CmdTerm(<q-args>)
   command! PowerShell call msdos#PowerShell()
 
   command! PwshHelp call msdos#pwsh_help(shellescape(<f-args>))

@@ -5,11 +5,16 @@
     " Last Modified: Aug 18, 2019
 " ============================================================================
 
-function! msdos#Cmd() abort  " {{{1
+function! msdos#set_shell_cmd() abort  " {{{1
 
   " All the defaults when running cmd as comspec on windows 10
-  set shell=cmd.exe
+  set shell=cmd
   " set shellcmdflag=/s\ /c
+  " TODO: Figure out if this wasn't a terrible idea. Maybe need to simply
+  " modify our invocations of system commands.
+	" Dude don't fucking turn /U ON
+  " let &shellcmdflag = '/C /F:ON /E:ON '
+  " Actually turning on of these on will really mess everything up. Huh
   set shellpipe=>%s\ 2>&1
   set shellredir=>%s\ 2>&1
   " Is this necessary? Or should it be empty?
@@ -18,6 +23,53 @@ function! msdos#Cmd() abort  " {{{1
   " What about setting shellquote to "" so that cmd gets the args quoted?
   echomsg 'Using cmd as the system shell.'
   return
+endfunction
+
+function! msdos#invoke_cmd(command) abort  " {{{1
+
+  if exists('&shellslash')
+    let s:old_shellslash = &shellslash
+    set noshellslash
+  endif
+
+  if !empty(a:command)
+    let s:ret = systemlist(a:command)
+  else
+    call msdos#CmdTerm
+  endif
+
+  if exists('&shellslash')
+    let &shellslash = s:old_shellslash
+  endif
+
+  if v:shell_error
+    return v:shell_error
+  else
+    return s:ret
+  endif
+
+endfunction
+
+function! msdos#CmdTerm(...) abort  " {{{1
+  " Handle args later
+
+  if exists('&shellslash')
+    let s:old_shellslash = &shellslash
+    set noshellslash
+  endif
+
+  execute 'term cmd /U /F:ON /E:ON /K C:\tools\Cmder\vendor\init.bat'
+
+  if exists('&shellslash')
+    let &shellslash = s:old_shellslash
+  endif
+
+  if v:shell_error
+    return v:shell_error
+  else
+    return s:ret
+  endif
+
 endfunction
 
 function! msdos#PowerShell() abort  " {{{1
@@ -41,6 +93,7 @@ endfunction
 function! msdos#pwsh_help(helppage) abort   " {{{1
   echomsg 'Setting the shell to powershell.'
   call msdos#PowerShell()
-  r!pwsh -noprofile -nologo -command get-help a:helppage
+  " It might not be a bad idea
+  :r!pwsh -NoProfile -NoLogo -Command Get-Help a:helppage
   echomsg 'Note that shell was not restored'
 endfunction

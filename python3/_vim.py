@@ -399,3 +399,8 @@ def my_plugins():
     res = {idx: j for idx, j in enumerate(vim.eval("plugs").keys())}
     print(res)
     return res
+
+
+def fname():
+    """Simple example of how to get the current buffer's filename."""
+    return (vim.current.buffer).name

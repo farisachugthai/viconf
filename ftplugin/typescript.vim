@@ -29,6 +29,7 @@ if !exists('b:did_typescript_setup')
     if len(tsconfig_file)
         let tsconfig_data = json_decode(join(readfile(tsconfig_file)))
 
+        " TODO: What do we do if this line raises an err
         let paths = values(map(tsconfig_data.compilerOptions.paths, {key, val -> [
                     \ glob2regpat(key),
                     \ substitute(val[0], '\/\*$', '', '')]

@@ -1745,3 +1745,6 @@ jinja2
 configtrait
 PySide
 matplotlib's
+SymPy
+psutil
+#hiddle

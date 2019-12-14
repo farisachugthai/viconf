@@ -122,7 +122,6 @@
   "git.stagedDecorator": " Ξ ",
   "git.untrackedDecorator": " : Untracked : ",
   "git.virtualTextPrefix": "Coc-Git:",
-  "highlight.trace.server": "messages",
   "html.filetypes": [
     "html",
     "handlebars",
@@ -136,7 +135,6 @@
   "javascript.suggest.names": true,
   "javascript.suggestionActions.enabled": true,
   "json.format.enable": true,
-  "json.trace.server": "messages",
   "languageserver": {
     "bash": {
       "args": [
@@ -167,8 +165,7 @@
         "compile_commands.json",
         ".git/"
       ],
-      "shell": true,
-      "trace.server": "messages"
+      "shell": true
     },
     "vimlsp": {
       "args": [
@@ -442,7 +439,6 @@
   "powershell.codeFormatting.openBraceOnSameLine": true,
   "powershell.codeFormatting.useCorrectCasing": true,
   "powershell.debugging.createTemporaryIntegratedConsole": false,
-  "powershell.developer.editorServicesLogLevel": "Error",
   "powershell.helpCompletion": "LineComment",
   "powershell.integratedConsole.focusConsoleOnExecute": false,
   "powershell.integratedConsole.showOnStartup": false,
@@ -569,7 +565,6 @@
   "tsserver.implicitProjectConfig.checkJs": true,
   "tsserver.implicitProjectConfig.experimentalDecorators": true,
   "tsserver.locale": "utf8",
-  "tsserver.log": "normal",
   "typescript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
   "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
   "typescript.referencesCodeLens.enable": true,
@@ -589,7 +584,6 @@
   ],
   "yaml.format.enable": true,
   "yaml.format.proseWrap": "always",
-  "yaml.trace.server": "messages",
   "yank.enableCompletion": true,
   "yank.limit": 30,
   "yank.list.maxsize": 300,
