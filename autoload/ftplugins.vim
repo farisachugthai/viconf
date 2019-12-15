@@ -167,16 +167,16 @@ function! ftplugins#VimPath() abort  " {{{1
   " what the hell do you need to muck with the path for.
   " autoloaded functions!
   let s:path='.,**'
-  let s:path = s:path . ',' . expand('$VIMRUNTIME') . '/*,'
+  let s:path = s:path . ',' . expand('$VIMRUNTIME')
 
-  if !exists('*stdpath')
-    return s:path
-  endif
+  if !exists('*stdpath') | let &l:path = s:path | return s:path | endif
 
-  let s:path = s:path . stdpath('config') . '/**,'
+  let s:path = s:path . stdpath('config') . '/autoload'
 
   " Idk if this is gonna glob the way I want.
-  let s:path = s:path . stdpath('data') . '/**1/autoload/*.vim'
+  let s:path = s:path . stdpath('data') . '/**1/autoload'
+
+  let &l:path = s:path
   return s:path
 
 endfunction

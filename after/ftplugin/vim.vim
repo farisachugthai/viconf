@@ -5,12 +5,6 @@
     " Last Modified: Nov 14, 2019
 " ============================================================================
 
-" Guard: {{{1
-let s:cpo_save = &cpoptions
-set cpoptions-=C
-
-" Globals: {{{1
-
 " From `:he syntax`
 " 			*g:vimsyn_minlines*	*g:vimsyn_maxlines*
 " Support embedded lua python nd ruby syntax highlighting in vim ftypes.
@@ -18,7 +12,6 @@ let g:vimsyn_minlines = 300
 
 let g:vimsyn_maxlines = 500  " why is the default 60???
 
-" Embedding: {{{2
 " Allows users to specify the type of embedded script highlighting
 " they want:  (perl/python/ruby/tcl support)
 "   g:vimsyn_embed == 0   : don't embed any scripts
@@ -33,8 +26,6 @@ let g:vimsyn_embed = 'P'
 " Turn off errors because 50% of them are wrong.
 let g:vimsyn_noerror = 1
 
-" *g:vimsyn_folding* {{{2
-
 " Some folding is now supported with syntax/vim.vim:
 
    " g:vimsyn_folding == 0 or doesn't exist: no syntax-based folding
@@ -44,7 +35,6 @@ let g:vimsyn_noerror = 1
 
 let g:vimsyn_folding = 'afP'
 
-" Vim Specific:
 if &filetype !=# 'vim' | finish | endif
 
 setlocal expandtab
@@ -63,15 +53,9 @@ setlocal isfname+=#
 " So that you can cleanly jump around inside of autoloaded func names
 setlocal iskeyword-=#
 
-" ALE: {{{1
-
 " Don't drop the quotes because if the var isn't defined it'll raise errors
 call ftplugins#ALE_Vim_Conf()
 
-" Atexit: {{{1
 let b:undo_ftplugin = 'setlocal fdm< com< cms< et< sw< ts< sts< lbr< sua< wrap< isk<'
       \ . '|setlocal path< isf<'
       \ . '|unlet! b:undo_ftplugin'
-
-let &cpoptions = s:cpo_save
-unlet s:cpo_save

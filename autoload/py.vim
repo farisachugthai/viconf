@@ -55,7 +55,7 @@ function! s:_PythonPath() abort  " {{{1
       endif
 
       " #3) use the remote pythons std lib modules
-      let s:path = ',' . s:root_dir . '/lib/python3.8/*' . s:path . ','
+      let s:path = ',' . s:root_dir . '/lib/python3.8' . s:path
 
     " then do it all over again for windows.
     " sunovabitch conda doesn't lay out the python dirs in the same spot as Unix
@@ -82,7 +82,6 @@ function! s:_PythonPath() abort  " {{{1
     " Todo i guess. lol sigh
     let &l:path = s:path
     return s:path
-
   endif
   return s:path
 
@@ -90,6 +89,9 @@ endfunction
 function! py#PythonPath() abort  " {{{1
 
   let s:path = s:_PythonPath()
+  let &l:path = s:path
+  return s:path
+
   let &l:path = s:path
   return s:path
 

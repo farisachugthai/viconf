@@ -14,7 +14,7 @@ First I'll go over setting basic options.
 Options
 =========
 
-The first and most obvious file is the :doc:`init.vim`. We can setup
+The first and most obvious file is the :file:`init.vim`. We can setup
 the base options like so:
 
 +--------------------------+----------------+
@@ -38,13 +38,13 @@ How do we utilize ``let`` for a built-in vim variables?
 
     let &grepprg = 'ag --nogroup --nocolor --column --vimgrep $*'
 
-By prepending `&` to the variable, Vim knows we're modifying the value of
+By prepending :kbd:`&` to the variable, Vim knows we're modifying the value of
 a variable it recognizes and not defining our own. The single quotes are
 still required; however I find this more manageable than adding a `\\``
 before every single space.
 
-Virtualedit
-------------
+``&virtualedit``
+------------------
 
 .. code-block:: vim
 

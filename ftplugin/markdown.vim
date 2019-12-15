@@ -5,6 +5,9 @@
     " Last Modified: Aug 24, 2019
 " ============================================================================
 
+" Guard: {{{1
+if exists('b:did_ftplugin') | finish | endif
+
 " Needed to autoload the funcs and drop the runtime! to a runtime html call
 " Options: {{{1
 
@@ -38,9 +41,7 @@ setlocal foldlevel=0 foldlevelstart=0
 " need a check
 let g:markdown_fenced_languages = [
       \ 'ipython=python',
-      \ 'bash=sh',
       \ 'c++=cpp',
-      \ 'viml=vim',
       \ 'ini=dosini',
       \ ]
 
@@ -56,17 +57,17 @@ endif
 
 " Mappings: {{{1
 
-noremap <buffer> <Leader>1 m`yypVr=``
-noremap <buffer> <Leader>2 m`yypVr-``
-noremap <buffer> <Leader>3 m`^i### <esc>``4l
-noremap <buffer> <Leader>4 m`^i#### <esc>``5l
-noremap <buffer> <Leader>5 m`^i##### <esc>``6l
+nnoremap <buffer> <Leader>1 m`yypVr=``
+nnoremap <buffer> <Leader>2 m`yypVr-``
+nnoremap <buffer> <Leader>3 m`^i### <esc>``4l
+nnoremap <buffer> <Leader>4 m`^i#### <esc>``5l
+nnoremap <buffer> <Leader>5 m`^i##### <esc>``6l
 
-let b:undo_ftplugin .= 'unmap <buffer> <Leader>1'
-let b:undo_ftplugin .= 'unmap <buffer> <Leader>2'
-let b:undo_ftplugin .= 'unmap <buffer> <Leader>3'
-let b:undo_ftplugin .= 'unmap <buffer> <Leader>4'
-let b:undo_ftplugin .= 'unmap <buffer> <Leader>5'
+let b:undo_ftplugin .= 'nunmap <buffer> <Leader>1'
+let b:undo_ftplugin .= 'nunmap <buffer> <Leader>2'
+let b:undo_ftplugin .= 'nunmap <buffer> <Leader>3'
+let b:undo_ftplugin .= 'nunmap <buffer> <Leader>4'
+let b:undo_ftplugin .= 'nunmap <buffer> <Leader>5'
 
 " Plugins: {{{1
 
@@ -114,5 +115,7 @@ if has_key(plugs, 'vim-markdown')
 endif
 
 
+let b:did_ftplugin = 1
 let b:undo_ftplugin .= 'setl spell< cc< tw< lbr< et< ts< sts< sw< fdl< fdls<'
       \ . '|unlet! b:undo_ftplugin'
+      \ . '|unlet! b:did_ftplugin'
