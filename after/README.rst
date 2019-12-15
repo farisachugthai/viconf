@@ -25,6 +25,19 @@ the following structure.::
 
 Filetype plugins are listed for all the filetypes I commonly use.
 
+``&isfname`` and ``&iskeyword``
+--------------------------------
+
+Before FZF. I had way too much trouble getting these 2 set right.
+
+From :file:`<after/ftplugin/python.vim>`_.::
+
+   " YES I FINALLY GOT THIS RIGHT! In order to search the path with gf but still
+   " stop when on '.' when using keys like w and e, add . period isfname, don't
+   " add it to iskeyword. Jesus Christ I swear I've tried every iteration and
+   " then had git unset it a dozen times.
+   setlocal isfname+=.
+
 
 FZF Mappings
 ------------

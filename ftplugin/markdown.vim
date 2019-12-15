@@ -5,12 +5,11 @@
     " Last Modified: Aug 24, 2019
 " ============================================================================
 
-" Guard: {{{1
+if exists('b:did_ftplugin') | finish | endif
 if exists('b:did_ftplugin') | finish | endif
 
-" Needed to autoload the funcs and drop the runtime! to a runtime html call
-" Options: {{{1
-
+runtime $VIMRUNTIME/ftplugin/html.vim
+if exists('b:did_ftplugin') | unlet! b:did_ftplugin | endif
 runtime ftplugin/html.vim ftplugin/html_*.vim ftplugin/html/*.vim
 
 setlocal comments=fb:*,fb:-,fb:+,n:> commentstring=>\ %s
@@ -63,13 +62,11 @@ nnoremap <buffer> <Leader>3 m`^i### <esc>``4l
 nnoremap <buffer> <Leader>4 m`^i#### <esc>``5l
 nnoremap <buffer> <Leader>5 m`^i##### <esc>``6l
 
-let b:undo_ftplugin .= 'nunmap <buffer> <Leader>1'
-let b:undo_ftplugin .= 'nunmap <buffer> <Leader>2'
-let b:undo_ftplugin .= 'nunmap <buffer> <Leader>3'
-let b:undo_ftplugin .= 'nunmap <buffer> <Leader>4'
-let b:undo_ftplugin .= 'nunmap <buffer> <Leader>5'
-
-" Plugins: {{{1
+let b:undo_ftplugin .= ' nunmap <buffer> <Leader>1'
+let b:undo_ftplugin .= ' nunmap <buffer> <Leader>2'
+let b:undo_ftplugin .= ' nunmap <buffer> <Leader>3'
+let b:undo_ftplugin .= ' nunmap <buffer> <Leader>4'
+let b:undo_ftplugin .= ' nunmap <buffer> <Leader>5'
 
 " So Vim-markdown doesn't have a  plugin/* dir. So we don't have a
 " g:loaded_vim_markdown var to check. We have to assume vim-plug being used.

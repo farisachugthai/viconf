@@ -10,6 +10,7 @@
 " after/plugin/my_tabular_commands.vim
 " Provides extra :Tabularize commands
 
+if !exists('g:tabular_loaded') | finish | endif
 
 " Make line wrapping possible by resetting the 'cpo' option, first saving it
 

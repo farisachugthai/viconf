@@ -5,15 +5,11 @@
     " Last Modified: June 26, 2019
 " ============================================================================
 
-" Guard: {{{1
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 
-" Unrelated functionality but silence the errors from nvim -u NORC by defining
-" this var in the first plugin file loaded
-if !exists('plugs')
-  let plugs = {}
-endif
+" silence the errors from nvim -u NORC by defining this var in the first plugin file loaded
+if !exists('plugs') | let plugs = {} | endif
 
 " Commands: {{{1
 command! Todo call todo#Todo()
@@ -24,8 +20,6 @@ command! -nargs=1 -bang -complete=file Rename f <args>|w<bang>za
 " Gotta be honest this doesn't have much to do with anything but oh well.
 "
 " Autocompletion: {{{1
-
-" Options: {{{2
 set wildignorecase wildmode=full:list:longest,full:list
 set wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
 " C-n and C-p now use the same input that every other C-x does combined!
@@ -36,8 +30,6 @@ set complete+=kspell,d,k complete-=u,i
 " Create a preview window and display all possibilities but don't insert
 " dude what am i doing wrong that i don't get the cool autocompletion that NORC gets??
 set completeopt=menu,menuone,noselect,noinsert
-
-" Mappings: {{{2
 
 imap <C-]> <C-x><C-]>
 " vim-rsi got this one

@@ -31,20 +31,20 @@ let g:plug_window = 'tabe'
 Plug 'junegunn/fzf', { 'dir': expand('~/.fzf'), 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdTree', { 'on': ['NERDTreeCWD', 'NERDTreeVCS'] }
-noremap <Leader>nt <Cmd>NERDTreeCWD<CR>zz
+nnoremap <Leader>nt <Cmd>NERDTreeCWD<CR>zz
 " Switch NERDTree root to dir of currently focused window.
 " Make mapping match Spacemacs.
 if exists(':GuiTreeviewToggle')
-  noremap <Leader>0 <Cmd>GuiTreeviewToggle<CR>
+  nnoremap <Leader>0 <Cmd>GuiTreeviewToggle<CR>
 else
-  noremap <Leader>0 <Cmd>NERDTreeCWD<CR>
+  nnoremap <Leader>0 <Cmd>NERDTreeCWD<CR>
 endif
 
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-surround'
-Plug 'tpope/vim-vinegar'
+" Plug 'tpope/vim-vinegar'
 
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }  " Follow spacemacs lead and use e for errors
@@ -65,43 +65,33 @@ if !has('unix')  " this really fucks up on windows
   Plug 'jszakmeister/rst2ctags', {'dir': expand('~/src/rst2ctags')}
 endif
 
-if !empty(s:ubuntu)
-  Plug 'ekalinin/Dockerfile.vim', {'for': 'dockerfile'}
-endif
-
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 nnoremap U <Cmd>UndotreeToggle<CR>
 
-" Dude checking the remote hosts is blocking and doing it this early is murder
-" to startuptime. Just went from 280ms to 800.
-" if has('ruby')
-Plug 'greyblake/vim-preview', {'on': 'Preview'}
-" endif
 " The 'tabular' plugin must come _before_ 'vim-markdown'.
-Plug 'godlygeek/tabular'
+" Plug 'godlygeek/tabular'
 Plug 'itspriddle/vim-shellcheck', { 'for': ['sh', 'bash'] }
-Plug 'mitsuhiko/vim-jinja'
+Plug 'mitsuhiko/vim-jinja', {'for': ['html', 'jinja2', 'htmljinja', 'htmldjango'] }
 Plug 'ervandew/supertab'
 Plug 'junegunn/vim-peekaboo'
-Plug 'vim-voom/voom'
+Plug 'vim-voom/voom', {'on': ['Voom', 'VoomToggle', 'VoomExec'] }
 Plug 'romainl/vim-qf'
 
-Plug 'raimon49/requirements.txt.vim'
+Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
+" Plug 'ntpeters/vim-better-whitespace'
 
-Plug 'ntpeters/vim-better-whitespace'
-
+if empty(s:termux)
 " It's very frustrating having termux slow down beyond repair but also frustrating
 " not being able to use more than 15 plugins at any point in time
-if empty(s:termux)
   Plug 'chrisbra/csv.vim', {'for': ['csv', 'tsv']}
 
   " needed if for nothing else but the ftdetect
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
-  Plug 'mustache/vim-mustache-handlebars'
+  " Plug 'mustache/vim-mustache-handlebars'
   Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
   Plug 'elzr/vim-json', { 'for': 'json' }
-  Plug 'omnisharp/omnisharp-vim', {'for': 'cs'}
+  " Plug 'omnisharp/omnisharp-vim', {'for': 'cs'}
 
   Plug 'ludovicchabant/vim-gutentags'
 
@@ -109,8 +99,8 @@ if empty(s:termux)
   Plug 'psf/black', {'for': 'python'}
 endif
 
-Plug 'michaeljsmith/vim-indent-object'
-Plug 'tomtom/tlib_vim'
+" Plug 'michaeljsmith/vim-indent-object'
+" Plug 'tomtom/tlib_vim'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 
 call plug#end()

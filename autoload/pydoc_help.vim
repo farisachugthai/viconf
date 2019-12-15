@@ -8,7 +8,8 @@
 " Guards: {{{1
 let s:cpo_save = &cpoptions
 set cpoptions-=C
-function! s:temp_buffer() abort
+
+function! s:temp_buffer() abort  " {{{1
 
   if exists(':StripWhitespace')
     exec ':StripWhitespace'
@@ -24,7 +25,7 @@ function! s:temp_buffer() abort
   silent setlocal nomodifiable
 
 endfunction
-function! pydoc_help#PydocCword() abort
+function! pydoc_help#PydocCword() abort  " {{{1
 
   " Holy shit it works!!!
   let s:temp_cword = expand('<cWORD>')
@@ -35,14 +36,14 @@ function! pydoc_help#PydocCword() abort
   call s:temp_buffer()
 
 endfunction
-function! pydoc_help#SplitPydocCword() abort
+function! pydoc_help#SplitPydocCword() abort  " {{{1
   let s:temp_cword = expand('<cWORD>')
   split
   enew
   exec ':r! pydoc ' . s:temp_cword
   call s:temp_buffer()
 endfunction
-function s:handle_user_config() abort
+function s:handle_user_config() abort   " {{{1
 
   " Look at me handling user configured arguments!
   if exists('g:pydoc_window')
@@ -57,7 +58,7 @@ function s:handle_user_config() abort
   endif
 
 endfunction
-function! pydoc_help#Pydoc(module) abort
+function! pydoc_help#Pydoc(module) abort   " {{{1
 
   call s:handle_user_config()
   enew

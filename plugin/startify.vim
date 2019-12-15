@@ -49,7 +49,7 @@ let g:startify_commands = [
     \ ]
 
 " Temporarily turn this off
-" finish
+finish
 
 " What the fuck! Its still reading everyrhing perfectly.
 "

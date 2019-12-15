@@ -10,9 +10,9 @@ syn include $VIMRUNTIME/syntax/sh.vim
 unlet! b:current_syntax
 runtime $VIMRUNTIME/syntax/sh.vim
 unlet! b:current_syntax
-runtime syntax/sh.vim
-unlet! b:current_syntax
-runtime after/syntax/sh.vim
-unlet! b:current_syntax
+" runtime syntax/sh.vim
+" unlet! b:current_syntax
+" runtime after/syntax/sh.vim
+" unlet! b:current_syntax
 
 hi! link shVar Identifier

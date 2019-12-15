@@ -45,6 +45,12 @@ setlocal suffixesadd=.vim
 setlocal nolinebreak
 setlocal wrap
 
+setlocal foldmethod=expr
+" Didn't seem to be getting set
+setlocal indentexpr=GetVimIndent()
+setlocal indentkeys+==end,=else,=cat,=fina,=END,0\\,0=\"\\\ 
+
+let b:undo_indent = "setl indentkeys< indentexpr<"
 let &l:commentstring='" %s'
 let &l:path = ftplugins#VimPath()
 
@@ -59,3 +65,4 @@ call ftplugins#ALE_Vim_Conf()
 let b:undo_ftplugin = 'setlocal fdm< com< cms< et< sw< ts< sts< lbr< sua< wrap< isk<'
       \ . '|setlocal path< isf<'
       \ . '|unlet! b:undo_ftplugin'
+      \ . '|unlet! b:undo_indent'

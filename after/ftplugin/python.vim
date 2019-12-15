@@ -32,6 +32,13 @@ setlocal cindent
 setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 setlocal cinkeys-=0#
 
+setlocal nolisp		" Make sure lisp indenting doesn't supersede us
+setlocal autoindent	" indentexpr isn't much help otherwise
+
+setlocal indentexpr=GetPythonIndent(v:lnum)
+
+" First one from $VIMRUNTIME/indent/python.vim 2nd from the ftplugin
+setlocal indentkeys+=<:>,=elif,=except
 setlocal indentkeys-=0#
 
 setlocal include=^\\s*\\(from\\\|import\\)
@@ -59,6 +66,11 @@ setlocal foldmethod=indent
 
 setlocal suffixesadd+=.py
 setlocal omnifunc=python3complete#Complete
+
+" YES I FINALLY GOT THIS RIGHT! In order to search the path with gf but still
+" stop when on '.' when using keys like w and e, add . period isfname, don't
+" add it to iskeyword. Jesus Christ I swear I've tried every iteration and
+" then had git unset it a dozen times.
 setlocal isfname+=.
 
 " *'shiftround'* *'sr'* *'noshiftround'* *'nosr'*

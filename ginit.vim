@@ -5,14 +5,12 @@
   " Last Modified: September 09, 2019
 " ============================================================================
 
-" Guard: {{{1
 " Same way it's implemented in nvim_gui_shim. OH but don't forget.
 " ONLY LOAD if g:GuiLoaded exists. Probably not being reread
 if !has('nvim') || !exists('g:GuiLoaded')
   finish
 endif
 
-" Options: {{{1
 runtime plugin/nvim_gui_shim.vim
 
 " Holy hell we get the tabline back!!!
@@ -33,9 +31,11 @@ GuiLinespace 1
 " doesn't work
 
 " holy fuck this does work
-GuiFont FuraMono\ Nerd\ Font\ Mono:h12
+" GuiFont FuraMono\ Nerd\ Font\ Mono:h12
+" holy fuck this one actually looks good.
+GuiFont DejaVu\ Sans\ Mono:h11
 
 call GuiClipboard()
 
 " We need to map something to GuiTreeviewToggle!
-noremap <Leader>? <Cmd>GuiTreeviewToggle<CR><bar>execute 'echomsg ' . 'Opening up Nvim_Explorer.exe'
+nnoremap <Leader>? <Cmd>GuiTreeviewToggle<CR><bar>execute 'echomsg ' . 'Opening up Nvim_Explorer.exe'

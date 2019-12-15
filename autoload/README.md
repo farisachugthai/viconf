@@ -309,6 +309,20 @@ on my personal customization.
 - [Riv.vim](https://www.github.com/gu-fan/riv.vim)
 - [Devicons](https://www.github.com/ryanoasis/vim-devicons)
 
+### Removed Plugins
+
+Checking the remote hosts is blocking and doing it this early is murder
+to startuptime. Just went from 280ms to 800.
+
+```vim
+if has('ruby')
+  Plug 'greyblake/vim-preview', {'on': 'Preview'}
+endif
+
+```
+
+Unfortunately, I haven't been using any ruby plugins recently as a result.
+
 ## Vim
 
 My configuration for Vim has been deprecated as of March 2019. The files in this
