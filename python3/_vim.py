@@ -404,3 +404,9 @@ def my_plugins():
 def fname():
     """Simple example of how to get the current buffer's filename."""
     return (vim.current.buffer).name
+
+
+def pd(args=None):
+    """Simple helper because I do this so often."""
+    pprint(dir(args))
+    return dir(args)

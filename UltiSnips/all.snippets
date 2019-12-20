@@ -94,43 +94,44 @@ snippet todo "TODO comment" bw
 `!p snip.rv=get_comment_format()[0]` ${2:TODO}: $0${3: <${4:`!v strftime('%d-%m-%y')`}${5:, `!v g:snips_author`}>} `!p snip.rv=get_comment_format()[2]`
 endsnippet
 
-#######################################################################
-#                      Licensing and copyrights                       #
-#######################################################################
+##############################################################
+#                 Licensing and copyrights                   #
+##############################################################
 
 
 snippet c) "Print copyright info and time. Based on encoding option." b
-	Copyright `&enc[:2] == "utf" ? "©" : "(c)"` `strftime("%Y")` ${1:`g:snips_author`}. All Rights Reserved.
+Copyright `&enc[:2] == "utf" ? "©" : "(c)"` `strftime("%Y")` ${1:`g:snips_author`}. All Rights Reserved.
 endsnippet
 
 snippet lorem "Filler text." b
-	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-	tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-	quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-	consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-	cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-	non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-	${0}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
+non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+${0}
 endsnippet
 
 
 snippet GPL2 "GPL2 licensing" b
-	${1:One line to give the program's name and a brief description.}
-	Copyright `&enc[:2] == "utf" ? "©" : "(c)"` `strftime("%Y")` ${2:`g:snips_author`}
+${1:${VISUAL:One line to give the program's name and a brief description.}}
 
-	This program is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; either version 2 of the License, or
-	(at your option) any later version.
+Copyright `&enc[:2] == "utf" ? "©" : "(c)"` `strftime("%Y")` ${2:`g:snips_author`}
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
 
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, see <http://www.gnu.org/licenses/>.
-	${0}
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, see <http://www.gnu.org/licenses/>.
+${0}
 endsnippet
 
 snippet MIT "MIT License" b
@@ -175,7 +176,7 @@ snippet uuid "Random UUID" w
 `!p if not snip.c: import uuid; snip.rv = uuid.uuid4()`
 endsnippet
 
-snippet zim "First line in a zim file" ms
+snippet zim "First line in a zim file"
 Content-Type: text/x-zim-wiki
 endsnippet
 

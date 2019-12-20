@@ -1469,7 +1469,9 @@ if (has('termguicolors') && &termguicolors) || has('gui_running')  " {{{
       hi WildMenu guifg=#282828 guibg=#a89984 guisp=NONE gui=NONE cterm=NONE
       if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
         hi Pmenu guifg=#dfbf8e guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-        hi StatusLine guifg=#dfbf8e guibg=#504945 guisp=NONE gui=NONE cterm=NONE
+        hi StatusLine guifg=#dfbf8e guibg=#504945 guisp=NONE gui=bold cterm=bold
+        " nah too noisy
+        " hi Statusline cterm=bold,underline,reverse ctermfg=161 ctermbg=238 gui=bold,underline,reverse guifg=#7daea3 guibg=#565656
         hi StatusLineTerm guifg=#dfbf8e guibg=#504945 guisp=NONE gui=NONE cterm=NONE
         hi TabLine guifg=#dfbf8e guibg=#504945 guisp=NONE gui=NONE cterm=NONE
         hi TabLineFill guifg=#dfbf8e guibg=#282828 guisp=NONE gui=NONE cterm=NONE

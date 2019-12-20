@@ -5,35 +5,22 @@
     " Last Modified: Jul 20, 2019
 " ============================================================================
 
-" Guards: {{{1
-let s:cpo_save = &cpoptions
-set cpoptions-=C
-
 " Options: {{{1
 
+set nohlsearch
 if &textwidth!=0
   setl colorcolumn=+1
 else
   setl colorcolumn=80
 endif
 
-" Should we set a corresponding grepformat?
-if executable('rg')
-    let s:rg = 'rg'
-elseif executable('rg.exe')  " fucking windows
-    let s:rg = 'rg.exe'
-endif
-
-if executable('rg') || executable('rg.exe')
-  let &grepprg = s:rg . ' --vimgrep --no-messages --color=never '
-        \. ' --smart-case $* '
-endif
+let &grepprg = syncom#grepprg()
 
 " Search Mappings: {{{1
 
 " Dude read over :he getcharsearch(). Now ; and , search forward backward no matter what!!!
-noremap <expr> ; getcharsearch().forward ? ';' : ','
-noremap <expr> , getcharsearch().forward ? ',' : ';'
+nnoremap <expr> ; getcharsearch().forward ? ';' : ','
+nnoremap <expr> , getcharsearch().forward ? ',' : ';'
 
 " Search mappings: These will make it so that going to the next one in a
 " search will center on the line it's found in.
@@ -48,18 +35,16 @@ command! HiC call syncom#HiC()
 " command! HiD call <SID>syncom#HiD()
 command! HiQF call syncom#HiQF()
 
-" Isn't working. But at least the error message is specific enough that you
-" knew where to check.
-command! SyntaxInfo call g:syncom#get_syn_info()
+command! SyntaxInfo call syncom#get_syn_info()
 
 " Working:
-command! HiTest call g:syncom#hitest()
+command! HiTest call syncom#hitest()
 
 " Plug Mappings: {{{1
 " To attempt making this a little more modular.
 
 nnoremap <Plug>(HL) call syncom#HL()
-nnoremap <Plug>HiC <Cmd>HiC<CR>
+nnoremap <Plug>(HiC) <Cmd>HiC<CR>
 nnoremap <Plug>HiQF <Cmd>HiQF<CR>
 nnoremap <Plug>SyntaxInfo <Cmd>SyntaxInfo<CR>
 
@@ -86,17 +71,3 @@ nnoremap <silent> <C-Up> <Cmd>lfirst<CR><bar><Cmd>cfirst<CR>
 " Adding range means that the command defaults to current line
 " Need to add a check that we're in visual mode and drop the '<,'> if not.
 command! -nargs=0 -range Title execute 'normal! ' . "'<,'>s/\v<(.)(\w*)/\u\1\L\2/g"
-
-" Toggle Search Highlighting: {{{1
-
-set nohlsearch
-" augroup vimrc_incsearch_highlight
-    " autocmd!
-    " autocmd CmdlineEnter /,\? :set hlsearch
-    " autocmd CmdlineLeave /,\? :set nohlsearch
-" augroup END
-
-" Atexit: {{{1
-
-let &cpoptions = s:cpo_save
-unlet s:cpo_save

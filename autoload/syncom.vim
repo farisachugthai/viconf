@@ -99,7 +99,7 @@ function! syncom#grepprg() abort  " {{{1
   " Well Im not gonna do it now.
 
   let s:grep = s:rg . s:rg_options
-
+  let &grepprg = s:grep
   return s:grep
 endfunction
 

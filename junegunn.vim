@@ -69,7 +69,7 @@ Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 nnoremap U <Cmd>UndotreeToggle<CR>
 
 " The 'tabular' plugin must come _before_ 'vim-markdown'.
-" Plug 'godlygeek/tabular'
+Plug 'godlygeek/tabular'
 Plug 'itspriddle/vim-shellcheck', { 'for': ['sh', 'bash'] }
 Plug 'mitsuhiko/vim-jinja', {'for': ['html', 'jinja2', 'htmljinja', 'htmldjango'] }
 Plug 'ervandew/supertab'
@@ -78,7 +78,7 @@ Plug 'vim-voom/voom', {'on': ['Voom', 'VoomToggle', 'VoomExec'] }
 Plug 'romainl/vim-qf'
 
 Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
-" Plug 'ntpeters/vim-better-whitespace'
+Plug 'ntpeters/vim-better-whitespace'
 
 if empty(s:termux)
 " It's very frustrating having termux slow down beyond repair but also frustrating
@@ -99,8 +99,8 @@ if empty(s:termux)
   Plug 'psf/black', {'for': 'python'}
 endif
 
-" Plug 'michaeljsmith/vim-indent-object'
-" Plug 'tomtom/tlib_vim'
+Plug 'michaeljsmith/vim-indent-object'
+Plug 'tomtom/tlib_vim'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 
 call plug#end()

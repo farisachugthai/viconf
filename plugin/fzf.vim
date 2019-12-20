@@ -43,8 +43,6 @@ let g:fzf_action = {
 " NOTE: Use of stdpath() requires nvim0.3>
 let g:fzf_history_dir = stdpath('data') . '/fzf-history'
 
-" let g:fzf_layout = { 'window': '-tabnew' }
-let g:fzf_layout = { 'window': '10new' }
 
 " Standardized vars: {{{2
 let g:fzf_ag_options = ' --smart-case -u -g " " --'
@@ -68,6 +66,15 @@ if exists('$TMUX')
   let g:fzf_prefer_tmux = 1
 endif
 
+
+if has('nvim')
+  let $FZF_DEFAULT_OPTS .= ' --border --margin=0,2'
+
+  let g:fzf_layout = { 'window': 'call plugins#FloatingFZF()' }
+else
+  let g:fzf_layout = { 'window': '-tabnew' }
+endif
+
 " Fzf.vim: {{{2
 
 " [[B]Commits] Customize the options used by 'git log':
@@ -79,7 +86,8 @@ let g:fzf_commits_log_options = ' --graph'
 let g:fzf_buffers_jump = 1
 
 " [Tags] Command to generate tags file
-" let g:fzf_tags_command = 'ctags -R --options='
+let g:fzf_tags_command = 'ctags -R'
+      " \ . '--options='
 "       \ . expand('~')
 "       \ . '/projects/dynamic_ipython/tools/ctagsOptions.cnf'
 
@@ -100,6 +108,7 @@ let g:fzf_colors =  {
       \  'fg+':     ['fg', '#ec3836', '#3c3836', '#ebdbb2'],
       \  'bg+':     ['bg', '#ec3836', '#3c3836'],
       \  'hl+':     ['fg', '#fb4934'],
+      \  'border':  ['fg', 'Ignore'],
       \  'info':    ['fg', '#fabd2f'],
       \  'prompt':  ['fg', '#fe8019'],
       \  'pointer': ['fg', '#fb4934'],
@@ -261,7 +270,7 @@ command! -bang -nargs=* -complete=file_in_path FZRgFind
       \ : fzf#vim#with_preview({'dir': system('git rev-parse --show-toplevel 2&>/dev/null')[:-2]}, 'right:50%:hidden', '?'),
       \ <bang>0)
 
-" Damn sitll doesn't work
+" Damn still doesn't work
 command! -bang -nargs=* -complete=file_in_path FZFind
       \ call fzf#vim#grep(
       \ 'rg --no-heading --smart-case --no-messages ^ '
@@ -269,8 +278,9 @@ command! -bang -nargs=* -complete=file_in_path FZFind
       \ : fzf#vim#with_preview('right:50%:hidden', '?'),
       \ <bang>0)
 " Grep: {{{2
-command! -nargs=? -bang -bar FZGrep fzf#run(fzf#wrap({
+command! -nargs=? -bang -bar FZGrep fzf#run(fzf#wrap('grep', {
       \ 'source': 'silent! grep! <q-args>',
+      \ 'sink': 'edit',
       \ 'options': ['--multi', '--ansi', '--border'],
       \ <bang>0 ? fzf#vim#with_preview('up:60%')
       \ : fzf#vim#with_preview('right:50%:hidden', '?'),
@@ -306,7 +316,7 @@ command! -complete=dir -bang -nargs=* FZPreviewAg
 
 " Rg: {{{2
 command! -complete=dir -bang -nargs=* FZRg
-  \ call fzf#run(fzf#wrap({
+  \ call fzf#run(fzf#wrap('rg', {
   \   'source': 'rg --no-column --no-line-number --no-heading --no-messages --color=always'
   \   . ' --smart-case ' . shellescape(<q-args>),
   \   'sink': 'vsplit',
@@ -346,13 +356,13 @@ command! -bang -nargs=0 -complete=color FZColors
 command! -complete=buffer -bang FZBuf call fzf#run(fzf#wrap('buffers',
     \ {'source': map(range(1, bufnr('$')), 'bufname(v:val)')}, <bang>0))
 
-" Use Of s:fzf_options: {{{3
+" Use Of g:fzf_options: {{{3
 "
 " As  of Oct 15, 2019: this works
-command! -bang -complete=buffer -bar FZBuffers call fzf#run(fzf#wrap({
-        \ 'source':  reverse(find_files#buflist()),
+command! -bang -complete=buffer -bar FZBuffers call fzf#run(fzf#wrap('buffers',
+        \ {'source':  reverse(find_files#buflist()),
         \ 'sink':    function('find_files#bufopen'),
-        \ 'options': s:fzf_options,
+        \ 'options': g:fzf_options,
         \ 'down':    len(find_files#buflist()) + 2
         \ }, <bang>0))
 
@@ -368,7 +378,50 @@ command! -complete=file FZGit call find_files#FZFGit()
   " and also use this
   " \   {'dir': systemlist('git rev-parse --show-toplevel')[0] }, <bang>0)
   "
-" Rg that Updates: {{{1
+" Rg that Updates: {{{2
 "
 
 command! -nargs=* -bang FZUpRg call find_files#RipgrepFzf(<q-args>, <bang>0)
+
+
+" More rg: {{{2
+command! -complete=dir -bang -nargs=* RgFz
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always --smart-case '.<q-args>, 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \   <bang>0)
+
+" New help docs: {{{1
+
+" The query history for this command will be stored as 'ls' inside g:fzf_history_dir.
+" The name is ignored if g:fzf_history_dir is not defined.
+command! -bang -complete=dir -nargs=* FZLS
+    \ call fzf#run(fzf#wrap('ls', {'source': 'ls', 'dir': <q-args>}, <bang>0))
+
+
+" only search projects lmao
+command! -bang ProjectFiles call fzf#vim#files('~/projects', <bang>0)
+
+" Or, if you want to override the command with different fzf options, just pass
+" a custom spec to the function.
+command! -bang -nargs=? -complete=dir FZReverse
+    \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--info=inline']}, <bang>0)
+
+" Want a preview window?
+command! -bang -nargs=? -complete=dir FZFilePreview
+    \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--info=inline', '--preview', 'bat {}']}, <bang>0)
+
+" It kind of works, but you probably want a nicer previewer program than `cat`.
+" fzf.vim ships {a versatile preview script}{11} you can readily use. It
+" internally executes {bat}{12} for syntax highlighting, so make sure to install
+" it.
+
+" Ill allow this guy to take files back
+" oh man does that work better with fdq
+command! -bang -nargs=? -complete=dir Files
+    \ call fzf#vim#files(<q-args>, {'source': 'fd -H -t f',
+    \ 'options': [
+    \ '--layout=reverse', '--info=inline', '--preview', '~/.vim/plugged/fzf.vim/bin/preview.sh {}'
+    \ ]}, <bang>0)
+

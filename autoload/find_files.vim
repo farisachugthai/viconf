@@ -1,4 +1,4 @@
-"fnamemodify('g:python3_host_prog', ':p:h:h') ============================================================================
+" ============================================================================
   " File: find_files.vim
   " Author: Faris Chugthai
   " Description: Find files autoload
@@ -18,8 +18,11 @@ function! find_files#build_quickfix_list(lines) abort  " {{{1
   cc
 endfunction
 
+function! s:make_sentence(lines) abort  " {{{1
+  " *fzf-vim-reducer-example*
+  return substitute(join(a:lines), '^.', '\=toupper(submatch(0))', '').'.'
+endfunction
 
-" Maps
 function! find_files#fzf_maps() abort  " {{{1
 
   imap <expr> <C-x><C-s> fzf#vim#complete#word({
@@ -71,12 +74,12 @@ endfunction
 
 
 function! find_files#FZFMru() abort  " {{{1
-    call fzf#run(fzf#wrap({
+    call fzf#run(fzf#wrap('history', {
         \ 'source'  :   v:oldfiles,
         \ 'sink'    :   'edit',
         \ 'options' :  ['--multi', '--ansi'],
         \ 'down'    :    '40%'}))
-  endfunction
+endfunction
 
 function! find_files#FZFGit() abort  " {{{1
     " Remove trailing new line to make it work with tmux splits
@@ -93,11 +96,6 @@ function! find_files#FZFGit() abort  " {{{1
     endif
     " 'source': 'git ls-files',
     " 'down'  : '40%'
-endfunction
-
-function! s:make_sentence(lines) abort  " {{{1
-  " *fzf-vim-reducer-example*
-  return substitute(join(a:lines), '^.', '\=toupper(submatch(0))', '').'.'
 endfunction
 
 function! find_files#termux_remote() abort  " {{{1
@@ -121,8 +119,6 @@ function! find_files#termux_remote() abort  " {{{1
           \   'cache_enabled': 1,
           \ }
   endif
-
-
 endfunction
 
 function! find_files#ubuntu_remote() abort  " {{{1

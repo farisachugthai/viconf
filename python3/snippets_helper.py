@@ -52,26 +52,6 @@ CHART_TYPES = ["Line", "StackedLine", "HorizontalLine", "Bar", "StackedBar", "Ho
                "TimeLine", "TimeDeltaLine", "DateTimeLine", "Pie", "Radar", "Box", "Dot", "Funnel", "Gauge", "SolidGauge", "Pyramid", "Treemap"]
 
 
-# Tests for the existence of a variable declared by Vim's filetype detection
-# suggesting the type of shell script of the current file
-def testShell(scope, shell):
-    return vim.eval("exists('" + scope + ":is_" + shell + "')")
-
-
-# Loops over the possible variables, checking for global variables
-# first since they indicate an override by the user.
-def getShell():
-    for scope in ["g", "b"]:
-        for shell in ["bash", "posix", "sh", "kornshell"]:
-            if testShell(scope, shell) == "1":
-                if shell == "kornshell":
-                    return "ksh"
-                if shell == "posix":
-                    return "sh"
-                return shell
-    return "sh"
-
-
 def complete(tab, opts):
     """Get options that start with tab.
 
@@ -91,7 +71,11 @@ def complete(tab, opts):
 
 
 def _parse_comments(s):
-    """Parse vim's comments option to extract comment format """
+    """Parse vim's comments option to extract comment format.
+
+    :param s:
+    :type s: str
+    """
     i = iter(s.split(","))
 
     rv = []
@@ -509,12 +493,8 @@ def get_args(arglist):
 
 
 def x(snip):
-    """From html.snippets."""
+    """From html.snippets. Determines if xhtml or html I guess."""
     if snip.ft.startswith("x"):
         snip.rv = '/'
     else:
         snip.rv = ""
-        if snip.ft.startswith("x"):
-            snip.rv = '/'
-        else:
-            snip.rv = ""

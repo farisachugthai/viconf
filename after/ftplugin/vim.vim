@@ -37,6 +37,11 @@ let g:vimsyn_folding = 'afP'
 
 if &filetype !=# 'vim' | finish | endif
 
+" doesnt work
+" global !p
+" from _vim import command, pretty_it, pretty_xml, pretty_json
+" endglobal
+
 setlocal expandtab
 setlocal shiftwidth=2
 setlocal tabstop=2
@@ -45,10 +50,10 @@ setlocal suffixesadd=.vim
 setlocal nolinebreak
 setlocal wrap
 
-setlocal foldmethod=expr
+setlocal foldmethod=syntax
 " Didn't seem to be getting set
 setlocal indentexpr=GetVimIndent()
-setlocal indentkeys+==end,=else,=cat,=fina,=END,0\\,0=\"\\\ 
+setlocal indentkeys+==end,=else,=cat,=fina,=END,0\\,0=\"\\\
 
 let b:undo_indent = "setl indentkeys< indentexpr<"
 let &l:commentstring='" %s'
@@ -56,10 +61,10 @@ let &l:path = ftplugins#VimPath()
 
 " Make 'gf' work
 setlocal isfname+=#
-" So that you can cleanly jump around inside of autoloaded func names
-setlocal iskeyword-=#
+" To allow tag lookup via CTRL-] for autoload functions, '#' must be a
+" keyword character.  E.g., for netrw#Nread().
+setlocal isk+=#
 
-" Don't drop the quotes because if the var isn't defined it'll raise errors
 call ftplugins#ALE_Vim_Conf()
 
 let b:undo_ftplugin = 'setlocal fdm< com< cms< et< sw< ts< sts< lbr< sua< wrap< isk<'

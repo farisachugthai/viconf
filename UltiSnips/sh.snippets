@@ -1,10 +1,5 @@
 # sh.snippets
 
-global !p
-import vim
-from snippets_helper import get_shell, test_shell
-endglobal
-
 # Shebang. Good place to start
 snippet #! "#!/bin/bash" b
 #!/bin/bash
@@ -47,7 +42,7 @@ endsnippet
 
 snippet if "if ... then (if)" b
 if ${3:[[ ${2:condition} ]]}; then
-	${1:expression}
+  ${1:expression}
 ${0:possibly good time to expand elif or else}
 fi
 endsnippet
@@ -150,7 +145,7 @@ snippet temp "Tempfile"
 ${1:TMPFILE}="$(mktemp -t ${3:--suffix=${4:.SUFFIX}} ${2:`!p
 snip.rv = re.sub(r'[^a-zA-Z]', '_', snip.fn) or "untitled"
 `}.XXXXXX)"
-${5:${6/(.+)/trap "/}${6:rm -f '$${1/.*\s//}'}${6/(.+)/" 0               # EXIT\n/}${7/(.+)/trap "/}${7:rm -f '$${1/.*\s//}'; exit 1}${7/(.+)/" 2       # INT\n/}${8/(.+)/trap "/}${8:rm -f '$${1/.*\s//}'; exit 1}${8/(.+)/" 1 15    # HUP TERM\n/}}
+${5:${6/(.+)/trap "/}${6:rm -f '$${1/.*\s//}'}${6/(.+)/" 0		 # EXIT\n/}${7/(.+)/trap "/}${7:rm -f '$${1/.*\s//}'; exit 1}${7/(.+)/" 2	# INT\n/}${8/(.+)/trap "/}${8:rm -f '$${1/.*\s//}'; exit 1}${8/(.+)/" 1 15    # HUP TERM\n/}}
 
 endsnippet
 
@@ -197,7 +192,7 @@ endsnippet
 ################
 # *sigh*
 
-snippet go "getopts"
+snippet go "getopts" b
 while getopts '${1:o}' ${2:opts}
 do
 	case $$2 in
@@ -208,7 +203,7 @@ done
 endsnippet
 
 # Set SCRIPT_DIR variable to directory script is located.
-snippet dirname "get dir script is in"
+snippet dirname "get dir script is in" b
 ${1:SCRIPT_DIR}="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 endsnippet
 
@@ -216,8 +211,10 @@ snippet root "Check if a user's ID is equal to 0 and exec sudo"
 if [[ \$(id -u) -ne ${VISUAL:0} ]]; then exec sudo ${VISUAL:0}; fi
 endsnippet
 
-snippet func "Define a function"
+snippet func "Define a function" w
 ${VISUAL:${1:function_name}}() {
 	${0:# function_body}
 }
 endsnippet
+
+# Vim: set ft=snippets.sh:et:sts=2:ts=2:sw=2:
