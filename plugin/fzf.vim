@@ -5,34 +5,16 @@
     " Last Modified: Sep 15, 2019
 " ============================================================================
 
-" Options: {{{1
-"
-" Preliminary Setup: {{{2
-if !exists(':FZF')
-  call plug#load('fzf')
-endif
-
+" Ensure it actually loaded
+if !exists(':FZF') | call plug#load('fzf') | endif
 let g:fzf_command_prefix = 'Fuf'
+if !exists(':FufRg') | call plug#load('fzf.vim') | endif
 
-if !exists(':FufRg')
-  call plug#load('fzf.vim')
-endif
-
+" Set up windows to have the correct commands
 if !exists('$FZF_DEFAULT_COMMAND')  || !has('unix')
-  let $FZF_DEFAULT_COMMAND = 'rg --hidden -M 200 -m 200 --smart-case --passthru --files . '
+  " let $FZF_DEFAULT_COMMAND = 'rg --hidden -M 200 -m 200 --smart-case --passthru --files . '
+  let $FZF_DEFAULT_COMMAND = 'fd -H --color always -t f '
 endif
-
-" if !exists('$FZF_DEFAULT_OPTS')  || !has('unix')
-"   let $FZF_DEFAULT_OPTS = ' --multi --cycle --reverse --prompt "Query: " --tiebreak begin,length,index --ansi --filepath-word --border --header "FZF: File Browser" '
-" endif
-
-" Sep 15, 2019: Look what i found in stdpath('data') .
-" '/plugged/fzf.vim/plugin/fzf.vim' ! There's a statusline option!!! That's
-" awesome because there's kinda no reason to have all those autocmds anyway
-" TODO: Wait how do we use it tho
-" let g:fzf_nvim_statusline =
-
-" Builtins:  {{{2
 
 let g:fzf_action = {
   \ 'ctrl-q': function('find_files#build_quickfix_list'),
@@ -43,8 +25,13 @@ let g:fzf_action = {
 " NOTE: Use of stdpath() requires nvim0.3>
 let g:fzf_history_dir = stdpath('data') . '/fzf-history'
 
+if has('nvim')
+  let $FZF_DEFAULT_OPTS .= ' --border --margin=0,2'
+  let g:fzf_layout = { 'window': 'call plugins#FloatingFZF()' }
+else
+  let g:fzf_layout = { 'window': '-tabnew' }
+endif
 
-" Standardized vars: {{{2
 let g:fzf_ag_options = ' --smart-case -u -g " " --'
 
 " TODO: Might wanna consider turning this into a list
@@ -65,17 +52,6 @@ let g:fzf_options = [
 if exists('$TMUX')
   let g:fzf_prefer_tmux = 1
 endif
-
-
-if has('nvim')
-  let $FZF_DEFAULT_OPTS .= ' --border --margin=0,2'
-
-  let g:fzf_layout = { 'window': 'call plugins#FloatingFZF()' }
-else
-  let g:fzf_layout = { 'window': '-tabnew' }
-endif
-
-" Fzf.vim: {{{2
 
 " [[B]Commits] Customize the options used by 'git log':
 let g:fzf_commits_log_options = ' --graph'
@@ -99,8 +75,6 @@ let g:fzf_commands_expect = 'alt-enter,ctrl-x'
 " found another one. What is this???
 " nnoremap <plug>(-fzf-vim-do) :execute g:__fzf_command<cr>
 
-" FZF Colors: {{{2
-
 let g:fzf_colors =  {
       \  'fg':      ['fg', '#fbf1c7'],
       \  'bg':      ['bg', '#1d2021'],
@@ -117,7 +91,6 @@ let g:fzf_colors =  {
       \  'header':  ['fg', '#83a598']
       \ }
 
-" Highlighting: {{{2
 " hi! fzf1 ctermfg=161 ctermbg=238 guifg=#E12672 guibg=#565656 cterm=bold,underline guisp=NONE gui=bold,underline
 " hi! fzf2 ctermfg=151 ctermbg=238 guifg=#BCDDBD guibg=#565656 cterm=bold,underline guisp=NONE gui=bold,underline
 " hi! fzf3 ctermfg=252 ctermbg=238 guifg=#D9D9D9 guibg=#565656 cterm=bold,underline guisp=NONE gui=bold,underline
@@ -125,26 +98,10 @@ hi! fzf1 cterm=bold,underline,reverse gui=bold,underline,reverse guifg=#7daea3
 hi! link fzf2 fzf1
 hi! link fzf3 fzf1
 
-" Mappings: {{{1
-
-" Snippets: {{{2
-
 noremap <F6> <Cmd>FufSnippets<CR>
 noremap! <F6> <Cmd>FufSnippets<CR>
 " I suppose for continuity
 tnoremap <F6> <Cmd>FufSnippets<CR>
-
-" FZF Complete: {{{2
-
-" Yo check out the source code for this
-" if s:is_win
-"   inoremap <expr> <plug>(fzf-complete-path)      fzf#vim#complete#path('dir /s/b')
-"   inoremap <expr> <plug>(fzf-complete-file)      fzf#vim#complete#path('dir /s/b/a:-d')
-" else
-"   inoremap <expr> <plug>(fzf-complete-path)      fzf#vim#complete#path("find . -path '*/\.*' -prune -o -print \| sed '1d;s:^..::'")
-"   inoremap <expr> <plug>(fzf-complete-file)      fzf#vim#complete#path("find . -path '*/\.*' -prune -o -type f -print -o -type l -print \| sed 's:^..::'")
-" endif
-" inoremap <expr> <plug>(fzf-complete-file-ag)     fzf#vim#complete#path('ag -l -g ""')
 
 
 " If you have executable('ag') then don't ever use fzf-complete-path or file!
@@ -168,7 +125,6 @@ endif
 inoremap <expr> <C-x><C-l> fzf#vim#complete#line()
 inoremap <expr> <C-l> fzf#vim#complete#line()
 
-
 " Uhhh C-b for buffer?
 inoremap <expr> <C-x><C-b> fzf#vim#complete#buffer_line()
 
@@ -188,18 +144,11 @@ else
   inoremap <C-k> <C-x><C-k>
 endif
 
-" Remappable: {{{2
-
-" Mapping for selecting different mappings.
-" Could add one for insert mode but leader tab is gonna happen so often that we need to use
-" something else. Or we could just use \<tab>....hm.
 " NOTE: The imap should probably only be invoked using \<tab>
 nmap <Leader><tab>                 <Plug>(fzf-maps-n)
 omap <Leader><tab>                 <Plug>(fzf-maps-o)
 xmap <Leader><tab>                 <Plug>(fzf-maps-x)
 imap <Leader><tab>                 <Plug>(fzf-maps-i)
-
-" Ag and History: {{{2
 
 " Map vim defaults to fzf history commands
 noremap <silent> q:                <Cmd>FufHistory:<CR>
@@ -212,16 +161,10 @@ noremap <silent> <Leader>AG        <Cmd>FufAg <C-R><C-A><CR>
 xnoremap <silent> <Leader>ag       y<Cmd>FufAg <C-R>"<CR>
 nnoremap <silent> <Leader>`        <Cmd>FufMarks<CR>
 
-" If you want help with that, remember that :he fzf and :he fzf-vim give 2
-" different docs
-
 " FZF beat fugitive out on this one. Might take git log too.
 noremap <Leader>gg                 <Cmd>FufGGrep<Space>
 noremap <Leader>gl                 <Cmd>FufCommits<CR>
 noremap <Leader>GS                 <Cmd>FufGFiles?<CR>
-
-
-" Buffers Windows Files: {{{2
 
 " NERDTree Mapping: Dude I forgot I had this. Make sure :Files works but this
 " mapping is amazing.
@@ -233,22 +176,9 @@ noremap <Leader>bu                <Cmd>FufBuffers<CR>
 noremap <Leader>B                 <Cmd>FufBuffers<CR>
 noremap <Leader>f                 <Cmd>FufFiles<CR>
 
-" Make fzf behave the same in a real shell and nvims.
-" FZF now runs in a terminal
+" Make fzf behave the same in a real shell and nvims. FZF now runs in a terminal
+" So making it a tmap creates recursive instances which behaves oddly
 " tnoremap <C-t>                    <Cmd>FZF!<CR>
-
-" Might need to wrap this in a `if &shell ==# 'bash'
-" tnoremap <A-c>                    __fzf_cd__
-
-
-" Come up with a mappings to see your mappings obviously
-" A) This is horribly done but B) dude <Leader>tab in everymode
-" try
-"   nnoremap <F1> <Cmd>Maps<CR>
-" catch v:shell_error
-" endtry
-
-" Commands: {{{1
 
 " here's the call signature for fzf#vim#grep
 " - fzf#vim#grep(command, with_column, [options], [fullscreen])
@@ -256,28 +186,9 @@ noremap <Leader>f                 <Cmd>FufFiles<CR>
 "   so that it was formatted to accept fzf options
 " NOTE: It doesn't take a dictionary so stop doing that
 
-" Find: {{{2
-
 " Completion behavior				*:command-completion* *E179*
 " -complete=file_in_path	file and directory names in |'path'|
-
 " So that this command behaves similarly to the built in find.
-" Doesn't work
-command! -bang -nargs=* -complete=file_in_path FZRgFind
-      \ call fzf#vim#grep(
-      \ 'rg --no-heading --smart-case --no-messages ^ '
-      \ . shellescape(<q-args>), 1, <bang>0 ? fzf#vim#with_preview({'dir': system('git rev-parse --show-toplevel 2&>/dev/null')[:-2]}, 'up:60%')
-      \ : fzf#vim#with_preview({'dir': system('git rev-parse --show-toplevel 2&>/dev/null')[:-2]}, 'right:50%:hidden', '?'),
-      \ <bang>0)
-
-" Damn still doesn't work
-command! -bang -nargs=* -complete=file_in_path FZFind
-      \ call fzf#vim#grep(
-      \ 'rg --no-heading --smart-case --no-messages ^ '
-      \ . shellescape(<q-args>), 1, <bang>0 ? fzf#vim#with_preview('up:60%')
-      \ : fzf#vim#with_preview('right:50%:hidden', '?'),
-      \ <bang>0)
-" Grep: {{{2
 command! -nargs=? -bang -bar FZGrep fzf#run(fzf#wrap('grep', {
       \ 'source': 'silent! grep! <q-args>',
       \ 'sink': 'edit',
@@ -370,22 +281,19 @@ command! -bang -complete=buffer -bar FZBuffers call fzf#run(fzf#wrap('buffers',
 command! -bang -bar FZMru call find_files#FZFMru()
 
 " FZGit: {{{2
-
 " Oct 15, 2019: Works!
 command! -complete=file FZGit call find_files#FZFGit()
 
-  " TODO: The above command should use the fzf funcs
-  " and also use this
-  " \   {'dir': systemlist('git rev-parse --show-toplevel')[0] }, <bang>0)
-  "
-" Rg that Updates: {{{2
+" TODO: The above command should use the fzf funcs
+" and also use this
+" \   {'dir': systemlist('git rev-parse --show-toplevel')[0] }, <bang>0)
 "
 
+" Rg That Updates: {{{2
 command! -nargs=* -bang FZUpRg call find_files#RipgrepFzf(<q-args>, <bang>0)
 
-
-" More rg: {{{2
-command! -complete=dir -bang -nargs=* RgFz
+" Doesn't update but i thought i was cool
+command! -complete=dir -bang -nargs=* FzRgPrev
   \ call fzf#vim#grep(
   \   'rg --column --line-number --no-heading --color=always --smart-case '.<q-args>, 1,
   \   <bang>0 ? fzf#vim#with_preview('up:60%')
@@ -398,7 +306,6 @@ command! -complete=dir -bang -nargs=* RgFz
 " The name is ignored if g:fzf_history_dir is not defined.
 command! -bang -complete=dir -nargs=* FZLS
     \ call fzf#run(fzf#wrap('ls', {'source': 'ls', 'dir': <q-args>}, <bang>0))
-
 
 " only search projects lmao
 command! -bang ProjectFiles call fzf#vim#files('~/projects', <bang>0)
@@ -424,4 +331,3 @@ command! -bang -nargs=? -complete=dir Files
     \ 'options': [
     \ '--layout=reverse', '--info=inline', '--preview', '~/.vim/plugged/fzf.vim/bin/preview.sh {}'
     \ ]}, <bang>0)
-

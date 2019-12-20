@@ -115,3 +115,26 @@ From ``:he source_crnl``
    that ends in a <CR>, which will confuse the automaton.
 
 **tl;dr** Always use ff=unix ffs=unix,dos even on NT.
+
+
+Debugging FZF
+==============
+
+Here are 2 commands I'm still actively working on.::
+
+   " Doesn't work
+   command! -bang -nargs=* -complete=file_in_path FZRgFind
+         \ call fzf#vim#grep(
+         \ 'rg --no-heading --smart-case --no-messages ^ '
+         \ . shellescape(<q-args>), 1, <bang>0 ? fzf#vim#with_preview({'dir': system('git rev-parse --show-toplevel 2&>/dev/null')[:-2]}, 'up:60%')
+         \ : fzf#vim#with_preview({'dir': system('git rev-parse --show-toplevel 2&>/dev/null')[:-2]}, 'right:50%:hidden', '?'),
+         \ <bang>0)
+
+   " Damn still doesn't work
+   command! -bang -nargs=* -complete=file_in_path FZFind
+         \ call fzf#vim#grep(
+         \ 'rg --no-heading --smart-case --no-messages ^ '
+         \ . shellescape(<q-args>), 1, <bang>0 ? fzf#vim#with_preview('up:60%')
+         \ : fzf#vim#with_preview('right:50%:hidden', '?'),
+         \ <bang>0)
+   " Grep: {{{2

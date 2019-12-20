@@ -72,7 +72,8 @@ setlocal omnifunc=python3complete#Complete
 " add it to iskeyword. Jesus Christ I swear I've tried every iteration and
 " then had git unset it a dozen times.
 setlocal isfname+=.
-
+" NOPE. isk needs it to work. sorry.
+setlocal iskeyword+=.
 " *'shiftround'* *'sr'* *'noshiftround'* *'nosr'*
 " 'shiftround' 'sr'	boolean	(default off) global
 	" Round indent to multiple of 'shiftwidth'.  Applies to > and <

@@ -33,7 +33,6 @@ except (ImportError, ModuleNotFoundError):
 
 class VimBuffer:
     """Wrapper around the current Vim buffer."""
-
     def __getitem__(self, idx):
         if isinstance(idx, slice):  # Py3
             return self.__getslice__(idx.start, idx.stop)
@@ -56,7 +55,8 @@ class VimBuffer:
         return len(vim.current.buffer)
 
     def __repr__(self):
-        return '{}    #{}    {}'.format('Vim Buffer:', self.number, self.filetypes)
+        return '{}    #{}    {}'.format('Vim Buffer:', self.number,
+                                        self.filetypes)
 
     @property
     def line_till_cursor(self):  # pylint:disable=no-self-use
@@ -128,20 +128,15 @@ def save_mark(name):
 def escape(inp):
     """Creates a vim-friendly string from a group of
     dicts, lists and strings."""
-
     def conv(obj):
         """Convert obj."""
         if isinstance(obj, list):
             rv = as_unicode('[' + ','.join(conv(o) for o in obj) + ']')
         elif isinstance(obj, dict):
-            rv = as_unicode(
-                '{' + ','.join(
-                    [
-                        '%s:%s' % (conv(key), conv(value))
-                        for key, value in obj.iteritems()
-                    ]
-                ) + '}'
-            )
+            rv = as_unicode('{' + ','.join([
+                '%s:%s' % (conv(key), conv(value))
+                for key, value in obj.iteritems()
+            ]) + '}')
         else:
             rv = as_unicode('"%s"') % as_unicode(obj).replace('"', '\\"')
         return rv
@@ -241,8 +236,7 @@ def select(start, end):
         else:
             move_cmd += '%iG%i|' % virtual_position(end.line + 1, end.col + 1)
         move_cmd += 'o%iG%i|o\\<c-g>' % virtual_position(
-            start.line + 1, start.col + 1
-        )
+            start.line + 1, start.col + 1)
     feedkeys(move_cmd)
 
 
@@ -293,10 +287,8 @@ def _unmap_select_mode_mapping():
 
         for option in ('<buffer>', ''):
             # Put all smaps into a var, and then read the var
-            command(
-                r"redir => _tmp_smaps | silent smap %s " % option +
-                '| redir END'
-            )
+            command(r"redir => _tmp_smaps | silent smap %s " % option +
+                    '| redir END')
 
             # Check if any mappings where found
             if hasattr(vim, 'bindeval'):
@@ -321,8 +313,8 @@ def _unmap_select_mode_mapping():
             for map in maps:
                 # The first three chars are the modes, that might be listed.
                 # We are not interested in them here.
-                trig = map[3:].split(
-                )[0] if len(map[3:].split()) != 0 else None
+                trig = map[3:].split()[0] if len(
+                    map[3:].split()) != 0 else None
 
                 if trig is None:
                     continue
@@ -366,7 +358,7 @@ def _unmap_select_mode_mapping():
 def pretty_xml(x):
     """Make xml string `x` nicely formatted."""
     # Hat tip to http://code.activestate.com/recipes/576750/
-    new_xml = md.parseString(x.strip()).toprettyxml(indent=' '*2)
+    new_xml = md.parseString(x.strip()).toprettyxml(indent=' ' * 2)
     return '\n'.join(line for line in new_xml.split('\n') if line.strip())
 
 

@@ -60,15 +60,16 @@ function s:handle_user_config() abort   " {{{1
 endfunction
 function! pydoc_help#Pydoc(module) abort   " {{{1
 
-  call s:handle_user_config()
+  " call <SID>handle_user_config()
   enew
   if has('python3')
     " I realize i could do that EOF bullshit but i don't like it.
     if has('unix')
       exec 'r! python3 -m pydoc ' . a:module
     else
-      " exec 'r! python -m pydoc ' . a:module
-      call s:get_documents(a:module)
+      exec 'r! python -m pydoc ' . a:module
+      " This func doesn't exist anymore goddamn
+      " call s:get_documents(a:module)
 
     endif
 

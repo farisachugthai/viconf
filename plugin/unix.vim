@@ -2,7 +2,7 @@
     " File: unix.vim
     " Author: Faris Chugthai
     " Description: Add GNU/Linux commands, functions and mappings
-    " Last Modified: Jul 13, 2019
+    " Last Modified: Dec 16, 2019
 " ============================================================================
 
 nnoremap zE <nop>
@@ -18,13 +18,9 @@ if exists($ANDROID_DATA)
   nnoremap <silent> <Leader>ts <Cmd>execute '!termux-share -a send ' . shellescape(expand("%"))<CR>
 endif
 
-
-" Alternative Edit Implementation: {{{1
 " Completes filenames from the directories specified in the 'path' option:
 command! -nargs=1 -bang -complete=customlist,unix#EditFileComplete
    	\ EF edit<bang> <args>
-
-" Chmod: {{{1
 "	:S	Escape special characters for use with a shell command (see
 "		|shellescape()|). Must be the last one. Examples:
 "           :!dir <cfile>:S
@@ -40,8 +36,6 @@ command! -nargs=+ -complete=file MyEdit
 
 command! -nargs=+ -complete=file Sedit call unix#SpecialEdit(<q-args>, <q-mods>)
 
-
-" Pure Emacs: {{{1
 " There are more comfortable ways of doing the following in Vim.
 " I'm not going to convince you it's better. That it's cleaner.
 " Unfortunately, there are  few of *their* keybindings wired in.
@@ -58,9 +52,12 @@ else
   nnoremap <C-x><C-b> <Cmd>buffers<CR>
 endif
 
-nnoremap <silent> <C-x>o <Cmd>wincmd W<CR>
+" oh
+nnoremap <C-x>o <Cmd>wincmd W<CR>
+" zero
+nnoremap <C-x>0 <Cmd>wincmd c<CR>
+nnoremap <C-x>1 <Cmd>wincmd o<CR>
 
-" Control A And Incrementing: {{{1
 " Both Tmux and Readline utilize C-a. It's a useful keybinding and
 " my preferred manner of going to col-0 in insert mode. Cue vim-rsi
 " a la Tim Pope. Cool. It'd be kinda cool to have that in normal mode.
@@ -70,5 +67,7 @@ nnoremap C-a ^
 " nothing different than <CR>. Wtf???
 nnoremap + C-a
 
-command! -bar RangerChooser call vim_file_chooser#RangeChooser()
-nnoremap <leader>r :<C-U>vim_file_chooser#RangerChooser<CR>
+if exepath('ranger')
+  command! -bar RangerChooser call vim_file_chooser#RangeChooser()
+  nnoremap <leader>r :<C-U>vim_file_chooser#RangerChooser<CR>
+endif

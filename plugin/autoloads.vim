@@ -63,7 +63,7 @@ nnoremap <C-}> [I:let nr = input("Choose an include: ")<Bar>exe "normal! " . nr 
 command! -complete=tag Tags echo gettagstack(expand('%'))
 
 if exists('&tagfunc')
-  let &tagfunc = vim_file_chooser#TagFunc()
+  let &tagfunc = 'vim_file_chooser#TagFunc'
 endif
 
 " just cuz. plus isn't the complete compiler option kinda cool?

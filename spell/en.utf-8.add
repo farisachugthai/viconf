@@ -1750,3 +1750,17 @@ psutil
 #hiddle
 frontend
 QtConsole
+winreg
+#_init__
+atan2
+atan
+asin
+acos
+Logcheck
+logcheck
+ValueError
+LevelFormatter
+Qt5Agg
+argv
+mainloop
+formatMessage

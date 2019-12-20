@@ -30,6 +30,7 @@ let g:gruvbox_material_background = 'hard'
 " From ned batchelder.
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 
+" Standard Highlights: {{{
 " These got cleared somehow.
 " Screen line that the cursor is
 hi! CursorLine ctermbg=237 guibg=#3c3836 guifg=NONE ctermfg=NONE cterm=NONE gui=NONE guisp=NONE
@@ -47,6 +48,9 @@ hi link manHeaderFile Statement
 " hi link manHighlight
 hi link NormalNC Ignore
 hi link VisualNC Visual
+
+" }}}
+" Plugins: {{{
 
 " NERDTree: {{{
 
@@ -100,11 +104,8 @@ hi! fzf1 ctermfg=161 ctermbg=238 guifg=#E12672 guibg=#565656 cterm=bold,underlin
 hi! fzf2 ctermfg=151 ctermbg=238 guifg=#BCDDBD guibg=#565656 cterm=bold,underline
 hi! fzf3 ctermfg=252 ctermbg=238 guifg=#D9D9D9 guibg=#565656 cterm=bold,underline
 " }}}
-
-
+" }}}
 " Filetype specific ------------------------------------------------------- {{{
-
-
 " Man.vim: {{{
 " Define the default highlighting.
 " Only when an item doesn't have highlighting yet
@@ -759,14 +760,67 @@ hi! link vimSep LightGrey
 hi! link vimContinue LightGrey
 hi! link vimLet Orange
 hi! link vimAutoCmd Orange
+
+" Vim etc: {{{
+" Here's every highlighting group I've ran into and a note with what it represents
+" The last letter of an autocmd like wth
+hi link vimAugroup	vimAugroupKey
+
+" Lmao the comma between BufEnter,BufReadPre
+hi link vimAutoEventList vimAutoEvent
+
+" Don't link to WildMenu it's the space in between the word cluster and the
+" cluster group
+" hi link vimClusterName WildMenu
+hi link vimClusterName NONE
+hi link vimCmdSep vimCommand
+hi link vimCommentTitleLeader	vimCommentTitle
+hi link vimEcho	String
+
+" the spaces between words in an execute statement like wth
+hi link vimExecute Label
+
+hi link vimHiAttribList Underlined
+hi link vimHiCtermColor Underlined
+hi link vimHiFontname Underlined
+hi link vimHiKeyList Keyword
+
+hi link vimIskSep Keyword
+hi link vimMapModErr Exception
+
+hi link vimMapLhs vimNotation
+hi link vimMapRhs vimNotation
+hi link vimMapRhsExtend	vimNotation
+hi link vimOnlyHLGroup VisualNOS
+hi link vimOnlyCommand vimCommand
+hi link vimOnlyOption GruvboxGreen
+hi link vimSet vimSetEqual
+
+" There's a highlighting group for the equals sign in a set option statement...
+hi link vimSetEqual	Operator
+hi link vimSynKeyRegion Keyword
+hi link vimHiAttribList vimHighlight
+
+" This syntax group is literally whitespace...
+hi link vimSynRegion Nontext
+hi link vimSyncLines Number
+
+" Here are a few more xxx cleared syn groups
+hi link vimUserFunc Function
+
+hi link vimPythonRegion Identifier
+
 " }}}
+
 " }}}
+"
+" }}}
+
 " }}}
 
 " }}}
 
 " Original: {{{
-
 " Filetypes: {{{
 hi! link markdownH5 Yellow
 hi! link markdownH6 Yellow
@@ -3153,6 +3207,5 @@ if s:t_Co >= 256  "  {{{
 endif
 
 " }}}
-
-" Vim: set fdls=0:
+" Vim: set fdls=0 fdm=marker:
 " }}}

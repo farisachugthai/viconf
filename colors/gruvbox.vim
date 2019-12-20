@@ -543,51 +543,6 @@ endif
 
 
 " }}}
-
-" Here's every highlighting group I've ran into and a note with what it represents
-" The last letter of an autocmd like wth
-hi link vimAugroup	vimAugroupKey
-
-" Lmao the comma between BufEnter,BufReadPre
-hi link vimAutoEventList vimAutoEvent
-
-hi link vimClusterName WildMenu
-hi link vimCmdSep vimCommand
-hi link vimCommentTitleLeader	vimCommentTitle
-hi link vimEcho	String
-
-" the spaces between words in an execute statement like wth
-hi link vimExecute Label
-
-hi link vimHiAttribList Underlined
-hi link vimHiCtermColor Underlined
-hi link vimHiFontname Underlined
-hi link vimHiKeyList Keyword
-
-hi link vimIskSep Keyword
-hi link vimMapModErr Exception
-
-hi link vimMapLhs vimNotation
-hi link vimMapRhs vimNotation
-hi link vimMapRhsExtend	vimNotation
-hi link vimOnlyHLGroup VisualNOS
-hi link vimOnlyCommand vimCommand
-hi link vimOnlyOption GruvboxGreen
-hi link vimSet vimSetEqual
-
-" There's a highlighting group for the equals sign in a set option statement...
-hi link vimSetEqual	Operator
-hi link vimSynKeyRegion Keyword
-hi link vimHiAttribList vimHighlight
-
-" This syntax group is literally whitespace...
-hi link vimSynRegion Nontext
-hi link vimSyncLines Number
-
-" Here are a few more xxx cleared syn groups
-hi link vimUserFunc Function
-
-hi link vimPythonRegion Identifier
 " }}}
 " }}}
 " C: {{{

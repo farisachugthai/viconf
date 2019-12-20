@@ -40,10 +40,10 @@ endfunction
 
 " And now we have stufff about tags
 
-function vim_file_chooser#TagFunc(pattern, flags, info)
+function! vim_file_chooser#TagFunc(pattern, flags, info)
 " Lol literally what is this option?
 " well fuck. just errored on nvim4
-  function s:CompareFilenames(item1, item2)
+  function! CompareFilenames(item1, item2)
     let f1 = a:item1['filename']
     let f2 = a:item2['filename']
     return f1 >=# f2 ?
@@ -51,7 +51,7 @@ function vim_file_chooser#TagFunc(pattern, flags, info)
   endfunction
 
   let result = taglist(a:pattern)
-  call sort(result, "s:CompareFilenames")
+  call sort(result, "CompareFilenames")
 
   return result
 endfunction

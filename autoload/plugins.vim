@@ -1,12 +1,9 @@
 " ============================================================================
-  " File: ultisnips.vim
+  " File: plugins.vim
   " Author: Faris Chugthai
   " Description: Plugin related autoloaded functions
   " Last Modified: Dec 05, 2019
 " ============================================================================
-
-let s:cpo_save = &cpoptions
-set cpoptions-=C
 
 function! plugins#GetAllSnippets() abort  " {{{2
 
@@ -107,7 +104,6 @@ function! plugins#GrepFromSelected(type)
   let @@ = saved_unnamed_register
   execute 'CocList grep ' . word
 endfunction
-
 function plugins#FloatingFZF() abort
   let width = float2nr(&columns * 0.9)
   let height = float2nr(&lines * 0.6)
@@ -120,7 +116,3 @@ function plugins#FloatingFZF() abort
   let win = nvim_open_win(nvim_create_buf(v:false, v:true), v:true, opts)
   call setwinvar(win, '&winhighlight', 'NormalFloat:Normal')
 endfunction
-
-" Atexit: {{{1
-let &cpoptions = s:cpo_save
-unlet s:cpo_save

@@ -232,9 +232,6 @@
     "--auto-preview",
     "--normal"
   ],
-  "list.source.extensions.defaultArgs": [
-    "doc"
-  ],
   "list.source.extensions.defaultOptions": [
     "--top",
     "--normal"

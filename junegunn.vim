@@ -94,7 +94,7 @@ if empty(s:termux)
   " Plug 'omnisharp/omnisharp-vim', {'for': 'cs'}
 
   Plug 'ludovicchabant/vim-gutentags'
-
+  " Plug 'jupyter-vim/jupyter-vim'
   " Well this looks sweet
   Plug 'psf/black', {'for': 'python'}
 endif
