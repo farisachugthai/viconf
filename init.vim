@@ -44,7 +44,8 @@ map <Space> <Leader>
 
 if has('nvim-0.4')   " Fun new features!
   let &shadafile = stdpath('data') . '/shada/main.shada'
-  set pumblend=20 winblend=20  " toggle transparency in the pum and windows
+  " toggle transparency in the pum and windows. don't set higher than 10 it becomes hard to read higher than that
+  set pumblend=10 winblend=10
   try | set pyxversion=3 | catch /^Vim:E518:*/ | endtry
 endif
 
@@ -57,15 +58,10 @@ set backupcopy=auto    " use rename-and-write-new method whenever safe
 " patch required to honor double slash at end consolidate the writebackups -- they usually get deleted
 if has('patch-8.1.0251') | let &backupdir=stdpath('config') . '/undodir//' | endif
 
-if &tabstop > 4 | setlocal tabstop=4 | endif
-if &shiftwidth > 4  | setlocal shiftwidth=4 | endif
-setlocal expandtab smarttab softtabstop=4
 set foldnestmax=10 foldmethod=marker foldcolumn=2 foldopen+=jump,insert
 set signcolumn=auto:2  " this might be a nvim 4 thing
 try | set switchbuf=useopen,usetab,split | catch | endtry
-set hidden
-set splitbelow splitright sidescroll=5
-if &textwidth!=0 | set colorcolumn=+1 | else | set colorcolumn=80 | endif
+set splitbelow splitright sidescroll=5 hidden
 set number relativenumber cmdheight=1
 set isfname-==
 if filereadable(stdpath('config') . '/spell/en.utf-8.add')

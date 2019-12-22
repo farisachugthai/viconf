@@ -58,3 +58,7 @@ if has('unix')
 else  " windows not wsl
   call find_files#msdos_remote()
 endif
+
+if &tabstop > 4 | setlocal tabstop=4 | endif
+if &shiftwidth > 4  | setlocal shiftwidth=4 | endif
+setlocal expandtab smarttab softtabstop=4

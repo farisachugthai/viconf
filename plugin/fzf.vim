@@ -91,12 +91,22 @@ let g:fzf_colors =  {
       \  'header':  ['fg', '#83a598']
       \ }
 
+function! s:fzf_statusline()
+  " Override statusline as you like
+  hi! fzf1 cterm=bold,underline,reverse gui=bold,underline,reverse guifg=#7daea3
+  hi! link fzf2 fzf1
+  hi! link fzf3 fzf1
+  setlocal statusline=%#fzf1#\ FZF:\ %#fzf2#fz%#fzf3#f
+endfunction
+
+augroup FZFStatusline
+  au!
+  autocmd! User FzfStatusLine call <SID>fzf_statusline()
+augroup END
+
 " hi! fzf1 ctermfg=161 ctermbg=238 guifg=#E12672 guibg=#565656 cterm=bold,underline guisp=NONE gui=bold,underline
 " hi! fzf2 ctermfg=151 ctermbg=238 guifg=#BCDDBD guibg=#565656 cterm=bold,underline guisp=NONE gui=bold,underline
 " hi! fzf3 ctermfg=252 ctermbg=238 guifg=#D9D9D9 guibg=#565656 cterm=bold,underline guisp=NONE gui=bold,underline
-hi! fzf1 cterm=bold,underline,reverse gui=bold,underline,reverse guifg=#7daea3
-hi! link fzf2 fzf1
-hi! link fzf3 fzf1
 
 noremap <F6> <Cmd>FufSnippets<CR>
 noremap! <F6> <Cmd>FufSnippets<CR>
@@ -193,9 +203,7 @@ command! -nargs=? -bang -bar FZGrep fzf#run(fzf#wrap('grep', {
       \ 'source': 'silent! grep! <q-args>',
       \ 'sink': 'edit',
       \ 'options': ['--multi', '--ansi', '--border'],
-      \ <bang>0 ? fzf#vim#with_preview('up:60%')
-      \ : fzf#vim#with_preview('right:50%:hidden', '?'),
-      \ <bang>0})
+      \ <bang>0 ? fzf#vim#with_preview('up:60%')  : fzf#vim#with_preview('right:50%:hidden', '?')}))
 
 
 " GGrep: {{{2
@@ -290,7 +298,7 @@ command! -complete=file FZGit call find_files#FZFGit()
 "
 
 " Rg That Updates: {{{2
-command! -nargs=* -bang FZUpRg call find_files#RipgrepFzf(<q-args>, <bang>0)
+command! -nargs=* -bang FZRG call find_files#RipgrepFzf(<q-args>, <bang>0)
 
 " Doesn't update but i thought i was cool
 command! -complete=dir -bang -nargs=* FzRgPrev

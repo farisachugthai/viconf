@@ -5,6 +5,8 @@
   " Last Modified: August 02, 2019
 " ============================================================================
 
+" FZF: {{{1
+" An action can be a reference to a function that processes selected lines
 function! find_files#build_quickfix_list(lines) abort  " {{{1
   call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
   copen
@@ -15,28 +17,23 @@ function! s:make_sentence(lines) abort  " {{{1
   return substitute(join(a:lines), '^.', '\=toupper(submatch(0))', '').'.'
 endfunction
 function! find_files#fzf_maps() abort  " {{{1
-
   imap <expr> <C-x><C-s> fzf#vim#complete#word({
       \ 'source':  'cat /usr/share/dict/words',
       \ 'reducer': function('<sid>make_sentence'),
       \ 'options': '--multi --reverse --margin 15%,0',
       \ 'left':    40})
-
   " And add a shorter version
   inoremap <C-s> <C-x><C-s>
-
-    imap <expr> <C-x><C-k> fzf#complete({
-                \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
-                \ 'options': '-ansi --multi --cycle', 'left': 30})
-
-    inoremap <C-k> <C-x><C-k>
+  imap <expr> <C-x><C-k> fzf#complete({
+              \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
+              \ 'options': '-ansi --multi --cycle', 'left': 30})
+  inoremap <C-k> <C-x><C-k>
 endfunction
 function! find_files#plug_help_sink(line)  " {{{1
   " Call :PlugHelp to use fzf to open a window with all of the plugins
   " you have installed listed and upon pressing enter open the help
   " docs. That's not a great explanation but honestly easier to explain
   " with a picture.
-  " TODO: Screenshot usage.
   let dir = g:plugs[a:line].dir
   for pat in ['doc/*.txt', 'README.md']
     let match = get(split(globpath(dir, pat), "\n"), 0, '')
@@ -57,31 +54,30 @@ endfunction
 function! find_files#bufopen(e) abort  " {{{1
   execute 'buffer' matchstr(a:e, '^[ 0-9]*')
 endfunction
-function! find_files#FZFMru() abort  " {{{1
-    call fzf#run(fzf#wrap('history', {
-        \ 'source'  :   v:oldfiles,
-        \ 'sink'    :   'edit',
-        \ 'options' :  ['--multi', '--ansi'],
-        \ 'down'    :    '40%'}))
+function find_files#FZFMru() abort  " {{{1
+  call fzf#run(fzf#wrap('history'
+      \ 'source'  :   v:oldfiles,
+      \ 'sink'    :   'edit',
+      \ 'options' :  ['--multi', '--ansi'],
+      \ 'down'    :    '40%'}))
 endfunction
 function! find_files#FZFGit() abort  " {{{1
-    " Remove trailing new line to make it work with tmux splits
-    let directory = substitute(system('git rev-parse --show-toplevel'), '\n$', '', '')
-    if !v:shell_error
-        lcd `=directory`
-        call fzf#run(fzf#wrap({
-            \ 'dir'   : directory,
-            \ 'source': 'git ls-files',
-            \ 'sink'  : 'e',
-            \ 'window': '50vnew'}))
-    else
-        FZF
-    endif
-    " 'source': 'git ls-files',
-    " 'down'  : '40%'
+  " Remove trailing new line to make it work with tmux splits
+  let directory = substitute(system('git rev-parse --show-toplevel'), '\n$', '', '')
+  if !v:shell_error
+    lcd `=directory`
+    call fzf#run(fzf#wrap({
+        \ 'dir'   : directory,
+        \ 'source': 'git ls-files',
+        \ 'sink'  : 'e',
+        \ 'window': '50vnew'}))
+  else
+      FZF
+  endif
+  " 'source': 'git ls-files',
+  " 'down'  : '40%'
 endfunction
 function! find_files#termux_remote() abort  " {{{1
-
   let g:python3_host_prog = exepath('python')
   let g:loaded_python_provider = 1
   let g:node_host_prog = '/data/data/com.termux/files/usr/bin/neovim-node-host'
@@ -100,10 +96,22 @@ function! find_files#termux_remote() abort  " {{{1
           \   },
           \   'cache_enabled': 1,
           \ }
+  else
+    let g:clipboard = {
+          \   'name': 'myClipboard',
+          \   'copy': {
+          \      '+': {lines, regtype -> extend(g:, {'foo': [lines, regtype]}) },
+          \      '*': {lines, regtype -> extend(g:, {'foo': [lines, regtype]}) },
+          \    },
+          \   'paste': {
+          \      '+': {-> get(g:, 'foo', [])},
+          \      '*': {-> get(g:, 'foo', [])},
+          \   },
+          \ }
+
   endif
 endfunction
 function! find_files#ubuntu_remote() abort  " {{{1
-
   let g:python3_host_prog = exepath('python3')
   let g:python_host_prog = '/usr/bin/python2'
   let g:node_host_prog = exepath('neovim-node-host')
@@ -122,12 +130,27 @@ function! find_files#ubuntu_remote() abort  " {{{1
           \   },
           \   'cache_enabled': 1,
           \ }
+  else
+    let g:clipboard = {
+          \   'name': 'myClipboard',
+          \   'copy': {
+          \      '+': {lines, regtype -> extend(g:, {'foo': [lines, regtype]}) },
+          \      '*': {lines, regtype -> extend(g:, {'foo': [lines, regtype]}) },
+          \    },
+          \   'paste': {
+          \      '+': {-> get(g:, 'foo', [])},
+          \      '*': {-> get(g:, 'foo', [])},
+          \   },
+          \ }
+
   endif
 
 endfunction
 function! find_files#msdos_remote() abort  " {{{1
-  let g:python3_host_prog = 'C:/tools/miniconda3/envs/neovim/python.exe'
-  let g:python_host_prog = 'C:/tools/miniconda3/envs/py2/python.exe'
+  " let g:python3_host_prog = 'C:/tools/miniconda3/envs/neovim/python.exe'
+  let g:python3_host_prog = exepath('python3')
+  " let g:python_host_prog = 'C:/tools/miniconda3/envs/py2/python.exe'
+  let g:python_host_prog = exepath('python')
   let g:loaded_ruby_provider = 1
   let g:node_host_prog = 'C:/tools/nvm/v13.0.1/neovim-node-host'
   let g:clipboard = {

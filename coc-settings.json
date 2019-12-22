@@ -228,6 +228,12 @@
     "--no-sort",
     "--ignore-case"
   ],
+  "list.source.commits.defaultOptions": [
+    "--regex",
+    "--ignore-case",
+    "--normal",
+    "--auto-preview"
+  ],
   "list.source.diagnostics.defaultOptions": [
     "--auto-preview",
     "--normal"
@@ -455,9 +461,6 @@
     "-U"
   ],
   "python.trace.server": "messages",
-  "python.venvFolders": [
-    "~/.virtualenvs"
-  ],
   "python.workspaceSymbols.exclusionPatterns": [
     "**/site-packages/**",
     "node_modules",

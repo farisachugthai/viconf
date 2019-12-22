@@ -1,6 +1,6 @@
-" gutentags
+" Gutentags:
 
-" General tags stuff
+" General Tags:
 
 " See Also: ../autoload/buffers.vim
 " There's a good buffers#PreviewWord that shows some stuff i'm sure you wanna do
@@ -26,4 +26,3 @@ endif
 if !has('unix')
   let g:gutentags_ctags_executable = expand('$HOME/bin/ctags')
 endif
-

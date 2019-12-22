@@ -671,7 +671,6 @@ conemu
 conf
 config
 configs
-configtrait
 configurables
 cookiejar
 cp
@@ -938,7 +937,6 @@ jedi
 jekyll
 jetbrains
 jinja
-jinja2
 joinpath
 jpeg
 jq
@@ -1296,7 +1294,6 @@ ps1
 psdrive
 pstree
 psutil
-psutil
 ptpython
 ptpython's
 pushd
@@ -1512,6 +1509,8 @@ su
 subclassing
 subkey
 subkeys
+sublist
+sublists
 submodule
 submodules
 subnetting

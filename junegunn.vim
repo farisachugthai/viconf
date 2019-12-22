@@ -17,7 +17,7 @@ let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux) && empty(s:wsl)
 
 call plug#begin(stdpath('data') . '/plugged')
 
-Plug 'neoclide/coc.nvim' ", {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 let $NVIM_COC_LOG_FILE = stdpath('data')  . '/site/coc.log'
 let $NVIM_COC_LOG_LEVEL = 'ERROR'
 

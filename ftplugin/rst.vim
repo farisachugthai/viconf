@@ -16,6 +16,10 @@ let g:rst_syntax_code_list = {
     \ 'sh': ['sh', 'bash'],
     \ }
 
+  " just added rst
+   " I kinda hope this does nothing
+    " \ 'rst': ['rst'],
+    " NOPE EVERYTHING BROKE
 let g:rst_use_emphasis_colors = 1
 let g:rst_fold_enabled = 1
 
@@ -23,6 +27,7 @@ let g:rst_fold_enabled = 1
 if exists('b:did_ftplugin') | finish | endif
 let b:did_ftplugin = 1
 
+syntax sync fromstart
 setlocal textwidth=80
 setlocal expandtab
 setlocal spell!

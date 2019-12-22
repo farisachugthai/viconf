@@ -19,7 +19,7 @@ let g:NetrwTopLvlMenu = 'File Explorer'
 let g:netrw_keepdir = 0
 
 " Open windows from netrw in a preview window. Can be achieved by pressing 'P'
-let g:netrw_browse_split = 4
+let g:netrw_browse_split = 2
 
   " *g:netrw_liststyle*		Set the default listing style:
   "                               = 0: thin listing (one file per line)
@@ -27,7 +27,7 @@ let g:netrw_browse_split = 4
 				     " stamp information and file size)
 				" = 2: wide listing (multiple files in columns)
 				" = 3: tree style listing
-let g:netrw_liststyle = 1
+let g:netrw_liststyle = 3
 
 let g:netrw_list_hide = netrw_gitignore#Hide() . '.*\.swp$'
 

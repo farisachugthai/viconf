@@ -70,7 +70,7 @@ function! syncom#hitest() abort  " Hitest: An easier way of sourcing hitest {{{1
   endtry
   return v:true
 endfunction
-function! syncom#grepprg() abort  " {{{1
+function syncom#grepprg() abort  " {{{1
   " executable check was in ../plugin/syncom.vim but we haven't figured out
   " if we're using rg.exe or rg.exe
   if executable('rg')
@@ -82,7 +82,9 @@ function! syncom#grepprg() abort  " {{{1
   endif
 
   " actually between this coc and fzf maybe i should make rg options global
-  let s:rg_options = ' --vimgrep --no-messages --smart-case --no-messages --hidden --no-heading --max-columsn 300 --max-columns-preview --no-ignore-messages --trim ^'
+  let s:rg_options = ' --vimgrep --no-messages --smart-case --no-messages '
+        \ . '--hidden --no-heading --max-columns 300 --max-columns-preview '
+        \ . ' --no-ignore-messages --trim . '
   " Well Im not gonna do it now.
 
   let s:grep = s:rg . s:rg_options

@@ -14,6 +14,8 @@ else
   setl colorcolumn=80
 endif
 
+" let &grepprg = syncom#grepprg(<q-args>)
+" note you can't do this. no args to options
 let &grepprg = syncom#grepprg()
 
 " Search Mappings: {{{1
