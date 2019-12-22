@@ -354,9 +354,6 @@
     "--no-sort",
     "--top"
   ],
-  // "list.source.quickfix.defaultArgs": [
-  //   "preview"
-  // ],
   "list.source.quickfix.defaultOptions": [
     "--top",
     "--normal"
@@ -392,8 +389,6 @@
     "--interactive",
     "--number-select"
   ],
-  // so obviously only do this on windows. shit there are so many things that we need to configure
-  // "list.source.tags.command": "~/bin/ctags.exe -R --options=~/.ctags/universal_ctags.ctags .",
   "list.source.tags.defaultOptions": [
     "--top",
     "--normal"

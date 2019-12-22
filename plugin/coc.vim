@@ -6,19 +6,13 @@
 " ============================================================================
 
 " Global options are in ../../coc_settings.json
-" Guard: {{{1
-" Can't do this anymore we load before coc
-" if !exists('g:did_coc_loaded')  | finish | endif
 
-let s:cpo_save = &cpoptions
-set cpoptions-=C
-
-" Options: {{{1
-
-" Env vars: {{{2
 let $NVIM_COC_LOG_LEVEL = 'debug'
 let $NVIM_COC_LOG_FILE = stdpath('data') . '/site/coc.log'
 
+" TODO:
+" so obviously only do this on windows. shit there are so many things that we need to configure
+" list.source.tags.command: ~/bin/ctags.exe -R --options=~/.ctags/universal_ctags.ctags .,
 " General: {{{2
 
 " TODO:
@@ -47,9 +41,6 @@ let g:coc_snippet_prev = '<C-k>'
 	" 	\ }
 	" 	\})
 
-" Mappings: {{{1
-
-" Basic: {{{2
 "
 " TODO: Might need to open a pull request he states that these are mapped by
 " default. omap af and omap if didn't show anything
@@ -110,7 +101,11 @@ nnoremap ,i <Cmd>CocInfo<CR>
 
 
 " Grep By Motion: Mnemonic CocSelect {{{2
+
 " Don't use vmap I don't want this in select mode!
+
+" Yo why dont we use onoremap though?
+
 " Q: How to grep by motion?
 " A: Create custom keymappings like:
 xnoremap ,cs :<C-u>call plugins#GrepFromSelected(visualmode())<CR>
@@ -228,8 +223,5 @@ augroup CocUser
 
   autocmd CompleteDone * pclose
 	autocmd CursorHold * silent call CocActionAsync('highlight')
-augroup END
 
-" Atexit:
-let &cpoptions = s:cpo_save
-unlet s:cpo_save
+augroup END

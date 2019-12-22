@@ -151,30 +151,30 @@ xmap <Leader><tab>                 <Plug>(fzf-maps-x)
 imap <Leader><tab>                 <Plug>(fzf-maps-i)
 
 " Map vim defaults to fzf history commands
-noremap <silent> q:                <Cmd>FufHistory:<CR>
-noremap <silent> q/                <Cmd>FufHistory/<CR>
+nnoremap <silent> q:                <Cmd>FufHistory:<CR>
+nnoremap <silent> q/                <Cmd>FufHistory/<CR>
 
 " And get the rest of the fzf.vim commands involved.
-noremap <silent> <Leader>L         <Cmd>FufLines<CR>
-noremap <silent> <Leader>ag        <Cmd>FufAg <C-R><C-W><CR>
+nnoremap <silent> <Leader>L         <Cmd>FufLines<CR>
+nnoremap <silent> <Leader>ag        <Cmd>FufAg <C-R><C-W><CR>
 noremap <silent> <Leader>AG        <Cmd>FufAg <C-R><C-A><CR>
 xnoremap <silent> <Leader>ag       y<Cmd>FufAg <C-R>"<CR>
 nnoremap <silent> <Leader>`        <Cmd>FufMarks<CR>
 
 " FZF beat fugitive out on this one. Might take git log too.
-noremap <Leader>gg                 <Cmd>FufGGrep<Space>
-noremap <Leader>gl                 <Cmd>FufCommits<CR>
-noremap <Leader>GS                 <Cmd>FufGFiles?<CR>
+nnoremap <Leader>gg                 <Cmd>FufGGrep<Space>
+nnoremap <Leader>gl                 <Cmd>FufCommits<CR>
+nnoremap <Leader>GS                 <Cmd>FufGFiles?<CR>
 
 " NERDTree Mapping: Dude I forgot I had this. Make sure :Files works but this
 " mapping is amazing.
 nnoremap <silent><expr> <Leader>n (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
 
-noremap <silent> <Leader>C        <Cmd>FufColors<CR>
-noremap <silent> <Leader><CR>     <Cmd>FufBuffers<CR>
-noremap <Leader>bu                <Cmd>FufBuffers<CR>
-noremap <Leader>B                 <Cmd>FufBuffers<CR>
-noremap <Leader>f                 <Cmd>FufFiles<CR>
+nnoremap <silent> <Leader>C        <Cmd>FufColors<CR>
+nnoremap <silent> <Leader><CR>     <Cmd>FufBuffers<CR>
+nnoremap <Leader>bu                <Cmd>FufBuffers<CR>
+nnoremap <Leader>B                 <Cmd>FufBuffers<CR>
+nnoremap <Leader>f                 <Cmd>FufFiles<CR>
 
 " Make fzf behave the same in a real shell and nvims. FZF now runs in a terminal
 " So making it a tmap creates recursive instances which behaves oddly

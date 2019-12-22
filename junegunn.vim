@@ -69,7 +69,6 @@ Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 nnoremap U <Cmd>UndotreeToggle<CR>
 
 " The 'tabular' plugin must come _before_ 'vim-markdown'.
-Plug 'godlygeek/tabular'
 Plug 'itspriddle/vim-shellcheck', { 'for': ['sh', 'bash'] }
 Plug 'mitsuhiko/vim-jinja', {'for': ['html', 'jinja2', 'htmljinja', 'htmldjango'] }
 Plug 'ervandew/supertab'
@@ -77,7 +76,7 @@ Plug 'junegunn/vim-peekaboo'
 Plug 'vim-voom/voom', {'on': ['Voom', 'VoomToggle', 'VoomExec'] }
 Plug 'romainl/vim-qf'
 
-Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
+Plug 'raimon49/requirements.txt.vim'
 Plug 'ntpeters/vim-better-whitespace'
 
 if empty(s:termux)
@@ -85,6 +84,7 @@ if empty(s:termux)
 " not being able to use more than 15 plugins at any point in time
   Plug 'chrisbra/csv.vim', {'for': ['csv', 'tsv']}
 
+  Plug 'godlygeek/tabular'
   " needed if for nothing else but the ftdetect
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
@@ -93,12 +93,12 @@ if empty(s:termux)
   Plug 'elzr/vim-json', { 'for': 'json' }
   " Plug 'omnisharp/omnisharp-vim', {'for': 'cs'}
 
-  Plug 'ludovicchabant/vim-gutentags'
   " Plug 'jupyter-vim/jupyter-vim'
   " Well this looks sweet
-  Plug 'psf/black', {'for': 'python'}
 endif
 
+Plug 'psf/black', {'for': 'python'}
+Plug 'ludovicchabant/vim-gutentags'
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'tomtom/tlib_vim'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!

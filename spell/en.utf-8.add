@@ -235,10 +235,12 @@ LVM
 LaTex
 LanguageClient
 Lansdale
+LevelFormatter
 Lightline
 Linksys
 Linter
 Litecoin
+Logcheck
 Losh
 Losh's
 Lubuntu
@@ -336,6 +338,7 @@ PyPI
 PyPy
 PyQt
 PyQt4
+PySide
 PyUtils
 Pydoc
 Pydocs
@@ -349,6 +352,8 @@ Pythonesque
 QEMU
 QTConsole
 Qt5
+Qt5Agg
+QtConsole
 QtWebEngine
 Qubes
 QuickStart
@@ -383,6 +388,7 @@ SHA
 SHA384
 SHA512
 SHAs
+SLists
 SMB
 SOCKS5
 SQLite
@@ -425,6 +431,7 @@ Subprocesses
 Subtrees
 SuperUser
 Supima
+SymPy
 System32
 TLDP
 TLDR
@@ -446,6 +453,7 @@ TiddlyWiki
 Tk
 ToC
 Todo
+Tools
 Torrenting
 Twilio
 UC
@@ -467,6 +475,7 @@ VC
 VDP
 VIMRUNTIME
 VMware
+ValueError
 VeraCrypt
 Vigenere
 Vigenère
@@ -523,6 +532,7 @@ aarch64
 abspath
 accessor
 ack
+acos
 actionscript
 ada
 ada95
@@ -553,10 +563,14 @@ arduino
 arg
 argparse
 args
+argv
 aria2c
 asc
+asin
 aspx
 asyncio
+atan
+atan2
 atomicparsley
 attr
 atwood
@@ -657,6 +671,7 @@ conemu
 conf
 config
 configs
+configtrait
 configurables
 cookiejar
 cp
@@ -777,8 +792,10 @@ fishshell
 flake8
 fmt
 fnmatch
+formatMessage
 fortran
 from
+frontend
 fsck
 fsharp
 fstab
@@ -921,6 +938,7 @@ jedi
 jekyll
 jetbrains
 jinja
+jinja2
 joinpath
 jpeg
 jq
@@ -1031,6 +1049,7 @@ localectl
 localehelper
 localhost
 localize
+logcheck
 logfile
 logstart
 logstate
@@ -1051,6 +1070,7 @@ macchanger
 macos
 macrokernel
 mailfile
+mainloop
 makedirs
 makemigrations
 makepasswd
@@ -1064,6 +1084,7 @@ matchit
 mathematica
 matlab
 matplotlib
+matplotlib's
 mawk
 maya
 mccabe
@@ -1274,6 +1295,7 @@ protonmail
 ps1
 psdrive
 pstree
+psutil
 psutil
 ptpython
 ptpython's
@@ -1560,6 +1582,7 @@ traceback
 tracebacks
 traceroute
 traitlets
+travis
 trie
 tronscript
 tty
@@ -1688,6 +1711,7 @@ win32yank
 win64
 winbatch
 windo
+winreg
 wombat256
 workflow
 worktree
@@ -1738,29 +1762,3 @@ zshrc
 µBlock
 µMatrix
 µTP
-Tools
-travis
-SLists
-jinja2
-configtrait
-PySide
-matplotlib's
-SymPy
-psutil
-#hiddle
-frontend
-QtConsole
-winreg
-#_init__
-atan2
-atan
-asin
-acos
-Logcheck
-logcheck
-ValueError
-LevelFormatter
-Qt5Agg
-argv
-mainloop
-formatMessage

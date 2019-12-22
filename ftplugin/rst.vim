@@ -5,10 +5,6 @@
     " Last Modified: Oct 27, 2019
 " ============================================================================
 
-" Globals: {{{1
-let s:cpo_save = &cpoptions
-set cpoptions-=C
-
 let g:rst_style = 1
 
 " May 13, 2019: Updated. Grabbed this directly from $VIMRUNTIME/syntax/rst.vim
@@ -23,7 +19,10 @@ let g:rst_syntax_code_list = {
 let g:rst_use_emphasis_colors = 1
 let g:rst_fold_enabled = 1
 
-" Rst specific: {{{1
+" Now that globals are set check for b:did_ftplugin
+if exists('b:did_ftplugin') | finish | endif
+let b:did_ftplugin = 1
+
 setlocal textwidth=80
 setlocal expandtab
 setlocal spell!
@@ -61,14 +60,9 @@ setlocal suffixesadd=.py,.rst,.rst.txt
 
 let &l:path = py#PythonPath()
 
-" Sphinx Command: {{{1
 command! -buffer Sphinx call pydoc_help#sphinx_build(<q-args>)
 
-" The Official Ftplugin: {{{1
-
 setlocal comments=fb:.. commentstring=..\ %s
-
-" Let's redo the undo ftplugin
 
 let b:undo_ftplugin = 'setlocal tw< cms< com< cc< lbr< fdl< fdls< '
       \ . '|setlocal spell< isk< kp< mp< efm< sua< sr< '
@@ -90,18 +84,8 @@ if !exists('g:rst_style') || g:rst_style != 0
   let b:undo_ftplugin .= 'setlocal  ts< sw< sts<'
 endif
 
-if has('patch-7.3.867')  " Introduced the TextChanged event.
-  setlocal foldmethod=expr
-  setlocal foldexpr=RstFold#GetRstFold()
-  setlocal foldtext=RstFold#GetRstFoldText()
-  " augroup RstFold
-  "   autocmd TextChanged,InsertLeave <buffer> unlet! b:RstFoldCache
-  " augroup END
-  let b:undo_ftplugin .= 'setlocal fdm< foldexpr< foldtext<'
-                    \ . '|unlet! b:RstFoldCache'
-endif
-
-
-" Atexit: {{{1
-let &cpoptions = s:cpo_save
-unlet s:cpo_save
+setlocal foldmethod=expr
+setlocal foldexpr=RstFold#GetRstFold()
+setlocal foldtext=RstFold#GetRstFoldText()
+let b:undo_ftplugin .= 'setlocal fdm< foldexpr< foldtext<'
+                  \ . '|unlet! b:RstFoldCache'

@@ -169,7 +169,6 @@ function py#ALE_Python_Conf() abort  " {{{1
   endif
 
 endfunction
-
 function py#Py(...) abort
   " call py#Py('print("hey")')
   " works. But this isn't exactly how i want this done.
