@@ -46,7 +46,9 @@ Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-surround'
 " Plug 'tpope/vim-vinegar'
 
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+if has('python')
+  Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+endif
 Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }  " Follow spacemacs lead and use e for errors
 
 if exists('$TMUX')

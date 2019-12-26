@@ -4,11 +4,6 @@
     " Description: Ftplugin specific autoloaded functions
     " Last Modified: August 28, 2019
 " ============================================================================
-
-" Guard: {{{1
-let s:cpo_save = &cpoptions
-set cpoptions-=C
-
 function! ftplugins#ALE_JSON_Conf() abort  " {{{1
   " Standard fixers defined for JSON
   let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
@@ -35,7 +30,6 @@ function! ftplugins#ALE_JSON_Conf() abort  " {{{1
     let b:ale_linters_explicit = 1
   " endif
 endfunction
-
 function! ftplugins#FormatFile() abort  " {{{1
   let l:lines='all'
   " 'pyf expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
@@ -61,7 +55,6 @@ function! ftplugins#FormatFile() abort  " {{{1
 " or save any files. To revert a formatting, just undo.
 " autocmd BufWritePre *.h,*.cc,*.cpp call Formatonsave()
 endfunction
-
 function! ftplugins#ClangCheckimpl(cmd) abort  " {{{1
 " This is honestly really useful if you simply swap out the filetype
   if &autowrite | wall | endif
@@ -75,7 +68,6 @@ function! ftplugins#ClangCheckimpl(cmd) abort  " {{{1
   endif
   let g:clang_check_last_cmd = a:cmd
 endfunction
-
 function! ftplugins#ClangCheck()  abort  " {{{1
   let l:filename = expand('%')
   if l:filename =~ '\.\(cpp\|cxx\|cc\|c\)$'
@@ -87,7 +79,6 @@ function! ftplugins#ClangCheck()  abort  " {{{1
   endif
 
 endfunction
-
 function! ftplugins#ALE_CSS_Conf() abort  " {{{1
 
   let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
@@ -96,8 +87,6 @@ function! ftplugins#ALE_CSS_Conf() abort  " {{{1
     let b:ale_fixers += ['prettier']
   endif
 endfunction
-
-
 function! ftplugins#ALE_sh_conf() abort  " {{{1
   " this is probably a waste of time when compiler shellcheck exists
   " if we're using powershell or cmd on windows set ALEs default shell to bash
@@ -125,8 +114,6 @@ function! ftplugins#ALE_sh_conf() abort  " {{{1
     let b:ale_sh_shellcheck_executable = 'C:/tools/miniconda3/envs/neovim/bin/shellcheck.exe'
   endif
 endfunction
-
-
 function! ftplugins#ALE_Html_Conf() abort  " {{{1
 
   let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
@@ -136,7 +123,6 @@ function! ftplugins#ALE_Html_Conf() abort  " {{{1
   endif
 
 endfunction
-
 function! ftplugins#ALE_JS_Conf() abort  " {{{1
 
   if !has('unix')
@@ -150,8 +136,6 @@ function! ftplugins#ALE_JS_Conf() abort  " {{{1
   endif
 
 endfunction
-
-
 function! ftplugins#ALE_Vim_Conf() abort  " {{{1
   let b:ale_linters = ['ale_custom_linting_rules']
   let b:ale_linters_explicit = 1
@@ -160,27 +144,25 @@ function! ftplugins#ALE_Vim_Conf() abort  " {{{1
     let b:ale_linters += ['vint']
   endif
 endfunction
-
 function! ftplugins#VimPath() abort  " {{{1
 
   " I know you may be thinking, there are no include or defines in a vim file
   " what the hell do you need to muck with the path for.
   " autoloaded functions!
-  let s:path='.,**'
-  let s:path = s:path . ',' . expand('$VIMRUNTIME')
+  let s:path='.,**,'
+  let s:path = s:path . expand('$VIMRUNTIME') . ','
 
   if !exists('*stdpath') | let &l:path = s:path | return s:path | endif
 
-  let s:path = s:path . stdpath('config') . '/autoload'
+  let s:path = s:path . stdpath('config') . '/autoload,'
 
   " Idk if this is gonna glob the way I want.
-  let s:path = s:path . stdpath('data') . '/**1/autoload'
+  let s:path = s:path . stdpath('data') . '/**1/autoload,'
 
   let &l:path = s:path
   return s:path
 
 endfunction
-
 function! ftplugins#CPath() abort  " {{{1
 
   let s:path='.,**,,'
@@ -221,9 +203,3 @@ function! ftplugins#CPath() abort  " {{{1
   return s:path
 
 endfunction
-
-" Atexit: {{{1
-let &cpoptions = s:cpo_save
-unlet s:cpo_save
-
-" Vim: fdl=0:fdls=0:

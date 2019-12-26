@@ -4,7 +4,6 @@
     " Description: Syntax commands
     " Last Modified: Nov 13, 2019
 " ============================================================================
-
 function! syncom#HL() abort  " HL: Whats the highlighting group under my cursor? {{{1
   echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
 endfunction
@@ -14,11 +13,11 @@ function! syncom#HiC() abort  " HiC: Show hl group and fg color {{{1
   echomsg 'Foreground color: ' . synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'fg')
 
 endfunction
-function syncom#HiD() abort  " HiDebug: {{{1
-  " TODO: Debug
-  echo join(map(synstack(line('.'), col('.')),) synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'fg')
+function! syncom#HiD() abort  " HiDebug: {{{1
+  " TODO: Debug. The parenthesis got fucked up at some point so figure that out
+  echo join(map(synstack(line('.'), col('.')), synIDattr(synIDtrans(synID(line('.'), col('.'), 1)))), 'fg')
 endfunction
-function syncom#HiQF() abort  " HiAll: Now utilize quickfix {{{1
+function! syncom#HiQF() abort  " HiAll: Now utilize quickfix {{{1
   " synstack returns a list. takes lnum and col.
   " map is crazy specific in its argument requirements. map(list, string)
   " cexpr evals a command and adds it to the quickfist list
@@ -70,24 +69,29 @@ function! syncom#hitest() abort  " Hitest: An easier way of sourcing hitest {{{1
   endtry
   return v:true
 endfunction
-function syncom#grepprg() abort  " {{{1
+function! syncom#grepprg() abort  " {{{1
   " executable check was in ../plugin/syncom.vim but we haven't figured out
   " if we're using rg.exe or rg.exe
-  if executable('rg')
-    let s:rg = 'rg'
-  elseif executable('rg.exe')
-    let s:rg = 'rg.exe'
+  "
+  " rg's been giving me a ton of problems on windows and even on linux i never
+  " had it set up the way i wanted. i'm realizing fd is probably moreso what i
+  " want
+  if executable('fd')
+    let s:cmd = 'fd'
+    " Don't use color
+    let s:options = ' -H '
+  elseif executable('fd.exe')
+    let s:cmd = 'fd.exe'
+    let s:options = ' -H '
+  elseif executable('rg')
+    let s:cmd = 'rg'
+    let s:options = ' --vimgrep --no-messages --smart-case --no-messages '
+          \ . '--hidden --no-heading --max-columns 300 --max-columns-preview '
+          \ . ' --no-ignore-messages --trim . '
   else
-    throw 'syncom#grepprg: Rg not executable but grepprg set to it.'
+    throw 'syncom#grepprg: Neither fd nor rg are executable. Set grepprg to grep or something I guess.'
   endif
-
-  " actually between this coc and fzf maybe i should make rg options global
-  let s:rg_options = ' --vimgrep --no-messages --smart-case --no-messages '
-        \ . '--hidden --no-heading --max-columns 300 --max-columns-preview '
-        \ . ' --no-ignore-messages --trim . '
-  " Well Im not gonna do it now.
-
-  let s:grep = s:rg . s:rg_options
+  let s:grep = s:cmd . s:options
   let &grepprg = s:grep
   return s:grep
 endfunction

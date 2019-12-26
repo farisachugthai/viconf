@@ -64,6 +64,8 @@ try | set switchbuf=useopen,usetab,split | catch | endtry
 set splitbelow splitright sidescroll=5 hidden
 set number relativenumber cmdheight=1
 set isfname-==
+set iskeyword=@,48-57,_,192-255   " Idk how but i managed to mess up the default isk
+
 if filereadable(stdpath('config') . '/spell/en.utf-8.add')
   let &spellfile = stdpath('config') . '/spell/en.utf-8.add'
 endif

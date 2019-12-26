@@ -55,7 +55,7 @@ setlocal foldmethod=syntax
 setlocal indentexpr=GetVimIndent()
 setlocal indentkeys+==end,=else,=cat,=fina,=END,0\\,0=\"\\\
 
-let b:undo_indent = "setl indentkeys< indentexpr<"
+let b:undo_indent = "setlocal indentkeys< indentexpr<"
 let &l:commentstring='" %s'
 let &l:path = ftplugins#VimPath()
 

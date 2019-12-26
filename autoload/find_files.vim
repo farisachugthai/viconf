@@ -4,9 +4,6 @@
   " Description: Find files autoload
   " Last Modified: August 02, 2019
 " ============================================================================
-
-" FZF: {{{1
-" An action can be a reference to a function that processes selected lines
 function! find_files#build_quickfix_list(lines) abort  " {{{1
   call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
   copen
@@ -54,12 +51,12 @@ endfunction
 function! find_files#bufopen(e) abort  " {{{1
   execute 'buffer' matchstr(a:e, '^[ 0-9]*')
 endfunction
-function find_files#FZFMru() abort  " {{{1
-  call fzf#run(fzf#wrap('history'
-      \ 'source'  :   v:oldfiles,
-      \ 'sink'    :   'edit',
-      \ 'options' :  ['--multi', '--ansi'],
-      \ 'down'    :    '40%'}))
+function! find_files#FZFMru() abort  " {{{1
+    call fzf#run(fzf#wrap('history', {
+        \ 'source'  :   v:oldfiles,
+        \ 'sink'    :   'edit',
+        \ 'options' :  ['--multi', '--ansi'],
+        \ 'down'    :    '40%'}))
 endfunction
 function! find_files#FZFGit() abort  " {{{1
   " Remove trailing new line to make it work with tmux splits

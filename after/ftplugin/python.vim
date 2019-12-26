@@ -5,10 +5,6 @@
     " Last Modified: Oct 18, 2019
 " ============================================================================
 
-" Guards: {{{1
-let s:cpo_save = &cpoptions
-set cpoptions-=C
-
 " Options: {{{1
 
 " Globals
@@ -150,6 +146,3 @@ let b:undo_ftplugin = 'setlocal lbr< tw< cms< et< sts< ts< sw< cc< fdm< kp<'
 " Dude i think that this just starts autofiring if you have ale or coc enabled
 " jesus christ is it annoying
       " \ . '|unmap <buffer> <F5>'
-
-let &cpoptions = s:cpo_save
-unlet s:cpo_save

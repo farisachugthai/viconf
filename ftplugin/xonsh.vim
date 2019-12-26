@@ -5,10 +5,7 @@
   " Last Modified: November 29, 2019
 " ============================================================================
 
-" Guard: {{{1
-
 if exists('b:did_ftplugin') | finish | endif
-
 
 " Sourcing Everything: {{{1
 runtime $VIMRUNTIME/ftplugin/python.vim

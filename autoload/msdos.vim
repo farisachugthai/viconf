@@ -24,7 +24,6 @@ function! msdos#set_shell_cmd() abort  " {{{1
   echomsg 'Using cmd as the system shell.'
   return
 endfunction
-
 function! msdos#invoke_cmd(command) abort  " {{{1
 
   if exists('&shellslash')
@@ -35,7 +34,7 @@ function! msdos#invoke_cmd(command) abort  " {{{1
   if !empty(a:command)
     let s:ret = systemlist(a:command)
   else
-    call msdos#CmdTerm
+    call msdos#CmdTerm()
   endif
 
   if exists('&shellslash')
@@ -49,7 +48,6 @@ function! msdos#invoke_cmd(command) abort  " {{{1
   endif
 
 endfunction
-
 function! msdos#CmdTerm(...) abort  " {{{1
   " Handle args later
 
@@ -71,7 +69,6 @@ function! msdos#CmdTerm(...) abort  " {{{1
   endif
 
 endfunction
-
 function! msdos#PowerShell() abort  " {{{1
 
   " 07/23/2019: Just found out that even when using powershell comspec is
@@ -89,7 +86,6 @@ function! msdos#PowerShell() abort  " {{{1
   echomsg 'Using powershell as the system shell.'
   return
 endfunction
-
 function! msdos#pwsh_help(helppage) abort   " {{{1
   echomsg 'Setting the shell to powershell.'
   call msdos#PowerShell()

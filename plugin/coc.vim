@@ -10,6 +10,14 @@
 let $NVIM_COC_LOG_LEVEL = 'debug'
 let $NVIM_COC_LOG_FILE = stdpath('data') . '/site/coc.log'
 
+if exists('plugs')  " installed with vim-plug
+  if index(keys(plugs), 'coc.nvim') == -1
+    " yes i actually mean the #. If this gets funky check that -1 the number
+    " is being compared to the number not the str
+    finish
+  endif
+endif
+
 " TODO:
 " so obviously only do this on windows. shit there are so many things that we need to configure
 " list.source.tags.command: ~/bin/ctags.exe -R --options=~/.ctags/universal_ctags.ctags .,

@@ -11,6 +11,10 @@ let g:rst_style = 1
 "
 " Use fewer code lists it ends up accounting for 50% of startuptime when
 " using rst docs
+" It took me like 10 tries to get this right so here's a reminder of how dict
+" syntax works.
+" call extend(g:rst_syntax_code_list, {'javascript': ['js', 'javascript']})
+" to add javascript highlighting to an rst doc
 let g:rst_syntax_code_list = {
     \ 'python': ['python', 'python3', 'ipython'],
     \ 'sh': ['sh', 'bash'],
@@ -35,7 +39,7 @@ setlocal colorcolumn=80
 setlocal linebreak
 setlocal foldlevel=1
 setlocal foldlevelstart=1
-
+setlocal wildignore+=*.html,*.css
 setlocal iskeyword+=.
 
 " Only because I want to follow module names the same way as python
@@ -43,13 +47,17 @@ setlocal include=^\\s*\\(from\\\|import\\)
 
 setlocal includeexpr=substitute(v:fname,'\\.','/','g')
 
-" don't do the executable(sphinx-build) check here its in ../compiler/rst.vim
 compiler rst
 
-if filereadable('conf.py')
-  let &l:makeprg .= ' . ../build/html '
-elseif glob('../conf.py')
-  let &l:makeprg .= ' .. ../../build/html '
+if executable('sphinx-build')
+  let &l:makeprg = 'sphinx-build -b html'
+
+  if filereadable('conf.py')
+    let &l:makeprg .= ' . ../build/html '
+  elseif glob('../conf.py')
+    let &l:makeprg .= ' .. ../../build/html '
+  endif
+
 endif
 
 " Actually from the python ftplugin: {{{2
@@ -70,7 +78,7 @@ command! -buffer Sphinx call pydoc_help#sphinx_build(<q-args>)
 setlocal comments=fb:.. commentstring=..\ %s
 
 let b:undo_ftplugin = 'setlocal tw< cms< com< cc< lbr< fdl< fdls< '
-      \ . '|setlocal spell< isk< kp< mp< efm< sua< sr< '
+      \ . '|setlocal spell< wig< isk< kp< mp< efm< sua< sr< '
       \ . '|setlocal cin< cinw< path< '
       \ . '|setlocal include<'
       \ . '|setlocal indentkeys<'

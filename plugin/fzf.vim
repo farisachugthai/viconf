@@ -16,6 +16,9 @@ if !exists('$FZF_DEFAULT_COMMAND')  || !has('unix')
   let $FZF_DEFAULT_COMMAND = 'fd -H --color always -t f '
 endif
 
+" Idk if this is gonna do anything on WSL but let's see
+let g:fzf_launcher = 'xterm -e bash -ic %s'
+
 let g:fzf_action = {
   \ 'ctrl-q': function('find_files#build_quickfix_list'),
   \ 'ctrl-t': 'tab split',

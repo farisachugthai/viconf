@@ -30,7 +30,10 @@ function! s:_PythonPath() abort  " {{{1
   let s:path = '.,,**,'
 
   " Set path based on nvims dynamically defined remote python host.
-  if !empty('g:python3_host_prog')
+  " WHAT THE FUCK! This is currently empty why are the lines below executing
+  " omfg vim
+  " if !empty('g:python3_host_prog')
+  if exists('g:python3_host_prog')
 
     " Note: Regardless of whether its unix or not, add dirs in reverse order
     " as we're appending them to the set option
@@ -160,12 +163,12 @@ function py#ALE_Python_Conf() abort  " {{{1
     let b:ale_fixers+=['black']
   endif
 
-  if executable('yapf')
-    let b:ale_fixers += ['yapf']
-  endif
+  " if executable('yapf')
+  "   let b:ale_fixers += ['yapf']
+  " endif
 
   if executable('autopep8')
-      let b:ale_fixers += ['autopep8']
+    let b:ale_fixers += ['autopep8']
   endif
 
 endfunction

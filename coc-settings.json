@@ -236,7 +236,8 @@
   ],
   "list.source.diagnostics.defaultOptions": [
     "--auto-preview",
-    "--normal"
+    "--top",
+    "--input"
   ],
   "list.source.extensions.defaultOptions": [
     "--top",
@@ -470,7 +471,7 @@
     ".venv"
   ],
   "python.workspaceSymbols.rebuildOnStart": true,
-  "python.workspaceSymbols.tagFilePath": "${workspaceFolder}/tags",
+  "python.workspaceSymbols.tagFilePath": "${workspaceFolder}/.vscode/tags",
   "refactor.afterContext": 0,
   "refactor.beforeContext": 0,
   "refactor.openCommand": "vsplit",

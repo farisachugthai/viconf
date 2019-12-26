@@ -45,10 +45,10 @@ command! -nargs=+ -complete=file Sedit call unix#SpecialEdit(<q-args>, <q-mods>)
 " by fzf or the vim built-in, and they both have quite different looking
 " interfaces IMO.
 if exists('*fzf#wrap')
-  nnoremap <M-x>      <Cmd>Commands<CR>
-  nnoremap <C-x><C-b> <Cmd>Buffers<CR>
+  nnoremap <M-x>      <Cmd>FufCommands<CR>
+  nnoremap <C-x><C-b> <Cmd>FufBuffers<CR>
 else
-  nnoremap <M-x>      <Cmd>commands<CR>
+  nnoremap <M-x>      <Cmd>verbose command<CR>
   nnoremap <C-x><C-b> <Cmd>buffers<CR>
 endif
 
