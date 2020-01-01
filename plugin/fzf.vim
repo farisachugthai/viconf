@@ -13,7 +13,7 @@ if !exists(':FufRg') | call plug#load('fzf.vim') | endif
 " Set up windows to have the correct commands
 if !exists('$FZF_DEFAULT_COMMAND')  || !has('unix')
   " let $FZF_DEFAULT_COMMAND = 'rg --hidden -M 200 -m 200 --smart-case --passthru --files . '
-  let $FZF_DEFAULT_COMMAND = 'fd -H --color always -t f '
+  let $FZF_DEFAULT_COMMAND = 'fd -H --follow -d 6 --color always -t f '
 endif
 
 " Idk if this is gonna do anything on WSL but let's see
@@ -38,9 +38,9 @@ endif
 let g:fzf_ag_options = ' --smart-case -u -g " " --'
 
 " TODO: Might wanna consider turning this into a list
-let g:fzf_rg_options = ' --hidden --max-columns 300 --max-depth 8 --max-count 50 '
-      \. '--color ansi --no-column --no-line-number  --no-heading '
-      \. ' --auto-hybrid-regex --max-columns-preview --no-messages --smart-case '
+let g:fzf_rg_options = ' --hidden --max-columns 300 --max-depth 8 '
+      \. '--max-count 50 --color ansi --context 0 '
+      \. ' --auto-hybrid-regex --max-columns-preview --smart-case '
       \. '--glob "!{.git,node_modules,*.txt,*.csv,*.json,*.html}" '
 
 

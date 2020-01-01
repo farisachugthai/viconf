@@ -17,7 +17,7 @@ let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux) && empty(s:wsl)
 
 call plug#begin(stdpath('data') . '/plugged')
 
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', {'branch': 'master'}
 let $NVIM_COC_LOG_FILE = stdpath('data')  . '/site/coc.log'
 let $NVIM_COC_LOG_LEVEL = 'ERROR'
 
@@ -73,6 +73,7 @@ nnoremap U <Cmd>UndotreeToggle<CR>
 " The 'tabular' plugin must come _before_ 'vim-markdown'.
 Plug 'itspriddle/vim-shellcheck', { 'for': ['sh', 'bash'] }
 Plug 'mitsuhiko/vim-jinja', {'for': ['html', 'jinja2', 'htmljinja', 'htmldjango'] }
+Plug 'cespare/vim-toml'
 Plug 'ervandew/supertab'
 Plug 'junegunn/vim-peekaboo'
 Plug 'vim-voom/voom', {'on': ['Voom', 'VoomToggle', 'VoomExec'] }

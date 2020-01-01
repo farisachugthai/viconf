@@ -241,5 +241,7 @@ augroup CocUser
 	autocmd CursorHold * silent call CocActionAsync('highlight')
 
   " Dude holy fuck is this annoying
+  " Shit which one.
   autocmd! CmdlineEnter CompleteDone
+  " autocmd! CmdwinEnter *
 augroup END
