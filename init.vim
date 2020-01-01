@@ -15,6 +15,9 @@ let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Everv
 let s:wsl = !empty($WSL_DISTRO_NAME)
 let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux) && empty(s:wsl)
 
+if !empty('s:termux') | call find_files#termux_remote() | elseif !has('unix')
+  | call find_files#msdos_remote() | else | call find_files#ubuntu_remote() | endif
+
 set synmaxcol=400 termguicolors  " Set up the colorscheme
 syntax sync fromstart linebreaks=2
 
@@ -32,7 +35,8 @@ if s:material_gruvbox == v:false | call syncom#gruvbox() | endif
 " Set shell correctly. TODO: do i still need this?
 " if !has('unix') | runtime autoload/msdos.vim | call msdos#Cmd() | endif
 if has('unnamedplus') | set clipboard+=unnamed,unnamedplus | else | set clipboard+=unnamed | endif
-set pastetoggle=<F7>
+
+set pastetoggle=<F3>   " fuck me this is what windows terminal uses for something
 let g:loaded_vimballPlugin = 1
 let g:loaded_getscriptPlugin = 1
 let g:loaded_2html_plugin = 1

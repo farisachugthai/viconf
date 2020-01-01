@@ -5,36 +5,13 @@
     " Last Modified: Jul 20, 2019
 " ============================================================================
 
-" Options: {{{1
-
-set nohlsearch
-if &textwidth!=0
-  setl colorcolumn=+1
-else
-  setl colorcolumn=80
-endif
-
-" let &grepprg = syncom#grepprg(<q-args>)
-" note you can't do this. no args to options
-let &grepprg = syncom#grepprg()
-
-" Search Mappings: {{{1
-
-" Dude read over :he getcharsearch(). Now ; and , search forward backward no matter what!!!
-nnoremap <expr> ; getcharsearch().forward ? ';' : ','
-nnoremap <expr> , getcharsearch().forward ? ',' : ';'
-
-" Search mappings: These will make it so that going to the next one in a
-" search will center on the line it's found in.
-nnoremap n nzzzv
-nnoremap N Nzzzv
-
 " Highlighting Commands: {{{1
 
 " Did you know that both -complete=color and -complete=highlight are things??
+" These commands all just describe the color and highlighting group under your
+" cursor.
 command! HL call syncom#HL()
 command! HiC call syncom#HiC()
-" command! HiD call <SID>syncom#HiD()
 command! HiQF call syncom#HiQF()
 
 command! SyntaxInfo call syncom#get_syn_info()
@@ -45,13 +22,13 @@ command! HiTest call syncom#hitest()
 " Plug Mappings: {{{1
 " To attempt making this a little more modular.
 
-nnoremap <Plug>(HL) call syncom#HL()
+nnoremap <Plug>(HL) <Cmd>call syncom#HL()<CR>
 nnoremap <Plug>(HiC) <Cmd>HiC<CR>
 nnoremap <Plug>HiQF <Cmd>HiQF<CR>
 nnoremap <Plug>SyntaxInfo <Cmd>SyntaxInfo<CR>
 
-if !hasmapto('<Plug>HL')
-  nnoremap <Leader>h <Plug>HL()
+if !hasmapto('<Plug>(HL)')
+  nnoremap <Leader>h <Plug>(HL)
 endif
 
 " QuickFix Window: {{{1

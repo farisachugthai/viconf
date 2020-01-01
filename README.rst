@@ -426,6 +426,7 @@ For example, :kbd:`C-f` only in insert mode invokes FZF.
 
 That code can be found `here.`_
 
+
 Different Shells
 ================
 
@@ -456,7 +457,8 @@ CTRL-I			Go to [count] newer cursor position in jump list
 
 That's legitimately wonderful to know!
 
-Now I just need to work that in, and make a few utility mappings for the qf.
+Now I just need to work that in, and make a few utility mappings for the
+quickfix window.
 
 
 Folds

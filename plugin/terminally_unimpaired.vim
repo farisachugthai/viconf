@@ -10,7 +10,7 @@ if executable('htop')  " {{{1
   " even in vim8.0+. Also requires htop which more than likely rules out Win32.
 
   " Need to use enew in case your previous buffer setl nomodifiable
-  noremap <Leader>ah <Cmd>wincmd v<CR><bar><Cmd>enew<CR><bar>term://htop
+  nnoremap <Leader>ah <Cmd>wincmd v<CR><bar><Cmd>enew<CR><bar>term://htop
 endif
 
 set wildcharm=<C-z>  "  Autocompletion on the cmdline: {{{1

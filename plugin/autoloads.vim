@@ -49,16 +49,41 @@ inoremap gI gi
 " just cuz. plus isn't the complete compiler option kinda cool?
 command! -complete=compiler -nargs=? -buffer Make make <q-args> %
 
-if has('unix')
-  if exists($ANDROID_DATA)   " Termux
-    call find_files#termux_remote()
-  else   " Ubuntu like or WSL
-    call find_files#ubuntu_remote()
-  endif
-else  " windows not wsl
-  call find_files#msdos_remote()
-endif
-
 if &tabstop > 4 | setlocal tabstop=4 | endif
 if &shiftwidth > 4  | setlocal shiftwidth=4 | endif
 setlocal expandtab smarttab softtabstop=4
+
+" Search: {{{
+set nohlsearch
+if &textwidth!=0
+  setl colorcolumn=+1
+else
+  setl colorcolumn=80
+endif
+
+" let &grepprg = syncom#grepprg(<q-args>)
+" note you can't do this. no args to options
+call syncom#grepprg()
+
+" Dude read over :he getcharsearch(). Now ; and , search forward backward no matter what!!!
+nnoremap <expr> ; getcharsearch().forward ? ';' : ','
+nnoremap <expr> , getcharsearch().forward ? ',' : ';'
+
+" Search mappings: These will make it so that going to the next one in a
+" search will center on the line it's found in.
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+" Dude i didn't know this. This is dope
+							" *gstar*
+" g*			Like "*", but don't put "\<" and "\>" around the word.
+			" This makes the search also find matches that are not a
+			" whole word.
+
+							" *g#*
+" g#			Like "#", but don't put "\<" and "\>" around the word.
+			" This makes the search also find matches that are not a
+			" whole word.
+
+nnoremap * g*
+nnoremap # g#

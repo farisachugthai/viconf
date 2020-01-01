@@ -10,7 +10,7 @@ setlocal shiftwidth=2 expandtab softtabstop=2
 runtime ftplugin/html.vim
 
 syntax sync fromstart
-syntax include $VIMRUNTIME/django.vim
+syntax include $VIMRUNTIME/syntax/django.vim
 
 let b:undo_ftplugin = 'setlocal sw< et< sts< '
       \ . '|unlet! b:undo_ftplugin'

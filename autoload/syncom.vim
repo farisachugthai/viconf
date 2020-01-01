@@ -69,6 +69,35 @@ function! syncom#hitest() abort  " Hitest: An easier way of sourcing hitest {{{1
   endtry
   return v:true
 endfunction
+function! s:rg_setup() abort
+  if executable('rg')
+    let s:cmd = 'rg'
+  elseif executable('rg.exe')
+    let s:cmd = 'rg.exe'
+  else
+    return False
+  endif
+
+  let s:options = ' --vimgrep --no-messages --smart-case --no-messages '
+        \ . '--hidden --no-heading --max-columns 300 --max-columns-preview '
+        \ . ' --no-ignore-messages --trim . '
+  let g:grep = s:cmd . s:options
+  let &grepprg = g:grep
+  return g:grep
+endfunction
+function! s:fd_setup() abort
+  if executable('fd')
+    let s:cmd = 'fd'
+  elseif executable('fd.exe')
+    let s:cmd = 'fd.exe'
+  else
+    throw 'syncom#grepprg: Neither fd nor rg are executable. Set grepprg to grep or something I guess.'
+  endif
+  let s:options = ' -H '
+  let g:grep = s:cmd . s:options
+  let &grepprg = g:grep
+  return g:grep
+endfunction
 function! syncom#grepprg() abort  " {{{1
   " executable check was in ../plugin/syncom.vim but we haven't figured out
   " if we're using rg.exe or rg.exe
@@ -76,24 +105,10 @@ function! syncom#grepprg() abort  " {{{1
   " rg's been giving me a ton of problems on windows and even on linux i never
   " had it set up the way i wanted. i'm realizing fd is probably moreso what i
   " want
-  if executable('fd')
-    let s:cmd = 'fd'
-    " Don't use color
-    let s:options = ' -H '
-  elseif executable('fd.exe')
-    let s:cmd = 'fd.exe'
-    let s:options = ' -H '
-  elseif executable('rg')
-    let s:cmd = 'rg'
-    let s:options = ' --vimgrep --no-messages --smart-case --no-messages '
-          \ . '--hidden --no-heading --max-columns 300 --max-columns-preview '
-          \ . ' --no-ignore-messages --trim . '
-  else
-    throw 'syncom#grepprg: Neither fd nor rg are executable. Set grepprg to grep or something I guess.'
+  let s:ret = s:rg_setup()
+  if s:ret == v:false
+    let s:second_try = s:fd_setup()
   endif
-  let s:grep = s:cmd . s:options
-  let &grepprg = s:grep
-  return s:grep
 endfunction
 function syncom#gruvbox() abort  " {{{1 old colorscheme
   if empty(globpath(&rtp, 'colors/gruvbox.vim'))

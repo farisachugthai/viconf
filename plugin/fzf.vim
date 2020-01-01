@@ -342,3 +342,8 @@ command! -bang -nargs=? -complete=dir Files
     \ 'options': [
     \ '--layout=reverse', '--info=inline', '--preview', '~/.vim/plugged/fzf.vim/bin/preview.sh {}'
     \ ]}, <bang>0)
+
+" Override his command to add completion
+" Wait theres a FufGFiles AND a FufGitFiles. What the hell is GitFiles?
+" I actually can't tell the difference. Weird.
+command! -bang -nargs=? -complete=file GFiles call fzf#vim#gitfiles(<q-args>, <bang>0)

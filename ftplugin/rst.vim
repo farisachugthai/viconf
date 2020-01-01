@@ -73,7 +73,8 @@ setlocal suffixesadd=.py,.rst,.rst.txt
 
 let &l:path = py#PythonPath()
 
-command! -buffer Sphinx call pydoc_help#sphinx_build(<q-args>)
+" Isn't a func anymore
+" command! -buffer Sphinx call pydoc_help#sphinx_build(<q-args>)
 
 setlocal comments=fb:.. commentstring=..\ %s
 

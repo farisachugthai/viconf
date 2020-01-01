@@ -2,4 +2,5 @@
   "python.linting.flake8Enabled": true,
   "python.jediEnabled": false,
   "python.formatting.provider": "black",
+  "python.diagnostics.sourceMapsEnabled": true,
 }

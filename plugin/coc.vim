@@ -38,18 +38,26 @@ let g:coc_quickfix_open_command = 'cwindow'
 let g:coc_snippet_next = '<C-j>'
 let g:coc_snippet_prev = '<C-k>'
 
-	" call coc#config('coc.preferences', {
-	" 	\ 'timeout': 1000,
-	" 	\})
-	" call coc#config('languageserver', {
-	" 	\ 'ccls': {
-	" 	\   "command": "ccls",
-	" 	\   "trace.server": "verbose",
-	" 	\   "filetypes": ["c", "cpp", "objc", "objcpp"]
-	" 	\ }
-	" 	\})
+" call coc#config('coc.preferences', {
+" 	\ 'timeout': 1000,
+" 	\})
+" call coc#config('languageserver', {
+" 	\ 'ccls': {
+" 	\   "command": "ccls",
+" 	\   "trace.server": "verbose",
+" 	\   "filetypes": ["c", "cpp", "objc", "objcpp"]
+" 	\ }
+" 	\})
 
-"
+" This is throwing errors. What am i doing wrong?
+" if !has('unix')
+"   call coc#config('python.condaPath', {
+"         \ 'C:/tools/vs/2019/Community/Common7/IDE/Extensions/Microsoft/Python/Miniconda/Miniconda3-x64/Scripts/conda'
+"         \ })
+" " else
+" endif
+
+
 " TODO: Might need to open a pull request he states that these are mapped by
 " default. omap af and omap if didn't show anything
 onoremap af <Plug>(coc-funcobj-a)
@@ -232,4 +240,6 @@ augroup CocUser
   autocmd CompleteDone * pclose
 	autocmd CursorHold * silent call CocActionAsync('highlight')
 
+  " Dude holy fuck is this annoying
+  autocmd! CmdlineEnter CompleteDone
 augroup END

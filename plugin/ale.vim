@@ -2,29 +2,8 @@
     " File: ale.vim
     " Author: Faris Chugthai
     " Description: Ale configuration. Had to be moved out of after/plugin
-    " Last Modified: Oct 06, 2019
+    " Last Modified: Dec 27, 2019
 " ============================================================================
-
-" Mappings: {{{1
-noremap <Leader>a <Cmd>ALEEnable<CR><Cmd>normal! zz <CR><Cmd>echomsg 'ALE Enabled'<CR>
-
-" Follow the lead of vim-unimpaired with a for ale
-noremap ]a <Cmd>ALENextWrap<CR>zz
-noremap [a <Cmd>ALEPreviousWrap<CR>zz
-
-" `:ALEInfoToFile` will write the ALE runtime information to a given filename.
-" The filename works just like |:w|.
-
-" <Meta-a> now gives detailed messages about what the linters have sent to ALE
-noremap <A-a> <Cmd>ALEDetail<CR>zz
-
-" I'm gonna make all my ALE mappings start with Alt so it's easier to
-" distinguish
-noremap <A-r> <Cmd>ALEFindReference<CR>
-
-" Dude why can't i get plug mappings right???
-" noremap <A-i> <Plug>(ale-info)zzza
-noremap <A-i> <Cmd>ALEInfo<CR>
 
 " Options: {{{1
 
@@ -188,3 +167,36 @@ let g:ale_pattern_options = {
 \       'ale_fixers': ['eslint'],
 \   },
 \}
+
+
+" LSP:
+let g:ale_lsp_show_message_severity = 'information'
+
+
+" Mappings: {{{1
+nnoremap <Leader>a <Cmd>ALEEnable<CR>
+      \ <Cmd>normal! zzzM <CR>
+      \ call AleMappings()<CR>
+      \ <Cmd>echomsg 'ALE Enabled'<CR>
+
+" wait to map these because none of these mappings are gonna work unless
+" if exists('g:loaded_ale')
+" actually i have a better idea
+function! AleMappings() abort
+
+  " Follow the lead of vim-unimpaired with a for ale
+  nnoremap ]a <Cmd>ALENextWrap<CR>zz
+  nnoremap [a <Cmd>ALEPreviousWrap<CR>zz
+
+  " `:ALEInfoToFile` will write the ALE runtime information to a given filename.
+  " The filename works just like |:w|.
+
+  " <Meta-a> now gives detailed messages about what the linters have sent to ALE
+  nnoremap <A-a> <Cmd>ALEDetail<CR>zz
+
+  " I'm gonna make all my ALE mappings start with Alt so it's easier to distinguish
+  nnoremap <A-r> <Cmd>ALEFindReference<CR>
+
+  " Dude why can't i get plug mappings right???
+  nnoremap <A-i> <Cmd>ALEInfo<CR>
+endfunction

@@ -11,11 +11,19 @@
 let g:python_highlight_all = 1
 let g:python_space_error_highlight = 1
 
+" Indent after an open paren: >
+	let g:pyindent_open_paren = 'shiftwidth() * 2'
+" Indent after a nested paren: >
+	let g:pyindent_nested_paren = 'shiftwidth()'
+" Indent for a continuation line: >
+	let g:pyindent_continue = 'shiftwidth() * 2'
+
 if &filetype !=#'python' && &filetype !=#'xonsh' | finish | endif
 
 runtime! $VIMRUNTIME/ftplugin/python.vim
 if exists('b:did_ftplugin') | unlet! b:did_ftplugin | endif
 
+syntax sync fromstart
 setlocal nolinebreak  " Dont set this on itll create syntaxerors
 setlocal textwidth=120
 setlocal tagcase=smart
@@ -40,9 +48,6 @@ setlocal indentkeys-=0#
 setlocal include=^\\s*\\(from\\\|import\\)
 " this is in the help docs for `:he includeexpr` and states for java but i bet
 " itd work for python
-" TODO: from .thisdir import something
-" is broken as it changes the single . to a / need to implement if only .[a-z]
-" then ./
 setlocal includeexpr=substitute(v:fname,'\\.','/','g')
 
 setlocal cinkeys-=0#
@@ -52,32 +57,24 @@ setlocal indentkeys-=0#
 " linters to react.
 setlocal colorcolumn=80,120
 setlocal foldmethod=indent
-
-" setlocal keywordprg=pydoc
-" let &l:keywordprg = ':PydocThis' . expand('<cWORD>')
-" let &l:keywordprg = pydoc_help#SplitPydocCword()
-
+setlocal keywordprg=python3\ -m\ pydoc
 " Use xnoremap because I wouldn't want this in select mode
 " xnoremap K <Cmd>'<,'>PydocThis<CR>
 
 setlocal suffixesadd+=.py
 setlocal omnifunc=python3complete#Complete
 
-" YES I FINALLY GOT THIS RIGHT! In order to search the path with gf but still
-" stop when on '.' when using keys like w and e, add . period isfname, don't
-" add it to iskeyword. Jesus Christ I swear I've tried every iteration and
-" then had git unset it a dozen times.
 setlocal isfname+=.
-" NOPE. isk needs it to work. sorry.
-setlocal iskeyword+=.
+setlocal isk-=.
+
+" Possibly chalk this up to one of the many tab related and necessary option
+" python requires you set
 " *'shiftround'* *'sr'* *'noshiftround'* *'nosr'*
 " 'shiftround' 'sr'	boolean	(default off) global
 	" Round indent to multiple of 'shiftwidth'.  Applies to > and <
 	" commands.  CTRL-T and CTRL-D in Insert mode always round the indent to
 	" a multiple of 'shiftwidth' (this is Vi compatible).
 setlocal shiftround
-" Possibly chalk this up to one of the many tab related and necessary option
-" python requires you set
 
 " Compiler: {{{1
 
@@ -94,8 +91,12 @@ endif
 " Mappings: {{{1
 
 " Don't know how I haven't done this yet.
+" TODO: Add ranges so we can do py3do on lines
 noremap <buffer> <F5> <Cmd>py3f %<CR>
 noremap! <buffer> <F5> <Cmd>py3f %<CR>
+
+" ../../autoload/pydoc_help.vim
+nnoremap <buffer> K <Cmd>PydocThis<CR>
 
 " Formatters: {{{1
 

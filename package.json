@@ -1,0 +1,27 @@
+{
+  "name": "viconf",
+  "version": "1.0.0",
+  "description": "======== readme ========",
+  "main": "index.js",
+  "dependencies": {
+    "coc.nvim": "^0.0.74",
+    "prettier": "^1.19.1"
+  },
+  "devdependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/farisachugthai/viconf.git"
+  },
+  "author": "Faris Chugthai",
+  "license": "MIT",
+  "readme": "README.rst",
+  "private": true,
+  "scripts":{
+    "lint": "tslint -p .",
+    "tagfunc": "./rplugin/node/coc_tag.js"
+  },
+  "bugs": {
+    "url": "https://github.com/farisachugthai/viconf/issues"
+  },
+  "homepage": "https://github.com/farisachugthai/viconf#readme"
+}

@@ -26,23 +26,61 @@ the following structure.::
 Filetype plugins are listed for all the filetypes I commonly use.
 
 ``&isfname`` and ``&iskeyword``
---------------------------------
+================================
 
-Before FZF. I had way too much trouble getting these 2 set right.
+Before FZF. I had way too much trouble getting these 2 set right for python
+files.
 
-From :file:`<after/ftplugin/python.vim>`_.::
+``&isfname`` dictates what files are looked up in the ``&path`` variable.
+This dictates a HUGE number of things, like what paths are considered
+for ``:find`` and the ``gf`` family of mappings.
+
+By adding a period to this variable, Vim knows to include it when looking for
+python imports.
+
+So something like:
+
+.. code-block:: python
+
+   from IPython.core.interactiveshell ...
+
+Would count as 1 word rather than 3. By setting::
+
+   setlocal includeexpr=substitute(v:fname,'\\.','/','g')
+   setlocal suffixesadd=.py
+
+We convert the periods to forward-slashes, and search the path for a file named
+IPython/core/interactiveshell.py.
+
+Perfect!
+
+However, I didn't want to skip :kbd:`.` as a word delimiter. When using
+:kbd:`w` and :kbd:`e` to move around, if a period is not considered as a word
+delimiter, it becomes very easy to skip over way too much of a word.
+
+Therefore ``&iskeyword`` needed to remove the period. Then w and e behave
+normally while still allowing every feature in Vim related to the path to work.
+
+Tldr
+----
+
+From my ftplugin for python files :file:`<after/ftplugin/python.vim>`_.::
 
    " YES I FINALLY GOT THIS RIGHT! In order to search the path with gf but still
    " stop when on '.' when using keys like w and e, add . period isfname, don't
    " add it to iskeyword. Jesus Christ I swear I've tried every iteration and
    " then had git unset it a dozen times.
    setlocal isfname+=.
+   setlocal isk-=.
+
+.. todo::
+   from .thisdir import something
+   is broken as it changes the single . to a / need to implement if only .[a-z]
+   then ./
 
 
 FZF Mappings
-------------
-
-.. gotta give this one to riv wouldn't have been able to make this table otherwise
+============
 
 +------------------+-----------------------------------------------------------+
 | Command          | List                                                      |
@@ -97,8 +135,8 @@ FZF Mappings
 +------------------+-----------------------------------------------------------+
 
 
-Special Shoutout to netrw
--------------------------
+Special Shout Out to netrw
+============================
 
 I had no idea you could do this.
 

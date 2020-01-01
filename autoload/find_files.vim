@@ -144,10 +144,9 @@ function! find_files#ubuntu_remote() abort  " {{{1
 
 endfunction
 function! find_files#msdos_remote() abort  " {{{1
-  " let g:python3_host_prog = 'C:/tools/miniconda3/envs/neovim/python.exe'
-  let g:python3_host_prog = exepath('python3')
-  " let g:python_host_prog = 'C:/tools/miniconda3/envs/py2/python.exe'
-  let g:python_host_prog = exepath('python')
+  " Don't set python paths dynamically it's such a headache
+  let g:python3_host_prog = 'C:/tools/vs/2019/Community/Common7/IDE/Extensions/Microsoft/Python/Miniconda/Miniconda3-x64/python.exe'
+  let g:python_host_prog = 'C:/Python27/python.exe'
   let g:loaded_ruby_provider = 1
   let g:node_host_prog = 'C:/tools/nvm/v13.0.1/neovim-node-host'
   let g:clipboard = {

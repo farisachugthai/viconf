@@ -5,23 +5,22 @@
     " Last Modified: Nov 02, 2019
 " ============================================================================
 
-" Autocmds:
-"
 augroup PydocHelp
   au!
   autocmd Filetype man,help setlocal number relativenumber
   autocmd Filetype man,help  if winnr('$') > 1
         \| wincmd T
         \| endif
+
+  " Cmon bro don't comment these out. Only reason we got the path working...
   autocmd Filetype python let &l:path = py#PythonPath()
   autocmd Filetype python call py#ALE_Python_Conf()
 augroup END
 
-" Commands:
-
 if has('python3')
     command! -range -nargs=+ Pythonx <line1>,<line2>python3 <args>
-    command! -nargs=? Pd python3 print(dir(<q-args>))
+    " FUCK YEA! Dec 27, 2019: Behaves as expected!
+    command! -nargs=? Pd python3 print(dir(<args>))
 
 elseif has('pythonx')
     command! -range -nargs=+ Pythonx <line1>,<line2>pythonx <args>
@@ -45,3 +44,4 @@ command! -nargs=? Pydoc call pydoc_help#Pydoc(<f-args>)
   " command! -nargs=1 PydocMod call pydoc_help#ShowPyDoc('<args>', 1)
   " command! -nargs=* PydocModSearch call pydoc_help#ShowPyDoc('<args>', 0)
 " endif
+command! -nargs=0 PydocShow call pydoc_help#show()

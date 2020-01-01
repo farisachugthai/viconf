@@ -20,6 +20,26 @@ function! py#nvim_taglist() abort  " {{{1
   " Or if you wanna see a different way
   call nvim_call_function('tagfiles')
 endfunction
+function! s:find_stdlib(dir) abort
+  " I feel like this is driving me crazy wtf
+  " We also gotta figure out if below the root dir we have lib/py 3.6
+  " 3.7 or 3.8
+  if isdirectory(a:dir . '/lib/python3.8')
+    let s:root_stdlib = a:dir . '/lib/python3.8'
+
+  elseif isdirectory(a:dir . '/lib/python3.7')
+    let s:root_stdlib = a:dir . '/lib/python3.7'
+
+  elseif isdirectory(a:dir . '/lib/python3.6')
+    let s:root_stdlib = a:dir . '/lib/python3.6'
+
+  elseif isdirectory(a:dir . '/lib/python3')
+    let s:root_stdlib = a:dir . '/lib/python3'
+  endif
+
+  return s:root_stdlib
+
+endfunction
 function! s:_PythonPath() abort  " {{{1
 
   " Set up the path var for python filetypes. Here we go!
@@ -30,9 +50,9 @@ function! s:_PythonPath() abort  " {{{1
   let s:path = '.,,**,'
 
   " Set path based on nvims dynamically defined remote python host.
-  " WHAT THE FUCK! This is currently empty why are the lines below executing
-  " omfg vim
   " if !empty('g:python3_host_prog')
+  " WHAT THE FUCK! This is currently empty why are the lines below executing
+  " omfg vim. let's try this differently.
   if exists('g:python3_host_prog')
 
     " Note: Regardless of whether its unix or not, add dirs in reverse order
@@ -44,9 +64,25 @@ function! s:_PythonPath() abort  " {{{1
 
       " Warning: Don't glob this one.
       " It includes so many things that basic lookups start going REALLY slowly
-      let s:site_pack = s:root_dir . '/lib/python3.8/site-packages,'
+      " Dec 30, 2019: Dude it is outrageous how much searching we have to do.
 
-      let s:path = s:path . s:site_pack
+      " Just ran into a problem because one of my conda envs is still using
+      " 3.7 like ffs why do you have to be so difficult.
+      let s:site_pack = s:find_stdlib(s:root_dir)
+
+      if isdirectory(s:root_dir . '/lib/python3.8/site-packages')
+        let s:site_pack = s:root_dir . '/lib/python3.8/site-packages,'
+
+      elseif isdirectory(s:root_dir . '/lib/python3.7/site-packages')
+        let s:site_pack = s:root_dir . '/lib/python3.7/site-packages,'
+
+      elseif isdirectory(s:root_dir . '/lib/python3.6/site-packages')
+        let s:site_pack = s:root_dir . '/lib/python3.6/site-packages,'
+      endif
+
+      if exists('s:site_pack')
+        let s:path = s:path . s:site_pack
+      endif
 
       " #2) use the system python's std library modules
       " Oh don't forget the usr/lib one. Ugh. But android doesn't put that in
@@ -58,7 +94,11 @@ function! s:_PythonPath() abort  " {{{1
       endif
 
       " #3) use the remote pythons std lib modules
-      let s:path = ',' . s:root_dir . '/lib/python3.8' . s:path
+      let s:stdlib = s:find_stdlib(s:root_dir)
+
+      if exists('s:stdlib')
+        let s:path = s:path . s:stdlib
+      endif
 
     " then do it all over again for windows.
     " sunovabitch conda doesn't lay out the python dirs in the same spot as Unix
@@ -99,7 +139,7 @@ function! py#PythonPath() abort  " {{{1
   return s:path
 
 endfunction
-function py#python_serves_python() abort  " {{{1
+function! py#python_serves_python() abort  " {{{1
 
 python3 << EOF
 import site, sys, vim
@@ -137,7 +177,7 @@ EOF
 call pure_python_path()
 
 endfunction
-function py#YAPF() abort  " {{{1
+function! py#YAPF() abort  " {{{1
   if exists(':TBrowseOutput')
     " Realistically should accept func args
     :TBrowseOutput !yapf %
@@ -151,7 +191,7 @@ function py#YAPF() abort  " {{{1
     call nvim_buf_set_lines('%', 0, '$', 0, '!yapf -i s:old_buffer')
   endif
 endfunction
-function py#ALE_Python_Conf() abort  " {{{1
+function! py#ALE_Python_Conf() abort  " {{{1
 
   let b:ale_linters = ['flake8', 'pydocstyle', 'pyls']
   let b:ale_linters_explicit = 1
@@ -172,7 +212,7 @@ function py#ALE_Python_Conf() abort  " {{{1
   endif
 
 endfunction
-function py#Py(...) abort
+function! py#Py(...) abort
   " call py#Py('print("hey")')
   " works. But this isn't exactly how i want this done.
   if exists('g:python3_host_prog')

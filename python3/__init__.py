@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Initialize pythonx in neovim."""
-from collections import deque
+from importlib.machinery import PathFinder
+from io import StringIO
 import logging
 import os
 import sys
@@ -10,7 +11,9 @@ try:
     import pynvim
     from pynvim import api, attach
 except ImportError:
-    import vim  # noqa pylint:disable=import-error,unused-import
+    pass
+
+import vim  # noqa pylint:disable=import-error,unused-import
 
 
 __docformat__ = 'reStructuredText'
@@ -19,71 +22,39 @@ logger = logging.getLogger(__name__).addHandler(logging.StreamHandler())
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-
-class QueueHandler(logging.Handler):
-    """This handler store logs events into a queue."""
-
-    def __init__(self, queue):
-        """Initialize an instance, using the passed queue."""
-        logging.Handler.__init__(self)
-        self.queue = queue
-
-    def enqueue(self, record):
-        """Enqueue a log record."""
-        self.queue.append(record)
-
-    def emit(self, record):
-        self.enqueue(self.format(record))
+if not getattr(vim, 'find_module', None):
+    vim.find_module = PathFinder.find_module
 
 
-QUEUE = deque(maxlen=1000)
-FMT_NORMAL = logging.Formatter(
-    fmt='%(asctime)s %(levelname).4s %(message)s', datefmt='%H:%M:%S'
-)
-FMT_DEBUG = logging.Formatter(
-    fmt='%(asctime)s.%(msecs)03d %(levelname).4s [%(name)s] %(message)s',
-    datefmt='%H:%M:%S'
-)
+
+class Options:
+    aggressive = 1
+    diff = False
+    experimental = True
+    ignore = vim.eval('g:pymode_lint_ignore')
+    in_place = True
+    indent_size = int(vim.eval('&tabstop'))
+    line_range = None
+    hang_closing = False
+    max_line_length = int(vim.eval('g:pymode_options_max_line_length'))
+    pep8_passes = 100
+    recursive = False
+    select = vim.eval('g:pymode_lint_select')
+    verbose = 0
 
 
-def setup_logging(debug=True, logfile=None):
-    """
-    All the produced logs using the standard logging function
-    will be collected in a queue by the `queue_handler` as well
-    as outputted on the standard error `stderr_handler`.
+def fix_file(buffer, options):
+    # TODO
+    pass
 
-    The verbosity and the format of the log message is
-    controlled by the `debug` parameter
+fix_file(vim.current.buffer.name, Options)
 
-    - debug=False:
-        a concise log format will be used, debug messsages will be discarded
-        and only important message will be passed to the `stderr_handler`
 
-    - debug=True:
-        an extended log format will be used, all messages will be processed
-        by both the handlers
-    """
-    root_logger = logging.getLogger()
 
-    if debug:
-        log_level = logging.DEBUG
-        formatter = FMT_DEBUG
-    else:
-        log_level = logging.INFO
-        formatter = FMT_NORMAL
-
-    handlers = []
-    handlers.append(QueueHandler(QUEUE))
-    if logfile:
-        if logfile == '-':
-            handlers.append(logging.StreamHandler())
-    else:
-        handlers.append(logging.FileHandler(logfile))
-
-    for handler in handlers:
-        handler.setLevel(log_level)
-        handler.setFormatter(formatter)
-        handler.addFilter(logging.Filter())
-        root_logger.addHandler(handler)
-
-    root_logger.setLevel(10)
+def get_documentation(vim):
+    """Search documentation and append to current buffer."""
+    # is sys.stdout needed at all below?
+    sys.stdout, _ = StringIO(), sys.stdout
+    help(vim.eval('a:word'))
+    sys.stdout, out = _, sys.stdout.getvalue()
+    vim.current.buffer.append(str(out).splitlines(), 0)

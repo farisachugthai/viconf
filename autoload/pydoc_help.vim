@@ -5,9 +5,8 @@
   " Last Modified: Oct 20, 2019
 " ============================================================================
 
-" Guards: {{{1
-let s:cpo_save = &cpoptions
-set cpoptions-=C
+" Honestly most of these functions are in varying states of F'ed up.
+" Need to tear this apart and fgure out what works and why.
 
 function! s:temp_buffer() abort  " {{{1
 
@@ -42,6 +41,25 @@ function! pydoc_help#SplitPydocCword() abort  " {{{1
   enew
   exec ':r! pydoc ' . s:temp_cword
   call s:temp_buffer()
+endfunction
+function! pydoc_help#PydocCwordNatively() abort  " {{{1
+
+  " Created because pydoc isn't immediately aware of 3rd party libraries.
+  " The above work just fine with the stdlib.
+  " However...I don't want to have to make the distinction ya know.
+    let s:temp_cword = expand('<cWORD>')
+py3 << EOF
+
+import pydoc
+import importlib
+try:
+    helped_mod = importlib.import_module(s:temp_cword)
+except:
+    vim.command("echoerr 'Error during import of %s'" % s:temp_cword)
+else:
+    pydoc.help(helped_mod)
+
+EOF
 endfunction
 function s:handle_user_config() abort   " {{{1
 
@@ -150,78 +168,6 @@ function! pydoc_help#the_curse_of_nvims_floating_wins() abort  " {{{1
   " fashion. Sweet!!
   call nvim_win_set_option(s:win_handle, 'winhl', 'Special')
 endfunction
-function! pydoc_help#ShowPyDoc(name, type) abort  " {{{1
-  " Args: name: lookup; type: 0: search, 1: lookup
-    if a:name == ''
-        return
-    endif
-    if bufloaded("__doc__")
-        let l:buf_is_new = 0
-        if bufname("%") == "__doc__"
-            " The current buffer is __doc__, thus do not
-            " recreate nor resize it
-            let l:pydoc_wh = -1
-        else
-            " If the __doc__ buffer is open, jump to it
-            if exists("g:pydoc_use_drop")
-                execute "drop" "__doc__"
-            else
-                execute "sbuffer" bufnr("__doc__")
-            endif
-            let l:pydoc_wh = -1
-        endif
-    else
-        let l:buf_is_new = 1
-        execute g:pydoc_open_cmd '__doc__'
-    endif
-
-    setlocal modifiable
-    setlocal noswapfile
-    setlocal buftype=nofile
-    setlocal bufhidden=delete
-    setlocal syntax=man
-    setlocal nolist
-
-    normal ggdG
-    " Remove function/method arguments
-    let s:name2 = substitute(a:name, '(.*', '', 'g' )
-    " Remove all colons
-    let s:name2 = substitute(s:name2, ':', '', 'g' )
-    if a:type == 1
-        let s:cmd = g:pydoc_cmd . ' ' . shellescape(s:name2)
-    else
-        let s:cmd = g:pydoc_cmd . ' -k ' . shellescape(s:name2)
-    endif
-    if &verbose
-        echomsg "pydoc: calling " s:cmd
-    endif
-    execute  "silent read !" s:cmd
-    normal 1G
-
-    if exists('l:pydoc_wh') && l:pydoc_wh != -1
-        execute "resize" l:pydoc_wh
-    end
-
-    if g:pydoc_highlight == 1
-        execute 'syntax match pydoc' "'" . s:name2 . "'"
-    endif
-
-    let l:line = getline(2)
-    if l:line =~ "^no Python documentation found for.*$"
-        if l:buf_is_new
-            execute "bdelete!"
-        else
-            normal u
-            setlocal nomodified
-            setlocal nomodifiable
-        endif
-        redraw
-        echohl WarningMsg | echo l:line | echohl None
-    else
-        setlocal nomodified
-        setlocal nomodifiable
-    endif
-endfunction
 function! s:ReplaceModuleAlias()  " {{{1 Replace module aliases with their own name.
     "
     " For example:
@@ -260,74 +206,18 @@ function! s:ExpandModulePath()  " {{{1
     let l:suf = l:line[col("."):]
     return matchstr(pre, "[A-Za-z0-9_.]*$") . matchstr(suf, "^[A-Za-z0-9_]*")
 endfunction
-function! pydoc_help#show_toc() abort  " {{{1
-  let bufname = bufname('%')
-  let info = getloclist(0, {'winid': 1})
-  if !empty(info) && getwinvar(info.winid, 'qf_toc') ==# bufname
-    lopen
-    return
-  endif
+function! pydoc_help#show() "{{{
+    let word = s:ReplaceModuleAlias()
+    let buf = nvim_create_buf(v:false, v:true)
+    " not yet
+    call s:temp_buffer()
+    call jobstart('pydoc ' . word, {'on_stdout':{j,d,e->append(line('.'),d)}})
+    setlocal nomodifiable
+    setlocal nomodified
+    setlocal filetype=rst
+    " Make it vertical
+    wincmd L
+    normal gg
+    wincmd p
 
-  let toc = []
-  let lnum = 2
-  let last_line = line('$') - 1
-  let last_added = 0
-  let has_section = 0
-  let has_sub_section = 0
-
-  while lnum && lnum <= last_line
-    let level = 0
-    let add_text = ''
-    let text = getline(lnum)
-
-    if text =~# '^=\+$' && lnum + 1 < last_line
-      " A de-facto section heading.  Other headings are inferred.
-      let has_section = 1
-      let has_sub_section = 0
-      let lnum = nextnonblank(lnum + 1)
-      let text = getline(lnum)
-      let add_text = text
-      while add_text =~# '\*[^*]\+\*\s*$'
-        let add_text = matchstr(add_text, '.*\ze\*[^*]\+\*\s*$')
-      endwhile
-    elseif text =~# '^[A-Z0-9][-A-ZA-Z0-9 .][-A-Z0-9 .():]*\%([ \t]\+\*.\+\*\)\?$'
-      " Any line that's yelling is important.
-      let has_sub_section = 1
-      let level = has_section
-      let add_text = matchstr(text, '.\{-}\ze\s*\%([ \t]\+\*.\+\*\)\?$')
-    elseif text =~# '\~$'
-          \ && matchstr(text, '^\s*\zs.\{-}\ze\s*\~$') !~# '\t\|\s\{2,}'
-          \ && getline(lnum - 1) =~# '^\s*<\?$\|^\s*\*.*\*$'
-          \ && getline(lnum + 1) =~# '^\s*>\?$\|^\s*\*.*\*$'
-      " These lines could be headers or code examples.  We only want the
-      " ones that have subsequent lines at the same indent or more.
-      let l = nextnonblank(lnum + 1)
-      if getline(l) =~# '\*[^*]\+\*$'
-        " Ignore tag lines
-        let l = nextnonblank(l + 1)
-      endif
-
-      if indent(lnum) <= indent(l)
-        let level = has_section + has_sub_section
-        let add_text = matchstr(text, '\S.*')
-      endif
-    endif
-
-    let add_text = substitute(add_text, '\s\+$', '', 'g')
-    if !empty(add_text) && last_added != lnum
-      let last_added = lnum
-      call add(toc, {'bufnr': bufnr('%'), 'lnum': lnum,
-            \ 'text': repeat('  ', level) . add_text})
-    endif
-    let lnum = nextnonblank(lnum + 1)
-  endwhile
-
-  call setloclist(0, toc, ' ')
-  call setloclist(0, [], 'a', {'title': 'Help TOC'})
-  lopen
-  let w:qf_toc = bufname
-
-endfunction
-" Atexit: {{{1
-let &cpoptions = s:cpo_save
-unlet s:cpo_save
+endfunction "}}}
