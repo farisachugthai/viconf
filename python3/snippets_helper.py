@@ -17,39 +17,102 @@ import string
 import vim
 
 from os import path as ospath
+
 # I swear the snip option has a few of these ready to go
 import re
 from collections import Counter
 
 # http://docutils.sourceforge.net/docs/ref/rst/roles.html
-TEXT_ROLES = ['emphasis', 'literal', 'code', 'math',
-                          'pep-reference', 'rfc-reference',
-                          'strong', 'subscript', 'superscript',
-                          'title-reference', 'raw']
-TEXT_ROLES_REGEX = r'\.\.\srole::?\s(w+)'
+TEXT_ROLES = [
+    "emphasis",
+    "literal",
+    "code",
+    "math",
+    "pep-reference",
+    "rfc-reference",
+    "strong",
+    "subscript",
+    "superscript",
+    "title-reference",
+    "raw",
+]
+TEXT_ROLES_REGEX = r"\.\.\srole::?\s(w+)"
 
 # http://docutils.sourceforge.net/docs/ref/rst/directives.html#specific-admonitions
-SPECIFIC_ADMONITIONS = ["attention", "caution", "danger",
-                                                "error", "hint", "important", "note",
-                                                "tip", "warning"]
+SPECIFIC_ADMONITIONS = [
+    "attention",
+    "caution",
+    "danger",
+    "error",
+    "hint",
+    "important",
+    "note",
+    "tip",
+    "warning",
+]
 # http://docutils.sourceforge.net/docs/ref/rst/directives.html
-DIRECTIVES = ['code', 'contents', 'admonition', 'table', 'csv-table', 'list-table',
-              'class', 'container', 'sidebar', 'topic', 'title',
-              'role', 'default-role', 'raw']
+DIRECTIVES = [
+    "code",
+    "contents",
+    "admonition",
+    "table",
+    "csv-table",
+    "list-table",
+    "class",
+    "container",
+    "sidebar",
+    "topic",
+    "title",
+    "role",
+    "default-role",
+    "raw",
+]
 
 # DIRECTIVES_WITHOUT_TITLE means directive arguments equal None
-DIRECTIVES_WITHOUT_TITLE = ['math', 'meta', 'parsed-literal', 'line-block',
-                            'header', 'compound', 'highlights', 'pull-quote',
-                            'footer', 'epigraph', 'rubric', 'sectnum']
+DIRECTIVES_WITHOUT_TITLE = [
+    "math",
+    "meta",
+    "parsed-literal",
+    "line-block",
+    "header",
+    "compound",
+    "highlights",
+    "pull-quote",
+    "footer",
+    "epigraph",
+    "rubric",
+    "sectnum",
+]
 
-INCLUDABLE_DIRECTIVES = ['image', 'figure', 'include']
+INCLUDABLE_DIRECTIVES = ["image", "figure", "include"]
 
 # Directives for Subsubsection Definition
-DIRECTIVES_FOR_SUBSTITUTION = ['replace', 'unicode', 'date']
+DIRECTIVES_FOR_SUBSTITUTION = ["replace", "unicode", "date"]
 
 # http://www.pygal.org/en/stable/documentation/types/index.html
-CHART_TYPES = ["Line", "StackedLine", "HorizontalLine", "Bar", "StackedBar", "HorizontalBar", "Histogram", "XY", "DateLine",
-               "TimeLine", "TimeDeltaLine", "DateTimeLine", "Pie", "Radar", "Box", "Dot", "Funnel", "Gauge", "SolidGauge", "Pyramid", "Treemap"]
+CHART_TYPES = [
+    "Line",
+    "StackedLine",
+    "HorizontalLine",
+    "Bar",
+    "StackedBar",
+    "HorizontalBar",
+    "Histogram",
+    "XY",
+    "DateLine",
+    "TimeLine",
+    "TimeDeltaLine",
+    "DateTimeLine",
+    "Pie",
+    "Radar",
+    "Box",
+    "Dot",
+    "Funnel",
+    "Gauge",
+    "SolidGauge",
+    "Pyramid",
+    "Treemap",
+]
 
 
 def complete(tab, opts):
@@ -61,7 +124,7 @@ def complete(tab, opts):
     """
     msg = "({0})"
     if tab:
-        opts = [m[len(tab):] for m in opts if m.startswith(tab)]
+        opts = [m[len(tab) :] for m in opts if m.startswith(tab)]
     if len(opts) == 1:
         return opts[0]
 
@@ -82,12 +145,12 @@ def _parse_comments(s):
     try:
         while True:
             # get the flags and text of a comment part
-            flags, text = next(i).split(':', 1)
+            flags, text = next(i).split(":", 1)
 
             if len(flags) == 0:
-                rv.append(('OTHER', text, text, text, ""))
+                rv.append(("OTHER", text, text, text, ""))
             # parse 3-part comment, but ignore those with O flag
-            elif 's' in flags and 'O' not in flags:
+            elif "s" in flags and "O" not in flags:
                 ctriple = ["TRIPLE"]
                 indent = ""
 
@@ -95,17 +158,17 @@ def _parse_comments(s):
                     indent = " " * int(flags[-1])
                 ctriple.append(text)
 
-                flags, text = next(i).split(':', 1)
-                assert flags[0] == 'm'
+                flags, text = next(i).split(":", 1)
+                assert flags[0] == "m"
                 ctriple.append(text)
 
-                flags, text = next(i).split(':', 1)
-                assert flags[0] == 'e'
+                flags, text = next(i).split(":", 1)
+                assert flags[0] == "e"
                 ctriple.append(text)
                 ctriple.append(indent)
 
                 rv.append(ctriple)
-            elif 'b' in flags:
+            elif "b" in flags:
                 if len(text) == 1:
                     rv.insert(0, ("SINGLE_CHAR", text, text, text, ""))
     except StopIteration:
@@ -144,9 +207,7 @@ def make_box(twidth, bwidth=None):
         :func:`get_comment_format`
     """
     b, m, e, i = (s.strip() for s in get_comment_format())
-    bwidth_inner = bwidth - 3 - max(
-        len(b), len(i + e)
-    ) if bwidth else twidth + 2
+    bwidth_inner = bwidth - 3 - max(len(b), len(i + e)) if bwidth else twidth + 2
     sline = b + m + bwidth_inner * m[0] + 2 * m[0]
     nspaces = (bwidth_inner - twidth) // 2
     mlines = i + m + " " + " " * nspaces
@@ -176,7 +237,7 @@ class Arg:
 
     def __init__(self, arg):
         self.arg = arg
-        self.name = arg.split('=')[0].strip()
+        self.name = arg.split("=")[0].strip()
 
     def __str__(self):
         return self.name
@@ -185,19 +246,19 @@ class Arg:
         return self.name
 
     def is_kwarg(self):
-        return '=' in self.arg
+        return "=" in self.arg
 
 
 def get_args(arglist):
-    args = [Arg(arg) for arg in arglist.split(',') if arg]
-    args = [arg for arg in args if arg.name != 'self']
+    args = [Arg(arg) for arg in arglist.split(",") if arg]
+    args = [arg for arg in args if arg.name != "self"]
 
     return args
 
 
 def get_quoting_style(snip):
     style = snip.opt("g:ultisnips_python_quoting_style", "double")
-    if style == 'single':
+    if style == "single":
         return SINGLE_QUOTES
     return DOUBLE_QUOTES
 
@@ -206,7 +267,7 @@ def triple_quotes(snip):
     style = snip.opt("g:ultisnips_python_quoting_style")
     if not style:
         return get_quoting_style(snip) * 3
-    return (SINGLE_QUOTES if style == 'single' else DOUBLE_QUOTES) * 3
+    return (SINGLE_QUOTES if style == "single" else DOUBLE_QUOTES) * 3
 
 
 def triple_quotes_handle_trailing(snip, quoting_style):
@@ -282,10 +343,10 @@ def format_return(style):
 
 def write_docstring_args(args, snip):
     if not args:
-        snip.rv += ' {0}'.format(triple_quotes(snip))
+        snip.rv += " {0}".format(triple_quotes(snip))
         return
 
-    snip.rv += '\n' + snip.mkline('', indent='')
+    snip.rv += "\n" + snip.mkline("", indent="")
 
     style = get_style(snip)
 
@@ -309,7 +370,7 @@ def write_google_docstring_args(args, snip):
         for arg in args:
             snip += format_arg(arg, GOOGLE)
         snip.unshift()
-        snip.rv += '\n' + snip.mkline('', indent='')
+        snip.rv += "\n" + snip.mkline("", indent="")
 
     if kwargs:
         snip += "Kwargs:"
@@ -317,7 +378,7 @@ def write_google_docstring_args(args, snip):
         for kwarg in kwargs:
             snip += format_arg(kwarg, GOOGLE)
         snip.unshift()
-        snip.rv += '\n' + snip.mkline('', indent='')
+        snip.rv += "\n" + snip.mkline("", indent="")
 
 
 def write_numpy_docstring_args(args, snip):
@@ -333,19 +394,19 @@ def write_numpy_docstring_args(args, snip):
             snip += format_arg(arg, NUMPY)
     if kwargs:
         for kwarg in kwargs:
-            snip += format_arg(kwarg, NUMPY) + ', optional'
-    snip.rv += '\n' + snip.mkline('', indent='')
+            snip += format_arg(kwarg, NUMPY) + ", optional"
+    snip.rv += "\n" + snip.mkline("", indent="")
 
 
 def write_init_body(args, parents, snip):
     parents = [p.strip() for p in parents.split(",")]
-    parents = [p for p in parents if p != 'object']
+    parents = [p for p in parents if p != "object"]
 
     for p in parents:
         snip += p + ".__init__(self)"
 
     if parents:
-        snip.rv += '\n' + snip.mkline('', indent='')
+        snip.rv += "\n" + snip.mkline("", indent="")
 
     for arg in args:
         snip += "self._%s = %s" % (arg, arg)
@@ -353,9 +414,9 @@ def write_init_body(args, parents, snip):
 
 def write_slots_args(args, snip):
     quote = get_quoting_style(snip)
-    arg_format = quote + '_%s' + quote
+    arg_format = quote + "_%s" + quote
     args = [arg_format % arg for arg in args]
-    snip += '__slots__ = (%s,)' % ', '.join(args)
+    snip += "__slots__ = (%s,)" % ", ".join(args)
 
 
 def write_function_docstring(t, snip):
@@ -374,17 +435,17 @@ def write_function_docstring(t, snip):
     style = get_style(snip)
 
     if style == NUMPY:
-        snip += 'Returns'
-        snip += '-------'
-        snip += 'TODO'
+        snip += "Returns"
+        snip += "-------"
+        snip += "TODO"
     else:
         snip += format_return(style)
-    snip.rv += '\n' + snip.mkline('', indent='')
+    snip.rv += "\n" + snip.mkline("", indent="")
     snip += triple_quotes(snip)
 
 
 def get_dir_and_file_name(snip):
-    return os.getcwd().split(os.sep)[-1] + '.' + snip.basename
+    return os.getcwd().split(os.sep)[-1] + "." + snip.basename
 
 
 class TextTag:
@@ -431,29 +492,31 @@ def create_table(snip):
     columns_amount = int(placeholders_string[1])
 
     # erase current line
-    snip.buffer[snip.line] = ''
+    snip.buffer[snip.line] = ""
 
     # create anonymous snippet with expected content and number of tabstops
-    anon_snippet_title = ' | '.join(
-        ['$' + str(col) for col in range(1, columns_amount + 1)]
-    ) + "\n"
-    anon_snippet_delimiter = ':-|' * (columns_amount - 1) + ":-\n"
+    anon_snippet_title = (
+        " | ".join(["$" + str(col) for col in range(1, columns_amount + 1)]) + "\n"
+    )
+    anon_snippet_delimiter = ":-|" * (columns_amount - 1) + ":-\n"
     anon_snippet_body = ""
     for row in range(1, rows_amount + 1):
-        anon_snippet_body += ' | '.join(
-            [
-                '$' + str(row * columns_amount + col)
-                for col in range(1, columns_amount + 1)
-            ]
-        ) + "\n"
-    anon_snippet_table = anon_snippet_title + \
-        anon_snippet_delimiter + anon_snippet_body
+        anon_snippet_body += (
+            " | ".join(
+                [
+                    "$" + str(row * columns_amount + col)
+                    for col in range(1, columns_amount + 1)
+                ]
+            )
+            + "\n"
+        )
+    anon_snippet_table = anon_snippet_title + anon_snippet_delimiter + anon_snippet_body
 
     # expand anonymous snippet
     snip.expand_anon(anon_snippet_table)
 
 
-def make_items(times, leading='+'):
+def make_items(times, leading="+"):
     """Make lines with leading char multiple times.
 
     So wait why is this set up so that times is a keyword argument...?
@@ -478,23 +541,24 @@ def make_items(times, leading='+'):
 
 def split_line(text):
     import textwrap
+
     lines = textwrap.wrap(text, 78 - 19)
     output = list()
     for line in lines:
-        output.append('*' + ' '*19 + line)
+        output.append("*" + " " * 19 + line)
     snip_line = snip.tabstops[4].end[0]
     snip.buffer.append(output, snip_line + 1)
     del snip.buffer[snip_line]
 
 
 def get_args(arglist):
-    args = [arg.strip() for arg in arglist.split(',') if arg]
+    args = [arg.strip() for arg in arglist.split(",") if arg]
     return args
 
 
 def x(snip):
     """From html.snippets. Determines if xhtml or html I guess."""
     if snip.ft.startswith("x"):
-        snip.rv = '/'
+        snip.rv = "/"
     else:
         snip.rv = ""

@@ -75,12 +75,12 @@ function! s:rg_setup() abort
   elseif executable('rg.exe')
     let s:cmd = 'rg.exe'
   else
-    return False
+    return v:false
   endif
 
   let s:options = ' --vimgrep --no-messages --smart-case --no-messages '
         \ . '--hidden --no-heading --max-columns 300 --max-columns-preview '
-        \ . ' --no-ignore-messages --trim . '
+        \ . ' --no-ignore-messages --color never --trim . '
   let g:grep = s:cmd . s:options
   let &grepprg = g:grep
   return g:grep
@@ -110,8 +110,8 @@ function! syncom#grepprg() abort  " {{{1
     let s:second_try = s:fd_setup()
   endif
 endfunction
-function syncom#gruvbox() abort  " {{{1 old colorscheme
-  if empty(globpath(&rtp, 'colors/gruvbox.vim'))
+function! syncom#gruvbox() abort  " {{{1 old colorscheme
+  if empty(globpath(&runtimepath, 'colors/gruvbox.vim'))
     return v:false
   else
     let g:gruvbox_contrast_hard = 1
@@ -122,9 +122,9 @@ function syncom#gruvbox() abort  " {{{1 old colorscheme
     return v:true
   endif
 endfunction
-function syncom#gruvbox_material() abort  " {{{1 new colorscheme
+function! syncom#gruvbox_material() abort  " {{{1 new colorscheme
   " TODO:
-  if empty(globpath(&rtp, 'colors/gruvbox-material.vim'))
+  if empty(globpath(&runtimepath, 'colors/gruvbox-material.vim'))
     return v:false
   else
     let g:gruvbox_material_transparent_background = 1
@@ -134,7 +134,7 @@ function syncom#gruvbox_material() abort  " {{{1 new colorscheme
     return v:true
   endif
 endfunction
-function syncom#rainbow_paren() abort
+function! syncom#rainbow_paren() abort
 
   highlight! link RBP1 Red
   highlight! link RBP2 Yellow

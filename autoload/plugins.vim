@@ -90,7 +90,7 @@ function! plugins#startify_bookmarks() abort  " {{{2
     endif
   endfor
 endfunction
-function! plugins#GrepFromSelected(type)
+function! plugins#GrepFromSelected(type) abort
   let saved_unnamed_register = @@
   if a:type ==# 'v'
     normal! `<v`>y
@@ -104,7 +104,7 @@ function! plugins#GrepFromSelected(type)
   let @@ = saved_unnamed_register
   execute 'CocList grep ' . word
 endfunction
-function plugins#FloatingFZF() abort
+function! plugins#FloatingFZF() abort
   let width = float2nr(&columns * 0.9)
   let height = float2nr(&lines * 0.6)
   let opts = { 'relative': 'editor',

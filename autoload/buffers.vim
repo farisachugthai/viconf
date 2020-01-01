@@ -5,7 +5,7 @@
   " Last Modified: July 22, 2019
 " ============================================================================
 
-function! buffers#EchoRTP()  " {{{1
+function! buffers#EchoRTP() abort " {{{1
 
   " Huh son of a bitch. I actually figured out an easier way to do this
   " let's do a check that this function exists then and do it the non-nvim way
@@ -15,12 +15,10 @@ function! buffers#EchoRTP()  " {{{1
       echo directory
     endfor
   else
-    for i in split(&rtp, ',') | echo i | endfor
+    for i in split(&runtimepath, ',') | echo i | endfor
   endif
 
 endfunction
-
-
 function! buffers#PreviewWord() abort  " {{{1
 " Open a tag for the word under the cursor in the preview window.
 " TODO: Could definitely do with a mapping
@@ -61,10 +59,6 @@ function! buffers#PreviewWord() abort  " {{{1
     endif
   endif
 endfunction
-
-
-" Terminal Buffers: {{{1
-
 function! buffers#terminals() abort
 
   " If running a terminal in Vim, go into Normal mode with Esc

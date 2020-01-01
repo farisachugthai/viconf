@@ -71,7 +71,8 @@ class Target:
     We can just allow other users to change the class attribute
     as necessary.
     """
-    _target_file = Path('../spell/en.utf-8.add').resolve()
+
+    _target_file = Path("../spell/en.utf-8.add").resolve()
     target_file = str(_target_file)
 
 
@@ -81,13 +82,14 @@ def vim_bufnr():
 
 
 def nvim_listen_address():
-    return os.environ.get('NVIM_LISTEN_ADDRESS')
+    return os.environ.get("NVIM_LISTEN_ADDRESS")
 
 
-def attach_nvim(how='socket', path=None):
+def attach_nvim(how="socket", path=None):
     """Ensure you don't execute this from inside neovim or it'll emit an error."""
     from pynvim import attach
-    return attach('socket', path=nvim_listen_address())
+
+    return attach("socket", path=nvim_listen_address())
 
 
 def vim_api():
@@ -120,8 +122,11 @@ def fix_spellfile(wordlist):
     for i, j in enumerate(wordlist):
         try:
             if i > 0:
-                if wordlist[i] and wordlist[i] != wordlist[i + 1] \
-                        and not wordlist[i].startswith('!'):
+                if (
+                    wordlist[i]
+                    and wordlist[i] != wordlist[i + 1]
+                    and not wordlist[i].startswith("!")
+                ):
                     new_wordlist.append(j)
         except IndexError:  # Goes until its 1 too high idk how to stop that
             break
@@ -143,7 +148,7 @@ def sortfile(spellfile):
         Sorted list of words.
 
     """
-    with open(spellfile, 'rt') as f:
+    with open(spellfile, "rt") as f:
         spellobj = f.readlines()
 
     sorted_spellfile = sorted(spellobj)
@@ -167,14 +172,14 @@ def main():
 
     logging.basicConfig(level=logging.DEBUG)
 
-    logging.debug('Args: ', args)
+    logging.debug("Args: ", args)
     for i in args[0:]:
         spell_list = sortfile(i)
         # vim_api()
         fixed = fix_spellfile(spell_list)
-        with open(i, 'wt') as f:
+        with open(i, "wt") as f:
             f.writelines(fixed)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

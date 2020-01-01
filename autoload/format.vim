@@ -5,17 +5,6 @@
     " Last Modified: February 24, 2019
 " ============================================================================
 
-" Guard: {{{1
-if exists('g:did_format_vim') || &compatible || v:version < 700
-  finish
-endif
-let g:did_format_vim = 1
-
-let s:cpo_save = &cpoptions
-set cpoptions-=C
-
-" Functions: {{{1
-
 function! format#Format() abort
 "                                                         *format-formatexpr*
 " The 'formatexpr' option can be set to a Vim script function that performs
@@ -47,7 +36,6 @@ function! format#Format() abort
     " do not run internal formatter!
     return 0
 endfunc
-
 function! format#MarkdownFoldText() abort " {{{1 Credit to TPope
 
   let line = getline(v:lnum)
@@ -71,19 +59,3 @@ function! format#MarkdownFoldText() abort " {{{1 Credit to TPope
   return "="
 
 endfunction
-
-" Python Functions: {{{1
-
-" Is this how we do this?
-py3 << EOF
-from _vim import pretty_it
-EOF
-
-command! -range=% Pxml :<line1>,<line2>python pretty_it('xml')
-command! -range=% Pjson :<line1>,<line2>python pretty_it('json')
-command! -range=% Pyaml :<line1>,<line2>python pretty_it('yaml')
-
-" Atexit: {{{1
-
-let &cpoptions = s:cpo_save
-unlet s:cpo_save

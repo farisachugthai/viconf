@@ -34,12 +34,12 @@ class FileLink:
         """Initialize a file object."""
         self.nvim = nvim
         # Damnit why isnt it recognizing this as a func? this is the missing link
-        self.path_obj = self.nvim.call('nvim_get_current_buf()')
+        self.path_obj = self.nvim.call("nvim_get_current_buf()")
         if logger is not None:
             self.logger = logger
 
     def __repr__(self):
-        return '{!r}'.format(self._path_file())
+        return "{!r}".format(self._path_file())
 
     def _path_file(self):
         """Pathify a file."""
@@ -60,21 +60,21 @@ class FileLink:
         if real_file:
             return real_file.parent
 
-    @pynvim.command(name='Follow', nargs=1, complete='file')
+    @pynvim.command(name="Follow", nargs=1, complete="file")
     def true_file(self, path_obj):
         """Implement a command that opens and resolves a symlink."""
         if self._is_symlink:
             real_file = self._resolved_path()
             dirname = real_file.parent
             self.nvim.chdir(str(dirname))
-            self.nvim.command('edit' + str(real_file))
+            self.nvim.command("edit" + str(real_file))
 
 
 def _setup_logging(level):
-    logger = logging.getLogger(name='rplugin/python3/follow_links')
+    logger = logging.getLogger(name="rplugin/python3/follow_links")
     logger.setLevel(level)
-    if os.environ.get('NVIM_PYTHON_LOG_FILE'):
-        log_file = os.environ.get('NVIM_PYTHON_LOG_FILE')
+    if os.environ.get("NVIM_PYTHON_LOG_FILE"):
+        log_file = os.environ.get("NVIM_PYTHON_LOG_FILE")
     else:
         # log_file = sys.stdout
         # log_dir = realpath(join(__file__, pardir, 'log'))
@@ -88,22 +88,22 @@ def _setup_logging(level):
         pass
     else:
         logger.addHandler(hdlr)
-    formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+    formatter = logging.Formatter("%(asctime)s %(levelname)s %(message)s")
     hdlr.setFormatter(formatter)
     return logger
 
 
-@pynvim.autocmd('BufEnter')
+@pynvim.autocmd("BufEnter")
 def main():
     """Set everything up."""
     log_levels = {
-        'debug': logging.DEBUG,
-        'info': logging.INFO,
-        'warning': logging.WARNING,
-        'error': logging.ERROR,
-        'critical': logging.CRITICAL,
+        "debug": logging.DEBUG,
+        "info": logging.INFO,
+        "warning": logging.WARNING,
+        "error": logging.ERROR,
+        "critical": logging.CRITICAL,
     }
-    LOGGER = _setup_logging(log_levels['warning'])
+    LOGGER = _setup_logging(log_levels["warning"])
     # if os.environ.get('NVIM_LISTEN_ADDRESS'):
     #     nvim = pynvim.attach('socket', path=os.environ['NVIM_LISTEN_ADDRESS'])
     # else:
@@ -115,5 +115,5 @@ def main():
         cur_file.true_file()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

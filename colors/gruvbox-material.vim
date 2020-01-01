@@ -20,7 +20,6 @@ let s:t_Co = exists('&t_Co') && !empty(&t_Co) && &t_Co > 1 ? &t_Co : 2
 let s:italics = (((&t_ZH !=# '' && &t_ZH != '[7m') || has('gui_running')) && !has('iOS')) || has('nvim')
 
 " }}}
-
 " My Additions: {{{
 
 let g:gruvbox_material_transparent_background = 1
@@ -106,6 +105,164 @@ hi! fzf3 ctermfg=252 ctermbg=238 guifg=#D9D9D9 guibg=#565656 cterm=bold,underlin
 " }}}
 " }}}
 " Filetype specific ------------------------------------------------------- {{{
+
+" Jinja: {{{
+
+hi! link jinjaOperator Operator
+" }}}
+" Django: {{{
+hi link djangoTagBlock PreProc
+hi link djangoVarBlock PreProc
+hi link djangoStatement Statement
+hi link djangoFilter Identifier
+hi link djangoArgument Constant
+hi link djangoTagError Error
+hi link djangoVarError Error
+hi link djangoError Error
+hi link djangoComment Comment
+hi link djangoComBlock Comment
+hi link djangoTodo Todo
+
+" }}}
+" CSS: {{{
+hi! link cssAnimationProp cssProp
+hi! link cssAtKeyword PreProc
+hi! link cssAtRule Include
+hi! link cssAtRuleLogical Statement
+hi! link cssAttr Constant
+hi! link cssAttrComma Special
+hi! link cssAttributeSelector String
+hi! link cssAuralAttr cssAttr
+hi! link cssAuralProp cssProp
+hi! link cssBackgroundAttr cssAttr
+hi! link cssBackgroundProp Aqua
+hi! link cssBorderAttr cssAttr
+hi! link cssBorderOutlineProp Directory
+hi! link cssBorderProp cssProp
+hi! link cssBoxAttr cssAttr
+hi! link cssBoxProp Aqua
+hi! link cssBoxProp cssProp
+hi! link cssBraceError Error
+hi! link cssBraces Function
+hi! link cssCascadeAttr cssAttr
+hi! link cssCascadeProp cssProp
+hi! link cssClassName Function
+hi! link cssClassName Green
+hi! link cssClassNameDot Function
+hi! link cssColor Blue
+hi! link cssColor Constant
+hi! link cssColorProp Aqua
+hi! link cssColorProp cssProp
+hi! link cssComment Comment
+hi! link cssCommonAttr cssAttr
+hi! link cssContentForPagedMediaAttr cssAttr
+hi! link cssContentForPagedMediaProp cssProp
+hi! link cssCustomProp Special
+hi! link cssDeprecated Error
+hi! link cssDimensionAttr cssAttr
+hi! link cssDimensionProp Aqua
+hi! link cssDimensionProp cssProp
+hi! link cssError Error
+hi! link cssFlexibleBoxAttr cssAttr
+hi! link cssFlexibleBoxProp Aqua
+hi! link cssFlexibleBoxProp cssProp
+hi! link cssFontAttr cssAttr
+hi! link cssFontDescriptor Special
+hi! link cssFontDescriptorAttr cssAttr
+hi! link cssFontDescriptorProp cssProp
+hi! link cssFontProp cssProp
+hi! link cssFunction Constant
+hi! link cssFunctionComma Function
+hi! link cssFunctionName Function
+hi! link cssGeneratedContentAttr cssAttr
+hi! link cssGeneratedContentProp cssProp
+hi! link cssGradientAttr cssAttr
+hi! link cssGridAttr cssAttr
+hi! link cssGridProp cssProp
+hi! link cssHacks Comment
+hi! link cssHyerlinkAttr cssAttr
+hi! link cssHyerlinkProp cssProp
+hi! link cssIEUIAttr cssAttr
+hi! link cssIEUIProp cssProp
+hi! link cssIdentifier Function
+hi! link cssImportant Special
+hi! link cssInteractAttr cssAttr
+hi! link cssInteractProp cssProp
+hi! link cssKeyFrameProp Constant
+hi! link cssLineboxAttr cssAttr
+hi! link cssLineboxProp cssProp
+hi! link cssListAttr cssAttr
+hi! link cssListProp Aqua
+hi! link cssListProp cssProp
+hi! link cssMarginAttr cssAttr
+hi! link cssMarginProp Aqua
+hi! link cssMarqueeAttr cssAttr
+hi! link cssMarqueeProp cssProp
+hi! link cssMediaAttr cssAttr
+hi! link cssMediaComma Normal
+hi! link cssMediaProp cssProp
+hi! link cssMediaType Special
+hi! link cssMobileTextProp cssProp
+hi! link cssMultiColumnAttr cssAttr
+hi! link cssMultiColumnProp cssProp
+hi! link cssNoise Noise
+hi! link cssPaddingAttr cssAttr
+hi! link cssPaddingProp Aqua
+hi! link cssPaddingProp Directory
+hi! link cssPageMarginProp cssAtKeyword
+hi! link cssPageProp cssProp
+hi! link cssPagePseudo PreProc
+hi! link cssPagedMediaAttr cssAttr
+hi! link cssPagedMediaProp cssProp
+hi! link cssPositioningAttr cssAttr
+hi! link cssPositioningProp Yellow
+hi! link cssPositioningProp cssProp
+hi! link cssPrintAttr cssAttr
+hi! link cssPrintProp Aqua
+hi! link cssPrintProp cssProp
+hi! link cssProp StorageClass
+hi! link cssPseudoClassId PreProc
+hi! link cssPseudoClassLang Constant
+hi! link cssRenderAttr cssAttr
+hi! link cssRenderProp Aqua
+hi! link cssRenderProp cssProp
+hi! link cssRubyAttr cssAttr
+hi! link cssRubyProp cssProp
+hi! link cssSelectorOp Blue
+hi! link cssSelectorOp Special
+hi! link cssSelectorOp2 Blue
+hi! link cssSelectorOp2 Special
+hi! link cssSpeechAttr cssAttr
+hi! link cssSpeechProp cssProp
+hi! link cssTableAttr cssAttr
+hi! link cssTableProp Aqua
+hi! link cssTableProp cssProp
+hi! link cssTagName Statement
+hi! link cssTextAttr cssAttr
+hi! link cssTextProp Aqua
+hi! link cssTextProp cssProp
+hi! link cssTransformAttr cssAttr
+hi! link cssTransformProp Aqua
+hi! link cssTransformProp cssProp
+hi! link cssTransitionAttr cssAttr
+hi! link cssTransitionProp Aqua
+hi! link cssTransitionProp cssProp
+hi! link cssUIAttr cssAttr
+hi! link cssUIProp Yellow
+hi! link cssUIProp cssProp
+hi! link cssURL String
+hi! link cssUnicodeEscape Special
+hi! link cssUnicodeRange Constant
+hi! link cssUnitDecorators Number
+hi! link cssValueAngle Number
+hi! link cssValueFrequency Number
+hi! link cssValueInteger Number
+hi! link cssValueLength Number
+hi! link cssValueNumber Number
+hi! link cssValueTime Number
+hi! link cssVendor Comment
+hi! link cssVendor White
+" }}}
 " Man.vim: {{{
 " Define the default highlighting.
 " Only when an item doesn't have highlighting yet
@@ -572,6 +729,7 @@ hi link pythonTripleQuotes		pythonQuotes
 
 " }}}
 " Vim: {{{
+
 " Defined In Syntax File: {{{
 hi! link vimAbb	vimCommand
 hi! link vimAddress	vimMark
@@ -813,7 +971,7 @@ hi link vimPythonRegion Identifier
 " }}}
 
 " }}}
-"
+
 " }}}
 
 " }}}
@@ -821,25 +979,63 @@ hi link vimPythonRegion Identifier
 " }}}
 
 " Original: {{{
+
 " Filetypes: {{{
+
+" Markdown: {{{
+hi! link markdownBlockquote Grey
+hi! link markdownBlockquote GruvboxGray
+hi! link markdownBoldDelimiter Grey
+hi! link markdownCode Directory
+hi! link markdownCodeBlock Directory
+hi! link markdownCodeDelimiter Directory
+hi! link markdownError markdownText
+hi! link markdownH1 GruvboxGreenBold
+hi! link markdownH2 GruvboxGreenBold
+hi! link markdownH3 Title
+hi! link markdownH4 Title
 hi! link markdownH5 Yellow
 hi! link markdownH6 Yellow
-hi! link markdownCode Green
-hi! link markdownCodeBlock Aqua
-hi! link markdownCodeDelimiter Aqua
-hi! link markdownBlockquote Grey
+hi! link markdownHeadingDelimiter Delimiter
+hi! link markdownHeadingRule Grey
+hi! link markdownIdDeclaration markdownLinkText
+hi! link markdownLinkDelimiter Grey
+hi! link markdownLinkText Aqua
+hi! link markdownLinkTextDelimiter Grey
 hi! link markdownListMarker Red
 hi! link markdownOrderedListMarker Grey
 hi! link markdownRule Grey
-hi! link markdownHeadingRule Grey
+hi! link markdownText Normal
+hi! link markdownUrl Underlined
 hi! link markdownUrlDelimiter Grey
-hi! link markdownLinkDelimiter Grey
-hi! link markdownLinkTextDelimiter Grey
-hi! link markdownHeadingDelimiter Orange
-hi! link markdownLinkText Aqua
 hi! link markdownUrlTitleDelimiter Green
-hi! link markdownIdDeclaration markdownLinkText
-hi! link markdownBoldDelimiter Grey
+hi! link mkdBlockquote    Comment
+hi! link mkdBold          PmenuSel
+hi! link mkdCode          String
+hi! link mkdCodeDelimiter ColorColumn
+hi! link mkdCodeEnd       String
+hi! link mkdCodeStart     String
+hi! link mkdDelimiter     Delimiter
+hi! link mkdFootnote      TablineSel
+hi! link mkdFootnotes     Underlined
+hi! link mkdHeading       Tag
+hi! link mkdID            Identifier
+hi! link mkdInlineURL     Underlined
+hi! link mkdLineBreak     Whitespace
+hi! link mkdLink          Underlined
+hi! link mkdLinkDef       mkdID
+hi! link mkdLinkDefTarget mkdURL
+hi! link mkdLinkTitle     htmlString
+hi! link mkdListItem      Identifier
+hi! link mkdNonListItemBlock Normal
+hi! link mkdRule          Identifier
+hi! link mkdSnippetVIM    Label
+hi! link mkdString        String
+hi! link mkdURL           Underlined
+hi! markdownItalic cterm=italic gui=italic
+
+" }}}
+
 hi! link cOperator Purple
 hi! link cStructure Orange
 hi! link cppOperator Purple
@@ -879,36 +1075,6 @@ hi! link xmlProcessingDelim Grey
 hi! link xmlTag AquaBold
 hi! link xmlTagName AquaBold
 
-hi! link cssBraces White
-hi! link cssFunctionName Yellow
-hi! link cssIdentifier Orange
-hi! link cssClassName Green
-hi! link cssColor Blue
-hi! link cssSelectorOp Blue
-hi! link cssSelectorOp2 Blue
-hi! link cssImportant Green
-hi! link cssTextProp Aqua
-hi! link cssAnimationProp Aqua
-hi! link cssUIProp Yellow
-hi! link cssTransformProp Aqua
-hi! link cssTransitionProp Aqua
-hi! link cssPrintProp Aqua
-hi! link cssPositioningProp Yellow
-hi! link cssBoxProp Aqua
-hi! link cssFontDescriptorProp Aqua
-hi! link cssFlexibleBoxProp Aqua
-hi! link cssBorderOutlineProp Aqua
-hi! link cssBackgroundProp Aqua
-hi! link cssMarginProp Aqua
-hi! link cssListProp Aqua
-hi! link cssTableProp Aqua
-hi! link cssFontProp Aqua
-hi! link cssPaddingProp Aqua
-hi! link cssDimensionProp Aqua
-hi! link cssRenderProp Aqua
-hi! link cssColorProp Aqua
-hi! link cssGeneratedContentProp Aqua
-hi! link cssVendor White
 hi! link javaScriptFunction Aqua
 hi! link javaScriptIdentifier Red
 hi! link javaScriptMember Blue

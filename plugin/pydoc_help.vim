@@ -45,3 +45,12 @@ command! -nargs=? Pydoc call pydoc_help#Pydoc(<f-args>)
   " command! -nargs=* PydocModSearch call pydoc_help#ShowPyDoc('<args>', 0)
 " endif
 command! -nargs=0 PydocShow call pydoc_help#show()
+
+
+" For more see ../python3/_vim
+py3 << EOF
+from _vim import pretty_it
+EOF
+command! -range=% Pxml :<line1>,<line2>python pretty_it('xml')
+command! -range=% Pjson :<line1>,<line2>python pretty_it('json')
+command! -range=% Pyaml :<line1>,<line2>python pretty_it('yaml')

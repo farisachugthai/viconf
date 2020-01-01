@@ -22,8 +22,11 @@ import json
 
 import vim  # pylint:disable=import-error
 
-from UltiSnips.compatibility import col2byte, byte2col
-from UltiSnips.position import Position
+try:
+    from UltiSnips.compatibility import col2byte, byte2col
+    from UltiSnips.position import Position
+except (ImportError, ModuleNotFoundError):
+    col2byte = byte2col = Position = None
 
 try:
     import yaml
@@ -33,6 +36,7 @@ except (ImportError, ModuleNotFoundError):
 
 class VimBuffer:
     """Wrapper around the current Vim buffer."""
+
     def __getitem__(self, idx):
         if isinstance(idx, slice):  # Py3
             return self.__getslice__(idx.start, idx.stop)
@@ -55,8 +59,7 @@ class VimBuffer:
         return len(vim.current.buffer)
 
     def __repr__(self):
-        return '{}    #{}    {}'.format('Vim Buffer:', self.number,
-                                        self.filetypes)
+        return "{}    #{}    {}".format("Vim Buffer:", self.number, self.filetypes)
 
     @property
     def line_till_cursor(self):  # pylint:disable=no-self-use
@@ -78,7 +81,7 @@ class VimBuffer:
         filetypes : list
 
         """
-        return [ft for ft in vim.eval('&filetype').split('.') if ft]
+        return [ft for ft in vim.eval("&filetype").split(".") if ft]
 
     @property
     def cursor(self):  # pylint:disable=no-self-use
@@ -105,12 +108,12 @@ buf = VimBuffer()  # pylint:disable=invalid-name
 @contextmanager
 def option_set_to(name, new_value):
     """Set a Vim option to a value."""
-    old_value = vim.eval('&' + name)
-    command('set {0}={1}'.format(name, new_value))
+    old_value = vim.eval("&" + name)
+    command("set {0}={1}".format(name, new_value))
     try:
         yield
     finally:
-        command('set {0}={1}'.format(name, old_value))
+        command("set {0}={1}".format(name, old_value))
 
 
 @contextmanager
@@ -128,15 +131,22 @@ def save_mark(name):
 def escape(inp):
     """Creates a vim-friendly string from a group of
     dicts, lists and strings."""
+
     def conv(obj):
         """Convert obj."""
         if isinstance(obj, list):
-            rv = as_unicode('[' + ','.join(conv(o) for o in obj) + ']')
+            rv = as_unicode("[" + ",".join(conv(o) for o in obj) + "]")
         elif isinstance(obj, dict):
-            rv = as_unicode('{' + ','.join([
-                '%s:%s' % (conv(key), conv(value))
-                for key, value in obj.iteritems()
-            ]) + '}')
+            rv = as_unicode(
+                "{"
+                + ",".join(
+                    [
+                        "%s:%s" % (conv(key), conv(value))
+                        for key, value in obj.iteritems()
+                    ]
+                )
+                + "}"
+            )
         else:
             rv = as_unicode('"%s"') % as_unicode(obj).replace('"', '\\"')
         return rv
@@ -165,31 +175,31 @@ def bindeval(text):
     return rv
 
 
-def feedkeys(keys, mode='n'):
+def feedkeys(keys, mode="n"):
     """Wrapper around vim's feedkeys function.
 
     Mainly for convenience.
 
     """
-    if eval('mode()') == 'n':
-        if keys == 'a':
+    if eval("mode()") == "n":
+        if keys == "a":
             cursor_pos = get_cursor_pos()
             cursor_pos[2] = int(cursor_pos[2]) + 1
             set_cursor_from_pos(cursor_pos)
-        if keys in 'ai':
-            keys = 'startinsert'
+        if keys in "ai":
+            keys = "startinsert"
 
-    if keys == 'startinsert':
-        command('startinsert')
+    if keys == "startinsert":
+        command("startinsert")
     else:
         command(as_unicode(r'call feedkeys("%s", "%s")') % (keys, mode))
 
 
 def new_scratch_buffer(text):
     """Create a new scratch buffer with the text given."""
-    vim.command('botright new')
-    vim.command('set ft=')
-    vim.command('set buftype=nofile')
+    vim.command("botright new")
+    vim.command("set ft=")
+    vim.command("set buftype=nofile")
 
     vim.current.buffer[:] = text.splitlines()
 
@@ -199,44 +209,43 @@ def new_scratch_buffer(text):
 def virtual_position(line, col):
     """Runs the position through virtcol() and returns the result."""
     nbytes = col2byte(line, col)
-    return line, int(eval('virtcol([%d, %d])' % (line, nbytes)))
+    return line, int(eval("virtcol([%d, %d])" % (line, nbytes)))
 
 
 def select(start, end):
     """Select the span in Select mode."""
     _unmap_select_mode_mapping()
 
-    selection = eval('&selection')
+    selection = eval("&selection")
 
     col = col2byte(start.line + 1, start.col)
     vim.current.window.cursor = start.line + 1, col
 
-    mode = eval('mode()')
+    mode = eval("mode()")
 
-    move_cmd = ''
-    if mode != 'n':
+    move_cmd = ""
+    if mode != "n":
         move_cmd += r"\<Esc>"
 
     if start == end:
         # Zero Length Tabstops, use 'i' or 'a'.
-        if col == 0 or mode not in 'i' and col < len(buf[start.line]):
-            move_cmd += 'i'
+        if col == 0 or mode not in "i" and col < len(buf[start.line]):
+            move_cmd += "i"
         else:
-            move_cmd += 'a'
+            move_cmd += "a"
     else:
         # Non zero length, use Visual selection.
-        move_cmd += 'v'
-        if 'inclusive' in selection:
+        move_cmd += "v"
+        if "inclusive" in selection:
             if end.col == 0:
-                move_cmd += '%iG$' % end.line
+                move_cmd += "%iG$" % end.line
             else:
-                move_cmd += '%iG%i|' % virtual_position(end.line + 1, end.col)
-        elif 'old' in selection:
-            move_cmd += '%iG%i|' % virtual_position(end.line + 1, end.col)
+                move_cmd += "%iG%i|" % virtual_position(end.line + 1, end.col)
+        elif "old" in selection:
+            move_cmd += "%iG%i|" % virtual_position(end.line + 1, end.col)
         else:
-            move_cmd += '%iG%i|' % virtual_position(end.line + 1, end.col + 1)
-        move_cmd += 'o%iG%i|o\\<c-g>' % virtual_position(
-            start.line + 1, start.col + 1)
+            move_cmd += "%iG%i|" % virtual_position(end.line + 1, end.col + 1)
+        move_cmd += "o%iG%i|o\\<c-g>" % virtual_position(start.line + 1, start.col + 1)
     feedkeys(move_cmd)
 
 
@@ -249,30 +258,30 @@ def get_mark_pos(name):
 
 
 def set_cursor_from_pos(pos):
-    return _set_pos('.', pos)
+    return _set_pos(".", pos)
 
 
 def get_cursor_pos():
-    return _get_pos('.')
+    return _get_pos(".")
 
 
 def delete_mark(name):
     try:
-        return command('delma ' + name)
+        return command("delma " + name)
     except:
         return False
 
 
 def _set_pos(name, pos):
-    return eval("setpos(\"{0}\", {1})".format(name, pos))
+    return eval('setpos("{0}", {1})'.format(name, pos))
 
 
 def _get_pos(name):
-    return eval("getpos(\"{0}\")".format(name))
+    return eval('getpos("{0}")'.format(name))
 
 
 def _is_pos_zero(pos):
-    return ['0'] * 4 == pos or [0] == pos
+    return ["0"] * 4 == pos or [0] == pos
 
 
 def _unmap_select_mode_mapping():
@@ -282,23 +291,22 @@ def _unmap_select_mode_mapping():
     (ie, ignores things like <Plug>).
 
     """
-    if int(eval('g:UltiSnipsRemoveSelectModeMappings')):
-        ignores = eval('g:UltiSnipsMappingsToIgnore') + ['UltiSnips']
+    if int(eval("g:UltiSnipsRemoveSelectModeMappings")):
+        ignores = eval("g:UltiSnipsMappingsToIgnore") + ["UltiSnips"]
 
-        for option in ('<buffer>', ''):
+        for option in ("<buffer>", ""):
             # Put all smaps into a var, and then read the var
-            command(r"redir => _tmp_smaps | silent smap %s " % option +
-                    '| redir END')
+            command(r"redir => _tmp_smaps | silent smap %s " % option + "| redir END")
 
             # Check if any mappings where found
-            if hasattr(vim, 'bindeval'):
+            if hasattr(vim, "bindeval"):
                 # Safer to use bindeval, if it exists, because it can deal with
                 # non-UTF-8 characters in mappings; see GH #690.
                 all_maps = bindeval(r"_tmp_smaps")
             else:
                 all_maps = eval(r"_tmp_smaps")
             all_maps = list(filter(len, all_maps.splitlines()))
-            if len(all_maps) == 1 and all_maps[0][0] not in ' sv':
+            if len(all_maps) == 1 and all_maps[0][0] not in " sv":
                 # "No maps found". String could be localized. Hopefully
                 # it doesn't start with any of these letters in any
                 # language
@@ -306,40 +314,40 @@ def _unmap_select_mode_mapping():
 
             # Only keep mappings that should not be ignored
             maps = [
-                m for m in all_maps
+                m
+                for m in all_maps
                 if not any(i in m for i in ignores) and len(m.strip())
             ]
 
             for map in maps:
                 # The first three chars are the modes, that might be listed.
                 # We are not interested in them here.
-                trig = map[3:].split()[0] if len(
-                    map[3:].split()) != 0 else None
+                trig = map[3:].split()[0] if len(map[3:].split()) != 0 else None
 
                 if trig is None:
                     continue
 
                 # The bar separates commands
-                if trig[-1] == '|':
-                    trig = trig[:-1] + '<Bar>'
+                if trig[-1] == "|":
+                    trig = trig[:-1] + "<Bar>"
 
                 # Special ones
-                if trig[0] == '<':
+                if trig[0] == "<":
                     add = False
                     # Only allow these
-                    for valid in ['Tab', 'NL', 'CR', 'C-Tab', 'BS']:
-                        if trig == '<%s>' % valid:
+                    for valid in ["Tab", "NL", "CR", "C-Tab", "BS"]:
+                        if trig == "<%s>" % valid:
                             add = True
                     if not add:
                         continue
 
                 # UltiSnips remaps <BS>. Keep this around.
-                if trig == '<BS>':
+                if trig == "<BS>":
                     continue
 
                 # Actually unmap it
                 try:
-                    command('silent! sunmap %s %s' % (option, trig))
+                    command("silent! sunmap %s %s" % (option, trig))
                 except:  # pylint:disable=bare-except
                     # Bug 908139: ignore unmaps that fail because of
                     # unprintable characters. This is not ideal because we
@@ -358,8 +366,8 @@ def _unmap_select_mode_mapping():
 def pretty_xml(x):
     """Make xml string `x` nicely formatted."""
     # Hat tip to http://code.activestate.com/recipes/576750/
-    new_xml = md.parseString(x.strip()).toprettyxml(indent=' ' * 2)
-    return '\n'.join(line for line in new_xml.split('\n') if line.strip())
+    new_xml = md.parseString(x.strip()).toprettyxml(indent=" " * 2)
+    return "\n".join(line for line in new_xml.split("\n") if line.strip())
 
 
 def pretty_json(j):
@@ -373,9 +381,9 @@ def interpret_yaml(y):
 
 
 prettiers = {
-    'xml': pretty_xml,
-    'json': pretty_json,
-    'yaml': interpret_yaml,
+    "xml": pretty_xml,
+    "json": pretty_json,
+    "yaml": interpret_yaml,
 }
 
 
@@ -383,7 +391,7 @@ def pretty_it(datatype):
     r = vim.current.range
     content = "\n".join(r)
     content = prettiers[datatype](content)
-    r[:] = str(content).split('\n')
+    r[:] = str(content).split("\n")
 
 
 def my_plugins():
