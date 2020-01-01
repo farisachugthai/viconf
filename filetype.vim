@@ -21,5 +21,4 @@ augroup YourFTDetect
   au BufNewFile,BufRead *.rst.txt set filetype=rst.txt
   au BufNewFile,BufRead *.rst_t set filetype=htmljinja
   au BufNewFile,BufRead *.gitconfig set filetype=gitconfig
-
 augroup END

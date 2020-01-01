@@ -5,12 +5,11 @@
     " Last Modified: Oct 18, 2019
 " ============================================================================
 
-" Options: {{{1
-
-" Globals
+" Globals:
 let g:python_highlight_all = 1
 let g:python_space_error_highlight = 1
 
+" Filetype Specific Options:
 if &filetype !=#'python' && &filetype !=#'xonsh' | finish | endif
 
 runtime! $VIMRUNTIME/ftplugin/python.vim
@@ -53,12 +52,6 @@ setlocal indentkeys-=0#
 setlocal colorcolumn=80,120
 setlocal foldmethod=indent
 
-" setlocal keywordprg=pydoc
-" let &l:keywordprg = ':PydocThis' . expand('<cWORD>')
-" let &l:keywordprg = pydoc_help#SplitPydocCword()
-
-" Use xnoremap because I wouldn't want this in select mode
-" xnoremap K <Cmd>'<,'>PydocThis<CR>
 
 setlocal suffixesadd+=.py
 setlocal omnifunc=python3complete#Complete
@@ -92,7 +85,6 @@ else
 endif
 
 " Mappings: {{{1
-
 " Don't know how I haven't done this yet.
 noremap <buffer> <F5> <Cmd>py3f %<CR>
 noremap! <buffer> <F5> <Cmd>py3f %<CR>
@@ -102,29 +94,25 @@ noremap! <buffer> <F5> <Cmd>py3f %<CR>
 if executable('yapf')
   setlocal equalprg=yapf
   setlocal formatprg=yapf
-
   command! -buffer -complete=buffer -nargs=0 YAPF call py#YAPF()
   command! -buffer -complete=buffer -nargs=0 YAPFI exec '!yapf -i %'
   command! -buffer -complete=buffer -nargs=0 YAPFD cexpr! exec '!yapf -d %'
 
 else
-    if executable('autopep8')
-        setlocal equalprg=autopep8
-        setlocal formatprg=autopep8
-
-        command! -nargs=0 -complete=buffer -buffer Autopep8 cexpr! exec '!autopep8 -i ' . shellescape(<q-args>) . expand('%')
-        " command! -nargs=0 Autopep8 exec '!autopep8 -i %'
-        " command! -nargs=0 Autopep8 cexpr! exec '!autopep8 -d %'
-    endif
+  if executable('autopep8')
+    setlocal equalprg=autopep8
+    setlocal formatprg=autopep8
+    command! -nargs=0 -complete=buffer -buffer Autopep8 cexpr! exec '!autopep8 -i ' . shellescape(<q-args>) . expand('%')
+    command! -nargs=0 Autopep8 exec '!autopep8 -i %'
+    " command! -nargs=0 Autopep8 cexpr! exec '!autopep8 -d %'
+  endif
 endif
 
 " ALE: {{{1
-
 " Ive actually noticed things working bettwr when called unconditionally
 call py#ALE_Python_Conf()
 
 " Coc: {{{1
-"
 " Just tried this and it worked! So keep checking :CocCommand output
 if !empty('g:did_coc_loaded')
   command! -nargs=? CocPython call CocActionAsync('runCommand', 'python.startREPL', shellescape(<q-args>))|
@@ -142,7 +130,3 @@ let b:undo_ftplugin = 'setlocal lbr< tw< cms< et< sts< ts< sw< cc< fdm< kp<'
       \ . '|setlocal omnifunc<'
       \ . '|setlocal cinkeys<'
       \ . '|unlet! b:undo_ftplugin'
-
-" Dude i think that this just starts autofiring if you have ale or coc enabled
-" jesus christ is it annoying
-      " \ . '|unmap <buffer> <F5>'

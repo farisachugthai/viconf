@@ -232,4 +232,6 @@ augroup CocUser
   autocmd CompleteDone * pclose
 	autocmd CursorHold * silent call CocActionAsync('highlight')
 
+  " holy fuck stop raising errors
+  autocmd! CmdwinEnter *
 augroup END
