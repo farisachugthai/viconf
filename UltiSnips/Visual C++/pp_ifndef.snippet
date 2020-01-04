@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>#ifndef</Title>
+			<Shortcut>#ifndef</Shortcut>
+			<Description>Code snippet for #ifndef</Description>
+			<Author>Microsoft Corporation</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+				<SnippetType>SurroundsWith</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>expression</ID>
+					<ToolTip>Preprocessor expression to evaluate</ToolTip>
+					<Default>1</Default>
+				</Literal>
+			</Declarations>
+			<Code Language="cpp"><![CDATA[#ifndef $expression$
+				$selected$ $end$ 
+				#endif // !$expression$
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

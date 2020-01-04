@@ -17,14 +17,13 @@ let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux) && empty(s:wsl)
 
 call plug#begin(stdpath('data') . '/plugged')
 
-Plug 'neoclide/coc.nvim', {'branch': 'master'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 let $NVIM_COC_LOG_FILE = stdpath('data')  . '/site/coc.log'
 let $NVIM_COC_LOG_LEVEL = 'ERROR'
 
 " So you can't use dir: ./vim-plug because it'll put vim-plug in the cwd not
 " this one
 " doesnt work either
-" Plug 'junegunn/vim-plug', {'dir': expand('~/projects/viconf/vim-plug')}
 Plug 'junegunn/vim-plug' ", {'dir': expand('~/projects/viconf/vim-plug')}
 let g:plug_window = 'tabe'
 
@@ -104,6 +103,7 @@ Plug 'psf/black', {'for': 'python'}
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'tomtom/tlib_vim'
+Plug 'neovim/nvim-lsp'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 
 call plug#end()

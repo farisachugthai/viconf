@@ -76,6 +76,7 @@ our :class:`jedi.Script()` object.
 *PHEW* we're getting closer.
 
 """
+import os
 import sys
 
 try:

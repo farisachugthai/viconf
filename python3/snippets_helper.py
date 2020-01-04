@@ -382,6 +382,11 @@ def write_google_docstring_args(args, snip):
 
 
 def write_numpy_docstring_args(args, snip):
+    """
+    TODO: This fucked up on me the other day and it was at that moment
+    I realized I have literally no idea what's going on here or how to debug
+    it.
+    """
     if args:
         snip += "Parameters"
         snip += "----------"

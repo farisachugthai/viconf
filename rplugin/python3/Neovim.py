@@ -87,9 +87,13 @@ our :class:`jedi.Script()` object.
 """
 import logging
 import os
-from pathlib import Path
 import sys
 
+# The directory is called python3 i thought this was implied
+if sys.version_info < (3, 0):
+    sys.exit()
+
+from pathlib import Path
 try:
     import pynvim
 except (ImportError, ModuleNotFoundError) as e:

@@ -19,16 +19,23 @@ inoremap <nowait> [ []<C-G>U<Left>
 " Awful
 " inoremap <nowait> ' ''<C-G>U<Left>
 
+" Literally ` does the same thing as ' but ` remembers column.
+nnoremap ' `
+
 if has('+shellslash')
   set shellslash
 endif
 
 " Fix up the path a little I'm starting to use ]i and gf and the like more
-let &path = '.,,**,' . expand('$VIMRUNTIME') . '/*/*.vim'
-
-if exists('*stdpath')  " fuckin vim
-  let &path = &path . ',' . stdpath('config')
+" But make it conditional on me not having already set it for an ftplugin
+if !exists('b:did_ftplugin')
+  if exists('*stdpath')  " fuckin vim
+    let &path = '.,,**,' . expand('$VIMRUNTIME') . '/*/*.vim'  . ',' . stdpath('config')
+  else
+    let &path = '.,,**,' . expand('$VIMRUNTIME') . '/*/*.vim'
+  endif
 endif
+
 
 " Scratch Buffers: {{{1
 command! -nargs=0 ScratchBuffer call pydoc_help#scratch_buffer()
@@ -42,9 +49,6 @@ command! -nargs=0 ScratchBuffer call pydoc_help#scratch_buffer()
 " Oct 18, 2019: I just ran into llist and lwindow showing different things
 " and lwindow didn't show the location list i had the at the time so
 " switching again
-nnoremap <Leader>c <Cmd>clist!<CR>
-nnoremap <leader>q <Cmd>copen<CR>
-
 augroup YourQFAuGroup
   au!
   autocmd QuickFixCmdPost * copen

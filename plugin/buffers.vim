@@ -11,7 +11,9 @@
 nnoremap <Leader>rt call buffers#EchoRTP()
 command! -nargs=0 EchoRTP echo buffers#EchoRTP()
 
-function! Buf_Window_Mapping() abort  " {{{1
+" }}}
+
+function! Window_Mappings() abort  " {{{1
   " Navigate windows more easily
   nnoremap <C-h> <Cmd>wincmd h<CR>
   nnoremap <C-j> <Cmd>wincmd j<CR>
@@ -25,9 +27,25 @@ function! Buf_Window_Mapping() abort  " {{{1
   " Also don't make me hit the shift key
   nnoremap <C-w>, 5<C-w><
   nnoremap <C-w>. 5<C-w>>
-endfunction
 
-function! QuickfixMappings() abort
+  " Navigate Windows More Easily:
+  nnoremap <Leader>ws <Cmd>wincmd s<CR>
+  nnoremap <Leader>wv <Cmd>wincmd v<CR>
+  nnoremap <Leader>ww <Cmd>wincmd w<CR>
+  " Split and edit file under the cursor
+  nnoremap <Leader>wf <Cmd>wincmd f<CR>
+  " Split and open the word under the cursor as a tag
+  " noremap <Leader>w] <Cmd>wincmd ]<CR>
+
+  " Thank you index.txt! From:
+  " 2.2 Window commands						*CTRL-W*
+  " |CTRL-W_g_CTRL-]| CTRL-W g CTRL-]  split window and do |:tjump| to tag
+  " under cursor
+  nnoremap <Leader>w] <C-w>g<C-]>
+  nnoremap <Leader>wc <Cmd>wincmd c<CR>
+  nnoremap <Leader>wo <Cmd>wincmd o<CR>
+endfunction
+function! Quickfix_Mappings() abort
 
   " To make navigating the location list and quickfix easier
   " Also check ./unimpaired.vim
@@ -35,25 +53,42 @@ function! QuickfixMappings() abort
   " Oct 18, 2019: I just ran into llist and lwindow showing different things
   " and lwindow didn't show the location list i had at the time so switching again
   " November llist throws an error if no location. *sigh*
-  noremap <Leader>cc <Cmd>cwindow<CR><bar>
+  nnoremap <Leader>qc <Cmd>cwindow<CR>
+
   " Leader l is currently botright lwindow
-  nnoremap <Leader>lc <Cmd>lwindow<CR>
-  nnoremap <Leader>cl <Cmd>clist!<CR>
+  nnoremap <Leader>lw <Cmd>lwindow<CR>
   nnoremap <Leader>ll <Cmd>llist!<CR>
-  nnoremap <leader>co <Cmd>copen<CR>
   nnoremap <Leader>lo <Cmd>lopen<CR>
 
+  " Normally the quickfix window is at the bottom of the screen.  If there are
+  " vertical splits, it's at the bottom of the rightmost column of windows.  To
+  " make it always occupy the full width: >
+  " 	:botright cwindow
+  nnoremap <Leader>qw <Cmd>botright cwindow<CR>
+  nnoremap <Leader>ql <Cmd>botright clist!<CR>
+  nnoremap <leader>qo <Cmd>botright copen<CR>
+
+  nnoremap <Leader>c <Cmd>make %<CR>
+
+  " Unimpaired Mappings:
+  " Map quickfix list, buffers, windows and tabs to *[ and *]
+  nnoremap ]q <Cmd>cnext<CR>
+  nnoremap [q <Cmd>cprev<CR>
+  nnoremap ]Q <Cmd>clast<CR>
+  nnoremap [Q <Cmd>cfirst<CR>
+  nnoremap ]l <Cmd>lnext<CR>
+  nnoremap [l <Cmd>lprev<CR>
+  nnoremap ]L <Cmd>llast<CR>
+  nnoremap [L <Cmd>lfirst<CR>
+
+  " Unrelated but cmdline
+  " It's annoying you lose a whole command from a typo
+  cnoremap <Esc> <nop>
+  " However I still need the functionality
+  cnoremap <C-g> <Esc>
+  " Avoid accidental hits of <F1> while aiming for <Esc>
+  noremap! <F1> <Esc>
 endfunction
-
-" Command Line: {{{1
-" It's annoying you lose a whole command from a typo
-cnoremap <Esc> <nop>
-" However I still need the functionality
-cnoremap <C-g> <Esc>
-" Avoid accidental hits of <F1> while aiming for <Esc>
-noremap! <F1> <Esc>
-
-" ALT Key Window Navigation: {{{1
 function! Alt_Key_Navigation() abort
   " Originally this inspired primarily for terminal use but why not put it everywhere?
   noremap  <A-h> <C-w>h
@@ -81,24 +116,27 @@ function! Alt_Key_Navigation() abort
   endif
 
 endfunction
-
-" Navigate Buffers More Easily: {{{1
-function! SpaceBuffers() abort
-  noremap <Leader>bb <Cmd>buffers<CR>
-  noremap <Leader>bd <Cmd>bdelete<CR>
-  noremap <Leader>bn <Cmd>bnext<CR>
-  noremap <Leader>bp <Cmd>bprev<CR>
-  noremap <Leader>bf <Cmd>bfirst<CR>
-  noremap <Leader>bl <Cmd>blast<CR>
+function! Buffer_Mappings() abort
+  " Navigate Buffers More Easily:
+  nnoremap <Leader>bb <Cmd>buffers<CR>
+  nnoremap <Leader>bd <Cmd>bdelete<CR>
+  nnoremap <Leader>bn <Cmd>bnext<CR>
+  nnoremap <Leader>bp <Cmd>bprev<CR>
+  nnoremap <Leader>bf <Cmd>bfirst<CR>
+  nnoremap <Leader>bl <Cmd>blast<CR>
 	" aka yank the whole buffer
-  noremap <Leader>bY <Cmd>"+%y<CR>
+  nnoremap <Leader>bY <Cmd>"+%y<CR>
 	" and then paste it
-  noremap <Leader>bP <Cmd>"+P<CR>
+  nnoremap <Leader>bP <Cmd>"+P<CR>
   " Sunovabitch bonly isn't a command?? Why is
   " noremap <Leader>bo <Cmd>bonly<CR>
-endfunction
 
-function! TabMaps() abort  " {{{1
+  nnoremap ]b <Cmd>bnext<CR>
+  nnoremap [b <Cmd>bprev<CR>
+  nnoremap ]B <Cmd>blast<CR>
+  nnoremap [B <Cmd>bfirst<CR>
+endfunction
+function! Tab_Mappings() abort  " {{{1
   nnoremap <Leader>tn <Cmd>tabnext<CR>
   nnoremap <Leader>tp <Cmd>tabprev<CR>
   nnoremap <Leader>tq <Cmd>tabclose<CR>
@@ -114,61 +152,20 @@ function! TabMaps() abort  " {{{1
 	nnoremap <Leader>tf <Cmd>tabfirst<CR>
 	nnoremap <Leader>tl <Cmd>tablast<CR>
 
-  noremap <F9> <Cmd>tabe ~/projects/viconf/init.vim<CR>
-  " Don't forget to add in mappings when in insert/cmd mode
-  noremap! <F9> <Cmd>tabe ~/projects/viconf/init.vim<CR>
-  tnoremap <F9> <Cmd>tabe ~/projects/viconf/init.vim<CR>
-
-endfunction
-
-" Navigate Windows More Easily: {{{1
-function! SpaceWindows() abort
-  noremap <Leader>ws <Cmd>wincmd s<CR>
-  noremap <Leader>wv <Cmd>wincmd v<CR>
-  noremap <Leader>ww <Cmd>wincmd w<CR>
-  " Split and edit file under the cursor
-  noremap <Leader>wf <Cmd>wincmd f<CR>
-  " Split and open the word under the cursor as a tag
-  " noremap <Leader>w] <Cmd>wincmd ]<CR>
-
-  " Thank you index.txt! From:
-  " 2.2 Window commands						*CTRL-W*
-  " |CTRL-W_g_CTRL-]| CTRL-W g CTRL-]  split window and do |:tjump| to tag
-  " under cursor
-  noremap <Leader>w] <C-w>g<C-]>
-  noremap <Leader>wc <Cmd>wincmd c<CR>
-  noremap <Leader>wo <Cmd>wincmd o<CR>
-endfunction
-
-" Unimpaired Mappings: {{{1
-
-function! UnImpairedWindows() abort
-  " Map quickfix list, buffers, windows and tabs to *[ and *]
-  noremap ]q <Cmd>cnext<CR>
-  noremap [q <Cmd>cprev<CR>
-  noremap ]Q <Cmd>clast<CR>
-  noremap [Q <Cmd>cfirst<CR>
-  noremap ]l <Cmd>lnext<CR>
-  noremap [l <Cmd>lprev<CR>
-  noremap ]L <Cmd>llast<CR>
-  noremap [L <Cmd>lfirst<CR>
-  noremap ]b <Cmd>bnext<CR>
-  noremap [b <Cmd>bprev<CR>
-  noremap ]B <Cmd>blast<CR>
-  noremap [B <Cmd>bfirst<CR>
-  noremap ]t <Cmd>tabn<CR>
-  noremap [t <Cmd>tabp<CR>
-  noremap ]T <Cmd>tablast<CR>
-  noremap [T <Cmd>tabfirst<CR>
+  nnoremap ]t <Cmd>tabn<CR>
+  nnoremap [t <Cmd>tabp<CR>
+  nnoremap ]T <Cmd>tablast<CR>
+  nnoremap [T <Cmd>tabfirst<CR>
 endfunction
 
 " Call Functions: {{{1
-if !exists('no_plugin_maps') && !exists('no_windows_vim_maps')
-  call Buf_Window_Mapping()
+if !exists('no_plugin_maps') && !exists('no_windows_vim_maps') && !exists('b:plugin_buffers_maps')
+  call Window_Mappings()
   call Alt_Key_Navigation()
-  call SpaceBuffers()
-  call TabMaps()
-  call UnImpairedWindows()
-  call SpaceWindows()
-  call QuickfixMappings()
+  call Buffer_Mappings()
+  call Tab_Mappings()
+  call Quickfix_Mappings()
+  let b:plugin_buffers_maps = 1
 endif
+
+" }}}

@@ -19,21 +19,25 @@ GuiTabline v:false
 " This looks reasonable with the font
 GuiLinespace 1
 
-" Doesn't work
-" GuiFont 'FuraMono Nerd Font Mono:h14'
-" can't quote
+" GuiFonts: Note that you can't quote! Use backslashes
+
+" Also note adding in the :h thing consistently causes an error
+" to get thrown for "bad pitch metrics"
+
+" works but 'reports bad fixed font pitch metrics'
+" GuiFont FuraMono\ Nerd\ Font\ Mono
 " works but meh
 " GuiFont Hack:h11
 " Throws an error because not fixed pitch
 " GuiFont Monoisome:h11
+" Also note that when you go to `:he guifont`
 " the info for set guifont isn't true of our command here
-" GuiFont FuraMono_Nerd_Font_Mono:h12
-" doesn't work
-
 " holy fuck this does work
-" GuiFont FuraMono\ Nerd\ Font\ Mono:h12
 " holy fuck this one actually looks good.
-GuiFont DejaVu\ Sans\ Mono:h11
+" GuiFont DejaVu\ Sans\ Mono:h11
+" why is it throwing errors now
+" GuiFont Cascadia\ Code
+GuiFont Fira\ Code\ Retina:h12
 
 call GuiClipboard()
 

@@ -23,12 +23,6 @@ import json
 import vim  # pylint:disable=import-error
 
 try:
-    from UltiSnips.compatibility import col2byte, byte2col
-    from UltiSnips.position import Position
-except (ImportError, ModuleNotFoundError):
-    col2byte = byte2col = Position = None
-
-try:
     import yaml
 except (ImportError, ModuleNotFoundError):
     yaml = None

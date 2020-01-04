@@ -5,28 +5,25 @@
     " Last Modified: June 08, 2019
 " ============================================================================
 
-" Guard: {{{1
-let s:cpo_save = &cpoptions
-set cpoptions&vim
-
-" Options: {{{1
+if &filetype !=# 'css' || &filetype !=# 'less' | finish | endif
 
 setlocal expandtab
 setlocal shiftwidth=2
 setlocal softtabstop=2
 setlocal suffixesadd=.html,.css
 setlocal omnifunc=csscomplete#CompleteCSS
+setlocal path=,,**
+
+" only difference between less and css ftplugin
+" css
+setlocal comments=s1:/*,mb:*,ex:*/ commentstring&
+" less
+" setlocal comments=:// commentstring=//\ %s
 
 compiler csslint
 
-if !empty('g:loaded_ale') && &filetype==#'css'
-  call ftplugins#ALE_CSS_Conf()
-endif
-
-" Atexit: {{{1
+let &l:include = '^\s*@import\s\+\%(url(\)\='
+call ftplugins#ALE_CSS_Conf()
 
 let b:undo_ftplugin = 'setlocal et< sw< sts< sua< ofu< mp< efm< '
       \ . '|unlet! b:undo_ftplugin'
-
-let &cpoptions = s:cpo_save
-unlet s:cpo_save

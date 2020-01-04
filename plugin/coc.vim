@@ -7,8 +7,10 @@
 
 " Global options are in ../../coc_settings.json
 
-let $NVIM_COC_LOG_LEVEL = 'debug'
+let $NVIM_COC_LOG_LEVEL = 'WARN'
 let $NVIM_COC_LOG_FILE = stdpath('data') . '/site/coc.log'
+let $NVIM_NODE_LOG_FILE = stdpath('data') . '/site/node.log'
+let $NVIM_NODE_LOG_LEVEL = 'WARN'
 
 if exists('plugs')  " installed with vim-plug
   if index(keys(plugs), 'coc.nvim') == -1

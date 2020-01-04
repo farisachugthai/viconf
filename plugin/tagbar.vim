@@ -5,20 +5,12 @@
     " Last Modified: Sep 14, 2019
 " ============================================================================
 
-" Guard: {{{1
-let s:cpo_save = &cpoptions
-set cpoptions-=C
-
-" Options: {{{1
-
-" Vim Options: {{{2
 let g:tagbar_left = 1
 let g:tagbar_width = 30
 let g:tagbar_sort = 0
 let g:tagbar_singleclick = 1
 let g:tagbar_hide_nonpublic = 0
 let g:tagbar_autoshowtag = 1
-
 
 " Literally ruins my ability to see any other messages i might care about
 let g:tagbar_silent = 1
@@ -57,8 +49,8 @@ if !has('unix')
       let g:tagbar_ctags_bin = exepath('ctags')
   endif
 
-  if filereadable(expand('$HOME/.ctags/universal_ctags.ctags'))
-    let g:tagbar_ctags_options = [expand('~/.ctags/universal_ctags.ctags')]
+  if filereadable(expand('$HOME/.ctags.d/new_universal.ctags'))
+    let g:tagbar_ctags_options = [expand('~/.ctags.d/new_universal.ctags')]
   endif
   " Icon Chars
         " let g:tagbar_iconchars = ['▸', '▾']
@@ -67,6 +59,8 @@ if !has('unix')
   " Uh so all of these displayed correctly even on windows so give me some
   " cooler ones
   let g:tagbar_iconchars = ['▶', '▼']
+else
+  let g:tagbar_iconchars = ['▷', '◢']
 
 endif
 
@@ -74,14 +68,9 @@ endif
 " top of the window and the blank lines in between top-level scopes in order to
 " save screen real estate.
 " Termux needs this
-if exists($ANDROID_ROOT)
-  let g:tagbar_compact = 1
-endif
+if exists($ANDROID_ROOT) | let g:tagbar_compact = 1 | endif
 
-" Mappings: {{{1
 let g:tagbar_map_zoomwin = 'Z'
-
-" Filetype Implementations: {{{1
 
 let g:tagbar_type_ansible = {
 	\ 'ctagstype' : 'ansible',
@@ -181,8 +170,3 @@ let g:tagbar_type_snippets = {
     \ 's:snippets',
     \ ]
     \ }
-
-" Atexit: {{{1
-
-let &cpoptions = s:cpo_save
-unlet s:cpo_save

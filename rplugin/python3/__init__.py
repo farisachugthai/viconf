@@ -41,5 +41,5 @@ def rplugin_attach():
 
 
 # Only run this if we don't have an open channel.
-if not os.environ.get('NVIM_LISTEN_ADDRESS'):
-    nvim = rplugin_attach()
+# if not os.environ.get('NVIM_LISTEN_ADDRESS'):
+#     nvim = rplugin_attach()
