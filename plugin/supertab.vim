@@ -15,7 +15,7 @@ if !exists('g:loaded_supertab') | finish | endif
 " 40% of the way in he sets up the context for you.
 
 " Might give this a try
-let g:SuperTabDefaultCompletionType = "<c-x><c-u>"
+let g:SuperTabDefaultCompletionType = '<C-x><C-u>'
 
 " let g:SuperTabDefaultCompletionType = 'context'
 
@@ -27,7 +27,7 @@ let g:SuperTabDefaultCompletionType = "<c-x><c-u>"
 
 let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
 let g:SuperTabContextDiscoverDiscovery =
-        \ ["&completefunc:<c-x><c-u>", "&omnifunc:<c-x><c-o>"]
+        \ ['&completefunc:<c-x><c-u>', '&omnifunc:<c-x><c-o>']
 
 function! MyTagContext() abort
   if filereadable(expand('%:p:h') . '/tags')

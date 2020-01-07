@@ -26,7 +26,7 @@ function! find_files#fzf_maps() abort  " {{{1
               \ 'options': '-ansi --multi --cycle', 'left': 30})
   inoremap <C-k> <C-x><C-k>
 endfunction
-function! find_files#plug_help_sink(line)  " {{{1
+function! find_files#plug_help_sink(line)  abort " {{{1
   " Call :PlugHelp to use fzf to open a window with all of the plugins
   " you have installed listed and upon pressing enter open the help
   " docs. That's not a great explanation but honestly easier to explain
@@ -162,7 +162,7 @@ function! find_files#msdos_remote() abort  " {{{1
         \   'cache_enabled': 1,
         \ }
 endfunction
-function! find_files#RipgrepFzf(query, fullscreen)
+function! find_files#RipgrepFzf(query, fullscreen)  abort
 
 " In the default implementation of `Rg`, ripgrep process starts only once with
 " the initial query (e.g. `:Rg foo`) and fzf filters the output of the process.

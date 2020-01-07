@@ -5,8 +5,10 @@
 " Last Author:  Sainnhepark <sainnhe@gmail.com>
 " Last Updated: Dec 10, 2019
 
-scriptencoding utf8  " {{{
+" {{{
+scriptencoding utf8
 
+" {{{
 let s:cpo_save = &cpoptions
 set cpoptions-=C
 hi clear
@@ -20,978 +22,20 @@ let s:t_Co = exists('&t_Co') && !empty(&t_Co) && &t_Co > 1 ? &t_Co : 2
 let s:italics = (((&t_ZH !=# '' && &t_ZH != '[7m') || has('gui_running')) && !has('iOS')) || has('nvim')
 
 " }}}
-" My Additions: {{{
-
-let g:gruvbox_material_transparent_background = 1
-let g:gruvbox_material_enable_bold = 1
-let g:gruvbox_material_background = 'hard'
-
-" From ned batchelder.
-match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
-
-" Standard Highlights: {{{
-" These got cleared somehow.
-" Screen line that the cursor is
-hi! CursorLine ctermbg=237 guibg=#3c3836 guifg=NONE ctermfg=NONE cterm=NONE gui=NONE guisp=NONE
-
-" Line number of CursorLine
-hi! CursorLineNr guifg=#fabd2f guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE ctermbg=237
-
-" Screen column that the cursor is
-hi! link CursorColumn CursorLine
-
-" Additional Links
-
-hi link manEmail Directory
-hi link manHeaderFile Statement
-" hi link manHighlight
-hi link NormalNC Ignore
-hi link VisualNC Visual
-
 " }}}
-" Plugins: {{{
-
-" NERDTree: {{{
-
-hi link NERDTreeBookmarks Typedef
-hi link NERDTreeCWD Underlined
-hi link NERDTreeDir Directory
-hi link NERDTreeDirSlash Delimiter
-hi link NERDTreeNodeDelimeters Delimiter
-hi link hideBracketsInNERDTree Conceal
-hi! link NERDTreeFile Structure
-
-" }}}
-" Asynchronous Lint Engine: {{{
-
-" call s:HL('ALEError', s:none, s:none, s:undercurl, s:red)
-" call s:HL('ALEWarning', s:none, s:none, s:undercurl, s:yellow)
-" call s:HL('ALEInfo', s:none, s:none, s:undercurl, s:blue)
-
-hi link ALEErrorSign Error
-hi link ALEWarningSign QuickFixLine
-hi link ALEInfoSign Directory
-hi link ALEError Error
-hi link ALEWarning QuickFixLine
-hi link ALEInfo Macro
-
-" }}}
-" GitGutter: {{{
-
-hi link GitGutterAdd GruvboxGreenSign
-hi link GitGutterChange Macro
-hi link GitGutterDelete GruvboxRedSign
-hi link GitGutterChangeDelete Macro
-
-" }}}
-" GitCommit: "{{{
-" Do I have this plugin? Is this a fugitive thing?
-hi link gitcommitSelectedFile GruvboxGreen
-hi link gitcommitDiscardedFile GruvboxRed
-
-" }}}
-" Tagbar: {{{
-hi! link TagbarSignature Question
-hi! link TagbarTitle Title
-" I mean this is whats displayed at the top of the buffer so why not title?
-hi! link TagbarHelp Define
-
-" }}}
-" FZF: {{{
-
-hi! fzf1 ctermfg=161 ctermbg=238 guifg=#E12672 guibg=#565656 cterm=bold,underline
-hi! fzf2 ctermfg=151 ctermbg=238 guifg=#BCDDBD guibg=#565656 cterm=bold,underline
-hi! fzf3 ctermfg=252 ctermbg=238 guifg=#D9D9D9 guibg=#565656 cterm=bold,underline
-" }}}
-" }}}
-" Filetype specific ------------------------------------------------------- {{{
-
-" Jinja: {{{
-
-hi! link jinjaOperator Operator
-" }}}
-" Django: {{{
-hi link djangoTagBlock PreProc
-hi link djangoVarBlock PreProc
-hi link djangoStatement Statement
-hi link djangoFilter Identifier
-hi link djangoArgument Constant
-hi link djangoTagError Error
-hi link djangoVarError Error
-hi link djangoError Error
-hi link djangoComment Comment
-hi link djangoComBlock Comment
-hi link djangoTodo Todo
-
-" }}}
-" CSS: {{{
-hi! link cssAnimationProp cssProp
-hi! link cssAtKeyword PreProc
-hi! link cssAtRule Include
-hi! link cssAtRuleLogical Statement
-hi! link cssAttr Constant
-hi! link cssAttrComma Special
-hi! link cssAttributeSelector String
-hi! link cssAuralAttr cssAttr
-hi! link cssAuralProp cssProp
-hi! link cssBackgroundAttr cssAttr
-hi! link cssBackgroundProp Aqua
-hi! link cssBorderAttr cssAttr
-hi! link cssBorderOutlineProp Directory
-hi! link cssBorderProp cssProp
-hi! link cssBoxAttr cssAttr
-hi! link cssBoxProp Aqua
-hi! link cssBoxProp cssProp
-hi! link cssBraceError Error
-hi! link cssBraces Function
-hi! link cssCascadeAttr cssAttr
-hi! link cssCascadeProp cssProp
-hi! link cssClassName Function
-hi! link cssClassName Green
-hi! link cssClassNameDot Function
-hi! link cssColor Blue
-hi! link cssColor Constant
-hi! link cssColorProp Aqua
-hi! link cssColorProp cssProp
-hi! link cssComment Comment
-hi! link cssCommonAttr cssAttr
-hi! link cssContentForPagedMediaAttr cssAttr
-hi! link cssContentForPagedMediaProp cssProp
-hi! link cssCustomProp Special
-hi! link cssDeprecated Error
-hi! link cssDimensionAttr cssAttr
-hi! link cssDimensionProp Aqua
-hi! link cssDimensionProp cssProp
-hi! link cssError Error
-hi! link cssFlexibleBoxAttr cssAttr
-hi! link cssFlexibleBoxProp Aqua
-hi! link cssFlexibleBoxProp cssProp
-hi! link cssFontAttr cssAttr
-hi! link cssFontDescriptor Special
-hi! link cssFontDescriptorAttr cssAttr
-hi! link cssFontDescriptorProp cssProp
-hi! link cssFontProp cssProp
-hi! link cssFunction Constant
-hi! link cssFunctionComma Function
-hi! link cssFunctionName Function
-hi! link cssGeneratedContentAttr cssAttr
-hi! link cssGeneratedContentProp cssProp
-hi! link cssGradientAttr cssAttr
-hi! link cssGridAttr cssAttr
-hi! link cssGridProp cssProp
-hi! link cssHacks Comment
-hi! link cssHyerlinkAttr cssAttr
-hi! link cssHyerlinkProp cssProp
-hi! link cssIEUIAttr cssAttr
-hi! link cssIEUIProp cssProp
-hi! link cssIdentifier Function
-hi! link cssImportant Special
-hi! link cssInteractAttr cssAttr
-hi! link cssInteractProp cssProp
-hi! link cssKeyFrameProp Constant
-hi! link cssLineboxAttr cssAttr
-hi! link cssLineboxProp cssProp
-hi! link cssListAttr cssAttr
-hi! link cssListProp Aqua
-hi! link cssListProp cssProp
-hi! link cssMarginAttr cssAttr
-hi! link cssMarginProp Aqua
-hi! link cssMarqueeAttr cssAttr
-hi! link cssMarqueeProp cssProp
-hi! link cssMediaAttr cssAttr
-hi! link cssMediaComma Normal
-hi! link cssMediaProp cssProp
-hi! link cssMediaType Special
-hi! link cssMobileTextProp cssProp
-hi! link cssMultiColumnAttr cssAttr
-hi! link cssMultiColumnProp cssProp
-hi! link cssNoise Noise
-hi! link cssPaddingAttr cssAttr
-hi! link cssPaddingProp Aqua
-hi! link cssPaddingProp Directory
-hi! link cssPageMarginProp cssAtKeyword
-hi! link cssPageProp cssProp
-hi! link cssPagePseudo PreProc
-hi! link cssPagedMediaAttr cssAttr
-hi! link cssPagedMediaProp cssProp
-hi! link cssPositioningAttr cssAttr
-hi! link cssPositioningProp Yellow
-hi! link cssPositioningProp cssProp
-hi! link cssPrintAttr cssAttr
-hi! link cssPrintProp Aqua
-hi! link cssPrintProp cssProp
-hi! link cssProp StorageClass
-hi! link cssPseudoClassId PreProc
-hi! link cssPseudoClassLang Constant
-hi! link cssRenderAttr cssAttr
-hi! link cssRenderProp Aqua
-hi! link cssRenderProp cssProp
-hi! link cssRubyAttr cssAttr
-hi! link cssRubyProp cssProp
-hi! link cssSelectorOp Blue
-hi! link cssSelectorOp Special
-hi! link cssSelectorOp2 Blue
-hi! link cssSelectorOp2 Special
-hi! link cssSpeechAttr cssAttr
-hi! link cssSpeechProp cssProp
-hi! link cssTableAttr cssAttr
-hi! link cssTableProp Aqua
-hi! link cssTableProp cssProp
-hi! link cssTagName Statement
-hi! link cssTextAttr cssAttr
-hi! link cssTextProp Aqua
-hi! link cssTextProp cssProp
-hi! link cssTransformAttr cssAttr
-hi! link cssTransformProp Aqua
-hi! link cssTransformProp cssProp
-hi! link cssTransitionAttr cssAttr
-hi! link cssTransitionProp Aqua
-hi! link cssTransitionProp cssProp
-hi! link cssUIAttr cssAttr
-hi! link cssUIProp Yellow
-hi! link cssUIProp cssProp
-hi! link cssURL String
-hi! link cssUnicodeEscape Special
-hi! link cssUnicodeRange Constant
-hi! link cssUnitDecorators Number
-hi! link cssValueAngle Number
-hi! link cssValueFrequency Number
-hi! link cssValueInteger Number
-hi! link cssValueLength Number
-hi! link cssValueNumber Number
-hi! link cssValueTime Number
-hi! link cssVendor Comment
-hi! link cssVendor White
-" }}}
-" Man.vim: {{{
-" Define the default highlighting.
-" Only when an item doesn't have highlighting yet
-
-highlight default link manTitle          Title
-highlight default link manSectionHeading Statement
-highlight default link manOptionDesc     Constant
-highlight default link manReference      PreProc
-highlight default link manSubHeading     Function
-
-highlight default link manUnderline Underlined
-highlight default link manBold GruvboxYellowBold
-highlight default link manItalic htmlItalic
-
-" And the rest
-hi! link manCError Error
-hi! link manEmail Directory
-hi! link manEnvVar Identifier
-hi! link manEnvVarFile Identifier
-hi! link manEnvVarFile Identifier
-hi! link manFile GruvboxYellow
-hi! link manFiles GruvboxFg0
-hi! link manFooter GruvboxPurple
-hi! link manHighlight GruvboxYellow
-hi! link manHistory GruvboxYellow
-hi! link manHeaderFile GruvboxYellow
-hi! link manSectionHeading GruvboxOrangeBold
-hi! link manSentence GruvboxFg2
-hi! link manSignal GruvboxPurple
-hi! link manURL GruvboxGreen
-
-" }}}
-" Netrw: {{{
-" Hate to be that guy but Netrw is considered an ftplugin
-
-hi link netrwClassify Directory
-hi link netrwCmdNote Directory
-hi link netrwCmdSep VertSplit
-hi link netrwComma Delimiter
-hi link netrwComment Comment
-if has('nvim')
-  hi link netrwCopyTgt IncSearch
-else
-  " Is this canoniccal vim?
-  hi link netrwCopyTgt StorageClass
-endif
-
-hi link netrwDateSep Delimiter
-hi link netrwDir Directory
-hi link netrwExe Macro
-hi link netrwGray Folded
-hi link netrwHelpCmd Directory
-hi link netrwHide Conceal
-hi link netrwHidePat Folded
-hi link netrwLib Directory
-hi link netrwLink Underlined
-hi link netrwList PreCondit
-hi link netrwPlain String
-hi link netrwQHTopic Number
-hi link netrwSizeDate Delimiter
-hi link netrwSlash Delimiter
-hi link netrwSortBy Title
-hi link netrwSortSeq netrwList
-hi link netrwSpecial netrwClassify
-hi link netrwSymLink Special
-hi link netrwTime Delimiter
-hi link netrwTimeSep Delimiter
-hi link netrwTreeBar Special
-hi link netrwTreeBarSpace Special
-hi link netrwVersion Float
-
-" }}}
-" Rst: {{{
-
-hi! link rstDirectivesh     Question
-hi! link rstDirectivepython Question
-hi! link rstInlineLiteral   Identifier
-
-" Well heres the built in syntax file
-hi link rstCitation                     String
-hi link rstCitationReference            Identifier
-hi link rstCodeBlock                    String
-hi link rstComment                      Comment
-hi link rstDelimiter                    Delimiter
-hi link rstDirective                    Keyword
-hi link rstDoctestBlock                 PreProc
-" hi link rstExDirective                  String
-" Blends in with the rest of the string
-hi link rstExDirective                  Identifier
-hi link rstExplicitMarkup               rstDirective
-hi link rstFileLink                     rstHyperlinkReference
-hi link rstFootnote                     String
-hi link rstFootnoteReference            Identifier
-hi link rstHyperLinkReference           Identifier
-hi link rstHyperlinkTarget              String
-hi link rstInlineInternalTargets        Identifier
-hi link rstInlineLiteral                String
-hi link rstInterpretedTextOrHyperlinkReference  Identifier
-hi link rstLiteralBlock                 String
-hi link rstQuotedLiteralBlock           String
-hi link rstSections                     Title
-hi! link rstSimpleTable                 Orange
-hi! link rstSimpleTableLines            OrangeBold
-hi link rstStandaloneHyperlink          Identifier
-hi link rstSubstitutionDefinition       rstDirective
-hi link rstSubstitutionReference        PreProc
-hi! link rstTable                       Orange
-hi! link rstTableLines                   Orange
-hi link rstTodo                         Todo
-hi link rstTransition                   rstSections
-
-hi! link rstDirectivesh     Question
-hi! link rstDirectivepython Question
-hi! link rstInlineLiteral   Identifier
-
-" }}}
-" Tmux: {{{
-
-hi def link tmuxFormatString      Identifier
-hi def link tmuxAction            Boolean
-hi def link tmuxBoolean           Boolean
-hi def link tmuxCommands          Keyword
-hi def link tmuxComment           Comment
-hi def link tmuxKey               Special
-hi def link tmuxNumber            Number
-hi def link tmuxFlags             Identifier
-hi def link tmuxOptions           Function
-hi def link tmuxString            String
-hi def link tmuxTodo              Todo
-hi def link tmuxVariable          Identifier
-hi def link tmuxVariableExpansion Identifier
-hi! link tmuxColor SpecialKey
-
-" }}}
-" Diff: {{{
-
-hi DiffAdd guifg=#b8bb26 guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermfg=100 ctermbg=234
-hi DiffChange guifg=#8ec07c guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermfg=29 ctermbg=234
-hi DiffDelete guifg=#fb4934 guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermfg=124 ctermbg=234
-hi DiffText guifg=#fabd2f guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermfg=172 ctermbg=234
-hi! link diffAdded GruvboxGreen
-hi! link diffRemoved GruvboxRed
-hi! link diffChanged Directory
-
-hi! link diffFile GruvboxOrange
-hi! link diffNewFile GruvboxYellow
-
-hi! link diffLine GruvboxBlue
-
-" }}}
-" Html: {{{
-
-hi link htmlScriptTag Tag
-
-" Default syntax
-hi link htmlTag                     Function
-hi link htmlEndTag                  Identifier
-hi link htmlArg                     Type
-hi link htmlTagName                 htmlStatement
-hi link htmlSpecialTagName          Exception
-hi link htmlValue                     String
-hi link htmlSpecialChar             Special
-
-hi htmlBold                cterm=bold gui=bold
-hi htmlBoldUnderline       cterm=bold,underline gui=bold,underline
-hi htmlBoldItalic          cterm=bold,italic gui=bold,italic
-hi htmlBoldUnderlineItalic  cterm=bold,italic,underline gui=bold,italic,underline
-hi htmlUnderline           cterm=underline gui=underline
-hi htmlUnderlineItalic     cterm=italic,underline gui=italic,underline
-hi htmlItalic              cterm=italic gui=italic
-hi link htmlH1                      Title
-hi link htmlH2                      htmlH1
-hi link htmlH3                      htmlH2
-hi link htmlH4                      htmlH3
-hi link htmlH5                      htmlH4
-hi link htmlH6                      htmlH5
-hi link htmlHead                    PreProc
-hi link htmlTitle                   Title
-hi link htmlBoldItalicUnderline     htmlBoldUnderlineItalic
-hi link htmlUnderlineBold           htmlBoldUnderline
-hi link htmlUnderlineItalicBold     htmlBoldUnderlineItalic
-hi link htmlUnderlineBoldItalic     htmlBoldUnderlineItalic
-hi link htmlItalicUnderline         htmlUnderlineItalic
-hi link htmlItalicBold              htmlBoldItalic
-hi link htmlItalicBoldUnderline     htmlBoldUnderlineItalic
-hi link htmlItalicUnderlineBold     htmlBoldUnderlineItalic
-hi link htmlLink                    Underlined
-hi link htmlLeadingSpace            None
-
-if v:version > 800 || v:version == 800 && has("patch1038")
-		hi def htmlStrike              term=strikethrough cterm=strikethrough gui=strikethrough
-else
-		hi def htmlStrike              term=underline cterm=underline gui=underline
-endif
-
-hi link htmlPreStmt            PreProc
-hi link htmlPreError           Error
-hi link htmlPreProc            PreProc
-hi link htmlPreAttr            String
-hi link htmlPreProcAttrName    PreProc
-hi link htmlPreProcAttrError   Error
-hi link htmlSpecial            Special
-hi link htmlSpecialChar        Special
-hi link htmlString             String
-hi link htmlStatement          Statement
-hi link htmlComment            Comment
-hi link htmlCommentPart        Comment
-hi link htmlValue              String
-hi link htmlCommentError       htmlError
-hi link htmlTagError           htmlError
-hi link htmlEvent              javaScript
-hi link htmlError              Error
-
-hi link javaScript             Special
-hi link javaScriptExpression   javaScript
-hi link htmlCssStyleComment    Comment
-hi link htmlCssDefinition      Special
-" }}}
-" Xml: {{{
-
-hi! link xmlTag GruvboxBlue
-hi! link xmlEndTag GruvboxBlue
-hi! link xmlTagName GruvboxBlue
-hi! link xmlEqual GruvboxBlue
-hi! link docbkKeyword Keyword
-
-hi! link xmlDocTypeDecl GruvboxGray
-hi! link xmlDocTypeKeyword Keyword
-hi! link xmlCdataStart GruvboxGray
-hi! link xmlCdataCdata GruvboxPurple
-hi! link dtdFunction GruvboxGray
-hi! link dtdTagName GruvboxPurple
-
-hi! link xmlAttrib Directory
-hi! link xmlProcessingDelim GruvboxGray
-hi! link dtdParamEntityPunct GruvboxGray
-hi! link dtdParamEntityDPunct GruvboxGray
-hi! link xmlAttribPunct GruvboxGray
-
-hi! link xmlEntity GruvboxOrange
-hi! link xmlEntityPunct GruvboxOrange
-" }}}
-" Sh: {{{
-hi link bashAdminStatement	shStatement
-hi link bashSpecialVariables	shShellVariables
-hi link bashStatement		shStatement
-hi link shAlias		Identifier
-hi link shArithRegion	shShellVariables
-hi link shArithmetic		Special
-hi link shAstQuote	shDoubleQuote
-hi link shAtExpr	shSetList
-hi link shBQComment	shComment
-hi link shBeginHere	shRedir
-hi link shBkslshDblQuote	shDoubleQuote
-hi link shBkslshSnglQuote	shSingleQuote
-hi link shCase             Question
-hi link shCaseBar	shConditional
-hi link shCaseCommandSub	shCommandSub
-hi link shCaseDoubleQuote	shDoubleQuote
-hi link shCaseError		Error
-hi link shCaseEsac         Question
-hi link shCaseEsacSync     Question
-hi link shCaseExSingleQuote Question
-hi link shCaseIn	shConditional
-hi link shCaseLabel        Question
-hi link shCaseRange        Question
-hi link shCaseSingleQuote	shSingleQuote
-hi link shCaseStart	shConditional
-hi link shCharClass		Identifier
-hi link shCmdParenRegion   Question
-hi link shCmdSubRegion	shShellVariables
-hi link shColon	shComment
-hi link shComma            Question
-hi link shCommandSub		Special
-hi link shCommandSubBQ		shCommandSub
-hi link shComment		Comment
-hi link shCondError		Error
-hi link shConditional		Conditional
-hi link shCtrlSeq		Special
-hi link shCurlyError		Error
-hi link shCurlyIn          Question
-hi link shDblBrace         Question
-hi link shDblParen         Question
-hi link shDeref	shShellVariables
-hi link shDerefDelim	shOperator
-hi link shDerefEscape      Question
-hi link shDerefLen		shDerefOff
-hi link shDerefOff		shDerefOp
-hi link shDerefOp	shOperator
-hi link shDerefOpError		Error
-hi link shDerefPOL	shDerefOp
-hi link shDerefPPS	shDerefOp
-hi link shDerefPPSleft     Question
-hi link shDerefPPSright    Question
-hi link shDerefPSR	shDerefOp
-hi link shDerefPSRleft     Question
-hi link shDerefPSRright    Question
-hi link shDerefPattern     Question
-hi link shDerefSimple	shDeref
-hi link shDerefSpecial	shDeref
-hi link shDerefString	shDoubleQuote
-hi link shDerefVar	shDeref
-hi link shDerefVarArray    Question
-hi link shDerefWordError		Error
-hi link shDo               Question
-hi link shDoError		Error
-hi link shDoSync           Question
-hi link shDoubleQuote	shString
-hi link shEcho	shString
-hi link shEchoDelim	shOperator
-hi link shEchoQuote	shString
-hi link shEmbeddedEcho	shString
-hi link shEsacError		Error
-hi link shEscape	shCommandSub
-hi link shExDoubleQuote	shDoubleQuote
-hi link shExSingleQuote	shSingleQuote
-hi link shExpr             Question
-hi link shExprRegion		Delimiter
-hi link shFor              Question
-hi link shForPP	shLoop
-hi link shForSync          Question
-hi link shFunction	Function
-hi link shFunctionFour     Question
-hi link shFunctionKey		Keyword
-hi link shFunctionName		Function
-hi link shFunctionOne      Identifier
-hi link shFunctionStart    Question
-hi link shFunctionThree    Question
-hi link shFunctionTwo      Question
-hi link shHereDoc	shString
-hi link shHereDoc01		shRedir
-hi link shHereDoc02		shRedir
-hi link shHereDoc03		shRedir
-hi link shHereDoc04		shRedir
-hi link shHereDoc05		shRedir
-hi link shHereDoc06		shRedir
-hi link shHereDoc07		shRedir
-hi link shHereDoc08		shRedir
-hi link shHereDoc09		shRedir
-hi link shHereDoc10		shRedir
-hi link shHereDoc11		shRedir
-hi link shHereDoc12		shRedir
-hi link shHereDoc13		shRedir
-hi link shHereDoc14		shRedir
-hi link shHereDoc15		shRedir
-hi link shHereDoc16        Question
-hi link shHerePayload	shHereDoc
-hi link shHereString	shRedir
-hi link shIf               Identifier
-hi link shIfSync           Question
-hi link shInError		Error
-hi link shLoop	shStatement
-hi link shNoQuote	shDoubleQuote
-hi link shNumber		Number
-hi link shOK               Question
-hi link shOperator		Operator
-hi link shOption	shCommandSub
-hi link shParen	shArithmetic
-hi link shParenError		Error
-hi link shPattern	shString
-hi link shPosnParm	shShellVariables
-hi link shQuickComment	shComment
-hi link shQuote	shOperator
-hi link shRange	shOperator
-hi link shRedir	shOperator
-hi link shRepeat		Repeat
-hi link shSet		Statement
-hi link shSetList		Identifier
-hi link shSetListDelim	shOperator
-hi link shSetOption	shOption
-hi link shShellVariables		PreProc
-hi link shSingleQuote	shString
-hi link shSnglCase		Statement
-hi link shSource	shOperator
-hi link shSource	shOperator
-hi link shSpecial		Special
-hi link shSpecialDQ		Special
-hi link shSpecialNoZS		shSpecial
-hi link shSpecialNxt	shSpecial
-hi link shSpecialSQ		Special
-hi link shSpecialStart	shSpecial
-hi link shSpecialVar       Question
-hi link shStatement		Statement
-hi link shString		String
-hi link shStringSpecial	shSpecial
-hi link shSubSh            Question
-hi link shSubShRegion	shOperator
-hi link shTest             Question
-hi link shTestDoubleQuote	shString
-hi link shTestError		Error
-hi link shTestOpr	shConditional
-hi link shTestPattern	shString
-hi link shTestSingleQuote	shString
-hi link shTodo		Todo
-hi link shTouch            Question
-hi link shTouchCmd	shStatement
-hi link shUntilSync        Question
-hi link shVarAssign        Question
-hi link shVariable	shSetList
-hi link shWhileSync        Question
-hi link shWrapLineOperator	shOperator
-
-" }}}
-if has('nvim')  " {{{
-	" How does a nice light blue sound?
-	hi! NvimInternalError guibg=NONE ctermfg=108 ctermbg=234 gui=reverse guifg=#8ec0e1 guisp=NONE
-	hi link nvimAutoEvent	vimAutoEvent
-	hi link nvimHLGroup	vimHLGroup
-  hi link NvimIdentifierKey IdentifierBold
-	hi link nvimInvalid Exception
-	hi link nvimMap	vimMap
-	hi link nvimUnmap	vimUnmap
-
-	hi link TermCursor Cursor
-	hi TermCursorNC ctermfg=237 ctermbg=223 guifg=#3c3836 guibg=#ebdbb2 guisp=NONE cterm=NONE gui=NONE
-
-	" *hl-NormalFloat* NormalFloat	Normal text in floating windows.
-	hi NormalFloat ctermfg=223 ctermbg=234 guifg=#ebdbb2 guibg=#1d2021 guisp=NONE gui=undercurl cterm=undercurl
-
-	" *hl-IncSearch*
-	" IncSearch	'incsearch' highlighting; also used for the text replaced with ':s///c'
-	hi IncSearch cterm=reverse ctermfg=208 ctermbg=234 gui=reverse guifg=#fe8019 guibg=#1d2021 guisp=NONE
-
-	" From he nvim-terminal-emulator
-	hi debugPC term=reverse ctermbg=darkblue guibg=darkblue
-	hi debugBreakpoint term=reverse ctermbg=red guibg=red
-endif
-
-" }}}
-" Python: {{{
-hi link pythonAsync			Statement
-hi link pythonAttribute TypeDef
-hi link pythonBoolean Boolean
-hi! link pythonBoolean Purple
-hi! link pythonBuiltin Orange
-hi! link pythonBuiltinFunc Orange
-hi! link pythonBuiltinObj Orange
-hi link pythonComment		Comment
-hi! link pythonCoding Blue
-hi! link pythonConditional Red
-hi! link pythonDecorator Red
-hi link pythonComment		Comment
-hi! link pythonDot Grey
-hi! link pythonDottedName GreenBold
-hi link pythonEscape		Special
-hi! link pythonException Red
-hi! link pythonExceptions Purple
-hi! link pythonFunction Aqua
-hi! link pythonImport Blue
-hi! link pythonInclude Blue
-hi link pythonMatrixMultiply Number
-hi link pythonNumber Number
-hi! link pythonOperator Orange
-hi link pythonQuotes		String
-hi link pythonRawString		String
-hi! link pythonRepeat Red
-hi! link pythonRun Blue
-hi link pythonSpaceError		Error
-hi link pythonStatement		Statement
-hi link pythonString		String
-hi link pythonSync IdentifierBold
-hi link pythonTodo			Todo
-hi link pythonTripleQuotes		pythonQuotes
-
-" }}}
-" Vim: {{{
-
-" Defined In Syntax File: {{{
-hi! link vimAbb	vimCommand
-hi! link vimAddress	vimMark
-hi! link vimAuHighlight	vimHighlight
-hi! link vimAugroupError	Error
-hi! link vimAugroupKey	Keyword
-hi! link vimAutoCmd	vimCommand
-hi! link vimAutoCmdOpt	vimOption
-hi! link vimAutoEvent	Type
-hi! link vimAutoSet	vimCommand
-hi! link vimBehave	vimCommand
-hi! link vimBehaveModel	vimBehave
-hi! link vimBracket	Delimiter
-hi! link vimCmplxRepeat	SpecialChar
-hi! link vimCommand	Statement
-hi! link vimComment	Comment
-hi! link vimCommentString	vimString
-hi! link vimCommentTitle	PreProc
-hi! link vimCondHL	vimCommand
-hi! link vimContinue	Special
-hi! link vimCtrlChar	SpecialChar
-hi! link vimEchoHL	vimCommand
-hi! link vimEchoHLNone	vimGroup
-hi! link vimElseIfErr	Error
-hi! link vimElseif	vimCondHL
-hi! link vimEnvvar	PreProc
-hi! link vimError	Error
-hi! link vimFBVar	vimVar
-hi! link vimFTCmd	vimCommand
-hi! link vimFTOption	vimSynType
-hi! link vimFgBgAttrib	vimHiAttrib
-hi! link vimFold	Folded
-hi! link vimFunc Function
-hi! link vimFuncKey	vimCommand
-hi! link vimFuncName	Function
-hi! link vimFuncSID	Special
-hi! link vimFuncVar	Identifier
-hi! link vimFunction Function
-hi! link vimGroup	Type
-hi! link vimGroupAdd	vimSynOption
-hi! link vimGroupName	vimGroup
-hi! link vimGroupRem	vimSynOption
-hi! link vimGroupSpecial	Special
-hi! link vimHLGroup	vimGroup
-hi! link vimHLMod	PreProc
-hi! link vimHiAttrib	PreProc
-hi! link vimHiBang vimHighlight
-hi! link vimHiCTerm	vimHiTerm
-hi! link vimHiClear	vimHighlight
-hi! link vimHiCtermFgBg	vimHiTerm
-hi! link vimHiGroup	vimGroupName
-hi! link vimHiGui	vimHiTerm
-hi! link vimHiGuiFgBg	vimHiTerm
-hi! link vimHiGuiFont	vimHiTerm
-hi! link vimHiGuiRgb	vimNumber
-hi! link vimHiNmbr	Number
-hi! link vimHiStartStop	vimHiTerm
-hi! link vimHiTerm	Type
-hi! link vimHighlight	Operator
-hi! link vimInsert	vimString
-
-" vimIsCommand is a terrible regex honestly don't match it with anything
-" Output of `syn list vimIsCommand
-" --- Syntax items ---
-" vimIsCommand   xxx match /\<\h\w*\>/  contains=vimCommand
-"                    match /<Bar>\s*\a\+/  transparent contains=vimCommand,vimNotation
-" \h is any upper case letter. \w is any letter. wtf? that contains SO many false positives
-
-" hi! link vimIsCommand       vimOption
-hi! link vimIskSep	Delimiter
-hi! link vimKeyCode	vimSpecFile
-hi! link vimKeyword	Statement
-hi! link vimLet	vimCommand
-hi! link vimLineComment	vimComment
-hi! link vimMap	vimCommand
-hi! link vimMapBang	vimCommand
-hi! link vimMapMod	vimBracket
-hi! link vimMapModKey	vimFuncSID
-hi! link vimMark	Number
-hi! link vimMarkNumber	vimNumber
-hi! link vimMenuMod	vimMapMod
-hi! link vimMenuName	PreProc
-hi! link vimMenuNameMore	vimMenuName
-hi! link vimMtchComment	vimComment
-hi! link vimNorm	vimCommand
-hi! link vimNotFunc	vimCommand
-hi! link vimNotPatSep	vimString
-hi! link vimNotation	Special
-hi! link vimNumber GruvboxRed
-hi! link vimOper	Operator
-hi! link vimOperError	Error
-hi! link vimOption	PreProc
-hi! link vimParenSep	Delimiter
-hi! link vimPatSep	SpecialChar
-hi! link vimPatSepErr	vimError
-hi! link vimPatSepR	vimPatSep
-hi! link vimPatSepZ	vimPatSep
-hi! link vimPatSepZone	vimString
-hi! link vimPattern	Type
-hi! link vimPlainMark	vimMark
-hi! link vimPlainRegister	vimRegister
-hi! link vimRegister	SpecialChar
-hi! link vimScriptDelim	Comment
-hi! link vimSearch	vimString
-hi! link vimSearchDelim	Statement
-hi! link vimSep	Delimiter
-hi! link vimSetMod	vimOption
-hi! link vimSetSep	Statement
-hi! link vimSetString	vimString
-hi! link vimSpecFile	Identifier
-hi! link vimSpecFileMod	vimSpecFile
-hi! link vimSpecial	Type
-hi! link vimStatement	Statement
-hi! link vimStdPlugin       Function
-hi! link vimString	String
-hi! link vimStringCont	vimString
-hi! link vimStringEnd	vimString
-hi! link vimSubst	vimCommand
-hi! link vimSubst1	vimSubst
-hi! link vimSubstDelim	Delimiter
-hi! link vimSubstFlags	Special
-hi! link vimSubstSubstr	SpecialChar
-hi! link vimSubstTwoBS	vimString
-hi! link vimSynCase	Type
-hi! link vimSynCaseError	Error
-hi! link vimSynContains	vimSynOption
-hi! link vimSynError	Error
-hi! link vimSynKeyContainedin	vimSynContains
-hi! link vimSynKeyOpt	vimSynOption
-hi! link vimSynMtchGrp	vimSynOption
-hi! link vimSynMtchOpt	vimSynOption
-hi! link vimSynNextgroup	vimSynOption
-hi! link vimSynNotPatRange	vimSynRegPat
-hi! link vimSynOption	Special
-hi! link vimSynPatRange	vimString
-hi! link vimSynReg	Type
-hi! link vimSynRegOpt	vimSynOption
-hi! link vimSynRegPat	vimString
-hi! link vimSynType	vimSpecial
-hi! link vimSyncC	Type
-hi! link vimSyncError	Error
-hi! link vimSyncGroup	vimGroupName
-hi! link vimSyncGroupName	vimGroupName
-hi! link vimSyncKey	Type
-hi! link vimSyncNone	Type
-hi! link vimSyntax	vimCommand
-hi! link vimTodo	Todo
-hi! link vimUnmap	vimMap
-hi! link vimUserAttrb	vimSpecial
-hi! link vimUserAttrbCmplt	vimSpecial
-hi! link vimUserAttrbCmpltFunc	Special
-hi! link vimUserAttrbError	Error
-hi! link vimUserAttrbKey	vimOption
-hi! link vimUserCmd vimUserCommand
-hi! link vimUserCmdError	Error
-hi! link vimUserCommand	vimCommand
-hi! link vimVar	Identifier
-hi! link vimWarn	WarningMsg
-
-" }}}
-" Vim Errors: {{{
-hi link vimBehaveError	vimError
-hi link vimBufnrWarn	vimWarn
-hi link vimCollClassErr	vimError
-hi link vimEmbedError	vimError
-hi link vimErrSetting	vimError
-hi link vimFTError	vimError
-hi link vimFunc         	vimError
-hi link vimFuncBody Function
-hi link vimFunctionError	vimError
-hi link vimHiAttribList	vimError
-hi link vimHiCtermError	vimError
-hi link vimHiKeyError	vimError
-hi link vimKeyCodeError	vimError
-hi link vimMapModErr	vimError
-hi link vimSubstFlagErr	vimError
-hi link vimSynCaseError	vimError
-hi link vimSynError Exception
-hi! link vimNotation Orange
-hi! link vimBracket Orange
-hi! link vimMapModKey Purple
-hi! link vimMapMod Purple
-hi! link vimFuncSID LightGrey
-hi! link vimSetSep LightGrey
-hi! link vimSep LightGrey
-hi! link vimContinue LightGrey
-hi! link vimLet Orange
-hi! link vimAutoCmd Orange
-
-" Vim etc: {{{
-" Here's every highlighting group I've ran into and a note with what it represents
-" The last letter of an autocmd like wth
-hi link vimAugroup	vimAugroupKey
-
-" Lmao the comma between BufEnter,BufReadPre
-hi link vimAutoEventList vimAutoEvent
-
-" Don't link to WildMenu it's the space in between the word cluster and the
-" cluster group
-" hi link vimClusterName WildMenu
-hi link vimClusterName NONE
-hi link vimCmdSep vimCommand
-hi link vimCommentTitleLeader	vimCommentTitle
-hi link vimEcho	String
-
-" the spaces between words in an execute statement like wth
-hi link vimExecute Label
-
-hi link vimHiAttribList Underlined
-hi link vimHiCtermColor Underlined
-hi link vimHiFontname Underlined
-hi link vimHiKeyList Keyword
-
-hi link vimIskSep Keyword
-hi link vimMapModErr Exception
-
-hi link vimMapLhs vimNotation
-hi link vimMapRhs vimNotation
-hi link vimMapRhsExtend	vimNotation
-hi link vimOnlyHLGroup VisualNOS
-hi link vimOnlyCommand vimCommand
-hi link vimOnlyOption GruvboxGreen
-hi link vimSet vimSetEqual
-
-" There's a highlighting group for the equals sign in a set option statement...
-hi link vimSetEqual	Operator
-hi link vimSynKeyRegion Keyword
-hi link vimHiAttribList vimHighlight
-
-" This syntax group is literally whitespace...
-hi link vimSynRegion Nontext
-hi link vimSyncLines Number
-
-" Here are a few more xxx cleared syn groups
-hi link vimUserFunc Function
-
-hi link vimPythonRegion Identifier
-
-" }}}
-
-" }}}
-
-" }}}
-
-" }}}
-
-" }}}
-
 " Original: {{{
-
 " Filetypes: {{{
 
 " Markdown: {{{
 hi! link markdownBlockquote Grey
-hi! link markdownBlockquote GruvboxGray
+hi! link markdownBlockquote Gray
 hi! link markdownBoldDelimiter Grey
 hi! link markdownCode Directory
 hi! link markdownCodeBlock Directory
 hi! link markdownCodeDelimiter Directory
 hi! link markdownError markdownText
-hi! link markdownH1 GruvboxGreenBold
-hi! link markdownH2 GruvboxGreenBold
+hi! link markdownH1 GreenBold
+hi! link markdownH2 GreenBold
 hi! link markdownH3 Title
 hi! link markdownH4 Title
 hi! link markdownH5 Yellow
@@ -1155,6 +199,7 @@ hi! link jsNull Purple
 hi! link jsUndefined Purple
 hi! link jsClassDefinition Yellow
 hi! link jsObjectKey GreenBold
+
 hi! link typescriptReserved Aqua
 hi! link typescriptLabel Aqua
 hi! link typescriptFuncKeyword Aqua
@@ -1174,11 +219,13 @@ hi! link typescriptInterpolationDelimiter Aqua
 hi! link typescriptDocSeeTag Comment
 hi! link typescriptDocParam Comment
 hi! link typescriptDocTags vimCommentTitle
+
 hi! link jsxTagName Aqua
 hi! link jsxComponentName Green
 hi! link jsxCloseString LightGrey
 hi! link jsxAttrib Yellow
 hi! link jsxEqual Aqua
+
 hi! link purescriptModuleKeyword Aqua
 hi! link purescriptModuleName Blue
 hi! link purescriptWhere Aqua
@@ -1194,12 +241,14 @@ hi! link purescriptConstructor White
 hi! link purescriptFunction White
 hi! link purescriptConditional Orange
 hi! link purescriptBacktick Orange
+
 hi! link coffeeExtendedOp Orange
 hi! link coffeeSpecialOp White
 hi! link coffeeDotAccess Grey
 hi! link coffeeCurly Orange
 hi! link coffeeParen White
 hi! link coffeeBracket Orange
+
 hi! link javaAnnotation Blue
 hi! link javaDocTags Aqua
 hi! link javaParen White
@@ -1225,10 +274,6 @@ hi! link rustSigil Orange
 hi! link rustStringContinuation Aqua
 hi! link rustStructure Aqua
 hi! link rustCommentLineDoc Comment
-
-hi! link rubyStringDelimiter Green
-hi! link rubyInterpolationDelimiter Aqua
-
 hi! link luaIn Red
 hi! link luaFunction Aqua
 hi! link luaTable Orange
@@ -1265,6 +310,7 @@ hi! link clojureSpecial Orange
 hi! link clojureStringEscape Aqua
 hi! link clojureUnquote Yellow
 hi! link clojureVariable Blue
+
 hi! link scalaNameDefinition White
 hi! link scalaCaseFollowing White
 hi! link scalaCapitalWord White
@@ -1277,6 +323,7 @@ hi! link scalaTypeDeclaration Yellow
 hi! link scalaTypeTypePostDeclaration Yellow
 hi! link scalaInstanceDeclaration White
 hi! link scalaInterpolation Aqua
+
 hi! link haskellType Blue
 hi! link haskellIdentifier Aqua
 hi! link haskellSeparator LightGrey
@@ -1311,6 +358,7 @@ hi! link haskellShebang YellowBold
 hi! link haskellLiquid PurpleBold
 hi! link haskellQuasiQuoted BlueBold
 hi! link haskellTypeRoles RedBold
+
 hi! link perlStatementPackage PreProc
 hi! link perlStatementInclude PreProc
 hi! link perlStatementStorage StorageClass
@@ -1320,15 +368,19 @@ hi! link perlMethod Function
 hi! link podCommand StorageClass
 hi! link podCmdText Macro
 hi! link podVerbatimLine String
+
 hi! link jsonKeyword Green
 hi! link jsonQuote Green
 hi! link jsonBraces White
 hi! link jsonString White
+
 hi! link yamlKey Aqua
 hi! link yamlConstant Purple
+
 hi! link tomlTable Orange
 hi! link tomlTableArray Orange
 hi! link tomlKey White
+
 hi! link mailHeader Blue
 hi! link mailHeaderKey Blue
 hi! link mailHeaderEmail Blue
@@ -1348,6 +400,7 @@ hi! link mailQuotedExp6 Orange
 hi! link mailSignature White
 hi! link mailURL Orange
 hi! link mailEmail Orange
+
 hi! link csBraces White
 hi! link csEndColon White
 hi! link csLogicSymbols Purple
@@ -1357,6 +410,7 @@ hi! link csInterpolationDelimiter Aqua
 hi! link csInterpolationFormat Aqua
 hi! link csInterpolationAlignDel AquaBold
 hi! link csInterpolationFormatDel AquaBold
+
 hi! link shRange White
 hi! link shTestOpr Purple
 hi! link shOption Purple
@@ -1382,13 +436,14 @@ hi! link diffNewFile Blue
 hi! link diffFile Orange
 hi! link diffLine Grey
 hi! link diffIndexLine Aqua
+
+hi! link helpCommand Orange
+hi! link helpExample Green
+hi! link helpHeader Aqua
+hi! link helpHeadline Title
 hi! link helpHyperTextEntry Red
 hi! link helpHyperTextJump Blue
 hi! link helpSectionDelim Grey
-hi! link helpExample Green
-hi! link helpCommand Orange
-hi! link helpHeadline Title
-hi! link helpHeader Aqua
 hi! link helpSpecial Yellow
 
 " }}}
@@ -3374,4 +2429,1066 @@ endif
 
 " }}}
 " Vim: set fdls=0 fdm=marker:
+" }}}
+" My Additions: {{{
+" Standard Highlights: {{{
+let g:gruvbox_material_transparent_background = 1
+let g:gruvbox_material_enable_bold = 1
+let g:gruvbox_material_background = 'hard'
+
+" From ned batchelder.
+match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
+
+" These got cleared somehow.
+" Screen line that the cursor is
+hi! CursorLine ctermbg=237 guibg=#3c3836 guifg=NONE ctermfg=NONE cterm=NONE gui=NONE guisp=NONE
+
+" Line number of CursorLine
+hi! CursorLineNr guifg=#fabd2f guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE ctermbg=237
+
+" Screen column that the cursor is
+hi! link CursorColumn CursorLine
+
+" Additional Links
+
+hi link manEmail Directory
+hi link manHeaderFile Statement
+" hi link manHighlight
+hi link NormalNC Ignore
+hi link VisualNC Visual
+
+" }}}
+" Plugins: {{{
+
+" NERDTree: {{{
+
+hi link NERDTreeBookmarks Typedef
+hi link NERDTreeCWD Underlined
+hi link NERDTreeDir Directory
+hi link NERDTreeDirSlash Delimiter
+hi link NERDTreeNodeDelimeters Delimiter
+hi link hideBracketsInNERDTree Conceal
+hi! link NERDTreeFile Structure
+
+" }}}
+" Asynchronous Lint Engine: {{{
+
+" call s:HL('ALEError', s:none, s:none, s:undercurl, s:red)
+" call s:HL('ALEWarning', s:none, s:none, s:undercurl, s:yellow)
+" call s:HL('ALEInfo', s:none, s:none, s:undercurl, s:blue)
+
+hi link ALEErrorSign Error
+hi link ALEWarningSign QuickFixLine
+hi link ALEInfoSign Directory
+hi link ALEError Error
+hi link ALEWarning QuickFixLine
+hi link ALEInfo Macro
+
+" }}}
+" GitGutter: {{{
+
+hi link GitGutterAdd GreenSign
+hi link GitGutterChange Macro
+hi link GitGutterDelete RedSign
+hi link GitGutterChangeDelete Macro
+
+" }}}
+" GitCommit: "{{{
+" Do I have this plugin? Is this a fugitive thing?
+hi link gitcommitSelectedFile Green
+hi link gitcommitDiscardedFile Red
+
+" }}}
+" Tagbar: {{{
+hi! link TagbarSignature Question
+hi! link TagbarTitle Title
+" I mean this is whats displayed at the top of the buffer so why not title?
+hi! link TagbarHelp Define
+
+" }}}
+" FZF: {{{
+
+hi! fzf1 ctermfg=161 ctermbg=238 guifg=#E12672 guibg=#565656 cterm=bold,underline
+hi! fzf2 ctermfg=151 ctermbg=238 guifg=#BCDDBD guibg=#565656 cterm=bold,underline
+hi! fzf3 ctermfg=252 ctermbg=238 guifg=#D9D9D9 guibg=#565656 cterm=bold,underline
+" }}}
+" Coc: {{{
+
+hi link CocErrorLine Exception
+hi link CocWarningLine WarningMsg
+hi link CocInfoLine EndOfBuffer
+hi link CocHintLine GreenSign
+hi link CocSelectedLine Visual
+
+" Override one of his...actually now a few
+hi! link CocInfoSign SpellRare
+hi! link CocErrorHighlight Error
+hi! link CocWarningHighlight OrangeBold
+hi link CocInfoHighlight EndOfBuffer
+hi! link CocHintHighlight GreenSign
+hi! link CocGitAddedSign GruvboxYellowBold
+hi! link CocCodeLens Macro
+hi! link CocErrorSign Error
+hi! link CocWarningSign GreenSign
+hi! link CocHintFloat Float
+hi! link CocHintSign Macro
+hi! link CocSelectedText Search
+hi! link CocUnderline Underlined
+hi! link CocListFgYellow GruvboxYellow
+hi! link CocListFgBlue GruvboxBlue
+hi! link CocListFgGreen Green
+hi! link CocListFgGrey GruvboxBg4
+hi! link CocListBgGrey GruvboxBg0
+
+hi! link CocListFgRed Red
+hi! link CocListFgYellow GruvboxYellow
+hi! link CocListFgCyan Macro
+
+" Ooo its a good idea to define the pum
+" CocFloating
+
+" }}}
+" Signify: {{{
+
+hi! link SignifySignAdd GreenSign
+hi! link SignifySignChange Macro
+hi! link SignifySignDelete RedSign
+
+" }}}
+" }}}
+" Filetype specific ------------------------------------------------------- {{{
+" Tutor: {{{
+hi tutorOK ctermfg=green guifg=#00ff88 cterm=bold gui=bold
+hi tutorX ctermfg=red guifg=#ff2000  cterm=bold gui=bold
+" TODO
+" tutorEmphasis
+" tutorInlineOK  xxx match /✓/
+" tutorURL       xxx links to tutorLink
+" tutorEmail     xxx links to tutorLink
+hi link tutorBold htmlBold
+hi link tutorCommand Delimiter
+hi link tutorConcealedEscapes Conceal
+hi link tutorEmail tutorLink
+hi link tutorEmphasis htmlItalic
+hi link tutorExpect Special
+hi link tutorInlineCode Delimiter
+hi link tutorInlineCommand vimCommand
+hi link tutorInlineOK tutorOK
+hi link tutorInlineX tutorX
+hi link tutorInternalAnchor Underlined
+hi link tutorLink PmenuSel
+hi link tutorLinkAnchor Underlined
+hi link tutorLinkBands Delimiter
+hi link tutorMarks Todo
+hi link tutorNormal Delimiter
+hi link tutorSection Title
+hi link tutorSectionBullet Delimiter
+hi link tutorShell Delimiter
+hi link tutorShellPrompt Delimeter
+hi link tutorTOC Directory
+hi link tutorURL tutorLink
+" }}}
+" Jinja: {{{
+
+hi! link jinjaOperator Operator
+" }}}
+" Django: {{{
+hi link djangoTagBlock PreProc
+hi link djangoVarBlock PreProc
+hi link djangoStatement Statement
+hi link djangoFilter Identifier
+hi link djangoArgument Constant
+hi link djangoTagError Error
+hi link djangoVarError Error
+hi link djangoError Error
+hi link djangoComment Comment
+hi link djangoComBlock Comment
+hi link djangoTodo Todo
+
+" }}}
+" CSS: {{{
+hi! link cssAnimationProp cssProp
+hi! link cssAtKeyword PreProc
+hi! link cssAtRule Include
+hi! link cssAtRuleLogical Statement
+hi! link cssAttr Constant
+hi! link cssAttrComma Special
+hi! link cssAttributeSelector String
+hi! link cssAuralAttr cssAttr
+hi! link cssAuralProp cssProp
+hi! link cssBackgroundAttr cssAttr
+hi! link cssBackgroundProp Aqua
+hi! link cssBorderAttr cssAttr
+hi! link cssBorderOutlineProp Directory
+hi! link cssBorderProp cssProp
+hi! link cssBoxAttr cssAttr
+hi! link cssBoxProp Aqua
+hi! link cssBoxProp cssProp
+hi! link cssBraceError Error
+hi! link cssBraces Function
+hi! link cssCascadeAttr cssAttr
+hi! link cssCascadeProp cssProp
+hi! link cssClassName Function
+hi! link cssClassName Green
+hi! link cssClassNameDot Function
+hi! link cssColor Blue
+hi! link cssColor Constant
+hi! link cssColorProp Aqua
+hi! link cssColorProp cssProp
+hi! link cssComment Comment
+hi! link cssCommonAttr cssAttr
+hi! link cssContentForPagedMediaAttr cssAttr
+hi! link cssContentForPagedMediaProp cssProp
+hi! link cssCustomProp Special
+hi! link cssDeprecated Error
+hi! link cssDimensionAttr cssAttr
+hi! link cssDimensionProp Aqua
+hi! link cssDimensionProp cssProp
+hi! link cssError Error
+hi! link cssFlexibleBoxAttr cssAttr
+hi! link cssFlexibleBoxProp Aqua
+hi! link cssFlexibleBoxProp cssProp
+hi! link cssFontAttr cssAttr
+hi! link cssFontDescriptor Special
+hi! link cssFontDescriptorAttr cssAttr
+hi! link cssFontDescriptorProp cssProp
+hi! link cssFontProp cssProp
+hi! link cssFunction Constant
+hi! link cssFunctionComma Function
+hi! link cssFunctionName Function
+hi! link cssGeneratedContentAttr cssAttr
+hi! link cssGeneratedContentProp cssProp
+hi! link cssGradientAttr cssAttr
+hi! link cssGridAttr cssAttr
+hi! link cssGridProp cssProp
+hi! link cssHacks Comment
+hi! link cssHyerlinkAttr cssAttr
+hi! link cssHyerlinkProp cssProp
+hi! link cssIEUIAttr cssAttr
+hi! link cssIEUIProp cssProp
+hi! link cssIdentifier Function
+hi! link cssImportant Special
+hi! link cssInteractAttr cssAttr
+hi! link cssInteractProp cssProp
+hi! link cssKeyFrameProp Constant
+hi! link cssLineboxAttr cssAttr
+hi! link cssLineboxProp cssProp
+hi! link cssListAttr cssAttr
+hi! link cssListProp Aqua
+hi! link cssListProp cssProp
+hi! link cssMarginAttr cssAttr
+hi! link cssMarginProp Aqua
+hi! link cssMarqueeAttr cssAttr
+hi! link cssMarqueeProp cssProp
+hi! link cssMediaAttr cssAttr
+hi! link cssMediaComma Normal
+hi! link cssMediaProp cssProp
+hi! link cssMediaType Special
+hi! link cssMobileTextProp cssProp
+hi! link cssMultiColumnAttr cssAttr
+hi! link cssMultiColumnProp cssProp
+hi! link cssNoise Noise
+hi! link cssPaddingAttr cssAttr
+hi! link cssPaddingProp Aqua
+hi! link cssPaddingProp Directory
+hi! link cssPageMarginProp cssAtKeyword
+hi! link cssPageProp cssProp
+hi! link cssPagePseudo PreProc
+hi! link cssPagedMediaAttr cssAttr
+hi! link cssPagedMediaProp cssProp
+hi! link cssPositioningAttr cssAttr
+hi! link cssPositioningProp Yellow
+hi! link cssPositioningProp cssProp
+hi! link cssPrintAttr cssAttr
+hi! link cssPrintProp Aqua
+hi! link cssPrintProp cssProp
+hi! link cssProp StorageClass
+hi! link cssPseudoClassId PreProc
+hi! link cssPseudoClassLang Constant
+hi! link cssRenderAttr cssAttr
+hi! link cssRenderProp Aqua
+hi! link cssRenderProp cssProp
+hi! link cssRubyAttr cssAttr
+hi! link cssRubyProp cssProp
+hi! link cssSelectorOp Blue
+hi! link cssSelectorOp Special
+hi! link cssSelectorOp2 Blue
+hi! link cssSelectorOp2 Special
+hi! link cssSpeechAttr cssAttr
+hi! link cssSpeechProp cssProp
+hi! link cssTableAttr cssAttr
+hi! link cssTableProp Aqua
+hi! link cssTableProp cssProp
+hi! link cssTagName Statement
+hi! link cssTextAttr cssAttr
+hi! link cssTextProp Aqua
+hi! link cssTextProp cssProp
+hi! link cssTransformAttr cssAttr
+hi! link cssTransformProp Aqua
+hi! link cssTransformProp cssProp
+hi! link cssTransitionAttr cssAttr
+hi! link cssTransitionProp Aqua
+hi! link cssTransitionProp cssProp
+hi! link cssUIAttr cssAttr
+hi! link cssUIProp Yellow
+hi! link cssUIProp cssProp
+hi! link cssURL String
+hi! link cssUnicodeEscape Special
+hi! link cssUnicodeRange Constant
+hi! link cssUnitDecorators Number
+hi! link cssValueAngle Number
+hi! link cssValueFrequency Number
+hi! link cssValueInteger Number
+hi! link cssValueLength Number
+hi! link cssValueNumber Number
+hi! link cssValueTime Number
+hi! link cssVendor Comment
+hi! link cssVendor White
+" }}}
+" Man.vim: {{{
+" Define the default highlighting.
+" Only when an item doesn't have highlighting yet
+
+highlight default link manTitle          Title
+highlight default link manSectionHeading Statement
+highlight default link manOptionDesc     Constant
+highlight default link manReference      PreProc
+highlight default link manSubHeading     Function
+
+highlight default link manUnderline Underlined
+highlight default link manBold GruvboxYellowBold
+highlight default link manItalic htmlItalic
+
+" And the rest
+hi! link manCError Error
+hi! link manEmail Directory
+hi! link manEnvVar Identifier
+hi! link manEnvVarFile Identifier
+hi! link manEnvVarFile Identifier
+hi! link manFile GruvboxYellow
+hi! link manFiles GruvboxFg0
+hi! link manFooter GruvboxPurple
+hi! link manHighlight GruvboxYellow
+hi! link manHistory GruvboxYellow
+hi! link manHeaderFile GruvboxYellow
+hi! link manSectionHeading OrangeBold
+hi! link manSentence GruvboxFg2
+hi! link manSignal GruvboxPurple
+hi! link manURL Green
+
+" }}}
+" Netrw: {{{
+" Hate to be that guy but Netrw is considered an ftplugin
+
+hi link netrwClassify Directory
+hi link netrwCmdNote Directory
+hi link netrwCmdSep VertSplit
+hi link netrwComma Delimiter
+hi link netrwComment Comment
+if has('nvim')
+  hi link netrwCopyTgt IncSearch
+else
+  " Is this canoniccal vim?
+  hi link netrwCopyTgt StorageClass
+endif
+
+hi link netrwDateSep Delimiter
+hi link netrwDir Directory
+hi link netrwExe Macro
+hi link netrwGray Folded
+hi link netrwHelpCmd Directory
+hi link netrwHide Conceal
+hi link netrwHidePat Folded
+hi link netrwLib Directory
+hi link netrwLink Underlined
+hi link netrwList PreCondit
+hi link netrwPlain String
+hi link netrwQHTopic Number
+hi link netrwSizeDate Delimiter
+hi link netrwSlash Delimiter
+hi link netrwSortBy Title
+hi link netrwSortSeq netrwList
+hi link netrwSpecial netrwClassify
+hi link netrwSymLink Special
+hi link netrwTime Delimiter
+hi link netrwTimeSep Delimiter
+hi link netrwTreeBar Special
+hi link netrwTreeBarSpace Special
+hi link netrwVersion Float
+
+" }}}
+" Rst: {{{
+
+hi! link rstDirectivesh     Question
+hi! link rstDirectivepython pythonDoctest
+hi! link rstInlineLiteral   Identifier
+
+" Well heres the built in syntax file
+hi link rstCitation                     String
+hi link rstCitationReference            Identifier
+hi link rstCodeBlock                    String
+hi link rstComment                      Comment
+hi link rstDelimiter                    Delimiter
+hi link rstDirective                    Keyword
+hi link rstDoctestBlock                 PreProc
+" hi link rstExDirective                  String
+" Blends in with the rest of the string
+hi link rstExDirective                  Identifier
+hi link rstExplicitMarkup               rstDirective
+hi link rstFileLink                     rstHyperlinkReference
+hi link rstFootnote                     String
+hi link rstFootnoteReference            Identifier
+hi link rstHyperLinkReference           Identifier
+hi link rstHyperlinkTarget              String
+hi link rstInlineInternalTargets        Identifier
+hi link rstInlineLiteral                String
+hi link rstInterpretedTextOrHyperlinkReference  Identifier
+hi link rstLiteralBlock                 String
+hi link rstQuotedLiteralBlock           String
+hi link rstSections                     Title
+hi! link rstSimpleTable                 Orange
+hi! link rstSimpleTableLines            OrangeBold
+hi link rstStandaloneHyperlink          Identifier
+hi link rstSubstitutionDefinition       rstDirective
+hi link rstSubstitutionReference        PreProc
+hi! link rstTable                       Orange
+hi! link rstTableLines                   Orange
+hi link rstTodo                         Todo
+hi link rstTransition                   rstSections
+
+hi! link rstDirectivesh     Question
+hi! link rstDirectivepython Question
+hi! link rstInlineLiteral   Identifier
+
+" }}}
+" Tmux: {{{
+
+hi def link tmuxFormatString      Identifier
+hi def link tmuxAction            Boolean
+hi def link tmuxBoolean           Boolean
+hi def link tmuxCommands          Keyword
+hi def link tmuxComment           Comment
+hi def link tmuxKey               Special
+hi def link tmuxNumber            Number
+hi def link tmuxFlags             Identifier
+hi def link tmuxOptions           Function
+hi def link tmuxString            String
+hi def link tmuxTodo              Todo
+hi def link tmuxVariable          Identifier
+hi def link tmuxVariableExpansion Identifier
+hi! link tmuxColor SpecialKey
+
+" }}}
+" Diff: {{{
+
+hi DiffAdd guifg=#b8bb26 guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermfg=100 ctermbg=234
+hi DiffChange guifg=#8ec07c guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermfg=29 ctermbg=234
+hi DiffDelete guifg=#fb4934 guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermfg=124 ctermbg=234
+hi DiffText guifg=#fabd2f guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermfg=172 ctermbg=234
+hi! link diffAdded Green
+hi! link diffRemoved Red
+hi! link diffChanged Directory
+
+hi! link diffFile Orange
+hi! link diffNewFile GruvboxYellow
+
+hi! link diffLine GruvboxBlue
+
+" }}}
+" Html: {{{
+
+hi link htmlScriptTag Tag
+
+" Default syntax
+hi link htmlTag                     Function
+hi link htmlEndTag                  Identifier
+hi link htmlArg                     Type
+hi link htmlTagName                 htmlStatement
+hi link htmlSpecialTagName          Exception
+hi link htmlValue                     String
+hi link htmlSpecialChar             Special
+
+hi htmlBold                cterm=bold gui=bold
+hi htmlBoldUnderline       cterm=bold,underline gui=bold,underline
+hi htmlBoldItalic          cterm=bold,italic gui=bold,italic
+hi htmlBoldUnderlineItalic  cterm=bold,italic,underline gui=bold,italic,underline
+hi htmlUnderline           cterm=underline gui=underline
+hi htmlUnderlineItalic     cterm=italic,underline gui=italic,underline
+hi htmlItalic              cterm=italic gui=italic
+hi link htmlH1                      Title
+hi link htmlH2                      htmlH1
+hi link htmlH3                      htmlH2
+hi link htmlH4                      htmlH3
+hi link htmlH5                      htmlH4
+hi link htmlH6                      htmlH5
+hi link htmlHead                    PreProc
+hi link htmlTitle                   Title
+hi link htmlBoldItalicUnderline     htmlBoldUnderlineItalic
+hi link htmlUnderlineBold           htmlBoldUnderline
+hi link htmlUnderlineItalicBold     htmlBoldUnderlineItalic
+hi link htmlUnderlineBoldItalic     htmlBoldUnderlineItalic
+hi link htmlItalicUnderline         htmlUnderlineItalic
+hi link htmlItalicBold              htmlBoldItalic
+hi link htmlItalicBoldUnderline     htmlBoldUnderlineItalic
+hi link htmlItalicUnderlineBold     htmlBoldUnderlineItalic
+hi link htmlLink                    Underlined
+hi link htmlLeadingSpace            None
+
+if v:version > 800 || v:version == 800 && has("patch1038")
+		hi def htmlStrike              term=strikethrough cterm=strikethrough gui=strikethrough
+else
+		hi def htmlStrike              term=underline cterm=underline gui=underline
+endif
+
+hi link htmlPreStmt            PreProc
+hi link htmlPreError           Error
+hi link htmlPreProc            PreProc
+hi link htmlPreAttr            String
+hi link htmlPreProcAttrName    PreProc
+hi link htmlPreProcAttrError   Error
+hi link htmlSpecial            Special
+hi link htmlSpecialChar        Special
+hi link htmlString             String
+hi link htmlStatement          Statement
+hi link htmlComment            Comment
+hi link htmlCommentPart        Comment
+hi link htmlValue              String
+hi link htmlCommentError       htmlError
+hi link htmlTagError           htmlError
+hi link htmlEvent              javaScript
+hi link htmlError              Error
+
+hi link javaScript             Special
+hi link javaScriptExpression   javaScript
+hi link htmlCssStyleComment    Comment
+hi link htmlCssDefinition      Special
+" }}}
+" Xml: {{{
+
+hi! link xmlTag GruvboxBlue
+hi! link xmlEndTag GruvboxBlue
+hi! link xmlTagName GruvboxBlue
+hi! link xmlEqual GruvboxBlue
+hi! link docbkKeyword Keyword
+
+hi! link xmlDocTypeDecl Gray
+hi! link xmlDocTypeKeyword Keyword
+hi! link xmlCdataStart Gray
+hi! link xmlCdataCdata GruvboxPurple
+hi! link dtdFunction Gray
+hi! link dtdTagName GruvboxPurple
+
+hi! link xmlAttrib Directory
+hi! link xmlProcessingDelim Gray
+hi! link dtdParamEntityPunct Gray
+hi! link dtdParamEntityDPunct Gray
+hi! link xmlAttribPunct Gray
+
+hi! link xmlEntity Orange
+hi! link xmlEntityPunct Orange
+" }}}
+" Sh: {{{
+hi link bashAdminStatement	shStatement
+hi link bashSpecialVariables	shShellVariables
+hi link bashStatement		shStatement
+hi link shAlias		Identifier
+hi link shArithRegion	shShellVariables
+hi link shArithmetic		Special
+hi link shAstQuote	shDoubleQuote
+hi link shAtExpr	shSetList
+hi link shBQComment	shComment
+hi link shBeginHere	shRedir
+hi link shBkslshDblQuote	shDoubleQuote
+hi link shBkslshSnglQuote	shSingleQuote
+hi link shCase             Question
+hi link shCaseBar	shConditional
+hi link shCaseCommandSub	shCommandSub
+hi link shCaseDoubleQuote	shDoubleQuote
+hi link shCaseError		Error
+hi link shCaseEsac         Question
+hi link shCaseEsacSync     Question
+hi link shCaseExSingleQuote Question
+hi link shCaseIn	shConditional
+hi link shCaseLabel        Question
+hi link shCaseRange        Question
+hi link shCaseSingleQuote	shSingleQuote
+hi link shCaseStart	shConditional
+hi link shCharClass		Identifier
+hi link shCmdParenRegion   Question
+hi link shCmdSubRegion	shShellVariables
+hi link shColon	shComment
+hi link shComma            Question
+hi link shCommandSub		Special
+hi link shCommandSubBQ		shCommandSub
+hi link shComment		Comment
+hi link shCondError		Error
+hi link shConditional		Conditional
+hi link shCtrlSeq		Special
+hi link shCurlyError		Error
+hi link shCurlyIn          Question
+hi link shDblBrace         Question
+hi link shDblParen         Question
+hi link shDeref	shShellVariables
+hi link shDerefDelim	shOperator
+hi link shDerefEscape      Question
+hi link shDerefLen		shDerefOff
+hi link shDerefOff		shDerefOp
+hi link shDerefOp	shOperator
+hi link shDerefOpError		Error
+hi link shDerefPOL	shDerefOp
+hi link shDerefPPS	shDerefOp
+hi link shDerefPPSleft     Question
+hi link shDerefPPSright    Question
+hi link shDerefPSR	shDerefOp
+hi link shDerefPSRleft     Question
+hi link shDerefPSRright    Question
+hi link shDerefPattern     Question
+hi link shDerefSimple	shDeref
+hi link shDerefSpecial	shDeref
+hi link shDerefString	shDoubleQuote
+hi link shDerefVar	shDeref
+hi link shDerefVarArray    Question
+hi link shDerefWordError		Error
+hi link shDo               Question
+hi link shDoError		Error
+hi link shDoSync           Question
+hi link shDoubleQuote	shString
+hi link shEcho	shString
+hi link shEchoDelim	shOperator
+hi link shEchoQuote	shString
+hi link shEmbeddedEcho	shString
+hi link shEsacError		Error
+hi link shEscape	shCommandSub
+hi link shExDoubleQuote	shDoubleQuote
+hi link shExSingleQuote	shSingleQuote
+hi link shExpr             Question
+hi link shExprRegion		Delimiter
+hi link shFor              Question
+hi link shForPP	shLoop
+hi link shForSync          Question
+hi link shFunction	Function
+hi link shFunctionFour     Question
+hi link shFunctionKey		Keyword
+hi link shFunctionName		Function
+hi link shFunctionOne      Identifier
+hi link shFunctionStart    Question
+hi link shFunctionThree    Question
+hi link shFunctionTwo      Question
+hi link shHereDoc	shString
+hi link shHereDoc01		shRedir
+hi link shHereDoc02		shRedir
+hi link shHereDoc03		shRedir
+hi link shHereDoc04		shRedir
+hi link shHereDoc05		shRedir
+hi link shHereDoc06		shRedir
+hi link shHereDoc07		shRedir
+hi link shHereDoc08		shRedir
+hi link shHereDoc09		shRedir
+hi link shHereDoc10		shRedir
+hi link shHereDoc11		shRedir
+hi link shHereDoc12		shRedir
+hi link shHereDoc13		shRedir
+hi link shHereDoc14		shRedir
+hi link shHereDoc15		shRedir
+hi link shHereDoc16        Question
+hi link shHerePayload	shHereDoc
+hi link shHereString	shRedir
+hi link shIf               Identifier
+hi link shIfSync           Question
+hi link shInError		Error
+hi link shLoop	shStatement
+hi link shNoQuote	shDoubleQuote
+hi link shNumber		Number
+hi link shOK               Question
+hi link shOperator		Operator
+hi link shOption	shCommandSub
+hi link shParen	shArithmetic
+hi link shParenError		Error
+hi link shPattern	shString
+hi link shPosnParm	shShellVariables
+hi link shQuickComment	shComment
+hi link shQuote	shOperator
+hi link shRange	shOperator
+hi link shRedir	shOperator
+hi link shRepeat		Repeat
+hi link shSet		Statement
+hi link shSetList		Identifier
+hi link shSetListDelim	shOperator
+hi link shSetOption	shOption
+hi link shShellVariables		PreProc
+hi link shSingleQuote	shString
+hi link shSnglCase		Statement
+hi link shSource	shOperator
+hi link shSource	shOperator
+hi link shSpecial		Special
+hi link shSpecialDQ		Special
+hi link shSpecialNoZS		shSpecial
+hi link shSpecialNxt	shSpecial
+hi link shSpecialSQ		Special
+hi link shSpecialStart	shSpecial
+hi link shSpecialVar       Question
+hi link shStatement		Statement
+hi link shString		String
+hi link shStringSpecial	shSpecial
+hi link shSubSh            Question
+hi link shSubShRegion	shOperator
+hi link shTest             Question
+hi link shTestDoubleQuote	shString
+hi link shTestError		Error
+hi link shTestOpr	shConditional
+hi link shTestPattern	shString
+hi link shTestSingleQuote	shString
+hi link shTodo		Todo
+hi link shTouch            Question
+hi link shTouchCmd	shStatement
+hi link shUntilSync        Question
+hi link shVarAssign        Question
+hi link shVariable	shSetList
+hi link shWhileSync        Question
+hi link shWrapLineOperator	shOperator
+
+" }}}
+if has('nvim')  " {{{
+	" How does a nice light blue sound?
+	hi! NvimInternalError guibg=NONE ctermfg=108 ctermbg=234 gui=reverse guifg=#8ec0e1 guisp=NONE
+	hi link nvimAutoEvent	vimAutoEvent
+	hi link nvimHLGroup	vimHLGroup
+  hi link NvimIdentifierKey IdentifierBold
+	hi link nvimInvalid Exception
+	hi link nvimMap	vimMap
+	hi link nvimUnmap	vimUnmap
+
+	hi link TermCursor Cursor
+	hi TermCursorNC ctermfg=237 ctermbg=223 guifg=#3c3836 guibg=#ebdbb2 guisp=NONE cterm=NONE gui=NONE
+
+	" *hl-NormalFloat* NormalFloat	Normal text in floating windows.
+	hi NormalFloat ctermfg=223 ctermbg=234 guifg=#ebdbb2 guibg=#1d2021 guisp=NONE gui=undercurl cterm=undercurl
+
+	" *hl-IncSearch*
+	" IncSearch	'incsearch' highlighting; also used for the text replaced with ':s///c'
+	hi IncSearch cterm=reverse ctermfg=208 ctermbg=234 gui=reverse guifg=#fe8019 guibg=#1d2021 guisp=NONE
+
+	" From he nvim-terminal-emulator
+	hi debugPC term=reverse ctermbg=darkblue guibg=darkblue
+	hi debugBreakpoint term=reverse ctermbg=red guibg=red
+endif
+
+" }}}
+" Python: {{{
+hi link pythonAsync			Statement
+hi link pythonAttribute TypeDef
+hi link pythonBoolean Boolean
+hi! link pythonBoolean Purple
+hi! link pythonBuiltin Orange
+hi! link pythonBuiltinFunc Orange
+hi! link pythonBuiltinObj Orange
+hi link pythonComment		Comment
+hi! link pythonCoding Blue
+hi! link pythonConditional Red
+hi! link pythonDecorator Red
+hi link pythonComment		Comment
+hi! link pythonDot Grey
+hi! link pythonDottedName GreenBold
+hi link pythonEscape		Special
+hi! link pythonException Red
+hi! link pythonExceptions Purple
+hi! link pythonFunction Aqua
+hi! link pythonImport Blue
+hi! link pythonInclude Blue
+hi link pythonMatrixMultiply Number
+hi link pythonNumber Number
+hi! link pythonOperator Orange
+hi link pythonQuotes		String
+hi link pythonRawString		String
+hi! link pythonRepeat Red
+hi! link pythonRun Blue
+hi link pythonSpaceError		Error
+hi link pythonStatement		Statement
+hi link pythonString		String
+hi link pythonSync IdentifierBold
+hi link pythonTodo			Todo
+hi link pythonTripleQuotes		pythonQuotes
+
+" }}}
+" Vim: {{{
+
+hi! link vimAbb	vimCommand
+hi! link vimAddress	vimMark
+hi! link vimAuHighlight	vimHighlight
+hi! link vimAugroup	vimAugroupKey
+hi! link vimAugroupError	Error
+hi! link vimAugroupKey	Keyword
+hi! link vimAutoCmd	vimCommand
+hi! link vimAutoCmd Orange
+hi! link vimAutoCmdOpt	vimOption
+hi! link vimAutoEvent	Type
+hi! link vimAutoEventList vimAutoEvent
+hi! link vimAutoSet	vimCommand
+hi! link vimBehave	vimCommand
+hi! link vimBehaveError	vimError
+hi! link vimBehaveModel	vimBehave
+hi! link vimBracket	Orange
+hi! link vimBracket Orange
+hi! link vimBufnrWarn	vimWarn
+hi! link vimClusterName NONE
+hi! link vimCmdSep vimCommand
+hi! link vimCmplxRepeat	SpecialChar
+hi! link vimCollClassErr	vimError
+hi! link vimCommand	Statement
+hi! link vimComment	Comment
+hi! link vimCommentString	vimString
+hi! link vimCommentTitle	PreProc
+hi! link vimCommentTitleLeader	vimCommentTitle
+hi! link vimCondHL	vimCommand
+hi! link vimContinue	Special
+hi! link vimContinue LightGrey
+hi! link vimCtrlChar	SpecialChar
+hi! link vimEcho	String
+hi! link vimEchoHL	vimCommand
+hi! link vimEchoHLNone	vimGroup
+hi! link vimElseIfErr	Error
+hi! link vimElseif	vimCondHL
+hi! link vimEmbedError	vimError
+hi! link vimEnvvar	PreProc
+hi! link vimErrSetting	vimError
+hi! link vimError	Error
+hi! link vimExecute Label
+hi! link vimFBVar	vimVar
+hi! link vimFTCmd	vimCommand
+hi! link vimFTError	vimError
+hi! link vimFTOption	vimSynType
+hi! link vimFgBgAttrib	vimHiAttrib
+hi! link vimFold	Folded
+hi! link vimFunc         	vimError
+hi! link vimFunc Function
+hi! link vimFuncBody Function
+hi! link vimFuncKey	vimCommand
+hi! link vimFuncName	Function
+hi! link vimFuncSID	Special
+hi! link vimFuncSID LightGrey
+hi! link vimFuncVar	Identifier
+hi! link vimFunction Function
+hi! link vimFunctionError	vimError
+hi! link vimGroup	Type
+hi! link vimGroupAdd	vimSynOption
+hi! link vimGroupName	vimGroup
+hi! link vimGroupRem	vimSynOption
+hi! link vimGroupSpecial	Special
+hi! link vimHLGroup	vimGroup
+hi! link vimHLMod	PreProc
+hi! link vimHiAttrib	PreProc
+hi! link vimHiAttribList	vimError
+hi! link vimHiAttribList Underlined
+hi! link vimHiAttribList vimHighlight
+hi! link vimHiBang vimHighlight
+hi! link vimHiCTerm	vimHiTerm
+hi! link vimHiClear	vimHighlight
+hi! link vimHiCtermColor Underlined
+hi! link vimHiCtermError	vimError
+hi! link vimHiCtermFgBg	vimHiTerm
+hi! link vimHiFontname Underlined
+hi! link vimHiGroup	vimGroupName
+hi! link vimHiGui	vimHiTerm
+hi! link vimHiGuiFgBg	vimHiTerm
+hi! link vimHiGuiFont	vimHiTerm
+hi! link vimHiGuiRgb	vimNumber
+hi! link vimHiKeyError	vimError
+hi! link vimHiKeyList Keyword
+hi! link vimHiNmbr	Number
+hi! link vimHiStartStop	vimHiTerm
+hi! link vimHiTerm	Type
+hi! link vimHighlight	Operator
+hi! link vimInsert	vimString
+" hi! link vimIskSep	Delimiter
+hi! link vimIskSep Keyword
+hi! link vimKeyCode	vimSpecFile
+hi! link vimKeyCodeError	vimError
+hi! link vimKeyword	Statement
+hi! link vimLet	vimCommand
+hi! link vimLineComment	vimComment
+hi! link vimMap	vimCommand
+hi! link vimMapBang	vimCommand
+hi! link vimMapLhs vimNotation
+hi! link vimMapMod Orange
+hi! link vimMapModErr	vimError
+hi! link vimMapModKey	vimFuncSID
+hi! link vimMapRhs vimNotation
+hi! link vimMapRhsExtend	vimNotation
+hi! link vimMark	Number
+hi! link vimMarkNumber	vimNumber
+hi! link vimMenuMod	vimMapMod
+hi! link vimMenuName	PreProc
+hi! link vimMenuNameMore	vimMenuName
+hi! link vimMtchComment	vimComment
+hi! link vimNorm	vimCommand
+hi! link vimNotFunc	vimCommand
+hi! link vimNotPatSep	vimString
+hi! link vimNotation	Special
+hi! link vimNotation Orange
+hi! link vimNumber Red
+hi! link vimOnlyCommand vimCommand
+hi! link vimOnlyHLGroup VisualNOS
+hi! link vimOnlyOption Green
+hi! link vimOper	Operator
+hi! link vimOperError	Error
+hi! link vimOption	PreProc
+hi! link vimParenSep	Delimiter
+hi! link vimPatSep	SpecialChar
+hi! link vimPatSepErr	vimError
+hi! link vimPatSepR	vimPatSep
+hi! link vimPatSepZ	vimPatSep
+hi! link vimPatSepZone	vimString
+hi! link vimPattern	Type
+hi! link vimPlainMark	vimMark
+hi! link vimPlainRegister	vimRegister
+hi! link vimPythonRegion Identifier
+hi! link vimRegister	SpecialChar
+hi! link vimScriptDelim	Comment
+hi! link vimSearch	vimString
+hi! link vimSearchDelim	Statement
+hi! link vimSep	Delimiter
+hi! link vimSep LightGrey
+hi! link vimSet vimSetEqual
+hi! link vimSetEqual	Operator
+hi! link vimSetMod	vimOption
+hi! link vimSetSep	Statement
+hi! link vimSetSep LightGrey
+hi! link vimSetString	vimString
+hi! link vimSpecFile	Identifier
+hi! link vimSpecFileMod	vimSpecFile
+hi! link vimSpecial	Type
+hi! link vimStatement	Statement
+hi! link vimStdPlugin       Function
+hi! link vimString	String
+hi! link vimStringCont	vimString
+hi! link vimStringEnd	vimString
+hi! link vimSubst	vimCommand
+hi! link vimSubst1	vimSubst
+hi! link vimSubstDelim	Delimiter
+hi! link vimSubstFlagErr	vimError
+hi! link vimSubstFlags	Special
+hi! link vimSubstSubstr	SpecialChar
+hi! link vimSubstTwoBS	vimString
+hi! link vimSynCase	Type
+hi! link vimSynCaseError	Error
+hi! link vimSynCaseError	vimError
+hi! link vimSynContains	vimSynOption
+hi! link vimSynError	Error
+hi! link vimSynError Exception
+hi! link vimSynKeyContainedin	vimSynContains
+hi! link vimSynKeyOpt	vimSynOption
+hi! link vimSynKeyRegion Keyword
+hi! link vimSynMtchGrp	vimSynOption
+hi! link vimSynMtchOpt	vimSynOption
+hi! link vimSynNextgroup	vimSynOption
+hi! link vimSynNotPatRange	vimSynRegPat
+hi! link vimSynOption	Special
+hi! link vimSynPatRange	vimString
+hi! link vimSynReg	Type
+hi! link vimSynRegOpt	vimSynOption
+hi! link vimSynRegPat	vimString
+hi! link vimSynRegion Nontext
+hi! link vimSynType	vimSpecial
+hi! link vimSyncC	Type
+hi! link vimSyncError	Error
+hi! link vimSyncGroup	vimGroupName
+hi! link vimSyncGroupName	vimGroupName
+hi! link vimSyncKey	Type
+hi! link vimSyncLines Number
+hi! link vimSyncNone	Type
+hi! link vimSyntax	vimCommand
+hi! link vimTodo	Todo
+hi! link vimUnmap	vimMap
+hi! link vimUserAttrb	vimSpecial
+hi! link vimUserAttrbCmplt	vimSpecial
+hi! link vimUserAttrbCmpltFunc	Special
+hi! link vimUserAttrbError	Error
+hi! link vimUserAttrbKey	vimOption
+hi! link vimUserCmd vimUserCommand
+hi! link vimUserCmdError	Error
+hi! link vimUserCommand	vimCommand
+hi! link vimUserFunc Function
+hi! link vimVar	Identifier
+hi! link vimWarn	WarningMsg
+" }}}
+
+" }}}
+
+" }}}
+" Ruby: {{{
+
+hi! link rubyStringDelimiter Delimiter
+hi! link rubyInterpolationDelimiter Directory
+" So TPope defined all of these but they got wiped in the hi clear. So copy
+" paste it is?
+hi! link rubyASCIICode		Character
+hi! link rubyBoolean			Boolean
+hi! link rubyClass			rubyDefine
+hi! link rubyConditional		Conditional
+hi! link rubyConditionalModifier	rubyConditional
+hi! link rubyControl			Statement
+hi link rubyDefine			Define
+hi link rubyException		Exception
+hi link rubyExceptional		rubyConditional
+hi link rubyFloat			Float
+hi link rubyFunction		Function
+hi link rubyInclude			Include
+hi link rubyInteger			Number
+hi link rubyMethodExceptional	rubyDefine
+hi link rubyModule			rubyDefine
+hi link rubyOptionalDo		rubyRepeat
+hi link rubyRepeat			Repeat
+hi link rubyRepeatModifier		rubyRepeat
+
+hi link rubyIdentifier		Identifier
+
+" hi def link rubyInterpolationDelimiter	Delimiter
+" hi def link rubyStringDelimiter		Delimiter
+hi link rubyAccess			Statement
+hi link rubyAttribute		Statement
+hi link rubyBeginEnd		Statement
+hi link rubyBlockParameter		rubyIdentifier
+hi link rubyCapitalizedMethod	rubyLocalVariableOrMethod
+hi link rubyClassVariable		rubyIdentifier
+hi link rubyComment			Comment
+hi link rubyConstant		Type
+hi link rubyData			Comment
+hi link rubyDataDirective		Delimiter
+hi link rubyDocumentation		Comment
+hi link rubyError			Error
+hi link rubyEval			Statement
+hi link rubyGlobalVariable		rubyIdentifier
+hi link rubyHeredoc			rubyString
+hi link rubyInstanceVariable	rubyIdentifier
+hi link rubyInterpolationDelimiter Aqua
+hi link rubyInvalidVariable		Error
+hi link rubyKeyword			Keyword
+hi link rubyNoInterpolation		rubyString
+hi link rubyOperator		Operator
+hi link rubyPredefinedConstant	rubyPredefinedIdentifier
+hi link rubyPredefinedIdentifier	rubyIdentifier
+hi link rubyPredefinedVariable	rubyPredefinedIdentifier
+hi link rubyPseudoVariable		Constant
+hi link rubyQuoteEscape		rubyStringEscape
+hi link rubyRegexp			rubyString
+hi link rubyRegexpAnchor		rubyRegexpSpecial
+hi link rubyRegexpCharClass		rubyRegexpSpecial
+hi link rubyRegexpComment		Comment
+hi link rubyRegexpDelimiter		rubyStringDelimiter
+hi link rubyRegexpDot		rubyRegexpCharClass
+hi link rubyRegexpEscape		rubyRegexpSpecial
+hi link rubyRegexpQuantifier	rubyRegexpSpecial
+hi link rubyRegexpSpecial		Special
+hi link rubySharpBang		PreProc
+hi link rubySpaceError		rubyError
+hi link rubyString			String
+hi link rubyStringDelimiter Green
+hi link rubyStringEscape		Special
+hi link rubySymbol			Constant
+hi link rubySymbolDelimiter		rubySymbol
+hi link rubyTodo			Todo
+
+
+" }}}
+" }}}
 " }}}

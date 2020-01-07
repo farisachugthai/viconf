@@ -12,7 +12,7 @@ function! vim_file_chooser#RangeChooser() abort
     " The option "--choosefiles" was added in ranger 1.5.1. Use the next line
     " with ranger 1.4.2 through 1.5.0 instead.
     "exec 'silent !ranger --choosefile=' . shellescape(temp)
-    if has("gui_running")
+    if has('gui_running')
         exec 'silent !xterm -e ranger --choosefiles=' . shellescape(temp)
     else
         exec 'silent !ranger --choosefiles=' . shellescape(temp)
@@ -40,10 +40,10 @@ endfunction
 
 " And now we have stufff about tags
 
-function! vim_file_chooser#TagFunc(pattern, flags, info)
+function! vim_file_chooser#TagFunc(pattern, flags, info) abort
 " Lol literally what is this option?
 " well fuck. just errored on nvim4
-  function! CompareFilenames(item1, item2)
+  function! CompareFilenames(item1, item2) abort
     let f1 = a:item1['filename']
     let f2 = a:item2['filename']
     return f1 >=# f2 ?
@@ -51,7 +51,7 @@ function! vim_file_chooser#TagFunc(pattern, flags, info)
   endfunction
 
   let result = taglist(a:pattern)
-  call sort(result, "CompareFilenames")
+  call sort(result, 'CompareFilenames')
 
   return result
 endfunction

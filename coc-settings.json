@@ -17,7 +17,6 @@
   "coc.preferences.jumpCommand": "tabe",
   "coc.preferences.messageLevel": "error",
   "coc.preferences.previewAutoClose": true,
-  "coc.preferences.snippetStatusText": "",
   "coc.preferences.useQuickfixForLocations": true,
   "coc.source.around.firstMatch": false,
   "coc.source.around.priority": 60,
@@ -56,12 +55,6 @@
     ".js"
   ],
   "coc.source.issues.shortcut": "Coc-Issues:",
-  "coc.source.omni.priority": 10,
-  "coc.source.omni.shortcut": "Coc-Omni:",
-  "coc.source.omni.triggerCharacters": [
-    "Tab"
-  ],
-  "coc.source.syntax.shortcut": "Coc-Syn:",
   "coc.source.tag.priority": 50,
   "coc.source.tag.shortcut": "Coc-Tag:",
   "coc.source.ultisnips.filetypes": [
@@ -421,27 +414,14 @@
     "--auto-preview"
   ],
   "lists.disabledLists": [
-    "buffers",
     "bcommits",
     "branches",
     "bcommits",
-    "commits",
     "colors",
     "filetypes",
-    "maps",
-    "marks",
-    "snippets",
     "vimcommands",
     "windows"
   ],
-  "powershell.codeFolding.showLastLine": true,
-  "powershell.codeFormatting.openBraceOnSameLine": true,
-  "powershell.codeFormatting.useCorrectCasing": true,
-  "powershell.debugging.createTemporaryIntegratedConsole": false,
-  "powershell.helpCompletion": "LineComment",
-  "powershell.integratedConsole.focusConsoleOnExecute": false,
-  "powershell.integratedConsole.showOnStartup": false,
-  "powershell.powerShellExePath": "C:\\pwsh\\7-preview\\pwsh.exe",
   "python.analysis.diagnosticEnabled": true,
   "python.analysis.diagnosticPublishDelay": 300,
   "python.analysis.downloadChannel": "daily",
@@ -451,7 +431,7 @@
   "python.autoComplete.addBrackets": true,
   "python.autoComplete.showAdvancedMembers": true,
   "python.autoUpdateLanguageServer": true,
-  // "python.condaPath": "C:/tools/vs/2019/Community/Common7/IDE/Extensions/Microsoft/Python/Miniconda/Miniconda3-x64/Scripts/conda",
+  "python.condaPath": "C:/tools/vs/2019/Community/Common7/IDE/Extensions/Microsoft/Python/Miniconda/Miniconda3-x64/Scripts/conda",
   "python.jediEnabled": false,
   "python.jediMemoryLimit": -1,
   "python.jediShortcut": "Jedi",
@@ -490,10 +470,11 @@
   "snippets.extends": {
     "python": [
       "rst"
-    ]
+    ],
+    "bash":["sh", "shellscript"]
   },
   "snippets.priority": 90,
-  "snippets.shortcut": "SNIP",
+  "snippets.shortcut": "Snip",
   "snippets.snipmate.author": "Faris A. Chugthai",
   "snippets.snipmate.enable": false,
   "snippets.triggerCharacters": [
@@ -502,12 +483,11 @@
   ],
   "snippets.ultisnips.directories": [
     "~/.config/nvim/UltiSnips",
-    "~/.config/coc",
-    "~/AppData/Local/coc/ultiSnips",
+    "~/.config/coc/Ultisnips",
+    "~/AppData/Local/coc/UltiSnips",
     "~/AppData/Local/nvim/UltiSnips"
   ],
   "snippets.ultisnips.pythonVersion": 3,
-  "snippets.userSnippetsDirectory": "~/projects/viconf/UltiSnips",
   "suggest.acceptSuggestionOnCommitCharacter": true,
   "suggest.autoTrigger": "always",
   "suggest.completionItemKindLabels": {

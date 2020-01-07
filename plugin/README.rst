@@ -138,3 +138,47 @@ Here are 2 commands I'm still actively working on.::
          \ : fzf#vim#with_preview('right:50%:hidden', '?'),
          \ <bang>0)
    " Grep: {{{2
+
+
+Working with tags
+==================
+
+In the opposite vein of unimpaired (as unimpaired uses keybindings of the
+flavor :kbd:`]` :kbd:`[a-z]`), I just found the keybinding :kbd:`g]`!
+
+It's phenomenally useful but because of unimpaired I'm inclined to remember it
+as ]g instead of g].
+
+However that's not hard to fix!::
+
+   nnoremap ]g g]
+   nnoremap ]g g]
+
+Then I began reviewing tagsrch.txt. And wow.::
+
+                                                           *g]*
+   g]			Like CTRL-], but use ":tselect" instead of ":tag".
+
+                                                           *v_g]*
+   {Visual}g]		Same as "g]", but use the highlighted text as the
+                           " identifier.
+
+                                                           *:tj* *:tjump*
+   :tj[ump][!] [name]	Like ":tselect", but jump to the tag directly when
+                           there is only one match.
+
+                                                           *:stj* *:stjump*
+   :stj[ump][!] [name]	Does ":tjump[!] [name]" and splits the window for the
+                           selected tag.
+
+                                                           *g_CTRL-]*
+   g CTRL-]		Like CTRL-], but use ":tjump" instead of ":tag".
+
+So let's do better than g]!::
+
+   nnoremap ]g <Cmd>stjump!<CR>
+   xnoremap ]g <Cmd>stjump!<CR>
+
+
+.. note::
+   The <Cmd> pseudo-mapping is only available on Neovim.

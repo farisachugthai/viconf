@@ -168,19 +168,19 @@ function! pydoc_help#the_curse_of_nvims_floating_wins() abort  " {{{1
   " fashion. Sweet!!
   call nvim_win_set_option(s:win_handle, 'winhl', 'Special')
 endfunction
-function! s:ReplaceModuleAlias()  " {{{1 Replace module aliases with their own name.
+function! s:ReplaceModuleAlias() abort " {{{1 Replace module aliases with their own name.
     "
     " For example:
     "   import foo as bar
     " if `bar` is in the ExpandModulePath's return value, it should be
     " replaced with `foo`.
-    let l:cur_col = col(".")
-    let l:cur_line = line(".")
+    let l:cur_col = col('.')
+    let l:cur_line = line('.')
     let l:module_path = s:ExpandModulePath()
     let l:module_names = split(l:module_path, '\.')
     let l:module_orig_name = l:module_names[0]
     if search('import \+[0-9a-zA-Z_.]\+ \+as \+' . l:module_orig_name)
-        let l:line = getline(".")
+        let l:line = getline('.')
         let l:name = matchlist(l:line, 'import \+\([a-zA-Z0-9_.]\+\) \+as')[1]
         if l:name != ''
             let l:module_orig_name = l:name
@@ -192,7 +192,7 @@ function! s:ReplaceModuleAlias()  " {{{1 Replace module aliases with their own n
     call cursor(l:cur_line, l:cur_col)
     return join(l:module_names, ".")
 endfunction
-function! s:ExpandModulePath()  " {{{1
+function! s:ExpandModulePath() abort  " {{{1
     " Extract the 'word' at the cursor, expanding leftwards across identifiers
     " and the . operator, and rightwards across the identifier only.
     "
@@ -201,12 +201,12 @@ function! s:ExpandModulePath()  " {{{1
     "           ^   !
     "
     " With the cursor at ^ this returns 'xml'; at ! it returns 'xml.dom'.
-    let l:line = getline(".")
-    let l:pre = l:line[:col(".") - 1]
-    let l:suf = l:line[col("."):]
-    return matchstr(pre, "[A-Za-z0-9_.]*$") . matchstr(suf, "^[A-Za-z0-9_]*")
+    let l:line = getline('.')
+    let l:pre = l:line[:col('.') - 1]
+    let l:suf = l:line[col('.'):]
+    return matchstr(pre, '[A-Za-z0-9_.]*$') . matchstr(suf, '^[A-Za-z0-9_]*')
 endfunction
-function! pydoc_help#show() "{{{
+function! pydoc_help#show() abort  " {{{
     let word = s:ReplaceModuleAlias()
     let buf = nvim_create_buf(v:false, v:true)
     " not yet

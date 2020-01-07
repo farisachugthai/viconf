@@ -5,49 +5,43 @@
   " Last Modified: Oct 20, 2019
 " ============================================================================
 
-setlocal formatoptions-=t
+if exists('b:did_ftplugin') | finish | endif
+let b:did_ftplugin = 1
 
-" JSON has no comments.
-" setlocal comments=
-" setlocal commentstring=
-" sometimes it does fuck you
-let &commentstring='// %s'
-
-setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
-
-" Let's add in a few more options though. Enforce 2 space tabs
-setlocal expandtab softtabstop=2 shiftwidth=2 tabstop=2
-
-setlocal suffixesadd=.json,.js,.jsx
 " Got this from the syntax file
 let g:vim_json_warnings = 1
+" Always set the globals first
 
-setlocal foldmethod=indent
-
-" ALE: {{{1
 " If this got sourced for some other filetype like md or javascript stop now
 
 if &filetype!=#'json'
   finish
 endif
 
-  " Load my configs
-call ftplugins#ALE_JSON_Conf()
-
-" Commands: {{{1
-" TODO: Could pretty easily make a command that runs python -m json.fix('%')
-" on a buffer
-" Unfortunately I can't get the right invocation down :/
-" r!python3 -m json.tool --sort-keys %
-" I hate that I can't get it right from inside the interpreter though.
-" oh shit it's a separate module!!!
-" :py3 from json import tool
-
-" Highlighting: {{{1
-
 syntax match jsonComment +\/\/.\+$+
 
 highlight link jsonComment Comment
 
-" Atexit: {{{1
+setlocal formatoptions-=t
+
+" The original ftplugin states that JSON has no comments.
+" Well sometimes it does fuck you
+let &commentstring='// %s'
+setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
+
+" Let's add in a few more options though. Enforce 2 space tabs
+setlocal expandtab softtabstop=2 shiftwidth=2 tabstop=2
+setlocal suffixesadd=.json,.js,.jsx
+setlocal foldmethod=indent
+
+call ftplugins#ALE_JSON_Conf()
+
+" These mappings are particularly nice in JSON files
+inoremap <buffer> ( ()<C-G>U<Left>
+inoremap <buffer> [ []<C-G>U<Left>
+inoremap <buffer> { {}<C-G>U<Left>
+inoremap <buffer> " ""<C-G>U<Left>
+" Also can we auto fix single quotes?
+inoremap <buffer> ' "<C-G>U<Left>
+
 let b:undo_ftplugin = 'setlocal fo< com< cms< et< sts< sw< ts< sua< fdm<'

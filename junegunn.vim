@@ -17,7 +17,7 @@ let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux) && empty(s:wsl)
 
 call plug#begin(stdpath('data') . '/plugged')
 
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lockfile'}
 let $NVIM_COC_LOG_FILE = stdpath('data')  . '/site/coc.log'
 let $NVIM_COC_LOG_LEVEL = 'ERROR'
 
@@ -39,6 +39,7 @@ else
   nnoremap <Leader>0 <Cmd>NERDTreeCWD<CR>
 endif
 
+Plug 'morhetz/gruvbox'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rsi'

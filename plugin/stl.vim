@@ -45,7 +45,7 @@ function! s:Statusline() abort
   if exists('*CSV_WCol')
     " Doing it the exact way he specifies in the help docs means you don't get
     " tsv support
-    if &filetype == 'tsv' || &filetype == 'csv'
+    if &filetype ==# 'tsv' || &filetype ==# 'csv'
       let csv = '%1*%{CSV_WCol()}%*'
     else
       let csv = ''

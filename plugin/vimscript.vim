@@ -7,24 +7,9 @@
 
 " I would say this is unrelated but this file is aimless
 nnoremap <Leader>cd <Cmd>cd %:p:h<CR><Bar><Cmd>pwd<CR>
-" however we need to move mappings above the profiling check dingus
-" WHOA THIS MAPPING IS TOO COOL
-inoremap <nowait> ( ()<C-G>U<Left>
-inoremap <nowait> [ []<C-G>U<Left>
-
-" This one gets horrifically annoying there are so many situations where you
-" don't need it
-" inoremap <nowait> < <><C-G>U<Left>
-" Let's give this a whirl
-" Awful
-" inoremap <nowait> ' ''<C-G>U<Left>
 
 " Literally ` does the same thing as ' but ` remembers column.
 nnoremap ' `
-
-if has('+shellslash')
-  set shellslash
-endif
 
 " Fix up the path a little I'm starting to use ]i and gf and the like more
 " But make it conditional on me not having already set it for an ftplugin
@@ -36,13 +21,9 @@ if !exists('b:did_ftplugin')
   endif
 endif
 
-
-" Scratch Buffers: {{{1
 command! -nargs=0 ScratchBuffer call pydoc_help#scratch_buffer()
 
-" Quickfix things: {{{1
 " That i want available in every buffer so we can't put them in the ftplugin
-
 " To make navigating the location list and quickfix easier
 " Also check ./unimpaired.vim
 " Sep 05, 2019: This doesnt need to be 2 commands!! cwindow does both!
@@ -54,7 +35,7 @@ augroup YourQFAuGroup
   autocmd QuickFixCmdPost * copen
 augroup END
 
-command -nargs=0 Redo execute histget("cmd", -1)
+command -nargs=0 Redo execute histget('cmd', -1)
 
 " These 2 commands are for parsing the output of scriptnames though a command
 " like :TBrowseScriptnames would probably be easier to work with
@@ -71,23 +52,18 @@ command! -nargs=0 NvimAPI
 command! -complete=dir -nargs=1 Mkdir call mkdir(shellescape('<q-args>'), 'p', '0700')
 
 " Last Call For Options: {{{1
-
 " Omnifuncs: {{{2
-
 " I just wanted to move this farther back in the queue
-if &omnifunc == "" | setlocal omnifunc=syntaxcomplete#Complete | endif
-
-if &completefunc == "" | setlocal completefunc=syntaxcomplete#Complete | endif
+if &omnifunc ==# '' | setlocal omnifunc=syntaxcomplete#Complete | endif
+if &completefunc ==# '' | setlocal completefunc=syntaxcomplete#Complete | endif
 
 " Formatexpr: {{{2
 " Same with this
-
 if &formatexpr ==# ''
   setlocal formatexpr=format#Format()  " check the autoload directory
 endif
 
 " QuickFix: {{{2
-
 " From :he *:cadde* *:caddexpr*
 " Evaluate {expr} and add the resulting lines to the current quickfix list.
 " If a quickfix list is not present, then a new list is created. The current

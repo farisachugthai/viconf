@@ -6,7 +6,6 @@
 " ============================================================================
 
 if exists('b:did_ftplugin') | finish | endif
-if exists('b:did_ftplugin') | finish | endif
 
 runtime $VIMRUNTIME/ftplugin/html.vim
 if exists('b:did_ftplugin') | unlet! b:did_ftplugin | endif
@@ -17,9 +16,9 @@ setlocal formatoptions+=tcqln formatoptions-=r formatoptions-=o
 setlocal formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\|^[-*+]\\s\\+\\\|^\\[^\\ze[^\\]]\\+\\]:
 
 if exists('b:undo_ftplugin')
-  let b:undo_ftplugin .= "|setl cms< com< fo< flp<"
+  let b:undo_ftplugin .= "|setl cms< com< fo< flp< "
 else
-  let b:undo_ftplugin = "setl cms< com< fo< flp<"
+  let b:undo_ftplugin = "setl cms< com< fo< flp< "
 endif
 
 " Enable spellchecking.
@@ -51,7 +50,7 @@ let g:markdown_folding = 1
 if has("folding") && exists("g:markdown_folding")
   setlocal foldexpr=format#MarkdownFoldText()
   setlocal foldmethod=expr
-  let b:undo_ftplugin .= "setlocal foldexpr< foldmethod<"
+  let b:undo_ftplugin .= "| setlocal foldexpr< foldmethod<"
 endif
 
 " Mappings: {{{1

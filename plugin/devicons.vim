@@ -5,6 +5,8 @@
     " Last Modified: March 28, 2019
 " ============================================================================
 
+scriptencoding utf-8
+
 " Guard: {{{1
 if !has_key(plugs, 'vim-devicons')
     finish

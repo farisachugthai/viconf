@@ -53,9 +53,9 @@ function! format#MarkdownFoldText() abort " {{{1 Credit to TPope
   endif
 
   if (line =~ '^.\+$') && (nextline =~ '^-\+$')
-    return ">2"
+    return '>2'
   endif
 
-  return "="
+  return '='
 
 endfunction

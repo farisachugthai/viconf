@@ -12,7 +12,7 @@ function! unix#tmux_send(content, dest) abort  " {{{ tmux send: 1
   call writefile(split(a:content, "\n", 1), tempfile, 'b')
 
   call system(printf('tmux load-buffer -b vim-tmux %s \;'
-        \ ' paste-buffer -d -b vim-tmux -t %s',
+        \ . ' paste-buffer -d -b vim-tmux -t %s',
         \ shellescape(tempfile), shellescape(dest)))
 
   call delete(tempfile)
@@ -65,7 +65,7 @@ function! unix#SpecialEdit(files, mods) abort
     exe a:mods . ' split ' . s:files
   endfor
 endfunction
-function! unix#RmDir(path)  " {{{1
+function! unix#RmDir(path) abort " {{{1
 	" sanity check; make sure it's not empty, /, or $HOME
 	if empty(a:path)
 		echoerr 'Attempted to delete empty path'
@@ -76,7 +76,7 @@ function! unix#RmDir(path)  " {{{1
 	endif
 	return system("rm -rf " . shellescape(a:path))
 endfunction
-function! unix#system(pwd, cmd)  " {{{1
+function! unix#system(pwd, cmd)  abort  " {{{1
   " Executes {cmd} with the cwd set to {pwd}, without changing Vim's cwd.
   " If {pwd} is the empty string then it doesn't change the cwd.
 	let cmd = a:cmd

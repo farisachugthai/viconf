@@ -5,12 +5,6 @@
   " Last Modified: July 13, 2019
 " ============================================================================
 
-" Guards: {{{1
-let s:cpo_save = &cpoptions
-set cpoptions-=C
-
-" Global Ftplugin: {{{1
-
 function! vimscript#after_ft() abort
 
   let s:debug = 1
@@ -49,8 +43,6 @@ function! vimscript#after_ft() abort
   return v:False
 
 endfunction
-
-
 function! vimscript#BetterProfiler(fname) abort  " {{{1
   " Because Vim's built in profiling capabilities are nonsensical like wtf?
 
@@ -83,17 +75,13 @@ function! vimscript#BetterProfiler(fname) abort  " {{{1
   exec 'e ' a:fname
 
 endfunction
-
-" let s:Debug = 1
-" let b:fname = '~/projects/viconf/.config/nvim/colors/gruvbox8.vim'
-" call g:BetterProfiler(b:fname)
-
-" AH I forgot Junegunn has one written as well!
-
-" Profile: {{{1
-
-" Profile a func or file. Oooo I could use XDG_DATA_HOME instead of _ROOT there
 function! vimscript#profile(bang) abort
+  " let s:Debug = 1
+  " let b:fname = '~/projects/viconf/.config/nvim/colors/gruvbox8.vim'
+  " call g:BetterProfiler(b:fname)
+  " AH I forgot Junegunn has one written as well!
+
+  " Profile a func or file. Oooo I could use XDG_DATA_HOME instead of _ROOT there
   if a:bang
     profile pause
     noautocmd qall
@@ -104,8 +92,6 @@ function! vimscript#profile(bang) abort
     profile file *
   endif
 endfunction
-
-
 function! vimscript#Scriptnames(re) abort  " {{{1
 " Command to filter :scriptnames output by a regex
     redir => scriptnames
@@ -115,8 +101,6 @@ function! vimscript#Scriptnames(re) abort  " {{{1
     let filtered = filter(split(scriptnames, "\n"), "v:val =~ '" . a:re . "'")
     echo join(filtered, ' \n ')
 endfunction
-
-
 function! vimscript#ScriptnamesDict() abort  " {{{1
 " From 10,000 lines deep in :he eval
 " Get the output of ":scriptnames" in the scriptnames_output variable.
@@ -147,7 +131,6 @@ function! vimscript#ScriptnamesDict() abort  " {{{1
   " unlet scriptnames_output
   return scripts
 endfunction
-
 function s:get_scriptnames() abort  " {{{1
   let s:scriptnames_output = ''
   redir => s:scriptnames_output
@@ -155,19 +138,9 @@ function s:get_scriptnames() abort  " {{{1
   redir END
   return s:scriptnames_output
 endfunction
-
-
 function! vimscript#fzf_scriptnames() abort  " {{{1
   " TODO: Why is the LSP complaining?
-  call fzf#vim#run(fzf#wrap({s:get_scriptnames()},
-        \ 0,
-        \ 0,
-        \ <bang>0 ? fzf#vim#with_preview('up:60%')
-        \ : fzf#vim#with_preview('right:50%:hidden', '?'),
-        \ <bang>0))
+  call fzf#vim#run(fzf#wrap({'source': s:get_scriptnames(),
+        \ 'sink': 'e', }
+        \ <bang>0 ? fzf#vim#with_preview('up:60%') : fzf#vim#with_preview('right:50%:hidden', '?'), <bang>0))
 endfunction
-
-
-" Atexit: {{{1
-let &cpoptions = s:cpo_save
-unlet s:cpo_save

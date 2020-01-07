@@ -62,9 +62,8 @@ function! syncom#get_syn_info() abort  " {{{1
         \ ' guibg: ' . linkedSyn.guibg
 endfunction
 function! syncom#hitest() abort  " Hitest: An easier way of sourcing hitest {{{1
-  try  " or just use runtime???
-    " so $VIMRUNTIME/syntax/hitest.vim
-    runtime $VIMRUNTIME/syntax/hitest.vim
+  try
+    source $VIMRUNTIME/syntax/hitest.vim
   catch E403
   endtry
   return v:true

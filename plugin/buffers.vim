@@ -34,16 +34,6 @@ function! Window_Mappings() abort  " {{{1
   nnoremap <Leader>ww <Cmd>wincmd w<CR>
   " Split and edit file under the cursor
   nnoremap <Leader>wf <Cmd>wincmd f<CR>
-  " Split and open the word under the cursor as a tag
-  " noremap <Leader>w] <Cmd>wincmd ]<CR>
-
-  " Thank you index.txt! From:
-  " 2.2 Window commands						*CTRL-W*
-  " |CTRL-W_g_CTRL-]| CTRL-W g CTRL-]  split window and do |:tjump| to tag
-  " under cursor
-  nnoremap <Leader>w] <C-w>g<C-]>
-  nnoremap <Leader>wc <Cmd>wincmd c<CR>
-  nnoremap <Leader>wo <Cmd>wincmd o<CR>
 endfunction
 function! Quickfix_Mappings() abort
 
@@ -72,6 +62,7 @@ function! Quickfix_Mappings() abort
 
   " Unimpaired Mappings:
   " Map quickfix list, buffers, windows and tabs to *[ and *]
+  " Note: A bunch more in ./tag_miscellany.vim
   nnoremap ]q <Cmd>cnext<CR>
   nnoremap [q <Cmd>cprev<CR>
   nnoremap ]Q <Cmd>clast<CR>

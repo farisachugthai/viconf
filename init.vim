@@ -35,6 +35,7 @@ runtime junegunn.vim  " Load my plugins.
 " Don't assume that the InstallPlug() func worked so ensure it's defined
 if empty('plugs') | let plugs = {} | endif
 
+" colo gruvbox
 let s:material_gruvbox =  syncom#gruvbox_material()
 if s:material_gruvbox == v:false | call syncom#gruvbox() | endif
 
