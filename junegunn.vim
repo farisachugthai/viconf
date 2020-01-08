@@ -36,6 +36,7 @@ else
   nnoremap <Leader>0 <Cmd>NERDTreeCWD<CR>
 endif
 
+" Plug 'morhetz/gruvbox'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rsi'

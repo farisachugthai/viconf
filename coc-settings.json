@@ -389,6 +389,12 @@
     "--interactive",
     "--number-select"
   ],
+  "list.source.tags.defaultCommand": [
+    "ctags",
+    "-R",
+    "--options",
+    "~/.ctags.d/"
+  ],
   "list.source.tags.defaultOptions": [
     "--top",
     "--normal"
@@ -437,7 +443,6 @@
   "python.jediShortcut": "Jedi",
   "python.linting.flake8Path": "python -m flake8",
   "python.linting.pylintEnabled": false,
-  // "python.pythonPath": "C:\\Python38\\python.exe",
   "python.terminal.activateEnvironment": true,
   "python.terminal.executeInFileDir": true,
   "python.terminal.launchArgs": [
@@ -468,10 +473,13 @@
   "snippets.autoTrigger": true,
   "snippets.editSnippetsCommand": "tabe",
   "snippets.extends": {
+    "bash": [
+      "sh",
+      "shellscript"
+    ],
     "python": [
       "rst"
-    ],
-    "bash":["sh", "shellscript"]
+    ]
   },
   "snippets.priority": 90,
   "snippets.shortcut": "Snip",

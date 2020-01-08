@@ -29,3 +29,13 @@ nnoremap ]w <C-w>g<C-]>
 
 nnoremap <Leader>wc <Cmd>wincmd c<CR>
 nnoremap <Leader>wo <Cmd>wincmd o<CR>
+
+
+" Forgot i had this function autoloaded
+" Open a tag for the word under the cursor in the preview window.
+" TODO: Could definitely do with a mapping
+
+command! -complete=tag PreviewTag call buffers#PreviewWord()
+
+" Probably needs a better mapping but whatever
+nnoremap <Leader>t] <Cmd>PreviewTag<CR>
