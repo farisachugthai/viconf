@@ -28,21 +28,28 @@ let g:startify_session_savevars = [
        \ ]
 
        " 'g:random_plugin_use_feature'
-
+" Commands and bookmarks officially use A B C D E F G H I!
 let g:startify_commands = [
-    \ {'h': ['Vim Reference', 'h ref'],},
+      \ {'a': 'Ag'},
+      \ {'b': 'Buffers'},
     \ {'f': ['FZF!', 'FZF!'],},
     \ {'g': ['Git status!', 'Gstatus'],},
+    \ {'h': ['Vim Reference', 'h ref'],},
     \ ]
 
+let g:startify_bookmarks = [
+      \ {'c': '~/.local/share/nvim/plugged/coc.nvim'},
+      \ {'d': '~/projects/dynamic_ipython/README.rst'},
+      \ { 'i': '~/projects/viconf/init.vim' },
+      \ ]
 " What the fuck! Its still reading everyrhing perfectly.
 "
 " In fact, if i comment out the finish it STOPS working...what the hell?
 " Keep MRU below the current directorys MRU. But those are inheritently longer
 " than everything else so keep them below everything else.
 let g:startify_lists = [
-    \ { 'type': 'commands',  'header': ['   Commands']              },
     \ { 'type': 'sessions',  'header': ['   Sessions']              },
+    \ { 'type': 'commands',  'header': ['   Commands']              },
     \ { 'type': 'bookmarks', 'header': ['   Bookmarks']             },
     \ { 'type': 'dir',       'header': ['   MRU ' . getcwd()]       },
     \ { 'type': 'files',     'header': ['   MRU']                   },

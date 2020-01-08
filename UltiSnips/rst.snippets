@@ -111,6 +111,28 @@ endsnippet
 # Directives
 # ------------
 
+
+snippet mod "Module Directive" b
+${1:${VISUAL:One sentence module summary.}}
+
+.. :module:\``!p snip.rv = snip.basename`\`
+    :synopsis: $1
+
+:File: `!p snip.rv = snip.fn`
+:Author: `!v g:snips_author`
+
+${3:Parameters}
+`!p snip.rv = len(t[1])*'-'`
+${4:mod_variables} : ${5:type}
+    ${6:Explanation and give an inline docstring.}
+
+${7:Example}
+`!p snip.rv = len(t[1])*'-'`
+${8:code-block}:: ${9:python3}
+
+    ${10:TODO}
+endsnippet
+
 snippet img "image link directive" w
 .. |${1:alias}| image:: ${2:img}
 endsnippet

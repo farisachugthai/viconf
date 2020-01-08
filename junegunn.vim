@@ -21,9 +21,6 @@ Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lock
 let $NVIM_COC_LOG_FILE = stdpath('data')  . '/site/coc.log'
 let $NVIM_COC_LOG_LEVEL = 'ERROR'
 
-" So you can't use dir: ./vim-plug because it'll put vim-plug in the cwd not
-" this one
-" doesnt work either
 Plug 'junegunn/vim-plug' ", {'dir': expand('~/projects/viconf/vim-plug')}
 let g:plug_window = 'tabe'
 
@@ -39,14 +36,12 @@ else
   nnoremap <Leader>0 <Cmd>NERDTreeCWD<CR>
 endif
 
-Plug 'morhetz/gruvbox'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-surround'
-" Plug 'tpope/vim-vinegar'
 
-if has('python')
+if has('python3')
   Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 endif
 Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }  " Follow spacemacs lead and use e for errors

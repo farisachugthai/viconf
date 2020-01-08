@@ -1,5 +1,11 @@
+<<<<<<< Updated upstream
 conda_root C:/tools/vs/2019/Community/Common7/IDE/Extensions/Microsoft/Python/Miniconda/Miniconda3-x64
 pytest C:/tools/vs/2019/Community/Common7/IDE/Extensions/Microsoft/Python/Miniconda/Miniconda3-x64/envs/ipython/lib/site-packages/_pytest
+||||||| constructed merge base
+WindowsKits C:/Program Files (x86)/Windows Kits/10
+conda_root C:/tools/vs/2019/Community/Common7/IDE/Extensions/Microsoft/Python/Miniconda/Miniconda3-x64
+=======
+>>>>>>> Stashed changes
 python ~/python
 startup ~/.ipython/profile_default/startup
 terminal_profile ~/projects/dotfiles/nt/AppData/Local/Packages/Microsoft.WindowsTerminal/LocalState/profiles.json
@@ -7,6 +13,8 @@ tutorials ~/Dropbox/python/tutorials
 WindowsKits C:/Program Files (x86)/Windows Kits/10
 python_test_suite ~/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/usr/lib/python3.8/test
 
+WindowsKits C:/Program Files (x86)/Windows Kits/10
+conda_root C:/tools/vs/2019/Community/Common7/IDE/Extensions/Microsoft/Python/Miniconda/Miniconda3-x64
 freshpy3_lib ~/AppData/Roaming/microsoft-visual-cpp-build-tools/14.0.25420.1/library
 msvcincludes C:/tools/vs/2019/Community/VC/Tools/MSVC/14.23.28105/include
 viconf ~/projects/viconf/.config/nvim
