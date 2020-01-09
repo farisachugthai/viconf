@@ -5,17 +5,6 @@
     " Last Modified: Dec 27, 2019
 " ============================================================================
 
-" Options: {{{1
-
-" Quickfix: {{{2
-
-" By default ale uses location list which I never remember
-" let g:ale_set_quickfix = 1
-" let g:ale_set_loclist = 0
-" Yeah but theres a reason they do it. Location list is window specific so you
-" only want linting information for your current buffer to populate the list.
-" More importantly, you don't want every buffer to wipe your quickfix list
-" while you're in the middle of recompiling something.
 
 let g:ale_virtualtext_cursor = 1
 let g:ale_virtualtext_prefix =  'ALE: '
@@ -38,6 +27,7 @@ let g:ale_sign_info = 'I'
 let g:ale_sign_error = 'E'
 let g:ale_sign_highlight_linenrs = 1
 
+let g:ale_sign_style_warning = 'E'
 
 " More: {{{2
 let g:ale_pattern_options_enabled = 1
@@ -174,10 +164,12 @@ let g:ale_lsp_show_message_severity = 'information'
 
 
 " Mappings: {{{1
-nnoremap <Leader>a <Cmd>ALEEnable<CR>
+command! ALEE <Cmd>ALEEnable<CR>
       \ <Cmd>normal! zzzM <CR>
       \ call AleMappings()<CR>
       \ <Cmd>echomsg 'ALE Enabled'<CR>
+
+nnoremap <Leader>a <Cmd>ALEE<CR>
 
 " wait to map these because none of these mappings are gonna work unless
 " if exists('g:loaded_ale')

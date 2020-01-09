@@ -45,7 +45,7 @@ function! Quickfix_Mappings() abort
   " November llist throws an error if no location. *sigh*
   nnoremap <Leader>qc <Cmd>cwindow<CR>
 
-  " Leader l is currently botright lwindow
+  nnoremap <Leader>l <Cmd>botright lwindow<CR>
   nnoremap <Leader>lw <Cmd>lwindow<CR>
   nnoremap <Leader>ll <Cmd>llist!<CR>
   nnoremap <Leader>lo <Cmd>lopen<CR>
@@ -80,6 +80,11 @@ function! Quickfix_Mappings() abort
   " Avoid accidental hits of <F1> while aiming for <Esc>
   noremap! <F1> <Esc>
 endfunction
+
+" From `:he quickfix`
+command! -nargs=+ NewGrep execute 'silent grep! <args>' | copen
+
+
 function! Alt_Key_Navigation() abort
   " Originally this inspired primarily for terminal use but why not put it everywhere?
   noremap  <A-h> <C-w>h

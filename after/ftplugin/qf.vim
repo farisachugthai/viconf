@@ -8,6 +8,11 @@
 nnoremap <buffer> <Left> <Cmd>colder<CR>
 nnoremap <buffer> <Right> <Cmd>cnewer<CR>
 
+" These need to catch E776 no location list
+nnoremap <buffer><silent> <C-Down> <Cmd>llast<CR><bar><Cmd>clast<CR>
+
+nnoremap <buffer><silent> <C-Up> <Cmd>lfirst<CR><bar><Cmd>cfirst<CR>
+
 if !get(g:, 'qf_disable_statusline')
   let b:undo_ftplugin = "setlocal stl<"
 
@@ -19,3 +24,7 @@ setlocal stl=%t%{exists('w:quickfix_title')?\ '\ '.w:quickfix_title\ :\ ''}\ %=%
 if !exists('g:loaded_qf') | finish | endif
 
 let g:qf_mapping_ack_style = 1
+
+nnoremap <buffer> { <Plug>(qf_previous_file)
+nnoremap <buffer> } <Plug>(qf_next_file)
+

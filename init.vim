@@ -54,7 +54,7 @@ map <Space> <Leader>
 if has('nvim-0.4')   " Fun new features!
   let &shadafile = stdpath('data') . '/shada/main.shada'
   " toggle transparency in the pum and windows. don't set higher than 10 it becomes hard to read higher than that
-  set pumblend=10 winblend=10
+  set pumblend=10 winblend=5
   try | set pyxversion=3 | catch /^Vim:E518:*/ | endtry
 endif
 
@@ -63,7 +63,10 @@ endif
 set swapfile undofile backupext='.bak'
 set writebackup        " protect against crash-during-write
 set nobackup           " but do not persist backup after successful write
-set backupcopy=auto    " use rename-and-write-new method whenever safe
+
+" use rename-and-write-new method whenever safe. actually might go with yes
+" its slower but idc
+set backupcopy=yes
 " patch required to honor double slash at end consolidate the writebackups -- they usually get deleted
 if has('patch-8.1.0251') | let &backupdir=stdpath('config') . '/undodir//' | endif
 

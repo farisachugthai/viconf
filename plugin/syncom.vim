@@ -31,18 +31,6 @@ if !hasmapto('<Plug>(HL)')
   nnoremap <Leader>h <Plug>(HL)
 endif
 
-" QuickFix Window: {{{1
-
-" From `:he quickfix`
-command! -nargs=+ NewGrep execute 'silent grep! <args>' | copen
-
-" But now I need way more mappings
-
-nnoremap <silent> <Leader>l <Cmd>botright lwindow<CR>
-" These need to catch E776 no location list
-nnoremap <silent> <C-Down> <Cmd>llast<CR><bar><Cmd>clast<CR>
-nnoremap <silent> <C-Up> <Cmd>lfirst<CR><bar><Cmd>cfirst<CR>
-
 " Title: {{{1
 
 " From `:he change`  line 352 tag g?g?

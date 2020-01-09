@@ -182,3 +182,25 @@ So let's do better than g]!::
 
 .. note::
    The <Cmd> pseudo-mapping is only available on Neovim.
+
+
+ALE --- Asynchronous Lint Engine
+================================
+
+By default ale uses location lists.
+
+Location lists are tied to the window they were created for, not the
+entire session as the quickfix list is. Because commands like ``:lwindow`` and ``:lopen`` are window
+specific, you only see linting information for your current buffer to populate the list.
+
+If ALE were to use the quickfix, you would see linting information for
+every buffer you have open simultaneously, which would be a nightmare.
+
+More importantly, you don't want every buffer to wipe your quickfix list
+while you're in the middle of actually recompiling something
+simply to view a few linter errors.
+
+Quickfix
+==========
+
+See :file:`./buffers.vim` for the Quickfix_Mappings function,
