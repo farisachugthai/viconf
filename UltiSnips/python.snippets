@@ -4,7 +4,7 @@ priority 70
 extends rst
 
 #######################################################################
-#				 Python Snippets				                      #
+#				 Python Snippets									  #
 #######################################################################
 
 # UltiSnips Imports:{{{1
@@ -112,8 +112,8 @@ snippet """ "doc block (triple quotes)"
 ${1:${VISUAL}}$0
 `!p snip.rv = triple_quotes(snip)`
 endsnippet
-
 # }}}
+
 # Imports: {{{1
 snippet imp "import statement" b
 import ${0:${VISUAL}}
@@ -184,16 +184,7 @@ endsnippet
 # TODO
 snippet with "with expr - context manager" b
 with ${1:expr}`!p snip.rv = " as " if t[2] else ""`${2:var}:
-	${3:${VISUAL:pass}}
-$0
-endsnippet
-
-# However I don't know what that says so let's simplify
-# Let's also build this snippet around my most frequent use case
-# requests.get()
-snippet with "simpler context manager" b
-with ${1:open} ${2:filename}, ${3:'xt'} as ${4:f}:
-	${0:f.write(res.text)}
+	${0:f.write(res.text)}$0
 endsnippet
 
 snippet while "while loop" b
@@ -281,74 +272,8 @@ finally:
 	${7:pass}
 endsnippet
 
-<<<<<<< HEAD
-
 # Comprehensions:{{{1
 
-||||||| be92d71
-
-||||||| constructed merge base
-    ${7:pass}
-endsnippet
-
-# Argparse: {{{1
-
-# Don't use a $0 at the end it ends up adding blank white space. Or read UltiSnips-snippet-option
-snippet argfunc "Initialize ArgumentParser in def _parse_arguments" bms
-def _parse_arguments():
-    parser = argparse.ArgumentParser(description=__doc__)
-
-    ${1:Not a bad time to invoke snippets argpos or argopt.}
-
-    args = parser.parse_args()
-
-    return args
-endsnippet
-
-snippet argpos "Add argument - positional argument for a string type." b
-parser.add_argument(${1:${VISUAL}},
-    type=${1:str},
-    nargs=${2:"+"},
-    help=${3:Feed me input.}
-)
-endsnippet
-
-snippet parser "Add argument for an optional argument." smw
-parser.add_argument("$1", "--$2", dest="$2",
-		    metavar=$3, help="$4")
-endsnippet
-
-snippet parser "add argument for version = %(prog)s" b
-parser.add_argument('-V', '--version', action='version',
-		    version='%(prog)s' + pyutil.__about__['version'])
-endsnippet
-
-# TODO: Figure out how to account for whitespace
-snippet parser "add arg - file" b
-parser.add_argument('${1:${VISUAL}}', required=$2, type=argparse.FileType('$3'),
-		    help='$4')
-endsnippet
-
-snippet parser "Logging argument" b
-parser.add_argument(
-    '${1:-l}',
-    '${2:--log}',
-    default=${3:sys.stdout},
-    type=${4:argparse.FileType('w')},
-    help='${0:File to write logging messages to.}')
-endsnippet
-
-
-=======
-    ${7:pass}
-endsnippet
-
->>>>>>> Stashed changes
-# Comprehensions:{{{1
-
-=======
-# Comprehensions: {{{
->>>>>>> master
 # All of these has the 'b' option but none these snippets only expand the right
 # hand side of a snippet. Why would they ever be at the beginning of a line??
 
@@ -469,8 +394,8 @@ class ${1:MyClass}${2:(object)}:
 	`!p snip.rv = triple_quotes(snip)`${3:Docstring for $1. }`!p snip.rv = triple_quotes(snip)`
 
 <<<<<<< HEAD
-    def __init__(self$4):
-        `!p snip.rv = triple_quotes(snip)`${5: {to be defined:$1.}}`!p
+	def __init__(self$4):
+		`!p snip.rv = triple_quotes(snip)`${5: {to be defined:$1.}}`!p
 ||||||| be92d71
 <<<<<<< Updated upstream
 	def __init__(self$4):
@@ -479,7 +404,7 @@ class ${1:MyClass}${2:(object)}:
 	def __init__(self$4):
 	`!p snip.rv = triple_quotes(snip)`${5: {to be defined:$1.}}`!p
 =======
-    def __init__(self$4):
+	def __init__(self$4):
 	`!p snip.rv = triple_quotes(snip)`${5: {to be defined:$1.}}`!p
 >>>>>>> Stashed changes
 =======
@@ -842,4 +767,4 @@ snippet /(^|(?<=\W))\./ "self." r
 self.${1:${VISUAL}}$0
 endsnippet
 
-# Vim: set ft=snippets.python foldmethod=marker et ts=4:
+# Vim: set et ts=4:

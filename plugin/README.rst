@@ -45,7 +45,6 @@ adding var names will probably pay dividends.
 
 .. _syntax: ../syntax
 
-
 Autocmd for Vim Commentary
 ===========================
 
@@ -226,4 +225,3 @@ So I implemented that as::
 'xmap' because visual map, in a really unintuitive move, includes select-mode.
 The extra :kbd:`/` and <CR> are because a forward slash and a <CR> repeat the
 last search.
->>>>>>> master
