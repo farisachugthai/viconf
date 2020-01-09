@@ -4,7 +4,7 @@ priority 70
 extends rst
 
 #######################################################################
-#				 Python Snippets				  #
+#				 Python Snippets				                      #
 #######################################################################
 
 # UltiSnips Imports:{{{1
@@ -281,18 +281,83 @@ finally:
 	${7:pass}
 endsnippet
 
+<<<<<<< HEAD
 
 # Comprehensions:{{{1
 
+||||||| be92d71
+
+||||||| constructed merge base
+    ${7:pass}
+endsnippet
+
+# Argparse: {{{1
+
+# Don't use a $0 at the end it ends up adding blank white space. Or read UltiSnips-snippet-option
+snippet argfunc "Initialize ArgumentParser in def _parse_arguments" bms
+def _parse_arguments():
+    parser = argparse.ArgumentParser(description=__doc__)
+
+    ${1:Not a bad time to invoke snippets argpos or argopt.}
+
+    args = parser.parse_args()
+
+    return args
+endsnippet
+
+snippet argpos "Add argument - positional argument for a string type." b
+parser.add_argument(${1:${VISUAL}},
+    type=${1:str},
+    nargs=${2:"+"},
+    help=${3:Feed me input.}
+)
+endsnippet
+
+snippet parser "Add argument for an optional argument." smw
+parser.add_argument("$1", "--$2", dest="$2",
+		    metavar=$3, help="$4")
+endsnippet
+
+snippet parser "add argument for version = %(prog)s" b
+parser.add_argument('-V', '--version', action='version',
+		    version='%(prog)s' + pyutil.__about__['version'])
+endsnippet
+
+# TODO: Figure out how to account for whitespace
+snippet parser "add arg - file" b
+parser.add_argument('${1:${VISUAL}}', required=$2, type=argparse.FileType('$3'),
+		    help='$4')
+endsnippet
+
+snippet parser "Logging argument" b
+parser.add_argument(
+    '${1:-l}',
+    '${2:--log}',
+    default=${3:sys.stdout},
+    type=${4:argparse.FileType('w')},
+    help='${0:File to write logging messages to.}')
+endsnippet
+
+
+=======
+    ${7:pass}
+endsnippet
+
+>>>>>>> Stashed changes
+# Comprehensions:{{{1
+
+=======
+# Comprehensions: {{{
+>>>>>>> master
 # All of these has the 'b' option but none these snippets only expand the right
 # hand side of a snippet. Why would they ever be at the beginning of a line??
 
 snippet lc "List comprehension" w
-[${1:value} for {2:value} in ${3:iterable}]$0
+[${1:value} for ${2:value} in ${3:iterable}]$0
 endsnippet
 
 snippet lci "List comprehension if. Commonly referred to as a filter" w
-[${1:value} for {2:value} in ${3:iterable} if ${4:condition}]$0
+[${1:value} for ${2:value} in ${3:iterable} if ${4:condition}]$0
 endsnippet
 
 snippet lcie "List comprehension if" w
@@ -383,9 +448,9 @@ endsnippet
 snippet defs "static method with docstrings" b
 @staticmethod
 def ${1:function}(${2:arg1}):
-    `!p snip.rv = triple_quotes(snip)`${3:TODO: Docstring for $1.}`!p
+	`!p snip.rv = triple_quotes(snip)`${3:TODO: Docstring for $1.}`!p
 write_function_docstring(t, snip) `
-    ${5:${VISUAL:pass}}
+	${5:${VISUAL:pass}}
 endsnippet
 
 # Class & Special Method Name Snippets:{{{1
@@ -401,10 +466,34 @@ endsnippet
 # Class: {{{2
 snippet class "class with docstrings" b
 class ${1:MyClass}${2:(object)}:
-    `!p snip.rv = triple_quotes(snip)`${3:Docstring for $1. }`!p snip.rv = triple_quotes(snip)`
+	`!p snip.rv = triple_quotes(snip)`${3:Docstring for $1. }`!p snip.rv = triple_quotes(snip)`
 
+<<<<<<< HEAD
     def __init__(self$4):
         `!p snip.rv = triple_quotes(snip)`${5: {to be defined:$1.}}`!p
+||||||| be92d71
+<<<<<<< Updated upstream
+	def __init__(self$4):
+		`!p snip.rv = triple_quotes(snip)`${5: {to be defined:$1.}}`!p
+||||||| constructed merge base
+	def __init__(self$4):
+	`!p snip.rv = triple_quotes(snip)`${5: {to be defined:$1.}}`!p
+=======
+    def __init__(self$4):
+	`!p snip.rv = triple_quotes(snip)`${5: {to be defined:$1.}}`!p
+>>>>>>> Stashed changes
+=======
+<<<<<<< Updated upstream
+	def __init__(self$4):
+		`!p snip.rv = triple_quotes(snip)`${5: {to be defined:$1.}}`!p
+||||||| constructed merge base
+	def __init__(self$4):
+	`!p snip.rv = triple_quotes(snip)`${5: {to be defined:$1.}}`!p
+=======
+	def __init__(self$4):
+	`!p snip.rv = triple_quotes(snip)`${5: {to be defined:$1.}}`!p
+>>>>>>> Stashed changes
+>>>>>>> master
 snip.rv = ""
 snip >> 2
 
@@ -750,8 +839,7 @@ endsnippet
 
 # doesn't expand when there is a word in front
 snippet /(^|(?<=\W))\./ "self." r
-self.
+self.${1:${VISUAL}}$0
 endsnippet
-
 
 # Vim: set ft=snippets.python foldmethod=marker et ts=4:

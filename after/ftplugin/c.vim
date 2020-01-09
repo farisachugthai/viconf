@@ -30,6 +30,8 @@ elseif executable('gcc')  " Because of windows
   compiler gcc
   setlocal makeprg=gcc\ %<.o
   echomsg 'after/ftplugin/c.vim: Using gcc as the compiler'
+elseif executable('nmake')
+  compiler msvc
 endif
 
 if exists(':Man') == 2

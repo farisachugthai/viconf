@@ -11,7 +11,9 @@
 nnoremap <Leader>rt call buffers#EchoRTP()
 command! -nargs=0 EchoRTP echo buffers#EchoRTP()
 
-" }}}
+" From `:he quickfix`
+command! -nargs=+ NewGrep execute 'silent grep! <args>' | copen
+
 
 function! Window_Mappings() abort  " {{{1
   " Navigate windows more easily
@@ -45,15 +47,18 @@ function! Quickfix_Mappings() abort
   " November llist throws an error if no location. *sigh*
   nnoremap <Leader>qc <Cmd>cwindow<CR>
 
+  " These need to catch E776 no location list
+  nnoremap <silent> <C-Down> <Cmd>llast<CR><bar><Cmd>clast<CR>
+  nnoremap <silent> <C-Up> <Cmd>lfirst<CR><bar><Cmd>cfirst<CR>
+
+  " Normally the quickfix window is at the bottom of the screen.  If there are
+  " vertical splits, it's at the bottom of the rightmost column of windows.  To
+  " make it always occupy the full width:
   nnoremap <Leader>l <Cmd>botright lwindow<CR>
   nnoremap <Leader>lw <Cmd>lwindow<CR>
   nnoremap <Leader>ll <Cmd>llist!<CR>
   nnoremap <Leader>lo <Cmd>lopen<CR>
 
-  " Normally the quickfix window is at the bottom of the screen.  If there are
-  " vertical splits, it's at the bottom of the rightmost column of windows.  To
-  " make it always occupy the full width: >
-  " 	:botright cwindow
   nnoremap <Leader>qw <Cmd>botright cwindow<CR>
   nnoremap <Leader>ql <Cmd>botright clist!<CR>
   nnoremap <leader>qo <Cmd>botright copen<CR>

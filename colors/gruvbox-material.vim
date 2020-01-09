@@ -314,7 +314,7 @@ hi link netrwDateSep Delimiter
 hi link netrwDir Directory
 hi link netrwExe Macro
 hi link netrwGray Folded
-hi link netrwHelpCmd Directory
+hi link netrwHelpCmd Delimiter
 hi link netrwHide Conceal
 hi link netrwHidePat Folded
 hi link netrwLib Directory
@@ -322,12 +322,13 @@ hi link netrwLink Underlined
 hi link netrwList PreCondit
 hi link netrwPlain String
 hi link netrwQHTopic Number
+hi! link netrwQuickHelp netrwHelpCmd
 hi link netrwSizeDate Delimiter
 hi link netrwSlash Delimiter
 hi link netrwSortBy Title
 hi link netrwSortSeq netrwList
 hi link netrwSpecial netrwClassify
-hi link netrwSymLink Special
+hi! link netrwSymLink Special
 hi link netrwTime Delimiter
 hi link netrwTimeSep Delimiter
 hi link netrwTreeBar Special
@@ -1504,16 +1505,8 @@ hi! link BufTabLineHidden TabLineFill
 hi! link BufTabLineFill TabLineFill
 hi! link DirvishPathTail Aqua
 hi! link DirvishArg Yellow
-hi! link netrwDir Green
-hi! link netrwClassify Green
-hi! link netrwLink Grey
-hi! link netrwSymLink White
-hi! link netrwExe Yellow
-hi! link netrwComment Grey
-hi! link netrwList Aqua
-hi! link netrwHelpCmd Blue
-hi! link netrwCmdSep LightGrey
-hi! link netrwVersion Orange
+
+
 hi! link NERDTreeBookmarksLeader Conceal
 hi! link NERDTreeDir Green
 hi! link NERDTreeDirSlash Aqua

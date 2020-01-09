@@ -1,6 +1,8 @@
 # Git Ignore
 # Maintainer: Faris Chugthai
 
+yarn.lock
+
 # Sphinx build files: From pandas-website
 searchindex.js
 robots.txt

@@ -5,6 +5,11 @@
     " Last Modified: Oct 14, 2019
 " ============================================================================
 
+if exists('b:loaded_your_netrw')
+  finish
+endif
+let b:loaded_your_netrw = 1
+
 " Options: {{{1
 " Can be modified interactively using `:NetrwSettings` !!
 
@@ -114,7 +119,6 @@ if &filetype !=# 'netrw'
   finish
 endif
 
-"
 function NetrwUnmaps() abort
 " wth why is this a thing.
   nunmap <buffer> a
@@ -144,3 +148,6 @@ augroup YourNetrw
   au!
   au FileExplorer User silent call NetrwUnmaps()
 augroup END
+
+" Yo how crazy is it that this isn't setup
+nnoremap <buffer><silent><nowait> q :<C-u>bd!<CR>

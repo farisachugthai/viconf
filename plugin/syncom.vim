@@ -7,11 +7,8 @@
 
 " Highlighting Commands: {{{1
 
-" Did you know that both -complete=color and -complete=highlight are things??
-" These commands all just describe the color and highlighting group under your
-" cursor.
-command! HL call syncom#HL()
-command! HiC call syncom#HiC()
+command! -complete=highlight HL call syncom#HL()
+command! -complete=color HiC call syncom#HiC()
 command! HiQF call syncom#HiQF()
 
 command! SyntaxInfo call syncom#get_syn_info()
@@ -32,9 +29,7 @@ if !hasmapto('<Plug>(HL)')
 endif
 
 " Title: {{{1
-
 " From `:he change`  line 352 tag g?g?
-
 " Adding range means that the command defaults to current line
 " Need to add a check that we're in visual mode and drop the '<,'> if not.
 command! -nargs=0 -range Title execute 'normal! ' . "'<,'>s/\v<(.)(\w*)/\u\1\L\2/g"
