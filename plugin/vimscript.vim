@@ -11,6 +11,7 @@ nnoremap <Leader>cd <Cmd>cd %:p:h<CR><Bar><Cmd>pwd<CR>
 " Literally ` does the same thing as ' but ` remembers column.
 nnoremap ' `
 
+xnoremap * y/<C-R>"<CR>
 " Fix up the path a little I'm starting to use ]i and gf and the like more
 " But make it conditional on me not having already set it for an ftplugin
 if !exists('b:did_ftplugin')
@@ -23,19 +24,7 @@ endif
 
 command! -nargs=0 ScratchBuffer call pydoc_help#scratch_buffer()
 
-" That i want available in every buffer so we can't put them in the ftplugin
-" To make navigating the location list and quickfix easier
-" Also check ./unimpaired.vim
-" Sep 05, 2019: This doesnt need to be 2 commands!! cwindow does both!
-" Oct 18, 2019: I just ran into llist and lwindow showing different things
-" and lwindow didn't show the location list i had the at the time so
-" switching again
-augroup YourQFAuGroup
-  au!
-  autocmd QuickFixCmdPost * copen
-augroup END
-
-command -nargs=0 Redo execute histget('cmd', -1)
+command! -nargs=0 Redo call histget('cmd', -1)
 
 " These 2 commands are for parsing the output of scriptnames though a command
 " like :TBrowseScriptnames would probably be easier to work with

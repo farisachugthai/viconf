@@ -194,6 +194,11 @@ function! ftplugins#CPath() abort  " {{{1
       let s:path = s:path . 'C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include,'
     endif
 
+    " Yo honestly this is the one you're looking for
+    if isdirectory('C:/Program Files (x86)/Windows Kits/10/include/10.0.17763.0/um')
+      let s:path = s:path . 'C:/Program Files (x86)/Windows Kits/10/include/10.0.17763.0/um'
+    endif
+
     if exists('$INCLUDEDIR')
       let s:path = s:path . expand('$INCLUDEDIR')
     endif

@@ -182,3 +182,25 @@ So let's do better than g]!::
 
 .. note::
    The <Cmd> pseudo-mapping is only available on Neovim.
+
+Searching
+=========
+
+It's bugged me so much that * and # don't search in visual mode.:
+
+   Note that the ":vmap" command can be used to specifically map keys in Visual
+   mode.  For example, if you would like the "/" command not to extend the Visual
+   area, but instead take the highlighted text and search for that::
+
+      :vmap / y/<C-R>"<CR>
+
+   (In the <> notation ``<>``, when typing it you should type it literally; you
+   need to remove the 'B' flag from '&cpoptions'.)
+
+So I implemented that as::
+
+   :xnoremap * y/<C-R>"<CR>/<CR>
+
+'xmap' because visual map, in a really unintuitive move, includes select-mode.
+The extra :kbd:`/` and <CR> are because a forward slash and a <CR> repeat the
+last search.
