@@ -225,3 +225,19 @@ So I implemented that as::
 'xmap' because visual map, in a really unintuitive move, includes select-mode.
 The extra :kbd:`/` and <CR> are because a forward slash and a <CR> repeat the
 last search.
+
+
+Using shells besides cmd or bash
+================================
+
+In usr_41 it's mentioned that files formatted with dos formatting won't
+run vim scripts correctly so holy shit that might explain a hell of a lot
+Comment this out because we now define ``&ff`` as only unix in $MYVIMRC.::
+
+   set fileformats=unix,dos
+
+Related to inter-op on Windows.:
+
+   'slash' and 'unix' are useful on Windows when sharing view files
+   with Unix.  The Unix version of Vim cannot source dos format scripts,
+   but the Windows version of Vim can source unix format scripts.

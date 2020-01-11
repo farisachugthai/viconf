@@ -5,19 +5,16 @@
   " Last Modified: Oct 20, 2019
 " ============================================================================
 
-" EchoRTP: {{{1
 " The nvim API is seriously fantastic.
-
 nnoremap <Leader>rt call buffers#EchoRTP()
 command! -nargs=0 EchoRTP echo buffers#EchoRTP()
 
 " From `:he quickfix`
 command! -nargs=+ NewGrep execute 'silent grep! <args>' | copen
-
-
 function! Window_Mappings() abort  " {{{1
   " Navigate windows more easily
   nnoremap <C-h> <Cmd>wincmd h<CR>
+  " This displays as <NL> when you run `:map` but it behaves like C-j. Oh well.
   nnoremap <C-j> <Cmd>wincmd j<CR>
   nnoremap <C-k> <Cmd>wincmd k<CR>
   nnoremap <C-l> <Cmd>wincmd l<CR>
@@ -85,11 +82,8 @@ function! Quickfix_Mappings() abort
   " Avoid accidental hits of <F1> while aiming for <Esc>
   noremap! <F1> <Esc>
 endfunction
-
 " From `:he quickfix`
 command! -nargs=+ NewGrep execute 'silent grep! <args>' | copen
-
-
 function! Alt_Key_Navigation() abort
   " Originally this inspired primarily for terminal use but why not put it everywhere?
   noremap  <A-h> <C-w>h
@@ -158,8 +152,7 @@ function! Tab_Mappings() abort  " {{{1
   nnoremap ]T <Cmd>tablast<CR>
   nnoremap [T <Cmd>tabfirst<CR>
 endfunction
-
-" Call Functions: {{{1
+" Call Functions:
 if !exists('no_plugin_maps') && !exists('no_windows_vim_maps') && !exists('b:plugin_buffers_maps')
   call Window_Mappings()
   call Alt_Key_Navigation()
@@ -168,5 +161,3 @@ if !exists('no_plugin_maps') && !exists('no_windows_vim_maps') && !exists('b:plu
   call Quickfix_Mappings()
   let b:plugin_buffers_maps = 1
 endif
-
-" }}}

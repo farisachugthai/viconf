@@ -26,7 +26,7 @@ let g:fzf_action = {
   \ 'ctrl-v': 'vsplit' }
 
 " NOTE: Use of stdpath() requires nvim0.3>
-let g:fzf_history_dir = stdpath('data') . '/fzf-history'
+let g:fzf_history_dir = stdpath('data') . '/site/fzf-history'
 
 if has('nvim')
   let $FZF_DEFAULT_OPTS .= ' --border --margin=0,2'

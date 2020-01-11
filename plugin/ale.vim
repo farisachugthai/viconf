@@ -164,13 +164,6 @@ let g:ale_lsp_show_message_severity = 'information'
 
 
 " Mappings: {{{1
-command! ALEE <Cmd>ALEEnable<CR>
-      \ <Cmd>normal! zzzM <CR>
-      \ call AleMappings()<CR>
-      \ <Cmd>echomsg 'ALE Enabled'<CR>
-
-nnoremap <Leader>a <Cmd>ALEE<CR>
-
 " wait to map these because none of these mappings are gonna work unless
 " if exists('g:loaded_ale')
 " actually i have a better idea

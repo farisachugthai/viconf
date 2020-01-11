@@ -69,7 +69,6 @@ nnoremap C-a ^
 " nothing different than <CR>. Wtf???
 nnoremap + C-a
 
-if exepath('ranger')
-  command! -bar RangerChooser call vim_file_chooser#RangeChooser()
-  nnoremap <leader>r :<C-U>vim_file_chooser#RangerChooser<CR>
-endif
+" As a nod to the inspiration I also want it in insert-mode
+nnoremap <C-x><C-r> :<C-U>source $MYVIMRC<CR>echomsg 'Reread $MYVIMRC'<CR>
+inoremap <C-x><C-r> :<C-U>source $MYVIMRC<CR>echomsg 'Reread $MYVIMRC'<CR>

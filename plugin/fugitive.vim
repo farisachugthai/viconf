@@ -5,8 +5,7 @@
     " Last Modified: Dec 05, 2019
 " ============================================================================
 
-if exists('g:loaded_fugitive')
-
+function! Fugitive_mappings() abort
   nnoremap <Leader>gb   <Cmd>Gblame<CR>
   nnoremap <Leader>gc   <Cmd>Gcommit<CR>
   nnoremap <Leader>gd   <Cmd>Gdiffsplit!<CR>
@@ -29,5 +28,8 @@ if exists('g:loaded_fugitive')
   nnoremap <Leader>gst  <Cmd>Git diffsplit! --stat<CR>
   nnoremap <Leader>gw   <Cmd>Gwrite<CR>
   nnoremap <Leader>gW   <Cmd>Gwrite!<CR>
+endfunction
 
+if exists('g:loaded_fugitive')
+  call Fugitive_mappings()
 endif

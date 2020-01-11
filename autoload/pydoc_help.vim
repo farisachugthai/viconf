@@ -9,6 +9,8 @@
 " Need to tear this apart and fgure out what works and why.
 
 function! s:temp_buffer() abort  " {{{1
+  " Use for setting a buffer that's been filled with text to something similar
+  " to an 'rst' help page.
 
   if exists(':StripWhitespace')
     exec ':StripWhitespace'
@@ -42,25 +44,6 @@ function! pydoc_help#SplitPydocCword() abort  " {{{1
   exec ':r! pydoc ' . s:temp_cword
   call s:temp_buffer()
 endfunction
-function! pydoc_help#PydocCwordNatively() abort  " {{{1
-
-  " Created because pydoc isn't immediately aware of 3rd party libraries.
-  " The above work just fine with the stdlib.
-  " However...I don't want to have to make the distinction ya know.
-    let s:temp_cword = expand('<cWORD>')
-py3 << EOF
-
-import pydoc
-import importlib
-try:
-    helped_mod = importlib.import_module(s:temp_cword)
-except:
-    vim.command("echoerr 'Error during import of %s'" % s:temp_cword)
-else:
-    pydoc.help(helped_mod)
-
-EOF
-endfunction
 function s:handle_user_config() abort   " {{{1
 
   " Look at me handling user configured arguments!
@@ -81,17 +64,13 @@ function! pydoc_help#Pydoc(module) abort   " {{{1
   " call <SID>handle_user_config()
   enew
   if has('python3')
-    " I realize i could do that EOF bullshit but i don't like it.
     if has('unix')
       exec 'r! python3 -m pydoc ' . a:module
     else
       exec 'r! python -m pydoc ' . a:module
-      " This func doesn't exist anymore goddamn
-      " call s:get_documents(a:module)
-
     endif
-
-  elseif has('python')  " not sure how to guarantee that python points to py2...
+  " not sure how to guarantee that python points to py2...
+  elseif has('python')
     exec 'r! python -m pydoc ' . a:module
   endif
 
@@ -99,19 +78,14 @@ function! pydoc_help#Pydoc(module) abort   " {{{1
 endfunction
 function! pydoc_help#async_cursor() abort " Async Pydoc: {{{1
 
+  let s:temp_cword = expand('<cWORD>')
+  enew
   call jobstart('pydoc ' . expand('<cWORD>'), {'on_stdout':{j,d,e->append(line('.'),d)}})
+  call nvim_command('sleep 1')
+  call s:temp_buffer()
 
 endfunction
 function! pydoc_help#async_cexpr() abort  " {{{1
-  " this function POURS output into the current buf so make sure you're
-  " switched to a scratch buffer.
-  " However... **THIS WORKS**
-	"    <cexpr>    is replaced with the word under the cursor, including more
-	"	   to form a C expression.  E.g., when the cursor is on "arg"
-	"	   of "ptr->arg" then the result is "ptr->arg"; when the
-	"	   cursor is on "]" of "list[idx]" then the result is
-	"	   "list[idx]".  This is used for |v:beval_text|.
-
   call jobstart('pydoc ' . expand('<cexpr>'), {'on_stdout':{j,d,e->append(line('.'),d)}})
 endfunction
 function! pydoc_help#broken_scratch_buffer() abort  " {{{1

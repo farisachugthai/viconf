@@ -15,14 +15,14 @@ endsnippet
 
 snippet gvar "Global / configuration variable" b
 if !exists('g:${1:${VISUAL}}')
-	let g:$1 = ${2:"${3:<tab>}"}
+  let g:$1 = ${2:"${3:<tab>}"}
 endif
 endsnippet
 
 snippet guard "Script reload guard. Good to put directly under the header snippet." b
 " Guard: {{{1
-if exists('${1:g:did_`!p snip.rv = snip.fn.replace('.','_')`}') || ${2:&compatible} || ${3:v:version < 700}
-	finish
+if exists('${1:b:loaded_`!p snip.rv = snip.fn.replace('.','_')`}') || ${2:&compatible} || ${3:v:version < 700}
+    finish
 endif
 let $1 = ${4:1}
 
@@ -30,13 +30,8 @@ cpo$0
 endsnippet
 
 snippet plugin "Plugin reload guard." b
-" Guard: {{{1
-if !has_key(plugs, '${1:${VISUAL}`!p snip.rv = snip.basename.replace('.', '_')`}')
-	finish
-endif
-
 if exists('b:did_`!p snip.rv = snip.basename.replace('.', '_')`') || &compatible || v:version < 700
-	finish
+  finish
 endif
 let b:did_`!p snip.rv = snip.basename.replace('.', '_')` = 1
 $0
@@ -53,17 +48,17 @@ endsnippet
 
 snippet fun "function with simple tabstops" b
 function! ${1:function_name}($2) abort
-	${3:'code'}
+  ${3:'code'}
 endfunction
 $0
 endsnippet
 
 snippet header "standard Vim script file header" b
 " ============================================================================
-	" File: ${1:`!v expand('%:t')`}
-	" Author: ${2:`!v g:snips_author`}
-	" Description: ${3:${VISUAL:A description of the file below}}
-	${4:" Last Modified: `!v strftime("%B %d, %Y")`}$0
+  " File: ${1:`!v expand('%:t')`}
+  " Author: ${2:`!v g:snips_author`}
+  " Description: ${3:${VISUAL:A description of the file below}}
+  ${4:" Last Modified: `!v strftime("%B %d, %Y")`}$0
 " ============================================================================
 endsnippet
 
@@ -78,9 +73,9 @@ endsnippet
 
 snippet syntax "Syntax file guard" b
 if v:version < 600
-	syntax clear
+  syntax clear
 elseif exists(${1:'b:current_syntax'})
-	finish
+  finish
 endif
 
 let ${2:b:current_syntax} = 1
@@ -89,15 +84,15 @@ endsnippet
 
 snippet func "Autocompletes function name based on filename" b
 function! ${1:`expand('%') =~ 'autoload' ? substitute(matchstr(expand('%:p'),'autoload/\zs.*\ze.vim'),'[/\\]','#','g').'#' : ''`}${2:function_name}(${3}) abort
-		${0}
+    ${0}
 endif
 endsnippet
 
 snippet try "try ... catch statement"
 try
-	${1:${VISUAL}}
+  ${1:${VISUAL}}
 catch $2
-	$0
+  $0
 endtry
 endsnippet
 
@@ -107,9 +102,9 @@ endsnippet
 
 global !p
 def sec_title(snip, t):
-	file_start = snip.fn.split('.')[0]
-	sec_name = t[1].strip("1234567890. ").lower().replace(' ', '-')
-	return ("*%s-%s*" % (file_start, sec_name)).rjust(78-len(t[1]))
+  file_start = snip.fn.split('.')[0]
+  sec_name = t[1].strip("1234567890. ").lower().replace(' ', '-')
+  return ("*%s-%s*" % (file_start, sec_name)).rjust(78-len(t[1]))
 endglobal
 
 snippet sec "Section marker" b
@@ -140,46 +135,48 @@ endsnippet
 
 snippet for "for ... in loop"
 for ${1} in ${2}
-	${0:${VISUAL}}
+  ${0:${VISUAL}}
 endfor
 endsnippet
 
 snippet for "for [key, value] in loop"
 for [${1},${2}] in items(${3})
-	${0}
-	unlet $1 $2
+  ${0}
+  unlet $1 $2
 endfor
 endsnippet
 
 snippet wh "while loop"
 while ${1}
-	${0:${VISUAL:body}}
+  ${0:${VISUAL:body}}
 endw
 endsnippet
 
 snippet if "if statement" b
 if ${1}
-	${0:${VISUAL:body}}
-endif
+  ${0:${VISUAL:body}}
 endsnippet
 
-snippet elif "elif by vim" bs
+snippet elif "elif by vim" b
 elseif ${1}
-	${0:${VISUAL:body}}
+  ${0:${VISUAL:body}}
 endsnippet
 
-snippet ife "if ... else statement" mw
-if ${1:${VISUAL}}
-	$2
+snippet else "else" w
 else
-	$0
+  $0
 endif
+endsnippet
+
+snippet ife "if ... else statement" w
+${0:if}
+    ${1:else}
 endsnippet
 
 snippet aug "augroup ... autocmd block" b
 augroup ${1:AU_NAME}
-	autocmd!
-	autocmd ${2:BufRead,BufNewFile} ${3:*.ext,*.ext3|<buffer[=N]>} $0
+  autocmd!
+  autocmd ${2:BufRead,BufNewFile} ${3:*.ext,*.ext3|<buffer[=N]>} $0
 augroup end
 endsnippet
 
@@ -293,4 +290,4 @@ snippet exe "execute(var)" b
 execute('${0:${VISUAL}}')
 endsnippet
 
-# Vim: set et ts=4 sts=4 sw=4:
+# Vim: set et ts=4 sts=2 sw=2:

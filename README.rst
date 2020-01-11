@@ -529,6 +529,28 @@ control very quickly.
 
    endfunction
 
+Asynchronous Buffers
+====================
+.. admonition:: Be careful when working with ``jobstart``.
+
+This function POURS output into the current buf so make sure you're
+switched to a scratch buffer.
+
+However... **THIS WORKS**
+
+.. function:: jobstart
+
+   <cexpr> is replaced with the word under the cursor, including more to form a
+   C expression. E.g., when the cursor is on "arg" of "ptr->arg" then the result
+   is "ptr->arg"; when the cursor is on "]" of "list[idx]" then the result is
+   "list[idx]".  This is used for ``v:beval_text``.
+
+Examples
+--------
+::
+
+   call jobstart('pydoc ' . expand('<cexpr>'), {'on_stdout':{j,d,e->append(line('.'),d)}})
+
 
 .. _`here.`: after/plugin/fzf.vim
 .. _`after/ftplugin/gitcommit.vim`: ./after/ftplugin/gitcommit.vim

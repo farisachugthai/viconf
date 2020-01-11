@@ -100,7 +100,7 @@ Plug 'psf/black', {'for': 'python'}
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'tomtom/tlib_vim'
-Plug 'neovim/nvim-lsp'
+" Plug 'neovim/nvim-lsp'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 
 call plug#end()

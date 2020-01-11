@@ -53,7 +53,7 @@ if executable('sphinx-build')
   let &l:makeprg = 'sphinx-build -b html'
 
   if filereadable('conf.py')
-    let &l:makeprg .= ' . ../build/html '
+    let &l:makeprg .= ' . ./build/html '
   elseif glob('../conf.py')
     let &l:makeprg .= ' .. ../../build/html '
   endif
