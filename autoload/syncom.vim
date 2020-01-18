@@ -79,7 +79,7 @@ function! s:rg_setup() abort
 
   let s:options = ' --vimgrep --no-messages --smart-case --no-messages '
         \ . '--hidden --no-heading --max-columns 300 --max-columns-preview '
-        \ . ' --no-ignore-messages --color never --trim '
+        \ . ' --no-ignore-messages --color never --trim --no-column '
   let g:grep = s:cmd . s:options
   let &grepprg = g:grep
   return g:grep

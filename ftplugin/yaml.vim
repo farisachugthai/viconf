@@ -13,4 +13,11 @@ if exists('*nvim_command')
   call nvim_command('UltiSnipsAddFiletypes ansible')
 endif
 
+py3 << EOF
+from _vim import pretty_it
+EOF
+
+" For more see ../python3/_vim
+command! -buffer -range=% Pyaml :<line1>,<line2>python pretty_it('yaml')
+
 let b:undo_ftplugin = 'setl com< cms< et< fo< sw< et< sts< ts<'

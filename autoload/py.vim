@@ -184,7 +184,7 @@ function! py#YAPF() abort  " {{{1
   else
     " save old buffer
     let s:old_buffer = nvim_get_buffer_lines()
-    call pydoc_help#scratch_buffer()
+    let s:new_buffer = pydoc_help#scratch_buffer()
     " can we do this this way?
     " :py3 vim.current.buffer[:] = yapf -i %
     " TODO: check this
@@ -219,4 +219,11 @@ function! py#Py(...) abort
     exec 'py3 ' . a:1
   endif
 
+endfunction
+
+function! py#Black() abort
+py3 << EOF
+from py import Black
+Black()
+EOF
 endfunction

@@ -2,23 +2,12 @@
 # -*- coding: utf-8 -*-
 """Open a file, check if symlink, if so follow link and cd to dir.
 
-.. module:: follow_links
-
-.. highlight:: vim
-
-Honestly don't know what to do to make this work.
-
 Well now you can open up nvim and run::
 
     terminal
     ipython -i --pdb follow_links.py
 
 And it'll execute without errors which is nice.
-
-Nov 03, 2019:
-
-    Holy shit I may have gotten this working.
-
 """
 import logging
 import os
@@ -96,6 +85,13 @@ def _setup_logging(level):
 @pynvim.autocmd("BufEnter")
 def main():
     """Set everything up."""
+    cur_file = FileLink(pynvim.api.nvim.Nvim)
+
+    if cur_file.is_symlink:
+        cur_file.true_file()
+
+
+if __name__ == "__main__":
     log_levels = {
         "debug": logging.DEBUG,
         "info": logging.INFO,
@@ -104,16 +100,4 @@ def main():
         "critical": logging.CRITICAL,
     }
     LOGGER = _setup_logging(log_levels["warning"])
-    # if os.environ.get('NVIM_LISTEN_ADDRESS'):
-    #     nvim = pynvim.attach('socket', path=os.environ['NVIM_LISTEN_ADDRESS'])
-    # else:
-    #     nvim = None
-
-    cur_file = FileLink(pynvim.api.nvim.Nvim, logger=LOGGER)
-
-    if cur_file.is_symlink:
-        cur_file.true_file()
-
-
-if __name__ == "__main__":
     main()

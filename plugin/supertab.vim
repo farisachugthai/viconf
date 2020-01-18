@@ -5,8 +5,6 @@
   " Last Modified: May 14, 2019
 " ============================================================================
 
-if !exists('g:loaded_supertab') | finish | endif
-
 " Culmination Of The Help Docs:
 
 " Pretty much a copy paste of the last section of the help docs except
@@ -15,7 +13,8 @@ if !exists('g:loaded_supertab') | finish | endif
 " 40% of the way in he sets up the context for you.
 
 " Might give this a try
-let g:SuperTabDefaultCompletionType = '<C-x><C-u>'
+" let g:SuperTabDefaultCompletionType = '<C-x><C-u>'
+" nah leave it as C-p its way better
 
 " let g:SuperTabDefaultCompletionType = 'context'
 
@@ -25,10 +24,11 @@ let g:SuperTabDefaultCompletionType = '<C-x><C-u>'
 " in an ftplugin, you'll need to call *SuperTabSetDefaultCompletionType* like so,
 " supplying the completion type you wish to switch to:
 
-let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
-let g:SuperTabContextDiscoverDiscovery =
-        \ ['&completefunc:<c-x><c-u>', '&omnifunc:<c-x><c-o>']
+" let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
+" let g:SuperTabContextDiscoverDiscovery =
+"         \ ['&completefunc:<c-x><c-u>', '&omnifunc:<c-x><c-o>']
 
+" Yeah so Im gonna
 function! MyTagContext() abort
   if filereadable(expand('%:p:h') . '/tags')
     return "\<c-x>\<c-]>"

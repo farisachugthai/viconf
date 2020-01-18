@@ -5,12 +5,7 @@
     " Last Modified: Oct 01, 2019
 " ============================================================================
 
-" Guard: {{{1
 scriptencoding utf-8
-let s:cpo_save = &cpoptions
-set cpoptions-=C
-
-" Plugins: {{{1
 let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Evervim. Thanks!
 let s:wsl = !empty($WSL_DISTRO_NAME)                   " Windows is !has('unix') but WSL checks explicitly
 let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux) && empty(s:wsl)
@@ -84,24 +79,20 @@ if empty(s:termux)
   Plug 'chrisbra/csv.vim', {'for': ['csv', 'tsv']}
 
   Plug 'godlygeek/tabular'
+  Plug 'neovim/nvim-lsp'
   " needed if for nothing else but the ftdetect
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
   " Plug 'mustache/vim-mustache-handlebars'
   Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
   Plug 'elzr/vim-json', { 'for': 'json' }
-  " Plug 'omnisharp/omnisharp-vim', {'for': 'cs'}
-
-  " Plug 'jupyter-vim/jupyter-vim'
-  " Well this looks sweet
 endif
 
-Plug 'psf/black', {'for': 'python'}
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'tomtom/tlib_vim'
-" Plug 'neovim/nvim-lsp'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
+Plug 'liuchengxu/vista.vim'
 
 call plug#end()
 

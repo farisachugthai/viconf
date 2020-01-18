@@ -44,4 +44,10 @@ inoremap <buffer> " ""<C-G>U<Left>
 " Also can we auto fix single quotes?
 inoremap <buffer> ' "<C-G>U<Left>
 
+py3 << EOF
+from _vim import pretty_it
+EOF
+" For more see ../python3/_vim
+command! -buffer -range=% Pjson :<line1>,<line2>python pretty_it('json')
+
 let b:undo_ftplugin = 'setlocal fo< com< cms< et< sts< sw< ts< sua< fdm<'

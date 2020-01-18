@@ -7,6 +7,8 @@
 
 scriptencoding utf-8
 
+" I want the spacebar back
+let g:tagbar_map_showproto = '?'
 let g:tagbar_left = 1
 let g:tagbar_width = 30
 let g:tagbar_sort = 0
@@ -21,11 +23,17 @@ let g:tagbar_silent = 1
 " let g:tagbar_status_func = 'TagbarStatusFunc'
 " Doesn't work
 
+" you lazyvload it
+" augroup TagbarFiletypes
+"   au!
+"   autocmd FileType * nested :call tagbar#autoopen(0)
+" augroup END
+
 " If you set this option the Tagbar window will automatically close when you
 " jump to a tag. This implies |g:tagbar_autofocus|. If enabled the "C" flag will
 " be shown in the statusline of the Tagbar window.
 " Actually I like having it open
-let g:tagbar_autoclose = 0
+let g:tagbar_autoclose = 1
 
 " -1: Use the global line number settings.
 " Well that just feels like the courteous thing to do right?

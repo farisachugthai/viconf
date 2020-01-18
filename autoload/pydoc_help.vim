@@ -8,6 +8,19 @@
 " Honestly most of these functions are in varying states of F'ed up.
 " Need to tear this apart and fgure out what works and why.
 
+function! pydoc_help#open_files(files) abort
+
+  let bufnrs = []
+    for file in a:files
+      let bufnr = bufadd(file)
+      call bufload(file)
+      call add(bufnrs, bufnr(file))
+    endfor
+  return bufnrs
+endfunction
+function! pydoc_help#scratch_buffer() abort
+  return nvim_create_buf(v:true, v:true)
+endfunction
 function! s:temp_buffer() abort  " {{{1
   " Use for setting a buffer that's been filled with text to something similar
   " to an 'rst' help page.
@@ -60,9 +73,7 @@ function s:handle_user_config() abort   " {{{1
 
 endfunction
 function! pydoc_help#Pydoc(module) abort   " {{{1
-
-  " call <SID>handle_user_config()
-  enew
+  call s:scratch_buffer()
   if has('python3')
     if has('unix')
       exec 'r! python3 -m pydoc ' . a:module
