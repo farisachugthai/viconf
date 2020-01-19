@@ -5,7 +5,7 @@
     " Last Modified: Sep 13, 2019
 " ============================================================================
 
-if executable('htop')  " {{{1
+if executable('htop')
   " Leader -- applications -- htop. Requires nvim for <Cmd> which tmk doesn't exist
   " even in vim8.0+. Also requires htop which more than likely rules out Win32.
 
@@ -13,16 +13,16 @@ if executable('htop')  " {{{1
   nnoremap <Leader>ah <Cmd>wincmd v<CR><bar><Cmd>enew<CR><bar>term://htop
 endif
 
-set wildcharm=<C-z>  "  Autocompletion on the cmdline: {{{1
+set wildcharm=<C-z>
 nnoremap ,e :e **/*<C-z><S-Tab>
 
 set path-=/usr/include
 nnoremap ,f :find **/*<C-z><S-Tab>
 
-if !empty('$ANDROID_DATA')
+if !empty($ANDROID_DATA)
   " May 26, 2019: Just ran into my first problem from a filename with a space in the name *sigh*
-  nnoremap <Leader>ts :<C-u>execute '!termux-share -a send ' . shellescape(expand('%'))<CR>
-  command TSend :<C-u>execute '!termux-share -a send ' . shellescape(expand('%'))<CR>
+  command! TermuxSend :<C-u>execute '!termux-share -a send ' . shellescape(expand('%'))<CR>
+  nnoremap <Leader>ts :<C-u>TermuxSend<CR>
 endif
 
 if !has('unix')
@@ -40,16 +40,16 @@ if !has('unix')
   command! SetCmd call msdos#set_shell_cmd()
   call msdos#set_shell_cmd()
 
-  command! -nargs=? TermInvokeCmd call msdos#invoke_cmd(<q-args>)
-  command! -nargs=? TermCmd call msdos#CmdTerm(<q-args>)
+  command! -nargs=? CmdInvoke call msdos#invoke_cmd(<q-args>)
+  command! -nargs=? -complete=shellcmd Cmd call msdos#CmdTerm(<q-args>)
   command! PowerShell call msdos#PowerShell()
 
-  command! PwshHelp call msdos#pwsh_help(shellescape(<f-args>))
+  command! -nargs=? PwshHelp call msdos#pwsh_help(shellescape(<f-args>))
 endif
 
 if !has('nvim') | finish | endif
 
-augroup TermGroup
+augroup UserTerm
   au!
   autocmd TermOpen * setlocal statusline=%{b:term_title}
 

@@ -20,14 +20,8 @@ let g:WebDevIconsUnicodeDecorateFileNodesDefaultSymbol = ''
 " enable file extension pattern matching glyphs on folder/directory (disabled by default with 0)
 let g:DevIconsEnableFolderExtensionPatternMatching = 1
 
-" Enable this for a specific ftplugin I'm curious what thisll look like. We
-" already call that func but the rest I'm curious about.
-" Tried netrw and it looks weird.
-" setlocal statusline=%f\ %{WebDevIconsGetFileTypeSymbol()}\ %h%w%m%r\ %=%(%l,%c%V\ %Y\ %=\ %P%)
-
 " Heres an example of how to override filetypes.
-" let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols = {} " needed
-" let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['myext'] = 'ƛ'
+let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols = {} " needed or else it cries that the var wasn't declared in advance
 
 let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['vim'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['sqlite'] = ''
@@ -37,7 +31,7 @@ let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['md'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['js'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['cs'] = ''
 
-  let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols= {
+let s:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols= {
         \ 'styl'     : '',
         \ 'sass'     : '',
         \ 'scss'     : '',

@@ -25,28 +25,33 @@ if !exists('b:did_typescript_setup')
 
   " aliases
   let tsconfig_file = findfile('tsconfig.json', '.;')
+
   if len(tsconfig_file)
 
     " Yeah i think it's this one. reading in the file and it might not be utf-8
+    try
     let tsconfig_data = json_decode(join(readfile(tsconfig_file)))
+    " catch all Vim errors. thanks help docs
+    catch /^Vim\%((\a\+)\)\=:E/
+    endtry
 
     " TODO: What do we do if this line raises an err
-    let paths = values(map(tsconfig_data.compilerOptions.paths, {key, val -> [
-                \ glob2regpat(key),
-                \ substitute(val[0], '\/\*$', '', '')]
-                \ }))
+    " let paths = values(map(tsconfig_data.compilerOptions.paths, {key, val -> [
+    "             \ glob2regpat(key),
+    "             \ substitute(val[0], '\/\*$', '', '')]
+    "             \ }))
 
-    for path in paths
-      let path[1] = finddir(path[1], '.;')
-    endfor
+    " for path in paths
+    "   let path[1] = finddir(path[1], '.;')
+    " endfor
 
-    let b:ts_config_paths = paths
+    " let b:ts_config_paths = paths
 
-    unlet tsconfig_file
-    unlet tsconfig_data
-    unlet paths
+    unlet! tsconfig_data
+    " unlet paths
   endif
 
+  unlet tsconfig_file
   " lint file on write
   if executable('tslint')
     let &l:errorformat = '%EERROR: %f:%l:%c - %m,'
@@ -56,6 +61,7 @@ if !exists('b:did_typescript_setup')
 
     let &l:makeprg = 'tslint --format prose'
 
+    echomsg 'ftplugin/typescript: Setting tslint as the compiler.'
     augroup TS
       autocmd!
       autocmd BufWritePost <buffer> silent make! <afile> | silent redraw!

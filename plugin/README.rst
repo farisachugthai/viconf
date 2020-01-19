@@ -241,3 +241,61 @@ Related to inter-op on Windows.:
    'slash' and 'unix' are useful on Windows when sharing view files
    with Unix.  The Unix version of Vim cannot source dos format scripts,
    but the Windows version of Vim can source unix format scripts.
+
+Supertab
+========
+
+Supertab is a great plugin to build on insert-mode completion.
+
+I realized none of this was necessary.
+
+From :file:`./supertab.vim`.
+
+.. code-block:: vim
+
+   if !exists('g:loaded_supertab') | finish | endif
+
+   " Culmination Of The Help Docs:
+
+   " Pretty much a copy paste of the last section of the help docs except
+   " I added the autocmd to it's own augroup.
+
+   " 40% of the way in he sets up the context for you.
+
+   " Might give this a try
+   let g:SuperTabDefaultCompletionType = '<C-x><C-u>'
+
+Stopped using this as the completefunc option wasn't set.
+Supertab appears to provide a litany of functions for use;
+however, so this might be revisited.
+
+For example, one could do.::
+
+   set completefunc=SuperTabCodeComplete
+
+Note: once the buffer has been initialized, changing the value of this setting
+will not change the default complete type used. If you want to change the
+default completion type for the current buffer after it has been set, perhaps
+in an ftplugin, you'll need to call *SuperTabSetDefaultCompletionType* like so,
+supplying the completion type you wish to switch to::
+
+   let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
+   let g:SuperTabContextDiscoverDiscovery =
+           \ ['&completefunc:<c-x><c-u>', '&omnifunc:<c-x><c-o>']
+
+
+This configuration will result in a completion flow like so::
+
+   "   if text before the cursor looks like a file path:
+   "     use file completion
+   "   elif text before the cursor looks like an attempt to access a member
+   "   (method, field, etc):
+   "     use user completion
+   "       where user completion is currently set to supertab's
+   "       completion chaining, resulting in:
+   "         if omni completion has results:
+   "           use omni completion
+   "         else:
+   "           use keyword completion
+   "   else:
+   "     use keyword completion

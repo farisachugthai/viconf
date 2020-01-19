@@ -79,7 +79,8 @@ if empty(s:termux)
   Plug 'chrisbra/csv.vim', {'for': ['csv', 'tsv']}
 
   Plug 'godlygeek/tabular'
-  Plug 'neovim/nvim-lsp'
+  " jesus christ is this slow
+  " Plug 'neovim/nvim-lsp'
   " needed if for nothing else but the ftdetect
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}

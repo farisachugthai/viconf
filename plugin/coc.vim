@@ -140,7 +140,6 @@ nnoremap ,d  <Cmd>CocList diagnostics<CR>
 
 " Orrrrr
 " nnoremap ,d <Plug>(coc-diagnostic-info)<CR>
-
 " Manage extensions
 nnoremap ,e  <Cmd>CocList extensions<CR>
 " Show commands
@@ -168,8 +167,7 @@ nnoremap <Leader>j  :<C-u>CocNext<CR>
 nnoremap ,j  :<C-u>CocNext<CR>
 nnoremap <Leader>k  :<C-u>CocPrev<CR>
 nnoremap ,k  :<C-u>CocPrev<CR>
-" ranger nabbed this one
-" nnoremap <Leader>r  :<C-u>CocListResume<CR>
+nnoremap <Leader>r  :<C-u>CocListResume<CR>
 nnoremap ,r  :<C-u>CocListResume<CR>
 
 " Other Mappings: {{{2
@@ -203,8 +201,7 @@ nnoremap ,q  <Plug>(coc-fix-current)<CR>
 " Commands: {{{1
 
 " Dec 05, 2019: Got a new one for ya!
-command! CocExtensionStats :py3 from pprint import pprint; pprint(vim.eval('CocAction("extensionStats")'))
-
+command! -nargs=0 CocExtensionStats :py3 from pprint import pprint; pprint(vim.eval('CocAction("extensionStats")'))
 
 " Let's group these together by prefixing with Coc
 " Use `:Format` to format current buffer
@@ -228,7 +225,7 @@ command! -nargs=0 CocPython call CocActionAsync('runCommand', 'python.startREPL'
 
 " Use autocmd to force lightline update.
 " Well I have my own statusline function but you're close
-augroup CocUser
+augroup UserCoc
   au!
   autocmd User CocStatusChange,CocDiagnosticChange
         \| if exists('*Statusline_expr')
@@ -239,11 +236,10 @@ augroup CocUser
   " This happens with coc-powershell all the time
   autocmd User CocTerminalOpen stopinsert
 
-  autocmd CompleteDone * pclose
-	autocmd CursorHold * silent call CocActionAsync('highlight')
+  autocmd CursorHold * silent call CocActionAsync('highlight')
 
   " Dude holy fuck is this annoying
   " Shit which one.
-  autocmd! CmdlineEnter CompleteDone
+  autocmd! User CmdlineEnter CompleteDone
   " autocmd! CmdwinEnter *
 augroup END

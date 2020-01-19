@@ -5,104 +5,6 @@ README
 :Author: Faris Chugthai
 :Date: Jul 06, 2019
 
-To say Vim has a lot of options, associated files and directories is an
-understatement. But these can be broken down piece by piece to be more
-easily digestible.
-
-First I'll go over setting basic options.
-
-Options
-=========
-
-The first and most obvious file is the :file:`init.vim`. We can setup
-the base options like so:
-
-+--------------------------+----------------+
-| Options                  |                |
-+--------------------------+----------------+
-| .. code-block:: vim      |                |
-+--------------------------+----------------+
-|    :let OPTION_NAME = 1  | Enable option  |
-+--------------------------+----------------+
-|    :let OPTION_NAME = 0  | Disable option |
-+--------------------------+----------------+
-| Continuation of settings |                |
-+--------------------------+----------------+
-
-let vs. set
-------------
-
-How do we utilize ``let`` for a built-in vim variables?
-
-.. code-block:: vim
-
-    let &grepprg = 'ag --nogroup --nocolor --column --vimgrep $*'
-
-By prepending :kbd:`&` to the variable, Vim knows we're modifying the value of
-a variable it recognizes and not defining our own. The single quotes are
-still required; however I find this more manageable than adding a `\\``
-before every single space.
-
-``&virtualedit``
-------------------
-
-.. code-block:: vim
-
-   set virtualedit=all
-
-It allows you to move the cursor anywhere in the window.
-If you enter characters or insert a visual block, Vim will add whatever
-spaces are required to the left of the inserted characters to keep
-them in place. Virtual edit mode makes it simple to edit tabular data.
-Turn it off with ``:set virtualedit=.``
-
-Diffopts
----------
-
-My current ``&diffopt``.::
-
-   " Filler lines to keep text synced, 0 lines of context on diffs,
-   " don't diff hidden files,default foldcolumn is 2, case insensitive
-   set diffopt=filler,context:0,hiddenoff,foldcolumn:2,icase,indent-heuristic,horizontal
-   if has('patch-8.1.0360') | set diffopt+=internal,algorithm:patience | endif
-
-.. todo:: Annotate the rest
-
-
-Environment Variables
-=====================
-
-Do not ever redefine :envvar:`$VIMRUNTIME`! This variable is used by both Neovim and
-Vim; however, both define the var differently.
-
-If this is set in a startup file like `.bash_profile` or `.bashrc`, it will
-create compatibility issues between the two.
-
-Nvim defines :envvar:`$VIMRUNTIME` as /usr/share/nvim/runtime/, in
-comparison to Vim's /usr/share/vim/runtime/ definition. Therefore, defining `$VIMRUNTIME`
-as /usr/share/vim/runtime/ in a startup file will cause unexpected behavior
-in Neovim's startup.
-
-
-Extraneous Environment Variables
---------------------------------
-
-The below is an env var set as a convenient bridge between Ubuntu and Termux
-As a result it messes things up if not set, but there's no reason to halt
-everything. Feel free to discard if you copy/paste my vimrc.
-
-Added: 05/18/19: Just found out Windows has an envvar ``%SystemRoot%``::
-
-   if !exists('$_ROOT') && !empty(g:termux)
-     let $_ROOT = expand('$PREFIX')
-   elseif !exists('$_ROOT') && !empty(g:ubuntu)
-     let $_ROOT = '/usr'
-   elseif !exists('$_ROOT') && !empty(g:windows)
-     " Or should I use ALLUSERSPROFILE
-     let $_ROOT = expand('$SystemRoot')
-   endif
-
-
 Directory Layout and Runtimepath
 =================================
 
@@ -372,6 +274,7 @@ inputted by setting only the ``full`` or ``list`` options.
 Then if you hit ``wildchar`` a second time, drop the longest option. If i hit
 tab twice in a row, I want you to start auto-populating the command line
 
+.. _insert-mode-completion:
 
 Insert Mode Completion
 ----------------------
@@ -529,8 +432,10 @@ control very quickly.
 
    endfunction
 
+
 Asynchronous Buffers
 ====================
+
 .. admonition:: Be careful when working with ``jobstart``.
 
 This function POURS output into the current buf so make sure you're
@@ -545,11 +450,121 @@ However... **THIS WORKS**
    is "ptr->arg"; when the cursor is on "]" of "list[idx]" then the result is
    "list[idx]".  This is used for ``v:beval_text``.
 
+
 Examples
 --------
+
 ::
 
    call jobstart('pydoc ' . expand('<cexpr>'), {'on_stdout':{j,d,e->append(line('.'),d)}})
+
+Coc Nvim
+========
+
+py3 from pprint import pprint; pprint(vim.eval('coc#list#get_chars()'))
+
+
+Beginners Intro
+===============
+
+
+To say Vim has a lot of options, associated files and directories is an
+understatement. But these can be broken down piece by piece to be more
+easily digestible.
+
+First I'll go over setting basic options.
+
+Options
+=========
+
+The first and most obvious file is the :file:`init.vim`. We can setup
+the base options like so:
+
++--------------------------+----------------+
+| Options                  |                |
++--------------------------+----------------+
+| .. code-block:: vim      |                |
++--------------------------+----------------+
+|    :let OPTION_NAME = 1  | Enable option  |
++--------------------------+----------------+
+|    :let OPTION_NAME = 0  | Disable option |
++--------------------------+----------------+
+| Continuation of settings |                |
++--------------------------+----------------+
+
+let vs. set
+------------
+
+How do we utilize ``let`` for a built-in vim variables?
+
+.. code-block:: vim
+
+    let &grepprg = 'ag --nogroup --nocolor --column --vimgrep $*'
+
+By prepending :kbd:`&` to the variable, Vim knows we're modifying the value of
+a variable it recognizes and not defining our own. The single quotes are
+still required; however I find this more manageable than adding a `\\``
+before every single space.
+
+``&virtualedit``
+------------------
+
+.. code-block:: vim
+
+   set virtualedit=all
+
+It allows you to move the cursor anywhere in the window.
+If you enter characters or insert a visual block, Vim will add whatever
+spaces are required to the left of the inserted characters to keep
+them in place. Virtual edit mode makes it simple to edit tabular data.
+Turn it off with ``:set virtualedit=.``
+
+Diffopts
+---------
+
+My current ``&diffopt``.::
+
+   " Filler lines to keep text synced, 0 lines of context on diffs,
+   " don't diff hidden files,default foldcolumn is 2, case insensitive
+   set diffopt=filler,context:0,hiddenoff,foldcolumn:2,icase,indent-heuristic,horizontal
+   if has('patch-8.1.0360') | set diffopt+=internal,algorithm:patience | endif
+
+.. todo:: Annotate the rest
+
+
+Environment Variables
+=====================
+
+Do not ever redefine :envvar:`$VIMRUNTIME`! This variable is used by both Neovim and
+Vim; however, both define the var differently.
+
+If this is set in a startup file like `.bash_profile` or `.bashrc`, it will
+create compatibility issues between the two.
+
+Nvim defines :envvar:`$VIMRUNTIME` as /usr/share/nvim/runtime/, in
+comparison to Vim's /usr/share/vim/runtime/ definition. Therefore, defining `$VIMRUNTIME`
+as /usr/share/vim/runtime/ in a startup file will cause unexpected behavior
+in Neovim's startup.
+
+
+Extraneous Environment Variables
+--------------------------------
+
+The below is an env var set as a convenient bridge between Ubuntu and Termux
+As a result it messes things up if not set, but there's no reason to halt
+everything. Feel free to discard if you copy/paste my vimrc.
+
+Added: 05/18/19: Just found out Windows has an envvar ``%SystemRoot%``::
+
+   if !exists('$_ROOT') && !empty(g:termux)
+     let $_ROOT = expand('$PREFIX')
+   elseif !exists('$_ROOT') && !empty(g:ubuntu)
+     let $_ROOT = '/usr'
+   elseif !exists('$_ROOT') && !empty(g:windows)
+     " Or should I use ALLUSERSPROFILE
+     let $_ROOT = expand('$SystemRoot')
+   endif
+
 
 
 .. _`here.`: after/plugin/fzf.vim

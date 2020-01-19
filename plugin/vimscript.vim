@@ -12,6 +12,7 @@ nnoremap <Leader>cd <Cmd>cd %:p:h<CR><Bar><Cmd>pwd<CR>
 nnoremap ' `
 
 xnoremap * y/<C-R>"<CR>
+
 " Fix up the path a little I'm starting to use ]i and gf and the like more
 " But make it conditional on me not having already set it for an ftplugin
 if !exists('b:did_ftplugin')
@@ -22,9 +23,18 @@ if !exists('b:did_ftplugin')
   endif
 endif
 
-command! -nargs=0 ScratchBuffer call pydoc_help#scratch_buffer()
+" In which I learn hwo complete works
+command! -complete=buffer -nargs=0 ScratchBuffer call pydoc_help#scratch_buffer()
+command! -complete=compiler Compiler :<C-u>compiler<CR>
+" '<,'>s/compiler/event/g
+" You may find that ---^ does you good
+command! -complete=event Event :<C-u>event<CR>
 
 command! -nargs=0 Redo call histget('cmd', -1)
+
+" Completes filenames from the directories specified in the 'path' option:
+command! -nargs=1 -bang -complete=customlist,unix#EditFileComplete
+   	\ EF edit<bang> <args>
 
 " These 2 commands are for parsing the output of scriptnames though a command
 " like :TBrowseScriptnames would probably be easier to work with

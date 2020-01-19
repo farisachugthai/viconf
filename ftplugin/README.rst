@@ -78,3 +78,39 @@ a completely necessary part of my workflow these days.
 In my reStructured text ftplugin, I added :kbd:`.` to ``iskeyword`` in order
 to have dotted packages, *I.E. IPython.core.interactiveshell*, recognized
 as 1 word.
+
+
+Vim Filetype Plugin
+====================
+
+Some folding is now supported with :envvar:`VIMRUNTIME`\/syntax/vim.vim::
+
+   " g:vimsyn_folding == 0 or doesn't exist: no syntax-based folding
+   " g:vimsyn_folding =~ 'a' : augroups
+   " g:vimsyn_folding =~ 'f' : fold functions
+   " g:vimsyn_folding =~ 'P' : fold python   script
+
+   let g:vimsyn_folding = 'afP'
+
+Worked really well however caused a noticeable slowdown on startup.
+
+.. note::
+   The actual increase in startuptime was relatively small; however,
+   in the grand scheme of things it's too annoying that 50%+ of vim's
+   startuptime is spent on syntax highlighting and folding rather than the
+   40+ plugins being loaded at any time.
+   As a result syntax based highlighting got disabled.
+
+
+Allows users to specify the type of embedded script highlighting they want
+(perl/python/ruby/tcl support)::
+
+   " g:vimsyn_embed == 0   : don't embed any scripts
+   " g:vimsyn_embed =~# 'l' : embed lua
+   " g:vimsyn_embed =~# 'm' : embed mzscheme
+   " g:vimsyn_embed =~# 'p' : embed perl
+   " g:vimsyn_embed =~# 'P' : embed python
+   " g:vimsyn_embed =~# 'r' : embed ruby
+   " g:vimsyn_embed =~# 't' : embed tcl
+   let g:vimsyn_embed = 'P'
+

@@ -142,6 +142,7 @@ DokuWiki
 Dotfiles
 DynamicStyle
 EHD
+EffBot
 Eich
 Envs
 Esc
@@ -183,8 +184,10 @@ Gitignore
 Gitter
 Google
 Gravatar
+Grinberg
 Grinberg's
 Gruvbox
+GruvboxDarkHard
 GruvboxPurple
 GuiLoaded
 GuiMacro
@@ -201,6 +204,7 @@ HTTPServer
 Harleysville
 Heimes
 Hettinger
+Hettinger's
 I'll
 I've
 IPv4
@@ -218,6 +222,7 @@ Jinja2
 Junegunn
 Junegunn's
 Jupyter
+Jupyter's
 KVM
 KWin
 Kaspersky
@@ -226,6 +231,7 @@ KeePass
 KeePassX
 KeePassXC
 KernelSpecManager
+KeyBindings
 Keycode
 Keymappings
 Kleopatra
@@ -369,6 +375,7 @@ RDoc
 README
 REPL
 RET
+REs
 RFID
 RHEL
 RPC
@@ -435,6 +442,7 @@ Submodules
 Subprocesses
 Subtrees
 SuperUser
+Supertab
 Supima
 SymPy
 System32
@@ -450,6 +458,7 @@ TerminalIPythonApp
 Termux
 Termux's
 TestCase
+TestSuite
 Texinfo
 TextChanged
 TextMate
@@ -576,6 +585,7 @@ asc
 ascii
 asin
 aspx
+async
 asyncio
 atan
 atan2
@@ -637,6 +647,7 @@ bzip2
 bzipped
 bztar
 cURL
+callables
 cd
 cdrom
 certfile
@@ -673,6 +684,7 @@ colorcolumn
 colorscheme
 colorschemes
 commit's
+commonmark
 completefunc
 conda
 condarc
@@ -716,6 +728,7 @@ delphi
 deoplete
 dev
 devnull
+dicts
 diff
 difflib
 diffoff
@@ -728,6 +741,7 @@ dir
 dirname
 dirs
 dirstat
+displayhook
 distutils
 divmod
 django
@@ -769,6 +783,7 @@ env
 envvar
 equalprg
 erlang
+errno
 esac
 eslint
 etc
@@ -806,6 +821,7 @@ formatMessage
 fortran
 from
 frontend
+frontends
 frozenset
 fsck
 fsharp
@@ -814,6 +830,7 @@ fstrings
 ftdetect
 ftplugin
 ftplugins
+fuck
 fullscreen
 func
 function
@@ -843,6 +860,7 @@ gitmodules
 gitrevisions
 gksu
 gksudo
+globbing
 gnupg
 gnuplot
 godoc
@@ -903,6 +921,7 @@ ifconfig
 iframe
 ignorecase
 img
+import
 importlib
 indexeddb
 ini
@@ -924,6 +943,7 @@ iptables
 ipv4
 ipv6
 ipy
+ipykernel
 ipynb
 ipython
 ipython2
@@ -988,6 +1008,8 @@ keepassx
 keepassxc
 kennethreitz
 keras
+kernelspec
+kernelspecs
 keybase
 keybindings
 keychain
@@ -1316,6 +1338,7 @@ ptpython's
 pushd
 pwd
 pwgen
+pwsh
 py
 py3
 py3do
@@ -1539,6 +1562,7 @@ subshells
 sudo
 surrogateescape
 symlink
+sympy
 syncthing
 syntime
 sys
@@ -1574,6 +1598,7 @@ tig
 timefmt
 timeit
 timezones
+tkinter
 tldr
 tmap
 tmp
@@ -1773,6 +1798,7 @@ zcat
 zenburn
 zim
 zimwiki
+zipfile
 zipimport
 zlib
 zsh
@@ -1780,29 +1806,5 @@ zshrc
 µBlock
 µMatrix
 µTP
-#od
-errno
-import
-dicts
-sympy
-async
-kernelspec
-Jupyter's
-ipykernel
-kernelspecs
-callables
-pwsh
-frontends
-fuck
-globbing
-tkinter
-REs
-commonmark
-GruvboxDarkHard
-Hettinger's
-EffBot
-zipfile
-TestSuite
-Grinberg
-displayhook
-KeyBindings
+Shlex
+shlex

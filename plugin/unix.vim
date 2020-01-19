@@ -18,9 +18,6 @@ if exists($ANDROID_DATA)
   nnoremap <silent> <Leader>ts <Cmd>execute '!termux-share -a send ' . shellescape(expand("%"))<CR>
 endif
 
-" Completes filenames from the directories specified in the 'path' option:
-command! -nargs=1 -bang -complete=customlist,unix#EditFileComplete
-   	\ EF edit<bang> <args>
 "	:S	Escape special characters for use with a shell command (see
 "		|shellescape()|). Must be the last one. Examples:
 "           :!dir <cfile>:S
