@@ -114,3 +114,36 @@ Allows users to specify the type of embedded script highlighting they want
    " g:vimsyn_embed =~# 't' : embed tcl
    let g:vimsyn_embed = 'P'
 
+
+Disabling Autocommands
+======================
+Oct 16, 2019:
+The number of autocommands in the plugin vim-markdown is crazy.
+
+**ALL BufEnters, WinEnters, BufLeaves, InsertLeave, InsertEnters.**
+
+It's a filetype specific plugin why does it need to refresh the syntax in EVERY BUFFER????
+To top it off, I don't think his syntax file is written correctly. I fixed
+the first few lines where he checks for ``b:did_syntax`` incorrectly, and
+markdown files went from loading in 600ms to 500. *sigh*.
+
+To clear them I used::
+
+  if exists('#Mkd')
+    au! Mkd
+  endif
+
+.. warning::
+   Don't condense that down to 1 line! autocmds can not have other commands
+   following them
+
+The following won't work.::
+
+  if exists('#Mkd') | au! Mkd | endif
+
+And in case you were wondering yes::
+
+   exists('#autocmd group')
+
+is the syntax used here.
+

@@ -15,6 +15,8 @@ let g:vimsyn_maxlines = 500  " why is the default 60???
 " Turn off errors because 50% of them are wrong.
 let g:vimsyn_noerror = 1
 
+runtime $VIMRUNTIME/ftplugin/vim.vim
+
 setlocal expandtab
 setlocal shiftwidth=2
 setlocal tabstop=2
@@ -23,7 +25,7 @@ setlocal suffixesadd=.vim
 setlocal nolinebreak
 setlocal wrap
 
-setlocal foldmethod=syntax
+setlocal foldmethod=indent
 " Didn't seem to be getting set
 setlocal indentexpr=GetVimIndent()
 setlocal indentkeys+==end,=else,=cat,=fina,=END,0\\,0=\"\\\

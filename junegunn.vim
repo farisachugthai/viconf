@@ -45,7 +45,7 @@ if has('python3')
   Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 endif
 Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }  " Follow spacemacs lead and use e for errors
-
+nnoremap <Leader>a <Cmd>ALEEnable<CR><bar>:call plugins#AleMappings()<CR>
 if exists('$TMUX')
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'edkolev/tmuxline.vim'

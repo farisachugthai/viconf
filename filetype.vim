@@ -5,10 +5,15 @@
   " Last Modified: Oct 10, 2019
 " ============================================================================
 
+if exists('b:loaded_filetype_vim') || &compatible || v:version < 700
+  finish
+endif
+let b:loaded_filetype_vim = 1
+
 let g:requirements#detect_filename_pattern = 'Pipfile'
 let g:is_bash = 1
 
-augroup YourFTDetect
+augroup Userftdetect
   au!
   au BufNewFile,BufRead *.json,*.jsonp,*.webmanifest,*.code-workspace,*.jupyterlab-settings set filetype=json
   au BufNewFile,BufRead *.bash,*.bashrc,*.profile,*.bash_profile set filetype=bash

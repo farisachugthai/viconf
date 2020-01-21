@@ -3,7 +3,10 @@ import importlib
 import logging
 import pydoc
 import time
+import traceback
 import vim
+
+from pprint import pprint as print
 
 try:
     import black
@@ -40,35 +43,37 @@ def timer(func):
 
 
 def _robust_black():
-    try:
-        fast = nvim_get_var("g:black_fast")
-    except E5555:
-        fast = None
     mode = get_mode()
     buffer_str = "\n".join(vim.current.buffer) + "\n"
     try:
-        return black.format_file_contents(buffer_str, fast=fast, mode=mode)
+        return black.format_file_contents(buffer_str, fast=None, mode=mode)
     except black.NothingChanged:
-        print(f"Already well formatted, good job. (took {time.time() - start:.4f}s)")
+        print("Already well formatted, good job.")
     except Exception as exc:
-        print(exc)
+        traceback.print_exc(exc)
 
 
 def get_mode():
+    # TODO
     return black.FileMode(
-        line_length=int(vim.eval("g:black_linelength")),
-        string_normalization=not bool(
-            int(vim.eval("g:black_skip_string_normalization"))
-        ),
+        # line_length=int(vim.eval("g:black_linelength")),
+        line_length=88,
+        # string_normalization=not bool(
+        #     int(vim.eval("g:black_skip_string_normalization"))
+        # ),
         is_pyi=vim.current.buffer.name.endswith(".pyi"),
     )
 
 
-def Black():
+def _black():
     try:
-        new_buffer_str = _robust_black()
+        return _robust_black()
     except:
         raise
+
+
+def get_cursors():
+    # Why is this a section of code that's called?
     current_buffer = vim.current.window.buffer
     cursors = []
     for i, tabpage in enumerate(vim.tabpages):
@@ -76,6 +81,14 @@ def Black():
             for j, window in enumerate(tabpage.windows):
                 if window.valid and window.buffer == current_buffer:
                     cursors.append((i, j, window.cursor))
+
+
+def black():
+    start = time.time()
+    new_buffer_str = _black()
+    if new_buffer_str is None:
+        return
+    list_of_cursors = get_cursors()
     vim.current.buffer[:] = new_buffer_str.split("\n")[:-1]
     for i, j, cursor in cursors:
         window = vim.tabpages[i].windows[j]

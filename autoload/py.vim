@@ -223,7 +223,7 @@ endfunction
 
 function! py#Black() abort
 py3 << EOF
-from py import Black
+from py import black
 Black()
 EOF
 endfunction

@@ -34,10 +34,10 @@ GuiLinespace 1
 " the info for set guifont isn't true of our command here
 " holy fuck this does work
 " holy fuck this one actually looks good.
-" GuiFont DejaVu\ Sans\ Mono:h11
+GuiFont DejaVu\ Sans\ Mono:h11
 " why is it throwing errors now
 " GuiFont Cascadia\ Code
-GuiFont Fira\ Code\ Retina:h12
+" GuiFont Fira\ Code\ Retina:h12
 
 call GuiClipboard()
 

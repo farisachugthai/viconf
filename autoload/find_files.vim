@@ -141,14 +141,13 @@ function! find_files#ubuntu_remote() abort  " {{{1
           \ }
 
   endif
-
 endfunction
 function! find_files#msdos_remote() abort  " {{{1
   " Don't set python paths dynamically it's such a headache
   let g:python3_host_prog = 'C:/tools/vs/2019/Community/Common7/IDE/Extensions/Microsoft/Python/Miniconda/Miniconda3-x64/python.exe'
   let g:python_host_prog = 'C:/Python27/python.exe'
   let g:loaded_ruby_provider = 1
-  let g:node_host_prog = 'C:/tools/nvm/v13.0.1/neovim-node-host'
+  let g:node_host_prog = 'C:/tools/nvm/v12.14.1/neovim-node-host.cmd'
   let g:clipboard = {
         \   'name': 'winClip',
         \   'copy': {
@@ -163,26 +162,26 @@ function! find_files#msdos_remote() abort  " {{{1
         \ }
 endfunction
 function! find_files#RipgrepFzf(query, fullscreen)  abort
+  " In the default implementation of `Rg`, ripgrep process starts only once with
+  " the initial query (e.g. `:Rg foo`) and fzf filters the output of the process.
 
-" In the default implementation of `Rg`, ripgrep process starts only once with
-" the initial query (e.g. `:Rg foo`) and fzf filters the output of the process.
+  " This is okay in most cases because fzf is quite performant even with millions
+  " of lines, but we can make fzf completely delegate its search responsibliity to
+  " ripgrep process by making it restart ripgrep whenever the query string is
+  " updated. In this scenario, fzf becomes a simple selector interface rather than
+  " a "fuzzy finder".
 
-" This is okay in most cases because fzf is quite performant even with millions
-" of lines, but we can make fzf completely delegate its search responsibliity to
-" ripgrep process by making it restart ripgrep whenever the query string is
-" updated. In this scenario, fzf becomes a simple selector interface rather than
-" a "fuzzy finder".
-
-" - `--bind 'change:reload:rg ... {q}'` will make fzf restart ripgrep process
-"   whenever the query string, denoted by `{q}`, is changed.
-" - With `--phony` option, fzf will no longer perform search. The query string
-"   you type on fzf prompt is only used for restarting ripgrep process.
-" - Also note that we enabled previewer with `fzf#vim#with_preview`.
+  " - `--bind 'change:reload:rg ... {q}'` will make fzf restart ripgrep process
+  "   whenever the query string, denoted by `{q}`, is changed.
+  " - With `--phony` option, fzf will no longer perform search. The query string
+  "   you type on fzf prompt is only used for restarting ripgrep process.
+  " - Also note that we enabled previewer with `fzf#vim#with_preview`.
 
   let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
   let initial_command = printf(command_fmt, shellescape(a:query))
   let reload_command = printf(command_fmt, '{q}')
   let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
-
 endfunction
+
+" Vim: set fdm=indent:

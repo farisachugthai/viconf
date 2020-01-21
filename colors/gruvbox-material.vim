@@ -22,7 +22,8 @@ let s:italics = (((&t_ZH !=# '' && &t_ZH != '[7m') || has('gui_running')) && !h
 " }}}
 " My Additions: {{{
 
-let g:gruvbox_material_transparent_background = 1
+" DUDE DON'T SET THIS TO 1!
+let g:gruvbox_material_transparent_background = 0
 let g:gruvbox_material_enable_bold = 1
 let g:gruvbox_material_background = 'hard'
 
@@ -45,7 +46,7 @@ hi! link CursorColumn CursorLine
 hi link manEmail Directory
 hi link manHeaderFile Statement
 " hi link manHighlight
-hi link NormalNC Ignore
+" hi link NormalNC Ignore
 hi link VisualNC Visual
 
 " }}}
@@ -298,10 +299,7 @@ hi! link manURL GruvboxGreen
 " Netrw: {{{
 " Hate to be that guy but Netrw is considered an ftplugin
 
-hi link netrwClassify Directory
 hi link netrwCmdNote Directory
-hi link netrwCmdSep VertSplit
-hi link netrwComma Delimiter
 hi link netrwComment Comment
 if has('nvim')
   hi link netrwCopyTgt IncSearch
@@ -335,6 +333,42 @@ hi link netrwTreeBar Special
 hi link netrwTreeBarSpace Special
 hi link netrwVersion Float
 
+ hi default link netrwCmdSep	Delimiter
+ hi default link netrwDir	Directory
+ hi default link netrwHelpCmd	Function
+ hi default link netrwQHTopic	Number
+ hi default link netrwHidePat	Statement
+ hi default link netrwHideSep	netrwComment
+ hi default link netrwList	Statement
+ hi default link netrwVersion	Identifier
+ hi default link netrwSymLink	Question
+ hi default link netrwExe	PreProc
+ hi default link netrwDateSep	Delimiter
+
+ hi default link netrwTreeBar	Special
+ hi default link netrwTimeSep	netrwDateSep
+ hi default link netrwComma	netrwComment
+ hi default link netrwHide	netrwComment
+ hi default link netrwMarkFile	TabLineSel
+ hi default link netrwLink	Special
+
+ " special syntax highlighting (see :he g:netrw_special_syntax)
+ hi default link netrwCoreDump	WarningMsg
+ hi default link netrwData	DiffChange
+ hi default link netrwHdr	netrwPlain
+ hi default link netrwLex	netrwPlain
+ hi default link netrwLib	DiffChange
+ hi default link netrwMakefile	DiffChange
+ hi default link netrwYacc	netrwPlain
+ hi default link netrwPix	Special
+
+ hi default link netrwBak	netrwGray
+ hi default link netrwCompress	netrwGray
+ hi default link netrwSpecFile	netrwGray
+ hi default link netrwObj	netrwGray
+ hi default link netrwTags	netrwGray
+ hi default link netrwTilde	netrwGray
+ hi default link netrwTmp	netrwGray
 " }}}
 " Rst: {{{
 
@@ -400,18 +434,18 @@ hi! link tmuxColor SpecialKey
 " }}}
 " Diff: {{{
 
-hi DiffAdd guifg=#b8bb26 guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermfg=100 ctermbg=234
-hi DiffChange guifg=#8ec07c guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermfg=29 ctermbg=234
-hi DiffDelete guifg=#fb4934 guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermfg=124 ctermbg=234
-hi DiffText guifg=#fabd2f guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermfg=172 ctermbg=234
-hi! link diffAdded GruvboxGreen
-hi! link diffRemoved GruvboxRed
+" hi DiffAdd guifg=#b8bb26 guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermfg=100 ctermbg=234
+" hi DiffChange guifg=#8ec07c guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermfg=29 ctermbg=234
+" hi DiffDelete guifg=#fb4934 guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermfg=124 ctermbg=234
+" hi DiffText guifg=#fabd2f guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermfg=172 ctermbg=234
+hi! link diffAdded Green
+hi! link diffRemoved Red
 hi! link diffChanged Directory
 
-hi! link diffFile GruvboxOrange
-hi! link diffNewFile GruvboxYellow
+hi! link diffFile Orange
+hi! link diffNewFile Yellow
 
-hi! link diffLine GruvboxBlue
+hi! link diffLine Blue
 
 " }}}
 " Html: {{{
@@ -978,7 +1012,6 @@ hi link vimPythonRegion Identifier
 " }}}
 
 " }}}
-
 " Original: {{{
 " Filetypes: {{{
 
@@ -1658,12 +1691,11 @@ if (has('termguicolors') && &termguicolors) || has('gui_running')  " {{{
       hi FoldColumn guifg=#928374 guibg=NONE guisp=NONE gui=NONE cterm=NONE
       hi Folded guifg=#928374 guibg=NONE guisp=NONE gui=bold cterm=bold
       hi CursorColumn guifg=NONE guibg=NONE guisp=NONE gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
-      hi CursorLine guifg=NONE guibg=NONE guisp=NONE gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
       hi CursorLineNr guifg=#a89984 guibg=NONE guisp=NONE gui=NONE cterm=NONE
       hi MatchParen guifg=NONE guibg=NONE guisp=NONE gui=bold ctermfg=NONE ctermbg=NONE cterm=bold
     else
       if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-        hi Normal guifg=#dfbf8e guibg=#1d2021 guisp=NONE gui=NONE cterm=NONE font='FuraMono Nerd Font Mono:h12'
+        hi Normal guifg=#dfbf8e guibg=#1d2021 guisp=NONE gui=NONE cterm=NONE
         hi Terminal guifg=#dfbf8e guibg=#1d2021 guisp=NONE gui=NONE cterm=NONE
         hi DiffText guifg=NONE guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse
         hi EndOfBuffer guifg=#1d2021 guibg=#1d2021 guisp=NONE gui=NONE cterm=NONE

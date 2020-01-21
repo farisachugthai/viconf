@@ -75,14 +75,14 @@ function! vimscript#BetterProfiler(fname) abort  " {{{1
   exec 'e ' a:fname
 
 endfunction
-function! vimscript#profile(bang) abort
+function! vimscript#profile(...) abort
   " let s:Debug = 1
   " let b:fname = '~/projects/viconf/.config/nvim/colors/gruvbox8.vim'
   " call g:BetterProfiler(b:fname)
   " AH I forgot Junegunn has one written as well!
 
   " Profile a func or file. Oooo I could use XDG_DATA_HOME instead of _ROOT there
-  if a:bang
+  if a:1 ==# '!'
     profile pause
     noautocmd qall
   else

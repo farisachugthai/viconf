@@ -144,7 +144,7 @@ function! ftplugins#ALE_Vim_Conf() abort  " {{{1
     let b:ale_linters += ['vint']
   endif
 endfunction
-function! ftplugins#VimPath() abort  " {{{1
+function! ftplugins#VimPath() abort
 
   " I know you may be thinking, there are no include or defines in a vim file
   " what the hell do you need to muck with the path for.
@@ -155,7 +155,7 @@ function! ftplugins#VimPath() abort  " {{{1
   if !exists('*stdpath') | let &l:path = s:path | return s:path | endif
 
   let s:path = s:path . stdpath('config') . '/autoload,'
-
+  let s:path = s:path . stdpath('data')
   " Idk if this is gonna glob the way I want.
   let s:path = s:path . stdpath('data') . '/**1/autoload,'
 
@@ -163,7 +163,7 @@ function! ftplugins#VimPath() abort  " {{{1
   return s:path
 
 endfunction
-function! ftplugins#CPath() abort  " {{{1
+function! ftplugins#CPath() abort
 
   let s:path='.,**,,'
 

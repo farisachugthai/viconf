@@ -140,14 +140,17 @@ function NetrwUnmaps() abort
 
   " See g:netrw_preview above
   nnoremap <buffer> <Tab>	<Plug>NetrwShrink
+
+  " Yo how crazy is it that this isn't setup
+  nnoremap <buffer><silent> q :<C-u>bd!<CR>
+
+  " Fuck I still need history
+  nnoremap <buffer> Q q:
   return 1
 endfunction
 
 " TODO: check this got done right
-augroup YourNetrw
+augroup UserNetrw
   au!
   au FileExplorer User silent call NetrwUnmaps()
 augroup END
-
-" Yo how crazy is it that this isn't setup
-nnoremap <buffer><silent><nowait> q :<C-u>bd!<CR>
