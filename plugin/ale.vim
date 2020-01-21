@@ -5,7 +5,6 @@
     " Last Modified: Dec 27, 2019
 " ============================================================================
 
-
 let g:ale_virtualtext_cursor = 1
 let g:ale_virtualtext_prefix =  'ALE: '
 let g:ale_virtualtext_delay = 200
@@ -17,7 +16,7 @@ let g:ale_sign_highlight_linenrs = 1
 let g:ale_close_preview_on_insert = 1
 let g:ale_echo_cursor = 0
 
-" Signs: {{{2
+" Signs:
 
 let g:ale_set_signs = 1
 let g:ale_sign_column_always = 1
@@ -26,10 +25,10 @@ let g:ale_sign_warning = 'W'
 let g:ale_sign_info = 'I'
 let g:ale_sign_error = 'E'
 let g:ale_sign_highlight_linenrs = 1
-
 let g:ale_sign_style_warning = 'E'
 
-" More: {{{2
+" More:
+
 let g:ale_pattern_options_enabled = 1
 let g:ale_pattern_options = {'\.min.js$': {'ale_enabled': 0}}
 
@@ -122,7 +121,7 @@ let g:ale_virtualenv_dir_names = [
     \   'venv',
     \ ]
 
-if isdirectory('~/virtualenvs')
+if isdirectory(expand('~/virtualenvs'))
   let g:ale_virtualenv_dir_names += [expand('~/virtualenvs')]
 endif
 
@@ -137,51 +136,14 @@ if isdirectory(expand('~/.local/share/virtualenvs'))
 endif
 
 let g:ale_cache_executable_check_failures = v:true
-
 let g:ale_linters_ignore = {'python': ['pylint']}
 
-" Node: {{{1
-
-if !has('unix')
-  if executable(exepath('node.exe'))
-    let g:ale_windows_node_executable_path = exepath('node.exe')
-  endif
-endif
-
 " Example from the help page
-"
-  " Use just ESLint for linting and fixing files which end in '.foo.js'
+" Use just ESLint for linting and fixing files which end in '.foo.js'
 let g:ale_pattern_options = {
 \   '\.foo\.js$': {
 \       'ale_linters': ['eslint'],
 \       'ale_fixers': ['eslint'],
 \   },
 \}
-
-
-" LSP:
 let g:ale_lsp_show_message_severity = 'information'
-
-
-" Mappings: {{{1
-" wait to map these because none of these mappings are gonna work unless
-" if exists('g:loaded_ale')
-" actually i have a better idea
-function! AleMappings() abort
-
-  " Follow the lead of vim-unimpaired with a for ale
-  nnoremap ]a <Cmd>ALENextWrap<CR>zz
-  nnoremap [a <Cmd>ALEPreviousWrap<CR>zz
-
-  " `:ALEInfoToFile` will write the ALE runtime information to a given filename.
-  " The filename works just like |:w|.
-
-  " <Meta-a> now gives detailed messages about what the linters have sent to ALE
-  nnoremap <A-a> <Cmd>ALEDetail<CR>zz
-
-  " I'm gonna make all my ALE mappings start with Alt so it's easier to distinguish
-  nnoremap <A-r> <Cmd>ALEFindReference<CR>
-
-  " Dude why can't i get plug mappings right???
-  nnoremap <A-i> <Cmd>ALEInfo<CR>
-endfunction

@@ -61,15 +61,12 @@ else
   setl colorcolumn=80
 endif
 
-" let &grepprg = syncom#grepprg(<q-args>)
-" note you can't do this. no args to options
-call syncom#grepprg()
-
 " Dude read over :he getcharsearch(). Now ; and , search forward backward no matter what!!!
 nnoremap <expr> ; getcharsearch().forward ? ';' : ','
 nnoremap <expr> , getcharsearch().forward ? ',' : ';'
 
-" Search mappings: These will make it so that going to the next one in a
+" Search mappings:
+" These will make it so that going to the next one in a
 " search will center on the line it's found in.
 nnoremap n nzzzv
 nnoremap N Nzzzv
@@ -87,3 +84,13 @@ nnoremap N Nzzzv
 
 nnoremap * g*
 nnoremap # g#
+
+" While we're on the topic of searching
+" If you highlight something in Visual mode, you should be able to use '#' and
+" '*' to search for it.
+xnoremap * y/<C-R>"<CR>
+" not 100% sure if this one works
+xnoremap # y?<C-R>"<CR>
+
+" Literally ` does the same thing as ' but ` remembers column.
+nnoremap ' `

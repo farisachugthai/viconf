@@ -6,7 +6,29 @@ if !has('unix')
   let g:gutentags_ctags_executable = expand('$HOME/bin/ctags')
 endif
 
-nnoremap <C-}> [I:let nr = input("Choose an include: ")<Bar>exe "normal! " . nr ."[\t"<CR>
+let g:gutentags_ctags_exclude = [
+      \ '.pyc',
+      \ '.eggs',
+      \ '.egg-info',
+      \ '_static',
+      \ '__pycache__',
+      \ 'elpy',
+      \ 'elpa',
+      \ '.ipynb_checkpoints',
+      \ '.idea',
+      \ 'node_modules',
+      \ '_build',
+      \ 'build',
+      \ '.git',
+      \ 'log',
+      \ 'tmp',
+      \ 'dist',
+      \ '.tox',
+      \ '.venv',
+      \ ]
+
+" Mnemonic: goto like mosts other g commands and \ is the key we're left free
+nnoremap <g-\> [I:let nr = input("Choose an include: ")<Bar>exe "normal! " . nr ."[\t"<CR>
 
 setglobal tags=tags,**/tags
 setglobal tagcase=smart showfulltag
@@ -15,36 +37,28 @@ setglobal tagcase=smart showfulltag
 command! -complete=tag Tags echo gettagstack(expand('%'))
 
 if exists('&tagfunc')
-  let &tagfunc = 'vim_file_chooser#TagFunc'
+  let &tagfunc = 'TagFunc'
 endif
 
 nnoremap ]g <Cmd>stjump!<CR>
 xnoremap ]g <Cmd>stjump!<CR>
 
-" Split and open the word under the cursor as a tag
-" noremap <Leader>w] <Cmd>wincmd ]<CR>
-
-" Thank you index.txt! From:
-" 2.2 Window commands						*CTRL-W*
-" |CTRL-W_g_CTRL-]| CTRL-W g CTRL-]  split window and do |:tjump| to tag
-" under cursor
+" Thank you index.txt!
+" From: 2.2 Window commands						*CTRL-W*
+" |CTRL-W_g_CTRL-]| CTRL-W g CTRL-]
+" split window and do |:tjump| to tag under cursor
 nnoremap <Leader>w] <C-w>g<C-]>
 nnoremap ]w <C-w>g<C-]>
 
 nnoremap <Leader>wc <Cmd>wincmd c<CR>
 nnoremap <Leader>wo <Cmd>wincmd o<CR>
 
-
-" Forgot i had this function autoloaded
 " Open a tag for the word under the cursor in the preview window.
 " TODO: Could definitely do with a mapping
-
 command! -complete=tag PreviewTag call buffers#PreviewWord()
 
 " Probably needs a better mapping but whatever
 nnoremap <Leader>t] <Cmd>PreviewTag<CR>
-
-" And now we have stufff about tags
 
 function! TagFunc(pattern, flags, info) abort
 " Lol literally what is this option?

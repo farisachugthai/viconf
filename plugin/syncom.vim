@@ -5,6 +5,9 @@
     " Last Modified: Jul 20, 2019
 " ============================================================================
 
+" Grepprg:
+call syncom#grepprg()
+
 " Highlighting Commands: {{{1
 
 command! -complete=highlight HL call syncom#HL()
@@ -34,7 +37,7 @@ endif
 " Need to add a check that we're in visual mode and drop the '<,'> if not.
 command! -nargs=0 -range Title execute 'normal! ' . "'<,'>s/\v<(.)(\w*)/\u\1\L\2/g"
 
-augroup CursorLine
+augroup UserCursorLine
   autocmd!
   autocmd InsertEnter * setlocal cursorline
   autocmd InsertLeave * setlocal nocursorline

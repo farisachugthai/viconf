@@ -5,7 +5,7 @@
   " Last Modified: Dec 05, 2019
 " ============================================================================
 
-function! plugins#GetAllSnippets() abort  " {{{2
+function! plugins#GetAllSnippets() abort
 
   call UltiSnips#SnippetsInCurrentScope(1)
   let list = []
@@ -20,7 +20,7 @@ function! plugins#GetAllSnippets() abort  " {{{2
   endfor
   return list
 endfunction
-function! plugins#ExpandPossibleShorterSnippet() abort   " {{{2
+function! plugins#ExpandPossibleShorterSnippet() abort
   if len(UltiSnips#SnippetsInCurrentScope()) == 1 "only one candidate...
     let curr_key = keys(UltiSnips#SnippetsInCurrentScope())[0]
     normal diw
@@ -40,7 +40,7 @@ function! plugins#ExpandSnippetOrCarriageReturn() abort
       return "\<CR>"
     endif
 endfunction
-function! plugins#InstallPlug() abort  " {{{2
+function! plugins#InstallPlug() abort
 
   " Unsure of how to capture return code
   if empty(executable('curl')) | return | endif
@@ -51,7 +51,7 @@ function! plugins#InstallPlug() abort  " {{{2
   catch | echo v:exception | endtry
   echomsg 'Now using a homebrewed solution to get Vim-plug'
   endfunction
-function! plugins#list_commits() abort  " {{{2
+function! plugins#list_commits() abort
   " note: Don't forget that
   " echo isdirectory('~/projects/viconf')
   " outputs 0 on windows and
@@ -64,13 +64,13 @@ function! plugins#list_commits() abort  " {{{2
     let git = 'Git'
     return map(commits, '{"line": matchstr(v:val, "\\s\\zs.*"), "cmd": "'. git .' show ". matchstr(v:val, "^\\x\\+") }')
 endfunction
-function! plugins#filter_header(lines) abort  " {{{2
+function! plugins#filter_header(lines) abort
     let longest_line   = max(map(copy(a:lines), 'strwidth(v:val)'))
     let centered_lines = map(copy(a:lines),
         \ 'repeat(" ", (&columns / 2) - (longest_line / 2)) . v:val')
     return centered_lines
 endfunction
-function! plugins#startify_bookmarks() abort  " {{{2
+function! plugins#startify_bookmarks() abort
 
   let s:nerdbookmarks = readfile(expand($HOME) . '/.NERDTreeBookmarks')
   if !filereadable(s:nerdbookmarks) | return | endif
@@ -115,4 +115,36 @@ function! plugins#FloatingFZF() abort
 
   let win = nvim_open_win(nvim_create_buf(v:false, v:true), v:true, opts)
   call setwinvar(win, '&winhighlight', 'NormalFloat:Normal')
+endfunction
+function! plugins#Voom() abort
+  let s:stddata = stdpath('data')
+  let s:plugin_dir = s:stddata . '/plugged/'
+  let s:voom_dir = s:plugin_dir . 'voom/autoload/voom/voom_vimplugin2657'
+  let s:voom_file = s:voom_dir . '/voom_vim.py'
+  let s:voom_rst_file = s:voom_dir . '/voom_mode_rst'
+  try
+    let ret = py3file s:voom_file
+    py3file s:voom_rst_file
+    return ret
+  catch
+    return v:false
+  endtry
+
+endfunction
+function! plugins#AleMappings() abort
+  " Follow the lead of vim-unimpaired with a for ale
+  nnoremap ]a <Cmd>ALENextWrap<CR>zz
+  nnoremap [a <Cmd>ALEPreviousWrap<CR>zz
+
+  " `:ALEInfoToFile` will write the ALE runtime information to a given filename.
+  " The filename works just like |:w|.
+
+  " <Meta-a> now gives detailed messages about what the linters have sent to ALE
+  nnoremap <A-a> <Cmd>ALEDetail<CR><bar>:normal! zz<CR>
+
+  " I'm gonna make all my ALE mappings start with Alt so it's easier to distinguish
+  nnoremap <A-r> <Cmd>ALEFindReference<CR>
+
+  " Dude why can't i get plug mappings right???
+  nnoremap <A-i> <Cmd>ALEInfo<CR>
 endfunction

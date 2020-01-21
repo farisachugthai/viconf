@@ -5,7 +5,7 @@
     " Last Modified: Nov 02, 2019
 " ============================================================================
 
-augroup PydocHelp
+augroup UserHelpandPython
   au!
   autocmd FileType man,help setlocal number relativenumber
   autocmd FileType man,help  if winnr('$') > 1
@@ -39,4 +39,4 @@ command! -nargs=? Pydoc call pydoc_help#Pydoc(<f-args>)
 command! -nargs=0 PydocShow call pydoc_help#show()
 
 " I'm assuming I completely failed here
-command! -nargs=? -buffer -bang -bar -complete=file -range Black <line1>,<line2> call py#Black()
+command! -nargs=? -buffer -bang -bar -complete=file -range Black <line1>,<line2>call py#black()

@@ -5,13 +5,7 @@
     " Last Modified: Sep 26, 2019
 " ============================================================================
 
-" Global options are in ../../coc_settings.json
-
-let $NVIM_COC_LOG_LEVEL = 'WARN'
-let $NVIM_COC_LOG_FILE = stdpath('data') . '/site/coc.log'
-let $NVIM_NODE_LOG_FILE = stdpath('data') . '/site/node.log'
-let $NVIM_NODE_LOG_LEVEL = 'WARN'
-
+" Most Global options are in ../../coc_settings.json
 if exists('plugs')  " installed with vim-plug
   if index(keys(plugs), 'coc.nvim') == -1
     " yes i actually mean the #. If this gets funky check that -1 the number
@@ -23,8 +17,7 @@ endif
 " TODO:
 " so obviously only do this on windows. shit there are so many things that we need to configure
 " list.source.tags.command: ~/bin/ctags.exe -R --options=~/.ctags/universal_ctags.ctags .,
-" General: {{{2
-
+"
 " TODO:
 " May have to extend after a has('unix') check.
 " Yeah probably need to make system checks to get rid of incorrect
@@ -39,6 +32,12 @@ let g:WorkspaceFolders = [
 let g:coc_quickfix_open_command = 'cwindow'
 let g:coc_snippet_next = '<C-j>'
 let g:coc_snippet_prev = '<C-k>'
+
+let g:coc_enable_locationlist = 1
+let $NVIM_COC_LOG_LEVEL = 'WARN'
+let $NVIM_COC_LOG_FILE = stdpath('data') . '/site/coc.log'
+let $NVIM_NODE_LOG_FILE = stdpath('data') . '/site/node.log'
+let $NVIM_NODE_LOG_LEVEL = 'WARN'
 
 " call coc#config('coc.preferences', {
 " 	\ 'timeout': 1000,
@@ -109,9 +108,8 @@ nnoremap <F2> <Plug>(coc-refactor)<CR>
 xnoremap <F2> <Cmd>'<,'>CocCommand document.renameCurrentWord<CR>
 
 " CocOpenLog: {{{2
-" C-m only moves you down a line in normal mode. Pointless.
-" fuck it also maps to CR
-" nnoremap <expr> <C-m> coc#client#open_log()
+" TODO: Why does this raise an error?
+" nnoremap <expr> ,l coc#client#open_log()
 nnoremap ,l <Cmd>CocOpenLog<CR>
 
 " And let's add one in for CocInfo

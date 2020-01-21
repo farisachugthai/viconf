@@ -183,11 +183,9 @@ nnoremap <Leader>GS                 <Cmd>FufGFiles?<CR>
 " mapping is amazing.
 nnoremap <silent><expr> <Leader>n (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
 
-nnoremap <silent> <Leader>C        <Cmd>FufColors<CR>
-nnoremap <silent> <Leader><CR>     <Cmd>FufBuffers<CR>
+nnoremap <Leader>C                 <Cmd>FufColors<CR>
 nnoremap <Leader>bu                <Cmd>FufBuffers<CR>
 nnoremap <Leader>B                 <Cmd>FufBuffers<CR>
-nnoremap <Leader>f                 <Cmd>FufFiles<CR>
 
 " Make fzf behave the same in a real shell and nvims. FZF now runs in a terminal
 " So making it a tmap creates recursive instances which behaves oddly

@@ -8,11 +8,6 @@
 " I would say this is unrelated but this file is aimless
 nnoremap <Leader>cd <Cmd>cd %:p:h<CR><Bar><Cmd>pwd<CR>
 
-" Literally ` does the same thing as ' but ` remembers column.
-nnoremap ' `
-
-xnoremap * y/<C-R>"<CR>
-
 " Fix up the path a little I'm starting to use ]i and gf and the like more
 " But make it conditional on me not having already set it for an ftplugin
 if !exists('b:did_ftplugin')
@@ -80,4 +75,4 @@ endif
 
 " Aug 02, 2019: So this command still doesn't work as expected; however, it
 " doesn't produce an error on run so there's that
-command! -bang -complete=buffer -complete=file -nargs=? -range=% Profile call vimscript#profile(<f-args>)
+command! -bang -complete=buffer -complete=file -nargs=? Profile call vimscript#profile(<f-args>)
