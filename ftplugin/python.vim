@@ -20,7 +20,7 @@ let g:pyindent_continue = 'shiftwidth() * 2'
 if &filetype !=#'python' && &filetype !=#'xonsh' | finish | endif
 
 if exists('b:did_ftplugin') | unlet! b:did_ftplugin | endif
-runtime! $VIMRUNTIME/ftplugin/python.vim
+source $VIMRUNTIME/ftplugin/python.vim
 
 syntax sync fromstart
 setlocal nolinebreak  " Dont set this on itll create syntaxerors

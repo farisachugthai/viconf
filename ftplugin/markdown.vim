@@ -7,9 +7,11 @@
 
 if exists('b:did_ftplugin') | finish | endif
 
-runtime $VIMRUNTIME/ftplugin/html.vim
-if exists('b:did_ftplugin') | unlet! b:did_ftplugin | endif
+if &filetype !=# 'markdown' | finish | endif
+
 runtime ftplugin/html.vim ftplugin/html_*.vim ftplugin/html/*.vim
+
+if exists('b:did_ftplugin') | unlet! b:did_ftplugin | endif
 
 setlocal comments=fb:*,fb:-,fb:+,n:> commentstring=>\ %s
 setlocal formatoptions+=tcqln formatoptions-=r formatoptions-=o
@@ -69,47 +71,29 @@ let b:undo_ftplugin .= ' nunmap <buffer> <Leader>5'
 
 " So Vim-markdown doesn't have a  plugin/* dir. So we don't have a
 " g:loaded_vim_markdown var to check. We have to assume vim-plug being used.
-
 " Don't freak out a bare nvim config though.
-
-if !exists('plugs')
-  finish
-endif
+if !exists('plugs') | finish | endif
 
 if has_key(plugs, 'vim-markdown')
   let g:vim_markdown_folding_style_pythonic = 1
-
   " Folding level is a number between 1 and 6. By default, if not specified, it
   " is set to 1.
   let g:vim_markdown_folding_level = 2
-
   " Allow for the TOC window to auto-fit when it's possible for it to shrink.
   " It never increases its default size (half screen), it only shrinks.
   let g:vim_markdown_toc_autofit = 1
-
-  let g:vim_markdown_math = 1
-
+  " let g:vim_markdown_math = 1
   let g:vim_markdown_follow_anchor = 1
-
   let g:vim_markdown_frontmatter = 1
-
-  let g:vim_markdown_toml_frontmatter = 1
-
-  let g:vim_markdown_json_frontmatter = 1
-
+  " let g:vim_markdown_toml_frontmatter = 1
+  " let g:vim_markdown_json_frontmatter = 1
   let g:vim_markdown_strikethrough = 1
 
-  " Oct 16, 2019: Dude we gotta disable his autocmds he has them listed on ALL
-  " bufenters, winenters, bufleaves, InsertLeave, InsertEnters like wtf do you
-  " need to refresh the syntax for in EVERY BUFFER????
-  " And in case you were wondering yes:
-  " exists('#autocmd group') is the syntax used here.
   if exists('#Mkd')
     au! Mkd
   endif
 
 endif
-
 
 let b:did_ftplugin = 1
 let b:undo_ftplugin .= 'setl spell< cc< tw< lbr< et< ts< sts< sw< fdl< fdls<'

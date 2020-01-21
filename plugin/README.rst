@@ -186,6 +186,8 @@ So let's do better than g]!::
 ALE --- Asynchronous Lint Engine
 ================================
 
+quickfix vs. locationlist
+--------------------------
 By default ale uses location lists.
 
 Location lists are tied to the window they were created for, not the
@@ -198,6 +200,22 @@ every buffer you have open simultaneously, which would be a nightmare.
 More importantly, you don't want every buffer to wipe your quickfix list
 while you're in the middle of actually recompiling something
 simply to view a few linter errors.
+
+Node
+-----
+
+Shockingly, this simple if/else was the difference between :file:`ale.vim`
+loading in 0.4 msecs and ~15.::
+
+   " Node:
+
+   " if !has('unix')
+   "   if isdirectory('C:/Program Files/nodejs/node.exe')
+   "     let g:ale_windows_node_executable_path = 'C:/Program Files/nodejs/node.exe'
+   "   elseif executable(exepath('node.exe'))
+   "     let g:ale_windows_node_executable_path = exepath('node.exe')
+   "   endif
+   " endif
 
 Quickfix
 ==========
@@ -299,3 +317,36 @@ This configuration will result in a completion flow like so::
    "           use keyword completion
    "   else:
    "     use keyword completion
+
+
+Fugitive
+=========
+
+I put all of my mappings into a function. Now I'm trying to figure out how to
+call that functional in a conditional way. Function calls are expensive in Vim,
+*and honestly even defining enough is pretty bad* so we don't want it called
+on every new BufEnter.
+
+.. todo:: How do we call UserFugitiveMappings in a way that still behaves as expected.
+
+I think we gotta set up an autocmd that fires on ``DirChanged``.
+
+Oddly fugitive doesn't do that at all! Check the output of ``:augroup fugitive``
+*which btw you should do with*
+``autocmd fugitive`` not ``augroup``.
+
+There's a autocommand::
+
+   fugitive  BufNewFile
+       \*         call FugitiveDetect(expand('<amatch>:p'))
+
+That does the same thing that I did in this function::
+
+   function! ProjectRoot() abort
+     " Like how would this not be really useful all the time?
+     return FugitiveExtractGitDir(fnamemodify(expand('%'), ':p:h'))
+   endfunction
+
+
+ALE and node
+================

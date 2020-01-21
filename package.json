@@ -5,9 +5,12 @@
   "main": "index.js",
   "dependencies": {
     "coc.nvim": "^0.0.74",
-    "prettier": "^1.19.1"
+    "prettier": "^1.19.1",
+    "vim-language-server": "^1.4.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "jest": "latest"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/farisachugthai/viconf.git"
@@ -16,9 +19,11 @@
   "license": "MIT",
   "readme": "README.rst",
   "private": true,
-  "scripts":{
+  "scripts": {
     "lint": "tslint -p .",
-    "tagfunc": "./rplugin/node/coc_tag.js"
+    "fix": "npx prettier",
+    "tagfunc": "./rplugin/node/coc_tag.js",
+    "test": "jest rplugin/node"
   },
   "bugs": {
     "url": "https://github.com/farisachugthai/viconf/issues"

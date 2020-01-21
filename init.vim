@@ -7,13 +7,16 @@
 
 scriptencoding utf-8
 set fileformat=unix fileformats=unix,dos  " don't let DOS fuck up the EOL
-let s:cpo_save = &cpoptions
-set cpoptions-=C
 setglobal cpoptions-=c,e,_  " couple options that bugged me
 
 let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Evervim. Thanks!
 let s:wsl = !empty($WSL_DISTRO_NAME)
 let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux) && empty(s:wsl)
+
+set synmaxcol=400 termguicolors  " Set up the colorscheme
+syntax sync fromstart linebreaks=2
+syntax enable
+filetype indent plugin on
 
 if exists('$ANDROID_DATA')  " Fuck i had to change this because wsl was loading termux jesus christ
   call find_files#termux_remote() | echo 'loaded termux'
@@ -24,8 +27,6 @@ else
 endif
 
 if exists('g:GuiLoaded') | runtime ginit.vim | endif
-set synmaxcol=400 termguicolors  " Set up the colorscheme
-syntax sync fromstart linebreaks=2
 
 " So loading plugins almost immediately is definitely the best way to go
 let s:vim_plug = filereadable(glob(fnameescape(stdpath('data') . '/site/autoload/plug.vim')))
@@ -90,7 +91,7 @@ set mouse=a nojoinspaces autowrite autochdir modeline
 if exists('&modelineexpr') | set modelineexpr | endif
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 
-set diffopt=filler,context:0,hiddenoff,foldcolumn:2,icase,indent-heuristic,horizontal
+set diffopt=filler,context:0,closeoff,hiddenoff,foldcolumn:2,icase,indent-heuristic,horizontal,iblank,iwhite
 if has('patch-8.1.0360') | set diffopt+=internal,algorithm:patience | endif
 set browsedir="buffer"   " which directory is used for the file browser
 let &g:listchars = "tab:\u21e5\u00b7,extends:\u21c9,precedes:\u21c7,nbsp:\u00b7"
@@ -107,7 +108,7 @@ set conceallevel=2 concealcursor=nc    " enable concealing
 nnoremap q; q:
 nnoremap Q @q
 xnoremap <BS> d
-set spelllang=en spellsuggest=5
+set spellsuggest=5
 nnoremap <Leader>sp <Cmd>setlocal spell!<CR>
 nnoremap <Leader>o o<Esc>
 nnoremap <Leader>O O<Esc>
@@ -115,7 +116,12 @@ nnoremap <Leader>O O<Esc>
 set showmatch matchpairs+=<:> lazyredraw matchtime=20  " Show the matching pair for 2 seconds
 let g:matchparen_timeout = 500
 let g:matchparen_insert_timeout = 300
-packadd justify cfilter matchit  " Add some packages
+" Add some packages
+" Holy shit. I was reading through the verbose file and trust me you want
+" these on separate lines
+packadd justify
+packadd cfilter
+packadd matchit
 
-let &cpoptions = s:cpo_save
-unlet s:cpo_save
+" This might be a terrible idea but
+au! VimEnter *
