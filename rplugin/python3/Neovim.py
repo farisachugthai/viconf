@@ -94,6 +94,7 @@ if sys.version_info < (3, 0):
     sys.exit()
 
 from pathlib import Path
+
 try:
     import pynvim
 except (ImportError, ModuleNotFoundError) as e:
