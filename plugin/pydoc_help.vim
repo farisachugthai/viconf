@@ -30,7 +30,8 @@ endif
 " Apr 23, 2019: Didn't know complete help was a thing.
 " Oh holy shit that's awesome
 command! -nargs=1 -complete=help Help call pydoc_help#Helptab()
-command! -nargs=0 -range PydocThis call pydoc_help#PydocCword()
+" Needs to accept args for bang
+command! -bang -bar -range -nargs=0 -range PydocThis call pydoc_help#PydocCword()
 
 " This should be able to take the argument '-bang' and allow to open in a new
 " separate window like fzf does.

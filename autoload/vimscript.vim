@@ -6,7 +6,6 @@
 " ============================================================================
 
 function! vimscript#after_ft() abort
-
   let s:debug = 1
   let s:cur_ft = &filetype
   let s:after_ftplugin_dir = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/after/ftplugin/'
@@ -41,7 +40,6 @@ function! vimscript#after_ft() abort
 
   " This seems like a reasonable return after a fail.
   return v:False
-
 endfunction
 function! vimscript#BetterProfiler(fname) abort  " {{{1
   " Because Vim's built in profiling capabilities are nonsensical like wtf?
@@ -56,24 +54,22 @@ function! vimscript#BetterProfiler(fname) abort  " {{{1
   " echomsg fname actually causes an error so that's good i guess
     echomsg string(a:fname)
   endif
-
-" :prof[ile][!] file {pattern}
-" 		Profile script file that matches the pattern {pattern}.
-" 		See |:debug-name| for how {pattern} is used.
-" 		This only profiles the script itself, not the functions
-" 		defined in it.
-" 		When the [!] is added then all functions defined in the script
-" 		will also be profiled.
-" 		Note that profiling only starts when the script is loaded
-" 		after this command.  A :profile command in the script itself
-" 		won't work.
+  " :prof[ile][!] file {pattern}
+  " 		Profile script file that matches the pattern {pattern}.
+  " 		See |:debug-name| for how {pattern} is used.
+  " 		This only profiles the script itself, not the functions
+  " 		defined in it.
+  " 		When the [!] is added then all functions defined in the script
+  " 		will also be profiled.
+  " 		Note that profiling only starts when the script is loaded
+  " 		after this command.  A :profile command in the script itself
+  " 		won't work.
   profile file a:fname
   source a:fname
   profile stop
   profile dump
 
   exec 'e ' a:fname
-
 endfunction
 function! vimscript#profile(...) abort
   " let s:Debug = 1
@@ -93,7 +89,7 @@ function! vimscript#profile(...) abort
   endif
 endfunction
 function! vimscript#Scriptnames(re) abort  " {{{1
-" Command to filter :scriptnames output by a regex
+  " Command to filter :scriptnames output by a regex
     redir => scriptnames
     silent scriptnames
     redir END
@@ -102,9 +98,9 @@ function! vimscript#Scriptnames(re) abort  " {{{1
     echo join(filtered, ' \n ')
 endfunction
 function! vimscript#ScriptnamesDict() abort  " {{{1
-" From 10,000 lines deep in :he eval
-" Get the output of ":scriptnames" in the scriptnames_output variable.
-" Call by entering `:echo g:ScriptNamesDict()` or the command below.
+  " From 10,000 lines deep in :he eval
+  " Get the output of ":scriptnames" in the scriptnames_output variable.
+  " Call by entering `:echo g:ScriptNamesDict()` or the command below.
   let s:scriptnames_output = ''
   redir => s:scriptnames_output
   silent scriptnames
@@ -140,7 +136,9 @@ function s:get_scriptnames() abort  " {{{1
 endfunction
 function! vimscript#fzf_scriptnames() abort  " {{{1
   " TODO: Why is the LSP complaining?
-  call fzf#vim#run(fzf#wrap({'source': s:get_scriptnames(),
-        \ 'sink': 'e', }
-        \ <bang>0 ? fzf#vim#with_preview('up:60%') : fzf#vim#with_preview('right:50%:hidden', '?'), <bang>0))
+ "  call fzf#run(
+  call fzf#run(fzf#wrap("scriptnames",
+        \ {'source': s:get_scriptnames(),
+        \ 'sink': 'e',
+        \ 'options': ['--border', '--header', 'Scriptnames']},))
 endfunction

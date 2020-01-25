@@ -6,8 +6,8 @@ import random
 import json
 from collections import deque, namedtuple
 
-from complete import *
-from snippets_helper import *
+from .complete import *
+from .snippets_helper import *
 
 NORMAL = 0x1
 DOXYGEN = 0x2

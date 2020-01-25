@@ -19,13 +19,13 @@ if !exists('b:did_ftplugin')
 endif
 
 " In which I learn hwo complete works
-command! -complete=buffer -nargs=0 ScratchBuffer call pydoc_help#scratch_buffer()
-command! -complete=compiler Compiler :<C-u>compiler<CR>
+command! -bar -complete=buffer -nargs=0 ScratchBuffer call pydoc_help#scratch_buffer()
+command! -bar -complete=compiler Compiler :<C-u>compiler<CR>
 " '<,'>s/compiler/event/g
 " You may find that ---^ does you good
-command! -complete=event Event :<C-u>event<CR>
+command! -bar -complete=event Event :<C-u>event<CR>
 
-command! -nargs=0 Redo call histget('cmd', -1)
+command! -bar -nargs=0 Redo call histget('cmd', -1)
 
 " Completes filenames from the directories specified in the 'path' option:
 command! -nargs=1 -bang -complete=customlist,unix#EditFileComplete
@@ -45,14 +45,18 @@ command! -nargs=0 NvimAPI
 " Easier mkdir and cross platform!
 command! -complete=dir -nargs=1 Mkdir call mkdir(shellescape('<q-args>'), 'p', '0700')
 
+" Commands from the help pages. map.txt
+   " Replace a range with the contents of a file
+   " (Enter this all as one line)
+   command! -bar -range -nargs=1 -complete=file Replace <line1>-pu_|<line1>,<line2>d|r <args>|<line1>d
+
+   " Count the number of lines in the range
+   command! -bar -range -nargs=0 Lines  echo <line2> - <line1> + 1 'lines'
+
 " Last Call For Options: {{{1
-" Omnifuncs: {{{2
-" I just wanted to move this farther back in the queue
 if &omnifunc ==# '' | setlocal omnifunc=syntaxcomplete#Complete | endif
 if &completefunc ==# '' | setlocal completefunc=syntaxcomplete#Complete | endif
 
-" Formatexpr: {{{2
-" Same with this
 if &formatexpr ==# ''
   setlocal formatexpr=format#Format()  " check the autoload directory
 endif
@@ -66,13 +70,4 @@ endif
 " command! -nargs=? QFSearch execute 'g/' . shellescape(<q-args>) . '/ caddexpr ' . expand('%') . ":" . line(".") . ":" . getline(".")
 " Doesn't work and tried like 20 times to debug it.
 
-" Keep Profiling At End: {{{2
-" Because you have this check and it could stop everything else from getting
-" defined for no reason
-if !has('profile') || !has('reltime')  " timing functionality
-  finish
-endif
-
-" Aug 02, 2019: So this command still doesn't work as expected; however, it
-" doesn't produce an error on run so there's that
-command! -bang -complete=buffer -complete=file -nargs=? Profile call vimscript#profile(<f-args>)
+command! -bar -bang -complete=buffer -complete=file -nargs=? Profile call vimscript#profile(<f-args>)

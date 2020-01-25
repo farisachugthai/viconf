@@ -19,6 +19,10 @@ let g:OmniSharp_python_path = stdpath('data') . '/site/log'
 " \}
 
 let g:OmniSharp_timeout = 5
+
+" Update semantic highlighting after all text changes
+" let g:OmniSharp_highlight_types = 3
+" Update semantic highlighting on BufEnter and InsertLeave
 let g:OmniSharp_highlight_types = 2
 let g:OmniSharp_selector_ui = 'fzf'
 
@@ -31,5 +35,19 @@ augroup omnisharp_commands
 augroup END
 
 
+" Rename with dialog
+nnoremap <Leader>nm :OmniSharpRename<CR>
+nnoremap <F2> :OmniSharpRename<CR>
+" Rename without dialog - with cursor on the symbol to rename: `:Rename newname`
+command! -bang -nargs=1 RenameOmniSharp :call OmniSharp#RenameTo("<args>")
+
+nnoremap <Leader>cf :OmniSharpCodeFormat<CR>
+
+" Start the omnisharp server for the current solution
+nnoremap <Leader>ss :OmniSharpStartServer<CR>
+nnoremap <Leader>sp :OmniSharpStopServer<CR>
+
+" Enable snippet completion
+" let g:OmniSharp_want_snippet=1
 " Enable snippet completion
 let g:OmniSharp_want_snippet=1

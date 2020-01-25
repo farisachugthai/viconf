@@ -13,19 +13,6 @@ function! s:make_sentence(lines) abort  " {{{1
   " *fzf-vim-reducer-example*
   return substitute(join(a:lines), '^.', '\=toupper(submatch(0))', '').'.'
 endfunction
-function! find_files#fzf_maps() abort  " {{{1
-  imap <expr> <C-x><C-s> fzf#vim#complete#word({
-      \ 'source':  'cat /usr/share/dict/words',
-      \ 'reducer': function('<sid>make_sentence'),
-      \ 'options': '--multi --reverse --margin 15%,0',
-      \ 'left':    40})
-  " And add a shorter version
-  inoremap <C-s> <C-x><C-s>
-  imap <expr> <C-x><C-k> fzf#complete({
-              \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
-              \ 'options': '-ansi --multi --cycle', 'left': 30})
-  inoremap <C-k> <C-x><C-k>
-endfunction
 function! find_files#plug_help_sink(line)  abort " {{{1
   " Call :PlugHelp to use fzf to open a window with all of the plugins
   " you have installed listed and upon pressing enter open the help
@@ -50,6 +37,7 @@ function! find_files#buflist() abort  " {{{1
 endfunction
 function! find_files#bufopen(e) abort  " {{{1
   execute 'buffer' matchstr(a:e, '^[ 0-9]*')
+  return v:true
 endfunction
 function! find_files#FZFMru() abort  " {{{1
     call fzf#run(fzf#wrap('history', {
@@ -183,5 +171,4 @@ function! find_files#RipgrepFzf(query, fullscreen)  abort
   let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
 endfunction
-
 " Vim: set fdm=indent:

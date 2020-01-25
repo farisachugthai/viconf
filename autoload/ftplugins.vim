@@ -41,22 +41,22 @@ function! ftplugins#FormatFile() abort  " {{{1
   " let g:clang_format_path =  expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
   noremap <Leader><C-c>f <Cmd>pyfile expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
   noremap! <Leader><C-c>f <Cmd>pyfile expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
-" With this integration you can press the bound key and clang-format will
-" format the current line in NORMAL and INSERT mode or the selected region in
-" VISUAL mode. The line or region is extended to the next bigger syntactic
-" entity.
+  " With this integration you can press the bound key and clang-format will
+  " format the current line in NORMAL and INSERT mode or the selected region in
+  " VISUAL mode. The line or region is extended to the next bigger syntactic
+  " entity.
 
-" You can also pass in the variable "l:lines" to choose the range for
-" formatting. This variable can either contain "<start line>:<end line>" or
-" "all" to format the full file. So, to format the full file, write a function
-" like:
+  " You can also pass in the variable "l:lines" to choose the range for
+  " formatting. This variable can either contain "<start line>:<end line>" or
+  " "all" to format the full file. So, to format the full file, write a function
+  " like:
 
-" It operates on the current, potentially unsaved buffer and does not create
-" or save any files. To revert a formatting, just undo.
-" autocmd BufWritePre *.h,*.cc,*.cpp call Formatonsave()
+  " It operates on the current, potentially unsaved buffer and does not create
+  " or save any files. To revert a formatting, just undo.
+  " autocmd BufWritePre *.h,*.cc,*.cpp call Formatonsave()
 endfunction
 function! ftplugins#ClangCheckimpl(cmd) abort  " {{{1
-" This is honestly really useful if you simply swap out the filetype
+  " This is honestly really useful if you simply swap out the filetype
   if &autowrite | wall | endif
   echo "running " . a:cmd . " ..."
   let l:output = system(a:cmd)
@@ -77,10 +77,8 @@ function! ftplugins#ClangCheck()  abort  " {{{1
   else
     echo "Can't detect file's compilation arguments and no previous clang-check invocation!"
   endif
-
 endfunction
 function! ftplugins#ALE_CSS_Conf() abort  " {{{1
-
   let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
 
   if executable('prettier')
@@ -98,8 +96,7 @@ function! ftplugins#ALE_sh_conf() abort  " {{{1
     else
       let g:ale_sh_shell_default_shell = 0
     endif
-
- " else
+   " else
     let s:bash_location = exepath('bash')
     if executable(s:bash_location)
       let g:ale_sh_shell_default_shell = 1
@@ -115,16 +112,13 @@ function! ftplugins#ALE_sh_conf() abort  " {{{1
   endif
 endfunction
 function! ftplugins#ALE_Html_Conf() abort  " {{{1
-
   let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
 
   if executable('prettier')
     let b:ale_fixers += ['prettier']
   endif
-
 endfunction
 function! ftplugins#ALE_JS_Conf() abort  " {{{1
-
   if !has('unix')
     let g:ale_windows_node_executable_path = fnameescape('C:/Program Files/nodejs/node.exe')
   endif
@@ -134,7 +128,6 @@ function! ftplugins#ALE_JS_Conf() abort  " {{{1
   if executable('prettier')
     let b:ale_fixers += ['prettier']
   endif
-
 endfunction
 function! ftplugins#ALE_Vim_Conf() abort  " {{{1
   let b:ale_linters = ['ale_custom_linting_rules']
@@ -145,7 +138,6 @@ function! ftplugins#ALE_Vim_Conf() abort  " {{{1
   endif
 endfunction
 function! ftplugins#VimPath() abort
-
   " I know you may be thinking, there are no include or defines in a vim file
   " what the hell do you need to muck with the path for.
   " autoloaded functions!
@@ -155,16 +147,14 @@ function! ftplugins#VimPath() abort
   if !exists('*stdpath') | let &l:path = s:path | return s:path | endif
 
   let s:path = s:path . stdpath('config') . '/autoload,'
-  let s:path = s:path . stdpath('data')
+  let s:path = s:path . stdpath('data') . ','
   " Idk if this is gonna glob the way I want.
   let s:path = s:path . stdpath('data') . '/**1/autoload,'
 
   let &l:path = s:path
   return s:path
-
 endfunction
 function! ftplugins#CPath() abort
-
   let s:path='.,**,,'
 
   if has('unix')

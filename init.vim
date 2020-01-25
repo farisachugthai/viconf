@@ -17,6 +17,10 @@ set synmaxcol=400 termguicolors  " Set up the colorscheme
 syntax sync fromstart linebreaks=2
 syntax enable
 filetype indent plugin on
+" Seriously how does this keep getting fucked up
+if has('unix')
+set runtimepath=~/.config/nvim,~/.local/share/nvim/site,/usr/share/nvim/site,/usr/local/share/nvim/site,/usr/share/nvim/runtime,/usr/local/share/nvim/site/after,/usr/share/nvim/site/after,~/.local/share/nvim/site/after,~/.config/nvim/after
+endif
 
 if exists('$ANDROID_DATA')  " Fuck i had to change this because wsl was loading termux jesus christ
   call find_files#termux_remote() | echo 'loaded termux'
@@ -47,6 +51,7 @@ let g:loaded_vimballPlugin = 1
 let g:loaded_getscriptPlugin = 1
 let g:loaded_2html_plugin = 1
 let g:loaded_logiPat = 1
+let g:loaded_netrwPlugin = 1
 
 noremap <Space> <nop>
 let g:maplocalleader = '<Space>'

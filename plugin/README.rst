@@ -177,7 +177,8 @@ So let's do better than g]!::
 
    nnoremap ]g <Cmd>stjump!<CR>
    xnoremap ]g <Cmd>stjump!<CR>
-
+   " Don't forget
+   ptag!
 
 .. note::
    The <Cmd> pseudo-mapping is only available on Neovim.
@@ -225,7 +226,28 @@ See :file:`./buffers.vim` for the Quickfix_Mappings function,
 Searching
 =========
 
-It's bugged me so much that * and # don't search in visual mode.:
+Here's a helpful tidbit from the help pages.
+
+							" *gstar*
+" g*			Like "*", but don't put "\<" and "\>" around the word.
+			" This makes the search also find matches that are not a
+			" whole word.
+
+							" *g#*
+" g#			Like "#", but don't put "\<" and "\>" around the word.
+			" This makes the search also find matches that are not a
+			" whole word.
+
+" nnoremap * g*
+" nnoremap # g#
+
+
+Using ``*`` and ``#`` to search in Visual Mode
+==============================================
+
+It's bugged me for a while that :kbd:`*` and :kbd:`#` don't search when
+you have text selected in visual mode.
+I found a little section in the help that inspired the perfect way to fix that.:
 
    Note that the ":vmap" command can be used to specifically map keys in Visual
    mode.  For example, if you would like the "/" command not to extend the Visual
@@ -238,12 +260,23 @@ It's bugged me so much that * and # don't search in visual mode.:
 
 So I implemented that as::
 
-   :xnoremap * y/<C-R>"<CR>/<CR>
+   xnoremap * y/<C-R>"<CR>/<CR>gvzz
+   xnoremap # y?<C-R>"<CR>gvzz
 
 'xmap' because visual map, in a really unintuitive move, includes select-mode.
-The extra :kbd:`/` and <CR> are because a forward slash and a <CR> repeat the
-last search.
+*If you're unfamiliar, select-mode is basically visual-mode with overwrite.*
+I don't want this mapping to include anything but visual mode so xmap.
 
+Then yank into the clipboard and begin a search with :kbd:`/`.
+<C-R> or Control-r inserts text literally while in insert-mode, while on the
+command line and while searching. <C-R>" inserts clipboard text!
+<CR> to start the search.
+
+The extra :kbd:`/` and :kbd:`<CR>` are because a forward slash and a <CR>
+repeat the last search, *and oddly this mapping doesn't working without it.*
+
+``gv`` reselects the last text you had highlighted in visual mode. And ``zz``
+re-centers the cursor!
 
 Using shells besides cmd or bash
 ================================

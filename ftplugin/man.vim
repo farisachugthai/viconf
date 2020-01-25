@@ -5,12 +5,6 @@
   " Last Modified: September 10, 2019
 " ============================================================================
 
-" Guard: {{{1
-
-let s:cpo_save = &cpoptions
-set cpo-=C
-
-
 " Vim Official Ftplugin: {{{1
 " Set this globally
 let g:ft_man_folding_enable = 1
@@ -21,7 +15,7 @@ if &filetype !=# 'man'
 endif
 
 " Yours: {{{1
-  " Kinda pointless in a man pagr
+  " Kinda pointless in a man page
 setlocal foldcolumn=0 signcolumn=
 setlocal wrap linebreak
 
@@ -42,9 +36,9 @@ setlocal number relativenumber
       \ . '|unlet! b:undo_ftplugin'
 
 if !exists('g:no_plugin_maps') && !exists('g:no_man_maps')
-  noremap <buffer> q <Cmd>bd<CR>
+  nnoremap <buffer> q <Cmd>bd<CR>
   " Check the rplugin/python3/pydoc.py file
-  noremap <buffer> P <Cmd>call pydoc_help#PydocThis<CR>
+  nnoremap <buffer> P <Cmd>call pydoc_help#PydocThis<CR>
 
   let b:undo_ftplugin .= 'nunmap <buffer> q'
 	\ . '|nunmap <buffer> P'

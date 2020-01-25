@@ -69,3 +69,6 @@ nnoremap + C-a
 " As a nod to the inspiration I also want it in insert-mode
 nnoremap <C-x><C-r> :<C-U>source $MYVIMRC<CR>echomsg 'Reread $MYVIMRC'<CR>
 inoremap <C-x><C-r> :<C-U>source $MYVIMRC<CR>echomsg 'Reread $MYVIMRC'<CR>
+
+" Swap the mark and point
+xnoremap <C-x><C-x> o

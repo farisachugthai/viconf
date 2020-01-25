@@ -11,7 +11,6 @@ function! syncom#HiC() abort  " HiC: Show hl group and fg color {{{1
   " This function could be expanded by expanding the hl groups
   echomsg 'Highlighting group: ' . synIDattr(synID(line('.'), col('.'), 1), 'name')
   echomsg 'Foreground color: ' . synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'fg')
-
 endfunction
 function! syncom#HiD() abort  " HiDebug: {{{1
   " TODO: Debug. The parenthesis got fucked up at some point so figure that out
@@ -23,14 +22,14 @@ function! syncom#HiQF() abort  " HiAll: Now utilize quickfix {{{1
   " cexpr evals a command and adds it to the quickfist list
   cexpr! map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunction
-function! syncom#get_syn_id(transparent) abort  " {{{1
+function! syncom#get_syn_id(...) abort  " {{{1
   " Display syntax infomation on under the current cursor
   let synid = synID(line('.'), col('.'), 1)
   " Wait are arguments allowed to be optional
-  if a:transparent
-    return synIDtrans(synid)
-  else
+  if a:0 == 0
     return synid
+  else
+    return synIDtrans(synid)
   endif
 endfunction
 function! syncom#get_syn_attr(synid) abort  " {{{1
@@ -47,7 +46,7 @@ function! syncom#get_syn_attr(synid) abort  " {{{1
         \ 'guibg': guibg}
 endfunction
 function! syncom#get_syn_info() abort  " {{{1
-  let baseSyn = syncom#get_syn_attr(g:get_syn_id(0))
+  let baseSyn = syncom#get_syn_attr(synID(line("."), col("."), 1))
   echo 'name: ' . baseSyn.name .
         \ ' CTERMFG: ' . baseSyn.ctermfg .
         \ ' ctermbg: ' . baseSyn.ctermbg .
@@ -134,7 +133,6 @@ function! syncom#gruvbox_material() abort  " {{{1 new colorscheme
   endif
 endfunction
 function! syncom#rainbow_paren() abort
-
   highlight! link RBP1 Red
   highlight! link RBP2 Yellow
   highlight! link RBP3 Green

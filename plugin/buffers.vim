@@ -16,7 +16,7 @@ function! Window_Mappings() abort  " {{{1
   nnoremap <C-h> <Cmd>wincmd h<CR>
   " This displays as <NL> when you run `:map` but it behaves like C-j. Oh well.
   nnoremap <C-j> <Cmd>wincmd j<CR>
-  nnoremap <C-k> <Cmd>wincmd k<CR>
+  " nnoremap <C-k> <Cmd>wincmd k<CR>
   nnoremap <C-l> <Cmd>wincmd l<CR>
   " Move windows a little faster the command bythemselves don't do anything
   nnoremap <C-w>< 5<C-w><
@@ -60,7 +60,7 @@ function! Quickfix_Mappings() abort
   nnoremap <Leader>ql <Cmd>botright clist!<CR>
   nnoremap <leader>qo <Cmd>botright copen<CR>
 
-  nnoremap <Leader>c <Cmd>make %<CR>
+  nnoremap <Leader>C <Cmd>make %<CR>
 
   " Unimpaired Mappings:
   " Map quickfix list, buffers, windows and tabs to *[ and *]

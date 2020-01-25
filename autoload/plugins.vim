@@ -6,7 +6,6 @@
 " ============================================================================
 
 function! plugins#GetAllSnippets() abort
-
   call UltiSnips#SnippetsInCurrentScope(1)
   let list = []
   for [key, info] in items(g:current_ulti_dict_info)
@@ -31,8 +30,8 @@ function! plugins#ExpandPossibleShorterSnippet() abort
   return 0
 endfunction
 function! plugins#ExpandSnippetOrCarriageReturn() abort
-" Hopefully will expand snippets or CR. Or it'll destroy deoplete's
-" ability to close the pum. *shrugs*
+  " Hopefully will expand snippets or CR. Or it'll destroy deoplete's
+  " ability to close the pum. *shrugs*
   let snippet = UltiSnips#ExpandSnippetOrJump()
     if g:ulti_expand_or_jump_res > 0
       return snippet
@@ -41,7 +40,6 @@ function! plugins#ExpandSnippetOrCarriageReturn() abort
     endif
 endfunction
 function! plugins#InstallPlug() abort
-
   " Unsure of how to capture return code
   if empty(executable('curl')) | return | endif
   try " Successfully executed on termux
@@ -71,7 +69,6 @@ function! plugins#filter_header(lines) abort
     return centered_lines
 endfunction
 function! plugins#startify_bookmarks() abort
-
   let s:nerdbookmarks = readfile(expand($HOME) . '/.NERDTreeBookmarks')
   if !filereadable(s:nerdbookmarks) | return | endif
 
@@ -129,7 +126,6 @@ function! plugins#Voom() abort
   catch
     return v:false
   endtry
-
 endfunction
 function! plugins#AleMappings() abort
   " Follow the lead of vim-unimpaired with a for ale

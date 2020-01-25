@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "coc.nvim": "^0.0.74",
+    "jsonlint": "^1.6.3",
     "prettier": "^1.19.1",
     "vim-language-server": "^1.4.1"
   },

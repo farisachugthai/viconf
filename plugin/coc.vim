@@ -58,6 +58,7 @@ let $NVIM_NODE_LOG_LEVEL = 'WARN'
 " " else
 " endif
 
+call coc#snippet#enable()
 
 " TODO: Might need to open a pull request he states that these are mapped by
 " default. omap af and omap if didn't show anything
@@ -115,13 +116,10 @@ nnoremap ,l <Cmd>CocOpenLog<CR>
 " And let's add one in for CocInfo
 nnoremap ,i <Cmd>CocInfo<CR>
 
-
 " Grep By Motion: Mnemonic CocSelect {{{2
 
 " Don't use vmap I don't want this in select mode!
-
 " Yo why dont we use onoremap though?
-
 " Q: How to grep by motion?
 " A: Create custom keymappings like:
 xnoremap ,cs :<C-u>call plugins#GrepFromSelected(visualmode())<CR>
@@ -131,13 +129,10 @@ nnoremap ,cs :<C-u>set operatorfunc=plugins#GrepFromSelected<CR>g@
 command! -nargs=0 CocDiagnostic call CocActionAsync('diagnosticInfo')
 
 " Maps For CocList X: {{{2
-
 nnoremap <C-g> <Cmd>CocList<CR>
-
 nnoremap ,d  <Cmd>CocList diagnostics<CR>
-
-" Orrrrr
 " nnoremap ,d <Plug>(coc-diagnostic-info)<CR>
+
 " Manage extensions
 nnoremap ,e  <Cmd>CocList extensions<CR>
 " Show commands

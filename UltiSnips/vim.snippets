@@ -25,8 +25,6 @@ if exists('${1:b:loaded_`!p snip.rv = snip.fn.replace('.','_')`}') || ${2:&compa
     finish
 endif
 let $1 = ${4:1}
-
-cpo$0
 endsnippet
 
 snippet plugin "Plugin reload guard." b
@@ -34,7 +32,6 @@ if exists('b:did_`!p snip.rv = snip.basename.replace('.', '_')`') || &compatible
   finish
 endif
 let b:did_`!p snip.rv = snip.basename.replace('.', '_')` = 1
-$0
 endsnippet
 
 # FUCKKKKK i've been using lower case c thinking it was the line continuation one :(
@@ -49,8 +46,7 @@ endsnippet
 snippet fun "function with simple tabstops" b
 function! ${1:function_name}($2) abort
   ${3:'code'}
-endfunction
-$0
+endfunction$0
 endsnippet
 
 snippet header "standard Vim script file header" b
@@ -64,11 +60,11 @@ endsnippet
 
 # Yay! First successful use of a regex
 snippet "ft(plugin)?" "Ftplugin guard" br
-" Guard: {{{1
 if exists('b:did_ftplugin') | finish | endif
 let b:did_ftplugin = 1
 
-cpo$0
+let b:undo_ftplugin = 'setlocal $1'
+      \ . '|unlet! b:undo_ftplugin'
 endsnippet
 
 snippet syntax "Syntax file guard" b
@@ -79,7 +75,6 @@ elseif exists(${1:'b:current_syntax'})
 endif
 
 let ${2:b:current_syntax} = 1
-$0
 endsnippet
 
 snippet func "Autocompletes function name based on filename" b
@@ -88,10 +83,10 @@ function! ${1:`expand('%') =~ 'autoload' ? substitute(matchstr(expand('%:p'),'au
 endif
 endsnippet
 
-snippet try "try ... catch statement"
+snippet try "try ... catch statement. Defaults to catch everything" mib
 try
   ${1:${VISUAL}}
-catch $2
+catch ${2:/.*/}
   $0
 endtry
 endsnippet
@@ -168,15 +163,18 @@ else
 endif
 endsnippet
 
+# I realize its weird to have the if and else in there but then you can expand
+# the if else snippets i have above
 snippet ife "if ... else statement" w
 ${0:if}
-    ${1:else}
+
+${1:else}
 endsnippet
 
-snippet aug "augroup ... autocmd block" b
+snippet aug "augroup ... autocmd block." b
 augroup ${1:AU_NAME}
   autocmd!
-  autocmd ${2:BufRead,BufNewFile} ${3:*.ext,*.ext3|<buffer[=N]>} $0
+  ${2:au}$0
 augroup end
 endsnippet
 
@@ -189,31 +187,31 @@ endsnippet
 #####################
 
 snippet bun "Vundle.vim Plugin definition"
-Plugin '${VISUAL:0}'
+Plugin '${0:${VISUAL}}'
 endsnippet
 
 snippet plug "vim-plug Plugin definition" b
-Plug '${VISUAL:0}'
+Plug '${0:${VISUAL}}'
 endsnippet
 
 snippet plugdo "vim-plug Plugin definition with { 'do': '' }" b
-Plug '${VISUAL:1}', { 'do': '${0}' }
+Plug '${1:${VISUAL}}', { 'do': '${0}' }
 endsnippet
 
-snippet plugon "vim-plug Plugin definition with { 'on': '' }" b
-Plug '${VISUAL:1}', { 'on': '${0}' }
+snippet plug "vim-plug Plugin definition with { 'on': '' }" b
+Plug '${1:${VISUAL}}', { 'on': '${0}' }
 endsnippet
 
-snippet plugfor "vim-plug Plugin definition with { 'for': '' }" b
-Plug '${VISUAL:1}', { 'for': '${0}' }
+snippet plug "vim-plug Plugin definition with { 'for': '' }" b
+Plug '${1:${VISUAL}}', { 'for': '${0}' }
 endsnippet
 
-snippet plugbr "vim-plug Plugin definition with { 'branch': '' }" b
-Plug '${VISUAL:1}', { 'branch': '${0}' }
+snippet plug "vim-plug Plugin definition with { 'branch': '' }" b
+Plug '${1:${VISUAL}}', { 'branch': '${0}' }
 endsnippet
 
-snippet plugtag "vim-plug Plugin definition with { 'tag': '' }" b
-Plug '${VISUAL:1}', { 'tag': '${0}' }
+snippet plug "vim-plug Plugin definition with { 'tag': '' }" b
+Plug '${1:${VISUAL}}', { 'tag': '${0}' }
 endsnippet
 
 #############
@@ -221,15 +219,15 @@ endsnippet
 #############
 
 snippet letg "let buffer local var = val"
-let g:${1:variable} = ${0: value}
+let g:${1:${VISUAL}} = ${0:value}
 endsnippet
 
 snippet letb "let buffer local var = val"
-let b:${1:variable} = ${0: value}
+let b:${1:${VISUAL}} = ${0:value}
 endsnippet
 
 snippet sg "setglobal"
-setglobal  ${1:${VISUAL}} $0
+setglobal  ${1:${VISUAL}}
 endsnippet
 
 snippet se "set a var"
@@ -237,13 +235,13 @@ set ${1:${VISUAL}}
 endsnippet
 
 snippet set "set a var=value"
-set ${1:setting}=${0:value}
+set ${1:${VISUAL}}=${0:value}
 endsnippet
 
 # Mar 07, 2019: Shortened to sl because setl is barely shorter than actually typing setlocal
 # Also the equal needed to be moved over so I could tab over it.
 snippet sl "setlocal var=value" w
-setlocal ${1:setting}${2:=value}$0
+setlocal ${1:${VISUAL}}${2:=value}
 endsnippet
 
 #############
@@ -251,43 +249,43 @@ endsnippet
 #############
 
 snippet map "map var var CR" b
-map ${<Leader>${1}} ${2}${3:<CR>}
+map ${<Leader>${1:${VISUAL}}} ${2}${3:<CR>}
 endsnippet
 
 snippet no "noremap var var CR" b
-noremap ${1} ${2}${3:<CR>}
+noremap ${1:${VISUAL}} ${2}${3:<CR>}
 endsnippet
 
 snippet nno "nnoremap var var CR" b
-nnoremap ${1} ${2}${3:<CR>}
+nnoremap ${1:${VISUAL}} ${2}${3:<CR>}
 endsnippet
 
 snippet vm "noremap var var CR" b
-vmap ${1} ${2}${3:<CR>}
+vmap ${1:${VISUAL}} ${2}${3:<CR>}
 endsnippet
 
 snippet vno "vnoremap var var CR" b
-vnoremap ${1} ${2}${3:<CR>}
+vnoremap ${1:${VISUAL}} ${2}${3:<CR>}
 endsnippet
 
 snippet im "imap var var CR" b
-imap ${1} ${2}${3:<CR>}
+imap ${1:${VISUAL}} ${2}${3:<CR>}
 endsnippet
 
 snippet ino "inoremap var var CR" b
-inoremap ${1} ${2}${3:<CR>}
+inoremap ${1:${VISUAL}} ${2}${3:<CR>}
 endsnippet
 
 snippet cm "cmap var var CR" b
-cmap ${1} ${2}${3:<CR>}
+cmap ${1:${VISUAL}} ${2}${3:<CR>}
 endsnippet
 
 snippet cnm "cnoremap var var CR" b
-cnoremap ${1} ${2}${3:<CR>}
+cnoremap ${1:${VISUAL}} ${2}${3:<CR>}
 endsnippet
 
 snippet exe "execute(var)" b
 execute('${0:${VISUAL}}')
 endsnippet
 
-# Vim: set et ts=4 sts=2 sw=2:
+# Vim: set ts=4 sts=2 sw=2:
