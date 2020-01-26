@@ -31,7 +31,7 @@ endif
 " Oh holy shit that's awesome
 command! -nargs=1 -complete=help Help call pydoc_help#Helptab()
 " Needs to accept args for bang
-command! -bang -bar -range -nargs=0 -range PydocThis call pydoc_help#PydocCword()
+command! -bang -bar PydocThis call pydoc_help#PydocCword()
 
 " This should be able to take the argument '-bang' and allow to open in a new
 " separate window like fzf does.
@@ -39,5 +39,7 @@ command! -nargs=0 PydocSplit call pydoc_help#SplitPydocCword()
 command! -nargs=? Pydoc call pydoc_help#Pydoc(<f-args>)
 command! -nargs=0 PydocShow call pydoc_help#show()
 
-" I'm assuming I completely failed here
-command! -nargs=? -buffer -bang -bar -complete=file -range Black <line1>,<line2>call py#black()
+" TODO: Work on the range then the bang
+command! -complete=file -range BlackCurrent <line1>,<line2>call py#Black()
+
+command! -nargs=* -complete=file -complete=file_in_path BlackThese call py#black_these(<f-args>)

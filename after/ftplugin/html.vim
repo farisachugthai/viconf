@@ -5,11 +5,7 @@
   " Last Modified: June 08, 2019
 " ============================================================================
 
-" Guard: {{{1
-let s:cpo_save = &cpoptions
-set cpoptions-=C
-
-" Options: {{{1
+if &filetype !=# 'html' | finish | endif
 
 setlocal expandtab
 setlocal shiftwidth=2
@@ -24,14 +20,7 @@ call htmlcomplete#DetectOmniFlavor()
 
 let g:ft_html_autocomment = 1
 
-" Plugins: {{{1
-if has_key(plugs, 'ale') && &filetype==#'html'
-  call ftplugins#ALE_Html_Conf()
-endif
+call ftplugins#ALE_Html_Conf()
 
-" Atexit: {{{1
 let b:undo_ftplugin = 'setlocal et< sw< sts< sua< ofu<'
       \ . '|unlet! b:undo_ftplugin'
-
-let &cpoptions = s:cpo_save
-unlet s:cpo_save

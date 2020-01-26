@@ -15,6 +15,10 @@ endglobal
 # snip.rv=
 # endsnippet
 
+snippet ' "Quote the word. How the hell have I never done this?" w
+'${0:${VISUAL}}'
+endsnippet
+
 # Hey check out what I just found in the help docs
 snippet "(\w+).par" "Parenthesis (postfix)" r
 (`!p snip.rv = match.group(1)`$1)$0

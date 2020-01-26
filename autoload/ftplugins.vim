@@ -165,28 +165,29 @@ function! ftplugins#CPath() abort
     endif
 
   else
+    set shellslash
     " we did it.
     if exists('$INCLUDE')
       let s:path = s:path . expand('$INCLUDE')
       return s:path
     endif
 
-    if isdirectory('C:/tools/miniconda3/envs/neovim/Library/include')
-      let s:path = s:path . 'C:/tools/miniconda3/envs/neovim/Library/include,'
-      let s:path = s:path . 'C:/tools/miniconda3/envs/neovim/include,'
+    if isdirectory('C:/tools/miniconda3/envs/working/Library/include')
+      let s:path = s:path . 'C:/tools/miniconda3/envs/working/Library/include,'
+      let s:path = s:path . 'C:/tools/miniconda3/envs/working/include,'
     endif
 
-    if isdirectory('C:/tools/vs/2019/BuildTools/VC/Tools/MSVC/14.23.28105/include')
-      let s:path = s:path . 'C:/tools/vs/2019/BuildTools/VC/Tools/MSVC/14.23.28105/include,'
+    if isdirectory('C:/tools/vs/2019/Community/VC/Tools/MSVC/14.24.28314/include')
+      let s:path = s:path . 'C:/tools/vs/2019/Community/VC/Tools/MSVC/14.24.28314/include'
     endif
 
-    if isdirectory('C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include')
-      let s:path = s:path . 'C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include,'
+    if isdirectory('C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include')
+      let s:path = s:path . 'C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include,'
     endif
 
     " Yo honestly this is the one you're looking for
-    if isdirectory('C:/Program Files (x86)/Windows Kits/10/include/10.0.17763.0/um')
-      let s:path = s:path . 'C:/Program Files (x86)/Windows Kits/10/include/10.0.17763.0/um'
+    if isdirectory('C:/Program Files (x86)/Windows Kits/10/include/10.0.17763.0')
+      let s:path = s:path . 'C:/Program Files (x86)/Windows Kits/10/include/10.0.17763.0/**2'
     endif
 
     if exists('$INCLUDEDIR')

@@ -9,22 +9,27 @@ if exists('b:did_ftplugin') | finish | endif
 
 if &filetype !=# 'markdown' | finish | endif
 
-runtime ftplugin/html.vim ftplugin/html_*.vim ftplugin/html/*.vim
-
-if exists('b:did_ftplugin') | unlet! b:did_ftplugin | endif
-
-setlocal comments=fb:*,fb:-,fb:+,n:> commentstring=>\ %s
-setlocal formatoptions+=tcqln formatoptions-=r formatoptions-=o
+setlocal comments=fb:*,fb:-,fb:+,n:> 
+" used to be
+" commentstring=>\ %s
+setlocal commentstring=<!--%s-->
+setlocal formatoptions=tcqln
 setlocal formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\|^[-*+]\\s\\+\\\|^\\[^\\ze[^\\]]\\+\\]:
+setlocal omnifunc=htmlcomplete#CompleteTags
+call htmlcomplete#DetectOmniFlavor()
+syntax sync fromstart
+setlocal conceallevel=0  " this gets annoying quick
 
-if exists('b:undo_ftplugin')
-  let b:undo_ftplugin .= "|setl cms< com< fo< flp< "
-else
-  let b:undo_ftplugin = "setl cms< com< fo< flp< "
-endif
+let b:match_ignorecase = 1
+let b:match_words = '<:>,' .
+\ '<\@<=[ou]l\>[^>]*\%(>\|$\):<\@<=li\>:<\@<=/[ou]l>,' .
+\ '<\@<=dl\>[^>]*\%(>\|$\):<\@<=d[td]\>:<\@<=/dl>,' .
+\ '<\@<=\([^/][^ \t>]*\)[^>]*\%(>\|$\):<\@<=/\1>'
+
+let b:undo_ftplugin = "setl cms< com< fo< flp< ofu< "
 
 " Enable spellchecking.
-" setlocal spell!
+setlocal spell!
 
 " Automatically wrap at 80 characters after whitespace
 setlocal textwidth=80
@@ -47,15 +52,9 @@ let g:markdown_fenced_languages = [
 
 let g:markdown_minlines = 100
 
-let g:markdown_folding = 1
-
-if has("folding") && exists("g:markdown_folding")
-  setlocal foldexpr=format#MarkdownFoldText()
-  setlocal foldmethod=expr
-  let b:undo_ftplugin .= "| setlocal foldexpr< foldmethod<"
-endif
-
-" Mappings: {{{1
+setlocal foldexpr=format#MarkdownFoldText()
+setlocal foldmethod=expr
+let b:undo_ftplugin .= "| setlocal foldexpr< foldmethod<"
 
 nnoremap <buffer> <Leader>1 m`yypVr=``
 nnoremap <buffer> <Leader>2 m`yypVr-``
@@ -63,11 +62,11 @@ nnoremap <buffer> <Leader>3 m`^i### <esc>``4l
 nnoremap <buffer> <Leader>4 m`^i#### <esc>``5l
 nnoremap <buffer> <Leader>5 m`^i##### <esc>``6l
 
-let b:undo_ftplugin .= ' nunmap <buffer> <Leader>1'
-let b:undo_ftplugin .= ' nunmap <buffer> <Leader>2'
-let b:undo_ftplugin .= ' nunmap <buffer> <Leader>3'
-let b:undo_ftplugin .= ' nunmap <buffer> <Leader>4'
-let b:undo_ftplugin .= ' nunmap <buffer> <Leader>5'
+let b:undo_ftplugin .= '| nunmap <buffer> <Leader>1'
+let b:undo_ftplugin .= '| nunmap <buffer> <Leader>2'
+let b:undo_ftplugin .= '| nunmap <buffer> <Leader>3'
+let b:undo_ftplugin .= '| nunmap <buffer> <Leader>4'
+let b:undo_ftplugin .= '| nunmap <buffer> <Leader>5'
 
 " So Vim-markdown doesn't have a  plugin/* dir. So we don't have a
 " g:loaded_vim_markdown var to check. We have to assume vim-plug being used.
@@ -95,7 +94,8 @@ if has_key(plugs, 'vim-markdown')
 
 endif
 
-let b:did_ftplugin = 1
+runtime ftplugin/html.vim ftplugin/html_*.vim ftplugin/html/*.vim
+
 let b:undo_ftplugin .= 'setl spell< cc< tw< lbr< et< ts< sts< sw< fdl< fdls<'
       \ . '|unlet! b:undo_ftplugin'
       \ . '|unlet! b:did_ftplugin'

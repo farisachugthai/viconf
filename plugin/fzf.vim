@@ -118,13 +118,13 @@ tnoremap <F6> <Cmd>Snippets<CR>
   else
       imap <C-x><C-f> <Plug>(fzf-complete-file)
       imap <C-x><C-j> <Plug>(fzf-complete-path)
-      inoremap <C-f> <C-x><C-f>
-      inoremap <C-j> <C-x><C-j>
+      " inoremap <C-f> <C-x><C-f>
+      " inoremap <C-j> <C-x><C-j>
   endif
 
   inoremap <expr> <C-x><C-k> fzf#vim#complete#word({'left': '15%'})
   inoremap <expr> <C-x><C-l> fzf#vim#complete#line()
-  inoremap <expr> <C-l> fzf#vim#complete#line()
+  " inoremap <expr> <C-l> fzf#vim#complete#line()
 
   " Uhhh C-b for buffer?
   inoremap <expr> <C-x><C-b> fzf#vim#complete#buffer_line()
@@ -139,10 +139,11 @@ tnoremap <F6> <Cmd>Snippets<CR>
   imap <expr> <C-x><C-k> fzf#complete({
               \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
               \ 'options': '-ansi --multi --cycle', 'left': 30})
-  inoremap <C-k> <C-x><C-k>
+  " inoremap <C-k> <C-x><C-k>
 
 " NOTE: The imap should probably only be invoked using \<tab>
 nmap <Leader><tab>                 <Plug>(fzf-maps-n)
+nmap \<tab>                 <Plug>(fzf-maps-n)
 omap <Leader><tab>                 <Plug>(fzf-maps-o)
 xmap <Leader><tab>                 <Plug>(fzf-maps-x)
 imap \<tab>                        <Plug>(fzf-maps-i)
@@ -165,10 +166,10 @@ nnoremap <Leader>GS                 <Cmd>FufGFiles?<CR>
 
 " NERDTree Mapping: Dude I forgot I had this. Make sure :Files works but this
 " mapping is amazing.
-nnoremap <expr> <Leader>n (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
+" nnoremap <expr> <Leader>n (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
 
 nnoremap <Leader>bu                <Cmd>FufBuffers<CR>
-nnoremap <Leader>B                 <Cmd>FufBuffers<CR>
+" nnoremap <Leader>B                 <Cmd>FufBuffers<CR>
 
 " FZGrep:
   " here's the call signature for fzf#vim#grep

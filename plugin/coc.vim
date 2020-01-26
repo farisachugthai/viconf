@@ -30,8 +30,9 @@ let g:WorkspaceFolders = [
       \ ]
 
 let g:coc_quickfix_open_command = 'cwindow'
-let g:coc_snippet_next = '<C-j>'
-let g:coc_snippet_prev = '<C-k>'
+" Dude i have so many things simultaneously bound to C-j I need to fix this badly
+" let g:coc_snippet_next = '<C-j>'
+" let g:coc_snippet_prev = '<C-k>'
 
 let g:coc_enable_locationlist = 1
 let $NVIM_COC_LOG_LEVEL = 'WARN'

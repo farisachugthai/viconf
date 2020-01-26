@@ -223,7 +223,21 @@ endfunction
 
 function! py#Black() abort
 py3 << EOF
-from py import black
-Black()
+from py import blackened_vim
+blackened_vim()
 EOF
 endfunction
+
+function! py#black_these() abort
+  " TODO: Probably good to work on for learning vim ranges right?
+  py3 << EOF
+  from py import black
+EOF
+endfunction
+
+function! py#black_version() abort
+  py3 << EOF
+  from py import black_version
+  black_version()
+EOF
+endfu

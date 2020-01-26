@@ -5,6 +5,11 @@
     " Last Modified: Dec 16, 2019
 " ============================================================================
 
+if exists('g:did_unix') || &compatible || v:version < 700
+  finish
+endif
+let g:did_unix = 1
+
 nnoremap zE <nop>
 
 if has('unix')
@@ -51,11 +56,20 @@ else
   nnoremap <C-x><C-f>                 :<C-u>find ~/**
 endif
 
+
+function! AddVileBinding(key, handler)
+  " Map a key 3 times for normal mode, insert and command.
+  exec 'nnoremap ' . a:key a:handler
+  exec 'inoremap ' . a:key a:handler
+  exec 'cnoremap ' . a:key a:handler
+
+endfunction
 " oh
-nnoremap <C-x>o <Cmd>wincmd W<CR>
+call AddVileBinding('<C-x>o', '<Cmd>wincmd W<CR>')
 " zero
-nnoremap <C-x>0 <Cmd>wincmd c<CR>
-nnoremap <C-x>1 <Cmd>wincmd o<CR>
+call AddVileBinding('<C-x>0', '<Cmd>wincmd c<CR>')
+
+call AddVileBinding('<C-x>1', '<Cmd>wincmd o<CR>')
 
 " Both Tmux and Readline utilize C-a. It's a useful keybinding and
 " my preferred manner of going to col-0 in insert mode. Cue vim-rsi
@@ -67,8 +81,7 @@ nnoremap C-a ^
 nnoremap + C-a
 
 " As a nod to the inspiration I also want it in insert-mode
-nnoremap <C-x><C-r> :<C-U>source $MYVIMRC<CR>echomsg 'Reread $MYVIMRC'<CR>
-inoremap <C-x><C-r> :<C-U>source $MYVIMRC<CR>echomsg 'Reread $MYVIMRC'<CR>
+call AddVileBinding('<C-x><C-r>', '<Cmd>source $MYVIMRC<CR>echomsg "Reread $MYVIMRC"<CR>')
 
 " Swap the mark and point
 xnoremap <C-x><C-x> o

@@ -61,7 +61,7 @@ endsnippet
 
 snippet filter "filter" b
 {% filter ${1:${VISUAL}} %}
-	$0
+    $0
 {% endfilter %}
 endsnippet
 
@@ -71,9 +71,9 @@ endsnippet
 # Uh I'd agree
 snippet for "for" b
 {% for ${1:${VISUAL}} in ${2:sequence} %}
-	3${4:
+    3${4:
 {% else %}
-	$5}
+    $5}
 {% endfor %}
 endsnippet
 
@@ -86,37 +86,36 @@ endsnippet
 
 snippet if "if" b
 {% if ${1:${VISUAL}} %}
-	$2
+    $2
 {% endif %}
 endsnippet
 
 snippet if "if/else" b
 {% if ${1:${VISUAL}} %}
-	$2
+    $2
+${3:{% elif %}}
 {% else %}
-	$3
+    $3
 {% endif %}
 endsnippet
 
 snippet if "if/elif/else" b
 {% if ${1:${VISUAL}} %}
-	$2
-{% elif %}
-	$3
+    $2
 {% else %}
-	$4
+    $4
 {% endif %}
 endsnippet
 
 snippet macro "macro" b
 {% macro ${1:name}(${2:args}) %}
-	$3
+    $3
 {% endmacro %}
 endsnippet
 
 snippet call "call" b
 {% call ${1:name}(${2:args}) %}
-	$3
+    $3
 {% endcall %}
 endsnippet
 
@@ -126,19 +125,19 @@ endsnippet
 
 snippet trans "translation" b
 {% trans %}
-	${0:${VISUAL}}
+    ${0:${VISUAL}}
 {% endtrans %}
 endsnippet
 
 snippet with "with" b
 {% with %}
-	${0:${VISUAL}}
+    ${0:${VISUAL}}
 {% endwith %}
 endsnippet
 
 snippet autoescape "autoescape" b
 {% autoescape ${1:true} %}
-	${2:${VISUAL}}
+    ${2:${VISUAL}}
 {% endautoescape %}
 endsnippet
 

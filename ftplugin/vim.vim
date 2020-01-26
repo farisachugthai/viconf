@@ -6,12 +6,14 @@
 " ============================================================================
 
 if exists('b:did_ftplugin') | finish | endif
-let b:did_ftplugin = 1
+" We source $VIMRUNTIME later don't do this
+" let b:did_ftplugin = 1
 
 let g:vimsyn_minlines = 300
 let g:vimsyn_maxlines = 500  " why is the default 60???
 let g:vimsyn_noerror = 1  " Turn off errors because 50% of them are wrong.
 
+syntax sync fromstart
 source $VIMRUNTIME/ftplugin/vim.vim
 setlocal expandtab
 setlocal shiftwidth=2
