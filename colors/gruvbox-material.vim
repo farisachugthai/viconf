@@ -6,6 +6,10 @@
 " Last Updated: Dec 10, 2019
 
 scriptencoding utf8  " {{{
+if exists('g:loaded_gruvbox_material_vim') || &compatible || v:version < 700
+    finish
+endif
+let g:loaded_gruvbox_material_vim = 1
 
 let s:cpo_save = &cpoptions
 set cpoptions-=C

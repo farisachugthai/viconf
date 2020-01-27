@@ -5,6 +5,11 @@
   " Last Modified: Aug 12, 2019
 " ============================================================================
 
+if exists('g:loaded_vimscript_vim') || &compatible || v:version < 700
+    finish
+endif
+let g:loaded_vimscript_vim = 1
+
 " I would say this is unrelated but this file is aimless
 nnoremap <Leader>cd <Cmd>cd %:p:h<CR><Bar><Cmd>pwd<CR>
 

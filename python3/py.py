@@ -1,10 +1,15 @@
 import functools
 import importlib
+import json
 import logging
 import pydoc
 import time
 import traceback
-import vim
+try:
+    import vim  # pylint: disable=import-error
+    _has_vim = True
+except ImportError:
+    _has_vim = False
 
 from pprint import pprint as print
 
@@ -14,6 +19,43 @@ except:
     black = None
 
 logger = logging.getLogger(name=__name__)
+
+
+def _set_return_error(err):
+    # If we're not in a vim plugin, don't try to set the error
+    if not _has_vim:
+        return
+
+    # Exceptions don't really work across the vim-python boundary, so instead
+    # we catch the exception and set it into a global variable. The calling vim
+    # code will then manually check that value after the command completes.
+    if err is None:
+        vim.command('let g:py_err = {}')
+    else:
+        err_dict = {
+            "code": getattr(err, 'code', 'ERROR'),
+            "msg": str(err),
+        }
+        # Not the best way to serialize to vim types,
+        # but it'll work for this specific case
+        vim.command("let g:py_err_json = %s" % json.dumps(err_dict))
+
+def vimcmd(fxn):
+    """ Decorator for functions that will be run from vim """
+
+    @functools.wraps(fxn)
+    def wrapper(*args, **kwargs):
+        try:
+            ret = fxn(*args, **kwargs)
+        except Exception as e:
+            logger.exception("Error running python %s()", fxn.__name__)
+            _set_return_error(e)
+            return 0
+        else:
+            _set_return_error(None)
+            return ret
+    wrapper.is_cmd = True
+    return wrapper
 
 
 def import_mod_under_cursor():
@@ -83,7 +125,7 @@ def get_cursors():
                     cursors.append((i, j, window.cursor))
 
 
-def black():
+def blackened_vim():
     start = time.time()
     new_buffer_str = _black()
     if new_buffer_str is None:
@@ -99,9 +141,5 @@ def black():
     print(f"Reformatted in {time.time() - start:.4f}s.")
 
 
-def BlackUpgrade():
-    _initialize_black_env(upgrade=True)
-
-
-def BlackVersion():
+def black_version():
     print(f"Black, version {black.__version__} on Python {sys.version}.")

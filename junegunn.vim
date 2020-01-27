@@ -9,6 +9,7 @@ scriptencoding utf-8
 let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Evervim. Thanks!
 let s:wsl = !empty($WSL_DISTRO_NAME)                   " Windows is !has('unix') but WSL checks explicitly
 let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux) && empty(s:wsl)
+if !has('unix') | set noshellslash | endif
 
 " Few options I wanna set in advance
 let g:no_default_tabular_maps = 1
@@ -83,9 +84,9 @@ if empty(s:termux)
   " needed if for nothing else but the ftdetect
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
-  " Plug 'mustache/vim-mustache-handlebars'
   Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
   Plug 'elzr/vim-json', { 'for': 'json' }
+  Plug 'omnisharp/omnisharp-vim', {'for': 'cs'}
 endif
 
 Plug 'ludovicchabant/vim-gutentags'

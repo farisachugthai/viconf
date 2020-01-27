@@ -8,18 +8,20 @@
 scriptencoding utf-8
 set fileformat=unix fileformats=unix,dos  " don't let DOS fuck up the EOL
 setglobal cpoptions-=c,e,_  " couple options that bugged me
+set shellslash
 
 let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Evervim. Thanks!
 let s:wsl = !empty($WSL_DISTRO_NAME)
 let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux) && empty(s:wsl)
+let s:this_dir = fnamemodify(expand('$MYVIMRC'), ':p:h')
 
 set synmaxcol=400 termguicolors  " Set up the colorscheme
 syntax sync fromstart linebreaks=2
-syntax enable
-filetype indent plugin on
 " Seriously how does this keep getting fucked up
 if has('unix')
-set runtimepath=~/.config/nvim,~/.local/share/nvim/site,/usr/share/nvim/site,/usr/local/share/nvim/site,/usr/share/nvim/runtime,/usr/local/share/nvim/site/after,/usr/share/nvim/site/after,~/.local/share/nvim/site/after,~/.config/nvim/after
+  set runtimepath=~/.config/nvim,~/.local/share/nvim/site,/usr/share/nvim/site,/usr/local/share/nvim/site,/usr/share/nvim/runtime,/usr/local/share/nvim/site/after,/usr/share/nvim/site/after,~/.local/share/nvim/site/after,~/.config/nvim/after
+else
+  set runtimepath=~/AppData/Local/nvim,~/AppData/Local/nvim-data/site,C:/Neovim/share/nvim/runtime,C:/Neovim/share/nvim-qt/runtime
 endif
 
 if exists('$ANDROID_DATA')  " Fuck i had to change this because wsl was loading termux jesus christ
@@ -30,15 +32,7 @@ else
   call find_files#ubuntu_remote() | echo 'loaded wsl'
 endif
 
-if exists('g:GuiLoaded') | runtime ginit.vim | endif
-
-" So loading plugins almost immediately is definitely the best way to go
-let s:vim_plug = filereadable(glob(fnameescape(stdpath('data') . '/site/autoload/plug.vim')))
-if empty(s:vim_plug) && exists('*plugins#InstallPlug') | call plugins#InstallPlug() | endif
-runtime junegunn.vim  " Load my plugins.
-
-" Don't assume that the InstallPlug() func worked so ensure it's defined
-if empty('plugs') | let plugs = {} | endif
+if exists('g:GuiLoaded') | let s:ginit = s:this_dir . '/ginit.vim' | exec 'source ' . s:ginit | endif
 
 " colo gruvbox
 let s:material_gruvbox =  syncom#gruvbox_material()
@@ -128,5 +122,13 @@ packadd justify
 packadd cfilter
 packadd matchit
 
+let s:vim_plug = filereadable((fnameescape(stdpath('data') . '/site/autoload/plug.vim')))
+if empty(s:vim_plug) && exists('*plugins#InstallPlug') | call plugins#InstallPlug() | endif
+let s:junegunn = s:this_dir . '/junegunn.vim'  " Load my plugins.
+exec 'source ' . s:junegunn
+" Don't assume that the InstallPlug() func worked so ensure it's defined
+if empty('plugs') | let plugs = {} | endif
+
 " This might be a terrible idea but
 au! VimEnter *
+
