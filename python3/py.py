@@ -1,17 +1,20 @@
 import functools
 import importlib
+from importlib.util import find_spec
 import json
 import logging
 import pydoc
+import site
+import sys
+from os.path import isdir
 import time
 import traceback
+from pprint import pprint as print
+
 try:
     import vim  # pylint: disable=import-error
-    _has_vim = True
 except ImportError:
-    _has_vim = False
-
-from pprint import pprint as print
+    vim = None
 
 try:
     import black
@@ -19,6 +22,13 @@ except:
     black = None
 
 logger = logging.getLogger(name=__name__)
+
+
+def log(logrecord, level=30):
+    # Just thought to wrap pythons usual logging features.
+    # Wait wouldnt it be easier if python thought sys.stdout/stderr were something
+    # similar to this command?
+    return vim.command("echomsg " + logger.log(logrecord, level))
 
 
 def _set_return_error(err):
@@ -30,18 +40,19 @@ def _set_return_error(err):
     # we catch the exception and set it into a global variable. The calling vim
     # code will then manually check that value after the command completes.
     if err is None:
-        vim.command('let g:py_err = {}')
+        vim.command("let g:py_err = {}")
     else:
         err_dict = {
-            "code": getattr(err, 'code', 'ERROR'),
+            "code": getattr(err, "code", "ERROR"),
             "msg": str(err),
         }
         # Not the best way to serialize to vim types,
         # but it'll work for this specific case
         vim.command("let g:py_err_json = %s" % json.dumps(err_dict))
 
+
 def vimcmd(fxn):
-    """ Decorator for functions that will be run from vim """
+    """Decorator for functions that will be run from vim."""
 
     @functools.wraps(fxn)
     def wrapper(*args, **kwargs):
@@ -54,16 +65,16 @@ def vimcmd(fxn):
         else:
             _set_return_error(None)
             return ret
-    wrapper.is_cmd = True
+
     return wrapper
 
 
-def import_mod_under_cursor():
+def pykeywordprg():
     temp_cword = vim.eval(expand("<cWORD>"))
     logger.debug(f"{temp_cword}")
     try:
         helped_mod = importlib.import_module(temp_cword)
-    except:
+    except vim.error:
         vim.command("echoerr 'Error during import of %s'" % temp_cword)
     else:
         pydoc.help(helped_mod)
@@ -96,22 +107,10 @@ def _robust_black():
 
 
 def get_mode():
-    # TODO
     return black.FileMode(
-        # line_length=int(vim.eval("g:black_linelength")),
         line_length=88,
-        # string_normalization=not bool(
-        #     int(vim.eval("g:black_skip_string_normalization"))
-        # ),
         is_pyi=vim.current.buffer.name.endswith(".pyi"),
     )
-
-
-def _black():
-    try:
-        return _robust_black()
-    except:
-        raise
 
 
 def get_cursors():
@@ -123,23 +122,44 @@ def get_cursors():
             for j, window in enumerate(tabpage.windows):
                 if window.valid and window.buffer == current_buffer:
                     cursors.append((i, j, window.cursor))
-
-
-def blackened_vim():
-    start = time.time()
-    new_buffer_str = _black()
-    if new_buffer_str is None:
-        return
-    list_of_cursors = get_cursors()
-    vim.current.buffer[:] = new_buffer_str.split("\n")[:-1]
     for i, j, cursor in cursors:
         window = vim.tabpages[i].windows[j]
         try:
             window.cursor = cursor
         except vim.error:
             window.cursor = (len(window.buffer), 0)
+
+
+def blackened_vim():
+    start = time.time()
+    new_buffer_str = _robust_black()
+    if new_buffer_str is None:
+        return
+    vim.current.buffer[:] = new_buffer_str.split("\n")[:-1]
     print(f"Reformatted in {time.time() - start:.4f}s.")
 
 
 def black_version():
     print(f"Black, version {black.__version__} on Python {sys.version}.")
+
+
+def setup_vim_path():
+    vim_path = ".,**,,"
+    vim_path += sys.prefix + ","
+    for i in site.getsitepackages():
+        vim_path += i + ","
+        print(vim_path)
+        return vim_path
+
+
+def pure_python_path():
+    """Attempt 2."""
+    for p in sys.path:
+        # Add each directory in sys.path, if it exists.
+        if isdir(p):
+            # Command 'set' needs backslash before each space.
+            vim.command(r"set path+=%s" % (p.replace(" ", r"\ ")))
+
+
+def importer(mod):
+    return find_spec(mod)

@@ -5,6 +5,9 @@
   " Last Modified: September 10, 2019
 " ============================================================================
 
+if exists('b:did_ftplugin') | finish | endif
+let b:did_ftplugin = 1
+
 " Vim Official Ftplugin: {{{1
 " Set this globally
 let g:ft_man_folding_enable = 1
@@ -40,8 +43,8 @@ if !exists('g:no_plugin_maps') && !exists('g:no_man_maps')
   " Check the rplugin/python3/pydoc.py file
   nnoremap <buffer> P <Cmd>call pydoc_help#PydocThis<CR>
 
-  let b:undo_ftplugin .= 'nunmap <buffer> q'
-	\ . '|nunmap <buffer> P'
+  let b:undo_ftplugin .= '| nunmap <buffer> q'
+	\ . '| nunmap <buffer> P'
 endif
 
 "Filetype  Nvim Official Ftplugin: {{{1
@@ -61,10 +64,5 @@ if !exists('g:no_plugin_maps') && !exists('g:no_man_maps')
 	\ . '|nunmap <buffer> <C-T>'
   " allow dot and dash in manual page name.
   setlocal iskeyword+=\.,-
-
+  let b:undo_ftplugin .= '|setlocal isk<'
 endif
-
-let &cpo = s:cpo_save
-unlet s:cpo_save
-
-" vim: set sw=2 ts=8 noet:

@@ -1,29 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Open a file, check if symlink, if so follow link and cd to dir.
-
-Well now you can open up nvim and run::
-
-    terminal
-    ipython -i --pdb follow_links.py
-
-And it'll execute without errors which is nice.
-"""
 import logging
 import os
 from pathlib import Path
-import pynvim
+import vim
 
 logger = logging.getLogger(name=__name__)
 
 
-@pynvim.plugin
 class FileLink:
-    def __init__(self, nvim, logger=None):
+    def __init__(self, logger=None):
         """Initialize a file object."""
-        self.nvim = nvim
         # Damnit why isnt it recognizing this as a func? this is the missing link
-        self.path_obj = self.nvim.call("nvim_get_current_buf()")
+        self.path_obj = vim.eval("nvim_get_current_buf()")
         if logger is not None:
             self.logger = logger
 
@@ -49,14 +38,13 @@ class FileLink:
         if real_file:
             return real_file.parent
 
-    @pynvim.command(name="Follow", nargs=1, complete="file")
     def true_file(self, path_obj):
         """Implement a command that opens and resolves a symlink."""
         if self._is_symlink:
             real_file = self._resolved_path()
             dirname = real_file.parent
-            self.nvim.chdir(str(dirname))
-            self.nvim.command("edit" + str(real_file))
+            vim.chdir(str(dirname))
+            vim.command("edit" + str(real_file))
 
 
 def _setup_logging(level):
@@ -65,11 +53,6 @@ def _setup_logging(level):
     if os.environ.get("NVIM_PYTHON_LOG_FILE"):
         log_file = os.environ.get("NVIM_PYTHON_LOG_FILE")
     else:
-        # log_file = sys.stdout
-        # log_dir = realpath(join(__file__, pardir, 'log'))
-        # if not os.path.exists(log_dir):
-        # os.makedirs(log_dir)
-        # log_file = os.path.join(log_dir, 'lint.log')
         pass
     try:
         hdlr = logging.FileHandler(log_file)
@@ -82,10 +65,9 @@ def _setup_logging(level):
     return logger
 
 
-@pynvim.autocmd("BufEnter")
 def main():
     """Set everything up."""
-    cur_file = FileLink(pynvim.api.nvim.Nvim)
+    cur_file = FileLink()
 
     if cur_file.is_symlink:
         cur_file.true_file()

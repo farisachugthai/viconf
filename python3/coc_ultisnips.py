@@ -1,13 +1,12 @@
 import re
 import os
-import vim
 import string
 import random
 import json
 from collections import deque, namedtuple
 
-from .complete import *
-from .snippets_helper import *
+import vim
+from snippets_helper import *
 
 NORMAL = 0x1
 DOXYGEN = 0x2

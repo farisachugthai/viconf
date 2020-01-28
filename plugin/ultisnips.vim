@@ -6,9 +6,10 @@
 " ============================================================================
 
 " Options: {{{1
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 
-let g:UltiSnipsJumpForwardTrigger = '<C-j>'
-let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
 let g:ultisnips_python_style = 'numpy'
 let g:ultisnips_python_quoting_style = 'double'
 let g:UltiSnipsEnableSnipMate = 0

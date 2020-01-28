@@ -189,16 +189,6 @@ def feedkeys(keys, mode="n"):
         command(as_unicode(r'call feedkeys("%s", "%s")') % (keys, mode))
 
 
-def new_scratch_buffer(text):
-    """Create a new scratch buffer with the text given."""
-    vim.command("botright new")
-    vim.command("set ft=")
-    vim.command("set buftype=nofile")
-
-    vim.current.buffer[:] = text.splitlines()
-
-    feedkeys(r"\<Esc>")
-
 
 def virtual_position(line, col):
     """Runs the position through virtcol() and returns the result."""
@@ -397,8 +387,8 @@ def my_plugins():
 
 def fname():
     """Simple example of how to get the current buffer's filename."""
-    return (vim.current.buffer).name
-
+    # or you should do b = VimBuffer().name
+    return vim.current.buffer.name
 
 def pd(args=None):
     """Simple helper because I do this so often."""

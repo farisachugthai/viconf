@@ -9,7 +9,7 @@
 command! -bar -bang Todo call todo#Todo()
 
 " :he map line 1454. How have i never noticed this isn't a feature???
-command! -bar -nargs=1 -bang -complete=file Rename f <args>|w<bang>za
+command! -bar -nargs=? -bang -complete=buffer Rename f <args>|w<bang>za
 
 " Completion:
 set wildignorecase wildmode=full:list:longest,full:list
@@ -25,9 +25,6 @@ set complete+=kspell,d,k complete-=u,i
 set completeopt=menu,menuone,noselect,noinsert,preview
 
 imap <C-]> <C-x><C-]>
-imap <C-i> <C-x><C-i>
-imap <C-n> <C-x><C-n>
-imap <C-p> <C-x><C-p>
 xnoremap < <gv
 xnoremap > >gv
 
@@ -47,6 +44,12 @@ if &tabstop > 4 | setlocal tabstop=4 | endif
 if &shiftwidth > 4  | setlocal shiftwidth=4 | endif
 setlocal expandtab smarttab softtabstop=4
 
+nnoremap q; q:
+nnoremap Q @q
+xnoremap <BS> d
+nnoremap <Leader>sp <Cmd>setlocal spell!<CR>
+nnoremap <Leader>o o<Esc>
+nnoremap <Leader>O O<Esc>
 " Search Mappings:
 set nohlsearch
 if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif

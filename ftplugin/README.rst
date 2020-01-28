@@ -117,12 +117,15 @@ Allows users to specify the type of embedded script highlighting they want
 
 Disabling Autocommands
 ======================
+
 Oct 16, 2019:
 The number of autocommands in the plugin vim-markdown is crazy.
 
 **ALL BufEnters, WinEnters, BufLeaves, InsertLeave, InsertEnters.**
 
-It's a filetype specific plugin why does it need to refresh the syntax in EVERY BUFFER????
+It's a filetype specific plugin why does it need to refresh the syntax in
+EVERY BUFFER????
+
 To top it off, I don't think his syntax file is written correctly. I fixed
 the first few lines where he checks for ``b:did_syntax`` incorrectly, and
 markdown files went from loading in 600ms to 500. *sigh*.
@@ -146,4 +149,29 @@ And in case you were wondering yes::
    exists('#autocmd group')
 
 is the syntax used here.
+
+Syntax Highlighting in rst files
+================================
+
+May 13, 2019: Updated. Grabbed this directly from $VIMRUNTIME/syntax/rst.vim
+
+Use fewer code lists it ends up accounting for 50% of startup-time when
+using rst docs
+It took me like 10 tries to get this right so here's a reminder of how dict
+syntax works.::
+
+   call extend(g:rst_syntax_code_list, {'javascript': ['js', 'javascript']})
+
+to add javascript highlighting to an rst doc.::
+
+   let g:rst_syntax_code_list = {
+       \ 'python': ['python', 'python3', 'ipython'],
+       \ 'sh': ['sh', 'bash'],
+       \ }
+
+Then later I added rst.::
+
+    \ 'rst': ['rst'],
+
+This was a terrible mistake don't do this.
 

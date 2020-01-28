@@ -13,17 +13,20 @@ let g:sh_fold_enabled= 3  "   (enables function and heredoc folding)
 " highlighting readline options
 let g:readline_has_bash = 1
 
+if exists('b:did_ftplugin') | finish | endif
+
+let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
+let b:ale_linters += ['language_server']
+
 " Source things correctly damnit!
-"
-runtime $VIMRUNTIME/ftplugin/sh.vim
+source $VIMRUNTIME/ftplugin/sh.vim
 unlet! b:did_ftplugin
-runtime $VIMRUNTIME/ftplugin/bash.vim
-unlet! b:did_ftplugin
-" runtime ftplugin/sh.vim
-" unlet! b:did_ftplugin
-runtime after/ftplugin/sh.vim
+source $VIMRUNTIME/ftplugin/bash.vim
 unlet! b:did_ftplugin
 
+runtime after/ftplugin/sh.vim
+
+syntax sync fromstart
 setlocal syntax=bash
 
 let b:undo_ftplugin = 'setlocal syntax< '

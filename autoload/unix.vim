@@ -16,10 +16,8 @@ function! unix#tmux_send(content, dest) abort  " {{{ tmux send: 1
         \ shellescape(tempfile), shellescape(dest)))
 
   call delete(tempfile)
-
 endfunction
 function! unix#tmux_map(key, dest) abort " Tmux Map: {{{1
-
   execute printf('nnoremap <silent> %s "tyy:call <SID>tmux_send(@t, "%s")<cr>', a:key, a:dest)
   execute printf('xnoremap <silent> %s "ty:call <SID>tmux_send(@t, "%s")<cr>gv', a:key, a:dest)
 endfunction
@@ -55,12 +53,12 @@ endfunction
 function! unix#ListUsers(A,L,P) abort
   return system('cut -d: -f1 /etc/passwd')
 endfun
-function! unix#EditFileComplete(A,L,P) abort  " EditFileComplete: {{{1
+function! unix#EditFileComplete(A,L,P) abort  " {{{1
   return split(globpath(&path, a:A), '\n')
 endfunction
 function! unix#SpecialEdit(files, mods) abort
-" This example does not work for file names with spaces!
-" so wait if that's true can't we just use shellescape...?
+  " This example does not work for file names with spaces!
+  " so wait if that's true can't we just use shellescape...?
   for s:files in expand(a:files, 0, 1)
     exe a:mods . ' split ' . s:files
   endfor

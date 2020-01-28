@@ -35,6 +35,7 @@ setglobal tagcase=smart showfulltag
 
 " You never added complete tags dude!
 command! -complete=tag Tags echo gettagstack(expand('%'))
+command! -complete=tag -bar -bang Tagz call fzf#run(fzf#wrap({'source': 'gettagstack(expand("%"))', 'sink': 'e', 'options': g:fzf_options}, <bang>0))
 
 if exists('&tagfunc')
   let &tagfunc = 'TagFunc'

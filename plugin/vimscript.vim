@@ -23,14 +23,16 @@ if !exists('b:did_ftplugin')
   endif
 endif
 
-" In which I learn hwo complete works
+" In which I learn how complete works
 command! -bar -complete=buffer -nargs=0 ScratchBuffer call pydoc_help#scratch_buffer()
-command! -bar -complete=compiler Compiler :<C-u>compiler<CR>
+command! -bar -complete=compiler Compiler compiler <args>
 " '<,'>s/compiler/event/g
 " You may find that ---^ does you good
-command! -bar -complete=event Event :<C-u>event<CR>
+command! -bar -complete=event Event event<args>1
 
-command! -bar -nargs=0 Redo call histget('cmd', -1)
+command! -bar -nargs=0 RerunLastCmd call histget('cmd', -1)
+
+command! -bar -nargs=1 -complete=history RerunLastX call histget(<args>, 1)
 
 " Completes filenames from the directories specified in the 'path' option:
 command! -nargs=1 -bang -complete=customlist,unix#EditFileComplete

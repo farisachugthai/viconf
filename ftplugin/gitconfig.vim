@@ -12,6 +12,7 @@ setlocal et
 setlocal softtabstop=4
 setlocal tabstop=4
 setlocal shiftwidth=4
+setlocal cms=#\ %s
 
 syntax sync fromstart
 syntax include $VIMRUNTIME/syntax/dosini.vim

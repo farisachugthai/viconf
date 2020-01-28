@@ -40,25 +40,6 @@ let $NVIM_COC_LOG_FILE = stdpath('data') . '/site/coc.log'
 let $NVIM_NODE_LOG_FILE = stdpath('data') . '/site/node.log'
 let $NVIM_NODE_LOG_LEVEL = 'WARN'
 
-" call coc#config('coc.preferences', {
-" 	\ 'timeout': 1000,
-" 	\})
-" call coc#config('languageserver', {
-" 	\ 'ccls': {
-" 	\   "command": "ccls",
-" 	\   "trace.server": "verbose",
-" 	\   "filetypes": ["c", "cpp", "objc", "objcpp"]
-" 	\ }
-" 	\})
-
-" This is throwing errors. What am i doing wrong?
-" if !has('unix')
-"   call coc#config('python.condaPath', {
-"         \ 'C:/tools/vs/2019/Community/Common7/IDE/Extensions/Microsoft/Python/Miniconda/Miniconda3-x64/Scripts/conda'
-"         \ })
-" " else
-" endif
-
 call coc#snippet#enable()
 
 " TODO: Might need to open a pull request he states that these are mapped by
@@ -75,20 +56,9 @@ endfunction
 inoremap <expr> <C-Space> coc#refresh()
 
 " As a heads up theres also a coc#select#snippet
-" I think supertab does the <CR> thing for us
-" Be aware that this formats the file on every CR so don't do this everywhere
-" inoremap <expr> <CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-" inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"))
-" Actually you have to use this one because otherwise CR autoselects the first
-" thing on the PUM which is terrible when you're just trying to insert
-" whitespace.
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
 
-"Cycle through completion entries with tab/shift+tab
-" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<Tab>"
-
-nnoremap <expr> gK <Plug>(coc-definition)<CR>
+nnoremap gK <Plug>(coc-definition)<CR>
 " The gu<text object> operation is too important
 " nnoremap <expr><buffer> gu <Plug>(coc-usages)<CR>
 nnoremap g} <Plug>(coc-usages)<CR>
@@ -230,10 +200,6 @@ augroup UserCoc
   " This happens with coc-powershell all the time
   autocmd User CocTerminalOpen stopinsert
 
-  autocmd CursorHold * silent call CocActionAsync('highlight')
-
-  " Dude holy fuck is this annoying
-  " Shit which one.
+  " autocmd CursorHold * silent call CocActionAsync('highlight')
   autocmd! User CmdlineEnter CompleteDone
-  " autocmd! CmdwinEnter *
 augroup END

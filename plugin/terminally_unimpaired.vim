@@ -21,7 +21,7 @@ nnoremap ,f :find **/*<C-z><S-Tab>
 
 if !empty($ANDROID_DATA)
   " May 26, 2019: Just ran into my first problem from a filename with a space in the name *sigh*
-  command! TermuxSend :<C-u>execute '!termux-share -a send ' . shellescape(expand('%'))<CR>
+  command! TermuxSend execute '!termux-share -a send ' . shellescape(expand('%'))
   nnoremap <Leader>ts :<C-u>TermuxSend<CR>
 endif
 

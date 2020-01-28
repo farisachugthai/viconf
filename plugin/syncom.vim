@@ -9,23 +9,19 @@
 call syncom#grepprg()
 
 " Highlighting Commands: {{{1
-
-command! -complete=highlight HL call syncom#HL()
-command! -complete=color HiC call syncom#HiC()
+command! HL call syncom#HL()
+command! HiC call syncom#HiC()
 command! HiQF call syncom#HiQF()
-
 command! SyntaxInfo call syncom#get_syn_info()
 
 " Working:
 command! HiTest call syncom#hitest()
 
 " Plug Mappings: {{{1
-" To attempt making this a little more modular.
-
 nnoremap <Plug>(HL) <Cmd>call syncom#HL()<CR>
 nnoremap <Plug>(HiC) <Cmd>HiC<CR>
-nnoremap <Plug>HiQF <Cmd>HiQF<CR>
-nnoremap <Plug>SyntaxInfo <Cmd>SyntaxInfo<CR>
+nnoremap <Plug>(HiQF) <Cmd>HiQF<CR>
+nnoremap <Plug>(SyntaxInfo) <Cmd>SyntaxInfo<CR>
 
 if !hasmapto('<Plug>(HL)')
   nnoremap <Leader>h <Plug>(HL)
@@ -41,4 +37,5 @@ augroup UserCursorLine
   autocmd!
   autocmd InsertEnter * setlocal cursorline
   autocmd InsertLeave * setlocal nocursorline
+  autocmd VimEnter * colorscheme gruvbox-material
 augroup end

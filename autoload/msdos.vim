@@ -6,7 +6,6 @@
 " ============================================================================
 
 function! msdos#set_shell_cmd() abort  " {{{1
-
   " All the defaults when running cmd as comspec on windows 10
   set shell=cmd
   " set shellcmdflag=/s\ /c
@@ -25,7 +24,6 @@ function! msdos#set_shell_cmd() abort  " {{{1
   return
 endfunction
 function! msdos#invoke_cmd(command) abort  " {{{1
-
   if exists('&shellslash')
     let s:old_shellslash = &shellslash
     set noshellslash
@@ -46,7 +44,6 @@ function! msdos#invoke_cmd(command) abort  " {{{1
   else
     return s:ret
   endif
-
 endfunction
 function! msdos#CmdTerm(...) abort  " {{{1
   " Handle args later
@@ -67,10 +64,8 @@ function! msdos#CmdTerm(...) abort  " {{{1
   else
     return s:ret
   endif
-
 endfunction
 function! msdos#PowerShell() abort  " {{{1
-
   " 07/23/2019: Just found out that even when using powershell comspec is
   " supposed to be set to cmd. Explains a few things
   if !empty($SHELL) | unlet! $SHELL | endif

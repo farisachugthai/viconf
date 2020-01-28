@@ -56,16 +56,18 @@ import os
 from pathlib import Path
 import sys
 
+logging.basicConfig(level=logging.DEBUG)
+
 try:
-    import pynvim
-except ImportError:  # i guess were not in nvim
-    try:
-        import vim
-    except ImportError:
-        sys.exit()
+    import vim
+except ImportError:
+    vim = None
+    VimBuffer = object
+else:
+    from _vim import VimBuffer
 
 
-class Target:
+class Target(VimBuffer):
     """Create a class for our target buffer.
 
     We can just allow other users to change the class attribute
@@ -76,28 +78,14 @@ class Target:
     target_file = str(_target_file)
 
 
-def vim_bufnr():
-    """No params returns the current bufnr."""
-    return vim.current.buffer
-
-
 def nvim_listen_address():
     return os.environ.get("NVIM_LISTEN_ADDRESS")
-
-
-def attach_nvim(how="socket", path=None):
-    """Ensure you don't execute this from inside neovim or it'll emit an error."""
-    from pynvim import attach
-
-    return attach("socket", path=nvim_listen_address())
 
 
 def vim_api():
     """Tepidly I'm going to use this now."""
     # it worked!
     vim.command("exec 'e ' . stdpath('config') . '/spell/en.utf-8.add'")
-    # this doesnt :/
-    # vim.command("sort expand('%')")
 
 
 def fix_spellfile(wordlist):
@@ -169,8 +157,6 @@ def main():
         # don't use sys.exit. Kills the channel between you and the remote host that powers everything.
         # besides you have to manually assign to sys.argv anyway.
         args = [Target().target_file]
-
-    logging.basicConfig(level=logging.DEBUG)
 
     logging.debug("Args: ", args)
     for i in args[0:]:

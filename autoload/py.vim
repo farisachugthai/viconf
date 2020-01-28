@@ -6,19 +6,10 @@
 " ============================================================================
 
 function! py#taglist() abort  " {{{1
-" Still pretty shaky but getting better
-  " call a vim function from python. tagfiles() is a builtin that displays the
-  " included tags files for the buffer.
-
-python3 << EOF
-from pprint import pprint
-pprint(vim.call('tagfiles'))
-
-EOF
+  py3 from pprint import pprint; pprint(vim.call('tagfiles'))
 endfunction
 function! py#nvim_taglist() abort  " {{{1
-  " Or if you wanna see a different way
-  call nvim_call_function('tagfiles')
+  return nvim_call_function('tagfiles')
 endfunction
 function! s:find_stdlib(dir) abort
   " I feel like this is driving me crazy wtf
@@ -38,10 +29,8 @@ function! s:find_stdlib(dir) abort
   endif
 
   return s:root_stdlib
-
 endfunction
 function! s:_PythonPath() abort  " {{{1
-
   " Set up the path var for python filetypes. Here we go!
   " Note: the path option is to find directories so it's usually unnecesssary
   " to glob if you have the /usr/lib/python dir in hand.
@@ -127,55 +116,14 @@ function! s:_PythonPath() abort  " {{{1
     return s:path
   endif
   return s:path
-
 endfunction
 function! py#PythonPath() abort  " {{{1
-
   let s:path = s:_PythonPath()
   let &l:path = s:path
   return s:path
-
-  let &l:path = s:path
-  return s:path
-
 endfunction
 function! py#python_serves_python() abort  " {{{1
-
-python3 << EOF
-import site, sys, vim
-import os
-def setup_vim_path():
-    vim_path = '.,**,,'
-    vim_path += sys.prefix + ','
-
-    for i in site.getsitepackages():
-        vim_path += i + ','
-
-    print(vim_path)
-    return vim_path
-
-
-def pure_python_path():
-    """Attempt 2."""
-    for p in sys.path:
-    # Add each directory in sys.path, if it exists.
-        if os.path.isdir(p):
-            # Command 'set' needs backslash before each space.
-            vim.command(r"set path+=%s" % (p.replace(" ", r"\ ")))
-
-
-def Importer(mod):
-    """Totally preliminary but this might be really useful.
-
-    Check the docstring with your pydoc command.
-    """
-    from importlib.util import find_spec
-    return find_spec(mod)
-
-EOF
-
-call pure_python_path()
-
+  call pure_python_path()
 endfunction
 function! py#YAPF() abort  " {{{1
   if exists(':TBrowseOutput')
@@ -192,7 +140,6 @@ function! py#YAPF() abort  " {{{1
   endif
 endfunction
 function! py#ALE_Python_Conf() abort  " {{{1
-
   let b:ale_linters = ['flake8', 'pydocstyle', 'pyls']
   let b:ale_linters_explicit = 1
 
@@ -203,41 +150,33 @@ function! py#ALE_Python_Conf() abort  " {{{1
     let b:ale_fixers+=['black']
   endif
 
-  " if executable('yapf')
-  "   let b:ale_fixers += ['yapf']
-  " endif
-
   if executable('autopep8')
     let b:ale_fixers += ['autopep8']
   endif
-
-endfunction
-function! py#Py(...) abort
-  " call py#Py('print("hey")')
-  " works. But this isn't exactly how i want this done.
-  if exists('g:python3_host_prog')
-    exec 'py3 ' . a:1
-  endif
-
 endfunction
 
 function! py#Black() abort
-py3 << EOF
-from py import blackened_vim
-blackened_vim()
-EOF
+  py3 import py; py.blackened_vim()
 endfunction
 
-function! py#black_these() abort
-  " TODO: Probably good to work on for learning vim ranges right?
-  py3 << EOF
-  from py import black
-EOF
+function! py#black_these(bufs) abort
+  for buf in a:bufs
+    py3 from py import Black; blackened_vim(buf)
+  endfor
 endfunction
 
 function! py#black_version() abort
-  py3 << EOF
-  from py import black_version
-  black_version()
-EOF
-endfu
+  py3 from py import black_version; black_version()
+endfunction
+
+function! s:timed(func) abort
+
+  let start = reltime()
+  call a:func()
+  let seconds = reltimefloat(reltime(start))
+  return seconds
+endfunction
+
+function! py#timedblack() abort
+  return s:timed(py#Black())
+endfunction

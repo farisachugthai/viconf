@@ -9,7 +9,6 @@
 " Need to tear this apart and fgure out what works and why.
 
 function! pydoc_help#open_files(files) abort
-
   let bufnrs = []
     for file in a:files
       let bufnr = bufadd(file)
@@ -37,10 +36,8 @@ function! s:temp_buffer() abort  " {{{1
   setlocal nomodified
   setlocal buflisted
   silent setlocal nomodifiable
-
 endfunction
 function! pydoc_help#PydocCword() abort  " {{{1
-
   " Holy shit it works!!!
   let s:temp_cword = expand('<cWORD>')
   enew
@@ -48,7 +45,6 @@ function! pydoc_help#PydocCword() abort  " {{{1
   " If you wanna keep going we can change the status line. We can change how
   " we invoke python
   call s:temp_buffer()
-
 endfunction
 function! pydoc_help#SplitPydocCword() abort  " {{{1
   let s:temp_cword = expand('<cWORD>')
@@ -58,7 +54,6 @@ function! pydoc_help#SplitPydocCword() abort  " {{{1
   call s:temp_buffer()
 endfunction
 function s:handle_user_config() abort   " {{{1
-
   " Look at me handling user configured arguments!
   if exists('g:pydoc_window')
     if type('g:pydoc_window') == v:t_string
@@ -70,7 +65,6 @@ function s:handle_user_config() abort   " {{{1
   else
     split
   endif
-
 endfunction
 function! pydoc_help#Pydoc(module) abort   " {{{1
   call s:scratch_buffer()
@@ -88,13 +82,11 @@ function! pydoc_help#Pydoc(module) abort   " {{{1
   call s:temp_buffer()
 endfunction
 function! pydoc_help#async_cursor() abort " Async Pydoc: {{{1
-
   let s:temp_cword = expand('<cWORD>')
   enew
   call jobstart('pydoc ' . expand('<cWORD>'), {'on_stdout':{j,d,e->append(line('.'),d)}})
   call nvim_command('sleep 1')
   call s:temp_buffer()
-
 endfunction
 function! pydoc_help#async_cexpr() abort  " {{{1
   call jobstart('pydoc ' . expand('<cexpr>'), {'on_stdout':{j,d,e->append(line('.'),d)}})
@@ -108,19 +100,16 @@ function! pydoc_help#broken_scratch_buffer() abort  " {{{1
   let buf = nvim_create_buf(v:false, v:true)
 
   " and the help for that function
-" nvim_create_buf({listed}, {scratch})                       *nvim_create_buf()*
-"                 Creates a new, empty, unnamed buffer.
+  " nvim_create_buf({listed}, {scratch})                       *nvim_create_buf()*
+  "                 Creates a new, empty, unnamed buffer.
 
-"                 Parameters: ~
-"                     {listed}   Sets 'buflisted'
-"                     {scratch}  Creates a "throwaway" |scratch-buffer| for
-"                                temporary work (always 'nomodified')
-
-
+  "                 Parameters: ~
+  "                     {listed}   Sets 'buflisted'
+  "                     {scratch}  Creates a "throwaway" |scratch-buffer| for
+  "                                temporary work (always 'nomodified')
   " original: should fill with pydoc output
   " TODO: this is the "broken" line
   " call nvim_buf_set_lines(buf, 0, -1, v:true, ["test", "text"])
-
   let opts = {'relative': 'cursor', 'width': 10, 'height': 2, 'col': 0,
       \ 'row': 1, 'anchor': 'NW', 'style': 'minimal'}
 
@@ -131,7 +120,6 @@ function! pydoc_help#broken_scratch_buffer() abort  " {{{1
   " To close the float, |nvim_win_close()| can be used.
   " 0 for the current window, v:false is for don't force
   nnoremap <buffer> q <Cmd>nvim_win_close(0, v:false)<CR>
-
 endfunction
 function! pydoc_help#the_curse_of_nvims_floating_wins() abort  " {{{1
   " No seriously they're difficult to work with
@@ -194,8 +182,6 @@ endfunction
 function! pydoc_help#show() abort  " {{{
     let word = s:ReplaceModuleAlias()
     let buf = nvim_create_buf(v:false, v:true)
-    " not yet
-    call s:temp_buffer()
     call jobstart('pydoc ' . word, {'on_stdout':{j,d,e->append(line('.'),d)}})
     setlocal nomodifiable
     setlocal nomodified
@@ -204,5 +190,4 @@ function! pydoc_help#show() abort  " {{{
     wincmd L
     normal gg
     wincmd p
-
-endfunction "}}}
+endfunction " }}}

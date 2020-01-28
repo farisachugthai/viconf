@@ -13,13 +13,15 @@ set shellslash
 let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Evervim. Thanks!
 let s:wsl = !empty($WSL_DISTRO_NAME)
 let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux) && empty(s:wsl)
-let s:this_dir = fnamemodify(expand('$MYVIMRC'), ':p:h')
+let s:this_dir = fnameescape(fnamemodify(expand('$MYVIMRC'), ':p:h'))
 
 set synmaxcol=400 termguicolors  " Set up the colorscheme
 syntax sync fromstart linebreaks=2
-" Seriously how does this keep getting fucked up
+
+" Seriously how does this keep getting fucked up. omfg packpath is worse???
 if has('unix')
-  set runtimepath=~/.config/nvim,~/.local/share/nvim/site,/usr/share/nvim/site,/usr/local/share/nvim/site,/usr/share/nvim/runtime,/usr/local/share/nvim/site/after,/usr/share/nvim/site/after,~/.local/share/nvim/site/after,~/.config/nvim/after
+  set runtimepath=~/.config/nvim,~/.local/share/nvim/site,$VIMRUNTIME,~/.config/nvim/after
+  set packpath=~/.config/nvim,~/.local/share/nvim/site,$VIMRUNTIME,~/.config/nvim/after
 else
   set runtimepath=~/AppData/Local/nvim,~/AppData/Local/nvim-data/site,C:/Neovim/share/nvim/runtime,C:/Neovim/share/nvim-qt/runtime
 endif
@@ -32,11 +34,7 @@ else
   call find_files#ubuntu_remote() | echo 'loaded wsl'
 endif
 
-if exists('g:GuiLoaded') | let s:ginit = s:this_dir . '/ginit.vim' | exec 'source ' . s:ginit | endif
-
-" colo gruvbox
-let s:material_gruvbox =  syncom#gruvbox_material()
-if s:material_gruvbox == v:false | call syncom#gruvbox() | endif
+if exists('g:GuiLoaded') | exec 'source ' s:this_dir . '/ginit.vim' | endif
 
 if has('unnamedplus') | set clipboard+=unnamed,unnamedplus | else | set clipboard+=unnamed | endif
 
@@ -90,7 +88,7 @@ set mouse=a nojoinspaces autowrite autochdir modeline
 if exists('&modelineexpr') | set modelineexpr | endif
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 
-set diffopt=filler,context:0,closeoff,hiddenoff,foldcolumn:2,icase,indent-heuristic,horizontal,iblank,iwhite
+set diffopt=filler,context:0,hiddenoff,foldcolumn:2,icase,indent-heuristic,horizontal,iblank,iwhite
 if has('patch-8.1.0360') | set diffopt+=internal,algorithm:patience | endif
 set browsedir="buffer"   " which directory is used for the file browser
 let &g:listchars = "tab:\u21e5\u00b7,extends:\u21c9,precedes:\u21c7,nbsp:\u00b7"
@@ -104,31 +102,22 @@ set inccommand=split
 set terse shortmess=aoOsAItTWAcF
 set title titlestring=%<%F%=%l/%L-%P   " leaves a cool title for tmux
 set conceallevel=2 concealcursor=nc    " enable concealing
-nnoremap q; q:
-nnoremap Q @q
-xnoremap <BS> d
 set spellsuggest=5
-nnoremap <Leader>sp <Cmd>setlocal spell!<CR>
-nnoremap <Leader>o o<Esc>
-nnoremap <Leader>O O<Esc>
 
 set showmatch matchpairs+=<:> lazyredraw matchtime=20  " Show the matching pair for 2 seconds
 let g:matchparen_timeout = 500
 let g:matchparen_insert_timeout = 300
-" Add some packages
 " Holy shit. I was reading through the verbose file and trust me you want
 " these on separate lines
 packadd justify
 packadd cfilter
 packadd matchit
 
-let s:vim_plug = filereadable((fnameescape(stdpath('data') . '/site/autoload/plug.vim')))
-if empty(s:vim_plug) && exists('*plugins#InstallPlug') | call plugins#InstallPlug() | endif
-let s:junegunn = s:this_dir . '/junegunn.vim'  " Load my plugins.
-exec 'source ' . s:junegunn
-" Don't assume that the InstallPlug() func worked so ensure it's defined
-if empty('plugs') | let plugs = {} | endif
-
 " This might be a terrible idea but
 au! VimEnter *
 
+let s:vim_plug = filereadable(fnameescape(stdpath('data') . '/site/autoload/plug.vim'))
+if empty(s:vim_plug) && exists('*plugins#InstallPlug') | call plugins#InstallPlug() | endif
+exec 'source ' s:this_dir . '/junegunn.vim'
+" Don't assume that the InstallPlug() func worked so ensure it's defined
+if empty('plugs') | let plugs = {} | endif

@@ -5,12 +5,14 @@
     " Last Modified: Dec 05, 2019
 " ============================================================================
 
-" Actually this gets sourced before fugitive so probs don't
-" if !exists('g:loaded_fugitive') | finish | endif
+if exists('b:did_fugitive') || &compatible || v:version < 700
+  finish
+endif
+let b:did_fugitive = 1
 
 let g:fugitive_git_executable = 'git'
 
-function! UserFugitiveMappings() abort
+function UserFugitiveMappings() abort
   nnoremap <Leader>gb   <Cmd>Gblame<CR>
   nnoremap <Leader>gc   <Cmd>Gcommit<CR>
   nnoremap <Leader>gd   <Cmd>Gdiffsplit!<CR>
@@ -37,7 +39,11 @@ endfunction
 
 call UserFugitiveMappings()
 
-function! ProjectRoot() abort
+function ProjectGitDir() abort
   " Like how would this not be really useful all the time?
   return FugitiveExtractGitDir(fnamemodify(expand('%'), ':p:h'))
+endfunction
+
+function ProjectRoot() abort
+  return fnamemodify(fnameescape(ProjectGitDir()), ':p:h')
 endfunction

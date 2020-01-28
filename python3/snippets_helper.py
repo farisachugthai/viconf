@@ -13,14 +13,11 @@ A useful combination with UltiSnips.
 """
 import os
 import string
-
-import vim
-
-from os import path as ospath
-
-# I swear the snip option has a few of these ready to go
+import textwrap
 import re
 from collections import Counter
+
+import vim
 
 # http://docutils.sourceforge.net/docs/ref/rst/roles.html
 TEXT_ROLES = [
@@ -266,7 +263,7 @@ def get_quoting_style(snip):
 def triple_quotes(snip):
     style = snip.opt("g:ultisnips_python_quoting_style")
     if not style:
-        return get_quoting_style(snip) * 3
+        return '”""'
     return (SINGLE_QUOTES if style == "single" else DOUBLE_QUOTES) * 3
 
 
@@ -468,9 +465,10 @@ class BoldWrapper(TextTag):
 
     def __init__(self, wrapped):
         self._wrapped = wrapped
+        super().__init__(wrapped)
 
     def render(self):
-        return "<b>{}</b>".format(self._wrapped.render())
+        return "<b>{}</b>".format(self._wrapped)
 
 
 class ItalicWrapper(TextTag):
@@ -478,10 +476,11 @@ class ItalicWrapper(TextTag):
 
     def __init__(self, wrapped):
         self._wrapped = wrapped
+        super().__init__(wrapped)
 
     def render(self):
         """Wrap the text with HTML italic tags."""
-        return "<i>{}</i>".format(self._wrapped.render())
+        return "<i>{}</i>".format(self._wrapped)
 
 
 def create_table(snip):
@@ -545,7 +544,6 @@ def make_items(times, leading="+"):
 
 
 def split_line(text):
-    import textwrap
 
     lines = textwrap.wrap(text, 78 - 19)
     output = list()

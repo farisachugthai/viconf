@@ -38,22 +38,8 @@ function! ftplugins#FormatFile() abort  " {{{1
   if filereadable('C:/tools/vs/2019/Community/VC/Tools/Llvm/bin/clang-format.exe')
     let g:clang_format_path = 'C:/tools/vs/2019/Community/VC/Tools/Llvm/bin/clang-format.exe'
   endif
-  " let g:clang_format_path =  expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
   noremap <Leader><C-c>f <Cmd>pyfile expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
   noremap! <Leader><C-c>f <Cmd>pyfile expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
-  " With this integration you can press the bound key and clang-format will
-  " format the current line in NORMAL and INSERT mode or the selected region in
-  " VISUAL mode. The line or region is extended to the next bigger syntactic
-  " entity.
-
-  " You can also pass in the variable "l:lines" to choose the range for
-  " formatting. This variable can either contain "<start line>:<end line>" or
-  " "all" to format the full file. So, to format the full file, write a function
-  " like:
-
-  " It operates on the current, potentially unsaved buffer and does not create
-  " or save any files. To revert a formatting, just undo.
-  " autocmd BufWritePre *.h,*.cc,*.cpp call Formatonsave()
 endfunction
 function! ftplugins#ClangCheckimpl(cmd) abort  " {{{1
   " This is honestly really useful if you simply swap out the filetype
@@ -96,7 +82,6 @@ function! ftplugins#ALE_sh_conf() abort  " {{{1
     else
       let g:ale_sh_shell_default_shell = 0
     endif
-   " else
     let s:bash_location = exepath('bash')
     if executable(s:bash_location)
       let g:ale_sh_shell_default_shell = 1
@@ -197,5 +182,4 @@ function! ftplugins#CPath() abort
   endif
 
   return s:path
-
 endfunction

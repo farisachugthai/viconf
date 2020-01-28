@@ -156,6 +156,13 @@ class Instance(App):
     pass
 
 
+def attach_nvim(how="socket", path=None):
+    """Ensure you don't execute this from inside neovim or it'll emit an error."""
+    from pynvim import attach
+
+    return attach("socket", path=nvim_listen_address())
+
+
 # @pynvim.command('ListBuf', nargs=0)
 def list_buf(vim):
     """Return the Vimscript function :func:`nvim_list_bufs()`.

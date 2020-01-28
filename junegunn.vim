@@ -14,6 +14,7 @@ if !has('unix') | set noshellslash | endif
 " Few options I wanna set in advance
 let g:no_default_tabular_maps = 1
 let g:plug_shallow = 1
+let g:undotree_SetFocusWhenToggle = 1
 
 call plug#begin(stdpath('data') . '/plugged')
 
@@ -33,7 +34,7 @@ nnoremap <Leader>nt <Cmd>NERDTreeCWD<CR>zz
 if exists(':GuiTreeviewToggle')
   nnoremap <Leader>0 <Cmd>GuiTreeviewToggle<CR>
 else
-  nnoremap <Leader>0 <Cmd>NERDTreeCWD<CR>
+  nnoremap <Leader>0 <Cmd>NERDTreeVCS<CR>
 endif
 
 " Plug 'morhetz/gruvbox'
@@ -45,8 +46,9 @@ Plug 'tpope/vim-surround'
 if has('python3')
   Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 endif
-Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }  " Follow spacemacs lead and use e for errors
-nnoremap <Leader>a <Cmd>ALEEnable<CR><bar>:call plugins#AleMappings()<CR>
+Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }
+nnoremap <Leader>a <Cmd>ALEEnable<CR><bar>:sil call plugins#AleMappings()<CR>
+nnoremap <Leader>et <Cmd>ALEToggle()<CR><bar>:sil call plugins#AleMappings()<CR>
 if exists('$TMUX')
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'edkolev/tmuxline.vim'

@@ -281,7 +281,7 @@ Insert Mode Completion
 
 Because I can never remember these.
 
-7. Insert mode completion				*ins-completion*
+7. Insert mode completion                               *ins-completion*
 
 In Insert and Replace mode, there are several commands to complete part of a
 keyword or line that has been typed.  This is useful if you are using
@@ -347,15 +347,15 @@ And seemingly nothing else. I think most of those are the bash defaults too!
 Jumps
 ======
 
-Are something I never utilize frequently enough.
+Are something I never utilize frequently enough.:
 
-							*CTRL-O*
-CTRL-O			Go to [count] Older cursor position in jump list
-			(not a motion command).
+                                                        *CTRL-O*
+CTRL-O                  Go to [count] Older cursor position in jump list
+                        (not a motion command).
 
-<Tab>		or					*CTRL-I* *<Tab>*
-CTRL-I			Go to [count] newer cursor position in jump list
-			(not a motion command).
+<Tab>           or                                      *CTRL-I* *<Tab>*
+CTRL-I                  Go to [count] newer cursor position in jump list
+                        (not a motion command).
 
 
 That's legitimately wonderful to know!
@@ -363,14 +363,13 @@ That's legitimately wonderful to know!
 Now I just need to work that in, and make a few utility mappings for the
 quickfix window.
 
-
 Folds
-===========
+-----
 
 .. admonition::  foldclose=all  " close folds automatically when you move out of them
 
-
 Jesus Christ is this setting annoying. Don't set it!
+
 
 Includes and the Path
 ---------------------
@@ -441,7 +440,9 @@ Asynchronous Buffers
 This function POURS output into the current buf so make sure you're
 switched to a scratch buffer.
 
-However... **THIS WORKS**
+However... **THIS WORKS**::
+
+   call jobstart('pydoc ' . expand('<cexpr>'), {'on_stdout':{j,d,e->append(line('.'),d)}})
 
 .. function:: jobstart
 
@@ -451,22 +452,64 @@ However... **THIS WORKS**
    "list[idx]".  This is used for ``v:beval_text``.
 
 
-Examples
---------
-
-::
-
-   call jobstart('pydoc ' . expand('<cexpr>'), {'on_stdout':{j,d,e->append(line('.'),d)}})
-
 Coc Nvim
 ========
 
-py3 from pprint import pprint; pprint(vim.eval('coc#list#get_chars()'))
+.. glossary::
+
+   pum
+      Pop up menu
+
+A useful command on the ex line. Prefix with ``:py3``.:
+
+.. code-block:: python3
+
+   from pprint import pprint; pprint(vim.eval('coc#list#get_chars()'))
+
+Don't use the below mapping because CR auto-selects the first
+thing on the :abbr:`pum` which is terrible when you're just trying
+to insert whitespace.::
+
+   inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"))
+
+
+Fixing Coc auto-completion in the cmdwindow
+-------------------------------------------
+The `pum` would open after using :kbd:`q;`. It would then raise an error on
+the ``CompleteDone`` event as it isn't allowed in the command window.::
+
+   autocmd! User CmdlineEnter CompleteDone
+
+Fixed things up perfectly.
+
+.. todo::
+   Why is this raising an error.
+
+.. code-block:: vim
+
+   " Example from docs
+   call coc#config('coc.preferences', {
+        \ 'timeout': 1000,
+        \})
+   call coc#config('languageserver', {
+        \ 'ccls': {
+        \   "command": "ccls",
+        \   "trace.server": "verbose",
+        \   "filetypes": ["c", "cpp", "objc", "objcpp"]
+        \ }
+        \})
+
+   " This is throwing errors. What am i doing wrong?
+   if !has('unix')
+     call coc#config('python.condaPath', {
+           \ 'C:/tools/vs/2019/Community/Common7/IDE/Extensions/Microsoft/Python/Miniconda/Miniconda3-x64/Scripts/conda'
+           \ })
+   " else todo
+   endif
 
 
 Beginners Intro
 ===============
-
 
 To say Vim has a lot of options, associated files and directories is an
 understatement. But these can be broken down piece by piece to be more
@@ -546,7 +589,6 @@ comparison to Vim's /usr/share/vim/runtime/ definition. Therefore, defining `$VI
 as /usr/share/vim/runtime/ in a startup file will cause unexpected behavior
 in Neovim's startup.
 
-
 Extraneous Environment Variables
 --------------------------------
 
@@ -564,8 +606,6 @@ Added: 05/18/19: Just found out Windows has an envvar ``%SystemRoot%``::
      " Or should I use ALLUSERSPROFILE
      let $_ROOT = expand('$SystemRoot')
    endif
-
-
 
 .. _`here.`: after/plugin/fzf.vim
 .. _`after/ftplugin/gitcommit.vim`: ./after/ftplugin/gitcommit.vim

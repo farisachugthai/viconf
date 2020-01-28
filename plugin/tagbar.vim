@@ -19,16 +19,6 @@ let g:tagbar_autoshowtag = 1
 " Literally ruins my ability to see any other messages i might care about
 let g:tagbar_silent = 1
 
-" This gets really fucky so suck it up and dont autoload
-" let g:tagbar_status_func = 'TagbarStatusFunc'
-" Doesn't work
-
-" you lazyvload it
-" augroup TagbarFiletypes
-"   au!
-"   autocmd FileType * nested :call tagbar#autoopen(0)
-" augroup END
-
 " If you set this option the Tagbar window will automatically close when you
 " jump to a tag. This implies |g:tagbar_autofocus|. If enabled the "C" flag will
 " be shown in the statusline of the Tagbar window.

@@ -101,10 +101,10 @@ augroup FZFStatusline
   autocmd! User FzfStatusLine call <SID>fzf_statusline()
 augroup END
 
-noremap <F6> <Cmd>Snippets<CR>
-noremap! <F6> <Cmd>Snippets<CR>
+noremap <F6>                <Cmd>Snippets<CR>
+noremap! <F6>               <Cmd>Snippets<CR>
 " I suppose for continuity
-tnoremap <F6> <Cmd>Snippets<CR>
+tnoremap <F6>               <Cmd>Snippets<CR>
 
 " All <C-x> mappings
   if has('unix')
@@ -116,97 +116,82 @@ tnoremap <F6> <Cmd>Snippets<CR>
       imap <C-x><C-j> <Plug>(fzf-complete-path)
     endif
   else
-      imap <C-x><C-f> <Plug>(fzf-complete-file)
-      imap <C-x><C-j> <Plug>(fzf-complete-path)
-      " inoremap <C-f> <C-x><C-f>
-      " inoremap <C-j> <C-x><C-j>
+      imap <C-x><C-f>       <Plug>(fzf-complete-file)
+      imap <C-x><C-j>       <Plug>(fzf-complete-path)
+      inoremap <C-f>        <C-x><C-f>
+      inoremap <C-j>        <C-x><C-j>
   endif
 
-  inoremap <expr> <C-x><C-k> fzf#vim#complete#word({'left': '15%'})
   inoremap <expr> <C-x><C-l> fzf#vim#complete#line()
-  " inoremap <expr> <C-l> fzf#vim#complete#line()
+  inoremap <expr> <C-l>      fzf#vim#complete#line()
 
   " Uhhh C-b for buffer?
   inoremap <expr> <C-x><C-b> fzf#vim#complete#buffer_line()
 
-  imap <expr> <C-x><C-s> fzf#vim#complete#word({
+  imap <expr> <C-x><C-s>    fzf#vim#complete#word({
       \ 'source':  'cat /usr/share/dict/words',
       \ 'reducer': function('<sid>make_sentence'),
       \ 'options': '--multi --reverse --margin 15%,0',
       \ 'left':    40})
   " And add a shorter version
-  inoremap <C-s> <C-x><C-s>
-  imap <expr> <C-x><C-k> fzf#complete({
+  inoremap <C-s>            <C-x><C-s>
+  imap <expr> <C-x><C-k>    fzf#complete({
               \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
               \ 'options': '-ansi --multi --cycle', 'left': 30})
-  " inoremap <C-k> <C-x><C-k>
+  inoremap <C-k>            <C-x><C-k>
 
 " NOTE: The imap should probably only be invoked using \<tab>
-nmap <Leader><tab>                 <Plug>(fzf-maps-n)
-nmap \<tab>                 <Plug>(fzf-maps-n)
-omap <Leader><tab>                 <Plug>(fzf-maps-o)
-xmap <Leader><tab>                 <Plug>(fzf-maps-x)
-imap \<tab>                        <Plug>(fzf-maps-i)
+nmap ,<tab>                 <Plug>(fzf-maps-n)
+omap ,<tab>                 <Plug>(fzf-maps-o)
+xmap ,<tab>                 <Plug>(fzf-maps-x)
+imap ,<tab>                 <Plug>(fzf-maps-i)
 
 " Map vim defaults to fzf history commands
-nnoremap <silent> q:                <Cmd>History:<CR>
-nnoremap <silent> q/                <Cmd>History/<CR>
+nnoremap <silent> q:        <Cmd>History:<CR>
+nnoremap <silent> q/        <Cmd>History/<CR>
 
 " And get the rest of the fzf.vim commands involved.
-nnoremap  <Leader>L         <Cmd>FufLines<CR>
-nnoremap  <Leader>ag        <Cmd>FufAg <C-R><C-W><CR>
-noremap   <Leader>AG        <Cmd>FufAg <C-R><C-A><CR>
-xnoremap  <Leader>ag       y<Cmd>FufAg <C-R>"<CR>
-nnoremap  <Leader>`        <Cmd>FufMarks<CR>
+nnoremap  <Leader>l         <Cmd>Lines<CR>
+nnoremap  <Leader>s         <Cmd>Ag <C-R><C-W><CR>
+nnoremap  <Leader>s         <Cmd>Ag <C-R><C-A><CR>
+xnoremap  <Leader>s         y<Cmd>Ag <C-R>"<CR>
+nnoremap  <Leader>`         <Cmd>Marks<CR>
 
 " FZF beat fugitive out on this one. Might take git log too.
-nnoremap <Leader>gg                 <Cmd>FufGGrep<Space>
-nnoremap <Leader>gl                 <Cmd>FufCommits<CR>
-nnoremap <Leader>GS                 <Cmd>FufGFiles?<CR>
+nnoremap <Leader>gg         <Cmd>GGrep<Space>
+nnoremap <Leader>gl         <Cmd>Commits<CR>
+nnoremap <Leader>g?         <Cmd>GFiles?<CR>
 
 " NERDTree Mapping: Dude I forgot I had this. Make sure :Files works but this
 " mapping is amazing.
-" nnoremap <expr> <Leader>n (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
+nnoremap <expr> <Leader>n   (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
 
-nnoremap <Leader>bu                <Cmd>FufBuffers<CR>
-" nnoremap <Leader>B                 <Cmd>FufBuffers<CR>
+nnoremap ,b                 <Cmd>Buffers<CR>
+nnoremap ,B                 <Cmd>Buffers<CR>
 
 " FZGrep:
   " here's the call signature for fzf#vim#grep
   " - fzf#vim#grep(command, with_column, [options], [fullscreen])
   "   If you're interested it would be kinda neat to modify that `dir` line
-  "   so that it was formatted to accept fzf options
-  " NOTE: It doesn't take a dictionary so stop doing that
 
-  " Completion behavior				*:command-completion* *E179*
-  " -complete=file_in_path	file and directory names in |'path'|
-  " So that this command behaves similarly to the built in find.
-command! -nargs=? -bang -bar FZGrep fzf#run(fzf#wrap('grep', {
+command! -complete=file_in_path -nargs=? -bang -bar FZGrep call fzf#run(fzf#wrap('grep', {
       \ 'source': 'silent! grep! <q-args>',
       \ 'sink': 'edit',
-      \ 'options': ['--multi', '--ansi', '--border'],
-      \ <bang>0 ? fzf#vim#with_preview('up:60%')  : fzf#vim#with_preview('right:50%:hidden', '?')}))
+      \ 'options': ['--multi', '--ansi', '--border'],}))
+      \ <bang>0 ? fzf#vim#with_preview('up:60%')  : fzf#vim#with_preview('right:50%:hidden', '?')
 
-command! -bar -bang -nargs=* FZGGrep
+	" -addr=buffers		Range for buffers (also not loaded buffers)
+
+  " Gtfo it worked
+command! -bang -bar -complete=file -addr=buffers -nargs=* FZGGrep
   \   call fzf#vim#grep(
   \   'git grep --line-number --color=always ' . shellescape(<q-args>),
   \   0,
   \   {'dir': systemlist('git rev-parse --show-toplevel')[0]},
   \   <bang>0)
-
-" FZPreviewAg:
-  " - Start fzf with hidden preview window that can be enabled with '?' key
-  " :Ag! - Start fzf in fullscreen and display the preview window above
-  " Augmenting Ag command using fzf#vim#with_preview function
-  "   * fzf#vim#with_preview([[options], [preview window], [toggle keys...]])
-  "     * For syntax-highlighting, Ruby and any of the following tools are required:
-  "       - Highlight: http://www.andre-simon.de/doku/highlight/en/highlight.php
-  "       - CodeRay: http://coderay.rubychan.de/
-  "       - Rouge: https://github.com/jneen/rouge
-  "
-  "   :Ag  - Start fzf with hidden preview window that can be enabled with "?" key
-  "   :Ag! - Start fzf in fullscreen and display the preview window above
-command! -bar -complete=dir -bang -nargs=* FZPreviewAg
+" Ag: FZF With a Preview Window {{{2
+"   :Ag! - Start fzf in fullscreen and display the preview window above
+command! -complete=dir -bang -bar -addr=buffers -nargs=* FZPreviewAg
   \ call fzf#vim#ag(<q-args>,
   \                 <bang>0 ? fzf#vim#with_preview('up:60%')
   \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
@@ -224,7 +209,7 @@ command! -bar -complete=dir -bang -nargs=* FZMehRg
 
         " \   <bang>0 ? fzf#vim#with_preview('up:60%') : fzf#vim#with_preview('right:50%:hidden', '?')
 " Files With Preview Window: {{{2
-command! -bang -nargs=? -complete=dir FZPreviewFiles
+command! -bang -nargs=? -complete=dir -bar FZPreviewFiles
   \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
 " PlugHelp: " Does this need an f-args?
@@ -241,11 +226,11 @@ command! -bar -bang -nargs=0 -complete=color FZColors
   \ 'options': '--reverse --margin 30%,0'}, <bang>0)
 
 " FZBuf: Works better than FZBuffers
-command! -bar -bang -complete=buffer -bang FZBuf call fzf#run(fzf#wrap('buffers',
-    \ {'source': map(range(1, bufnr('$')), 'bufname(v:val)')}, <bang>0))
+command! -bar -bang -complete=buffer FZBuf call fzf#run(fzf#wrap('buffers',
+    \ {'source': map(range(1, bufnr('$')), 'bufname(v:val)')},
+    \ <bang>0))
 
-" FZBuffers:
-  " Use Of g:fzf_options:
+" FZBuffers: Use Of g:fzf_options:
   " As of Oct 15, 2019: this works. Also correctly locates files which none of my rg commands seem to do
 command! -bang -complete=buffer -bar FZBuffers call fzf#run(fzf#wrap('buffers',
         \ {'source':  reverse(find_files#buflist()),
@@ -267,8 +252,8 @@ command! -bar -complete=file FZGit call find_files#FZFGit()
 " Rg That Updates:
 command! -bar -complete=dir -nargs=* -bang FZRg call find_files#RipgrepFzf(<q-args>, <bang>0)
 
-" Doesn't update but I thought it was cool
-command! -complete=dir -bang -bar -nargs=* FzRgPrev
+" Doesn't update but i thought i was cool
+command! -bar -complete=dir -bang -nargs=* FzRgPrev
   \ call fzf#vim#grep(
   \   'rg --column --line-number --no-heading --color=always --smart-case ' . <q-args>,
   \   1,
@@ -276,19 +261,19 @@ command! -complete=dir -bang -bar -nargs=* FzRgPrev
   \           : fzf#vim#with_preview('right:50%:hidden', '?'),
   \   <bang>0)
 
-command! -bang -complete=dir -nargs=* FZLS
+command! -bar -bang -complete=dir -nargs=* FZLS
     \ call fzf#run(fzf#wrap('ls', {'source': 'ls', 'dir': <q-args>}, <bang>0))
 
 " only search projects lmao
-command! -bang ProjectFiles call fzf#vim#files('~/projects', <bang>0)
+command! -bar -bang FZProjectFiles call fzf#vim#files('~/projects', <bang>0)
 
 " Or, if you want to override the command with different fzf options, just pass
 " a custom spec to the function.
-command! -bang -nargs=? -complete=dir FZReverse
+command! -bar -bang -nargs=? -complete=dir FZReverse
     \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--info=inline']}, <bang>0)
 
 " Want a preview window?
-command! -bang -nargs=? -complete=dir FZFilePreview
+command! -bar -bang -nargs=? -complete=dir FZFilePreview
     \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--info=inline', '--preview', 'bat {}']}, <bang>0)
 
 command! -bar -bang -nargs=? -complete=dir Files
@@ -297,15 +282,14 @@ command! -bar -bang -nargs=? -complete=dir Files
     \ '--layout=reverse', '--info=inline', '--preview', '~/.vim/plugged/fzf.vim/bin/preview.sh {}'
     \ ]}, <bang>0)
 
-  " Override his GFiles command to add completion
-  " Wait theres a FufGFiles AND a FufGitFiles. What the hell is GitFiles?
-  " I actually can't tell the difference. Weird.
+" Override his command to add completion
 command! -bar -bang -nargs=? -complete=file GFiles call fzf#vim#gitfiles(<q-args>, <bang>0)
-
 
 " Me just copy pasting his plugin
 command! -bar -bang FZIMaps call fzf#vim#maps("i", <bang>0)',
 command! -bar -bang FZCMaps call fzf#vim#maps("c", <bang>0)',
 command! -bar -bang FZTMaps call fzf#vim#maps("t", <bang>0)',
+
+" command! -bar -nargs=? -complete=mapping FZMaps execute ':Maps <q-args>'
 
 " Vim: set fdm=indent:
