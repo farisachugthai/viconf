@@ -41,6 +41,7 @@ function! vimscript#after_ft() abort
   " This seems like a reasonable return after a fail.
   return v:False
 endfunction
+
 function! vimscript#BetterProfiler(fname) abort  " {{{1
   " Because Vim's built in profiling capabilities are nonsensical like wtf?
 
@@ -71,6 +72,7 @@ function! vimscript#BetterProfiler(fname) abort  " {{{1
 
   exec 'e ' a:fname
 endfunction
+
 function! vimscript#profile(...) abort
   " let s:Debug = 1
   " let b:fname = '~/projects/viconf/.config/nvim/colors/gruvbox8.vim'
@@ -88,6 +90,7 @@ function! vimscript#profile(...) abort
     profile file *
   endif
 endfunction
+
 function! vimscript#Scriptnames(re) abort  " {{{1
   " Command to filter :scriptnames output by a regex
     redir => scriptnames
@@ -97,6 +100,7 @@ function! vimscript#Scriptnames(re) abort  " {{{1
     let filtered = filter(split(scriptnames, "\n"), "v:val =~ '" . a:re . "'")
     echo join(filtered, ' \n ')
 endfunction
+
 function! vimscript#ScriptnamesDict() abort  " {{{1
   " From 10,000 lines deep in :he eval
   " Get the output of ":scriptnames" in the scriptnames_output variable.
@@ -127,6 +131,7 @@ function! vimscript#ScriptnamesDict() abort  " {{{1
   " unlet scriptnames_output
   return scripts
 endfunction
+
 function s:get_scriptnames() abort  " {{{1
   let s:scriptnames_output = ''
   redir => s:scriptnames_output
@@ -134,9 +139,8 @@ function s:get_scriptnames() abort  " {{{1
   redir END
   return s:scriptnames_output
 endfunction
+
 function! vimscript#fzf_scriptnames() abort  " {{{1
-  " TODO: Why is the LSP complaining?
- "  call fzf#run(
   call fzf#run(fzf#wrap("scriptnames",
         \ {'source': s:get_scriptnames(),
         \ 'sink': 'e',

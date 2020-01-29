@@ -16,18 +16,22 @@ let g:readline_has_bash = 1
 if exists('b:did_ftplugin') | finish | endif
 
 let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
-let b:ale_linters += ['language_server']
+let b:ale_linters = ['language_server', 'shell']
+if executable('shellcheck')
+  let b:ale_linters += ['shellcheck']
+endif
 
 " Source things correctly damnit!
 source $VIMRUNTIME/ftplugin/sh.vim
 unlet! b:did_ftplugin
 source $VIMRUNTIME/ftplugin/bash.vim
-unlet! b:did_ftplugin
 
 runtime after/ftplugin/sh.vim
 
-syntax sync fromstart
-setlocal syntax=bash
+syntax sync fromstart linebreaks=2
+setl syntax=sh
 
 let b:undo_ftplugin = 'setlocal syntax< '
       \ . '|unlet! b:undo_ftplugin'
+      \ . '|unlet! b:ale_fixers'
+      \ . '|unlet! b:ale_linters'

@@ -35,9 +35,9 @@ function! format#Format() abort
 
     " do not run internal formatter!
     return 0
-endfunc
-function! format#MarkdownFoldText() abort " {{{1 Credit to TPope
+endfunction
 
+function! format#MarkdownFoldText() abort " {{{1 Credit to TPope
   let line = getline(v:lnum)
 
   " Regular headers
@@ -57,5 +57,4 @@ function! format#MarkdownFoldText() abort " {{{1 Credit to TPope
   endif
 
   return '='
-
 endfunction

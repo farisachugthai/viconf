@@ -23,6 +23,7 @@ function! msdos#set_shell_cmd() abort  " {{{1
   echomsg 'Using cmd as the system shell.'
   return
 endfunction
+
 function! msdos#invoke_cmd(command) abort  " {{{1
   if exists('&shellslash')
     let s:old_shellslash = &shellslash
@@ -45,6 +46,7 @@ function! msdos#invoke_cmd(command) abort  " {{{1
     return s:ret
   endif
 endfunction
+
 function! msdos#CmdTerm(...) abort  " {{{1
   " Handle args later
 
@@ -65,6 +67,7 @@ function! msdos#CmdTerm(...) abort  " {{{1
     return s:ret
   endif
 endfunction
+
 function! msdos#PowerShell() abort  " {{{1
   " 07/23/2019: Just found out that even when using powershell comspec is
   " supposed to be set to cmd. Explains a few things
@@ -81,6 +84,7 @@ function! msdos#PowerShell() abort  " {{{1
   echomsg 'Using powershell as the system shell.'
   return
 endfunction
+
 function! msdos#pwsh_help(helppage) abort   " {{{1
   echomsg 'Setting the shell to powershell.'
   call msdos#PowerShell()

@@ -4,6 +4,7 @@
     " Description: Ftplugin specific autoloaded functions
     " Last Modified: August 28, 2019
 " ============================================================================
+
 function! ftplugins#ALE_JSON_Conf() abort  " {{{1
   " Standard fixers defined for JSON
   let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
@@ -30,6 +31,7 @@ function! ftplugins#ALE_JSON_Conf() abort  " {{{1
     let b:ale_linters_explicit = 1
   " endif
 endfunction
+
 function! ftplugins#FormatFile() abort  " {{{1
   let l:lines='all'
   " 'pyf expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
@@ -41,6 +43,7 @@ function! ftplugins#FormatFile() abort  " {{{1
   noremap <Leader><C-c>f <Cmd>pyfile expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
   noremap! <Leader><C-c>f <Cmd>pyfile expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
 endfunction
+
 function! ftplugins#ClangCheckimpl(cmd) abort  " {{{1
   " This is honestly really useful if you simply swap out the filetype
   if &autowrite | wall | endif
@@ -54,6 +57,7 @@ function! ftplugins#ClangCheckimpl(cmd) abort  " {{{1
   endif
   let g:clang_check_last_cmd = a:cmd
 endfunction
+
 function! ftplugins#ClangCheck()  abort  " {{{1
   let l:filename = expand('%')
   if l:filename =~ '\.\(cpp\|cxx\|cc\|c\)$'
@@ -64,6 +68,7 @@ function! ftplugins#ClangCheck()  abort  " {{{1
     echo "Can't detect file's compilation arguments and no previous clang-check invocation!"
   endif
 endfunction
+
 function! ftplugins#ALE_CSS_Conf() abort  " {{{1
   let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
 
@@ -71,6 +76,7 @@ function! ftplugins#ALE_CSS_Conf() abort  " {{{1
     let b:ale_fixers += ['prettier']
   endif
 endfunction
+
 function! ftplugins#ALE_sh_conf() abort  " {{{1
   " this is probably a waste of time when compiler shellcheck exists
   " if we're using powershell or cmd on windows set ALEs default shell to bash
@@ -96,6 +102,7 @@ function! ftplugins#ALE_sh_conf() abort  " {{{1
     let b:ale_sh_shellcheck_executable = 'C:/tools/miniconda3/envs/neovim/bin/shellcheck.exe'
   endif
 endfunction
+
 function! ftplugins#ALE_Html_Conf() abort  " {{{1
   let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
 
@@ -103,6 +110,7 @@ function! ftplugins#ALE_Html_Conf() abort  " {{{1
     let b:ale_fixers += ['prettier']
   endif
 endfunction
+
 function! ftplugins#ALE_JS_Conf() abort  " {{{1
   if !has('unix')
     let g:ale_windows_node_executable_path = fnameescape('C:/Program Files/nodejs/node.exe')
@@ -114,6 +122,7 @@ function! ftplugins#ALE_JS_Conf() abort  " {{{1
     let b:ale_fixers += ['prettier']
   endif
 endfunction
+
 function! ftplugins#ALE_Vim_Conf() abort  " {{{1
   let b:ale_linters = ['ale_custom_linting_rules']
   let b:ale_linters_explicit = 1
@@ -122,6 +131,7 @@ function! ftplugins#ALE_Vim_Conf() abort  " {{{1
     let b:ale_linters += ['vint']
   endif
 endfunction
+
 function! ftplugins#VimPath() abort
   " I know you may be thinking, there are no include or defines in a vim file
   " what the hell do you need to muck with the path for.
@@ -139,6 +149,7 @@ function! ftplugins#VimPath() abort
   let &l:path = s:path
   return s:path
 endfunction
+
 function! ftplugins#CPath() abort
   let s:path='.,**,,'
 

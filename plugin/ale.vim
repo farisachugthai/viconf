@@ -36,10 +36,12 @@ let g:ale_pattern_options = {'\.min.js$': {'ale_enabled': 0}}
 let g:ale_fixers = { '*': [ 'remove_trailing_lines', 'trim_whitespace' ] }
 let g:ale_fix_on_save = 1
 
+" When ALE is linting bash files recognize it as sh
 let g:ale_linter_aliases = {
       \ 'ps1': 'powershell',
       \ 'htmljinja': ['html', 'handlebars'],
-      \ 'htmldjango': 'html'
+      \ 'htmldjango': 'html',
+      \ 'bash': 'sh',
       \ }
 
 " When ale is linting C# only use OmniSharp

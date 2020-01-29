@@ -4,15 +4,18 @@
   " Description: Find files autoload
   " Last Modified: August 02, 2019
 " ============================================================================
+
 function! find_files#build_quickfix_list(lines) abort  " {{{1
   call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
   copen
   cc
 endfunction
+
 function! s:make_sentence(lines) abort  " {{{1
   " *fzf-vim-reducer-example*
   return substitute(join(a:lines), '^.', '\=toupper(submatch(0))', '').'.'
 endfunction
+
 function! find_files#plug_help_sink(line)  abort " {{{1
   " Call :PlugHelp to use fzf to open a window with all of the plugins
   " you have installed listed and upon pressing enter open the help
@@ -29,16 +32,19 @@ function! find_files#plug_help_sink(line)  abort " {{{1
   tabnew
   execute 'Explore' dir
 endfunction
+
 function! find_files#buflist() abort  " {{{1
   redir => s:ls
   silent! ls
   redir END
   return split(s:ls, '\n')
 endfunction
+
 function! find_files#bufopen(e) abort  " {{{1
   execute 'buffer' matchstr(a:e, '^[ 0-9]*')
   return v:true
 endfunction
+
 function! find_files#FZFMru() abort  " {{{1
     call fzf#run(fzf#wrap('history', {
         \ 'source'  :   v:oldfiles,
@@ -46,6 +52,7 @@ function! find_files#FZFMru() abort  " {{{1
         \ 'options' :  ['--multi', '--ansi'],
         \ 'down'    :    '40%'}))
 endfunction
+
 function! find_files#FZFGit() abort  " {{{1
   " Remove trailing new line to make it work with tmux splits
   let directory = substitute(system('git rev-parse --show-toplevel'), '\n$', '', '')
@@ -62,6 +69,7 @@ function! find_files#FZFGit() abort  " {{{1
   " 'source': 'git ls-files',
   " 'down'  : '40%'
 endfunction
+
 function! find_files#termux_remote() abort  " {{{1
   let g:python3_host_prog = exepath('python')
   let g:loaded_python_provider = 1
@@ -96,6 +104,7 @@ function! find_files#termux_remote() abort  " {{{1
 
   endif
 endfunction
+
 function! find_files#ubuntu_remote() abort  " {{{1
   let g:python3_host_prog = exepath('python3')
   let g:python_host_prog = '/usr/bin/python2'
@@ -115,7 +124,7 @@ function! find_files#ubuntu_remote() abort  " {{{1
           \   },
           \   'cache_enabled': 1,
           \ }
-  else
+  else  " TODO: Could just use termux-clipboard-get and set
     let g:clipboard = {
           \   'name': 'myClipboard',
           \   'copy': {
@@ -130,6 +139,7 @@ function! find_files#ubuntu_remote() abort  " {{{1
 
   endif
 endfunction
+
 function! find_files#msdos_remote() abort  " {{{1
   " Don't set python paths dynamically it's such a headache
   let g:python3_host_prog = 'C:/tools/vs/2019/Community/Common7/IDE/Extensions/Microsoft/Python/Miniconda/Miniconda3-x64/python.exe'
@@ -149,6 +159,7 @@ function! find_files#msdos_remote() abort  " {{{1
         \   'cache_enabled': 1,
         \ }
 endfunction
+
 function! find_files#RipgrepFzf(query, fullscreen)  abort
   " In the default implementation of `Rg`, ripgrep process starts only once with
   " the initial query (e.g. `:Rg foo`) and fzf filters the output of the process.
@@ -171,4 +182,5 @@ function! find_files#RipgrepFzf(query, fullscreen)  abort
   let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
 endfunction
+
 " Vim: set fdm=indent:

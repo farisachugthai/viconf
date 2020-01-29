@@ -17,9 +17,12 @@ function! pydoc_help#open_files(files) abort
     endfor
   return bufnrs
 endfunction
+
 function! pydoc_help#scratch_buffer() abort
+  if !has('nvim') | throw "Doesn't work on vim" | endif
   return nvim_create_buf(v:true, v:true)
 endfunction
+
 function! s:temp_buffer() abort  " {{{1
   " Use for setting a buffer that's been filled with text to something similar
   " to an 'rst' help page.
@@ -37,6 +40,7 @@ function! s:temp_buffer() abort  " {{{1
   setlocal buflisted
   silent setlocal nomodifiable
 endfunction
+
 function! pydoc_help#PydocCword() abort  " {{{1
   " Holy shit it works!!!
   let s:temp_cword = expand('<cWORD>')
@@ -46,6 +50,7 @@ function! pydoc_help#PydocCword() abort  " {{{1
   " we invoke python
   call s:temp_buffer()
 endfunction
+
 function! pydoc_help#SplitPydocCword() abort  " {{{1
   let s:temp_cword = expand('<cWORD>')
   split
@@ -53,6 +58,7 @@ function! pydoc_help#SplitPydocCword() abort  " {{{1
   exec ':r! pydoc ' . s:temp_cword
   call s:temp_buffer()
 endfunction
+
 function s:handle_user_config() abort   " {{{1
   " Look at me handling user configured arguments!
   if exists('g:pydoc_window')
@@ -66,6 +72,7 @@ function s:handle_user_config() abort   " {{{1
     split
   endif
 endfunction
+
 function! pydoc_help#Pydoc(module) abort   " {{{1
   call s:scratch_buffer()
   if has('python3')
@@ -81,6 +88,7 @@ function! pydoc_help#Pydoc(module) abort   " {{{1
 
   call s:temp_buffer()
 endfunction
+
 function! pydoc_help#async_cursor() abort " Async Pydoc: {{{1
   let s:temp_cword = expand('<cWORD>')
   enew
@@ -88,9 +96,12 @@ function! pydoc_help#async_cursor() abort " Async Pydoc: {{{1
   call nvim_command('sleep 1')
   call s:temp_buffer()
 endfunction
+
 function! pydoc_help#async_cexpr() abort  " {{{1
+  if !has('nvim') | throw "Doesn't work on vim" | endif
   call jobstart('pydoc ' . expand('<cexpr>'), {'on_stdout':{j,d,e->append(line('.'),d)}})
 endfunction
+
 function! pydoc_help#broken_scratch_buffer() abort  " {{{1
   " Not actually broken i just need to debug the commented out lines
   " basically how do i put the info i want into a list that can be properly
@@ -121,6 +132,7 @@ function! pydoc_help#broken_scratch_buffer() abort  " {{{1
   " 0 for the current window, v:false is for don't force
   nnoremap <buffer> q <Cmd>nvim_win_close(0, v:false)<CR>
 endfunction
+
 function! pydoc_help#the_curse_of_nvims_floating_wins() abort  " {{{1
   " No seriously they're difficult to work with
 
@@ -141,6 +153,7 @@ function! pydoc_help#the_curse_of_nvims_floating_wins() abort  " {{{1
   " fashion. Sweet!!
   call nvim_win_set_option(s:win_handle, 'winhl', 'Special')
 endfunction
+
 function! s:ReplaceModuleAlias() abort " {{{1 Replace module aliases with their own name.
     "
     " For example:
@@ -165,6 +178,7 @@ function! s:ReplaceModuleAlias() abort " {{{1 Replace module aliases with their 
     call cursor(l:cur_line, l:cur_col)
     return join(l:module_names, ".")
 endfunction
+
 function! s:ExpandModulePath() abort  " {{{1
     " Extract the 'word' at the cursor, expanding leftwards across identifiers
     " and the . operator, and rightwards across the identifier only.
@@ -179,6 +193,7 @@ function! s:ExpandModulePath() abort  " {{{1
     let l:suf = l:line[col('.'):]
     return matchstr(pre, '[A-Za-z0-9_.]*$') . matchstr(suf, '^[A-Za-z0-9_]*')
 endfunction
+
 function! pydoc_help#show() abort  " {{{
     let word = s:ReplaceModuleAlias()
     let buf = nvim_create_buf(v:false, v:true)

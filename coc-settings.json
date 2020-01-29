@@ -35,18 +35,6 @@
   ],
   "coc.source.dictionary.priority": 40,
   "coc.source.dictionary.shortcut": "Coc-Dict:",
-  "coc.source.emoji.filetypes": [
-    "rst",
-    "md",
-    "txt",
-    "help",
-    "html"
-  ],
-  "coc.source.emoji.priority": 40,
-  "coc.source.emoji.shortcut": "Coc-Emoji: ",
-  "coc.source.emoji.triggerCharacters": [
-    ":"
-  ],
   "coc.source.file.ignoreHidden": false,
   "coc.source.file.priority": 20,
   "coc.source.file.shortcut": "Coc-Files: ",
@@ -55,8 +43,6 @@
     ".js"
   ],
   "coc.source.issues.shortcut": "Coc-Issues:",
-  "coc.source.tag.priority": 50,
-  "coc.source.tag.shortcut": "Coc-Tag:",
   "coc.source.ultisnips.filetypes": [
     "python",
     "html",
@@ -102,11 +88,9 @@
     ],
     "profile.allowCompactBoolean": false
   },
-  "emmet.showAbbreviationSuggestions": true,
-  "emmet.showExpandedAbbreviation": "inMarkupAndStylesheetFilesOnly",
   "git.addGlameToBufferVar": true,
   "git.addGlameToVirtualText": true,
-  // "git.branchCharacter": "  ",
+   "git.branchCharacter": "  ",
   "git.changedDecorator": "*",
   "git.conflictedDecorator": "::",
   "git.enableGlobalStatus": true,
@@ -115,14 +99,6 @@
   "git.stagedDecorator": " Ξ ",
   "git.untrackedDecorator": " : Untracked : ",
   "git.virtualTextPrefix": "Coc-Git:",
-  "html.filetypes": [
-    "html",
-    "handlebars",
-    "htmldjango",
-    "htmljinja",
-    "smarty"
-  ],
-  "html.format.enable": true,
   "javascript.referencesCodeLens.enable": true,
   "javascript.showUnused": true,
   "javascript.suggest.names": true,

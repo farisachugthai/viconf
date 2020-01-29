@@ -8,9 +8,11 @@
 function! py#taglist() abort  " {{{1
   py3 from pprint import pprint; pprint(vim.call('tagfiles'))
 endfunction
+
 function! py#nvim_taglist() abort  " {{{1
   return nvim_call_function('tagfiles')
 endfunction
+
 function! s:find_stdlib(dir) abort
   " I feel like this is driving me crazy wtf
   " We also gotta figure out if below the root dir we have lib/py 3.6
@@ -30,6 +32,7 @@ function! s:find_stdlib(dir) abort
 
   return s:root_stdlib
 endfunction
+
 function! s:_PythonPath() abort  " {{{1
   " Set up the path var for python filetypes. Here we go!
   " Note: the path option is to find directories so it's usually unnecesssary
@@ -117,14 +120,17 @@ function! s:_PythonPath() abort  " {{{1
   endif
   return s:path
 endfunction
+
 function! py#PythonPath() abort  " {{{1
   let s:path = s:_PythonPath()
   let &l:path = s:path
   return s:path
 endfunction
+
 function! py#python_serves_python() abort  " {{{1
   call pure_python_path()
 endfunction
+
 function! py#YAPF() abort  " {{{1
   if exists(':TBrowseOutput')
     " Realistically should accept func args
@@ -139,6 +145,7 @@ function! py#YAPF() abort  " {{{1
     call nvim_buf_set_lines('%', 0, '$', 0, '!yapf -i s:old_buffer')
   endif
 endfunction
+
 function! py#ALE_Python_Conf() abort  " {{{1
   let b:ale_linters = ['flake8', 'pydocstyle', 'pyls']
   let b:ale_linters_explicit = 1
@@ -170,7 +177,6 @@ function! py#black_version() abort
 endfunction
 
 function! s:timed(func) abort
-
   let start = reltime()
   call a:func()
   let seconds = reltimefloat(reltime(start))

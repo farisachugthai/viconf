@@ -6,7 +6,6 @@
 " ============================================================================
 
 function! buffers#EchoRTP() abort " {{{1
-
   " Huh son of a bitch. I actually figured out an easier way to do this
   " let's do a check that this function exists then and do it the non-nvim way
   " otherwise
@@ -17,13 +16,13 @@ function! buffers#EchoRTP() abort " {{{1
   else
     for i in split(&runtimepath, ',') | echo i | endfor
   endif
-
 endfunction
-function! buffers#PreviewWord() abort  " {{{1
-" Open a tag for the word under the cursor in the preview window.
-" TODO: Could definitely do with a mapping
 
-" From :he cursorhold-example
+function! buffers#PreviewWord() abort  " {{{1
+  " Open a tag for the word under the cursor in the preview window.
+  " TODO: Could definitely do with a mapping
+
+  " From :he cursorhold-example
   if &previewwindow     " don't do this in the preview window
     return
   endif
@@ -59,8 +58,8 @@ function! buffers#PreviewWord() abort  " {{{1
     endif
   endif
 endfunction
-function! buffers#terminals() abort
 
+function! buffers#terminals() abort
   " If running a terminal in Vim, go into Normal mode with Esc
   tnoremap <Esc> <C-\><C-n>
 
@@ -89,5 +88,4 @@ function! buffers#terminals() abort
 
   tnoremap <F4> <Cmd>Snippets<CR>
   tnoremap <F6> <Cmd>UltiSnipsEdit<CR>
-
 endfunction

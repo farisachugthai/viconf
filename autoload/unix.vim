@@ -17,10 +17,12 @@ function! unix#tmux_send(content, dest) abort  " {{{ tmux send: 1
 
   call delete(tempfile)
 endfunction
+
 function! unix#tmux_map(key, dest) abort " Tmux Map: {{{1
   execute printf('nnoremap <silent> %s "tyy:call <SID>tmux_send(@t, "%s")<cr>', a:key, a:dest)
   execute printf('xnoremap <silent> %s "ty:call <SID>tmux_send(@t, "%s")<cr>gv', a:key, a:dest)
 endfunction
+
 function! unix#UnixOptions() abort
   " These conditions only ever exist on Unix. Only run them if that's what
   " we're using
@@ -37,6 +39,7 @@ function! unix#UnixOptions() abort
         let &path = &path .','. expand('$_ROOT') . '/include/libcs50'
     endif
 endfunction
+
 function! unix#finger() abort
   " Finger: {Command and Function}
   " Example from :he command-complete
@@ -50,12 +53,17 @@ function! unix#finger() abort
     endif
   endif
 endfunction
+
 function! unix#ListUsers(A,L,P) abort
+  " From help docs
   return system('cut -d: -f1 /etc/passwd')
-endfun
+endfunction
+
 function! unix#EditFileComplete(A,L,P) abort  " {{{1
+  " Also from helpdocs
   return split(globpath(&path, a:A), '\n')
 endfunction
+
 function! unix#SpecialEdit(files, mods) abort
   " This example does not work for file names with spaces!
   " so wait if that's true can't we just use shellescape...?
@@ -63,6 +71,7 @@ function! unix#SpecialEdit(files, mods) abort
     exe a:mods . ' split ' . s:files
   endfor
 endfunction
+
 function! unix#RmDir(path) abort " {{{1
 	" sanity check; make sure it's not empty, /, or $HOME
 	if empty(a:path)
@@ -74,6 +83,7 @@ function! unix#RmDir(path) abort " {{{1
 	endif
 	return system("rm -rf " . shellescape(a:path))
 endfunction
+
 function! unix#system(pwd, cmd)  abort  " {{{1
   " Executes {cmd} with the cwd set to {pwd}, without changing Vim's cwd.
   " If {pwd} is the empty string then it doesn't change the cwd.

@@ -91,6 +91,7 @@ set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 set diffopt=filler,context:0,hiddenoff,foldcolumn:2,icase,indent-heuristic,horizontal,iblank,iwhite
 if has('patch-8.1.0360') | set diffopt+=internal,algorithm:patience | endif
 set browsedir="buffer"   " which directory is used for the file browser
+
 let &g:listchars = "tab:\u21e5\u00b7,extends:\u21c9,precedes:\u21c7,nbsp:\u00b7"
 " trail:\u2423 doesn't work with hack as font
 let &g:fillchars = "stl:' ',stlnc:' ',vert:\u250b,fold:\u00b7,diff:'.'"
@@ -99,7 +100,7 @@ set breakindent breakindentopt=sbr
 let &showbreak = '↳ '                   " Indent wrapped lines correctly
 set updatetime=100 lazyredraw
 set inccommand=split
-set terse shortmess=aoOsAItTWAcF
+set terse shortmess=aoOsItTWcF
 set title titlestring=%<%F%=%l/%L-%P   " leaves a cool title for tmux
 set conceallevel=2 concealcursor=nc    " enable concealing
 set spellsuggest=5
