@@ -17,15 +17,25 @@ augroup UserHelpandPython
 augroup END
 
 if has('python3')
-    command! -bar -complete=expression -complete=function -range -nargs=+ Pythonx <line1>,<line2>python3 <args>
-    " FUCK YEA! Dec 27, 2019: Behaves as expected!
-    command! -bar -complete=expression -complete=function -nargs=? Pd python3 print(dir(<args>))
 
-    command! -bar -nargs=+ -complete=expression -complete=function -nargs=? P python3 print(<args>)
+  command! -bar -complete=expression -complete=function -range -nargs=+ Pythonx <line1>,<line2>python3 <args>
+
+  " FUCK YEA! Dec 27, 2019: Behaves as expected!
+  " You know whats nice? Both of these expressions work.
+  " :Pd(vim.vars)
+  " :Pd vim.vars
+  command! -bar -complete=expression -complete=function -nargs=? Pd python3 print(dir(<args>))
+
+  command! -bar -nargs=+ -complete=expression -complete=function -nargs=? P python3 print(<args>)
+
 elseif has('pythonx')
-    command! -bar -complete=expression -complete=function -range -nargs=+ Pyx <line1>,<line2>pythonx <args>
+
+  command! -bar -complete=expression -complete=function -range -nargs=+ Pyx <line1>,<line2>pythonx <args>
+
 elseif has('python')
-    command! -bar -complete=expression -complete=function -range -nargs=+ Pyx <line1>,<line2>python <args>
+
+  command! -bar -complete=expression -complete=function -range -nargs=+ Pyx <line1>,<line2>python <args>
+
 endif
 
 " Apr 23, 2019: Didn't know complete help was a thing.
@@ -49,6 +59,5 @@ command! -nargs=0 PydocShow call pydoc_help#show()
 command! -complete=file -range BlackCurrent <line1>,<line2>call py#Black()
 
 command! -nargs=* -complete=file -complete=file_in_path BlackThese call py#black_these(<f-args>)
-    
-command! -bar -bang -nargs=* IPython :<mods>term<bang> ipython <args>
 
+command! -bar -bang -nargs=* IPython :<mods>term<bang> ipython <args>
