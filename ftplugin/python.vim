@@ -56,9 +56,9 @@ setlocal indentkeys-=0#
 " linters to react.
 setlocal colorcolumn=80,120
 setlocal foldmethod=indent
-setlocal keywordprg=python3\ -m\ pydoc
+" setlocal keywordprg=python\ -m\ pydoc
 " Use xnoremap because I wouldn't want this in select mode
-" xnoremap K <Cmd>'<,'>PydocThis<CR>
+execute 'xnoremap K <Cmd>Pydoc ' . expand('<cWORD>') . '<CR>'
 
 setlocal suffixesadd+=.py
 setlocal omnifunc=python3complete#Complete
@@ -94,7 +94,7 @@ noremap <buffer> <F5> <Cmd>py3f %<CR>
 noremap! <buffer> <F5> <Cmd>py3f %<CR>
 
 " ../../autoload/pydoc_help.vim
-nnoremap <buffer> K <Cmd>PydocThis<CR>
+" nnoremap <buffer> K <Cmd>PydocThis<CR>
 
 " Formatters: {{{1
 
@@ -136,4 +136,6 @@ let b:undo_ftplugin = 'setlocal lbr< tw< cms< et< sts< ts< sw< cc< fdm< kp<'
       \ . '|setlocal indentkeys<'
       \ . '|setlocal omnifunc<'
       \ . '|setlocal cinkeys<'
+      \ . '|unmap <buffer> <F5>'
+      \ . '|unmap! <buffer> <F5>'
       \ . '|unlet! b:undo_ftplugin'

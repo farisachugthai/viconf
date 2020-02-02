@@ -5,19 +5,26 @@
   " Last Modified: Oct 20, 2019
 " ============================================================================
 
+if exists('g:did_buffers') || &compatible || v:version < 700
+  finish
+endif
+let g:did_buffers = 1
+
+
 " The nvim API is seriously fantastic.
 nnoremap <Leader>rt call buffers#EchoRTP()
 command! -nargs=0 EchoRTP echo buffers#EchoRTP()
 
-" From `:he quickfix`
-command! -nargs=+ NewGrep execute 'silent grep! <args>' | copen
+command! -complete=dir -bar -bang -nargs=* NewGrep execute 'silent grep! <args>' | copen<bang>
+
 function! Window_Mappings() abort  " {{{1
   " Navigate windows more easily
-  nnoremap <C-h> <Cmd>wincmd h<CR>
+  " We cant use these though because ultisnips took c-j and c-k fuck
+  " nnoremap <C-h> <Cmd>wincmd h<CR>
   " This displays as <NL> when you run `:map` but it behaves like C-j. Oh well.
-  nnoremap <C-j> <Cmd>wincmd j<CR>
+  " nnoremap <C-j> <Cmd>wincmd j<CR>
   " nnoremap <C-k> <Cmd>wincmd k<CR>
-  nnoremap <C-l> <Cmd>wincmd l<CR>
+  " nnoremap <C-l> <Cmd>wincmd l<CR>
   " Move windows a little faster the command bythemselves don't do anything
   nnoremap <C-w>< 5<C-w><
   nnoremap <C-w>> 5<C-w>>
@@ -34,8 +41,8 @@ function! Window_Mappings() abort  " {{{1
   " Split and edit file under the cursor
   nnoremap <Leader>wf <Cmd>wincmd f<CR>
 endfunction
-function! Quickfix_Mappings() abort
 
+function! Quickfix_Mappings() abort
   " To make navigating the location list and quickfix easier
   " Also check ./unimpaired.vim
   " Sep 05, 2019: This doesnt need to be 2 commands!! cwindow does both!
@@ -82,8 +89,7 @@ function! Quickfix_Mappings() abort
   " Avoid accidental hits of <F1> while aiming for <Esc>
   noremap! <F1> <Esc>
 endfunction
-" From `:he quickfix`
-command! -nargs=+ NewGrep execute 'silent grep! <args>' | copen
+
 function! Alt_Key_Navigation() abort
   " Originally this inspired primarily for terminal use but why not put it everywhere?
   noremap  <A-h> <C-w>h
@@ -109,8 +115,8 @@ function! Alt_Key_Navigation() abort
     noremap! <A-Right>  <Cmd>wincmd l<CR>
     noremap! <A-Left>   <Cmd>wincmd h<CR>
   endif
-
 endfunction
+
 function! Buffer_Mappings() abort
   " Navigate Buffers More Easily:
   nnoremap <Leader>bb <Cmd>buffers<CR>
@@ -131,6 +137,7 @@ function! Buffer_Mappings() abort
   nnoremap ]B <Cmd>blast<CR>
   nnoremap [B <Cmd>bfirst<CR>
 endfunction
+
 function! Tab_Mappings() abort  " {{{1
   nnoremap <Leader>tn <Cmd>tabnext<CR>
   nnoremap <Leader>tp <Cmd>tabprev<CR>
@@ -152,12 +159,12 @@ function! Tab_Mappings() abort  " {{{1
   nnoremap ]T <Cmd>tablast<CR>
   nnoremap [T <Cmd>tabfirst<CR>
 endfunction
+
 " Call Functions:
-if !exists('no_plugin_maps') && !exists('no_windows_vim_maps') && !exists('b:plugin_buffers_maps')
+if !exists('no_plugin_maps') && !exists('no_windows_vim_maps')
   call Window_Mappings()
   call Alt_Key_Navigation()
   call Buffer_Mappings()
   call Tab_Mappings()
   call Quickfix_Mappings()
-  let b:plugin_buffers_maps = 1
 endif

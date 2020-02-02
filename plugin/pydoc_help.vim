@@ -17,14 +17,15 @@ augroup UserHelpandPython
 augroup END
 
 if has('python3')
-    command! -range -nargs=+ Pythonx <line1>,<line2>python3 <args>
+    command! -bar -complete=expression -complete=function -range -nargs=+ Pythonx <line1>,<line2>python3 <args>
     " FUCK YEA! Dec 27, 2019: Behaves as expected!
-    command! -nargs=? Pd python3 print(dir(<args>))
+    command! -bar -complete=expression -complete=function -nargs=? Pd python3 print(dir(<args>))
 
+    command! -bar -nargs=+ -complete=expression -complete=function -nargs=? P python3 print(<args>)
 elseif has('pythonx')
-    command! -range -nargs=+ Pythonx <line1>,<line2>pythonx <args>
+    command! -bar -complete=expression -complete=function -range -nargs=+ Pyx <line1>,<line2>pythonx <args>
 elseif has('python')
-    command! -range -nargs=+ Pythonx <line1>,<line2>python <args>
+    command! -bar -complete=expression -complete=function -range -nargs=+ Pyx <line1>,<line2>python <args>
 endif
 
 " Apr 23, 2019: Didn't know complete help was a thing.
@@ -36,10 +37,18 @@ command! -bang -bar PydocThis call pydoc_help#PydocCword()
 " This should be able to take the argument '-bang' and allow to open in a new
 " separate window like fzf does.
 command! -nargs=0 PydocSplit call pydoc_help#SplitPydocCword()
-command! -nargs=? Pydoc call pydoc_help#Pydoc(<f-args>)
+
+" holy fuck i just beefed this command up a lot. now takes a bang and should
+" work more correctly.
+" todo: i think i added a completefunc thatll work perfectly
+
+command! -nargs=? -bang Pydoc exec <mods> . 'file'<bang> . call pydoc_help#Pydoc(<f-args>)
 command! -nargs=0 PydocShow call pydoc_help#show()
 
 " TODO: Work on the range then the bang
 command! -complete=file -range BlackCurrent <line1>,<line2>call py#Black()
 
 command! -nargs=* -complete=file -complete=file_in_path BlackThese call py#black_these(<f-args>)
+    
+command! -bar -bang -nargs=* IPython :<mods>term<bang> ipython <args>
+

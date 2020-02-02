@@ -25,8 +25,6 @@ let g:SuperTabClosePreviewOnPopupClose = 1  " (default value: 0)
 let g:SuperTabDefaultCompletionType = 'context'
 let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
 
-set completefunc=SuperTabCodeComplete
-
 augroup SuperTabOmniFunc
   autocmd!
   autocmd FileType *

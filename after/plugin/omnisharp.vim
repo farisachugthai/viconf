@@ -1,4 +1,13 @@
 
+if exists('b:did_omnisharp') || &compatible || v:version < 700
+  finish
+endif
+let b:did_omnisharp = 1
+
+if &filetype !=# 'cs'
+  finish
+endif
+
 " Dude they wrote everything python that's dope
 let g:OmniSharp_loglevel = 'DEBUG'
 

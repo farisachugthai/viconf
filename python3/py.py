@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""Utilize both the legacy and new nvim API to work with Neovim."""
 import functools
 import importlib
 from importlib.util import find_spec
@@ -14,7 +17,7 @@ from pprint import pprint as print
 try:
     import vim  # pylint: disable=import-error
 except ImportError:
-    vim = None
+    vim = None  # remote process not in vim
 
 try:
     import black
@@ -25,20 +28,23 @@ logger = logging.getLogger(name=__name__)
 
 
 def log(logrecord, level=30):
-    # Just thought to wrap pythons usual logging features.
+    """Simple way to wrap pythons usual logging features."""
     # Wait wouldnt it be easier if python thought sys.stdout/stderr were something
     # similar to this command?
     return vim.command("echomsg " + logger.log(logrecord, level))
 
 
-def _set_return_error(err):
+def _set_return_error(err=None):
+    """Standardize the flaky interface betweem vim and python.
+
+    Exceptions don't really work across the vim-python boundary, so instead
+    we catch the exception and set it into a global variable. The calling vim
+    code will then manually check that value after the command completes.
+    """
     # If we're not in a vim plugin, don't try to set the error
-    if not _has_vim:
+    if vim is None:
         return
 
-    # Exceptions don't really work across the vim-python boundary, so instead
-    # we catch the exception and set it into a global variable. The calling vim
-    # code will then manually check that value after the command completes.
     if err is None:
         vim.command("let g:py_err = {}")
     else:
@@ -108,8 +114,7 @@ def _robust_black():
 
 def get_mode():
     return black.FileMode(
-        line_length=88,
-        is_pyi=vim.current.buffer.name.endswith(".pyi"),
+        line_length=88, is_pyi=vim.current.buffer.name.endswith(".pyi"),
     )
 
 

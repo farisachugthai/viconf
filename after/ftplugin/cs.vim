@@ -1,4 +1,11 @@
 
+" if exists('b:did_ftplugin') | finish | endif
+" let b:did_ftplugin = 1
+
+if &filetype !=# 'cs'
+  finish
+endif
+
 " This really needs to be filetype specific.
 
 " The following commands are contextual, based on the cursor position.
@@ -26,10 +33,13 @@ nnoremap <Leader>nm :OmniSharpRename<CR>
 " nnoremap <F2> :OmniSharpRename<CR>
 
 " Rename without dialog - with cursor on the symbol to rename: `:Rename newname`
-command! -nargs=1 Rename :call OmniSharp#RenameTo("<args>")
+command! -nargs=1 OmniRename call OmniSharp#RenameTo(<q-args>)
 
 nnoremap <buffer> <Leader>cf :OmniSharpCodeFormat<CR>
 
 " Start the omnisharp server for the current solution
 nnoremap <buffer> <Leader>ss :OmniSharpStartServer<CR>
 nnoremap <buffer> <Leader>sp :OmniSharpStopServer<CR>
+
+" let b:undo_ftplugin = 'setlocal '
+"       \ . '|unlet! b:undo_ftplugin'
