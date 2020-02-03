@@ -5,18 +5,20 @@
   " Last Modified: Oct 20, 2019
 " ============================================================================
 
-" The nvim API is seriously fantastic.
-nnoremap <Leader>rt call buffers#EchoRTP()
-command! -nargs=0 EchoRTP echo buffers#EchoRTP()
+if exists('g:did_buffers') || &compatible || v:version < 700
+  finish
+endif
+let g:did_buffers = 1
 
 " From `:he quickfix`
 command! -nargs=+ NewGrep execute 'silent grep! <args>' | copen
+
 function! Window_Mappings() abort  " {{{1
   " Navigate windows more easily
   nnoremap <C-h> <Cmd>wincmd h<CR>
   " This displays as <NL> when you run `:map` but it behaves like C-j. Oh well.
   nnoremap <C-j> <Cmd>wincmd j<CR>
-  " nnoremap <C-k> <Cmd>wincmd k<CR>
+  nnoremap <C-k> <Cmd>wincmd k<CR>
   nnoremap <C-l> <Cmd>wincmd l<CR>
   " Move windows a little faster the command bythemselves don't do anything
   nnoremap <C-w>< 5<C-w><
@@ -34,15 +36,9 @@ function! Window_Mappings() abort  " {{{1
   " Split and edit file under the cursor
   nnoremap <Leader>wf <Cmd>wincmd f<CR>
 endfunction
-function! Quickfix_Mappings() abort
 
-  " To make navigating the location list and quickfix easier
-  " Also check ./unimpaired.vim
-  " Sep 05, 2019: This doesnt need to be 2 commands!! cwindow does both!
-  " Oct 18, 2019: I just ran into llist and lwindow showing different things
-  " and lwindow didn't show the location list i had at the time so switching again
-  " November llist throws an error if no location. *sigh*
-  nnoremap <Leader>qc <Cmd>cwindow<CR>
+function! Quickfix_Mappings() abort
+  nnoremap <Leader>q <Cmd>cwindow<CR>
 
   " These need to catch E776 no location list
   nnoremap <silent> <C-Down> <Cmd>llast<CR><bar><Cmd>clast<CR>
@@ -82,8 +78,7 @@ function! Quickfix_Mappings() abort
   " Avoid accidental hits of <F1> while aiming for <Esc>
   noremap! <F1> <Esc>
 endfunction
-" From `:he quickfix`
-command! -nargs=+ NewGrep execute 'silent grep! <args>' | copen
+
 function! Alt_Key_Navigation() abort
   " Originally this inspired primarily for terminal use but why not put it everywhere?
   noremap  <A-h> <C-w>h
@@ -109,9 +104,9 @@ function! Alt_Key_Navigation() abort
     noremap! <A-Right>  <Cmd>wincmd l<CR>
     noremap! <A-Left>   <Cmd>wincmd h<CR>
   endif
-
 endfunction
-function! Buffer_Mappings() abort
+
+function! Buffer_Mappings() abort  " {{{
   " Navigate Buffers More Easily:
   nnoremap <Leader>bb <Cmd>buffers<CR>
   nnoremap <Leader>bd <Cmd>bdelete<CR>
@@ -131,6 +126,7 @@ function! Buffer_Mappings() abort
   nnoremap ]B <Cmd>blast<CR>
   nnoremap [B <Cmd>bfirst<CR>
 endfunction
+
 function! Tab_Mappings() abort  " {{{1
   nnoremap <Leader>tn <Cmd>tabnext<CR>
   nnoremap <Leader>tp <Cmd>tabprev<CR>
@@ -152,6 +148,7 @@ function! Tab_Mappings() abort  " {{{1
   nnoremap ]T <Cmd>tablast<CR>
   nnoremap [T <Cmd>tabfirst<CR>
 endfunction
+
 " Call Functions:
 if !exists('no_plugin_maps') && !exists('no_windows_vim_maps') && !exists('b:plugin_buffers_maps')
   call Window_Mappings()
@@ -159,5 +156,4 @@ if !exists('no_plugin_maps') && !exists('no_windows_vim_maps') && !exists('b:plu
   call Buffer_Mappings()
   call Tab_Mappings()
   call Quickfix_Mappings()
-  let b:plugin_buffers_maps = 1
 endif

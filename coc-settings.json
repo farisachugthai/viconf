@@ -413,7 +413,6 @@
   "python.autoComplete.addBrackets": true,
   "python.autoComplete.showAdvancedMembers": true,
   "python.autoUpdateLanguageServer": true,
-  "python.condaPath": "C:/tools/vs/2019/Community/Common7/IDE/Extensions/Microsoft/Python/Miniconda/Miniconda3-x64/Scripts/conda",
   "python.jediEnabled": false,
   "python.jediMemoryLimit": -1,
   "python.jediShortcut": "Jedi",
@@ -438,7 +437,6 @@
   "refactor.afterContext": 0,
   "refactor.beforeContext": 0,
   "refactor.openCommand": "vsplit",
-  "session.directory": "~/.local/share/nvim/session",
   "session.restartOnSessionLoad": true,
   "signature.enable": true,
   "signature.hideOnTextChange": true,
@@ -472,8 +470,8 @@
     "~/AppData/Local/nvim/UltiSnips"
   ],
   "snippets.ultisnips.pythonVersion": 3,
-  "suggest.acceptSuggestionOnCommitCharacter": true,
-  "suggest.autoTrigger": "always",
+  "suggest.acceptSuggestionOnCommitCharacter": false,
+  "suggest.autoTrigger": "trigger",
   "suggest.completionItemKindLabels": {
     "class": "",
     "color": "",
@@ -502,7 +500,7 @@
     "variable": ""
   },
   "suggest.defaultSortMethod": "length",
-  "suggest.detailField": "menu",
+  "suggest.detailField": "preview",
   "suggest.disableMenu": true,
   "suggest.disableMenuShortcut": true,
   "suggest.enablePreselect": false,

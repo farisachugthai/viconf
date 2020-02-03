@@ -17,7 +17,9 @@ endif
 " TODO:
 " so obviously only do this on windows. shit there are so many things that we need to configure
 " list.source.tags.command: ~/bin/ctags.exe -R --options=~/.ctags/universal_ctags.ctags .,
-"
+
+if exists('g:node_host_prog') | let g:coc_node_path = g:node_host_prog | endif
+
 " TODO:
 " May have to extend after a has('unix') check.
 " Yeah probably need to make system checks to get rid of incorrect
@@ -30,9 +32,8 @@ let g:WorkspaceFolders = [
       \ ]
 
 let g:coc_quickfix_open_command = 'cwindow'
-" Dude i have so many things simultaneously bound to C-j I need to fix this badly
-" let g:coc_snippet_next = '<C-j>'
-" let g:coc_snippet_prev = '<C-k>'
+let g:coc_snippet_next = '<C-j>'
+let g:coc_snippet_prev = '<C-k>'
 
 let g:coc_enable_locationlist = 1
 let $NVIM_COC_LOG_LEVEL = 'WARN'
@@ -40,7 +41,8 @@ let $NVIM_COC_LOG_FILE = stdpath('data') . '/site/coc.log'
 let $NVIM_NODE_LOG_FILE = stdpath('data') . '/site/node.log'
 let $NVIM_NODE_LOG_LEVEL = 'WARN'
 
-call coc#snippet#enable()
+" This raises a lot of errors
+" call coc#snippet#enable()
 
 " TODO: Might need to open a pull request he states that these are mapped by
 " default. omap af and omap if didn't show anything
@@ -187,8 +189,6 @@ command! -nargs=0 CocPython call CocActionAsync('runCommand', 'python.startREPL'
 
 " Autocmds: {{{1
 
-" Use autocmd to force lightline update.
-" Well I have my own statusline function but you're close
 augroup UserCoc
   au!
   autocmd User CocStatusChange,CocDiagnosticChange
@@ -196,10 +196,8 @@ augroup UserCoc
         \| call Statusline_expr()
         \| endif
 
-	autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-  " This happens with coc-powershell all the time
-  autocmd User CocTerminalOpen stopinsert
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 
-  " autocmd CursorHold * silent call CocActionAsync('highlight')
   autocmd! User CmdlineEnter CompleteDone
+
 augroup END

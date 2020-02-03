@@ -8,7 +8,6 @@
 scriptencoding utf-8
 set fileformat=unix fileformats=unix,dos  " don't let DOS fuck up the EOL
 setglobal cpoptions-=c,e,_  " couple options that bugged me
-set shellslash
 
 let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Evervim. Thanks!
 let s:wsl = !empty($WSL_DISTRO_NAME)
@@ -23,18 +22,20 @@ if has('unix')
   set runtimepath=~/.config/nvim,~/.local/share/nvim/site,$VIMRUNTIME,~/.config/nvim/after
   set packpath=~/.config/nvim,~/.local/share/nvim/site,$VIMRUNTIME,~/.config/nvim/after
 else
-  set runtimepath=~/AppData/Local/nvim,~/AppData/Local/nvim-data/site,C:/Neovim/share/nvim/runtime,C:/Neovim/share/nvim-qt/runtime
+  set runtimepath=$USERPROFILE\AppData\Local\nvim,$USERPROFILE\AppData\Local\nvim-data\site,$VIMRUNTIME,C:\Neovim\share\nvim-qt\runtime
+  set packpath=$USERPROFILE\AppData\Local\nvim,$USERPROFILE\AppData\Local\nvim-data\site,$VIMRUNTIME,C:\Neovim\share\nvim-qt\runtime
 endif
 
 if exists('$ANDROID_DATA')  " Fuck i had to change this because wsl was loading termux jesus christ
-  call find_files#termux_remote() | echo 'loaded termux'
+  call find_files#termux_remote() | echomsg 'loaded termux'
 elseif !has('unix')
-  call find_files#msdos_remote()
+  call find_files#msdos_remote() | echomsg 'loaded msdos'
 else
-  call find_files#ubuntu_remote() | echo 'loaded wsl'
+  call find_files#ubuntu_remote() | echomsg 'loaded wsl'
 endif
 
-if exists('g:GuiLoaded') | exec 'source ' s:this_dir . '/ginit.vim' | endif
+" How does this get set even when i'm in a terminal?
+if exists('g:GuiLoaded') | exec 'source ' s:this_dir . '\ginit.vim' | endif
 
 if has('unnamedplus') | set clipboard+=unnamed,unnamedplus | else | set clipboard+=unnamed | endif
 
@@ -89,6 +90,7 @@ if exists('&modelineexpr') | set modelineexpr | endif
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 
 set diffopt=filler,context:0,hiddenoff,foldcolumn:2,icase,indent-heuristic,horizontal,iblank,iwhite
+" TODO: closeoff needs to be added conditionally. how?
 if has('patch-8.1.0360') | set diffopt+=internal,algorithm:patience | endif
 set browsedir="buffer"   " which directory is used for the file browser
 
@@ -114,10 +116,12 @@ packadd justify
 packadd cfilter
 packadd matchit
 
-" This might be a terrible idea but
-au! VimEnter *
-
+if has('unix')
 let s:vim_plug = filereadable(fnameescape(stdpath('data') . '/site/autoload/plug.vim'))
+else
+let s:vim_plug = filereadable(fnameescape(stdpath('data') . '\site\autoload\plug.vim'))
+endif
+
 if empty(s:vim_plug) && exists('*plugins#InstallPlug') | call plugins#InstallPlug() | endif
 exec 'source ' s:this_dir . '/junegunn.vim'
 " Don't assume that the InstallPlug() func worked so ensure it's defined

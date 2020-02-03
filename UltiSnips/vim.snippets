@@ -28,10 +28,10 @@ let $1 = ${4:1}
 endsnippet
 
 snippet plugin "Plugin reload guard." b
-if exists('b:did_`!p snip.rv = snip.basename.replace('.', '_')`') || &compatible || v:version < 700
+if exists('g:did_`!p snip.rv = snip.basename.replace('.', '_')`') || &compatible || v:version < 700
   finish
 endif
-let b:did_`!p snip.rv = snip.basename.replace('.', '_')` = 1
+let g:did_`!p snip.rv = snip.basename.replace('.', '_')` = 1
 endsnippet
 
 # FUCKKKKK i've been using lower case c thinking it was the line continuation one :(

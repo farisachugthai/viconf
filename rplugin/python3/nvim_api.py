@@ -1,57 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""The help docs from the nvim remote help files.
-
-Landed on it from $NVIM_RPLUGIN_MANIFEST I believe.
-
-:date: Apr 18, 2019
-
-.. highlight:: vim
-
-Currently this module opens up a new tab with your info.
-
-Roadmap
-========
-
-If we decide to make this a full plugin, distribute it as it's own filetype,
-then we might wanna distribute your own syntax highlighting.
-
-In addition it'd be considerate if we added in:
-
-A) Options for ``vsplit``, ``hsplit`` or ``open`` in a tab and
-B) A mapping to ``<LocalLeader>`` or to :kbd:`K`.
-C) Cmdline completion.
-
-Cmdline Completion
-===================
-
-Apr 19, 2019:
-
-Figure out if this'll work for the completer.
-
-.. code-block:: vim
-
-    let l:old_path = &path
-    set path=''
-    let &path = sys.prefix + '**,'
-    command -complete=file_in_path
-
-I mean don't intermix langs like that but that general idea.
-
-
-Setting up completions for pydoc
---------------------------------
-
-Jedi can do it with the Pyimport command.::
-
-    function! jedi#py_import_completions(argl, cmdl, pos) abort
-        PythonJedi jedi_vim.py_import_completions()
-    endfun
-
-The only thing that PythonJedi does is determine py2 or 3. So we can skip that.
-jedi_vim is the pythonx file that jedi loads to call this function.
-
-py_import_completions()::
+"""
+Setting up completions thanks to Jedi.
 
     @catch_and_print_exceptions
     def py_import_completions():
@@ -88,7 +38,7 @@ else:
     from pynvim import setup_logging
 
 
-@pynvim.plugin
+# @pynvim.plugin
 class Limit:
     """From `:he remote-plugin-host`."""
 
@@ -106,7 +56,7 @@ class Limit:
         self.vim = vim
         self.calls = 0
 
-    @pynvim.command("Cmd", range="", nargs="*", sync=True)
+    # @pynvim.command("Cmd", range="", nargs="*", sync=True)
     def command_handler(self, args, range):
         self._increment_calls()
         self.vim.current.line = "Command: Called %d times, args: %s, range: %s" % (
@@ -116,7 +66,7 @@ class Limit:
         )
 
 
-@pynvim.plugin
+# @pynvim.plugin
 class PydocButUnfortunatelyBroken:
     """Read output from :mod:`pydoc` into a buffer."""
 
@@ -128,25 +78,10 @@ class PydocButUnfortunatelyBroken:
         else:
             self.env = os.environ.items()
 
-    @pynvim.command("Pydoc", nargs=1)
+    # @pynvim.command("Pydoc", nargs=1)
     def command_handler(self, args):
         """Open a new tab with the pydoc output."""
         self.vim.command("tabe")
         self.vim.command("r!pydoc " + args[0])
         self.vim.command("set ft=man")
 
-
-if __name__ == "__main__":
-    # should check for xdg data home existing too. probably should make this
-    # its own function
-    if not os.environ.get("NVIM_PYTHON_LOG_FILE"):
-        os.environ.putenv(
-            "NVIM_PYTHON_LOG_FILE",
-            os.path.join(os.environ.get("XDG_DATA_HOME"), "", "nvim", "python.log"),
-        )
-    setup_logging(name="rplugin.python3.pydoc")
-
-    pydoc_plugin = Pydoc()
-
-    # Holy shit running `:py3f %` on this file echoes out the message!
-    # vim.command('echo "did this work at all?"')

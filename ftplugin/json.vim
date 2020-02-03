@@ -34,9 +34,10 @@ setlocal expandtab softtabstop=2 shiftwidth=2 tabstop=2
 setlocal suffixesadd=.json,.js,.jsx
 setlocal foldmethod=syntax
 
+" Set up ALE correctly
 call ftplugins#ALE_JSON_Conf()
 
-" These mappings are particularly nice in JSON files
+" These mappings are particularly nice in JSON files.:
 inoremap <buffer> ( ()<C-G>U<Left>
 inoremap <buffer> [ []<C-G>U<Left>
 inoremap <buffer> { {}<C-G>U<Left>
@@ -44,10 +45,19 @@ inoremap <buffer> " ""<C-G>U<Left>
 " Also can we auto fix single quotes?
 inoremap <buffer> ' "<C-G>U<Left>
 
-" py3 << EOF
-" from _vim import pretty_it
-" EOF
-" " For more see ../python3/_vim
-" command! -buffer -range=% Pjson :<line1>,<line2>python pretty_it('json')
+" Set up matchit:
+let b:match_ignorecase = 1
+let b:match_words = '<:>,{:},"",(:),[:]'
 
-let b:undo_ftplugin = 'setlocal fo< com< cms< et< sts< sw< ts< sua< fdm<'
+" And set up a formatter.
+" For more see ../python3/_vim
+command! -buffer -bang -bar -range=% -nargs=0 Pjson :w<bang> <bar> <line1>,<line2>python3 import _vim; _vim.pretty_it('json')
+
+" TODO: Check that this worked
+setlocal formatprg=:Pjson
+
+let b:undo_ftplugin = 'setlocal fo< com< cms< et< sts< sw< ts< sua< fdm< fp< '
+      \ . '|unlet! b:undo_ftplugin'
+      \ . '|unlet! b:ale_fixers'
+      \ . '|unlet! b:ale_linters'
+      \ . '|unlet! b:ale_linters_explicit'

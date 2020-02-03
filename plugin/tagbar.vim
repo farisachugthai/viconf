@@ -5,6 +5,11 @@
     " Last Modified: Sep 14, 2019
 " ============================================================================
 
+if exists('g:did_tagbar') || &compatible || v:version < 700
+  finish
+endif
+let g:did_tagbar = 1
+
 scriptencoding utf-8
 
 " I want the spacebar back
@@ -132,8 +137,6 @@ let g:tagbar_type_ps1 = {
 \ }
 
 
-    " \ 'ctagsargs' : ['-f', 'tags', '--encoding="utf-8"',
-    "                \ '--sort=yes', '--sro="»"'],
 let g:tagbar_type_rst = {
     \ 'ctagstype': 'rst',
     \ 'ctagsbin' : expand('$HOME/src/rst2ctags/rst2ctags.py'),
@@ -149,6 +152,9 @@ let g:tagbar_type_rst = {
     \ 'sort': 0,
 \ }
 
+  " \ 'ctagsargs' : ['-f', 'tags', '--encoding="utf-8"',
+  "                \ '--sort=yes', '--sro="»"'],
+
 let g:tagbar_type_typescript = {
   \ 'ctagstype': 'typescript',
   \ 'kinds': [
@@ -163,10 +169,9 @@ let g:tagbar_type_typescript = {
   \ ]
   \ }
 
-
 let g:tagbar_type_snippets = {
-    \ 'ctagstype' : 'snippets',
-    \ 'kinds' : [
-    \ 's:snippets',
-    \ ]
-    \ }
+      \ 'ctagstype' : 'snippets',
+      \ 'kinds' : [
+      \ 's:snippets',
+      \ ]
+\ }

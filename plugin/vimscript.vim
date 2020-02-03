@@ -10,6 +10,26 @@ if exists('g:loaded_vimscript_vim') || &compatible || v:version < 700
 endif
 let g:loaded_vimscript_vim = 1
 
+if !exists('g:rg_binary')
+  let g:rg_binary = 'rg'
+endif
+
+if !exists('g:rg_format')
+  let g:rg_format = "%f:%l:%c:%m"
+endif
+
+if !exists('g:rg_command')
+  let g:rg_command = g:rg_binary . ' --vimgrep'
+endif
+
+if !exists('g:rg_root_types')
+  let g:rg_root_types = ['.git']
+endif
+
+if !exists('g:rg_window_location')
+  let g:rg_window_location = 'botright'
+endif
+
 " I would say this is unrelated but this file is aimless
 nnoremap <Leader>cd <Cmd>cd %:p:h<CR><Bar><Cmd>pwd<CR>
 

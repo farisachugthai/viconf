@@ -5,6 +5,11 @@
     " Last Modified: Sep 13, 2019
 " ============================================================================
 
+if exists('g:did_terminally_unimpaired') || &compatible || v:version < 700
+  finish
+endif
+let g:did_terminally_unimpaired = 1
+
 if executable('htop')
   " Leader -- applications -- htop. Requires nvim for <Cmd> which tmk doesn't exist
   " even in vim8.0+. Also requires htop which more than likely rules out Win32.
@@ -12,6 +17,12 @@ if executable('htop')
   " Need to use enew in case your previous buffer setl nomodifiable
   nnoremap <Leader>ah <Cmd>wincmd v<CR><bar><Cmd>enew<CR><bar>term://htop
 endif
+
+" It's damn near a crime that I haven't done this one yet
+" Make tab on the cmdline either using vim's normal auto-completion but only
+" if the popup menu isn't already open. If it is, then select the next option.
+" cnoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<C-d>"
+" cnoremap <expr> <S-Tab> pumvisible() ? "\<C-n>" : "\<C-d>"
 
 set wildcharm=<C-z>
 nnoremap ,e :e **/*<C-z><S-Tab>
@@ -26,9 +37,6 @@ if !empty($ANDROID_DATA)
 endif
 
 if !has('unix')
-  if exists('+shellslash')   " don't drop the +!
-    set shellslash
-  endif
   set sessionoptions+=unix,slash viewoptions+=unix,slash
 
   " So this HAS to be a bad idea; however, all 3 DirChanged autocommands emit
@@ -38,7 +46,7 @@ if !has('unix')
   set eventignore=DirChanged
 
   command! SetCmd call msdos#set_shell_cmd()
-  call msdos#set_shell_cmd()
+  " call msdos#set_shell_cmd()
 
   command! -nargs=? CmdInvoke call msdos#invoke_cmd(<q-args>)
   command! -nargs=? -complete=shellcmd Cmd call msdos#CmdTerm(<q-args>)
@@ -66,5 +74,4 @@ augroup UserTerm
 
   " Set up mappings
   autocmd TermOpen * call buffers#terminals()
-
 augroup END

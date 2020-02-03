@@ -163,3 +163,45 @@ def pure_python_path():
 
 def importer(mod):
     return find_spec(mod)
+
+def get_environment(use_cache=True):
+    import jedi
+    if use_cache:
+        return jedi.api.environment.get_cached_default_environment()
+    else:
+        try:
+            return jedi.get_system_environment()
+        except jedi.InvalidPythonEnvironment as exc:
+            traceback.format_exc(exc)
+            raise
+
+
+def catch_and_print_exceptions(func):
+
+    @functools.wraps
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except (Exception, vim.error):
+            traceback.print_exc()
+    return wrapper
+
+
+@catch_and_print_exceptions
+def import_completions():
+    pass
+
+
+def import_into_vim():
+    argl = vim.eval('a:argl')
+    try:
+        import jedi
+    except ImportError:
+        raise
+    else:
+        text = f"import {argl}"
+        script = jedi.Script(text, 1 , len(text), "", environment=get_environment())
+        completions = [ f"{argl}, {c.complete for c in script.completions()" ]
+    vim.command("return '%s'" % '\n'.join(completions))
+
+

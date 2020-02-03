@@ -5,8 +5,10 @@
     " Last Modified: Jul 20, 2019
 " ============================================================================
 
-" Grepprg:
-call syncom#grepprg()
+if exists('g:did_syncom') || &compatible || v:version < 700
+  finish
+endif
+let g:did_syncom = 1
 
 " Highlighting Commands: {{{1
 command! HL call syncom#HL()
@@ -33,9 +35,17 @@ endif
 " Need to add a check that we're in visual mode and drop the '<,'> if not.
 command! -nargs=0 -range Title execute 'normal! ' . "'<,'>s/\v<(.)(\w*)/\u\1\L\2/g"
 
-augroup UserCursorLine
+augroup UserColors
   autocmd!
   autocmd InsertEnter * setlocal cursorline
   autocmd InsertLeave * setlocal nocursorline
   autocmd VimEnter * colorscheme gruvbox-material
 augroup end
+
+" Grepprg:
+try
+  " if you don't have fd or rg installed you shouldn't lose highlighting
+  call syncom#grepprg()
+catch /.*/
+endtry
+
