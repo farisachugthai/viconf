@@ -5,8 +5,14 @@
     " Last Modified: June 26, 2019
 " ============================================================================
 
+if exists('g:did_autoloads') || &compatible || v:version < 700
+  finish
+endif
+let g:did_autoloads = 1
+
+
 " TODO: make bang handle either open in split or full window
-command! -bar -bang Todo call todo#Todo()
+command! -bar Todo call todo#Todo()
 
 " :he map line 1454. How have i never noticed this isn't a feature???
 command! -bar -nargs=? -bang -complete=buffer Rename f <args>|w<bang>za
@@ -24,7 +30,10 @@ set complete+=kspell,d,k complete-=u,i
 " dude what am i doing wrong that i don't get the cool autocompletion that NORC gets??
 set completeopt=menu,menuone,noselect,noinsert,preview
 
-imap <C-]> <C-x><C-]>
+						" *i_CTRL-]*
+" CTRL-]		Trigger abbreviation, without inserting a character.
+" So I guess we shouldnt do this anymore either
+" imap <C-]> <C-x><C-]>
 xnoremap < <gv
 xnoremap > >gv
 
@@ -38,7 +47,13 @@ noremap <Down> gj
 inoremap gI gi
 
 " just cuz. plus isn't the complete compiler option kinda cool?
-command! -bar -bang -complete=compiler -nargs=? -buffer Make make <q-args> %
+command! -bar -bang -complete=compiler -nargs=* Make
+      \ if <args>
+      \ for f in expand(<q-args>, 0, 1) |
+      \ exe '<mods> make ' . f |
+      \ endfor
+      \ else
+      \ exe '<mods> make ' . expand('%')
 
 if &tabstop > 4 | setlocal tabstop=4 | endif
 if &shiftwidth > 4  | setlocal shiftwidth=4 | endif
@@ -50,6 +65,7 @@ xnoremap <BS> d
 nnoremap <Leader>sp <Cmd>setlocal spell!<CR>
 nnoremap <Leader>o o<Esc>
 nnoremap <Leader>O O<Esc>
+
 " Search Mappings:
 set nohlsearch
 if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif

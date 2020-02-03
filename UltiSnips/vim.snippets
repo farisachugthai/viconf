@@ -20,7 +20,6 @@ endif
 endsnippet
 
 snippet guard "Script reload guard. Good to put directly under the header snippet." b
-" Guard: {{{1
 if exists('${1:b:loaded_`!p snip.rv = snip.fn.replace('.','_')`}') || ${2:&compatible} || ${3:v:version < 700}
     finish
 endif
@@ -83,7 +82,7 @@ function! ${1:`expand('%') =~ 'autoload' ? substitute(matchstr(expand('%:p'),'au
 endif
 endsnippet
 
-snippet try "try ... catch statement. Defaults to catch everything" mib
+snippet try "try ... catch statement. Defaults to catch everything" ib
 try
   ${1:${VISUAL}}
 catch ${2:/.*/}

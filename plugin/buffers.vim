@@ -10,17 +10,22 @@ if exists('g:did_buffers') || &compatible || v:version < 700
 endif
 let g:did_buffers = 1
 
+" The nvim API is seriously fantastic.
+nnoremap <Leader>rt call buffers#EchoRTP()
+command! -nargs=0 EchoRTP echo buffers#EchoRTP()
+
 " From `:he quickfix`
-command! -nargs=+ NewGrep execute 'silent grep! <args>' | copen
+command! -complete=dir -bar -bang -nargs=* NewGrep execute 'silent grep! <args>' | copen<bang>
 
 function! Window_Mappings() abort  " {{{1
   " Navigate windows more easily
-  nnoremap <C-h> <Cmd>wincmd h<CR>
   " This displays as <NL> when you run `:map` but it behaves like C-j. Oh well.
   nnoremap <C-j> <Cmd>wincmd j<CR>
   nnoremap <C-k> <Cmd>wincmd k<CR>
   nnoremap <C-l> <Cmd>wincmd l<CR>
-  " Move windows a little faster the command bythemselves don't do anything
+  nnoremap <C-j> <Cmd>wincmd j<CR>
+  nnoremap <C-l> <Cmd>wincmd l<CR>
+  " Resize windows a little faster
   nnoremap <C-w>< 5<C-w><
   nnoremap <C-w>> 5<C-w>>
   nnoremap <C-w>+ 5<C-w>+
@@ -40,7 +45,7 @@ endfunction
 function! Quickfix_Mappings() abort
   nnoremap <Leader>q <Cmd>cwindow<CR>
 
-  " These need to catch E776 no location list
+  " TODO: These need to catch E776 no location list
   nnoremap <silent> <C-Down> <Cmd>llast<CR><bar><Cmd>clast<CR>
   nnoremap <silent> <C-Up> <Cmd>lfirst<CR><bar><Cmd>cfirst<CR>
 
@@ -114,9 +119,9 @@ function! Buffer_Mappings() abort  " {{{
   nnoremap <Leader>bp <Cmd>bprev<CR>
   nnoremap <Leader>bf <Cmd>bfirst<CR>
   nnoremap <Leader>bl <Cmd>blast<CR>
-	" aka yank the whole buffer
+  " aka yank the whole buffer
   nnoremap <Leader>bY <Cmd>"+%y<CR>
-	" and then paste it
+  " and then paste it
   nnoremap <Leader>bP <Cmd>"+P<CR>
   " Sunovabitch bonly isn't a command?? Why is
   " noremap <Leader>bo <Cmd>bonly<CR>
@@ -134,14 +139,14 @@ function! Tab_Mappings() abort  " {{{1
   nnoremap <Leader>tc <Cmd>tabclose<CR>
   nnoremap <Leader>T  <Cmd>tabs<CR>
   nnoremap <Leader>te <Cmd>tabedit<CR>
-	" ngl pretty surprised that that cword didn't need an expand()
-	nnoremap <Leader>t# <Cmd>tabedit <cword><CR>
-	" Need to decide between many options
-	" nnoremap <Leader>tg <Cmd>tabedit
-	" poop can't do this
-	" nnoremap <Leader>tn <Cmd>tabnew<CR>
-	nnoremap <Leader>tf <Cmd>tabfirst<CR>
-	nnoremap <Leader>tl <Cmd>tablast<CR>
+  " ngl pretty surprised that that cword didn't need an expand()
+  nnoremap <Leader>t# <Cmd>tabedit <cword><CR>
+  " Need to decide between many options
+  " nnoremap <Leader>tg <Cmd>tabedit
+  " poop can't do this
+  " nnoremap <Leader>tn <Cmd>tabnew<CR>
+  nnoremap <Leader>tf <Cmd>tabfirst<CR>
+  nnoremap <Leader>tl <Cmd>tablast<CR>
 
   nnoremap ]t <Cmd>tabn<CR>
   nnoremap [t <Cmd>tabp<CR>
@@ -150,7 +155,7 @@ function! Tab_Mappings() abort  " {{{1
 endfunction
 
 " Call Functions:
-if !exists('no_plugin_maps') && !exists('no_windows_vim_maps') && !exists('b:plugin_buffers_maps')
+if !exists('no_plugin_maps') && !exists('no_windows_vim_maps')
   call Window_Mappings()
   call Alt_Key_Navigation()
   call Buffer_Mappings()

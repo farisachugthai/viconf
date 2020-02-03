@@ -26,7 +26,7 @@ let g:NERDTreeShowBookmarks = 1
 let g:NERDTreeNaturalSort = 1
 
 " change cwd every time NerdTree root changes: {{{2
-let g:NERDTreeChDirMode = 2
+" let g:NERDTreeChDirMode = 2
 
 let g:NERDTreeShowLineNumbers = 1
 
@@ -50,10 +50,10 @@ let g:NERDTreeAutoDeleteBuffer = 1
 
 let g:NERDTreeMapToggleZoom = 'Z'  " Z is for Zoom why the hell is the default A?
 
-let g:NERDTreeGlyphReadOnly = 'U+237A'  " literally never gonna remember i did this but oh well
+" let g:NERDTreeGlyphReadOnly = 'U+237A'  " literally never gonna remember i did this but oh well
 
 " To open a file always in the current tab, and expand directories in place, >
-let g:NERDTreeCustomOpenArgs = {'file': {'reuse':'currenttab', 'where':'p', 'keepopen':1, 'stay':1}}
+" let g:NERDTreeCustomOpenArgs = {'file': {'reuse':'currenttab', 'where':'p', 'keepopen':1, 'stay':1}}
 
 " This setting governs whether the NERDTree window or the bookmarks table closes
 " after opening a file with the |NERDTree-o|, |NERDTree-i|, |NERDTree-t| and

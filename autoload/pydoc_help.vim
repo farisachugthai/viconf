@@ -20,7 +20,10 @@ endfunction
 
 function! pydoc_help#scratch_buffer() abort
   if !has('nvim') | throw "Doesn't work on vim" | endif
-  return nvim_create_buf(v:true, v:true)
+
+  "  First param is buflisted?
+  " Second is scratch buffer?1
+  return nvim_create_buf(v:false, v:true)
 endfunction
 
 function! s:temp_buffer() abort  " {{{1
@@ -31,14 +34,15 @@ function! s:temp_buffer() abort  " {{{1
     exec ':StripWhitespace'
   endif
 
-  hi! link Whitespace NONE
+  " hi! link Whitespace NONE
   setlocal relativenumber
   setlocal filetype=rst
   " Because i have it on in my rst filetype.
   setlocal nospell
-  setlocal nomodified
-  setlocal buflisted
-  silent setlocal nomodifiable
+  setlocal buftype=nofile,nowrite
+  " setlocal nomodified
+  " setlocal buflisted
+  " silent setlocal nomodifiable
 endfunction
 
 function! pydoc_help#PydocCword() abort  " {{{1
@@ -74,10 +78,10 @@ function s:handle_user_config() abort   " {{{1
 endfunction
 
 function! pydoc_help#Pydoc(module) abort   " {{{1
-  call s:scratch_buffer()
+  call pydoc_help#scratch_buffer()
   if has('python3')
     if has('unix')
-      exec 'r! python3 -m pydoc ' . a:module
+      :python3 'import pydoc,' . a:module '; pydoc.help(' . a:module . ')'
     else
       exec 'r! python -m pydoc ' . a:module
     endif

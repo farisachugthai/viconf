@@ -29,11 +29,15 @@ if !hasmapto('<Plug>(HL)')
   nnoremap <Leader>h <Plug>(HL)
 endif
 
+" Use the down arrow when the pums open
+inoremap <Down> <C-R>=pumvisible() ? "\<lt>C-N>" : "\<lt>Down>"<CR>
+inoremap <Up> <C-R>=pumvisible() ? "\<lt>C-P>" : "\<lt>Up>"<CR>
+
 " Title: {{{1
 " From `:he change`  line 352 tag g?g?
 " Adding range means that the command defaults to current line
 " Need to add a check that we're in visual mode and drop the '<,'> if not.
-command! -nargs=0 -range Title execute 'normal! ' . "'<,'>s/\v<(.)(\w*)/\u\1\L\2/g"
+command! -nargs=0 -bar -range TitleCase execute 'normal! ' . "'<,'>s/\v<(.)(\w*)/\u\1\L\2/g"
 
 augroup UserColors
   autocmd!
@@ -48,4 +52,3 @@ try
   call syncom#grepprg()
 catch /.*/
 endtry
-

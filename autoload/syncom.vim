@@ -4,6 +4,7 @@
     " Description: Syntax commands
     " Last Modified: Nov 13, 2019
 " ============================================================================
+
 function! syncom#HL() abort  " HL: Whats the highlighting group under my cursor? {{{1
   echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
 endfunction
@@ -84,9 +85,8 @@ function! s:rg_setup() abort
     return v:false
   endif
 
-  let s:options = ' --vimgrep --no-messages --smart-case --no-messages '
-        \ . '--hidden --no-heading --max-columns 300 --max-columns-preview '
-        \ . ' --no-ignore-messages --color never --trim --no-column '
+  let s:options = ' --vimgrep --no-messages --smart-case --no-messages --hidden --no-heading '
+        \ . ' --no-ignore-messages --color never --trim --no-column --with-filename '
   let g:grep = s:cmd . s:options
   let &grepprg = g:grep
   return g:grep

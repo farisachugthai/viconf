@@ -14,16 +14,13 @@ let s:wsl = !empty($WSL_DISTRO_NAME)
 let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux) && empty(s:wsl)
 let s:this_dir = fnameescape(fnamemodify(expand('$MYVIMRC'), ':p:h'))
 
-set synmaxcol=400 termguicolors  " Set up the colorscheme
-syntax sync fromstart linebreaks=2
-
 " Seriously how does this keep getting fucked up. omfg packpath is worse???
 if has('unix')
   set runtimepath=~/.config/nvim,~/.local/share/nvim/site,$VIMRUNTIME,~/.config/nvim/after
   set packpath=~/.config/nvim,~/.local/share/nvim/site,$VIMRUNTIME,~/.config/nvim/after
 else
   set runtimepath=$USERPROFILE\AppData\Local\nvim,$USERPROFILE\AppData\Local\nvim-data\site,$VIMRUNTIME,C:\Neovim\share\nvim-qt\runtime
-  set packpath=$USERPROFILE\AppData\Local\nvim,$USERPROFILE\AppData\Local\nvim-data\site,$VIMRUNTIME,C:\Neovim\share\nvim-qt\runtime
+  set packpath=~\AppData\Local\nvim,~\AppData\Local\nvim-data\site,$VIMRUNTIME,C:\Neovim\share\nvim-qt\runtime
 endif
 
 if exists('$ANDROID_DATA')  " Fuck i had to change this because wsl was loading termux jesus christ
@@ -36,9 +33,7 @@ endif
 
 " How does this get set even when i'm in a terminal?
 if exists('g:GuiLoaded') | exec 'source ' s:this_dir . '\ginit.vim' | endif
-
 if has('unnamedplus') | set clipboard+=unnamed,unnamedplus | else | set clipboard+=unnamed | endif
-
 set pastetoggle=<F9>   " fuck me this is what windows terminal uses for something
 let g:loaded_vimballPlugin = 1
 let g:loaded_getscriptPlugin = 1
@@ -52,8 +47,7 @@ map <Space> <Leader>
 
 if has('nvim-0.4')   " Fun new features!
   let &shadafile = stdpath('data') . '/shada/main.shada'
-  " toggle transparency in the pum and windows. don't set higher than 10 it becomes hard to read higher than that
-  set pumblend=10 winblend=5
+  set pumblend=20 winblend=20  " toggle transparency in the pum and windows
   try | set pyxversion=3 | catch /^Vim:E518:*/ | endtry
 endif
 
@@ -106,7 +100,6 @@ set terse shortmess=aoOsItTWcF
 set title titlestring=%<%F%=%l/%L-%P   " leaves a cool title for tmux
 set conceallevel=2 concealcursor=nc    " enable concealing
 set spellsuggest=5
-
 set showmatch matchpairs+=<:> lazyredraw matchtime=20  " Show the matching pair for 2 seconds
 let g:matchparen_timeout = 500
 let g:matchparen_insert_timeout = 300
@@ -117,12 +110,13 @@ packadd cfilter
 packadd matchit
 
 if has('unix')
-let s:vim_plug = filereadable(fnameescape(stdpath('data') . '/site/autoload/plug.vim'))
+  let s:vim_plug = filereadable(fnameescape(stdpath('data') . '/site/autoload/plug.vim'))
 else
-let s:vim_plug = filereadable(fnameescape(stdpath('data') . '\site\autoload\plug.vim'))
+  let s:vim_plug = filereadable(fnameescape(stdpath('data') . '\site\autoload\plug.vim'))
 endif
 
 if empty(s:vim_plug) && exists('*plugins#InstallPlug') | call plugins#InstallPlug() | endif
+
 exec 'source ' s:this_dir . '/junegunn.vim'
 " Don't assume that the InstallPlug() func worked so ensure it's defined
 if empty('plugs') | let plugs = {} | endif

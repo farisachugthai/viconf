@@ -5,16 +5,9 @@
     " Last Modified: Oct 20, 2019
 " ============================================================================
 
-" Guard: {{{1
 let b:loaded_plugin_stl = 1
 
-let s:cpo_save = &cpoptions
-set cpoptions-=C
-
-" Statusline: {{{1
-
 function! StatusDiagnostic() abort
-
   if !exists('g:loaded_coc') | return '' | endif
 
   let info = get(b:, 'coc_diagnostic_info', {})
@@ -38,7 +31,7 @@ function! s:Statusline() abort
   else
     let dicons = ''
   endif
-  let fug = " %{exists('g:loaded_fugitive') ? fugitive#statusline() : ''} "
+  let fug = " %{exists('g:loaded_fugitive') ? FugitiveStatusline() : ''} "
   let sep = ' %= '
   let pos = ' %-12(%l : %c%V%) '
 
@@ -88,8 +81,6 @@ function! s:Statusline() abort
         \. ale_stl
         \. s:gutentags
         \. pos . '%*' . ' %P'
-
-
 endfunction
 
 function! Statusline_expr() abort
@@ -103,6 +94,3 @@ augroup YourStatusline
 augroup END
 
 command! ReloadStatusline call Statusline_expr()
-
-let &cpoptions = s:cpo_save
-unlet s:cpo_save

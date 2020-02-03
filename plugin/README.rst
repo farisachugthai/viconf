@@ -13,14 +13,12 @@ stay in the `init.vim <../init.vim>`_.
 
 Below are just some notes on how to best work with these files.
 
-
 Motivation
 ==========
 
 If you're not sure why you would want to begin breaking up your vimrc,
 I can't recommend `Tom Ryder's writing enough
 <https://vimways.org/2018/from-vimrc-to-vim>`_
-
 
 Common Vim Naming Conventions
 =============================
@@ -43,7 +41,7 @@ you regularly see more than one ftplugin in the output of `scriptnames`.
 In directories where it makes sense to load more than one file, like `syntax`_,
 adding var names will probably pay dividends.
 
-.. _syntax: ../syntax
+.. _syntax:
 
 Autocmd for Vim Commentary
 ===========================
@@ -68,7 +66,6 @@ Function Scoping
 If you set a guard at the beginning of a plugin file that reads something
 to the effect of::
 
-   " Guard: {{{1
    if exists('g:did_plugin_name') || &compatible || v:version < 700
       finish
    endif
@@ -79,13 +76,11 @@ As it's been set globally, we won't reload the file unless we explicitly
 
 .. caution:: You actually won't reload it in any situation.
 
-
 So there's actually no need anymore to define functions as::
 
    function! VimFoo() abort
 
 And it'd actually possibly be better to define it without the :kbd:`!`.
-
 We would want an error if that go re-sourced and re-defined.
 
 
@@ -93,8 +88,6 @@ Writing Plugins on NT systems
 ==============================
 
 From ``:he source_crnl``
-
-.. are you allowed to do that for a directive?
 
 .. code-block:: help
 
@@ -113,7 +106,7 @@ From ``:he source_crnl``
    detection, because it's common to start with a line that defines a mapping
    that ends in a <CR>, which will confuse the automaton.
 
-**tl;dr** Always use ff=unix ffs=unix,dos even on NT.
+**tl;dr** Always use ``ff=unix ffs=unix,dos`` even on NT.
 
 
 Debugging FZF
@@ -187,13 +180,16 @@ So let's do better than g]!::
 ALE --- Asynchronous Lint Engine
 ================================
 
+A plugin that lints buffers as well as, as of late, supports the LSP protocol.
+
 quickfix vs. locationlist
 --------------------------
 By default ale uses location lists.
 
 Location lists are tied to the window they were created for, not the
-entire session as the quickfix list is. Because commands like ``:lwindow`` and ``:lopen`` are window
-specific, you only see linting information for your current buffer to populate the list.
+entire session as the quickfix list is. Because commands like ``:lwindow``
+and ``:lopen`` are window specific, you only see linting information for your
+current buffer to populate the list.
 
 If ALE were to use the quickfix, you would see linting information for
 every buffer you have open simultaneously, which would be a nightmare.
@@ -208,38 +204,32 @@ Node
 Shockingly, this simple if/else was the difference between :file:`ale.vim`
 loading in 0.4 msecs and ~15.::
 
-   " Node:
-
-   " if !has('unix')
-   "   if isdirectory('C:/Program Files/nodejs/node.exe')
-   "     let g:ale_windows_node_executable_path = 'C:/Program Files/nodejs/node.exe'
-   "   elseif executable(exepath('node.exe'))
-   "     let g:ale_windows_node_executable_path = exepath('node.exe')
-   "   endif
-   " endif
-
-Quickfix
-==========
-
-See :file:`./buffers.vim` for the Quickfix_Mappings function,
+   if !has('unix')
+     if isdirectory('C:/Program Files/nodejs/node.exe')
+       let g:ale_windows_node_executable_path = 'C:/Program Files/nodejs/node.exe'
+     elseif executable(exepath('node.exe'))
+       let g:ale_windows_node_executable_path = exepath('node.exe')
+     endif
+   endif
 
 Searching
 =========
 
-Here's a helpful tidbit from the help pages.
+Here's a helpful tidbit from the help pages.:
 
-							" *gstar*
-" g*			Like "*", but don't put "\<" and "\>" around the word.
-			" This makes the search also find matches that are not a
-			" whole word.
+   g*			Like "*", but don't put "\<" and "\>" around the word. 
+                        This makes the search also find matches that are not a
+			whole word.
 
-							" *g#*
-" g#			Like "#", but don't put "\<" and "\>" around the word.
-			" This makes the search also find matches that are not a
-			" whole word.
+							*g#*
+   g#			Like "#", but don't put "\<" and "\>" around the word.
+   			This makes the search also find matches that are not a
+			whole word.
 
-" nnoremap * g*
-" nnoremap # g#
+::
+
+   nnoremap * g*
+   nnoremap # g#
 
 
 Using ``*`` and ``#`` to search in Visual Mode
@@ -380,6 +370,3 @@ That does the same thing that I did in this function::
      return FugitiveExtractGitDir(fnamemodify(expand('%'), ':p:h'))
    endfunction
 
-
-ALE and node
-================

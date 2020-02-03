@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Initialize pythonx in neovim."""
+from collections import namedtuple
 from importlib.machinery import PathFinder
 from io import StringIO
 import logging
@@ -9,12 +10,15 @@ import sys
 
 try:
     import pynvim
-    from pynvim import api, attach
 except ImportError:
     pass
+else:
+    from pynvim import api, attach
 
-import vim  # noqa pylint:disable=import-error,unused-import
-
+try:
+    import vim  # noqa pylint:disable=import-error,unused-import
+except ImportError:
+    vim = None
 
 __docformat__ = "reStructuredText"
 
@@ -22,7 +26,7 @@ logger = logging.getLogger(__name__).addHandler(logging.StreamHandler())
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-if not getattr(vim, "find_module", None):
+if not hasattr(vim, "find_module"):
     vim.find_module = PathFinder.find_module
 
 
@@ -41,13 +45,8 @@ class Options:
     select = vim.eval("g:pymode_lint_select")
     verbose = 0
 
-
-def fix_file(buffer, options):
-    # TODO
-    pass
-
-
-fix_file(vim.current.buffer.name, Options)
+alt_options = namedtuple("alt_options", field_names=("aggressive", "diff", "experimental", "in_place", "ignore",
+    "pep8_passes", "line_range"))
 
 
 def get_documentation(vim):

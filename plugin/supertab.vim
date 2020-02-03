@@ -5,10 +5,10 @@
   " Last Modified: May 14, 2019
 " ============================================================================
 
-if exists('b:did_supertab') || &compatible || v:version < 700
+if exists('g:did_supertab') || &compatible || v:version < 700
   finish
 endif
-let b:did_supertab = 1
+let g:did_supertab = 1
 
 if exists('plugs')
   if !has_key(plugs, 'supertab')

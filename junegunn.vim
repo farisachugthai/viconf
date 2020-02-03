@@ -27,8 +27,10 @@ let g:plug_window = 'tabe'
 
 Plug 'junegunn/fzf', { 'dir': expand('~/.fzf'), 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+
 Plug 'scrooloose/nerdTree', { 'on': ['NERDTreeCWD', 'NERDTreeVCS'] }
 nnoremap <Leader>nt <Cmd>NERDTreeCWD<CR>zz
+
 " Switch NERDTree root to dir of currently focused window.
 " Make mapping match Spacemacs.
 if exists(':GuiTreeviewToggle')
@@ -36,6 +38,16 @@ if exists(':GuiTreeviewToggle')
 else
   nnoremap <Leader>0 <Cmd>NERDTreeVCS<CR>
 endif
+
+augroup nerd_loader
+  autocmd!
+  autocmd VimEnter * silent! autocmd! FileExplorer
+  autocmd BufEnter,BufNew *
+        \  if isdirectory(expand('<amatch>'))
+        \|   call plug#load('nerdtree')
+        \|   execute 'autocmd! nerd_loader'
+        \| endif
+augroup END
 
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
