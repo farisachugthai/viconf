@@ -12,7 +12,7 @@ let g:did_unix = 1
 
 nnoremap zE <nop>
 
-let s:root_dir = fnameescape(fnamemodify(expand('$MYVIMRC'), ':p:h:h'))
+let s:root_dir = fnameescape(fnamemodify(expand('%'), ':p:h:h'))
 
 if has('unix')
   call unix#UnixOptions()
@@ -86,5 +86,13 @@ nnoremap + C-a
 " As a nod to the inspiration I also want it in insert-mode
 call AddVileBinding('<C-x><C-r>', '<Cmd>source $MYVIMRC<CR>echomsg "Reread $MYVIMRC"<CR>')
 
+" info so possibly not cannonical
+call AddVileBinding('<C-x>w', '<Cmd> set wrap!')
+
 " Swap the mark and point
 xnoremap <C-x><C-x> o
+
+
+command! -bang -bar -complete=arglist -nargs=? Brofiles fzf#run(fzf#wrap('oldfiles', {'source': v:oldfiles, 'sink': 'sp', 'options': g:fzf_options}, <bang>0))
+
+call AddVileBinding('<C-x>b', '<Cmd>Brofiles<CR>')

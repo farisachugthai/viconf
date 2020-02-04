@@ -2,15 +2,7 @@
 # encoding: utf-8
 """Wrapper functionality around the functions we need from Vim.
 
-This is copied directly from UltiSnips so we may need to change a couple of things.
-
 Really useful seemingly universal functions for working with Vim though.
-
-Dude! Go to line 178 there's a function for making scratch buffers.
-That's awesome because we could use it to A) replcae the one in
-autoload/pydoc_help.vim or B) change this one ot make it asynchronous and try
-to improve or speed up a few things that we've gotten accustomed to taking for
-granted.
 
 Dec 07, 2019: Double checked that this passes a cursory `:py3f %` test and it did.
 
@@ -31,23 +23,27 @@ except (ImportError, ModuleNotFoundError):
 class VimBuffer:
     """Wrapper around the current Vim buffer."""
 
+    def __init__(self):
+        self.vim = vim
+        self.buf = self.cur_buffer()
+
     def __getitem__(self, idx):
         if isinstance(idx, slice):  # Py3
-            return self.__getslice__(idx.start, idx.stop)
+            yield self.__getslice__(idx.start, idx.stop)
         rv = vim.current.buffer[idx]
-        return as_unicode(rv)
+        yield rv
 
     def __getslice__(self, i, j):  # pylint:disable=no-self-use
         rv = vim.current.buffer[i:j]
-        return [as_unicode(l) for l in rv]
+        yield [l for l in rv]
 
     def __setitem__(self, idx, text):
         if isinstance(idx, slice):  # Py3
             return self.__setslice__(idx.start, idx.stop, text)
-        vim.current.buffer[idx] = as_vimencoding(text)
+        vim.current.buffer[idx] = text
 
     def __setslice__(self, i, j, text):  # pylint:disable=no-self-use
-        vim.current.buffer[i:j] = [as_vimencoding(l) for l in text]
+        vim.current.buffer[i:j] = [l for l in text]
 
     def __len__(self):
         return len(vim.current.buffer)
@@ -59,7 +55,7 @@ class VimBuffer:
     def line_till_cursor(self):  # pylint:disable=no-self-use
         """Return the text before the cursor."""
         _, col = self.cursor
-        return as_unicode(vim.current.line)[:col]
+        return (vim.current.line)[:col]
 
     @property
     def number(self):  # pylint:disable=no-self-use
@@ -95,6 +91,28 @@ class VimBuffer:
         nbyte = col2byte(pos.line + 1, pos.col)
         vim.current.window.cursor = pos.line + 1, nbyte
 
+    def cur_window(self):
+        return vim.current.window
+
+    def cur_buffer(self):
+        return vim.current.buffer
+
+    def cur_tab(self):
+        return vim.current.tabpage
+
+    def cur_range(self):
+        return vim.current.range
+
+    def cur_line(self):
+        return vim.current.line
+
+    def cur_session(self):
+        return vim.current._session
+
+    def fname():
+        """Simple example of how to get the current buffer's filename."""
+        return vim.current.buffer.name
+
 
 buf = VimBuffer()  # pylint:disable=invalid-name
 
@@ -129,9 +147,9 @@ def escape(inp):
     def conv(obj):
         """Convert obj."""
         if isinstance(obj, list):
-            rv = as_unicode("[" + ",".join(conv(o) for o in obj) + "]")
+            rv = "[" + ",".join(conv(o) for o in obj) + "]"
         elif isinstance(obj, dict):
-            rv = as_unicode(
+            rv = (
                 "{"
                 + ",".join(
                     [
@@ -142,30 +160,25 @@ def escape(inp):
                 + "}"
             )
         else:
-            rv = as_unicode('"%s"') % as_unicode(obj).replace('"', '\\"')
+            rv = ('"%s"') % (obj).replace('"', '\\"')
         return rv
 
     return conv(inp)
 
 
-def command(cmd):
-    """Wraps vim.command."""
-    return as_unicode(vim.command(as_vimencoding(cmd)))
-
-
 def eval(text):
     """Wraps vim.eval."""
-    rv = vim.eval(as_vimencoding(text))
+    rv = vim.eval(text)
     if not isinstance(rv, (dict, list)):
-        return as_unicode(rv)
+        return rv
     return rv
 
 
 def bindeval(text):
     """Wraps vim.bindeval."""
-    rv = vim.bindeval(as_vimencoding(text))
+    rv = vim.bindeval(text)
     if not isinstance(rv, (dict, list)):
-        return as_unicode(rv)
+        return rv
     return rv
 
 
@@ -173,7 +186,6 @@ def feedkeys(keys, mode="n"):
     """Wrapper around vim's feedkeys function.
 
     Mainly for convenience.
-
     """
     if eval("mode()") == "n":
         if keys == "a":
@@ -186,8 +198,7 @@ def feedkeys(keys, mode="n"):
     if keys == "startinsert":
         command("startinsert")
     else:
-        command(as_unicode(r'call feedkeys("%s", "%s")') % (keys, mode))
-
+        command(r'call feedkeys("%s", "%s")' % (keys, mode))
 
 
 def virtual_position(line, col):
@@ -389,6 +400,7 @@ def fname():
     """Simple example of how to get the current buffer's filename."""
     # or you should do b = VimBuffer().name
     return vim.current.buffer.name
+
 
 def pd(args=None):
     """Simple helper because I do this so often."""

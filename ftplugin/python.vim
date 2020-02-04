@@ -17,9 +17,9 @@ let g:pyindent_nested_paren = 'shiftwidth()'
 let g:pyindent_continue = 'shiftwidth() * 2'
 
 " Filetype Specific Options:
-if &filetype !=#'python' && &filetype !=#'xonsh' | finish | endif
+if &filetype !=# 'python' || &filetype !=# 'xonsh' || &filetype !=# 'pyrex' | finish | endif
 
-if exists('b:did_ftplugin') | unlet! b:did_ftplugin | endif
+if exists('b:did_ftplugin') | finish | endif
 source $VIMRUNTIME/ftplugin/python.vim
 
 syntax sync fromstart
@@ -48,9 +48,6 @@ setlocal include=^\\s*\\(from\\\|import\\)
 " this is in the help docs for `:he includeexpr` and states for java but i bet
 " itd work for python
 setlocal includeexpr=substitute(v:fname,'\\.','/','g')
-
-setlocal cinkeys-=0#
-setlocal indentkeys-=0#
 
 " also let's know where the line needs to end visually but not invoke the
 " linters to react.
@@ -139,3 +136,4 @@ let b:undo_ftplugin = 'setlocal lbr< tw< cms< et< sts< ts< sw< cc< fdm< kp<'
       \ . '|unmap <buffer> <F5>'
       \ . '|unmap! <buffer> <F5>'
       \ . '|unlet! b:undo_ftplugin'
+      \ . '|unlet! b:did_ftplugin'

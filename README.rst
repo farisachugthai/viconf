@@ -132,6 +132,15 @@ different configuration files on different devices, and would like to
 check whether a plugin was installed. It's also good for debugging and
 seeing in what order a plugin loads.
 
+Git Subtree
+-----------
+
+Updating vim-plug.
+
+.. code-block:: bash
+
+   git subtree pull --squash --prefix=vim-plug https://github.com/junegunn/vim-plug.git master
+
 
 Spell Files
 ============

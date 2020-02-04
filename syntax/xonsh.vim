@@ -16,8 +16,10 @@ if exists("xsh_highlight_all")
 endif
 
 " Include python files goddamn
-runtime! syntax/python.vim
-unlet b:current_syntax
+let g:python_highlight_all = 1
+let g:python_space_error_highlight = 1
+source $VIMRUNTIME/syntax/python.vim
+unlet! b:current_syntax
 
 syn keyword xshStatement    as assert break continue del except exec finally
 syn keyword xshStatement    global lambda pass print raise return try with
@@ -33,6 +35,15 @@ syn match xshComment    "#.*$" contains=xshTodo
 syn match xshFunction    "[a-zA-Z_][a-zA-Z0-9_]*" contained
 syn match xshEnvironmentVariable "\v\$[a-zA-Z0-9_]+"
 
+" Do not spell doctests inside strings.
+" Notice that the end of a string, either ''', or """, will end the contained
+" doctest too.  Thus, we do *not* need to have it as an end pattern.
+syn region pythonDoctest
+      \ start="^\s*>>>\s" end="^\s*$"
+      \ contained contains=ALLBUT,pythonDoctest,pythonFunction,@Spell
+syn region pythonDoctestValue
+      \ start=+^\s*\%(>>>\s\|\.\.\.\s\|"""\|'''\)\@!\S\++ end="$"
+	  \ contained
 syn region xshString    matchgroup=Normal start=+[uU]\='+ end=+'+ skip=+\\\\\|\\'+ contains=xshEscape
 syn region xshString    matchgroup=Normal start=+[uU]\="+ end=+"+ skip=+\\\\\|\\"+ contains=xshEscape
 syn region xshString    matchgroup=Normal start=+[uU]\="""+ end=+"""+  contains=xshEscape

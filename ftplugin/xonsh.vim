@@ -8,22 +8,11 @@
 if exists('b:did_ftplugin') | finish | endif
 
 " Sourcing Everything: {{{1
-runtime $VIMRUNTIME/ftplugin/python.vim
+source $VIMRUNTIME/ftplugin/python.vim
 unlet! b:did_ftplugin
+let s:this_dir = fnameescape(fnamemodify(expand('%'), ':p:h'))
 
-runtime ftplugin/python.vim
-unlet! b:did_ftplugin
-
-runtime ftplugin/python/*.vim
-unlet! b:did_ftplugin
-
-runtime after/ftplugin/python.vim
-unlet! b:did_ftplugin
-
-runtime after/ftplugin/python/*.vim
-unlet! b:did_ftplugin
-
-runtime $VIMRUNTIME/syntax/python.vim
+exec 'source ' . s:this_dir . '/python.vim'
 
 " Options: {{{1
 setlocal syntax=xonsh
@@ -34,5 +23,6 @@ setlocal foldmethod=indent
 setlocal suffixesadd+=,.xsh,.xonshrc,
 
 " Atexit: {{{1
-let b:undo_ftplugin = 'setlocal foldmethod< syntax< sua< '
+let b:undo_ftplugin = 'setlocal fdm< syntax< sua< '
             \ . '|unlet! b:undo_ftplugin'
+            \ . '|unlet! b:did_ftplugin'

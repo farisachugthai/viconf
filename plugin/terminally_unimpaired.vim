@@ -36,6 +36,14 @@ if !empty($ANDROID_DATA)
   nnoremap <Leader>ts :<C-u>TermuxSend<CR>
 endif
 
+if exists('$ANDROID_DATA')  " Fuck i had to change this because wsl was loading termux jesus christ
+  call find_files#termux_remote() | echo 'loaded termux'
+elseif !has('unix')
+  call find_files#msdos_remote()
+else
+  call find_files#ubuntu_remote() | echo 'loaded wsl'
+endif
+
 if !has('unix')
   set sessionoptions+=unix,slash viewoptions+=unix,slash
 

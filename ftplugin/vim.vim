@@ -42,3 +42,4 @@ let b:undo_ftplugin = 'setlocal et< sw< ts< sts< lbr< sua< wrap< fdl< fdm< cms< 
       \ . '|setlocal path< isf<'
       \ . '|unlet! b:undo_ftplugin'
       \ . '|unlet! b:undo_indent'
+      \ . '|unlet! b:did_ftplugin'

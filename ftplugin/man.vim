@@ -6,7 +6,6 @@
 " ============================================================================
 
 if exists('b:did_ftplugin') | finish | endif
-let b:did_ftplugin = 1
 
 " Vim Official Ftplugin: {{{1
 " Set this globally
@@ -35,8 +34,7 @@ setlocal shiftwidth=8
 setlocal breakindent
 setlocal number relativenumber
 
-  let b:undo_ftplugin = 'setlocal isk< buftype< swf< bufhidden< mod< ro< ma< et< ts< sts< sw< wrap< breakindent< '
-      \ . '|unlet! b:undo_ftplugin'
+let b:undo_ftplugin  = 'setlocal isk< buftype< swf< bufhidden< mod< ro< '
 
 if !exists('g:no_plugin_maps') && !exists('g:no_man_maps')
   nnoremap <buffer> q <Cmd>bd<CR>
@@ -66,3 +64,8 @@ if !exists('g:no_plugin_maps') && !exists('g:no_man_maps')
   setlocal iskeyword+=\.,-
   let b:undo_ftplugin .= '|setlocal isk<'
 endif
+
+
+let b:undo_ftplugin  .= '|setlocal ma< et< ts< sts< sw< wrap< breakindent< '
+                    \ . '|unlet! b:undo_ftplugin'
+                    \ . '|unlet! b:did_ftplugin'

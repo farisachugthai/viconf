@@ -52,7 +52,7 @@ let g:markdown_fenced_languages = [
       \ 'ini=dosini',
       \ ]
 
-let g:markdown_minlines = 100
+let g:markdown_minlines = 500
 
 setlocal foldexpr=format#MarkdownFoldText()
 setlocal foldmethod=expr
@@ -93,7 +93,7 @@ if has_key(plugs, 'vim-markdown')
 
 endif
 
-" runtime ftplugin/html.vim ftplugin/html_*.vim ftplugin/html/*.vim
+source $VIMRUNTIME/ftplugin/html.vim
 
 let b:undo_ftplugin .= 'setl spell< cc< tw< lbr< et< ts< sts< sw< fdl< fdls<'
       \ . '|unlet! b:undo_ftplugin'

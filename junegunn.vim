@@ -79,16 +79,10 @@ Plug 'mhinz/vim-startify'
 " nnoremap U <Cmd>UndotreeToggle<CR>
 
 " The 'tabular' plugin must come _before_ 'vim-markdown'.
-" Plug 'itspriddle/vim-shellcheck', { 'for': ['sh', 'bash'] }
-" Plug 'mitsuhiko/vim-jinja', {'for': ['html', 'jinja2', 'htmljinja', 'htmldjango'] }
-" Plug 'cespare/vim-toml', {'for': ['toml']}
 " Plug 'ervandew/supertab'
 Plug 'junegunn/vim-peekaboo'
 " Plug 'vim-voom/voom', {'on': ['Voom', 'VoomToggle', 'VoomExec'] }
 " Plug 'romainl/vim-qf'
-
-" This is running crazy slow on windows
-" Plug 'raimon49/requirements.txt.vim', {'for': ['requirements', 'txt', 'config']}
 
 " if empty(s:termux)
   " Plug 'chrisbra/csv.vim', {'for': ['csv', 'tsv']}
@@ -104,7 +98,7 @@ Plug 'junegunn/vim-peekaboo'
 
 " Plug 'ludovicchabant/vim-gutentags'
 " Plug 'tomtom/tlib_vim'
-" Plug 'ryanoasis/vim-devicons'           " Keep at end!
+Plug 'ryanoasis/vim-devicons'           " Keep at end!
 
 call plug#end()
 

@@ -90,7 +90,7 @@
   },
   "git.addGlameToBufferVar": true,
   "git.addGlameToVirtualText": true,
-   "git.branchCharacter": "  ",
+  "git.branchCharacter": "  ",
   "git.changedDecorator": "*",
   "git.conflictedDecorator": "::",
   "git.enableGlobalStatus": true,
@@ -140,7 +140,7 @@
       "args": [
         "--stdio"
       ],
-      "command": "vim-language-server.cmd",
+      "command": "vim-language-server",
       "filetypes": [
         "vim"
       ],

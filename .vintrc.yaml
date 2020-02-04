@@ -1,3 +1,5 @@
+---
+
 # ============================================================================
 # File  : .vintrc
 # Author: Faris Chugthai
@@ -18,8 +20,8 @@ env:
     neovim: true
 
 policies:
-    # ProhibitImplicitScopeVariable:
-    #     enabled: false
+    ProhibitImplicitScopeVariable:
+        enabled: true
     # ProhibitAbbreviationOption:
     #     enabled: false
     ProhibitSetNoCompatible:
@@ -31,3 +33,27 @@ policies:
         enabled: true
     ProhibitNoAbortFunction:
         enabled: true
+    ProhibitUnusedVariable:
+      enabled: true
+
+# fyi
+# $: vint -V init.vim
+# vint DEBUG: checking: `init.vim`
+# vint DEBUG: severity: STYLE_PROBLEM
+# vint DEBUG: enabled: ProhibitAbbreviationOption
+# vint DEBUG: enabled: ProhibitAutocmdWithNoGroup
+# vint DEBUG: enabled: ProhibitCommandRelyOnUser
+# vint DEBUG: enabled: ProhibitCommandWithUnintendedSideEffect
+# vint DEBUG: enabled: ProhibitEncodingOptionAfterScriptEncoding
+# vint DEBUG: enabled: ProhibitEqualTildeOperator
+# vint DEBUG: enabled: ProhibitImplicitScopeBuiltinVariable
+# vint DEBUG: disabled: ProhibitImplicitScopeVariable
+# vint DEBUG: enabled: ProhibitInvalidMapCall
+# vint DEBUG: enabled: ProhibitMissingScriptEncoding
+# vint DEBUG: enabled: ProhibitNoAbortFunction
+# vint DEBUG: disabled: ProhibitSetNoCompatible
+# vint DEBUG: enabled: ProhibitUnnecessaryDoubleQuote
+# vint DEBUG: disabled: ProhibitUnusedVariable
+# vint DEBUG: enabled: ProhibitUsingUndeclaredVariable       
+
+...

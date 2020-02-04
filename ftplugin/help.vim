@@ -11,7 +11,6 @@ setlocal formatoptions+=tcroql textwidth=78
 setlocal cole=2 cocu=nc
 setlocal iskeyword+=-
 
-let b:undo_ftplugin = "setlocal fo< tw< cole< cocu< "
 
 " Oh shit i found duplicated code.
 " NOTE: I mean code duplicated in the neovim source code.
@@ -25,3 +24,8 @@ nnoremap <buffer> go gO
 let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
 " Align help tags to the right margin
 let b:ale_fixers += ['align_help_tags']
+
+
+let b:undo_ftplugin = "setlocal fo< tw< cole< cocu< "
+                    \ . '|unlet! b:undo_ftplugin'
+                    \ . '|unlet! b:did_ftplugin'

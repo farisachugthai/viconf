@@ -39,7 +39,8 @@ map <Space> <Leader>
 
 if has('nvim-0.4')   " Fun new features!
   let &shadafile = stdpath('data') . '/shada/main.shada'
-  set pumblend=20 winblend=20  " toggle transparency in the pum and windows
+  " toggle transparency in the pum and windows. don't set higher than 10 it becomes hard to read higher than that
+  set pumblend=10 winblend=5
   try | set pyxversion=3 | catch /^Vim:E518:*/ | endtry
 endif
 
@@ -150,13 +151,13 @@ set termguicolors
 set synmaxcol=1000
 
 if exists('$ANDROID_DATA')  " Fuck i had to change this because wsl was loading termux jesus christ
-  call find_files#termux_remote() | echomsg 'loaded termux'
+  call find_files#termux_remote()
 elseif !has('unix')
   " Note: dude holy hell is it necessary to call the msdos#set_shell_cmd()
   " func. you do so in ./plugin/unix.vim but jesus christ did it fuck stuff up
   " when that got deleted
-  call find_files#msdos_remote() | echomsg 'loaded msdos'
+  call find_files#msdos_remote()
 else
-  call find_files#ubuntu_remote() | echomsg 'loaded wsl'
+  call find_files#ubuntu_remote()
 endif
 
