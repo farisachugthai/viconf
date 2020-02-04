@@ -27,8 +27,13 @@ let g:rst_syntax_code_list = {
 let g:rst_use_emphasis_colors = 1
 let g:rst_fold_enabled = 1
 
-" Now that globals are set check for b:did_ftplugin
+
+" Now that globals are set check for ....
+if &filetype !=# 'rst' | finish | endif
+" The right file type
+"
 if exists('b:did_ftplugin') | finish | endif
+" and that b:did_ftplugin is set
 let b:did_ftplugin = 1
 
 syntax sync fromstart
@@ -85,6 +90,7 @@ let b:undo_ftplugin = 'setlocal tw< cms< com< cc< lbr< fdl< fdls< '
       \ . '|setlocal indentkeys<'
       \ . '|setlocal cinkeys<'
       \ . '|unlet! b:undo_ftplugin'
+      \ . '|unlet! b:did_ftplugin'
 
 " reStructuredText standard recommends that tabs be expanded to 8 spaces
 " The choice of 3-space indentation is to provide slightly better support for

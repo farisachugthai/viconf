@@ -12,10 +12,13 @@ let g:did_unix = 1
 
 nnoremap zE <nop>
 
+let s:root_dir = fnameescape(fnamemodify(expand('$MYVIMRC'), ':p:h:h'))
+
 if has('unix')
   call unix#UnixOptions()
 else
-  runtime autoload/msdos.vim
+  " exec 'source ' . s:root_dir . '\autoload\msdos.vim'
+  call msdos#set_shell_cmd()
 endif
 
 if exists($ANDROID_DATA)

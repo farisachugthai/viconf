@@ -6,9 +6,9 @@
 " ============================================================================
 
 " Options: {{{1
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+let g:UltiSnipsExpandTrigger="<C-j>"
+let g:UltiSnipsJumpForwardTrigger="<C-j>"
+let g:UltiSnipsJumpBackwardTrigger="<C-k>"
 
 let g:ultisnips_python_style = 'numpy'
 let g:ultisnips_python_quoting_style = 'double'
@@ -36,10 +36,15 @@ let g:UltiSnipsListSnippets = '<C-\>'
 
 " Oddly, setting this var only sets it in select-mode though.
 " So let's add a few mappings to help us along.
-nnoremap <C-\> :<C-u>call UltiSnips#ListSnippets()
-vnoremap <C-\> :<C-u>call UltiSnips#ListSnippets()
+" nnoremap <C-\> :<C-u>call UltiSnips#ListSnippets()<CR>
 
-" Mappings: {{{1
+" TODO: Not really working. Kinda hard to get it to behave how I'd like.
+vnoremap <C-\> :<C-u>call UltiSnips#ListSnippets()<CR>
+" Yo and here's a different way of doing this
+" nnoremap <expr> <C-\> py#list_snippets()
+" And another!
+" vnoremap <C-\> <Cmd>py#list_snippets()
+
 noremap <F4> <Cmd>UltiSnipsEdit<CR>
 noremap! <F4> <Cmd>UltiSnipsEdit<CR>
 
@@ -61,4 +66,3 @@ inoremap <C-@> <Cmd>echo UltiSnips#ListSnippets()<CR>
 inoremap <silent> <M-s> <C-R>=(plugins#ExpandPossibleShorterSnippet() == 0? '': UltiSnips#ExpandSnippet())<CR>
 
 command! UltiSnipsListSnippets call UltiSnips#ListSnippets()
-

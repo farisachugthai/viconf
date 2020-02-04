@@ -17,8 +17,13 @@ if exists('b:did_ftplugin') | finish | endif
 
 let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
 let b:ale_linters = ['language_server', 'shell']
+
 if executable('shellcheck')
   let b:ale_linters += ['shellcheck']
+
+  setlocal makeprg=shellcheck
+  compiler shellcheck
+
 endif
 
 " Source things correctly damnit!

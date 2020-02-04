@@ -24,12 +24,8 @@ function! ftplugins#ALE_JSON_Conf() abort  " {{{1
     let b:ale_fixers += ['fixjson']
   endif
 
-  " if executable('jsonlint')
-  " Jul 17, 2019: Only json linter available. So  enabled it no matter what
-  " then? Like what other choice do you have right?
     let b:ale_linters = ['jsonlint']
     let b:ale_linters_explicit = 1
-  " endif
 endfunction
 
 function! ftplugins#FormatFile() abort  " {{{1

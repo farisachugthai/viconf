@@ -24,9 +24,12 @@ if has('python3')
   " You know whats nice? Both of these expressions work.
   " :Pd(vim.vars)
   " :Pd vim.vars
-  command! -bar -complete=expression -complete=function -nargs=? Pd python3 print(dir(<args>))
+  command! -range -bar -complete=expression -complete=function -nargs=? Pd <line1>,<line2>python3 print(dir(<args>))
 
-  command! -bar -nargs=+ -complete=expression -complete=function -nargs=? P python3 print(<args>)
+  " Honestly i don't know what the <range> arg is providing to these commands
+  " and half the time it makes no sense but we may as well implement the whole
+  " interface
+  command! -range -bar -nargs=+ -complete=expression -complete=function -nargs=? P <line1>,<line2>python3 print(<args>)
 
 elseif has('pythonx')
 

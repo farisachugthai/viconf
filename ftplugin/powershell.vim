@@ -5,16 +5,7 @@
     " Last Modified: Oct 22, 2019
 " ============================================================================
 
-" Guard: {{{1
-if exists("b:did_ftplugin")
-  finish
-endif
-let b:did_ftplugin = 1
-
-let s:cpo_save = &cpoptions
-set cpoptions-=C
-
-" Options: {{{1
+" Options: {{{
 setlocal expandtab
 setlocal shiftwidth=4
 setlocal softtabstop=4
@@ -34,11 +25,12 @@ setlocal foldmethod=syntax
 
 let b:ale_fixers = ['powershell']
 
-" Atexit: {{{1
+" }}}
+
+" Atexit: {{{
 
 let b:undo_ftplugin = 'setlocal et< sw< sts< cms< tw< isk< sua< fdm< '
       \ . '|unlet! b:ale_fixers'
       \ . '|unlet! b:undo_ftplugin'
 
-let &cpoptions = s:cpo_save
-unlet s:cpo_save
+" }}}

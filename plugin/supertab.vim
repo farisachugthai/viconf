@@ -5,6 +5,17 @@
   " Last Modified: May 14, 2019
 " ============================================================================
 
+if exists('g:did_supertab') || &compatible || v:version < 700
+  finish
+endif
+let g:did_supertab = 1
+
+if exists('plugs')
+  if !has_key(plugs, 'supertab')
+    finish
+  endif
+endif
+
 let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
 let g:SuperTabContextDiscoverDiscovery =
         \ ['&completefunc:<c-x><c-u>', '&omnifunc:<c-x><c-o>']
@@ -24,6 +35,8 @@ let g:SuperTabCrMapping = 1
 let g:SuperTabClosePreviewOnPopupClose = 1  " (default value: 0)
 let g:SuperTabDefaultCompletionType = 'context'
 let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
+
+" set completefunc=SuperTabCodeComplete
 
 augroup SuperTabOmniFunc
   autocmd!

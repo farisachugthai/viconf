@@ -141,10 +141,10 @@ tnoremap <F6>               <Cmd>Snippets<CR>
   inoremap <C-k>            <C-x><C-k>
 
 " NOTE: The imap should probably only be invoked using \<tab>
-nmap ,<tab>                 <Plug>(fzf-maps-n)
-omap ,<tab>                 <Plug>(fzf-maps-o)
-xmap ,<tab>                 <Plug>(fzf-maps-x)
-imap ,<tab>                 <Plug>(fzf-maps-i)
+nmap \<tab>                 <Plug>(fzf-maps-n)
+omap \<tab>                 <Plug>(fzf-maps-o)
+xmap \<tab>                 gv<Plug>(fzf-maps-x)
+imap \<tab>                 <Plug>(fzf-maps-i)
 
 " Map vim defaults to fzf history commands
 nnoremap <silent> q:        <Cmd>History:<CR>

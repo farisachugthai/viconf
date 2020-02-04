@@ -5,13 +5,6 @@
     " Last Modified: Nov 14, 2019
 " ============================================================================
 
-" Guard: {{{1
-
-let s:cpo_save = &cpoptions
-set cpoptions&vim
-
-" Options: {{{1
-
 setlocal textwidth=72
 setlocal spell
 
@@ -22,9 +15,4 @@ setlocal linebreak
 setlocal formatoptions-=t formatoptions+=croql
 setlocal comments=:#,:; commentstring=;\ %s
 
-" Atexit: {{{1
-
 let b:undo_ftplugin = 'setlocal tw< sp< cc< fo< com< cms<'
-
-let &cpoptions = s:cpo_save
-unlet s:cpo_save

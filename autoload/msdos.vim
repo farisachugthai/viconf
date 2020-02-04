@@ -7,7 +7,7 @@
 
 function! msdos#set_shell_cmd() abort  " {{{1
   " All the defaults when running cmd as comspec on windows 10
-  set shell=cmd
+  set shell=cmd.exe
   " set shellcmdflag=/s\ /c
   " TODO: Figure out if this wasn't a terrible idea. Maybe need to simply
   " modify our invocations of system commands.
@@ -20,15 +20,15 @@ function! msdos#set_shell_cmd() abort  " {{{1
   set shellxquote=(
   set shellxescape=^
   " What about setting shellquote to "" so that cmd gets the args quoted?
-  echomsg 'Using cmd as the system shell.'
+  " echomsg 'Using cmd as the system shell.'
   return
 endfunction
 
 function! msdos#invoke_cmd(command) abort  " {{{1
-  if exists('&shellslash')
-    let s:old_shellslash = &shellslash
-    set noshellslash
-  endif
+  " if exists('&shellslash')
+  "   let s:old_shellslash = &shellslash
+  "   set noshellslash
+  " endif
 
   if !empty(a:command)
     let s:ret = systemlist(a:command)
@@ -36,9 +36,9 @@ function! msdos#invoke_cmd(command) abort  " {{{1
     call msdos#CmdTerm()
   endif
 
-  if exists('&shellslash')
-    let &shellslash = s:old_shellslash
-  endif
+  " if exists('&shellslash')
+  "   let &shellslash = s:old_shellslash
+  " endif
 
   if v:shell_error
     return v:shell_error
@@ -50,16 +50,16 @@ endfunction
 function! msdos#CmdTerm(...) abort  " {{{1
   " Handle args later
 
-  if exists('&shellslash')
-    let s:old_shellslash = &shellslash
-    set noshellslash
-  endif
+  " if exists('&shellslash')
+  "   let s:old_shellslash = &shellslash
+  "   set noshellslash
+  " endif
 
   execute 'term cmd /U /F:ON /E:ON /K C:\tools\Cmder\vendor\init.bat'
 
-  if exists('&shellslash')
-    let &shellslash = s:old_shellslash
-  endif
+  " if exists('&shellslash')
+  "   let &shellslash = s:old_shellslash
+  " endif
 
   if v:shell_error
     return v:shell_error

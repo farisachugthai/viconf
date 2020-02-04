@@ -10,22 +10,22 @@ if exists('g:did_buffers') || &compatible || v:version < 700
 endif
 let g:did_buffers = 1
 
-
 " The nvim API is seriously fantastic.
 nnoremap <Leader>rt call buffers#EchoRTP()
 command! -nargs=0 EchoRTP echo buffers#EchoRTP()
 
+" From `:he quickfix`
 command! -complete=dir -bar -bang -nargs=* NewGrep execute 'silent grep! <args>' | copen<bang>
 
 function! Window_Mappings() abort  " {{{1
   " Navigate windows more easily
-  " We cant use these though because ultisnips took c-j and c-k fuck
-  " nnoremap <C-h> <Cmd>wincmd h<CR>
   " This displays as <NL> when you run `:map` but it behaves like C-j. Oh well.
-  " nnoremap <C-j> <Cmd>wincmd j<CR>
-  " nnoremap <C-k> <Cmd>wincmd k<CR>
-  " nnoremap <C-l> <Cmd>wincmd l<CR>
-  " Move windows a little faster the command bythemselves don't do anything
+  nnoremap <C-j> <Cmd>wincmd j<CR>
+  nnoremap <C-k> <Cmd>wincmd k<CR>
+  nnoremap <C-l> <Cmd>wincmd l<CR>
+  nnoremap <C-j> <Cmd>wincmd j<CR>
+  nnoremap <C-l> <Cmd>wincmd l<CR>
+  " Resize windows a little faster
   nnoremap <C-w>< 5<C-w><
   nnoremap <C-w>> 5<C-w>>
   nnoremap <C-w>+ 5<C-w>+
@@ -43,15 +43,9 @@ function! Window_Mappings() abort  " {{{1
 endfunction
 
 function! Quickfix_Mappings() abort
-  " To make navigating the location list and quickfix easier
-  " Also check ./unimpaired.vim
-  " Sep 05, 2019: This doesnt need to be 2 commands!! cwindow does both!
-  " Oct 18, 2019: I just ran into llist and lwindow showing different things
-  " and lwindow didn't show the location list i had at the time so switching again
-  " November llist throws an error if no location. *sigh*
-  nnoremap <Leader>qc <Cmd>cwindow<CR>
+  nnoremap <Leader>q <Cmd>cwindow<CR>
 
-  " These need to catch E776 no location list
+  " TODO: These need to catch E776 no location list
   nnoremap <silent> <C-Down> <Cmd>llast<CR><bar><Cmd>clast<CR>
   nnoremap <silent> <C-Up> <Cmd>lfirst<CR><bar><Cmd>cfirst<CR>
 
@@ -117,7 +111,7 @@ function! Alt_Key_Navigation() abort
   endif
 endfunction
 
-function! Buffer_Mappings() abort
+function! Buffer_Mappings() abort  " {{{
   " Navigate Buffers More Easily:
   nnoremap <Leader>bb <Cmd>buffers<CR>
   nnoremap <Leader>bd <Cmd>bdelete<CR>
@@ -125,9 +119,9 @@ function! Buffer_Mappings() abort
   nnoremap <Leader>bp <Cmd>bprev<CR>
   nnoremap <Leader>bf <Cmd>bfirst<CR>
   nnoremap <Leader>bl <Cmd>blast<CR>
-	" aka yank the whole buffer
+  " aka yank the whole buffer
   nnoremap <Leader>bY <Cmd>"+%y<CR>
-	" and then paste it
+  " and then paste it
   nnoremap <Leader>bP <Cmd>"+P<CR>
   " Sunovabitch bonly isn't a command?? Why is
   " noremap <Leader>bo <Cmd>bonly<CR>
@@ -145,14 +139,14 @@ function! Tab_Mappings() abort  " {{{1
   nnoremap <Leader>tc <Cmd>tabclose<CR>
   nnoremap <Leader>T  <Cmd>tabs<CR>
   nnoremap <Leader>te <Cmd>tabedit<CR>
-	" ngl pretty surprised that that cword didn't need an expand()
-	nnoremap <Leader>t# <Cmd>tabedit <cword><CR>
-	" Need to decide between many options
-	" nnoremap <Leader>tg <Cmd>tabedit
-	" poop can't do this
-	" nnoremap <Leader>tn <Cmd>tabnew<CR>
-	nnoremap <Leader>tf <Cmd>tabfirst<CR>
-	nnoremap <Leader>tl <Cmd>tablast<CR>
+  " ngl pretty surprised that that cword didn't need an expand()
+  nnoremap <Leader>t# <Cmd>tabedit <cword><CR>
+  " Need to decide between many options
+  " nnoremap <Leader>tg <Cmd>tabedit
+  " poop can't do this
+  " nnoremap <Leader>tn <Cmd>tabnew<CR>
+  nnoremap <Leader>tf <Cmd>tabfirst<CR>
+  nnoremap <Leader>tl <Cmd>tablast<CR>
 
   nnoremap ]t <Cmd>tabn<CR>
   nnoremap [t <Cmd>tabp<CR>

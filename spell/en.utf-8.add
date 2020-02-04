@@ -1809,3 +1809,6 @@ zshrc
 xmap
 Beazley's
 wsgiref
+PyperClip
+pyperclip
+CPython

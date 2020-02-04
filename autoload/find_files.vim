@@ -9,12 +9,12 @@ function! find_files#build_quickfix_list(lines) abort  " {{{1
   call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
   copen
   cc
-endfunction
+endfunction  " }}}
 
 function! s:make_sentence(lines) abort  " {{{1
   " *fzf-vim-reducer-example*
   return substitute(join(a:lines), '^.', '\=toupper(submatch(0))', '').'.'
-endfunction
+endfunction  " }}}
 
 function! find_files#plug_help_sink(line)  abort " {{{1
   " Call :PlugHelp to use fzf to open a window with all of the plugins
@@ -31,19 +31,19 @@ function! find_files#plug_help_sink(line)  abort " {{{1
   endfor
   tabnew
   execute 'Explore' dir
-endfunction
+endfunction  " }}}
 
 function! find_files#buflist() abort  " {{{1
   redir => s:ls
   silent! ls
   redir END
   return split(s:ls, '\n')
-endfunction
+endfunction  " }}}
 
 function! find_files#bufopen(e) abort  " {{{1
   execute 'buffer' matchstr(a:e, '^[ 0-9]*')
   return v:true
-endfunction
+endfunction  " }}}
 
 function! find_files#FZFMru() abort  " {{{1
     call fzf#run(fzf#wrap('history', {
@@ -51,7 +51,7 @@ function! find_files#FZFMru() abort  " {{{1
         \ 'sink'    :   'edit',
         \ 'options' :  ['--multi', '--ansi'],
         \ 'down'    :    '40%'}))
-endfunction
+endfunction  " }}}
 
 function! find_files#FZFGit() abort  " {{{1
   " Remove trailing new line to make it work with tmux splits
@@ -68,7 +68,7 @@ function! find_files#FZFGit() abort  " {{{1
   endif
   " 'source': 'git ls-files',
   " 'down'  : '40%'
-endfunction
+endfunction  " }}}
 
 function! find_files#termux_remote() abort  " {{{1
   let g:python3_host_prog = exepath('python')
@@ -103,13 +103,23 @@ function! find_files#termux_remote() abort  " {{{1
           \ }
 
   endif
-endfunction
+endfunction   " }}}
 
 function! find_files#ubuntu_remote() abort  " {{{1
-  let g:python3_host_prog = exepath('python3')
+  " let g:python3_host_prog = exepath('python3')
+ 
+  " wanna see a different way to do this?
+  python3 from jedi import get_default_environment
+  let s:host_prog = py3eval('get_default_environment().executable')
+  if executable(s:host_prog)
+    let g:python3_host_prog = s:host_prog
+  endif
+
   let g:python_host_prog = '/usr/bin/python2'
   let g:node_host_prog = exepath('neovim-node-host')
-  let g:loaded_ruby_provider = 1
+
+  " let g:loaded_ruby_provider = 1
+  let g:loaded_ruby_provider = exepath('neovim-ruby-host')
 
   if exists('$TMUX')
     let g:clipboard = {
@@ -138,14 +148,24 @@ function! find_files#ubuntu_remote() abort  " {{{1
           \ }
 
   endif
-endfunction
+endfunction  " }}}
 
 function! find_files#msdos_remote() abort  " {{{1
   " Don't set python paths dynamically it's such a headache
-  let g:python3_host_prog = 'C:/tools/vs/2019/Community/Common7/IDE/Extensions/Microsoft/Python/Miniconda/Miniconda3-x64/python.exe'
-  let g:python_host_prog = 'C:/Python27/python.exe'
+  let g:python3_host_prog = 'C:\Python38\python.exe'
+  let g:python_host_prog = 'C:\Python27\python.exe'
+  " let g:loaded_python_provider = 1
   let g:loaded_ruby_provider = 1
-  let g:node_host_prog = 'C:/tools/nvm/v12.14.1/neovim-node-host.cmd'
+
+  " dont do that
+  " let g:node_host_prog = 'C:\Users\fac\scoop\apps\nvm\current\v13.7.0\node'
+  " this still isn't working
+  " let g:node_host_prog =
+  " 'C:\Users\fac\AppData\Local\Yarn\Bin\neovim-node-host'
+  " neither was neovim-node-host.cmd
+  " wow this one actually fucking worked
+  let g:node_host_prog = 'C:\Users\fac\AppData\Local\Yarn\Data\Global\node_modules\neovim\bin\cli.js'
+
   let g:clipboard = {
         \   'name': 'winClip',
         \   'copy': {
@@ -153,14 +173,15 @@ function! find_files#msdos_remote() abort  " {{{1
         \      '*': 'win32yank.exe -i --crlf',
         \    },
         \   'paste': {
-        \      '+': 'win32yank.exe -o --lf',
-        \      '*': 'win32yank.exe -o --lf',
+        \      '+': 'win32yank.exe -o --crlf',
+        \      '*': 'win32yank.exe -o --crlf',
         \   },
         \   'cache_enabled': 1,
         \ }
-endfunction
+endfunction   " }}}
 
-function! find_files#RipgrepFzf(query, fullscreen)  abort
+function! find_files#RipgrepFzf(query, fullscreen)  abort   " {{{
+
   " In the default implementation of `Rg`, ripgrep process starts only once with
   " the initial query (e.g. `:Rg foo`) and fzf filters the output of the process.
 
@@ -181,6 +202,25 @@ function! find_files#RipgrepFzf(query, fullscreen)  abort
   let reload_command = printf(command_fmt, '{q}')
   let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
-endfunction
+endfunction  " }}}
 
-" Vim: set fdm=indent:
+function! find_files#RgSearch(txt) abort  " {{{
+  let l:rgopts = ' '
+  if &ignorecase == 1
+    let l:rgopts = l:rgopts . '-i '
+  endif
+  if &smartcase == 1
+    let l:rgopts = l:rgopts . '-S '
+  endif
+  silent! exe 'grep! ' . l:rgopts . a:txt
+  if len(getqflist())
+    exe g:rg_window_location 'copen'
+    redraw!
+  else
+    cclose
+    redraw!
+    echo "No match found for " . a:txt
+  endif
+endfunction  " }}}
+
+" Vim: set fdm=marker:

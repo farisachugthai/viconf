@@ -16,7 +16,9 @@ setlocal commentstring=<!--%s-->
 setlocal formatoptions=tcqln
 setlocal formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\|^[-*+]\\s\\+\\\|^\\[^\\ze[^\\]]\\+\\]:
 setlocal omnifunc=htmlcomplete#CompleteTags
+
 call htmlcomplete#DetectOmniFlavor()
+
 syntax sync fromstart
 setlocal conceallevel=0  " this gets annoying quick
 
@@ -81,11 +83,8 @@ if has_key(plugs, 'vim-markdown')
   " Allow for the TOC window to auto-fit when it's possible for it to shrink.
   " It never increases its default size (half screen), it only shrinks.
   let g:vim_markdown_toc_autofit = 1
-  " let g:vim_markdown_math = 1
   let g:vim_markdown_follow_anchor = 1
   let g:vim_markdown_frontmatter = 1
-  " let g:vim_markdown_toml_frontmatter = 1
-  " let g:vim_markdown_json_frontmatter = 1
   let g:vim_markdown_strikethrough = 1
 
   if exists('#Mkd')
@@ -94,7 +93,7 @@ if has_key(plugs, 'vim-markdown')
 
 endif
 
-runtime ftplugin/html.vim ftplugin/html_*.vim ftplugin/html/*.vim
+" runtime ftplugin/html.vim ftplugin/html_*.vim ftplugin/html/*.vim
 
 let b:undo_ftplugin .= 'setl spell< cc< tw< lbr< et< ts< sts< sw< fdl< fdls<'
       \ . '|unlet! b:undo_ftplugin'

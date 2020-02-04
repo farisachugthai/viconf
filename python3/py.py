@@ -75,6 +75,66 @@ def vimcmd(fxn):
     return wrapper
 
 
+# Jedi:
+
+class PythonToVimStr(unicode):
+    """ Vim has a different string implementation of single quotes """
+    __slots__ = []
+
+    def __new__(cls, obj, encoding='UTF-8'):
+        if not (is_py3 or isinstance(obj, unicode)):
+            obj = unicode.__new__(cls, obj, encoding)
+
+        # Vim cannot deal with zero bytes:
+        obj = obj.replace('\0', '\\0')
+        return unicode.__new__(cls, obj)
+
+    def __repr__(self):
+        # this is totally stupid and makes no sense but vim/python unicode
+        # support is pretty bad. don't ask how I came up with this... It just
+        # works...
+        # It seems to be related to that bug: http://bugs.python.org/issue5876
+        if unicode is str:
+            s = self
+        else:
+            s = self.encode('UTF-8')
+        return '"%s"' % s.replace('\\', '\\\\').replace('"', r'\"')
+
+
+class VimError(Exception):
+    def __init__(self, message, throwpoint, executing):
+        super(type(self), self).__init__(message)
+        self.message = message
+        self.throwpoint = throwpoint
+        self.executing = executing
+
+    def __str__(self):
+        return "{}; created by {!r} (in {})".format(
+            self.message, self.executing, self.throwpoint
+        )
+
+
+def _catch_exception(string, is_eval):
+    """
+    Interface between vim and python calls back to it.
+    Necessary, because the exact error message is not given by `vim.error`.
+    """
+    result = vim.eval('g:py_err ({0}, {1})'.format(
+        repr(PythonToVimStr(string, 'UTF-8')), int(is_eval)))
+    if 'exception' in result:
+        raise VimError(result['exception'], result['throwpoint'], string)
+    return result['result']
+
+
+def vim_command(string):
+    _catch_exception(string, is_eval=False)
+
+
+def vim_eval(string):
+    return _catch_exception(string, is_eval=True)
+
+
+
 def pykeywordprg():
     temp_cword = vim.eval(expand("<cWORD>"))
     logger.debug(f"{temp_cword}")
@@ -102,7 +162,10 @@ def timer(func):
 
 
 def _robust_black():
-    mode = get_mode()
+    if hasattr(black, 'FileMode'):
+        mode = get_mode()
+    else:
+        raise ModuleNotFoundError("Black wasn't installed.")
     buffer_str = "\n".join(vim.current.buffer) + "\n"
     try:
         return black.format_file_contents(buffer_str, fast=None, mode=mode)
@@ -168,3 +231,45 @@ def pure_python_path():
 
 def importer(mod):
     return find_spec(mod)
+
+def get_environment(use_cache=True):
+    import jedi
+    if use_cache:
+        return jedi.api.environment.get_cached_default_environment()
+    else:
+        try:
+            return jedi.get_system_environment()
+        except jedi.InvalidPythonEnvironment as exc:
+            traceback.format_exc(exc)
+            raise
+
+
+def catch_and_print_exceptions(func):
+
+    @functools.wraps
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except (Exception, vim.error):
+            traceback.print_exc()
+    return wrapper
+
+
+@catch_and_print_exceptions
+def import_completions():
+    pass
+
+
+def import_into_vim():
+    argl = vim.eval('a:argl')
+    try:
+        import jedi
+    except ImportError:
+        raise
+    else:
+        text = f"import {argl}"
+        script = jedi.Script(text, 1 , len(text), "", environment=get_environment())
+        completions = [ f"{argl}, {c.complete for c in script.completions()}" ]
+    vim.command("return '%s'" % '\n'.join(completions))
+
+
