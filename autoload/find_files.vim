@@ -156,9 +156,15 @@ function! find_files#msdos_remote() abort  " {{{1
   let g:python_host_prog = 'C:\Python27\python.exe'
   " let g:loaded_python_provider = 1
   let g:loaded_ruby_provider = 1
-  " let g:node_host_prog = 'C:\Users\fac\scoop\apps\nvm\current\v13.7.0\neovim-node-host'
-  " One does exist there but I've noticed that this is much more standard
-  let g:node_host_prog = 'C:\Users\fac\AppData\Local\Yarn\bin\neovim-node-host'
+
+  " dont do that
+  " let g:node_host_prog = 'C:\Users\fac\scoop\apps\nvm\current\v13.7.0\node'
+  " this still isn't working
+  " let g:node_host_prog =
+  " 'C:\Users\fac\AppData\Local\Yarn\Bin\neovim-node-host'
+  " neither was neovim-node-host.cmd
+  " wow this one actually fucking worked
+  let g:node_host_prog = 'C:\Users\fac\AppData\Local\Yarn\Data\Global\node_modules\neovim\bin\cli.js'
 
   let g:clipboard = {
         \   'name': 'winClip',

@@ -140,7 +140,7 @@
       "args": [
         "--stdio"
       ],
-      "command": "vim-language-server",
+      "command": "vim-language-server.cmd",
       "filetypes": [
         "vim"
       ],
@@ -159,7 +159,7 @@
           ]
         },
         "iskeyword": "@,48-57,_,192-255,-#",
-        "runtimepath": "&rtp",
+        "runtimepath": false,
         "suggest": {
           "fromRuntimepath": false,
           "fromVimruntime": true

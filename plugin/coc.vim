@@ -18,7 +18,10 @@ endif
 " so obviously only do this on windows. shit there are so many things that we need to configure
 " list.source.tags.command: ~/bin/ctags.exe -R --options=~/.ctags/universal_ctags.ctags .,
 
-if exists('g:node_host_prog') | let g:coc_node_path = g:node_host_prog | endif
+" if exists('g:node_host_prog') | let g:coc_node_path = g:node_host_prog | endif
+if !has('unix')
+  let g:coc_node_path = 'C:\Users\fac\scoop\apps\nvm\current\v13.7.0\node.exe'
+endif
 
 " TODO:
 " May have to extend after a has('unix') check.

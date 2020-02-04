@@ -5,6 +5,11 @@
     " Last Modified: Nov 16, 2019
 " ============================================================================
 
+if exists('g:did_startify') || &compatible || v:version < 700
+  finish
+endif
+let g:did_startify = 1
+
 if has('unix')
   let g:startify_change_to_dir = 1
 endif
@@ -56,18 +61,16 @@ let g:startify_lists = [
     \ ]
 
 
-" Setup_devicons: {{{1
-let entry_format = "'   ['. index .']'. repeat(' ', (3 - strlen(index)))"
+function! StartifyEntryFormat() abort
+  let entry_format = "repeat(' ', (3 - strlen(index)))"
 
 if exists('*WebDevIconsGetFileTypeSymbol')  " support for vim-devicons
-    let entry_format .= ". WebDevIconsGetFileTypeSymbol(entry_path) .' '.  entry_path"
+  let entry_format .= ". WebDevIconsGetFileTypeSymbol(entry_path) .' '.  entry_path"
+  return WebDevIconsGetFileTypeSymbol(fnamemodify(expand('%'), ':p')) ." ". entry_path
 else
-    let entry_format .= '. entry_path'
+  let entry_format .= '. entry_path'
+  return entry_format
 endif
-
-function! StartifyEntryFormat() abort
-  return 'WebDevIconsGetFileTypeSymbol(absolute_path) ." ". entry_path'
 endfunction
 
-
-" let g:startify_custom_header = plugins#filter_header(startify#fortune#cowsay())
+let g:startify_custom_header ='startify#center(startify#fortune#cowsay())'

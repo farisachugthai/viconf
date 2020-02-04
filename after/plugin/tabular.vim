@@ -5,7 +5,7 @@
     " Last Modified: ddate
 " ============================================================================
 
-" Official Docs: {{{1
+" Official Docs: {{{
 " Dude these are from the docs this is awesome!
 " after/plugin/my_tabular_commands.vim
 " Provides extra :Tabularize commands
@@ -22,4 +22,8 @@ AddTabularPattern! asterisk /*/l1
 AddTabularPipeline! remove_leading_spaces /^ /
           \ map(a:lines, "substitute(v:val, '^ *', '', '')")
 
-" Restore the saved value of 'cpo'
+" }}}
+
+" This is simply a useful command FYI. Center everything around commas in the
+" center
+" Tabularize /,/r1l1

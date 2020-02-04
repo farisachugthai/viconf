@@ -34,12 +34,12 @@ let g:UltiSnipsExpandTrigger = '<Tab>'
 " Literally listed in the help docs as unused. Why not?
 let g:UltiSnipsListSnippets = '<C-\>'
 
-" Mappings: {{{1
-
 " Oddly, setting this var only sets it in select-mode though.
 " So let's add a few mappings to help us along.
-nnoremap <C-\> :<C-u>call UltiSnips#ListSnippets()
-vnoremap <C-\> :<C-u>call UltiSnips#ListSnippets()
+" nnoremap <C-\> :<C-u>call UltiSnips#ListSnippets()<CR>
+
+" TODO: Not really working. Kinda hard to get it to behave how I'd like.
+vnoremap <C-\> :<C-u>call UltiSnips#ListSnippets()<CR>
 " Yo and here's a different way of doing this
 " nnoremap <expr> <C-\> py#list_snippets()
 " And another!
