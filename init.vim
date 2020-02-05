@@ -26,7 +26,9 @@ endif
 " How does this get set even when i'm in a terminal?
 if exists('g:GuiLoaded') | exec 'source ' s:this_dir . '\ginit.vim' | endif
 if has('unnamedplus') | set clipboard+=unnamed,unnamedplus | else | set clipboard+=unnamed | endif
+
 set pastetoggle=<F9>   " fuck me this is what windows terminal uses for something
+
 let g:loaded_vimballPlugin = 1
 let g:loaded_getscriptPlugin = 1
 let g:loaded_2html_plugin = 1
@@ -44,7 +46,7 @@ if has('nvim-0.4')   " Fun new features!
   try | set pyxversion=3 | catch /^Vim:E518:*/ | endtry
 endif
 
-" backups: {{{
+" Backups: {{{
 " Protect changes between writes. Default values of updatecount
 " (200 keystrokes) and updatetime (4 seconds) are fine
 set swapfile undofile backupext='.bak'
@@ -80,10 +82,9 @@ if ! isdirectory(expand(&g:undodir))
 endif
 
 " Make shift-insert work like in Xterm
-if has('gui_running')
-  map <S-Insert> <MiddleMouse>
-  map! <S-Insert> <MiddleMouse>
-endif
+noremap <S-Insert> <MiddleMouse>
+noremap! <S-Insert> <MiddleMouse>
+tnoremap <S-Insert> <MiddleMouse>
 
 set suffixes+=.aux,.bbl,.blg,.brf,.cb,.dvi,.idx,.ilg,.ind,.inx,.jpg,.log,.out,.png,.toc
 set suffixes-=.h,.obj
@@ -129,11 +130,9 @@ set spellsuggest=5
 set showmatch matchpairs+=<:> lazyredraw matchtime=20  " Show the matching pair for 2 seconds
 let g:matchparen_timeout = 500
 let g:matchparen_insert_timeout = 300
-" Holy shit. I was reading through the verbose file and trust me you want
-" these on separate lines
-packadd justify
-packadd cfilter
-packadd matchit
+
+set termguicolors
+set synmaxcol=1000
 
 if has('unix')
   let s:vim_plug = filereadable(fnameescape(stdpath('data') . '/site/autoload/plug.vim'))
@@ -146,18 +145,3 @@ if empty(s:vim_plug) && exists('*plugins#InstallPlug') | call plugins#InstallPlu
 exec 'source ' s:this_dir . '/junegunn.vim'
 " Don't assume that the InstallPlug() func worked so ensure it's defined
 if empty('plugs') | let plugs = {} | endif
-
-set termguicolors
-set synmaxcol=1000
-
-if exists('$ANDROID_DATA')  " Fuck i had to change this because wsl was loading termux jesus christ
-  call find_files#termux_remote()
-elseif !has('unix')
-  " Note: dude holy hell is it necessary to call the msdos#set_shell_cmd()
-  " func. you do so in ./plugin/unix.vim but jesus christ did it fuck stuff up
-  " when that got deleted
-  call find_files#msdos_remote()
-else
-  call find_files#ubuntu_remote()
-endif
-

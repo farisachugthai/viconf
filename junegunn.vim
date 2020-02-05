@@ -53,36 +53,36 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rsi'
 " Plug 'tpope/vim-surround'
-" Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-unimpaired'
 " Plug 'tpope/apathy'
 Plug 'tpope/scriptease'
 
 " if has('python3')
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 " endif
-" Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }
-" nnoremap <Leader>a <Cmd>ALEEnable<CR><bar>:sil call plugins#AleMappings()<CR>
-" nnoremap <Leader>et <Cmd>ALEToggle()<CR><bar>:sil call plugins#AleMappings()<CR>
-" if exists('$TMUX')
-"   Plug 'christoomey/vim-tmux-navigator'
-"   Plug 'edkolev/tmuxline.vim'
-" endif
+Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }
+nnoremap <Leader>a <Cmd>ALEEnable<CR><bar>:sil call plugins#AleMappings()<CR>
+nnoremap <Leader>et <Cmd>ALEToggle()<CR><bar>:sil call plugins#AleMappings()<CR>
+if exists('$TMUX')
+  Plug 'christoomey/vim-tmux-navigator'
+  Plug 'edkolev/tmuxline.vim'
+endif
 
 Plug 'mhinz/vim-startify'
 
-" Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
-" noremap <silent> <F8> <Cmd>TagbarToggle<CR>
-" noremap! <silent> <F8> <Cmd>TagbarToggle<CR>
-" tnoremap <silent> <F8> <Cmd>TagbarToggle<CR>
+Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
+noremap <silent> <F8> <Cmd>TagbarToggle<CR>
+noremap! <silent> <F8> <Cmd>TagbarToggle<CR>
+tnoremap <silent> <F8> <Cmd>TagbarToggle<CR>
 
-" Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
-" nnoremap U <Cmd>UndotreeToggle<CR>
+Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
+nnoremap U <Cmd>UndotreeToggle<CR>
 
 " The 'tabular' plugin must come _before_ 'vim-markdown'.
 " Plug 'ervandew/supertab'
 Plug 'junegunn/vim-peekaboo'
-" Plug 'vim-voom/voom', {'on': ['Voom', 'VoomToggle', 'VoomExec'] }
-" Plug 'romainl/vim-qf'
+Plug 'vim-voom/voom', {'on': ['Voom', 'VoomToggle', 'VoomExec'] }
+Plug 'romainl/vim-qf'
 
 " if empty(s:termux)
   " Plug 'chrisbra/csv.vim', {'for': ['csv', 'tsv']}
@@ -96,8 +96,8 @@ Plug 'junegunn/vim-peekaboo'
   " Plug 'michaeljsmith/vim-indent-object'
 " endif
 
-" Plug 'ludovicchabant/vim-gutentags'
-" Plug 'tomtom/tlib_vim'
+Plug 'ludovicchabant/vim-gutentags'
+Plug 'tomtom/tlib_vim'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 
 call plug#end()

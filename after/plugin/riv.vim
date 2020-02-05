@@ -5,16 +5,10 @@
     " Last Modified: May 09, 2019
 " ============================================================================
 
-" Guards: {{{1
-
-if !has_key(plugs, 'riv.vim')
+if exists('g:did_riv_after_plugin') || &compatible || v:version < 700
     finish
 endif
-
-if exists('b:did_riv_after_plugin') || &compatible || v:version < 700
-    finish
-endif
-
+let g:did_riv_after_plugin = 1
 " Options: {{{1
 
 " Turn off his syntax highlighting
