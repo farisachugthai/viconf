@@ -34,7 +34,7 @@ endif
 command! -nargs=1 -complete=file Chmod call system('chmod +x ' . expand('%:S'))
 
 " More From The Bottom Of Help Map: {{{1
-command! -nargs=+ -complete=file MyEdit
+command! -nargs=+ -complete=file EditThese
     \ for f in expand(<q-args>, 0, 1) |
     \ exe '<mods> split ' . f |
     \ endfor
@@ -93,6 +93,10 @@ call AddVileBinding('<C-x>w', '<Cmd> set wrap!')
 xnoremap <C-x><C-x> o
 
 
-command! -bang -bar -complete=arglist -nargs=? Brofiles fzf#run(fzf#wrap('oldfiles', {'source': v:oldfiles, 'sink': 'sp', 'options': g:fzf_options}, <bang>0))
+command! -bang -bar -complete=arglist -nargs=? Brofiles
+      \ call fzf#run(fzf#wrap('oldfiles',
+      \ {'source': v:oldfiles,
+      \ 'sink': 'sp',
+      \ 'options': g:fzf_options}, <bang>0))
 
 call AddVileBinding('<C-x>b', '<Cmd>Brofiles<CR>')
