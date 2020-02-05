@@ -16,8 +16,6 @@ augroup UserHelpandPython
   autocmd FileType python call py#ALE_Python_Conf()
 augroup END
 
-if has('python3')
-
   command! -bar -complete=expression -complete=function -range -nargs=+ Pythonx <line1>,<line2>python3 <args>
 
   " FUCK YEA! Dec 27, 2019: Behaves as expected!
@@ -30,16 +28,6 @@ if has('python3')
   " and half the time it makes no sense but we may as well implement the whole
   " interface
   command! -range -bar -nargs=+ -complete=expression -complete=function -nargs=? P <line1>,<line2>python3 print(<args>)
-
-elseif has('pythonx')
-
-  command! -bar -complete=expression -complete=function -range -nargs=+ Pyx <line1>,<line2>pythonx <args>
-
-elseif has('python')
-
-  command! -bar -complete=expression -complete=function -range -nargs=+ Pyx <line1>,<line2>python <args>
-
-endif
 
 " Apr 23, 2019: Didn't know complete help was a thing.
 " Oh holy shit that's awesome
@@ -55,7 +43,7 @@ command! -nargs=0 PydocSplit call pydoc_help#SplitPydocCword()
 " work more correctly.
 " todo: i think i added a completefunc thatll work perfectly
 
-command! -nargs=? -bang Pydoc exec <mods> . 'file'<bang> . call pydoc_help#Pydoc(<f-args>)
+command! -nargs=? -bang Pydoc :<mods>file<bang> exec 'call pydoc_help#Pydoc(<f-args>)'
 command! -nargs=0 PydocShow call pydoc_help#show()
 
 " TODO: Work on the range then the bang
@@ -63,4 +51,16 @@ command! -complete=file -range BlackCurrent <line1>,<line2>call py#Black()
 
 command! -nargs=* -complete=file -complete=file_in_path BlackThese call py#black_these(<f-args>)
 
+" Works! 
 command! -bar -bang -nargs=* IPython :<mods>term<bang> ipython <args>
+
+function! s:IPythonOptions(...) abort
+  let list = ['profile', 'history', 'kernel', 'locate']
+  " If you quote this with single quotes it wont work correctly...WHAT THE
+  " FUCK
+  return join(list, "\n")
+endfunction
+
+" So far works
+command! -bar -bang -nargs=* -complete=dir -complete=custom,s:IPythonOptions IPy :<mods>term<bang> ipython <args>
+

@@ -78,7 +78,7 @@ function! find_files#termux_remote() abort  " {{{1
 
   if exists('$TMUX')
     let g:clipboard = {
-          \   'name': 'myclipboard',
+          \   'name': 'tmux-clipboard',
           \   'copy': {
           \      '+': 'tmux load-buffer -',
           \      '*': 'tmux load-buffer -',

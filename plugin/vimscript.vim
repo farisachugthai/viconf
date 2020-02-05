@@ -10,6 +10,8 @@ if exists('g:loaded_vimscript_vim') || &compatible || v:version < 700
 endif
 let g:loaded_vimscript_vim = 1
 
+let s:this_dir = fnameescape(fnamemodify(expand('%'), ':p:h'))
+
 if !exists('g:rg_binary')
   let g:rg_binary = 'rg'
 endif
@@ -98,3 +100,4 @@ endif
 " Doesn't work and tried like 20 times to debug it.
 
 command! -bar -bang -complete=buffer -complete=file -nargs=? Profile call vimscript#profile(<f-args>)
+
