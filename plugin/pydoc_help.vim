@@ -42,8 +42,10 @@ command! -nargs=0 PydocSplit call pydoc_help#SplitPydocCword()
 " holy fuck i just beefed this command up a lot. now takes a bang and should
 " work more correctly.
 " todo: i think i added a completefunc thatll work perfectly
+" Man i really messed this one up. Look through the git log to see the older
+" invocations
+" command! -nargs=? -bang Pydoc :<mods>file<bang> exec 'call pydoc_help#Pydoc(<f-args>)'
 
-command! -nargs=? -bang Pydoc :<mods>file<bang> exec 'call pydoc_help#Pydoc(<f-args>)'
 command! -nargs=0 PydocShow call pydoc_help#show()
 
 " TODO: Work on the range then the bang

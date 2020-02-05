@@ -1,7 +1,8 @@
 " ============================================================================
   " File: vimscript.vim
   " Author: Faris Chugthai
-  " Description: Profiling commands and other
+  " Description: The last call for options to set before we stop sourcing
+  " the plugins dir
   " Last Modified: Aug 12, 2019
 " ============================================================================
 
@@ -45,12 +46,12 @@ if !exists('b:did_ftplugin')
   endif
 endif
 
-" In which I learn how complete works
+" In Which I Learn How Complete Works: {{{
 command! -bar -complete=buffer -nargs=0 ScratchBuffer call pydoc_help#scratch_buffer()
 command! -bar -complete=compiler Compiler compiler <args>
 " '<,'>s/compiler/event/g
 " You may find that ---^ does you good
-command! -bar -complete=event Event event<args>1
+command! -bar -complete=event Event event<args>
 
 command! -bar -nargs=0 RerunLastCmd call histget('cmd', -1)
 
@@ -58,7 +59,9 @@ command! -bar -nargs=1 -complete=history RerunLastX call histget(<args>, 1)
 
 " Completes filenames from the directories specified in the 'path' option:
 command! -nargs=1 -bang -complete=customlist,unix#EditFileComplete
-   	\ EF edit<bang> <args>
+   	\ Edit edit<bang> <args>
+
+" }}}
 
 " These 2 commands are for parsing the output of scriptnames though a command
 " like :TBrowseScriptnames would probably be easier to work with
@@ -74,13 +77,15 @@ command! -nargs=0 NvimAPI
 " Easier mkdir and cross platform!
 command! -complete=dir -nargs=1 Mkdir call mkdir(shellescape('<q-args>'), 'p', '0700')
 
-" Commands from the help pages. map.txt
-   " Replace a range with the contents of a file
-   " (Enter this all as one line)
-   command! -bar -range -nargs=1 -complete=file Replace <line1>-pu_|<line1>,<line2>d|r <args>|<line1>d
+" Commands from the help pages. map.txt: {{{
+" Replace a range with the contents of a file
+" (Enter this all as one line)
+command! -bar -range -nargs=1 -complete=file Replace <line1>-pu_|<line1>,<line2>d|r <args>|<line1>d
 
-   " Count the number of lines in the range
-   command! -bar -range -nargs=0 Lines  echo <line2> - <line1> + 1 'lines'
+" Count the number of lines in the range
+command! -bar -range -nargs=0 Lines  echo <line2> - <line1> + 1 'lines'
+
+" }}}
 
 " Last Call For Options: {{{1
 if &omnifunc ==# '' | setlocal omnifunc=syntaxcomplete#Complete | endif
@@ -101,3 +106,4 @@ endif
 
 command! -bar -bang -complete=buffer -complete=file -nargs=? Profile call vimscript#profile(<f-args>)
 
+" Vim: set fdm=marker:
