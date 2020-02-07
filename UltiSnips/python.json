@@ -1,4 +1,11 @@
 {
+    "#!": {
+        "prefix": "#!",
+        "body": [
+            "#!/usr/bin/env python",
+            "# -*- coding: utf-8 -*-"
+        ],
+    },
     "if": {
         "prefix": "if",
         "body": [

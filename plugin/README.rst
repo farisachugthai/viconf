@@ -215,6 +215,7 @@ loading in 0.4 msecs and ~15.::
 Searching
 =========
 
+
 Here's a helpful tidbit from the help pages.:
 
    g*			Like "*", but don't put "\<" and "\>" around the word. 

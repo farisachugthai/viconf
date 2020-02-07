@@ -39,7 +39,5 @@ GuiFont DejaVu\ Sans\ Mono:h11
 " GuiFont Cascadia\ Code
 " GuiFont Fira\ Code\ Retina:h12
 
-call GuiClipboard()
-
 " We need to map something to GuiTreeviewToggle!
 nnoremap <Leader>? <Cmd>GuiTreeviewToggle<CR><bar>execute 'echomsg ' . 'Opening up Nvim_Explorer.exe'

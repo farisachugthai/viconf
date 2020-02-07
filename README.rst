@@ -95,6 +95,29 @@ number of files in `syntax`_
 
 .. _`syntax`: ./syntax/
 
+So where are my files?
+----------------------
+
+This produces the weirdest behavior.
+In order to find where files are, one can use a series of functions Vim
+provides for stating the OS. However a fair number of them have clunky
+syntax and produce surprising behavior.::
+
+   " let s:this_dir = fnameescape(fnamemodify(resolve('$MYVIMRC'), ':p:h'))
+   " echomsg s:this_dir
+
+That resolves to your current working directory. I couldn't begin to tell you
+why it does that.::
+
+   let s:this_dir = fnameescape(fnamemodify(expand('$MYVIMRC'), ':p:h'))
+   echomsg s:this_dir
+   " use this 2 lines for debugging or just in a different spot if you want
+   let s:something = fnamemodify(expand('<sfile>'), ':p:h')
+   echomsg s:something
+
+These 2 actually echo the same location!
+*assuming that you put those 2 in your vimrc.*
+
 
 Working with Plugins
 =====================

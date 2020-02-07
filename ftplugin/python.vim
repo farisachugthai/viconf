@@ -72,6 +72,8 @@ setlocal isk-=.
 	" a multiple of 'shiftwidth' (this is Vi compatible).
 setlocal shiftround
 
+let &l:path = py#PythonPath()
+
 " Compiler: {{{1
 
 " TODO: how do we undo_ftplugin for a compiler?

@@ -5,6 +5,7 @@
     " Last Modified: Dec 27, 2019
 " ============================================================================
 
+" Virtualtext: {{{
 let g:ale_virtualtext_cursor = 1
 let g:ale_virtualtext_prefix =  'ALE: '
 let g:ale_virtualtext_delay = 200
@@ -16,7 +17,9 @@ let g:ale_sign_highlight_linenrs = 1
 let g:ale_close_preview_on_insert = 1
 let g:ale_echo_cursor = 0
 
-" Signs:
+" }}}
+"
+" Signs: {{{
 
 let g:ale_set_signs = 1
 let g:ale_sign_column_always = 1
@@ -77,7 +80,7 @@ let g:ale_python_pyls_config = {
       \ },
       \ 'jedi_symbols': {
       \   'all_scopes': v:true,
-      \ 'enabled': v:true
+      \   'enabled': v:true
       \ },
       \ 'mccabe': {
       \   'enabled': v:true,
@@ -149,3 +152,5 @@ let g:ale_pattern_options = {
 \   },
 \}
 let g:ale_lsp_show_message_severity = 'information'
+
+" Vim: set fdm=marker:

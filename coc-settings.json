@@ -64,8 +64,6 @@
   "coc.source.word.shortcut": "Coc-Word: ",
   "codeLens.enable": true,
   "codeLens.separator": "‣",
-  "cursors.nextKey": "<M-Tab>",
-  "cursors.previousKey": "<M-S-Tab>",
   "diagnostic.checkCurrentLine": true,
   "diagnostic.displayByAle": false,
   "diagnostic.enableMessage": "always",
@@ -177,7 +175,6 @@
   "list.maxPreviewHeight": 25,
   "list.nextKeymap": "<C-n>",
   "list.previewHighlightGroup": "IdentifierBold",
-  "list.previewSplitRight": true,
   "list.previousKeymap": "<C-p>",
   "list.selectedSignText": "****",
   "list.signOffset": 20,
@@ -407,23 +404,26 @@
   "python.analysis.diagnosticEnabled": true,
   "python.analysis.diagnosticPublishDelay": 300,
   "python.analysis.downloadChannel": "daily",
-  "python.analysis.logLevel": "Warning",
   "python.analysis.openFilesOnly": false,
   "python.analysis.symbolsHierarchyDepthLimit": 12,
   "python.autoComplete.addBrackets": true,
   "python.autoComplete.showAdvancedMembers": true,
   "python.autoUpdateLanguageServer": true,
   "python.jediEnabled": false,
-  "python.jediMemoryLimit": -1,
-  "python.jediShortcut": "Jedi",
   "python.linting.flake8Path": "python -m flake8",
   "python.linting.pylintEnabled": false,
+  "python.testing.unittestArgs": [
+      "-v",
+      "-s",
+      "./test",
+      "-p",
+      "test*.py"
+  ],
   "python.terminal.activateEnvironment": true,
   "python.terminal.executeInFileDir": true,
   "python.terminal.launchArgs": [
     "-U"
   ],
-  "python.trace.server": "messages",
   "python.workspaceSymbols.exclusionPatterns": [
     "**/site-packages/**",
     "node_modules",
@@ -460,7 +460,7 @@
   "snippets.snipmate.author": "Faris A. Chugthai",
   "snippets.snipmate.enable": false,
   "snippets.triggerCharacters": [
-    "Tab",
+    "C-n",
     "C-j"
   ],
   "snippets.ultisnips.directories": [

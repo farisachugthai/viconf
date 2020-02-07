@@ -54,7 +54,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rsi'
 " Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
-" Plug 'tpope/apathy'
+Plug 'tpope/apathy'
 Plug 'tpope/scriptease'
 
 " if has('python3')
@@ -84,17 +84,17 @@ Plug 'junegunn/vim-peekaboo'
 Plug 'vim-voom/voom', {'on': ['Voom', 'VoomToggle', 'VoomExec'] }
 Plug 'romainl/vim-qf'
 
-" if empty(s:termux)
+if empty(s:termux)
   " Plug 'chrisbra/csv.vim', {'for': ['csv', 'tsv']}
-  " Plug 'godlygeek/tabular', {'on': 'Tabularize'}
+  Plug 'godlygeek/tabular', {'on': 'Tabularize'}
   " needed if for nothing else but the ftdetect
-  " Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
+  Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
   " Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
-  " Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
-  " Plug 'elzr/vim-json', { 'for': 'json' }
-  " Plug 'omnisharp/omnisharp-vim', {'for': 'cs'}
-  " Plug 'michaeljsmith/vim-indent-object'
-" endif
+  Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
+  Plug 'elzr/vim-json', { 'for': 'json' }
+  Plug 'omnisharp/omnisharp-vim', {'for': ['cs', 'ps1',] }
+  Plug 'michaeljsmith/vim-indent-object'
+endif
 
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'tomtom/tlib_vim'

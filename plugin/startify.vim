@@ -37,7 +37,7 @@ let g:startify_session_savevars = [
 let g:startify_commands = [
       \ {'a': 'Ag'},
       \ {'b': 'Buffers'},
-    \ {'f': ['FZF!', 'FZF!'],},
+    \ {'f': ['FZF! ~', 'FZF! ~'],},
     \ {'g': ['Git status!', 'Gstatus'],},
     \ {'h': ['Vim Reference', 'h ref'],},
     \ ]

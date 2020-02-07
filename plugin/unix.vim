@@ -11,15 +11,8 @@ endif
 let g:did_unix = 1
 
 nnoremap zE <nop>
+nnoremap <Leader>cd <Cmd>cd %:p:h<CR><Bar><Cmd>pwd<CR>
 
-let s:root_dir = fnameescape(fnamemodify(expand('%'), ':p:h:h'))
-
-if has('unix')
-  call unix#UnixOptions()
-else
-  " exec 'source ' . s:root_dir . '\autoload\msdos.vim'
-  call msdos#set_shell_cmd()
-endif
 
 if exists($ANDROID_DATA)
   " May 26, 2019: Just ran into my first problem from a filename with a space in the name *sigh*

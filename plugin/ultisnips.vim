@@ -29,8 +29,6 @@ let g:UltiSnipsSnippetDirectories = [ stdpath('config') . '/UltiSnips' ]
 
 let g:UltiSnipsUsePythonVersion = 3
 
-let g:UltiSnipsExpandTrigger = '<Tab>'
-
 " Literally listed in the help docs as unused. Why not?
 let g:UltiSnipsListSnippets = '<C-\>'
 

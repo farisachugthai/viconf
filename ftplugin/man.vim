@@ -5,8 +5,6 @@
   " Last Modified: September 10, 2019
 " ============================================================================
 
-if exists('b:did_ftplugin') | finish | endif
-
 " Vim Official Ftplugin: {{{1
 " Set this globally
 let g:ft_man_folding_enable = 1
@@ -15,6 +13,8 @@ let g:ft_man_open_mode = "tab"
 if &filetype !=# 'man'
   finish  " why is the whole file wrapped in an if else?
 endif
+
+if exists('b:did_ftplugin') | finish | endif
 
 " Yours: {{{1
   " Kinda pointless in a man page

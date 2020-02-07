@@ -21,9 +21,16 @@ augroup Userftdetect
   au BufNewFile,BufRead setup.cfg set filetype=dosini
   au BufNewFile,BufRead *.xonshrc, set filetype=xonsh
   au BufNewFile,BufRead *.xsh set filetype=xonsh
-  au BufNewFile,BufRead *.tmux set filetype=tmux
-  au BufNewFile,BufRead *.tmux.conf set filetype=tmux
+  " au BufNewFile,BufRead *.tmux set filetype=tmux
+  " au BufNewFile,BufRead *.tmux.conf set filetype=tmux
+
+" tmux configuration
+" just noticed that in $VIMRUNTIME/filetype.vim
+" au BufNewFile,BufRead {.,}tmux*.conf		setf tmux
+
   au BufNewFile,BufRead *.rst.txt set filetype=rst.txt
   au BufNewFile,BufRead *.rst_t set filetype=htmljinja
   au BufNewFile,BufRead *.gitconfig set filetype=gitconfig
+  au BufNewFile,BufRead *.rktd set filetype=lisp
+
 augroup END

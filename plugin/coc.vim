@@ -57,6 +57,19 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
+" So I got rid of supertab and ultisnips is finally set in a consistent way
+" with inoremaps and FZF and doesn't overlap with too much of the C-x C-f
+" family and their abbreviations. JESUS that got tough.
+
+" Let's give Coc the tab key. If this doesn't work as expected we can also go
+" with something like <M-/>
+inoremap <silent><expr> <TAB>
+  \ pumvisible() ? coc#_select_confirm() :
+  \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+  \ <SID>check_back_space() ? "\<TAB>" :
+  \ coc#refresh()
+
+
 " Refresh completions with C-Space
 inoremap <expr> <C-Space> coc#refresh()
 

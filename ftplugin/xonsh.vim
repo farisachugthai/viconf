@@ -10,7 +10,8 @@ if exists('b:did_ftplugin') | finish | endif
 " Sourcing Everything: {{{1
 source $VIMRUNTIME/ftplugin/python.vim
 unlet! b:did_ftplugin
-let s:this_dir = fnameescape(fnamemodify(expand('%'), ':p:h'))
+
+let s:this_dir = fnameescape(fnamemodify(expand('<sfile>'), ':p:h'))
 
 exec 'source ' . s:this_dir . '/python.vim'
 

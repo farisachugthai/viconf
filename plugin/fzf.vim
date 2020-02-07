@@ -13,7 +13,7 @@ if !exists(':Rg') | call plug#load('fzf.vim') | endif
 " Set up windows to have the correct commands
 if !exists('$FZF_DEFAULT_COMMAND')  || !has('unix')
   " let $FZF_DEFAULT_COMMAND = 'rg --hidden -M 200 -m 200 --smart-case --passthru --files . '
-  let $FZF_DEFAULT_COMMAND = 'fd -H --follow -d 6 --color always -t f '
+  let $FZF_DEFAULT_COMMAND = 'fd --hidden --follow -d 6 -t f '
 endif
 
 let g:fzf_action = {
@@ -286,10 +286,11 @@ command! -bar -bang -nargs=? -complete=dir Files
 command! -bar -bang -nargs=? -complete=file GFiles call fzf#vim#gitfiles(<q-args>, <bang>0)
 
 " Me just copy pasting his plugin
-command! -bar -bang FZIMaps call fzf#vim#maps("i", <bang>0)',
-command! -bar -bang FZCMaps call fzf#vim#maps("c", <bang>0)',
-command! -bar -bang FZTMaps call fzf#vim#maps("t", <bang>0)',
+command! -bar -bang -complete=mapping FZIMaps call fzf#vim#maps("i", <bang>0)
+command! -bar -bang -complete=mapping FZCMaps call fzf#vim#maps("c", <bang>0)
+command! -bar -bang -complete=mapping FZTMaps call fzf#vim#maps("t", <bang>0)
 
-" command! -bar -nargs=? -complete=mapping FZMaps execute ':Maps <q-args>'
+" Add completion to his Maps command but define ours the same way
+command! -bar -bang -nargs=? -complete=mapping FZMaps call fzf#vim#maps("n", <bang>0)
 
 " Vim: set fdm=indent:

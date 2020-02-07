@@ -1812,3 +1812,6 @@ wsgiref
 PyperClip
 pyperclip
 CPython
+Dunders
+Faulthandler
+optparse

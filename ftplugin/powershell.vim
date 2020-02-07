@@ -16,7 +16,7 @@ setlocal textwidth=120
 " Actually it's easier to have this off. Maybe. Maybe make a buffer local
 " mapping where you can toggle it?
 setlocal iskeyword-=-
-
+setlocal colorcolumn=80,120
 setlocal suffixesadd+=.ps1
 
 " So this'll be tricky to do period and it's gonna {probably} be a bitch to

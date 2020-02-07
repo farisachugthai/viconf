@@ -1,27 +1,61 @@
 {
   "name": "viconf",
-  "version": "1.0.0",
-  "main": "rplugin/node/coc_tag.js",
-  "dependencies": {
-    "jsonlint": "^1.6.3",
-    "eslint": "latest"
-  },
-  "devDependencies": {},
+  "license": "MIT",
+  "description": "Mostly here for Coc extensions",
+  "readme": "README.rst",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/farisachugthai/viconf.git"
   },
-  "author": "Faris Chugthai",
-  "license": "MIT",
-  "readme": "README.rst",
-  "private": true,
   "scripts": {
     "lint": "tslint -p .",
     "fix": "npx prettier",
-    "tagfunc": "./rplugin/node/coc_tag.js"
+    "tagfunc": "./rplugin/node/coc_tag.js",
+    "watch": "tsc -w -p ./",
+    "build": "rm -rf ./out && webpack"
   },
+
+  "main": "rplugin/node/coc_tag.js",
+  "author": "Faris Chugthai",
   "bugs": {
     "url": "https://github.com/farisachugthai/viconf/issues"
   },
-  "homepage": "https://github.com/farisachugthai/viconf#readme"
+
+  "keywords": [
+    "coc.nvim",
+    "nvim",
+    "coc"
+  ],
+  "engines": {
+    "vscode": "latest",
+    "coc": "^0.0.71"
+  },
+  "activationEvents": [
+    "onLanguage:vim"
+  ],
+  "version": "1.0.0",
+  "dependencies": {
+    "@types/vscode": "^1.41.0",
+    "bash-language-server": "^1.7.0",
+    "coc-dictionary": "latest",
+    "coc-git": ">=1.7.0",
+    "coc-highlight": ">=1.2.5",
+    "coc-html": ">=1.2.1",
+    "coc-json": ">=1.2.4",
+    "coc-lists": ">=1.3.6",
+    "coc-python": "latest",
+    "coc-snippets": ">=2.1.17",
+    "coc-tslint": "^1.0.17",
+    "coc-tsserver": ">=1.4.9",
+    "coc-ultisnips": "latest",
+    "coc-vimlsp": ">=0.4.4",
+    "coc-word": ">=1.2.2",
+    "coc-yaml": "^1.0.2",
+    "coc-yank": ">=1.1.3",
+    "eslint": "latest",
+    "jsonlint": "^1.6.3",
+    "vim-language-server": "^1.4.0",
+    "yaml-language-server": "^0.6.1"
+  }
 }

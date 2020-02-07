@@ -11,8 +11,7 @@ if exists('g:loaded_vimscript_vim') || &compatible || v:version < 700
 endif
 let g:loaded_vimscript_vim = 1
 
-let s:this_dir = fnameescape(fnamemodify(expand('%'), ':p:h'))
-
+" Rg options: {{{
 if !exists('g:rg_binary')
   let g:rg_binary = 'rg'
 endif
@@ -33,9 +32,19 @@ if !exists('g:rg_window_location')
   let g:rg_window_location = 'botright'
 endif
 
-" I would say this is unrelated but this file is aimless
-nnoremap <Leader>cd <Cmd>cd %:p:h<CR><Bar><Cmd>pwd<CR>
+" }}}
 
+" Platform Specific Options: {{{
+
+if has('unix')
+  call unix#UnixOptions()
+else
+  call msdos#set_shell_cmd()
+endif
+
+" }}}
+
+" Fix the path: {{{
 " Fix up the path a little I'm starting to use ]i and gf and the like more
 " But make it conditional on me not having already set it for an ftplugin
 if !exists('b:did_ftplugin')
@@ -45,6 +54,8 @@ if !exists('b:did_ftplugin')
     let &path = '.,,**,' . expand('$VIMRUNTIME') . '/*/*.vim'
   endif
 endif
+
+" }}}
 
 " In Which I Learn How Complete Works: {{{
 command! -bar -complete=buffer -nargs=0 ScratchBuffer call pydoc_help#scratch_buffer()
@@ -61,10 +72,12 @@ command! -bar -nargs=1 -complete=history RerunLastX call histget(<args>, 1)
 command! -nargs=1 -bang -complete=customlist,unix#EditFileComplete
    	\ Edit edit<bang> <args>
 
+command! -nargs=1 -bang -complete=file -complete=customlist,unix#EditFileComplete
+   	\ Split <mods>split<bang> <args>
 " }}}
 
 " These 2 commands are for parsing the output of scriptnames though a command
-" like :TBrowseScriptnames would probably be easier to work with
+" like :TBrowseScriptnames would probably be easier to work with: {{{
 command! -nargs=? Scriptnames call vimscript#Scriptnames(<f-args>)
 command! -nargs=0 Scriptnamesdict echo vimscript#ScriptnamesDict()
 
@@ -76,6 +89,7 @@ command! -nargs=0 NvimAPI
 
 " Easier mkdir and cross platform!
 command! -complete=dir -nargs=1 Mkdir call mkdir(shellescape('<q-args>'), 'p', '0700')
+" }}}
 
 " Commands from the help pages. map.txt: {{{
 " Replace a range with the contents of a file
@@ -91,19 +105,23 @@ command! -bar -range -nargs=0 Lines  echo <line2> - <line1> + 1 'lines'
 if &omnifunc ==# '' | setlocal omnifunc=syntaxcomplete#Complete | endif
 if &completefunc ==# '' | setlocal completefunc=syntaxcomplete#Complete | endif
 
-if &formatexpr ==# ''
-  setlocal formatexpr=format#Format()  " check the autoload directory
-endif
+" This fucks up `gq`
+" if &formatexpr ==# ''
+"   setlocal formatexpr=format#Format()  " check the autoload directory
+" endif
 
-" QuickFix: {{{2
+" }}}
+
+" QuickFix: {{{1
 " From :he *:cadde* *:caddexpr*
 " Evaluate {expr} and add the resulting lines to the current quickfix list.
 " If a quickfix list is not present, then a new list is created. The current
 " cursor position will not be changed. See |:cexpr| for more information.
 " g/mypattern/caddexpr expand("%") . ":" . line(".") .  ":" . getline(".")
 " command! -nargs=? QFSearch execute 'g/' . shellescape(<q-args>) . '/ caddexpr ' . expand('%') . ":" . line(".") . ":" . getline(".")
-" Doesn't work and tried like 20 times to debug it.
 
 command! -bar -bang -complete=buffer -complete=file -nargs=? Profile call vimscript#profile(<f-args>)
+" Doesn't work and tried like 20 times to debug it.
+" }}}
 
 " Vim: set fdm=marker:

@@ -12,6 +12,7 @@ setglobal cpoptions-=c,e,_  " couple options that bugged me
 let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Evervim. Thanks!
 let s:wsl = !empty($WSL_DISTRO_NAME)
 let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux) && empty(s:wsl)
+
 let s:this_dir = fnameescape(fnamemodify(expand('$MYVIMRC'), ':p:h'))
 
 " Seriously how does this keep getting fucked up. omfg packpath is worse???
@@ -71,13 +72,13 @@ let &g:undodir=&g:directory . '/vim/undo//'
 let &g:backupdir=&g:directory . '/vim/backup//'
 let &g:directory.='/vim/swap//'
 " Create directories if they doesn't exist
-if ! isdirectory(expand(&g:directory))
+if !isdirectory(expand(&g:directory))
   silent! call mkdir(expand(&g:directory), 'p', 0700)
 endif
-if ! isdirectory(expand(&g:backupdir))
+if !isdirectory(expand(&g:backupdir))
   silent! call mkdir(expand(&g:backupdir), 'p', 0700)
 endif
-if ! isdirectory(expand(&g:undodir))
+if !isdirectory(expand(&g:undodir))
   silent! call mkdir(expand(&g:undodir), 'p', 0700)
 endif
 
@@ -86,9 +87,7 @@ noremap <S-Insert> <MiddleMouse>
 noremap! <S-Insert> <MiddleMouse>
 tnoremap <S-Insert> <MiddleMouse>
 
-set suffixes+=.aux,.bbl,.blg,.brf,.cb,.dvi,.idx,.ilg,.ind,.inx,.jpg,.log,.out,.png,.toc
-set suffixes-=.h,.obj
-
+set suffixes=.bak,~,.o,.info,.swp,.aux,.bbl,.blg,.brf,.cb,.dvi,.idx,.ilg,.ind,.inx,.jpg,.log,.out,.png,.toc
 set foldnestmax=10 foldmethod=marker foldcolumn=2 foldopen+=jump,insert
 set signcolumn=auto:4  " this might be a nvim 4 thing
 try | set switchbuf=useopen,usetab,split | catch | endtry
@@ -98,8 +97,8 @@ set number relativenumber cmdheight=1
 set isfname-==
 set iskeyword=@,48-57,_,192-255   " Idk how but i managed to mess up the default isk
 
-if filereadable(stdpath('config') . '/spell/en.utf-8.add')
-  let &spellfile = stdpath('config') . '/spell/en.utf-8.add'
+if filereadable(s:this_dir . '/spell/en.utf-8.add')
+  let &spellfile = s:this_dir . '/spell/en.utf-8.add'
 endif
 " both smartcase and infercase require ignorecase to be set
 set ignorecase
@@ -134,14 +133,8 @@ let g:matchparen_insert_timeout = 300
 set termguicolors
 set synmaxcol=1000
 
-if has('unix')
-  let s:vim_plug = filereadable(fnameescape(stdpath('data') . '/site/autoload/plug.vim'))
-else
-  let s:vim_plug = filereadable(fnameescape(stdpath('data') . '\site\autoload\plug.vim'))
-endif
+if !exists('plug#load')  | exec 'source ' . s:this_dir . '/vim-plug/plug.vim' | endif
 
-if empty(s:vim_plug) && exists('*plugins#InstallPlug') | call plugins#InstallPlug() | endif
-
-exec 'source ' s:this_dir . '/junegunn.vim'
-" Don't assume that the InstallPlug() func worked so ensure it's defined
-if empty('plugs') | let plugs = {} | endif
+exec 'source ' . s:this_dir . '/junegunn.vim'
+" Don't assume that worked. Needs to be defined but increasingly not as needed
+if !exists('plugs') | let plugs = {} | endif

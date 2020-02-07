@@ -81,8 +81,16 @@ nnoremap N Nzzzv
 
 " If you highlight something in Visual mode, you should be able to use '#' and
 " '*' to search for it.
-xnoremap * y/<C-R>"<CR>/<CR>gvzz
-xnoremap # y?<C-R>"<CR>gvzz
+xnoremap * y/<C-R>"<CR>
+xnoremap # y?<C-R>"<CR>
+
+" here's a great idea from justinmk:
+" mark searches before you start
+nnoremap / ms/
+" let's extend justin's idea with ours!
+" get rid of the gv it's super confusing
+xnoremap / msy/<C-R>"<CR>
+
 
 if has('unix')
   if exists(':Marks')
