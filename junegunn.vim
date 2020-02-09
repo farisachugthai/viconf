@@ -44,7 +44,7 @@ augroup nerd_loader
   autocmd VimEnter * silent! autocmd! FileExplorer
   autocmd BufEnter,BufNew *
         \  if isdirectory(expand('<amatch>'))
-        \|   call plug#load('nerdtree')
+        \|   call plug#load('nerdTree')
         \|   execute 'autocmd! nerd_loader'
         \| endif
 augroup END
@@ -52,8 +52,8 @@ augroup END
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rsi'
-" Plug 'tpope/vim-surround'
-Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-surround'
+" Plug 'tpope/vim-unimpaired'
 Plug 'tpope/apathy'
 Plug 'tpope/scriptease'
 

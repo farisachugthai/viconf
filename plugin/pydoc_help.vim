@@ -16,29 +16,32 @@ augroup UserHelpandPython
   autocmd FileType python call py#ALE_Python_Conf()
 augroup END
 
-  command! -bar -complete=expression -complete=function -range -nargs=+ Pythonx <line1>,<line2>python3 <args>
+command! -bar -complete=expression -complete=function -range -nargs=+ Pythonx <line1>,<line2>python3 <args>
+" FUCK YEA! Dec 27, 2019: Behaves as expected!
+" You know whats nice? Both of these expressions work.
+" :Pd(vim.vars)
+" :Pd vim.vars
+command! -range -bar -complete=expression -complete=function -nargs=? Pd <line1>,<line2>python3 import(<args>);print(dir(<args>))
 
-  " FUCK YEA! Dec 27, 2019: Behaves as expected!
-  " You know whats nice? Both of these expressions work.
-  " :Pd(vim.vars)
-  " :Pd vim.vars
-  command! -range -bar -complete=expression -complete=function -nargs=? Pd <line1>,<line2>python3 print(dir(<args>))
-
-  " Honestly i don't know what the <range> arg is providing to these commands
-  " and half the time it makes no sense but we may as well implement the whole
-  " interface
-  command! -range -bar -nargs=+ -complete=expression -complete=function -nargs=? P <line1>,<line2>python3 print(<args>)
+" Honestly i don't know what the <range> arg is providing to these commands
+" and half the time it makes no sense but we may as well implement the whole
+" interface
+command! -range -bar -complete=expression -complete=function -nargs=? P <line1>,<line2>python3  print(<args>)
 
 " Apr 23, 2019: Didn't know complete help was a thing.
 " Oh holy shit that's awesome
-command! -nargs=1 -complete=help Help call pydoc_help#Helptab()
+command! -nargs=1 -bar -complete=help Help call pydoc_help#Helptab()
 " Needs to accept args for bang
 command! -bang -bar PydocThis call pydoc_help#PydocCword()
 
 " This should be able to take the argument '-bang' and allow to open in a new
 " separate window like fzf does.
-command! -nargs=0 PydocSplit call pydoc_help#SplitPydocCword()
+" NOTE: See :he func-range to see how range can get passed automatically to
+" functions without being specified in the command definition
+command! -nargs=? -bar -range PydocSplit call pydoc_help#SplitPydocCword(<q-mods>)
 
+command -bar -bang -range PydocSp
+      \ exec '<mods>split<bang>:python3 import pydoc'.expand('<cWORD>').'; pydoc.help('.expand('<cWORD>').')'
 " holy fuck i just beefed this command up a lot. now takes a bang and should
 " work more correctly.
 " todo: i think i added a completefunc thatll work perfectly
@@ -52,9 +55,6 @@ command! -nargs=0 PydocShow call pydoc_help#show()
 command! -complete=file -range BlackCurrent <line1>,<line2>call py#Black()
 
 command! -nargs=* -complete=file -complete=file_in_path BlackThese call py#black_these(<f-args>)
-
-" Works! 
-command! -bar -bang -nargs=* IPython :<mods>term<bang> ipython <args>
 
 function! s:IPythonOptions(...) abort
   let list = ['profile', 'history', 'kernel', 'locate']

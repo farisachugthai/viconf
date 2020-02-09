@@ -412,17 +412,17 @@
   "python.jediEnabled": false,
   "python.linting.flake8Path": "python -m flake8",
   "python.linting.pylintEnabled": false,
-  "python.testing.unittestArgs": [
-      "-v",
-      "-s",
-      "./test",
-      "-p",
-      "test*.py"
-  ],
   "python.terminal.activateEnvironment": true,
   "python.terminal.executeInFileDir": true,
   "python.terminal.launchArgs": [
     "-U"
+  ],
+  "python.testing.unittestArgs": [
+    "-v",
+    "-s",
+    "./test",
+    "-p",
+    "test*.py"
   ],
   "python.workspaceSymbols.exclusionPatterns": [
     "**/site-packages/**",

@@ -26,7 +26,7 @@ setlocal isfname+=#  " Make 'gf' work
 " keyword character.  E.g., for netrw#Nread().
 setlocal isk+=#
 setlocal wrap
-setlocal foldmethod=indent
+setlocal foldmethod=marker
 setlocal foldlevel=0
 
 setlocal indentexpr=GetVimIndent()
@@ -38,8 +38,12 @@ let &l:path = ftplugins#VimPath()
 
 call ftplugins#ALE_Vim_Conf()
 
+" the original ftplugin also sets b:undo_ftplugin = to call VimFtpluginUndo
 let b:undo_ftplugin = 'setlocal et< sw< ts< sts< lbr< sua< wrap< fdl< fdm< cms< path< isf< isk<'
       \ . '|setlocal path< isf<'
       \ . '|unlet! b:undo_ftplugin'
       \ . '|unlet! b:undo_indent'
       \ . '|unlet! b:did_ftplugin'
+      \ . '|call VimFtpluginUndo()'
+
+

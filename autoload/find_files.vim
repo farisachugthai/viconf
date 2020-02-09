@@ -108,18 +108,10 @@ endfunction   " }}}
 function! find_files#ubuntu_remote() abort  " {{{1
   let g:python3_host_prog = exepath('python3')
  
-  " wanna see a different way to do this?
-  " python3 from jedi import get_default_environment
-  " let s:host_prog = py3eval('get_default_environment().executable')
-  " if executable(s:host_prog)
-  "   let g:python3_host_prog = s:host_prog
-  " endif
-
+  let g:python3_host_prog = '~/.local/share/virtualenvs/utilities-lAlPOULO/bin/python3'
   let g:python_host_prog = '/usr/bin/python2'
-  let g:node_host_prog = exepath('neovim-node-host')
-
+  let g:node_host_prog = '~/.local/share/yarn/global/node_modules/.bin/neovim-node-host'
   let g:loaded_ruby_provider = 1
-  " let g:loaded_ruby_provider = exepath('neovim-ruby-host')
 
   if exists('$TMUX')
     let g:clipboard = {

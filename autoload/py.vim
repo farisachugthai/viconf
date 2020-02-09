@@ -157,10 +157,10 @@ function! py#timedblack() abort  " {{{
   return s:timed(py#Black())
 endfunction  " }}}
 
-function! py#py_import_completions(argl, cmdl, pos) abort
+function! py#py_import_completions(argl, cmdl, pos) abort  " {{{
   python3 py.import_completions()
-endfun
+endfunction  " }}}
 
-function! py#py_import(args) abort
+function! py#py_import(args) abort   " {{{
   python3 py.import_into_vim()
-endfun
+endfunction  " }}}

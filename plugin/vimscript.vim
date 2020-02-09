@@ -66,29 +66,6 @@ command! -bar -complete=event Event event<args>
 
 command! -bar -nargs=0 RerunLastCmd call histget('cmd', -1)
 
-command! -bar -nargs=1 -complete=history RerunLastX call histget(<args>, 1)
-
-" Completes filenames from the directories specified in the 'path' option:
-command! -nargs=1 -bang -complete=customlist,unix#EditFileComplete
-   	\ Edit edit<bang> <args>
-
-command! -nargs=1 -bang -complete=file -complete=customlist,unix#EditFileComplete
-   	\ Split <mods>split<bang> <args>
-" }}}
-
-" These 2 commands are for parsing the output of scriptnames though a command
-" like :TBrowseScriptnames would probably be easier to work with: {{{
-command! -nargs=? Scriptnames call vimscript#Scriptnames(<f-args>)
-command! -nargs=0 Scriptnamesdict echo vimscript#ScriptnamesDict()
-
-" Useful if you wanna see all available funcs provided by nvim
-command! -nargs=0 NvimAPI
-      \ new|put =map(filter(api_info().functions,
-      \ '!has_key(v:val,''deprecated_since'')'),
-      \ 'v:val.name')
-
-" Easier mkdir and cross platform!
-command! -complete=dir -nargs=1 Mkdir call mkdir(shellescape('<q-args>'), 'p', '0700')
 " }}}
 
 " Commands from the help pages. map.txt: {{{

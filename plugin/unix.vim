@@ -10,15 +10,24 @@ if exists('g:did_unix') || &compatible || v:version < 700
 endif
 let g:did_unix = 1
 
+" Platform Specific Settings: {{{
 nnoremap zE <nop>
 nnoremap <Leader>cd <Cmd>cd %:p:h<CR><Bar><Cmd>pwd<CR>
 
+if has('unix')
+  call unix#UnixOptions()
+else
+  call msdos#set_shell_cmd()
+endif
 
 if exists($ANDROID_DATA)
   " May 26, 2019: Just ran into my first problem from a filename with a space in the name *sigh*
   nnoremap <silent> <Leader>ts <Cmd>execute '!termux-share -a send ' . shellescape(expand("%"))<CR>
 endif
 
+" }}}
+
+" Chmod: {{{
 "	:S	Escape special characters for use with a shell command (see
 "		|shellescape()|). Must be the last one. Examples:
 "           :!dir <cfile>:S
@@ -26,11 +35,15 @@ endif
 " From :he filename-modifiers in the cmdline page.
 command! -nargs=1 -complete=file Chmod call system('chmod +x ' . expand('%:S'))
 
-" More From The Bottom Of Help Map: {{{1
-command! -nargs=+ -complete=file EditThese
+" }}}
+
+" More From The Bottom Of Help Map: {{{
+command! -bang -bar -nargs=+ -complete=file -complete=file_in_path EditFiles
     \ for f in expand(<q-args>, 0, 1) |
-    \ exe '<mods> split ' . f |
+    \ exe '<mods> split ' . f<bang> |
     \ endfor
+
+command!  -complete=file_in_path  -bang -bar -nargs=* -complete=file -complete=dir MyEdit <mods>edit<bang> <q-args>
 
 command! -nargs=+ -complete=file Sedit call unix#SpecialEdit(<q-args>, <q-mods>)
 
@@ -39,9 +52,9 @@ command! -nargs=+ -complete=file Sedit call unix#SpecialEdit(<q-args>, <q-mods>)
 " Unfortunately, there are  few of *their* keybindings wired in.
 " May as well map them correctly.
 
-" This seemingly trivial difference determines whether the following is run
-" by fzf or the vim built-in, and they both have quite different looking
-" interfaces IMO.
+" }}}
+
+" Ensure fzf behaves similarly in a shell or in Vim: {{{
 if exists('*fzf#wrap')
   nnoremap <M-x>                      <Cmd>FufCommands<CR>
   nnoremap <C-x><C-b>                 :<C-u>FufBuffers
@@ -51,15 +64,17 @@ else
   nnoremap <C-x><C-b>                 <Cmd>buffers<CR>
   nnoremap <C-x><C-f>                 :<C-u>find ~/**
 endif
+" }}}
 
-
-function! AddVileBinding(key, handler)
+function! AddVileBinding(key, handler)  " {{{
   " Map a key 3 times for normal mode, insert and command.
   exec 'nnoremap ' . a:key a:handler
   exec 'inoremap ' . a:key a:handler
   exec 'cnoremap ' . a:key a:handler
 
-endfunction
+endfunction " }}}
+
+" Vile Bindings: {{{
 " oh
 call AddVileBinding('<C-x>o', '<Cmd>wincmd W<CR>')
 " zero
@@ -85,7 +100,6 @@ call AddVileBinding('<C-x>w', '<Cmd> set wrap!')
 " Swap the mark and point
 xnoremap <C-x><C-x> o
 
-
 command! -bang -bar -complete=arglist -nargs=? Brofiles
       \ call fzf#run(fzf#wrap('oldfiles',
       \ {'source': v:oldfiles,
@@ -93,3 +107,7 @@ command! -bang -bar -complete=arglist -nargs=? Brofiles
       \ 'options': g:fzf_options}, <bang>0))
 
 call AddVileBinding('<C-x>b', '<Cmd>Brofiles<CR>')
+
+" Make shift-insert work like in Xterm. From arch
+call AddVileBinding('<S-Insert>', '<MiddleMouse>')
+" }}}

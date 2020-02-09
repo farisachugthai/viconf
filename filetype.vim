@@ -21,12 +21,13 @@ augroup Userftdetect
   au BufNewFile,BufRead setup.cfg set filetype=dosini
   au BufNewFile,BufRead *.xonshrc, set filetype=xonsh
   au BufNewFile,BufRead *.xsh set filetype=xonsh
-  " au BufNewFile,BufRead *.tmux set filetype=tmux
-  " au BufNewFile,BufRead *.tmux.conf set filetype=tmux
-
-" tmux configuration
-" just noticed that in $VIMRUNTIME/filetype.vim
-" au BufNewFile,BufRead {.,}tmux*.conf		setf tmux
+  " YESSSS I used bracket expansion correctly fuck yes
+  au BufNewFile,BufRead *.tmux{,.conf} set filetype=tmux
+  " tmux configuration
+  " just noticed that in $VIMRUNTIME/filetype.vim
+  " so why don't we recognize tmux filetypes without it then?
+  " OH it needs teh conf.
+  " au BufNewFile,BufRead {.,}tmux*.conf		setf tmux
 
   au BufNewFile,BufRead *.rst.txt set filetype=rst.txt
   au BufNewFile,BufRead *.rst_t set filetype=htmljinja

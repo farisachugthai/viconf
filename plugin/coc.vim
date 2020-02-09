@@ -14,6 +14,7 @@ if exists('plugs')  " installed with vim-plug
   endif
 endif
 
+" Options: {{{
 " TODO:
 " so obviously only do this on windows. shit there are so many things that we need to configure
 " list.source.tags.command: ~/bin/ctags.exe -R --options=~/.ctags/universal_ctags.ctags .,
@@ -46,7 +47,11 @@ let $NVIM_NODE_LOG_LEVEL = 'WARN'
 
 " This raises a lot of errors
 " call coc#snippet#enable()
+" }}}
 
+" Mappings: {{{
+
+" General Mappings: {{{
 " TODO: Might need to open a pull request he states that these are mapped by
 " default. omap af and omap if didn't show anything
 onoremap af <Plug>(coc-funcobj-a)
@@ -80,8 +85,9 @@ nnoremap gK <Plug>(coc-definition)<CR>
 " The gu<text object> operation is too important
 " nnoremap <expr><buffer> gu <Plug>(coc-usages)<CR>
 nnoremap g} <Plug>(coc-usages)<CR>
+" }}}
 
-" Bracket maps: {{{2
+" Bracket maps: {{{
 " Shit none of these work
 " oh also these are builtin mappings
 " nnoremap [g <Plug>(coc-diagnostic-prev)<CR>
@@ -90,20 +96,22 @@ nnoremap g} <Plug>(coc-usages)<CR>
 " Note: Tried adding <expr> and didn't work
 " nnoremap [c  <Plug>(coc-git-prevchunk)<CR>
 " nnoremap ]c  <Plug>(coc-git-nextchunk)<CR>
+" }}}
 
-" Remap for rename current word: {{{2
+" Remap for rename current word: {{{
 nnoremap <F2> <Plug>(coc-refactor)<CR>
 
 " Instead of actually writing a '<,'> are we allowed to use the * char?
 xnoremap <F2> <Cmd>'<,'>CocCommand document.renameCurrentWord<CR>
+" }}}
 
 " CocOpenLog: {{{2
 " TODO: Why does this raise an error?
 " nnoremap <expr> ,l coc#client#open_log()
 nnoremap ,l <Cmd>CocOpenLog<CR>
-
 " And let's add one in for CocInfo
 nnoremap ,i <Cmd>CocInfo<CR>
+" }}}
 
 " Grep By Motion: Mnemonic CocSelect {{{2
 
@@ -116,8 +124,9 @@ nnoremap ,cs :<C-u>set operatorfunc=plugins#GrepFromSelected<CR>g@
 
 " Show all diagnostics
 command! -nargs=0 CocDiagnostic call CocActionAsync('diagnosticInfo')
+" }}}
 
-" Maps For CocList X: {{{2
+" Maps For CocList X: {{{
 nnoremap <C-g> <Cmd>CocList<CR>
 nnoremap ,d  <Cmd>CocList diagnostics<CR>
 " nnoremap ,d <Plug>(coc-diagnostic-info)<CR>
@@ -134,16 +143,11 @@ nnoremap ,s  <Cmd>CocList -I symbols<CR>
 " Easier Grep Using CocList Words:
 nnoremap ,w <Cmd>execute 'CocList -I --normal --input=' . expand('<cword>') . ' words'<CR>
 
-command! -nargs=0 CocWords execute 'CocList -I --normal --input=' . expand('<cword>') . ' words'
-
 " Keymapping for grep word under cursor with interactive mode
 nnoremap ,g <Cmd>exe 'CocList -I --input=' . expand('<cword>') . ' grep'<CR>
+" }}}
 
-" TODO: Figure out the ternary operator, change nargs to ? and if arg then
-" input=arg else expand(cword)
-command! -nargs=0 CocGrep execute 'CocList -I --input=' . expand('<cword>') . ' grep'
-
-" CocResume: {{{2
+" CocResume: {{{
 " Amazingly leader j k and p aren't taken. From the readme
 nnoremap <Leader>j  :<C-u>CocNext<CR>
 nnoremap ,j  :<C-u>CocNext<CR>
@@ -151,8 +155,9 @@ nnoremap <Leader>k  :<C-u>CocPrev<CR>
 nnoremap ,k  :<C-u>CocPrev<CR>
 nnoremap <Leader>r  :<C-u>CocListResume<CR>
 nnoremap ,r  :<C-u>CocListResume<CR>
+" }}}
 
-" Other Mappings: {{{2
+" Other Mappings: {{{
 xnoremap ,m  <Plug>(coc-format-selected)<CR>
 nnoremap ,m  <Plug>(coc-format-selected)<CR>
 
@@ -170,17 +175,25 @@ nnoremap gx <Plug>(coc-openlink)<CR>
 " Coc Usages
 nnoremap ,u <Plug>(coc-references)<CR>
 
-command! -nargs=0 CocReferences call CocAction('jumpReferences')
-
 nnoremap ,. <Plug>(coc-command-repeat)<CR>
-
-command! -nargs=0 CocRepeat call CocAction('repeatCommand')
 
 " Autofix problem of current line
 nnoremap ,f  <Plug>(coc-fix-current)<CR>
 nnoremap ,q  <Plug>(coc-fix-current)<CR>
+" }}}
+" }}}
 
-" Commands: {{{1
+" Commands: {{{
+
+command! -nargs=0 CocWords execute 'CocList -I --normal --input=' . expand('<cword>') . ' words'
+
+command! -nargs=0 CocRepeat call CocAction('repeatCommand')
+
+command! -nargs=0 CocReferences call CocAction('jumpReferences')
+
+" TODO: Figure out the ternary operator, change nargs to ? and if arg then
+" input=arg else expand(cword)
+command! -nargs=0 CocGrep execute 'CocList -I --input=' . expand('<cword>') . ' grep'
 
 " Dec 05, 2019: Got a new one for ya!
 command! -nargs=0 CocExtensionStats :py3 from pprint import pprint; pprint(vim.eval('CocAction("extensionStats")'))
@@ -202,8 +215,9 @@ command! -nargs=0 CocPython call CocActionAsync('runCommand', 'python.startREPL'
 " Let's also get some information here.
 " call CocAction('commands') is a lamer version of CocCommand
 " similar deal with CocFix and CocAction() -quickfix
+" }}}
 
-" Autocmds: {{{1
+" Autocmds: {{{
 
 augroup UserCoc
   au!
@@ -217,3 +231,6 @@ augroup UserCoc
   autocmd! User CmdlineEnter CompleteDone
 
 augroup END
+" }}}
+
+" Vim: set fdm=marker:

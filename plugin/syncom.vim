@@ -33,22 +33,15 @@ endif
 inoremap <Down> <C-R>=pumvisible() ? "\<lt>C-N>" : "\<lt>Down>"<CR>
 inoremap <Up> <C-R>=pumvisible() ? "\<lt>C-P>" : "\<lt>Up>"<CR>
 
-" Title: {{{1
-" From `:he change`  line 352 tag g?g?
-" Adding range means that the command defaults to current line
-" Need to add a check that we're in visual mode and drop the '<,'> if not.
-command! -nargs=0 -bar -range TitleCase execute 'normal! ' . "'<,'>s/\v<(.)(\w*)/\u\1\L\2/g"
-
-augroup UserColors
+augroup UserColors  " {{{
   autocmd!
-  autocmd InsertEnter * setlocal cursorline
-  autocmd InsertLeave * setlocal nocursorline
   autocmd VimEnter * colorscheme gruvbox-material
-augroup end
+augroup end  " }}}
 
-" Grepprg:
+" Grepprg: {{{
 try
   " if you don't have fd or rg installed you shouldn't lose highlighting
   call syncom#grepprg()
 catch /.*/
 endtry
+" }}}

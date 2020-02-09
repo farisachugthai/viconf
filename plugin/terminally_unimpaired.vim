@@ -24,28 +24,12 @@ endif
 " cnoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<C-d>"
 " cnoremap <expr> <S-Tab> pumvisible() ? "\<C-n>" : "\<C-d>"
 
-set wildcharm=<C-z>
-nnoremap ,e :e **/*<C-z><S-Tab>
-
 set path-=/usr/include
-nnoremap ,f :find **/*<C-z><S-Tab>
 
 if !empty($ANDROID_DATA)
   " May 26, 2019: Just ran into my first problem from a filename with a space in the name *sigh*
   command! TermuxSend execute '!termux-share -a send ' . shellescape(expand('%'))
   nnoremap <Leader>ts :<C-u>TermuxSend<CR>
-endif
-
-if exists('$ANDROID_DATA')  " Fuck i had to change this because wsl was loading termux jesus christ
-  call find_files#termux_remote() | echo 'loaded termux'
-
-" Damn it was this part. Whew! All that work just to realize that only on NT
-" and WSL does this function call run exceptionally slow. Goddamn.
-" Unfortunately, even if you don't like it, these have to be called though
-elseif !has('unix')
-  call find_files#msdos_remote()
-else
-  call find_files#ubuntu_remote() | echo 'loaded wsl'
 endif
 
 if !has('unix')
@@ -58,8 +42,6 @@ if !has('unix')
   set eventignore=DirChanged
 
   command! SetCmd call msdos#set_shell_cmd()
-  " call msdos#set_shell_cmd()
-
   command! -nargs=? CmdInvoke call msdos#invoke_cmd(<q-args>)
   command! -nargs=? -complete=shellcmd Cmd call msdos#CmdTerm(<q-args>)
   command! PowerShell call msdos#PowerShell()

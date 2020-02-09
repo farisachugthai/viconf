@@ -5,26 +5,33 @@
   " Last Modified: September 23, 2019
 " ============================================================================
 
+if exists('g:did_init_vim') || &compatible || v:version < 700
+    finish
+endif
+let g:did_init_vim = 1
+
 scriptencoding utf-8
-set fileformat=unix fileformats=unix,dos  " don't let DOS fuck up the EOL
+setglobal fileformats=unix,dos
 setglobal cpoptions-=c,e,_  " couple options that bugged me
 
+" Set paths correctly: {{{
 let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Evervim. Thanks!
 let s:wsl = !empty($WSL_DISTRO_NAME)
 let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux) && empty(s:wsl)
 
 let s:this_dir = fnameescape(fnamemodify(expand('$MYVIMRC'), ':p:h'))
+let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h'))
 
 " Seriously how does this keep getting fucked up. omfg packpath is worse???
 if has('unix')
-  set runtimepath=~/.config/nvim,~/.local/share/nvim/site,$VIMRUNTIME,~/.config/nvim/after
-  set packpath=~/.config/nvim,~/.local/share/nvim/site,$VIMRUNTIME,~/.config/nvim/after
+  setglobal runtimepath=~/.config/nvim,~/.local/share/nvim/site,$VIMRUNTIME,~/.config/nvim/after
+  setglobal packpath=~/.config/nvim,~/.local/share/nvim/site,$VIMRUNTIME,~/.config/nvim/after
 else
-  set runtimepath=$USERPROFILE\AppData\Local\nvim,$USERPROFILE\AppData\Local\nvim-data\site,$VIMRUNTIME,C:\Neovim\share\nvim-qt\runtime
-  set packpath=~\AppData\Local\nvim,~\AppData\Local\nvim-data\site,$VIMRUNTIME,C:\Neovim\share\nvim-qt\runtime
-endif
+  setglobal runtimepath=$USERPROFILE\AppData\Local\nvim,$USERPROFILE\AppData\Local\nvim-data\site,$VIMRUNTIME,C:\Neovim\share\nvim-qt\runtime
+  setglobal packpath=~\AppData\Local\nvim,~\AppData\Local\nvim-data\site,$VIMRUNTIME,C:\Neovim\share\nvim-qt\runtime
+endif  " }}}
 
-" How does this get set even when i'm in a terminal?
+" Source ginit. Why is this getting set even in the TUI? {{{
 if exists('g:GuiLoaded') | exec 'source ' s:this_dir . '\ginit.vim' | endif
 if has('unnamedplus') | set clipboard+=unnamed,unnamedplus | else | set clipboard+=unnamed | endif
 
@@ -43,20 +50,20 @@ map <Space> <Leader>
 if has('nvim-0.4')   " Fun new features!
   let &shadafile = stdpath('data') . '/shada/main.shada'
   " toggle transparency in the pum and windows. don't set higher than 10 it becomes hard to read higher than that
-  set pumblend=10 winblend=5
+  setglobal pumblend=10 winblend=5
   try | set pyxversion=3 | catch /^Vim:E518:*/ | endtry
-endif
+endif   " }}}
 
 " Backups: {{{
 " Protect changes between writes. Default values of updatecount
 " (200 keystrokes) and updatetime (4 seconds) are fine
-set swapfile undofile backupext='.bak'
-set writebackup        " protect against crash-during-write
-set nobackup           " but do not persist backup after successful write
+setglobal swapfile undofile backupext='.bak'
+setglobal writebackup        " protect against crash-during-write
+setglobal nobackup           " but do not persist backup after successful write
 
 " use rename-and-write-new method whenever safe. actually might go with yes
 " its slower but idc
-set backupcopy=yes
+setglobal backupcopy=yes
 " patch required to honor double slash at end consolidate the writebackups -- they usually get deleted
 if has('patch-8.1.0251') | let &backupdir=stdpath('config') . '/undodir//' | endif
 
@@ -81,15 +88,20 @@ endif
 if !isdirectory(expand(&g:undodir))
   silent! call mkdir(expand(&g:undodir), 'p', 0700)
 endif
+" }}}
 
-" Make shift-insert work like in Xterm
+" Make shift-insert work like in Xterm: {{{
 noremap <S-Insert> <MiddleMouse>
 noremap! <S-Insert> <MiddleMouse>
 tnoremap <S-Insert> <MiddleMouse>
 
 set suffixes=.bak,~,.o,.info,.swp,.aux,.bbl,.blg,.brf,.cb,.dvi,.idx,.ilg,.ind,.inx,.jpg,.log,.out,.png,.toc
-set foldnestmax=10 foldmethod=marker foldcolumn=2 foldopen+=jump,insert
-set signcolumn=auto:4  " this might be a nvim 4 thing
+
+setglobal foldnestmax=10 foldmethod=marker foldcolumn=2
+setglobal foldignore=
+setglobal foldopen+=jump,insert foldminlines=0  foldlevelstart=0
+
+setglobal signcolumn=auto:4  " this might be a nvim 4 thing
 try | set switchbuf=useopen,usetab,split | catch | endtry
 set splitbelow splitright
 set sidescroll=5 hidden
@@ -98,9 +110,10 @@ set isfname-==
 set iskeyword=@,48-57,_,192-255   " Idk how but i managed to mess up the default isk
 
 if filereadable(s:this_dir . '/spell/en.utf-8.add')
-  let &spellfile = s:this_dir . '/spell/en.utf-8.add'
-endif
-" both smartcase and infercase require ignorecase to be set
+  let &g:spellfile = s:this_dir . '/spell/en.utf-8.add'
+endif  " }}}
+
+" both smartcase and infercase require ignorecase to be set: {{{
 set ignorecase
 set smartcase infercase
 
@@ -110,7 +123,9 @@ if exists('&modelineexpr') | set modelineexpr | endif
 set whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 
 set diffopt=filler,context:0,hiddenoff,foldcolumn:2,icase,indent-heuristic,horizontal,iblank,iwhite
-" TODO: closeoff needs to be added conditionally. how?
+" }}}
+
+" TODO: closeoff needs to be added conditionally. how? {{{
 if has('patch-8.1.0360') | set diffopt+=internal,algorithm:patience | endif
 set browsedir="buffer"   " which directory is used for the file browser
 
@@ -121,6 +136,8 @@ let &g:fillchars = "stl:' ',stlnc:' ',vert:\u250b,fold:\u00b7,diff:'.'"
 set breakindent breakindentopt=sbr
 let &showbreak = '↳ '                   " Indent wrapped lines correctly
 set updatetime=100 lazyredraw
+" A full second's a long time to timeout
+set timeoutlen=300
 set inccommand=split
 set terse shortmess=aoOsItTWcF
 set title titlestring=%<%F%=%l/%L-%P   " leaves a cool title for tmux
@@ -129,12 +146,27 @@ set spellsuggest=5
 set showmatch matchpairs+=<:> lazyredraw matchtime=20  " Show the matching pair for 2 seconds
 let g:matchparen_timeout = 500
 let g:matchparen_insert_timeout = 300
+" }}}
 
+" Plugins: {{{
+" Don't assume that the InstallPlug() func worked so ensure it's defined
 set termguicolors
 set synmaxcol=1000
-
-if !exists('plug#load')  | exec 'source ' . s:this_dir . '/vim-plug/plug.vim' | endif
+if !exists('plug#load')  | exec 'source ' . s:repo_root . '/vim-plug/plug.vim' | endif
 
 exec 'source ' . s:this_dir . '/junegunn.vim'
 " Don't assume that worked. Needs to be defined but increasingly not as needed
 if !exists('plugs') | let plugs = {} | endif
+
+if exists('$ANDROID_DATA')  " Fuck i had to change this because wsl was loading termux jesus christ
+  call find_files#termux_remote()
+elseif !has('unix')
+  " Note: dude holy hell is it necessary to call the msdos#set_shell_cmd()
+  " func. you do so in ./plugin/unix.vim but jesus christ did it fuck stuff up
+  " when that got deleted
+  call find_files#msdos_remote()
+else
+  call find_files#ubuntu_remote()
+endif
+
+" }}}

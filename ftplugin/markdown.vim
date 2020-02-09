@@ -76,7 +76,9 @@ let b:undo_ftplugin .= '| nunmap <buffer> <Leader>5'
 if !exists('plugs') | finish | endif
 
 if has_key(plugs, 'vim-markdown')
-  let g:vim_markdown_folding_style_pythonic = 1
+
+  " dude this makes shit so slow
+  let g:vim_markdown_folding_style_pythonic = 0
   " Folding level is a number between 1 and 6. By default, if not specified, it
   " is set to 1.
   let g:vim_markdown_folding_level = 2
@@ -92,8 +94,6 @@ if has_key(plugs, 'vim-markdown')
   endif
 
 endif
-
-source $VIMRUNTIME/ftplugin/html.vim
 
 let b:undo_ftplugin .= 'setl spell< cc< tw< lbr< et< ts< sts< sw< fdl< fdls<'
       \ . '|unlet! b:undo_ftplugin'

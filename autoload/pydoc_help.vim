@@ -39,10 +39,7 @@ function! s:temp_buffer() abort  " {{{1
   setlocal filetype=rst
   " Because i have it on in my rst filetype.
   setlocal nospell
-  setlocal buftype=nofile,nowrite
-  " setlocal nomodified
-  " setlocal buflisted
-  " silent setlocal nomodifiable
+  setlocal buftype=nofile bufhidden=delete noswapfile nowrap previewwindow
 endfunction
 
 function! pydoc_help#PydocCword() abort  " {{{1
@@ -55,11 +52,13 @@ function! pydoc_help#PydocCword() abort  " {{{1
   call s:temp_buffer()
 endfunction
 
-function! pydoc_help#SplitPydocCword() abort  " {{{1
+function! pydoc_help#SplitPydocCword(mods) range abort  " {{{1
+  " NOTE: See `:he func-range to see how functions can accept ranges without
+  " it being specified in their parameters
+  " Jesus did i fuck this one up
   let s:temp_cword = expand('<cWORD>')
-  split
-  enew
-  exec ':r! pydoc ' . s:temp_cword
+ 
+  " Cross your fingers i did this right haha
   call s:temp_buffer()
 endfunction
 
