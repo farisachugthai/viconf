@@ -12,12 +12,8 @@
     "powershell",
     "python"
   ],
-  "coc.preferences.formatOnType": true,
   "coc.preferences.hoverTarget": "float",
-  "coc.preferences.jumpCommand": "tabe",
-  "coc.preferences.messageLevel": "error",
   "coc.preferences.previewAutoClose": true,
-  "coc.preferences.useQuickfixForLocations": true,
   "coc.source.around.firstMatch": false,
   "coc.source.around.priority": 60,
   "coc.source.around.shortcut": "Coc-Around:",
@@ -27,7 +23,6 @@
   "coc.source.buffer.shortcut": "Coc-Buffer:",
   "coc.source.dictionary.filetypes": [
     "rst",
-    "md",
     "text",
     "json",
     "help",
@@ -79,15 +74,8 @@
   "diagnostic.virtualTextLineSeparator": " \\ ",
   "diagnostic.virtualTextLines": 0,
   "diagnostic.virtualTextPrefix": "Coc-Diagnostic: ",
-  "emmet.preferences": {
-    "filter.commentTrigger": [
-      "id",
-      "class"
-    ],
-    "profile.allowCompactBoolean": false
-  },
-  "git.addGlameToBufferVar": true,
-  "git.addGlameToVirtualText": true,
+  "git.addGBlameToBufferVar": true,
+  "git.addGBlameToVirtualText": true,
   "git.branchCharacter": "  ",
   "git.changedDecorator": "*",
   "git.conflictedDecorator": "::",
@@ -416,13 +404,6 @@
   "python.terminal.executeInFileDir": true,
   "python.terminal.launchArgs": [
     "-U"
-  ],
-  "python.testing.unittestArgs": [
-    "-v",
-    "-s",
-    "./test",
-    "-p",
-    "test*.py"
   ],
   "python.workspaceSymbols.exclusionPatterns": [
     "**/site-packages/**",

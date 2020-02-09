@@ -200,21 +200,40 @@ command! -nargs=0 CocExtensionStats :py3 from pprint import pprint; pprint(vim.e
 
 " Let's group these together by prefixing with Coc
 " Use `:Format` to format current buffer
-command! -nargs=0 CocFormat call CocAction('format')
+command! CocFormat call CocAction('format')
 
 " Use `:Fold` to fold current buffer
 command! -nargs=? CocFold call CocActionAsync('fold', <f-args>)
 
 " use `:OR` for organize import of current buffer
-command! -nargs=0 CocSort call CocAction('runCommand', 'editor.action.organizeImport')
+command! CocSort call CocAction('runCommand', 'editor.action.organizeImport')
 
 " Just tried this and it worked! So keep checking :CocList commands and add
 " more as we go.
-command! -nargs=0 CocPython call CocActionAsync('runCommand', 'python.startREPL')|
+command! CocPython call CocActionAsync('runCommand', 'python.startREPL')|
 
 " Let's also get some information here.
 " call CocAction('commands') is a lamer version of CocCommand
 " similar deal with CocFix and CocAction() -quickfix
+" actually ive overriding his coc fix  giving it the quickfix arg fucks
+" something up
+
+command! -nargs=* -range CocFix call coc#rpc#notify('codeActionRange', [<line1>, <line2>, <q-args>])
+
+" Nabbed these from his plugin/coc.vim file and changed the mappings to
+" commands
+command! CocDefinition call CocAction('jumpDefinition')
+
+command! CocDeclaration    call       CocAction('jumpDeclaration')
+command! CocImplementation call       CocAction('jumpImplementation')
+command! CocTypeDefinition call       CocAction('jumpTypeDefinition')
+command! CocReferences     call       CocAction('jumpReferences')
+command! CocOpenlink      call       CocActionAsync('openLink')
+command! CocFixCurrent    call       CocActionAsync('doQuickfix')
+command! CocFloatHide     call       coc#util#float_hide()
+command! CocFloatJump     call       coc#util#float_jump()
+command! CocCommandRepeat call       CocAction('repeatCommand')
+
 " }}}
 
 " Autocmds: {{{

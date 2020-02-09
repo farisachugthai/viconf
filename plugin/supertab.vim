@@ -37,6 +37,7 @@ let g:SuperTabDefaultCompletionType = 'context'
 let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
 
 " set completefunc=SuperTabCodeComplete
+if !exists('*SuperTabChain') | finish | endif
 
 augroup SuperTabOmniFunc
   autocmd!

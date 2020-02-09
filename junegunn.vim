@@ -28,8 +28,9 @@ let g:plug_window = 'tabe'
 Plug 'junegunn/fzf', { 'dir': expand('~/.fzf'), 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
-Plug 'scrooloose/nerdTree', { 'on': ['NERDTreeCWD', 'NERDTreeVCS'] }
+Plug 'scrooloose/nerdTree', { 'on': ['NERDTreeCWD', 'NERDTreeVCS', 'NERDTreeFind'] }
 nnoremap <Leader>nt <Cmd>NERDTreeCWD<CR>zz
+nnoremap <Leader>nf <Cmd>NERDTreeFind<CR>
 
 " Switch NERDTree root to dir of currently focused window.
 " Make mapping match Spacemacs.
@@ -52,7 +53,7 @@ augroup END
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rsi'
-Plug 'tpope/vim-surround'
+" Plug 'tpope/vim-surround'
 " Plug 'tpope/vim-unimpaired'
 Plug 'tpope/apathy'
 Plug 'tpope/scriptease'
@@ -78,16 +79,12 @@ tnoremap <silent> <F8> <Cmd>TagbarToggle<CR>
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 nnoremap U <Cmd>UndotreeToggle<CR>
 
-" The 'tabular' plugin must come _before_ 'vim-markdown'.
-" Plug 'ervandew/supertab'
 Plug 'junegunn/vim-peekaboo'
 Plug 'vim-voom/voom', {'on': ['Voom', 'VoomToggle', 'VoomExec'] }
 Plug 'romainl/vim-qf'
 
 if empty(s:termux)
-  " Plug 'chrisbra/csv.vim', {'for': ['csv', 'tsv']}
   Plug 'godlygeek/tabular', {'on': 'Tabularize'}
-  " needed if for nothing else but the ftdetect
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
   " Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
   Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }

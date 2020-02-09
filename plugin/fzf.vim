@@ -143,12 +143,14 @@ tnoremap <F6>               <Cmd>Snippets<CR>
 " NOTE: The imap should probably only be invoked using \<tab>
 nmap \<tab>                 <Plug>(fzf-maps-n)
 omap \<tab>                 <Plug>(fzf-maps-o)
-xmap \<tab>                 gv<Plug>(fzf-maps-x)
+xmap \<tab>                 <Plug>(fzf-maps-x)
 imap \<tab>                 <Plug>(fzf-maps-i)
 
 " Map vim defaults to fzf history commands
-nnoremap <silent> q:        <Cmd>History:<CR>
-nnoremap <silent> q/        <Cmd>History/<CR>
+nnoremap q:        <Cmd>History:<CR>
+nnoremap q/        <Cmd>History/<CR>
+" But id still want to use q: when i can
+nnoremap q; q:
 
 " And get the rest of the fzf.vim commands involved.
 nnoremap  <Leader>l         <Cmd>Lines<CR>
@@ -183,13 +185,14 @@ command! -complete=file_in_path -nargs=? -bang -bar FZGrep call fzf#run(fzf#wrap
 	" -addr=buffers		Range for buffers (also not loaded buffers)
 
   " Gtfo it worked
-command! -bang -bar -complete=file -addr=buffers -nargs=* FZGGrep
+command! -bang -bar -complete=file  -range -addr=buffers -nargs=* FZGGrep
   \   call fzf#vim#grep(
   \   'git grep --line-number --color=always ' . shellescape(<q-args>),
   \   0,
   \   {'dir': systemlist('git rev-parse --show-toplevel')[0]},
   \   <bang>0)
-" Ag: FZF With a Preview Window {{{2
+
+" Ag FZF With A Preview Window: {{{2
 "   :Ag! - Start fzf in fullscreen and display the preview window above
 command! -complete=dir -bang -bar -addr=buffers -nargs=* FZPreviewAg
   \ call fzf#vim#ag(<q-args>,
@@ -208,29 +211,38 @@ command! -bar -complete=dir -bang -nargs=* FZMehRg
         \ ))
 
         " \   <bang>0 ? fzf#vim#with_preview('up:60%') : fzf#vim#with_preview('right:50%:hidden', '?')
+
 " Files With Preview Window: {{{2
 command! -bang -nargs=? -complete=dir -bar FZPreviewFiles
   \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+" }}}
 
-" PlugHelp: " Does this need an f-args?
-command! -bang -bar FZHelp call fzf#run(fzf#wrap({'help',
-  \ 'source': sort(keys(g:plugs)),
-  \ 'sink'  :   function('find_files#plug_help_sink')}, <bang>0))
+" Plugins: {{{
+function! s:Plugins(...) abort
+  return sort(keys(g:plugs))
+endfunction
 
-" Doesnt work
-command! -bar -bang -nargs=* -complete=dir FZAgrep call fzf#vim#grep(s:ag_command .
-      \ shellescape(<q-args>), 1, <bang>0)
+" TODO: Sink doesnt work
+command! -nargs=* -bang -bar -complete=customlist,s:Plugins FZPlugins
+      \ call fzf#run(fzf#wrap(
+      \ 'help',
+      \ {'source': sort(keys(g:plugs)),
+      \ 'sink'  : function('find_files#plug_help_sink'),
+      \ 'options': g:fzf_options},
+      \ <bang>0))
+" }}}
 
 command! -bar -bang -nargs=0 -complete=color FZColors
   \ call fzf#vim#colors({'left': '35%',
   \ 'options': '--reverse --margin 30%,0'}, <bang>0)
 
-" FZBuf: Works better than FZBuffers
+" FZBuf: {{{ Works better than FZBuffers
 command! -bar -bang -complete=buffer FZBuf call fzf#run(fzf#wrap('buffers',
     \ {'source': map(range(1, bufnr('$')), 'bufname(v:val)')},
     \ <bang>0))
+" }}}
 
-" FZBuffers: Use Of g:fzf_options:
+" FZBuffers: Use Of g:fzf_options: {{{
   " As of Oct 15, 2019: this works. Also correctly locates files which none of my rg commands seem to do
 command! -bang -complete=buffer -bar FZBuffers call fzf#run(fzf#wrap('buffers',
         \ {'source':  reverse(find_files#buflist()),
@@ -238,6 +250,7 @@ command! -bang -complete=buffer -bar FZBuffers call fzf#run(fzf#wrap('buffers',
         \ 'options': g:fzf_options,
         \ 'down':    len(find_files#buflist()) + 2
         \ }, <bang>0))
+" }}}
 
 " FZMru: I feel like this could work with complete=history right?
 command! -bang -bar FZMru call find_files#FZFMru()
@@ -291,6 +304,6 @@ command! -bar -bang -complete=mapping FZCMaps call fzf#vim#maps("c", <bang>0)
 command! -bar -bang -complete=mapping FZTMaps call fzf#vim#maps("t", <bang>0)
 
 " Add completion to his Maps command but define ours the same way
-command! -bar -bang -nargs=? -complete=mapping FZMaps call fzf#vim#maps("n", <bang>0)
+command! -bar -bang -nargs=? -complete=mapping Maps call fzf#vim#maps("n", <bang>0)
 
 " Vim: set fdm=indent:

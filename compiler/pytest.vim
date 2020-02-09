@@ -5,7 +5,7 @@
   " Last Modified: July 19, 2019
 " ============================================================================
 
-" Guards: {{{1
+" Guards: {{{
 if exists('current_compiler')
   finish
 endif
@@ -17,6 +17,10 @@ endif
 
 let s:cpo_save = &cpoptions
 set cpoptions-=C
+
+" }}}
+
+"  CompilerSet: {{{
 
 CompilerSet makeprg=py.test\ --tb=short\ -q\ --color=no
 

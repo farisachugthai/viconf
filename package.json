@@ -14,16 +14,15 @@
     "tagfunc": "./rplugin/node/coc_tag.js",
     "watch": "yarn run tsc -w -p rplugin/node",
     "build": "yarn run rimraf ./out && yarn run webpack",
-    "start": "yarn run vim-language-server --stdio"
+    "start": "yarn run vim-language-server --stdio",
+    "install" : "yarn install"
   },
-
   "main": "rplugin/node/coc_tag.js",
   "directories": {"lib": "rplugin/node"},
   "author": "Faris Chugthai",
   "bugs": {
     "url": "https://github.com/farisachugthai/viconf/issues"
   },
-
   "keywords": [
     "coc.nvim",
     "nvim",
@@ -39,6 +38,7 @@
   "version": "1.0.0",
   "dependencies": {
     "@types/vscode": "^1.41.0",
+    "@yarnpkg/pnpify": "^2.0.0-rc.17",
     "bash-language-server": "^1.7.0",
     "coc-dictionary": "latest",
     "coc-git": ">=1.7.0",
@@ -56,7 +56,7 @@
     "coc-yank": ">=1.1.3",
     "eslint": "latest",
     "jsonlint": "^1.6.3",
-    "vim-language-server": "^1.4.0",
+    "vim-language-server": "^1.4.2",
     "yaml-language-server": "^0.6.1"
   }
 }

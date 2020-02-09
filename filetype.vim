@@ -30,7 +30,7 @@ augroup Userftdetect
   " au BufNewFile,BufRead {.,}tmux*.conf		setf tmux
 
   au BufNewFile,BufRead *.rst.txt set filetype=rst.txt
-  au BufNewFile,BufRead *.rst_t set filetype=htmljinja
+  au BufNewFile,BufRead *.rst_t set filetype=htmljinja.htmldjango
   au BufNewFile,BufRead *.gitconfig set filetype=gitconfig
   au BufNewFile,BufRead *.rktd set filetype=lisp
 

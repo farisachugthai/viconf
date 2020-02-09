@@ -18,28 +18,14 @@ if executable('htop')
   nnoremap <Leader>ah <Cmd>wincmd v<CR><bar><Cmd>enew<CR><bar>term://htop
 endif
 
-" It's damn near a crime that I haven't done this one yet
-" Make tab on the cmdline either using vim's normal auto-completion but only
-" if the popup menu isn't already open. If it is, then select the next option.
-" cnoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<C-d>"
-" cnoremap <expr> <S-Tab> pumvisible() ? "\<C-n>" : "\<C-d>"
-
-set path-=/usr/include
-
-if !empty($ANDROID_DATA)
-  " May 26, 2019: Just ran into my first problem from a filename with a space in the name *sigh*
-  command! TermuxSend execute '!termux-share -a send ' . shellescape(expand('%'))
-  nnoremap <Leader>ts :<C-u>TermuxSend<CR>
-endif
-
 if !has('unix')
-  set sessionoptions+=unix,slash viewoptions+=unix,slash
+  setglobal sessionoptions+=unix,slash viewoptions+=unix,slash
 
   " So this HAS to be a bad idea; however, all 3 DirChanged autocommands emit
   " errors and that's a little insane
   " Oct 22, 2019: Somehow I've observed literally 0 problems with this and the
   " error is still emitted when the dir changes soooo
-  set eventignore=DirChanged
+  setglobal eventignore=DirChanged
 
   command! SetCmd call msdos#set_shell_cmd()
   command! -nargs=? CmdInvoke call msdos#invoke_cmd(<q-args>)

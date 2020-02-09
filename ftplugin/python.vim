@@ -5,7 +5,7 @@
     " Last Modified: Oct 18, 2019
 " ============================================================================
 
-" Globals:
+" Globals: {{{
 let g:python_highlight_all = 1
 let g:python_space_error_highlight = 1
 
@@ -15,8 +15,9 @@ let g:pyindent_open_paren = 'shiftwidth() * 2'
 let g:pyindent_nested_paren = 'shiftwidth()'
 " Indent for a continuation line: >
 let g:pyindent_continue = 'shiftwidth() * 2'
+" }}}
 
-" Filetype Specific Options:
+" Filetype Specific Options: {{{
 if &filetype !=# 'python' || &filetype !=# 'xonsh' || &filetype !=# 'pyrex' | finish | endif
 
 if exists('b:did_ftplugin') | finish | endif
@@ -53,11 +54,9 @@ setlocal includeexpr=substitute(v:fname,'\\.','/','g')
 " linters to react.
 setlocal colorcolumn=80,120
 setlocal foldmethod=indent
-" setlocal keywordprg=python\ -m\ pydoc
-" Use xnoremap because I wouldn't want this in select mode
-execute 'xnoremap K <Cmd>Pydoc ' . expand('<cWORD>') . '<CR>'
 
-setlocal suffixesadd+=.py
+setlocal suffixesadd+=.py,pyi
+setlocal suffixes+=.pyc
 setlocal omnifunc=python3complete#Complete
 
 setlocal isfname+=.
@@ -73,6 +72,7 @@ setlocal isk-=.
 setlocal shiftround
 
 let &l:path = py#PythonPath()
+" }}}
 
 " Compiler: {{{1
 
@@ -80,13 +80,15 @@ let &l:path = py#PythonPath()
 " Well this is neat!
 if executable('pytest')
   compiler pytest
+  setlocal makeprg=py.test\ --tb=short\ -q\ --color=no
   echomsg 'Using pytest as a compiler!'
 else
   compiler pylint
   echomsg 'Using pylint as a compiler!'
-endif
+endif  " }}}
 
 " Mappings: {{{1
+
 " Don't know how I haven't done this yet.
 " TODO: Add ranges so we can do py3do on lines
 noremap <buffer> <F5> <Cmd>py3f %<CR>
@@ -94,6 +96,11 @@ noremap! <buffer> <F5> <Cmd>py3f %<CR>
 
 " ../../autoload/pydoc_help.vim
 " nnoremap <buffer> K <Cmd>PydocThis<CR>
+" setlocal keywordprg=python\ -m\ pydoc
+" Use xnoremap because I wouldn't want this in select mode
+execute 'xnoremap K <Cmd>Pydoc ' . expand('<cWORD>') . '<CR>'
+
+" }}}
 
 " Formatters: {{{1
 
@@ -112,22 +119,23 @@ else
     command! -nargs=0 Autopep8 exec '!autopep8 -i %'
     " command! -nargs=0 Autopep8 cexpr! exec '!autopep8 -d %'
   endif
-endif
+endif  " }}}
 
-" ALE: {{{1
+" Plugins: {{{
+" ALE:
 " Ive actually noticed things working bettwr when called unconditionally
 call py#ALE_Python_Conf()
 
-" Coc: {{{1
+" Coc:
 " Just tried this and it worked! So keep checking :CocCommand output
 if !empty('g:did_coc_loaded')
-  command! -nargs=? CocPython call CocActionAsync('runCommand', 'python.startREPL', shellescape(<q-args>))|
-endif
-
+  command! -nargs=* -bar CocPython call CocActionAsync('runCommand', 'python.startREPL', shellescape(<q-args>))
+endif  " }}}
 
 " Atexit: {{{1
 " For a reference go to $VIMRUNTIME/ftplugin/python.vim
-let b:undo_ftplugin = 'setlocal lbr< tw< cms< et< sts< ts< sw< cc< fdm< kp<'
+let b:undo_ftplugin = 'setlocal lbr< tw< cms< et< sts< ts<'
+      \ . '|setlocal su< sw< cc< fdm< kp<'
       \ . '|setlocal sr< sua< isf< ep< fp< path< cinw<'
       \ . '|setlocal mp< efm<'
       \ . '|setlocal comments<'

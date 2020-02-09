@@ -1,12 +1,12 @@
 // @ts-ignore
-const { sources, workspace } = require("coc.nvim");
+const {sources, workspace} = require("coc.nvim");
 const path = require("path");
 const fs = require("fs");
 const util = require("util");
 const readline = require("readline");
 
 const TAG_CACHE = {};
-const { nvim } = workspace;
+const {nvim} = workspace;
 
 async function getTagFiles() {
   let files = await nvim.call("tagfiles");
@@ -19,7 +19,7 @@ async function getTagFiles() {
   for (let file of files) {
     let stat = await util.promisify(fs.stat)(file);
     if (!stat || !stat.isFile()) continue;
-    tagfiles.push({ file, mtime: stat.mtime });
+    tagfiles.push({file, mtime: stat.mtime});
   }
   return tagfiles;
 }
@@ -60,7 +60,7 @@ async function loadTags(fullpath, mtime) {
     wordItem.push(path);
     words.set(word, wordItem);
   });
-  TAG_CACHE[fullpath] = { words, mtime };
+  TAG_CACHE[fullpath] = {words, mtime};
   return words;
 }
 
@@ -68,10 +68,10 @@ exports.activate = context => {
   context.subscriptions.push(
     sources.createSource({
       name: "tags",
-      shortcut: "T",
+      shortcut: "Coc-Tag",
       priority: 3,
-      doComplete: async function(opt) {
-        let { input } = opt;
+      doComplete: async function (opt) {
+        let {input} = opt;
         if (input.length == 0) return null;
         let tagfiles = await getTagFiles();
         if (!tagfiles || tagfiles.length == 0) return null;
@@ -95,7 +95,7 @@ exports.activate = context => {
           }
         }
 
-        return { items };
+        return {items};
       }
     })
   );

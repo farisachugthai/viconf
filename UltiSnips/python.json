@@ -1,11 +1,4 @@
 {
-    "#!": {
-        "prefix": "#!",
-        "body": [
-            "#!/usr/bin/env python",
-            "# -*- coding: utf-8 -*-"
-        ],
-    },
     "if": {
         "prefix": "if",
         "body": [
@@ -194,7 +187,7 @@
         "prefix": "__main__",
         "body": [
             "if __name__ == \"__main__\":",
-            "    ${1:pass}",
+            "    ${1:pass}"
         ],
         "description": "Code snippet for a `if __name__ == \"__main__\": ...` block"
     },
@@ -246,5 +239,15 @@
         "prefix": "pudb",
         "body": "import pudb; pudb.set_trace()",
         "description": "Code snippet for pudb debug"
+    },
+    "#!": {
+      "prefix": "#!",
+      "body": "#!/usr/bin/env python\n# -*- coding: utf-8 -*-",
+      "description": "Code snippet for shebang"
+    },
+    "ifmain": {
+      "prefix": "ifmain",
+      "body": "if \"__name__\" == \"__main\":\n\t ${1:main()}",
+      "description": "ifmain"
     }
 }

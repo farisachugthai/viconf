@@ -12,10 +12,10 @@ let g:did_buffers = 1
 
 " The nvim API is seriously fantastic.
 nnoremap <Leader>rt call buffers#EchoRTP()
-command! -nargs=0 EchoRTP echo buffers#EchoRTP()
+command! EchoRTP echo buffers#EchoRTP()
 
 " From `:he quickfix`
-command! -complete=dir -bar -bang -nargs=* NewGrep execute 'silent grep! <args>' | copen<bang>
+command! -complete=dir -bang -nargs=* NewGrep execute 'silent grep! <q-args>' | copen<bang>
 
 function! Window_Mappings() abort  " {{{1
   " Navigate windows more easily
@@ -43,23 +43,28 @@ function! Window_Mappings() abort  " {{{1
 endfunction
 
 function! Quickfix_Mappings() abort
-  nnoremap <Leader>q <Cmd>cwindow<CR>
 
   " TODO: These need to catch E776 no location list
-  nnoremap <silent> <C-Down> <Cmd>llast<CR><bar><Cmd>clast<CR>
-  nnoremap <silent> <C-Up> <Cmd>lfirst<CR><bar><Cmd>cfirst<CR>
+  nnoremap <C-Down> <Cmd>llast<CR><bar><Cmd>clast<CR>
+  nnoremap <C-Up> <Cmd>lfirst<CR><bar><Cmd>cfirst<CR>
 
   " Normally the quickfix window is at the bottom of the screen.  If there are
   " vertical splits, it's at the bottom of the rightmost column of windows.  To
   " make it always occupy the full width:
-  nnoremap <Leader>l <Cmd>botright lwindow<CR>
-  nnoremap <Leader>lw <Cmd>lwindow<CR>
-  nnoremap <Leader>ll <Cmd>llist!<CR>
+  " use botright.
+  nnoremap <Leader>l <Cmd>botright lhistory<CR>
+  nnoremap <Leader>lw <Cmd>botright lwindow<CR>
+  nnoremap <Leader>ll <Cmd>botright llist!<CR>
   nnoremap <Leader>lo <Cmd>lopen<CR>
+  nnoremap <Leader>lf <Cmd>lwindow<CR>
 
+  " Wanna note how long Ive been using Vim and still i onlyjust found out
+  " about the chistory and lhistory commands like wth
+  nnoremap <Leader>q <Cmd>botright chistory<CR>
   nnoremap <Leader>qw <Cmd>botright cwindow<CR>
   nnoremap <Leader>ql <Cmd>botright clist!<CR>
   nnoremap <leader>qo <Cmd>botright copen<CR>
+  nnoremap <Leader>qf <Cmd>cwindow<CR>
 
   nnoremap <Leader>C <Cmd>make %<CR>
 
@@ -84,7 +89,7 @@ function! Quickfix_Mappings() abort
   noremap! <F1> <Esc>
 endfunction
 
-function! Alt_Key_Navigation() abort
+function! AltKeyNavigation() abort
   " Originally this inspired primarily for terminal use but why not put it everywhere?
   noremap  <A-h> <C-w>h
   noremap  <A-j> <C-w>j
@@ -112,20 +117,31 @@ function! Alt_Key_Navigation() abort
 endfunction
 
 function! Buffer_Mappings() abort  " {{{
+  
   " Navigate Buffers More Easily:
-  nnoremap <Leader>bb <Cmd>buffers<CR>
+  " Also note I wrote a Buffers command that utilizes fzf.
+  nnoremap <Leader>bb <Cmd>Buffers<CR>
+
   nnoremap <Leader>bd <Cmd>bdelete<CR>
+  " like quit
+  nnoremap <Leader>bq <Cmd>bdelete!<CR>
+  " like eXit
+  nnoremap <Leader>bx <Cmd>bwipeout<CR>
+  nnoremap <Leader>bu <Cmd>bunload<CR>
+
   nnoremap <Leader>bn <Cmd>bnext<CR>
   nnoremap <Leader>bp <Cmd>bprev<CR>
-  nnoremap <Leader>bf <Cmd>bfirst<CR>
-  nnoremap <Leader>bl <Cmd>blast<CR>
+  nnoremap <Leader>b0 <Cmd>bfirst<CR>
+  nnoremap <Leader>b$ <Cmd>blast<CR>
   " aka yank the whole buffer
-  nnoremap <Leader>bY <Cmd>"+%y<CR>
+  nnoremap <Leader>by <Cmd>"+%y<CR>
   " and then paste it
-  nnoremap <Leader>bP <Cmd>"+P<CR>
+  nnoremap <Leader>bp <Cmd>"+gp<CR>
   " Sunovabitch bonly isn't a command?? Why is
   " noremap <Leader>bo <Cmd>bonly<CR>
 
+  nnoremap <Leader>bs <Cmd>sbuffer<CR>
+  nnoremap <Leader>bv <Cmd>vs<CR>
   nnoremap ]b <Cmd>bnext<CR>
   nnoremap [b <Cmd>bprev<CR>
   nnoremap ]B <Cmd>blast<CR>
@@ -133,6 +149,7 @@ function! Buffer_Mappings() abort  " {{{
 endfunction
 
 function! Tab_Mappings() abort  " {{{1
+
   nnoremap <Leader>tn <Cmd>tabnext<CR>
   nnoremap <Leader>tp <Cmd>tabprev<CR>
   nnoremap <Leader>tq <Cmd>tabclose<CR>
@@ -157,7 +174,7 @@ endfunction
 " Call Functions:
 if !exists('no_plugin_maps') && !exists('no_windows_vim_maps')
   call Window_Mappings()
-  call Alt_Key_Navigation()
+  call AltKeyNavigation()
   call Buffer_Mappings()
   call Tab_Mappings()
   call Quickfix_Mappings()

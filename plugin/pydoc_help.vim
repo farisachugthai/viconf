@@ -30,7 +30,10 @@ command! -range -bar -complete=expression -complete=function -nargs=? P <line1>,
 
 " Apr 23, 2019: Didn't know complete help was a thing.
 " Oh holy shit that's awesome
-command! -nargs=1 -bar -complete=help Help call pydoc_help#Helptab()
+" Ah fzf is too good jesus christ. He provided all the arguments for you so
+" all you have to do is ask "bang or not?"
+command! -bar -bang -nargs=* -complete=help Help call fzf#vim#helptags(<bang> ? 1 : 0)
+
 " Needs to accept args for bang
 command! -bang -bar PydocThis call pydoc_help#PydocCword()
 
@@ -40,8 +43,8 @@ command! -bang -bar PydocThis call pydoc_help#PydocCword()
 " functions without being specified in the command definition
 command! -nargs=? -bar -range PydocSplit call pydoc_help#SplitPydocCword(<q-mods>)
 
-command -bar -bang -range PydocSp
-      \ exec '<mods>split<bang>:python3 import pydoc'.expand('<cWORD>').'; pydoc.help('.expand('<cWORD>').')'
+" command! -bar -bang -range PydocSp
+"       \ exec '<mods>split<bang>:python3 import pydoc'.expand('<cWORD>').'; pydoc.help('.expand('<cWORD>').')'
 " holy fuck i just beefed this command up a lot. now takes a bang and should
 " work more correctly.
 " todo: i think i added a completefunc thatll work perfectly
@@ -49,7 +52,7 @@ command -bar -bang -range PydocSp
 " invocations
 " command! -nargs=? -bang Pydoc :<mods>file<bang> exec 'call pydoc_help#Pydoc(<f-args>)'
 
-command! -nargs=0 PydocShow call pydoc_help#show()
+command! PydocShow call pydoc_help#show()
 
 " TODO: Work on the range then the bang
 command! -complete=file -range BlackCurrent <line1>,<line2>call py#Black()
@@ -58,8 +61,7 @@ command! -nargs=* -complete=file -complete=file_in_path BlackThese call py#black
 
 function! s:IPythonOptions(...) abort
   let list = ['profile', 'history', 'kernel', 'locate']
-  " If you quote this with single quotes it wont work correctly...WHAT THE
-  " FUCK
+  " Quote this with single quotes and it wont work correctly...WHAT THE FUCK
   return join(list, "\n")
 endfunction
 

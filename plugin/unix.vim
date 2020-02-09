@@ -22,20 +22,22 @@ endif
 
 if exists($ANDROID_DATA)
   " May 26, 2019: Just ran into my first problem from a filename with a space in the name *sigh*
-  nnoremap <silent> <Leader>ts <Cmd>execute '!termux-share -a send ' . shellescape(expand("%"))<CR>
-endif
+  " admonition: dont use -bar here because we need to use bar as well
+  command! -bang -nargs=* TermuxSend execute 'keepalt w<bang> <bar>!termux-share -a send ' . <args> ? <args> : expand('%:S')
+  nnoremap <Leader>ts :<C-u>TermuxSend<CR>
 
-" }}}
+endif  " }}}
 
 " Chmod: {{{
-"	:S	Escape special characters for use with a shell command (see
-"		|shellescape()|). Must be the last one. Examples:
-"           :!dir <cfile>:S
-"           :call system('chmod +w -- ' . expand('%:S'))
-" From :he filename-modifiers in the cmdline page.
-command! -nargs=1 -complete=file Chmod call system('chmod +x ' . expand('%:S'))
 
-" }}}
+" :S    Escape special characters for use with a shell command (see
+"  |shellescape()|). Must be the last one. Examples:
+
+" :!dir <cfile>:S
+" :call system('chmod +w -- ' . expand('%:S'))
+
+" From :he filename-modifiers in the cmdline page.
+command! -nargs=1 -complete=file Chmod call system('chmod +x ' . expand('%:S'))   " }}}
 
 " More From The Bottom Of Help Map: {{{
 command! -bang -bar -nargs=+ -complete=file -complete=file_in_path EditFiles
@@ -43,7 +45,7 @@ command! -bang -bar -nargs=+ -complete=file -complete=file_in_path EditFiles
     \ exe '<mods> split ' . f<bang> |
     \ endfor
 
-command!  -complete=file_in_path  -bang -bar -nargs=* -complete=file -complete=dir MyEdit <mods>edit<bang> <q-args>
+command!  -complete=file_in_path  -bang -bar -nargs=* -complete=file -complete=dir EditAny <mods>edit<bang> <q-args>
 
 command! -nargs=+ -complete=file Sedit call unix#SpecialEdit(<q-args>, <q-mods>)
 
@@ -75,6 +77,7 @@ function! AddVileBinding(key, handler)  " {{{
 endfunction " }}}
 
 " Vile Bindings: {{{
+
 " oh
 call AddVileBinding('<C-x>o', '<Cmd>wincmd W<CR>')
 " zero
@@ -100,7 +103,8 @@ call AddVileBinding('<C-x>w', '<Cmd> set wrap!')
 " Swap the mark and point
 xnoremap <C-x><C-x> o
 
-command! -bang -bar -complete=arglist -nargs=? Brofiles
+" Brofiles: {{{ Note: you can add a complete with no nargs?
+command! -bang -bar -complete=arglist Brofiles
       \ call fzf#run(fzf#wrap('oldfiles',
       \ {'source': v:oldfiles,
       \ 'sink': 'sp',

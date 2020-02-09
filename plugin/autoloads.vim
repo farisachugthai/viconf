@@ -97,7 +97,6 @@ if &tabstop > 4 | setglobal tabstop=4 | endif
 if &shiftwidth > 4  | setglobal shiftwidth=4 | endif
 setglobal expandtab smarttab softtabstop=4
 
-nnoremap q; q:
 nnoremap Q @q
 xnoremap <BS> d
 nnoremap <Leader>sp <Cmd>setlocal spell!<CR>

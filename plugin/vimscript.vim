@@ -30,9 +30,7 @@ endif
 
 if !exists('g:rg_window_location')
   let g:rg_window_location = 'botright'
-endif
-
-" }}}
+endif " }}}
 
 " Platform Specific Options: {{{
 
@@ -40,33 +38,33 @@ if has('unix')
   call unix#UnixOptions()
 else
   call msdos#set_shell_cmd()
-endif
-
-" }}}
+endif " }}}
 
 " Fix the path: {{{
-" Fix up the path a little I'm starting to use ]i and gf and the like more
-" But make it conditional on me not having already set it for an ftplugin
+
 if !exists('b:did_ftplugin')
   if exists('*stdpath')  " fuckin vim
     let &path = '.,,**,' . expand('$VIMRUNTIME') . '/*/*.vim'  . ',' . stdpath('config')
   else
     let &path = '.,,**,' . expand('$VIMRUNTIME') . '/*/*.vim'
   endif
-endif
-
-" }}}
+endif " }}}
 
 " In Which I Learn How Complete Works: {{{
-command! -bar -complete=buffer -nargs=0 ScratchBuffer call pydoc_help#scratch_buffer()
+
+command! -bar -complete=buffer ScratchBuffer call pydoc_help#scratch_buffer()
+
 command! -bar -complete=compiler Compiler compiler <args>
 " '<,'>s/compiler/event/g
 " You may find that ---^ does you good
 command! -bar -complete=event Event event<args>
 
-command! -bar -nargs=0 RerunLastCmd call histget('cmd', -1)
+command! -bar -bang -complete=var -nargs=+ Var set<bang> <args>
 
-" }}}
+" well check out how cool this is. shouldnt be so surprised that this works
+command! -complete=environment -bar -nargs=+ Env let $<args>
+
+command! -bar RerunLastCmd call histget('cmd', -1)  " }}}
 
 " Commands from the help pages. map.txt: {{{
 " Replace a range with the contents of a file
@@ -74,31 +72,11 @@ command! -bar -nargs=0 RerunLastCmd call histget('cmd', -1)
 command! -bar -range -nargs=1 -complete=file Replace <line1>-pu_|<line1>,<line2>d|r <args>|<line1>d
 
 " Count the number of lines in the range
-command! -bar -range -nargs=0 Lines  echo <line2> - <line1> + 1 'lines'
-
-" }}}
+command! -bar -range -nargs=0 Lines  echo <line2> - <line1> + 1 'lines'  " }}}
 
 " Last Call For Options: {{{1
 if &omnifunc ==# '' | setlocal omnifunc=syntaxcomplete#Complete | endif
-if &completefunc ==# '' | setlocal completefunc=syntaxcomplete#Complete | endif
 
-" This fucks up `gq`
-" if &formatexpr ==# ''
-"   setlocal formatexpr=format#Format()  " check the autoload directory
-" endif
-
-" }}}
-
-" QuickFix: {{{1
-" From :he *:cadde* *:caddexpr*
-" Evaluate {expr} and add the resulting lines to the current quickfix list.
-" If a quickfix list is not present, then a new list is created. The current
-" cursor position will not be changed. See |:cexpr| for more information.
-" g/mypattern/caddexpr expand("%") . ":" . line(".") .  ":" . getline(".")
-" command! -nargs=? QFSearch execute 'g/' . shellescape(<q-args>) . '/ caddexpr ' . expand('%') . ":" . line(".") . ":" . getline(".")
-
-command! -bar -bang -complete=buffer -complete=file -nargs=? Profile call vimscript#profile(<f-args>)
-" Doesn't work and tried like 20 times to debug it.
-" }}}
+if &completefunc ==# '' | setlocal completefunc=syntaxcomplete#Complete | endif  " }}}
 
 " Vim: set fdm=marker:
