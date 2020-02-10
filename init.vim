@@ -5,6 +5,7 @@
   " Last Modified: September 23, 2019
 " ============================================================================
 
+" Preliminary: {{{
 if exists('g:did_init_vim') || &compatible || v:version < 700
     finish
 endif
@@ -13,11 +14,12 @@ let g:did_init_vim = 1
 scriptencoding utf-8
 setglobal fileformats=unix,dos
 setglobal cpoptions-=c,e,_  " couple options that bugged me
+" }}}
 
-" Set paths correctly:
+" Set paths correctly: {{{
 let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Evervim. Thanks!
 let s:wsl = !empty($WSL_DISTRO_NAME)
-let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux) && empty(s:wsl)
+" let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux) && empty(s:wsl)
 
 let s:this_dir = fnameescape(fnamemodify(expand('$MYVIMRC'), ':p:h'))
 let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h'))
@@ -34,9 +36,9 @@ endif
 " Source ginit. Why is this getting set even in the TUI?
 if exists('g:GuiLoaded') | exec 'source ' s:this_dir . '\ginit.vim' | endif
 if has('unnamedplus') | setglobal clipboard+=unnamed,unnamedplus | else | setglobal clipboard+=unnamed | endif
+" }}}
 
-setglobal pastetoggle=<F9>   " fuck me this is what windows terminal uses for something
-
+" Macros, Leader, and Nvim specific features: {{{
 let g:loaded_vimballPlugin = 1
 let g:loaded_getscriptPlugin = 1
 let g:loaded_2html_plugin = 1
@@ -54,7 +56,9 @@ if has('nvim-0.4')   " Fun new features!
   try | setglobal pyxversion=3 | catch /^Vim:E518:*/ | endtry
 endif
 
-" Backups:
+" }}}
+
+" Backups: {{{
 " Protect changes between writes. Default values of updatecount
 " (200 keystrokes) and updatetime (4 seconds) are fine
 setglobal swapfile undofile backupext='.bak'
@@ -66,8 +70,9 @@ setglobal nobackup           " but do not persist backup after successful write
 setglobal backupcopy=yes
 " patch required to honor double slash at end consolidate the writebackups -- they usually get deleted
 if has('patch-8.1.0251') | let &g:backupdir=stdpath('config') . '/undodir//' | endif
+" }}}
 
-" Gotta be honest this part was stolen almost entirely from arch!
+" Gotta be honest this part was stolen almost entirely from arch!: {{{
 
 " Move temporary files to a secure location to protect against CVE-2017-1000382
 if exists('$XDG_CACHE_HOME')
@@ -88,13 +93,10 @@ endif
 if !isdirectory(expand(&g:undodir))
   silent! call mkdir(expand(&g:undodir), 'p', 0700)
 endif
+" }}}
 
-
-" Make shift-insert work like in Xterm:
-noremap <S-Insert> <MiddleMouse>
-noremap! <S-Insert> <MiddleMouse>
-tnoremap <S-Insert> <MiddleMouse>
-
+" Options: {{{
+setglobal pastetoggle=<F9>   " fuck me this is what windows terminal uses for something
 setglobal suffixes=.bak,~,.o,.info,.swp,.aux,.bbl,.blg,.brf,.cb,.dvi,.idx,.ilg,.ind,.inx,.jpg,.log,.out,.png,.toc
 
 setglobal foldnestmax=10 foldmethod=marker foldcolumn=2
@@ -149,18 +151,22 @@ setglobal showmatch matchpairs+=<:>
 setglobal lazyredraw matchtime=20  " Show the matching pair for 2 seconds
 let g:matchparen_timeout = 500
 let g:matchparen_insert_timeout = 300
+" }}}
 
-" Plugins:
+" Colorscheme:  {{{
 " Don't assume that the InstallPlug() func worked so ensure it's defined
 setglobal termguicolors
 setglobal synmaxcol=1000
-if !exists('plug#load')  | exec 'source ' . s:repo_root . '/vim-plug/plug.vim' | endif
+if !exists('plug#load')  | exec 'source ' . s:repo_root . '/vim-plug/plug.vim' | endif " }}}
 
+" Load Plugins: {{{
 exec 'source ' . s:this_dir . '/junegunn.vim'
 " Don't assume that worked. Needs to be defined but increasingly not as needed
 if !exists('plugs') | let plugs = {} | endif
+" }}}
 
-if exists('$ANDROID_DATA')  " Fuck i had to change this because wsl was loading termux jesus christ
+if exists('$ANDROID_DATA')   " {{{
+  " Fuck i had to change this because wsl was loading termux jesus christ
   call find_files#termux_remote()
 elseif !has('unix')
   " Note: dude holy hell is it necessary to call the msdos#set_shell_cmd()
@@ -170,3 +176,6 @@ elseif !has('unix')
 else
   call find_files#ubuntu_remote()
 endif
+" }}}
+
+" Vim: set fdm=marker foldlevelstart=0:

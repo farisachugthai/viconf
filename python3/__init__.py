@@ -45,8 +45,19 @@ class Options:
     select = vim.eval("g:pymode_lint_select")
     verbose = 0
 
-alt_options = namedtuple("alt_options", field_names=("aggressive", "diff", "experimental", "in_place", "ignore",
-    "pep8_passes", "line_range"))
+
+alt_options = namedtuple(
+    "alt_options",
+    field_names=(
+        "aggressive",
+        "diff",
+        "experimental",
+        "in_place",
+        "ignore",
+        "pep8_passes",
+        "line_range",
+    ),
+)
 
 
 def get_documentation(vim):

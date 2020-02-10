@@ -460,3 +460,7 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder
 .mfractor/
+/luarocks
+/lua
+/lua_modules
+/.luarocks

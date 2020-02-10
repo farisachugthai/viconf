@@ -72,21 +72,24 @@ def vimcmd(fxn):
             _set_return_error(None)
             return ret
 
+    wrapper.is_cmd = True
     return wrapper
 
 
 # Jedi:
 
-class PythonToVimStr(unicode):
+
+class PythonToVimStr:
     """ Vim has a different string implementation of single quotes """
+
     __slots__ = []
 
-    def __new__(cls, obj, encoding='UTF-8'):
+    def __new__(cls, obj, encoding="UTF-8"):
         if not (is_py3 or isinstance(obj, unicode)):
             obj = unicode.__new__(cls, obj, encoding)
 
         # Vim cannot deal with zero bytes:
-        obj = obj.replace('\0', '\\0')
+        obj = obj.replace("\0", "\\0")
         return unicode.__new__(cls, obj)
 
     def __repr__(self):
@@ -97,8 +100,8 @@ class PythonToVimStr(unicode):
         if unicode is str:
             s = self
         else:
-            s = self.encode('UTF-8')
-        return '"%s"' % s.replace('\\', '\\\\').replace('"', r'\"')
+            s = self.encode("UTF-8")
+        return '"%s"' % s.replace("\\", "\\\\").replace('"', r"\"")
 
 
 class VimError(Exception):
@@ -119,11 +122,14 @@ def _catch_exception(string, is_eval):
     Interface between vim and python calls back to it.
     Necessary, because the exact error message is not given by `vim.error`.
     """
-    result = vim.eval('g:py_err ({0}, {1})'.format(
-        repr(PythonToVimStr(string, 'UTF-8')), int(is_eval)))
-    if 'exception' in result:
-        raise VimError(result['exception'], result['throwpoint'], string)
-    return result['result']
+    result = vim.eval(
+        "g:py_err ({0}, {1})".format(
+            repr(PythonToVimStr(string, "UTF-8")), int(is_eval)
+        )
+    )
+    if "exception" in result:
+        raise VimError(result["exception"], result["throwpoint"], string)
+    return result["result"]
 
 
 def vim_command(string):
@@ -132,7 +138,6 @@ def vim_command(string):
 
 def vim_eval(string):
     return _catch_exception(string, is_eval=True)
-
 
 
 def pykeywordprg():
@@ -162,7 +167,7 @@ def timer(func):
 
 
 def _robust_black():
-    if hasattr(black, 'FileMode'):
+    if hasattr(black, "FileMode"):
         mode = get_mode()
     else:
         raise ModuleNotFoundError("Black wasn't installed.")
@@ -232,8 +237,10 @@ def pure_python_path():
 def importer(mod):
     return find_spec(mod)
 
+
 def get_environment(use_cache=True):
     import jedi
+
     if use_cache:
         return jedi.api.environment.get_cached_default_environment()
     else:
@@ -245,13 +252,13 @@ def get_environment(use_cache=True):
 
 
 def catch_and_print_exceptions(func):
-
     @functools.wraps
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
         except (Exception, vim.error):
             traceback.print_exc()
+
     return wrapper
 
 
@@ -261,15 +268,13 @@ def import_completions():
 
 
 def import_into_vim():
-    argl = vim.eval('a:argl')
+    argl = vim.eval("a:argl")
     try:
         import jedi
     except ImportError:
         raise
     else:
         text = f"import {argl}"
-        script = jedi.Script(text, 1 , len(text), "", environment=get_environment())
-        completions = [ f"{argl}, {c.complete for c in script.completions()}" ]
-    vim.command("return '%s'" % '\n'.join(completions))
-
-
+        script = jedi.Script(text, 1, len(text), "", environment=get_environment())
+        completions = [f"{argl}, {c.complete for c in script.completions()}"]
+    vim.command("return '%s'" % "\n".join(completions))

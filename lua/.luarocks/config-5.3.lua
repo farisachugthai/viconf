@@ -1,7 +1,7 @@
-lua_interpreter = "lua"
+lua_interpreter = "lua5.3"
 variables = {
-   LUA_BINDIR = "/data/data/com.termux/files/usr/bin",
-   LUA_DIR = "/data/data/com.termux/files/usr",
-   LUA_INCDIR = "/data/data/com.termux/files/usr/include",
+   LUA_BINDIR = "/usr/bin",
+   LUA_DIR = "/usr",
+   LUA_INCDIR = "/usr/include",
    LUA_LIBDIR = "/data/data/com.termux/files/usr/lib"
 }

@@ -1,11 +1,26 @@
+" ============================================================================
+  " File: tag_miscellany.vim
+  " Author: Faris A Chugthai
+  " Description: Utility settings for tags
+  " Last Modified: 02/10/2020
+" ============================================================================
+
 " See Also: ../autoload/buffers.vim
-" There's a good buffers#PreviewWord that shows some stuff i'm sure you wanna do
+
 " See Also:  ./buffers.vim for more things similar to this
+" There's a good buffers#PreviewWord that shows some stuff i'm sure you wanna do
 
 " if !has('unix')
 "   let g:gutentags_ctags_executable = expand('$HOME/bin/ctags')
 " endif
 
+if exists('g:did_tag_miscellany') | finish | endif
+let g:did_tag_miscellany = 1
+
+if !exists('g:plugs') | finish | endif
+
+" Could check for loaded_gutentags = 1 but idk if we're loading before him or
+" not
 let g:gutentags_ctags_exclude = [
       \ '.pyc',
       \ '.eggs',
@@ -35,10 +50,10 @@ setglobal tagcase=smart showfulltag
 
 " You never added complete tags dude!
 command! -complete=tag Tags echo gettagstack(expand('%'))
-command! -complete=tag -bar -bang Tagz call fzf#run(fzf#wrap({'source': 'gettagstack(expand("%"))', 'sink': 'e', 'options': g:fzf_options}, <bang>0))
+command! -complete=tag -bar -bang FZTags call fzf#run(fzf#wrap({'source': 'gettagstack(expand("%"))', 'sink': 'e', 'options': g:fzf_options}, <bang>0))
 
 if exists('&tagfunc')
-  let &tagfunc = 'TagFunc'
+  let &g:tagfunc = 'TagFunc'
 endif
 
 nnoremap ]g <Cmd>stjump!<CR>

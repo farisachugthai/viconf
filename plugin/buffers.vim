@@ -17,7 +17,7 @@ command! EchoRTP echo buffers#EchoRTP()
 " From `:he quickfix`
 command! -complete=dir -bang -nargs=* NewGrep execute 'silent grep! <q-args>' | copen<bang>
 
-function! Window_Mappings() abort  " {{{1
+function! Window_Mappings() abort  " {{{
   " Navigate windows more easily
   " This displays as <NL> when you run `:map` but it behaves like C-j. Oh well.
   nnoremap <C-j> <Cmd>wincmd j<CR>
@@ -40,9 +40,9 @@ function! Window_Mappings() abort  " {{{1
   nnoremap <Leader>ww <Cmd>wincmd w<CR>
   " Split and edit file under the cursor
   nnoremap <Leader>wf <Cmd>wincmd f<CR>
-endfunction
+endfunction  " }}}
 
-function! Quickfix_Mappings() abort
+function! Quickfix_Mappings() abort  " {{{
 
   " TODO: These need to catch E776 no location list
   nnoremap <C-Down> <Cmd>llast<CR><bar><Cmd>clast<CR>
@@ -87,9 +87,9 @@ function! Quickfix_Mappings() abort
   cnoremap <C-g> <Esc>
   " Avoid accidental hits of <F1> while aiming for <Esc>
   noremap! <F1> <Esc>
-endfunction
+endfunction  " }}}
 
-function! AltKeyNavigation() abort
+function! AltKeyNavigation() abort  " {{{
   " Originally this inspired primarily for terminal use but why not put it everywhere?
   noremap  <A-h> <C-w>h
   noremap  <A-j> <C-w>j
@@ -114,7 +114,7 @@ function! AltKeyNavigation() abort
     noremap! <A-Right>  <Cmd>wincmd l<CR>
     noremap! <A-Left>   <Cmd>wincmd h<CR>
   endif
-endfunction
+endfunction  " }}}
 
 function! Buffer_Mappings() abort  " {{{
   
@@ -146,7 +146,7 @@ function! Buffer_Mappings() abort  " {{{
   nnoremap [b <Cmd>bprev<CR>
   nnoremap ]B <Cmd>blast<CR>
   nnoremap [B <Cmd>bfirst<CR>
-endfunction
+endfunction  " }}}
 
 function! Tab_Mappings() abort  " {{{1
 

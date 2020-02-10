@@ -14,8 +14,7 @@
     "tagfunc": "./rplugin/node/coc_tag.js",
     "watch": "yarn run tsc -w -p rplugin/node",
     "build": "yarn run rimraf ./out && yarn run webpack",
-    "start": "yarn run vim-language-server --stdio",
-    "install" : "yarn install"
+    "start": "yarn run vim-language-server --stdio"
   },
   "main": "rplugin/node/coc_tag.js",
   "directories": {"lib": "rplugin/node"},

@@ -8,7 +8,7 @@
 " Honestly most of these functions are in varying states of F'ed up.
 " Need to tear this apart and fgure out what works and why.
 
-function! pydoc_help#open_files(files) abort
+function! pydoc_help#open_files(files) abort  " {{{
   let bufnrs = []
     for file in a:files
       let bufnr = bufadd(file)
@@ -16,15 +16,15 @@ function! pydoc_help#open_files(files) abort
       call add(bufnrs, bufnr(file))
     endfor
   return bufnrs
-endfunction
+endfunction  " }}}
 
-function! pydoc_help#scratch_buffer() abort
+function! pydoc_help#scratch_buffer() abort   " {{{
   if !has('nvim') | throw "Doesn't work on vim" | endif
 
   "  First param is buflisted?
   " Second is scratch buffer?1
   return nvim_create_buf(v:false, v:true)
-endfunction
+endfunction   " }}}
 
 function! s:temp_buffer() abort  " {{{1
   " Use for setting a buffer that's been filled with text to something similar
@@ -40,7 +40,7 @@ function! s:temp_buffer() abort  " {{{1
   " Because i have it on in my rst filetype.
   setlocal nospell
   setlocal buftype=nofile bufhidden=delete noswapfile nowrap previewwindow
-endfunction
+endfunction   " }}}
 
 function! pydoc_help#PydocCword() abort  " {{{1
   " Holy shit it works!!!
@@ -50,7 +50,7 @@ function! pydoc_help#PydocCword() abort  " {{{1
   " If you wanna keep going we can change the status line. We can change how
   " we invoke python
   call s:temp_buffer()
-endfunction
+endfunction  " }}}
 
 function! pydoc_help#SplitPydocCword(mods) range abort  " {{{1
   " NOTE: See `:he func-range to see how functions can accept ranges without
@@ -60,7 +60,7 @@ function! pydoc_help#SplitPydocCword(mods) range abort  " {{{1
  
   " Cross your fingers i did this right haha
   call s:temp_buffer()
-endfunction
+endfunction   " }}}
 
 function s:handle_user_config() abort   " {{{1
   " Look at me handling user configured arguments!
@@ -74,7 +74,7 @@ function s:handle_user_config() abort   " {{{1
   else
     split
   endif
-endfunction
+endfunction   " }}}
 
 function! pydoc_help#Pydoc(module) abort   " {{{1
   call pydoc_help#scratch_buffer()
@@ -90,7 +90,7 @@ function! pydoc_help#Pydoc(module) abort   " {{{1
   endif
 
   call s:temp_buffer()
-endfunction
+endfunction   " }}}
 
 function! pydoc_help#async_cursor() abort " Async Pydoc: {{{1
   let s:temp_cword = expand('<cWORD>')
@@ -98,12 +98,15 @@ function! pydoc_help#async_cursor() abort " Async Pydoc: {{{1
   call jobstart('pydoc ' . expand('<cWORD>'), {'on_stdout':{j,d,e->append(line('.'),d)}})
   call nvim_command('sleep 1')
   call s:temp_buffer()
-endfunction
+endfunction   " }}}
 
 function! pydoc_help#async_cexpr() abort  " {{{1
+
   if !has('nvim') | throw "Doesn't work on vim" | endif
+
   call jobstart('pydoc ' . expand('<cexpr>'), {'on_stdout':{j,d,e->append(line('.'),d)}})
-endfunction
+
+endfunction   " }}}
 
 function! pydoc_help#broken_scratch_buffer() abort  " {{{1
   " Not actually broken i just need to debug the commented out lines
@@ -134,7 +137,7 @@ function! pydoc_help#broken_scratch_buffer() abort  " {{{1
   " To close the float, |nvim_win_close()| can be used.
   " 0 for the current window, v:false is for don't force
   nnoremap <buffer> q <Cmd>nvim_win_close(0, v:false)<CR>
-endfunction
+endfunction  " }}}
 
 function! pydoc_help#the_curse_of_nvims_floating_wins() abort  " {{{1
   " No seriously they're difficult to work with
@@ -155,7 +158,7 @@ function! pydoc_help#the_curse_of_nvims_floating_wins() abort  " {{{1
   " So now we finally have a winnr which we can work with in a more reasonable
   " fashion. Sweet!!
   call nvim_win_set_option(s:win_handle, 'winhl', 'Special')
-endfunction
+endfunction   " }}}
 
 function! s:ReplaceModuleAlias() abort " {{{1 Replace module aliases with their own name.
     "
@@ -180,7 +183,7 @@ function! s:ReplaceModuleAlias() abort " {{{1 Replace module aliases with their 
     endif
     call cursor(l:cur_line, l:cur_col)
     return join(l:module_names, ".")
-endfunction
+endfunction  " }}}
 
 function! s:ExpandModulePath() abort  " {{{1
     " Extract the 'word' at the cursor, expanding leftwards across identifiers
@@ -195,7 +198,7 @@ function! s:ExpandModulePath() abort  " {{{1
     let l:pre = l:line[:col('.') - 1]
     let l:suf = l:line[col('.'):]
     return matchstr(pre, '[A-Za-z0-9_.]*$') . matchstr(suf, '^[A-Za-z0-9_]*')
-endfunction
+endfunction  " }}}
 
 function! pydoc_help#show() abort  " {{{
     let word = s:ReplaceModuleAlias()
@@ -209,3 +212,4 @@ function! pydoc_help#show() abort  " {{{
     normal gg
     wincmd p
 endfunction " }}}
+

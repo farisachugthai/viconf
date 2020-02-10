@@ -442,7 +442,8 @@
   "snippets.snipmate.enable": false,
   "snippets.triggerCharacters": [
     "C-n",
-    "C-j"
+    "C-j",
+    "Tab"
   ],
   "snippets.ultisnips.directories": [
     "~/.config/nvim/UltiSnips",

@@ -7,6 +7,8 @@
 
 scriptencoding utf-8
 let g:webdevicons_enable_nerdtree = 1               " adding the flags to NERDTree
+let g:webdevicons_enable_startify = 1
+
 let g:airline_powerline_fonts = 1
 let g:DevIconsEnableFoldersOpenClose = 1
 
@@ -160,6 +162,7 @@ let s:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols= {
         \ '.bashrc'                          : '',
         \ '.zshrc'                           : '',
         \ '.vimrc'                           : '',
+        \ 'init.vim'                         : '',
         \ '.gvimrc'                          : '',
         \ '_vimrc'                           : '',
         \ '_gvimrc'                          : '',

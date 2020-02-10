@@ -5,10 +5,16 @@
     " Last Modified: Jun 29, 2019
 " ============================================================================
 
-" Options: {{{1
-let g:UltiSnipsExpandTrigger="<C-j>"
-let g:UltiSnipsJumpForwardTrigger="<C-j>"
-let g:UltiSnipsJumpBackwardTrigger="<C-k>"
+if exists('g:did_ultisnips_plugin') || &compatible || v:version < 700
+  finish
+endif
+let g:did_ultisnips_plugin = 1
+
+
+" Options: {{{
+let g:UltiSnipsExpandTrigger="<Tab>"
+let g:UltiSnipsJumpForwardTrigger="<Tab>"
+let g:UltiSnipsJumpBackwardTrigger="<S-Tab>"
 
 let g:ultisnips_python_style = 'numpy'
 let g:ultisnips_python_quoting_style = 'double'
@@ -34,6 +40,10 @@ let g:UltiSnipsListSnippets = '<C-\>'
 
 " Oddly, setting this var only sets it in select-mode though.
 " So let's add a few mappings to help us along.
+
+" }}}
+
+" Mappings: {{{
 " nnoremap <C-\> :<C-u>call UltiSnips#ListSnippets()<CR>
 
 " TODO: Not really working. Kinda hard to get it to behave how I'd like.
@@ -58,9 +68,11 @@ endif
 " mode. Fuck <C-S-2> is open a new tab in microsoft terminal. Hm.
 inoremap <C-@> <Cmd>echo UltiSnips#ListSnippets()<CR>
 
-" Functions And Commands: {{{1
-
 " Changed the mapping to Alt-S for snippets.
 inoremap <silent> <M-s> <C-R>=(plugins#ExpandPossibleShorterSnippet() == 0? '': UltiSnips#ExpandSnippet())<CR>
+" }}}
 
-command! UltiSnipsListSnippets call UltiSnips#ListSnippets()
+" Functions And Commands: {{{
+
+command! -complete=filetype -bar UltiSnipsListSnippets call UltiSnips#ListSnippets()
+" }}}

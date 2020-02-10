@@ -5,29 +5,33 @@
     " Last Modified: Nov 13, 2019
 " ============================================================================
 
-function! syncom#HL() abort  " HL: Whats the highlighting group under my cursor? {{{1
-  echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
-endfunction
+function! syncom#HL() abort  " HL: Whats the highlighting group under my cursor? {{{
 
-function! syncom#HiC() abort  " HiC: Show hl group and fg color {{{1
+  echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
+
+endfunction  " }}}
+
+function! syncom#HiC() abort  " HiC: Show hl group and fg color {{{
   " This function could be expanded by expanding the hl groups
   echomsg 'Highlighting group: ' . synIDattr(synID(line('.'), col('.'), 1), 'name')
   echomsg 'Foreground color: ' . synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'fg')
-endfunction
+endfunction   " }}}
 
-function! syncom#HiD() abort  " HiDebug: {{{1
+function! syncom#HiD() abort  " HiDebug: {{{
+
   " TODO: Debug. The parenthesis got fucked up at some point so figure that out
   echo join(map(synstack(line('.'), col('.')), synIDattr(synIDtrans(synID(line('.'), col('.'), 1)))), 'fg')
-endfunction
 
-function! syncom#HiQF() abort  " HiAll: Now utilize quickfix {{{1
+endfunction  " }}}
+
+function! syncom#HiQF() abort  " HiAll: Now utilize quickfix {{{
   " synstack returns a list. takes lnum and col.
   " map is crazy specific in its argument requirements. map(list, string)
   " cexpr evals a command and adds it to the quickfist list
   cexpr! map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-endfunction
+endfunction   " }}}
 
-function! syncom#get_syn_id(...) abort  " {{{1
+function! syncom#get_syn_id(...) abort  " {{{
   " Display syntax infomation on under the current cursor
   let synid = synID(line('.'), col('.'), 1)
   " Wait are arguments allowed to be optional
@@ -36,9 +40,9 @@ function! syncom#get_syn_id(...) abort  " {{{1
   else
     return synIDtrans(synid)
   endif
-endfunction
+endfunction  " }}}
 
-function! syncom#get_syn_attr(synid) abort  " {{{1
+function! syncom#get_syn_attr(synid) abort  " {{{
   let name = synIDattr(a:synid, 'name')
   let ctermfg = synIDattr(a:synid, 'fg', 'cterm')
   let ctermbg = synIDattr(a:synid, 'bg', 'cterm')
@@ -50,9 +54,9 @@ function! syncom#get_syn_attr(synid) abort  " {{{1
         \ 'ctermbg': ctermbg,
         \ 'guifg': guifg,
         \ 'guibg': guibg}
-endfunction
+endfunction  " }}}
 
-function! syncom#get_syn_info() abort  " {{{1
+function! syncom#get_syn_info() abort  " {{{
   let baseSyn = syncom#get_syn_attr(synID(line("."), col("."), 1))
   echo 'name: ' . baseSyn.name .
         \ ' CTERMFG: ' . baseSyn.ctermfg .
@@ -66,17 +70,18 @@ function! syncom#get_syn_info() abort  " {{{1
         \ ' ctermbg: ' . linkedSyn.ctermbg .
         \ ' guifg: ' . linkedSyn.guifg .
         \ ' guibg: ' . linkedSyn.guibg
-endfunction
+endfunction  " }}}
 
-function! syncom#hitest() abort  " Hitest: An easier way of sourcing hitest {{{1
+function! syncom#hitest() abort  " Hitest: An easier way of sourcing hitest {{{
   try
     source $VIMRUNTIME/syntax/hitest.vim
   catch E403
   endtry
   return v:true
-endfunction
+endfunction  " }}}
 
-function! s:rg_setup() abort
+function! s:rg_setup() abort  " {{{
+
   if executable('rg')
     let s:cmd = 'rg'
   elseif executable('rg.exe')
@@ -85,14 +90,18 @@ function! s:rg_setup() abort
     return v:false
   endif
 
-  let s:options = ' --vimgrep --no-messages --smart-case --no-messages --hidden --no-heading '
-        \ . ' --no-ignore-messages --color never --trim --no-column --with-filename '
-  let g:grep = s:cmd . s:options
-  let &grepprg = g:grep
-  return g:grep
-endfunction
+  let s:options = ' --vimgrep --smart-case --no-messages --hidden'
+        \ . ' --no-heading --no-ignore-messages --color never --trim'
+        \ . ' --line-number --with-filename '
 
-function! s:fd_setup() abort
+  let g:grep = s:cmd . s:options
+  let &g:grepprg = g:grep
+  return g:grep
+
+endfunction  " }}}
+
+function! s:fd_setup() abort  " {{{
+
   if executable('fd')
     let s:cmd = 'fd'
   elseif executable('fd.exe')
@@ -102,11 +111,11 @@ function! s:fd_setup() abort
   endif
   let s:options = ' -H '
   let g:grep = s:cmd . s:options
-  let &grepprg = g:grep
+  let &g:grepprg = g:grep
   return g:grep
-endfunction
+endfunction  " }}}
 
-function! syncom#grepprg() abort  " {{{1
+function! syncom#grepprg(...) abort  " {{{
   " executable check was in ../plugin/syncom.vim but we haven't figured out
   " if we're using rg.exe or rg.exe
   "
@@ -115,11 +124,12 @@ function! syncom#grepprg() abort  " {{{1
   " want
   let s:ret = s:rg_setup()
   if s:ret == v:false
-    let s:second_try = s:fd_setup()
+    let s:ret = s:fd_setup()
   endif
-endfunction
+  return s:ret
+endfunction  " }}}
 
-function! syncom#gruvbox() abort  " {{{1 old colorscheme
+function! syncom#gruvbox() abort  " {{{ old colorscheme
   if empty(globpath(&runtimepath, 'colors/gruvbox.vim'))
     return v:false
   else
@@ -130,9 +140,9 @@ function! syncom#gruvbox() abort  " {{{1 old colorscheme
     colorscheme gruvbox
     return v:true
   endif
-endfunction
+endfunction  " }}}
 
-function! syncom#gruvbox_material() abort  " {{{1 new colorscheme
+function! syncom#gruvbox_material() abort  " {{{ new colorscheme
   " TODO:
   if empty(globpath(&runtimepath, 'colors/gruvbox-material.vim'))
     return v:false
@@ -143,9 +153,9 @@ function! syncom#gruvbox_material() abort  " {{{1 new colorscheme
     colo gruvbox-material
     return v:true
   endif
-endfunction
+endfunction  " }}}
 
-function! syncom#rainbow_paren() abort
+function! syncom#rainbow_paren() abort  " {{{
   highlight! link RBP1 Red
   highlight! link RBP2 Yellow
   highlight! link RBP3 Green
@@ -170,4 +180,4 @@ function! syncom#rainbow_paren() abort
   call input({'prompt':'>','highlight':'RainbowParens'})
 
   " From he input
-endfunction
+endfunction  " }}}

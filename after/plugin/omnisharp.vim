@@ -1,12 +1,15 @@
+" ============================================================================
+  " File: omnisharp.vim
+  " Author: Faris Chugthai
+  " Description: The Omnisharp LSP for C#
+  " Last Modified: February 09, 2020
+" ============================================================================
 
 if exists('b:did_omnisharp') || &compatible || v:version < 700
   finish
 endif
 let b:did_omnisharp = 1
-
-if &filetype !=# 'cs'
-  finish
-endif
+let g:OmniSharp_server_stdio = 1
 
 " Dude they wrote everything python that's dope
 let g:OmniSharp_loglevel = 'DEBUG'
@@ -43,7 +46,6 @@ augroup omnisharp_commands
 
 augroup END
 
-
 " Rename with dialog
 nnoremap <Leader>nm :OmniSharpRename<CR>
 nnoremap <F2> :OmniSharpRename<CR>
@@ -56,7 +58,4 @@ nnoremap <Leader>cf :OmniSharpCodeFormat<CR>
 nnoremap <Leader>ss :OmniSharpStartServer<CR>
 nnoremap <Leader>sp :OmniSharpStopServer<CR>
 
-" Enable snippet completion
-" let g:OmniSharp_want_snippet=1
-" Enable snippet completion
 let g:OmniSharp_want_snippet=1

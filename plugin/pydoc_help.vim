@@ -5,6 +5,10 @@
     " Last Modified: Nov 02, 2019
 " ============================================================================
 
+" guard
+
+let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
+
 augroup UserHelpandPython
   au!
   autocmd FileType man,help setlocal number relativenumber
@@ -12,7 +16,7 @@ augroup UserHelpandPython
         \| wincmd T
         \| endif
 
-  autocmd FileType python let &l:path = py#PythonPath()
+  autocmd FileType python exec 'source ' . s:repo_root . '/ftplugin/python.vim'
   autocmd FileType python call py#ALE_Python_Conf()
 augroup END
 
@@ -32,7 +36,9 @@ command! -range -bar -complete=expression -complete=function -nargs=? P <line1>,
 " Oh holy shit that's awesome
 " Ah fzf is too good jesus christ. He provided all the arguments for you so
 " all you have to do is ask "bang or not?"
-command! -bar -bang -nargs=* -complete=help Help call fzf#vim#helptags(<bang> ? 1 : 0)
+" Unfortunately the ternary expression <bang> ? 1 : 0 doesn't work; however,
+" junegunn's <bang>0 does!
+command! -bar -bang -nargs=* -complete=help Help call fzf#vim#helptags(<bang>0)
 
 " Needs to accept args for bang
 command! -bang -bar PydocThis call pydoc_help#PydocCword()

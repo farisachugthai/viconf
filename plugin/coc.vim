@@ -36,8 +36,8 @@ let g:WorkspaceFolders = [
       \ ]
 
 let g:coc_quickfix_open_command = 'cwindow'
-let g:coc_snippet_next = '<C-j>'
-let g:coc_snippet_prev = '<C-k>'
+let g:coc_snippet_next = '<C-n>'
+let g:coc_snippet_prev = '<C-p>'
 
 let g:coc_enable_locationlist = 1
 let $NVIM_COC_LOG_LEVEL = 'WARN'
@@ -68,11 +68,9 @@ endfunction
 
 " Let's give Coc the tab key. If this doesn't work as expected we can also go
 " with something like <M-/>
-inoremap <silent><expr> <TAB>
-  \ pumvisible() ? coc#_select_confirm() :
+inoremap <expr> <M-/> pumvisible() ? coc#_select_confirm() :
   \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-  \ <SID>check_back_space() ? "\<TAB>" :
-  \ coc#refresh()
+  \ <SID>check_back_space() ? "\<TAB>" : coc#refresh()
 
 
 " Refresh completions with C-Space

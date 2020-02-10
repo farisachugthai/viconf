@@ -5,7 +5,10 @@
     " Last Modified: Oct 20, 2019
 " ============================================================================
 
-let b:loaded_plugin_stl = 1
+if exists('b:did_stl') || &compatible || v:version < 700
+  finish
+endif
+let b:did_stl = 1
 
 function! StatusDiagnostic() abort
   if !exists('g:loaded_coc') | return '' | endif

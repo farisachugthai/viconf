@@ -64,7 +64,8 @@ command! -nargs=* -bang -bar -complete=file -complete=customlist,unix#EditFileCo
 command! -nargs=* -bang -bar -complete=file -complete=customlist,unix#EditFileComplete -range=0
         \ SplitHere <q-mods>split<bang> <q-args>
 
-command! -nargs=* -bang -bar -complete=file_in_path Find <q-mods>find<bang> <q-args>
+" Frustratingly this works but doesn't open the fucking file?
+command! -nargs=* -range=% -addr=buffers -bang -bar -complete=file_in_path Find <q-mods>find<bang> <q-args>
 
 " Well this is nice to know about. You can specify what a range refers to.
 " -addr=loaded_buffers
@@ -168,9 +169,11 @@ endif
 
 " }}}
 
+" {{{
 " From `:he change`  line 352 tag g?g?
 " Adding range means that the command defaults to current line
 " Need to add a check that we're in visual mode and drop the '<,'> if not.
 command! -nargs=0 -bar -range TitleCase execute 'normal! ' . "'<,'>s/\v<(.)(\w*)/\u\1\L\2/g"
-
+" }}}
+"
 " Vim: set fdm=marker:
