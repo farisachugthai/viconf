@@ -177,6 +177,20 @@ So let's do better than g]!::
    The <Cmd> pseudo-mapping is only available on Neovim.
 
 
+Mappings
+=========
+
+Here's a few different ways to map a function to a key.
+
+   " TODO: Not really working. Kinda hard to get it to behave how I'd like.
+   vnoremap <C-\> :<C-u>call UltiSnips#ListSnippets()<CR>
+   And another!
+   vnoremap <C-\> <Cmd>call UltiSnips#ListSnippets()<CR>
+   And another
+   vnoremap <expr> <C-\> UltiSnips#list_snippets()
+
+
+
 ALE --- Asynchronous Lint Engine
 ================================
 

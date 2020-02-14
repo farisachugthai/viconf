@@ -12,6 +12,8 @@ let g:did_tagbar = 1
 
 scriptencoding utf-8
 
+" Tagbar Options: {{{
+
 " I want the spacebar back
 let g:tagbar_map_showproto = '?'
 let g:tagbar_left = 1
@@ -45,14 +47,20 @@ let g:tagbar_foldlevel = 1
 " everywhere.
 let g:tagbar_autopreview = 0
 
-" Find the ctags executable: {{{2
+let g:tagbar_map_zoomwin = 'Z'
+
+" }}}
+
+" Platform Specific Options: {{{
 if !has('unix')
+
   " let g:tagbar_autopreview = 1
-  if filereadable(expand('$HOME/bin/ctags.exe'))
-    let g:tagbar_ctags_bin = expand('$HOME/bin/ctags.exe')
+  " Find the ctags executable: {{{
+  if filereadable(expand('$HOME/src/ctags/ctags.exe'))
+    let g:tagbar_ctags_bin = expand('$HOME/src/ctags/ctags.exe')
   elseif executable(exepath('ctags'))
-      let g:tagbar_ctags_bin = exepath('ctags')
-  endif
+    let g:tagbar_ctags_bin = exepath('ctags')
+  endif  " }}}
 
   if filereadable(expand('$HOME/.ctags.d/new_universal.ctags'))
     let g:tagbar_ctags_options = [expand('~/.ctags.d/new_universal.ctags')]
@@ -74,9 +82,9 @@ endif
 " save screen real estate.
 " Termux needs this
 if exists($ANDROID_ROOT) | let g:tagbar_compact = 1 | endif
+" }}}
 
-let g:tagbar_map_zoomwin = 'Z'
-
+" Tagbar Types: {{{
 let g:tagbar_type_ansible = {
 	\ 'ctagstype' : 'ansible',
 	\ 'kinds' : [
@@ -175,3 +183,5 @@ let g:tagbar_type_snippets = {
       \ 's:snippets',
       \ ]
 \ }
+
+" }}}

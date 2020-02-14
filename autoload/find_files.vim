@@ -108,7 +108,7 @@ endfunction   " }}}
 function! find_files#ubuntu_remote() abort  " {{{1
   let g:python3_host_prog = exepath('python3')
  
-  let g:python3_host_prog = '~/.local/share/virtualenvs/utilities-lAlPOULO/bin/python3'
+  let g:python3_host_prog = exepath('python')
   let g:python_host_prog = '/usr/bin/python2'
   let g:node_host_prog = '~/.local/share/yarn/global/node_modules/.bin/neovim-node-host'
   let g:loaded_ruby_provider = 1
@@ -144,17 +144,11 @@ endfunction  " }}}
 
 function! find_files#msdos_remote() abort  " {{{1
   " Don't set python paths dynamically it's such a headache
-  let g:python3_host_prog = 'C:\Python38\python.exe'
+  " let g:python3_host_prog = 'C:\Python38\python.exe'
+  let g:python3_host_prog = 'C:\Users\fac\scoop\apps\winpython\current\python-3.8.1.amd64\python.exe'
   let g:python_host_prog = 'C:\Python27\python.exe'
-  " let g:loaded_python_provider = 1
   let g:loaded_ruby_provider = 1
 
-  " dont do that
-  " let g:node_host_prog = 'C:\Users\fac\scoop\apps\nvm\current\v13.7.0\node'
-  " this still isn't working
-  " let g:node_host_prog =
-  " 'C:\Users\fac\AppData\Local\Yarn\Bin\neovim-node-host'
-  " neither was neovim-node-host.cmd
   " wow this one actually fucking worked
   let g:node_host_prog = 'C:\Users\fac\AppData\Local\Yarn\Data\Global\node_modules\neovim\bin\cli.js'
 

@@ -5,6 +5,7 @@
     " Last Modified: Oct 22, 2019
 " ============================================================================
 
+
 " Options: {{{
 setlocal expandtab
 setlocal shiftwidth=4
@@ -21,11 +22,9 @@ setlocal suffixesadd+=.ps1
 
 " So this'll be tricky to do period and it's gonna {probably} be a bitch to
 " implement in any sort of portable manner...but how can we set up keywordprg
-setlocal foldmethod=syntax
+setlocal foldmethod=syntax  " }}}
 
 let b:ale_fixers = ['powershell']
-
-" }}}
 
 " Atexit: {{{
 

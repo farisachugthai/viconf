@@ -57,7 +57,7 @@ function! pydoc_help#SplitPydocCword(mods) range abort  " {{{1
   " it being specified in their parameters
   " Jesus did i fuck this one up
   let s:temp_cword = expand('<cWORD>')
- 
+
   " Cross your fingers i did this right haha
   call s:temp_buffer()
 endfunction   " }}}
@@ -200,16 +200,20 @@ function! s:ExpandModulePath() abort  " {{{1
     return matchstr(pre, '[A-Za-z0-9_.]*$') . matchstr(suf, '^[A-Za-z0-9_]*')
 endfunction  " }}}
 
-function! pydoc_help#show() abort  " {{{
+function! pydoc_help#show(count, ...) abort  " {{{
     let word = s:ReplaceModuleAlias()
-    let buf = nvim_create_buf(v:false, v:true)
-    call jobstart('pydoc ' . word, {'on_stdout':{j,d,e->append(line('.'),d)}})
-    setlocal nomodifiable
-    setlocal nomodified
-    setlocal filetype=rst
-    " Make it vertical
-    wincmd L
-    normal gg
-    wincmd p
+    echo word
+    for i in a:count
+      let buf = nvim_create_buf(v:false, v:true)
+      " After creating the buffer we need to go to the next one and then do
+      " these steps. How?
+      call jobstart('pydoc ' . word, {'on_stdout':{j,d,e->append(line('.'),d)}})
+      setlocal nomodifiable
+      setlocal nomodified
+      setlocal filetype=rst
+      " Make it vertical
+      wincmd L
+      normal gg
+      wincmd p
+    endfor
 endfunction " }}}
-

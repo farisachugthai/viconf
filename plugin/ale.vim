@@ -5,7 +5,12 @@
     " Last Modified: Dec 27, 2019
 " ============================================================================
 
-" Virtualtext: {{{
+if exists('g:did_ale') || &compatible || v:version < 700
+  finish
+endif
+let g:did_ale = 1
+
+" UI: {{{
 let g:ale_virtualtext_cursor = 1
 let g:ale_virtualtext_prefix =  'ALE: '
 let g:ale_virtualtext_delay = 200
@@ -15,10 +20,12 @@ let g:ale_sign_highlight_linenrs = 1
 " let g:ale_cursor_detail = 1
 " holy fuck no
 let g:ale_close_preview_on_insert = 1
-let g:ale_echo_cursor = 0
+let g:ale_echo_cursor = 1
+
+let g:ale_completion_enabled = 1
 
 " }}}
-"
+
 " Signs: {{{
 
 let g:ale_set_signs = 1
@@ -55,6 +62,7 @@ let g:ale_linters = {
 " forgot how annoying open list was
 " let g:ale_open_list = 1
 let g:ale_list_vertical = 1
+" }}}
 
 " Python specific globals: {{{1
 

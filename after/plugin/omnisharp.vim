@@ -5,11 +5,13 @@
   " Last Modified: February 09, 2020
 " ============================================================================
 
-if exists('b:did_omnisharp') || &compatible || v:version < 700
-  finish
-endif
-let b:did_omnisharp = 1
+" if exists('b:did_omnisharp') || &compatible || v:version < 700
+"   finish
+" endif
+" let b:did_omnisharp = 1
+
 let g:OmniSharp_server_stdio = 1
+" let g:OmniSharp_server_stdio = 1
 
 " Dude they wrote everything python that's dope
 let g:OmniSharp_loglevel = 'DEBUG'

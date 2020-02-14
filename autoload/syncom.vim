@@ -94,9 +94,9 @@ function! s:rg_setup() abort  " {{{
         \ . ' --no-heading --no-ignore-messages --color never --trim'
         \ . ' --line-number --with-filename '
 
-  let g:grep = s:cmd . s:options
-  let &g:grepprg = g:grep
-  return g:grep
+  let s:grep = s:cmd . s:options
+  let &g:grepprg = s:grep
+  return s:grep
 
 endfunction  " }}}
 

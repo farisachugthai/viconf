@@ -36,8 +36,8 @@ let g:WorkspaceFolders = [
       \ ]
 
 let g:coc_quickfix_open_command = 'cwindow'
-let g:coc_snippet_next = '<C-n>'
-let g:coc_snippet_prev = '<C-p>'
+let g:coc_snippet_next = '<Tab>'
+let g:coc_snippet_prev = '<S-Tab>'
 
 let g:coc_enable_locationlist = 1
 let $NVIM_COC_LOG_LEVEL = 'WARN'

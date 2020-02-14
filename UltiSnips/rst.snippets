@@ -4,15 +4,15 @@
 extends python
 
 #######################################################################
-#                           Personal Snippets                         #
+#							Personal Snippets						  #
 #######################################################################
 
 global !p
-from snippets_helper import make_items, complete, TEXT_ROLES, TEXT_ROLES_REGEX, SPECIFIC_ADMONITIONS, DIRECTIVES, DIRECTIVES_WITHOUT_TITLE, DIRECTIVES_FOR_SUBSTITUTION, CHART_TYPES
+from snippets_helper import make_items, complete, TEXT_ROLES, TEXT_ROLES_REGEX, SPECIFIC_ADMONITIONS, DIRECTIVES, DIRECTIVES_WITHOUT_TITLE, DIRECTIVES_FOR_SUBSTITUTION, CHART_TYPES, INCLUDABLE_DIRECTIVES
 endglobal
 
 ################
-#  Inline      #
+#  Inline	   #
 ################
 
 snippet * "Italics" w
@@ -111,12 +111,15 @@ endsnippet
 # Directives
 # ------------
 
+snippet cur "Current module" b
+.. currentmodule:: ${0:${VISUAL}}
+endsnippet
 
 snippet mod "Module Directive" b
 ${1:${VISUAL:One sentence module summary.}}
 
 .. :module:\``!p snip.rv = snip.basename`\`
-    :synopsis: $1
+   :synopsis: $1
 
 :File: `!p snip.rv = snip.fn`
 :Author: `!v g:snips_author`
@@ -124,13 +127,13 @@ ${1:${VISUAL:One sentence module summary.}}
 ${3:Parameters}
 `!p snip.rv = len(t[1])*'-'`
 ${4:mod_variables} : ${5:type}
-    ${6:Explanation and give an inline docstring.}
+	${6:Explanation and give an inline docstring.}
 
 ${7:Example}
 `!p snip.rv = len(t[1])*'-'`
 ${8:code-block}:: ${9:python3}
 
-    ${10:TODO}
+	${10:TODO}
 endsnippet
 
 snippet img "image link directive" w
@@ -212,39 +215,8 @@ snippet cau "Caution directive" w
    ${0:${VISUAL:Take precaution with:}}
 endsnippet
 
-snippet quickstart "Shougos RST one snippet summary" b
-===========================
-${1:content_name}
-===========================
-
-.. contents:: ${1}
-
-${2:title1}
-====================================
-
-${3:subtitle1}
------------------------------------
-
-${4:subtitle2}
------------------------------------
-
-${5:subtitle3}
------------------------------------
-
-${6:title2}
-====================================
-
-${7:subtitle1}
------------------------------------
-
-${8:subtitle2}
------------------------------------
-
-$0
-endsnippet
-
 #############
-#  headers  #
+#  headers	#
 #############
 
 snippet title "Title with =" b
@@ -440,13 +412,13 @@ endsnippet
 
 # TODO
 snippet table "table from sphinx cheatsheet" b
-==================   ============
-Name                 Age
-==================   ============
-John D Hunter        40
-Cast of Thousands    41
-And Still More       42
-==================   ============
+==================	 ============
+Name				 Age
+==================	 ============
+John D Hunter		 40
+Cast of Thousands	 41
+And Still More		 42
+==================	 ============
 endsnippet
 
 snippet env "Environment variables"
@@ -473,7 +445,7 @@ endsnippet
 # img, inc, fig
 snippet id "Includable Directives" b
 `!p
-real_name=real_filename(os.path.basename(t[2]))
+real_name=os.path.basename(t[2])
 di=t[1][:2]
 
 link=""
@@ -532,8 +504,8 @@ endsnippet
 # it will be trigger at start of line or after a word
 snippet ro "Text Roles" w
 \ :$1`!p snip.rv=complete(t[1],
-							   TEXT_ROLES+look_up_directives(TEXT_ROLES_REGEX,
-														path))`:\`$2\`\
+							   TEXT_ROLES+TEXT_ROLES_REGEX,
+														path)`:\`$2\`\
 endsnippet
 
-# Vim: set noet:set ts=3:set sts=3:set sw=3:
+# Vim: set noet ts=3 sts=3 sw=3:

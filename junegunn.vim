@@ -32,8 +32,8 @@ let g:plug_window = 'tabe'
 Plug 'junegunn/fzf', { 'dir': expand('~/.fzf'), 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
-Plug 'scrooloose/nerdTree', { 'on': ['NERDTreeCWD', 'NERDTreeVCS', 'NERDTreeFind'] }
-nnoremap <Leader>nt <Cmd>NERDTreeCWD<CR>zz
+Plug 'scrooloose/nerdTree', { 'on': ['NERDTreeToggleVCS', 'NERDTreeVCS', 'NERDTreeFind'] }
+nnoremap <Leader>nt <Cmd>NERDTreeToggleVCS<CR>zz
 nnoremap <Leader>nf <Cmd>NERDTreeFind<CR>
 
 " Switch NERDTree root to dir of currently focused window.
@@ -41,7 +41,7 @@ nnoremap <Leader>nf <Cmd>NERDTreeFind<CR>
 if exists(':GuiTreeviewToggle')
   nnoremap <Leader>0 <Cmd>GuiTreeviewToggle<CR>
 else
-  nnoremap <Leader>0 <Cmd>NERDTreeVCS<CR>
+  nnoremap <Leader>0 <Cmd>NERDTreeToggleVCS<CR>
 endif
 
 augroup nerd_loader
@@ -57,9 +57,6 @@ augroup END
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rsi'
-" Plug 'tpope/vim-surround'
-" Plug 'tpope/vim-unimpaired'
-Plug 'tpope/vim-apathy'
 Plug 'tpope/vim-scriptease'
 
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
@@ -83,6 +80,7 @@ tnoremap <silent> <F8> <Cmd>TagbarToggle<CR>
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 nnoremap U <Cmd>UndotreeToggle<CR>
 
+Plug 'ervandew/supertab'
 Plug 'junegunn/vim-peekaboo'
 Plug 'vim-voom/voom', {'on': ['Voom', 'VoomToggle', 'VoomExec'] }
 Plug 'romainl/vim-qf'
@@ -95,19 +93,22 @@ if empty(s:termux)
   Plug 'elzr/vim-json', { 'for': 'json' }
   Plug 'omnisharp/omnisharp-vim' " , {'for': ['cs', 'ps1',] }
   Plug 'michaeljsmith/vim-indent-object'
+  Plug 'liuchengxu/vista.vim'
 endif
 
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'tomtom/tlib_vim'
-Plug 'ryanoasis/vim-devicons'           " Keep at end!
 
+Plug 'neovim/nvim-lsp', { 'on': 'LspInstall' }
+
+Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 " }}}
 
 " Commands: {{{
 
 " I utilize this command so often I may as well save the characters
-command! -nargs=0 Plugins echo map(keys(g:plugs), '"\n" . v:val')
+command! Plugins echo map(keys(g:plugs), '"\n" . v:val')
 
 " }}}
 " Vim: set fdm=marker foldlevelstart=0:

@@ -5,7 +5,10 @@
     " Last Modified: Nov 02, 2019
 " ============================================================================
 
-" guard
+if exists('g:loaded_pydoc_help_vim') || &compatible || v:version < 700
+    finish
+endif
+let g:loaded_pydoc_help_vim = 1
 
 let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
@@ -17,6 +20,7 @@ augroup UserHelpandPython
         \| endif
 
   autocmd FileType python exec 'source ' . s:repo_root . '/ftplugin/python.vim'
+  autocmd FileType python let &l:path = py#PythonPath()
   autocmd FileType python call py#ALE_Python_Conf()
 augroup END
 
@@ -58,7 +62,9 @@ command! -nargs=? -bar -range PydocSplit call pydoc_help#SplitPydocCword(<q-mods
 " invocations
 " command! -nargs=? -bang Pydoc :<mods>file<bang> exec 'call pydoc_help#Pydoc(<f-args>)'
 
-command! PydocShow call pydoc_help#show()
+" TODO: I have no idea what's going wrong with this command the only error i'm
+" getting is `list required`.
+command! -complete=expression -bang -bar -count=1 -addr=buffers PydocShow call pydoc_help#show(<count>)
 
 " TODO: Work on the range then the bang
 command! -complete=file -range BlackCurrent <line1>,<line2>call py#Black()
@@ -74,3 +80,8 @@ endfunction
 " So far works
 command! -bar -bang -nargs=* -complete=dir -complete=custom,s:IPythonOptions IPy :<mods>term<bang> ipython <args>
 
+command!  NvimCxn call py#Cnxn()
+
+" It's so annoying that buffers need confirmation to kill. Let's dedicate a
+" key but one that we know windows hasn't stolen yet.
+tnoremap <D-z> <Cmd>bd!<CR>

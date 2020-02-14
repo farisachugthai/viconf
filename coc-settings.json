@@ -99,9 +99,6 @@
       "filetypes": [
         "sh",
         "bash"
-      ],
-      "ignoredRootPaths": [
-        "~"
       ]
     },
     "clangd": {

@@ -12,19 +12,6 @@ endif
 let g:did_autoloads = 1
 
 
-" Completion: {{{
-setglobal wildignorecase wildmode=full:list:longest,full:list
-setglobal wildignore+=*.a,*.o,*.pyc,*~,*.swp,*.tmp
-setglobal wildcharm=<C-z>
-
-" C-n and C-p now use the same input that every other C-x does combined!
-" Remove includes they're pretty slow
-setglobal complete+=kspell,d,k complete-=u,i
-
-" Create a preview window and display all possibilities but don't insert
-" dude what am i doing wrong that i don't get the cool autocompletion that NORC gets??
-setglobal completeopt=menu,menuone,noselect,noinsert,preview
-
                                                 " *i_CTRL-]*
 " CTRL-]                Trigger abbreviation, without inserting a character.
 " So I guess we shouldnt do this anymore either
@@ -124,7 +111,7 @@ command! -bang -nargs=0 NvimAPI
       \ 'v:val.name')
 
 " Easier mkdir and cross platform!
-command! -complete=dir -nargs=1 Mkdir call mkdir(shellescape(<args>), 'p', '0700')
+command! -complete=dir -nargs=1 Mkdir call mkdir(<q-args>, 'p', '0700')
 " }}}
 
 " Search Mappings: {{{

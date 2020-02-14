@@ -241,13 +241,13 @@
         "description": "Code snippet for pudb debug"
     },
     "#!": {
-      "prefix": "#!",
-      "body": "#!/usr/bin/env python\n# -*- coding: utf-8 -*-",
-      "description": "Code snippet for shebang"
+        "prefix": "#!",
+        "body": "#!/usr/bin/env python\n# -*- coding: utf-8 -*-",
+        "description": "Code snippet for shebang"
     },
     "ifmain": {
-      "prefix": "ifmain",
-      "body": "if \"__name__\" == \"__main\":\n\t ${1:main()}",
-      "description": "ifmain"
+        "prefix": "ifmain",
+        "body": "if \"__name__\" == \"__main\":\n\t ${1:main()}",
+        "description": "ifmain"
     }
 }

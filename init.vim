@@ -2,7 +2,7 @@
   " File: init.vim
   " Author: Faris Chugthai
   " Description: Neovim configuration
-  " Last Modified: September 23, 2019
+  " Last Modified: Feb 12, 2020
 " ============================================================================
 
 " Preliminary: {{{
@@ -14,6 +14,7 @@ let g:did_init_vim = 1
 scriptencoding utf-8
 setglobal fileformats=unix,dos
 setglobal cpoptions-=c,e,_  " couple options that bugged me
+setglobal fencs=utf-8,latin1   " UGHHHHH
 " }}}
 
 " Set paths correctly: {{{
@@ -27,10 +28,10 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h'))
 " Seriously how does this keep getting fucked up. omfg packpath is worse???
 if has('unix')
   setglobal runtimepath=~/.config/nvim,~/.local/share/nvim/site,$VIMRUNTIME,~/.config/nvim/after
-  setglobal packpath=~/.config/nvim,~/.local/share/nvim/site,$VIMRUNTIME,~/.config/nvim/after
+  setglobal packpath=~/.config/nvim/pack,~/.local/share/nvim/site/pack,$VIMRUNTIME,~/.config/nvim/after/pack
 else
   setglobal runtimepath=$USERPROFILE\AppData\Local\nvim,$USERPROFILE\AppData\Local\nvim-data\site,$VIMRUNTIME,C:\Neovim\share\nvim-qt\runtime
-  setglobal packpath=~\AppData\Local\nvim,~\AppData\Local\nvim-data\site,$VIMRUNTIME,C:\Neovim\share\nvim-qt\runtime
+  setglobal packpath=~\AppData\Local\nvim\pack,~\AppData\Local\nvim-data\site\pack,$VIMRUNTIME,C:\Neovim\share\nvim-qt\runtime\pack
 endif
 
 " Source ginit. Why is this getting set even in the TUI?
@@ -44,6 +45,9 @@ let g:loaded_getscriptPlugin = 1
 let g:loaded_2html_plugin = 1
 let g:loaded_logiPat = 1
 let g:loaded_netrwPlugin = 1
+" Wth why doesn't match it have a loaded check?
+let g:loaded_matchit = 1
+packadd matchit
 
 noremap <Space> <nop>
 let g:maplocalleader = '<Space>'
@@ -56,6 +60,8 @@ if has('nvim-0.4')   " Fun new features!
   try | setglobal pyxversion=3 | catch /^Vim:E518:*/ | endtry
 endif
 
+let g:matchparen_timeout = 500
+let g:matchparen_insert_timeout = 300
 " }}}
 
 " Backups: {{{
@@ -97,7 +103,27 @@ endif
 
 " Options: {{{
 setglobal pastetoggle=<F9>   " fuck me this is what windows terminal uses for something
-setglobal suffixes=.bak,~,.o,.info,.swp,.aux,.bbl,.blg,.brf,.cb,.dvi,.idx,.ilg,.ind,.inx,.jpg,.log,.out,.png,.toc
+
+" Completion: {{{
+setglobal suffixes=.bak,~,.o,.info,.swp,.aux,.bbl,.blg,.brf,.cb,.dvi,.idx,.ilg,.ind,.inx,.jpg,.log,.out,.png,.toc,.pyc,*.a,*.obj,*.dll,*.exe,*.lib,*.mui,*.swp,*.tmp,
+
+setglobal wildignorecase wildmode=full:list:longest,full:list
+setglobal wildignore=*~,versions/*,cache/*,.tox/*,.pytest_cache/*,__pycache__/*
+setglobal wildcharm=<C-z>
+
+" C-n and C-p now use the same input that every other C-x does combined!
+" Remove includes they're pretty slow
+setglobal complete+=kspell,d,k complete-=u,i
+
+" Create a preview window and display all possibilities but don't insert
+" dude what am i doing wrong that i don't get the cool autocompletion that NORC gets??
+setglobal completeopt=menu,menuone,noselect,noinsert,preview
+
+" both smartcase and infercase require ignorecase to be set:
+setglobal ignorecase
+setglobal smartcase infercase smartindent
+
+" }}}
 
 setglobal foldnestmax=10 foldmethod=marker foldcolumn=2
 setglobal foldignore=
@@ -115,14 +141,10 @@ if filereadable(s:this_dir . '/spell/en.utf-8.add')
   let &g:spellfile = s:this_dir . '/spell/en.utf-8.add'
 endif
 
-" both smartcase and infercase require ignorecase to be set:
-setglobal ignorecase
-setglobal smartcase infercase
-
 setglobal path-=/usr/include
 setglobal sessionoptions-=buffers,winsize viewoptions-=options sessionoptions+=globals
-setglobal mouse=a 
-setglobal nojoinspaces 
+setglobal mouse=a
+setglobal nojoinspaces
 setglobal autowrite autochdir
 
 setglobal modeline
@@ -149,8 +171,6 @@ setglobal conceallevel=2 concealcursor=nc    " enable concealing
 setglobal spellsuggest=5
 setglobal showmatch matchpairs+=<:>
 setglobal lazyredraw matchtime=20  " Show the matching pair for 2 seconds
-let g:matchparen_timeout = 500
-let g:matchparen_insert_timeout = 300
 " }}}
 
 " Colorscheme:  {{{

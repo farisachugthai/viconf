@@ -51,7 +51,7 @@ function! s:_PythonPath() abort  " {{{1
       if exists('$ANDROID_DATA')
         let s:path = s:path . ',' . expand('$PREFIX/lib/python3.8')
       else
-        let s:path = s:path . ',/usr/lib/python3.8'
+        let s:path = s:path . ',/usr/lib/python3.8/**'
       endif
 
       " #3) use the remote pythons std lib modules
@@ -95,10 +95,6 @@ function! py#PythonPath() abort  " {{{1
   let s:path = s:_PythonPath()
   let &l:path = s:path
   return s:path
-endfunction  " }}}
-
-function! py#python_serves_python() abort  " {{{1
-  call pure_python_path()
 endfunction  " }}}
 
 function! py#YAPF() abort  " {{{1
@@ -163,4 +159,39 @@ endfunction  " }}}
 
 function! py#py_import(args) abort   " {{{
   python3 py.import_into_vim()
+endfunction  " }}}
+
+function! py#Cnxn() abort  " {{{
+  " Credit: JustinMK
+  " https://github.com/justinmk/config/blob/ad5b792049b352274d4cbd3525a2aff6ce296a7e/.config/nvim/init.vim#L1339-L1361
+  terminal python3
+
+  if has('unix')
+    call chansend(&channel, "import pynvim,os\n")
+  call chansend(&channel, "n = pynvim.attach('socket', path=os.environ.get('NVIM_LISTEN_ADDRESS'))\n")
+  else
+    call chansend(&channel, "import pynvim,os\r\n")
+  call chansend(&channel, "n = pynvim.attach('socket', path=os.environ.get('NVIM_LISTEN_ADDRESS'))\r\n")
+  endif
+
+endfunction  " }}}
+
+function! py#Cxn(...) abort  " {{{
+ silent! unlet g:cxn
+  tabnew
+    " if !empty(a:1)  " Only start the client.
+    " if exists(a:1)
+    " how the fuck are both of these throwing errors? fuck it no arguments.
+      " let g:cxn = a:1
+    call py#Cnxn()
+      " return
+    " endif
+ " endif
+
+  let s:nvim_path = v:progpath
+  let s:socket = stdpath('data') . '/socket'
+  call chansend(&channel, "NVIM_LISTEN_ADDRESS= " . s:socket . " -u NORC\n")
+  call chansend(&channel, ":let j=jobstart('nc -U ".v:servername."',{'rpc':v:true})\n")
+  call chansend(&channel, ":call rpcrequest(j, 'nvim_set_var', 'cxn', v:servername)\n")
+  call chansend(&channel, ":call rpcrequest(j, 'nvim_command', 'call py#Cnxn()')\n")
 endfunction  " }}}

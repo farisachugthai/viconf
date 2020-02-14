@@ -5,7 +5,15 @@
     " Last Modified: February 27, 2019
 " ============================================================================
 
-" Options: {{{1
+" Options: {{{
+
+let g:NERDTreeCustomOpenArgs = {
+      \ 'file': {
+            \ 'reuse': 'all',
+            \ 'where': 'p',
+            \ 'keepopen': 1,
+      \ },
+      \ 'dir': {}}
 
 " When you open a buffer, how do we do it? Don't only silent edit, keep jumps
 " too

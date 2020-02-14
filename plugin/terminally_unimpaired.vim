@@ -10,14 +10,6 @@ if exists('g:did_terminally_unimpaired') || &compatible || v:version < 700
 endif
 let g:did_terminally_unimpaired = 1
 
-if executable('htop')
-  " Leader -- applications -- htop. Requires nvim for <Cmd> which tmk doesn't exist
-  " even in vim8.0+. Also requires htop which more than likely rules out Win32.
-
-  " Need to use enew in case your previous buffer setl nomodifiable
-  nnoremap <Leader>ah <Cmd>wincmd v<CR><bar><Cmd>enew<CR><bar>term://htop
-endif
-
 if !has('unix')
   setglobal sessionoptions+=unix,slash viewoptions+=unix,slash
 
@@ -33,6 +25,17 @@ if !has('unix')
   command! PowerShell call msdos#PowerShell()
 
   command! -nargs=? PwshHelp call msdos#pwsh_help(shellescape(<f-args>))
+
+else
+
+  if executable('htop')
+    " Leader -- applications -- htop. Requires nvim for <Cmd> which tmk doesn't exist
+    " even in vim8.0+. Also requires htop which more than likely rules out Win32.
+
+    " Need to use enew in case your previous buffer setl nomodifiable
+    nnoremap <Leader>ah <Cmd>wincmd v<CR><bar><Cmd>enew<CR><bar>term://htop
+  endif
+
 endif
 
 if !has('nvim') | finish | endif

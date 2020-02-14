@@ -5,6 +5,10 @@
     " Last Modified: Jun 29, 2019
 " ============================================================================
 
+" Might need to start setting this because i'm still not getting
+" autocompletion to work the way i want.
+" let b:did_autoload_ultisnips_map_keys = 1
+
 if exists('g:did_ultisnips_plugin') || &compatible || v:version < 700
   finish
 endif
@@ -44,29 +48,17 @@ let g:UltiSnipsListSnippets = '<C-\>'
 " }}}
 
 " Mappings: {{{
-" nnoremap <C-\> :<C-u>call UltiSnips#ListSnippets()<CR>
-
-" TODO: Not really working. Kinda hard to get it to behave how I'd like.
-vnoremap <C-\> :<C-u>call UltiSnips#ListSnippets()<CR>
-" Yo and here's a different way of doing this
-" nnoremap <expr> <C-\> py#list_snippets()
-" And another!
-" vnoremap <C-\> <Cmd>py#list_snippets()
 
 noremap <F4> <Cmd>UltiSnipsEdit<CR>
 noremap! <F4> <Cmd>UltiSnipsEdit<CR>
 
-if exists(':FufSnippets')
-  noremap <F6> <Cmd>FufSnippets<CR>
-  noremap! <F6> <Cmd>FufSnippets<CR>
+if exists(':Snippets')
+  noremap <F6> <Cmd>Snippets<CR>
+  noremap! <F6> <Cmd>Snippets<CR>
 else
   noremap <F6> <Cmd>UltiSnipsListSnippets<CR>
   noremap! <F6> <Cmd>UltiSnipsListSnippets<CR>
 endif
-
-" C-@ is repeat last inserted text. But so is <C-Spc>. And <C-a> in insert
-" mode. Fuck <C-S-2> is open a new tab in microsoft terminal. Hm.
-inoremap <C-@> <Cmd>echo UltiSnips#ListSnippets()<CR>
 
 " Changed the mapping to Alt-S for snippets.
 inoremap <silent> <M-s> <C-R>=(plugins#ExpandPossibleShorterSnippet() == 0? '': UltiSnips#ExpandSnippet())<CR>
