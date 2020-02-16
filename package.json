@@ -1,26 +1,41 @@
 {
-  "name": "coc-extensions",
+  "name": "viconf",
   "license": "MIT",
+  "description": "Mostly here for Coc extensions",
+  "readme": "README.rst",
   "private": true,
   "repository": {
-    "url": "https://github.com/farisachugthai/viconf"
+    "type": "git",
+    "url": "git+https://github.com/farisachugthai/viconf.git"
+  },
+  "scripts": {
+    "lint": "yarn run tslint -p .",
+    "fix": "yarn run prettier rplugin/node",
+    "tagfunc": "./rplugin/node/coc_tag.js",
+    "watch": "yarn run tsc -w -p rplugin/node",
+    "build": "yarn run rimraf ./out && yarn run webpack",
+    "start": "yarn run vim-language-server --stdio"
+  },
+  "main": "rplugin/node/coc_tag.js",
+  "directories": {"lib": "rplugin/node"},
+  "author": "Faris Chugthai",
+  "bugs": {
+    "url": "https://github.com/farisachugthai/viconf/issues"
   },
   "keywords": [
     "coc.nvim",
     "nvim",
     "coc"
   ],
-  "author": "Faris Chugthai",
-  "bugs": {
-    "url": "https://github.com/farisachugthai/viconf/issues"
+  "engines": {
+    "vscode": "latest",
+    "coc": "^0.0.71"
   },
   "activationEvents": [
     "onLanguage:vim"
   ],
-  "engines": {
-    "coc": ">= 0.0.73"
-  },
-  "devDependencies": {
+  "version": "1.0.0",
+  "dependencies": {
     "@types/vscode": "^1.41.0",
     "@yarnpkg/pnpify": "^2.0.0-rc.17",
     "bash-language-server": "^1.7.0",
@@ -42,38 +57,5 @@
     "jsonlint": "^1.6.3",
     "vim-language-server": "^1.4.2",
     "yaml-language-server": "^0.6.1"
-  },
-  "description": "Mostly here for Coc extensions",
-  "directories": {
-    "lib": "rplugin/node"
-  },
-  "engines": {
-    "coc": "^0.0.71"
-  },
-  "keywords": [
-    "coc.nvim",
-    "nvim",
-    "coc"
-  ],
-  "license": "MIT",
-  "main": "rplugin/node/coc_tag.js",
-  "name": "viconf",
-  "private": true,
-  "readme": "README.rst",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/farisachugthai/viconf.git"
-  },
-  "scripts": {
-    "build": "yarn run rimraf ./out",
-    "clean": "rimraf node_modules; git checkout -- .; git clean -f",
-    "fix": "yarn run prettier rplugin/node",
-    "lint": "yarn run tslint -p .",
-    "preinstall": "yarn link coc.nvim",
-    "prepare": "npx npm-run-all clean build",
-    "start": "yarn run vim-language-server --stdio",
-    "tagfunc": "./rplugin/node/coc_tag.js",
-    "watch": "yarn run tsc -w -p rplugin/node"
-  },
-  "version": "1.0.0"
+  }
 }

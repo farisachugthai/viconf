@@ -42,10 +42,10 @@ function! s:temp_buffer() abort  " {{{1
   setlocal buftype=nofile bufhidden=delete noswapfile nowrap previewwindow
 endfunction   " }}}
 
-function! pydoc_help#PydocCword() abort  " {{{1
+function! pydoc_help#PydocCword(bang, mods, range) abort  " {{{1
   " Holy shit it works!!!
   let s:temp_cword = expand('<cWORD>')
-  enew
+  enew<a:bang>
   exec ':r! pydoc ' . s:temp_cword
   " If you wanna keep going we can change the status line. We can change how
   " we invoke python

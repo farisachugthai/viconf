@@ -125,7 +125,8 @@ setglobal smartcase infercase smartindent
 
 " }}}
 
-setglobal foldnestmax=10 foldmethod=marker foldcolumn=2
+setglobal foldnestmax=10
+set foldmethod=marker foldcolumn=2
 setglobal foldignore=
 setglobal foldopen+=jump,insert foldminlines=0  foldlevelstart=0
 
@@ -182,7 +183,7 @@ if !exists('plug#load')  | exec 'source ' . s:repo_root . '/vim-plug/plug.vim' |
 " Load Plugins: {{{
 exec 'source ' . s:this_dir . '/junegunn.vim'
 " Don't assume that worked. Needs to be defined but increasingly not as needed
-if !exists('plugs') | let plugs = {} | endif
+if !exists('g:plugs') | let g:plugs = {} | endif
 " }}}
 
 if exists('$ANDROID_DATA')   " {{{

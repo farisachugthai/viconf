@@ -5,25 +5,17 @@
     " Last Modified: Nov 02, 2019
 " ============================================================================
 
-" Guards: {{{
-let s:cpo_save = &cpoptions
-set cpoptions-=C
-
-
-" This loads slowly. How many more can we come up with?
+" Dont load if you spell checking isnt on. Also dont load if you dont know
+" what spell checking is.
 if has('spell')
   if &spell == v:false
     finish
   endif
+else
+  finish
 endif
+
 " Wordlist: {{{
-iab Abbout About
-iab Abbout About
-iab Abotu About
-iab Accross Across
-iab Acheive Achieve
-iab Acheived Achieved
-iab Acheiving Achieving
 iab Acn Can
 iab Acommodate Accommodate
 iab Acomodate Accommodate
@@ -70,19 +62,6 @@ iab Becaus Because
 iab Becuase Because
 iab Becuse Because
 iab Befoer Before
-iab Beggining Beginning
-iab Begining Beginning
-iab Beginining Beginning
-iab Beleiev Believe
-iab Beleieve Believe
-iab Beleif Belief
-iab Beleive Believe
-iab Beleived Believed
-iab Beleives Believes
-iab Benifit Benefit
-iab Benifits Benefits
-iab Betwen Between
-iab Beutiful Beautiful
 iab Boxs Boxes
 iab Brodcast Broadcast
 iab Calcullated Calculated
@@ -501,11 +480,6 @@ iab decison decision
 iab decisons decisions
 iab defendent defendant
 iab definately definitely
-iab deptartment department
-iab desicion decision
-iab desicions decisions
-iab desision decision
-iab desisions decisions
 iab didint didn't
 iab didnt didn't
 iab directiosn direction
@@ -773,7 +747,3 @@ ia youre you're
 ia youve you've
 iab yuor your
 iab yuo you
-
-" Atexit:
-let &cpoptions = s:cpo_save
-unlet s:cpo_save

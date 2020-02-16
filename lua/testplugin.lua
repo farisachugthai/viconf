@@ -13,7 +13,7 @@ end
 _testplugin = {add=add, buffer_ticks=buffer_ticks}
 
 -- Can run with `:py3 vim.exec_lua("_testplugin=require('testplugin')")`
--- now it can be accessed as vim.lua._testplugin
+-- now it can be accessed as `:py3 vim.lua._testplugin`
 --
 -- Taken from clink
 

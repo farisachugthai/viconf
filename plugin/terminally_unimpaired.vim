@@ -20,8 +20,8 @@ if !has('unix')
   setglobal eventignore=DirChanged
 
   command! SetCmd call msdos#set_shell_cmd()
-  command! -nargs=? CmdInvoke call msdos#invoke_cmd(<q-args>)
-  command! -nargs=? -complete=shellcmd Cmd call msdos#CmdTerm(<q-args>)
+  command! -nargs=? CmdInvoke call msdos#invoke_cmd(<f-args>)
+  command! -nargs=? -complete=shellcmd Cmd call msdos#CmdTerm(<f-args>)
   command! PowerShell call msdos#PowerShell()
 
   command! -nargs=? PwshHelp call msdos#pwsh_help(shellescape(<f-args>))
@@ -58,3 +58,11 @@ augroup UserTerm
   " Set up mappings
   autocmd TermOpen * call buffers#terminals()
 augroup END
+
+" Grepprg: {{{
+try
+  " if you don't have fd or rg installed you shouldn't lose highlighting
+  call syncom#grepprg()
+catch /.*/
+endtry
+" }}}

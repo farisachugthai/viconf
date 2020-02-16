@@ -45,6 +45,9 @@ let $NVIM_COC_LOG_FILE = stdpath('data') . '/site/coc.log'
 let $NVIM_NODE_LOG_FILE = stdpath('data') . '/site/node.log'
 let $NVIM_NODE_LOG_LEVEL = 'WARN'
 
+" Lets define this.
+let g:coc_jump_locations = []
+
 " This raises a lot of errors
 " call coc#snippet#enable()
 " }}}

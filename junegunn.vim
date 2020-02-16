@@ -20,6 +20,7 @@ let g:undotree_SetFocusWhenToggle = 1
 " }}}
 
 " List of plugins: {{{
+
 call plug#begin(stdpath('data') . '/plugged')
 
 Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lockfile'}
@@ -32,6 +33,7 @@ let g:plug_window = 'tabe'
 Plug 'junegunn/fzf', { 'dir': expand('~/.fzf'), 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
+" NerdTree: {{{
 Plug 'scrooloose/nerdTree', { 'on': ['NERDTreeToggleVCS', 'NERDTreeVCS', 'NERDTreeFind'] }
 nnoremap <Leader>nt <Cmd>NERDTreeToggleVCS<CR>zz
 nnoremap <Leader>nf <Cmd>NERDTreeFind<CR>
@@ -53,14 +55,20 @@ augroup nerd_loader
         \|   execute 'autocmd! nerd_loader'
         \| endif
 augroup END
+" }}}
 
+" TPope: {{{
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rsi'
+" Sorry but this invokes the python interpreter on startup making it slow as
+" dog shit
+" Plug 'tpope/vim-apathy'
 Plug 'tpope/vim-scriptease'
+" }}}
 
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-"
+
 Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }
 nnoremap <Leader>a <Cmd>ALEEnable<CR><bar>:sil call plugins#AleMappings()<CR>
 nnoremap <Leader>et <Cmd>ALEToggle()<CR><bar>:sil call plugins#AleMappings()<CR>
@@ -85,7 +93,7 @@ Plug 'junegunn/vim-peekaboo'
 Plug 'vim-voom/voom', {'on': ['Voom', 'VoomToggle', 'VoomExec'] }
 Plug 'romainl/vim-qf'
 
-if empty(s:termux)
+if empty(s:termux)  " {{{
   Plug 'godlygeek/tabular', {'on': 'Tabularize'}
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
   " Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
@@ -94,7 +102,7 @@ if empty(s:termux)
   Plug 'omnisharp/omnisharp-vim' " , {'for': ['cs', 'ps1',] }
   Plug 'michaeljsmith/vim-indent-object'
   Plug 'liuchengxu/vista.vim'
-endif
+endif  " }}}
 
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'tomtom/tlib_vim'

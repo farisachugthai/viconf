@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Utilize both the legacy and new nvim API to work with Neovim."""
+"""Utilize both the legacy and new nvim API to work with Neovim.
+
+Let's initialize a :class:`jedi.Script()` object, and return whatever we
+get by running a list comprehension over the completions data attribute of
+our :class:`jedi.Script()` object.
+
+"""
 import functools
 import importlib
 from importlib.util import find_spec
@@ -23,6 +29,12 @@ try:
     import black
 except:
     black = None
+
+try:
+    import jedi
+except ImportError:
+    jedi = None
+
 
 logger = logging.getLogger(name=__name__)
 
@@ -77,6 +89,19 @@ def vimcmd(fxn):
 
 
 # Jedi:
+
+def py_import_completions():
+    argl = vim.eval('a:argl')
+    try:
+        import jedi
+    except ImportError:
+        comps = []
+    else:
+        text = 'import %s' % argl
+        script = jedi.Script(text, 1, len(text), '',
+                             environment=get_environment())
+        comps = ['%s%s' % (argl, c.complete) for c in script.completions()]
+    vim.command("return '%s'" % '\n'.join(comps))
 
 
 class PythonToVimStr:
@@ -239,8 +264,6 @@ def importer(mod):
 
 
 def get_environment(use_cache=True):
-    import jedi
-
     if use_cache:
         return jedi.api.environment.get_cached_default_environment()
     else:
@@ -262,19 +285,9 @@ def catch_and_print_exceptions(func):
     return wrapper
 
 
-@catch_and_print_exceptions
-def import_completions():
-    pass
-
-
-def import_into_vim():
-    argl = vim.eval("a:argl")
-    try:
-        import jedi
-    except ImportError:
-        raise
-    else:
-        text = f"import {argl}"
+def import_into_vim(*args):
+    if jedi is not None:
+        text = f"import {args}"
         script = jedi.Script(text, 1, len(text), "", environment=get_environment())
-        completions = [f"{argl}, {c.complete for c in script.completions()}"]
+        completions = [f"{args}, {c.complete for c in script.completions()}"]
     vim.command("return '%s'" % "\n".join(completions))

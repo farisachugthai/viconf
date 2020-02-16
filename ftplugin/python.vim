@@ -20,7 +20,11 @@ let g:pyindent_continue = 'shiftwidth() * 2'
 " Filetype Specific Options: {{{
 if &filetype !=# 'python' || &filetype !=# 'xonsh' || &filetype !=# 'pyrex' | finish | endif
 
-if exists('b:did_ftplugin') | finish | endif
+if exists('b:did_python') || &compatible || v:version < 700
+  finish
+endif
+let b:did_python = 1
+
 source $VIMRUNTIME/ftplugin/python.vim
 
 syntax sync fromstart

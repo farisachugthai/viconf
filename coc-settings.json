@@ -397,6 +397,8 @@
   "python.jediEnabled": false,
   "python.linting.flake8Path": "python -m flake8",
   "python.linting.pylintEnabled": false,
+  "python.pipenvPath": "pipenv",
+  "python.pythonPath": "python",
   "python.terminal.activateEnvironment": true,
   "python.terminal.executeInFileDir": true,
   "python.terminal.launchArgs": [

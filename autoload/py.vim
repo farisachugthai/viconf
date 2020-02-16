@@ -7,6 +7,8 @@
 
 function! py#list_snippets() abort  " {{{
   " Utilizing the python API and ultisnispzzz
+  " Doesnt return anything?
+  py3 from UltiSnips import UltiSnips_Manager
   py3 UltiSnips_Manager.list_snippets()
 endfunction " }}}
 
@@ -153,12 +155,9 @@ function! py#timedblack() abort  " {{{
   return s:timed(py#Black())
 endfunction  " }}}
 
-function! py#py_import_completions(argl, cmdl, pos) abort  " {{{
-  python3 py.import_completions()
-endfunction  " }}}
-
-function! py#py_import(args) abort   " {{{
-  python3 py.import_into_vim()
+function! py#py_import(...) abort   " {{{
+  " Call the func with a list of desired args
+  python3 py.import_into_vim(a:000)
 endfunction  " }}}
 
 function! py#Cnxn() abort  " {{{

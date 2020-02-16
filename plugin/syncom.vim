@@ -47,10 +47,3 @@ augroup UserColors  " {{{
   autocmd VimEnter * colorscheme gruvbox-material
 augroup end  " }}}
 
-" Grepprg: {{{
-try
-  " if you don't have fd or rg installed you shouldn't lose highlighting
-  call syncom#grepprg()
-catch /.*/
-endtry
-" }}}

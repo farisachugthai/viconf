@@ -28,13 +28,13 @@ if !exists('b:did_typescript_setup')
   endif
 
   " aliases
-  let tsconfig_file = findfile('tsconfig.json', '.;')
+  let b:tsconfig_file = findfile('tsconfig.json', '.;')
 
-  if len(tsconfig_file)
+  if len(b:tsconfig_file)
 
     " Yeah i think it's this one. reading in the file and it might not be utf-8
     try
-    let tsconfig_data = json_decode(join(readfile(tsconfig_file)))
+    let tsconfig_data = json_decode(join(readfile(b:tsconfig_file)))
     " catch all Vim errors. thanks help docs
     catch /^Vim\%((\a\+)\)\=:E/
     endtry
@@ -55,7 +55,7 @@ if !exists('b:did_typescript_setup')
     " unlet paths
   endif
 
-  unlet tsconfig_file
+  unlet! b:tsconfig_file
   " lint file on write
   if executable('tslint')
     let &l:errorformat = '%EERROR: %f:%l:%c - %m,'

@@ -29,7 +29,7 @@ command! -bar -complete=expression -complete=function -range -nargs=+ Pythonx <l
 " You know whats nice? Both of these expressions work.
 " :Pd(vim.vars)
 " :Pd vim.vars
-command! -range -bar -complete=expression -complete=function -nargs=? Pd <line1>,<line2>python3 import(<args>);print(dir(<args>))
+command! -range -bar -complete=expression -complete=function -nargs=? Pd <line1>,<line2>python3 from pprint import pprint; pprint(dir(<args>))
 
 " Honestly i don't know what the <range> arg is providing to these commands
 " and half the time it makes no sense but we may as well implement the whole
@@ -44,8 +44,7 @@ command! -range -bar -complete=expression -complete=function -nargs=? P <line1>,
 " junegunn's <bang>0 does!
 command! -bar -bang -nargs=* -complete=help Help call fzf#vim#helptags(<bang>0)
 
-" Needs to accept args for bang
-command! -bang -bar PydocThis call pydoc_help#PydocCword()
+command! -range -bang -bar PydocThis call pydoc_help#PydocCword(<bang>, <mods>>)
 
 " This should be able to take the argument '-bang' and allow to open in a new
 " separate window like fzf does.
@@ -64,7 +63,8 @@ command! -nargs=? -bar -range PydocSplit call pydoc_help#SplitPydocCword(<q-mods
 
 " TODO: I have no idea what's going wrong with this command the only error i'm
 " getting is `list required`.
-command! -complete=expression -bang -bar -count=1 -addr=buffers PydocShow call pydoc_help#show(<count>)
+" command! -complete=expression -bang -bar -count=1 -addr=buffers PydocShow call pydoc_help#show(<count>)
+command! PydocShow call pydoc_help#show()
 
 " TODO: Work on the range then the bang
 command! -complete=file -range BlackCurrent <line1>,<line2>call py#Black()
