@@ -25,42 +25,44 @@ class VimBuffer:
 
     def __init__(self):
         self.vim = vim
-        self.buf = self.cur_buffer()
+        self._buffer = vim.current.buffer
+        self._window = vim.current.window
+        self._tabpage = vim.current.tabpage
+        self._range = vim.current.range
+        self._line = vim.current.line
 
     def __getitem__(self, idx):
         if isinstance(idx, slice):  # Py3
             yield self.__getslice__(idx.start, idx.stop)
-        rv = vim.current.buffer[idx]
+        rv = self._buffer[idx]
         yield rv
 
     def __getslice__(self, i, j):  # pylint:disable=no-self-use
-        rv = vim.current.buffer[i:j]
+        rv = self._buffer[i:j]
         yield [l for l in rv]
 
     def __setitem__(self, idx, text):
         if isinstance(idx, slice):  # Py3
             return self.__setslice__(idx.start, idx.stop, text)
-        vim.current.buffer[idx] = text
+        self._buffer[idx] = text
 
     def __setslice__(self, i, j, text):  # pylint:disable=no-self-use
-        vim.current.buffer[i:j] = [l for l in text]
+        self._buffer[i:j] = [l for l in text]
 
     def __len__(self):
-        return len(vim.current.buffer)
+        return len(self._buffer)
 
     def __repr__(self):
-        return "{}    #{}    {}".format("Vim Buffer:", self.number, self.filetypes)
+        return "{}    #{}    {}".format("Vim Buffer:", self.bufnr(), self.filetypes)
 
-    @property
     def line_till_cursor(self):  # pylint:disable=no-self-use
         """Return the text before the cursor."""
         _, col = self.cursor
         return (vim.current.line)[:col]
 
-    @property
-    def number(self):  # pylint:disable=no-self-use
+    def bufnr(self):  # pylint:disable=no-self-use
         """Return the bufnr() of the current buffer."""
-        return vim.current.buffer.number
+        return self._buffer.number
 
     @property
     def filetypes(self):
@@ -81,7 +83,7 @@ class VimBuffer:
         different from Vim's cursor.
 
         """
-        line, nbyte = vim.current.window.cursor
+        line, nbyte = self._window.cursor
         col = byte2col(line, nbyte)
         return Position(line - 1, col)
 
@@ -89,29 +91,32 @@ class VimBuffer:
     def cursor(self, pos):  # pylint:disable=no-self-use
         """See getter."""
         nbyte = col2byte(pos.line + 1, pos.col)
-        vim.current.window.cursor = pos.line + 1, nbyte
+        self._window.cursor = pos.line + 1, nbyte
 
     def cur_window(self):
-        return vim.current.window
+        return self._window
 
     def cur_buffer(self):
-        return vim.current.buffer
+        return self._buffer
 
     def cur_tab(self):
-        return vim.current.tabpage
+        return self._tabpage
 
     def cur_range(self):
-        return vim.current.range
+        return self._range
 
     def cur_line(self):
-        return vim.current.line
+        return self._line
 
     def cur_session(self):
-        return vim.current._session
+        return self._buffer._session
 
-    def fname():
+    def name(self):
         """Simple example of how to get the current buffer's filename."""
-        return vim.current.buffer.name
+        return self._buffer.name
+
+    def fname(self):
+        return self.name
 
 
 buf = VimBuffer()  # pylint:disable=invalid-name
@@ -240,7 +245,8 @@ def select(start, end):
             move_cmd += "%iG%i|" % virtual_position(end.line + 1, end.col)
         else:
             move_cmd += "%iG%i|" % virtual_position(end.line + 1, end.col + 1)
-        move_cmd += "o%iG%i|o\\<c-g>" % virtual_position(start.line + 1, start.col + 1)
+        move_cmd += "o%iG%i|o\\<c-g>" % virtual_position(
+            start.line + 1, start.col + 1)
     feedkeys(move_cmd)
 
 
@@ -291,7 +297,8 @@ def _unmap_select_mode_mapping():
 
         for option in ("<buffer>", ""):
             # Put all smaps into a var, and then read the var
-            command(r"redir => _tmp_smaps | silent smap %s " % option + "| redir END")
+            command(r"redir => _tmp_smaps | silent smap %s " %
+                    option + "| redir END")
 
             # Check if any mappings where found
             if hasattr(vim, "bindeval"):
@@ -317,7 +324,8 @@ def _unmap_select_mode_mapping():
             for map in maps:
                 # The first three chars are the modes, that might be listed.
                 # We are not interested in them here.
-                trig = map[3:].split()[0] if len(map[3:].split()) != 0 else None
+                trig = map[3:].split()[0] if len(
+                    map[3:].split()) != 0 else None
 
                 if trig is None:
                     continue
@@ -407,6 +415,7 @@ def pd(args=None):
     pprint(dir(args))
     return dir(args)
 
+
 class _Vim(object):
     def __getattr__(self, attr):
         return getattr(vim, attr)
@@ -416,7 +425,9 @@ vim_obj = _Vim()
 
 
 def _patch_nvim(vim):
-    class Bindeval(object):
+    """Patches to make handling both Vim and Nvim easier."""
+
+    class Bindeval:
         def __init__(self, data):
             self.data = data
 
@@ -424,6 +435,7 @@ def _patch_nvim(vim):
             return _bytes(self.data[key])
 
     def function(name):
+        """Kinda surpried this doesn't utilize functools.wraps."""
         def inner(*args, **kwargs):
             ret = vim.call(name, *args, **kwargs)
             return _bytes(ret)
@@ -435,7 +447,7 @@ def _patch_nvim(vim):
 
     vim_vars = vim.vars
 
-    class vars_wrapper(object):
+    class vars_wrapper:
         def get(self, *args, **kwargs):
             item = vim_vars.get(*args, **kwargs)
             return _bytes(item)

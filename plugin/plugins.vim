@@ -1,9 +1,23 @@
 " ============================================================================
-    " File: junegunn.vim
-    " Author: Faris Chugthai
-    " Description: Isolate where I define my plugins.
-    " Last Modified: Oct 01, 2019
+  " File: plugins
+  " Author: Faris Chugthai
+  " Description: Plugins
+  " Last Modified: February 17, 2020
 " ============================================================================
+
+if exists('g:loaded_plugins') || &compatible || v:version < 700
+  finish
+endif
+let g:loaded_plugins = 1
+
+let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
+
+" Load Plugins: {{{
+if !exists('plug#load')  | exec 'source ' . s:repo_root . '/vim-plug/plug.vim' | endif
+
+" Don't assume that worked. Needs to be defined but increasingly not as needed
+if !exists('g:plugs') | let g:plugs = {} | endif
+
 
 scriptencoding utf-8
 
@@ -47,13 +61,17 @@ else
 endif
 
 augroup nerd_loader
+
   autocmd!
-  autocmd VimEnter * silent! autocmd! FileExplorer
+  " Was raising an error according to verbosefile
+  " autocmd VimEnter * silent! autocmd! FileExplorer
+
   autocmd BufEnter,BufNew *
         \  if isdirectory(expand('<amatch>'))
         \|   call plug#load('nerdTree')
         \|   execute 'autocmd! nerd_loader'
         \| endif
+
 augroup END
 " }}}
 
@@ -70,7 +88,7 @@ Plug 'tpope/vim-scriptease'
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 
 Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }
-nnoremap <Leader>a <Cmd>ALEEnable<CR><bar>:sil call plugins#AleMappings()<CR>
+nnoremap <Leader>a <Cmd>ALEEnable<CR><bar>:sil call plugins#AleMappings()<CR><bar>:CocDisable<CR>redraw!<CR>
 nnoremap <Leader>et <Cmd>ALEToggle()<CR><bar>:sil call plugins#AleMappings()<CR>
 
 if exists('$TMUX')

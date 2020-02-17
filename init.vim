@@ -101,9 +101,6 @@ if !isdirectory(expand(&g:undodir))
 endif
 " }}}
 
-" Options: {{{
-setglobal pastetoggle=<F9>   " fuck me this is what windows terminal uses for something
-
 " Completion: {{{
 setglobal suffixes=.bak,~,.o,.info,.swp,.aux,.bbl,.blg,.brf,.cb,.dvi,.idx,.ilg,.ind,.inx,.jpg,.log,.out,.png,.toc,.pyc,*.a,*.obj,*.dll,*.exe,*.lib,*.mui,*.swp,*.tmp,
 
@@ -125,7 +122,11 @@ setglobal smartcase infercase smartindent
 
 " }}}
 
+" Options: {{{
+setglobal pastetoggle=<F9>   " fuck me this is what windows terminal uses for something
+
 setglobal foldnestmax=10
+" Oddly needs to be set locally?
 set foldmethod=marker foldcolumn=2
 setglobal foldignore=
 setglobal foldopen+=jump,insert foldminlines=0  foldlevelstart=0
@@ -149,7 +150,7 @@ setglobal nojoinspaces
 setglobal autowrite autochdir
 
 setglobal modeline
-if exists('&modelineexpr') | set modelineexpr | endif
+if exists('&modelineexpr') | setglobal modelineexpr | endif
 
 setglobal whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 " TODO: closeoff needs to be added conditionally. how?
@@ -172,31 +173,8 @@ setglobal conceallevel=2 concealcursor=nc    " enable concealing
 setglobal spellsuggest=5
 setglobal showmatch matchpairs+=<:>
 setglobal lazyredraw matchtime=20  " Show the matching pair for 2 seconds
-" }}}
 
-" Colorscheme:  {{{
-" Don't assume that the InstallPlug() func worked so ensure it's defined
 setglobal termguicolors
-setglobal synmaxcol=1000
-if !exists('plug#load')  | exec 'source ' . s:repo_root . '/vim-plug/plug.vim' | endif " }}}
-
-" Load Plugins: {{{
-exec 'source ' . s:this_dir . '/junegunn.vim'
-" Don't assume that worked. Needs to be defined but increasingly not as needed
-if !exists('g:plugs') | let g:plugs = {} | endif
-" }}}
-
-if exists('$ANDROID_DATA')   " {{{
-  " Fuck i had to change this because wsl was loading termux jesus christ
-  call find_files#termux_remote()
-elseif !has('unix')
-  " Note: dude holy hell is it necessary to call the msdos#set_shell_cmd()
-  " func. you do so in ./plugin/unix.vim but jesus christ did it fuck stuff up
-  " when that got deleted
-  call find_files#msdos_remote()
-else
-  call find_files#ubuntu_remote()
-endif
-" }}}
+setglobal synmaxcol=1000  " }}}
 
 " Vim: set fdm=marker foldlevelstart=0:

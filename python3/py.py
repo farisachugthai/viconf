@@ -34,6 +34,8 @@ try:
     import jedi
 except ImportError:
     jedi = None
+else:
+    from jedi.api import replstartup
 
 
 logger = logging.getLogger(name=__name__)
@@ -166,7 +168,7 @@ def vim_eval(string):
 
 
 def pykeywordprg():
-    temp_cword = vim.eval(expand("<cWORD>"))
+    temp_cword = vim.eval('expand("<cWORD>")')
     logger.debug(f"{temp_cword}")
     try:
         helped_mod = importlib.import_module(temp_cword)
@@ -246,7 +248,6 @@ def setup_vim_path():
     vim_path += sys.prefix + ","
     for i in site.getsitepackages():
         vim_path += i + ","
-        print(vim_path)
         return vim_path
 
 
@@ -288,6 +289,7 @@ def catch_and_print_exceptions(func):
 def import_into_vim(*args):
     if jedi is not None:
         text = f"import {args}"
-        script = jedi.Script(text, 1, len(text), "", environment=get_environment())
+        script = jedi.Script(text, 1, len(text), "",
+                             environment=get_environment())
         completions = [f"{args}, {c.complete for c in script.completions()}"]
     vim.command("return '%s'" % "\n".join(completions))

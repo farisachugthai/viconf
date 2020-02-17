@@ -10,6 +10,18 @@ function! py#list_snippets() abort  " {{{
   " Doesnt return anything?
   py3 from UltiSnips import UltiSnips_Manager
   py3 UltiSnips_Manager.list_snippets()
+endfunction
+
+function! py#list_snippets2() abort
+  try
+    py3 import UltiSnips
+  catch
+    return
+  endtry
+  python3 from UltiSnips.snippet_manager import SnippetManager
+  " This expression raises an error. # TODO:
+  let g:sm = py3eval("SnippetManager(" . g:UltiSnipsExpandTrigger, g:UltiSnipsJumpForwardTrigger, g:UltiSnipsJumpBackwardTrigger . ")")
+  py3 sm.list_snippets()
 endfunction " }}}
 
 function! py#taglist() abort  " {{{1

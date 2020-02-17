@@ -37,7 +37,6 @@
     ".ts",
     ".js"
   ],
-  "coc.source.issues.shortcut": "Coc-Issues:",
   "coc.source.ultisnips.filetypes": [
     "python",
     "html",
@@ -74,17 +73,6 @@
   "diagnostic.virtualTextLineSeparator": " \\ ",
   "diagnostic.virtualTextLines": 0,
   "diagnostic.virtualTextPrefix": "Coc-Diagnostic: ",
-  "git.addGBlameToBufferVar": true,
-  "git.addGBlameToVirtualText": true,
-  "git.branchCharacter": "  ",
-  "git.changedDecorator": "*",
-  "git.conflictedDecorator": "::",
-  "git.enableGlobalStatus": true,
-  "git.enableGutters": true,
-  "git.removedSign.text": "_",
-  "git.stagedDecorator": " Ξ ",
-  "git.untrackedDecorator": " : Untracked : ",
-  "git.virtualTextPrefix": "Coc-Git:",
   "javascript.referencesCodeLens.enable": true,
   "javascript.showUnused": true,
   "javascript.suggest.names": true,
@@ -178,12 +166,6 @@
     "--top",
     "--no-sort",
     "--ignore-case"
-  ],
-  "list.source.commits.defaultOptions": [
-    "--regex",
-    "--ignore-case",
-    "--normal",
-    "--auto-preview"
   ],
   "list.source.diagnostics.defaultOptions": [
     "--auto-preview",
@@ -399,7 +381,6 @@
   "python.linting.pylintEnabled": false,
   "python.pipenvPath": "pipenv",
   "python.pythonPath": "python",
-  "python.terminal.activateEnvironment": true,
   "python.terminal.executeInFileDir": true,
   "python.terminal.launchArgs": [
     "-U"
@@ -412,19 +393,12 @@
     ".tox",
     ".venv"
   ],
-  "python.workspaceSymbols.rebuildOnStart": true,
-  "python.workspaceSymbols.tagFilePath": "${workspaceFolder}/.vscode/tags",
-  "refactor.afterContext": 0,
-  "refactor.beforeContext": 0,
   "refactor.openCommand": "vsplit",
   "session.restartOnSessionLoad": true,
-  "signature.enable": true,
   "signature.hideOnTextChange": true,
   "signature.maxWindowHeight": 14,
   "signature.preferShownAbove": false,
-  "signature.target": "float",
   "signature.triggerSignatureWait": 300,
-  "snippets.autoTrigger": true,
   "snippets.editSnippetsCommand": "tabe",
   "snippets.extends": {
     "bash": [
@@ -436,7 +410,7 @@
     ]
   },
   "snippets.priority": 90,
-  "snippets.shortcut": "Snip",
+  "snippets.shortcut": "CocSnip",
   "snippets.snipmate.author": "Faris A. Chugthai",
   "snippets.snipmate.enable": false,
   "snippets.triggerCharacters": [
@@ -452,7 +426,7 @@
   ],
   "snippets.ultisnips.pythonVersion": 3,
   "suggest.acceptSuggestionOnCommitCharacter": false,
-  "suggest.autoTrigger": "trigger",
+  "suggest.autoTrigger": "always",
   "suggest.completionItemKindLabels": {
     "class": "",
     "color": "",
@@ -482,18 +456,11 @@
   },
   "suggest.defaultSortMethod": "length",
   "suggest.detailField": "preview",
-  "suggest.disableMenu": true,
-  "suggest.disableMenuShortcut": true,
-  "suggest.enablePreselect": false,
   "suggest.enablePreview": true,
   "suggest.fixInsertedWord": true,
   "suggest.floatEnable": true,
-  "suggest.highPrioritySourceLimit": 99,
   "suggest.keepCompleteopt": true,
-  "suggest.languageSourcePriority": 99,
-  "suggest.lowPrioritySourceLimit": 50,
   "suggest.maxCompleteItemCount": 100,
-  "suggest.minTriggerInputLength": 3,
   "suggest.noselect": true,
   "suggest.preferCompleteThanJumpPlaceholder": false,
   "suggest.removeDuplicateItems": true,
@@ -523,8 +490,6 @@
     "txt",
     "help"
   ],
-  "yaml.format.enable": true,
-  "yaml.format.proseWrap": "always",
   "yank.enableCompletion": true,
   "yank.limit": 30,
   "yank.list.maxsize": 300,
