@@ -43,20 +43,13 @@ augroup END
 
 " }}}
 
-augroup UserColors  " {{{
+" {{{
+augroup UserVimEnter
   autocmd!
   autocmd VimEnter * colorscheme gruvbox-material
-augroup end  " }}}
-
-" {{{
-augroup SuperTabOmniFunc
-  autocmd!
-  autocmd FileType *
-    \ if &omnifunc != '' |
-    \   call SuperTabChain(&omnifunc, "<c-p>", 1) |
-    \ endif
-augroup END
-
+  " idk how i fucked up but this now necessary?
+  autocmd VimEnter * exec 'so ' . s:repo_root . '/plugin/plugins.vim'
+augroup end
 " }}}
 
 if !has('nvim') | finish | endif

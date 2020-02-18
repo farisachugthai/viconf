@@ -5,8 +5,6 @@
     " Last Modified: Aug 24, 2019
 " ============================================================================
 
-if exists('b:did_ftplugin') | finish | endif
-
 if &filetype !=# 'markdown' | finish | endif
 
 setlocal comments=fb:*,fb:-,fb:+,n:> 
@@ -19,8 +17,13 @@ setlocal omnifunc=htmlcomplete#CompleteTags
 
 call htmlcomplete#DetectOmniFlavor()
 
+" Fuck that this is way too complicated
+" syntax region markdownItalic contains=ALL
+
 syntax sync fromstart
-setlocal conceallevel=0  " this gets annoying quick
+" this gets annoying quick. actually it was just that guys plugin. continue as
+" you were
+setlocal conceallevel=2
 
 let b:match_ignorecase = 1
 let b:match_words = '<:>,' .
@@ -42,7 +45,7 @@ setlocal linebreak
 " Fix tabs so that we can have ordered lists render properly
 setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
 
-setlocal foldlevel=0 foldlevelstart=0
+setlocal foldlevelstart=0
 
 " TPope's markdown plugin. Light enough footprint when settings vars to not
 " need a check
@@ -56,6 +59,7 @@ let g:markdown_minlines = 500
 
 setlocal foldexpr=format#MarkdownFoldText()
 setlocal foldmethod=expr
+
 let b:undo_ftplugin .= "| setlocal foldexpr< foldmethod<"
 
 nnoremap <buffer> <Leader>1 m`yypVr=``

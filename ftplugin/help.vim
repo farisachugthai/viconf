@@ -10,7 +10,13 @@ setlocal formatoptions+=tcroql textwidth=78
 " Just saying... I have this set globally too. W/e.
 setlocal cole=2 cocu=nc
 setlocal iskeyword+=-
+setlocal rnu nu
+setlocal foldcolumn=0 signcolumn=
 
+setlocal tabstop=8
+setlocal softtabstop=8
+setlocal shiftwidth=8
+setlocal breakindent
 
 " Oh shit i found duplicated code.
 " NOTE: I mean code duplicated in the neovim source code.
@@ -26,6 +32,5 @@ let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_wh
 let b:ale_fixers += ['align_help_tags']
 
 
-let b:undo_ftplugin = "setlocal fo< tw< cole< cocu< "
+let b:undo_ftplugin = "setlocal fo< tw< cole< cocu< isk< rnu< nu< "
                     \ . '|unlet! b:undo_ftplugin'
-                    \ . '|unlet! b:did_ftplugin'

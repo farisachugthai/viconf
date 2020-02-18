@@ -1020,12 +1020,11 @@ hi link vimPythonRegion Identifier
 " Filetypes: {{{
 
 " Markdown: {{{
-hi! link markdownBlockquote Grey
-hi! link markdownBlockquote Gray
-hi! link markdownBoldDelimiter Grey
-hi! link markdownCode Directory
+hi! link markdownBlockquote Include
+hi! link markdownBoldDelimiter Delimiter
+hi! link markdownCode Include
 hi! link markdownCodeBlock Directory
-hi! link markdownCodeDelimiter Directory
+hi! link markdownCodeDelimiter Delimiter
 hi! link markdownError markdownText
 hi! link markdownH1 GreenBold
 hi! link markdownH2 GreenBold
@@ -1034,17 +1033,17 @@ hi! link markdownH4 Title
 hi! link markdownH5 Yellow
 hi! link markdownH6 Yellow
 hi! link markdownHeadingDelimiter Delimiter
-hi! link markdownHeadingRule Grey
+hi! link markdownHeadingRule Yellow
 hi! link markdownIdDeclaration markdownLinkText
-hi! link markdownLinkDelimiter Grey
+hi! link markdownLinkDelimiter Delimiter
 hi! link markdownLinkText Aqua
-hi! link markdownLinkTextDelimiter Grey
+hi! link markdownLinkTextDelimiter Delimiter
 hi! link markdownListMarker Red
-hi! link markdownOrderedListMarker Grey
+hi! link markdownOrderedListMarker Red
 hi! link markdownRule Grey
 hi! link markdownText Normal
 hi! link markdownUrl Underlined
-hi! link markdownUrlDelimiter Grey
+hi! link markdownUrlDelimiter Delimiter
 hi! link markdownUrlTitleDelimiter Green
 hi! link mkdBlockquote    Comment
 hi! link mkdBold          PmenuSel

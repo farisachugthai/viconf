@@ -125,17 +125,12 @@ setglobal smartcase infercase smartindent
 " Options: {{{
 setglobal pastetoggle=<F9>   " fuck me this is what windows terminal uses for something
 
-setglobal foldnestmax=10
-" Oddly needs to be set locally?
-set foldmethod=marker foldcolumn=2
-setglobal foldignore=
-setglobal foldopen+=jump,insert foldminlines=0  foldlevelstart=0
-
 setglobal signcolumn=auto:4  " this might be a nvim 4 thing
 try | setglobal switchbuf=useopen,usetab,split | catch | endtry
 setglobal splitbelow splitright
 setglobal sidescroll=5 hidden
 set number relativenumber cmdheight=1  " dude these stopped setting when i set global them
+setglobal rnu nu cmdheight=1
 setglobal isfname-==
 setglobal iskeyword=@,48-57,_,192-255   " Idk how but i managed to mess up the default isk
 
@@ -154,9 +149,6 @@ if exists('&modelineexpr') | setglobal modelineexpr | endif
 
 setglobal whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 " TODO: closeoff needs to be added conditionally. how?
-if has('patch-8.1.0360') || has('nvim')
-  setglobal diffopt+=internal,algorithm:patience
-endif
 setglobal browsedir="buffer"   " which directory is used for the file browser
 
 let &g:listchars = "tab:\u21e5\u00b7,extends:\u21c9,precedes:\u21c7,nbsp:\u00b7"

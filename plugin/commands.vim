@@ -540,7 +540,7 @@ if exists($ANDROID_DATA)
 
 endif  " }}}
 
-" Fugitive Functions: {{
+" Fugitive Functions: {{{
 function ProjectGitDir() abort
   " Like how would this not be really useful all the time?
   return FugitiveExtractGitDir(fnamemodify(expand('%'), ':p:h'))

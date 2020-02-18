@@ -5,21 +5,13 @@
   " Last Modified: February 17, 2020
 " ============================================================================
 
-if exists('g:loaded_plugins') || &compatible || v:version < 700
-  finish
-endif
-let g:loaded_plugins = 1
-
+scriptencoding utf-8
 let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
 " Load Plugins: {{{
 if !exists('plug#load')  | exec 'source ' . s:repo_root . '/vim-plug/plug.vim' | endif
 
 " Don't assume that worked. Needs to be defined but increasingly not as needed
-if !exists('g:plugs') | let g:plugs = {} | endif
-
-
-scriptencoding utf-8
 
 " Preliminary Options: {{{
 let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Evervim. Thanks!
@@ -115,7 +107,7 @@ if empty(s:termux)  " {{{
   Plug 'godlygeek/tabular', {'on': 'Tabularize'}
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
   " Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
-  Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
+  " Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
   Plug 'elzr/vim-json', { 'for': 'json' }
   Plug 'omnisharp/omnisharp-vim' " , {'for': ['cs', 'ps1',] }
   Plug 'michaeljsmith/vim-indent-object'
@@ -137,4 +129,25 @@ call plug#end()
 command! Plugins echo map(keys(g:plugs), '"\n" . v:val')
 
 " }}}
+"
+"
+" Autocmds:
+" Needed to be defined after supertab
+" {{{
+" This might need to go in the after dir because SuperTabChain STILL isn't
+" registered
+" if !exists('*SuperTabChain')
+"   call plug#load('supertab')
+" endif
+
+" augroup SuperTabOmniFunc
+"   autocmd!
+"   autocmd FileType *
+"     \ if &omnifunc != '' |
+"     \   call SuperTabChain(&omnifunc, "<c-p>", 1) |
+"     \ endif
+" augroup END
+
+" }}}
+
 " Vim: set fdm=marker foldlevelstart=0:

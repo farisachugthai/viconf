@@ -109,9 +109,11 @@ function! find_files#ubuntu_remote() abort  " {{{1
   let g:python3_host_prog = exepath('python3')
  
   let g:python3_host_prog = exepath('python')
-  let g:python_host_prog = '/usr/bin/python2'
+  " let g:python_host_prog = '/usr/bin/python2'
+  let g:loaded_python_host_prog = 1
   let g:node_host_prog = '~/.local/share/yarn/global/node_modules/.bin/neovim-node-host'
-  let g:loaded_ruby_provider = 1
+  " let g:loaded_ruby_provider = 1
+  let g:ruby_host_prog = '~/.gem/ruby/2.7.0/bin/neovim-ruby-host'
 
   if exists('$TMUX')
     let g:clipboard = {

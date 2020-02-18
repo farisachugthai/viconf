@@ -5,14 +5,40 @@
   " Last Modified: February 16, 2020
 " ============================================================================
 
-if exists('g:loaded_options') || &compatible || v:version < 700
-  finish
-endif
-let g:loaded_options = 1
+" if exists('g:loaded_options') || &compatible || v:version < 700
+"   finish
+" endif
+" let g:loaded_options = 1
 
 scriptencoding utf-8
+let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
 " Global Options: {{{
+" Folds: {{{
+
+setglobal foldnestmax=10
+" Oddly needs to be set locally?
+set foldmethod=marker foldcolumn=2
+" Automatically close all folds from the beginning.
+setglobal foldlevelstart=0
+" Everything is a fold even if it's one line
+setglobal foldminlines=0  
+" And yes even if it's a comment
+setglobal foldignore=
+" Automatically open and close folds as i move out and in them.
+" setglobal foldopen=all foldclose=all
+" nah this is really annoying
+" }}}
+
+" Diffs:{{{
+setglobal diffopt=filler,context:0,closeoff,iblank,iwhite,iwhiteeol,indent-heuristic
+
+if has('patch-8.1.0360') || has('nvim')
+  setglobal diffopt+=internal,algorithm:patience
+endif
+" todo: hiddenoff
+" }}}
+
 if &tabstop > 4 | setglobal tabstop=4 | endif
 if &shiftwidth > 4  | setglobal shiftwidth=4 | endif
 setglobal expandtab smarttab softtabstop=4
@@ -20,7 +46,7 @@ setglobal expandtab smarttab softtabstop=4
 setglobal tags=tags,**/tags
 setglobal tagcase=smart showfulltag
 
-function! TagFunc(pattern, flags, info) abort
+function! TagFunc(pattern, flags, info) abort   " {{{
 " Lol literally what is this option?
 " well fuck. just errored on nvim4
   function! CompareFilenames(item1, item2) abort
@@ -34,7 +60,7 @@ function! TagFunc(pattern, flags, info) abort
   call sort(result, 'CompareFilenames')
 
   return result
-endfunction
+endfunction  " }}}
 
 if exists('&tagfunc')
   let &g:tagfunc = 'TagFunc'
@@ -72,8 +98,6 @@ endif
 " }}}
 
 " }}}
-
-if !exists('g:plugs') | finish | endif
 
 " Web Devicon: {{{
 let g:webdevicons_enable_nerdtree = 1               " adding the flags to NERDTree
@@ -595,7 +619,17 @@ function! MyTagContext() abort
   " configured context
 endfunction
 
-let g:SuperTabCompletionContexts = ['MyTagContext', 's:ContextText', 's:ContextDiscover']
+function! MyDictContext() abort
+  " TODO: Man i otta copy the pathogen slash func because this in't gonna work
+  " on windows
+  if filereadable('/usr/share/dict/words')
+    return "\<C-x>\<C-k>"
+  elseif filereadable(fnamemodify(expand('<sfile>') ':p:h:h') . '/spell/en.utf-8.add')
+    return "\<C-x>\<C-k>"
+  endif
+endfunction
+
+let g:SuperTabCompletionContexts = [ 's:ContextText', 's:ContextDiscover', 'MyTagContext', 'MyDictContext']
 
 " When enabled, <CR> will cancel completion mode preserving the current text.
 let g:SuperTabCrMapping = 1
@@ -711,9 +745,9 @@ let g:coc_jump_locations = []
 
 " Ensure it actually loaded: {{{
 
-if !exists(':FZF') | call plug#load('fzf') | endif
-" let g:fzf_command_prefix = 'Fuf'
-if !exists(':Rg') | call plug#load('fzf.vim') | endif
+" if !exists(':FZF') | call plug#load('fzf') | endif
+" " let g:fzf_command_prefix = 'Fuf'
+" if !exists(':Rg') | call plug#load('fzf.vim') | endif
 
 " Set up windows to have the correct commands
 if !exists('$FZF_DEFAULT_COMMAND')  || !has('unix')
@@ -900,15 +934,13 @@ function! Statusline_expr() abort  " {{{
   return s:Statusline()
 endfunction  " }}}
 
-augroup YourStatusline  " {{{
+augroup UserStatusline  " {{{
 
   au!
   au BufEnter * let &statusline = Statusline_expr()
-
 augroup END  " }}}
 
 command! -bar ReloadStatusline call s:Statusline()
-
 " }}}
 
 " Fix the path: {{{

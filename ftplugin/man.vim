@@ -21,12 +21,12 @@ if exists('b:did_ftplugin') | finish | endif
 setlocal foldcolumn=0 signcolumn=
 setlocal wrap linebreak
 
-setlocal buftype=nofile
+" setlocal buftype=nofile
 setlocal noswapfile
-setlocal bufhidden=hide
+" setlocal bufhidden=hide
 setlocal nomodified
-setlocal readonly
-setlocal nomodifiable
+" setlocal readonly
+" setlocal nomodifiable
 setlocal noexpandtab
 setlocal tabstop=8
 setlocal softtabstop=8

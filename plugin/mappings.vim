@@ -426,16 +426,21 @@ function! Quickfix_Mappings() abort  " {{{
   " vertical splits, it's at the bottom of the rightmost column of windows.  To
   " make it always occupy the full width:
   " use botright.
-  nnoremap <Leader>l <Cmd>botright lhistory<CR>
-  nnoremap <Leader>lw <Cmd>botright lwindow<CR>
+  nnoremap <Leader>l <Plug>(qf_loc_toggle)
+  nnoremap <Leader>lf <Cmd>lwindow<CR>
+  nnoremap <Leader>lh <Cmd>botright lhistory<CR>
   nnoremap <Leader>ll <Cmd>botright llist!<CR>
   nnoremap <Leader>lo <Cmd>lopen<CR>
-  nnoremap <Leader>lf <Cmd>lwindow<CR>
+  nnoremap <Leader>lw <Cmd>botright lwindow<CR>
 
   " Wanna note how long Ive been using Vim and still i onlyjust found out
   " about the chistory and lhistory commands like wth
-  nnoremap <Leader>q <Cmd>botright chistory<CR>
+
+  " Jump to and from location/quickfix windows.
+  nnoremap <Leader>c <Plug>(qf_qf_switch)
+  nnoremap <Leader>q <Plug>(qf_qf_toggle)
   nnoremap <Leader>qw <Cmd>botright cwindow<CR>
+  nnoremap <Leader>qh <Cmd>botright chistory<CR>
   nnoremap <Leader>ql <Cmd>botright clist!<CR>
   nnoremap <leader>qo <Cmd>botright copen<CR>
   nnoremap <Leader>qf <Cmd>cwindow<CR>

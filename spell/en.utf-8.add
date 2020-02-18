@@ -1820,3 +1820,6 @@ scriptease
 Completers
 completers
 Enums
+ModuleSpec
+pyreadline
+msvcrt
