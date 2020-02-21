@@ -5,12 +5,6 @@
   " Last Modified: February 16, 2020
 " ============================================================================
 
-" This is gonna be so much easier to organize than what we've been doing
-if exists('g:loaded_mappings') || &compatible || v:version < 700
-    finish
-endif
-let g:loaded_mappings = 1
-
 " Navigation: {{{
 xnoremap < <gv
 xnoremap > >gv
@@ -157,9 +151,9 @@ tnoremap <F6>               <Cmd>Snippets<CR>
 
 " Ensure fzf behaves similarly in a shell or in Vim: {{{
 if exists('*fzf#wrap')
-  nnoremap <M-x>                      <Cmd>FufCommands<CR>
-  nnoremap <C-x><C-b>                 :<C-u>FufBuffers
-  nnoremap <C-x><C-f>                 :<C-u>FufFiles
+  nnoremap <M-x>                      <Cmd>Commands<CR>
+  nnoremap <C-x><C-b>                 <Cmd>Buffers<CR>
+  nnoremap <C-x><C-f>                 <Cmd>Files ~/<CR>
 else
   nnoremap <M-x>                      <Cmd>verbose command<CR>
   nnoremap <C-x><C-b>                 <Cmd>buffers<CR>
@@ -243,7 +237,7 @@ xnoremap  <Leader>s         y<Cmd>Ag <C-R>"<CR>
 nnoremap  <Leader>`         <Cmd>Marks<CR>
 
 " FZF beat fugitive out on this one. Might take git log too.
-nnoremap <Leader>gg         <Cmd>GGrep<Space>
+nnoremap <Leader>gg         <Cmd>GGrep<CR>
 nnoremap <Leader>gl         <Cmd>Commits<CR>
 nnoremap <Leader>g?         <Cmd>GFiles?<CR>
 
@@ -283,6 +277,7 @@ inoremap <expr> <M-/> pumvisible() ? coc#_select_confirm() :
 
 
 " Refresh completions with C-Space
+" imap <c-space> <c-r>=SuperTabAlternateCompletion("\<lt>c-p>")<cr>
 inoremap <expr> <C-Space> coc#refresh()
 
 " As a heads up theres also a coc#select#snippet
@@ -393,11 +388,10 @@ nnoremap ,q  <Plug>(coc-fix-current)<CR>
 
 function! Window_Mappings() abort  " {{{
   " Navigate windows more easily
+  nnoremap <C-h> <Cmd>wincmd h<CR>
   " This displays as <NL> when you run `:map` but it behaves like C-j. Oh well.
   nnoremap <C-j> <Cmd>wincmd j<CR>
   nnoremap <C-k> <Cmd>wincmd k<CR>
-  nnoremap <C-l> <Cmd>wincmd l<CR>
-  nnoremap <C-j> <Cmd>wincmd j<CR>
   nnoremap <C-l> <Cmd>wincmd l<CR>
   " Resize windows a little faster
   nnoremap <C-w>< 5<C-w><
@@ -500,14 +494,13 @@ function! Buffer_Mappings() abort  " {{{
   " Navigate Buffers More Easily:
   " Also note I wrote a Buffers command that utilizes fzf.
   nnoremap <Leader>bb <Cmd>Buffers<CR>
-
   nnoremap <Leader>bd <Cmd>bdelete<CR>
   " like quit
   nnoremap <Leader>bq <Cmd>bdelete!<CR>
   " like eXit
   nnoremap <Leader>bx <Cmd>bwipeout<CR>
   nnoremap <Leader>bu <Cmd>bunload<CR>
-
+  nnoremap <Leader>bm <Cmd>bm<CR>
   nnoremap <Leader>bn <Cmd>bnext<CR>
   nnoremap <Leader>bp <Cmd>bprev<CR>
   nnoremap <Leader>b0 <Cmd>bfirst<CR>
@@ -567,14 +560,14 @@ function UserFugitiveMappings() abort
   nnoremap <Leader>gc   <Cmd>Gcommit<CR>
   nnoremap <Leader>gd   <Cmd>Gdiffsplit!<CR>
   cabbrev Gd Gdiffsplit!<Space>
-  nnoremap <Leader>gds  <Cmd>Gdiffsplit! --staged<CR>
+  nnoremap <Leader>gds  <Cmd>Gdiffsplit --staged<CR>
   cabbrev gds2 Git diff --stat --staged
-  nnoremap <Leader>gds2 <Cmd>Git diffsplit! --stat --staged<CR>
+  nnoremap <Leader>gds2 <Cmd>Git difftool --stat --staged<CR>
   nnoremap <Leader>ge   <Cmd>Gedit<Space>
   nnoremap <Leader>gf   <Cmd>Gfetch<CR>
   cabbrev gL 0Glog --pretty=oneline --graph --decorate --abbrev --all --branches
-  nnoremap <Leader>gL   <Cmd>0Glog --pretty=oneline --graph --decorate --abbrev --all --branches<CR>
-  nnoremap <Leader>gm   <Cmd>Gmerge<CR>
+  nnoremap <Leader>gL   <Cmd>0Glog --pretty=format:lo --graph --decorate --abbrev --all --branches<CR>
+  nnoremap <Leader>gm   <Cmd>Git mergetool<CR>
   " Make the mapping longer but clear as to whether gp would pull or push
   nnoremap <Leader>gp  <Cmd>Gpull<CR>
   nnoremap <Leader>gP  <Cmd>Gpush<CR>
@@ -608,6 +601,9 @@ nnoremap ]t <Cmd>PreviewTag<CR>
 
 " Mnemonic: goto like mosts other g commands and \ is the key we're left free
 nnoremap <g-\> [I:let nr = input("Choose an include: ")<Bar>exe "normal! " . nr ."[\t"<CR>
+
+nnoremap <2-LeftMouse> :exe "ptselect! ". expand("<cword>")<CR>
+
 " }}}
 
 " Syntax Plug Mappings: {{{

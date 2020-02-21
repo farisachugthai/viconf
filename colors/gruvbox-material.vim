@@ -24,6 +24,7 @@ let s:t_Co = exists('&t_Co') && !empty(&t_Co) && &t_Co > 1 ? &t_Co : 2
 let s:italics = (((&t_ZH !=# '' && &t_ZH != '[7m') || has('gui_running')) && !has('iOS')) || has('nvim')
 
 " }}}
+
 " My Additions: {{{
 
 " DUDE DON'T SET THIS TO 1!
@@ -33,6 +34,7 @@ let g:gruvbox_material_background = 'hard'
 
 " From ned batchelder.
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
+" }}}
 
 " Standard Highlights: {{{
 " These got cleared somehow.
@@ -44,16 +46,14 @@ hi! CursorLineNr guifg=#fabd2f guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE cter
 
 " Screen column that the cursor is
 hi! link CursorColumn CursorLine
-
 " Additional Links
-
-hi link manEmail Directory
-hi link manHeaderFile Statement
+hi! link manEmail Directory
+hi! link manHeaderFile Statement
 " hi link manHighlight
 " hi link NormalNC Ignore
-hi link VisualNC Visual
-
+hi! link VisualNC Visual
 " }}}
+
 " Plugins: {{{
 
 " NERDTree: {{{
@@ -67,68 +67,70 @@ hi link hideBracketsInNERDTree Conceal
 hi! link NERDTreeFile Structure
 
 " }}}
+
 " Asynchronous Lint Engine: {{{
 
 " call s:HL('ALEError', s:none, s:none, s:undercurl, s:red)
 " call s:HL('ALEWarning', s:none, s:none, s:undercurl, s:yellow)
 " call s:HL('ALEInfo', s:none, s:none, s:undercurl, s:blue)
 
-hi link ALEErrorSign Error
-hi link ALEWarningSign QuickFixLine
-hi link ALEInfoSign Directory
-hi link ALEError Error
-hi link ALEWarning QuickFixLine
-hi link ALEInfo Macro
-
+hi! link ALEErrorSign Error
+hi! link ALEWarningSign QuickFixLine
+hi! link ALEInfoSign Directory
+hi! link ALEError Error
+hi! link ALEWarning QuickFixLine
+hi! link ALEInfo Macro
 " }}}
+
 " GitGutter: {{{
-
-hi link GitGutterAdd GruvboxGreenSign
-hi link GitGutterChange Macro
-hi link GitGutterDelete GruvboxRedSign
-hi link GitGutterChangeDelete Macro
-
+hi! link GitGutterAdd GruvboxGreenSign
+hi! link GitGutterChange Macro
+hi! link GitGutterDelete GruvboxRedSign
+hi! link GitGutterChangeDelete Macro
 " }}}
+
 " GitCommit: "{{{
 " Do I have this plugin? Is this a fugitive thing?
-hi link gitcommitSelectedFile GruvboxGreen
-hi link gitcommitDiscardedFile GruvboxRed
-
+hi! link gitcommitSelectedFile GruvboxGreen
+hi! link gitcommitDiscardedFile GruvboxRed
 " }}}
+
 " Tagbar: {{{
 hi! link TagbarSignature Question
 hi! link TagbarTitle Title
 " I mean this is whats displayed at the top of the buffer so why not title?
 hi! link TagbarHelp Define
-
 " }}}
-" FZF: {{{
 
+" FZF: {{{
 hi! fzf1 ctermfg=161 ctermbg=238 guifg=#E12672 guibg=#565656 cterm=bold,underline
 hi! fzf2 ctermfg=151 ctermbg=238 guifg=#BCDDBD guibg=#565656 cterm=bold,underline
 hi! fzf3 ctermfg=252 ctermbg=238 guifg=#D9D9D9 guibg=#565656 cterm=bold,underline
 " }}}
+
 " }}}
+
 " Filetype specific ------------------------------------------------------- {{{
 
 " Jinja: {{{
 
 hi! link jinjaOperator Operator
 " }}}
-" Django: {{{
-hi link djangoTagBlock PreProc
-hi link djangoVarBlock PreProc
-hi link djangoStatement Statement
-hi link djangoFilter Identifier
-hi link djangoArgument Constant
-hi link djangoTagError Error
-hi link djangoVarError Error
-hi link djangoError Error
-hi link djangoComment Comment
-hi link djangoComBlock Comment
-hi link djangoTodo Todo
 
+" Django: {{{
+hi! link djangoTagBlock PreProc
+hi! link djangoVarBlock PreProc
+hi! link djangoStatement Statement
+hi! link djangoFilter Identifier
+hi! link djangoArgument Constant
+hi! link djangoTagError Error
+hi! link djangoVarError Error
+hi! link djangoError Error
+hi! link djangoComment Comment
+hi! link djangoComBlock Comment
+hi! link djangoTodo Todo
 " }}}
+
 " CSS: {{{
 hi! link cssAnimationProp cssProp
 hi! link cssAtKeyword PreProc
@@ -268,19 +270,21 @@ hi! link cssValueTime Number
 hi! link cssVendor Comment
 hi! link cssVendor White
 " }}}
+
 " Man.vim: {{{
+
 " Define the default highlighting.
 " Only when an item doesn't have highlighting yet
 
-highlight default link manTitle          Title
-highlight default link manSectionHeading Statement
-highlight default link manOptionDesc     Constant
-highlight default link manReference      PreProc
-highlight default link manSubHeading     Function
+highlight! link manTitle          Title
+highlight! link manSectionHeading Statement
+highlight! link manOptionDesc     Constant
+highlight! link manReference      PreProc
+highlight! link manSubHeading     Function
 
-highlight default link manUnderline Underlined
-highlight default link manBold GruvboxYellowBold
-highlight default link manItalic htmlItalic
+highlight! link manUnderline Underlined
+highlight! link manBold GruvboxYellowBold
+highlight! link manItalic htmlItalic
 
 " And the rest
 hi! link manCError Error
@@ -298,81 +302,81 @@ hi! link manSectionHeading GruvboxOrangeBold
 hi! link manSentence GruvboxFg2
 hi! link manSignal GruvboxPurple
 hi! link manURL GruvboxGreen
-
 " }}}
+
 " Netrw: {{{
 " Hate to be that guy but Netrw is considered an ftplugin
 
-hi link netrwCmdNote Directory
-hi link netrwComment Comment
+hi! link netrwCmdNote Directory
+hi! link netrwComment Comment
 if has('nvim')
-  hi link netrwCopyTgt IncSearch
+  hi! link netrwCopyTgt IncSearch
 else
   " Is this canoniccal vim?
-  hi link netrwCopyTgt StorageClass
+  hi! link netrwCopyTgt StorageClass
 endif
 
-hi link netrwDateSep Delimiter
-hi link netrwDir Directory
-hi link netrwExe Macro
-hi link netrwGray Folded
-hi link netrwHelpCmd Delimiter
-hi link netrwHide Conceal
-hi link netrwHidePat Folded
-hi link netrwLib Directory
-hi link netrwLink Underlined
-hi link netrwList PreCondit
-hi link netrwPlain String
-hi link netrwQHTopic Number
+hi! link netrwDateSep Delimiter
+hi! link netrwDir Directory
+hi! link netrwExe Macro
+hi! link netrwGray Folded
+hi! link netrwHelpCmd Delimiter
+hi! link netrwHide Conceal
+hi! link netrwHidePat Folded
+hi! link netrwLib Directory
+hi! link netrwLink Underlined
+hi! link netrwList PreCondit
+hi! link netrwPlain String
+hi! link netrwQHTopic Number
 hi! link netrwQuickHelp netrwHelpCmd
-hi link netrwSizeDate Delimiter
-hi link netrwSlash Delimiter
-hi link netrwSortBy Title
-hi link netrwSortSeq netrwList
-hi link netrwSpecial netrwClassify
+hi! link netrwSizeDate Delimiter
+hi! link netrwSlash Delimiter
+hi! link netrwSortBy Title
+hi! link netrwSortSeq netrwList
+hi! link netrwSpecial netrwClassify
 hi! link netrwSymLink Special
-hi link netrwTime Delimiter
-hi link netrwTimeSep Delimiter
-hi link netrwTreeBar Special
-hi link netrwTreeBarSpace Special
-hi link netrwVersion Float
+hi! link netrwTime Delimiter
+hi! link netrwTimeSep Delimiter
+hi! link netrwTreeBar Special
+hi! link netrwTreeBarSpace Special
+hi! link netrwVersion Float
 
- hi default link netrwCmdSep	Delimiter
- hi default link netrwDir	Directory
- hi default link netrwHelpCmd	Function
- hi default link netrwQHTopic	Number
- hi default link netrwHidePat	Statement
- hi default link netrwHideSep	netrwComment
- hi default link netrwList	Statement
- hi default link netrwVersion	Identifier
- hi default link netrwSymLink	Question
- hi default link netrwExe	PreProc
- hi default link netrwDateSep	Delimiter
+ hi! link netrwCmdSep	Delimiter
+ hi! link netrwDir	Directory
+ hi! link netrwHelpCmd	Function
+ hi! link netrwQHTopic	Number
+ hi! link netrwHidePat	Statement
+ hi! link netrwHideSep	netrwComment
+ hi! link netrwList	Statement
+ hi! link netrwVersion	Identifier
+ hi! link netrwSymLink	Question
+ hi! link netrwExe	PreProc
+ hi! link netrwDateSep	Delimiter
 
- hi default link netrwTreeBar	Special
- hi default link netrwTimeSep	netrwDateSep
- hi default link netrwComma	netrwComment
- hi default link netrwHide	netrwComment
- hi default link netrwMarkFile	TabLineSel
- hi default link netrwLink	Special
+ hi! link netrwTreeBar	Special
+ hi! link netrwTimeSep	netrwDateSep
+ hi! link netrwComma	netrwComment
+ hi! link netrwHide	netrwComment
+ hi! link netrwMarkFile	TabLineSel
+ hi! link netrwLink	Special
 
- " special syntax highlighting (see :he g:netrw_special_syntax)
- hi default link netrwCoreDump	WarningMsg
- hi default link netrwData	DiffChange
- hi default link netrwHdr	netrwPlain
- hi default link netrwLex	netrwPlain
- hi default link netrwLib	DiffChange
- hi default link netrwMakefile	DiffChange
- hi default link netrwYacc	netrwPlain
- hi default link netrwPix	Special
+ " !syntax highlighting (see :he g:netrw_special_syntax)
+ hi! link netrwCoreDump	WarningMsg
+ hi! link netrwData	DiffChange
+ hi! link netrwHdr	netrwPlain
+ hi! link netrwLex	netrwPlain
+ hi! link netrwLib	DiffChange
+ hi! link netrwMakefile	DiffChange
+ hi! link netrwYacc	netrwPlain
+ hi! link netrwPix	Special
 
- hi default link netrwBak	netrwGray
- hi default link netrwCompress	netrwGray
- hi default link netrwSpecFile	netrwGray
- hi default link netrwObj	netrwGray
- hi default link netrwTags	netrwGray
- hi default link netrwTilde	netrwGray
- hi default link netrwTmp	netrwGray
+ hi! link netrwBak	netrwGray
+ hi! link netrwCompress	netrwGray
+ hi! link netrwSpecFile	netrwGray
+ hi! link netrwObj	netrwGray
+ hi! link netrwTags	netrwGray
+ hi! link netrwTilde	netrwGray
+ hi! link netrwTmp	netrwGray
 " }}}
 " Rst: {{{
 
@@ -801,7 +805,7 @@ hi! link vimFTCmd	vimCommand
 hi! link vimFTOption	vimSynType
 hi! link vimFgBgAttrib	vimHiAttrib
 hi! link vimFold	Folded
-hi! link vimFunc Function
+hi! link vimFunc        Function
 hi! link vimFuncKey	vimCommand
 hi! link vimFuncName	Function
 hi! link vimFuncSID	Special
@@ -837,7 +841,7 @@ hi! link vimInsert	vimString
 "                    match /<Bar>\s*\a\+/  transparent contains=vimCommand,vimNotation
 " \h is any upper case letter. \w is any letter. wtf? that contains SO many false positives
 
-" hi! link vimIsCommand       vimOption
+" hi link vimIsCommand       vimOption
 hi! link vimIskSep	Delimiter
 hi! link vimKeyCode	vimSpecFile
 hi! link vimKeyword	Statement
@@ -893,9 +897,7 @@ hi! link vimSubstFlags	Special
 hi! link vimSubstSubstr	SpecialChar
 hi! link vimSubstTwoBS	vimString
 hi! link vimSynCase	Type
-hi! link vimSynCaseError	Error
 hi! link vimSynContains	vimSynOption
-hi! link vimSynError	Error
 hi! link vimSynKeyContainedin	vimSynContains
 hi! link vimSynKeyOpt	vimSynOption
 hi! link vimSynMtchGrp	vimSynOption
@@ -930,23 +932,20 @@ hi! link vimWarn	WarningMsg
 
 " }}}
 " Vim Errors: {{{
-hi link vimBehaveError	vimError
-hi link vimBufnrWarn	vimWarn
-hi link vimCollClassErr	vimError
-hi link vimEmbedError	vimError
-hi link vimErrSetting	vimError
-hi link vimFTError	vimError
-hi link vimFunc         	vimError
-hi link vimFuncBody Function
-hi link vimFunctionError	vimError
-hi link vimHiAttribList	vimError
-hi link vimHiCtermError	vimError
-hi link vimHiKeyError	vimError
-hi link vimKeyCodeError	vimError
-hi link vimMapModErr	vimError
-hi link vimSubstFlagErr	vimError
-hi link vimSynCaseError	vimError
-hi link vimSynError Exception
+hi! link vimBehaveError	vimError
+hi! link vimBufnrWarn	vimWarn
+hi! link vimCollClassErr	vimError
+hi! link vimEmbedError	vimError
+hi! link vimErrSetting	vimError
+hi! link vimFTError	vimError
+hi! link vimHiAttribList	vimError
+hi! link vimHiCtermError	vimError
+hi! link vimHiKeyError	vimError
+hi! link vimKeyCodeError	vimError
+hi! link vimMapModErr	vimError
+hi! link vimSubstFlagErr	vimError
+hi! link vimSynCaseError	vimError
+hi! link vimSynError Exception
 hi! link vimNotation Orange
 hi! link vimBracket Orange
 hi! link vimMapModKey Purple
@@ -961,53 +960,46 @@ hi! link vimAutoCmd Orange
 " Vim etc: {{{
 " Here's every highlighting group I've ran into and a note with what it represents
 " The last letter of an autocmd like wth
-hi link vimAugroup	vimAugroupKey
+hi! link vimAugroup	vimAugroupKey
 
 " Lmao the comma between BufEnter,BufReadPre
-hi link vimAutoEventList vimAutoEvent
-
+hi! link vimAutoEventList vimAutoEvent
 " Don't link to WildMenu it's the space in between the word cluster and the
 " cluster group
 " hi link vimClusterName WildMenu
-hi link vimClusterName NONE
-hi link vimCmdSep vimCommand
-hi link vimCommentTitleLeader	vimCommentTitle
-hi link vimEcho	String
+hi! link vimClusterName NONE
 
+hi! link vimCmdSep vimCommand
+hi! link vimCommentTitleLeader	vimCommentTitle
+hi! link vimEcho	String
 " the spaces between words in an execute statement like wth
-hi link vimExecute Label
-
-hi link vimHiAttribList Underlined
-hi link vimHiCtermColor Underlined
-hi link vimHiFontname Underlined
-hi link vimHiKeyList Keyword
-
-hi link vimIskSep Keyword
-hi link vimMapModErr Exception
-
-hi link vimMapLhs vimNotation
-hi link vimMapRhs vimNotation
-hi link vimMapRhsExtend	vimNotation
-hi link vimOnlyHLGroup VisualNOS
-hi link vimOnlyCommand vimCommand
-hi link vimOnlyOption GruvboxGreen
-hi link vimSet vimSetEqual
+hi! link vimExecute Label
+hi! link vimHiAttribList Underlined
+hi! link vimHiCtermColor Underlined
+hi! link vimHiFontname Underlined
+hi! link vimHiKeyList Keyword
+hi! link vimIskSep Keyword
+hi! link vimMapLhs vimNotation
+hi! link vimMapRhs vimNotation
+hi! link vimMapRhsExtend	vimNotation
+hi! link vimOnlyHLGroup VisualNOS
+hi! link vimOnlyCommand vimCommand
+hi! link vimOnlyOption GruvboxGreen
+hi! link vimSet vimSetEqual
 
 " There's a highlighting group for the equals sign in a set option statement...
-hi link vimSetEqual	Operator
-hi link vimSynKeyRegion Keyword
-hi link vimHiAttribList vimHighlight
+hi! link vimSetEqual	Operator
+hi! link vimSynKeyRegion Keyword
+hi! link vimHiAttribList vimHighlight
 
 " This syntax group is literally whitespace...
-hi link vimSynRegion Nontext
-hi link vimSyncLines Number
+hi! link vimSynRegion Nontext
+hi! link vimSyncLines Number
 
 " Here are a few more xxx cleared syn groups
-hi link vimUserFunc Function
+hi! link vimUserFunc Function
 
-hi link vimPythonRegion Identifier
-
-" }}}
+hi! link vimPythonRegion Identifier
 
 " }}}
 
@@ -1016,7 +1008,9 @@ hi link vimPythonRegion Identifier
 " }}}
 
 " }}}
+
 " Original: {{{
+
 " Filetypes: {{{
 
 " Markdown: {{{
@@ -1494,8 +1488,8 @@ hi! link helpCommand Orange
 hi! link helpHeadline Title
 hi! link helpHeader Aqua
 hi! link helpSpecial Yellow
-
 " }}}
+
 " Plugins: {{{
 hi! link plug2 Green
 hi! link plugBracket Grey
@@ -1626,8 +1620,8 @@ hi! link UndotreeHead Yellow
 hi! link UndotreeBranch Yellow
 hi! link UndotreeCurrent Aqua
 hi! link UndotreeSavedSmall Purple
-
 " }}}
+
 if (has('termguicolors') && &termguicolors) || has('gui_running')  " {{{
   if &background ==# 'dark'
     let g:terminal_ansi_colors = ['#665c54', '#ea6962', '#a9b665', '#e78a4e',
@@ -2568,6 +2562,7 @@ if (has('termguicolors') && &termguicolors) || has('gui_running')  " {{{
   unlet s:t_Co s:italics
   finish
 endif  " }}}
+
 if s:t_Co >= 256  "  {{{
   if &background ==# 'dark'
     hi White ctermfg=223 ctermbg=NONE cterm=NONE
@@ -3468,5 +3463,5 @@ if s:t_Co >= 256  "  {{{
 endif
 
 " }}}
-" Vim: set fdls=0 fdm=marker:
 " }}}
+" Vim: set fdls=0 fdm=marker:

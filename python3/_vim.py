@@ -12,7 +12,10 @@ import xml.dom.minidom as md
 from pprint import pprint
 import json
 
-import vim  # pylint:disable=import-error
+try:
+    import vim  # pylint:disable=import-error
+except ImportError:
+    vim = None
 
 try:
     import yaml

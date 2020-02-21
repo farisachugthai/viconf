@@ -31,12 +31,12 @@ setglobal foldignore=
 " }}}
 
 " Diffs:{{{
-setglobal diffopt=filler,context:0,closeoff,iblank,iwhite,iwhiteeol,indent-heuristic
+setglobal diffopt=filler,context:0,iblank,iwhite,iwhiteeol,indent-heuristic,hiddenoff,foldcolumn:1
 
 if has('patch-8.1.0360') || has('nvim')
   setglobal diffopt+=internal,algorithm:patience
 endif
-" todo: hiddenoff
+" todo: closeoff
 " }}}
 
 if &tabstop > 4 | setglobal tabstop=4 | endif
@@ -725,8 +725,8 @@ let g:WorkspaceFolders = [
       \ ]
 
 let g:coc_quickfix_open_command = 'cwindow'
-let g:coc_snippet_next = '<Tab>'
-let g:coc_snippet_prev = '<S-Tab>'
+" let g:coc_snippet_next = '<Tab>'
+" let g:coc_snippet_prev = '<S-Tab>'
 
 let g:coc_enable_locationlist = 1
 let $NVIM_COC_LOG_LEVEL = 'WARN'

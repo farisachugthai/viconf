@@ -251,9 +251,9 @@ In fact, **it currently takes 3.**
 
 .. code-block:: vim
 
-    map <F2> <Cmd>NERDTreeToggle
-    map! <F2> <Cmd>NERDTreeToggle
-    tmap <F2> <Cmd>NERDTreeToggle
+   map <F2> <Cmd>NERDTreeToggle
+   map! <F2> <Cmd>NERDTreeToggle
+   tmap <F2> <Cmd>NERDTreeToggle
 
 Nowhere near the most elegant solution; unfortunately, it seems to be the only
 one.

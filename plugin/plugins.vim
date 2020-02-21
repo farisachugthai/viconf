@@ -8,19 +8,19 @@
 scriptencoding utf-8
 let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
-" Load Plugins: {{{
+" Load Plugins:
 if !exists('plug#load')  | exec 'source ' . s:repo_root . '/vim-plug/plug.vim' | endif
 
 " Don't assume that worked. Needs to be defined but increasingly not as needed
 
 " Preliminary Options: {{{
 let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Evervim. Thanks!
-let s:wsl = !empty($WSL_DISTRO_NAME)                   " Windows is !has('unix') but WSL checks explicitly
-let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux) && empty(s:wsl)
+" let s:wsl = !empty($WSL_DISTRO_NAME)                   " Windows is !has('unix') but WSL checks explicitly
 
 " Few options I wanna set in advance
 let g:no_default_tabular_maps = 1
 let g:plug_shallow = 1
+let g:plug_window = 'tabe'
 let g:undotree_SetFocusWhenToggle = 1
 
 " }}}
@@ -34,7 +34,6 @@ let $NVIM_COC_LOG_FILE = stdpath('data')  . '/site/coc.log'
 let $NVIM_COC_LOG_LEVEL = 'ERROR'
 
 Plug 'junegunn/vim-plug' ", {'dir': expand('~/projects/viconf/vim-plug')}
-let g:plug_window = 'tabe'
 
 Plug 'junegunn/fzf', { 'dir': expand('~/.fzf'), 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -52,7 +51,7 @@ else
   nnoremap <Leader>0 <Cmd>NERDTreeToggleVCS<CR>
 endif
 
-augroup nerd_loader
+augroup UserNerdLoader
 
   autocmd!
   " Was raising an error according to verbosefile
@@ -77,15 +76,25 @@ Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-scriptease'
 " }}}
 
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips'
+" | Plug 'honza/vim-snippets'
 
 Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }
-nnoremap <Leader>a <Cmd>ALEEnable<CR><bar>:sil call plugins#AleMappings()<CR><bar>:CocDisable<CR>redraw!<CR>
-nnoremap <Leader>et <Cmd>ALEToggle()<CR><bar>:sil call plugins#AleMappings()<CR>
+nnoremap <Leader>a <Cmd>sil! ALEEnable<CR><bar>:sil! call plugins#AleMappings()<CR><bar>:sil! CocDisable<CR>:sil! redraw!<CR>
+nnoremap <Leader>et <Cmd>ALEToggle()<CR><bar>:sil! call plugins#AleMappings()<CR>
 
 if exists('$TMUX')
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'edkolev/tmuxline.vim'
+augroup UserTmuxline
+  au!
+  " saying Tmuxline isnt a command ergh
+  autocmd BufEnter * ++once
+        \  if exists(':Tmuxline')
+        \| exec 'Tmuxline vim_statusline_3'
+        \| endif
+
+augroup END
 endif
 
 Plug 'mhinz/vim-startify'
@@ -94,6 +103,8 @@ Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
 noremap <silent> <F8> <Cmd>TagbarToggle<CR>
 noremap! <silent> <F8> <Cmd>TagbarToggle<CR>
 tnoremap <silent> <F8> <Cmd>TagbarToggle<CR>
+" yo this mapping is great
+nnoremap ,t <Cmd>CocCommand tags.generate<CR><bar>:TagbarToggle<CR>
 
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 nnoremap U <Cmd>UndotreeToggle<CR>
@@ -106,8 +117,7 @@ Plug 'romainl/vim-qf'
 if empty(s:termux)  " {{{
   Plug 'godlygeek/tabular', {'on': 'Tabularize'}
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
-  " Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
-  " Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
+  Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
   Plug 'elzr/vim-json', { 'for': 'json' }
   Plug 'omnisharp/omnisharp-vim' " , {'for': ['cs', 'ps1',] }
   Plug 'michaeljsmith/vim-indent-object'
@@ -129,8 +139,7 @@ call plug#end()
 command! Plugins echo map(keys(g:plugs), '"\n" . v:val')
 
 " }}}
-"
-"
+
 " Autocmds:
 " Needed to be defined after supertab
 " {{{
@@ -149,5 +158,8 @@ command! Plugins echo map(keys(g:plugs), '"\n" . v:val')
 " augroup END
 
 " }}}
+
+packadd! matchit
+packadd! justify
 
 " Vim: set fdm=marker foldlevelstart=0:

@@ -38,12 +38,7 @@
     ".js"
   ],
   "coc.source.ultisnips.filetypes": [
-    "python",
-    "html",
-    "css",
-    "sh",
-    "powershell",
-    "typescript"
+    "*"
   ],
   "coc.source.ultisnips.priority": 99,
   "coc.source.ultisnips.shortcut": "Coc-UltiSnips:",
@@ -329,12 +324,6 @@
     "--interactive",
     "--number-select"
   ],
-  "list.source.tags.defaultCommand": [
-    "ctags",
-    "-R",
-    "--options",
-    "~/.ctags.d/"
-  ],
   "list.source.tags.defaultOptions": [
     "--top",
     "--normal"
@@ -413,11 +402,6 @@
   "snippets.shortcut": "CocSnip",
   "snippets.snipmate.author": "Faris A. Chugthai",
   "snippets.snipmate.enable": false,
-  "snippets.triggerCharacters": [
-    "C-n",
-    "C-j",
-    "Tab"
-  ],
   "snippets.ultisnips.directories": [
     "~/.config/nvim/UltiSnips",
     "~/.config/coc/Ultisnips",

@@ -9,5 +9,9 @@ description = {
 }
 build = {
    type = "builtin",
-   modules = {}
+   modules = {
+      lsp = "lsp.lua",
+      package = "package.lua",
+      testplugin = "testplugin.lua"
+   }
 }

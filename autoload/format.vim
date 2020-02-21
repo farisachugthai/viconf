@@ -58,3 +58,14 @@ function! format#MarkdownFoldText() abort " {{{ Credit to TPope
 
   return '='
 endfunction  " }}}
+
+" Create directories if they doesn't exist
+if !isdirectory(expand(&g:directory))
+  call mkdir(expand(&g:directory), 'p', 0700)
+endif
+if !isdirectory(expand(&g:backupdir))
+  call mkdir(expand(&g:backupdir), 'p', 0700)
+endif
+if !isdirectory(expand(&g:undodir))
+  call mkdir(expand(&g:undodir), 'p', 0700)
+endif

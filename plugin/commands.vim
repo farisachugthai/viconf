@@ -5,7 +5,6 @@
   " Last Modified: February 16, 2020
 " ============================================================================
 
-
 " Tags Command: {{{
 " You never added complete tags dude!
 command! -complete=tag -bar Tagstack echo gettagstack(expand('%'))
@@ -25,18 +24,18 @@ command! -complete=dir -bang -nargs=* NewGrep execute 'silent grep! <q-args>' | 
 
 " Coc Commands: {{{
 
-command! -nargs=0 CocWords execute 'CocList -I --normal --input=' . expand('<cword>') . ' words'
+command! CocWords execute 'CocList -I --normal --input=' . expand('<cword>') . ' words'
 
-command! -nargs=0 CocRepeat call CocAction('repeatCommand')
+command! CocRepeat call CocAction('repeatCommand')
 
-command! -nargs=0 CocReferences call CocAction('jumpReferences')
+command! CocReferences call CocAction('jumpReferences')
 
 " TODO: Figure out the ternary operator, change nargs to ? and if arg then
 " input=arg else expand(cword)
-command! -nargs=0 CocGrep execute 'CocList -I --input=' . expand('<cword>') . ' grep'
+command! CocGrep execute 'CocList -I --input=' . expand('<cword>') . ' grep'
 
 " Dec 05, 2019: Got a new one for ya!
-command! -nargs=0 CocExtensionStats :py3 from pprint import pprint; pprint(vim.eval('CocAction("extensionStats")'))
+command! CocExtensionStats :py3 from pprint import pprint; pprint(vim.eval('CocAction("extensionStats")'))
 
 " Let's group these together by prefixing with Coc
 " Use `:Format` to format current buffer
@@ -63,7 +62,6 @@ command! -nargs=* -range CocFix call coc#rpc#notify('codeActionRange', [<line1>,
 " Nabbed these from his plugin/coc.vim file and changed the mappings to
 " commands
 command! CocDefinition call CocAction('jumpDefinition')
-
 command! CocDeclaration    call       CocAction('jumpDeclaration')
 command! CocImplementation call       CocAction('jumpImplementation')
 command! CocTypeDefinition call       CocAction('jumpTypeDefinition')
@@ -72,8 +70,9 @@ command! CocOpenlink      call       CocActionAsync('openLink')
 command! CocFixCurrent    call       CocActionAsync('doQuickfix')
 command! CocFloatHide     call       coc#util#float_hide()
 command! CocFloatJump     call       coc#util#float_jump()
-command! CocCommandRepeat call       CocAction('repeatCommand')
-
+command! -bar CocCommandRepeat call       CocAction('repeatCommand')
+" How am I still going?
+command! CocServices echo CocAction('services')
 " }}}
 
 " A LOT Of FZF Commands: {{{
@@ -223,9 +222,11 @@ command! -bar -bang -nargs=? -complete=mapping Maps call fzf#vim#maps("n", <bang
 " Finding Files: {{{
 
 " Completes filenames from the directories specified in the 'path' option:
-command! -nargs=* -bang -bar -complete=customlist,unix#EditFileComplete
-        \ Edit edit<bang> <q-args>
+" doesnt work lol
+command! -nargs=* -range=% -bang -bar -complete=customlist,unix#EditFileComplete -complete=file
+        \ EdPreview :<q-mods> <line1>,<line2> pedit<bang> <q-args>
 
+command! -nargs=* -bang -complete=file -complete=file_in_path Goto pedit<bang> <args>
 " I admit feeling peer pressured to add this but
 " -range=N    A count (default N) which is specified in the line
 "             number position (like |:split|); allows for zero line
@@ -440,103 +441,18 @@ command! -bar -range -nargs=1 -complete=file Replace <line1>-pu_|<line1>,<line2>
 " Count the number of lines in the range
 command! -bar -range -nargs=0 Lines  echo <line2> - <line1> + 1 'lines'  " }}}
 
-" Ranger: {{{
-
-" ================ Ranger =======================
-if exists('g:ranger_choice_file')
-  if empty(glob(g:ranger_choice_file))
-    let s:choice_file_path = g:ranger_choice_file
-  else
-    echom "Message from *Ranger.vim* :"
-    echom "You've set the g:ranger_choice_file variable."
-    echom "Please use the path for a file that does not already exist."
-    echom "Using /tmp/chosenfile for now..."
-  endif
-endif
-
-if exists('g:ranger_command_override')
-  let s:ranger_command = g:ranger_command_override
-else
-  let s:ranger_command = 'ranger'
-endif
-
-if !exists('s:choice_file_path')
-  let s:choice_file_path = '/tmp/chosenfile'
-endif
-
-function! OpenRangerIn(path, edit_cmd)
-  let currentPath = expand(a:path)
-  let rangerCallback = { 'name': 'ranger', 'edit_cmd': a:edit_cmd }
-  function! rangerCallback.on_exit(job_id, code, event)
-    if a:code == 0
-      silent! Bclose!
-    endif
-    try
-      if filereadable(s:choice_file_path)
-	for f in readfile(s:choice_file_path)
-	  exec self.edit_cmd . f
-	endfor
-	call delete(s:choice_file_path)
-      endif
-    endtry
-  endfunction
-    enew
-    if isdirectory(currentPath)
-      call termopen(s:ranger_command . ' --choosefiles=' . s:choice_file_path . ' "' . currentPath . '"', rangerCallback)
-    else
-      call termopen(s:ranger_command . ' --choosefiles=' . s:choice_file_path . ' --selectfile="' . currentPath . '"', rangerCallback)
-    endif
-    startinsert
-  endfunction
-
-command! RangerCurrentFile call OpenRangerIn("%", s:default_edit_cmd)
-command! RangerCurrentDirectory call OpenRangerIn("%:p:h", s:default_edit_cmd)
-command! RangerWorkingDirectory call OpenRangerIn(".", s:default_edit_cmd)
-command! Ranger RangerCurrentFile
-
-" To open the selected file in a new tab
-command! RangerCurrentFileNewTab call OpenRangerIn("%", 'tabedit ')
-command! RangerCurrentFileExistingOrNewTab call OpenRangerIn("%", 'tab drop ')
-command! RangerCurrentDirectoryNewTab call OpenRangerIn("%:p:h", 'tabedit ')
-command! RangerCurrentDirectoryExistingOrNewTab call OpenRangerIn("%:p:h", 'tab drop ')
-command! RangerWorkingDirectoryNewTab call OpenRangerIn(".", 'tabedit ')
-command! RangerWorkingDirectoryExistingOrNewTab call OpenRangerIn(".", 'tab drop ')
-command! RangerNewTab RangerCurrentDirectoryNewTab
-
-function! OpenRanger()
-  Ranger
-endfunction
-
-" Open Ranger in the directory passed by argument
-function! OpenRangerOnVimLoadDir(argv_path)
-  let path = expand(a:argv_path)
-
-  " Delete empty buffer created by vim
-  Bclose!
-
-  " Open Ranger
-  call OpenRangerIn(path, 'edit')
-endfunction
-
-" To open ranger when vim load a directory
-if exists('g:ranger_replace_netrw') && g:ranger_replace_netrw
-  augroup ReplaceNetrwByRangerVim
-    autocmd VimEnter * silent! autocmd! FileExplorer
-    autocmd BufEnter * if isdirectory(expand("%")) | call OpenRangerOnVimLoadDir("%") | endif
-  augroup END
-endif
-
-if !exists('g:ranger_map_keys') || g:ranger_map_keys
-  map <leader>f :Ranger<CR>
-endif
-" }}}
-
 " Platform Specific Settings: {{{
-if exists($ANDROID_DATA)
+" dude omfg. exists($ANDROID_DATA) returns 0 on android.
+" so does getenv($ANDROID_DATA) *specifically returns v:null*
+" on windows i had a few expr return 1. like fuck you im trying to
+" distinguish what computer im on this isnt the hard part
+if !empty($ANDROID_DATA)
   " May 26, 2019: Just ran into my first problem from a filename with a space in the name *sigh*
   " admonition: dont use -bar here because we need to use bar as well
-  command! -bang -nargs=* TermuxSend execute 'keepalt w<bang> <bar>!termux-share -a send ' . <args> ? <args> : expand('%:S')
-  nnoremap <Leader>ts :<C-u>TermuxSend<CR>
+  " jeez this was frustrating... had to futz with where to add whitespace
+  " and <CR> seeing as how  that fundammentally changes the command.
+  command! -bang TermuxSend :silent! keepalt w<bang> <bar>exec '!termux-share -a send ' . expand('%:S')
+  nnoremap <Leader>ts <Cmd>TermuxSend<CR>
 
 endif  " }}}
 

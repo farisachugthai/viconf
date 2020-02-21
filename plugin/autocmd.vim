@@ -5,15 +5,14 @@
   " Last Modified: February 17, 2020
 " ============================================================================
 
-if exists('g:loaded_autocmd') || &compatible || v:version < 700
-  finish
-endif
-let g:loaded_autocmd = 1
+" if exists('g:loaded_autocmd') || &compatible || v:version < 700
+"   finish
+" endif
+" let g:loaded_autocmd = 1
 
 let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
-" {{{
-augroup UserHelpandPython
+augroup UserHelpandPython " {{{
   au!
   autocmd FileType man,help setlocal number relativenumber
   autocmd FileType man,help  if winnr('$') > 1
@@ -24,11 +23,9 @@ augroup UserHelpandPython
   autocmd FileType python let &l:path = py#PythonPath()
   autocmd FileType python call py#ALE_Python_Conf()
 augroup END
-
 " }}}
 
-" {{{
-augroup UserCoc
+augroup UserCoc " {{{
   au!
   autocmd User CocStatusChange,CocDiagnosticChange
         \| if exists('*Statusline_expr')
@@ -43,8 +40,7 @@ augroup END
 
 " }}}
 
-" {{{
-augroup UserVimEnter
+augroup UserVimEnter " {{{
   autocmd!
   autocmd VimEnter * colorscheme gruvbox-material
   " idk how i fucked up but this now necessary?
@@ -54,8 +50,7 @@ augroup end
 
 if !has('nvim') | finish | endif
 
-" {{{
-augroup UserTerm
+augroup UserTerm " {{{
   au!
   autocmd TermOpen * setlocal statusline=%{b:term_title}
 

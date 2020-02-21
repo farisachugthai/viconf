@@ -4,25 +4,13 @@
     " Description: Tmuxline conf
     " Last Modified: April 02, 2019
 " ============================================================================
-
-" Guard: {{{1
-" Dude he doesn't set a g:loaded_* or anything we have to do this manually
-if exists('plugs')
-  if !has_key(plugs, 'tmuxline.vim')
-    finish
-  endif
-else
-  finish
-endif
-
 if !exists('$TMUX')
   finish
 endif
 
-let s:cpo_save = &cpoptions
-set cpoptions-=C
+" if exists('*plug#load')
 
-" Tmuxline Presets: {{{1
+" Tmuxline Presets: {{{
 let g:tmuxline_powerline_separators = 0
 
 if !has('unix')  " Wait did i ever check if this works? Does WSL show !has('unix') wth?
@@ -45,8 +33,9 @@ else
        \'z'    : ['#(whoami)', '#H'],
        \ 'options': {'status-justify' : 'left' }}
 endif
+" }}}
 
-" Tmuxline Theme: {{{1
+" Tmuxline Theme: {{{
 " After defining all of these groups and format blocks, let's
 " define the tmux line to match our vim statusline
 let s:tmuxline_themes = stdpath('data') . '/plugged/tmuxline.vim/autoload/themes'
@@ -63,15 +52,5 @@ let g:tmuxline_separators = {
      \ 'right_alt' : '◀',
      \ 'space' : ' '}
 
-" Autocmd On VimEnter: {{{1
+" }}}
 
-" Doesn't work as you typically open to Startify where nomodifiable is set :/
-" augroup Tmuxline
-"   au!
-"   autocmd VimEnter * <Cmd>Tmuxline vim_statusline_3<CR>
-" augroup END
-
-" Atexit: {{{1
-
-let &cpoptions = s:cpo_save
-unlet s:cpo_save

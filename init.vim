@@ -6,11 +6,6 @@
 " ============================================================================
 
 " Preliminary: {{{
-if exists('g:did_init_vim') || &compatible || v:version < 700
-    finish
-endif
-let g:did_init_vim = 1
-
 scriptencoding utf-8
 setglobal fileformats=unix,dos
 setglobal cpoptions-=c,e,_  " couple options that bugged me
@@ -22,7 +17,6 @@ let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Everv
 let s:wsl = !empty($WSL_DISTRO_NAME)
 " let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux) && empty(s:wsl)
 
-let s:this_dir = fnameescape(fnamemodify(expand('$MYVIMRC'), ':p:h'))
 let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h'))
 
 " Seriously how does this keep getting fucked up. omfg packpath is worse???
@@ -35,7 +29,7 @@ else
 endif
 
 " Source ginit. Why is this getting set even in the TUI?
-if exists('g:GuiLoaded') | exec 'source ' s:this_dir . '\ginit.vim' | endif
+if exists('g:GuiLoaded') | exec 'source ' s:repo_root . '\ginit.vim' | endif
 if has('unnamedplus') | setglobal clipboard+=unnamed,unnamedplus | else | setglobal clipboard+=unnamed | endif
 " }}}
 
@@ -45,9 +39,6 @@ let g:loaded_getscriptPlugin = 1
 let g:loaded_2html_plugin = 1
 let g:loaded_logiPat = 1
 let g:loaded_netrwPlugin = 1
-" Wth why doesn't match it have a loaded check?
-let g:loaded_matchit = 1
-packadd matchit
 
 noremap <Space> <nop>
 let g:maplocalleader = '<Space>'
@@ -56,7 +47,7 @@ map <Space> <Leader>
 if has('nvim-0.4')   " Fun new features!
   let &shadafile = stdpath('data') . '/shada/main.shada'
   " toggle transparency in the pum and windows. don't set higher than 10 it becomes hard to read higher than that
-  setglobal pumblend=10 winblend=5
+  " setglobal pumblend=10 winblend=5
   try | setglobal pyxversion=3 | catch /^Vim:E518:*/ | endtry
 endif
 
@@ -76,9 +67,7 @@ setglobal nobackup           " but do not persist backup after successful write
 setglobal backupcopy=yes
 " patch required to honor double slash at end consolidate the writebackups -- they usually get deleted
 if has('patch-8.1.0251') | let &g:backupdir=stdpath('config') . '/undodir//' | endif
-" }}}
-
-" Gotta be honest this part was stolen almost entirely from arch!: {{{
+" Gotta be honest this part was stolen almost entirely from arch:
 
 " Move temporary files to a secure location to protect against CVE-2017-1000382
 if exists('$XDG_CACHE_HOME')
@@ -86,25 +75,16 @@ if exists('$XDG_CACHE_HOME')
 else
   let &g:directory=$HOME . '/.cache'
 endif
-let &g:undodir=&g:directory . '/vim/undo//'
-let &g:backupdir=&g:directory . '/vim/backup//'
-let &g:directory.='/vim/swap//'
-" Create directories if they doesn't exist
-if !isdirectory(expand(&g:directory))
-  silent! call mkdir(expand(&g:directory), 'p', 0700)
-endif
-if !isdirectory(expand(&g:backupdir))
-  silent! call mkdir(expand(&g:backupdir), 'p', 0700)
-endif
-if !isdirectory(expand(&g:undodir))
-  silent! call mkdir(expand(&g:undodir), 'p', 0700)
-endif
+let &g:undodir = &g:directory . '/vim/undo//'
+let &g:backupdir = &g:directory . '/vim/backup//'
+let &g:directory .= '/vim/swap//'
 " }}}
 
 " Completion: {{{
 setglobal suffixes=.bak,~,.o,.info,.swp,.aux,.bbl,.blg,.brf,.cb,.dvi,.idx,.ilg,.ind,.inx,.jpg,.log,.out,.png,.toc,.pyc,*.a,*.obj,*.dll,*.exe,*.lib,*.mui,*.swp,*.tmp,
 
-setglobal wildignorecase wildmode=full:list:longest,full:list
+setglobal wildignorecase
+setglobal wildmode=full:list:longest,full:list
 setglobal wildignore=*~,versions/*,cache/*,.tox/*,.pytest_cache/*,__pycache__/*
 setglobal wildcharm=<C-z>
 
@@ -115,11 +95,9 @@ setglobal complete+=kspell,d,k complete-=u,i
 " Create a preview window and display all possibilities but don't insert
 " dude what am i doing wrong that i don't get the cool autocompletion that NORC gets??
 setglobal completeopt=menu,menuone,noselect,noinsert,preview
-
 " both smartcase and infercase require ignorecase to be set:
 setglobal ignorecase
 setglobal smartcase infercase smartindent
-
 " }}}
 
 " Options: {{{
@@ -129,13 +107,12 @@ setglobal signcolumn=auto:4  " this might be a nvim 4 thing
 try | setglobal switchbuf=useopen,usetab,split | catch | endtry
 setglobal splitbelow splitright
 setglobal sidescroll=5 hidden
-set number relativenumber cmdheight=1  " dude these stopped setting when i set global them
-setglobal rnu nu cmdheight=1
+set number relativenumber cmdheight=2  " dude these stopped setting when i set global them
 setglobal isfname-==
 setglobal iskeyword=@,48-57,_,192-255   " Idk how but i managed to mess up the default isk
 
-if filereadable(s:this_dir . '/spell/en.utf-8.add')
-  let &g:spellfile = s:this_dir . '/spell/en.utf-8.add'
+if filereadable(s:repo_root . '/spell/en.utf-8.add')
+  let &g:spellfile = s:repo_root . '/spell/en.utf-8.add'
 endif
 
 setglobal path-=/usr/include
@@ -164,9 +141,8 @@ setglobal title titlestring=%<%F%=%l/%L-%P   " leaves a cool title for tmux
 setglobal conceallevel=2 concealcursor=nc    " enable concealing
 setglobal spellsuggest=5
 setglobal showmatch matchpairs+=<:>
-setglobal lazyredraw matchtime=20  " Show the matching pair for 2 seconds
-
-setglobal termguicolors
+setglobal matchtime=20  " Show the matching pair for 2 seconds
+" dude holy hell are we running faster on termux set termguicolors
 setglobal synmaxcol=1000  " }}}
 
 " Vim: set fdm=marker foldlevelstart=0:
