@@ -22,6 +22,10 @@ augroup UserHelpandPython " {{{
   autocmd FileType python exec 'source ' . s:repo_root . '/ftplugin/python.vim'
   autocmd FileType python let &l:path = py#PythonPath()
   autocmd FileType python call py#ALE_Python_Conf()
+
+  " Not ready yet. BE CAREFUL and go read :he BufReadCmd and Cmd-events
+  " inspired by $VIMRUNTIME/plugin/man.vim
+  " autocmd BufReadCmd pydoc:// call pydoc_help#foo(matchstr(expand('<amatch>'), 'pydoc://\zs.*'))
 augroup END
 " }}}
 

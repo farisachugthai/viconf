@@ -60,7 +60,7 @@ augroup UserNerdLoader
   autocmd BufEnter,BufNew *
         \  if isdirectory(expand('<amatch>'))
         \|   call plug#load('nerdTree')
-        \|   execute 'autocmd! nerd_loader'
+        \|   execute 'autocmd! UserNerdLoader'
         \| endif
 
 augroup END

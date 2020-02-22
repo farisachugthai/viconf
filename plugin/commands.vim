@@ -318,7 +318,7 @@ command! -range -bar -complete=expression -complete=function -nargs=? P <line1>,
 " junegunn's <bang>0 does!
 command! -bar -bang -nargs=* -complete=help Help call fzf#vim#helptags(<bang>0)
 
-command! -range -bang -bar PydocThis call pydoc_help#PydocCword(<bang>, <mods>>)
+command! -range -bang -bar PydocThis call pydoc_help#PydocCword(<bang>, <mods>)
 
 " This should be able to take the argument '-bang' and allow to open in a new
 " separate window like fzf does.
@@ -335,10 +335,8 @@ command! -nargs=? -bar -range PydocSplit call pydoc_help#SplitPydocCword(<q-mods
 " invocations
 " command! -nargs=? -bang Pydoc :<mods>file<bang> exec 'call pydoc_help#Pydoc(<f-args>)'
 
-" TODO: I have no idea what's going wrong with this command the only error i'm
-" getting is `list required`.
-" command! -complete=expression -bang -bar -count=1 -addr=buffers PydocShow call pydoc_help#show(<count>)
-command! PydocShow call pydoc_help#show()
+" todo: adding a bang expression didny work
+command! -bang -complete=expression -bar PydocShow call pydoc_help#show(<bang>0)
 
 " TODO: Work on the range then the bang
 command! -complete=file -range BlackCurrent <line1>,<line2>call py#Black()
@@ -420,7 +418,14 @@ command! -complete=filetype -bar UltiSnipsListSnippets call UltiSnips#ListSnippe
 " command! -bar UltiSnipsListSnippetsAgain? call py#list_snippets()
 " }}}
 
-" In Which I Learn How Complete Works: {{{
+" In Which I Learn How Commands Work: {{{
+
+" echos either 1 or 0
+command! -bang Bang0 echo <bang>0
+" echos nothing or '!' which is fucking pointless.
+command! -bang Bang echo <bang>
+
+" Learn Complete:
 command! -bar -complete=compiler Compiler compiler <args>
 " '<,'>s/compiler/event/g
 " You may find that ---^ does you good

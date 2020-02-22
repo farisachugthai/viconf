@@ -105,6 +105,33 @@ As a result of my modifications, this setup currently has:
   - This was accomplished by merging together the highlighting groups of
     both Neovim and Vim, and then adding around 20 links to color groups.
 
+- In addition to better man pages, there are a handful of functions to
+  asynchronously view the output of `pydoc` in a temporary buffer.
+
+  I.E.:
+
+  ```vim
+
+function! pydoc_help#show(...) abort  " {{{
+  let word = s:ReplaceModuleAlias()
+  let buf = nvim_create_buf(v:false, v:true)
+  if a:0 == 0
+    " switch to our new buffer
+    exec 'b' . buf
+  elseif a:0 == 1
+    if a:1 ==# '!'
+      exec 'tabe ' buf
+    endif
+  endif
+  call jobstart('pydoc ' . word, {'on_stdout':{j,d,e->append(line('.'),d)}})
+  " Make it vertical
+  wincmd L
+  normal gg
+  keepjumps keepalt wincmd p
+endfunction " }}}
+
+  ```
+
 ### Colorscheme Improvements
 
 - The [Gruvbox](https://github.com/morhetz/gruvbox.vim) colorscheme has been

@@ -40,7 +40,13 @@ function! s:temp_buffer() abort  " {{{1
   " Because i have it on in my rst filetype.
   setlocal nospell
   setlocal buftype=nofile bufhidden=delete noswapfile nowrap previewwindow
+  setlocal nomodified
+
 endfunction   " }}}
+
+function! pydoc_help#read_page() abort  " {{{
+  call s:temp_buffer()
+endfunction  " }}}
 
 function! pydoc_help#PydocCword(bang, mods, range) abort  " {{{1
   " Holy shit it works!!!
@@ -200,20 +206,25 @@ function! s:ExpandModulePath() abort  " {{{1
     return matchstr(pre, '[A-Za-z0-9_.]*$') . matchstr(suf, '^[A-Za-z0-9_]*')
 endfunction  " }}}
 
-function! pydoc_help#show(count, ...) abort  " {{{
-    let word = s:ReplaceModuleAlias()
-    echo word
-    for i in a:count
-      let buf = nvim_create_buf(v:false, v:true)
-      " After creating the buffer we need to go to the next one and then do
-      " these steps. How?
-      call jobstart('pydoc ' . word, {'on_stdout':{j,d,e->append(line('.'),d)}})
-      setlocal nomodifiable
-      setlocal nomodified
-      setlocal filetype=rst
-      " Make it vertical
-      wincmd L
-      normal gg
-      wincmd p
-    endfor
+function! pydoc_help#show(...) abort  " {{{
+  " AHHHHH THIS WORKS!!!!
+  let word = s:ReplaceModuleAlias()
+  let buf = nvim_create_buf(v:false, v:true)
+  if a:0 == 0
+    " switch to our new buffer
+    exec 'b' . buf
+  elseif a:0 == 1
+      tabnew!
+      exec 'b' . buf
+  else
+    throw 'autoload:pydoc_help#show: wrong # of args'
+      
+  endif
+  call jobstart('pydoc ' . word, {'on_stdout' : {j, d, e->append(line('.'),d)} } )
+  call s:temp_buffer()
+  " Make it vertical
+  wincmd L
+  normal gg
+  keepjumps keepalt wincmd p
 endfunction " }}}
+
