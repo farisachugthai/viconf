@@ -64,7 +64,8 @@ setlocal suffixes+=.pyc
 setlocal omnifunc=python3complete#Complete
 
 setlocal isfname+=.
-setlocal isk-=.
+" It get kinda annoying movin around without _ as a word delimiter
+setlocal isk-=.,_
 
 " Possibly chalk this up to one of the many tab related and necessary option
 " python requires you set

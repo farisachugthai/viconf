@@ -35,9 +35,13 @@ GuiLinespace 1
 " holy fuck this does work
 " holy fuck this one actually looks good.
 GuiFont DejaVu\ Sans\ Mono:h11
-" why is it throwing errors now
+
+" both work but wanted to switch it
 " GuiFont Cascadia\ Code
 " GuiFont Fira\ Code\ Retina:h12
+
+" Not too bad
+" GuiFont Monoid
 
 " We need to map something to GuiTreeviewToggle!
 nnoremap <Leader>? <Cmd>GuiTreeviewToggle<CR><bar>execute 'echomsg ' . 'Opening up Nvim_Explorer.exe'

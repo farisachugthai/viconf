@@ -11,6 +11,8 @@ endif
 let s:cpo_save = &cpoptions
 set cpoptions&vim
 
+syntax sync fromstart
+
 syntax iskeyword @,48-57,_,192-255,-
 syntax case match
 
@@ -73,7 +75,7 @@ syn keyword tmuxOptions
 syn keyword tmuxCommands
 \ attach attach-session bind bind-key break-pane breakp capture-pane
 \ capturep choose-buffer choose-client choose-tree clear-history clearhist
-\ clock-mode command-prompt confirm confirm-before copy-mode detach
+\ clock-mode command-prompt confirm confirm-before copy-mode copy-mode-vi detach
 \ detach-client display display-message display-panes displayp find-window
 \ findw if if-shell join-pane joinp kill-pane kill-server kill-session
 \ kill-window killp has-session has killw link-window linkw list-buffers
@@ -93,6 +95,8 @@ syn keyword tmuxCommands
 \ split-window splitw start start-server suspend-client suspendc swap-pane
 \ swap-window swapp swapw switch-client switchc unbind unbind-key
 \ unlink-window unlinkw wait wait-for
+
+let b:current_syntax = 1
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

@@ -111,16 +111,16 @@ function! vimscript#ScriptnamesDict() abort  " {{{1
   redir END
 
   " Split the output into lines and parse each line.	Add an entry to the "scripts" dictionary.
-  let scripts = {}
-  for line in split(scriptnames_output, "\n")
+  let s:scripts = {}
+  for s:line in split(scriptnames_output, "\n")
     " Only do non-blank lines.
-    if line =~ '\S'
+    if s:line =~ '\S'
       " Get the first number in the line.
-      let nr = matchstr(line, '\d\+')
+      let s:nr = matchstr(s:line, '\d\+')
       " Get the file name, remove the script number " 123: ".
-      let name = substitute(line, '.\+:\s*', '', '')
+      let s:name = substitute(s:line, '.\+:\s*', '', '')
       " Add an item to the Dictionary
-      let scripts[nr] = name
+      let l:scripts[s:nr] = s:name
     endif
   endfor
 
@@ -129,7 +129,7 @@ function! vimscript#ScriptnamesDict() abort  " {{{1
 
   " We didn't scope the var so is the below line necessary?
   " unlet scriptnames_output
-  return scripts
+  return l:scripts
 endfunction
 
 function s:get_scriptnames() abort  " {{{1

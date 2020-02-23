@@ -107,7 +107,10 @@ setglobal signcolumn=auto:4  " this might be a nvim 4 thing
 try | setglobal switchbuf=useopen,usetab,split | catch | endtry
 setglobal splitbelow splitright
 setglobal sidescroll=5 hidden
-set number relativenumber cmdheight=2  " dude these stopped setting when i set global them
+" dude these stopped setting when i set global them
+set number relativenumber
+setglobal cmdheight=2
+setglobal helpheight=8  " why is 20? help windows can be really intrusive with it that high
 setglobal isfname-==
 setglobal iskeyword=@,48-57,_,192-255   " Idk how but i managed to mess up the default isk
 
@@ -130,11 +133,11 @@ setglobal browsedir="buffer"   " which directory is used for the file browser
 
 let &g:listchars = "tab:\u21e5\u00b7,extends:\u21c9,precedes:\u21c7,nbsp:\u00b7"
 " trail:\u2423 doesn't work with hack as font
-let &g:fillchars = "stl:' ',stlnc:' ',vert:\u250b,fold:\u00b7,diff:'.'"
+let &fillchars = "stl:' ',stlnc:' ',vert:\u250b,fold:\u00b7,diff:'.'"
 
 setglobal breakindent breakindentopt=sbr
 let &g:showbreak = '↳ '                   " Indent wrapped lines correctly
-setglobal updatetime=100 lazyredraw
+setglobal updatetime=400 lazyredraw
 setglobal inccommand=split
 setglobal terse shortmess=aoOsItTWcF
 setglobal title titlestring=%<%F%=%l/%L-%P   " leaves a cool title for tmux

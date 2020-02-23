@@ -80,21 +80,21 @@ Plug 'SirVer/ultisnips'
 " | Plug 'honza/vim-snippets'
 
 Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }
-nnoremap <Leader>a <Cmd>sil! ALEEnable<CR><bar>:sil! call plugins#AleMappings()<CR><bar>:sil! CocDisable<CR>:sil! redraw!<CR>
-nnoremap <Leader>et <Cmd>ALEToggle()<CR><bar>:sil! call plugins#AleMappings()<CR>
+nnoremap <Leader>a <Cmd>sil! ALEEnable<CR><bar>:sil! call plugins#AleMappings()<CR><bar>:sil! CocDisable<CR>:sil! redraw!<CR>:ALELint<CR>
+nnoremap <Leader>et <Cmd>ALEToggle<CR>:sil! call plugins#AleMappings()<CR>:sil! redraw!<CR>
 
 if exists('$TMUX')
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'edkolev/tmuxline.vim'
-augroup UserTmuxline
-  au!
-  " saying Tmuxline isnt a command ergh
-  autocmd BufEnter * ++once
-        \  if exists(':Tmuxline')
-        \| exec 'Tmuxline vim_statusline_3'
-        \| endif
+  augroup UserTmuxline
+    au!
+    " saying Tmuxline isnt a command ergh
+    autocmd BufEnter * ++once
+          \  if exists(':Tmuxline')
+          \| exec 'Tmuxline vim_statusline_3'
+          \| endif
 
-augroup END
+  augroup END
 endif
 
 Plug 'mhinz/vim-startify'
@@ -122,6 +122,7 @@ if empty(s:termux)  " {{{
   Plug 'omnisharp/omnisharp-vim' " , {'for': ['cs', 'ps1',] }
   Plug 'michaeljsmith/vim-indent-object'
   Plug 'liuchengxu/vista.vim'
+  Plug 'HiPhish/jinja.vim'
 endif  " }}}
 
 Plug 'ludovicchabant/vim-gutentags'

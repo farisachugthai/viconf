@@ -1,4 +1,13 @@
-function! includes#TypeScriptIncludeExpression(fname, gf) abort
+" ============================================================================
+  " File: includes.vim
+  " Author: Faris Chugthai
+  " Description: Settin up the path for different file types.
+  " Last Modified: February 22, 2020
+" ============================================================================
+
+" See Also: ./py.vim and py#PythonPath
+
+function! includes#TypeScriptIncludeExpression(fname, gf) abort  " {{{
     " BUILT-IN NODE MODULES
     " =====================
     " they aren't natively accessible but we can use @types/node if available
@@ -171,4 +180,5 @@ function! includes#TypeScriptIncludeExpression(fname, gf) abort
     endif
 
     return a:fname . '.d.ts'
-endfunction
+  endfunction   " }}}
+

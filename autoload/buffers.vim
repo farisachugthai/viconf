@@ -2,10 +2,10 @@
   " File: buffers.vim
   " Author: Faris Chugthai
   " Description: Autoloaded functions for working with buffers.
-  " Last Modified: July 22, 2019
+  " Last Modified: Feb 22, 2020
 " ============================================================================
 
-function! buffers#EchoRTP() abort " {{{1
+function! buffers#EchoRTP() abort " {{{
   " Huh son of a bitch. I actually figured out an easier way to do this
   " let's do a check that this function exists then and do it the non-nvim way
   " otherwise
@@ -16,9 +16,9 @@ function! buffers#EchoRTP() abort " {{{1
   else
     for i in split(&runtimepath, ',') | echo i | endfor
   endif
-endfunction
+endfunction  " }}}
 
-function! buffers#PreviewWord() abort  " {{{1
+function! buffers#PreviewWord() abort  " {{{
   " Open a tag for the word under the cursor in the preview window.
   " TODO: Could definitely do with a mapping
 
@@ -57,9 +57,9 @@ function! buffers#PreviewWord() abort  " {{{1
       wincmd p      " back to old window
     endif
   endif
-endfunction
+endfunction  " }}}
 
-function! buffers#terminals() abort
+function! buffers#terminals() abort  " {{{
   " If running a terminal in Vim, go into Normal mode with Esc
   tnoremap <Esc> <C-\><C-n>
 
@@ -88,4 +88,8 @@ function! buffers#terminals() abort
 
   tnoremap <F4> <Cmd>Snippets<CR>
   tnoremap <F6> <Cmd>UltiSnipsEdit<CR>
-endfunction
+  
+  " It's so annoying that buffers need confirmation to kill. Let's dedicate a
+  " key but one that we know windows hasn't stolen yet.
+  tnoremap <D-z> <Cmd>bd!<CR>
+endfunction  " }}}

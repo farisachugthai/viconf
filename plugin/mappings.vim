@@ -19,8 +19,20 @@ noremap <Down> gj
 inoremap gI gi
 " }}}
 
-" Misc: {{{
+" Z Mappings: {{{
+
 nnoremap zE <nop>
+nnoremap zH zt
+" Huh so zt is like z<CR> but we stay in the same column
+nnoremap zt z<CR>
+" I wanna make zM redraw with the cursor in the middle but thats already
+" redraw with all folds closed. Also center is z. so thats easy enouh to
+" remember i guess
+" nnoremap zM 
+nnoremap zL z-
+" }}}
+
+" Misc: {{{
 nnoremap <Leader>cd <Cmd>cd %:p:h<CR><Bar><Cmd>pwd<CR>
 
 nnoremap Q @q
@@ -41,7 +53,8 @@ function! AddVileBinding(key, handler)  " {{{
   " Map a key 3 times for normal mode, insert and command.
   exec 'nnoremap ' . a:key a:handler
   exec 'inoremap ' . a:key a:handler
-  exec 'cnoremap ' . a:key a:handler
+  " I think tnoremap make more sense here.
+  exec 'tnoremap ' . a:key a:handler
 
 endfunction " }}}
 
@@ -411,33 +424,44 @@ function! Window_Mappings() abort  " {{{
 endfunction  " }}}
 
 function! Quickfix_Mappings() abort  " {{{
+  " Jump to and from location/quickfix windows.
 
   " TODO: These need to catch E776 no location list
   nnoremap <C-Down> <Cmd>llast<CR><bar><Cmd>clast<CR>
   nnoremap <C-Up> <Cmd>lfirst<CR><bar><Cmd>cfirst<CR>
 
+  nnoremap <Leader>lc <Cmd>lclose<CR>
+  nnoremap <Leader>lf <Cmd>lwindow<CR>
+
   " Normally the quickfix window is at the bottom of the screen.  If there are
   " vertical splits, it's at the bottom of the rightmost column of windows.  To
   " make it always occupy the full width:
   " use botright.
-  nnoremap <Leader>l <Plug>(qf_loc_toggle)
-  nnoremap <Leader>lf <Cmd>lwindow<CR>
   nnoremap <Leader>lh <Cmd>botright lhistory<CR>
   nnoremap <Leader>ll <Cmd>botright llist!<CR>
   nnoremap <Leader>lo <Cmd>lopen<CR>
   nnoremap <Leader>lw <Cmd>botright lwindow<CR>
 
-  " Wanna note how long Ive been using Vim and still i onlyjust found out
-  " about the chistory and lhistory commands like wth
+  " So this is contingent on having the qf plugin. need to add a check for
+  " that later.
+  " this is defined globally instead of only in the after/ftplugin/qf.vim
+  " because it toggles the location list and so we want to have that mapping
+  " defined everywhere.
+  nnoremap <Leader>l <Plug>(qf_loc_toggle)
+  " VSCode toggles maximized panel with this one so i guess lets match
+  nnoremap <C-\\> <Plug>(qf_qf_toggle)
 
-  " Jump to and from location/quickfix windows.
   nnoremap <Leader>c <Plug>(qf_qf_switch)
   nnoremap <Leader>q <Plug>(qf_qf_toggle)
-  nnoremap <Leader>qw <Cmd>botright cwindow<CR>
+  nnoremap <Leader>qc <Cmd>cclose<CR>
+  nnoremap <Leader>qf <Cmd>cwindow<CR>
+
+  " Wanna note how long Ive been using Vim and still i onlyjust found out
+  " about the chistory and lhistory commands like wth
   nnoremap <Leader>qh <Cmd>botright chistory<CR>
   nnoremap <Leader>ql <Cmd>botright clist!<CR>
   nnoremap <leader>qo <Cmd>botright copen<CR>
-  nnoremap <Leader>qf <Cmd>cwindow<CR>
+  nnoremap <Leader>qw <Cmd>botright cwindow<CR>
 
   nnoremap <Leader>C <Cmd>make %<CR>
 
@@ -490,7 +514,7 @@ function! AltKeyNavigation() abort  " {{{
 endfunction  " }}}
 
 function! Buffer_Mappings() abort  " {{{
-  
+
   " Navigate Buffers More Easily:
   " Also note I wrote a Buffers command that utilizes fzf.
   nnoremap <Leader>bb <Cmd>Buffers<CR>
@@ -617,6 +641,6 @@ if !hasmapto('<Plug>(HL)')
 endif  " }}}
 
 " Terminal: {{{
-" It's so annoying that buffers need confirmation to kill. Let's dedicate a
-" key but one that we know windows hasn't stolen yet.
-tnoremap <D-z> <Cmd>bd!<CR>
+" No dude go to buffers#terminal
+" }}}
+"

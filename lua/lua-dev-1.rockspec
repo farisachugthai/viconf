@@ -1,10 +1,10 @@
 package = "lua"
 version = "dev-1"
 source = {
-   url = "git+ssh://git@github.com/farisachugthai/viconf.git"
+   url = "git+https://github.com/farisachugthai/viconf.git"
 }
 description = {
-   homepage = "*** please enter a project homepage ***",
+   homepage = "https://github.com/farisachugthai/viconf",
    license = "*** please specify a license ***"
 }
 build = {

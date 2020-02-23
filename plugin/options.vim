@@ -598,8 +598,7 @@ let g:UltiSnipsSnippetDirectories = [ stdpath('config') . '/UltiSnips' ]
 
 let g:UltiSnipsUsePythonVersion = 3
 
-" Literally listed in the help docs as unused. Why not?
-let g:UltiSnipsListSnippets = '<C-\>'
+let g:UltiSnipsListSnippets = '<C-/>'
 
 " Oddly, setting this var only sets it in select-mode though.
 " So let's add a few mappings to help us along.

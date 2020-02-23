@@ -65,7 +65,7 @@ function! s:_PythonPath() abort  " {{{1
       if exists('$ANDROID_DATA')
         let s:path = s:path . ',' . expand('$PREFIX/lib/python3.8')
       else
-        let s:path = s:path . ',/usr/lib/python3.8/**'
+        let s:path = s:path . ',/usr/lib/python3.8'
       endif
 
       " #3) use the remote pythons std lib modules

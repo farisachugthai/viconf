@@ -118,7 +118,6 @@ if !exists("*s:GF")
   endfunction
 endif
 
-
 let b:undo_ftplugin = 'setlocal isf< sua< '
       \ . '|unlet! b:undo_ftplugin'
       \ . '|unlet! b:match_words'

@@ -29,6 +29,23 @@ augroup UserHelpandPython " {{{
 augroup END
 " }}}
 
+" TODO:
+"
+" :[range]ps[earch][!] [count] [/]pattern[/]
+" 		Works like |:ijump| but shows the found match in the preview
+" 		window.  The preview window is opened like with |:ptag|.  The
+" 		current window and cursor position isn't changed.  Useful
+" 		example: >
+" 			:psearch popen
+" <		Like with the |:ptag| command, you can use this to
+" 		automatically show information about the word under the
+" 		cursor.  This is less clever than using |:ptag|, but you don't
+" 		need a tags file and it will also find matches in system
+" 		include files.  Example: >
+"   :au! CursorHold *.[ch] ++nested exe "silent! psearch " . expand("<cword>")
+"
+"   Ah that's a fucking amazing idea!
+
 augroup UserCoc " {{{
   au!
   autocmd User CocStatusChange,CocDiagnosticChange
