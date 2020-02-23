@@ -42,9 +42,14 @@ endif
 if &tabstop > 4 | setglobal tabstop=4 | endif
 if &shiftwidth > 4  | setglobal shiftwidth=4 | endif
 setglobal expandtab smarttab softtabstop=4
+set nohlsearch
+if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif
+setglobal cdpath+=$HOME,$VIMRUNTIME
 
+" Tags: {{{
 setglobal tags=tags,**/tags
-setglobal tagcase=smart showfulltag
+setglobal tagcase=smart
+setglobal showfulltag
 
 function! TagFunc(pattern, flags, info) abort   " {{{
 " Lol literally what is this option?
@@ -65,9 +70,9 @@ endfunction  " }}}
 if exists('&tagfunc')
   let &g:tagfunc = 'TagFunc'
 endif
+" }}}
 
 " Platform Specific Options: {{{
-
 if has('unix')
   call unix#UnixOptions()
 else
@@ -82,7 +87,6 @@ try
 catch /.*/
 endtry
 " }}}
-
 
 if exists('$ANDROID_DATA')   " {{{ Remote Hosts
   " Fuck i had to change this because wsl was loading termux jesus christ
@@ -282,13 +286,11 @@ let g:ale_pattern_options = {
 \   },
 \}
 let g:ale_lsp_show_message_severity = 'information'
-
 " }}}
 
 " }}}
 
 " NERDTree: {{{
-
 let g:NERDTreeCustomOpenArgs = {
       \ 'file': {
             \ 'reuse': 'all',
@@ -297,76 +299,28 @@ let g:NERDTreeCustomOpenArgs = {
       \ },
       \ 'dir': {}}
 
-" When you open a buffer, how do we do it? Don't only silent edit, keep jumps
-" too
+" When you open a buffer, how do we do it? Don't only silent edit, keep jumps too
 let g:NERDTreeCreatePrefix = 'silent keepalt keepjumps'
-
 let g:NERDTreeDirArrows = 1
 let g:NERDTreeWinPos = 'right'
-
-" UI: {{{
 let g:NERDTreeShowHidden = 1
-
 " This setting controls the method by which the list of user bookmarks is
 " sorted. When sorted, bookmarks will render in alphabetical order by name.
 let g:NERDTreeBookmarksSort = 1  " case sensitive
-
 let g:NERDTreeShowBookmarks = 1
-
 let g:NERDTreeNaturalSort = 1
-
-" }}}
-
-" change cwd every time NerdTree root changes: {{{
+" change cwd every time NerdTree root changes:
 " let g:NERDTreeChDirMode = 2
-
 let g:NERDTreeShowLineNumbers = 1
-
  " Open dir with 1 keys, files with 2
 let g:NERDTreeMouseMode = 2
-
 let g:NERDTreeIgnore = [ '.pyc$', '.pyo$', '__pycache__$', '.git$', '.mypy', 'node_modules']
 let g:NERDTreeRespectWildIgnore = 1
-
-" Let's give netrw a shot I guess. No lets not.
-let g:NERDTreeHijackNetrw = 1
-
 let g:NERDTreeAutoDeleteBuffer = 1
-
-" Why did i do this?
-" That nerdtree.root.path.str() is too long to see on Termux tho
-" let s:stl = &statusline
-
-" default
-" let g:NERDTreeStatusline = "%{exists('b:NERDTree') ? b:NERDTree.root.path.str() : s:stl }"
-
 let g:NERDTreeMapToggleZoom = 'Z'  " Z is for Zoom why the hell is the default A?
-
-" let g:NERDTreeGlyphReadOnly = 'U+237A'  " literally never gonna remember i did this but oh well
-
-" To open a file always in the current tab, and expand directories in place, >
-" let g:NERDTreeCustomOpenArgs = {'file': {'reuse':'currenttab', 'where':'p', 'keepopen':1, 'stay':1}}
-
-" This setting governs whether the NERDTree window or the bookmarks table closes
-" after opening a file with the |NERDTree-o|, |NERDTree-i|, |NERDTree-t| and
-" |NERDTree-T| mappings.
-
-"  Value  | NERDTree Window Behavior
-"  -------+-------------------------------------------------------
-"  0      | No change
-"  1      | Closes after opening a file
-"  2      | Closes the bookmark table after opening a bookmark
-"  3(1+2) | Same as both 1 and 2
-
 let g:NERDTreeQuitOnOpen = 3
 
 " }}}
-
-" }}}
-
-" Fugitive: {{{
-
-let g:fugitive_git_executable = 'git'
 
 " }}}
 
@@ -448,26 +402,20 @@ if exists($ANDROID_ROOT) | let g:tagbar_compact = 1 | endif
 let g:tagbar_type_ansible = {
 	\ 'ctagstype' : 'ansible',
 	\ 'kinds' : [
-	\ 't:tasks'
-	\ ],
-	\ 'sort' : 0
-  \ }
+	\ 't:tasks'],
+	\ 'sort' : 0 }
 
 let g:tagbar_type_css = {
     \ 'ctagstype' : 'Css',
     \ 'kinds'     : [
     \ 'c:classes',
     \ 's:selectors',
-    \ 'i:identities'
-    \ ]
-    \ }
+    \ 'i:identities']}
 
-let g:tagbar_type_make = {
-            \ 'kinds':[
+let g:tagbar_type_make = {'kinds':[
             \ 'm:macros',
             \ 't:targets'
-            \ ]
-            \ }
+            \ ]}
 
 let g:tagbar_type_javascript = {
       \ 'ctagstype': 'javascript',
@@ -504,7 +452,6 @@ let g:tagbar_type_ps1 = {
     \ ]
 \ }
 
-
 let g:tagbar_type_rst = {
     \ 'ctagstype': 'rst',
     \ 'ctagsbin' : expand('$HOME/src/rst2ctags/rst2ctags.py'),
@@ -520,9 +467,6 @@ let g:tagbar_type_rst = {
     \ 'sort': 0,
 \ }
 
-  " \ 'ctagsargs' : ['-f', 'tags', '--encoding="utf-8"',
-  "                \ '--sort=yes', '--sro="»"'],
-
 let g:tagbar_type_typescript = {
   \ 'ctagstype': 'typescript',
   \ 'kinds': [
@@ -536,15 +480,12 @@ let g:tagbar_type_typescript = {
   \ 'e:enums',
   \ ]
   \ }
-
 let g:tagbar_type_snippets = {
       \ 'ctagstype' : 'snippets',
       \ 'kinds' : [
       \ 's:snippets',
       \ ]
-\ }
-
-" }}}
+\ }  " }}}
 
 " }}}
 
@@ -724,8 +665,8 @@ let g:WorkspaceFolders = [
       \ ]
 
 let g:coc_quickfix_open_command = 'cwindow'
-" let g:coc_snippet_next = '<Tab>'
-" let g:coc_snippet_prev = '<S-Tab>'
+let g:coc_snippet_next = '<Tab>'
+let g:coc_snippet_prev = '<S-Tab>'
 
 let g:coc_enable_locationlist = 1
 let $NVIM_COC_LOG_LEVEL = 'WARN'
@@ -843,12 +784,11 @@ augroup FZFStatusline
   au!
   autocmd! User FzfStatusLine call <SID>fzf_statusline()
 augroup END
-
 " }}}
+
 " }}}
 
 " Statusline: {{{
-
 function! StatusDiagnostic() abort  " {{{
   if !exists('g:loaded_coc') | return '' | endif
 
@@ -944,13 +884,11 @@ command! -bar ReloadStatusline call s:Statusline()
 
 " Fix the path: {{{
 
-if !exists('b:did_ftplugin')
-  if exists('*stdpath')  " fuckin vim
-    let &path = '.,,**,' . expand('$VIMRUNTIME') . '/*/*.vim'  . ',' . stdpath('config')
-  else
-    let &path = '.,,**,' . expand('$VIMRUNTIME') . '/*/*.vim'
-  endif
-endif " }}}
+if exists('*stdpath')  " fuckin vim
+  let &path = '.,,**,' . expand('$VIMRUNTIME') . '/*/*.vim'  . ',' . stdpath('config')
+else
+  let &path = '.,,**,' . expand('$VIMRUNTIME') . '/*/*.vim'
+endif
 
 " Last Call For Options: {{{
 if &omnifunc ==# '' | setlocal omnifunc=syntaxcomplete#Complete | endif

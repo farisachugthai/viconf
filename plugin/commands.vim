@@ -76,6 +76,11 @@ command! CocServices echo CocAction('services')
 " }}}
 
 " A LOT Of FZF Commands: {{{
+
+" fzf_for_todos
+"
+command -bang -bar -complete=var -nargs=* TodoFuzzy call find_files#RipgrepFzf('todo ' . <q-args>, <bang>0)
+
 " FZGrep:
   " here's the call signature for fzf#vim#grep
   " - fzf#vim#grep(command, with_column, [options], [fullscreen])
@@ -84,8 +89,8 @@ command! CocServices echo CocAction('services')
 command! -complete=file_in_path -nargs=? -bang -bar FZGrep call fzf#run(fzf#wrap('grep', {
       \ 'source': 'silent! grep! <q-args>',
       \ 'sink': 'edit',
-      \ 'options': ['--multi', '--ansi', '--border'],}))
-      \ <bang>0 ? fzf#vim#with_preview('up:60%')  : fzf#vim#with_preview('right:50%:hidden', '?')
+      \ 'options': ['--multi', '--ansi', '--border'],})
+      \  fzf#vim#with_preview('up:60%')
 
 	" -addr=buffers		Range for buffers (also not loaded buffers)
 
@@ -95,7 +100,7 @@ command! -bang -bar -complete=file  -range -addr=buffers -nargs=* FZGGrep
   \   'git grep --line-number --color=always ' . shellescape(<q-args>),
   \   0,
   \   {'dir': systemlist('git rev-parse --show-toplevel')[0]},
-  \   <bang>0)
+  \   <bang>0 ? fzf#vim#with_preview('up:60%') : fzf#vim#with_preview('right:50%:hidden', '?'))
 
 " Ag FZF With A Preview Window: {{{
 
@@ -109,14 +114,12 @@ command! -complete=dir -bang -bar -addr=buffers -nargs=* FZPreviewAg
 " Rg: Use `:Rg` or `:FZRg` or `:FufRg` before this one
 command! -bar -complete=dir -bang -nargs=* FZMehRg
   \ call fzf#run(fzf#wrap('rg', {
-        \   'source': 'rg --no-column --no-line-number --no-heading --no-messages --color=ansi'
+        \   'source': 'rg --no-column --no-line-number --no-heading --color=ansi'
         \   . ' --smart-case --follow ' . shellescape(<q-args>),
         \   'sink': 'vsplit',
-        \   'options': ['--ansi', '--multi', '--border', '--cycle', '--prompt', 'FZRG:',],},
-        \ <bang>0
-        \ ))
+        \   'options': ['--ansi', '--multi', '--border', '--cycle', '--prompt', 'FZRG:',]
+        \ }, <bang>0))
 
-        " \   <bang>0 ? fzf#vim#with_preview('up:60%') : fzf#vim#with_preview('right:50%:hidden', '?')
 " }}}
 
 " Files With Preview Window: {{{

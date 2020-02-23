@@ -79,27 +79,6 @@ def attach_nvim(how="socket", path=None):
     return attach("socket", path=nvim_listen_address())
 
 
-def list_buf(vim):
-    """Return the Vimscript function :func:`nvim_list_bufs()`.
-
-    Returns
-    --------
-    bufnrs : list of ints
-        Currently loaded buffers
-
-    Examples
-    --------
-    .. code-block:: vim
-
-        :ListBuf
-        " With one open buffer the output will be [1]
-        " Note that this could be any list of integers
-
-    """
-    bufnrs = vim.command("call nvim_list_bufs()")
-    return bufnrs
-
-
 def check_and_set_envvar(envvar, default=None):
     """Maintenance and housekeeping of the OS.
 

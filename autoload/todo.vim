@@ -35,6 +35,8 @@ function! todo#fzf() abort  " {{{
   let s:grep_cmd = 'git grep -niI -e TODO -e todo -e FIXME -e XXX -e HACK 2> /dev/null'
   call fzf#run(fzf#wrap('git-grep', {
         \ 'source' : 's:grep_cmd',
+        \ 'sink': 'pedit',
+        \ 'dir': 'git rev-parse --show-root',
         \ 'options': ['--ansi', '--multi', '--border', '--prompt', 'FZF Git Grep:', '--reverse'],}))
         " \ <bang>0 ? fzf#vim#with_preview('up:60%') : fzf#vim#with_preview('right:50%:hidden'),
 endfunction

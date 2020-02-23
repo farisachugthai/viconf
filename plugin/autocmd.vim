@@ -30,7 +30,7 @@ augroup END
 " }}}
 
 " TODO:
-"
+" Also worth noting func buffers#PreviewWord
 " :[range]ps[earch][!] [count] [/]pattern[/]
 " 		Works like |:ijump| but shows the found match in the preview
 " 		window.  The preview window is opened like with |:ptag|.  The

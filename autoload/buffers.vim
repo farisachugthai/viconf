@@ -37,6 +37,9 @@ function! buffers#PreviewWord() abort  " {{{
     endif
 
     " Try displaying a matching tag for the word under the cursor
+    " lets add a write operation so that that doesnt end up raising
+    if &autowrite | write | endif
+
     try
        execute 'ptag ' . w
     catch

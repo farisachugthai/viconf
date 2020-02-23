@@ -1,5 +1,7 @@
 # sh.snippets
 
+priority 50
+
 # Shebang. Good place to start
 snippet #! "#!/bin/bash" b
 #!/bin/bash
@@ -21,7 +23,6 @@ if [[ -z "${VISUAL:${1}}" ]]; then
 	${3:echo -e "Usage: $2 [options] commands"
 	break}
 fi
-$0
 endsnippet
 
 snippet source "Var = bash source" b
@@ -29,11 +30,11 @@ ${VISUAL:${1:source}}="${BASH_SOURCE[0]}"
 endsnippet
 
 snippet echo "Echo a statement" w
-echo -e ${VISUAL:$1}
+echo -e ${1:${VISUAL}}
 endsnippet
 
 snippet read "Read input from a user" w
-read ${VISUAL:$1}
+read ${1:${VISUAL}}
 endsnippet
 
 ###########
@@ -76,7 +77,7 @@ _which() {
 endsnippet
 
 snippet source "Source a file if it exists" b
-[[ -f ${VISUAL:1} ]] && source $1 || echo "$1 can not be sourced."
+[[ -f ${1:${VISUAL}} ]] && source $1 || echo "$1 can not be sourced."
 endsnippet
 
 

@@ -41,13 +41,7 @@ endsnippet
 global !p
 
 import json
-
-def compB(t, opts):
-	if t:
-		opts = [m[len(t):] for m in opts if m.startswith(t)]
-	if len(opts) == 1:
-		return opts[0]
-	return "(" + '|'.join(opts) + ')'
+from  snippets_helper import compB
 endglobal
 
 snippet b "Bool" b
@@ -55,7 +49,6 @@ snippet b "Bool" b
 endsnippet
 
 snippet fixjson "Fix the entire document easily."
-vim.eval('!python3 -m json.tool' %)
 endsnippet
 
 # or something like that

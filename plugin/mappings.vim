@@ -20,7 +20,6 @@ inoremap gI gi
 " }}}
 
 " Z Mappings: {{{
-
 nnoremap zE <nop>
 nnoremap zH zt
 " Huh so zt is like z<CR> but we stay in the same column
@@ -34,8 +33,7 @@ nnoremap zL z-
 
 " Misc: {{{
 nnoremap <Leader>cd <Cmd>cd %:p:h<CR><Bar><Cmd>pwd<CR>
-
-nnoremap Q @q
+nnoremap Q gq
 xnoremap <BS> d
 nnoremap <Leader>sp <Cmd>setlocal spell!<CR>
 nnoremap <Leader>o o<Esc>
@@ -53,7 +51,7 @@ function! AddVileBinding(key, handler)  " {{{
   " Map a key 3 times for normal mode, insert and command.
   exec 'nnoremap ' . a:key a:handler
   exec 'inoremap ' . a:key a:handler
-  " I think tnoremap make more sense here.
+  " I think tnoremap makes more sense here.
   exec 'tnoremap ' . a:key a:handler
 
 endfunction " }}}
@@ -100,9 +98,6 @@ call AddVileBinding('<S-Insert>', '<MiddleMouse>')
 " }}}
 
 " Search Mappings: {{{
-set nohlsearch
-if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif
-
 " Dude read over :he getcharsearch(). Now ; and , search forward backward no matter what!!!
 nnoremap <expr> ; getcharsearch().forward ? ';' : ','
 nnoremap <expr> , getcharsearch().forward ? ',' : ';'
