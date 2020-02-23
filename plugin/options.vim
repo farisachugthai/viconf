@@ -139,7 +139,8 @@ let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['cs'] = ''
 let g:ale_virtualtext_cursor = 1
 let g:ale_virtualtext_prefix =  'ALE: '
 let g:ale_virtualtext_delay = 200
-let g:ale_sign_highlight_linenrs = 1
+" let g:ale_sign_highlight_linenrs = 1
+
 
 " But lets try opening the preview window when the cursor moves to something
 " let g:ale_cursor_detail = 1
@@ -154,8 +155,8 @@ let g:ale_completion_enabled = 1
 " Signs: {{{
 
 let g:ale_set_signs = 1
-let g:ale_sign_column_always = 1
-let g:ale_change_sign_column_color = 1
+" let g:ale_sign_column_always = 1
+let g:ale_change_sign_column_color = 0
 let g:ale_sign_warning = 'W'
 let g:ale_sign_info = 'I'
 let g:ale_sign_error = 'E'

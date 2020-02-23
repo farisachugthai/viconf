@@ -63,7 +63,7 @@ augroup END
 
 augroup UserVimEnter " {{{
   autocmd!
-  autocmd VimEnter * colorscheme gruvbox-material
+  " autocmd VimEnter * colorscheme gruvbox-material
   " idk how i fucked up but this now necessary?
   autocmd VimEnter * exec 'so ' . s:repo_root . '/plugin/plugins.vim'
 augroup end
@@ -88,5 +88,10 @@ augroup UserTerm " {{{
 
   " Set up mappings
   autocmd TermOpen * call buffers#terminals()
+
+  autocmd TermOpen,WinEnter * if &buftype=='terminal'
+    \|setlocal winhighlight=StatusLine:StatusLineTerm,StatusLineNC:StatusLineTermNC
+    \|else|setlocal winhighlight=|endif
+
 augroup END
 " }}}
