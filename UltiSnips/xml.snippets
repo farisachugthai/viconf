@@ -2,17 +2,16 @@
 
 snippet xml "XML declaration" b
 <?xml version="1.0"?>
-
 endsnippet
 
-snippet t "Simple tag" b
+snippet t "Simple tag -- Expands visual too" b
 <${1:tag}>
-	${2:${VISUAL}}
+  ${2:${VISUAL}}
 </${1/([\w:._-]+).*/$1/}>
 endsnippet
 
-snippet ti "Inline tag" b
-<${1:tag}>${2:${VISUAL}}</${1/([\w:._-]+).*/$1/}>
+snippet ti "Inline tag -- Expands visual too" b
+<${1:tag}>${0:${VISUAL}}</${1/([\w:._-]+).*/$1/}>
 endsnippet
 
 snippet template "Starting point for a new xml file." bw

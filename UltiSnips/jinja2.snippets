@@ -9,7 +9,7 @@ priority 80
 # unicode support, an optional integrated sandboxed execution
 # environment, widely used and BSD licensed.
 
-extends htmljinja, html, html_minimal
+extends html
 
 snippet comment "Add a jinja comment" b
 {# ${1:${VISUAL}} #}
@@ -69,9 +69,9 @@ endsnippet
 # choosing between 'for' and 'for/else' snippets from the menu.
 
 # Uh I'd agree
-snippet for "for" b
+snippet for "for" w
 {% for ${1:${VISUAL}} in ${2:sequence} %}
-    3${4:
+    $3 ${4:
 {% else %}
     $5}
 {% endfor %}

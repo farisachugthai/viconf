@@ -238,36 +238,42 @@ function! pydoc_help#PreviewShow() abort  " {{{
   " that the very basic `:buffer` family of commands all take names similar
   " to the output of buf_name() and doing a lot of this with bufnr was a
   " mistake.
-  let orig_buffer = bufnr('%')
+  " let orig_buffer = bufnr('%')
+  "
   let word = s:ExpandModulePath()
-  let buffer = nvim_create_buf(v:false, v:true)
+
   " dude look at this phenomenally helpful shit from the docs on
   " preview-window
   if word =~ '\a'			" if the word contains a letter
 
-  " This is gonna be a weird ass way of doing this but. TODO: this isn't the
-  " right way to do this
-  split
-  " then go to the buffer
-  execute 'b' . buffer
-  try
-    setlocal previewwindow
-  catch  " this will fail if a preview-window already exists
-  endtry
+  " Here's a smarter way of doing this courtesy of t pope
+  let l:name = tempname()
 
-    silent! wincmd P			" jump to preview window
-      if &previewwindow			" if we really get there...
-        match none			" delete existing highlight
-        call jobstart('pydoc ' . word, {'on_stdout' : {j, d, e->append(line('.'),d)} } )
-        call s:temp_buffer()
-        " wincmd p			" back to old window
-      endif
+  " Fuck what do if we don't have a file name?
+  try
+    if &autowrite && &modified == 1
+      write
+    endif
+  catch
+  endtry
+  " Note: DONT USE pedit! it'll discard current changes to a buffer!!
+  exe 'pedit ' . fnameescape(l:name)
+  " Now go there
+  wincmd P
+  if &previewwindow == 1		" if we really get there...
+    match none			" delete existing highlight
+    call jobstart('pydoc ' . word, {'on_stdout' : {j, d, e->append(line('.'),d)} } )
+    call s:temp_buffer()
+  nnoremap <buffer> <silent> q :q<CR>
+    " wincmd p			" back to old window
+  else
+    echoerr "We're not in the preview window?"
+    return
+  endif
   
   else
     return
   endif
-  " go back to the original buffer
-  " execute 'b' . orig_buffer
 endfunction  " }}}
 
 function! pydoc_help#WholeLine(...) abort  " {{{
@@ -283,13 +289,10 @@ function! pydoc_help#WholeLine(...) abort  " {{{
       exec 'b' . buf
   else
     throw 'autoload:pydoc_help#show: wrong # of args'
-      
+
   endif
   py3 import pydoc
+  py3 curline = vim.command('let cur_line = getline(line("."))')
   py3 vim.current.buffer.append(pydoc.help(cur_line))
 endfunction  " }}}
 
-function! pydoc_help#Float() abort " {{{
-
-    let buf = nvim_create_buf(v:false, v:true)
-endfunction  " }}}

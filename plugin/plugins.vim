@@ -76,8 +76,7 @@ Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-scriptease'
 " }}}
 
-Plug 'SirVer/ultisnips'
-" | Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 
 Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }
 nnoremap <Leader>a <Cmd>sil! ALEEnable<CR><bar>:sil! call plugins#AleMappings()<CR><bar>:sil! CocDisable<CR>:sil! redraw!<CR>:ALELint<CR>
