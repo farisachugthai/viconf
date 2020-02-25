@@ -26,10 +26,21 @@ augroup UserHelpandPython " {{{
   " Not ready yet. BE CAREFUL and go read :he BufReadCmd and Cmd-events
   " inspired by $VIMRUNTIME/plugin/man.vim
   " autocmd BufReadCmd pydoc:// call pydoc_help#foo(matchstr(expand('<amatch>'), 'pydoc://\zs.*'))
+
+  autocmd FileType *
+    \ if &omnifunc != ''
+      \| if !exists('*SuperTabChain')
+      \| call plug#load('supertab')
+      \| endif
+    \|  call SuperTabChain(&omnifunc, "<c-p>")
+    \| else
+    \|  call SuperTabChain(&completefunc, "<c-p>")
+    \| endif
+
 augroup END
 " }}}
 
-" TODO:
+" TODO: {{{
 " Also worth noting func buffers#PreviewWord
 " :[range]ps[earch][!] [count] [/]pattern[/]
 " 		Works like |:ijump| but shows the found match in the preview
@@ -44,7 +55,7 @@ augroup END
 " 		include files.  Example: >
 "   :au! CursorHold *.[ch] ++nested exe "silent! psearch " . expand("<cword>")
 "
-"   Ah that's a fucking amazing idea!
+"   Ah that's a fucking amazing idea!  }}}
 
 augroup UserCoc " {{{
   au!
@@ -61,13 +72,6 @@ augroup END
 
 " }}}
 
-augroup UserVimEnter " {{{
-  autocmd!
-  " autocmd VimEnter * colorscheme gruvbox-material
-  " idk how i fucked up but this now necessary?
-  autocmd VimEnter * exec 'so ' . s:repo_root . '/plugin/plugins.vim'
-augroup end
-" }}}
 
 if !has('nvim') | finish | endif
 

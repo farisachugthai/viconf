@@ -29,6 +29,11 @@ setlocal wrap
 setlocal foldmethod=marker
 setlocal foldlevel=0
 
+" This man can do no wrong omg
+" if exists('*scriptease#complete')
+"   let &l:completefunc = scriptease#complete()
+" endif
+
 setlocal indentexpr=GetVimIndent()
 setlocal indentkeys+==end,=else,=cat,=fina,=END,0\\,0=\"\\\
 let b:undo_indent = "setlocal indentkeys< indentexpr<"

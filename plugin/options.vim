@@ -548,6 +548,8 @@ let g:UltiSnipsListSnippets = '<C-/>'
 " }}}
 
 " Supertab: {{{
+
+let g:SuperTabLongestEnhanced = 1
 let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
 let g:SuperTabContextDiscoverDiscovery =
         \ ['&completefunc:<c-x><c-u>', '&omnifunc:<c-x><c-o>']
@@ -565,8 +567,11 @@ function! MyDictContext() abort
   " on windows
   if filereadable('/usr/share/dict/words')
     return "\<C-x>\<C-k>"
-  elseif filereadable(fnamemodify(expand('<sfile>') ':p:h:h') . '/spell/en.utf-8.add')
+  let l:dict_context = fnamemodify(expand('<sfile>') ':p:h:h')
+  if filereadable(l:dict_context . '/spell/en.utf-8.add')
     return "\<C-x>\<C-k>"
+  else
+    echo l:dict_context
   endif
 endfunction
 

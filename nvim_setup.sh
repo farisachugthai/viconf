@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 # Maintainer: Faris Chugthai
 
-set -euo pipefail
-
 log() {
     local yellow="\e[0;33m"
     local magenta="\e[0;35m"
@@ -12,6 +10,7 @@ log() {
 }
 
 setup_plug() {
+
     log "Installing vim-plug"
     if [[ -z "$HOME/.local/share/nvim/site/autoload/plug.vim" ]]; then
         curl -fLo "$HOME/.local/share/nvim/autoload/plug.vim" --create-dirs \
@@ -53,6 +52,10 @@ setup_pynvim() {
 }
 
 notify() {
+    if [[ -z "$(command -v termux-notification)" ]]; then
+        return
+    fi
+
     if [[ -n "$1" ]]; then
         echo "$1" | termux-notification
     fi
@@ -67,5 +70,3 @@ setup_plug
 setup_pynvim
 
 $notify "Pynvim done updating."
-
-exit 0

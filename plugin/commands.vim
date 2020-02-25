@@ -77,9 +77,11 @@ command! CocServices echo CocAction('services')
 
 " A LOT Of FZF Commands: {{{
 
+" scriptnames:
+command! -bang -bar FZScriptnames call vimscript#fzf_scriptnames(<bang>0)
+
 " fzf_for_todos
-"
-command -bang -bar -complete=var -nargs=* TodoFuzzy call find_files#RipgrepFzf('todo ' . <q-args>, <bang>0)
+command! -bang -bar -complete=var -nargs=* TodoFuzzy call find_files#RipgrepFzf('todo ' . <q-args>, <bang>0)
 
 " FZGrep:
   " here's the call signature for fzf#vim#grep
@@ -311,7 +313,7 @@ command! -range -bar -complete=expression -complete=function -nargs=? Pd <line1>
 " Honestly i don't know what the <range> arg is providing to these commands
 " and half the time it makes no sense but we may as well implement the whole
 " interface
-command! -range -bar -complete=expression -complete=function -nargs=? P <line1>,<line2>python3  print(<args>)
+command! -range -bar -complete=expression -complete=function -nargs=? P <line1>,<line2>python3 print(<args>)
 
 " Apr 23, 2019: Didn't know complete help was a thing.
 " Oh holy shit that's awesome
@@ -321,7 +323,7 @@ command! -range -bar -complete=expression -complete=function -nargs=? P <line1>,
 " junegunn's <bang>0 does!
 command! -bar -bang -nargs=* -complete=help Help call fzf#vim#helptags(<bang>0)
 
-command! -range -bang -bar PydocThis call pydoc_help#PydocCword(<bang>, <mods>)
+command! -bang -bar PydocThis call pydoc_help#PydocCword(<bang>0, expand(<cword>))
 
 " This should be able to take the argument '-bang' and allow to open in a new
 " separate window like fzf does.

@@ -17,6 +17,10 @@ noremap <Down> gj
 
 " I mess this up constantly thinking that gI does what gi does
 inoremap gI gi
+
+" Literally ` does the same thing as ' but ` remembers column.
+nnoremap ' `
+
 " }}}
 
 " Z Mappings: {{{
@@ -31,7 +35,29 @@ nnoremap zt z<CR>
 nnoremap zL z-
 " }}}
 
+" Unimpaired Mappings: {{{
+" Map quickfix list, buffers, windows and tabs to *[ and *]
+" Note: A bunch more in ./tag_miscellany.vim
+nnoremap ]q <Cmd>cnext<CR>
+nnoremap [q <Cmd>cprev<CR>
+nnoremap ]Q <Cmd>clast<CR>
+nnoremap [Q <Cmd>cfirst<CR>
+nnoremap ]l <Cmd>lnext<CR>
+nnoremap [l <Cmd>lprev<CR>
+nnoremap ]L <Cmd>llast<CR>
+nnoremap [L <Cmd>lfirst<CR>
+
+" Unrelated but cmdline
+" It's annoying you lose a whole command from a typo
+cnoremap <Esc> <nop>
+" However I still need the functionality
+cnoremap <C-g> <Esc>
+" Avoid accidental hits of <F1> while aiming for <Esc>
+noremap! <F1> <Esc>
+" }}}
+
 " Misc: {{{
+
 nnoremap <Leader>cd <Cmd>cd %:p:h<CR><Bar><Cmd>pwd<CR>
 nnoremap Q gq
 xnoremap <BS> d
@@ -45,6 +71,39 @@ nnoremap ,f :find **/*<C-z><S-Tab>
 
 " The nvim API is seriously fantastic.
 nnoremap <Leader>rt call buffers#EchoRTP()
+" }}}
+
+" RSI: {{{
+function! MapRsi() abort
+
+  " Sorry tpope <3
+  inoremap        <C-A> <C-O>^
+  inoremap   <C-X><C-A> <C-A>
+  cnoremap        <C-A> <Home>
+  cnoremap   <C-X><C-A> <C-A>
+
+  inoremap <expr> <C-B> getline('.')=~'^\s*$'&&col('.')>strlen(getline('.'))?"0\<Lt>C-D>\<Lt>Esc>kJs":"\<Lt>Left>"
+  cnoremap        <C-B> <Left>
+
+  inoremap <expr> <C-D> col('.')>strlen(getline('.'))?"\<Lt>C-D>":"\<Lt>Del>"
+  cnoremap <expr> <C-D> getcmdpos()>strlen(getcmdline())?"\<Lt>C-D>":"\<Lt>Del>"
+
+  inoremap <expr> <C-E> col('.')>strlen(getline('.'))<bar><bar>pumvisible()?"\<Lt>C-E>":"\<Lt>End>"
+
+  inoremap <expr> <C-F> col('.')>strlen(getline('.'))?"\<Lt>C-F>":"\<Lt>Right>"
+  cnoremap <expr> <C-F> getcmdpos()>strlen(getcmdline())?&cedit:"\<Lt>Right>"
+
+  noremap!        <M-b> <S-Left>
+  noremap!        <M-f> <S-Right>
+  noremap!        <M-d> <C-O>dw
+  cnoremap        <M-d> <S-Right><C-W>
+  noremap!        <M-n> <Down>
+  noremap!        <M-p> <Up>
+  noremap!        <M-BS> <C-W>
+  noremap!        <M-C-h> <C-W>
+endfunction
+
+call MapRsi()
 " }}}
 
 function! AddVileBinding(key, handler)  " {{{
@@ -98,6 +157,10 @@ call AddVileBinding('<S-Insert>', '<MiddleMouse>')
 " }}}
 
 " Search Mappings: {{{
+
+" Toggle hlsearch with the same key that `less` does
+nnoremap <M-u> <Cmd>set hlsearch!<CR>
+
 " Dude read over :he getcharsearch(). Now ; and , search forward backward no matter what!!!
 nnoremap <expr> ; getcharsearch().forward ? ';' : ','
 nnoremap <expr> , getcharsearch().forward ? ',' : ';'
@@ -167,21 +230,6 @@ else
   nnoremap <C-x><C-b>                 <Cmd>buffers<CR>
   nnoremap <C-x><C-f>                 :<C-u>find ~/**
 endif
-" }}}
-
-" FZF Marks: {{{
-if has('unix')
-  if exists(':Marks')
-    " Hey why not make it fuzzy if we can
-    nnoremap ' <Cmd>Marks<CR>
-  else
-    " Literally ` does the same thing as ' but ` remembers column.
-    nnoremap ' `
-  endif
-else
-    nnoremap ' `
-endif
-
 " }}}
 
 " Imaps: {{{
@@ -460,25 +508,6 @@ function! Quickfix_Mappings() abort  " {{{
 
   nnoremap <Leader>C <Cmd>make %<CR>
 
-  " Unimpaired Mappings:
-  " Map quickfix list, buffers, windows and tabs to *[ and *]
-  " Note: A bunch more in ./tag_miscellany.vim
-  nnoremap ]q <Cmd>cnext<CR>
-  nnoremap [q <Cmd>cprev<CR>
-  nnoremap ]Q <Cmd>clast<CR>
-  nnoremap [Q <Cmd>cfirst<CR>
-  nnoremap ]l <Cmd>lnext<CR>
-  nnoremap [l <Cmd>lprev<CR>
-  nnoremap ]L <Cmd>llast<CR>
-  nnoremap [L <Cmd>lfirst<CR>
-
-  " Unrelated but cmdline
-  " It's annoying you lose a whole command from a typo
-  cnoremap <Esc> <nop>
-  " However I still need the functionality
-  cnoremap <C-g> <Esc>
-  " Avoid accidental hits of <F1> while aiming for <Esc>
-  noremap! <F1> <Esc>
 endfunction  " }}}
 
 function! AltKeyNavigation() abort  " {{{
@@ -638,4 +667,4 @@ endif  " }}}
 " Terminal: {{{
 " No dude go to buffers#terminal
 " }}}
-"
+

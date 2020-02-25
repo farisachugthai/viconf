@@ -5,7 +5,7 @@
   " Last Modified: July 13, 2019
 " ============================================================================
 
-function! vimscript#after_ft() abort
+function! vimscript#after_ft() abort  " {{{
   let s:debug = 1
   let s:cur_ft = &filetype
   let s:after_ftplugin_dir = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/after/ftplugin/'
@@ -40,7 +40,7 @@ function! vimscript#after_ft() abort
 
   " This seems like a reasonable return after a fail.
   return v:False
-endfunction
+endfunction  " }}}
 
 function! vimscript#BetterProfiler(fname) abort  " {{{1
   " Because Vim's built in profiling capabilities are nonsensical like wtf?
@@ -71,9 +71,9 @@ function! vimscript#BetterProfiler(fname) abort  " {{{1
   profile dump
 
   exec 'e ' a:fname
-endfunction
+endfunction  " }}}
 
-function! vimscript#profile(...) abort
+function! vimscript#profile(...) abort  " {({
   " let s:Debug = 1
   " let b:fname = '~/projects/viconf/.config/nvim/colors/gruvbox8.vim'
   " call g:BetterProfiler(b:fname)
@@ -89,7 +89,7 @@ function! vimscript#profile(...) abort
     profile func *
     profile file *
   endif
-endfunction
+endfunction  " }}}
 
 function! vimscript#Scriptnames(re) abort  " {{{1
   " Command to filter :scriptnames output by a regex
@@ -99,7 +99,7 @@ function! vimscript#Scriptnames(re) abort  " {{{1
 
     let filtered = filter(split(scriptnames, "\n"), "v:val =~ '" . a:re . "'")
     echo join(filtered, ' \n ')
-endfunction
+endfunction  " }}}
 
 function! vimscript#ScriptnamesDict() abort  " {{{1
   " From 10,000 lines deep in :he eval
@@ -130,7 +130,7 @@ function! vimscript#ScriptnamesDict() abort  " {{{1
   " We didn't scope the var so is the below line necessary?
   " unlet scriptnames_output
   return l:scripts
-endfunction
+endfunction  "  }}}
 
 function s:get_scriptnames() abort  " {{{1
   let s:scriptnames_output = ''
@@ -138,11 +138,12 @@ function s:get_scriptnames() abort  " {{{1
   silent scriptnames
   redir END
   return s:scriptnames_output
-endfunction
+endfunction  " }}}
 
-function! vimscript#fzf_scriptnames() abort  " {{{1
+function! vimscript#fzf_scriptnames(bang) abort  " {{{1
   call fzf#run(fzf#wrap("scriptnames",
         \ {'source': s:get_scriptnames(),
         \ 'sink': 'e',
-        \ 'options': ['--border', '--header', 'Scriptnames']},))
-endfunction
+        \ 'options': ['--border', '--header', 'Scriptnames']},
+        \ a:bang ))
+endfunction  " }}}

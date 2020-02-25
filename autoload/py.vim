@@ -143,12 +143,21 @@ function! py#ALE_Python_Conf() abort  " {{{1
 endfunction  " }}}
 
 function! py#Black() abort  " {{{
-  py3 import py; py.blackened_vim()
+  " let s:0
+  " todo: doesnt work. cant find file sp we raise
+  let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
+  let s:src = s:repo_root . '/python3/pybuffers.py'
+  call py3eval('s:src')
+  py3 from pybuffers import blackened_vim;
+  py3 blackened_vim()
 endfunction  " }}}
 
 function! py#black_these(bufs) abort  " {{{
+
+  " Can you do this with a range of buffers?
   for buf in a:bufs
-    py3 from py import Black; blackened_vim(buf)
+    py3 from pybuffers import blackened_vim
+    py3 blackened_vim(buf)
   endfor
 endfunction   " }}}
 

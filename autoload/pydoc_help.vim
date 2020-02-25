@@ -51,7 +51,7 @@ function! pydoc_help#read_page() abort  " {{{
   call s:temp_buffer()
 endfunction  " }}}
 
-function! pydoc_help#PydocCword(bang, mods, range) abort  " {{{1
+function! pydoc_help#PydocCword(bang, mods) abort  " {{{1
   " Holy shit it works!!!
   let s:temp_cword = expand('<cWORD>')
   enew<a:bang>

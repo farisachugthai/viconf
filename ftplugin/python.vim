@@ -100,10 +100,10 @@ noremap <buffer> <F5> <Cmd>py3f %<CR>
 noremap! <buffer> <F5> <Cmd>py3f %<CR>
 
 " ../../autoload/pydoc_help.vim
-" nnoremap <buffer> K <Cmd>PydocThis<CR>
-" setlocal keywordprg=python\ -m\ pydoc
+" nnoremap <buffer> K <Cmd>PydocShow<CR>
+setlocal keywordprg=:PydocShow
 " Use xnoremap because I wouldn't want this in select mode
-execute 'xnoremap K <Cmd>Pydoc ' . expand('<cWORD>') . '<CR>'
+" execute 'xnoremap K <Cmd>Pydoc ' . expand('<cWORD>') . '<CR>'
 
 " }}}
 

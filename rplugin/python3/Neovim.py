@@ -1,28 +1,37 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Arguably this module is to show off how great the neovim API is.
-"""
+# import contextlib
 import logging
 import os
 import sys
-
-# The directory is called python3 i thought this was implied
-if sys.version_info < (3, 0):
-    sys.exit()
-
 from pathlib import Path
+import imp
+import io
 
-try:
-    import pynvim
-except (ImportError, ModuleNotFoundError) as e:
-    sys.exit(e)
+from pynvim import attach
+from pynvim.api import Nvim, walk
+from pynvim.msgpack_rpc import ErrorResponse
+from pynvim.util import format_exc_skip
+from pynvim.plugin.decorators import plugin, rpc_export
 
 
-class UnsetEnvvarException(Exception):
-    """Exception for trying to cal an unset envvar/one with no value."""
+if sys.version_info >= (3, 4):
+    from importlib.machinery import PathFinder
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(self, *args, **kwargs)
+# Globals:
+
+basestring = str
+
+PYTHON_SUBDIR = "python3"
+num_types = (int, float)
+
+
+logger = logging.getLogger(__name__)
+debug, info, warn = (
+    logger.debug,
+    logger.info,
+    logger.warn,
+)
 
 
 class App:
@@ -72,11 +81,11 @@ class Instance(App):
     pass
 
 
-def attach_nvim(how="socket", path=None):
-    """Ensure you don't execute this from inside neovim or it'll emit an error."""
-    from pynvim import attach
-
-    return attach("socket", path=nvim_listen_address())
+def attach_nvim():
+    """Ensure you don't execute this from inside neovim or it'll emit an error.
+    """
+    path = os.environ.get("NVIM_LISTEN_ADDRESS")
+    return attach(how, path=path)
 
 
 def check_and_set_envvar(envvar, default=None):
@@ -99,7 +108,7 @@ def check_and_set_envvar(envvar, default=None):
         logging.debug(envvar + " already set to value of: " + os.environ.get(envvar))
 
 
-def main():
+def setup_envvars():
     """Set logging, ensure the correct environment variables are set up.
 
     Returns
@@ -122,3 +131,261 @@ def main():
 
     nvim_log_level = 20
     check_and_set_envvar("NVIM_PYTHON_LOG_LEVEL", default=nvim_log_level)
+
+
+@plugin
+class ScriptHost:
+    """Provides an environment for running python plugins created for Vim."""
+
+    def __init__(self, nvim):
+        """Initialize the legacy python-vim environment.
+
+        As far as I'm aware this throws on Windows semi frequently.
+        """
+        self.setup(nvim)
+        # context where all code will run
+        self.module = imp.new_module("__main__")
+        nvim.script_context = self.module
+        # it seems some plugins assume 'sys' is already imported, so do it now
+        exec("import sys", self.module.__dict__)
+        self.legacy_vim = LegacyVim.from_nvim(nvim)
+        sys.modules["vim"] = self.legacy_vim
+
+        # Handle DirChanged. #296
+        nvim.command('au DirChanged *'
+                'call rpcnotify({}, "python_chdir", v:event.cwd)'.format(
+                nvim.channel_id), async_=True,)
+        # XXX: Avoid race condition.
+        # https://github.com/neovim/pynvim/pull/296#issuecomment-358970531
+        # TODO(bfredl): when host initialization has been refactored,
+        # to make __init__ safe again, the following should work:
+        # os.chdir(nvim.eval('getcwd()', async_=False))
+        nvim.command(
+            'call rpcnotify({}, "python_chdir", getcwd())'.format(
+                nvim.channel_id), async_=True)
+
+    def setup(self, nvim):
+        """Setup import hooks and global streams.
+
+        This will add import hooks for importing modules from runtime
+        directories and patch the sys module so 'print' calls will be
+        forwarded to Nvim.
+        """
+        self.nvim = nvim
+        pass  # replaces next logging statement
+        # info('install import hook/path')
+        self.hook = path_hook(nvim)
+        sys.path_hooks.append(self.hook)
+        nvim.VIM_SPECIAL_PATH = "_vim_path_"
+        sys.path.append(nvim.VIM_SPECIAL_PATH)
+        pass  # replaces next logging statement
+        # info('redirect sys.stdout and sys.stderr')
+        self.saved_stdout = sys.stdout
+        self.saved_stderr = sys.stderr
+        sys.stdout = RedirectStream(lambda data: nvim.out_write(data))
+        sys.stderr = RedirectStream(lambda data: nvim.err_write(data))
+
+    def teardown(self):
+        """Restore state modified from the `setup` call."""
+        nvim = self.nvim
+        pass  # replaces next logging statement
+        # info('uninstall import hook/path')
+        sys.path.remove(nvim.VIM_SPECIAL_PATH)
+        sys.path_hooks.remove(self.hook)
+        pass  # replaces next logging statement
+        # info('restore sys.stdout and sys.stderr')
+        sys.stdout = self.saved_stdout
+        sys.stderr = self.saved_stderr
+
+    @rpc_export("python_execute", sync=True)
+    def python_execute(self, script, range_start, range_stop):
+        """Handle the `python` ex command."""
+        self._set_current_range(range_start, range_stop)
+        try:
+            exec(script, self.module.__dict__)
+        except Exception:
+            raise ErrorResponse(format_exc_skip(1))
+
+    @rpc_export("python_execute_file", sync=True)
+    def python_execute_file(self, file_path, range_start, range_stop):
+        """Handle the `pyfile` ex command."""
+        self._set_current_range(range_start, range_stop)
+        with open(file_path) as f:
+            script = compile(f.read(), file_path, "exec")
+            try:
+                exec(script, self.module.__dict__)
+            except Exception:
+                raise ErrorResponse(format_exc_skip(1))
+
+    @rpc_export("python_do_range", sync=True)
+    def python_do_range(self, start, stop, code):
+        """Handle the `pydo` ex command."""
+        self._set_current_range(start, stop)
+        nvim = self.nvim
+        start -= 1
+        fname = "_vim_pydo"
+
+        # define the function
+        function_def = "def %s(line, linenr):\n %s" % (fname, code,)
+        exec(function_def, self.module.__dict__)
+        # get the function
+        function = self.module.__dict__[fname]
+        while start < stop:
+            # Process batches of 5000 to avoid the overhead of making multiple
+            # API calls for every line. Assuming an average line length of 100
+            # bytes, approximately 488 kilobytes will be transferred per batch,
+            # which can be done very quickly in a single API call.
+            sstart = start
+            sstop = min(start + 5000, stop)
+            lines = nvim.current.buffer.api.get_lines(sstart, sstop, True)
+
+            exception = None
+            newlines = []
+            linenr = sstart + 1
+            for i, line in enumerate(lines):
+                result = function(line, linenr)
+                if result is None:
+                    # Update earlier lines, and skip to the next
+                    if newlines:
+                        end = sstart + len(newlines) - 1
+                        nvim.current.buffer.api.set_lines(sstart, end, True, newlines)
+                    sstart += len(newlines) + 1
+                    newlines = []
+                    pass
+                elif isinstance(result, basestring):
+                    newlines.append(result)
+                else:
+                    exception = TypeError(
+                        "pydo should return a string "
+                        + "or None, found %s instead" % result.__class__.__name__
+                    )
+                    break
+                linenr += 1
+
+            start = sstop
+            if newlines:
+                end = sstart + len(newlines)
+                nvim.current.buffer.api.set_lines(sstart, end, True, newlines)
+            if exception:
+                raise exception
+        # delete the function
+        del self.module.__dict__[fname]
+
+    @rpc_export("python_eval", sync=True)
+    def python_eval(self, expr):
+        """Handle the `pyeval` vim function."""
+        return eval(expr, self.module.__dict__)
+
+    @rpc_export("python_chdir", sync=False)
+    def python_chdir(self, cwd):
+        """Handle working directory changes."""
+        os.chdir(cwd)
+
+    def _set_current_range(self, start, stop):
+        current = self.legacy_vim.current
+        current.range = current.buffer.range(start, stop)
+
+
+class RedirectStream(io.IOBase):
+    """todo: Replace me with contextlib.redirect_stdout and redirect_stderr."""
+
+    def __init__(self, redirect_handler):
+        self.redirect_handler = redirect_handler
+
+    def write(self, data):
+        self.redirect_handler(data)
+
+    def writelines(self, seq):
+        self.redirect_handler("\n".join(seq))
+
+
+def num_to_str(obj):
+    if isinstance(obj, num_types):
+        return str(obj)
+    else:
+        return obj
+
+
+class LegacyVim(Nvim):
+    def eval(self, expr):
+        obj = self.request("vim_eval", expr)
+        return walk(num_to_str, obj)
+
+
+# Copied/adapted from :help if_pyth.
+
+def discover_runtime_directories(nvim):
+    """How can we get rid of all these funcs that require nvim as a parameter?"""
+    rv = []
+    for rtp in nvim.list_runtime_paths():
+        if not os.path.exists(rtp):
+            continue
+        for subdir in ["pythonx", PYTHON_SUBDIR]:
+            path = os.path.join(rtp, subdir)
+            if os.path.exists(path):
+                rv.append(path)
+    return rv
+
+
+def path_hook(nvim):
+    """todo: Flatten this more."""
+    def _get_paths():
+        if nvim._thread_invalid():
+            return []
+        return discover_runtime_directories(nvim)
+
+
+    def hook(path):
+        if path == nvim.VIM_SPECIAL_PATH:
+            return VimPathFinder
+        else:
+            raise ImportError
+
+    return hook
+
+
+class VimModuleLoader(object):
+    """Inexplicably this class and `VimPathFinder` were closures in `path_hook."""
+
+    def __init__(self, module):
+        self.module = module
+
+    def load_module(self, fullname, path=None):
+        """Check sys.modules, required for reload (see PEP302).
+
+        Uh no. How about we just implement the loader protocol?
+        """
+        try:
+            return sys.modules[fullname]
+        except KeyError:
+            pass
+        return imp.load_module(fullname, *self.module)
+
+    @staticmethod
+    def _find_module(fullname, oldtail, path):
+        """Oh this might be why. This wasnt scoped to the class previously."""
+        idx = oldtail.find(".")
+        if idx > 0:
+            name = oldtail[:idx]
+            tail = oldtail[idx + 1 :]
+            fmr = imp.find_module(name, path)
+            module = imp.find_module(fullname[: -len(oldtail)] + name, *fmr)
+            return _find_module(fullname, tail, module.__path__)
+        else:
+            return imp.find_module(fullname, path)
+
+class VimPathFinder(object):
+    @staticmethod
+    def find_module(fullname, path=None):
+        """Method for Python 2.7 and 3.3."""
+        try:
+            return VimModuleLoader._find_module(fullname, fullname, path or _get_paths())
+        except ImportError:
+            return None
+
+    @staticmethod
+    def find_spec(fullname, target=None):
+        """Method for Python 3.4+."""
+        return PathFinder.find_spec(fullname, _get_paths(), target)
+
+
