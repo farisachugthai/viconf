@@ -21,7 +21,7 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h'))
 
 " Seriously how does this keep getting fucked up. omfg packpath is worse???
 if has('unix')
-  setglobal runtimepath=~/.config/nvim,~/.local/share/nvim/site,$VIMRUNTIME,~/.config/nvim/after
+  let &g:runtimepath = stdpath('config') . ',' .  stdpath('data') . ',' . expand($VIMRUNTIME)
   setglobal packpath=~/.config/nvim/pack,~/.local/share/nvim/site/pack,$VIMRUNTIME,~/.config/nvim/after/pack
 else
   setglobal runtimepath=$USERPROFILE\AppData\Local\nvim,$USERPROFILE\AppData\Local\nvim-data\site,$VIMRUNTIME,C:\Neovim\share\nvim-qt\runtime
@@ -75,8 +75,6 @@ if has('patch-8.1.0251')
 if exists('$XDG_CACHE_HOME')
   let &g:directory=$XDG_CACHE_HOME
 else
-" How the actual fuck is this a real problem?
-  if !has('unix') | unlet $HOME | let $HOME = 'C:\Users\fac' | endif
   let $XDG_CACHE_HOME = $HOME . '/.cache'
   let &g:directory=$HOME . '/.cache'
 endif
@@ -152,13 +150,7 @@ setglobal matchtime=20  " Show the matching pair for 2 seconds
 setglobal synmaxcol=1000  " }}}
 
 " Load Plugins: {{{
-
-" set noloadplugins " no i meant mine
 if !exists('plug#load')  | unlet! g:loaded_plug | exec 'source ' . s:repo_root . '/vim-plug/plug.vim' | endif
-" runtime! plugin/**/*.vim
-
-" Don't assume that worked. Needs to be defined but increasingly not as needed
-
 " Preliminary Options: {{{
 " Few options I wanna set in advance
 let g:no_default_tabular_maps = 1
@@ -172,104 +164,90 @@ let g:undotree_SetFocusWhenToggle = 1
 
 function! LoadMyPlugins() abort
 
-call plug#begin(stdpath('data') . '/plugged')
+  call plug#begin(stdpath('data') . '/plugged')
+  Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lockfile'}
+  let $NVIM_COC_LOG_FILE = stdpath('data')  . '/site/coc.log'
+  let $NVIM_COC_LOG_LEVEL = 'ERROR'
+  Plug 'junegunn/vim-plug' ", {'dir': expand('~/projects/viconf/vim-plug')}
+  Plug 'junegunn/fzf', { 'dir': expand('~/.fzf'), 'do': './install --all' }
+  Plug 'junegunn/fzf.vim'
+  " NerdTree: {{{
+  Plug 'scrooloose/nerdTree', { 'on': ['NERDTreeToggleVCS', 'NERDTreeVCS', 'NERDTreeFind'] }
+  nnoremap <Leader>nt <Cmd>NERDTreeToggleVCS<CR>zz
+  nnoremap <Leader>nf <Cmd>NERDTreeFind<CR>
 
-Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lockfile'}
-let $NVIM_COC_LOG_FILE = stdpath('data')  . '/site/coc.log'
-let $NVIM_COC_LOG_LEVEL = 'ERROR'
+  " Switch NERDTree root to dir of currently focused window.
+  " Make mapping match Spacemacs.
+  if exists(':GuiTreeviewToggle')
+    nnoremap <Leader>0 <Cmd>GuiTreeviewToggle<CR>
+  else
+    nnoremap <Leader>0 <Cmd>NERDTreeToggleVCS<CR>
+  endif
 
-Plug 'junegunn/vim-plug' ", {'dir': expand('~/projects/viconf/vim-plug')}
-
-Plug 'junegunn/fzf', { 'dir': expand('~/.fzf'), 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-
-" NerdTree: {{{
-Plug 'scrooloose/nerdTree', { 'on': ['NERDTreeToggleVCS', 'NERDTreeVCS', 'NERDTreeFind'] }
-nnoremap <Leader>nt <Cmd>NERDTreeToggleVCS<CR>zz
-nnoremap <Leader>nf <Cmd>NERDTreeFind<CR>
-
-" Switch NERDTree root to dir of currently focused window.
-" Make mapping match Spacemacs.
-if exists(':GuiTreeviewToggle')
-  nnoremap <Leader>0 <Cmd>GuiTreeviewToggle<CR>
-else
-  nnoremap <Leader>0 <Cmd>NERDTreeToggleVCS<CR>
-endif
-
-augroup UserNerdLoader
-
-  autocmd!
-  " Was raising an error according to verbosefile
-  " autocmd VimEnter * silent! autocmd! FileExplorer
-
-  autocmd BufEnter,BufNew *
-        \  if isdirectory(expand('<amatch>'))
-        \|   call plug#load('nerdTree')
-        \|   execute 'autocmd! UserNerdLoader'
-        \| endif
-
-augroup END
-" }}}
-
-" TPope: {{{
-
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-fugitive'
-
-Plug 'tpope/vim-scriptease'
-
-" }}}
-
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-
-Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }
-nnoremap <Leader>a <Cmd>sil! ALEEnable<CR><bar>:sil! call plugins#AleMappings()<CR><bar>:sil! CocDisable<CR>:sil! redraw!<CR>:ALELint<CR>
-nnoremap <Leader>et <Cmd>ALEToggle<CR>:sil! call plugins#AleMappings()<CR>:sil! redraw!<CR>
-
-if exists('$TMUX')
-  Plug 'christoomey/vim-tmux-navigator'
-  Plug 'edkolev/tmuxline.vim'
-  augroup UserTmuxline
-    au!
-    autocmd VimEnter *
-          \  if exists(':Tmuxline')
-          \| exec 'Tmuxline vim_statusline_3'
+  augroup UserNerdLoader
+    autocmd!
+    " Was raising an error according to verbosefile
+    " autocmd VimEnter * silent! autocmd! FileExplorer
+    autocmd BufEnter,BufNew *
+          \  if isdirectory(expand('<amatch>'))
+          \|   call plug#load('nerdTree')
+          \|   execute 'autocmd! UserNerdLoader'
           \| endif
 
   augroup END
-endif
+  " }}}
+  Plug 'tpope/vim-commentary'
+  Plug 'tpope/vim-fugitive'
+  Plug 'tpope/vim-scriptease'
+  Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+  Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }
+  nnoremap <Leader>a <Cmd>sil! ALEEnable<CR><bar>:sil! call plugins#AleMappings()<CR><bar>:sil! CocDisable<CR>:sil! redraw!<CR>:ALELint<CR>
+  nnoremap <Leader>et <Cmd>ALEToggle<CR>:sil! call plugins#AleMappings()<CR>:sil! redraw!<CR>
 
-Plug 'mhinz/vim-startify'
+  if exists('$TMUX')
+    Plug 'christoomey/vim-tmux-navigator'
+    Plug 'edkolev/tmuxline.vim'
+    augroup UserTmuxline
+      au!
+      autocmd VimEnter *
+            \  if exists(':Tmuxline')
+            \| exec 'Tmuxline vim_statusline_3'
+            \| endif
 
-Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
-noremap <silent> <F8> <Cmd>TagbarToggle<CR>
-noremap! <silent> <F8> <Cmd>TagbarToggle<CR>
-tnoremap <silent> <F8> <Cmd>TagbarToggle<CR>
+    augroup END
+  endif
 
-" yo this mapping is great
-nnoremap ,t <Cmd>CocCommand tags.generate<CR><bar>:TagbarToggle<CR>
+  Plug 'mhinz/vim-startify'
 
-Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
-nnoremap U <Cmd>UndotreeToggle<CR>
+  Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
+  noremap <silent> <F8> <Cmd>TagbarToggle<CR>
+  noremap! <silent> <F8> <Cmd>TagbarToggle<CR>
+  tnoremap <silent> <F8> <Cmd>TagbarToggle<CR>
 
-Plug 'ervandew/supertab'
-Plug 'junegunn/vim-peekaboo'
-Plug 'vim-voom/voom', {'on': ['Voom', 'VoomToggle', 'VoomExec'] }
-Plug 'romainl/vim-qf'
+  " yo this mapping is great
+  nnoremap ,t <Cmd>CocCommand tags.generate<CR><bar>:TagbarToggle<CR>
 
-if empty(s:termux)  " {{{
-  Plug 'godlygeek/tabular', {'on': 'Tabularize'}
-  Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
-  Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
-  Plug 'omnisharp/omnisharp-vim', {'for': ['cs', 'ps1',] }
-  Plug 'HiPhish/jinja.vim'
-endif
-" }}}
+  Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
+  nnoremap U <Cmd>UndotreeToggle<CR>
 
-Plug 'ludovicchabant/vim-gutentags'
-Plug 'tomtom/tlib_vim'
-Plug 'ryanoasis/vim-devicons'           " Keep at end!
-call plug#end()
+  Plug 'ervandew/supertab'
+  Plug 'junegunn/vim-peekaboo'
+  Plug 'vim-voom/voom', {'on': ['Voom', 'VoomToggle', 'VoomExec'] }
+  Plug 'romainl/vim-qf'
+
+  if empty(s:termux)  " {{{
+    Plug 'godlygeek/tabular', {'on': 'Tabularize'}
+    Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
+    Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
+    Plug 'omnisharp/omnisharp-vim', {'for': ['cs', 'ps1',] }
+    Plug 'HiPhish/jinja.vim'
+  endif
+  " }}}
+
+  Plug 'ludovicchabant/vim-gutentags'
+  Plug 'tomtom/tlib_vim'
+  Plug 'ryanoasis/vim-devicons'           " Keep at end!
+  call plug#end()
 
 endfunction
 
@@ -280,14 +258,13 @@ call LoadMyPlugins()
 
 " I utilize this command so often I may as well save the characters
 command! Plugins echo map(keys(g:plugs), '"\n" . v:val')
-" Idk why but this became necessary on windows again
-if !has('unix') | set termguicolors | endif
-colo gruvbox-material
 
+" Idk why but this became necessary on windows again. and wsl
+set termguicolors
+colo gruvbox-material
 packadd! matchit
 packadd! justify
 " }}}
-
 " }}}
 
 " Vim: set fdm=marker foldlevelstart=0:

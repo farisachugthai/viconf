@@ -70,7 +70,6 @@ augroup END
 
 " }}}
 
-
 if !has('nvim') | finish | endif
 
 augroup UserTerm " {{{
@@ -97,4 +96,13 @@ augroup UserTerm " {{{
   "   \|else|setlocal winhighlight=|endif
 
 augroup END
+
+augroup UserStl
+  autocmd!
+
+  autocmd VimEnter * if exists(':Tmuxline')
+                  \| :Tmuxline vim_statusline_3
+                  \| endif
+augroup END
 " }}}
+

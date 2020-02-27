@@ -1758,7 +1758,7 @@ if &background ==# 'dark'
       endif  " }}}
     else  " {{{
       " Got this from `:he 'pumblend'
-      hi PmenuSel guifg=#282828 guibg=#a89984 guisp=NONE gui=NONE cterm=NONE blend=0
+      hi PmenuSel guifg=#282828 guibg=#a89984 guisp=NONE gui=NONE cterm=NONE
       " Yeah. Blend is 0
       " Yo tablinesel sets this way is pretty awful
       " hi TabLineSel guifg=#282828 guibg=#a89984 guisp=NONE gui=bold cterm=bold

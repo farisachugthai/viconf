@@ -18,12 +18,9 @@ if exists('g:did_jedi_after_plugin') || &compatible || v:version < 700
     finish
 endif
 let g:did_jedi_after_plugin = 1
-
-let s:cpo_save = &cpoptions
-set cpoptions-=C
+" }}}
 
 " Options: {{{1
-
 let g:jedi#use_tabs_not_buffers = 1
 
 " Huge contributor to Jedi's affect on startuptime
@@ -47,7 +44,4 @@ let g:jedi#completions_command = '<C-P>'
 
 " No! Also ensure `:set completeopt` contains noinsert,noselect
 let g:jedi#popup_select_first = 0
-
-" Atexit: {{{1
-let &cpoptions = s:cpo_save
-unlet s:cpo_save
+" }}}
