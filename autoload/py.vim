@@ -184,29 +184,20 @@ endfunction  " }}}
 function! py#Cnxn() abort  " {{{
   " Credit: JustinMK
   " https://github.com/justinmk/config/blob/ad5b792049b352274d4cbd3525a2aff6ce296a7e/.config/nvim/init.vim#L1339-L1361
-  terminal python3
+  terminal
 
   if has('unix')
     call chansend(&channel, "import pynvim,os\n")
-  call chansend(&channel, "n = pynvim.attach('socket', path=os.environ.get('NVIM_LISTEN_ADDRESS'))\n")
+    call chansend(&channel, "n = pynvim.attach('socket', path=os.environ.get('NVIM_LISTEN_ADDRESS'))\n")
   else
     call chansend(&channel, "import pynvim,os\r\n")
-  call chansend(&channel, "n = pynvim.attach('socket', path=os.environ.get('NVIM_LISTEN_ADDRESS'))\r\n")
+    call chansend(&channel, "n = pynvim.attach('socket', path=os.environ.get('NVIM_LISTEN_ADDRESS'))\r\n")
   endif
 
 endfunction  " }}}
 
 function! py#Cxn(...) abort  " {{{
- silent! unlet g:cxn
-  tabnew
-    " if !empty(a:1)  " Only start the client.
-    " if exists(a:1)
-    " how the fuck are both of these throwing errors? fuck it no arguments.
-      " let g:cxn = a:1
-    call py#Cnxn()
-      " return
-    " endif
- " endif
+  call py#Cnxn()
 
   let s:nvim_path = v:progpath
   let s:socket = stdpath('data') . '/socket'

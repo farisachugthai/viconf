@@ -4,11 +4,14 @@
     " Description: Tmuxline conf
     " Last Modified: April 02, 2019
 " ============================================================================
+
 if !exists('$TMUX')
   finish
 endif
 
-" if exists('*plug#load')
+if !exists('g:plugs')
+  finish
+endif
 
 " Tmuxline Presets: {{{
 let g:tmuxline_powerline_separators = 0

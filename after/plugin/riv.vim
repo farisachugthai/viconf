@@ -5,6 +5,10 @@
     " Last Modified: May 09, 2019
 " ============================================================================
 
+if !exists('g:plugs')
+  finish
+endif
+
 if exists('g:did_riv_after_plugin') || &compatible || v:version < 700
     finish
 endif

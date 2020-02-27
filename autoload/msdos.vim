@@ -22,51 +22,30 @@ function! msdos#set_shell_cmd() abort  " {{{1
   " What about setting shellquote to "" so that cmd gets the args quoted?
   " echomsg 'Using cmd as the system shell.'
   return
-endfunction
+endfunction  " }}}
 
 function! msdos#invoke_cmd(command) abort  " {{{1
-  " if exists('&shellslash')
-  "   let s:old_shellslash = &shellslash
-  "   set noshellslash
-  " endif
-
   if !empty(a:command)
     let s:ret = systemlist(a:command)
   else
     call msdos#CmdTerm()
   endif
 
-  " if exists('&shellslash')
-  "   let &shellslash = s:old_shellslash
-  " endif
-
   if v:shell_error
     return v:shell_error
   else
     return s:ret
   endif
-endfunction
+endfunction  " }}}
 
 function! msdos#CmdTerm(...) abort  " {{{1
-  " Handle args later
-
-  " if exists('&shellslash')
-  "   let s:old_shellslash = &shellslash
-  "   set noshellslash
-  " endif
-
-  execute 'term cmd /U /F:ON /E:ON /K C:\tools\Cmder\vendor\init.bat'
-
-  " if exists('&shellslash')
-  "   let &shellslash = s:old_shellslash
-  " endif
-
+  execute 'term cmd /U /F:ON /E:ON /K C:\Users\fac\init.cmd'
   if v:shell_error
     return v:shell_error
   else
     return s:ret
   endif
-endfunction
+endfunction  " }}}
 
 function! msdos#PowerShell() abort  " {{{1
   " 07/23/2019: Just found out that even when using powershell comspec is
@@ -83,7 +62,7 @@ function! msdos#PowerShell() abort  " {{{1
 
   echomsg 'Using powershell as the system shell.'
   return
-endfunction
+endfunction  " }}}
 
 function! msdos#pwsh_help(helppage) abort   " {{{1
   echomsg 'Setting the shell to powershell.'
@@ -91,4 +70,4 @@ function! msdos#pwsh_help(helppage) abort   " {{{1
   " It might not be a bad idea
   :r!pwsh -NoProfile -NoLogo -Command Get-Help a:helppage
   echomsg 'Note that shell was not restored'
-endfunction
+endfunction  " }}}

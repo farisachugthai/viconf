@@ -6,6 +6,10 @@
 " ============================================================================
 
 " Guard: {{{1
+
+if !exists('g:plugs')
+  finish
+endif
 if !has_key(plugs, 'vim-gitgutter')
     finish
 endif

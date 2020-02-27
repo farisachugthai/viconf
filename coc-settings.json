@@ -37,11 +37,6 @@
     ".ts",
     ".js"
   ],
-  "coc.source.ultisnips.filetypes": [
-    "*"
-  ],
-  "coc.source.ultisnips.priority": 99,
-  "coc.source.ultisnips.shortcut": "Coc-UltiSnips:",
   "coc.source.word.filetypes": [
     "rst",
     "md",
@@ -54,7 +49,7 @@
   "codeLens.enable": true,
   "codeLens.separator": "‣",
   "diagnostic.checkCurrentLine": true,
-  "diagnostic.displayByAle": false,
+  "diagnostic.displayByAle": true,
   "diagnostic.enableMessage": "always",
   "diagnostic.filetypeMap": {
     "default": "bufferType"
@@ -358,6 +353,7 @@
     "windows"
   ],
   "python.analysis.diagnosticEnabled": true,
+  "python.analysis.logLevel": "Information",
   "python.analysis.diagnosticPublishDelay": 300,
   "python.analysis.downloadChannel": "daily",
   "python.analysis.openFilesOnly": false,
@@ -371,9 +367,6 @@
   "python.pipenvPath": "pipenv",
   "python.pythonPath": "python",
   "python.terminal.executeInFileDir": true,
-  "python.terminal.launchArgs": [
-    "-U"
-  ],
   "python.workspaceSymbols.exclusionPatterns": [
     "**/site-packages/**",
     "node_modules",

@@ -89,10 +89,19 @@ function! s:rg_setup() abort  " {{{
   else
     return v:false
   endif
-
-  let s:options = ' --vimgrep --smart-case --no-messages --hidden'
-        \ . ' --no-heading --no-ignore-messages --color never --trim'
-        \ . ' --line-number --with-filename '
+" -M, --max-columns <NUM>                 Don't print lines longer than this limit.
+" --max-columns-preview               Print a preview for lines exceeding the limit.
+" -m, --max-count <NUM>                   Limit the number of matches.
+" --max-depth <NUM>                   Descend at most NUM directories.
+" --max-filesize <NUM+SUFFIX?>        Ignore files larger than NUM in size.
+" Dude I thought vimgrep implies colors never wtf
+  let s:options = ' --vimgrep --smart-case --hidden --color never'
+        \ . ' --max-columns 300 --max-count 5 --max-columns-preview --max-depth 10 --max-filesize 5000'
+        \ . ' --ignore-file-case-insensitive --glob-case-insensitive'
+        \ . ' --no-heading --trim --with-filename --no-line-number --context 0'
+  if !has('unix')
+    let s:options .= ' --crlf'
+  endif
 
   let s:grep = s:cmd . s:options
   let &g:grepprg = s:grep

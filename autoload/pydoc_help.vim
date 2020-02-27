@@ -231,6 +231,15 @@ function! pydoc_help#show(...) abort  " {{{
   keepjumps keepalt wincmd p
 endfunction " }}}
 
+function! s:is_preview_window_open()  " {{{
+  " Source: vim-plug
+  silent! wincmd P
+  if &previewwindow
+    wincmd p
+    return 1
+  endif
+endfunction  " }}}
+
 function! pydoc_help#PreviewShow() abort  " {{{
   " erghhhhh. still not there but it's close.
   " dude preview windows are weird and there's an odd amount of basic

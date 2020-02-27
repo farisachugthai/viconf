@@ -42,14 +42,14 @@ command! CocExtensionStats :py3 from pprint import pprint; pprint(vim.eval('CocA
 command! CocFormat call CocAction('format')
 
 " Use `:Fold` to fold current buffer
-command! -nargs=? CocFold call CocActionAsync('fold', <f-args>)
+command! -nargs=? CocFold :setlocal fdm=manual | call CocActionAsync('fold', <f-args>)
 
 " use `:OR` for organize import of current buffer
 command! CocSort call CocAction('runCommand', 'editor.action.organizeImport')
 
 " Just tried this and it worked! So keep checking :CocList commands and add
 " more as we go.
-command! CocPython call CocActionAsync('runCommand', 'python.startREPL')|
+command! CocPython call CocActionAsync('runCommand', 'python.startREPL')
 
 " Let's also get some information here.
 " call CocAction('commands') is a lamer version of CocCommand
@@ -73,6 +73,35 @@ command! CocFloatJump     call       coc#util#float_jump()
 command! -bar CocCommandRepeat call       CocAction('repeatCommand')
 " How am I still going?
 command! CocServices echo CocAction('services')
+
+function! s:CocProviders(A, L, P) abort
+
+  let s:list = ['rename', 'onTypeEdit', 'documentLink', 'documentColor', 'foldingRange',
+        \ 'format', 'codeAction', 'workspaceSymbols', 'formatRange', 'hover',
+	\ 'signature', 'documentSymbol', 'documentHighlight', 'definition',
+        \ 'declaration', 'typeDefinition', 'reference', 'implementation', 'codeLens',
+        \ 'selectionRange'
+        \ ]
+  return join(s:list, "\n")
+endfunction
+
+function! s:HandleCocProviders(provider) abort
+
+  let s:resp = CocHasProvider(a:provider)
+  if s:resp is v:true
+    echomsg 'That provider *DOES* exist for your current document.'
+  elseif s:resp is v:false
+    echomsg 'That provider *DOES NOT* exist for your current document.'
+  endif
+  return s:resp
+
+endfunction
+
+" This gets way more complicated if you try to handle more than 1 arg
+" command! -nargs=* -complete=custom,s:CocProviders CocProviders for i in [(<q-args>)] | call s:HandleCocProviders(i) | endfor
+
+command! -nargs=1 -complete=custom,s:CocProviders CocProviders call s:HandleCocProviders(<args>)
+
 " }}}
 
 " A LOT Of FZF Commands: {{{
@@ -242,8 +271,7 @@ command! -nargs=* -bang -bar -complete=file -complete=customlist,unix#EditFileCo
 command! -nargs=* -bang -bar -complete=file -complete=customlist,unix#EditFileComplete -range=0
         \ SplitHere <q-mods>split<bang> <q-args>
 
-" Frustratingly this works but doesn't open the fucking file?
-command! -nargs=* -range=% -addr=buffers -bang -bar -complete=file_in_path Find <q-mods>find<bang> <q-args>
+command! -nargs=* -range=% -addr=buffers -count -bang -bar -complete=file_in_path Find :<count><mods>find<bang> <args>
 
 " Well this is nice to know about. You can specify what a range refers to.
 " -addr=loaded_buffers
@@ -256,7 +284,7 @@ command! -nargs=* -bang -bar -complete=buffer -range=% -addr=buffers
 " }}}
 
 " Miscellaneous: {{{
-command! -bar -bang -complete=compiler -nargs=* Make
+command!  -bang -complete=compiler -nargs=* Make
       \ if <args>
       \ for f in expand(<q-args>, 0, 1) |
       \ exe '<mods> make<bang>' . f |
@@ -264,7 +292,7 @@ command! -bar -bang -complete=compiler -nargs=* Make
       \ else
       \ exe '<mods> make<bang>' . expand('%')
 
-command! -bar -bang -complete=compiler -nargs=* -range=% -addr=buffers MakeBuffers
+command! -bang -complete=compiler -nargs=* -range=% -addr=buffers MakeBuffers
       \ if <args>
       \ for f in expand(<q-args>, 0, 1) |
       \ exe '<mods> make<bang>' . f |
@@ -278,7 +306,7 @@ command! -bar -nargs=1 -complete=history RerunLastX call histget(<args>, 1)
 command! -bar Todo call todo#Todo()
 
 " :he map line 1454. How have i never noticed this isn't a feature???
-command! -bar -nargs=? -bang -complete=buffer Rename file <q-args>|w<bang>za
+command! -nargs=? -bang -complete=buffer Rename file <q-args>|w<bang>za
 
 " These 2 commands are for parsing the output of scriptnames though a command
 " like :TBrowseScriptnames would probably be easier to work with:
@@ -359,7 +387,7 @@ command! -bar -bang -nargs=* -complete=dir -complete=custom,s:IPythonOptions IPy
 
 command! -bar -complete=buffer ScratchBuffer call pydoc_help#scratch_buffer()
 
-command!  NvimCxn call py#Cnxn()
+command! NvimCxn call py#Cxn()
 " }}}
 
 " Terminal Command: {{{
@@ -427,11 +455,13 @@ command! -complete=filetype -bar UltiSnipsListSnippets call UltiSnips#ListSnippe
 
 " echos either 1 or 0
 command! -bang Bang0 echo <bang>0
-" echos nothing or '!' which is fucking pointless.
+" echos nothing or '!' which is fucking pointless. Well unless you're giving
+" it to an ex command. bang0 is definitely preferable for functions.
 command! -bang Bang echo <bang>
 
-" Learn Complete:
-command! -bar -complete=compiler Compiler compiler <args>
+" Learn Complete: Note that you haven't to provide nargs or typing a letter
+" with stop the completion
+command! -bar -bang -complete=compiler -nargs=1 Compiler compiler<bang> <args>
 " '<,'>s/compiler/event/g
 " You may find that ---^ does you good
 command! -bar -complete=event Event event<args>
@@ -441,15 +471,18 @@ command! -bar -bang -complete=var -nargs=+ Var set<bang> <args>
 " well check out how cool this is. shouldnt be so surprised that this works
 command! -complete=environment -bar -nargs=+ Env let $<args>
 
-command! -bar RerunLastCmd call histget('cmd', -1)  " }}}
+command! -bar Redo call histget('cmd', -1)  " }}}
 
 " Commands from the help pages. map.txt: {{{
 " Replace a range with the contents of a file
 " (Enter this all as one line)
 command! -bar -range -nargs=1 -complete=file Replace <line1>-pu_|<line1>,<line2>d|r <args>|<line1>d
 
-" Count the number of lines in the range
-command! -bar -range -nargs=0 Lines  echo <line2> - <line1> + 1 'lines'  " }}}
+" Count the number of lines in the range. Wait how does this not need to
+" concatenate the int and the str?
+" DON'T PUT COMMENTS IN THE SAME LINE AS COMMANDS DINGUS
+command! -bar -range -nargs=* Lines echomsg <line2> - <line1> + 1 'lines'
+" }}}
 
 " Platform Specific Settings: {{{
 " dude omfg. exists($ANDROID_DATA) returns 0 on android.

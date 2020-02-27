@@ -6,10 +6,10 @@
 " Last Updated: Dec 10, 2019
 
 scriptencoding utf8  " {{{
-if exists('g:loaded_gruvbox_material_vim') || &compatible || v:version < 700
-    finish
-endif
-let g:loaded_gruvbox_material_vim = 1
+" if exists('g:loaded_gruvbox_material_vim') || &compatible || v:version < 700
+"     finish
+" endif
+" let g:loaded_gruvbox_material_vim = 1
 
 let s:cpo_save = &cpoptions
 set cpoptions-=C
@@ -19,9 +19,6 @@ if exists('syntax_on')
 endif
 
 let g:colors_name = 'gruvbox-material'
-
-let s:t_Co = exists('&t_Co') && !empty(&t_Co) && &t_Co > 1 ? &t_Co : 2
-let s:italics = (((&t_ZH !=# '' && &t_ZH != '[7m') || has('gui_running')) && !has('iOS')) || has('nvim')
 
 " }}}
 
@@ -1008,6 +1005,7 @@ hi! link vimPythonRegion Identifier
 " }}}
 
 " Original: {{{
+
 " Filetypes: {{{
 
 " Markdown: {{{
@@ -1511,11 +1509,6 @@ hi! link SignifySignAdd GitGutterAdd
 hi! link SignifySignChange GitGutterChange
 hi! link SignifySignDelete GitGutterDelete
 hi! link SignifySignChangeDelete GitGutterChangeDelete
-hi! link CtrlPNoEntries Red
-hi! link CtrlPPrtCursor Blue
-if !exists('g:Lf_StlColorscheme')
-  let g:Lf_StlColorscheme = 'gruvbox_material'
-endif
 hi! link StartifyBracket Grey
 hi! link StartifyFile White
 hi! link StartifyNumber Red
@@ -1618,8 +1611,8 @@ hi! link UndotreeCurrent Aqua
 hi! link UndotreeSavedSmall Purple
 " }}}
 
-if (has('termguicolors') && &termguicolors) || has('gui_running')  " {{{
-  if &background ==# 'dark'
+" {{{
+if &background ==# 'dark'
     let g:terminal_ansi_colors = ['#665c54', '#ea6962', '#a9b665', '#e78a4e',
           \ '#7daea3', '#d3869b', '#89b482', '#dfbf8e', '#928374', '#ea6962',
           \ '#a9b665', '#e3a84e', '#7daea3', '#d3869b', '#89b482', '#dfbf8e']
@@ -1867,24 +1860,13 @@ if (has('termguicolors') && &termguicolors) || has('gui_running')  " {{{
     hi SpecialKey guifg=#7daea3 guibg=NONE guisp=NONE gui=NONE cterm=NONE
     " hi Ignore guifg=#dfbf8e guibg=NONE guisp=NONE gui=NONE cterm=NONE
     hi link Ignore Bg1
-    if !s:italics
       hi SpellBad gui=undercurl cterm=undercurl
       hi SpellCap gui=undercurl cterm=undercurl
       hi SpellLocal gui=undercurl cterm=undercurl
       hi SpellRare gui=undercurl cterm=undercurl
       hi Todo gui=bold cterm=bold
-    endif
-    if get(g:, 'gruvbox_material_disable_italic_comment', 0)
-      hi Comment guifg=#928374 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi SpecialComment guifg=#928374 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    else
       hi Comment guifg=#928374 guibg=NONE guisp=NONE gui=italic cterm=italic
       hi SpecialComment guifg=#928374 guibg=NONE guisp=NONE gui=italic cterm=italic
-      if !s:italics
-        hi Comment gui=NONE cterm=NONE
-        hi SpecialComment gui=NONE cterm=NONE
-      endif
-    endif
     if get(g:, 'gruvbox_material_enable_bold', 0)
       hi Function guifg=#a9b665 guibg=NONE guisp=NONE gui=bold cterm=bold
     else
@@ -1930,16 +1912,6 @@ if (has('termguicolors') && &termguicolors) || has('gui_running')  " {{{
     hi helpNote guifg=#d3869b guibg=NONE guisp=NONE gui=bold cterm=bold
     hi plug1 guifg=#e78a4e guibg=NONE guisp=NONE gui=bold cterm=bold
     hi plugNumber guifg=#e3a84e guibg=NONE guisp=NONE gui=bold cterm=bold
-    if !s:italics
-      hi markdownItalic gui=NONE cterm=NONE
-      hi markdownItalicDelimiter gui=NONE cterm=NONE
-      hi mkdItalic gui=NONE cterm=NONE
-      hi htmlBoldItalic gui=bold cterm=bold
-      hi htmlBoldUnderlineItalic gui=bold,underline cterm=bold,underline
-      hi htmlUnderlineItalic gui=underline cterm=underline
-      hi htmlItalic gui=NONE cterm=NONE
-      hi vimCommentTitle gui=bold cterm=bold
-    endif
     if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
       if get(g:, 'indent_guides_auto_colors', 0)
         if get(g:, 'gruvbox_material_invert_indent_guides', 0)
@@ -1971,33 +1943,6 @@ if (has('termguicolors') && &termguicolors) || has('gui_running')  " {{{
         endif
       endif
     endif
-    if !exists('g:indentLine_color_term')
-      let g:indentLine_color_term = 239
-    endif
-    if !exists('g:indentLine_color_gui')
-      let g:indentLine_color_gui = '#504945'
-    endif
-    " Rainbow Parentheses
-    if !exists('g:rbpt_colorpairs')
-      let g:rbpt_colorpairs = [['blue', '#7daea3'], ['magenta', '#d3869b'],
-            \ ['red', '#ea6962'], ['208', '#e78a4e']]
-    endif
-
-    let g:rainbow_guifgs = [ '#e78a4e', '#ea6962', '#d3869b', '#7daea3' ]
-    let g:rainbow_ctermfgs = [ '208', 'red', 'magenta', 'blue' ]
-
-    if !exists('g:rainbow_conf')
-      let g:rainbow_conf = {}
-    endif
-    if !has_key(g:rainbow_conf, 'guifgs')
-      let g:rainbow_conf['guifgs'] = g:rainbow_guifgs
-    endif
-    if !has_key(g:rainbow_conf, 'ctermfgs')
-      let g:rainbow_conf['ctermfgs'] = g:rainbow_ctermfgs
-    endif
-
-    let g:niji_dark_colours = g:rbpt_colorpairs
-    let g:niji_light_colours = g:rbpt_colorpairs
     if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
       hi GitGutterAdd guifg=#a9b665 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
       hi GitGutterChange guifg=#7daea3 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
@@ -2014,45 +1959,6 @@ if (has('termguicolors') && &termguicolors) || has('gui_running')  " {{{
       hi GitGutterDelete guifg=#ea6962 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
       hi GitGutterChangeDelete guifg=#d3869b guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
     endif
-    if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-      hi SignatureMarkText guifg=#7daea3 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-      hi SignatureMarkerText guifg=#d3869b guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-      hi SignatureMarkText guifg=#7daea3 guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-      hi SignatureMarkerText guifg=#d3869b guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-      hi SignatureMarkText guifg=#7daea3 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-      hi SignatureMarkerText guifg=#d3869b guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-    endif
-    if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-      hi ShowMarksHLl guifg=#7daea3 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-      hi ShowMarksHLu guifg=#7daea3 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-      hi ShowMarksHLo guifg=#7daea3 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-      hi ShowMarksHLm guifg=#7daea3 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-      hi ShowMarksHLl guifg=#7daea3 guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-      hi ShowMarksHLu guifg=#7daea3 guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-      hi ShowMarksHLo guifg=#7daea3 guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-      hi ShowMarksHLm guifg=#7daea3 guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-      hi ShowMarksHLl guifg=#7daea3 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-      hi ShowMarksHLu guifg=#7daea3 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-      hi ShowMarksHLo guifg=#7daea3 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-      hi ShowMarksHLm guifg=#7daea3 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-    endif
-    hi CtrlPMatch guifg=#a9b665 guibg=NONE guisp=NONE gui=bold cterm=bold
-    hi CtrlPPrtBase guifg=#504945 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi CtrlPLinePre guifg=#504945 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi CtrlPMode1 guifg=#7daea3 guibg=#504945 guisp=NONE gui=bold cterm=bold
-    hi CtrlPMode2 guifg=#282828 guibg=#7daea3 guisp=NONE gui=bold cterm=bold
-    hi CtrlPStats guifg=#a89984 guibg=#504945 guisp=NONE gui=bold cterm=bold
-    hi Lf_hl_match guifg=#a9b665 guibg=NONE guisp=NONE gui=bold cterm=bold
-    hi Lf_hl_match0 guifg=#a9b665 guibg=NONE guisp=NONE gui=bold cterm=bold
-    hi Lf_hl_match1 guifg=#89b482 guibg=NONE guisp=NONE gui=bold cterm=bold
-    hi Lf_hl_match2 guifg=#7daea3 guibg=NONE guisp=NONE gui=bold cterm=bold
-    hi Lf_hl_match3 guifg=#d3869b guibg=NONE guisp=NONE gui=bold cterm=bold
-    hi Lf_hl_match4 guifg=#e78a4e guibg=NONE guisp=NONE gui=bold cterm=bold
-    hi Lf_hl_matchRefine guifg=#ea6962 guibg=NONE guisp=NONE gui=bold cterm=bold
     let g:vimshell_escape_colors = [
           \ '#7c6f64', '#ea6962', '#a9b665', '#e3a84e',
           \ '#7daea3', '#d3869b', '#89b482', '#a89984',
@@ -2090,7 +1996,6 @@ if (has('termguicolors') && &termguicolors) || has('gui_running')  " {{{
     hi MatchWord guifg=NONE guibg=NONE guisp=NONE gui=underline ctermfg=NONE ctermbg=NONE cterm=underline
     hi MatchWordCur guifg=NONE guibg=NONE guisp=NONE gui=underline ctermfg=NONE ctermbg=NONE cterm=underline
     hi UndotreeSavedBig guifg=#d3869b guibg=NONE guisp=NONE gui=bold cterm=bold
-    unlet s:t_Co s:italics
     finish
   endif
   " Light background
@@ -2332,24 +2237,8 @@ if (has('termguicolors') && &termguicolors) || has('gui_running')  " {{{
   hi Float guifg=#945e80 guibg=NONE guisp=NONE gui=NONE cterm=NONE
   hi SpecialKey guifg=#47747e guibg=NONE guisp=NONE gui=NONE cterm=NONE
   hi Ignore guifg=#764e37 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  if !s:italics
-    hi SpellBad gui=undercurl cterm=undercurl
-    hi SpellCap gui=undercurl cterm=undercurl
-    hi SpellLocal gui=undercurl cterm=undercurl
-    hi SpellRare gui=undercurl cterm=undercurl
-    hi Todo gui=bold cterm=bold
-  endif
-  if get(g:, 'gruvbox_material_disable_italic_comment', 0)
-    hi Comment guifg=#928374 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi SpecialComment guifg=#928374 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  else
     hi Comment guifg=#928374 guibg=NONE guisp=NONE gui=italic cterm=italic
     hi SpecialComment guifg=#928374 guibg=NONE guisp=NONE gui=italic cterm=italic
-    if !s:italics
-      hi Comment gui=NONE cterm=NONE
-      hi SpecialComment gui=NONE cterm=NONE
-    endif
-  endif
   if get(g:, 'gruvbox_material_enable_bold', 0)
     hi Function guifg=#6c782e guibg=NONE guisp=NONE gui=bold cterm=bold
   else
@@ -2395,74 +2284,6 @@ if (has('termguicolors') && &termguicolors) || has('gui_running')  " {{{
   hi helpNote guifg=#945e80 guibg=NONE guisp=NONE gui=bold cterm=bold
   hi plug1 guifg=#c55b03 guibg=NONE guisp=NONE gui=bold cterm=bold
   hi plugNumber guifg=#b47109 guibg=NONE guisp=NONE gui=bold cterm=bold
-  if !s:italics
-    hi markdownItalic gui=NONE cterm=NONE
-    hi markdownItalicDelimiter gui=NONE cterm=NONE
-    hi mkdItalic gui=NONE cterm=NONE
-    hi htmlBoldItalic gui=bold cterm=bold
-    hi htmlBoldUnderlineItalic gui=bold,underline cterm=bold,underline
-    hi htmlUnderlineItalic gui=underline cterm=underline
-    hi htmlItalic gui=NONE cterm=NONE
-    hi vimCommentTitle gui=bold cterm=bold
-  endif
-  if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-    if get(g:, 'indent_guides_auto_colors', 0)
-      if get(g:, 'gruvbox_material_invert_indent_guides', 0)
-        hi IndentGuidesOdd guifg=#f9f5d7 guibg=#d5c4a1 guisp=NONE gui=reverse cterm=reverse
-        hi IndentGuidesEven guifg=#f9f5d7 guibg=#ebdbb2 guisp=NONE gui=reverse cterm=reverse
-      else
-        hi IndentGuidesOdd guifg=#f9f5d7 guibg=#d5c4a1 guisp=NONE gui=NONE cterm=NONE
-        hi IndentGuidesEven guifg=#f9f5d7 guibg=#ebdbb2 guisp=NONE gui=NONE cterm=NONE
-      endif
-    endif
-  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-    if get(g:, 'indent_guides_auto_colors', 0)
-      if get(g:, 'gruvbox_material_invert_indent_guides', 0)
-        hi IndentGuidesOdd guifg=#f2e5bc guibg=#d5c4a1 guisp=NONE gui=reverse cterm=reverse
-        hi IndentGuidesEven guifg=#f2e5bc guibg=#ebdbb2 guisp=NONE gui=reverse cterm=reverse
-      else
-        hi IndentGuidesOdd guifg=#f2e5bc guibg=#d5c4a1 guisp=NONE gui=NONE cterm=NONE
-        hi IndentGuidesEven guifg=#f2e5bc guibg=#ebdbb2 guisp=NONE gui=NONE cterm=NONE
-      endif
-    endif
-  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-    if get(g:, 'indent_guides_auto_colors', 0)
-      if get(g:, 'gruvbox_material_invert_indent_guides', 0)
-        hi IndentGuidesOdd guifg=#fbf1c7 guibg=#d5c4a1 guisp=NONE gui=reverse cterm=reverse
-        hi IndentGuidesEven guifg=#fbf1c7 guibg=#ebdbb2 guisp=NONE gui=reverse cterm=reverse
-      else
-        hi IndentGuidesOdd guifg=#fbf1c7 guibg=#d5c4a1 guisp=NONE gui=NONE cterm=NONE
-        hi IndentGuidesEven guifg=#fbf1c7 guibg=#ebdbb2 guisp=NONE gui=NONE cterm=NONE
-      endif
-    endif
-  endif
-  if !exists('g:indentLine_color_term')
-    let g:indentLine_color_term = 250
-  endif
-  if !exists('g:indentLine_color_gui')
-    let g:indentLine_color_gui = '#d5c4a1'
-  endif
-  " Rainbow Parentheses
-  if !exists('g:rbpt_colorpairs')
-    let g:rbpt_colorpairs = [['blue', '#47747e'], ['magenta', '#945e80'],
-          \ ['red', '#c74545'], ['130', '#c55b03']]
-  endif
-
-  let g:rainbow_guifgs = [ '#c55b03', '#c74545', '#945e80', '#47747e' ]
-  let g:rainbow_ctermfgs = [ '130', 'red', 'magenta', 'blue' ]
-
-  if !exists('g:rainbow_conf')
-    let g:rainbow_conf = {}
-  endif
-  if !has_key(g:rainbow_conf, 'guifgs')
-    let g:rainbow_conf['guifgs'] = g:rainbow_guifgs
-  endif
-  if !has_key(g:rainbow_conf, 'ctermfgs')
-    let g:rainbow_conf['ctermfgs'] = g:rainbow_ctermfgs
-  endif
-
-  let g:niji_dark_colours = g:rbpt_colorpairs
-  let g:niji_light_colours = g:rbpt_colorpairs
   if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
     hi GitGutterAdd guifg=#6c782e guibg=#fbf1c7 guisp=NONE gui=NONE cterm=NONE
     hi GitGutterChange guifg=#47747e guibg=#fbf1c7 guisp=NONE gui=NONE cterm=NONE
@@ -2479,45 +2300,6 @@ if (has('termguicolors') && &termguicolors) || has('gui_running')  " {{{
     hi GitGutterDelete guifg=#c74545 guibg=#ebdbb2 guisp=NONE gui=NONE cterm=NONE
     hi GitGutterChangeDelete guifg=#945e80 guibg=#ebdbb2 guisp=NONE gui=NONE cterm=NONE
   endif
-  if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-    hi SignatureMarkText guifg=#47747e guibg=#fbf1c7 guisp=NONE gui=NONE cterm=NONE
-    hi SignatureMarkerText guifg=#945e80 guibg=#fbf1c7 guisp=NONE gui=NONE cterm=NONE
-  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-    hi SignatureMarkText guifg=#47747e guibg=#f2e5bc guisp=NONE gui=NONE cterm=NONE
-    hi SignatureMarkerText guifg=#945e80 guibg=#f2e5bc guisp=NONE gui=NONE cterm=NONE
-  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-    hi SignatureMarkText guifg=#47747e guibg=#ebdbb2 guisp=NONE gui=NONE cterm=NONE
-    hi SignatureMarkerText guifg=#945e80 guibg=#ebdbb2 guisp=NONE gui=NONE cterm=NONE
-  endif
-  if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-    hi ShowMarksHLl guifg=#47747e guibg=#fbf1c7 guisp=NONE gui=NONE cterm=NONE
-    hi ShowMarksHLu guifg=#47747e guibg=#fbf1c7 guisp=NONE gui=NONE cterm=NONE
-    hi ShowMarksHLo guifg=#47747e guibg=#fbf1c7 guisp=NONE gui=NONE cterm=NONE
-    hi ShowMarksHLm guifg=#47747e guibg=#fbf1c7 guisp=NONE gui=NONE cterm=NONE
-  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-    hi ShowMarksHLl guifg=#47747e guibg=#f2e5bc guisp=NONE gui=NONE cterm=NONE
-    hi ShowMarksHLu guifg=#47747e guibg=#f2e5bc guisp=NONE gui=NONE cterm=NONE
-    hi ShowMarksHLo guifg=#47747e guibg=#f2e5bc guisp=NONE gui=NONE cterm=NONE
-    hi ShowMarksHLm guifg=#47747e guibg=#f2e5bc guisp=NONE gui=NONE cterm=NONE
-  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-    hi ShowMarksHLl guifg=#47747e guibg=#ebdbb2 guisp=NONE gui=NONE cterm=NONE
-    hi ShowMarksHLu guifg=#47747e guibg=#ebdbb2 guisp=NONE gui=NONE cterm=NONE
-    hi ShowMarksHLo guifg=#47747e guibg=#ebdbb2 guisp=NONE gui=NONE cterm=NONE
-    hi ShowMarksHLm guifg=#47747e guibg=#ebdbb2 guisp=NONE gui=NONE cterm=NONE
-  endif
-  hi CtrlPMatch guifg=#6c782e guibg=NONE guisp=NONE gui=bold cterm=bold
-  hi CtrlPPrtBase guifg=#d5c4a1 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  hi CtrlPLinePre guifg=#d5c4a1 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  hi CtrlPMode1 guifg=#47747e guibg=#d5c4a1 guisp=NONE gui=bold cterm=bold
-  hi CtrlPMode2 guifg=#fbf1c7 guibg=#47747e guisp=NONE gui=bold cterm=bold
-  hi CtrlPStats guifg=#7c6f64 guibg=#d5c4a1 guisp=NONE gui=bold cterm=bold
-  hi Lf_hl_match guifg=#6c782e guibg=NONE guisp=NONE gui=bold cterm=bold
-  hi Lf_hl_match0 guifg=#6c782e guibg=NONE guisp=NONE gui=bold cterm=bold
-  hi Lf_hl_match1 guifg=#4c7a5d guibg=NONE guisp=NONE gui=bold cterm=bold
-  hi Lf_hl_match2 guifg=#47747e guibg=NONE guisp=NONE gui=bold cterm=bold
-  hi Lf_hl_match3 guifg=#945e80 guibg=NONE guisp=NONE gui=bold cterm=bold
-  hi Lf_hl_match4 guifg=#c55b03 guibg=NONE guisp=NONE gui=bold cterm=bold
-  hi Lf_hl_matchRefine guifg=#c74545 guibg=NONE guisp=NONE gui=bold cterm=bold
   let g:vimshell_escape_colors = [
         \ '#a89984', '#c74545', '#6c782e', '#b47109',
         \ '#47747e', '#945e80', '#4c7a5d', '#7c6f64',
@@ -2555,11 +2337,9 @@ if (has('termguicolors') && &termguicolors) || has('gui_running')  " {{{
   hi MatchWord guifg=NONE guibg=NONE guisp=NONE gui=underline ctermfg=NONE ctermbg=NONE cterm=underline
   hi MatchWordCur guifg=NONE guibg=NONE guisp=NONE gui=underline ctermfg=NONE ctermbg=NONE cterm=underline
   hi UndotreeSavedBig guifg=#945e80 guibg=NONE guisp=NONE gui=bold cterm=bold
-  unlet s:t_Co s:italics
-  finish
-endif  " }}}
+  finish " }}}
 
-if s:t_Co >= 256  "  {{{
+  " {{{
   if &background ==# 'dark'
     hi White ctermfg=223 ctermbg=NONE cterm=NONE
     hi LightGrey ctermfg=246 ctermbg=NONE cterm=NONE
@@ -2787,24 +2567,8 @@ if s:t_Co >= 256  "  {{{
     hi Float ctermfg=175 ctermbg=NONE cterm=NONE
     hi SpecialKey ctermfg=109 ctermbg=NONE cterm=NONE
     hi Ignore ctermfg=223 ctermbg=NONE cterm=NONE
-    if !s:italics
-      hi SpellBad cterm=underline
-      hi SpellCap cterm=underline
-      hi SpellLocal cterm=underline
-      hi SpellRare cterm=underline
-      hi Todo cterm=bold
-    endif
-    if get(g:, 'gruvbox_material_disable_italic_comment', 0)
-      hi Comment ctermfg=245 ctermbg=NONE cterm=NONE
-      hi SpecialComment ctermfg=245 ctermbg=NONE cterm=NONE
-    else
       hi Comment ctermfg=245 ctermbg=NONE cterm=italic
       hi SpecialComment ctermfg=245 ctermbg=NONE cterm=italic
-      if !s:italics
-        hi Comment cterm=NONE
-        hi SpecialComment cterm=NONE
-      endif
-    endif
     if get(g:, 'gruvbox_material_enable_bold', 0)
       hi Function ctermfg=142 ctermbg=NONE cterm=bold
     else
@@ -2850,74 +2614,6 @@ if s:t_Co >= 256  "  {{{
     hi helpNote ctermfg=175 ctermbg=NONE cterm=bold
     hi plug1 ctermfg=208 ctermbg=NONE cterm=bold
     hi plugNumber ctermfg=214 ctermbg=NONE cterm=bold
-    if !s:italics
-      hi markdownItalic cterm=NONE
-      hi markdownItalicDelimiter cterm=NONE
-      hi mkdItalic cterm=NONE
-      hi htmlBoldItalic cterm=bold
-      hi htmlBoldUnderlineItalic cterm=bold,underline
-      hi htmlUnderlineItalic cterm=underline
-      hi htmlItalic cterm=NONE
-      hi vimCommentTitle cterm=bold
-    endif
-    if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-      if get(g:, 'indent_guides_auto_colors', 0)
-        if get(g:, 'gruvbox_material_invert_indent_guides', 0)
-          hi IndentGuidesOdd ctermfg=234 ctermbg=239 cterm=reverse
-          hi IndentGuidesEven ctermfg=234 ctermbg=237 cterm=reverse
-        else
-          hi IndentGuidesOdd ctermfg=234 ctermbg=239 cterm=NONE
-          hi IndentGuidesEven ctermfg=234 ctermbg=237 cterm=NONE
-        endif
-      endif
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-      if get(g:, 'indent_guides_auto_colors', 0)
-        if get(g:, 'gruvbox_material_invert_indent_guides', 0)
-          hi IndentGuidesOdd ctermfg=236 ctermbg=239 cterm=reverse
-          hi IndentGuidesEven ctermfg=236 ctermbg=237 cterm=reverse
-        else
-          hi IndentGuidesOdd ctermfg=236 ctermbg=239 cterm=NONE
-          hi IndentGuidesEven ctermfg=236 ctermbg=237 cterm=NONE
-        endif
-      endif
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-      if get(g:, 'indent_guides_auto_colors', 0)
-        if get(g:, 'gruvbox_material_invert_indent_guides', 0)
-          hi IndentGuidesOdd ctermfg=235 ctermbg=239 cterm=reverse
-          hi IndentGuidesEven ctermfg=235 ctermbg=237 cterm=reverse
-        else
-          hi IndentGuidesOdd ctermfg=235 ctermbg=239 cterm=NONE
-          hi IndentGuidesEven ctermfg=235 ctermbg=237 cterm=NONE
-        endif
-      endif
-    endif
-    if !exists('g:indentLine_color_term')
-      let g:indentLine_color_term = 239
-    endif
-    if !exists('g:indentLine_color_gui')
-      let g:indentLine_color_gui = '#504945'
-    endif
-    " Rainbow Parentheses
-    if !exists('g:rbpt_colorpairs')
-      let g:rbpt_colorpairs = [['blue', '#7daea3'], ['magenta', '#d3869b'],
-            \ ['red', '#ea6962'], ['208', '#e78a4e']]
-    endif
-
-    let g:rainbow_guifgs = [ '#e78a4e', '#ea6962', '#d3869b', '#7daea3' ]
-    let g:rainbow_ctermfgs = [ '208', 'red', 'magenta', 'blue' ]
-
-    if !exists('g:rainbow_conf')
-      let g:rainbow_conf = {}
-    endif
-    if !has_key(g:rainbow_conf, 'guifgs')
-      let g:rainbow_conf['guifgs'] = g:rainbow_guifgs
-    endif
-    if !has_key(g:rainbow_conf, 'ctermfgs')
-      let g:rainbow_conf['ctermfgs'] = g:rainbow_ctermfgs
-    endif
-
-    let g:niji_dark_colours = g:rbpt_colorpairs
-    let g:niji_light_colours = g:rbpt_colorpairs
     if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
       hi GitGutterAdd ctermfg=142 ctermbg=235 cterm=NONE
       hi GitGutterChange ctermfg=109 ctermbg=235 cterm=NONE
@@ -2944,35 +2640,6 @@ if s:t_Co >= 256  "  {{{
       hi SignatureMarkText ctermfg=109 ctermbg=237 cterm=NONE
       hi SignatureMarkerText ctermfg=175 ctermbg=237 cterm=NONE
     endif
-    if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-      hi ShowMarksHLl ctermfg=109 ctermbg=235 cterm=NONE
-      hi ShowMarksHLu ctermfg=109 ctermbg=235 cterm=NONE
-      hi ShowMarksHLo ctermfg=109 ctermbg=235 cterm=NONE
-      hi ShowMarksHLm ctermfg=109 ctermbg=235 cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-      hi ShowMarksHLl ctermfg=109 ctermbg=236 cterm=NONE
-      hi ShowMarksHLu ctermfg=109 ctermbg=236 cterm=NONE
-      hi ShowMarksHLo ctermfg=109 ctermbg=236 cterm=NONE
-      hi ShowMarksHLm ctermfg=109 ctermbg=236 cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-      hi ShowMarksHLl ctermfg=109 ctermbg=237 cterm=NONE
-      hi ShowMarksHLu ctermfg=109 ctermbg=237 cterm=NONE
-      hi ShowMarksHLo ctermfg=109 ctermbg=237 cterm=NONE
-      hi ShowMarksHLm ctermfg=109 ctermbg=237 cterm=NONE
-    endif
-    hi CtrlPMatch ctermfg=142 ctermbg=NONE cterm=bold
-    hi CtrlPPrtBase ctermfg=239 ctermbg=NONE cterm=NONE
-    hi CtrlPLinePre ctermfg=239 ctermbg=NONE cterm=NONE
-    hi CtrlPMode1 ctermfg=109 ctermbg=239 cterm=bold
-    hi CtrlPMode2 ctermfg=235 ctermbg=109 cterm=bold
-    hi CtrlPStats ctermfg=246 ctermbg=239 cterm=bold
-    hi Lf_hl_match ctermfg=142 ctermbg=NONE cterm=bold
-    hi Lf_hl_match0 ctermfg=142 ctermbg=NONE cterm=bold
-    hi Lf_hl_match1 ctermfg=108 ctermbg=NONE cterm=bold
-    hi Lf_hl_match2 ctermfg=109 ctermbg=NONE cterm=bold
-    hi Lf_hl_match3 ctermfg=175 ctermbg=NONE cterm=bold
-    hi Lf_hl_match4 ctermfg=208 ctermbg=NONE cterm=bold
-    hi Lf_hl_matchRefine ctermfg=167 ctermbg=NONE cterm=bold
     let g:vimshell_escape_colors = [
           \ '#7c6f64', '#ea6962', '#a9b665', '#e3a84e',
           \ '#7daea3', '#d3869b', '#89b482', '#a89984',
@@ -3010,7 +2677,6 @@ if s:t_Co >= 256  "  {{{
     hi MatchWord ctermfg=NONE ctermbg=NONE cterm=underline
     hi MatchWordCur ctermfg=NONE ctermbg=NONE cterm=underline
     hi UndotreeSavedBig ctermfg=175 ctermbg=NONE cterm=bold
-    unlet s:t_Co s:italics
     finish
   endif
   " Light background
@@ -3231,24 +2897,13 @@ if s:t_Co >= 256  "  {{{
   hi Float ctermfg=96 ctermbg=NONE cterm=NONE
   hi SpecialKey ctermfg=24 ctermbg=NONE cterm=NONE
   hi Ignore ctermfg=237 ctermbg=NONE cterm=NONE
-  if !s:italics
     hi SpellBad cterm=underline
     hi SpellCap cterm=underline
     hi SpellLocal cterm=underline
     hi SpellRare cterm=underline
     hi Todo cterm=bold
-  endif
-  if get(g:, 'gruvbox_material_disable_italic_comment', 0)
-    hi Comment ctermfg=245 ctermbg=NONE cterm=NONE
-    hi SpecialComment ctermfg=245 ctermbg=NONE cterm=NONE
-  else
     hi Comment ctermfg=245 ctermbg=NONE cterm=italic
     hi SpecialComment ctermfg=245 ctermbg=NONE cterm=italic
-    if !s:italics
-      hi Comment cterm=NONE
-      hi SpecialComment cterm=NONE
-    endif
-  endif
   if get(g:, 'gruvbox_material_enable_bold', 0)
     hi Function ctermfg=100 ctermbg=NONE cterm=bold
   else
@@ -3294,7 +2949,6 @@ if s:t_Co >= 256  "  {{{
   hi helpNote ctermfg=96 ctermbg=NONE cterm=bold
   hi plug1 ctermfg=130 ctermbg=NONE cterm=bold
   hi plugNumber ctermfg=136 ctermbg=NONE cterm=bold
-  if !s:italics
     hi markdownItalic cterm=NONE
     hi markdownItalicDelimiter cterm=NONE
     hi mkdItalic cterm=NONE
@@ -3303,65 +2957,6 @@ if s:t_Co >= 256  "  {{{
     hi htmlUnderlineItalic cterm=underline
     hi htmlItalic cterm=NONE
     hi vimCommentTitle cterm=bold
-  endif
-  if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-    if get(g:, 'indent_guides_auto_colors', 0)
-      if get(g:, 'gruvbox_material_invert_indent_guides', 0)
-        hi IndentGuidesOdd ctermfg=230 ctermbg=250 cterm=reverse
-        hi IndentGuidesEven ctermfg=230 ctermbg=223 cterm=reverse
-      else
-        hi IndentGuidesOdd ctermfg=230 ctermbg=250 cterm=NONE
-        hi IndentGuidesEven ctermfg=230 ctermbg=223 cterm=NONE
-      endif
-    endif
-  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-    if get(g:, 'indent_guides_auto_colors', 0)
-      if get(g:, 'gruvbox_material_invert_indent_guides', 0)
-        hi IndentGuidesOdd ctermfg=228 ctermbg=250 cterm=reverse
-        hi IndentGuidesEven ctermfg=228 ctermbg=223 cterm=reverse
-      else
-        hi IndentGuidesOdd ctermfg=228 ctermbg=250 cterm=NONE
-        hi IndentGuidesEven ctermfg=228 ctermbg=223 cterm=NONE
-      endif
-    endif
-  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-    if get(g:, 'indent_guides_auto_colors', 0)
-      if get(g:, 'gruvbox_material_invert_indent_guides', 0)
-        hi IndentGuidesOdd ctermfg=229 ctermbg=250 cterm=reverse
-        hi IndentGuidesEven ctermfg=229 ctermbg=223 cterm=reverse
-      else
-        hi IndentGuidesOdd ctermfg=229 ctermbg=250 cterm=NONE
-        hi IndentGuidesEven ctermfg=229 ctermbg=223 cterm=NONE
-      endif
-    endif
-  endif
-  if !exists('g:indentLine_color_term')
-    let g:indentLine_color_term = 250
-  endif
-  if !exists('g:indentLine_color_gui')
-    let g:indentLine_color_gui = '#d5c4a1'
-  endif
-  " Rainbow Parentheses
-  if !exists('g:rbpt_colorpairs')
-    let g:rbpt_colorpairs = [['blue', '#47747e'], ['magenta', '#945e80'],
-          \ ['red', '#c74545'], ['130', '#c55b03']]
-  endif
-
-  let g:rainbow_guifgs = [ '#c55b03', '#c74545', '#945e80', '#47747e' ]
-  let g:rainbow_ctermfgs = [ '130', 'red', 'magenta', 'blue' ]
-
-  if !exists('g:rainbow_conf')
-    let g:rainbow_conf = {}
-  endif
-  if !has_key(g:rainbow_conf, 'guifgs')
-    let g:rainbow_conf['guifgs'] = g:rainbow_guifgs
-  endif
-  if !has_key(g:rainbow_conf, 'ctermfgs')
-    let g:rainbow_conf['ctermfgs'] = g:rainbow_ctermfgs
-  endif
-
-  let g:niji_dark_colours = g:rbpt_colorpairs
-  let g:niji_light_colours = g:rbpt_colorpairs
   if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
     hi GitGutterAdd ctermfg=100 ctermbg=229 cterm=NONE
     hi GitGutterChange ctermfg=24 ctermbg=229 cterm=NONE
@@ -3388,35 +2983,6 @@ if s:t_Co >= 256  "  {{{
     hi SignatureMarkText ctermfg=24 ctermbg=223 cterm=NONE
     hi SignatureMarkerText ctermfg=96 ctermbg=223 cterm=NONE
   endif
-  if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-    hi ShowMarksHLl ctermfg=24 ctermbg=229 cterm=NONE
-    hi ShowMarksHLu ctermfg=24 ctermbg=229 cterm=NONE
-    hi ShowMarksHLo ctermfg=24 ctermbg=229 cterm=NONE
-    hi ShowMarksHLm ctermfg=24 ctermbg=229 cterm=NONE
-  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-    hi ShowMarksHLl ctermfg=24 ctermbg=228 cterm=NONE
-    hi ShowMarksHLu ctermfg=24 ctermbg=228 cterm=NONE
-    hi ShowMarksHLo ctermfg=24 ctermbg=228 cterm=NONE
-    hi ShowMarksHLm ctermfg=24 ctermbg=228 cterm=NONE
-  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-    hi ShowMarksHLl ctermfg=24 ctermbg=223 cterm=NONE
-    hi ShowMarksHLu ctermfg=24 ctermbg=223 cterm=NONE
-    hi ShowMarksHLo ctermfg=24 ctermbg=223 cterm=NONE
-    hi ShowMarksHLm ctermfg=24 ctermbg=223 cterm=NONE
-  endif
-  hi CtrlPMatch ctermfg=100 ctermbg=NONE cterm=bold
-  hi CtrlPPrtBase ctermfg=250 ctermbg=NONE cterm=NONE
-  hi CtrlPLinePre ctermfg=250 ctermbg=NONE cterm=NONE
-  hi CtrlPMode1 ctermfg=24 ctermbg=250 cterm=bold
-  hi CtrlPMode2 ctermfg=229 ctermbg=24 cterm=bold
-  hi CtrlPStats ctermfg=243 ctermbg=250 cterm=bold
-  hi Lf_hl_match ctermfg=100 ctermbg=NONE cterm=bold
-  hi Lf_hl_match0 ctermfg=100 ctermbg=NONE cterm=bold
-  hi Lf_hl_match1 ctermfg=165 ctermbg=NONE cterm=bold
-  hi Lf_hl_match2 ctermfg=24 ctermbg=NONE cterm=bold
-  hi Lf_hl_match3 ctermfg=96 ctermbg=NONE cterm=bold
-  hi Lf_hl_match4 ctermfg=130 ctermbg=NONE cterm=bold
-  hi Lf_hl_matchRefine ctermfg=88 ctermbg=NONE cterm=bold
   let g:vimshell_escape_colors = [
         \ '#a89984', '#c74545', '#6c782e', '#b47109',
         \ '#47747e', '#945e80', '#4c7a5d', '#7c6f64',
@@ -3454,11 +3020,10 @@ if s:t_Co >= 256  "  {{{
   hi MatchWord ctermfg=NONE ctermbg=NONE cterm=underline
   hi MatchWordCur ctermfg=NONE ctermbg=NONE cterm=underline
   hi UndotreeSavedBig ctermfg=96 ctermbg=NONE cterm=bold
-  unlet s:t_Co s:italics
   finish
 endif
-
-" }}}
 " }}}
 
-" Vim: set fdls=0 fdm=marker:
+" }}}
+
+" Vim: set fdls=0 fdm=marker et sw=4 ts=4 sts=4:

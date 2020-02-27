@@ -39,38 +39,13 @@ endif
 " todo: closeoff
 " }}}
 
+setglobal autochdir autowrite autoread
 if &tabstop > 4 | setglobal tabstop=4 | endif
 if &shiftwidth > 4  | setglobal shiftwidth=4 | endif
 setglobal expandtab smarttab softtabstop=4
 set nohlsearch
 if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif
 setglobal cdpath+=$HOME,$VIMRUNTIME
-
-" Tags: {{{
-setglobal tags=tags,**/tags
-setglobal tagcase=smart
-setglobal showfulltag
-
-function! TagFunc(pattern, flags, info) abort   " {{{
-" Lol literally what is this option?
-" well fuck. just errored on nvim4
-  function! CompareFilenames(item1, item2) abort
-    let f1 = a:item1['filename']
-    let f2 = a:item2['filename']
-    return f1 >=# f2 ?
-    \ -1 : f1 <=# f2 ? 1 : 0
-  endfunction
-
-  let result = taglist(a:pattern)
-  call sort(result, 'CompareFilenames')
-
-  return result
-endfunction  " }}}
-
-if exists('&tagfunc')
-  let &g:tagfunc = 'TagFunc'
-endif
-" }}}
 
 " Platform Specific Options: {{{
 if has('unix')
@@ -323,11 +298,12 @@ let g:NERDTreeQuitOnOpen = 3
 
 " }}}
 
-" }}}
-
 " Tagbar: {{{
 
 " General Options: {{{
+setglobal tags=tags,**/tags
+setglobal tagcase=smart
+setglobal showfulltag
 
 " I want the spacebar back
 let g:tagbar_map_showproto = '?'
@@ -567,7 +543,9 @@ function! MyDictContext() abort
   " on windows
   if filereadable('/usr/share/dict/words')
     return "\<C-x>\<C-k>"
-  let l:dict_context = fnamemodify(expand('<sfile>') ':p:h:h')
+  endif
+
+  let l:dict_context = fnamemodify(expand('<sfile>') . ':p:h:h')
   if filereadable(l:dict_context . '/spell/en.utf-8.add')
     return "\<C-x>\<C-k>"
   else
@@ -696,9 +674,10 @@ let g:coc_jump_locations = []
 " if !exists(':Rg') | call plug#load('fzf.vim') | endif
 
 " Set up windows to have the correct commands
-if !exists('$FZF_DEFAULT_COMMAND')  || !has('unix')
+if !has('unix')
   " let $FZF_DEFAULT_COMMAND = 'rg --hidden -M 200 -m 200 --smart-case --passthru --files . '
-  let $FZF_DEFAULT_COMMAND = 'fd --hidden --follow -d 6 -t f '
+  " let $FZF_DEFAULT_COMMAND = 'fd --hidden --follow -d 6 -t f '
+  unlet! $FZF_DEFAULT_OPTS $FZF_DEFAULT_COMMAND
 endif  " }}}
 
 " Options: {{{
@@ -888,7 +867,7 @@ augroup END  " }}}
 command! -bar ReloadStatusline call s:Statusline()
 " }}}
 
-" Fix the path: {{{
+" Fix the path + Last Call For Options: {{{
 
 if exists('*stdpath')  " fuckin vim
   let &path = '.,,**,' . expand('$VIMRUNTIME') . '/*/*.vim'  . ',' . stdpath('config')
@@ -896,9 +875,9 @@ else
   let &path = '.,,**,' . expand('$VIMRUNTIME') . '/*/*.vim'
 endif
 
-" Last Call For Options: {{{
 if &omnifunc ==# '' | setlocal omnifunc=syntaxcomplete#Complete | endif
 
-if &completefunc ==# '' | setlocal completefunc=syntaxcomplete#Complete | endif  " }}}
+if &completefunc ==# '' | setlocal completefunc=syntaxcomplete#Complete | endif
+"  }}}
 
 " Vim: set fdm=marker:

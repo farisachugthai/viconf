@@ -5,10 +5,11 @@
     " Last Modified: May 04, 2019
 " ============================================================================
 
-" The modifications made here try to optimize Jedi's utilities; however,
-" many features are disabled. Jedi was responsible for over 80% of my startuptime
-" in some cases, which I was initially shocked by.
 " Guard: {{{1
+if !exists('g:plugs')
+  finish
+endif
+
 if !has_key(plugs, 'jedi-vim')
     finish
 endif

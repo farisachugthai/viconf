@@ -385,3 +385,26 @@ That does the same thing that I did in this function::
      return FugitiveExtractGitDir(fnamemodify(expand('%'), ':p:h'))
    endfunction
 
+User Defined Commands
+=======================
+
+Feb 25, 2020:
+Can be too difficult to write; however, they're pretty great when done
+correctly.
+
+- `:Find` with no arg opens this file
+
+- `:Find!` does as well
+  
+- `:Find <TAB><TAB>` begins cycling files
+
+- `:Find README.md` opens the first README.md in the path
+
+- `:2Find README.md` opens the 2nd README.md in the path
+
+- completes as expected
+
+User defined find.::
+
+   command! -nargs=* -range=% -addr=buffers -count -bang -bar -complete=file_in_path Find :<count><mods>find<bang> <args>
+

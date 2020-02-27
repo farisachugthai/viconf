@@ -66,13 +66,18 @@ setglobal nobackup           " but do not persist backup after successful write
 " its slower but idc
 setglobal backupcopy=yes
 " patch required to honor double slash at end consolidate the writebackups -- they usually get deleted
-if has('patch-8.1.0251') | let &g:backupdir=stdpath('config') . '/undodir//' | endif
+if has('patch-8.1.0251')
+ let &g:backupdir=stdpath('config') . '/undodir//'
+ endif
 " Gotta be honest this part was stolen almost entirely from arch:
 
 " Move temporary files to a secure location to protect against CVE-2017-1000382
 if exists('$XDG_CACHE_HOME')
   let &g:directory=$XDG_CACHE_HOME
 else
+" How the actual fuck is this a real problem?
+  if !has('unix') | unlet $HOME | let $HOME = 'C:\Users\fac' | endif
+  let $XDG_CACHE_HOME = $HOME . '/.cache'
   let &g:directory=$HOME . '/.cache'
 endif
 let &g:undodir = &g:directory . '/vim/undo//'
@@ -122,8 +127,6 @@ setglobal path-=/usr/include
 setglobal sessionoptions-=buffers,winsize viewoptions-=options sessionoptions+=globals
 setglobal mouse=a
 setglobal nojoinspaces
-setglobal autowrite autochdir
-
 setglobal modeline
 if exists('&modelineexpr') | setglobal modelineexpr | endif
 
@@ -150,14 +153,13 @@ setglobal synmaxcol=1000  " }}}
 
 " Load Plugins: {{{
 
-set noloadplugins " no i meant mine
-if !exists('plug#load')  | exec 'source ' . s:repo_root . '/vim-plug/plug.vim' | endif
+" set noloadplugins " no i meant mine
+if !exists('plug#load')  | unlet! g:loaded_plug | exec 'source ' . s:repo_root . '/vim-plug/plug.vim' | endif
+" runtime! plugin/**/*.vim
+
 " Don't assume that worked. Needs to be defined but increasingly not as needed
 
 " Preliminary Options: {{{
-let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Evervim. Thanks!
-" let s:wsl = !empty($WSL_DISTRO_NAME)                   " Windows is !has('unix') but WSL checks explicitly
-
 " Few options I wanna set in advance
 let g:no_default_tabular_maps = 1
 let g:plug_shallow = 1
@@ -167,6 +169,8 @@ let g:undotree_SetFocusWhenToggle = 1
 " }}}
 
 " List of plugins: {{{
+
+function! LoadMyPlugins() abort
 
 call plug#begin(stdpath('data') . '/plugged')
 
@@ -257,12 +261,8 @@ if empty(s:termux)  " {{{
   Plug 'godlygeek/tabular', {'on': 'Tabularize'}
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
-  Plug 'elzr/vim-json', { 'for': 'json' }
-  Plug 'omnisharp/omnisharp-vim' " , {'for': ['cs', 'ps1',] }
-  Plug 'michaeljsmith/vim-indent-object'
-  Plug 'liuchengxu/vista.vim'
+  Plug 'omnisharp/omnisharp-vim', {'for': ['cs', 'ps1',] }
   Plug 'HiPhish/jinja.vim'
-  Plug 'neovim/nvim-lsp', { 'on': 'LspInstall' }
 endif
 " }}}
 
@@ -271,14 +271,17 @@ Plug 'tomtom/tlib_vim'
 Plug 'ryanoasis/vim-devicons'           " Keep at end!
 call plug#end()
 
+endfunction
+
+call LoadMyPlugins()
 " }}}
 
 " Commands: {{{
 
 " I utilize this command so often I may as well save the characters
 command! Plugins echo map(keys(g:plugs), '"\n" . v:val')
-
-runtime! plugin/**/*.vim
+" Idk why but this became necessary on windows again
+if !has('unix') | set termguicolors | endif
 colo gruvbox-material
 
 packadd! matchit

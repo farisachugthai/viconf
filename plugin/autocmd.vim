@@ -27,16 +27,14 @@ augroup UserHelpandPython " {{{
   " inspired by $VIMRUNTIME/plugin/man.vim
   " autocmd BufReadCmd pydoc:// call pydoc_help#foo(matchstr(expand('<amatch>'), 'pydoc://\zs.*'))
 
-  autocmd FileType *
-    \ if &omnifunc != ''
-      \| if !exists('*SuperTabChain')
-      \| call plug#load('supertab')
+  if exists('*SuperTabChain')
+    autocmd FileType *
+      \ if &omnifunc != ''
+      \|  call SuperTabChain(&omnifunc, "<c-p>")
+      \| else
+      \|  call SuperTabChain(&completefunc, "<c-p>")
       \| endif
-    \|  call SuperTabChain(&omnifunc, "<c-p>")
-    \| else
-    \|  call SuperTabChain(&completefunc, "<c-p>")
-    \| endif
-
+  endif
 augroup END
 " }}}
 
@@ -93,9 +91,10 @@ augroup UserTerm " {{{
   " Set up mappings
   autocmd TermOpen * call buffers#terminals()
 
-  autocmd TermOpen,WinEnter * if &buftype=='terminal'
-    \|setlocal winhighlight=StatusLine:StatusLineTerm,StatusLineNC:StatusLineTermNC
-    \|else|setlocal winhighlight=|endif
+  " Dear god this i awful looking
+  " autocmd TermOpen,WinEnter * if &buftype=='terminal'
+  "   \|setlocal winhighlight=StatusLine:StatusLineTerm,StatusLineNC:StatusLineTermNC
+  "   \|else|setlocal winhighlight=|endif
 
 augroup END
 " }}}

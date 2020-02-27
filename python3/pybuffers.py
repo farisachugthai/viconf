@@ -21,7 +21,7 @@ import traceback
 from pprint import pprint as print
 
 try:
-    import vim  # pylint: disable=import-error
+    import vim  # noqa
 except ImportError:
     vim = None  # remote process not in vim
 
@@ -112,22 +112,19 @@ class PythonToVimStr:
     __slots__ = []
 
     def __new__(cls, obj, encoding="UTF-8"):
-        if not (is_py3 or isinstance(obj, unicode)):
-            obj = unicode.__new__(cls, obj, encoding)
+        if not isinstance(obj, str):
+            obj = str.__new__(cls, obj, encoding)
 
         # Vim cannot deal with zero bytes:
         obj = obj.replace("\0", "\\0")
-        return unicode.__new__(cls, obj)
+        return str.__new__(cls, obj)
 
     def __repr__(self):
         # this is totally stupid and makes no sense but vim/python unicode
         # support is pretty bad. don't ask how I came up with this... It just
         # works...
         # It seems to be related to that bug: http://bugs.python.org/issue5876
-        if unicode is str:
-            s = self
-        else:
-            s = self.encode("UTF-8")
+        s = self.encode("UTF-8")
         return '"%s"' % s.replace("\\", "\\\\").replace('"', r"\"")
 
 
@@ -142,6 +139,18 @@ class VimError(Exception):
         return "{}; created by {!r} (in {})".format(
             self.message, self.executing, self.throwpoint
         )
+
+
+class VimErr(VimError):
+    """An error that's a bit gentler to handle."""
+
+    def __init__(self, message=None):
+        super().__init__(message)
+        self.message = message
+        self.exc_info0, self.exc_info1, self.exc_info2 = *sys.exc_info()
+
+    def __repr__(self):
+        return (self.exc_info0, self.message)
 
 
 def _catch_exception(string, is_eval):
@@ -291,5 +300,9 @@ def import_into_vim(*args):
         text = f"import {args}"
         script = jedi.Script(text, 1, len(text), "",
                              environment=get_environment())
-        completions = [f"{args}, {c.complete for c in script.completions()}"]
+
+        partial_completions = (c.complete() for c in script.completions())
+
+        completions = [f"{args}, {partial_completions}"]
+
     vim.command("return '%s'" % "\n".join(completions))

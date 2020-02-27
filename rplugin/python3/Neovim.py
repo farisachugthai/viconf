@@ -81,7 +81,7 @@ class Instance(App):
     pass
 
 
-def attach_nvim():
+def attach_nvim(how='path'):
     """Ensure you don't execute this from inside neovim or it'll emit an error.
     """
     path = os.environ.get("NVIM_LISTEN_ADDRESS")
@@ -105,7 +105,8 @@ def check_and_set_envvar(envvar, default=None):
             os.environ.setdefault(str(envvar), default)
             logging.info(envvar + " set to: " + default)
     else:
-        logging.debug(envvar + " already set to value of: " + os.environ.get(envvar))
+        logging.debug(envvar + " already set to value of: " +
+                      os.environ.get(envvar))
 
 
 def setup_envvars():
@@ -118,18 +119,19 @@ def setup_envvars():
     """
     home = Path.home()
     if sys.platform == "linux":
-        xdg_data_default = str(home.joinpath(".local/share/"))
+        xdg = home.joinpath(".local/share/")
     elif sys.platform.startswith("win"):
-        xdg_data_default = str(home.joinpath("AppData/Local/"))
+        xdg = home.joinpath("AppData/Local/")
     else:
         raise NotImplementedError("Windows, Android and Linux only.")
 
+    xdg_data_default = str(xdg)
     check_and_set_envvar("XDG_DATA_HOME", default=xdg_data_default)
 
-    nvim_log_file = Path(xdg_data_default).joinpath("nvim/python.log")
-    check_and_set_envvar("NVIM_PYTHON_LOG_FILE", default=nvim_log_file)
+    nvim_log_file = xdg_data_default.joinpath("nvim/python.log")
+    check_and_set_envvar("NVIM_PYTHON_LOG_FILE", default=str(nvim_log_file))
 
-    nvim_log_level = 20
+    nvim_log_level = "20"  # it actually fuckin throws if you feed it 20 not "20"
     check_and_set_envvar("NVIM_PYTHON_LOG_LEVEL", default=nvim_log_level)
 
 
@@ -141,8 +143,13 @@ class ScriptHost:
         """Initialize the legacy python-vim environment.
 
         As far as I'm aware this throws on Windows semi frequently.
+
+        moved the self.nvim = nvim to the ``__init__`` so that :meth:`setup`
+        doesn't require parameters anymore.
         """
-        self.setup(nvim)
+        self.nvim = nvim
+
+        self.setup()
         # context where all code will run
         self.module = imp.new_module("__main__")
         nvim.script_context = self.module
@@ -153,8 +160,8 @@ class ScriptHost:
 
         # Handle DirChanged. #296
         nvim.command('au DirChanged *'
-                'call rpcnotify({}, "python_chdir", v:event.cwd)'.format(
-                nvim.channel_id), async_=True,)
+                     'call rpcnotify({}, "python_chdir", v:event.cwd)'.format(
+                         nvim.channel_id), async_=True,)
         # XXX: Avoid race condition.
         # https://github.com/neovim/pynvim/pull/296#issuecomment-358970531
         # TODO(bfredl): when host initialization has been refactored,
@@ -164,14 +171,13 @@ class ScriptHost:
             'call rpcnotify({}, "python_chdir", getcwd())'.format(
                 nvim.channel_id), async_=True)
 
-    def setup(self, nvim):
+    def setup(self):
         """Setup import hooks and global streams.
 
         This will add import hooks for importing modules from runtime
         directories and patch the sys module so 'print' calls will be
         forwarded to Nvim.
         """
-        self.nvim = nvim
         pass  # replaces next logging statement
         # info('install import hook/path')
         self.hook = path_hook(nvim)
@@ -248,7 +254,8 @@ class ScriptHost:
                     # Update earlier lines, and skip to the next
                     if newlines:
                         end = sstart + len(newlines) - 1
-                        nvim.current.buffer.api.set_lines(sstart, end, True, newlines)
+                        nvim.current.buffer.api.set_lines(
+                            sstart, end, True, newlines)
                     sstart += len(newlines) + 1
                     newlines = []
                     pass
@@ -334,7 +341,6 @@ def path_hook(nvim):
             return []
         return discover_runtime_directories(nvim)
 
-
     def hook(path):
         if path == nvim.VIM_SPECIAL_PATH:
             return VimPathFinder
@@ -345,7 +351,7 @@ def path_hook(nvim):
 
 
 class VimModuleLoader(object):
-    """Inexplicably this class and `VimPathFinder` were closures in `path_hook."""
+    """Inexplicably this class and `VimPathFinder` were closures in `path_hook`."""
 
     def __init__(self, module):
         self.module = module
@@ -367,25 +373,33 @@ class VimModuleLoader(object):
         idx = oldtail.find(".")
         if idx > 0:
             name = oldtail[:idx]
-            tail = oldtail[idx + 1 :]
+            tail = oldtail[idx + 1:]
             fmr = imp.find_module(name, path)
             module = imp.find_module(fullname[: -len(oldtail)] + name, *fmr)
             return _find_module(fullname, tail, module.__path__)
         else:
             return imp.find_module(fullname, path)
 
+
 class VimPathFinder(object):
+    # TODO: We gotta define get_paths in this class but seriously every
+    # function either implicitly uses `nvim` or requires it as a positional
+    # parameter ughh
+
+    # fuckin idiots you never initialized the pathfinder
+    path_finder = PathFinder()
+
     @staticmethod
     def find_module(fullname, path=None):
         """Method for Python 2.7 and 3.3."""
         try:
-            return VimModuleLoader._find_module(fullname, fullname, path or _get_paths())
+            # return VimModuleLoader._find_module(fullname, fullname, path or _get_paths())
+            return VimModuleLoader._find_module(fullname, fullname, path)
         except ImportError:
             return None
 
     @staticmethod
     def find_spec(fullname, target=None):
         """Method for Python 3.4+."""
-        return PathFinder.find_spec(fullname, _get_paths(), target)
-
-
+        # return PathFinder.find_spec(fullname, _get_paths(), target)
+        return path_finder.find_spec(fullname, target)

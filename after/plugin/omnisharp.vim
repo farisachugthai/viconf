@@ -5,6 +5,9 @@
   " Last Modified: February 09, 2020
 " ============================================================================
 
+if !exists('g:plugs')
+  finish
+endif
 " if exists('b:did_omnisharp') || &compatible || v:version < 700
 "   finish
 " endif

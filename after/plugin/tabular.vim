@@ -6,6 +6,9 @@
 " ============================================================================
 
 " Official Docs: {{{
+if !exists('g:plugs')
+  finish
+endif
 " Dude these are from the docs this is awesome!
 " after/plugin/my_tabular_commands.vim
 " Provides extra :Tabularize commands

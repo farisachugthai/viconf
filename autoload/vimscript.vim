@@ -73,7 +73,7 @@ function! vimscript#BetterProfiler(fname) abort  " {{{1
   exec 'e ' a:fname
 endfunction  " }}}
 
-function! vimscript#profile(...) abort  " {({
+function! vimscript#profile(...) abort  " {{{
   " let s:Debug = 1
   " let b:fname = '~/projects/viconf/.config/nvim/colors/gruvbox8.vim'
   " call g:BetterProfiler(b:fname)
@@ -140,10 +140,14 @@ function s:get_scriptnames() abort  " {{{1
   return s:scriptnames_output
 endfunction  " }}}
 
-function! vimscript#fzf_scriptnames(bang) abort  " {{{1
+function! vimscript#fzf_scriptnames(bang) abort  " {{{
+
   call fzf#run(fzf#wrap("scriptnames",
-        \ {'source': s:get_scriptnames(),
+        \ {'source': ':scriptnames',
         \ 'sink': 'e',
-        \ 'options': ['--border', '--header', 'Scriptnames']},
+        \ 'options': ['--header', 'Scriptnames']},
         \ a:bang ))
-endfunction  " }}}
+
+endfunction
+" }}}
+
