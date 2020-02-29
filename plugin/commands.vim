@@ -268,8 +268,12 @@ command! -nargs=* -bang -complete=file -complete=file_in_path Goto pedit<bang> <
 command! -nargs=* -bang -bar -complete=file -complete=customlist,unix#EditFileComplete
         \ Split <q-mods>split<bang> <q-args>
 
+" See if we cant catch me constantly mistyping :sb as :bs
 command! -nargs=* -bang -bar -complete=file -complete=customlist,unix#EditFileComplete -range=0
-        \ SplitHere <q-mods>split<bang> <q-args>
+        \ Bsplit <q-mods>split<bang> <q-args>
+
+" Why not do the same for :Bd
+command! -nargs=* -range=% -addr=buffers -count -bang -bar -complete=buffer Bdelete :<count><mods>bd<bang> <args>
 
 command! -nargs=* -range=% -addr=buffers -count -bang -bar -complete=file_in_path Find :<count><mods>find<bang> <args>
 

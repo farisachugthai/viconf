@@ -8,6 +8,7 @@
 " turns of ALL json error highlight. I only need to turn off json comment
 " error...
 
+" Guard: {{{
 
 if !exists("main_syntax")
   " quit when a syntax file was already loaded
@@ -15,13 +16,21 @@ if !exists("main_syntax")
     finish
   endif
   let main_syntax = 'json'
+else
+  finish
 endif
+" }}}
+
+syntax sync fromstart
+syntax case ignore
 
 syntax match   jsonNoise           /\%(:\|,\)/
+syn keyword jsonTodo FIXME NOTE TODO XXX contained
 
 " NOTE that for the concealing to work your conceallevel should be set to 2
 
-" Syntax: Strings
+" Syntax: Strings {{{
+
 " Separated into a match and region because a region by itself is always greedy
 syn match  jsonStringMatch /"\([^"]\|\\\"\)\+"\ze[[:blank:]\r\n]*[,}\]]/ contains=jsonString
 if has('conceal')
@@ -29,11 +38,13 @@ if has('conceal')
 else
 	syn region  jsonString oneline matchgroup=jsonQuote start=/"/  skip=/\\\\\|\\"/  end=/"/ contains=jsonEscape contained
 endif
+" }}}
 
-" Syntax: JSON does not allow strings with single quotes, unlike JavaScript.
+" Syntax: JSON does not allow strings with single quotes, unlike JavaScript. {{{
 syn region  jsonStringSQError oneline  start=+'+  skip=+\\\\\|\\"+  end=+'+
+" }}}
 
-" Syntax: JSON Keywords
+" Syntax: JSON Keywords {{{
 " Separated into a match and region because a region by itself is always greedy
 syn match  jsonKeywordMatch /"\([^"]\|\\\"\)\+"[[:blank:]\r\n]*\:/ contains=jsonKeyword
 if has('conceal')
@@ -41,13 +52,16 @@ if has('conceal')
 else
    syn region  jsonKeyword matchgroup=jsonQuote start=/"/  end=/"\ze[[:blank:]\r\n]*\:/ contained
 endif
+" }}}
 
-" Syntax: Escape sequences
+" Syntax: Escape sequences {{{
 syn match   jsonEscape    "\\["\\/bfnrt]" contained
 syn match   jsonEscape    "\\u\x\{4}" contained
+" }}}
 
-" Syntax: Numbers
+" Syntax: Numbers {{{
 syn match   jsonNumber    "-\=\<\%(0\|[1-9]\d*\)\%(\.\d\+\)\=\%([eE][-+]\=\d\+\)\=\>\ze[[:blank:]\r\n]*[,}\]]"
+" }}}
 
 " ERROR WARNINGS **********************************************
 
@@ -105,9 +119,11 @@ syn region  jsonFold matchgroup=jsonBraces start="\[" end=/]\(\_s\+\ze"\)\@!/ tr
 
 " Define the default highlighting.
 " Only when an item doesn't have highlighting yet
+
+hi def link jsonTodo            Todo
 hi def link jsonPadding         Operator
 hi def link jsonString          String
-hi def link jsonTest          Label
+hi def link jsonTest            Label
 hi def link jsonEscape          Special
 hi def link jsonNumber          Number
 hi def link jsonBraces          Delimiter
@@ -129,9 +145,4 @@ hi def link jsonQuote           Quote
 hi def link jsonNoise           Noise
 
 let b:current_syntax = "json"
-if main_syntax == 'json'
-  unlet main_syntax
-endif
-
-" Vim settings
-" vim: ts=8 fdm=marker
+" vim: set ts=8 fdm=marker:

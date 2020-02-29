@@ -114,13 +114,11 @@ setglobal sidescroll=5 hidden
 set number relativenumber
 setglobal cmdheight=2
 setglobal helpheight=8  " why is 20? help windows can be really intrusive with it that high
-setglobal isfname-==
-setglobal iskeyword=@,48-57,_,192-255   " Idk how but i managed to mess up the default isk
 
 if filereadable(s:repo_root . '/spell/en.utf-8.add')
   let &g:spellfile = s:repo_root . '/spell/en.utf-8.add'
 endif
-
+let &g:path = &path . ',' . stdpath('data')
 setglobal path-=/usr/include
 setglobal sessionoptions-=buffers,winsize viewoptions-=options sessionoptions+=globals
 setglobal mouse=a
@@ -258,10 +256,8 @@ call LoadMyPlugins()
 
 " I utilize this command so often I may as well save the characters
 command! Plugins echo map(keys(g:plugs), '"\n" . v:val')
-
-" Idk why but this became necessary on windows again. and wsl
-set termguicolors
 colo gruvbox-material
+set termguicolors
 packadd! matchit
 packadd! justify
 " }}}

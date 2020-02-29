@@ -17,7 +17,9 @@
     "start": "yarn run vim-language-server --stdio"
   },
   "main": "rplugin/node/coc_tag.js",
-  "directories": {"lib": "rplugin/node"},
+  "directories": {
+    "lib": "rplugin/node"
+  },
   "author": "Faris Chugthai",
   "bugs": {
     "url": "https://github.com/farisachugthai/viconf/issues"
@@ -56,6 +58,7 @@
     "eslint": "latest",
     "jsonlint": "^1.6.3",
     "vim-language-server": "^1.4.2",
+    "vscode-languageserver-textdocument": "^1.0.1",
     "yaml-language-server": "^0.6.1"
   }
 }

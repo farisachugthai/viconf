@@ -502,7 +502,7 @@ function! Quickfix_Mappings() abort  " {{{
   " Wanna note how long Ive been using Vim and still i onlyjust found out
   " about the chistory and lhistory commands like wth
   nnoremap <Leader>qh <Cmd>botright chistory<CR>
-  nnoremap <Leader>ql <Cmd>botright clist!<CR>
+ nnoremap <Leader>ql <Cmd>botright clist!<CR>
   nnoremap <leader>qo <Cmd>botright copen<CR>
   nnoremap <Leader>qw <Cmd>botright cwindow<CR>
 

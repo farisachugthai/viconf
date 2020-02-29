@@ -46,6 +46,9 @@ setglobal expandtab smarttab softtabstop=4
 set nohlsearch
 if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif
 setglobal cdpath+=$HOME,$VIMRUNTIME
+setglobal isfname-==
+setglobal iskeyword=@,48-57,_,192-255   " Idk how but i managed to mess up the default isk
+setglobal winblend=10
 
 " Platform Specific Options: {{{
 if has('unix')
@@ -490,6 +493,7 @@ let g:gutentags_ctags_exclude = [
       \ '.venv',
       \ ]
 
+let g:gutentags_resolve_symlinks = 1
 " }}}
 
 " UltiSnips: {{{

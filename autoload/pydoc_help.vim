@@ -5,9 +5,6 @@
   " Last Modified: Oct 20, 2019
 " ============================================================================
 
-" Honestly most of these functions are in varying states of F'ed up.
-" Need to tear this apart and fgure out what works and why.
-
 function! pydoc_help#open_files(files) abort  " {{{
   let bufnrs = []
     for file in a:files
@@ -54,22 +51,13 @@ endfunction  " }}}
 function! pydoc_help#PydocCword(bang, mods) abort  " {{{1
   " Holy shit it works!!!
   let s:temp_cword = expand('<cWORD>')
-  enew<a:bang>
+  exec a:mods . 'enew' . a:bang
+  " enew<a:bang>
   exec ':r! pydoc ' . s:temp_cword
   " If you wanna keep going we can change the status line. We can change how
   " we invoke python
   call s:temp_buffer()
 endfunction  " }}}
-
-function! pydoc_help#SplitPydocCword(mods) range abort  " {{{1
-  " NOTE: See `:he func-range to see how functions can accept ranges without
-  " it being specified in their parameters
-  " Jesus did i fuck this one up
-  let s:temp_cword = expand('<cWORD>')
-
-  " Cross your fingers i did this right haha
-  call s:temp_buffer()
-endfunction   " }}}
 
 function s:handle_user_config() abort   " {{{1
   " Look at me handling user configured arguments!
@@ -104,17 +92,44 @@ endfunction   " }}}
 function! pydoc_help#async_cursor() abort " Async Pydoc: {{{1
   let s:temp_cword = expand('<cWORD>')
   enew
-  call jobstart('pydoc ' . expand('<cWORD>'), {'on_stdout':{j,d,e->append(line('.'),d)}})
+  call jobstart('pydoc ' . s:temp_cword, {'on_stdout':{j,d,e->append(line('.'),d)}})
   call nvim_command('sleep 1')
   call s:temp_buffer()
 endfunction   " }}}
 
-function! pydoc_help#async_cexpr() abort  " {{{1
+function! pydoc_help#async_cfile_mods(mods, bang) abort  " {{{1
+  if !has('nvim') | throw "Doesn't work on vim" | endif
+  let s:temp_cfile = expand('<cfile>')
+  exec a:mods . 'enew' . a:bang
+  call jobstart('pydoc ' . s:temp_cfile {'on_stdout':{j,d,e->append(line('.'),d)}})
+  call s:temp_buffer()
+endfunction   " }}}
+
+function! pydoc_help#async_cfile() abort  " {{{1
+  " Dude this is it.
+  " If we can floating window this, I may have my first vim plugin down.
 
   if !has('nvim') | throw "Doesn't work on vim" | endif
 
-  call jobstart('pydoc ' . expand('<cexpr>'), {'on_stdout':{j,d,e->append(line('.'),d)}})
+  " save the word were looking for first
+  let s:temp_cfile = expand('<cfile>')
 
+  " Empty buffer
+  let buf = nvim_create_buf(v:false, v:true)
+
+  let opts = {'relative': 'cursor', 'width': 100, 'height': 24, 'col': 0,
+      \ 'row': 0, 'anchor': 'NW', 'style': 'minimal'}
+
+  " note we call v:true to enter the window
+  let win = nvim_open_win(buf, v:true, opts)
+  " optional: change highlight, otherwise Pmenu is used
+  call nvim_win_set_option(win, 'winhl', 'Normal:MyHighlight')
+
+  " To close the float, |nvim_win_close()| can be used.
+  " 0 for the current window, v:false is for don't force
+  nnoremap <buffer> q <Cmd>call nvim_win_close(0, v:true)<CR>
+  call jobstart('pydoc ' . s:temp_cfile, {'on_stdout':{j,d,e->append(line('.'),d)}})
+  call s:temp_buffer()
 endfunction   " }}}
 
 function! pydoc_help#broken_scratch_buffer() abort  " {{{1
@@ -145,7 +160,7 @@ function! pydoc_help#broken_scratch_buffer() abort  " {{{1
 
   " To close the float, |nvim_win_close()| can be used.
   " 0 for the current window, v:false is for don't force
-  nnoremap <buffer> q <Cmd>nvim_win_close(0, v:false)<CR>
+  nnoremap <buffer> q <Cmd>call nvim_win_close(0, v:false)<CR>
 endfunction  " }}}
 
 function! pydoc_help#the_curse_of_nvims_floating_wins() abort  " {{{1
@@ -300,6 +315,8 @@ function! pydoc_help#WholeLine(...) abort  " {{{
     throw 'autoload:pydoc_help#show: wrong # of args'
 
   endif
+  " I dont wanna futz with it if it works but remember that funcs can handle
+  " a range arg and that the python3 command automatically understands it
   py3 import pydoc
   py3 curline = vim.command('let cur_line = getline(line("."))')
   py3 vim.current.buffer.append(pydoc.help(cur_line))

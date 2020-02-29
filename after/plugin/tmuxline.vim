@@ -4,25 +4,13 @@
     " Description: Tmuxline conf
     " Last Modified: April 02, 2019
 " ============================================================================
-
 scriptencoding utf-8
-if !exists('$TMUX') | finish | endif
-if !exists('g:plugs') | finish | endif
+" if !exists('$TMUX') | finish | endif
+" if !exists('g:plugs') | finish | endif
 
 " Tmuxline Presets: {{{
-let g:tmuxline_powerline_separators = 0
+let g:tmuxline_powerline_separators = 1
 
-" if !has('unix')  " Wait did i ever check if this works? Does WSL show !has('unix') wth?
-"   let g:tmuxline_preset = {
-"       \'a'       : '#S', \'b'       : '#W',
-"       \'c'       : '#H',
-"       \'win'     : '#I #W',
-"       \'cwin'    : '#I #W',
-"       \'x'       : '%a',
-"       \'y'       : '#W %R',
-"       \'z'       : '#H',
-"       \'options' : {'status-justify' : 'center'}}
-" else
 let g:tmuxline_status_justify = 'centre'
 let g:tmuxline_powerline_separators = 1
 let g:tmuxline_preset = {
@@ -30,9 +18,7 @@ let g:tmuxline_preset = {
       \ 'win'  : ['#I', '#W'],
       \ 'cwin' : ['#I', '#W'],
       \ 'y'    : ['#(uptime  | cut -d " " -f 1,2,3)'],
-      \ 'z'    : ['#(whoami)', '#H'],
-      \ 'options': {'status-justify' : 'centre' }}
-" endif
+      \ 'z'    : ['#(whoami)', '#H'],}
 " }}}
 
 " Tmuxline Theme: {{{
@@ -45,7 +31,7 @@ if filereadable(s:tmuxline_themes . '/vim_statusline_3.vim')
   let g:tmuxline_theme = 'vim_statusline_3'
 endif
 
-let g:tmuxline_separators = {
+let g:tmuxline_powerline_separators = {
      \ 'left' : '»',
      \ 'left_alt': '▶',
      \ 'right' : '«',
@@ -54,3 +40,9 @@ let g:tmuxline_separators = {
 
 " }}}
 
+augroup  UserTmux
+  au!
+  au VimEnter * if exists(':Tmuxline')
+        \| :Tmuxline vim_statusline_3
+        \| endif
+augroup END

@@ -16,9 +16,10 @@ if exists("b:current_syntax")
 endif
 
 " Get the CTRL-H syntax to handle backspaced text
-runtime $VIMRUNTIME/syntax/ctrlh.vim
+source $VIMRUNTIME/syntax/ctrlh.vim
 
 syntax case ignore
+syntax sync fromstart
 syntax match manReference       '\<\zs\(\f\|:\)\+(\([nlpo]\|\d[a-z]*\)\?)\ze\(\W\|$\)'
 syntax match manTitle           '^\(\f\|:\)\+([0-9nlpo][a-z]*).*'
 syntax match manSectionHeading  '^[a-z][a-z0-9& ,.-]*[a-z]$'

@@ -439,16 +439,15 @@ hi! link tmuxColor SpecialKey
 " }}}
 
 " Diff: {{{
-" hi DiffAdd guifg=#b8bb26 guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermfg=100 ctermbg=234
-" hi DiffChange guifg=#8ec07c guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermfg=29 ctermbg=234
-" hi DiffDelete guifg=#fb4934 guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermfg=124 ctermbg=234
-" hi DiffText guifg=#fabd2f guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermfg=172 ctermbg=234
 hi! link diffAdded Green
 hi! link diffRemoved Red
 hi! link diffChanged Directory
 hi! link diffFile Orange
-hi! link diffNewFile Yellow
 hi! link diffLine Blue
+hi! link diffOldFile Purple
+hi! link diffNewFile Blue
+hi! link diffFile Orange
+hi! link diffIndexLine Aqua
 " }}}
 
 " Html: {{{
@@ -543,6 +542,7 @@ hi! link xmlAttribPunct GruvboxGray
 hi! link xmlEntity GruvboxOrange
 hi! link xmlEntityPunct GruvboxOrange
 " }}}
+
 " Sh: {{{
 hi link bashAdminStatement      shStatement
 hi link bashSpecialVariables    shShellVariables
@@ -704,32 +704,34 @@ hi link shWhileSync        Question
 hi link shWrapLineOperator      shOperator
 
 " }}}
+
 if has('nvim')  " {{{
-        " How does a nice light blue sound?
-        hi! NvimInternalError guibg=NONE ctermfg=108 ctermbg=234 gui=reverse guifg=#8ec0e1 guisp=NONE
-        hi link nvimAutoEvent   vimAutoEvent
-        hi link nvimHLGroup     vimHLGroup
+  " How does a nice light blue sound?
+  hi! NvimInternalError guibg=NONE ctermfg=108 ctermbg=234 gui=reverse guifg=#8ec0e1 guisp=NONE
+  hi link nvimAutoEvent   vimAutoEvent
+  hi link nvimHLGroup     vimHLGroup
   hi link NvimIdentifierKey IdentifierBold
-        hi link nvimInvalid Exception
-        hi link nvimMap vimMap
-        hi link nvimUnmap       vimUnmap
+  hi link nvimInvalid Exception
+  hi link nvimMap vimMap
+  hi link nvimUnmap       vimUnmap
 
-        hi link TermCursor Cursor
-        hi TermCursorNC ctermfg=237 ctermbg=223 guifg=#3c3836 guibg=#ebdbb2 guisp=NONE cterm=NONE gui=NONE
+  hi link TermCursor Cursor
+  hi TermCursorNC ctermfg=237 ctermbg=223 guifg=#3c3836 guibg=#ebdbb2 guisp=NONE cterm=NONE gui=NONE
 
-        " *hl-NormalFloat* NormalFloat  Normal text in floating windows.
-        hi NormalFloat ctermfg=223 ctermbg=234 guifg=#ebdbb2 guibg=#1d2021 guisp=NONE gui=undercurl cterm=undercurl
+  " *hl-NormalFloat* NormalFloat  Normal text in floating windows.
+  hi NormalFloat ctermfg=223 ctermbg=234 guifg=#ebdbb2 guibg=#1d2021 guisp=NONE gui=undercurl cterm=undercurl
 
-        " *hl-IncSearch*
-        " IncSearch     'incsearch' highlighting; also used for the text replaced with ':s///c'
-        hi IncSearch cterm=reverse ctermfg=208 ctermbg=234 gui=reverse guifg=#fe8019 guibg=#1d2021 guisp=NONE
+  " *hl-IncSearch*
+  " IncSearch     'incsearch' highlighting; also used for the text replaced with ':s///c'
+  hi IncSearch cterm=reverse ctermfg=208 ctermbg=234 gui=reverse guifg=#fe8019 guibg=#1d2021 guisp=NONE
 
-        " From he nvim-terminal-emulator
-        hi debugPC term=reverse ctermbg=darkblue guibg=darkblue
-        hi debugBreakpoint term=reverse ctermbg=red guibg=red
+  " From he nvim-terminal-emulator
+  hi debugPC term=reverse ctermbg=darkblue guibg=darkblue
+  hi debugBreakpoint term=reverse ctermbg=red guibg=red
 endif
 
 " }}}
+
 " Python: {{{
 hi link pythonAsync                     Statement
 hi link pythonAttribute TypeDef
@@ -766,6 +768,7 @@ hi link pythonTodo                      Todo
 hi link pythonTripleQuotes              pythonQuotes
 
 " }}}
+
 " Vim: {{{
 
 " Defined In Syntax File: {{{
@@ -1059,11 +1062,20 @@ hi! link mkdString        String
 hi! link mkdURL           Underlined
 hi! markdownItalic cterm=italic gui=italic
 
+hi! link mkdBold Grey
+hi! link mkdCodeDelimiter Aqua
+hi! link mkdDelimiter Grey
+hi! link mkdHeading Orange
+hi! link mkdId Yellow
+hi! link mkdLink Aqua
+hi! link mkdListItem Red
 " }}}
 
+" c: {{{
 hi! link cOperator Purple
 hi! link cStructure Orange
 hi! link cppOperator Purple
+" }}}
 hi! link docbkKeyword AquaBold
 hi! link dtdFunction Grey
 hi! link dtdParamEntityDPunct Grey
@@ -1077,13 +1089,6 @@ hi! link htmlSpecialTagName Blue
 hi! link htmlTag AquaBold
 hi! link htmlTagN White
 hi! link htmlTagName Blue
-hi! link mkdBold Grey
-hi! link mkdCodeDelimiter Aqua
-hi! link mkdDelimiter Grey
-hi! link mkdHeading Orange
-hi! link mkdId Yellow
-hi! link mkdLink Aqua
-hi! link mkdListItem Red
 hi! link objcDirective Blue
 hi! link objcTypeModifier Red
 hi! link xmlAttrib Orange
@@ -1409,15 +1414,6 @@ hi! link zshOptStart Orange
 hi! link zshOption Aqua
 hi! link zshFunction Green
 
-hi! link diffAdded Green
-hi! link diffRemoved Red
-hi! link diffChanged Yellow
-hi! link diffOldFile Purple
-hi! link diffNewFile Blue
-hi! link diffFile Orange
-hi! link diffLine Grey
-hi! link diffIndexLine Aqua
-
 " Help: {{{
 
 " Default syntax
@@ -1474,7 +1470,6 @@ hi link helpURL         String
 hi link helpUnderlined  Underlined
 hi link helpVim         Identifier
 hi link helpWarning WarningMsg
-" }}}
 hi! link helpHyperTextEntry Red
 hi! link helpHyperTextJump Blue
 hi! link helpSectionDelim Grey
@@ -1483,6 +1478,8 @@ hi! link helpCommand Orange
 hi! link helpHeadline Title
 hi! link helpHeader Aqua
 hi! link helpSpecial Yellow
+" }}}
+
 " }}}
 
 " Plugins: {{{
@@ -1667,20 +1664,6 @@ if &background ==# 'dark'
       hi BlueBold guifg=#7daea3 guibg=NONE guisp=NONE gui=NONE cterm=NONE
       hi PurpleBold guifg=#d3869b guibg=NONE guisp=NONE gui=NONE cterm=NONE
     endif
-    if get(g:, 'gruvbox_material_transparent_background', 0) && !has('gui_running')
-      hi Normal guifg=#dfbf8e guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi Terminal guifg=#dfbf8e guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi DiffText guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
-      hi VertSplit guifg=#665c54 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi QuickFixLine guifg=#e3a84e guibg=NONE guisp=NONE gui=reverse cterm=reverse
-      hi EndOfBuffer guifg=#928374 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi FoldColumn guifg=#928374 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi Folded guifg=#928374 guibg=NONE guisp=NONE gui=bold cterm=bold
-      hi CursorColumn guifg=NONE guibg=NONE guisp=NONE gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
-      hi CursorLineNr guifg=#a89984 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi MatchParen guifg=NONE guibg=NONE guisp=NONE gui=bold ctermfg=NONE ctermbg=NONE cterm=bold
-    else
-      if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
         hi Normal guifg=#dfbf8e guibg=#1d2021 guisp=NONE gui=NONE cterm=NONE
         hi Terminal guifg=#dfbf8e guibg=#1d2021 guisp=NONE gui=NONE cterm=NONE
         hi DiffText guifg=NONE guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse
@@ -1693,70 +1676,7 @@ if &background ==# 'dark'
         hi CursorColumn guifg=NONE guibg=#282828 guisp=NONE gui=NONE cterm=NONE
         hi CursorLine guifg=NONE guibg=#282828 guisp=NONE gui=NONE cterm=NONE
         hi CursorLineNr guifg=#a89984 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-      elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-        hi Normal guifg=#dfbf8e guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-        hi Terminal guifg=#dfbf8e guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-        hi DiffText guifg=NONE guibg=#282828 guisp=NONE gui=reverse cterm=reverse
-        hi EndOfBuffer guifg=#282828 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-        hi VertSplit guifg=#665c54 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-        hi QuickFixLine guifg=#e3a84e guibg=#282828 guisp=NONE gui=reverse cterm=reverse
-        hi MatchParen guifg=NONE guibg=#3c3836 guisp=NONE gui=bold cterm=bold
-        hi FoldColumn guifg=#928374 guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-        hi Folded guifg=#928374 guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-        hi CursorColumn guifg=NONE guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-        hi CursorLine guifg=NONE guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-        hi CursorLineNr guifg=#a89984 guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-      elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-        hi Normal guifg=#dfbf8e guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-        hi Terminal guifg=#dfbf8e guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-        hi DiffText guifg=NONE guibg=#32302f guisp=NONE gui=reverse cterm=reverse
-        hi EndOfBuffer guifg=#32302f guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-        hi VertSplit guifg=#665c54 guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-        hi QuickFixLine guifg=#e3a84e guibg=#32302f guisp=NONE gui=reverse cterm=reverse
-        hi MatchParen guifg=NONE guibg=#504945 guisp=NONE gui=bold cterm=bold
-        hi FoldColumn guifg=#928374 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-        hi Folded guifg=#928374 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-        hi CursorColumn guifg=NONE guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-        hi CursorLine guifg=NONE guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-        hi CursorLineNr guifg=#a89984 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-      endif
-    endif
-    if &background ==#'light'  " {{{
-      hi PmenuSel guifg=#3c3836 guibg=#a89984 guisp=NONE gui=NONE cterm=NONE
-      hi TabLineSel guifg=#3c3836 guibg=#a89984 guisp=NONE gui=bold cterm=bold
-      hi WildMenu guifg=#3c3836 guibg=#a89984 guisp=NONE gui=NONE cterm=NONE
-      if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-        hi Pmenu guifg=#dfbf8e guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-        hi StatusLine guifg=#dfbf8e guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-        hi StatusLineTerm guifg=#dfbf8e guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-        hi TabLine guifg=#dfbf8e guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-        hi TabLineFill guifg=#dfbf8e guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-        hi ColorColumn guifg=NONE guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-        hi! SignColumn guifg=NONE guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-        hi StatusLineNC guifg=#a89984 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-        hi StatusLineTermNC guifg=#a89984 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-      elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-        hi Pmenu guifg=#dfbf8e guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-        hi StatusLine guifg=#dfbf8e guibg=#504945 guisp=NONE gui=NONE cterm=NONE
-        hi StatusLineTerm guifg=#dfbf8e guibg=#504945 guisp=NONE gui=NONE cterm=NONE
-        hi TabLine guifg=#dfbf8e guibg=#504945 guisp=NONE gui=NONE cterm=NONE
-        hi TabLineFill guifg=#dfbf8e guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-        hi ColorColumn guifg=NONE guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-        hi SignColumn guifg=NONE guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-        hi StatusLineNC guifg=#a89984 guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-        hi StatusLineTermNC guifg=#a89984 guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-      elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-        hi Pmenu guifg=#dfbf8e guibg=#504945 guisp=NONE gui=NONE cterm=NONE
-        hi StatusLine guifg=#dfbf8e guibg=#665c54 guisp=NONE gui=NONE cterm=NONE
-        hi StatusLineTerm guifg=#dfbf8e guibg=#665c54 guisp=NONE gui=NONE cterm=NONE
-        hi TabLine guifg=#dfbf8e guibg=#665c54 guisp=NONE gui=NONE cterm=NONE
-        hi TabLineFill guifg=#dfbf8e guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-        hi ColorColumn guifg=NONE guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-        hi SignColumn guifg=NONE guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-        hi StatusLineNC guifg=#a89984 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-        hi StatusLineTermNC guifg=#a89984 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-      endif  " }}}
-    else  " {{{
+      " {{{
       " Got this from `:he 'pumblend'
       hi PmenuSel guifg=#282828 guibg=#a89984 guisp=NONE gui=NONE cterm=NONE
       " Yeah. Blend is 0
@@ -1765,7 +1685,6 @@ if &background ==# 'dark'
       " Actually the lightbg one is pretty solid
       hi TabLineSel guifg=#ebdbb2 guibg=#7c6f64 guisp=NONE gui=bold cterm=bold
       hi WildMenu guifg=#282828 guibg=#a89984 guisp=NONE gui=NONE cterm=NONE
-      if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
         hi Pmenu guifg=#dfbf8e guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
         hi StatusLine guifg=#dfbf8e guibg=#504945 guisp=NONE gui=bold cterm=bold
         " nah too noisy
@@ -1777,27 +1696,6 @@ if &background ==# 'dark'
         hi SignColumn guifg=NONE guibg=#282828 guisp=NONE gui=NONE cterm=NONE
         hi StatusLineNC guifg=#a89984 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
         hi StatusLineTermNC guifg=#a89984 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-      elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-        hi Pmenu guifg=#dfbf8e guibg=#504945 guisp=NONE gui=NONE cterm=NONE
-        hi StatusLine guifg=#dfbf8e guibg=#665c54 guisp=NONE gui=NONE cterm=NONE
-        hi StatusLineTerm guifg=#dfbf8e guibg=#665c54 guisp=NONE gui=NONE cterm=NONE
-        hi TabLine guifg=#dfbf8e guibg=#665c54 guisp=NONE gui=NONE cterm=NONE
-        hi TabLineFill guifg=#dfbf8e guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-        hi ColorColumn guifg=NONE guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-        hi SignColumn guifg=NONE guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-        hi StatusLineNC guifg=#a89984 guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-        hi StatusLineTermNC guifg=#a89984 guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-      elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-        hi Pmenu guifg=#dfbf8e guibg=#504945 guisp=NONE gui=NONE cterm=NONE
-        hi StatusLine guifg=#dfbf8e guibg=#665c54 guisp=NONE gui=NONE cterm=NONE
-        hi StatusLineTerm guifg=#dfbf8e guibg=#665c54 guisp=NONE gui=NONE cterm=NONE
-        hi TabLine guifg=#dfbf8e guibg=#665c54 guisp=NONE gui=NONE cterm=NONE
-        hi TabLineFill guifg=#dfbf8e guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-        hi ColorColumn guifg=NONE guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-        hi SignColumn guifg=NONE guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-        hi StatusLineNC guifg=#a89984 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-        hi StatusLineTermNC guifg=#a89984 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-      endif
     endif  "  }}}
 
     hi Conceal guifg=#7daea3 guibg=NONE guisp=NONE gui=NONE cterm=NONE
@@ -1872,22 +1770,10 @@ if &background ==# 'dark'
     else
       hi Function guifg=#a9b665 guibg=NONE guisp=NONE gui=NONE cterm=NONE
     endif
-    if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
       hi DiffAdd guifg=NONE guibg=#32361a guisp=NONE gui=NONE cterm=NONE
       hi DiffChange guifg=NONE guibg=#0d3138 guisp=NONE gui=NONE cterm=NONE
       hi DiffDelete guifg=NONE guibg=#3c1f1e guisp=NONE gui=NONE cterm=NONE
       hi Error guifg=NONE guibg=#3c1f1e guisp=NONE gui=NONE cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-      hi DiffAdd guifg=NONE guibg=#3d4220 guisp=NONE gui=NONE cterm=NONE
-      hi DiffChange guifg=NONE guibg=#0f3a42 guisp=NONE gui=NONE cterm=NONE
-      hi DiffDelete guifg=NONE guibg=#472322 guisp=NONE gui=NONE cterm=NONE
-      hi Error guifg=NONE guibg=#472322 guisp=NONE gui=NONE cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-      hi DiffAdd guifg=NONE guibg=#34381b guisp=NONE gui=NONE cterm=NONE
-      hi DiffChange guifg=NONE guibg=#0e363e guisp=NONE gui=NONE cterm=NONE
-      hi DiffDelete guifg=NONE guibg=#402120 guisp=NONE gui=NONE cterm=NONE
-      hi Error guifg=NONE guibg=#402120 guisp=NONE gui=NONE cterm=NONE
-    endif
     hi markdownH1 guifg=#a9b665 guibg=NONE guisp=NONE gui=bold cterm=bold
     hi markdownH2 guifg=#a9b665 guibg=NONE guisp=NONE gui=bold cterm=bold
     hi markdownH3 guifg=#e3a84e guibg=NONE guisp=NONE gui=bold cterm=bold
@@ -2108,42 +1994,6 @@ if &background ==# 'dark'
       hi CursorLineNr guifg=#7c6f64 guibg=#ebdbb2 guisp=NONE gui=NONE cterm=NONE
     endif
   endif
-  if &background ==#'light'
-    hi PmenuSel guifg=#ebdbb2 guibg=#7c6f64 guisp=NONE gui=NONE cterm=NONE
-    hi TabLineSel guifg=#ebdbb2 guibg=#7c6f64 guisp=NONE gui=bold cterm=bold
-    hi WildMenu guifg=#ebdbb2 guibg=#7c6f64 guisp=NONE gui=NONE cterm=NONE
-    if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-      hi Pmenu guifg=#504945 guibg=#f2e5bc guisp=NONE gui=NONE cterm=NONE
-      hi StatusLine guifg=#504945 guibg=#ebdbb2 guisp=NONE gui=NONE cterm=NONE
-      hi StatusLineTerm guifg=#504945 guibg=#ebdbb2 guisp=NONE gui=NONE cterm=NONE
-      hi TabLine guifg=#504945 guibg=#ebdbb2 guisp=NONE gui=NONE cterm=NONE
-      hi TabLineFill guifg=#504945 guibg=#fbf1c7 guisp=NONE gui=NONE cterm=NONE
-      hi ColorColumn guifg=NONE guibg=#fbf1c7 guisp=NONE gui=NONE cterm=NONE
-      hi SignColumn guifg=NONE guibg=#fbf1c7 guisp=NONE gui=NONE cterm=NONE
-      hi StatusLineNC guifg=#7c6f64 guibg=#fbf1c7 guisp=NONE gui=NONE cterm=NONE
-      hi StatusLineTermNC guifg=#7c6f64 guibg=#fbf1c7 guisp=NONE gui=NONE cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-      hi Pmenu guifg=#504945 guibg=#ebdbb2 guisp=NONE gui=NONE cterm=NONE
-      hi StatusLine guifg=#504945 guibg=#d5c4a1 guisp=NONE gui=NONE cterm=NONE
-      hi StatusLineTerm guifg=#504945 guibg=#d5c4a1 guisp=NONE gui=NONE cterm=NONE
-      hi TabLine guifg=#504945 guibg=#d5c4a1 guisp=NONE gui=NONE cterm=NONE
-      hi TabLineFill guifg=#504945 guibg=#f2e5bc guisp=NONE gui=NONE cterm=NONE
-      hi ColorColumn guifg=NONE guibg=#f2e5bc guisp=NONE gui=NONE cterm=NONE
-      hi SignColumn guifg=NONE guibg=#f2e5bc guisp=NONE gui=NONE cterm=NONE
-      hi StatusLineNC guifg=#7c6f64 guibg=#f2e5bc guisp=NONE gui=NONE cterm=NONE
-      hi StatusLineTermNC guifg=#7c6f64 guibg=#f2e5bc guisp=NONE gui=NONE cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-      hi Pmenu guifg=#504945 guibg=#d5c4a1 guisp=NONE gui=NONE cterm=NONE
-      hi StatusLine guifg=#504945 guibg=#bdae93 guisp=NONE gui=NONE cterm=NONE
-      hi StatusLineTerm guifg=#504945 guibg=#bdae93 guisp=NONE gui=NONE cterm=NONE
-      hi TabLine guifg=#504945 guibg=#bdae93 guisp=NONE gui=NONE cterm=NONE
-      hi TabLineFill guifg=#504945 guibg=#ebdbb2 guisp=NONE gui=NONE cterm=NONE
-      hi ColorColumn guifg=NONE guibg=#ebdbb2 guisp=NONE gui=NONE cterm=NONE
-      hi SignColumn guifg=NONE guibg=#ebdbb2 guisp=NONE gui=NONE cterm=NONE
-      hi StatusLineNC guifg=#7c6f64 guibg=#ebdbb2 guisp=NONE gui=NONE cterm=NONE
-      hi StatusLineTermNC guifg=#7c6f64 guibg=#ebdbb2 guisp=NONE gui=NONE cterm=NONE
-    endif
-  else
     hi PmenuSel guifg=#fbf1c7 guibg=#7c6f64 guisp=NONE gui=NONE cterm=NONE
     " hi TabLineSel guifg=#fbf1c7 guibg=#7c6f64 guisp=NONE gui=bold cterm=bold
     hi TabLineSel guifg=#ebdbb2 guibg=#7c6f64 guisp=NONE gui=bold cterm=bold
@@ -2179,7 +2029,6 @@ if &background ==# 'dark'
       hi StatusLineNC guifg=#7c6f64 guibg=#ebdbb2 guisp=NONE gui=NONE cterm=NONE
       hi StatusLineTermNC guifg=#7c6f64 guibg=#ebdbb2 guisp=NONE gui=NONE cterm=NONE
     endif
-  endif
   hi Conceal guifg=#47747e guibg=NONE guisp=NONE gui=NONE cterm=NONE
   hi Cursor guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
   hi lCursor guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
@@ -2244,22 +2093,10 @@ if &background ==# 'dark'
   else
     hi Function guifg=#6c782e guibg=NONE guisp=NONE gui=NONE cterm=NONE
   endif
-  if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
     hi DiffAdd guifg=NONE guibg=#e3f6b4 guisp=NONE gui=NONE cterm=NONE
     hi DiffChange guifg=NONE guibg=#cff1f6 guisp=NONE gui=NONE cterm=NONE
     hi DiffDelete guifg=NONE guibg=#ffdbcc guisp=NONE gui=NONE cterm=NONE
     hi Error guifg=NONE guibg=#ffdbcc guisp=NONE gui=NONE cterm=NONE
-  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-    hi DiffAdd guifg=NONE guibg=#d1ea9b guisp=NONE gui=NONE cterm=NONE
-    hi DiffChange guifg=NONE guibg=#bee4ea guisp=NONE gui=NONE cterm=NONE
-    hi DiffDelete guifg=NONE guibg=#fbcab5 guisp=NONE gui=NONE cterm=NONE
-    hi Error guifg=NONE guibg=#fbcab5 guisp=NONE gui=NONE cterm=NONE
-  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-    hi DiffAdd guifg=NONE guibg=#daf0a7 guisp=NONE gui=NONE cterm=NONE
-    hi DiffChange guifg=NONE guibg=#c6eaf0 guisp=NONE gui=NONE cterm=NONE
-    hi DiffDelete guifg=NONE guibg=#fbcdb9 guisp=NONE gui=NONE cterm=NONE
-    hi Error guifg=NONE guibg=#fbcdb9 guisp=NONE gui=NONE cterm=NONE
-  endif
   hi markdownH1 guifg=#6c782e guibg=NONE guisp=NONE gui=bold cterm=bold
   hi markdownH2 guifg=#6c782e guibg=NONE guisp=NONE gui=bold cterm=bold
   hi markdownH3 guifg=#b47109 guibg=NONE guisp=NONE gui=bold cterm=bold
@@ -2374,21 +2211,6 @@ if &background ==# 'dark'
       hi BlueBold ctermfg=109 ctermbg=NONE cterm=NONE
       hi PurpleBold ctermfg=175 ctermbg=NONE cterm=NONE
     endif
-    if get(g:, 'gruvbox_material_transparent_background', 0)
-      hi Normal ctermfg=223 ctermbg=NONE cterm=NONE
-      hi Terminal ctermfg=223 ctermbg=NONE cterm=NONE
-      hi DiffText ctermfg=NONE ctermbg=NONE cterm=reverse
-      hi VertSplit ctermfg=241 ctermbg=NONE cterm=NONE
-      hi QuickFixLine ctermfg=214 ctermbg=NONE cterm=reverse
-      hi EndOfBuffer ctermfg=245 ctermbg=NONE cterm=NONE
-      hi FoldColumn ctermfg=245 ctermbg=NONE cterm=NONE
-      hi Folded ctermfg=245 ctermbg=NONE cterm=bold
-      hi CursorColumn ctermfg=NONE ctermbg=NONE cterm=NONE
-      hi CursorLine ctermfg=NONE ctermbg=NONE cterm=NONE
-      hi CursorLineNr ctermfg=246 ctermbg=NONE cterm=NONE
-      hi MatchParen ctermfg=NONE ctermbg=NONE cterm=bold
-    else
-      if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
         hi Normal ctermfg=223 ctermbg=234 cterm=NONE
         if !has('patch-8.0.0616') && !has('nvim') " Fix for Vim bug
           set background=dark
@@ -2404,77 +2226,7 @@ if &background ==# 'dark'
         hi CursorColumn ctermfg=NONE ctermbg=235 cterm=NONE
         hi CursorLine ctermfg=NONE ctermbg=235 cterm=NONE
         hi CursorLineNr ctermfg=246 ctermbg=235 cterm=NONE
-      elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-        hi Normal ctermfg=223 ctermbg=235 cterm=NONE
-        if !has('patch-8.0.0616') && !has('nvim') " Fix for Vim bug
-          set background=dark
-        endif
-        hi Terminal ctermfg=223 ctermbg=235 cterm=NONE
-        hi DiffText ctermfg=NONE ctermbg=235 cterm=reverse
-        hi EndOfBuffer ctermfg=235 ctermbg=235 cterm=NONE
-        hi VertSplit ctermfg=241 ctermbg=235 cterm=NONE
-        hi QuickFixLine ctermfg=214 ctermbg=235 cterm=reverse
-        hi MatchParen ctermfg=NONE ctermbg=237 cterm=bold
-        hi FoldColumn ctermfg=245 ctermbg=236 cterm=NONE
-        hi Folded ctermfg=245 ctermbg=236 cterm=NONE
-        hi CursorColumn ctermfg=NONE ctermbg=236 cterm=NONE
-        hi CursorLine ctermfg=NONE ctermbg=236 cterm=NONE
-        hi CursorLineNr ctermfg=246 ctermbg=236 cterm=NONE
-      elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-        hi Normal ctermfg=223 ctermbg=236 cterm=NONE
-        if !has('patch-8.0.0616') && !has('nvim') " Fix for Vim bug
-          set background=dark
-        endif
-        hi Terminal ctermfg=223 ctermbg=236 cterm=NONE
-        hi DiffText ctermfg=NONE ctermbg=236 cterm=reverse
-        hi EndOfBuffer ctermfg=236 ctermbg=236 cterm=NONE
-        hi VertSplit ctermfg=241 ctermbg=236 cterm=NONE
-        hi QuickFixLine ctermfg=214 ctermbg=236 cterm=reverse
-        hi MatchParen ctermfg=NONE ctermbg=239 cterm=bold
-        hi FoldColumn ctermfg=245 ctermbg=237 cterm=NONE
-        hi Folded ctermfg=245 ctermbg=237 cterm=NONE
-        hi CursorColumn ctermfg=NONE ctermbg=237 cterm=NONE
-        hi CursorLine ctermfg=NONE ctermbg=237 cterm=NONE
-        hi CursorLineNr ctermfg=246 ctermbg=237 cterm=NONE
-      endif
-    endif
-    if &background ==#'light'
-      hi PmenuSel ctermfg=237 ctermbg=246 cterm=NONE
-      hi TabLineSel ctermfg=237 ctermbg=246 cterm=bold
-      hi WildMenu ctermfg=237 ctermbg=246 cterm=NONE
-      if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-        hi Pmenu ctermfg=223 ctermbg=236 cterm=NONE
-        hi StatusLine ctermfg=223 ctermbg=237 cterm=NONE
-        hi StatusLineTerm ctermfg=223 ctermbg=237 cterm=NONE
-        hi TabLine ctermfg=223 ctermbg=237 cterm=NONE
-        hi TabLineFill ctermfg=223 ctermbg=235 cterm=NONE
-        hi ColorColumn ctermfg=NONE ctermbg=235 cterm=NONE
-        hi SignColumn ctermfg=NONE ctermbg=235 cterm=NONE
-        hi StatusLineNC ctermfg=246 ctermbg=235 cterm=NONE
-        hi StatusLineTermNC ctermfg=246 ctermbg=235 cterm=NONE
-      elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-        hi Pmenu ctermfg=223 ctermbg=237 cterm=NONE
-        hi StatusLine ctermfg=223 ctermbg=239 cterm=NONE
-        hi StatusLineTerm ctermfg=223 ctermbg=239 cterm=NONE
-        hi TabLine ctermfg=223 ctermbg=239 cterm=NONE
-        hi TabLineFill ctermfg=223 ctermbg=236 cterm=NONE
-        hi ColorColumn ctermfg=NONE ctermbg=236 cterm=NONE
-        hi SignColumn ctermfg=NONE ctermbg=236 cterm=NONE
-        hi StatusLineNC ctermfg=246 ctermbg=236 cterm=NONE
-        hi StatusLineTermNC ctermfg=246 ctermbg=236 cterm=NONE
-      elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-        hi Pmenu ctermfg=223 ctermbg=239 cterm=NONE
-        hi StatusLine ctermfg=223 ctermbg=241 cterm=NONE
-        hi StatusLineTerm ctermfg=223 ctermbg=241 cterm=NONE
-        hi TabLine ctermfg=223 ctermbg=241 cterm=NONE
-        hi TabLineFill ctermfg=223 ctermbg=237 cterm=NONE
-        hi ColorColumn ctermfg=NONE ctermbg=237 cterm=NONE
-        hi SignColumn ctermfg=NONE ctermbg=237 cterm=NONE
-        hi StatusLineNC ctermfg=246 ctermbg=237 cterm=NONE
-        hi StatusLineTermNC ctermfg=246 ctermbg=237 cterm=NONE
-      endif
-    else
-      hi PmenuSel ctermfg=235 ctermbg=246 cterm=NONE
+          hi PmenuSel ctermfg=235 ctermbg=246 cterm=NONE
       " hi TabLineSel ctermfg=235 ctermbg=246 cterm=bold
       hi TabLineSel ctermfg=237 ctermbg=246 cterm=bold
       hi WildMenu ctermfg=235 ctermbg=246 cterm=NONE
@@ -2509,7 +2261,6 @@ if &background ==# 'dark'
         hi StatusLineNC ctermfg=246 ctermbg=237 cterm=NONE
         hi StatusLineTermNC ctermfg=246 ctermbg=237 cterm=NONE
       endif
-    endif
     hi Conceal ctermfg=109 ctermbg=NONE cterm=NONE
     hi Cursor ctermfg=NONE ctermbg=NONE cterm=reverse
     hi lCursor ctermfg=NONE ctermbg=NONE cterm=reverse
@@ -2574,22 +2325,10 @@ if &background ==# 'dark'
     else
       hi Function ctermfg=142 ctermbg=NONE cterm=NONE
     endif
-    if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
       hi DiffAdd ctermfg=NONE ctermbg=22 cterm=NONE
       hi DiffChange ctermfg=NONE ctermbg=17 cterm=NONE
       hi DiffDelete ctermfg=NONE ctermbg=52 cterm=NONE
       hi Error ctermfg=NONE ctermbg=52 cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-      hi DiffAdd ctermfg=NONE ctermbg=22 cterm=NONE
-      hi DiffChange ctermfg=NONE ctermbg=17 cterm=NONE
-      hi DiffDelete ctermfg=NONE ctermbg=52 cterm=NONE
-      hi Error ctermfg=NONE ctermbg=52 cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-      hi DiffAdd ctermfg=NONE ctermbg=22 cterm=NONE
-      hi DiffChange ctermfg=NONE ctermbg=17 cterm=NONE
-      hi DiffDelete ctermfg=NONE ctermbg=52 cterm=NONE
-      hi Error ctermfg=NONE ctermbg=52 cterm=NONE
-    endif
     hi markdownH1 ctermfg=142 ctermbg=NONE cterm=bold
     hi markdownH2 ctermfg=142 ctermbg=NONE cterm=bold
     hi markdownH3 ctermfg=214 ctermbg=NONE cterm=bold
@@ -2713,21 +2452,6 @@ if &background ==# 'dark'
     hi BlueBold ctermfg=24 ctermbg=NONE cterm=NONE
     hi PurpleBold ctermfg=96 ctermbg=NONE cterm=NONE
   endif
-  if get(g:, 'gruvbox_material_transparent_background', 0)
-    hi Normal ctermfg=237 ctermbg=NONE cterm=NONE
-    hi Terminal ctermfg=237 ctermbg=NONE cterm=NONE
-    hi DiffText ctermfg=NONE ctermbg=NONE cterm=reverse
-    hi VertSplit ctermfg=248 ctermbg=NONE cterm=NONE
-    hi QuickFixLine ctermfg=136 ctermbg=NONE cterm=reverse
-    hi EndOfBuffer ctermfg=245 ctermbg=NONE cterm=NONE
-    hi FoldColumn ctermfg=245 ctermbg=NONE cterm=NONE
-    hi Folded ctermfg=245 ctermbg=NONE cterm=bold
-    hi CursorColumn ctermfg=NONE ctermbg=NONE cterm=NONE
-    hi CursorLine ctermfg=NONE ctermbg=NONE cterm=NONE
-    hi CursorLineNr ctermfg=243 ctermbg=NONE cterm=NONE
-    hi MatchParen ctermfg=NONE ctermbg=NONE cterm=bold
-  else
-    if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
       hi Normal ctermfg=237 ctermbg=230 cterm=NONE
       hi Terminal ctermfg=237 ctermbg=230 cterm=NONE
       hi DiffText ctermfg=NONE ctermbg=230 cterm=reverse
@@ -2740,70 +2464,6 @@ if &background ==# 'dark'
       hi CursorColumn ctermfg=NONE ctermbg=229 cterm=NONE
       hi CursorLine ctermfg=NONE ctermbg=229 cterm=NONE
       hi CursorLineNr ctermfg=243 ctermbg=229 cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-      hi Normal ctermfg=237 ctermbg=229 cterm=NONE
-      hi Terminal ctermfg=237 ctermbg=229 cterm=NONE
-      hi DiffText ctermfg=NONE ctermbg=229 cterm=reverse
-      hi EndOfBuffer ctermfg=229 ctermbg=229 cterm=NONE
-      hi VertSplit ctermfg=248 ctermbg=229 cterm=NONE
-      hi QuickFixLine ctermfg=136 ctermbg=229 cterm=reverse
-      hi MatchParen ctermfg=NONE ctermbg=223 cterm=bold
-      hi FoldColumn ctermfg=245 ctermbg=228 cterm=NONE
-      hi Folded ctermfg=245 ctermbg=228 cterm=NONE
-      hi CursorColumn ctermfg=NONE ctermbg=228 cterm=NONE
-      hi CursorLine ctermfg=NONE ctermbg=228 cterm=NONE
-      hi CursorLineNr ctermfg=243 ctermbg=228 cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-      hi Normal ctermfg=237 ctermbg=228 cterm=NONE
-      hi Terminal ctermfg=237 ctermbg=228 cterm=NONE
-      hi DiffText ctermfg=NONE ctermbg=228 cterm=reverse
-      hi EndOfBuffer ctermfg=228 ctermbg=228 cterm=NONE
-      hi VertSplit ctermfg=248 ctermbg=228 cterm=NONE
-      hi QuickFixLine ctermfg=136 ctermbg=228 cterm=reverse
-      hi MatchParen ctermfg=NONE ctermbg=250 cterm=bold
-      hi FoldColumn ctermfg=245 ctermbg=223 cterm=NONE
-      hi Folded ctermfg=245 ctermbg=223 cterm=NONE
-      hi CursorColumn ctermfg=NONE ctermbg=223 cterm=NONE
-      hi CursorLine ctermfg=NONE ctermbg=223 cterm=NONE
-      hi CursorLineNr ctermfg=243 ctermbg=223 cterm=NONE
-    endif
-  endif
-  if &background ==#'light'
-    hi PmenuSel ctermfg=223 ctermbg=243 cterm=NONE
-    hi TabLineSel ctermfg=223 ctermbg=243 cterm=bold
-    hi WildMenu ctermfg=223 ctermbg=243 cterm=NONE
-    if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-      hi Pmenu ctermfg=239 ctermbg=228 cterm=NONE
-      hi StatusLine ctermfg=239 ctermbg=223 cterm=NONE
-      hi StatusLineTerm ctermfg=239 ctermbg=223 cterm=NONE
-      hi TabLine ctermfg=239 ctermbg=223 cterm=NONE
-      hi TabLineFill ctermfg=239 ctermbg=229 cterm=NONE
-      hi ColorColumn ctermfg=NONE ctermbg=229 cterm=NONE
-      hi SignColumn ctermfg=NONE ctermbg=229 cterm=NONE
-      hi StatusLineNC ctermfg=243 ctermbg=229 cterm=NONE
-      hi StatusLineTermNC ctermfg=243 ctermbg=229 cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-      hi Pmenu ctermfg=239 ctermbg=223 cterm=NONE
-      hi StatusLine ctermfg=239 ctermbg=250 cterm=NONE
-      hi StatusLineTerm ctermfg=239 ctermbg=250 cterm=NONE
-      hi TabLine ctermfg=239 ctermbg=250 cterm=NONE
-      hi TabLineFill ctermfg=239 ctermbg=228 cterm=NONE
-      hi ColorColumn ctermfg=NONE ctermbg=228 cterm=NONE
-      hi SignColumn ctermfg=NONE ctermbg=228 cterm=NONE
-      hi StatusLineNC ctermfg=243 ctermbg=228 cterm=NONE
-      hi StatusLineTermNC ctermfg=243 ctermbg=228 cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-      hi Pmenu ctermfg=239 ctermbg=250 cterm=NONE
-      hi StatusLine ctermfg=239 ctermbg=248 cterm=NONE
-      hi StatusLineTerm ctermfg=239 ctermbg=248 cterm=NONE
-      hi TabLine ctermfg=239 ctermbg=248 cterm=NONE
-      hi TabLineFill ctermfg=239 ctermbg=223 cterm=NONE
-      hi ColorColumn ctermfg=NONE ctermbg=223 cterm=NONE
-      hi SignColumn ctermfg=NONE ctermbg=223 cterm=NONE
-      hi StatusLineNC ctermfg=243 ctermbg=223 cterm=NONE
-      hi StatusLineTermNC ctermfg=243 ctermbg=223 cterm=NONE
-    endif
-  else
     hi PmenuSel ctermfg=229 ctermbg=243 cterm=NONE
     " hi TabLineSel ctermfg=229 ctermbg=243 cterm=bold
       hi TabLineSel ctermfg=237 ctermbg=246 cterm=bold
@@ -2839,7 +2499,6 @@ if &background ==# 'dark'
       hi StatusLineNC ctermfg=243 ctermbg=223 cterm=NONE
       hi StatusLineTermNC ctermfg=243 ctermbg=223 cterm=NONE
     endif
-  endif
   hi Conceal ctermfg=24 ctermbg=NONE cterm=NONE
   hi Cursor ctermfg=NONE ctermbg=NONE cterm=reverse
   hi lCursor ctermfg=NONE ctermbg=NONE cterm=reverse
@@ -2909,22 +2568,10 @@ if &background ==# 'dark'
   else
     hi Function ctermfg=100 ctermbg=NONE cterm=NONE
   endif
-  if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
     hi DiffAdd ctermfg=NONE ctermbg=193 cterm=NONE
     hi DiffChange ctermfg=NONE ctermbg=195 cterm=NONE
     hi DiffDelete ctermfg=NONE ctermbg=224 cterm=NONE
     hi Error ctermfg=NONE ctermbg=224 cterm=NONE
-  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-    hi DiffAdd ctermfg=NONE ctermbg=193 cterm=NONE
-    hi DiffChange ctermfg=NONE ctermbg=152 cterm=NONE
-    hi DiffDelete ctermfg=NONE ctermbg=223 cterm=NONE
-    hi Error ctermfg=NONE ctermbg=223 cterm=NONE
-  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-    hi DiffAdd ctermfg=NONE ctermbg=193 cterm=NONE
-    hi DiffChange ctermfg=NONE ctermbg=195 cterm=NONE
-    hi DiffDelete ctermfg=NONE ctermbg=223 cterm=NONE
-    hi Error ctermfg=NONE ctermbg=223 cterm=NONE
-  endif
   hi markdownH1 ctermfg=100 ctermbg=NONE cterm=bold
   hi markdownH2 ctermfg=100 ctermbg=NONE cterm=bold
   hi markdownH3 ctermfg=136 ctermbg=NONE cterm=bold
@@ -2957,11 +2604,135 @@ if &background ==# 'dark'
     hi htmlUnderlineItalic cterm=underline
     hi htmlItalic cterm=NONE
     hi vimCommentTitle cterm=bold
+<<<<<<< Updated upstream
   if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
+||||||| constructed merge base
+  endif
+  if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
+    if get(g:, 'indent_guides_auto_colors', 0)
+      if get(g:, 'gruvbox_material_invert_indent_guides', 0)
+        hi IndentGuidesOdd ctermfg=230 ctermbg=250 cterm=reverse
+        hi IndentGuidesEven ctermfg=230 ctermbg=223 cterm=reverse
+      else
+        hi IndentGuidesOdd ctermfg=230 ctermbg=250 cterm=NONE
+        hi IndentGuidesEven ctermfg=230 ctermbg=223 cterm=NONE
+      endif
+    endif
+  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
+    if get(g:, 'indent_guides_auto_colors', 0)
+      if get(g:, 'gruvbox_material_invert_indent_guides', 0)
+        hi IndentGuidesOdd ctermfg=228 ctermbg=250 cterm=reverse
+        hi IndentGuidesEven ctermfg=228 ctermbg=223 cterm=reverse
+      else
+        hi IndentGuidesOdd ctermfg=228 ctermbg=250 cterm=NONE
+        hi IndentGuidesEven ctermfg=228 ctermbg=223 cterm=NONE
+      endif
+    endif
+  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
+    if get(g:, 'indent_guides_auto_colors', 0)
+      if get(g:, 'gruvbox_material_invert_indent_guides', 0)
+        hi IndentGuidesOdd ctermfg=229 ctermbg=250 cterm=reverse
+        hi IndentGuidesEven ctermfg=229 ctermbg=223 cterm=reverse
+      else
+        hi IndentGuidesOdd ctermfg=229 ctermbg=250 cterm=NONE
+        hi IndentGuidesEven ctermfg=229 ctermbg=223 cterm=NONE
+      endif
+    endif
+  endif
+  if !exists('g:indentLine_color_term')
+    let g:indentLine_color_term = 250
+  endif
+  if !exists('g:indentLine_color_gui')
+    let g:indentLine_color_gui = '#d5c4a1'
+  endif
+  " Rainbow Parentheses
+  if !exists('g:rbpt_colorpairs')
+    let g:rbpt_colorpairs = [['blue', '#47747e'], ['magenta', '#945e80'],
+          \ ['red', '#c74545'], ['130', '#c55b03']]
+  endif
+
+  let g:rainbow_guifgs = [ '#c55b03', '#c74545', '#945e80', '#47747e' ]
+  let g:rainbow_ctermfgs = [ '130', 'red', 'magenta', 'blue' ]
+
+  if !exists('g:rainbow_conf')
+    let g:rainbow_conf = {}
+  endif
+  if !has_key(g:rainbow_conf, 'guifgs')
+    let g:rainbow_conf['guifgs'] = g:rainbow_guifgs
+  endif
+  if !has_key(g:rainbow_conf, 'ctermfgs')
+    let g:rainbow_conf['ctermfgs'] = g:rainbow_ctermfgs
+  endif
+
+  let g:niji_dark_colours = g:rbpt_colorpairs
+  let g:niji_light_colours = g:rbpt_colorpairs
+  if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
+=======
+  endif
+  if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
+    if get(g:, 'indent_guides_auto_colors', 0)
+      if get(g:, 'gruvbox_material_invert_indent_guides', 0)
+        hi IndentGuidesOdd ctermfg=230 ctermbg=250 cterm=reverse
+        hi IndentGuidesEven ctermfg=230 ctermbg=223 cterm=reverse
+      else
+        hi IndentGuidesOdd ctermfg=230 ctermbg=250 cterm=NONE
+        hi IndentGuidesEven ctermfg=230 ctermbg=223 cterm=NONE
+      endif
+    endif
+  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
+    if get(g:, 'indent_guides_auto_colors', 0)
+      if get(g:, 'gruvbox_material_invert_indent_guides', 0)
+        hi IndentGuidesOdd ctermfg=228 ctermbg=250 cterm=reverse
+        hi IndentGuidesEven ctermfg=228 ctermbg=223 cterm=reverse
+      else
+        hi IndentGuidesOdd ctermfg=228 ctermbg=250 cterm=NONE
+        hi IndentGuidesEven ctermfg=228 ctermbg=223 cterm=NONE
+      endif
+    endif
+  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
+    if get(g:, 'indent_guides_auto_colors', 0)
+      if get(g:, 'gruvbox_material_invert_indent_guides', 0)
+        hi IndentGuidesOdd ctermfg=229 ctermbg=250 cterm=reverse
+        hi IndentGuidesEven ctermfg=229 ctermbg=223 cterm=reverse
+      else
+        hi IndentGuidesOdd ctermfg=229 ctermbg=250 cterm=NONE
+        hi IndentGuidesEven ctermfg=229 ctermbg=223 cterm=NONE
+      endif
+    endif
+  endif
+  if !exists('g:indentLine_color_term')
+    let g:indentLine_color_term = 250
+  endif
+  if !exists('g:indentLine_color_gui')
+    let g:indentLine_color_gui = '#d5c4a1'
+  endif
+  " Rainbow Parentheses
+  if !exists('g:rbpt_colorpairs')
+    let g:rbpt_colorpairs = [['blue', '#47747e'], ['magenta', '#945e80'],
+          \ ['red', '#c74545'], ['130', '#c55b03']]
+  endif
+
+  let g:rainbow_guifgs = [ '#c55b03', '#c74545', '#945e80', '#47747e' ]
+  let g:rainbow_ctermfgs = [ '130', 'red', 'magenta', 'blue' ]
+
+  if !exists('g:rainbow_conf')
+    let g:rainbow_conf = {}
+  endif
+  if !has_key(g:rainbow_conf, 'guifgs')
+    let g:rainbow_conf['guifgs'] = g:rainbow_guifgs
+  endif
+  if !has_key(g:rainbow_conf, 'ctermfgs')
+    let g:rainbow_conf['ctermfgs'] = g:rainbow_ctermfgs
+  endif
+
+  let g:niji_dark_colours = g:rbpt_colorpairs
+  let g:niji_light_colours = g:rbpt_colorpairs
+>>>>>>> Stashed changes
     hi GitGutterAdd ctermfg=100 ctermbg=229 cterm=NONE
     hi GitGutterChange ctermfg=24 ctermbg=229 cterm=NONE
     hi GitGutterDelete ctermfg=88 ctermbg=229 cterm=NONE
     hi GitGutterChangeDelete ctermfg=96 ctermbg=229 cterm=NONE
+<<<<<<< Updated upstream
   elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
     hi GitGutterAdd ctermfg=100 ctermbg=228 cterm=NONE
     hi GitGutterChange ctermfg=24 ctermbg=228 cterm=NONE
@@ -2983,6 +2754,59 @@ if &background ==# 'dark'
     hi SignatureMarkText ctermfg=24 ctermbg=223 cterm=NONE
     hi SignatureMarkerText ctermfg=96 ctermbg=223 cterm=NONE
   endif
+||||||| constructed merge base
+  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
+    hi GitGutterAdd ctermfg=100 ctermbg=228 cterm=NONE
+    hi GitGutterChange ctermfg=24 ctermbg=228 cterm=NONE
+    hi GitGutterDelete ctermfg=88 ctermbg=228 cterm=NONE
+    hi GitGutterChangeDelete ctermfg=96 ctermbg=228 cterm=NONE
+  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
+    hi GitGutterAdd ctermfg=100 ctermbg=223 cterm=NONE
+    hi GitGutterChange ctermfg=24 ctermbg=223 cterm=NONE
+    hi GitGutterDelete ctermfg=88 ctermbg=223 cterm=NONE
+    hi GitGutterChangeDelete ctermfg=96 ctermbg=223 cterm=NONE
+  endif
+  if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
+    hi SignatureMarkText ctermfg=24 ctermbg=229 cterm=NONE
+    hi SignatureMarkerText ctermfg=96 ctermbg=229 cterm=NONE
+  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
+    hi SignatureMarkText ctermfg=24 ctermbg=228 cterm=NONE
+    hi SignatureMarkerText ctermfg=96 ctermbg=228 cterm=NONE
+  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
+    hi SignatureMarkText ctermfg=24 ctermbg=223 cterm=NONE
+    hi SignatureMarkerText ctermfg=96 ctermbg=223 cterm=NONE
+  endif
+  if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
+    hi ShowMarksHLl ctermfg=24 ctermbg=229 cterm=NONE
+    hi ShowMarksHLu ctermfg=24 ctermbg=229 cterm=NONE
+    hi ShowMarksHLo ctermfg=24 ctermbg=229 cterm=NONE
+    hi ShowMarksHLm ctermfg=24 ctermbg=229 cterm=NONE
+  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
+    hi ShowMarksHLl ctermfg=24 ctermbg=228 cterm=NONE
+    hi ShowMarksHLu ctermfg=24 ctermbg=228 cterm=NONE
+    hi ShowMarksHLo ctermfg=24 ctermbg=228 cterm=NONE
+    hi ShowMarksHLm ctermfg=24 ctermbg=228 cterm=NONE
+  elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
+    hi ShowMarksHLl ctermfg=24 ctermbg=223 cterm=NONE
+    hi ShowMarksHLu ctermfg=24 ctermbg=223 cterm=NONE
+    hi ShowMarksHLo ctermfg=24 ctermbg=223 cterm=NONE
+    hi ShowMarksHLm ctermfg=24 ctermbg=223 cterm=NONE
+  endif
+  hi CtrlPMatch ctermfg=100 ctermbg=NONE cterm=bold
+  hi CtrlPPrtBase ctermfg=250 ctermbg=NONE cterm=NONE
+  hi CtrlPLinePre ctermfg=250 ctermbg=NONE cterm=NONE
+  hi CtrlPMode1 ctermfg=24 ctermbg=250 cterm=bold
+  hi CtrlPMode2 ctermfg=229 ctermbg=24 cterm=bold
+  hi CtrlPStats ctermfg=243 ctermbg=250 cterm=bold
+  hi Lf_hl_match ctermfg=100 ctermbg=NONE cterm=bold
+  hi Lf_hl_match0 ctermfg=100 ctermbg=NONE cterm=bold
+  hi Lf_hl_match1 ctermfg=165 ctermbg=NONE cterm=bold
+  hi Lf_hl_match2 ctermfg=24 ctermbg=NONE cterm=bold
+  hi Lf_hl_match3 ctermfg=96 ctermbg=NONE cterm=bold
+  hi Lf_hl_match4 ctermfg=130 ctermbg=NONE cterm=bold
+  hi Lf_hl_matchRefine ctermfg=88 ctermbg=NONE cterm=bold
+=======
+>>>>>>> Stashed changes
   let g:vimshell_escape_colors = [
         \ '#a89984', '#c74545', '#6c782e', '#b47109',
         \ '#47747e', '#945e80', '#4c7a5d', '#7c6f64',
@@ -3020,7 +2844,13 @@ if &background ==# 'dark'
   hi MatchWord ctermfg=NONE ctermbg=NONE cterm=underline
   hi MatchWordCur ctermfg=NONE ctermbg=NONE cterm=underline
   hi UndotreeSavedBig ctermfg=96 ctermbg=NONE cterm=bold
+<<<<<<< Updated upstream
   finish
+||||||| constructed merge base
+  unlet s:t_Co s:italics
+  finish
+=======
+>>>>>>> Stashed changes
 endif
 " }}}
 

@@ -94,15 +94,11 @@ def vimcmd(fxn):
 
 def py_import_completions():
     argl = vim.eval('a:argl')
-    try:
-        import jedi
-    except ImportError:
-        comps = []
-    else:
-        text = 'import %s' % argl
-        script = jedi.Script(text, 1, len(text), '',
-                             environment=get_environment())
-        comps = ['%s%s' % (argl, c.complete) for c in script.completions()]
+    text = 'import %s' % argl
+    script = jedi.Script(text, 1, len(text), '',
+                         environment=get_environment())
+    comps = []
+    comps = [f"{argl}, {c.complete for c in script.completions()}"]
     vim.command("return '%s'" % '\n'.join(comps))
 
 
