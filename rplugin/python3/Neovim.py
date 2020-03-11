@@ -5,8 +5,11 @@ import logging
 import os
 import sys
 from pathlib import Path
+# Fuck this module is deprecated but in here so many times.
 import imp
 import io
+from importlib import import_module, invalidate_caches
+from importlib.util import find_spec, module_from_spec
 
 from pynvim import attach
 from pynvim.api import Nvim, walk
@@ -17,6 +20,8 @@ from pynvim.plugin.decorators import plugin, rpc_export
 
 if sys.version_info >= (3, 4):
     from importlib.machinery import PathFinder
+else:
+    PathFinder = None
 
 # Globals:
 
@@ -26,7 +31,8 @@ PYTHON_SUBDIR = "python3"
 num_types = (int, float)
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(name=__name__)
+logger.addFilter(logging.Filter(name=__name__))
 debug, info, warn = (
     logger.debug,
     logger.info,
@@ -178,8 +184,7 @@ class ScriptHost:
         directories and patch the sys module so 'print' calls will be
         forwarded to Nvim.
         """
-        pass  # replaces next logging statement
-        # info('install import hook/path')
+        info('install import hook/path')
         self.hook = path_hook(nvim)
         sys.path_hooks.append(self.hook)
         nvim.VIM_SPECIAL_PATH = "_vim_path_"
@@ -350,13 +355,14 @@ def path_hook(nvim):
     return hook
 
 
-class VimModuleLoader(object):
+class VimModuleLoader:
     """Inexplicably this class and `VimPathFinder` were closures in `path_hook`."""
 
-    def __init__(self, module):
+    def __init__(self, module, path=None):
         self.module = module
+        self.path = path
 
-    def load_module(self, fullname, path=None):
+    def load_module(self):
         """Check sys.modules, required for reload (see PEP302).
 
         Uh no. How about we just implement the loader protocol?
@@ -367,9 +373,28 @@ class VimModuleLoader(object):
             pass
         return imp.load_module(fullname, *self.module)
 
+
+class VimPathFinder:
+    # TODO: We gotta define get_paths in this class but seriously every
+    # function either implicitly uses `nvim` or requires it as a positional
+    # parameter ughh
+
+    def __init__(self, fullname, path=None):
+        self.fullname = fullname
+        self.path = path if path is not None else''
+        # This is a clasmethod so the way you guys set this up was retarded
+        self.spec = PathFinder.find_spec(fullname, path) if PathFinder is not None else None
+
+    def find_module(self, fullname, oldtail, path):
+        try:
+            return self._find_module(fullname, oldtail, path)
+        except ImportError:
+            return None
+
     @staticmethod
     def _find_module(fullname, oldtail, path):
-        """Oh this might be why. This wasnt scoped to the class previously."""
+        """Method for Python 2.7 and 3.3."""
+            # return VimModuleLoader._find_module(fullname, fullname, path or _get_paths())
         idx = oldtail.find(".")
         if idx > 0:
             name = oldtail[:idx]
@@ -379,27 +404,3 @@ class VimModuleLoader(object):
             return _find_module(fullname, tail, module.__path__)
         else:
             return imp.find_module(fullname, path)
-
-
-class VimPathFinder(object):
-    # TODO: We gotta define get_paths in this class but seriously every
-    # function either implicitly uses `nvim` or requires it as a positional
-    # parameter ughh
-
-    # fuckin idiots you never initialized the pathfinder
-    path_finder = PathFinder()
-
-    @staticmethod
-    def find_module(fullname, path=None):
-        """Method for Python 2.7 and 3.3."""
-        try:
-            # return VimModuleLoader._find_module(fullname, fullname, path or _get_paths())
-            return VimModuleLoader._find_module(fullname, fullname, path)
-        except ImportError:
-            return None
-
-    @staticmethod
-    def find_spec(fullname, target=None):
-        """Method for Python 3.4+."""
-        # return PathFinder.find_spec(fullname, _get_paths(), target)
-        return path_finder.find_spec(fullname, target)

@@ -20,8 +20,8 @@ augroup UserHelpandPython " {{{
         \| endif
 
   autocmd FileType python exec 'source ' . s:repo_root . '/ftplugin/python.vim'
-  autocmd FileType python let &l:path = py#PythonPath()
-  autocmd FileType python call py#ALE_Python_Conf()
+  autocmd FileType python,xonsh let &l:path = py#PythonPath()
+  autocmd FileType python,xonsh call py#ALE_Python_Conf()
 
   " Not ready yet. BE CAREFUL and go read :he BufReadCmd and Cmd-events
   " inspired by $VIMRUNTIME/plugin/man.vim
@@ -35,6 +35,8 @@ augroup UserHelpandPython " {{{
       \|  call SuperTabChain(&completefunc, "<c-p>")
       \| endif
   endif
+
+
 augroup END
 " }}}
 
@@ -57,13 +59,9 @@ augroup END
 
 augroup UserCoc " {{{
   au!
-  autocmd User CocStatusChange,CocDiagnosticChange
-        \| if exists('*Statusline_expr')
-        \| call Statusline_expr()
-        \| endif
-
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-
+  autocmd  User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+  autocmd  User CursorHold call CocActionAsync('showSignatureHelp')
+  " Clear this so that p.u.m. doesn't open in the command window
   autocmd! User CmdlineEnter CompleteDone
 
 augroup END
@@ -99,10 +97,7 @@ augroup END
 
 augroup UserStl
   autocmd!
-
-  autocmd VimEnter * if exists(':Tmuxline')
-                  \| :Tmuxline vim_statusline_3
-                  \| endif
+  au CmdwinEnter [/?]  startinsert
 augroup END
 " }}}
 

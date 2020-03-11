@@ -7,23 +7,32 @@
 
 if exists('b:did_ftplugin') | finish | endif
 
-" Sourcing Everything: {{{1
+" Sourcing Everything: {{{
 source $VIMRUNTIME/ftplugin/python.vim
 unlet! b:did_ftplugin
 
 let s:this_dir = fnameescape(fnamemodify(expand('<sfile>'), ':p:h'))
 
 exec 'source ' . s:this_dir . '/python.vim'
+" }}}
 
-" Options: {{{1
+" Options: {{{
+if executable('black')
+  setlocal formatprg=black
+endif
+
+setlocal keywordprg=:PydocShow
+setlocal foldlevelstart=0
 setlocal syntax=xonsh
-
 syntax sync fromstart
-
-setlocal foldmethod=indent
 setlocal suffixesadd+=,.xsh,.xonshrc,
 
-" Atexit: {{{1
+setlocal formatoptions=jcroql
+setlocal expandtab shiftwidth=4 sts=4 ts=4
+
+" }}}
+
+" Atexit: {{{
 let b:undo_ftplugin = 'setlocal fdm< syntax< sua< '
             \ . '|unlet! b:undo_ftplugin'
             \ . '|unlet! b:did_ftplugin'

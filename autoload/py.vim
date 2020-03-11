@@ -57,7 +57,7 @@ function! s:_PythonPath() abort  " {{{1
        " guess who figured something out today?
        python3 import site, vim;
        let s:site_pack = py3eval('site.USER_SITE')
-       let s:path = s:path . s:site_pack
+       let s:path = s:path . s:site_pack . '/**'
 
       " #2) use the system python's std library modules
       " Oh don't forget the usr/lib one. Ugh. But android doesn't put that in

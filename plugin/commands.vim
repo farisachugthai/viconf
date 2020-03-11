@@ -20,6 +20,9 @@ command! EchoRTP echo buffers#EchoRTP()
 " From `:he quickfix`
 command! -complete=dir -bang -nargs=* NewGrep execute 'silent grep! <q-args>' | copen<bang>
 
+" An example that uses the argument list and avoids errors for files without matches:
+command! -complete=var -nargs=* -range SearchAll silent argdo try | grepadd! <args> %  | catch /E480:/ | endtry
+
 " }}}
 
 " Coc Commands: {{{
@@ -105,6 +108,14 @@ command! -nargs=1 -complete=custom,s:CocProviders CocProviders call s:HandleCocP
 " }}}
 
 " A LOT Of FZF Commands: {{{
+
+" Apr 23, 2019: Didn't know complete help was a thing.
+" Oh holy shit that's awesome
+" Ah fzf is too good jesus christ. He provided all the arguments for you so
+" all you have to do is ask "bang or not?"
+" Unfortunately the ternary expression <bang> ? 1 : 0 doesn't work; however,
+" junegunn's <bang>0 does!
+command! -bar -bang -nargs=* -complete=help Help call fzf#vim#helptags(<bang>0)
 
 " scriptnames:
 command! -bang -bar FZScriptnames call vimscript#fzf_scriptnames(<bang>0)
@@ -288,6 +299,7 @@ command! -nargs=* -bang -bar -complete=buffer -range=% -addr=buffers
 " }}}
 
 " Miscellaneous: {{{
+
 command!  -bang -complete=compiler -nargs=* Make
       \ if <args>
       \ for f in expand(<q-args>, 0, 1) |
@@ -342,18 +354,9 @@ command! -bar -complete=expression -complete=function -range -nargs=+ Pythonx <l
 " :Pd vim.vars
 command! -range -bar -complete=expression -complete=function -nargs=? Pd <line1>,<line2>python3 from pprint import pprint; pprint(dir(<args>))
 
-" Honestly i don't know what the <range> arg is providing to these commands
-" and half the time it makes no sense but we may as well implement the whole
-" interface
 command! -range -bar -complete=expression -complete=function -nargs=? P <line1>,<line2>python3 print(<args>)
 
-" Apr 23, 2019: Didn't know complete help was a thing.
-" Oh holy shit that's awesome
-" Ah fzf is too good jesus christ. He provided all the arguments for you so
-" all you have to do is ask "bang or not?"
-" Unfortunately the ternary expression <bang> ? 1 : 0 doesn't work; however,
-" junegunn's <bang>0 does!
-command! -bar -bang -nargs=* -complete=help Help call fzf#vim#helptags(<bang>0)
+command! -bar -range -nargs=+ Pi <line1>,<line2>python3 import <args>
 
 command! -bang -bar PydocThis call pydoc_help#PydocCword(<bang>0, expand(<cword>))
 
@@ -361,7 +364,7 @@ command! -bang -bar PydocThis call pydoc_help#PydocCword(<bang>0, expand(<cword>
 " separate window like fzf does.
 " NOTE: See :he func-range to see how range can get passed automatically to
 " functions without being specified in the command definition
-command! -nargs=? -bar -range PydocSplit call pydoc_help#SplitPydocCword(<q-mods>)
+command! -nargs=? -bar PydocSplit call pydoc_help#SplitPydocCword(<q-mods>)
 
 " command! -bar -bang -range PydocSp
 "       \ exec '<mods>split<bang>:python3 import pydoc'.expand('<cWORD>').'; pydoc.help('.expand('<cWORD>').')'
@@ -389,7 +392,7 @@ endfunction
 " So far works
 command! -bar -bang -nargs=* -complete=dir -complete=custom,s:IPythonOptions IPy :<mods>term<bang> ipython <args>
 
-command! -bar -complete=buffer ScratchBuffer call pydoc_help#scratch_buffer()
+command! -bar -bang -complete=buffer ScratchBuffer call pydoc_help#scratch_listed_buffer(<bang>0)
 
 command! NvimCxn call py#Cxn()
 " }}}
@@ -513,6 +516,7 @@ function ProjectRoot() abort
   return fnamemodify(fnameescape(ProjectGitDir()), ':p:h')
 endfunction
 
+command! -range -addr=arguments -bang -bar -nargs=* Gclone exe fugitive#Command(<line1>, <count>, +"<range>", <bang>0, "<mods>", <q-args>) 
 " }}}
 
 " Syntax Highlighting: {{{

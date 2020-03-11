@@ -5,15 +5,11 @@
   " Last Modified: February 16, 2020
 " ============================================================================
 
-" if exists('g:loaded_options') || &compatible || v:version < 700
-"   finish
-" endif
-" let g:loaded_options = 1
-
 scriptencoding utf-8
 let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
 " Global Options: {{{
+
 " Folds: {{{
 
 setglobal foldnestmax=10
@@ -22,7 +18,7 @@ set foldmethod=marker foldcolumn=2
 " Automatically close all folds from the beginning.
 setglobal foldlevelstart=0
 " Everything is a fold even if it's one line
-setglobal foldminlines=0  
+setglobal foldminlines=0
 " And yes even if it's a comment
 setglobal foldignore=
 " Automatically open and close folds as i move out and in them.
@@ -39,6 +35,7 @@ endif
 " todo: closeoff
 " }}}
 
+" Other: {{{
 setglobal autochdir autowrite autoread
 if &tabstop > 4 | setglobal tabstop=4 | endif
 if &shiftwidth > 4  | setglobal shiftwidth=4 | endif
@@ -49,6 +46,7 @@ setglobal cdpath+=$HOME,$VIMRUNTIME
 setglobal isfname-==
 setglobal iskeyword=@,48-57,_,192-255   " Idk how but i managed to mess up the default isk
 setglobal winblend=10
+" }}}
 
 " Platform Specific Options: {{{
 if has('unix')
@@ -56,15 +54,6 @@ if has('unix')
 else
   call msdos#set_shell_cmd()
 endif
-" }}}
-
-" Grepprg: {{{
-try
-  " if you don't have fd or rg installed you shouldn't lose highlighting
-  call syncom#grepprg()
-catch /.*/
-endtry
-" }}}
 
 if exists('$ANDROID_DATA')   " {{{ Remote Hosts
   " Fuck i had to change this because wsl was loading termux jesus christ
@@ -140,9 +129,9 @@ let g:ale_sign_info = 'I'
 let g:ale_sign_error = 'E'
 let g:ale_sign_highlight_linenrs = 1
 let g:ale_sign_style_warning = 'E'
+" }}}
 
-" More:
-
+" More: {{{
 let g:ale_pattern_options_enabled = 1
 let g:ale_pattern_options = {'\.min.js$': {'ale_enabled': 0}}
 
@@ -152,10 +141,12 @@ let g:ale_fix_on_save = 1
 
 " When ALE is linting bash files recognize it as sh
 let g:ale_linter_aliases = {
-      \ 'ps1': 'powershell',
+      \ 'ps1': ['powershell', 'cs'],
       \ 'htmljinja': ['html', 'handlebars'],
+      \ 'jinja': ['html', 'handlebars'],
       \ 'htmldjango': 'html',
       \ 'bash': 'sh',
+      \ 'xonsh': 'python',
       \ }
 
 " When ale is linting C# only use OmniSharp
@@ -239,14 +230,12 @@ let g:ale_virtualenv_dir_names = [
     \   'venv',
     \ ]
 
-if isdirectory(expand('~/virtualenvs'))
-  let g:ale_virtualenv_dir_names += [expand('~/virtualenvs')]
+if isdirectory(expand('~/.virtualenvs'))
+  let g:ale_virtualenv_dir_names += [expand('~/.virtualenvs')]
 endif
 
-if isdirectory(expand('~/miniconda3'))
-  let g:ale_virtualenv_dir_names +=  [expand('~/miniconda3')]
-elseif isdirectory('C:/tools/miniconda3')
-  let g:ale_virtualenv_dir_names += ['C:/tools/miniconda3']
+if isdirectory(expand('~/scoop/apps/winpython/current'))
+  let g:ale_virtualenv_dir_names +=  [expand('~/scoop/apps/winpython/current')]
 endif
 
 if isdirectory(expand('~/.local/share/virtualenvs'))
@@ -257,13 +246,14 @@ let g:ale_cache_executable_check_failures = v:true
 let g:ale_linters_ignore = {'python': ['pylint']}
 
 " Example from the help page
-" Use just ESLint for linting and fixing files which end in '.foo.js'
+" Use just ESLint for linting and fixing files which end in '.js'
 let g:ale_pattern_options = {
-\   '\.foo\.js$': {
-\       'ale_linters': ['eslint'],
-\       'ale_fixers': ['eslint'],
-\   },
-\}
+            \   '\.js$': {
+            \       'ale_linters': ['eslint'],
+            \       'ale_fixers': ['eslint'],
+            \   },
+            \ }
+
 let g:ale_lsp_show_message_severity = 'information'
 " }}}
 
@@ -293,7 +283,7 @@ let g:NERDTreeNaturalSort = 1
 let g:NERDTreeShowLineNumbers = 1
  " Open dir with 1 keys, files with 2
 let g:NERDTreeMouseMode = 2
-let g:NERDTreeIgnore = [ '.pyc$', '.pyo$', '__pycache__$', '.git$', '.mypy', 'node_modules']
+let g:NERDTreeIgnore = [ '.pyc$', '.pyo$', '__pycache__$', '.git$', '.mypy']
 let g:NERDTreeRespectWildIgnore = 1
 let g:NERDTreeAutoDeleteBuffer = 1
 let g:NERDTreeMapToggleZoom = 'Z'  " Z is for Zoom why the hell is the default A?
@@ -460,12 +450,14 @@ let g:tagbar_type_typescript = {
   \ 'e:enums',
   \ ]
   \ }
+
 let g:tagbar_type_snippets = {
       \ 'ctagstype' : 'snippets',
       \ 'kinds' : [
       \ 's:snippets',
       \ ]
-\ }  " }}}
+      \ }
+" }}}
 
 " }}}
 
@@ -517,14 +509,8 @@ let g:UltiSnipsSnippetDir = [stdpath('config') . '/UltiSnips']
 " iterate through every dir in &rtp which saves an immense amount of time
 " on startup.
 let g:UltiSnipsSnippetDirectories = [ stdpath('config') . '/UltiSnips' ]
-
 let g:UltiSnipsUsePythonVersion = 3
-
 let g:UltiSnipsListSnippets = '<C-/>'
-
-" Oddly, setting this var only sets it in select-mode though.
-" So let's add a few mappings to help us along.
-
 " }}}
 
 " Supertab: {{{
@@ -564,7 +550,6 @@ let g:SuperTabCrMapping = 1
 let g:SuperTabClosePreviewOnPopupClose = 1  " (default value: 0)
 let g:SuperTabDefaultCompletionType = 'context'
 let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
-
 " }}}
 
 " Startify: {{{
@@ -638,8 +623,9 @@ let g:startify_custom_header ='startify#center(startify#fortune#cowsay())'
 
 " if exists('g:node_host_prog') | let g:coc_node_path = g:node_host_prog | endif
 if !has('unix')
-  let g:coc_node_path = 'C:\Users\fac\scoop\apps\nvm\current\v13.7.0\node.exe'
+  let g:coc_node_path = 'C:\Users\fac\scoop\apps\nvm\current\v13.10.1\node.exe'
 endif
+
 
 " TODO:
 " May have to extend after a has('unix') check.
@@ -661,6 +647,7 @@ let $NVIM_COC_LOG_LEVEL = 'WARN'
 let $NVIM_COC_LOG_FILE = stdpath('data') . '/site/coc.log'
 let $NVIM_NODE_LOG_FILE = stdpath('data') . '/site/node.log'
 let $NVIM_NODE_LOG_LEVEL = 'WARN'
+let $NVIM_NODE_HOST_DEBUG = 1
 
 " Lets define this.
 let g:coc_jump_locations = []
@@ -673,15 +660,12 @@ let g:coc_jump_locations = []
 
 " Ensure it actually loaded: {{{
 
-" if !exists(':FZF') | call plug#load('fzf') | endif
-" " let g:fzf_command_prefix = 'Fuf'
-" if !exists(':Rg') | call plug#load('fzf.vim') | endif
-
 " Set up windows to have the correct commands
 if !has('unix')
   " let $FZF_DEFAULT_COMMAND = 'rg --hidden -M 200 -m 200 --smart-case --passthru --files . '
   " let $FZF_DEFAULT_COMMAND = 'fd --hidden --follow -d 6 -t f '
-  unlet! $FZF_DEFAULT_OPTS $FZF_DEFAULT_COMMAND
+  unlet! $FZF_DEFAULT_OPTS 
+  unlet! $FZF_DEFAULT_COMMAND
 endif  " }}}
 
 " Options: {{{
@@ -722,9 +706,10 @@ if exists('$TMUX')
 endif
 
 " [[B]Commits] Customize the options used by 'git log':
-let g:fzf_commits_log_options = ' --graph'
+let g:fzf_commits_log_options = ' --graph --abbrev-commit --abbrev --date=relative'
       \ . ' --color=always --all --branches --pretty'
-      \ . ' --format="h%d %s $* " '
+      \ . ' --format="h%d %Cred%h%Creset -%C(yellow)%d%Creset %s"'
+      \ . ' %Cgreen(%cr) %C(bold blue)<%an>%Creset $* " '
 
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1
@@ -760,115 +745,49 @@ let g:fzf_colors =  {
       \  'header':  ['fg', '#83a598']
       \ }
 
-function! s:fzf_statusline()
-  " Override statusline as you like
-  hi! fzf1 cterm=bold,underline,reverse gui=bold,underline,reverse guifg=#7daea3
-  hi! link fzf2 fzf1
-  hi! link fzf3 fzf1
-  setlocal statusline=%#fzf1#\ FZF:\ %#fzf2#fz%#fzf3#f
-endfunction
-
-" NOTE: This has to remain the name of the augroup it's what Junegunn calls
-augroup FZFStatusline
-  au!
-  autocmd! User FzfStatusLine call <SID>fzf_statusline()
-augroup END
 " }}}
 
 " }}}
 
-" Statusline: {{{
-function! StatusDiagnostic() abort  " {{{
-  if !exists('g:loaded_coc') | return '' | endif
+" Tmuxline: {{{
 
-  let info = get(b:, 'coc_diagnostic_info', {})
-  if empty(info) | return '' | endif
-  let msgs = []
-  if get(info, 'error', 0)
-    call add(msgs, 'E' . info['error'])
-  endif
-  if get(info, 'warning', 0)
-    call add(msgs, 'W' . info['warning'])
-  endif
-  return join(msgs, ' ') . ' ' . get(g:, 'coc_status', '')
-endfunction  " }}}
+let g:tmuxline_powerline_separators = 1
 
-function! s:Statusline() abort  " {{{
+let g:tmuxline_status_justify = 'centre'
+let g:tmuxline_powerline_separators = 1
+let g:tmuxline_preset = {
+      \ 'a'    : ['#[fg=#504945,bg=#dfbf8e] ▶ #S'],
+      \ 'win'  : ['#I', '#W'],
+      \ 'cwin' : ['#I', '#W'],
+      \ 'y'    : ['#(uptime  | cut -d " " -f 1,2,3)'],
+      \ 'z'    : ['#(whoami)', '#H'],}
 
-  " Define statusline groups for WebDevIcons, Fugitive and other plugins.
-  " Define empty fallbacks if those plugins aren't installed. Then
-  " use the builtins to fill out the information.
-  if exists('*WebDevIconsGetFileTypeSymbol')
-    let dicons = '%{WebDevIconsGetFileTypeSymbol()}'
-  else
-    let dicons = ''
-  endif
-  let fug = " %{exists('g:loaded_fugitive') ? FugitiveStatusline() : ''} "
-  let sep = ' %= '
-  let pos = ' %-12(%l : %c%V%) '
+" After defining all of these groups and format blocks, let's
+" define the tmux line to match our vim statusline
+let s:tmuxline_themes = stdpath('data') . '/plugged/tmuxline.vim/autoload/themes'
 
-  if exists('*CSV_WCol')
-    " Doing it the exact way he specifies in the help docs means you don't get
-    " tsv support
-    if &filetype ==# 'tsv' || &filetype ==# 'csv'
-      let csv = '%1*%{CSV_WCol()}%*'
-    else
-      let csv = ''
-    endif
-  else
-    let csv = ''
-  endif
+if filereadable(s:tmuxline_themes . '/vim_statusline_3.vim')
+  execute 'source ' . s:tmuxline_themes . '/vim_statusline_3.vim'
+  let g:tmuxline_theme = 'vim_statusline_3'
+endif
 
-  if exists('*strftime')
-    " Overtakes the whole screen when Termux zooms in
-    if &columns > 80
-      let tstmp = ' %{strftime("%H:%M %m-%d-%Y", getftime(expand("%:p")))}'
-      " last modified timestamp
-    else
-      let tstmp = ''
-    endif
-  else
-    let tstmp = ''  " ternary expressions should get on the todo list
-  endif
+let g:tmuxline_powerline_separators = {
+     \ 'left' : '»',
+     \ 'left_alt': '▶',
+     \ 'right' : '«',
+     \ 'right_alt' : '◀',
+     \ 'space' : ' '}
 
-  " from he 'statusline'.
-  " Each status line item is of the form:
-  " %-0{minwid}.{maxwid}{item}
-  let cos = " %{exists('g:did_coc_loaded') ? coc#status() : ''} "
+" }}}
 
-  let cog = ' %{exists("coc_git_status") ? coc_git_status : ""} '
+" Voom: {{{
 
-  " shit g:ale_enabled == 0 returns True
-  let ale_stl = '%{exists("g:ale_enabled") ? "[ALE]" : ""}'
-
-  let s:gutentags = '%{exists("g:gutentags_enabled") ? gutentags#statusline() : ""}'
-
-
-  return '[%n] ' . dicons . '%m' . '%r' . ' %y '
-        \. fug . csv
-        \. ' %{&ff} ' . tstmp
-        \. cos . cog
-        \. StatusDiagnostic()
-        \. ' %f'
-        \. sep
-        \. ale_stl
-        \. s:gutentags
-        \. pos . '%*' . ' %P'
-
-endfunction  " }}}
-
-function! Statusline_expr() abort  " {{{
-  " Lets give a nicer clean entry point.
-  return s:Statusline()
-endfunction  " }}}
-
-augroup UserStatusline  " {{{
-
-  au!
-  au BufEnter * let &statusline = Statusline_expr()
-augroup END  " }}}
-
-command! -bar ReloadStatusline call s:Statusline()
+let g:voom_ft_modes = {'markdown': 'markdown', 'rst': 'rst', 'zimwiki': 'dokuwiki'}
+let g:voom_default_mode = 'rst'
+let g:voom_python_versions = [3,2]
+" You conditionally can't use << or <C-Left> unless your node is the furthest down the stack
+" But that's kinda dumb.
+let g:voom_always_allow_move_left = 1
 " }}}
 
 " Fix the path + Last Call For Options: {{{
@@ -883,5 +802,7 @@ if &omnifunc ==# '' | setlocal omnifunc=syntaxcomplete#Complete | endif
 
 if &completefunc ==# '' | setlocal completefunc=syntaxcomplete#Complete | endif
 "  }}}
+
+" }}}
 
 " Vim: set fdm=marker:

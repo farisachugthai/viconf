@@ -1,18 +1,24 @@
 " header
 " It feels a little silly to do too much for this one line of code so let's not.
 
-" Guard: {{{1
+let g:python_space_error_highlight = 1
+
+" Source it once per buffer
 if exists('b:did_after_syntax_python') || &compatible || v:version < 700
   finish
 endif
 let b:did_after_syntax_python = 1
 
-" Original: {{{1
-let g:python_space_error_highlight = 1
+" Well i mean a specific kind
+if &filetype !=# 'python'
+  finish
+endif
 
+" Otherwise this probably got set
+unlet! b:current_syntax
 source $VIMRUNTIME/syntax/python.vim
 
-" Personal Overrides: {{{1
+" Personal Overrides: {{{
 " They missed one! A python3.4 thing I think.
 syn keyword pythonExceptions ModuleNotFoundError
 

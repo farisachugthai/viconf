@@ -49,8 +49,7 @@ function! plugins#InstallPlug() abort
     execute('!curl --progress-bar --create-dirs -Lo '
             \ . stdpath('data') . '/site/autoload/plug.vim'
             \ . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
-  catch | echo v:exception | endtry
-  echomsg 'Now using a homebrewed solution to get Vim-plug'
+  catch | echoerr v:exception | endtry
 endfunction
 
 function! plugins#list_commits() abort

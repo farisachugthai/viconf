@@ -31,10 +31,8 @@ let g:rst_fold_enabled = 1
 " Now that globals are set check for ....
 if &filetype !=# 'rst' | finish | endif
 " The right file type
-"
 if exists('b:did_ftplugin') | finish | endif
-" and that b:did_ftplugin is set
-let b:did_ftplugin = 1
+source $VIMRUNTIME/ftplugin/rst.vim
 
 syntax sync fromstart
 setlocal textwidth=80
@@ -46,10 +44,23 @@ setlocal foldlevel=1
 setlocal foldlevelstart=1
 setlocal wildignore+=*.html,*.css
 setlocal iskeyword+=.
+setlocal iskeyword-=_
+
+" Dude some of the options in fo-table are MADE for rst
+" n	When formatting text, recognize numbered lists.  This actually uses
+" 	the 'formatlistpat' option, thus any kind of list can be used.  The
+" 	indent of the text after the number is used for the next line.  The
+" 	default is to find a number, optionally followed by '.', ':', ')',
+" 	']' or '}'.  Note that 'autoindent' must be set too.  Doesn't work
+" 	well together with "2".
+" 	Example: >
+" 		1. the first item
+" 		   wraps
+" 		2. the second item
+setlocal formatoptions+=n
 
 " Only because I want to follow module names the same way as python
 setlocal include=^\\s*\\(from\\\|import\\)
-
 setlocal includeexpr=substitute(v:fname,'\\.','/','g')
 
 compiler rst

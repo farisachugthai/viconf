@@ -60,7 +60,9 @@ noremap! <F1> <Esc>
 
 nnoremap <Leader>cd <Cmd>cd %:p:h<CR><Bar><Cmd>pwd<CR>
 nnoremap Q gq
-xnoremap <BS> d
+" xnoremap <BS> d
+" doesn't work! but C-h is backspace soooo
+xnoremap <C-h> d
 nnoremap <Leader>sp <Cmd>setlocal spell!<CR>
 nnoremap <Leader>o o<Esc>
 nnoremap <Leader>O O<Esc>
@@ -209,8 +211,8 @@ else
   noremap! <F6> <Cmd>UltiSnipsListSnippets<CR>
 endif
 
-" Changed the mapping to Alt-S for snippets.
-inoremap <silent> <M-s> <C-R>=(plugins#ExpandPossibleShorterSnippet() == 0? '': UltiSnips#ExpandSnippet())<CR>
+" Changed the mapping to Alt-= for snippets.
+inoremap <silent> <M-=> <C-R>=(plugins#ExpandPossibleShorterSnippet() == 0? '': UltiSnips#ExpandSnippet())<CR>
 " }}}
 
 " FZF: {{{
@@ -491,11 +493,18 @@ function! Quickfix_Mappings() abort  " {{{
   " because it toggles the location list and so we want to have that mapping
   " defined everywhere.
   nnoremap <Leader>l <Plug>(qf_loc_toggle)
+  nnoremap <Leader>ln <Plug>(qf_loc_next)
+  nnoremap <Leader>lp <Plug>(qf_loc_previous)
+  nnoremap <Leader>lo <Plug>(qf_loc_toggle)
+  nnoremap <Leader>lc <Cmd>lclose<CR>
+  nnoremap <Leader>lf <Cmd>lwindow<CR>
+
   " VSCode toggles maximized panel with this one so i guess lets match
   nnoremap <C-\\> <Plug>(qf_qf_toggle)
-
-  nnoremap <Leader>c <Plug>(qf_qf_switch)
   nnoremap <Leader>q <Plug>(qf_qf_toggle)
+
+  nnoremap <Leader>qp <Plug>(qf_older)
+  nnoremap <Leader>qn <Plug>(qf_newer)
   nnoremap <Leader>qc <Cmd>cclose<CR>
   nnoremap <Leader>qf <Cmd>cwindow<CR>
 
@@ -636,7 +645,7 @@ nnoremap ]g <Cmd>stjump!<CR>
 xnoremap ]g <Cmd>stjump!<CR>
 
 " Thank you index.txt!
-" From: 2.2 Window commands						*CTRL-W*
+" From: 2.2 Window commands                                             *CTRL-W*
 " |CTRL-W_g_CTRL-]| CTRL-W g CTRL-]
 " split window and do |:tjump| to tag under cursor
 nnoremap <Leader>w] <C-w>g<C-]>
@@ -645,12 +654,13 @@ nnoremap ]w <C-w>g<C-]>
 nnoremap <Leader>wc <Cmd>wincmd c<CR>
 nnoremap <Leader>wo <Cmd>wincmd o<CR>
 
-nnoremap ]t <Cmd>PreviewTag<CR>
+" No tabnext takes this one
+" nnoremap ]t <Cmd>PreviewTag<CR>
 
 " Mnemonic: goto like mosts other g commands and \ is the key we're left free
 nnoremap <g-\> [I:let nr = input("Choose an include: ")<Bar>exe "normal! " . nr ."[\t"<CR>
 
-nnoremap <2-LeftMouse> :exe "ptselect! ". expand("<cword>")<CR>
+" nnoremap <2-LeftMouse> :exe "ptselect! ". expand("<cword>")<CR>
 
 " }}}
 

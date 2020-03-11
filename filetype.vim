@@ -27,11 +27,14 @@ augroup Userftdetect
   " just noticed that in $VIMRUNTIME/filetype.vim
   " so why don't we recognize tmux filetypes without it then?
   " OH it needs teh conf.
-  " au BufNewFile,BufRead {.,}tmux*.conf		setf tmux
-
+  au BufNewFile,BufRead {.,}tmux*.conf		setf tmux
+  au BufNewFile,BufRead *.sh setlocal filetype=bash
   au BufNewFile,BufRead *.rst.txt set filetype=rst.txt
   au BufNewFile,BufRead *.rst_t set filetype=htmljinja.htmldjango
   au BufNewFile,BufRead *.gitconfig set filetype=gitconfig
   au BufNewFile,BufRead *.rktd set filetype=lisp
+
+  " Go dep and Rust use several TOML config files that are not named with .toml.
+  au BufNewFile,BufRead *.toml,Gopkg.lock,Cargo.lock,*/.cargo/config,*/.cargo/credentials,Pipfile setf toml
 
 augroup END
