@@ -81,6 +81,16 @@ endif
 let &g:undodir = &g:directory . '/vim/undo//'
 let &g:backupdir = &g:directory . '/vim/backup//'
 let &g:directory .= '/vim/swap//'
+" Create directories if they doesn't exist
+if !isdirectory(expand(&g:directory))
+  silent! call mkdir(expand(&g:directory), 'p', 0700)
+endif
+if !isdirectory(expand(&g:backupdir))
+  silent! call mkdir(expand(&g:backupdir), 'p', 0700)
+endif
+if !isdirectory(expand(&g:undodir))
+  silent! call mkdir(expand(&g:undodir), 'p', 0700)
+endif
 " }}}
 
 " Completion: {{{
@@ -104,6 +114,7 @@ setglobal smartcase infercase smartindent
 " }}}
 
 " Options: {{{
+set winblend=10  " fuck this is window specific
 setglobal pastetoggle=<F9>   " fuck me this is what windows terminal uses for something
 
 setglobal signcolumn=auto:4  " this might be a nvim 4 thing
@@ -132,7 +143,8 @@ setglobal browsedir="buffer"   " which directory is used for the file browser
 
 let &g:listchars = "tab:\u21e5\u00b7,extends:\u21c9,precedes:\u21c7,nbsp:\u00b7"
 " trail:\u2423 doesn't work with hack as font
-let &fillchars = "stl:' ',stlnc:' ',vert:\u250b,fold:\u00b7,diff:'.'"
+let &g:fillchars = "stl:' ',stlnc:' ',vert:\u250b,fold:\u00b7,diff:'.'"
+" set fillchars=stl:^,stlnc:=,vert:│,fold:·,diff:-
 
 setglobal breakindent breakindentopt=sbr
 let &g:showbreak = '↳ '                   " Indent wrapped lines correctly
@@ -145,18 +157,21 @@ setglobal spellsuggest=5
 setglobal showmatch matchpairs+=<:>
 setglobal matchtime=20  " Show the matching pair for 2 seconds
 " dude holy hell are we running faster on termux set termguicolors
-setglobal synmaxcol=1000  " }}}
+setglobal synmaxcol=1000
+
+packadd! matchit
+packadd! justify
+" }}}
 
 " Load Plugins: {{{
-if !exists('plug#load')  | unlet! g:loaded_plug | exec 'source ' . s:repo_root . '/vim-plug/plug.vim' | endif
+"
 " Preliminary Options: {{{
+if !exists('plug#load')  | unlet! g:loaded_plug | exec 'source ' . s:repo_root . '/vim-plug/plug.vim' | endif
 " Few options I wanna set in advance
 let g:no_default_tabular_maps = 1
 let g:plug_shallow = 1
 let g:plug_window = 'tabe'
 let g:undotree_SetFocusWhenToggle = 1
-
-" }}}
 
 " List of plugins: {{{
 
@@ -166,7 +181,6 @@ function! LoadMyPlugins() abort
   Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lockfile'}
   let $NVIM_COC_LOG_FILE = stdpath('data')  . '/site/coc.log'
   let $NVIM_COC_LOG_LEVEL = 'ERROR'
-  Plug 'junegunn/vim-plug' ", {'dir': expand('~/projects/viconf/vim-plug')}
   Plug 'junegunn/fzf', { 'dir': expand('~/.fzf'), 'do': './install --all' }
   Plug 'junegunn/fzf.vim'
   " NerdTree: {{{
@@ -197,7 +211,7 @@ function! LoadMyPlugins() abort
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-scriptease'
-  Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+  Plug 'SirVer/ultisnips'
   Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }
   nnoremap <Leader>a <Cmd>sil! ALEEnable<CR><bar>:sil! call plugins#AleMappings()<CR><bar>:sil! CocDisable<CR>:sil! redraw!<CR>:ALELint<CR>
   nnoremap <Leader>et <Cmd>ALEToggle<CR>:sil! call plugins#AleMappings()<CR>:sil! redraw!<CR>
@@ -205,18 +219,9 @@ function! LoadMyPlugins() abort
   if exists('$TMUX')
     Plug 'christoomey/vim-tmux-navigator'
     Plug 'edkolev/tmuxline.vim'
-    augroup UserTmuxline
-      au!
-      autocmd VimEnter *
-            \  if exists(':Tmuxline')
-            \| exec 'Tmuxline vim_statusline_3'
-            \| endif
-
-    augroup END
   endif
-
   Plug 'mhinz/vim-startify'
-
+  Plug 'mitsuhiko/vim-jinja'
   Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
   noremap <silent> <F8> <Cmd>TagbarToggle<CR>
   noremap! <silent> <F8> <Cmd>TagbarToggle<CR>
@@ -229,21 +234,22 @@ function! LoadMyPlugins() abort
   nnoremap U <Cmd>UndotreeToggle<CR>
 
   Plug 'ervandew/supertab'
+  let g:peekaboo_compact = 1
   Plug 'junegunn/vim-peekaboo'
-  Plug 'vim-voom/voom', {'on': ['Voom', 'VoomToggle', 'VoomExec'] }
   Plug 'romainl/vim-qf'
 
+  Plug 'tomtom/tlib_vim'
   if empty(s:termux)  " {{{
-    Plug 'godlygeek/tabular', {'on': 'Tabularize'}
-    Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
-    Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
-    Plug 'omnisharp/omnisharp-vim', {'for': ['cs', 'ps1',] }
-    Plug 'HiPhish/jinja.vim'
+  Plug 'junegunn/vim-plug' ", {'dir': expand('~/projects/viconf/vim-plug')}
+  Plug 'godlygeek/tabular', {'on': 'Tabularize'}
+  Plug 'vim-voom/voom', {'on': ['Voom', 'VoomToggle', 'VoomExec'] }
+  Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
+  Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
+  Plug 'omnisharp/omnisharp-vim', {'for': ['cs', 'ps1',] }
+  Plug 'ludovicchabant/vim-gutentags'
   endif
   " }}}
 
-  Plug 'ludovicchabant/vim-gutentags'
-  Plug 'tomtom/tlib_vim'
   Plug 'ryanoasis/vim-devicons'           " Keep at end!
   call plug#end()
 
@@ -253,14 +259,10 @@ call LoadMyPlugins()
 " }}}
 
 " Commands: {{{
-
 " I utilize this command so often I may as well save the characters
 command! Plugins echo map(keys(g:plugs), '"\n" . v:val')
-colo gruvbox-material
-set termguicolors
-packadd! matchit
-packadd! justify
 " }}}
+
 " }}}
 
 " Vim: set fdm=marker foldlevelstart=0:

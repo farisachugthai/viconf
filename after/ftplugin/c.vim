@@ -20,6 +20,8 @@ set cpoptions&vim
 				" positives.
 let g:compiler_gcc_ignore_unmatched_lines = 1
 
+syn sync fromstart
+setlocal foldmethod=syntax
 setlocal suffixesadd=.c,.h,.cpp
 setlocal cindent
 

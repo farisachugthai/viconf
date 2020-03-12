@@ -244,9 +244,9 @@ command! -bar -bang -nargs=? -complete=dir Files
 command! -bar -bang -nargs=? -complete=file GFiles call fzf#vim#gitfiles(<q-args>, <bang>0)
 
 " Me just copy pasting his plugin
-command! -bar -bang -complete=mapping FZIMaps call fzf#vim#maps("i", <bang>0)
-command! -bar -bang -complete=mapping FZCMaps call fzf#vim#maps("c", <bang>0)
-command! -bar -bang -complete=mapping FZTMaps call fzf#vim#maps("t", <bang>0)
+command! -bar -bang -complete=mapping IMaps call fzf#vim#maps("i", <bang>0)
+command! -bar -bang -complete=mapping CMaps call fzf#vim#maps("c", <bang>0)
+command! -bar -bang -complete=mapping TMaps call fzf#vim#maps("t", <bang>0)
 
 " Add completion to his Maps command but define ours the same way
 command! -bar -bang -nargs=? -complete=mapping Maps call fzf#vim#maps("n", <bang>0)

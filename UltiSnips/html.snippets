@@ -267,6 +267,7 @@ endsnippet
 
 snippet html "HTML basic structure" b
 <!DOCTYPE html>
+<html lang="en">
 <html>
   <head>
     <meta charset="UTF-8" />
@@ -281,15 +282,15 @@ endsnippet
 
 snippet htmll "HTML basic structure with the lang attribute" b
 <!DOCTYPE html>
-<html lang="${1:es}">
-                <head>
-                                <meta charset="UTF-8" />
-                                <meta name="viewport" content="width=device-width" />
-                                <title>${2:`!p snip.rv = snip.basename.replace('-', ' ').capitalize()`}</title>
-                </head>
-                <body>
-                                ${0:body}
-                </body>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>${2:`!p snip.rv = snip.basename.replace('-', ' ').capitalize()`}</title>
+  </head>
+  <body>
+  ${0:${VISUAL}}
+  </body>
 </html>
 endsnippet
 
@@ -298,7 +299,7 @@ snippet i "<i>" w
 endsnippet
 
 snippet id "id global attribute"
-id="$1"
+id="${1:${VISUAL}}"
 endsnippet
 
 snippet img "<img>"

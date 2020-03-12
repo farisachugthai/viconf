@@ -48,7 +48,7 @@ function! pydoc_help#read_page() abort  " {{{
   call s:temp_buffer()
 endfunction  " }}}
 
-function! pydoc_help#PydocCword(bang, mods) abort  " {{{1
+function! pydoc_help#PydocCbword(bang, mods) abort  " {{{1
   " Holy shit it works!!!
   let s:temp_cword = expand('<cWORD>')
   exec a:mods . 'enew' . a:bang
@@ -236,8 +236,8 @@ function! pydoc_help#show(...) abort  " {{{
       exec 'b' . buf
   else
     throw 'autoload:pydoc_help#show: wrong # of args'
-      
   endif
+
   call jobstart('pydoc ' . word, {'on_stdout' : {j, d, e->append(line('.'),d)} } )
   call s:temp_buffer()
   " Make it vertical

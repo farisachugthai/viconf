@@ -282,7 +282,7 @@ highlight! link manReference      PreProc
 highlight! link manSubHeading     Function
 
 highlight! link manUnderline Underlined
-highlight! link manBold GruvboxYellowBold
+highlight! link manBold YellowBold
 highlight! link manItalic htmlItalic
 
 " And the rest
@@ -291,16 +291,16 @@ hi! link manEmail Directory
 hi! link manEnvVar Identifier
 hi! link manEnvVarFile Identifier
 hi! link manEnvVarFile Identifier
-hi! link manFile GruvboxYellow
-hi! link manFiles GruvboxFg0
-hi! link manFooter GruvboxPurple
-hi! link manHighlight GruvboxYellow
-hi! link manHistory GruvboxYellow
-hi! link manHeaderFile GruvboxYellow
-hi! link manSectionHeading GruvboxOrangeBold
-hi! link manSentence GruvboxFg2
-hi! link manSignal GruvboxPurple
-hi! link manURL GruvboxGreen
+hi! link manFile Yellow
+hi! link manFiles Yellow
+hi! link manFooter Purple
+hi! link manHighlight Yellow
+hi! link manHistory Yellow
+hi! link manHeaderFile Yellow
+hi! link manSectionHeading OrangeBold
+hi! link manSentence Fg2
+hi! link manSignal Purple
+hi! link manURL Green
 " }}}
 
 " Netrw: {{{
@@ -520,27 +520,27 @@ hi! link htmlCssDefinition      Special
 
 " Xml: {{{
 
-hi! link xmlTag GruvboxBlue
-hi! link xmlEndTag GruvboxBlue
-hi! link xmlTagName GruvboxBlue
-hi! link xmlEqual GruvboxBlue
+hi! link xmlTag Blue
+hi! link xmlEndTag Blue
+hi! link xmlTagName Blue
+hi! link xmlEqual Blue
 hi! link docbkKeyword Keyword
 
-hi! link xmlDocTypeDecl GruvboxGray
+hi! link xmlDocTypeDecl Gray
 hi! link xmlDocTypeKeyword Keyword
-hi! link xmlCdataStart GruvboxGray
-hi! link xmlCdataCdata GruvboxPurple
-hi! link dtdFunction GruvboxGray
-hi! link dtdTagName GruvboxPurple
+hi! link xmlCdataStart Gray
+hi! link xmlCdataCdata Purple
+hi! link dtdFunction Gray
+hi! link dtdTagName Purple
 
 hi! link xmlAttrib Directory
-hi! link xmlProcessingDelim GruvboxGray
-hi! link dtdParamEntityPunct GruvboxGray
-hi! link dtdParamEntityDPunct GruvboxGray
-hi! link xmlAttribPunct GruvboxGray
+hi! link xmlProcessingDelim Gray
+hi! link dtdParamEntityPunct Gray
+hi! link dtdParamEntityDPunct Gray
+hi! link xmlAttribPunct Gray
 
-hi! link xmlEntity GruvboxOrange
-hi! link xmlEntityPunct GruvboxOrange
+hi! link xmlEntity Orange
+hi! link xmlEntityPunct Orange
 " }}}
 
 " Sh: {{{
@@ -859,7 +859,7 @@ hi! link vimNorm        vimCommand
 hi! link vimNotFunc     vimCommand
 hi! link vimNotPatSep   vimString
 hi! link vimNotation    Special
-hi! link vimNumber GruvboxRed
+hi! link vimNumber Red
 hi! link vimOper        Operator
 hi! link vimOperError   Error
 hi! link vimOption      PreProc
@@ -982,7 +982,7 @@ hi! link vimMapRhs vimNotation
 hi! link vimMapRhsExtend        vimNotation
 hi! link vimOnlyHLGroup VisualNOS
 hi! link vimOnlyCommand vimCommand
-hi! link vimOnlyOption GruvboxGreen
+hi! link vimOnlyOption Green
 hi! link vimSet vimSetEqual
 
 " There's a highlighting group for the equals sign in a set option statement...

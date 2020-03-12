@@ -106,3 +106,27 @@ augroup UserStl
 augroup END
 " }}}
 
+" {{{
+" augroup UserAutomake
+"   au!
+"   autocmd BufReadCmd *.rst compiler rst | if executable('sphinx-build')
+"                   \| let &l:makeprg = 'sphinx-build -b html'
+"                   \| if filereadable('conf.py')
+"                   \| let &l:makeprg .= ' . ./build/html '
+"                   \| elseif glob('../conf.py')
+"                   \| let &l:makeprg .= ' .. ../../build/html '
+"                   \| endif
+"                   \| endif
+  " autocmd BufReadCmd *.py if executable('pytest') 
+  "                 \| compiler pytest
+  "                 \| setlocal makeprg=py.test\ --tb=short\ -q\ --color=no
+  "                 \| echomsg 'Using pytest as a compiler!'
+  "                 \| else
+  "                 \| compiler pylint
+  "                 \| echomsg 'Using pylint as a compiler!'
+  "                 \| endif
+  " autocmd BufWritePost *.rst,*.py :make! %
+" augroup END
+
+" }}}
+

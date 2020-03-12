@@ -5,6 +5,7 @@
     " Last Modified: Oct 27, 2019
 " ============================================================================
 
+" Global Options: {{{
 let g:rst_style = 1
 
 " May 13, 2019: Updated. Grabbed this directly from $VIMRUNTIME/syntax/rst.vim
@@ -26,12 +27,11 @@ let g:rst_syntax_code_list = {
     " NOPE EVERYTHING BROKE
 let g:rst_use_emphasis_colors = 1
 let g:rst_fold_enabled = 1
-
+" }}}
 
 " Now that globals are set check for ....
 if &filetype !=# 'rst' | finish | endif
-" The right file type
-"
+" The right file type: {{{
 if exists('b:did_ftplugin') | finish | endif
 " and that b:did_ftplugin is set
 let b:did_ftplugin = 1
@@ -46,26 +46,12 @@ setlocal foldlevel=1
 setlocal foldlevelstart=1
 setlocal wildignore+=*.html,*.css
 setlocal iskeyword+=.
-
 " Only because I want to follow module names the same way as python
 setlocal include=^\\s*\\(from\\\|import\\)
-
 setlocal includeexpr=substitute(v:fname,'\\.','/','g')
+" }}}
 
-compiler rst
-
-if executable('sphinx-build')
-  let &l:makeprg = 'sphinx-build -b html'
-
-  if filereadable('conf.py')
-    let &l:makeprg .= ' . ./build/html '
-  elseif glob('../conf.py')
-    let &l:makeprg .= ' .. ../../build/html '
-  endif
-
-endif
-
-" Actually from the python ftplugin: {{{2
+" Actually from the python ftplugin: {{{
 setlocal cindent
 setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 setlocal cinkeys-=0#
@@ -107,5 +93,7 @@ endif
 setlocal foldmethod=expr
 setlocal foldexpr=RstFold#GetRstFold()
 setlocal foldtext=RstFold#GetRstFoldText()
+" }}}
+
 let b:undo_ftplugin .= 'setlocal fdm< foldexpr< foldtext<'
                   \ . '|unlet! b:RstFoldCache'

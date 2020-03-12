@@ -26,19 +26,27 @@ our :class:`jedi.Script()` object.
 *PHEW* we're getting closer.
 
 """
+import logging
 import os
+import pydoc
 import sys
+import tracemalloc
 
 try:
     import pynvim
 except ImportError:  # let's not use ModuleNotFoundError because that limit us to 3.7
-    sys.exit("Pynvim isn't installed. Exiting.")
+    pynvim = setup_logging = None
 else:
     # forgot this was a thing!
     from pynvim import setup_logging
 
+logging.basicConfig()
+
+tracemalloc.start()
 
 # @pynvim.plugin
+
+
 class Limit:
     """From `:he remote-plugin-host`."""
 
@@ -82,6 +90,11 @@ class PydocButUnfortunatelyBroken:
     def command_handler(self, args):
         """Open a new tab with the pydoc output."""
         self.vim.command("tabe")
-        self.vim.command("r!pydoc " + args[0])
+        try:
+            self.vim.command("r!pydoc " + args[0])
+        except NameError as e:
+            # reasonably that command should be sys.stdout now.
+            self.vim.echoerr(e)
+            self.vim.echoerr('Trying to import.')
+            # todo: importlib
         self.vim.command("set ft=man")
-

@@ -1826,3 +1826,7 @@ msvcrt
 effbot
 Lungh
 Frederik
+Msys2
+libuv
+kqueue
+threadpool

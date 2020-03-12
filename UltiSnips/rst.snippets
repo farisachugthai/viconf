@@ -12,27 +12,27 @@ from snippets_helper import make_items, complete, TEXT_ROLES, TEXT_ROLES_REGEX, 
 endglobal
 
 ################
-#  Inline	   #
+#	Inline		#
 ################
 
 snippet * "Italics" w
-*${1:${VISUAL:Emphasis}}* $0
+*${1:${VISUAL:Emphasis}}*
 endsnippet
 
 snippet ** "Bold" w
-**${1:${VISUAL:Strong emphasis}}** $0
+**${1:${VISUAL:Strong emphasis}}**
 endsnippet
 
 snippet bold "bold" w
-**${1:${VISUAL:Strong emphasis}}** $0
+**${1:${VISUAL:Strong emphasis}}**
 endsnippet
 
 snippet kbd "Add the kbd directive to your doc" w
-:kbd:\`${1:${VISUAL}}\` $0
+:kbd:\`${1:${VISUAL}}\`
 endsnippet
 
 snippet rep "Replace" b
-.. |${1:replace}| replace:: ${2:${VISUAL}} $0
+.. |${1:replace}| replace:: ${2:${VISUAL}}
 endsnippet
 
 snippet ref  "Links that follow labelled objects. Expand 'lab or labhe'" w
@@ -69,7 +69,7 @@ snippet file "Inline file directive" w
 endsnippet
 
 ###########
-#  links  #
+#	links  #
 ###########
 
 snippet ext "link to an external URL. Simpler." w
@@ -105,7 +105,7 @@ endsnippet
 snippet path "Link to a local file"
 ${1:rel path}: ${2:${VISUAL:link}}_.
 
-.. _${2}: ${3:path/to/file} $0
+.. _${2}: ${3:path/to/file}
 endsnippet
 
 # Directives
@@ -119,7 +119,7 @@ snippet mod "Module Directive" b
 ${1:${VISUAL:One sentence module summary.}}
 
 .. :module:\``!p snip.rv = snip.basename`\`
-   :synopsis: $1
+	:synopsis: $1
 
 :File: `!p snip.rv = snip.fn`
 :Author: `!v g:snips_author`
@@ -142,81 +142,81 @@ endsnippet
 
 snippet fig "Figure directive" w
 .. figure:: ${1:img}
-   :alt: ${2:alter text}
+	:alt: ${2:alter text}
 
 $0
 endsnippet
 
 snippet contents "content directive" w
 .. contents::
-   ${1:${VISUAL::depth:}}
-   ${2::local:}
+	${1:${VISUAL::depth:}}
+	${2::local:}
 
-   $0
+	$0
 endsnippet
 
 snippet code "Code block directive." w
 .. code-block:: ${1:type}
 
-   ${0:${VISUAL:code}}
+	${0:${VISUAL:code}}
 endsnippet
 
 snippet tip "Tips or anyone in need of a directive!" w
 .. tip::
 
-   ${0:${VISUAL:Tip for anyone having trouble.}}
+	${0:${VISUAL:Tip for anyone having trouble.}}
 endsnippet
 
 snippet code "Code block directive." w
 .. code:: ${1:type}
 
-   ${0:${VISUAL:write some code}}
+	${0:${VISUAL:write some code}}
 endsnippet
 
 snippet note "Take note of this directive over here ;)" w
 .. note::
 
-   ${0:${VISUAL:Take note of the fact that}}
+	${0:${VISUAL:Take note of the fact that}}
 endsnippet
 
 snippet warn "Warning directive"
 .. warning::
 
-   ${0:${VISUAL:Warning:}}
+	${0:${VISUAL:Warning:}}
 endsnippet
 
 snippet imp "Important directive" w
 .. important::
 
-   ${0:${VISUAL:Important notice:}}
+	${0:${VISUAL:Important notice:}}
 endsnippet
 
 snippet att "Attention directive" w
 .. attention::
 
-   ${0:${VISUAL:Attention!}}
+	${0:${VISUAL:Attention!}}
 endsnippet
 
 snippet dan "Danger directive" w
 .. danger::
 
-   ${0:${VISUAL:Danger:}}
+	${0:${VISUAL:Danger:}}
 endsnippet
 
 snippet err "Error directive" w
 .. error::
 
-   ${0:${VISUAL:Error:}}
+	${0:${VISUAL:Error:}}
 endsnippet
 
 snippet cau "Caution directive" w
 .. caution::
 
-   ${0:${VISUAL:Take precaution with:}}
+	${0:${VISUAL:Take precaution with:}}
 endsnippet
 
 #############
-#  headers	#
+#	headers	#
 #############
 
 snippet title "Title with =" b
@@ -291,10 +291,26 @@ endsnippet
 
 
 ############
-#  Sphinx  #
+#	Sphinx  #
 ############
 
 # Keep Sphinx specific stuff separate for now.
+
+snippet literal "Literal include" b
+.. literalinclude:: ${1:path}
+endsnippet
+
+snippet include "Literal include" b
+.. include:: ${1:path}
+endsnippet
+
+snippet compound "Literal include" b
+.. compound:: ${1:path}
+
+	${2:${VISUAL}::}
+
+		${3:Keep it coming}
+endsnippet
 
 # Utilize "gf" here!
 
@@ -332,14 +348,12 @@ endsnippet
 # directives.register_directive('table', RSTTable)
 # directives.register_directive('csv-table', CSVTable)
 # directives.register_directive('list-table', ListTable)
-# directives.register_directive('math', MathDirective)
 
 # Drom directives/codw
 # directives.register_directive('highlight', Highlight)
 # directives.register_directive('highlightlang', HighlightLang)
 # directives.register_directive('code-block', CodeBlock)
 # directives.register_directive('sourcecode', CodeBlock)
-# directives.register_directive('literalinclude', LiteralInclude)
 
 # For the inline roles
 # specific_docroles = {
@@ -359,77 +373,81 @@ endsnippet
 # }  # type: Dict[str, RoleFunction]
 
 ###################
-#  Sphinx Inline  #
+#	Sphinx Inline	#
 ###################
 
 snippet com "command inline"
-:command:\`${1:${VISUAL}}\` $0
+:command:\`${1:${VISUAL}}\`
 endsnippet
 
 snippet math "math inline"
-:math:\`${1:${VISUAL}}\` $0
+:math:\`${1:${VISUAL}}\`
+endsnippet
+
+snippet numref "numref inline"
+:numref:\`${1:${VISUAL}}\` <$2>
 endsnippet
 
 snippet file "file inline"
-:file:\`${1:${VISUAL}}\` $0
+:file:\`${1:${VISUAL}}\`
 endsnippet
 
 snippet pep "pep inline"
-:pep:\`${1:${VISUAL}}\` $0
+:pep:\`${1:${VISUAL}}\`
 endsnippet
 
 snippet doc "doc inline"
-:doc:\`${1:${VISUAL}}\` $0
+:doc:\`${1:${VISUAL}}\`
 endsnippet
 
 ######################
-#  Sphinx Directive  #
+#	Sphinx Directive	#
 ######################
 
 
 snippet sid "SideBar" b
 .. sidebar:: ${1:SideBar Title}
 
-   ${2:${VISUAL:SideBar Content}}
+	${2:${VISUAL:SideBar Content}}
 endsnippet
 
 snippet hi "Set a highlight directive to establish the base for code block directives"
 .. highlight::
-   ${1::linenos:}
-   ${2::linenothreshold:}
-   ${3::emphasize-lines: 1,2,3}
+	${1::linenos:}
+	${2::linenothreshold:}
+	${3::emphasize-lines: 1,2,3}
 
-   ${0:${VISUAL:Optional content}}
+	${0:${VISUAL:Optional content}}
 endsnippet
 
 snippet toctree "directive_toctree" b
 .. toctree::
-   :maxdepth: ${1:1}
-   ${2::glob:}
+	:maxdepth: ${1:1}
+	${2::glob:}
 
-   ${3:${VISUAL}}
+	${3:${VISUAL}}
 endsnippet
 
 # TODO
 snippet table "table from sphinx cheatsheet" b
 ==================	 ============
-Name				 Age
+Name								Age
 ==================	 ============
-John D Hunter		 40
-Cast of Thousands	 41
-And Still More		 42
+John D Hunter					40
+Cast of Thousands				41
+And Still More					42
 ==================	 ============
 endsnippet
 
 snippet env "Environment variables"
-:envvar:\`${1:${VISUAL}}\` $0
+:envvar:\`${1:${VISUAL}}\`
 endsnippet
 
 snippet only "Only create directive based on certain parameters" b
 .. only:: html
 
-   :Release: |version|
-   :Date: |today|
+	:Release: |version|
+	:Date: |today|
 endsnippet
 
 # Numpydoc
@@ -464,48 +482,41 @@ if di == 'fi':
 snip.rv=complete(t[1], INCLUDABLE_DIRECTIVES)
 `:: ${2:${VISUAL:file}}`!p
 if content:
-	snip.rv +="    "+content`
+	snip.rv +="		"+content`
 `!p
 # Tip of whether file is exist in comment type
 if not check_file_exist(path, t[2]):
 	snip.rv='.. FILE {0} does not exist'.format(t[2])
 else:
 	snip.rv=""
-`$0
+`
 endsnippet
 
 snippet di "Directives" b
 .. $1`!p snip.rv=complete(t[1], DIRECTIVES)`:: $2
 
 	${3:${VISUAL:Content}}
-$0
 endsnippet
 
 snippet dt "Directives without title" b
 .. $1`!p snip.rv=complete(t[1], DIRECTIVES_WITHOUT_TITLE)`::
 
 	${2:${VISUAL:Content}}
-$0
 endsnippet
 
 snippet ds "Directives for subscription" b
 .. |$1| $2`!p snip.rv=complete(t[2], DIRECTIVES_FOR_SUBSTITUTION)`:: ${3:Content}
-$0
 endsnippet
 
 snippet sa "Specific Admonitions" b
 .. $1`!p snip.rv =complete(t[1], SPECIFIC_ADMONITIONS)`:: $2
 
 	${3:${VISUAL:Content}}
-
-$0
 endsnippet
 
 # it will be trigger at start of line or after a word
 snippet ro "Text Roles" w
-\ :$1`!p snip.rv=complete(t[1],
-							   TEXT_ROLES+TEXT_ROLES_REGEX,
-														path)`:\`$2\`\
+\ :$1`!p snip.rv=complete(t[1],TEXT_ROLES+TEXT_ROLES_REGEX, path)`:\`$2\`\
 endsnippet
 
 # Vim: set noet ts=3 sts=3 sw=3:

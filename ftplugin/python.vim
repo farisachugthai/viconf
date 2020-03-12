@@ -15,6 +15,8 @@ let g:pyindent_open_paren = 'shiftwidth() * 2'
 let g:pyindent_nested_paren = 'shiftwidth()'
 " Indent for a continuation line: >
 let g:pyindent_continue = 'shiftwidth() * 2'
+
+let g:pydoc_executable = 1
 " }}}
 
 " Filetype Specific Options: {{{
@@ -65,7 +67,7 @@ setlocal omnifunc=python3complete#Complete
 
 setlocal isfname+=.
 " It get kinda annoying movin around without _ as a word delimiter
-setlocal isk-=.,_
+setlocal iskeyword-=.,_
 
 " Possibly chalk this up to one of the many tab related and necessary option
 " python requires you set
@@ -78,19 +80,6 @@ setlocal shiftround
 
 let &l:path = py#PythonPath()
 " }}}
-
-" Compiler: {{{1
-
-" TODO: how do we undo_ftplugin for a compiler?
-" Well this is neat!
-if executable('pytest')
-  compiler pytest
-  setlocal makeprg=py.test\ --tb=short\ -q\ --color=no
-  echomsg 'Using pytest as a compiler!'
-else
-  compiler pylint
-  echomsg 'Using pylint as a compiler!'
-endif  " }}}
 
 " Mappings: {{{1
 

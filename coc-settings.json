@@ -361,7 +361,6 @@
   "python.autoComplete.addBrackets": true,
   "python.autoComplete.showAdvancedMembers": true,
   "python.autoUpdateLanguageServer": true,
-  "python.jediEnabled": false,
   "python.linting.flake8Path": "python -m flake8",
   "python.linting.pylintEnabled": false,
   "python.pipenvPath": "pipenv",
