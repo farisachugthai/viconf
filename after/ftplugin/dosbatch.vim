@@ -5,20 +5,8 @@
     " Last Modified: May 23, 2019
 " ============================================================================
 
-" Guard: {{{1
-if exists('g:did_dosbatch_after_ftplugin') || &compatible || v:version < 700
-  finish
-endif
-let g:did_dosbatch_after_ftplugin = 1
-
-let s:cpo_save = &cpoptions
-set cpoptions&vim
-
-" Options: {{{1
 setlocal commentstring=::\ %s
+setlocal suffixesadd=.cmd,.bat
 
-" atexit: {{{1
-let b:undo_ftplugin = 'set cms<'
-
-let &cpoptions = s:cpo_save
-unlet s:cpo_save
+let b:undo_ftplugin = 'setlocal cms< sua<'
+      \ . '|unlet! b:undo_ftplugin'

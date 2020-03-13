@@ -5,11 +5,12 @@
   " Last Modified: November 29, 2019
 " ============================================================================
 
-" Sourcing Everything: {{{1
+" Sourcing Everything: {{{
+if exists('b:did_ftplugin') | finish | endif
+
 let s:this_dir = fnameescape(fnamemodify(expand('<sfile>'), ':p:h'))
 
 exec 'source ' . s:this_dir . '/python.vim'
-" We source the runtime python file there so dont do it here
 " }}}
 
 " Options: {{{
@@ -31,15 +32,18 @@ endif
 
 let &l:path  = py#PythonPath()
 setlocal syntax=xonsh
-syntax sync fromstart
 
-setlocal foldmethod=indent
+setlocal foldlevelstart=0
+syntax sync fromstart
 setlocal suffixesadd+=,.xsh,.xonshrc,
 setlocal include=^\\s*\\(from\\\|import\\)
 setlocal includeexpr=substitute(v:fname,'\\.','/','g')
+
+setlocal formatoptions=jcroql
+setlocal expandtab shiftwidth=4 sts=4 ts=4
 " }}}
 
-" Compiler: {{{1
+" Compiler: {{{
 
 " TODO: how do we undo_ftplugin for a compiler?
 " Well this is neat!
@@ -50,9 +54,11 @@ if executable('pytest')
 else
   compiler pylint
   echomsg 'Using pylint as a compiler!'
-endif  " }}}
+endif
+" }}}
 
 " Atexit: {{{
 let b:undo_ftplugin = 'setlocal fdm< syntax< sua< '
             \ . '|unlet! b:undo_ftplugin'
             \ . '|unlet! b:did_ftplugin'
+" }}}

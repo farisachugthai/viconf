@@ -106,8 +106,8 @@ function! find_files#termux_remote() abort  " {{{1
 endfunction   " }}}
 
 function! find_files#ubuntu_remote() abort  " {{{1
-  let g:python3_host_prog = '/usr/bin/python'
-  let g:loaded_python_host_prog = 1
+  let g:python3_host_prog = '/usr/bin/python3'
+  let g:python_host_prog = '/usr/bin/python2'
   let g:node_host_prog = expand('~/.local/share/yarn/global/node_modules/.bin/neovim-node-host')
   let g:ruby_host_prog = expand('~/.gem/ruby/2.7.0/bin/neovim-ruby-host')
 
@@ -148,8 +148,8 @@ function! find_files#msdos_remote() abort  " {{{1
   let g:loaded_ruby_provider = 1
 
   " wow this one actually fucking worked
-  " let g:node_host_prog = 'C:\Users\fac\AppData\Local\Yarn\Data\Global\node_modules\neovim\bin\cli.js'
-  let g:node_host_prog = 'C:\Users\fac\scoop\apps\nvm\current\v13.7.0\node_modules\neovim\bin\cli.js'
+  let g:node_host_prog = 'C:\Users\fac\scoop\apps\nvm\current\v13.10.1\node_modules\neovim\bin\cli.js'
+
   let g:clipboard = {
         \   'name': 'winClip',
         \   'copy': {

@@ -23,6 +23,13 @@ function! pydoc_help#scratch_buffer() abort   " {{{
   return nvim_create_buf(v:false, v:true)
 endfunction   " }}}
 
+function! pydoc_help#scratch_listed_buffer(bang) range abort " {{{
+  let bufnum = nvim_create_buf(v:true, v:true)
+  " Actually fuck trying to figure out how to switch to that buffer
+  :Buffers
+  return bufnum
+endfunction  " }}}
+
 function! s:temp_buffer() abort  " {{{1
   " Use for setting a buffer that's been filled with text to something similar
   " to an 'rst' help page.

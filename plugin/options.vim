@@ -5,15 +5,11 @@
   " Last Modified: February 16, 2020
 " ============================================================================
 
-" if exists('g:loaded_options') || &compatible || v:version < 700
-"   finish
-" endif
-" let g:loaded_options = 1
-
 scriptencoding utf-8
 let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
 " Global Options: {{{
+
 " Folds: {{{
 
 setglobal foldnestmax=10
@@ -39,7 +35,8 @@ endif
 " todo: closeoff
 " }}}
 
-setglobal autochdir autowrite autoread  " {{{
+" Other: {{{
+setglobal autochdir autowrite autoread
 if &tabstop > 4 | setglobal tabstop=4 | endif
 if &shiftwidth > 4  | setglobal shiftwidth=4 | endif
 setglobal expandtab smarttab softtabstop=4
@@ -47,32 +44,43 @@ set nohlsearch
 if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif
 setglobal cdpath+=$HOME,$VIMRUNTIME
 setglobal iskeyword=@,48-57,_,192-255   " Idk how but i managed to mess up the default isk
-" }}}
 
-" UI: {{{
 setlocal termguicolors
 colo gruvbox-material
 setglobal winblend=10
+" }}}
 
 " Platform Specific Options: {{{
 if has('unix')
   call unix#UnixOptions()
+  let g:tagbar_iconchars = ['▷', '◢']
 else
   call msdos#set_shell_cmd()
+
+  " Find The Ctags Executable:
+  if filereadable(expand('$HOME/src/ctags/ctags.exe'))
+    let g:tagbar_ctags_bin = expand('$HOME/src/ctags/ctags.exe')
+  elseif executable(exepath('ctags'))
+    let g:tagbar_ctags_bin = exepath('ctags')
+  endif
+
+  if filereadable(expand('$HOME/.ctags.d/new_universal.ctags'))
+    let g:tagbar_ctags_options = [expand('~/.ctags.d/new_universal.ctags')]
+  endif
+  " Icon Chars
+  let g:tagbar_iconchars = ['▶', '▼']
 endif
-" }}}
 
-" Grepprg: {{{
-try
-  " if you don't have fd or rg installed you shouldn't lose highlighting
-  call syncom#grepprg()
-catch /.*/
-endtry
-" }}}
-
-if exists('$ANDROID_DATA')   " {{{ Remote Hosts
+" Remote Hosts:
+if exists('$ANDROID_DATA')
   " Fuck i had to change this because wsl was loading termux jesus christ
   call find_files#termux_remote()
+
+  " Setting this option will result in Tagbar omitting the short help at the
+  " top of the window and the blank lines in between top-level scopes in order to
+  " save screen real estate.
+  " Termux needs this
+  let g:tagbar_compact = 1
 elseif !has('unix')
   " Note: dude holy hell is it necessary to call the msdos#set_shell_cmd()
   " func. you do so in ./plugin/unix.vim but jesus christ did it fuck stuff up
@@ -121,15 +129,8 @@ let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['cs'] = ''
 let g:ale_virtualtext_cursor = 1
 let g:ale_virtualtext_prefix =  'ALE: '
 let g:ale_virtualtext_delay = 200
-" let g:ale_sign_highlight_linenrs = 1
-
-
-" But lets try opening the preview window when the cursor moves to something
-" let g:ale_cursor_detail = 1
-" holy fuck no
 let g:ale_close_preview_on_insert = 1
 let g:ale_echo_cursor = 1
-
 let g:ale_completion_enabled = 1
 
 " }}}
@@ -144,9 +145,9 @@ let g:ale_sign_info = 'I'
 let g:ale_sign_error = 'E'
 let g:ale_sign_highlight_linenrs = 1
 let g:ale_sign_style_warning = 'E'
+" }}}
 
-" More:
-
+" More: {{{
 let g:ale_pattern_options_enabled = 1
 let g:ale_pattern_options = {'\.min.js$': {'ale_enabled': 0}}
 
@@ -156,10 +157,12 @@ let g:ale_fix_on_save = 1
 
 " When ALE is linting bash files recognize it as sh
 let g:ale_linter_aliases = {
-      \ 'ps1': 'powershell',
+      \ 'ps1': ['powershell', 'cs'],
       \ 'htmljinja': ['html', 'handlebars'],
+      \ 'jinja': ['html', 'handlebars'],
       \ 'htmldjango': 'html',
       \ 'bash': 'sh',
+      \ 'xonsh': 'python',
       \ }
 
 " When ale is linting C# only use OmniSharp
@@ -243,14 +246,12 @@ let g:ale_virtualenv_dir_names = [
     \   'venv',
     \ ]
 
-if isdirectory(expand('~/virtualenvs'))
-  let g:ale_virtualenv_dir_names += [expand('~/virtualenvs')]
+if isdirectory(expand('~/.virtualenvs'))
+  let g:ale_virtualenv_dir_names += [expand('~/.virtualenvs')]
 endif
 
-if isdirectory(expand('~/miniconda3'))
-  let g:ale_virtualenv_dir_names +=  [expand('~/miniconda3')]
-elseif isdirectory('C:/tools/miniconda3')
-  let g:ale_virtualenv_dir_names += ['C:/tools/miniconda3']
+if isdirectory(expand('~/scoop/apps/winpython/current'))
+  let g:ale_virtualenv_dir_names +=  [expand('~/scoop/apps/winpython/current')]
 endif
 
 if isdirectory(expand('~/.local/share/virtualenvs'))
@@ -261,13 +262,14 @@ let g:ale_cache_executable_check_failures = v:true
 let g:ale_linters_ignore = {'python': ['pylint']}
 
 " Example from the help page
-" Use just ESLint for linting and fixing files which end in '.foo.js'
+" Use just ESLint for linting and fixing files which end in '.js'
 let g:ale_pattern_options = {
-\   '\.foo\.js$': {
-\       'ale_linters': ['eslint'],
-\       'ale_fixers': ['eslint'],
-\   },
-\}
+            \   '\.js$': {
+            \       'ale_linters': ['eslint'],
+            \       'ale_fixers': ['eslint'],
+            \   },
+            \ }
+
 let g:ale_lsp_show_message_severity = 'information'
 " }}}
 
@@ -297,12 +299,11 @@ let g:NERDTreeNaturalSort = 1
 let g:NERDTreeShowLineNumbers = 1
  " Open dir with 1 keys, files with 2
 let g:NERDTreeMouseMode = 2
-let g:NERDTreeIgnore = [ '.pyc$', '.pyo$', '__pycache__$', '.git$', '.mypy', 'node_modules']
+let g:NERDTreeIgnore = [ '.pyc$', '.pyo$', '__pycache__$', '.git$', '.mypy']
 let g:NERDTreeRespectWildIgnore = 1
 let g:NERDTreeAutoDeleteBuffer = 1
 let g:NERDTreeMapToggleZoom = 'Z'  " Z is for Zoom why the hell is the default A?
 let g:NERDTreeQuitOnOpen = 3
-
 " }}}
 
 " Tagbar: {{{
@@ -328,58 +329,21 @@ let g:tagbar_silent = 1
 " jump to a tag. This implies |g:tagbar_autofocus|. If enabled the "C" flag will
 " be shown in the statusline of the Tagbar window.
 " Actually I like having it open
-let g:tagbar_autoclose = 1
+let g:tagbar_autoclose = 0
 
 " -1: Use the global line number settings.
 " Well that just feels like the courteous thing to do right?
 let g:tagbar_show_linenumbers = -1
 
-" Actually let's fold this a bit more.
-" Default is 99 btw
-let g:tagbar_foldlevel = 1
+" Actually let's fold this a bit more. Default is 99 btw
+let g:tagbar_foldlevel = 0
 
 " If this variable is set to 1 then moving the cursor in the Tagbar window will
 " automatically show the current tag in the preview window.
 " Dude it takes up a crazy amount of room on termux and is generally quite annoying
-" Don't know why we only went with windows only. that setting is annoying
-" everywhere.
 let g:tagbar_autopreview = 0
 
 let g:tagbar_map_zoomwin = 'Z'
-
-" }}}
-
-" Platform Specific Options: {{{
-if !has('unix')
-
-  " let g:tagbar_autopreview = 1
-  " Find the ctags executable: {{{
-  if filereadable(expand('$HOME/src/ctags/ctags.exe'))
-    let g:tagbar_ctags_bin = expand('$HOME/src/ctags/ctags.exe')
-  elseif executable(exepath('ctags'))
-    let g:tagbar_ctags_bin = exepath('ctags')
-  endif  " }}}
-
-  if filereadable(expand('$HOME/.ctags.d/new_universal.ctags'))
-    let g:tagbar_ctags_options = [expand('~/.ctags.d/new_universal.ctags')]
-  endif
-  " Icon Chars
-        " let g:tagbar_iconchars = ['▸', '▾']
-        " let g:tagbar_iconchars = ['▷', '◢']
-        " let g:tagbar_iconchars = ['+', '-']  (default on Windows)
-  " Uh so all of these displayed correctly even on windows so give me some
-  " cooler ones
-  let g:tagbar_iconchars = ['▶', '▼']
-else
-  let g:tagbar_iconchars = ['▷', '◢']
-
-endif
-
-" Setting this option will result in Tagbar omitting the short help at the
-" top of the window and the blank lines in between top-level scopes in order to
-" save screen real estate.
-" Termux needs this
-if exists($ANDROID_ROOT) | let g:tagbar_compact = 1 | endif
 " }}}
 
 " Tagbar Types: {{{
@@ -464,18 +428,18 @@ let g:tagbar_type_typescript = {
   \ 'e:enums',
   \ ]
   \ }
+
 let g:tagbar_type_snippets = {
       \ 'ctagstype' : 'snippets',
       \ 'kinds' : [
       \ 's:snippets',
       \ ]
-\ }  " }}}
+      \ }
+" }}}
 
 " }}}
 
 " Gutentags: {{{
-" Could check for loaded_gutentags = 1 but idk if we're loading before him or
-" not
 let g:gutentags_ctags_exclude = [
       \ '.pyc',
       \ '.eggs',
@@ -521,14 +485,8 @@ let g:UltiSnipsSnippetDir = [stdpath('config') . '/UltiSnips']
 " iterate through every dir in &rtp which saves an immense amount of time
 " on startup.
 let g:UltiSnipsSnippetDirectories = [ stdpath('config') . '/UltiSnips' ]
-
 let g:UltiSnipsUsePythonVersion = 3
-
 let g:UltiSnipsListSnippets = '<C-/>'
-
-" Oddly, setting this var only sets it in select-mode though.
-" So let's add a few mappings to help us along.
-
 " }}}
 
 " Supertab: {{{
@@ -568,7 +526,6 @@ let g:SuperTabCrMapping = 1
 let g:SuperTabClosePreviewOnPopupClose = 1  " (default value: 0)
 let g:SuperTabDefaultCompletionType = 'context'
 let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
-
 " }}}
 
 " Startify: {{{
@@ -642,8 +599,9 @@ let g:startify_custom_header ='startify#center(startify#fortune#cowsay())'
 
 " if exists('g:node_host_prog') | let g:coc_node_path = g:node_host_prog | endif
 if !has('unix')
-  let g:coc_node_path = 'C:\Users\fac\scoop\apps\nvm\current\v13.7.0\node.exe'
+  let g:coc_node_path = 'C:\Users\fac\scoop\apps\nvm\current\v13.10.1\node.exe'
 endif
+
 
 " TODO:
 " May have to extend after a has('unix') check.
@@ -665,6 +623,7 @@ let $NVIM_COC_LOG_LEVEL = 'WARN'
 let $NVIM_COC_LOG_FILE = stdpath('data') . '/site/coc.log'
 let $NVIM_NODE_LOG_FILE = stdpath('data') . '/site/node.log'
 let $NVIM_NODE_LOG_LEVEL = 'WARN'
+let $NVIM_NODE_HOST_DEBUG = 1
 
 " Lets define this.
 let g:coc_jump_locations = []
@@ -677,15 +636,12 @@ let g:coc_jump_locations = []
 
 " Ensure it actually loaded: {{{
 
-" if !exists(':FZF') | call plug#load('fzf') | endif
-" " let g:fzf_command_prefix = 'Fuf'
-" if !exists(':Rg') | call plug#load('fzf.vim') | endif
-
 " Set up windows to have the correct commands
 if !has('unix')
   " let $FZF_DEFAULT_COMMAND = 'rg --hidden -M 200 -m 200 --smart-case --passthru --files . '
   " let $FZF_DEFAULT_COMMAND = 'fd --hidden --follow -d 6 -t f '
-  unlet! $FZF_DEFAULT_OPTS $FZF_DEFAULT_COMMAND
+  unlet! $FZF_DEFAULT_OPTS
+  unlet! $FZF_DEFAULT_COMMAND
 endif  " }}}
 
 " Options: {{{
@@ -726,9 +682,10 @@ if exists('$TMUX')
 endif
 
 " [[B]Commits] Customize the options used by 'git log':
-let g:fzf_commits_log_options = ' --graph'
+let g:fzf_commits_log_options = ' --graph --abbrev-commit --abbrev --date=relative'
       \ . ' --color=always --all --branches --pretty'
-      \ . ' --format="h%d %s $* " '
+      \ . ' --format="h%d %Cred%h%Creset -%C(yellow)%d%Creset %s"'
+      \ . ' %Cgreen(%cr) %C(bold blue)<%an>%Creset $* " '
 
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1
@@ -764,115 +721,49 @@ let g:fzf_colors =  {
       \  'header':  ['fg', '#83a598']
       \ }
 
-function! s:fzf_statusline()
-  " Override statusline as you like
-  hi! fzf1 cterm=bold,underline,reverse gui=bold,underline,reverse guifg=#7daea3
-  hi! link fzf2 fzf1
-  hi! link fzf3 fzf1
-  setlocal statusline=%#fzf1#\ FZF:\ %#fzf2#fz%#fzf3#f
-endfunction
-
-" NOTE: This has to remain the name of the augroup it's what Junegunn calls
-augroup FZFStatusline
-  au!
-  autocmd! User FzfStatusLine call <SID>fzf_statusline()
-augroup END
 " }}}
 
 " }}}
 
-" Statusline: {{{
-function! StatusDiagnostic() abort  " {{{
-  if !exists('g:loaded_coc') | return '' | endif
+" Tmuxline: {{{
 
-  let info = get(b:, 'coc_diagnostic_info', {})
-  if empty(info) | return '' | endif
-  let msgs = []
-  if get(info, 'error', 0)
-    call add(msgs, 'E' . info['error'])
-  endif
-  if get(info, 'warning', 0)
-    call add(msgs, 'W' . info['warning'])
-  endif
-  return join(msgs, ' ') . ' ' . get(g:, 'coc_status', '')
-endfunction  " }}}
+let g:tmuxline_powerline_separators = 1
 
-function! s:Statusline() abort  " {{{
+let g:tmuxline_status_justify = 'centre'
+let g:tmuxline_powerline_separators = 1
+let g:tmuxline_preset = {
+      \ 'a'    : ['#[fg=#504945,bg=#dfbf8e] ▶ #S'],
+      \ 'win'  : ['#I', '#W'],
+      \ 'cwin' : ['#I', '#W'],
+      \ 'y'    : ['#(uptime  | cut -d " " -f 1,2,3)'],
+      \ 'z'    : ['#(whoami)', '#H'],}
 
-  " Define statusline groups for WebDevIcons, Fugitive and other plugins.
-  " Define empty fallbacks if those plugins aren't installed. Then
-  " use the builtins to fill out the information.
-  if exists('*WebDevIconsGetFileTypeSymbol')
-    let dicons = '%{WebDevIconsGetFileTypeSymbol()}'
-  else
-    let dicons = ''
-  endif
-  let fug = " %{exists('g:loaded_fugitive') ? FugitiveStatusline() : ''} "
-  let sep = ' %= '
-  let pos = ' %-12(%l : %c%V%) '
+" After defining all of these groups and format blocks, let's
+" define the tmux line to match our vim statusline
+let s:tmuxline_themes = stdpath('data') . '/plugged/tmuxline.vim/autoload/themes'
 
-  if exists('*CSV_WCol')
-    " Doing it the exact way he specifies in the help docs means you don't get
-    " tsv support
-    if &filetype ==# 'tsv' || &filetype ==# 'csv'
-      let csv = '%1*%{CSV_WCol()}%*'
-    else
-      let csv = ''
-    endif
-  else
-    let csv = ''
-  endif
+if filereadable(s:tmuxline_themes . '/vim_statusline_3.vim')
+  execute 'source ' . s:tmuxline_themes . '/vim_statusline_3.vim'
+  let g:tmuxline_theme = 'vim_statusline_3'
+endif
 
-  if exists('*strftime')
-    " Overtakes the whole screen when Termux zooms in
-    if &columns > 80
-      let tstmp = ' %{strftime("%H:%M %m-%d-%Y", getftime(expand("%:p")))}'
-      " last modified timestamp
-    else
-      let tstmp = ''
-    endif
-  else
-    let tstmp = ''  " ternary expressions should get on the todo list
-  endif
+let g:tmuxline_powerline_separators = {
+     \ 'left' : '»',
+     \ 'left_alt': '▶',
+     \ 'right' : '«',
+     \ 'right_alt' : '◀',
+     \ 'space' : ' '}
 
-  " from he 'statusline'.
-  " Each status line item is of the form:
-  " %-0{minwid}.{maxwid}{item}
-  let cos = " %{exists('g:did_coc_loaded') ? coc#status() : ''} "
+" }}}
 
-  let cog = ' %{exists("coc_git_status") ? coc_git_status : ""} '
+" Voom: {{{
 
-  " shit g:ale_enabled == 0 returns True
-  let ale_stl = '%{exists("g:ale_enabled") ? "[ALE]" : ""}'
-
-  let s:gutentags = '%{exists("g:gutentags_enabled") ? gutentags#statusline() : ""}'
-
-
-  return '[%n] ' . dicons . '%m' . '%r' . ' %y '
-        \. fug . csv
-        \. ' %{&ff} ' . tstmp
-        \. cos . cog
-        \. StatusDiagnostic()
-        \. ' %f'
-        \. sep
-        \. ale_stl
-        \. s:gutentags
-        \. pos . '%*' . ' %P'
-
-endfunction  " }}}
-
-function! Statusline_expr() abort  " {{{
-  " Lets give a nicer clean entry point.
-  return s:Statusline()
-endfunction  " }}}
-
-augroup UserStatusline  " {{{
-
-  au!
-  au BufEnter * let &statusline = Statusline_expr()
-augroup END  " }}}
-
-command! -bar ReloadStatusline call s:Statusline()
+let g:voom_ft_modes = {'markdown': 'markdown', 'rst': 'rst', 'zimwiki': 'dokuwiki'}
+let g:voom_default_mode = 'rst'
+let g:voom_python_versions = [3,2]
+" You conditionally can't use << or <C-Left> unless your node is the furthest down the stack
+" But that's kinda dumb.
+let g:voom_always_allow_move_left = 1
 " }}}
 
 " Fix the path + Last Call For Options: {{{

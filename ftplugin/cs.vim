@@ -59,7 +59,7 @@ nnoremap <buffer> <Leader>cf <Cmd>OmniSharpCodeFormat<CR>
 
 " Start the omnisharp server for the current solution
 nnoremap <buffer> <Leader>ss <Cmd>OmniSharpStartServer<CR>
-nnoremap <buffer> <Leader>sp :OmniSharpStopServer<CR>
+nnoremap <buffer> <Leader>sp <Cmd>OmniSharpStopServer<CR>
 
 " }}}
 
@@ -67,7 +67,4 @@ nnoremap <buffer> <Leader>sp :OmniSharpStopServer<CR>
 let b:undo_ftplugin = 'setlocal fo< com< '
       \ . '|unlet! b:undo_ftplugin'
       \ . '|unlet! b:did_ftplugin'
-
-let &cpo = s:keepcpo
-unlet s:keepcpo
 " }}}

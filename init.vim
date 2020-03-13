@@ -20,16 +20,13 @@ let s:wsl = !empty($WSL_DISTRO_NAME)
 let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h'))
 
 " Seriously how does this keep getting fucked up. omfg packpath is worse???
-if has('unix')
-  let &g:runtimepath = stdpath('config') . ',' .  stdpath('data') . ',' . expand($VIMRUNTIME)
-  setglobal packpath=~/.config/nvim/pack,~/.local/share/nvim/site/pack,$VIMRUNTIME,~/.config/nvim/after/pack
-else
-  setglobal runtimepath=$USERPROFILE\AppData\Local\nvim,$USERPROFILE\AppData\Local\nvim-data\site,$VIMRUNTIME,C:\Neovim\share\nvim-qt\runtime
-  setglobal packpath=~\AppData\Local\nvim\pack,~\AppData\Local\nvim-data\site\pack,$VIMRUNTIME,C:\Neovim\share\nvim-qt\runtime\pack
-endif
-
+  setglobal runtimepath=$HOME/.config/nvim,$HOME/.local/share/nvim/site,$VIMRUNTIME
+  setglobal packpath=~/.config/nvim/pack,~/.local/share/nvim/site/pack,$VIMRUNTIME
+  if !has('unix')
+    setglobal rtp+=C:\Neovim\share\nvim-qt\runtime
+ endif 
 " Source ginit. Why is this getting set even in the TUI?
-if exists('g:GuiLoaded') | exec 'source ' s:repo_root . '\ginit.vim' | endif
+if exists('g:GuiLoaded') | exec 'source ' s:repo_root . '/ginit.vim' | endif
 if has('unnamedplus') | setglobal clipboard+=unnamed,unnamedplus | else | setglobal clipboard+=unnamed | endif
 " }}}
 
@@ -45,7 +42,7 @@ let g:maplocalleader = '<Space>'
 map <Space> <Leader>
 
 if has('nvim-0.4')   " Fun new features!
-  let &shadafile = stdpath('data') . '/shada/main.shada'
+  let &shadafile = stdpath('data') . '/site/shada/main.shada'
   " toggle transparency in the pum and windows. don't set higher than 10 it becomes hard to read higher than that
   " setglobal pumblend=10 winblend=5
   try | setglobal pyxversion=3 | catch /^Vim:E518:*/ | endtry
@@ -59,28 +56,15 @@ let g:matchparen_insert_timeout = 300
 " Protect changes between writes. Default values of updatecount
 " (200 keystrokes) and updatetime (4 seconds) are fine
 setglobal swapfile undofile backupext='.bak'
-setglobal writebackup        " protect against crash-during-write
-setglobal nobackup           " but do not persist backup after successful write
-
 " use rename-and-write-new method whenever safe. actually might go with yes
 " its slower but idc
 setglobal backupcopy=yes
 " patch required to honor double slash at end consolidate the writebackups -- they usually get deleted
-if has('patch-8.1.0251')
- let &g:backupdir=stdpath('config') . '/undodir//'
- endif
+let &g:backupdir=stdpath('data') . '/site/undo//'
 " Gotta be honest this part was stolen almost entirely from arch:
 
-" Move temporary files to a secure location to protect against CVE-2017-1000382
-if exists('$XDG_CACHE_HOME')
-  let &g:directory=$XDG_CACHE_HOME
-else
-  let $XDG_CACHE_HOME = $HOME . '/.cache'
-  let &g:directory=$HOME . '/.cache'
-endif
-let &g:undodir = &g:directory . '/vim/undo//'
-let &g:backupdir = &g:directory . '/vim/backup//'
-let &g:directory .= '/vim/swap//'
+let &g:directory= stdpath('data') . '/site/cache//'
+let &g:undodir = stdpath('data') . '/site/undo//'
 " Create directories if they doesn't exist
 if !isdirectory(expand(&g:directory))
   silent! call mkdir(expand(&g:directory), 'p', 0700)
@@ -163,26 +147,28 @@ packadd! matchit
 packadd! justify
 " }}}
 
-" Load Plugins: {{{
-"
-" Preliminary Options: {{{
+" Load Plugins Preliminary Options: {{{
 if !exists('plug#load')  | unlet! g:loaded_plug | exec 'source ' . s:repo_root . '/vim-plug/plug.vim' | endif
 " Few options I wanna set in advance
 let g:no_default_tabular_maps = 1
 let g:plug_shallow = 1
 let g:plug_window = 'tabe'
 let g:undotree_SetFocusWhenToggle = 1
-
-" List of plugins: {{{
+" Windows gets all kinds of fucked up otherwise
+let g:plug_url = 'https://github.com/%s.git'
 
 function! LoadMyPlugins() abort
 
-  call plug#begin(stdpath('data') . '/plugged')
+  call plug#begin(stdpath('data'). '/plugged')
+
   Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lockfile'}
   let $NVIM_COC_LOG_FILE = stdpath('data')  . '/site/coc.log'
   let $NVIM_COC_LOG_LEVEL = 'ERROR'
   Plug 'junegunn/fzf', { 'dir': expand('~/.fzf'), 'do': './install --all' }
   Plug 'junegunn/fzf.vim'
+  Plug 'junegunn/goyo.vim'
+  Plug 'junegunn/vim-peekaboo'
+
   " NerdTree: {{{
   Plug 'scrooloose/nerdTree', { 'on': ['NERDTreeToggleVCS', 'NERDTreeVCS', 'NERDTreeFind'] }
   nnoremap <Leader>nt <Cmd>NERDTreeToggleVCS<CR>zz
@@ -208,8 +194,10 @@ function! LoadMyPlugins() abort
 
   augroup END
   " }}}
+  "
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
+  Plug 'tpope/vim-apathy'
   Plug 'tpope/vim-scriptease'
   Plug 'SirVer/ultisnips'
   Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }
@@ -220,8 +208,11 @@ function! LoadMyPlugins() abort
     Plug 'christoomey/vim-tmux-navigator'
     Plug 'edkolev/tmuxline.vim'
   endif
+
   Plug 'mhinz/vim-startify'
   Plug 'mitsuhiko/vim-jinja'
+
+  Plug 'cespare/vim-toml'
   Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
   noremap <silent> <F8> <Cmd>TagbarToggle<CR>
   noremap! <silent> <F8> <Cmd>TagbarToggle<CR>
@@ -231,22 +222,21 @@ function! LoadMyPlugins() abort
   nnoremap ,t <Cmd>CocCommand tags.generate<CR><bar>:TagbarToggle<CR>
 
   Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
-  nnoremap U <Cmd>UndotreeToggle<CR>
-
   Plug 'ervandew/supertab'
   let g:peekaboo_compact = 1
   Plug 'junegunn/vim-peekaboo'
+  Plug 'vim-voom/voom', {'on': ['Voom', 'VoomToggle', 'VoomExec'] }
   Plug 'romainl/vim-qf'
 
   Plug 'tomtom/tlib_vim'
   if empty(s:termux)  " {{{
-  Plug 'junegunn/vim-plug' ", {'dir': expand('~/projects/viconf/vim-plug')}
-  Plug 'godlygeek/tabular', {'on': 'Tabularize'}
-  Plug 'vim-voom/voom', {'on': ['Voom', 'VoomToggle', 'VoomExec'] }
-  Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
-  Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
-  Plug 'omnisharp/omnisharp-vim', {'for': ['cs', 'ps1',] }
-  Plug 'ludovicchabant/vim-gutentags'
+    Plug 'junegunn/vim-plug' ", {'dir': expand('~/projects/viconf/vim-plug')}
+    Plug 'godlygeek/tabular', {'on': 'Tabularize'}
+    Plug 'vim-voom/voom', {'on': ['Voom', 'VoomToggle', 'VoomExec'] }
+    Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
+    Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
+    Plug 'omnisharp/omnisharp-vim', {'for': ['cs', 'ps1',] }
+    Plug 'ludovicchabant/vim-gutentags'
   endif
   " }}}
 
@@ -261,8 +251,12 @@ call LoadMyPlugins()
 " Commands: {{{
 " I utilize this command so often I may as well save the characters
 command! Plugins echo map(keys(g:plugs), '"\n" . v:val')
-" }}}
+colo gruvbox-material
+set termguicolors
+packadd! matchit
+packadd! justify
 
+let syntax_cmd = "enable"
 " }}}
 
 " Vim: set fdm=marker foldlevelstart=0:

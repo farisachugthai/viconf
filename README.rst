@@ -607,6 +607,18 @@ My current ``&diffopt``.::
 .. todo:: Annotate the rest
 
 
+
+Creating Backups
+================
+
+The defaults are generally pretty good::
+
+   setglobal writebackup        " protect against crash-during-write
+   setglobal nobackup           " but do not persist backup after successful write
+
+Change &backupext and &directory to things you want.
+
+
 Environment Variables
 =====================
 

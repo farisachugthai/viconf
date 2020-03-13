@@ -30,7 +30,7 @@ setlocal shiftwidth=4 expandtab softtabstop=4
 syntax sync fromstart
 setlocal colorcolumn=120
 " todo: ensure it works
-setlocal include=^\s*\%(so\%[urce]\*\zs[^|]*
+setlocal include=^\s*\%(so\%[urce]\*\zs[^\|]*
 
 let b:undo_ftplugin = 'setlocal cms< sw< et< sts< cc< '
       \ . '|unlet! b:undo_ftplugin'
@@ -41,7 +41,7 @@ let b:undo_ftplugin = 'setlocal cms< sw< et< sts< cc< '
 " From none other than the shellcheck manpage!
 if executable('shellcheck') || executable('shellcheck.exe')
   " could also do
-  if globpath(&rtp, "compiler/shellcheck.vim")
+  if globpath(&runtimepath, 'compiler/shellcheck.vim')
     compiler shellcheck
   else
     setlocal makeprg=shellcheck\ -f\ gcc\ %

@@ -58,6 +58,7 @@ setlocal formatprg=:Pjson
 
 let b:undo_ftplugin = 'setlocal fo< com< cms< et< sts< sw< ts< sua< fdm< fp< '
       \ . '|unlet! b:undo_ftplugin'
+      \ . '|unlet! b:did_ftplugin'
       \ . '|unlet! b:ale_fixers'
       \ . '|unlet! b:ale_linters'
       \ . '|unlet! b:ale_linters_explicit'

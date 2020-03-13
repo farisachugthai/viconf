@@ -16,3 +16,4 @@ setlocal formatoptions-=t formatoptions+=croql
 setlocal comments=:#,:; commentstring=;\ %s
 
 let b:undo_ftplugin = 'setlocal tw< sp< cc< fo< com< cms<'
+      \ . '|unlet! b:undo_ftplugin'

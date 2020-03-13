@@ -44,6 +44,7 @@ BaseException
 BaseHTTPServer
 BeautifulSoup
 Beazley
+Beazley's
 BibTeX
 BigQuery
 Biomolecular
@@ -63,7 +64,9 @@ BufWritePost
 BufWritePre
 CLA
 CLI
+COMSPEC
 CPath
+CPython
 CS50
 CTRL
 CVE
@@ -81,6 +84,7 @@ Choi
 Chugthai
 Cmder
 CodeKata
+Cokelaar
 Colab
 ColorColumn
 CommandNotFoundException
@@ -88,6 +92,7 @@ CommonMark
 Commonmark
 Compiler
 CompletedProcess
+Completers
 ConEmu
 ConEmu's
 ConEmuANSI
@@ -139,10 +144,12 @@ Docopt
 Docstring
 DokuWiki
 Dotfiles
+Dunders
 DynamicStyle
 EHD
 EffBot
 Eich
+Enums
 Envs
 Esc
 ExceptionHook
@@ -163,10 +170,12 @@ FAT32
 FZF
 Facebook
 Faris
+Faulthandler
 FileSystem
 Filetype
 Firefox
 Fn
+Frederik
 FreeNAS
 Freenode
 Frontend
@@ -178,6 +187,7 @@ GPT
 GParted
 GUID
 GVim
+GitBooks
 GitHub
 Gitignore
 Gitter
@@ -251,6 +261,7 @@ Logcheck
 Losh
 Losh's
 Lubuntu
+Lungh
 MBR
 MDN
 MGMT
@@ -259,6 +270,7 @@ MOTW
 MRU
 MRU's
 MSDOS
+MSFT
 MathCAD
 MathJax
 Mathematica's
@@ -271,8 +283,10 @@ MinGW's
 Miniconda
 Mintty
 Mixin
+ModuleSpec
 Monero
 MongoDB
+Msys2
 NDK
 NERDTree
 NLP
@@ -355,6 +369,7 @@ Pydocs
 Pyflakes
 Pygal
 Pygments
+PyperClip
 Python3
 PythonAnywhere
 PythonDataScienceHandbook
@@ -490,6 +505,7 @@ VC
 VDP
 VIMRUNTIME
 VMware
+VSCode
 ValueError
 VeraCrypt
 Vigenere
@@ -686,6 +702,7 @@ colorschemes
 commit's
 commonmark
 completefunc
+completers
 conda
 condarc
 conemu
@@ -770,6 +787,7 @@ du
 duckduckgo
 dunder
 ecryptfs
+effbot
 eg
 elif
 elinks
@@ -826,6 +844,7 @@ frozenset
 fsck
 fsharp
 fstab
+fstrings
 fstrings
 ftdetect
 ftplugin
@@ -1042,6 +1061,7 @@ konsole
 kontact
 korganizer
 kotlin
+kqueue
 kraken
 krunner
 ksh
@@ -1069,6 +1089,7 @@ libreoffice
 libssl
 libstdc
 libtorrent
+libuv
 libux
 libvirt
 libvirtd
@@ -1169,6 +1190,7 @@ mp3
 mp4
 mpd
 msgpack
+msvcrt
 msys
 mycli
 mydir
@@ -1257,7 +1279,9 @@ openjdk
 openoffice
 openpyxl
 openssl
+optparse
 orbot
+ord
 org
 os
 outfile
@@ -1356,10 +1380,12 @@ pygments
 pyinstaller
 pylab
 pynvim
+pyperclip
 pypi
 pyplot
 pypy
 pyqt5
+pyreadline
 pyrex
 pytest
 python2
@@ -1452,6 +1478,7 @@ scp
 scrapy
 screencasts
 screenfetch
+scriptease
 scriptname
 scriptnames
 scrollback
@@ -1593,7 +1620,9 @@ tesla
 testcase
 tex
 texting
+threadpool
 thunar
+ti/!
 tiddlywiki
 tig
 timefmt
@@ -1763,6 +1792,7 @@ wouldn’t
 wpa
 writefile
 writethedocs
+wsgiref
 www
 wxPython
 wysiwyg
@@ -1781,6 +1811,7 @@ xhtml
 xinitrc
 xkb
 xkeymaps
+xmap
 xml
 xmodmap
 xonsh
@@ -1806,27 +1837,3 @@ zsh
 zshrc
 µBlock
 µMatrix
-xmap
-Beazley's
-wsgiref
-PyperClip
-pyperclip
-CPython
-Dunders
-Faulthandler
-optparse
-ord
-scriptease
-Completers
-completers
-Enums
-ModuleSpec
-pyreadline
-msvcrt
-effbot
-Lungh
-Frederik
-Msys2
-libuv
-kqueue
-threadpool

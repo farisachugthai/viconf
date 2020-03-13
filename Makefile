@@ -5,6 +5,8 @@ PYTHON ?= python3
 
 BUILD_VIRTUAL_ENV:=venv
 
+.PHONY: install check clean vint flake8
+
 $(dir $(BUILD_VIRTUAL_ENV)):
 	mkdir -p $@
 
@@ -33,5 +35,3 @@ check: vint flake8
 
 clean:
 	rm -rf build
-
-.PHONY: install check clean vint flake8
