@@ -23,6 +23,7 @@ command! -complete=dir -bang -nargs=* NewGrep execute 'silent grep! <q-args>' | 
 " An example that uses the argument list and avoids errors for files without matches:
 command! -complete=var -nargs=* -range SearchAll silent argdo try | grepadd! <args> %  | catch /E480:/ | endtry
 
+command! TB setl efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m | clist
 " }}}
 
 " Coc Commands: {{{

@@ -9,25 +9,23 @@
 scriptencoding utf-8
 setglobal fileformats=unix,dos
 setglobal cpoptions-=c,e,_  " couple options that bugged me
-setglobal fencs=utf-8,latin1   " UGHHHHH
+setglobal fileencodings=utf-8,latin1   " UGHHHHH
 " }}}
 
 " Set paths correctly: {{{
 let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Evervim. Thanks!
 let s:wsl = !empty($WSL_DISTRO_NAME)
 " let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux) && empty(s:wsl)
-
 let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h'))
-
 " Seriously how does this keep getting fucked up. omfg packpath is worse???
-  setglobal runtimepath=$HOME/.config/nvim,$HOME/.local/share/nvim/site,$VIMRUNTIME
-  setglobal packpath=~/.config/nvim/pack,~/.local/share/nvim/site/pack,$VIMRUNTIME
-  if !has('unix')
-    setglobal rtp+=C:\Neovim\share\nvim-qt\runtime
- endif 
+setglobal runtimepath=$HOME/.config/nvim,$HOME/.local/share/nvim/site,$VIMRUNTIME
+setglobal packpath=~/.config/nvim/pack,~/.local/share/nvim/site/pack,$VIMRUNTIME
+if !has('unix')
+  setglobal runtimepath+=C:\Neovim\share\nvim-qt\runtime
+endif
 " Source ginit. Why is this getting set even in the TUI?
 if exists('g:GuiLoaded') | exec 'source ' s:repo_root . '/ginit.vim' | endif
-if has('unnamedplus') | setglobal clipboard+=unnamed,unnamedplus | else | setglobal clipboard+=unnamed | endif
+setglobal clipboard=unnamed,unnamedplus
 " }}}
 
 " Macros, Leader, and Nvim specific features: {{{
@@ -77,78 +75,7 @@ if !isdirectory(expand(&g:undodir))
 endif
 " }}}
 
-" Completion: {{{
-setglobal suffixes=.bak,~,.o,.info,.swp,.aux,.bbl,.blg,.brf,.cb,.dvi,.idx,.ilg,.ind,.inx,.jpg,.log,.out,.png,.toc,.pyc,*.a,*.obj,*.dll,*.exe,*.lib,*.mui,*.swp,*.tmp,
-
-setglobal wildignorecase
-setglobal wildmode=full:list:longest,full:list
-setglobal wildignore=*~,versions/*,cache/*,.tox/*,.pytest_cache/*,__pycache__/*
-setglobal wildcharm=<C-z>
-
-" C-n and C-p now use the same input that every other C-x does combined!
-" Remove includes they're pretty slow
-setglobal complete+=kspell,d,k complete-=u,i
-
-" Create a preview window and display all possibilities but don't insert
-" dude what am i doing wrong that i don't get the cool autocompletion that NORC gets??
-setglobal completeopt=menu,menuone,noselect,noinsert,preview
-" both smartcase and infercase require ignorecase to be set:
-setglobal ignorecase
-setglobal smartcase infercase smartindent
-" }}}
-
-" Options: {{{
-set winblend=10  " fuck this is window specific
-setglobal pastetoggle=<F9>   " fuck me this is what windows terminal uses for something
-
-setglobal signcolumn=auto:4  " this might be a nvim 4 thing
-try | setglobal switchbuf=useopen,usetab,split | catch | endtry
-setglobal splitbelow splitright
-setglobal sidescroll=5 hidden
-" dude these stopped setting when i set global them
-set number relativenumber
-setglobal cmdheight=2
-setglobal helpheight=8  " why is 20? help windows can be really intrusive with it that high
-
-if filereadable(s:repo_root . '/spell/en.utf-8.add')
-  let &g:spellfile = s:repo_root . '/spell/en.utf-8.add'
-endif
-let &g:path = &path . ',' . stdpath('data')
-setglobal path-=/usr/include
-setglobal sessionoptions-=buffers,winsize viewoptions-=options sessionoptions+=globals
-setglobal mouse=a
-setglobal nojoinspaces
-setglobal modeline
-if exists('&modelineexpr') | setglobal modelineexpr | endif
-
-setglobal whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
-" TODO: closeoff needs to be added conditionally. how?
-setglobal browsedir="buffer"   " which directory is used for the file browser
-
-let &g:listchars = "tab:\u21e5\u00b7,extends:\u21c9,precedes:\u21c7,nbsp:\u00b7"
-" trail:\u2423 doesn't work with hack as font
-let &g:fillchars = "stl:' ',stlnc:' ',vert:\u250b,fold:\u00b7,diff:'.'"
-" set fillchars=stl:^,stlnc:=,vert:│,fold:·,diff:-
-
-setglobal breakindent breakindentopt=sbr
-let &g:showbreak = '↳ '                   " Indent wrapped lines correctly
-setglobal updatetime=400 lazyredraw
-setglobal inccommand=split
-setglobal terse shortmess=aoOsItTWcF
-setglobal title titlestring=%<%F%=%l/%L-%P   " leaves a cool title for tmux
-setglobal conceallevel=2 concealcursor=nc    " enable concealing
-setglobal spellsuggest=5
-setglobal showmatch matchpairs+=<:>
-setglobal matchtime=20  " Show the matching pair for 2 seconds
-" dude holy hell are we running faster on termux set termguicolors
-setglobal synmaxcol=1000
-
-packadd! matchit
-packadd! justify
-" }}}
-
 " Load Plugins Preliminary Options: {{{
-if !exists('plug#load')  | unlet! g:loaded_plug | exec 'source ' . s:repo_root . '/vim-plug/plug.vim' | endif
 " Few options I wanna set in advance
 let g:no_default_tabular_maps = 1
 let g:plug_shallow = 1
@@ -156,15 +83,20 @@ let g:plug_window = 'tabe'
 let g:undotree_SetFocusWhenToggle = 1
 " Windows gets all kinds of fucked up otherwise
 let g:plug_url = 'https://github.com/%s.git'
+let g:peekaboo_compact = 1
 
 function! LoadMyPlugins() abort
 
+  if !exists('plug#load')  | unlet! g:loaded_plug | exec 'source ' . s:repo_root . '/vim-plug/plug.vim' | endif
   call plug#begin(stdpath('data'). '/plugged')
 
   Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lockfile'}
   let $NVIM_COC_LOG_FILE = stdpath('data')  . '/site/coc.log'
   let $NVIM_COC_LOG_LEVEL = 'ERROR'
-  Plug 'junegunn/fzf', { 'dir': expand('~/.fzf'), 'do': './install --all' }
+  Plug 'junegunn/fzf', { 
+                  \ 'dir': expand('~/.fzf'),
+                  \ 'do': './install --all' 
+                  \ }
   Plug 'junegunn/fzf.vim'
   Plug 'junegunn/goyo.vim'
   Plug 'junegunn/vim-peekaboo'
@@ -194,7 +126,7 @@ function! LoadMyPlugins() abort
 
   augroup END
   " }}}
-  "
+
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-apathy'
@@ -209,37 +141,34 @@ function! LoadMyPlugins() abort
     Plug 'edkolev/tmuxline.vim'
   endif
 
-  Plug 'mhinz/vim-startify'
-  Plug 'mitsuhiko/vim-jinja'
-
-  Plug 'cespare/vim-toml'
+  Plug 'mhinz/vim-startify', {'on': 'Startify'}
   Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
   noremap <silent> <F8> <Cmd>TagbarToggle<CR>
   noremap! <silent> <F8> <Cmd>TagbarToggle<CR>
   tnoremap <silent> <F8> <Cmd>TagbarToggle<CR>
 
   " yo this mapping is great
-  nnoremap ,t <Cmd>CocCommand tags.generate<CR><bar>:TagbarToggle<CR>
-
-  Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
+  nnoremap ,t <Cmd>CocCommand tags.generate<CR><Cmd>TagbarToggle<CR>
+  Plug 'mbbill/undotree', { 'on' : 'UndotreeToggle' }
   Plug 'ervandew/supertab'
-  let g:peekaboo_compact = 1
-  Plug 'junegunn/vim-peekaboo'
+  Plug 'junegunn/vim-peekaboo' 
   Plug 'vim-voom/voom', {'on': ['Voom', 'VoomToggle', 'VoomExec'] }
   Plug 'romainl/vim-qf'
-
   Plug 'tomtom/tlib_vim'
+  " Dont know how i didnt realize lazy loaded plugins arent added to rtp.
+  Plug 'mitsuhiko/vim-jinja', {'for': 'jinja2'},
+  Plug 'cespare/vim-toml', {'for': 'toml'}'
+  Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
+  Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
+  Plug 'omnisharp/omnisharp-vim', {'for': ['cs', 'ps1',] }
+  Plug 'itspriddle/vim-shellcheck', {'for': ['sh', 'bash',] } 
   if empty(s:termux)  " {{{
-    Plug 'junegunn/vim-plug' ", {'dir': expand('~/projects/viconf/vim-plug')}
     Plug 'godlygeek/tabular', {'on': 'Tabularize'}
     Plug 'vim-voom/voom', {'on': ['Voom', 'VoomToggle', 'VoomExec'] }
-    Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
-    Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
-    Plug 'omnisharp/omnisharp-vim', {'for': ['cs', 'ps1',] }
     Plug 'ludovicchabant/vim-gutentags'
   endif
   " }}}
-
+  Plug 'kshenoy/vim-signature'
   Plug 'ryanoasis/vim-devicons'           " Keep at end!
   call plug#end()
 
@@ -251,12 +180,8 @@ call LoadMyPlugins()
 " Commands: {{{
 " I utilize this command so often I may as well save the characters
 command! Plugins echo map(keys(g:plugs), '"\n" . v:val')
-colo gruvbox-material
-set termguicolors
-packadd! matchit
-packadd! justify
 
-let syntax_cmd = "enable"
+let g:syntax_cmd = "enable"
 " }}}
 
 " Vim: set fdm=marker foldlevelstart=0:

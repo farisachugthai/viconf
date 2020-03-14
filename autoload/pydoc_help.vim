@@ -262,6 +262,16 @@ function! s:is_preview_window_open()  " {{{
   endif
 endfunction  " }}}
 
+function! s:opened_preview_window() abort  " {{{
+  " Sorry junegunn but its tpope.
+  for i in range(1, winnr('$'))
+    if getwinvar(i, '&previewwindow') == 1
+      return i
+    endif
+  endfor
+  return -1
+endfunction " }}}
+
 function! pydoc_help#PreviewShow() abort  " {{{
   " erghhhhh. still not there but it's close.
   " dude preview windows are weird and there's an odd amount of basic

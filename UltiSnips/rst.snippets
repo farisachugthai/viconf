@@ -52,8 +52,13 @@ snippet class "Inline class directive" w
 :class:\`${0:${VISUAL}}\`
 endsnippet
 
-snippet mod "Inline mod directive" w
+snippet mod "Inline mod role" w
 :mod:\`${0:${VISUAL}}\`
+endsnippet
+
+snippet moddir "Module directive" b
+.. :module:\``!p snip.rv = snip.basename`\`
+	:synopsis: ${0:${VISUAL}}
 endsnippet
 
 snippet code "Inline code. Needs to be visually highlighted first." b
@@ -118,9 +123,6 @@ endsnippet
 snippet mod "Module Directive" b
 ${1:${VISUAL:One sentence module summary.}}
 
-.. :module:\``!p snip.rv = snip.basename`\`
-	:synopsis: $1
-
 :File: `!p snip.rv = snip.fn`
 :Author: `!v g:snips_author`
 
@@ -129,22 +131,25 @@ ${3:Parameters}
 ${4:mod_variables} : ${5:type}
 	${6:Explanation and give an inline docstring.}
 
-${7:Example}
-`!p snip.rv = len(t[1])*'-'`
-${8:code-block}:: ${9:python3}
+endsnippet
 
-	${10:TODO}
+snippet example "todo check how to nest these again." b
+Examples
+--------
+${1:code-block}:: ${2:python3}
+
+	${0:${VISUAL}}
 endsnippet
 
 snippet img "image link directive" w
-.. |${1:alias}| image:: ${2:img}
+.. image:: ${0:${VISUAL}}
 endsnippet
 
 snippet fig "Figure directive" w
 .. figure:: ${1:img}
 	:alt: ${2:alter text}
 
-$0
+	$0
 endsnippet
 
 snippet contents "content directive" w

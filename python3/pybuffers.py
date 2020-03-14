@@ -92,14 +92,14 @@ def vimcmd(fxn):
 
 # Jedi:
 
+
 def py_import_completions():
-    argl = vim.eval('a:argl')
-    text = 'import %s' % argl
-    script = jedi.Script(text, 1, len(text), '',
-                         environment=get_environment())
+    argl = vim.eval("a:argl")
+    text = "import %s" % argl
+    script = jedi.Script(text, 1, len(text), "", environment=get_environment())
     comps = []
     comps = [f"{argl}, {c.complete for c in script.completions()}"]
-    vim.command("return '%s'" % '\n'.join(comps))
+    vim.command("return '%s'" % "\n".join(comps))
 
 
 class PythonToVimStr:
@@ -143,7 +143,7 @@ class VimErr(VimError):
     def __init__(self, message=None):
         super().__init__(message)
         self.message = message
-        self.exc_info0, self.exc_info1, self.exc_info2 = *sys.exc_info()
+        self.exc_info0, self.exc_info1, self.exc_info2 = sys.exc_info()
 
     def __repr__(self):
         return (self.exc_info0, self.message)
@@ -294,11 +294,49 @@ def catch_and_print_exceptions(func):
 def import_into_vim(*args):
     if jedi is not None:
         text = f"import {args}"
-        script = jedi.Script(text, 1, len(text), "",
-                             environment=get_environment())
+        script = jedi.Script(text, 1, len(text), "", environment=get_environment())
 
         partial_completions = (c.complete() for c in script.completions())
 
         completions = [f"{args}, {partial_completions}"]
 
     vim.command("return '%s'" % "\n".join(completions))
+
+
+def Black():
+    start = time.time()
+    fast = bool(int(vim.eval("g:black_fast")))
+    mode = black.FileMode(
+        line_length=int(vim.eval("g:black_linelength")),
+        string_normalization=not bool(
+            int(vim.eval("g:black_skip_string_normalization"))
+        ),
+        is_pyi=vim.current.buffer.name.endswith(".pyi"),
+    )
+    buffer_str = "\n".join(vim.current.buffer) + "\n"
+    try:
+        new_buffer_str = black.format_file_contents(buffer_str, fast=fast, mode=mode)
+    except black.NothingChanged:
+        print(f"Already well formatted, good job. (took {time.time() - start:.4f}s)")
+    except Exception as exc:
+        print(exc)
+    else:
+        current_buffer = vim.current.window.buffer
+        cursors = []
+        for i, tabpage in enumerate(vim.tabpages):
+            if tabpage.valid:
+                for j, window in enumerate(tabpage.windows):
+                    if window.valid and window.buffer == current_buffer:
+                        cursors.append((i, j, window.cursor))
+        vim.current.buffer[:] = new_buffer_str.split("\n")[:-1]
+        for i, j, cursor in cursors:
+            window = vim.tabpages[i].windows[j]
+            try:
+                window.cursor = cursor
+            except vim.error:
+                window.cursor = (len(window.buffer), 0)
+        print(f"Reformatted in {time.time() - start:.4f}s.")
+
+
+def BlackVersion():
+    print(f"Black, version {black.__version__} on Python {sys.version}.")

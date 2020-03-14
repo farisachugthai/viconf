@@ -222,7 +222,6 @@ noremap! <F6>               <Cmd>Snippets<CR>
 " I suppose for continuity
 tnoremap <F6>               <Cmd>Snippets<CR>
 
-" Ensure fzf behaves similarly in a shell or in Vim: {{{
 if exists('*fzf#wrap')
   nnoremap <M-x>                      <Cmd>Commands<CR>
   nnoremap <C-x><C-b>                 <Cmd>Buffers<CR>
@@ -232,7 +231,6 @@ else
   nnoremap <C-x><C-b>                 <Cmd>buffers<CR>
   nnoremap <C-x><C-f>                 :<C-u>find ~/**
 endif
-" }}}
 
 " Imaps: {{{
 if has('unix')
@@ -251,32 +249,31 @@ else
 endif
 
 inoremap <expr> <C-x><C-l> fzf#vim#complete#line()
-inoremap <expr> <C-l>      fzf#vim#complete#line()
+inoremap <expr> <C-x>l      fzf#vim#complete#line()
 
 " Uhhh C-b for buffer?
 inoremap <expr> <C-x><C-b> fzf#vim#complete#buffer_line()
 
 imap <expr> <C-x><C-s>    fzf#vim#complete#word({
-    \ 'source':  'cat /usr/share/dict/words',
+    \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
     \ 'reducer': function('<sid>make_sentence'),
     \ 'options': '--multi --reverse --margin 15%,0',
     \ 'left':    40})
 " And add a shorter version
 inoremap <C-s>            <C-x><C-s>
+
 imap <expr> <C-x><C-k>    fzf#complete({
             \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
-            \ 'options': '-ansi --multi --cycle', 'left': 30})
+            \ 'options': '-ansi --multi --cycle',
+            \ 'left': 30})
+
 inoremap <C-k>            <C-x><C-k>
 
-" }}}
-
-" Backslash Tab: {{{
 " NOTE: The imap should probably only be invoked using \<tab>
 nmap \<tab>                 <Plug>(fzf-maps-n)
 omap \<tab>                 <Plug>(fzf-maps-o)
 xmap \<tab>                 <Plug>(fzf-maps-x)
 imap \<tab>                 <Plug>(fzf-maps-i)
-
 " }}}
 
 " Map Vim Defaults To FZF History Commands:{{{
@@ -285,9 +282,7 @@ nnoremap q/        <Cmd>History/<CR>
 " But id still want to use q: when i can
 nnoremap q; q:
 
-" }}}
-
-" Get The Rest Of The FZF Vim Commands Involved: {{{
+" Get The Rest Of The FZF Vim Commands Involved:
 nnoremap  <Leader>l         <Cmd>Lines<CR>
 nnoremap  <Leader>s         <Cmd>Ag <C-R><C-W><CR>
 nnoremap  <Leader>s         <Cmd>Ag <C-R><C-A><CR>
@@ -299,13 +294,10 @@ nnoremap <Leader>gg         <Cmd>GGrep<CR>
 nnoremap <Leader>gl         <Cmd>Commits<CR>
 nnoremap <Leader>g?         <Cmd>GFiles?<CR>
 
-" NERDTree Mapping: Dude I forgot I had this. Make sure :Files works but this
-" mapping is amazing.
+" NERDTree Mapping:
 nnoremap <expr> <Leader>n   (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
-
 nnoremap ,b                 <Cmd>Buffers<CR>
 nnoremap ,B                 <Cmd>Buffers<CR>
-
 " }}}
 
 " }}}

@@ -1,96 +1,182 @@
 {
-  "if": {
-    "prefix": "if",
-    "body": [
-      "if ${1:expression}:",
-      "\t${2:pass}"
-    ],
-    "description": "Code snippet for an if statement"
+  "#!": {
+    "body": "#!/usr/bin/env python\n# -*- coding: utf-8 -*-",
+    "description": "Code snippet for shebang",
+    "prefix": "#!"
   },
-  "if/else": {
-    "prefix": "if/else",
+  "async/def": {
     "body": [
-      "if ${1:condition}:",
-      "\t${2:pass}",
-      "else:",
+      "async def ${1:funcname}(${2:parameter_list}):",
       "\t${3:pass}"
     ],
-    "description": "Code snippet for an if statement with else"
+    "description": "Code snippet for an async statement",
+    "prefix": "async/def"
+  },
+  "async/for": {
+    "body": [
+      "async for ${1:target} in ${2:iter}:",
+      "\t${3:block}"
+    ],
+    "description": "Code snippet for an async for statement",
+    "prefix": "async/for"
+  },
+  "async/for/else": {
+    "body": [
+      "async for ${1:target} in ${2:iter}:",
+      "\t${3:block}",
+      "else:",
+      "\t${4:block}"
+    ],
+    "description": "Code snippet for an async for statement with else",
+    "prefix": "async/for/else"
+  },
+  "async/with": {
+    "body": [
+      "async with ${1:expr} as ${2:var}:",
+      "\t${3:block}"
+    ],
+    "description": "Code snippet for an async with statement",
+    "prefix": "async/with"
+  },
+  "class": {
+    "body": [
+      "class ${1:classname}(${2:object}):",
+      "\t${3:pass}"
+    ],
+    "description": "Code snippet for a class definition",
+    "prefix": "class"
+  },
+  "def": {
+    "body": [
+      "def ${1:funcname}(${2:parameter_list}):",
+      "\t${3:pass}"
+    ],
+    "description": "Code snippet for a function definition",
+    "prefix": "def"
+  },
+  "def(abstract class method)": {
+    "body": [
+      "def ${1:funcname}(self, ${2:parameter_list}):",
+      "\traise NotImplementedError"
+    ],
+    "description": "Code snippet for an abstract class method",
+    "prefix": "def(abstract class method)"
+  },
+  "def(class method)": {
+    "body": [
+      "def ${1:funcname}(self, ${2:parameter_list}):",
+      "\t${3:pass}"
+    ],
+    "description": "Code snippet for a class method",
+    "prefix": "def(class method)"
+  },
+  "def(static class method)": {
+    "body": [
+      "@staticmethod",
+      "def ${1:funcname}(${2:parameter_list}):",
+      "\t${3:pass}"
+    ],
+    "description": "Code snippet for a static class method",
+    "prefix": "def(static class method)"
   },
   "elif": {
-    "prefix": "elif",
     "body": [
       "elif ${1:expression}:",
       "\t${2:pass}"
     ],
-    "description": "Code snippet for an elif"
+    "description": "Code snippet for an elif",
+    "prefix": "elif"
   },
   "else": {
-    "prefix": "else",
     "body": [
       "else:",
       "\t${1:pass}"
     ],
-    "description": "Code snippet for an else"
-  },
-  "while": {
-    "prefix": "while",
-    "body": [
-      "while ${1:expression}:",
-      "\t${2:pass}"
-    ],
-    "description": "Code snippet for a while loop"
-  },
-  "while/else": {
-    "prefix": "while/else",
-    "body": [
-      "while ${1:expression}:",
-      "\t${2:pass}",
-      "else:",
-      "\t${3:pass}"
-    ],
-    "description": "Code snippet for a while loop with else"
+    "description": "Code snippet for an else",
+    "prefix": "else"
   },
   "for": {
-    "prefix": "for",
     "body": [
       "for ${1:target_list} in ${2:expression_list}:",
       "\t${3:pass}"
     ],
-    "description": "Code snippet for a for loop"
+    "description": "Code snippet for a for loop",
+    "prefix": "for"
   },
   "for/else": {
-    "prefix": "for/else",
     "body": [
       "for ${1:target_list} in ${2:expression_list}:",
       "\t${3:pass}",
       "else:",
       "\t${4:pass}"
     ],
-    "description": "Code snippet for a for loop with else"
+    "description": "Code snippet for a for loop with else",
+    "prefix": "for/else"
+  },
+  "if": {
+    "body": [
+      "if ${1:expression}:",
+      "\t${2:pass}"
+    ],
+    "description": "Code snippet for an if statement",
+    "prefix": "if"
+  },
+  "if(main)": {
+    "body": [
+      "if __name__ == \"__main__\":",
+      "    ${1:pass}"
+    ],
+    "description": "Code snippet for a `if __name__ == \"__main__\": ...` block",
+    "prefix": "__main__"
+  },
+  "if/else": {
+    "body": [
+      "if ${1:condition}:",
+      "\t${2:pass}",
+      "else:",
+      "\t${3:pass}"
+    ],
+    "description": "Code snippet for an if statement with else",
+    "prefix": "if/else"
+  },
+  "ifmain": {
+    "body": "if \"__name__\" == \"__main\":\n\t ${1:main()}",
+    "description": "ifmain",
+    "prefix": "ifmain"
+  },
+  "ipdb": {
+    "body": "import ipdb; ipdb.set_trace()",
+    "description": "Code snippet for ipdb debug",
+    "prefix": "ipdb"
+  },
+  "lambda": {
+    "body": [
+      "lambda ${1:parameter_list}: ${2:expression}"
+    ],
+    "description": "Code snippet for a lambda statement",
+    "prefix": "lambda"
+  },
+  "pdb": {
+    "body": "import pdb; pdb.set_trace()",
+    "description": "Code snippet for pdb debug",
+    "prefix": "pdb"
+  },
+  "pudb": {
+    "body": "import pudb; pudb.set_trace()",
+    "description": "Code snippet for pudb debug",
+    "prefix": "pudb"
   },
   "try/except": {
-    "prefix": "try/except",
     "body": [
       "try:",
       "\t${1:pass}",
       "except ${2:expression} as ${3:identifier}:",
       "\t${4:pass}"
     ],
-    "description": "Code snippet for a try/except statement"
-  },
-  "try/finally": {
-    "prefix": "try/finally",
-    "body": [
-      "try:",
-      "\t${1:pass}",
-      "finally:",
-      "\t${2:pass}"
-    ],
-    "description": "Code snippet for a try/finally statement"
+    "description": "Code snippet for a try/except statement",
+    "prefix": "try/except"
   },
   "try/except/else": {
-    "prefix": "try/except/else",
     "body": [
       "try:",
       "\t${1:pass}",
@@ -99,22 +185,10 @@
       "else:",
       "\t${5:pass}"
     ],
-    "description": "Code snippet for a try/except/else statement"
-  },
-  "try/except/finally": {
-    "prefix": "try/except/finally",
-    "body": [
-      "try:",
-      "\t${1:pass}",
-      "except ${2:expression} as ${3:identifier}:",
-      "\t${4:pass}",
-      "finally:",
-      "\t${5:pass}"
-    ],
-    "description": "Code snippet for a try/except/finally statement"
+    "description": "Code snippet for a try/except/else statement",
+    "prefix": "try/except/else"
   },
   "try/except/else/finally": {
-    "prefix": "try/except/else/finally",
     "body": [
       "try:",
       "\t${1:pass}",
@@ -125,129 +199,55 @@
       "finally:",
       "\t${6:pass}"
     ],
-    "description": "Code snippet for a try/except/else/finally statement"
+    "description": "Code snippet for a try/except/else/finally statement",
+    "prefix": "try/except/else/finally"
+  },
+  "try/except/finally": {
+    "body": [
+      "try:",
+      "\t${1:pass}",
+      "except ${2:expression} as ${3:identifier}:",
+      "\t${4:pass}",
+      "finally:",
+      "\t${5:pass}"
+    ],
+    "description": "Code snippet for a try/except/finally statement",
+    "prefix": "try/except/finally"
+  },
+  "try/finally": {
+    "body": [
+      "try:",
+      "\t${1:pass}",
+      "finally:",
+      "\t${2:pass}"
+    ],
+    "description": "Code snippet for a try/finally statement",
+    "prefix": "try/finally"
+  },
+  "while": {
+    "body": [
+      "while ${1:expression}:",
+      "\t${2:pass}"
+    ],
+    "description": "Code snippet for a while loop",
+    "prefix": "while"
+  },
+  "while/else": {
+    "body": [
+      "while ${1:expression}:",
+      "\t${2:pass}",
+      "else:",
+      "\t${3:pass}"
+    ],
+    "description": "Code snippet for a while loop with else",
+    "prefix": "while/else"
   },
   "with": {
-    "prefix": "with",
     "body": [
       "with ${1:expression} as ${2:target}:",
       "\t${3:pass}"
     ],
-    "description": "Code snippet for a with statement"
-  },
-  "def": {
-    "prefix": "def",
-    "body": [
-      "def ${1:funcname}(${2:parameter_list}):",
-      "\t${3:pass}"
-    ],
-    "description": "Code snippet for a function definition"
-  },
-  "def(class method)": {
-    "prefix": "def(class method)",
-    "body": [
-      "def ${1:funcname}(self, ${2:parameter_list}):",
-      "\t${3:pass}"
-    ],
-    "description": "Code snippet for a class method"
-  },
-  "def(static class method)": {
-    "prefix": "def(static class method)",
-    "body": [
-      "@staticmethod",
-      "def ${1:funcname}(${2:parameter_list}):",
-      "\t${3:pass}"
-    ],
-    "description": "Code snippet for a static class method"
-  },
-  "def(abstract class method)": {
-    "prefix": "def(abstract class method)",
-    "body": [
-      "def ${1:funcname}(self, ${2:parameter_list}):",
-      "\traise NotImplementedError"
-    ],
-    "description": "Code snippet for an abstract class method"
-  },
-  "class": {
-    "prefix": "class",
-    "body": [
-      "class ${1:classname}(${2:object}):",
-      "\t${3:pass}"
-    ],
-    "description": "Code snippet for a class definition"
-  },
-  "lambda": {
-    "prefix": "lambda",
-    "body": [
-      "lambda ${1:parameter_list}: ${2:expression}"
-    ],
-    "description": "Code snippet for a lambda statement"
-  },
-  "if(main)": {
-    "prefix": "__main__",
-    "body": [
-      "if __name__ == \"__main__\":",
-      "    ${1:pass}"
-    ],
-    "description": "Code snippet for a `if __name__ == \"__main__\": ...` block"
-  },
-  "async/def": {
-    "prefix": "async/def",
-    "body": [
-      "async def ${1:funcname}(${2:parameter_list}):",
-      "\t${3:pass}"
-    ],
-    "description": "Code snippet for an async statement"
-  },
-  "async/for": {
-    "prefix": "async/for",
-    "body": [
-      "async for ${1:target} in ${2:iter}:",
-      "\t${3:block}"
-    ],
-    "description": "Code snippet for an async for statement"
-  },
-  "async/for/else": {
-    "prefix": "async/for/else",
-    "body": [
-      "async for ${1:target} in ${2:iter}:",
-      "\t${3:block}",
-      "else:",
-      "\t${4:block}"
-    ],
-    "description": "Code snippet for an async for statement with else"
-  },
-  "async/with": {
-    "prefix": "async/with",
-    "body": [
-      "async with ${1:expr} as ${2:var}:",
-      "\t${3:block}"
-    ],
-    "description": "Code snippet for an async with statement"
-  },
-  "ipdb": {
-    "prefix": "ipdb",
-    "body": "import ipdb; ipdb.set_trace()",
-    "description": "Code snippet for ipdb debug"
-  },
-  "pdb": {
-    "prefix": "pdb",
-    "body": "import pdb; pdb.set_trace()",
-    "description": "Code snippet for pdb debug"
-  },
-  "pudb": {
-    "prefix": "pudb",
-    "body": "import pudb; pudb.set_trace()",
-    "description": "Code snippet for pudb debug"
-  },
-  "#!": {
-    "prefix": "#!",
-    "body": "#!/usr/bin/env python\n# -*- coding: utf-8 -*-",
-    "description": "Code snippet for shebang"
-  },
-  "ifmain": {
-    "prefix": "ifmain",
-    "body": "if \"__name__\" == \"__main\":\n\t ${1:main()}",
-    "description": "ifmain"
+    "description": "Code snippet for a with statement",
+    "prefix": "with"
   }
 }

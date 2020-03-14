@@ -10,7 +10,7 @@
 " endif
 " let g:loaded_autocmd = 1
 
-" let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
+let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
 augroup UserHelpandPython " {{{
   au!
