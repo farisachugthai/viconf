@@ -44,7 +44,6 @@ BaseException
 BaseHTTPServer
 BeautifulSoup
 Beazley
-Beazley's
 BibTeX
 BigQuery
 Biomolecular
@@ -271,6 +270,7 @@ MRU
 MRU's
 MSDOS
 MSFT
+MSys2
 MathCAD
 MathJax
 Mathematica's
@@ -845,7 +845,6 @@ fsck
 fsharp
 fstab
 fstrings
-fstrings
 ftdetect
 ftplugin
 ftplugins
@@ -1080,6 +1079,7 @@ langmap
 langnoremap
 langremap
 launchctl
+lex
 libcs50
 libexpat1
 libffi
@@ -1837,3 +1837,6 @@ zsh
 zshrc
 µBlock
 µMatrix
+viewlet
+dropdown
+cmdlets

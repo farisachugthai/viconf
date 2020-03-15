@@ -27,9 +27,6 @@ setlocal statusline=%t%{exists('w:quickfix_title')?\ '\ '.w:quickfix_title\ :\ '
 
 if !exists('g:loaded_qf') | finish | endif
 
-let g:qf_mapping_ack_style = 1
-let g:qf_max_height = 6
-
 nnoremap <buffer> { <Plug>(qf_previous_file)
 nnoremap <buffer> } <Plug>(qf_next_file)
 
@@ -40,8 +37,3 @@ nnoremap <buffer> <M-t> QfHistoryOlder
 " mapping but it works that way
 nnoremap <buffer> <M-p> <Plug>(qf_qf_previous)
 nnoremap <buffer> <M-n> <Plug>(qf_qf_next)
-
-" Huh so this has to be defined for the next 2 to not raise an error
-let g:qf_statusline = {}
-let g:qf_statusline.before = '%<\ '
-let g:qf_statusline.after = '\ %f%=%l\/%-6L\ \ \ \ \ '

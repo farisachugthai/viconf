@@ -57,13 +57,16 @@ augroup END
 "
 "   Ah that's a fucking amazing idea!  }}}
 
-augroup UserCoc " {{{
+augroup UserPlugins " {{{
   au!
   autocmd  User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
   autocmd  User CursorHold call CocActionAsync('showSignatureHelp')
   " Clear this so that p.u.m. doesn't open in the command window
   autocmd! User CmdlineEnter CompleteDone
 
+  " why did he add the exclamation mark and the nested?
+  autocmd! User GoyoEnter nested call <SID>goyo_enter()
+  autocmd! User GoyoLeave nested call <SID>goyo_leave()
 augroup END
 
 " }}}
@@ -102,25 +105,28 @@ augroup END
 " }}}
 
 " {{{
-" augroup UserAutomake
-"   au!
-"   autocmd BufReadCmd *.rst compiler rst | if executable('sphinx-build')
-"                   \| let &l:makeprg = 'sphinx-build -b html'
-"                   \| if filereadable('conf.py')
-"                   \| let &l:makeprg .= ' . ./build/html '
-"                   \| elseif glob('../conf.py')
-"                   \| let &l:makeprg .= ' .. ../../build/html '
-"                   \| endif
-"                   \| endif
-  " autocmd BufReadCmd *.py if executable('pytest')
-  "                 \| compiler pytest
-  "                 \| setlocal makeprg=py.test\ --tb=short\ -q\ --color=no
-  "                 \| echomsg 'Using pytest as a compiler!'
-  "                 \| else
-  "                 \| compiler pylint
-  "                 \| echomsg 'Using pylint as a compiler!'
-  "                 \| endif
-  " autocmd BufWritePost *.rst,*.py :make! %
-" augroup END
+augroup UserAutomake
+  au!
+  autocmd FileType rst compiler rst
+  autocmd FileType rst if executable('sphinx-build')
+                    \|   if filereadable('conf.py')
+                    \|     let &l:makeprg = 'sphinx-build -b html . ./build/html'
+                    \|   elseif glob('../conf.py')
+                    \|     let &l:makeprg = 'sphinx-build -b html .. ../../build/html '
+                    \|   else
+                    \|     let &l:makeprg = 'sphinx-build -b html'
+                    \|   endif
+                    \| endif
+
+" autocmd BufReadCmd *.py if executable('pytest')
+"                 \| compiler pytest
+"                 \| setlocal makeprg=py.test\ --tb=short\ -q\ --color=no
+"                 \| echomsg 'Using pytest as a compiler!'
+"                 \| else
+"                 \| compiler pylint
+"                 \| echomsg 'Using pylint as a compiler!'
+"                 \| endif
+" autocmd BufWritePost *.rst,*.py :make! %
+augroup END
 
 " }}}

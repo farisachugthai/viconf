@@ -25,7 +25,9 @@ if !has('unix')
 endif
 " Source ginit. Why is this getting set even in the TUI?
 if exists('g:GuiLoaded') | exec 'source ' s:repo_root . '/ginit.vim' | endif
+" TODO: clipboards fucking up on windows
 setglobal clipboard=unnamed,unnamedplus
+" if has('unnamedplus') | setglobal clipboard+=unnamed,unnamedplus | else | setglobal clipboard+=unnamed | endif
 " }}}
 
 " Macros, Leader, and Nvim specific features: {{{
@@ -48,31 +50,6 @@ endif
 
 let g:matchparen_timeout = 500
 let g:matchparen_insert_timeout = 300
-" }}}
-
-" Backups: {{{
-" Protect changes between writes. Default values of updatecount
-" (200 keystrokes) and updatetime (4 seconds) are fine
-setglobal swapfile undofile backupext='.bak'
-" use rename-and-write-new method whenever safe. actually might go with yes
-" its slower but idc
-setglobal backupcopy=yes
-" patch required to honor double slash at end consolidate the writebackups -- they usually get deleted
-let &g:backupdir=stdpath('data') . '/site/undo//'
-" Gotta be honest this part was stolen almost entirely from arch:
-
-let &g:directory= stdpath('data') . '/site/cache//'
-let &g:undodir = stdpath('data') . '/site/undo//'
-" Create directories if they doesn't exist
-if !isdirectory(expand(&g:directory))
-  silent! call mkdir(expand(&g:directory), 'p', 0700)
-endif
-if !isdirectory(expand(&g:backupdir))
-  silent! call mkdir(expand(&g:backupdir), 'p', 0700)
-endif
-if !isdirectory(expand(&g:undodir))
-  silent! call mkdir(expand(&g:undodir), 'p', 0700)
-endif
 " }}}
 
 " Load Plugins Preliminary Options: {{{
@@ -157,14 +134,17 @@ function! LoadMyPlugins() abort
   Plug 'tomtom/tlib_vim'
   " Dont know how i didnt realize lazy loaded plugins arent added to rtp.
   Plug 'mitsuhiko/vim-jinja', {'for': 'jinja2'},
-  Plug 'cespare/vim-toml', {'for': 'toml'}'
+
+  Plug 'cespare/vim-toml', {'for': 'toml'}
+
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
-  Plug 'omnisharp/omnisharp-vim', {'for': ['cs', 'ps1',] }
-  Plug 'itspriddle/vim-shellcheck', {'for': ['sh', 'bash',] } 
+  Plug 'omnisharp/omnisharp-vim', {'for': ['cs', 'ps1'] }
+  Plug 'itspriddle/vim-shellcheck', {'for': ['sh', 'bash'] } 
+  Plug 'morhetz/gruvbox'
+
   if empty(s:termux)  " {{{
     Plug 'godlygeek/tabular', {'on': 'Tabularize'}
-    Plug 'vim-voom/voom', {'on': ['Voom', 'VoomToggle', 'VoomExec'] }
     Plug 'ludovicchabant/vim-gutentags'
   endif
   " }}}

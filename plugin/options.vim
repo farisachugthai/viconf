@@ -5,11 +5,11 @@
   " Last Modified: February 16, 2020
 " ============================================================================
 
+" Global Options:
 scriptencoding utf-8
 let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
-" Global Options: {{{
-
+" Folds And Diffs: {{{
 setglobal foldnestmax=10
 " Oddly needs to be set locally?
 set foldmethod=marker foldcolumn=2
@@ -29,20 +29,9 @@ if has('patch-8.1.0360') || has('nvim')
   setglobal diffopt+=internal,algorithm:patience
 endif
 " todo: closeoff
+" }}}
 
-setglobal autochdir autowrite autoread
-if &tabstop > 4 | setglobal tabstop=4 | endif
-if &shiftwidth > 4  | setglobal shiftwidth=4 | endif
-setglobal expandtab smarttab softtabstop=4
-set nohlsearch
-if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif
-setglobal cdpath+=$HOME,$VIMRUNTIME
-setglobal iskeyword=@,48-57,_,192-255   " Idk how but i managed to mess up the default isk
-setlocal termguicolors
-colo gruvbox-material
-set winblend=10
-setglobal suffixes=.bak,~,.o,.info,.swp,.aux,.bbl,.blg,.brf,.cb,.dvi,.idx,.ilg,.ind,.inx,.jpg,.log,.out,.png,.toc,.pyc,*.a,*.obj,*.dll,*.exe,*.lib,*.mui,*.swp,*.tmp,
-
+" Completions: {{{
 setglobal wildignorecase
 setglobal wildmode=full:list:longest,full:list
 setglobal wildignore=*~,versions/*,cache/*,.tox/*,.pytest_cache/*,__pycache__/*
@@ -62,6 +51,23 @@ setglobal showfulltag
 if exists('&tagfunc')
   let &g:tagfunc = 'CocTagFunc'
 endif
+" }}}
+
+" Other: {{{
+packadd! matchit
+packadd! justify
+setglobal autochdir autowrite autoread
+if &tabstop > 4 | setglobal tabstop=4 | endif
+if &shiftwidth > 4  | setglobal shiftwidth=4 | endif
+setglobal expandtab smarttab softtabstop=4
+set nohlsearch
+if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif
+setglobal cdpath+=$HOME,$VIMRUNTIME
+setglobal iskeyword=@,48-57,_,192-255   " Idk how but i managed to mess up the default isk
+setlocal termguicolors
+colo gruvbox-material
+set winblend=10
+setglobal suffixes=.bak,~,.o,.info,.swp,.aux,.bbl,.blg,.brf,.cb,.dvi,.idx,.ilg,.ind,.inx,.jpg,.log,.out,.png,.toc,.pyc,*.a,*.obj,*.dll,*.exe,*.lib,*.mui,*.swp,*.tmp,
 
 setglobal pastetoggle=<F9>   " fuck me this is what windows terminal uses for something
 setglobal signcolumn=auto:4  " this might be a nvim 4 thing
@@ -112,10 +118,13 @@ if has('unix')
   call unix#UnixOptions()
   let g:startify_change_to_dir = 1
   let g:tagbar_iconchars = ['▷', '◢']
+  let g:startify_change_to_dir = 1
 else
+  " XXX: might wanna change this:
+  " let $FZF_DEFAULT_COMMAND = 'rg --hidden -M 200 -m 200 --smart-case --passthru --files . '
+  " let $FZF_DEFAULT_COMMAND = 'fd --hidden --follow -d 6 -t f '
   unlet! $FZF_DEFAULT_OPTS
   unlet! $FZF_DEFAULT_COMMAND
-  let g:coc_node_path = 'C:\Users\fac\scoop\apps\nvm\current\v13.10.1\node.exe'
   call msdos#set_shell_cmd()
 
   " Find The Ctags Executable:
@@ -131,8 +140,34 @@ else
   " Icon Chars
   let g:tagbar_iconchars = ['▶', '▼']
 endif
+" }}}
 
-" Remote Hosts:
+" Backups: {{{
+" Protect changes between writes. Default values of updatecount
+" (200 keystrokes) and updatetime (4 seconds) are fine
+setglobal swapfile undofile backupext='.bak'
+" use rename-and-write-new method whenever safe. actually might go with yes
+" its slower but idc
+setglobal backupcopy=yes
+" patch required to honor double slash at end consolidate the writebackups -- they usually get deleted
+let &g:backupdir=stdpath('data') . '/site/undo//'
+" Gotta be honest this part was stolen almost entirely from arch:
+
+let &g:directory= stdpath('data') . '/site/cache//'
+let &g:undodir = stdpath('data') . '/site/undo//'
+" Create directories if they doesn't exist
+if !isdirectory(expand(&g:directory))
+  silent! call mkdir(expand(&g:directory), 'p', 0700)
+endif
+if !isdirectory(expand(&g:backupdir))
+  silent! call mkdir(expand(&g:backupdir), 'p', 0700)
+endif
+if !isdirectory(expand(&g:undodir))
+  silent! call mkdir(expand(&g:undodir), 'p', 0700)
+endif
+" }}}
+
+" Remote Hosts: {{{
 if exists('$ANDROID_DATA')
   call find_files#termux_remote()
 
@@ -152,6 +187,17 @@ if has('nvim')
 else
   let g:fzf_layout = { 'window': '-tabnew' }
 endif
+" }}}
+
+" QF: {{{
+let g:qf_window_bottom = 0
+" Huh so this has to be defined for the next 2 to not raise an error
+let g:qf_statusline = {}
+let g:qf_statusline.before = '%<\ '
+let g:qf_statusline.after = '\ %f%=%l\/%-6L\ \ \ \ \ '
+let g:qf_mapping_ack_style = 1
+let g:qf_max_height = 6
+let g:qf_auto_quit = 0
 " }}}
 
 " Web Devicon: {{{
@@ -175,7 +221,6 @@ let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['cs'] = ''
 " }}}
 
 " Black: {{{
-
 let g:load_black = 'py1.0'
 if !exists('g:black_virtualenv')
   if has('nvim')
@@ -194,7 +239,7 @@ if !exists('g:black_skip_string_normalization')
   let g:black_skip_string_normalization = 0
 endif
 
-" Ifthings slow down autoload these.
+" If things slow down autoload these.
 command! Black py3 Black()
 command! BlackUpgrade py3 BlackUpgrade()
 command! BlackVersion py3 BlackVersion()
@@ -232,11 +277,9 @@ let g:NERDTreeQuitOnOpen = 3
 " }}}
 
 " Tagbar: {{{
-
-" General Options: {{{
 " I want the spacebar back
 let g:tagbar_map_showproto = '?'
-let g:tagbar_left = 1
+let g:tagbar_left = 2
 let g:tagbar_width = 30
 let g:tagbar_sort = 0
 let g:tagbar_singleclick = 1
@@ -265,7 +308,6 @@ let g:tagbar_foldlevel = 0
 let g:tagbar_autopreview = 0
 
 let g:tagbar_map_zoomwin = 'Z'
-" }}}
 
 " Tagbar Types: {{{
 let g:tagbar_type_ansible = {
@@ -383,6 +425,21 @@ let g:gutentags_ctags_exclude = [
       \ ]
 
 let g:gutentags_resolve_symlinks = 1
+
+" g:gutentags_file_list_command
+" Specifies command(s) to use to list files for which tags should be generated, instead of recursively
+" examining all files within the project root. When invoked, file list commands will execute in the
+" project root directory.
+" This setting is useful in projects using source control to restrict tag generation to only files
+" tracked in the repository.
+
+let g:gutentags_file_list_command = 'fd -H -t f --follow .'
+
+" If there's a vscode dir in the root, then use that.
+if isdirectory('.vscode')
+  let g:gutentags_ctags_tagfile = '.vscode/tags'
+endif
+
 " }}}
 
 " UltiSnips: {{{
@@ -444,6 +501,10 @@ let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
 " }}}
 
 " Startify: {{{
+if has('unix')
+  let g:startify_change_to_dir = 1
+endif
+
 let g:startify_fortune_use_unicode = 1
 let g:startify_update_oldfiles = 1
 let g:startify_session_persistence = 1
@@ -454,6 +515,7 @@ let g:startify_session_savevars = [
        \ 'g:startify_session_savecmds',
        \ ]
 
+" Commands and bookmarks officially use A B C D E F G H I!
 let g:startify_commands = [
       \ {'a': 'Ag!'},
       \ {'b': 'Buffers!'},
@@ -494,12 +556,8 @@ let g:startify_custom_header ='startify#center(startify#fortune#cowsay())'
 " }}}
 
 " Coc: {{{
-" TODO:
-" so obviously only do this on windows. shit there are so many things that we need to configure
-" list.source.tags.command: ~/bin/ctags.exe -R --options=~/.ctags/universal_ctags.ctags .,
-" May have to extend after a has('unix') check.
 " Yeah probably need to make system checks to get rid of incorrect
-" non portable definitions in the JSON file.
+" non portable definitions in the JSON file. Like pythonPath? Holy shit.
 let g:WorkspaceFolders = [
       \ stdpath('config'),
       \ expand('$HOME/projects/dynamic_ipython'),
@@ -518,6 +576,16 @@ let $NVIM_NODE_LOG_FILE = stdpath('data') . '/site/node.log'
 let $NVIM_NODE_LOG_LEVEL = 'WARN'
 let $NVIM_NODE_HOST_DEBUG = 1
 let g:coc_jump_locations = []
+
+" This info gets mixed up on windows too often. But it should probs be a
+" function. whatever
+for i in ['coc-json', 'coc-tsserver', 'coc-python', 'coc-git', 'coc-lists', 'coc-snippets', 'coc-sh']
+  if exists('g:coc_global_extensions')
+    if !index(g:coc_global_extensions, i)
+      exec 'call coc#add_extension(' . i . ')'
+    endif
+  endif
+endfor
 " }}}
 
 " FZF: {{{
@@ -584,12 +652,11 @@ let g:fzf_colors =  {
       \  'header':  ['fg', '#83a598']
       \ }
 " }}}
+
 " }}}
 
 " Tmuxline: {{{
-
 let g:tmuxline_powerline_separators = 1
-
 let g:tmuxline_status_justify = 'centre'
 let g:tmuxline_powerline_separators = 1
 let g:tmuxline_preset = {
@@ -614,12 +681,11 @@ let g:tmuxline_powerline_separators = {
      \ 'right' : '«',
      \ 'right_alt' : '◀',
      \ 'space' : ' '}
-
 " }}}
 
-" goyo: {{{
+" Goyo: {{{
 
-function! s:goyo_enter()
+function! s:goyo_enter()  " {{{
   if executable('tmux') && strlen($TMUX)
     silent !tmux set status off
     silent !tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z
@@ -627,11 +693,10 @@ function! s:goyo_enter()
   set noshowmode
   set noshowcmd
   set scrolloff=999
-  Limelight
-  " ...
-endfunction
+  " ... Limelight
+endfunction  " }}}
 
-function! s:goyo_leave()
+function! s:goyo_leave()   " {{{
   if executable('tmux') && strlen($TMUX)
     silent !tmux set status on
     silent !tmux list-panes -F '\#F' | grep -q Z && tmux resize-pane -Z
@@ -639,12 +704,11 @@ function! s:goyo_leave()
   set showmode
   set showcmd
   set scrolloff=5
-  Limelight!
-  " ...
-endfunction
+  " ... Limelight!
+endfunction  " }}}
 
-autocmd! User GoyoEnter nested call <SID>goyo_enter()
-autocmd! User GoyoLeave nested call <SID>goyo_leave()
+" }}}
+
 " Voom: {{{
 let g:voom_ft_modes = {'markdown': 'markdown', 'rst': 'rst', 'zimwiki': 'dokuwiki'}
 let g:voom_default_mode = 'rst'
@@ -656,8 +720,9 @@ let g:voom_always_allow_move_left = 1
 
 " Fix the path + Last Call For Options: {{{
 let &path = '.,,**,' . expand('$VIMRUNTIME') . '/*/*.vim'  . ',' . stdpath('config')
+
 if &omnifunc ==# '' | setlocal omnifunc=syntaxcomplete#Complete | endif
 if &completefunc ==# '' | setlocal completefunc=syntaxcomplete#Complete | endif
-"  }}}
+" }}}
 "
 " Vim: set fdm=marker:

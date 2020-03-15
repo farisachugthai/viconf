@@ -103,7 +103,7 @@ let b:undo_ftplugin = 'setlocal tw< cms< com< cc< lbr< fdl< fdls< '
 
 if !exists('g:rst_style') || g:rst_style != 0
   setlocal expandtab shiftwidth=3 softtabstop=3 tabstop=8
-  let b:undo_ftplugin .= 'setlocal  ts< sw< sts<'
+  let b:undo_ftplugin .= 'setlocal ts< sw< sts<'
 endif
 
 setlocal foldmethod=expr

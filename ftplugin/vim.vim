@@ -53,7 +53,7 @@ call ftplugins#ALE_Vim_Conf()
 
 " the original ftplugin also sets b:undo_ftplugin = to call VimFtpluginUndo
 let b:undo_ftplugin = 'setlocal et< sw< ts< sts< lbr< sua< wrap< fdl< fdm< cms< path< isf< isk<'
-      \ . '|setlocal path< isf<'
+      \ . '|setlocal path< indentexpr< indentkeys<'
       \ . '|unlet! b:undo_ftplugin'
       \ . '|unlet! b:undo_indent'
       \ . '|unlet! b:did_ftplugin'

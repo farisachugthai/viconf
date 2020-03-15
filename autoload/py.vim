@@ -184,7 +184,7 @@ endfunction  " }}}
 function! py#Cnxn() abort  " {{{
   " Credit: JustinMK
   " https://github.com/justinmk/config/blob/ad5b792049b352274d4cbd3525a2aff6ce296a7e/.config/nvim/init.vim#L1339-L1361
-  terminal
+  terminal ipython
 
   if has('unix')
     call chansend(&channel, "import pynvim,os\n")

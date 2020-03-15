@@ -32,9 +32,8 @@ endif
 
 let &l:path  = py#PythonPath()
 setlocal syntax=xonsh
-
-setlocal foldlevelstart=0
 syntax sync fromstart
+setlocal foldlevelstart=0
 setlocal suffixesadd+=,.xsh,.xonshrc,
 setlocal include=^\\s*\\(from\\\|import\\)
 setlocal includeexpr=substitute(v:fname,'\\.','/','g')
@@ -58,7 +57,8 @@ endif
 " }}}
 
 " Atexit: {{{
-let b:undo_ftplugin = 'setlocal fdm< syntax< sua< '
-            \ . '|unlet! b:undo_ftplugin'
-            \ . '|unlet! b:did_ftplugin'
+let b:undo_ftplugin = 'setlocal kp< ep< fp< path< syntax< fdls< sua< include<'
+                \ . '|setlocal includeexpr< fo< et< sw< sts< ts< makeprg< '
+                \ . '|unlet! b:undo_ftplugin'
+                \ . '|unlet! b:did_ftplugin'
 " }}}

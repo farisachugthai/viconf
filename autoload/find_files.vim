@@ -148,7 +148,7 @@ function! find_files#msdos_remote() abort  " {{{1
   let g:loaded_ruby_provider = 1
 
   " wow this one actually fucking worked
-  let g:node_host_prog = 'C:\Users\fac\scoop\apps\nvm\current\v13.10.1\node_modules\neovim\bin\cli.js'
+  let g:node_host_prog = 'C:\Users\fac\scoop\apps\winpython\current\n\node_modules\neovim\bin\cli.js'
 
   let g:clipboard = {
         \   'name': 'winClip',
