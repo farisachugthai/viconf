@@ -182,3 +182,71 @@ function! includes#TypeScriptIncludeExpression(fname, gf) abort  " {{{
     return a:fname . '.d.ts'
   endfunction   " }}}
 
+function! includes#VimPath() abort  " {{{
+  " I know you may be thinking, there are no include or defines in a vim file
+  " what the hell do you need to muck with the path for.
+  " autoloaded functions!
+  let s:path='.,**,'
+  let s:path = s:path . expand('$VIMRUNTIME') . ','
+
+  if !exists('*stdpath') | let &l:path = s:path | return s:path | endif
+
+  let s:path = s:path . stdpath('config') . '/autoload,'
+  let s:path = s:path . stdpath('data') . ','
+  " Idk if this is gonna glob the way I want.
+  let s:path = s:path . stdpath('data') . '/**1/autoload,'
+
+  let &l:path = s:path
+  return s:path
+endfunction  " }}}
+
+function! includes#CPath() abort  " {{{
+  let s:path='.,**,,'
+
+  if has('unix')
+    let s:path = s:path . '/usr/include,/usr/local/include,'
+
+    if isdirectory(expand('$HOME/.local/include'))
+      let s:path = s:path . ',' .  expand('$HOME') . '/.local/include'
+    endif
+
+  else
+    let s:old_ss = &shellslash
+    set shellslash
+    " we did it.
+    if exists('$INCLUDE')
+      let s:path = s:path . expand('$INCLUDE')
+      return s:path
+    endif
+
+    " TODO: i hate fuckin with the paths this much but honestly we should set
+    " up a few var to figure out condas base dir and use it for C includes as
+    " well as python
+    if isdirectory('C:/tools/miniconda3/envs/working/Library/include')
+      let s:path = s:path . 'C:/tools/miniconda3/envs/working/Library/include,'
+      let s:path = s:path . 'C:/tools/miniconda3/envs/working/include,'
+    endif
+
+    if isdirectory('C:/tools/vs/2019/Community/VC/Tools/MSVC/14.24.28314/include')
+      let s:path = s:path . 'C:/tools/vs/2019/Community/VC/Tools/MSVC/14.24.28314/include'
+    endif
+
+    if isdirectory('C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include')
+      let s:path = s:path . 'C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include,'
+    endif
+
+    " Yo honestly this is the one you're looking for
+    if isdirectory('C:/Program Files (x86)/Windows Kits/10/include/10.0.17763.0')
+      let s:path = s:path . 'C:/Program Files (x86)/Windows Kits/10/include/10.0.17763.0/**2'
+    endif
+
+    if exists('$INCLUDEDIR')
+      let s:path = s:path . expand('$INCLUDEDIR')
+    endif
+
+    let &shellslash = s:old_ss
+  endif
+
+  return s:path
+endfunction  " }}}
+

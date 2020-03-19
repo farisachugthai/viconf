@@ -33,7 +33,7 @@ unlet! b:did_ftplugin
 source $VIMRUNTIME/ftplugin/bash.vim
 
 runtime after/ftplugin/sh.vim
-
+syntax enable
 syntax sync fromstart linebreaks=2
 setl syntax=bash
 

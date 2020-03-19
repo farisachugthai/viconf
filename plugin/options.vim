@@ -22,7 +22,6 @@ setglobal foldignore=
 " Automatically open and close folds as i move out and in them.
 " setglobal foldopen=all foldclose=all
 " nah this is really annoying
-
 setglobal diffopt=filler,context:0,iblank,iwhite,iwhiteeol,indent-heuristic,hiddenoff,foldcolumn:1
 
 if has('patch-8.1.0360') || has('nvim')
@@ -56,17 +55,19 @@ endif
 " Other: {{{
 packadd! matchit
 packadd! justify
+colorscheme gruvbox-material
+set termguicolors
 setglobal autochdir autowrite autoread
 if &tabstop > 4 | setglobal tabstop=4 | endif
 if &shiftwidth > 4  | setglobal shiftwidth=4 | endif
 setglobal expandtab smarttab softtabstop=4
 set nohlsearch
+
 if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif
 setglobal cdpath+=$HOME,$VIMRUNTIME
 setglobal iskeyword=@,48-57,_,192-255   " Idk how but i managed to mess up the default isk
-setlocal termguicolors
-colo gruvbox-material
 set winblend=10
+
 setglobal suffixes=.bak,~,.o,.info,.swp,.aux,.bbl,.blg,.brf,.cb,.dvi,.idx,.ilg,.ind,.inx,.jpg,.log,.out,.png,.toc,.pyc,*.a,*.obj,*.dll,*.exe,*.lib,*.mui,*.swp,*.tmp,
 
 setglobal pastetoggle=<F9>   " fuck me this is what windows terminal uses for something
@@ -82,6 +83,7 @@ setglobal helpheight=8  " why is 20? help windows can be really intrusive with i
 if filereadable(s:repo_root . '/spell/en.utf-8.add')
   let &g:spellfile = s:repo_root . '/spell/en.utf-8.add'
 endif
+
 let &g:path = &path . ',' . stdpath('data')
 setglobal path-=/usr/include
 setglobal sessionoptions-=buffers,winsize viewoptions-=options sessionoptions+=globals
@@ -125,6 +127,7 @@ else
   " let $FZF_DEFAULT_COMMAND = 'fd --hidden --follow -d 6 -t f '
   unlet! $FZF_DEFAULT_OPTS
   unlet! $FZF_DEFAULT_COMMAND
+
   call msdos#set_shell_cmd()
 
   " Find The Ctags Executable:
@@ -139,6 +142,17 @@ else
   endif
   " Icon Chars
   let g:tagbar_iconchars = ['▶', '▼']
+
+  " Now find node:
+  if has('unix')  " wsl
+    if isdirectory('$HOME/scoop/apps/winpython/current/n/node.exe')
+      let g:coc_node_path = '$HOME/scoop/apps/winpython/current/n/node.exe'
+    endif
+  else
+    if isdirectory('C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\node.exe')
+      let g:coc_node_path = 'C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\node.exe'
+    endif
+  endif
 endif
 " }}}
 
@@ -235,14 +249,11 @@ endif
 if !exists('g:black_linelength')
   let g:black_linelength = 88
 endif
+
 if !exists('g:black_skip_string_normalization')
   let g:black_skip_string_normalization = 0
 endif
 
-" If things slow down autoload these.
-command! Black py3 Black()
-command! BlackUpgrade py3 BlackUpgrade()
-command! BlackVersion py3 BlackVersion()
 " }}}
 
 " NERDTree: {{{
@@ -285,29 +296,13 @@ let g:tagbar_sort = 0
 let g:tagbar_singleclick = 1
 let g:tagbar_hide_nonpublic = 0
 let g:tagbar_autoshowtag = 1
-
-" Literally ruins my ability to see any other messages i might care about
 let g:tagbar_silent = 1
-
-" If you set this option the Tagbar window will automatically close when you
-" jump to a tag. This implies |g:tagbar_autofocus|. If enabled the "C" flag will
-" be shown in the statusline of the Tagbar window.
-" Actually I like having it open
 let g:tagbar_autoclose = 0
-
-" -1: Use the global line number settings.
-" Well that just feels like the courteous thing to do right?
 let g:tagbar_show_linenumbers = -1
-
-" Actually let's fold this a bit more. Default is 99 btw
 let g:tagbar_foldlevel = 0
-
-" If this variable is set to 1 then moving the cursor in the Tagbar window will
-" automatically show the current tag in the preview window.
-" Dude it takes up a crazy amount of room on termux and is generally quite annoying
 let g:tagbar_autopreview = 0
-
 let g:tagbar_map_zoomwin = 'Z'
+" }}}
 
 " Tagbar Types: {{{
 let g:tagbar_type_ansible = {
@@ -400,8 +395,6 @@ let g:tagbar_type_snippets = {
       \ }
 " }}}
 
-" }}}
-
 " Gutentags: {{{
 let g:gutentags_ctags_exclude = [
       \ '.pyc',
@@ -425,21 +418,11 @@ let g:gutentags_ctags_exclude = [
       \ ]
 
 let g:gutentags_resolve_symlinks = 1
-
-" g:gutentags_file_list_command
-" Specifies command(s) to use to list files for which tags should be generated, instead of recursively
-" examining all files within the project root. When invoked, file list commands will execute in the
-" project root directory.
-" This setting is useful in projects using source control to restrict tag generation to only files
-" tracked in the repository.
-
 let g:gutentags_file_list_command = 'fd -H -t f --follow .'
-
 " If there's a vscode dir in the root, then use that.
 if isdirectory('.vscode')
   let g:gutentags_ctags_tagfile = '.vscode/tags'
 endif
-
 " }}}
 
 " UltiSnips: {{{
@@ -463,7 +446,6 @@ let g:UltiSnipsListSnippets = '<C-/>'
 " }}}
 
 " Supertab: {{{
-
 let g:SuperTabLongestEnhanced = 1
 let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
 let g:SuperTabContextDiscoverDiscovery =
@@ -501,15 +483,10 @@ let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
 " }}}
 
 " Startify: {{{
-if has('unix')
-  let g:startify_change_to_dir = 1
-endif
-
 let g:startify_fortune_use_unicode = 1
 let g:startify_update_oldfiles = 1
 let g:startify_session_persistence = 1
 let g:startify_change_to_vcs_root = 0
-
 let g:startify_session_savevars = [
        \ 'g:startify_session_savevars',
        \ 'g:startify_session_savecmds',
@@ -556,8 +533,6 @@ let g:startify_custom_header ='startify#center(startify#fortune#cowsay())'
 " }}}
 
 " Coc: {{{
-" Yeah probably need to make system checks to get rid of incorrect
-" non portable definitions in the JSON file. Like pythonPath? Holy shit.
 let g:WorkspaceFolders = [
       \ stdpath('config'),
       \ expand('$HOME/projects/dynamic_ipython'),
@@ -577,15 +552,22 @@ let $NVIM_NODE_LOG_LEVEL = 'WARN'
 let $NVIM_NODE_HOST_DEBUG = 1
 let g:coc_jump_locations = []
 
-" This info gets mixed up on windows too often. But it should probs be a
-" function. whatever
-for i in ['coc-json', 'coc-tsserver', 'coc-python', 'coc-git', 'coc-lists', 'coc-snippets', 'coc-sh']
-  if exists('g:coc_global_extensions')
-    if !index(g:coc_global_extensions, i)
-      exec 'call coc#add_extension(' . i . ')'
-    endif
+function! s:Init_coc() abort
+  if !exists('g:coc_global_extensions')
+    let g:coc_global_extensions = ['coc-json', 'coc-tsserver', 'coc-python', 'coc-git', 'coc-lists', 'coc-snippets', 'coc-sh']
   endif
-endfor
+  " for l:ext in g:coc_global_extensions
+  "   echomsg l:ext
+    " Todo this doesn't work
+    " call coc#util#install_extension(l:ext)
+  " endfor
+
+endfunction
+
+if !exists('g:coc_init')
+  call s:Init_coc()
+  let g:coc_init = 1
+endif
 " }}}
 
 " FZF: {{{
@@ -656,9 +638,7 @@ let g:fzf_colors =  {
 " }}}
 
 " Tmuxline: {{{
-let g:tmuxline_powerline_separators = 1
 let g:tmuxline_status_justify = 'centre'
-let g:tmuxline_powerline_separators = 1
 let g:tmuxline_preset = {
       \ 'a'    : ['#[fg=#504945,bg=#dfbf8e] ▶ #S'],
       \ 'win'  : ['#I', '#W'],
@@ -683,9 +663,7 @@ let g:tmuxline_powerline_separators = {
      \ 'space' : ' '}
 " }}}
 
-" Goyo: {{{
-
-function! s:goyo_enter()  " {{{
+function! s:Goyo_enter() " Goyo: {{{
   if executable('tmux') && strlen($TMUX)
     silent !tmux set status off
     silent !tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z
@@ -694,9 +672,10 @@ function! s:goyo_enter()  " {{{
   set noshowcmd
   set scrolloff=999
   " ... Limelight
-endfunction  " }}}
+endfunction
+" }}}
 
-function! s:goyo_leave()   " {{{
+function! s:Goyo_leave()   " {{{
   if executable('tmux') && strlen($TMUX)
     silent !tmux set status on
     silent !tmux list-panes -F '\#F' | grep -q Z && tmux resize-pane -Z
@@ -705,8 +684,7 @@ function! s:goyo_leave()   " {{{
   set showcmd
   set scrolloff=5
   " ... Limelight!
-endfunction  " }}}
-
+endfunction
 " }}}
 
 " Voom: {{{
@@ -720,9 +698,8 @@ let g:voom_always_allow_move_left = 1
 
 " Fix the path + Last Call For Options: {{{
 let &path = '.,,**,' . expand('$VIMRUNTIME') . '/*/*.vim'  . ',' . stdpath('config')
-
 if &omnifunc ==# '' | setlocal omnifunc=syntaxcomplete#Complete | endif
 if &completefunc ==# '' | setlocal completefunc=syntaxcomplete#Complete | endif
 " }}}
-"
+
 " Vim: set fdm=marker:

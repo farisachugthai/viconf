@@ -80,6 +80,17 @@ function! syncom#hitest() abort  " Hitest: An easier way of sourcing hitest {{{
   return v:true
 endfunction  " }}}
 
+function! s:ag_setup() abort
+
+  if executable('ag')
+    setglobal grepprg=ag\ -s\ --vimgrep
+  elseif executable('grep')
+    setglobal grepprg=grep\ -rn\ $*\ /dev/null
+  else  " I CAN ONLY DO SO MUCH
+    throw 'syncom#grepprg: fd, rg, ag and grep are all unavailable. Wth?'
+  endif
+  setglobal grepformat=%f:%l:%c:%m,%f:%l:%m,%f:%l%m,%f\ \ %l%m
+endfunction
 function! s:rg_setup() abort  " {{{
 
   if executable('rg')
@@ -112,16 +123,13 @@ endfunction  " }}}
 function! s:fd_setup() abort  " {{{
 
   if executable('fd')
-    let s:cmd = 'fd'
+    setglobal grepprg=fd\ -H\ $*
   elseif executable('fd.exe')
-    let s:cmd = 'fd.exe'
+    setglobal grepprg=fd.exe\ -H\ $*
   else
-    throw 'syncom#grepprg: Neither fd nor rg are executable. Set grepprg to grep or something I guess.'
+    return v:false
   endif
-  let s:options = ' -H '
-  let g:grep = s:cmd . s:options
-  let &g:grepprg = g:grep
-  return g:grep
+  return v:true
 endfunction  " }}}
 
 function! syncom#grepprg(...) abort  " {{{
@@ -134,6 +142,9 @@ function! syncom#grepprg(...) abort  " {{{
   let s:ret = s:rg_setup()
   if s:ret == v:false
     let s:ret = s:fd_setup()
+  endif
+  if s:ret == v:false
+    let s:ret = s:ag_setup()
   endif
   return s:ret
 endfunction  " }}}

@@ -29,11 +29,10 @@ augroup Userftdetect  " {{{
   au!
   au BufNewFile,BufRead *.json,*.jsonp,*.webmanifest,*.code-workspace,*.jupyterlab-settings setfiletype json
   au BufNewFile,BufRead *.bash,*.bashrc,*.bash_profile setfiletype bash
-  au BufNewFile,BufRead *.sh,*.profile           setfiletype bash
-  au BufNewFile,BufRead *.sip                    setfiletype cpp
-  au BufNewFile,BufRead setup.cfg                setfiletype dosini
-  au BufNewFile,BufRead *.xonshrc,               setfiletype xonsh
-  au BufNewFile,BufRead *.xsh                    setfiletype xonsh
+  au BufNewFile,BufRead *.sh,*.profile                 setfiletype bash
+  au BufNewFile,BufRead *.sip                          setfiletype cpp
+  au BufNewFile,BufRead setup.cfg                      setfiletype dosini
+  au BufNewFile,BufRead *.xonshrc,*.xsh                setfiletype xonsh
 
   " YESSSS I used bracket expansion correctly fuck yes
   au BufNewFile,BufRead *.tmux{,.conf}           setfiletype tmux
@@ -51,7 +50,6 @@ augroup Userftdetect  " {{{
 
   " Go dep and Rust use several TOML config files that are not named with .toml.
   au BufNewFile,BufRead *.toml,Gopkg.lock,Cargo.lock,*/.cargo/config,*/.cargo/credentials,Pipfile setfiletype toml
-
 augroup END
 " }}}
 

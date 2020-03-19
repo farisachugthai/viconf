@@ -157,6 +157,7 @@ function! plugins#AleMappings() abort  " {{{
   " }}}
   
   " Options: {{{
+
   let g:ale_virtualtext_cursor = 1
   let g:ale_virtualtext_prefix =  'ALE: '
   let g:ale_virtualtext_delay = 200

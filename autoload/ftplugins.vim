@@ -1,7 +1,7 @@
  "===========================================================================
     " File: ftplugins.vim
     " Author: Faris Chugthai
-    " Description: Ftplugin specific autoloaded functions
+    " Description: Almost exclusively ALE configurations
     " Last Modified: August 28, 2019
 " ============================================================================
 
@@ -26,47 +26,6 @@ function! ftplugins#ALE_JSON_Conf() abort  " {{{
 
     let b:ale_linters = ['jsonlint']
     let b:ale_linters_explicit = 1
-endfunction  " }}}
-
-function! ftplugins#FormatFile() abort  " {{{
-  let l:lines='all'
-  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
-  let b:ale_fixers += [ 'clang-format' ]
-
-  if filereadable('C:/tools/vs/2019/Community/VC/Tools/Llvm/bin/clang-format.exe')
-    let g:clang_format_path = 'C:/tools/vs/2019/Community/VC/Tools/Llvm/bin/clang-format.exe'
-  endif
-
-  nnoremap <Leader>ef <Cmd>py3file expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
-
-endfunction  " }}}
-
-function! ftplugins#ClangCheckimpl(cmd) abort  " {{{
-
-  " This is honestly really useful if you simply swap out the filetype
-  if &autowrite | wall | endif
-  echo "running " . a:cmd . " ..."
-  let l:output = system(a:cmd)
-  cexpr l:output
-  cwindow
-  let w:quickfix_title = a:cmd
-  if v:shell_error != 0
-    cc
-  endif
-  let g:clang_check_last_cmd = a:cmd
-
-endfunction  " }}}
-
-function! ftplugins#ClangCheck()  abort  " {{{
-
-  let l:filename = expand('%')
-  if l:filename =~ '\.\(cpp\|cxx\|cc\|c\)$'
-    call ftplugins#ClangCheckImpl("clang-check " . l:filename)
-  elseif exists("g:clang_check_last_cmd")
-    call ftplugins#ClangCheckImpl(g:clang_check_last_cmd)
-  else
-    echo "Can't detect file's compilation arguments and no previous clang-check invocation!"
-  endif
 endfunction  " }}}
 
 function! ftplugins#ALE_CSS_Conf() abort  " {{{
@@ -101,19 +60,17 @@ function! ftplugins#ALE_sh_conf() abort  " {{{
 
   let b:ale_linters = ['shell', 'shellcheck']
 
-  if !has('unix')
-    let b:ale_sh_shellcheck_executable = 'C:/tools/miniconda3/envs/neovim/bin/shellcheck.exe'
-  endif
+  " if !has('unix')
+  "   let b:ale_sh_shellcheck_executable = 'C:/tools/miniconda3/envs/neovim/bin/shellcheck.exe'
+  " endif
 
 endfunction  " }}}
 
 function! ftplugins#ALE_Html_Conf() abort  " {{{
 
   let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
-
-  if executable('prettier')
-    let b:ale_fixers += ['prettier']
-  endif
+  " he checks for executability too let's say fuck it
+  let b:ale_fixers += ['prettier', 'stylelint', 'csslint']
 
 endfunction  " }}}
 
@@ -124,10 +81,8 @@ function! ftplugins#ALE_JS_Conf() abort  " {{{
   endif
 
   let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
+  let b:ale_fixers += ['prettier']
 
-  if executable('prettier')
-    let b:ale_fixers += ['prettier']
-  endif
 endfunction  " }}}
 
 function! ftplugins#ALE_Vim_Conf() abort  " {{{
@@ -138,67 +93,3 @@ function! ftplugins#ALE_Vim_Conf() abort  " {{{
     let b:ale_linters += ['vint']
   endif
 endfunction  " }}}
-
-function! ftplugins#VimPath() abort  " {{{
-  " I know you may be thinking, there are no include or defines in a vim file
-  " what the hell do you need to muck with the path for.
-  " autoloaded functions!
-  let s:path='.,**,'
-  let s:path = s:path . expand('$VIMRUNTIME') . ','
-
-  if !exists('*stdpath') | let &l:path = s:path | return s:path | endif
-
-  let s:path = s:path . stdpath('config') . '/autoload,'
-  let s:path = s:path . stdpath('data') . ','
-  " Idk if this is gonna glob the way I want.
-  let s:path = s:path . stdpath('data') . '/**1/autoload,'
-
-  let &l:path = s:path
-  return s:path
-endfunction  " }}}
-
-function! ftplugins#CPath() abort  " {{{
-  let s:path='.,**,,'
-
-  if has('unix')
-    let s:path = s:path . '/usr/include,/usr/local/include,'
-
-    if isdirectory(expand('$HOME/.local/include'))
-      let s:path = s:path . ',' .  expand('$HOME') . '/.local/include'
-    endif
-
-  else
-    set shellslash
-    " we did it.
-    if exists('$INCLUDE')
-      let s:path = s:path . expand('$INCLUDE')
-      return s:path
-    endif
-
-    if isdirectory('C:/tools/miniconda3/envs/working/Library/include')
-      let s:path = s:path . 'C:/tools/miniconda3/envs/working/Library/include,'
-      let s:path = s:path . 'C:/tools/miniconda3/envs/working/include,'
-    endif
-
-    if isdirectory('C:/tools/vs/2019/Community/VC/Tools/MSVC/14.24.28314/include')
-      let s:path = s:path . 'C:/tools/vs/2019/Community/VC/Tools/MSVC/14.24.28314/include'
-    endif
-
-    if isdirectory('C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include')
-      let s:path = s:path . 'C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include,'
-    endif
-
-    " Yo honestly this is the one you're looking for
-    if isdirectory('C:/Program Files (x86)/Windows Kits/10/include/10.0.17763.0')
-      let s:path = s:path . 'C:/Program Files (x86)/Windows Kits/10/include/10.0.17763.0/**2'
-    endif
-
-    if exists('$INCLUDEDIR')
-      let s:path = s:path . expand('$INCLUDEDIR')
-    endif
-
-  endif
-
-  return s:path
-endfunction  " }}}
-

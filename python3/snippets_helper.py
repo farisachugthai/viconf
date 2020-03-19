@@ -388,6 +388,9 @@ def write_numpy_docstring_args(args, snip):
     if args:
         snip += "Parameters"
         snip += "----------"
+    if isinstance(args[0], str):
+        snip.rv += "\n" + snip.mkline("", indent="")
+        return snip
 
     kwargs = [arg for arg in args if arg.is_kwarg()]
     args = [arg for arg in args if not arg.is_kwarg()]

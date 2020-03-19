@@ -1,17 +1,4 @@
 {
-  "#!": {
-    "body": "#!/usr/bin/env python\n# -*- coding: utf-8 -*-",
-    "description": "Code snippet for shebang",
-    "prefix": "#!"
-  },
-  "async/def": {
-    "body": [
-      "async def ${1:funcname}(${2:parameter_list}):",
-      "\t${3:pass}"
-    ],
-    "description": "Code snippet for an async statement",
-    "prefix": "async/def"
-  },
   "async/for": {
     "body": [
       "async for ${1:target} in ${2:iter}:",
@@ -61,23 +48,6 @@
     ],
     "description": "Code snippet for an abstract class method",
     "prefix": "def(abstract class method)"
-  },
-  "def(class method)": {
-    "body": [
-      "def ${1:funcname}(self, ${2:parameter_list}):",
-      "\t${3:pass}"
-    ],
-    "description": "Code snippet for a class method",
-    "prefix": "def(class method)"
-  },
-  "def(static class method)": {
-    "body": [
-      "@staticmethod",
-      "def ${1:funcname}(${2:parameter_list}):",
-      "\t${3:pass}"
-    ],
-    "description": "Code snippet for a static class method",
-    "prefix": "def(static class method)"
   },
   "elif": {
     "body": [

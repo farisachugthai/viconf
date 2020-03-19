@@ -15,11 +15,9 @@
   "coc.preferences.hoverTarget": "float",
   "coc.preferences.previewAutoClose": true,
   "coc.source.around.firstMatch": false,
-  "coc.source.around.priority": 60,
   "coc.source.around.shortcut": "Coc-Around:",
   "coc.source.buffer.firstMatch": false,
   "coc.source.buffer.ignoreGitignore": false,
-  "coc.source.buffer.priority": 30,
   "coc.source.buffer.shortcut": "Coc-Buffer:",
   "coc.source.dictionary.filetypes": [
     "rst",
@@ -38,6 +36,8 @@
     ".js"
   ],
   "coc.source.word.filetypes": [
+    "python",
+    "javascript",
     "rst",
     "md",
     "txt",
@@ -47,9 +47,8 @@
   "coc.source.word.priority": 30,
   "coc.source.word.shortcut": "Coc-Word: ",
   "codeLens.enable": true,
-  "codeLens.separator": "‣",
   "diagnostic.checkCurrentLine": true,
-  "diagnostic.displayByAle": true,
+  "diagnostic.displayByAle": false,
   "diagnostic.enableMessage": "always",
   "diagnostic.filetypeMap": {
     "default": "bufferType"
@@ -57,16 +56,9 @@
   "diagnostic.joinMessageLines": true,
   "diagnostic.level": "warning",
   "diagnostic.messageTarget": "float",
-  "diagnostic.refreshAfterSave": true,
   "diagnostic.refreshOnInsertMode": true,
-  "diagnostic.virtualText": true,
-  "diagnostic.virtualTextLineSeparator": " \\ ",
-  "diagnostic.virtualTextLines": 0,
-  "diagnostic.virtualTextPrefix": "Coc-Diagnostic: ",
   "javascript.referencesCodeLens.enable": true,
   "javascript.showUnused": true,
-  "javascript.suggest.names": true,
-  "javascript.suggestionActions.enabled": true,
   "json.format.enable": true,
   "languageserver": {
     "bash": {
@@ -159,8 +151,10 @@
   ],
   "list.source.diagnostics.defaultOptions": [
     "--auto-preview",
-    "--top",
-    "--input"
+    "--no-sort"
+  ],
+  "list.source.diagnostics.defaultArgs": [
+    "preview"
   ],
   "list.source.extensions.defaultOptions": [
     "--top",
@@ -268,6 +262,8 @@
   "list.source.mru.ignoreGitIgnore": true,
   "list.source.mru.maxLength": 100,
   "list.source.outline.ctagsFilestypes": [
+    "python",
+    "javascript",
     "rst",
     "markdown",
     "text"
@@ -276,6 +272,7 @@
     "--top",
     "--input",
     "--interactive",
+    "--auto-preview",
     "--normal"
   ],
   "list.source.output.defaultOptions": [
@@ -343,15 +340,6 @@
     "--normal",
     "--auto-preview"
   ],
-  "lists.disabledLists": [
-    "bcommits",
-    "branches",
-    "bcommits",
-    "colors",
-    "filetypes",
-    "vimcommands",
-    "windows"
-  ],
   "python.analysis.diagnosticEnabled": true,
   "python.analysis.logLevel": "Information",
   "python.analysis.diagnosticPublishDelay": 300,
@@ -395,10 +383,7 @@
   "snippets.snipmate.author": "Faris A. Chugthai",
   "snippets.snipmate.enable": false,
   "snippets.ultisnips.directories": [
-    "~/.config/nvim/UltiSnips",
-    "~/.config/coc/Ultisnips",
-    "~/AppData/Local/coc/UltiSnips",
-    "~/AppData/Local/nvim/UltiSnips"
+    "~/.config/nvim/UltiSnips"
   ],
   "snippets.ultisnips.pythonVersion": 3,
   "suggest.acceptSuggestionOnCommitCharacter": false,

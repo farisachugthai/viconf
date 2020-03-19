@@ -40,6 +40,7 @@ setlocal includeexpr=substitute(v:fname,'\\.','/','g')
 
 setlocal formatoptions=jcroql
 setlocal expandtab shiftwidth=4 sts=4 ts=4
+setlocal shiftround
 " }}}
 
 " Compiler: {{{
@@ -58,7 +59,9 @@ endif
 
 " Atexit: {{{
 let b:undo_ftplugin = 'setlocal kp< ep< fp< path< syntax< fdls< sua< include<'
-                \ . '|setlocal includeexpr< fo< et< sw< sts< ts< makeprg< '
+                \ . '|setlocal fdm< syntax< sua< '
+                \ . '|setlocal includeexpr< fo< et< sw< sts< ts< makeprg< sr< '
                 \ . '|unlet! b:undo_ftplugin'
                 \ . '|unlet! b:did_ftplugin'
 " }}}
+

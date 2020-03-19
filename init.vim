@@ -10,6 +10,7 @@ scriptencoding utf-8
 setglobal fileformats=unix,dos
 setglobal cpoptions-=c,e,_  " couple options that bugged me
 setglobal fileencodings=utf-8,latin1   " UGHHHHH
+setglobal nobomb | lockvar nobomb
 " }}}
 
 " Set paths correctly: {{{
@@ -20,14 +21,27 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h'))
 " Seriously how does this keep getting fucked up. omfg packpath is worse???
 setglobal runtimepath=$HOME/.config/nvim,$HOME/.local/share/nvim/site,$VIMRUNTIME
 setglobal packpath=~/.config/nvim/pack,~/.local/share/nvim/site/pack,$VIMRUNTIME
+
 if !has('unix')
+
   setglobal runtimepath+=C:\Neovim\share\nvim-qt\runtime
+
+if has("win32")
+ let &shell='bash.exe'
+ let &shellcmdflag = '-c'
+ let &shellredir = '>%s 2>&1'
+ set shellquote= shellxescape=
+ " set noshelltemp
+ set shellxquote=
+ let &shellpipe='2>&1| tee'
+endif
+
 endif
 " Source ginit. Why is this getting set even in the TUI?
 if exists('g:GuiLoaded') | exec 'source ' s:repo_root . '/ginit.vim' | endif
 " TODO: clipboards fucking up on windows
 setglobal clipboard=unnamed,unnamedplus
-" if has('unnamedplus') | setglobal clipboard+=unnamed,unnamedplus | else | setglobal clipboard+=unnamed | endif
+set modeline modelines=5
 " }}}
 
 " Macros, Leader, and Nvim specific features: {{{
@@ -70,9 +84,9 @@ function! LoadMyPlugins() abort
   Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lockfile'}
   let $NVIM_COC_LOG_FILE = stdpath('data')  . '/site/coc.log'
   let $NVIM_COC_LOG_LEVEL = 'ERROR'
-  Plug 'junegunn/fzf', { 
+  Plug 'junegunn/fzf', {
                   \ 'dir': expand('~/.fzf'),
-                  \ 'do': './install --all' 
+                  \ 'do': './install --all'
                   \ }
   Plug 'junegunn/fzf.vim'
   Plug 'junegunn/goyo.vim'
@@ -101,13 +115,16 @@ function! LoadMyPlugins() abort
           \|   execute 'autocmd! UserNerdLoader'
           \| endif
 
-  augroup END
-  " }}}
+  augroup END " }}}
 
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-apathy'
   Plug 'tpope/vim-scriptease'
+  Plug 'tpope/vim-surround'
+  " Plug 'tpope/vim-unimpaired'
+  Plug 'tpope/vim-eunuch'
+
   Plug 'SirVer/ultisnips'
   Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }
   nnoremap <Leader>a <Cmd>sil! ALEEnable<CR><bar>:sil! call plugins#AleMappings()<CR><bar>:sil! CocDisable<CR>:sil! redraw!<CR>:ALELint<CR>
@@ -126,30 +143,30 @@ function! LoadMyPlugins() abort
 
   " yo this mapping is great
   nnoremap ,t <Cmd>CocCommand tags.generate<CR><Cmd>TagbarToggle<CR>
-  Plug 'mbbill/undotree', { 'on' : 'UndotreeToggle' }
   Plug 'ervandew/supertab'
-  Plug 'junegunn/vim-peekaboo' 
+  Plug 'junegunn/vim-peekaboo'
   Plug 'vim-voom/voom', {'on': ['Voom', 'VoomToggle', 'VoomExec'] }
   Plug 'romainl/vim-qf'
-  Plug 'tomtom/tlib_vim'
-  " Dont know how i didnt realize lazy loaded plugins arent added to rtp.
-  Plug 'mitsuhiko/vim-jinja', {'for': 'jinja2'},
-
-  Plug 'cespare/vim-toml', {'for': 'toml'}
-
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
   Plug 'omnisharp/omnisharp-vim', {'for': ['cs', 'ps1'] }
-  Plug 'itspriddle/vim-shellcheck', {'for': ['sh', 'bash'] } 
-  Plug 'morhetz/gruvbox'
+  Plug 'itspriddle/vim-shellcheck', {'for': ['sh', 'bash'] }
 
   if empty(s:termux)  " {{{
-    Plug 'godlygeek/tabular', {'on': 'Tabularize'}
     Plug 'ludovicchabant/vim-gutentags'
-  endif
-  " }}}
-  Plug 'kshenoy/vim-signature'
+    Plug 'godlygeek/tabular', {'on': 'Tabularize'}
+    Plug 'mbbill/undotree', { 'on' : 'UndotreeToggle' }
+    Plug 'tomtom/tlib_vim'
+    Plug 'kshenoy/vim-signature'
+    Plug 'mitsuhiko/vim-jinja'
+    Plug 'cespare/vim-toml'
+    Plug 'morhetz/gruvbox'
+    Plug 'HerringtonDarkholme/yats.vim'
+
+  endif " }}}
+
   Plug 'ryanoasis/vim-devicons'           " Keep at end!
+
   call plug#end()
 
 endfunction
@@ -159,7 +176,7 @@ call LoadMyPlugins()
 
 " Commands: {{{
 " I utilize this command so often I may as well save the characters
-command! Plugins echo map(keys(g:plugs), '"\n" . v:val')
+command! -bar Plugins echo map(keys(g:plugs), '"\n" . v:val')
 
 let g:syntax_cmd = "enable"
 " }}}

@@ -45,6 +45,9 @@ command! CocExtensionStats :py3 from pprint import pprint; pprint(vim.eval('CocA
 " Use `:Format` to format current buffer
 command! CocFormat call CocAction('format')
 
+" Show all diagnostics
+command! CocDiagnostic call CocAction('diagnosticInfo')
+
 " Use `:Fold` to fold current buffer
 command! -nargs=? CocFold :setlocal fdm=manual | call CocActionAsync('fold', <f-args>)
 
@@ -110,6 +113,13 @@ command! -nargs=1 -complete=custom,s:CocProviders CocProviders call s:HandleCocP
 
 " A LOT Of FZF Commands: {{{
 
+" Brofiles: {{{ Note: you can add a complete with no nargs?
+command! -bang -bar -complete=arglist Brofiles
+      \ call fzf#run(fzf#wrap('oldfiles',
+      \ {'source': v:oldfiles,
+      \ 'sink': 'sp',
+      \ 'options': g:fzf_options}, <bang>0))
+
 " Apr 23, 2019: Didn't know complete help was a thing.
 " Oh holy shit that's awesome
 " Ah fzf is too good jesus christ. He provided all the arguments for you so
@@ -124,7 +134,7 @@ command! -bang -bar FZScriptnames call vimscript#fzf_scriptnames(<bang>0)
 " fzf_for_todos
 command! -bang -bar -complete=var -nargs=* TodoFuzzy call find_files#RipgrepFzf('todo ' . <q-args>, <bang>0)
 
-" FZGrep:
+" FZGrep: {{{
   " here's the call signature for fzf#vim#grep
   " - fzf#vim#grep(command, with_column, [options], [fullscreen])
   "   If you're interested it would be kinda neat to modify that `dir` line
@@ -144,6 +154,8 @@ command! -bang -bar -complete=file  -range -addr=buffers -nargs=* FZGGrep
   \   0,
   \   {'dir': systemlist('git rev-parse --show-toplevel')[0]},
   \   <bang>0 ? fzf#vim#with_preview('up:60%') : fzf#vim#with_preview('right:50%:hidden', '?'))
+
+" }}}
 
 " Ag FZF With A Preview Window: {{{
 
@@ -188,10 +200,6 @@ command! -nargs=* -bang -bar -complete=customlist,s:Plugins FZPlugins
       \ <bang>0))
 " }}}
 
-command! -bar -bang -nargs=0 -complete=color FZColors
-  \ call fzf#vim#colors({'left': '35%',
-  \ 'options': '--reverse --margin 30%,0'}, <bang>0)
-
 " FZBuf: {{{ Works better than FZBuffers
 command! -bar -bang -complete=buffer FZBuf call fzf#run(fzf#wrap('buffers',
     \ {'source': map(range(1, bufnr('$')), 'bufname(v:val)')},
@@ -208,7 +216,7 @@ command! -bang -complete=buffer -bar FZBuffers call fzf#run(fzf#wrap('buffers',
         \ }, <bang>0))
 " }}}
 
-" FZMru:
+" FZMru: {{{
 " I feel like this could work with complete=history right?
 command! -bang -bar FZMru call find_files#FZFMru()
 
@@ -252,7 +260,9 @@ command! -bar -bang -nargs=? -complete=dir Files
     \ '--layout=reverse', '--info=inline', '--preview', '~/.vim/plugged/fzf.vim/bin/preview.sh {}'
     \ ]}, <bang>0)
 
-" Override his command to add completion
+" }}}
+"
+" Override His Commands To Add Completion: {{{
 command! -bar -bang -nargs=? -complete=file GFiles call fzf#vim#gitfiles(<q-args>, <bang>0)
 
 " Me just copy pasting his plugin
@@ -262,6 +272,13 @@ command! -bar -bang -complete=mapping TMaps call fzf#vim#maps("t", <bang>0)
 
 " Add completion to his Maps command but define ours the same way
 command! -bar -bang -nargs=? -complete=mapping Maps call fzf#vim#maps("n", <bang>0)
+
+command! -bar -bang -nargs=* -complete=color Colo
+  \ call fzf#vim#colors({'left': '35%',
+  \ 'options': '--reverse --margin 30%,0'}, <bang>0)
+" }}}
+
+" }}}
 
 " }}}
 
@@ -378,7 +395,13 @@ command! -nargs=? -bar PydocSplit call pydoc_help#SplitPydocCword(<q-mods>)
 
 " todo: adding a bang expression didny work
 command! -bang -complete=expression -bar PydocShow call pydoc_help#show(<bang>0)
+" }}}
 
+" General Python Commands: {{{
+" If things slow down autoload these.
+command! Black py3 Black()
+command! BlackUpgrade py3 BlackUpgrade()
+command! BlackVersion py3 BlackVersion()
 " TODO: Work on the range then the bang
 command! -complete=file -range BlackCurrent <line1>,<line2>call py#Black()
 

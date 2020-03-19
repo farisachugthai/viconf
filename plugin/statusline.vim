@@ -19,6 +19,12 @@ augroup FZFStatusline  " {{{
 " NOTE: This has to remain the name of the augroup it's what Junegunn calls
   au!
   autocmd! User FzfStatusLine call <SID>fzf_statusline()
+  au BufEnter * let &statusline = Statusline(0)
+  autocmd User CocStatusChange,CocDiagnosticChange
+        \| if exists('*Statusline')
+        \| call Statusline_expr(0)
+        \| endif
+
 augroup END  " }}}
 
 function! s:VarExists(var, val) abort    " {{{
@@ -58,7 +64,7 @@ function! s:_Statusline(bang, ...) range abort  " {{{
     " Overtakes the whole screen when Termux zooms in
     " Worth noting that %< indicates where to truncate the &stl though
     if &columns > 80
-      let s:tstmp = ' %{strftime("%H:%M %m-%d-%Y", getftime(expand("%:p")))}'
+      let s:tstmp = ' %{strftime("%H:%M %m-%d-%Y", getftime(expand("%:p")))}  '
       " last modified timestamp
     else
       let s:tstmp = ''
@@ -74,9 +80,9 @@ function! s:_Statusline(bang, ...) range abort  " {{{
         \. '%< %m%r %y %w '
         \. s:VarExists('g:loaded_fugitive', '%{FugitiveStatusline()}')
         \. ' %{&ff} ' . s:tstmp
-        \. s:VarExists('g:did_coc_loaded', '%{coc#status()}')
-        \. s:VarExists('g:coc_git_status', '%{coc_git_status}')
-        \. ' %f'
+        \. s:VarExists('g:did_coc_loaded', ' %{coc#status()} ')
+        \. s:VarExists('g:coc_git_status', ' %{coc_git_status} ')
+        \. ' %f '
         \. s:sep
         \. s:StatusDiagnostic()
         \. s:VarExists('g:ale_enabled', '[ALE Lints]: %{getbufvar(bufnr(""), "ale_linted", 0)}')
@@ -94,18 +100,6 @@ endfunction " }}}
 function! Statusline(bang, ...) abort  " {{{ Lets give a nicer clean entry point.
   return s:_Statusline(a:bang, a:000)
 endfunction
-" }}}
-
-augroup UserStatusline " {{{
-
-  au!
-  au BufEnter * let &statusline = Statusline(0)
-  autocmd User CocStatusChange,CocDiagnosticChange
-        \| if exists('*Statusline')
-        \| call Statusline_expr(0)
-        \| endif
-
-augroup END
-" }}}
 
 command! -bang -bar -nargs=* -range=% -addr=loaded_buffers -complete=expression -complete=var ReloadStatusline call Statusline(<bang>0, <q-args>)
+" }}}

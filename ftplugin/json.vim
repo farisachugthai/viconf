@@ -5,18 +5,21 @@
   " Last Modified: Oct 20, 2019
 " ============================================================================
 
-if exists('b:did_ftplugin') | finish | endif
-let b:did_ftplugin = 1
-
 " Got this from the syntax file
 let g:vim_json_warnings = 1
 " Always set the globals first
 
-" If this got sourced for some other filetype like md or javascript stop now
+" if exists('b:did_ftplugin') | finish | endif
+" let b:did_ftplugin = 1
 
-if &filetype!=#'json'
-  finish
-endif
+" If this got sourced for some other filetype like md or javascript stop now
+" Eh im becoming less and less of a fan of doing this as time goes on.
+" If i set the filetype to snippets.json i want it to include these rules
+" if &filetype!=#'json'
+"   finish
+" endif
+
+source $VIMRUNTIME/ftplugin/json.vim
 
 syntax match jsonComment +\/\/.\+$+
 
@@ -33,6 +36,7 @@ setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
 setlocal expandtab softtabstop=2 shiftwidth=2 tabstop=2
 setlocal suffixesadd=.json,.js,.jsx
 setlocal foldmethod=syntax
+setlocal shiftround
 
 " Set up ALE correctly
 call ftplugins#ALE_JSON_Conf()
@@ -45,9 +49,13 @@ inoremap <buffer> " ""<C-G>U<Left>
 " Also can we auto fix single quotes?
 inoremap <buffer> ' "<C-G>U<Left>
 
-" Set up matchit:
-let b:match_ignorecase = 1
-let b:match_words = '<:>,{:},"",(:),[:]'
+setlocal matchpairs+=::,
+
+if exists("loaded_matchit")
+  " Set up matchit:
+  let b:match_ignorecase = 1
+  let b:match_words = '<:>,{:},"",(:),[:]'
+endif
 
 " And set up a formatter.
 " For more see ../python3/_vim
@@ -56,7 +64,7 @@ command! -buffer -bang -bar -range=% -nargs=0 Pjson :w<bang> <bar> <line1>,<line
 " TODO: Check that this worked
 setlocal formatprg=:Pjson
 
-let b:undo_ftplugin = 'setlocal fo< com< cms< et< sts< sw< ts< sua< fdm< fp< '
+let b:undo_ftplugin = 'setlocal fo< com< cms< et< sts< sw< ts< sua< fdm< fp< sr< '
       \ . '|unlet! b:undo_ftplugin'
       \ . '|unlet! b:did_ftplugin'
       \ . '|unlet! b:ale_fixers'

@@ -2,31 +2,9 @@
 " Language:	C#
 
 " Only do this when not done yet for this buffer: {{{
-if exists("b:did_ftplugin")
-  finish
-endif
+if exists("b:did_ftplugin") | finish | endif
 
-" Don't load another plugin for this buffer
-let b:did_ftplugin = 1
-let s:keepcpo= &cpo
-set cpo&vim
-
-if &filetype !=# 'cs'
-  finish
-endif
-" }}}
-
-" Original CS plugin: {{{
-" Set 'formatoptions' to break comment lines but not other lines,
-" and insert the comment leader when hitting <CR> or using "o".
-setlocal fo-=t fo+=croql
-
-" Set 'comments' to format dashed lists in comments.
-setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,:///,://
-" }}}
-
-" Mine: {{{
-" This really needs to be filetype specific.
+source $VIMRUNTIME/ftplugin/cs.vim
 
 " The following commands are contextual, based on the cursor position.
 nnoremap <buffer> gd <Cmd>OmniSharpGotoDefinition<CR>
@@ -61,10 +39,7 @@ nnoremap <buffer> <Leader>cf <Cmd>OmniSharpCodeFormat<CR>
 nnoremap <buffer> <Leader>ss <Cmd>OmniSharpStartServer<CR>
 nnoremap <buffer> <Leader>sp <Cmd>OmniSharpStopServer<CR>
 
-" }}}
-
-" {{{
+" Literally why don't the official ftplugins have undo ftplugins????
 let b:undo_ftplugin = 'setlocal fo< com< '
       \ . '|unlet! b:undo_ftplugin'
       \ . '|unlet! b:did_ftplugin'
-" }}}

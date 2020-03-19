@@ -73,6 +73,17 @@ nnoremap ,f :find **/*<C-z><S-Tab>
 
 " The nvim API is seriously fantastic.
 nnoremap <Leader>rt call buffers#EchoRTP()
+
+" Marks:
+nnoremap [1 :call signature#marker#Goto('prev', 1, v:count)
+nnoremap ]1 :call signature#marker#Goto('next', 1, v:count)
+nnoremap [2 :call signature#marker#Goto('prev', 2, v:count)
+nnoremap ]2 :call signature#marker#Goto('next', 2, v:count)
+nnoremap [3 :call signature#marker#Goto('prev', 3, v:count)
+nnoremap ]3 :call signature#marker#Goto('next', 3, v:count)
+nnoremap [4 :call signature#marker#Goto('prev', 4, v:count)
+nnoremap ]4 :call signature#marker#Goto('next', 4, v:count)
+
 " }}}
 
 " RSI: {{{
@@ -115,7 +126,7 @@ function! AddVileBinding(key, handler)  " {{{
   " I think tnoremap makes more sense here.
   exec 'tnoremap ' . a:key a:handler
 
-endfunction " }}}
+endfunction
 
 " Vile Bindings: {{{
 
@@ -144,13 +155,6 @@ call AddVileBinding('<C-x>w', '<Cmd> set wrap!')
 " Swap the mark and point
 xnoremap <C-x><C-x> o
 " }}}
-
-" Brofiles: {{{ Note: you can add a complete with no nargs?
-command! -bang -bar -complete=arglist Brofiles
-      \ call fzf#run(fzf#wrap('oldfiles',
-      \ {'source': v:oldfiles,
-      \ 'sink': 'sp',
-      \ 'options': g:fzf_options}, <bang>0))
 
 call AddVileBinding('<C-x>b', '<Cmd>Brofiles<CR>')
 
@@ -374,8 +378,6 @@ nnoremap ,i <Cmd>CocInfo<CR>
 xnoremap ,cs :<C-u>call plugins#GrepFromSelected(visualmode())<CR>
 nnoremap ,cs :<C-u>set operatorfunc=plugins#GrepFromSelected<CR>g@
 
-" Show all diagnostics
-command! -nargs=0 CocDiagnostic call CocActionAsync('diagnosticInfo')
 " }}}
 
 " Maps For CocList X: {{{

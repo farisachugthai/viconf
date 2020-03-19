@@ -59,13 +59,42 @@ function! format#MarkdownFoldText() abort " {{{ Credit to TPope
   return '='
 endfunction  " }}}
 
-" Create directories if they doesn't exist
-if !isdirectory(expand(&g:directory))
-  call mkdir(expand(&g:directory), 'p', 0700)
-endif
-if !isdirectory(expand(&g:backupdir))
-  call mkdir(expand(&g:backupdir), 'p', 0700)
-endif
-if !isdirectory(expand(&g:undodir))
-  call mkdir(expand(&g:undodir), 'p', 0700)
-endif
+function! format#FormatFile() abort  " {{{
+  let l:lines='all'
+  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
+  let b:ale_fixers += [ 'clang-format' ]
+
+  if filereadable('C:/tools/vs/2019/Community/VC/Tools/Llvm/bin/clang-format.exe')
+    let g:clang_format_path = 'C:/tools/vs/2019/Community/VC/Tools/Llvm/bin/clang-format.exe'
+  endif
+
+endfunction  " }}}
+
+function! format#ClangCheckimpl(cmd) abort  " {{{
+
+  " This is honestly really useful if you simply swap out the filetype
+  if &autowrite | wall | endif
+  echo "running " . a:cmd . " ..."
+  let l:output = system(a:cmd)
+  cexpr l:output
+  cwindow
+  let w:quickfix_title = a:cmd
+  if v:shell_error != 0
+    cc
+  endif
+  let g:clang_check_last_cmd = a:cmd
+
+endfunction  " }}}
+
+function! format#ClangCheck()  abort  " {{{
+
+  let l:filename = expand('%')
+  if l:filename =~ '\.\(cpp\|cxx\|cc\|c\)$'
+    call format#ClangCheckImpl("clang-check " . l:filename)
+  elseif exists("g:clang_check_last_cmd")
+    call format#ClangCheckImpl(g:clang_check_last_cmd)
+  else
+    echomsg "Can't detect file's compilation arguments and no previous clang-check invocation!"
+  endif
+endfunction  " }}}
+

@@ -1260,6 +1260,14 @@ hi! link rustSigil Orange
 hi! link rustStringContinuation Aqua
 hi! link rustStructure Aqua
 hi! link rustCommentLineDoc Comment
+
+hi! link luaIfThen Green
+hi! link luaElseifThen Orange
+hi! link luaThenEnd Purple
+hi! link luaBlock Green
+hi! link luaLoopBlock Blue
+hi! link luaStatement Aqua
+hi! link luaParen Operator
 hi! link luaIn Red
 hi! link luaFunction Aqua
 hi! link luaTable Orange

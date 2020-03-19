@@ -1,4 +1,16 @@
+# ============================================================================
+# File: snippets.snippets
+# Author: Faris Chugthai
+# Description: A description of the file below
+# Last Modified: March 18, 2020
+# ============================================================================
 # Snippet files to configure how your snippets configure your files.
+
+snippet snip "Make this faster" b
+snippet ${1:${VISUAL}}
+$2
+${0:endsnippet}
+endsnippet
 
 # We use a little hack so that the snippet is expanded
 # and parsed correctly
@@ -33,4 +45,14 @@ endsnippet
 
 snippet v "Fix incorrect snippets easier." wi
 \$\{${VISUAL}\}
+endsnippet
+
+snippet s "Let's make this as easy as possible."
+snippet ${1:${VISUAL}} "$1" b
+$0
+e$2
+endsnippet
+
+snippet e
+${0:endsnippet}
 endsnippet

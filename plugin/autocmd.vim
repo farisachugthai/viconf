@@ -36,6 +36,8 @@ augroup UserHelpandPython " {{{
       \| endif
   endif
 
+  " Here's a solid group to test out on
+  au! CursorHold .xonshrc ++nested exe "silent! psearch " . expand("<cword>")
 
 augroup END
 " }}}
@@ -53,7 +55,6 @@ augroup END
 " 		cursor.  This is less clever than using |:ptag|, but you don't
 " 		need a tags file and it will also find matches in system
 " 		include files.  Example: >
-"   :au! CursorHold *.[ch] ++nested exe "silent! psearch " . expand("<cword>")
 "
 "   Ah that's a fucking amazing idea!  }}}
 
@@ -64,7 +65,8 @@ augroup UserPlugins " {{{
   " Clear this so that p.u.m. doesn't open in the command window
   autocmd! User CmdlineEnter CompleteDone
 
-  " why did he add the exclamation mark and the nested?
+  " autocmd! User CursorHoldI
+  " todo: why did he add the exclamation mark and the nested?
   autocmd! User GoyoEnter nested call <SID>goyo_enter()
   autocmd! User GoyoLeave nested call <SID>goyo_leave()
 augroup END

@@ -1,3 +1,9 @@
+# ============================================================================
+# File: json.snippets
+# Author: Faris Chugthai
+# Description: json snippets
+# Last Modified: March 16, 2020
+# ============================================================================
 
 snippet s "String" b
 "${1:key}": "${0:value}",
@@ -9,7 +15,7 @@ endsnippet
 
 snippet a "Array" b
 [
-	${VISUAL}$0
+${VISUAL}$0
 ],
 endsnippet
 
@@ -48,7 +54,4 @@ snippet b "Bool" b
 "${1:key}": $2`!p snip.rv=compB(t[2], ['true', 'false'])`,
 endsnippet
 
-snippet fixjson "Fix the entire document easily."
-endsnippet
-
-# or something like that
+# Vim: set ft=snippets.json:

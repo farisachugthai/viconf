@@ -339,4 +339,5 @@ def Black():
 
 
 def BlackVersion():
+    """Print the installed version of black."""
     print(f"Black, version {black.__version__} on Python {sys.version}.")

@@ -6,27 +6,35 @@ priority 50
 snippet #! "#!/bin/bash" b
 #!/bin/bash
 # Maintainer: Faris Chugthai
-
-# set -euo pipefail
 endsnippet
 
 snippet # "dupe" b
 #!/bin/bash
 # Maintainer: Faris Chugthai
-
-# set -euo pipefail
 endsnippet
 
 # Check command line arguments. Make the expandchar easier to remember
 snippet [[ "If var is empty; echo help guide; break" b
-if [[ -z "${VISUAL:${1}}" ]]; then
+if [[ -z "${1:${VISUAL}}" ]]; then
 	${3:echo -e "Usage: $2 [options] commands"
 	break}
 fi
 endsnippet
 
+snippet test "Test if string is empty" w
+test -z ${0:${VISUAL}}
+endsnippet
+
+snippet test "Test if string is not empty" w
+test -n ${0:${VISUAL}}
+endsnippet
+
+snippet test "Test int equality" b
+test ${0:${VISUAL}} -eq $1
+endsnippet
+
 snippet source "Var = bash source" b
-${VISUAL:${1:source}}="${BASH_SOURCE[0]}"
+${1:${VISUAL}}="${BASH_SOURCE[0]}"
 endsnippet
 
 snippet echo "Echo a statement" w

@@ -20,13 +20,9 @@ let g:pydoc_executable = 1
 " }}}
 
 " Filetype Specific Options: {{{
-if &filetype !=# 'python' || &filetype !=# 'xonsh' || &filetype !=# 'pyrex' | finish | endif
-
-if exists('b:did_python') || &compatible || v:version < 700
-  finish
-endif
-let b:did_python = 1
-
+" Do this in advance so we don't waste time looking for a keywordprg i'll end
+" up overwriting anyway
+let g:pydoc_executable = 1
 source $VIMRUNTIME/ftplugin/python.vim
 
 syntax sync fromstart
@@ -79,6 +75,17 @@ setlocal iskeyword-=.,_
 setlocal shiftround
 
 let &l:path = py#PythonPath()
+
+" Dude the original ftplugin doesn't set up match words. why are the vim
+" ftplugins so fucking sparse?
+if exists("loaded_matchit")
+  " Use case with matchit.
+  let b:match_ignorecase = 0
+
+  let b:match_words = '\<if\>:\<elif\>:\<else\>,' 
+                  \ . '\<repeat\>:\<until\>'
+
+endif
 " }}}
 
 " Mappings: {{{1
