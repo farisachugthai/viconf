@@ -364,7 +364,6 @@ command! -nargs=0 -bar -range TitleCase execute 'normal! ' . "'<,'>s/\v<(.)(\w*)
 " }}}
 
 " Pydoc: {{{
-
 command! -bar -complete=expression -complete=function -range -nargs=+ Pythonx <line1>,<line2>python3 <args>
 " FUCK YEA! Dec 27, 2019: Behaves as expected!
 " You know whats nice? Both of these expressions work.
@@ -395,17 +394,16 @@ command! -nargs=? -bar PydocSplit call pydoc_help#SplitPydocCword(<q-mods>)
 
 " todo: adding a bang expression didny work
 command! -bang -complete=expression -bar PydocShow call pydoc_help#show(<bang>0)
-" }}}
 
 " General Python Commands: {{{
 " If things slow down autoload these.
-command! Black py3 Black()
-command! BlackUpgrade py3 BlackUpgrade()
-command! BlackVersion py3 BlackVersion()
+command! -bar Black py3 Black()
+command! -bar BlackUpgrade py3 BlackUpgrade()
+command! -bar BlackVersion py3 BlackVersion()
 " TODO: Work on the range then the bang
-command! -complete=file -range BlackCurrent <line1>,<line2>call py#Black()
+command! -bar -complete=file -range BlackCurrent <line1>,<line2>call py#Black()
 
-command! -nargs=* -complete=file -complete=file_in_path BlackThese call py#black_these(<f-args>)
+command! -nargs=* -bar -complete=file -complete=file_in_path BlackThese call py#black_these(<f-args>)
 
 function! s:IPythonOptions(...) abort
   let list = ['profile', 'history', 'kernel', 'locate']
@@ -423,28 +421,13 @@ command! NvimCxn call py#Cxn()
 
 " Terminal Command: {{{
 if !has('unix')
-  setglobal sessionoptions+=unix,slash viewoptions+=unix,slash
-
-  " So this HAS to be a bad idea; however, all 3 DirChanged autocommands emit
-  " errors and that's a little insane
-  " Oct 22, 2019: Somehow I've observed literally 0 problems with this and the
-  " error is still emitted when the dir changes soooo
-  setglobal eventignore=DirChanged
 
   command! SetCmd call msdos#set_shell_cmd()
-  command! -nargs=? CmdInvoke call msdos#invoke_cmd(<f-args>)
-  command! -nargs=? -complete=shellcmd Cmd call msdos#CmdTerm(<f-args>)
+  command! -bar -nargs=? CmdInvoke call msdos#invoke_cmd(<f-args>)
+  command! -bar -nargs=? -complete=shellcmd Cmd call msdos#CmdTerm(<f-args>)
   command! PowerShell call msdos#PowerShell()
 
-  command! -nargs=? PwshHelp call msdos#pwsh_help(shellescape(<f-args>))
-else
-  if executable('htop')
-    " Leader -- applications -- htop. Requires nvim for <Cmd> which tmk doesn't exist
-    " even in vim8.0+. Also requires htop which more than likely rules out Win32.
-
-    " Need to use enew in case your previous buffer setl nomodifiable
-    nnoremap <Leader>ah <Cmd>wincmd v<CR><bar><Cmd>enew<CR><bar>term://htop
-  endif
+  command! -bar -nargs=? PwshHelp call msdos#pwsh_help(shellescape(<f-args>))
 endif
 " }}}
 "
@@ -472,14 +455,7 @@ command! -nargs=+ -complete=file Sedit call unix#SpecialEdit(<q-args>, <q-mods>)
 " I'm not going to convince you it's better. That it's cleaner.
 " Unfortunately, there are  few of *their* keybindings wired in.
 " May as well map them correctly.
-" }}}
-
-" UltiSnips: {{{
-
 command! -complete=filetype -bar UltiSnipsListSnippets call UltiSnips#ListSnippets()
-
-" todo:
-" command! -bar UltiSnipsListSnippetsAgain? call py#list_snippets()
 " }}}
 
 " In Which I Learn How Commands Work: {{{

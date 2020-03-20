@@ -30,14 +30,14 @@ elseif executable('autopep8')
   setlocal formatprg=autopep8
 endif
 
-let &l:path  = py#PythonPath()
+let &l:path = py#PythonPath()
 setlocal syntax=xonsh
 syntax sync fromstart
 setlocal foldlevelstart=0
-setlocal suffixesadd+=,.xsh,.xonshrc,
+setlocal suffixesadd=.py,.xsh,.xonshrc,
 setlocal include=^\\s*\\(from\\\|import\\)
 setlocal includeexpr=substitute(v:fname,'\\.','/','g')
-
+setlocal cms=#\ %s
 setlocal formatoptions=jcroql
 setlocal expandtab shiftwidth=4 sts=4 ts=4
 setlocal shiftround
@@ -58,9 +58,8 @@ endif
 " }}}
 
 " Atexit: {{{
-let b:undo_ftplugin = 'setlocal kp< ep< fp< path< syntax< fdls< sua< include<'
-                \ . '|setlocal fdm< syntax< sua< '
-                \ . '|setlocal includeexpr< fo< et< sw< sts< ts< makeprg< sr< '
+let b:undo_ftplugin = 'setlocal kp< ep< fp< path< syntax< fdls< sua< include< '
+                \ . '|setlocal includeexpr< cms< fo< et< sw< sts< ts< sr< mp<'
                 \ . '|unlet! b:undo_ftplugin'
                 \ . '|unlet! b:did_ftplugin'
 " }}}

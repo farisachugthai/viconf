@@ -32,7 +32,9 @@ let b:match_words = '<:>,' .
 \ '<\@<=\([^/][^ \t>]*\)[^>]*\%(>\|$\):<\@<=/\1>'
 
 let b:undo_ftplugin = "setl cms< com< fo< flp< ofu< "
-
+let b:undo_ftplugin .= 'setl spell< cc< tw< lbr< et< ts< sts< sw< fdl< fdls<'
+      \ . '|unlet! b:undo_ftplugin'
+      \ . '|unlet! b:did_ftplugin'
 " Enable spellchecking.
 setlocal spell!
 
@@ -99,6 +101,3 @@ if has_key(plugs, 'vim-markdown')
 
 endif
 
-let b:undo_ftplugin .= 'setl spell< cc< tw< lbr< et< ts< sts< sw< fdl< fdls<'
-      \ . '|unlet! b:undo_ftplugin'
-      \ . '|unlet! b:did_ftplugin'

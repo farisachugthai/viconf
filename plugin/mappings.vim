@@ -57,6 +57,13 @@ noremap! <F1> <Esc>
 " }}}
 
 " Misc: {{{
+if executable('htop')
+  " Leader -- applications -- htop. Requires nvim for <Cmd> which tmk doesn't exist
+  " even in vim8.0+. Also requires htop which more than likely rules out Win32.
+
+  " Need to use enew in case your previous buffer setl nomodifiable
+  nnoremap <Leader>ah <Cmd>wincmd v<CR><bar><Cmd>enew<CR><bar>term://htop
+endif
 
 nnoremap <Leader>cd <Cmd>cd %:p:h<CR><Bar><Cmd>pwd<CR>
 nnoremap Q gq
@@ -298,19 +305,30 @@ nnoremap <Leader>gg         <Cmd>GGrep<CR>
 nnoremap <Leader>gl         <Cmd>Commits<CR>
 nnoremap <Leader>g?         <Cmd>GFiles?<CR>
 
-" NERDTree Mapping:
-nnoremap <expr> <Leader>n   (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
 nnoremap ,b                 <Cmd>Buffers<CR>
 nnoremap ,B                 <Cmd>Buffers<CR>
+
 " }}}
 
+" }}}
+
+" NERDTree Mapping: {{{
+nnoremap <expr> <Leader>n   (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
+nnoremap <Leader>nt <Cmd>NERDTreeToggleVCS<CR>zz
+nnoremap <Leader>nf <Cmd>NERDTreeFind<CR>
+
+" Switch NERDTree root to dir of currently focused window.
+" Make mapping match Spacemacs.
+if exists(':GuiTreeviewToggle')
+  nnoremap <Leader>0 <Cmd>GuiTreeviewToggle<CR>
+else
+  nnoremap <Leader>0 <Cmd>NERDTreeToggleVCS<CR>
+endif
 " }}}
 
 " Coc: {{{
 
 " General Mappings: {{{
-" TODO: Might need to open a pull request he states that these are mapped by
-" default. omap af and omap if didn't show anything
 onoremap af <Plug>(coc-funcobj-a)
 onoremap if <Plug>(coc-funcobj-i)
 
@@ -326,12 +344,13 @@ endfunction
 " Let's give Coc the tab key. If this doesn't work as expected we can also go
 " with something like <M-/>
 inoremap <expr> <M-/> pumvisible() ? coc#_select_confirm() :
-  \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-  \ <SID>check_back_space() ? "\<TAB>" : coc#refresh()
-
+  \ coc#expandableOrJumpable() ?
+  \ "\<C-R>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+  \ "\<CR>"
+  " \ <SID>check_back_space() ? "\<TAB>" : coc#refresh()
 
 " Refresh completions with C-Space
-" imap <c-space> <c-r>=SuperTabAlternateCompletion("\<lt>c-p>")<cr>
+inoremap <M-?> <C-R>=SuperTabAlternateCompletion("\<lt>c-p>")<CR>
 inoremap <expr> <C-Space> coc#refresh()
 
 " As a heads up theres also a coc#select#snippet
@@ -339,15 +358,14 @@ inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
 
 nnoremap gK <Plug>(coc-definition)<CR>
 " The gu<text object> operation is too important
-" nnoremap <expr><buffer> gu <Plug>(coc-usages)<CR>
+nnoremap <expr><buffer> <Leader>u <Plug>(coc-usages)<CR>
 nnoremap g} <Plug>(coc-usages)<CR>
 " }}}
 
 " Bracket maps: {{{
-" Shit none of these work
-" oh also these are builtin mappings
-" nnoremap [g <Plug>(coc-diagnostic-prev)<CR>
-" nnoremap ]g <Plug>(coc-diagnostic-next)<CR>
+" Shit none of these work oh also these are builtin mappings
+nnoremap [g <Plug>(coc-diagnostic-prev)<CR>
+nnoremap ]g <Plug>(coc-diagnostic-next)<CR>
 
 " Note: Tried adding <expr> and didn't work
 " nnoremap [c  <Plug>(coc-git-prevchunk)<CR>
@@ -635,8 +653,8 @@ call UserFugitiveMappings()
 " }}}
 
 " Tags: {{{
-nnoremap ]g <Cmd>stjump!<CR>
-xnoremap ]g <Cmd>stjump!<CR>
+nnoremap <C-?> <Cmd>stjump!<CR>
+xnoremap <C-?> <Cmd>stjump!<CR>
 
 " Thank you index.txt!
 " From: 2.2 Window commands                                             *CTRL-W*
@@ -650,6 +668,7 @@ nnoremap <Leader>wo <Cmd>wincmd o<CR>
 
 " No tabnext takes this one
 " nnoremap ]t <Cmd>PreviewTag<CR>
+nnoremap <C-i> <C-w><C-i>
 
 " Mnemonic: goto like mosts other g commands and \ is the key we're left free
 nnoremap <g-\> [I:let nr = input("Choose an include: ")<Bar>exe "normal! " . nr ."[\t"<CR>
@@ -666,7 +685,8 @@ nnoremap <Plug>(SyntaxInfo) <Cmd>SyntaxInfo<CR>
 
 if !hasmapto('<Plug>(HL)')
   nnoremap <Leader>h <Plug>(HL)
-endif  " }}}
+endif
+" }}}
 
 " Terminal: {{{
 " No dude go to buffers#terminal

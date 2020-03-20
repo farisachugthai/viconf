@@ -149,12 +149,12 @@
     "--no-sort",
     "--ignore-case"
   ],
+  "list.source.diagnostics.defaultArgs": [
+    "preview"
+  ],
   "list.source.diagnostics.defaultOptions": [
     "--auto-preview",
     "--no-sort"
-  ],
-  "list.source.diagnostics.defaultArgs": [
-    "preview"
   ],
   "list.source.extensions.defaultOptions": [
     "--top",
@@ -341,9 +341,9 @@
     "--auto-preview"
   ],
   "python.analysis.diagnosticEnabled": true,
-  "python.analysis.logLevel": "Information",
   "python.analysis.diagnosticPublishDelay": 300,
   "python.analysis.downloadChannel": "daily",
+  "python.analysis.logLevel": "Information",
   "python.analysis.openFilesOnly": false,
   "python.analysis.symbolsHierarchyDepthLimit": 12,
   "python.autoComplete.addBrackets": true,

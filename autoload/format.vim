@@ -59,22 +59,11 @@ function! format#MarkdownFoldText() abort " {{{ Credit to TPope
   return '='
 endfunction  " }}}
 
-function! format#FormatFile() abort  " {{{
-  let l:lines='all'
-  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
-  let b:ale_fixers += [ 'clang-format' ]
-
-  if filereadable('C:/tools/vs/2019/Community/VC/Tools/Llvm/bin/clang-format.exe')
-    let g:clang_format_path = 'C:/tools/vs/2019/Community/VC/Tools/Llvm/bin/clang-format.exe'
-  endif
-
-endfunction  " }}}
-
 function! format#ClangCheckimpl(cmd) abort  " {{{
 
   " This is honestly really useful if you simply swap out the filetype
   if &autowrite | wall | endif
-  echo "running " . a:cmd . " ..."
+  echomsg "running " . a:cmd . " ..."
   let l:output = system(a:cmd)
   cexpr l:output
   cwindow
@@ -98,3 +87,15 @@ function! format#ClangCheck()  abort  " {{{
   endif
 endfunction  " }}}
 
+function! ftplugins#FormatFile() abort  " {{{
+  let l:lines='all'
+  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
+  let b:ale_fixers += [ 'clang-format' ]
+
+  if filereadable('C:/tools/vs/2019/Community/VC/Tools/Llvm/bin/clang-format.exe')
+    let g:clang_format_path = 'C:/tools/vs/2019/Community/VC/Tools/Llvm/bin/clang-format.exe'
+  endif
+
+  nnoremap <Leader>ef <Cmd>py3file expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
+
+endfunction  " }}}

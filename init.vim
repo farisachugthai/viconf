@@ -75,8 +75,9 @@ let g:undotree_SetFocusWhenToggle = 1
 " Windows gets all kinds of fucked up otherwise
 let g:plug_url = 'https://github.com/%s.git'
 let g:peekaboo_compact = 1
+" }}}
 
-function! LoadMyPlugins() abort
+function! LoadMyPlugins() abort  " {{{
 
   if !exists('plug#load')  | unlet! g:loaded_plug | exec 'source ' . s:repo_root . '/vim-plug/plug.vim' | endif
   call plug#begin(stdpath('data'). '/plugged')
@@ -94,17 +95,6 @@ function! LoadMyPlugins() abort
 
   " NerdTree: {{{
   Plug 'scrooloose/nerdTree', { 'on': ['NERDTreeToggleVCS', 'NERDTreeVCS', 'NERDTreeFind'] }
-  nnoremap <Leader>nt <Cmd>NERDTreeToggleVCS<CR>zz
-  nnoremap <Leader>nf <Cmd>NERDTreeFind<CR>
-
-  " Switch NERDTree root to dir of currently focused window.
-  " Make mapping match Spacemacs.
-  if exists(':GuiTreeviewToggle')
-    nnoremap <Leader>0 <Cmd>GuiTreeviewToggle<CR>
-  else
-    nnoremap <Leader>0 <Cmd>NERDTreeToggleVCS<CR>
-  endif
-
   augroup UserNerdLoader
     autocmd!
     " Was raising an error according to verbosefile
@@ -147,6 +137,11 @@ function! LoadMyPlugins() abort
   Plug 'junegunn/vim-peekaboo'
   Plug 'vim-voom/voom', {'on': ['Voom', 'VoomToggle', 'VoomExec'] }
   Plug 'romainl/vim-qf'
+  Plug 'tomtom/tlib_vim'
+  " Dont know how i didnt realize lazy loaded plugins arent added to rtp.
+  Plug 'mitsuhiko/vim-jinja', {'for': 'jinja2'},
+
+  Plug 'cespare/vim-toml', {'for': 'toml'}
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
   Plug 'omnisharp/omnisharp-vim', {'for': ['cs', 'ps1'] }
@@ -156,13 +151,9 @@ function! LoadMyPlugins() abort
     Plug 'ludovicchabant/vim-gutentags'
     Plug 'godlygeek/tabular', {'on': 'Tabularize'}
     Plug 'mbbill/undotree', { 'on' : 'UndotreeToggle' }
-    Plug 'tomtom/tlib_vim'
     Plug 'kshenoy/vim-signature'
-    Plug 'mitsuhiko/vim-jinja'
-    Plug 'cespare/vim-toml'
     Plug 'morhetz/gruvbox'
     Plug 'HerringtonDarkholme/yats.vim'
-
   endif " }}}
 
   Plug 'ryanoasis/vim-devicons'           " Keep at end!

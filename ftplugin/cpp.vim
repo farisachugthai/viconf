@@ -9,14 +9,17 @@ if exists('b:did_ftplugin') | finish | endif
 
 " Source things correctly damnit!
 source $VIMRUNTIME/ftplugin/c.vim
-unlet! b:did_ftplugin
 
 " Also account for my mods. Where all the meat is
-let s:this_dir = fnameescape(fnamemodify(expand('<sfile>'), ':p:h:h'))
-exec 'source ' . s:this_dir . '/after/ftplugin/c.vim'
+let s:root_dir = fnameescape(fnamemodify(expand('<sfile>'), ':p:h:h'))
+exec 'source ' . s:root_dir . '/after/ftplugin/c.vim'
 syntax sync fromstart
 setlocal syntax=c
 setlocal mps+==:;
+" As a reminder i think this setting changes gq and affect how stuff like
+" textwidth is handled and shit.
+setlocal formatprg=ftplugins#FormatFile
+setlocal keywordprg=:Man
 
 setlocal cindent
 let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
@@ -36,11 +39,13 @@ let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_wh
 augroup UserFtpluginFormatter
   au!
   autocmd BufWritePre *.h,*.cc,*.cpp call format#Formatonsave()
+
 augroup END
 
 " Go with a spacemacs style binding
 nnoremap <buffer> <Leader>ef <Cmd>py3file $XDG_CONFIG_HOME . '/nvim/pythonx/clang-format.py'
 
-let b:undo_ftplugin = 'setlocal syntax< '
+let b:undo_ftplugin = 'setlocal syntax< fp< mps< kp< cin<'
       \ . '|unlet! b:undo_ftplugin'
-
+      \ . '|unlet! b:did_ftplugin'
+      \ . '|nunmap <Leader>ef'

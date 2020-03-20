@@ -247,6 +247,7 @@ function! includes#CPath() abort  " {{{
     let &shellslash = s:old_ss
   endif
 
+  let &l:path = s:path
   return s:path
 endfunction  " }}}
 

@@ -201,7 +201,7 @@ function! py#Cxn(...) abort  " {{{
 
   let s:nvim_path = v:progpath
   let s:socket = stdpath('data') . '/socket'
-  call chansend(&channel, "NVIM_LISTEN_ADDRESS= " . s:socket . " -u NORC\n")
+  call chansend(&channel, "%env NVIM_LISTEN_ADDRESS= " . s:socket . " -u NORC\n")
   call chansend(&channel, ":let j=jobstart('nc -U ".v:servername."',{'rpc':v:true})\n")
   call chansend(&channel, ":call rpcrequest(j, 'nvim_set_var', 'cxn', v:servername)\n")
   call chansend(&channel, ":call rpcrequest(j, 'nvim_command', 'call py#Cnxn()')\n")

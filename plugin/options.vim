@@ -122,6 +122,13 @@ if has('unix')
   let g:tagbar_iconchars = ['▷', '◢']
   let g:startify_change_to_dir = 1
 else
+  setglobal sessionoptions+=unix,slash viewoptions+=unix,slash
+
+  " So this HAS to be a bad idea; however, all 3 DirChanged autocommands emit
+  " errors and that's a little insane
+  " Oct 22, 2019: Somehow I've observed literally 0 problems with this and the
+  " error is still emitted when the dir changes soooo
+  setglobal eventignore=DirChanged
   " XXX: might wanna change this:
   " let $FZF_DEFAULT_COMMAND = 'rg --hidden -M 200 -m 200 --smart-case --passthru --files . '
   " let $FZF_DEFAULT_COMMAND = 'fd --hidden --follow -d 6 -t f '
