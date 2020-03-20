@@ -207,9 +207,9 @@ def make_box(twidth, bwidth=None):
     bwidth_inner = bwidth - 3 - \
         max(len(b), len(i + e)) if bwidth else twidth + 2
     sline = b + m + bwidth_inner * m[0] + 2 * m[0]
-    nspaces = (bwidth_inner - twidth) // 2
-    mlines = i + m + " " + " " * nspaces
-    mlinee = " " + " " * (bwidth_inner - twidth - nspaces) + m
+    nspaces = (bwidth_inner-twidth) // 2
+    mlines = i + m + " " + " "*nspaces
+    mlinee = " " + " " * (bwidth_inner-twidth-nspaces) + m
     eline = i + m + bwidth_inner * m[0] + 2 * m[0] + e
     return sline, mlines, mlinee, eline
 
@@ -502,20 +502,16 @@ def create_table(snip):
 
     # create anonymous snippet with expected content and number of tabstops
     anon_snippet_title = (
-        " | ".join(["$" + str(col)
-                    for col in range(1, columns_amount + 1)]) + "\n"
+        " | ".join(["$" + str(col) for col in range(1, columns_amount + 1)]) + "\n"
     )
-    anon_snippet_delimiter = ":-|" * (columns_amount - 1) + ":-\n"
+    anon_snippet_delimiter = ":-|" * (columns_amount-1) + ":-\n"
     anon_snippet_body = ""
     for row in range(1, rows_amount + 1):
         anon_snippet_body += (
-            " | ".join(
-                [
-                    "$" + str(row * columns_amount + col)
-                    for col in range(1, columns_amount + 1)
-                ]
-            )
-            + "\n"
+            " | ".join([
+                "$" + str(row*columns_amount + col)
+                for col in range(1, columns_amount + 1)
+            ]) + "\n"
         )
     anon_snippet_table = anon_snippet_title + \
         anon_snippet_delimiter + anon_snippet_body
@@ -556,7 +552,7 @@ def split_line(text):
     lines = textwrap.wrap(text, 78 - 19)
     output = list()
     for line in lines:
-        output.append("*" + " " * 19 + line)
+        output.append("*" + " "*19 + line)
     snip_line = snip.tabstops[4].end[0]
     snip.buffer.append(output, snip_line + 1)
     del snip.buffer[snip_line]

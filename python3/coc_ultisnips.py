@@ -18,13 +18,13 @@ JEDI = 0x6
 SINGLE_QUOTES = "'"
 DOUBLE_QUOTES = '"'
 
-
 _Placeholder = namedtuple("_FrozenPlaceholder", ["current_text", "start", "end"])
 _VisualContent = namedtuple("_VisualContent", ["mode", "text"])
 _Position = namedtuple("_Position", ["line", "col"])
 
 
 class _SnippetUtilCursor:
+
     def __init__(self, cursor):
         self._cursor = [cursor[0] - 1, cursor[1]]
         self._set = False
@@ -259,6 +259,7 @@ class SnippetUtil:
 
 
 class ContextSnippet:
+
     def __init__(self):
         self.buffer = vim.current.buffer
         self.window = vim.current.window
@@ -266,7 +267,7 @@ class ContextSnippet:
         self.line = vim.call("line", ".") - 1
         self.column = vim.call("col", ".") - 1
         line = vim.call("getline", ".")
-        self.after = line[self.column :]
+        self.after = line[self.column:]
         if "coc_selected_text" in vim.vars:
             self.visual_mode = vim.eval("visualmode()")
             self.visual_text = vim.vars["coc_selected_text"]
@@ -291,7 +292,7 @@ def x(snip):
 
 def compB(t, opts):
     if t:
-        opts = [m[len(t) :] for m in opts if m.startswith(t)]
+        opts = [m[len(t):] for m in opts if m.startswith(t)]
     if len(opts) == 1:
         return opts[0]
     return "(" + "|".join(opts) + ")"

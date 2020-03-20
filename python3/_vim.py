@@ -158,14 +158,9 @@ def escape(inp):
             rv = "[" + ",".join(conv(o) for o in obj) + "]"
         elif isinstance(obj, dict):
             rv = (
-                "{"
-                + ",".join(
-                    [
-                        "%s:%s" % (conv(key), conv(value))
-                        for key, value in obj.iteritems()
-                    ]
-                )
-                + "}"
+                "{" + ",".join([
+                    "%s:%s" % (conv(key), conv(value)) for key, value in obj.iteritems()
+                ]) + "}"
             )
         else:
             rv = ('"%s"') % (obj).replace('"', '\\"')
@@ -248,8 +243,7 @@ def select(start, end):
             move_cmd += "%iG%i|" % virtual_position(end.line + 1, end.col)
         else:
             move_cmd += "%iG%i|" % virtual_position(end.line + 1, end.col + 1)
-        move_cmd += "o%iG%i|o\\<c-g>" % virtual_position(
-            start.line + 1, start.col + 1)
+        move_cmd += "o%iG%i|o\\<c-g>" % virtual_position(start.line + 1, start.col + 1)
     feedkeys(move_cmd)
 
 
@@ -300,8 +294,7 @@ def _unmap_select_mode_mapping():
 
         for option in ("<buffer>", ""):
             # Put all smaps into a var, and then read the var
-            command(r"redir => _tmp_smaps | silent smap %s " %
-                    option + "| redir END")
+            command(r"redir => _tmp_smaps | silent smap %s " % option + "| redir END")
 
             # Check if any mappings where found
             if hasattr(vim, "bindeval"):
@@ -319,16 +312,14 @@ def _unmap_select_mode_mapping():
 
             # Only keep mappings that should not be ignored
             maps = [
-                m
-                for m in all_maps
+                m for m in all_maps
                 if not any(i in m for i in ignores) and len(m.strip())
             ]
 
             for map in maps:
                 # The first three chars are the modes, that might be listed.
                 # We are not interested in them here.
-                trig = map[3:].split()[0] if len(
-                    map[3:].split()) != 0 else None
+                trig = map[3:].split()[0] if len(map[3:].split()) != 0 else None
 
                 if trig is None:
                     continue
@@ -420,6 +411,7 @@ def pd(args=None):
 
 
 class _Vim(object):
+
     def __getattr__(self, attr):
         return getattr(vim, attr)
 
@@ -431,6 +423,7 @@ def _patch_nvim(vim):
     """Patches to make handling both Vim and Nvim easier."""
 
     class Bindeval:
+
         def __init__(self, data):
             self.data = data
 
@@ -439,9 +432,11 @@ def _patch_nvim(vim):
 
     def function(name):
         """Kinda surpried this doesn't utilize functools.wraps."""
+
         def inner(*args, **kwargs):
             ret = vim.call(name, *args, **kwargs)
             return _bytes(ret)
+
         return inner
 
     def bindeval(value):
@@ -451,6 +446,7 @@ def _patch_nvim(vim):
     vim_vars = vim.vars
 
     class vars_wrapper:
+
         def get(self, *args, **kwargs):
             item = vim_vars.get(*args, **kwargs)
             return _bytes(item)

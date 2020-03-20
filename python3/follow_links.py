@@ -9,6 +9,7 @@ logger = logging.getLogger(name=__name__)
 
 
 class FileLink:
+
     def __init__(self, logger=None):
         """Initialize a file object."""
         # Damnit why isnt it recognizing this as a func? this is the missing link
@@ -84,6 +85,7 @@ def list_buf():
     """
     bufnrs = vim.command("call nvim_list_bufs()")
     return bufnrs
+
 
 def main():
     """Set everything up."""
