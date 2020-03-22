@@ -224,6 +224,8 @@ endif
 
 " Changed the mapping to Alt-= for snippets.
 inoremap <silent> <M-=> <C-R>=(plugins#ExpandPossibleShorterSnippet() == 0? '': UltiSnips#ExpandSnippet())<CR>
+
+inoremap <expr> <Tab> UltiSnips#ExpandSnippetOrJump()
 " }}}
 
 " FZF: {{{
@@ -259,25 +261,33 @@ else
     inoremap <C-j>        <C-x><C-j>
 endif
 
-inoremap <expr> <C-x><C-l> fzf#vim#complete#line()
-inoremap <expr> <C-x>l      fzf#vim#complete#line()
+imap <expr> <C-x><C-l> fzf#vim#complete(fzf#wrap({
+  \ 'prefix': '^.*$',
+  \ 'source': 'rg -n ^ --color always',
+  \ 'options': '--ansi --delimiter : --nth 3..',
+  \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '')}))
+
+inoremap <C-l> <C-x><C-l>
 
 " Uhhh C-b for buffer?
 inoremap <expr> <C-x><C-b> fzf#vim#complete#buffer_line()
 
-imap <expr> <C-x><C-s>    fzf#vim#complete#word({
-    \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
+function! s:make_sentence(lines)
+  return substitute(join(a:lines), '^.', '\=toupper(submatch(0))', '').'.'
+endfunction
+
+imap <expr> <C-x><C-s>    fzf#vim#complete#word(
+    \ {'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
     \ 'reducer': function('<sid>make_sentence'),
     \ 'options': '--multi --reverse --margin 15%,0',
     \ 'left':    40})
 " And add a shorter version
 inoremap <C-s>            <C-x><C-s>
 
-imap <expr> <C-x><C-k>    fzf#complete({
-            \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
+imap <expr> <C-x><C-k>    fzf#vim#complete(
+            \ {'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
             \ 'options': '-ansi --multi --cycle',
             \ 'left': 30})
-
 inoremap <C-k>            <C-x><C-k>
 
 " NOTE: The imap should probably only be invoked using \<tab>

@@ -14,6 +14,7 @@ A useful combination with UltiSnips.
 import os
 import string
 import textwrap
+
 # import re
 # from collections import Counter
 
@@ -121,7 +122,7 @@ def complete(tab, opts):
     """
     msg = "({0})"
     if tab:
-        opts = [m[len(tab):] for m in opts if m.startswith(tab)]
+        opts = [m[len(tab) :] for m in opts if m.startswith(tab)]
     if len(opts) == 1:
         return opts[0]
 
@@ -204,12 +205,11 @@ def make_box(twidth, bwidth=None):
         :func:`get_comment_format`
     """
     b, m, e, i = (s.strip() for s in get_comment_format())
-    bwidth_inner = bwidth - 3 - \
-        max(len(b), len(i + e)) if bwidth else twidth + 2
+    bwidth_inner = bwidth - 3 - max(len(b), len(i + e)) if bwidth else twidth + 2
     sline = b + m + bwidth_inner * m[0] + 2 * m[0]
-    nspaces = (bwidth_inner-twidth) // 2
-    mlines = i + m + " " + " "*nspaces
-    mlinee = " " + " " * (bwidth_inner-twidth-nspaces) + m
+    nspaces = (bwidth_inner - twidth) // 2
+    mlines = i + m + " " + " " * nspaces
+    mlinee = " " + " " * (bwidth_inner - twidth - nspaces) + m
     eline = i + m + bwidth_inner * m[0] + 2 * m[0] + e
     return sline, mlines, mlinee, eline
 
@@ -504,17 +504,19 @@ def create_table(snip):
     anon_snippet_title = (
         " | ".join(["$" + str(col) for col in range(1, columns_amount + 1)]) + "\n"
     )
-    anon_snippet_delimiter = ":-|" * (columns_amount-1) + ":-\n"
+    anon_snippet_delimiter = ":-|" * (columns_amount - 1) + ":-\n"
     anon_snippet_body = ""
     for row in range(1, rows_amount + 1):
         anon_snippet_body += (
-            " | ".join([
-                "$" + str(row*columns_amount + col)
-                for col in range(1, columns_amount + 1)
-            ]) + "\n"
+            " | ".join(
+                [
+                    "$" + str(row * columns_amount + col)
+                    for col in range(1, columns_amount + 1)
+                ]
+            )
+            + "\n"
         )
-    anon_snippet_table = anon_snippet_title + \
-        anon_snippet_delimiter + anon_snippet_body
+    anon_snippet_table = anon_snippet_title + anon_snippet_delimiter + anon_snippet_body
 
     # expand anonymous snippet
     snip.expand_anon(anon_snippet_table)
@@ -552,7 +554,7 @@ def split_line(text):
     lines = textwrap.wrap(text, 78 - 19)
     output = list()
     for line in lines:
-        output.append("*" + " "*19 + line)
+        output.append("*" + " " * 19 + line)
     snip_line = snip.tabstops[4].end[0]
     snip.buffer.append(output, snip_line + 1)
     del snip.buffer[snip_line]
@@ -572,7 +574,7 @@ def x(snip):
 
 def compB(t, opts):
     if t:
-        opts = [m[len(t):] for m in opts if m.startswith(t)]
+        opts = [m[len(t) :] for m in opts if m.startswith(t)]
         if len(opts) == 1:
             return opts[0]
-        return "(" + '|'.join(opts) + ')'
+        return "(" + "|".join(opts) + ")"

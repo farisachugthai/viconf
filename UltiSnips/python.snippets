@@ -96,15 +96,11 @@ ${1:todo} : ${2:type}
 endsnippet
 
 snippet " "triple quoted string (double quotes)" b
-`!p triple_quotes_handle_trailing(snip, '"')`
-${1:${VISUAL}}$0
-`!p triple_quotes_handle_trailing(snip, '"')`
+"${1:${VISUAL}}"
 endsnippet
 
 snippet ' "triple quoted string (single quotes)" b
-`!p triple_quotes_handle_trailing(snip, "'")`
-${1:${VISUAL}}$0
-`!p triple_quotes_handle_trailing(snip, "'")`
+'${1:${VISUAL}}'
 endsnippet
 
 snippet """ "doc block (triple quotes)"

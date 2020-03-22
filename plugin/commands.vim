@@ -28,35 +28,35 @@ command! TB setl efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=
 
 " Coc Commands: {{{
 
-command! CocWords execute 'CocList -I --normal --input=' . expand('<cword>') . ' words'
+command! -bar -bang CocWords execute 'CocList -I --normal --input=' . <bang>0 ? expand('<cWORD>') : expand('<cword>') . ' words'
 
-command! CocRepeat call CocAction('repeatCommand')
+command! -bang -bar CocRepeat call CocAction('repeatCommand')
 
-command! CocReferences call CocAction('jumpReferences')
+command! -bang -bar CocReferences call CocAction('jumpReferences')
 
 " TODO: Figure out the ternary operator, change nargs to ? and if arg then
 " input=arg else expand(cword)
-command! CocGrep execute 'CocList -I --input=' . expand('<cword>') . ' grep'
+command! -bar -bang CocGrep execute 'CocList -I --input=' . expand('<cword>') . ' grep'
 
 " Dec 05, 2019: Got a new one for ya!
-command! CocExtensionStats :py3 from pprint import pprint; pprint(vim.eval('CocAction("extensionStats")'))
+command! -bang -bar CocExtensionStats py3 from pprint import pprint; pprint(vim.eval('CocAction("extensionStats")'))
 
 " Let's group these together by prefixing with Coc
 " Use `:Format` to format current buffer
-command! CocFormat call CocAction('format')
+command! -bar -bang CocFormat call CocAction('format')
 
 " Show all diagnostics
-command! CocDiagnostic call CocAction('diagnosticInfo')
+command! -bar -bang CocDiagnostic call CocAction('diagnosticInfo')
 
 " Use `:Fold` to fold current buffer
-command! -nargs=? CocFold :setlocal fdm=manual | call CocActionAsync('fold', <f-args>)
+command! -bang -nargs=? CocFold :setlocal fdm=manual | call CocActionAsync('fold', <f-args>)
 
 " use `:OR` for organize import of current buffer
-command! CocSort call CocAction('runCommand', 'editor.action.organizeImport')
+command! -bang -bar CocSort call CocAction('runCommand', 'editor.action.organizeImport')
 
 " Just tried this and it worked! So keep checking :CocList commands and add
 " more as we go.
-command! CocPython call CocActionAsync('runCommand', 'python.startREPL')
+command! -bang -bar CocPython call CocActionAsync('runCommand', 'python.startREPL')
 
 " Let's also get some information here.
 " call CocAction('commands') is a lamer version of CocCommand
@@ -68,18 +68,18 @@ command! -nargs=* -range CocFix call coc#rpc#notify('codeActionRange', [<line1>,
 
 " Nabbed these from his plugin/coc.vim file and changed the mappings to
 " commands
-command! CocDefinition call CocAction('jumpDefinition')
-command! CocDeclaration    call       CocAction('jumpDeclaration')
-command! CocImplementation call       CocAction('jumpImplementation')
-command! CocTypeDefinition call       CocAction('jumpTypeDefinition')
-command! CocReferences     call       CocAction('jumpReferences')
-command! CocOpenlink      call       CocActionAsync('openLink')
-command! CocFixCurrent    call       CocActionAsync('doQuickfix')
-command! CocFloatHide     call       coc#util#float_hide()
-command! CocFloatJump     call       coc#util#float_jump()
+command! -bar CocDefinition call CocAction('jumpDefinition')
+command! -bar CocDeclaration    call       CocAction('jumpDeclaration')
+command! -bar CocImplementation call       CocAction('jumpImplementation')
+command! -bar CocTypeDefinition call       CocAction('jumpTypeDefinition')
+command! -bar CocReferences     call       CocAction('jumpReferences')
+command! -bar CocOpenlink      call       CocActionAsync('openLink')
+command! -bar CocFixCurrent    call       CocActionAsync('doQuickfix')
+command! -bar CocFloatHide     call       coc#util#float_hide()
+command! -bar CocFloatJump     call       coc#util#float_jump()
 command! -bar CocCommandRepeat call       CocAction('repeatCommand')
 " How am I still going?
-command! CocServices echo CocAction('services')
+command! -bar CocServices echo CocAction('services')
 
 function! s:CocProviders(A, L, P) abort
 
@@ -107,7 +107,7 @@ endfunction
 " This gets way more complicated if you try to handle more than 1 arg
 " command! -nargs=* -complete=custom,s:CocProviders CocProviders for i in [(<q-args>)] | call s:HandleCocProviders(i) | endfor
 
-command! -nargs=1 -complete=custom,s:CocProviders CocProviders call s:HandleCocProviders(<args>)
+command! -bar -nargs=1 -complete=custom,s:CocProviders CocProviders call s:HandleCocProviders(<args>)
 
 " }}}
 
@@ -394,6 +394,7 @@ command! -nargs=? -bar PydocSplit call pydoc_help#SplitPydocCword(<q-mods>)
 
 " todo: adding a bang expression didny work
 command! -bang -complete=expression -bar PydocShow call pydoc_help#show(<bang>0)
+" }}}
 
 " General Python Commands: {{{
 " If things slow down autoload these.
@@ -417,6 +418,20 @@ command! -bar -bang -nargs=* -complete=dir -complete=custom,s:IPythonOptions IPy
 command! -bar -bang -complete=buffer ScratchBuffer call pydoc_help#scratch_listed_buffer(<bang>0)
 
 command! NvimCxn call py#Cxn()
+
+command! RangerCurrentFile call OpenRangerIn("%", s:default_edit_cmd)
+command! RangerCurrentDirectory call OpenRangerIn("%:p:h", s:default_edit_cmd)
+command! RangerWorkingDirectory call OpenRangerIn(".", s:default_edit_cmd)
+command! Ranger RangerCurrentFile
+
+" To open the selected file in a new tab
+command! RangerCurrentFileNewTab call OpenRangerIn("%", 'tabedit ')
+command! RangerCurrentFileExistingOrNewTab call OpenRangerIn("%", 'tab drop ')
+command! RangerCurrentDirectoryNewTab call OpenRangerIn("%:p:h", 'tabedit ')
+command! RangerCurrentDirectoryExistingOrNewTab call OpenRangerIn("%:p:h", 'tab drop ')
+command! RangerWorkingDirectoryNewTab call OpenRangerIn(".", 'tabedit ')
+command! RangerWorkingDirectoryExistingOrNewTab call OpenRangerIn(".", 'tab drop ')
+command! RangerNewTab RangerCurrentDirectoryNewTab
 " }}}
 
 " Terminal Command: {{{
@@ -507,26 +522,26 @@ if !empty($ANDROID_DATA)
 endif  " }}}
 
 " Fugitive Functions: {{{
-function ProjectGitDir() abort
+function s:ProjectGitDir() abort
   " Like how would this not be really useful all the time?
   return FugitiveExtractGitDir(fnamemodify(expand('%'), ':p:h'))
 endfunction
 
 function ProjectRoot() abort
-  return fnamemodify(fnameescape(ProjectGitDir()), ':p:h')
+  return fnamemodify(fnameescape(s:ProjectGitDir()), ':p:h')
 endfunction
+
+command! -range=% -addr=buffers -bang -bar GRoot echo ProjectRoot()
 
 command! -range -addr=arguments -bang -bar -nargs=* Gclone exe fugitive#Command(<line1>, <count>, +"<range>", <bang>0, "<mods>", <q-args>) 
 " }}}
 
 " Syntax Highlighting: {{{
-
 command! HL call syncom#HL()
 command! HiC call syncom#HiC()
 command! HiQF call syncom#HiQF()
 command! SyntaxInfo call syncom#get_syn_info()
-
 " Works:
 command! HiTest call syncom#hitest()
-
 " }}}
+

@@ -6,11 +6,13 @@
 " ============================================================================
 
 " Preliminary: {{{
+" These are the options that I consider the minimum requirements to running
 scriptencoding utf-8
 setglobal fileformats=unix,dos
 setglobal cpoptions-=c,e,_  " couple options that bugged me
 setglobal fileencodings=utf-8,latin1   " UGHHHHH
 setglobal nobomb | lockvar nobomb
+setglobal hidden
 " }}}
 
 " Set paths correctly: {{{
@@ -22,21 +24,18 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h'))
 setglobal runtimepath=$HOME/.config/nvim,$HOME/.local/share/nvim/site,$VIMRUNTIME
 setglobal packpath=~/.config/nvim/pack,~/.local/share/nvim/site/pack,$VIMRUNTIME
 
-if !has('unix')
+" Uh this does not work.
+" if has('Win32')
+"   setglobal runtimepath+=C:\Neovim\share\nvim-qt\runtime
+"  let &shell='bash.exe'
+"  let &shellcmdflag = '-c'
+"  let &shellredir = '>%s 2>&1'
+"  set shellquote= shellxescape=
+"  " set noshelltemp
+"  set shellxquote=
+"  let &shellpipe='2>&1| tee'
+" endif
 
-  setglobal runtimepath+=C:\Neovim\share\nvim-qt\runtime
-
-if has("win32")
- let &shell='bash.exe'
- let &shellcmdflag = '-c'
- let &shellredir = '>%s 2>&1'
- set shellquote= shellxescape=
- " set noshelltemp
- set shellxquote=
- let &shellpipe='2>&1| tee'
-endif
-
-endif
 " Source ginit. Why is this getting set even in the TUI?
 if exists('g:GuiLoaded') | exec 'source ' s:repo_root . '/ginit.vim' | endif
 " TODO: clipboards fucking up on windows
@@ -73,12 +72,12 @@ let g:plug_shallow = 1
 let g:plug_window = 'tabe'
 let g:undotree_SetFocusWhenToggle = 1
 " Windows gets all kinds of fucked up otherwise
-let g:plug_url = 'https://github.com/%s.git'
 let g:peekaboo_compact = 1
 " }}}
 
 function! LoadMyPlugins() abort  " {{{
 
+  let g:plug_url = 'https://github.com/%s.git'
   if !exists('plug#load')  | unlet! g:loaded_plug | exec 'source ' . s:repo_root . '/vim-plug/plug.vim' | endif
   call plug#begin(stdpath('data'). '/plugged')
 
@@ -115,7 +114,7 @@ function! LoadMyPlugins() abort  " {{{
   " Plug 'tpope/vim-unimpaired'
   Plug 'tpope/vim-eunuch'
 
-  Plug 'SirVer/ultisnips'
+  " Plug 'SirVer/ultisnips'
   Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }
   nnoremap <Leader>a <Cmd>sil! ALEEnable<CR><bar>:sil! call plugins#AleMappings()<CR><bar>:sil! CocDisable<CR>:sil! redraw!<CR>:ALELint<CR>
   nnoremap <Leader>et <Cmd>ALEToggle<CR>:sil! call plugins#AleMappings()<CR>:sil! redraw!<CR>
@@ -170,6 +169,8 @@ call LoadMyPlugins()
 command! -bar Plugins echo map(keys(g:plugs), '"\n" . v:val')
 
 let g:syntax_cmd = "enable"
+" py3f ./python3/_vim.py
+
 " }}}
 
 " Vim: set fdm=marker foldlevelstart=0:

@@ -152,11 +152,9 @@ else
 
   " Now find node:
   if has('unix')  " wsl
-    if isdirectory('$HOME/scoop/apps/winpython/current/n/node.exe')
-      let g:coc_node_path = '$HOME/scoop/apps/winpython/current/n/node.exe'
-    endif
+    let g:coc_node_path = '/usr/sbin/node'
   else
-    if isdirectory('C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\node.exe')
+    if executable('C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\node.exe')
       let g:coc_node_path = 'C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\node.exe'
     endif
   endif
@@ -261,6 +259,19 @@ if !exists('g:black_skip_string_normalization')
   let g:black_skip_string_normalization = 0
 endif
 
+" }}}
+
+" To open ranger when vim load a directory: {{{
+if exists('g:ranger_replace_netrw') && g:ranger_replace_netrw
+  augroup ReplaceNetrwByRangerVim
+    autocmd VimEnter * silent! autocmd! FileExplorer
+    autocmd BufEnter * if isdirectory(expand("%")) | call OpenRangerOnVimLoadDir("%") | endif
+  augroup END
+endif
+
+if !exists('g:ranger_map_keys') || g:ranger_map_keys
+  map <leader>f :Ranger<CR>
+endif
 " }}}
 
 " NERDTree: {{{
@@ -433,6 +444,8 @@ endif
 " }}}
 
 " UltiSnips: {{{
+let b:did_autoload_ultisnips = 1
+
 let g:UltiSnipsExpandTrigger="<Tab>"
 let g:UltiSnipsJumpForwardTrigger="<Tab>"
 let g:UltiSnipsJumpBackwardTrigger="<S-Tab>"

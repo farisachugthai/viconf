@@ -57,7 +57,7 @@ setlocal includeexpr=substitute(v:fname,'\\.','/','g')
 setlocal colorcolumn=80,120
 setlocal foldmethod=indent
 
-setlocal suffixesadd+=.py,pyi
+setlocal suffixesadd+=.py,pyi,__init__.py
 setlocal suffixes+=.pyc
 setlocal omnifunc=python3complete#Complete
 
@@ -106,8 +106,8 @@ setlocal keywordprg=:PydocShow
 " Formatters: {{{1
 
 if executable('yapf')
-  setlocal equalprg=yapf
-  setlocal formatprg=yapf
+  setlocal equalprg=yapf\ -i\ %
+  setlocal formatprg=yapf\ -i\ %
   command! -buffer -complete=buffer -nargs=0 YAPF call py#YAPF()
   command! -buffer -complete=buffer -nargs=0 YAPFI exec '!yapf -i %'
   command! -buffer -complete=buffer -nargs=0 YAPFD cexpr! exec '!yapf -d %'

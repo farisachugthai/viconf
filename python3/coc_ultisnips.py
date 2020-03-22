@@ -1,11 +1,16 @@
-import re
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import os
-import string
-import random
-import json
-from collections import deque, namedtuple
+from pathlib import Path
 
 import vim
+
+try:
+    import pynvim
+except ImportError:
+    pynvim = None
+
+from collections import namedtuple  # , deque,
 from snippets_helper import *
 
 NORMAL = 0x1
@@ -24,7 +29,6 @@ _Position = namedtuple("_Position", ["line", "col"])
 
 
 class _SnippetUtilCursor:
-
     def __init__(self, cursor):
         self._cursor = [cursor[0] - 1, cursor[1]]
         self._set = False
@@ -64,9 +68,6 @@ class IndentUtil:
     """Utility class for dealing properly with indentation."""
 
     def __init__(self):
-        self.reset()
-
-    def reset(self):
         """Gets the spacing properties from Vim."""
         self.shiftwidth = int(
             vim.eval("exists('*shiftwidth') ? shiftwidth() : &shiftwidth")
@@ -100,24 +101,27 @@ class SnippetUtil:
     """Provides easy access to indentation, etc.
 
     This is the 'snip' object in python code.
-
     """
 
     def __init__(self, _initial_indent, start, end, context):
         self._ind = IndentUtil()
-        self._visual = _VisualContent(
-            vim.eval("visualmode()"), vim.eval('get(g:,"coc_selected_text","")')
-        )
+        self._visual = _VisualContent(self.visualmode(), self.selected_text())
         self._initial_indent = _initial_indent
         self._reset("")
         self._start = start
         self._end = end
         self._context = context
 
+    def visualmode(self):
+        return vim.eval("visualmode()")
+
+    def selected_text(self):
+        return vim.eval('get(g:,"coc_selected_text","")')
+
     def _reset(self, cur):
         """Gets the snippet ready for another update.
 
-        :cur: the new value for c.
+        :param cur: the new value for c.
 
         """
         self._ind.reset()
@@ -130,7 +134,7 @@ class SnippetUtil:
         """Shifts the indentation level. Note that this uses the shiftwidth
         because thats what code formatters use.
 
-        :amount: the amount by which to shift.
+        :param amount: the amount by which to shift.
 
         """
         self.indent += " " * self._ind.shiftwidth * amount
@@ -139,7 +143,7 @@ class SnippetUtil:
         """Unshift the indentation level. Note that this uses the shiftwidth
         because thats what code formatters use.
 
-        :amount: the amount by which to unshift.
+        :param amount: the amount by which to unshift.
 
         """
         by = -self._ind.shiftwidth * amount
@@ -151,9 +155,9 @@ class SnippetUtil:
     def mkline(self, line="", indent=""):
         """Creates a properly set up line.
 
-        :line: the text to add
-        :indent: the indentation to have at the beginning
-                 if None, it uses the default amount
+        :param line: the text to add
+        :param indent: The indentation to have at the beginning.
+                       If None, it uses the default amount.
 
         """
         return indent + line
@@ -259,7 +263,6 @@ class SnippetUtil:
 
 
 class ContextSnippet:
-
     def __init__(self):
         self.buffer = vim.current.buffer
         self.window = vim.current.window
@@ -267,7 +270,7 @@ class ContextSnippet:
         self.line = vim.call("line", ".") - 1
         self.column = vim.call("col", ".") - 1
         line = vim.call("getline", ".")
-        self.after = line[self.column:]
+        self.after = line[self.column :]
         if "coc_selected_text" in vim.vars:
             self.visual_mode = vim.eval("visualmode()")
             self.visual_text = vim.vars["coc_selected_text"]
@@ -292,7 +295,7 @@ def x(snip):
 
 def compB(t, opts):
     if t:
-        opts = [m[len(t):] for m in opts if m.startswith(t)]
+        opts = [m[len(t) :] for m in opts if m.startswith(t)]
     if len(opts) == 1:
         return opts[0]
     return "(" + "|".join(opts) + ")"
@@ -302,3 +305,21 @@ def sec_title(snip, t):
     file_start = snip.fn.split(".")[0]
     sec_name = t[1].strip("1234567890. ").lower().replace(" ", "-")
     return ("*%s-%s*" % (file_start, sec_name)).rjust(78 - len(t[1]))
+
+
+def get_dot_vim():
+    """From UltiSnips/pythonx/vim_helper.
+
+    Return
+    ------
+    candidate : str
+        The likely place for  for the current setup.
+
+    """
+    if "MYVIMRC" in os.environ:
+        my_vimrc = os.path.dirname(os.path.expandvars(os.environ["MYVIMRC"]))
+        if os.path.isdir(my_vimrc):
+            return my_vimrc
+    raise RuntimeError(
+        f"Unable to find user configuration directory. I tried {my_vimrc}"
+    )

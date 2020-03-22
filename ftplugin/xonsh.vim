@@ -14,7 +14,9 @@ exec 'source ' . s:this_dir . '/python.vim'
 " }}}
 
 " Options: {{{
-setlocal keywordprg=:PydocShow
+" fuck keywordprg all it says is 'trailing characters'
+" setlocal keywordprg=:PydocShow
+nnoremap <buffer> K <Cmd>PydocShow<CR>
 noremap <buffer> <F5> <Cmd>py3f %<CR>
 noremap! <buffer> <F5> <Cmd>py3f %<CR>
 
@@ -23,16 +25,17 @@ if executable('black')
   setlocal formatprg=black
 
 elseif executable('yapf')
-  setlocal equalprg=yapf
-  setlocal formatprg=yapf
+  setlocal equalprg=yapf\ -i\ expand('%')
+  setlocal formatprg=yapf\ -i\ expand('%')
 elseif executable('autopep8')
   setlocal equalprg=autopep8
   setlocal formatprg=autopep8
 endif
 
 let &l:path = py#PythonPath()
-setlocal syntax=xonsh
-syntax sync fromstart
+" syn enable
+" setlocal syntax=xonsh
+" syntax sync fromstart
 setlocal foldlevelstart=0
 setlocal suffixesadd=.py,.xsh,.xonshrc,
 setlocal include=^\\s*\\(from\\\|import\\)

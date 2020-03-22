@@ -18,8 +18,6 @@ let g:vimsyn_maxlines = 500  " why is the default 60???
 let g:vimsyn_noerror = 1  " Turn off errors because 50% of them are wrong.
 let g:vimsyn_embed = 1
 
-if exists('b:did_ftplugin') | finish | endif
-
 syntax enable
 syntax sync fromstart
 source $VIMRUNTIME/ftplugin/vim.vim
@@ -47,6 +45,9 @@ setlocal foldlevel=0
 
 setlocal indentexpr=GetVimIndent()
 setlocal indentkeys+==end,=else,=cat,=fina,=END,0\\,0=\"\\\
+
+setlocal tags=~/.config/nvim/tags,$VIMRUNTIME/doc/tags,tags,**
+
 let b:undo_indent = "setlocal indentkeys< indentexpr<"
 
 let &l:commentstring='" %s'

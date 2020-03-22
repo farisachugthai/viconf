@@ -87,7 +87,7 @@ function! format#ClangCheck()  abort  " {{{
   endif
 endfunction  " }}}
 
-function! ftplugins#FormatFile() abort  " {{{
+function! format#FormatFile() abort  " {{{
   let l:lines='all'
   let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
   let b:ale_fixers += [ 'clang-format' ]
@@ -99,3 +99,4 @@ function! ftplugins#FormatFile() abort  " {{{
   nnoremap <Leader>ef <Cmd>py3file expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
 
 endfunction  " }}}
+

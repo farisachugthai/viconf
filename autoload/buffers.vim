@@ -91,7 +91,7 @@ function! buffers#terminals() abort  " {{{
 
   tnoremap <F4> <Cmd>Snippets<CR>
   tnoremap <F6> <Cmd>UltiSnipsEdit<CR>
-  
+
   " It's so annoying that buffers need confirmation to kill. Let's dedicate a
   " key but one that we know windows hasn't stolen yet.
   tnoremap <D-z> <Cmd>bd!<CR>

@@ -5,37 +5,18 @@
   " Last Modified: November 14, 2019
 " ============================================================================
 
-function! py#list_snippets() abort  " {{{
-  " Utilizing the python API and ultisnispzzz
-  " Doesnt return anything?
-  py3 from UltiSnips import UltiSnips_Manager
-  py3 UltiSnips_Manager.list_snippets()
-endfunction
-
-function! py#list_snippets2() abort
-  try
-    py3 import UltiSnips
-  catch
-    return
-  endtry
-  python3 from UltiSnips.snippet_manager import SnippetManager
-  " This expression raises an error. # TODO:
-  let g:sm = py3eval("SnippetManager(" . g:UltiSnipsExpandTrigger, g:UltiSnipsJumpForwardTrigger, g:UltiSnipsJumpBackwardTrigger . ")")
-  py3 sm.list_snippets()
-endfunction " }}}
-
-function! py#taglist() abort  " {{{1
+function! py#taglist() abort  " {{{
   " Let's return the value from `vim.call` so that we can check it later if
   " need be
   py3 from pprint import pprint; tagfiles = (vim.call('tagfiles'))
   py3 pprint(tagfiles)
 endfunction  " }}}
 
-function! py#nvim_taglist() abort  " {{{1
+function! py#nvim_taglist() abort  " {{{
   return nvim_call_function('tagfiles')
 endfunction  " }}}
 
-function! s:_PythonPath() abort  " {{{1
+function! s:_PythonPath() abort  " {{{
   " Set up the path var for python filetypes. Here we go!
   " Note: the path option is to find directories so it's usually unnecesssary
   " to glob if you have the /usr/lib/python dir in hand.
@@ -43,71 +24,75 @@ function! s:_PythonPath() abort  " {{{1
   " The current path and the buffer's dir. Also recursively search downwards
   let s:path = '.,,**,'
 
+  if !exists('g:python3_host_prog')
+    let &l:path = s:path
+    return s:path
+  endif
+
+  " python3_host_prog is set but we don't have python. Probably need to run
+  " UpdateRemotePlugins. but at least say something so we know there's a problem.
   if !has('python3')
+    echoerr 'autoload/py:PythonPath -- Run :UpdateRemotePlugins'
     let &l:path = s:path
     return s:path
   endif
  
-  if exists('g:python3_host_prog')
-    " Note: Regardless of whether its unix or not, add dirs in reverse order
-    " as we're appending them to the set option
-    if has('unix')
+  " Note: Regardless of whether its unix or not, add dirs in reverse order
+  " as we're appending them to the set option
 
-       " #1) use the remote python's site packages
-       " guess who figured something out today?
-       python3 import site, vim;
-       let s:site_pack = py3eval('site.USER_SITE')
-       let s:path = s:path . s:site_pack . '/**'
+  " #1) use the remote python's site packages
+  python3 import site, vim, sys
+  let s:site_pack = py3eval('site.USER_SITE')
+  let s:path = s:path . s:site_pack . '/**'
 
-      " #2) use the system python's std library modules
-      " Oh don't forget the usr/lib one. Ugh. But android doesn't put that in
-      " the same place as other unix OSes.
-      if exists('$ANDROID_DATA')
-        let s:path = s:path . ',' . expand('$PREFIX/lib/python3.8')
-      else
-        let s:path = s:path . ',/usr/lib/python3.8'
-      endif
+  " Platform specific checks:
+  if has('unix')
 
-      " #3) use the remote pythons std lib modules
-      let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h:h')
-      let s:path = s:path . ',' . s:root_dir
-
-    " then do it all over again for windows.
-    " sunovabitch conda doesn't lay out the python dirs in the same spot as Unix
+    " #2) use the system python's std library modules
+    " Oh don't forget the usr/lib one. Ugh. But android doesn't put that in
+    " the same place as other unix OSes.
+    if exists('$ANDROID_DATA')
+      let s:path = s:path . ',' . expand('$PREFIX/lib/python3.8')
     else
-      let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h')
-
-      let s:site_pack = s:root_dir . '/lib/site-packages'
-      let s:path = s:path . s:site_pack
-
-      " This option requires that the '**' either is at the end of the path or
-      " ends with a '/'
-      " let s:path =  ',' . s:root_dir . '/lib/**1/' . s:path . ','
-
-      " make this last. its the standard lib and we prepend it to the path so
-      " it should be first in the option AKA last in the function
-      " UGHHHHHHH VIM WHYYYYY. If you write this as s:root_dir . '/lib/*'
-      " it only matches 1 letter and doesn't include the std lib as a result.
-      " Shave off the glob to add more in. Yeah ikr?
-      let s:path = s:root_dir . '/lib,' . s:path
+      let s:path = s:path . ',/usr/lib/python3.8'
     endif
-  else
 
-    python3 import site, vim, sys;
-    let s:site_pack = py3eval('site.USER_SITE')
-    let s:prefix = py3eval('sys.prefix')
+    " #3) use the remote pythons std lib modules
+    let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h:h')
+    let s:path = s:path . ',' . s:root_dir
+
+  " then do it all over again for windows.
+  " sunovabitch conda doesn't lay out the python dirs in the same spot as Unix
+  else
+    let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h')
+
+    let s:site_pack = s:root_dir . '/lib/site-packages'
     let s:path = s:path . s:site_pack
 
-    let &l:path = s:path
-    return s:path
+    " This option requires that the '**' either is at the end of the path or
+    " ends with a '/'
+    " let s:path =  ',' . s:root_dir . '/lib/**1/' . s:path . ','
+
+    " make this last. its the standard lib and we prepend it to the path so
+    " it should be first in the option AKA last in the function
+    " UGHHHHHHH VIM WHYYYYY. If you write this as s:root_dir . '/lib/*'
+    " it only matches 1 letter and doesn't include the std lib as a result.
+    " Shave off the glob to add more in. Yeah ikr?
+    let s:path = s:root_dir . '/lib,' . s:path
   endif
   return s:path
 
 endfunction  " }}}
 
 function! py#PythonPath() abort  " {{{1
-  let s:path = s:_PythonPath()
+  " let s:path = s:_PythonPath()
+  " Theres a bug somewhere in there so pause that for a second
+  py3 import site
+  let s:user_site = py3eval('site.USER_SITE')
+  let s:user_site .= py3eval('sys.prefix')
+  let s:path = s:user_site
   let &l:path = s:path
+
   return s:path
 endfunction  " }}}
 
@@ -181,17 +166,33 @@ function! py#py_import(...) abort   " {{{
   python3 py.import_into_vim(a:000)
 endfunction  " }}}
 
-function! py#Cnxn() abort  " {{{
+function! py#Cnxn(...) abort  " {{{
+  call s:check_modified()
+  " terminal ipython
+  if len(a:000) is 0
+    call termopen('ipython')
+  else
+  " Handle this i guess?
+  call termopen('ipython', a:000)
+
   " Credit: JustinMK
   " https://github.com/justinmk/config/blob/ad5b792049b352274d4cbd3525a2aff6ce296a7e/.config/nvim/init.vim#L1339-L1361
-  terminal ipython
-
   if has('unix')
     call chansend(&channel, "import pynvim,os\n")
     call chansend(&channel, "n = pynvim.attach('socket', path=os.environ.get('NVIM_LISTEN_ADDRESS'))\n")
   else
     call chansend(&channel, "import pynvim,os\r\n")
     call chansend(&channel, "n = pynvim.attach('socket', path=os.environ.get('NVIM_LISTEN_ADDRESS'))\r\n")
+  endif
+
+endfunction  " }}}
+
+function s:check_modified() abort  " {{{
+  " TODO:
+  if &modified is 1 && &autowrite is 1
+    write
+  " we're probably gonna need a handful of fucking if elses for this to do
+  " what i want.
   endif
 
 endfunction  " }}}
@@ -206,3 +207,14 @@ function! py#Cxn(...) abort  " {{{
   call chansend(&channel, ":call rpcrequest(j, 'nvim_set_var', 'cxn', v:servername)\n")
   call chansend(&channel, ":call rpcrequest(j, 'nvim_command', 'call py#Cnxn()')\n")
 endfunction  " }}}
+
+function! py#RefreshSnippets() abort  " {{{
+  py3 UltiSnips_Manager._refresh_snippets()
+endfunction  " }}}
+
+function! py#list_snippets() abort  " {{{
+  " Utilizing the python API and ultisnispzzz
+  " Doesnt return anything?
+  py3 UltiSnips_Manager.list_snippets()
+endfunction  " }}}
+

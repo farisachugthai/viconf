@@ -1,18 +1,5 @@
 {
-		"prefix": "checked",
 		"body": [
-		],
-		"description": "Checked block"
-	},
-	"Class": {
-		"prefix": "class",
-		"body": [
-			"class ${1:Name}",
-			"{",
-			"    $0",
-			"}"
-		],
-		"description": "Class"
 	},
 	"Console.WriteLine": {
 		"prefix": "cw",

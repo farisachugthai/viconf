@@ -124,7 +124,6 @@ class PythonToVimStr:
 
 
 class VimError(Exception):
-
     def __init__(self, message, throwpoint, executing):
         super(type(self), self).__init__(message)
         self.message = message
@@ -214,8 +213,7 @@ def _robust_black():
 
 def get_mode():
     return black.FileMode(
-        line_length=88,
-        is_pyi=vim.current.buffer.name.endswith(".pyi"),
+        line_length=88, is_pyi=vim.current.buffer.name.endswith(".pyi"),
     )
 
 
@@ -282,7 +280,6 @@ def get_environment(use_cache=True):
 
 
 def catch_and_print_exceptions(func):
-
     @functools.wraps
     def wrapper(*args, **kwargs):
         try:
