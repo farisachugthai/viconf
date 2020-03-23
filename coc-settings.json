@@ -243,8 +243,7 @@
   "list.source.outline.defaultOptions": [
     "--top",
     "--input",
-    "--interactive",
-    "--auto-preview",
+    // "--auto-preview",
     "--normal"
   ],
   "list.source.output.defaultOptions": [

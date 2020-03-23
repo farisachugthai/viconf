@@ -33,9 +33,9 @@ elseif executable('autopep8')
 endif
 
 let &l:path = py#PythonPath()
-" syn enable
-" setlocal syntax=xonsh
-" syntax sync fromstart
+setlocal syntax=xonsh
+syntax sync fromstart
+syntax enable
 setlocal foldlevelstart=0
 setlocal suffixesadd=.py,.xsh,.xonshrc,
 setlocal include=^\\s*\\(from\\\|import\\)

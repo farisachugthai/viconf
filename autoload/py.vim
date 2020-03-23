@@ -39,6 +39,66 @@ function! s:_PythonPath() abort  " {{{
  
   " Note: Regardless of whether its unix or not, add dirs in reverse order
   " as we're appending them to the set option
+  if exists('g:python3_host_prog')
+    " Note: Regardless of whether its unix or not, add dirs in reverse order
+    " as we're appending them to the set option
+    if has('unix')
+
+       " #1) use the remote python's site packages
+       " guess who figured something out today?
+       python3 import site, vim;
+       let s:site_pack = py3eval('site.USER_SITE')
+       let s:path = s:path . s:site_pack . '/**'
+
+      " #2) use the system python's std library modules
+      " Oh don't forget the usr/lib one. Ugh. But android doesn't put that in
+      " the same place as other unix OSes.
+      if exists('$ANDROID_DATA')
+        let s:path = s:path . ',' . expand('$PREFIX/lib/python3.8')
+      else
+        let s:path = s:path . ',/usr/lib/python3.8'
+      endif
+
+      " #3) use the remote pythons std lib modules
+      let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h:h')
+      let s:path = s:path . ',' . s:root_dir
+
+    " then do it all over again for windows.
+    " sunovabitch conda doesn't lay out the python dirs in the same spot as Unix
+    else
+      let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h')
+=======
+  if exists('g:python3_host_prog')
+    " Note: Regardless of whether its unix or not, add dirs in reverse order
+    " as we're appending them to the set option
+    if has('unix')
+
+       " #1) use the remote python's site packages
+       " guess who figured something out today?
+       python3 import site, vim;
+       let s:site_pack = py3eval('site.USER_SITE')
+       let s:path = s:path . s:site_pack . '/**'
+
+      " #2) use the system python's std library modules
+      " Oh don't forget the usr/lib one. Ugh. But android doesn't put that in
+      " the same place as other unix OSes.
+      if exists('$ANDROID_DATA')
+        let s:path = s:path . ',' . expand('$PREFIX/lib/python3.8')
+      else
+        let s:path = s:path . ',/usr/lib/python3.8'
+      endif
+
+      " #3) use the remote pythons std lib modules
+      let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h')
+      let s:path = s:path . ',' . s:root_dir
+
+t     " #4 forgot to add my pythonx files
+      let s:path .= ',' . stdpath('config') . '/python3'
+
+    " then do it all over again for windows.
+    " sunovabitch conda doesn't lay out the python dirs in the same spot as Unix
+    else
+      let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h')
 
   " #1) use the remote python's site packages
   python3 import site, vim, sys

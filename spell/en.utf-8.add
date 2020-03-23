@@ -139,6 +139,7 @@ DirChange
 Discover's
 Django
 Django's
+DocBuilder
 Docopt
 Docstring
 DokuWiki
@@ -256,6 +257,7 @@ Lightline
 Linksys
 Linter
 Litecoin
+LogRecord
 Logcheck
 Losh
 Losh's
@@ -688,6 +690,7 @@ cmd
 cmd's
 cmder
 cmdlet
+cmdlets
 cmdline
 cmds
 cnoremap
@@ -781,6 +784,7 @@ doskey
 dotfiles
 dpkg
 dropbox
+dropdown
 drwxrwxr
 dtd
 du
@@ -1728,6 +1732,7 @@ venv
 verilog
 vhdl
 viconf
+viewlet
 vim
 vim74
 vim8
@@ -1837,7 +1842,3 @@ zsh
 zshrc
 µBlock
 µMatrix
-viewlet
-dropdown
-cmdlets
-DocBuilder

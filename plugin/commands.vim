@@ -92,9 +92,12 @@ function! s:CocProviders(A, L, P) abort
   return join(s:list, "\n")
 endfunction
 
-function! s:HandleCocProviders(provider) abort
+function! s:HandleCocProviders(...) abort
 
-  let s:resp = CocHasProvider(a:provider)
+  if len(a:000) is 0
+    return
+  endif
+  let s:resp = CocHasProvider(a:1)
   if s:resp is v:true
     echomsg 'That provider *DOES* exist for your current document.'
   elseif s:resp is v:false
@@ -107,8 +110,7 @@ endfunction
 " This gets way more complicated if you try to handle more than 1 arg
 " command! -nargs=* -complete=custom,s:CocProviders CocProviders for i in [(<q-args>)] | call s:HandleCocProviders(i) | endfor
 
-command! -bar -nargs=1 -complete=custom,s:CocProviders CocProviders call s:HandleCocProviders(<args>)
-
+command! -bar -nargs=* -complete=custom,s:CocProviders CocProviders call s:HandleCocProviders(<q-args>)
 " }}}
 
 " A LOT Of FZF Commands: {{{

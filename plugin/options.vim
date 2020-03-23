@@ -78,7 +78,10 @@ setglobal sidescroll=5 hidden
 " dude these stopped setting when i set global them
 set number relativenumber
 setglobal cmdheight=3
-setglobal helpheight=8  " why is 20? help windows can be really intrusive with it that high
+" why is 20? help windows can be really intrusive with it that high
+let s:height = &lines / 4
+let &g:previewheight  = s:height
+let &g:helpheight = s:height
 
 if filereadable(s:repo_root . '/spell/en.utf-8.add')
   let &g:spellfile = s:repo_root . '/spell/en.utf-8.add'
@@ -196,6 +199,10 @@ elseif !has('unix')
   call find_files#msdos_remote()
 else
   call find_files#ubuntu_remote()
+endif
+
+if !exists('$ANDROID_DATA')
+  call coc#config({ "bash": { "args": [ "start" ], "command": "bash-language-server", "filetypes": [ "sh", "bash" ] }})
 endif
 
 if has('nvim')
@@ -318,9 +325,9 @@ let g:tagbar_show_linenumbers = -1
 let g:tagbar_foldlevel = 0
 let g:tagbar_autopreview = 0
 let g:tagbar_map_zoomwin = 'Z'
-  if filereadable(expand('$HOME/.ctags.d/new_universal.ctags'))
-    let g:tagbar_ctags_options = [expand('~/.ctags.d/new_universal.ctags')]
-  endif
+if filereadable(expand('$HOME/.ctags.d/new_universal.ctags'))
+  let g:tagbar_ctags_options = [expand('~/.ctags.d/new_universal.ctags')]
+endif
 " }}}
 
 " Tagbar Types: {{{

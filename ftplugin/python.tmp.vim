@@ -15,17 +15,14 @@ let g:pyindent_open_paren = 'shiftwidth() * 2'
 let g:pyindent_nested_paren = 'shiftwidth()'
 " Indent for a continuation line: >
 let g:pyindent_continue = 'shiftwidth() * 2'
-
 let g:pydoc_executable = 1
 " }}}
 
 " Filetype Specific Options: {{{
-" Do this in advance so we don't waste time looking for a keywordprg i'll end
-" up overwriting anyway
-let g:pydoc_executable = 1
 source $VIMRUNTIME/ftplugin/python.vim
 
 syntax sync fromstart
+syntax enable
 setlocal nolinebreak  " Dont set this on itll create syntaxerors
 setlocal textwidth=120
 setlocal tagcase=smart
@@ -65,13 +62,6 @@ setlocal isfname+=.
 " It get kinda annoying movin around without _ as a word delimiter
 setlocal iskeyword-=.,_
 
-" Possibly chalk this up to one of the many tab related and necessary option
-" python requires you set
-" *'shiftround'* *'sr'* *'noshiftround'* *'nosr'*
-" 'shiftround' 'sr'	boolean	(default off) global
-	" Round indent to multiple of 'shiftwidth'.  Applies to > and <
-	" commands.  CTRL-T and CTRL-D in Insert mode always round the indent to
-	" a multiple of 'shiftwidth' (this is Vi compatible).
 setlocal shiftround
 
 let &l:path = py#PythonPath()
@@ -88,22 +78,16 @@ if exists("loaded_matchit")
 endif
 " }}}
 
-" Mappings: {{{1
+" Mappings: {{{
 
 " Don't know how I haven't done this yet.
 " TODO: Add ranges so we can do py3do on lines
 noremap <buffer> <F5> <Cmd>py3f %<CR>
 noremap! <buffer> <F5> <Cmd>py3f %<CR>
-
-" ../../autoload/pydoc_help.vim
-" nnoremap <buffer> K <Cmd>PydocShow<CR>
-setlocal keywordprg=:PydocShow
-" Use xnoremap because I wouldn't want this in select mode
-" execute 'xnoremap K <Cmd>Pydoc ' . expand('<cWORD>') . '<CR>'
-
+nnoremap K <Cmd>PydocShow<CR>
 " }}}
 
-" Formatters: {{{1
+" Formatters: {{{
 
 if executable('yapf')
   setlocal equalprg=yapf\ -i\ %
@@ -123,17 +107,15 @@ else
 endif  " }}}
 
 " Plugins: {{{
-" ALE:
-" Ive actually noticed things working bettwr when called unconditionally
 call py#ALE_Python_Conf()
 
-" Coc:
 " Just tried this and it worked! So keep checking :CocCommand output
 if !empty('g:did_coc_loaded')
   command! -nargs=* -bar CocPython call CocActionAsync('runCommand', 'python.startREPL', shellescape(<q-args>))
-endif  " }}}
+endif
+" }}}
 
-" Atexit: {{{1
+" Atexit: {{{
 " For a reference go to $VIMRUNTIME/ftplugin/python.vim
 " We shouldve gotten it from ^ that file but just in case
 if !exists('b:undo_ftplugin')

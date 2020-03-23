@@ -37,6 +37,7 @@ augroup UserHelpandPython " {{{
   endif
 
   " Here's a solid group to test out on
+  " Blocks the UI and jams shit
   " au! CursorHold .xonshrc ++nested exe "silent! psearch " . expand("<cword>")
 
 augroup END
@@ -113,7 +114,6 @@ autocmd BufReadCmd *.py if executable('pytest')
                 \| echomsg 'Using pylint as a compiler!'
                 \| endif
 
-" autocmd BufWritePost *.rst,*.py :make! %
 augroup END
 " }}}
 

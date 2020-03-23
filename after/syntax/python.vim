@@ -1,18 +1,12 @@
-" header
+" ============================================================================
+  " File: python.vim
+  " Author: Faris Chugthai
+  " Description: Syntax updates
+  " Last Modified: March 22, 2020
+" ============================================================================
 " It feels a little silly to do too much for this one line of code so let's not.
 
 let g:python_space_error_highlight = 1
-
-" Source it once per buffer
-if exists('b:did_after_syntax_python') || &compatible || v:version < 700
-  finish
-endif
-let b:did_after_syntax_python = 1
-
-" Well i mean a specific kind
-if &filetype !=# 'python'
-  finish
-endif
 
 " Otherwise this probably got set
 unlet! b:current_syntax
@@ -29,3 +23,9 @@ syn keyword pythonException else
 
 " New func
 syn keyword pythonBuiltinFunc breakpoint
+
+" Highlight the keys in keyword arguments correctly
+syn region FCall start='[[:alpha:]_]\i*\s*(' end=')' contains=FCall,FCallKeyword
+syn match FCallKeyword /\i*\ze\s*=[^=]/ contained
+hi default link FCallKeyword Yellow
+" }}}
