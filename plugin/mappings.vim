@@ -81,7 +81,15 @@ nnoremap ,f :find **/*<C-z><S-Tab>
 " The nvim API is seriously fantastic.
 nnoremap <Leader>rt call buffers#EchoRTP()
 
-" Marks:
+noremap <S-Insert> <MiddleMouse>
+noremap! <S-Insert> <MiddleMouse>
+tnoremap <S-Insert> <MiddleMouse>
+
+inoremap <Down> <C-R>=pumvisible() ? "\<lt>C-N>" : "\<lt>Down>"<CR>
+inoremap <Up> <C-R>=pumvisible() ? "\<lt>C-P>" : "\<lt>Up>"<CR>
+" }}}
+
+" Marks: {{{
 nnoremap [1 :call signature#marker#Goto('prev', 1, v:count)
 nnoremap ]1 :call signature#marker#Goto('next', 1, v:count)
 nnoremap [2 :call signature#marker#Goto('prev', 2, v:count)
@@ -90,7 +98,6 @@ nnoremap [3 :call signature#marker#Goto('prev', 3, v:count)
 nnoremap ]3 :call signature#marker#Goto('next', 3, v:count)
 nnoremap [4 :call signature#marker#Goto('prev', 4, v:count)
 nnoremap ]4 :call signature#marker#Goto('next', 4, v:count)
-
 " }}}
 
 " RSI: {{{
@@ -196,19 +203,7 @@ nnoremap / ms/
 xnoremap / msy/<C-R>"<CR>
 
 " }}}
-
-" Make Shift Insert Work Like In Xterm: {{{
-noremap <S-Insert> <MiddleMouse>
-noremap! <S-Insert> <MiddleMouse>
-tnoremap <S-Insert> <MiddleMouse>
-" }}}
-
-" Use The Down Arrow When The Pums Open: {{{
-inoremap <Down> <C-R>=pumvisible() ? "\<lt>C-N>" : "\<lt>Down>"<CR>
-inoremap <Up> <C-R>=pumvisible() ? "\<lt>C-P>" : "\<lt>Up>"<CR>
-
-" }}}
-
+"
 " UltiSnips: {{{
 
 noremap <F4> <Cmd>UltiSnipsEdit<CR>
@@ -380,21 +375,19 @@ nnoremap ]g <Plug>(coc-diagnostic-next)<CR>
 " Note: Tried adding <expr> and didn't work
 " nnoremap [c  <Plug>(coc-git-prevchunk)<CR>
 " nnoremap ]c  <Plug>(coc-git-nextchunk)<CR>
-" }}}
 
-" Remap for rename current word: {{{
 nnoremap <F2> <Plug>(coc-refactor)<CR>
 
 " Instead of actually writing a '<,'> are we allowed to use the * char?
 xnoremap <F2> <Cmd>'<,'>CocCommand document.renameCurrentWord<CR>
-" }}}
 
-" CocOpenLog: {{{2
 " TODO: Why does this raise an error?
 " nnoremap <expr> ,l coc#client#open_log()
 nnoremap ,l <Cmd>CocOpenLog<CR>
 " And let's add one in for CocInfo
 nnoremap ,i <Cmd>CocInfo<CR>
+	
+inoremap <M-w> <C-R>=coc#start({'source': 'word'})<CR>
 " }}}
 
 " Grep By Motion: Mnemonic CocSelect {{{2

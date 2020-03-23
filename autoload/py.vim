@@ -172,8 +172,9 @@ function! py#Cnxn(...) abort  " {{{
   if len(a:000) is 0
     call termopen('ipython')
   else
-  " Handle this i guess?
-  call termopen('ipython', a:000)
+    " Handle this i guess?
+    call termopen('ipython', a:000)
+  endif
 
   " Credit: JustinMK
   " https://github.com/justinmk/config/blob/ad5b792049b352274d4cbd3525a2aff6ce296a7e/.config/nvim/init.vim#L1339-L1361

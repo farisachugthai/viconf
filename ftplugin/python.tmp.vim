@@ -135,7 +135,12 @@ endif  " }}}
 
 " Atexit: {{{1
 " For a reference go to $VIMRUNTIME/ftplugin/python.vim
-let b:undo_ftplugin = 'setlocal lbr< tw< cms< et< sts< ts<'
+" We shouldve gotten it from ^ that file but just in case
+if !exists('b:undo_ftplugin')
+  let b:undo_ftplugin = ''
+endif
+
+let b:undo_ftplugin .= 'setlocal lbr< tw< cms< et< sts< ts<'
       \ . '|setlocal su< sw< cc< fdm< kp<'
       \ . '|setlocal sr< sua< isf< ep< fp< path< cinw<'
       \ . '|setlocal mp< efm<'
@@ -144,7 +149,7 @@ let b:undo_ftplugin = 'setlocal lbr< tw< cms< et< sts< ts<'
       \ . '|setlocal indentkeys<'
       \ . '|setlocal omnifunc<'
       \ . '|setlocal cinkeys<'
-      \ . '|unmap <buffer> <F5>'
-      \ . '|unmap! <buffer> <F5>'
+      \ . '|silent! unmap <buffer> <F5>'
+      \ . '|silent! unmap! <buffer> <F5>'
       \ . '|unlet! b:undo_ftplugin'
       \ . '|unlet! b:did_ftplugin'

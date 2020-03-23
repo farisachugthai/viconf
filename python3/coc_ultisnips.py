@@ -1,17 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from collections import namedtuple  # , deque,
 import os
 from pathlib import Path
-
-import vim
+import sys
+import vim   # noqa
 
 try:
     import pynvim
 except ImportError:
     pynvim = None
 
-from collections import namedtuple  # , deque,
-from snippets_helper import *
+sys.path.append('.')
+
+from snippets_helper import *   # noqa
 
 NORMAL = 0x1
 DOXYGEN = 0x2

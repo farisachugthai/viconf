@@ -67,6 +67,14 @@ from pynvim.msgpack_rpc.session import ErrorResponse, Session
 
 # }}}
 
+# Globals: {{{
+basestring = str
+
+if sys.version_info >= (3, 4):
+    from importlib.machinery import PathFinder
+
+PYTHON_SUBDIR = "python3"
+
 logger = logging.getLogger(__name__)
 debug, info, warn = (
     logger.debug,
@@ -74,15 +82,14 @@ debug, info, warn = (
     logger.warning,
 )
 
-
-# util: {{{
-# There is no 'long' type in Python3 just int
-
-
 long = int
 unicode_errors_default = "surrogateescape"
 
 NUM_TYPES = (int, long, float)
+
+# }}}
+# util: {{{
+# There is no 'long' type in Python3 just int
 
 
 def format_exc_skip(skip, limit=None):
@@ -182,7 +189,7 @@ def plugin(cls):
     # decorated functions have a bound Nvim instance as first argument.
     # For methods in a plugin-decorated class this is not required, because
     # the class initializer will already receive the nvim object.
-    predicate = lambda fn: hasattr(fn, "_nvim_bind")
+    def predicate(fn): return hasattr(fn, "_nvim_bind")
     for _, fn in inspect.getmembers(cls, predicate):
         fn._nvim_bind = False
     return cls
@@ -982,20 +989,6 @@ class LuaFuncs(object):
 # }}}
 
 # plugin/scripthost: {{{
-logger = logging.getLogger(__name__)
-debug, info, warn = (
-    logger.debug,
-    logger.info,
-    logger.warn,
-)
-
-basestring = str
-
-if sys.version_info >= (3, 4):
-    from importlib.machinery import PathFinder
-
-PYTHON_SUBDIR = "python3"
-
 
 @plugin
 class ScriptHost(object):
@@ -1189,7 +1182,7 @@ def path_hook(nvim):
         idx = oldtail.find(".")
         if idx > 0:
             name = oldtail[:idx]
-            tail = oldtail[idx + 1 :]
+            tail = oldtail[idx + 1:]
             fmr = imp.find_module(name, path)
             module = imp.find_module(fullname[: -len(oldtail)] + name, *fmr)
             return _find_module(fullname, tail, module.__path__)
@@ -1447,7 +1440,7 @@ class Range(object):
             start = self.start
         if end is None:
             end = self.end
-        self._buffer[start : end + 1] = lines
+        self._buffer[start: end + 1] = lines
 
     def __iter__(self):
         for i in range(self.start, self.end + 1):
@@ -1632,7 +1625,7 @@ class RemoteSequence(object):
         """Return a sequence item by index."""
         if not isinstance(idx, slice):
             return self._fetch()[idx]
-        return self._fetch()[idx.start : idx.stop]
+        return self._fetch()[idx.start: idx.stop]
 
     def __iter__(self):
         """Return an iterator for the sequence."""

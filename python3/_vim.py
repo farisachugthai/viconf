@@ -7,13 +7,16 @@ Really useful seemingly universal functions for working with Vim though.
 Dec 07, 2019: Double checked that this passes a cursory `:py3f %` test and it did.
 
 """
-from contextlib import contextmanager
-import xml.dom.minidom as md
-from pprint import pprint
 import json
+import xml.dom.minidom as md
+import sys
+
+from contextlib import contextmanager
+from pathlib import Path
+from pprint import pprint
 
 try:
-    import vim  # pylint:disable=import-error
+    import vim  # noqa pylint:disable=import-error
 except ImportError:
     vim = None
 
@@ -21,6 +24,44 @@ try:
     import yaml
 except (ImportError, ModuleNotFoundError):
     yaml = None
+
+
+def vim_eval(text):
+    """Wraps vim.eval."""
+    return vim.eval(text)
+
+
+def bindeval(text):
+    """Wraps vim.bindeval."""
+    return vim.bindeval(text)
+
+
+def command(text, *args, **kwargs):
+    return vim.command(text, *args, **kwargs)
+
+
+def feedkeys(keys, mode="n"):
+    """Wrapper around vim's feedkeys function.
+
+    Mainly for convenience.
+    """
+    if eval("mode()") == "n":
+        if keys == "a":
+            cursor_pos = get_cursor_pos()
+            cursor_pos[2] = int(cursor_pos[2]) + 1
+            set_cursor_from_pos(cursor_pos)
+        if keys in "ai":
+            keys = "startinsert"
+
+    if keys == "startinsert":
+        command("startinsert")
+    else:
+        command(r'call feedkeys("%s", "%s")' % (keys, mode))
+
+
+data = vim_eval('stdpath("data")')
+if Path(data).exists():
+    sys.path.append(data)
 
 
 def _vim_dec(string):
@@ -172,35 +213,6 @@ def save_mark(name):
             set_mark_from_pos(name, old_pos)
 
 
-def eval(text):
-    """Wraps vim.eval."""
-    return vim.eval(text)
-
-
-def bindeval(text):
-    """Wraps vim.bindeval."""
-    return vim.bindeval(text)
-
-
-def feedkeys(keys, mode="n"):
-    """Wrapper around vim's feedkeys function.
-
-    Mainly for convenience.
-    """
-    if eval("mode()") == "n":
-        if keys == "a":
-            cursor_pos = get_cursor_pos()
-            cursor_pos[2] = int(cursor_pos[2]) + 1
-            set_cursor_from_pos(cursor_pos)
-        if keys in "ai":
-            keys = "startinsert"
-
-    if keys == "startinsert":
-        command("startinsert")
-    else:
-        command(r'call feedkeys("%s", "%s")' % (keys, mode))
-
-
 def virtual_position(line, col):
     """Runs the position through virtcol() and returns the result."""
     nbytes = col2byte(line, col)
@@ -209,8 +221,6 @@ def virtual_position(line, col):
 
 def select(start, end):
     """Select the span in Select mode."""
-    _unmap_select_mode_mapping()
-
     selection = eval("&selection")
 
     col = col2byte(start.line + 1, start.col)
@@ -279,163 +289,6 @@ def _is_pos_zero(pos):
     return ["0"] * 4 == pos or [0] == pos
 
 
-<<<<<<< Updated upstream
-def _unmap_select_mode_mapping():
-    """This function unmaps select mode mappings if so wished by the user.
-
-    Removes select mode mappings that can actually be typed by the user
-    (ie, ignores things like <Plug>).
-
-    """
-    if int(eval("g:UltiSnipsRemoveSelectModeMappings")):
-        ignores = eval("g:UltiSnipsMappingsToIgnore") + ["UltiSnips"]
-
-        for option in ("<buffer>", ""):
-            # Put all smaps into a var, and then read the var
-            command(r"redir => _tmp_smaps | silent smap %s " % option + "| redir END")
-
-            # Check if any mappings where found
-            if hasattr(vim, "bindeval"):
-                # Safer to use bindeval, if it exists, because it can deal with
-                # non-UTF-8 characters in mappings; see GH #690.
-                all_maps = bindeval(r"_tmp_smaps")
-            else:
-                all_maps = eval(r"_tmp_smaps")
-            all_maps = list(filter(len, all_maps.splitlines()))
-            if len(all_maps) == 1 and all_maps[0][0] not in " sv":
-                # "No maps found". String could be localized. Hopefully
-                # it doesn't start with any of these letters in any
-                # language
-                continue
-
-            # Only keep mappings that should not be ignored
-            maps = [
-                m for m in all_maps
-                if not any(i in m for i in ignores) and len(m.strip())
-            ]
-
-            for map in maps:
-                # The first three chars are the modes, that might be listed.
-                # We are not interested in them here.
-                trig = map[3:].split()[0] if len(map[3:].split()) != 0 else None
-
-                if trig is None:
-                    continue
-
-                # The bar separates commands
-                if trig[-1] == "|":
-                    trig = trig[:-1] + "<Bar>"
-
-                # Special ones
-                if trig[0] == "<":
-                    add = False
-                    # Only allow these
-                    for valid in ["Tab", "NL", "CR", "C-Tab", "BS"]:
-                        if trig == "<%s>" % valid:
-                            add = True
-                    if not add:
-                        continue
-
-                # UltiSnips remaps <BS>. Keep this around.
-                if trig == "<BS>":
-                    continue
-
-                # Actually unmap it
-                try:
-                    command("silent! sunmap %s %s" % (option, trig))
-                except:  # pylint:disable=bare-except
-                    # Bug 908139: ignore unmaps that fail because of
-                    # unprintable characters. This is not ideal because we
-                    # will not be able to unmap lhs with any unprintable
-                    # character. If the lhs stats with a printable
-                    # character this will leak to the user when he tries to
-                    # type this character as a first in a selected tabstop.
-                    # This case should be rare enough to not bother us
-                    # though.
-                    pass
-
-
-||||||| constructed merge base
-def _unmap_select_mode_mapping():
-    """This function unmaps select mode mappings if so wished by the user.
-
-    Removes select mode mappings that can actually be typed by the user
-    (ie, ignores things like <Plug>).
-
-    """
-    if int(eval("g:UltiSnipsRemoveSelectModeMappings")):
-        ignores = eval("g:UltiSnipsMappingsToIgnore") + ["UltiSnips"]
-
-        for option in ("<buffer>", ""):
-            # Put all smaps into a var, and then read the var
-            command(r"redir => _tmp_smaps | silent smap %s " %
-                    option + "| redir END")
-
-            # Check if any mappings where found
-            if hasattr(vim, "bindeval"):
-                # Safer to use bindeval, if it exists, because it can deal with
-                # non-UTF-8 characters in mappings; see GH #690.
-                all_maps = bindeval(r"_tmp_smaps")
-            else:
-                all_maps = eval(r"_tmp_smaps")
-            all_maps = list(filter(len, all_maps.splitlines()))
-            if len(all_maps) == 1 and all_maps[0][0] not in " sv":
-                # "No maps found". String could be localized. Hopefully
-                # it doesn't start with any of these letters in any
-                # language
-                continue
-
-            # Only keep mappings that should not be ignored
-            maps = [
-                m
-                for m in all_maps
-                if not any(i in m for i in ignores) and len(m.strip())
-            ]
-
-            for map in maps:
-                # The first three chars are the modes, that might be listed.
-                # We are not interested in them here.
-                trig = map[3:].split()[0] if len(
-                    map[3:].split()) != 0 else None
-
-                if trig is None:
-                    continue
-
-                # The bar separates commands
-                if trig[-1] == "|":
-                    trig = trig[:-1] + "<Bar>"
-
-                # Special ones
-                if trig[0] == "<":
-                    add = False
-                    # Only allow these
-                    for valid in ["Tab", "NL", "CR", "C-Tab", "BS"]:
-                        if trig == "<%s>" % valid:
-                            add = True
-                    if not add:
-                        continue
-
-                # UltiSnips remaps <BS>. Keep this around.
-                if trig == "<BS>":
-                    continue
-
-                # Actually unmap it
-                try:
-                    command("silent! sunmap %s %s" % (option, trig))
-                except:  # pylint:disable=bare-except
-                    # Bug 908139: ignore unmaps that fail because of
-                    # unprintable characters. This is not ideal because we
-                    # will not be able to unmap lhs with any unprintable
-                    # character. If the lhs stats with a printable
-                    # character this will leak to the user when he tries to
-                    # type this character as a first in a selected tabstop.
-                    # This case should be rare enough to not bother us
-                    # though.
-                    pass
-
-
-=======
->>>>>>> Stashed changes
 # Unrelated formatting code
 
 def pretty_xml(x):

@@ -9,6 +9,23 @@ if exists('b:did_ftplugin') | finish | endif
 
 source $VIMRUNTIME/ftplugin/javascript.vim
 
+setlocal expandtab tabstop=4 softtabstop=2 shiftwidth=2
+setlocal include=^\\s*[^\/]\\+\\(from\\\|require(\\)\\s*['\"\.]
+
+let &l:define  = '^\s*\('
+             \ . '\(export\s\)*\(default\s\)*\(var\|const\|let\|function\|class\|interface\)\s'
+             \ . '\|\(public\|private\|protected\|readonly\|static\)\s'
+             \ . '\|\(get\s\|set\s\)'
+             \ . '\|\(export\sdefault\s\|abstract\sclass\s\)'
+             \ . '\|\(async\s\)'
+             \ . '\|\(\ze\i\+([^)]*).*{$\)'
+             \ . '\)'
+
+setlocal includeexpr=includes#TypeScriptIncludeExpression(v:fname,0)
+
+setlocal suffixesadd+=.ts,.tsx,.d.ts
+setlocal isfname+=@-@
+
 " Original: {{{
 " https://gist.githubusercontent.com/romainl/a50b49408308c45cc2f9f877dfe4df0c/raw/1ab8eb733948c0c89d11553cc0e00f4ab251f31e/typescript.vim
 
@@ -86,22 +103,6 @@ if !exists('b:did_typescript_setup')
 endif
 
 
-setlocal include=^\\s*[^\/]\\+\\(from\\\|require(\\)\\s*['\"\.]
-
-let &l:define  = '^\s*\('
-             \ . '\(export\s\)*\(default\s\)*\(var\|const\|let\|function\|class\|interface\)\s'
-             \ . '\|\(public\|private\|protected\|readonly\|static\)\s'
-             \ . '\|\(get\s\|set\s\)'
-             \ . '\|\(export\sdefault\s\|abstract\sclass\s\)'
-             \ . '\|\(async\s\)'
-             \ . '\|\(\ze\i\+([^)]*).*{$\)'
-             \ . '\)'
-
-setlocal includeexpr=includes#TypeScriptIncludeExpression(v:fname,0)
-
-setlocal suffixesadd+=.ts,.tsx,.d.ts
-setlocal isfname+=@-@
-
 " more helpful gf
 nnoremap <silent> <buffer> gf         :call <SID>GF(expand('<cfile>'), 'find')<CR>
 xnoremap <silent> <buffer> gf         <Esc>:<C-u>call <SID>GF(visual#GetSelection(), 'find')<CR>
@@ -110,10 +111,10 @@ xnoremap <silent> <buffer> <C-w><C-f> <Esc>:<C-u>call <SID>GF(visual#GetSelectio
 
 if !exists("*s:GF")
   function s:GF(text, cmd)  " {{{
-    let include_expression = TypeScriptIncludeExpression(a:text, 1)
+    let l:include_expression = TypeScriptIncludeExpression(a:text, 1)
 
-    if len(include_expression) > 1
-      execute a:cmd . " " . include_expression
+    if len(l:include_expression) > 1
+      execute a:cmd . " " . l:include_expression
     else
       echohl WarningMsg
       echo "Can't find file " . a:text
@@ -122,8 +123,9 @@ if !exists("*s:GF")
   endfunction  " }}}
 endif
 
-let b:undo_ftplugin = 'setlocal isf< sua< syntax< '
+let b:undo_ftplugin = 'setlocal isf< sua< syntax< et< sts< sw< ts< '
       \ . '|unlet! b:undo_ftplugin'
+      \ . '|unlet! l:include_expression'
       \ . '|unlet! b:match_words'
       \ . '|unlet! b:did_ftplugin'
 

@@ -121,6 +121,11 @@ if has('unix')
   let g:startify_change_to_dir = 1
   let g:tagbar_iconchars = ['▷', '◢']
   let g:startify_change_to_dir = 1
+
+  call coc#config({"languaageserver": {"bash": {"args": [ "start" ], "command": "bash-language-server", "filetypes": ["sh", "bash"]}}})
+  call coc#config({"languageserver": {"clangd": { "args": [ "--background-index" ], "command": "clangd", "filetypes": [ "c", "cpp", "objc", "objcpp" ], "rootPatterns": [ "compile_flags.txt", "compile_commands.json", ".git/" ], "shell": true }}})
+
+  let g:coc_node_path = '/usr/sbin/node'
 else
   setglobal sessionoptions+=unix,slash viewoptions+=unix,slash
 
@@ -144,19 +149,12 @@ else
     let g:tagbar_ctags_bin = exepath('ctags')
   endif
 
-  if filereadable(expand('$HOME/.ctags.d/new_universal.ctags'))
-    let g:tagbar_ctags_options = [expand('~/.ctags.d/new_universal.ctags')]
-  endif
   " Icon Chars
   let g:tagbar_iconchars = ['▶', '▼']
 
   " Now find node:
-  if has('unix')  " wsl
-    let g:coc_node_path = '/usr/sbin/node'
-  else
-    if executable('C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\node.exe')
-      let g:coc_node_path = 'C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\node.exe'
-    endif
+  if executable('C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\node.exe')
+    let g:coc_node_path = 'C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\node.exe'
   endif
 endif
 " }}}
@@ -320,6 +318,9 @@ let g:tagbar_show_linenumbers = -1
 let g:tagbar_foldlevel = 0
 let g:tagbar_autopreview = 0
 let g:tagbar_map_zoomwin = 'Z'
+  if filereadable(expand('$HOME/.ctags.d/new_universal.ctags'))
+    let g:tagbar_ctags_options = [expand('~/.ctags.d/new_universal.ctags')]
+  endif
 " }}}
 
 " Tagbar Types: {{{

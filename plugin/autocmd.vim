@@ -19,9 +19,9 @@ augroup UserHelpandPython " {{{
         \| wincmd T
         \| endif
 
-  autocmd FileType python exec 'source ' . s:repo_root . '/ftplugin/python.vim'
-  autocmd FileType python,xonsh let &l:path = py#PythonPath()
-  autocmd FileType python,xonsh call py#ALE_Python_Conf()
+  " autocmd FileType python exec 'source ' . s:repo_root . '/ftplugin/python.vim'
+  " autocmd FileType python,xonsh let &l:path = py#PythonPath()
+  " autocmd FileType python,xonsh call py#ALE_Python_Conf()
 
   " Not ready yet. BE CAREFUL and go read :he BufReadCmd and Cmd-events
   " inspired by $VIMRUNTIME/plugin/man.vim

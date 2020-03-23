@@ -61,34 +61,6 @@
   "javascript.showUnused": true,
   "json.format.enable": true,
   "languageserver": {
-    "bash": {
-      "args": [
-        "start"
-      ],
-      "command": "bash-language-server",
-      "filetypes": [
-        "sh",
-        "bash"
-      ]
-    },
-    "clangd": {
-      "args": [
-        "--background-index"
-      ],
-      "command": "clangd",
-      "filetypes": [
-        "c",
-        "cpp",
-        "objc",
-        "objcpp"
-      ],
-      "rootPatterns": [
-        "compile_flags.txt",
-        "compile_commands.json",
-        ".git/"
-      ],
-      "shell": true
-    },
     "vimlsp": {
       "args": [
         "--stdio"
