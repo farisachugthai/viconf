@@ -20,6 +20,10 @@ function! s:_PythonPath() abort  " {{{
   " Set up the path var for python filetypes. Here we go!
   " Note: the path option is to find directories so it's usually unnecesssary
   " to glob if you have the /usr/lib/python dir in hand.
+  " If you do choose to glob keep in mind this from the help.:
+  " This option requires that the '**' either is at the end of the path or
+  " ends with a '/'
+
 
   " The current path and the buffer's dir. Also recursively search downwards
   let s:path = '.,,**,'
@@ -32,114 +36,46 @@ function! s:_PythonPath() abort  " {{{
   " python3_host_prog is set but we don't have python. Probably need to run
   " UpdateRemotePlugins. but at least say something so we know there's a problem.
   if !has('python3')
-    echoerr 'autoload/py:PythonPath -- Run :UpdateRemotePlugins'
+    echoerr 'autoload/py:PythonPath -- We do not have python3 but python3_host_prog is set. Run :UpdateRemotePlugins'
     let &l:path = s:path
     return s:path
   endif
  
-  " Note: Regardless of whether its unix or not, add dirs in reverse order
-  " as we're appending them to the set option
-  if exists('g:python3_host_prog')
-    " Note: Regardless of whether its unix or not, add dirs in reverse order
-    " as we're appending them to the set option
-    if has('unix')
+   " #1) use the remote python's site packages
+   " guess who figured something out today?
+   python3 import site, vim;
+   let s:site_pack = py3eval('site.USER_SITE')
+   let s:path = s:path . s:site_pack . '/**'
 
-       " #1) use the remote python's site packages
-       " guess who figured something out today?
-       python3 import site, vim;
-       let s:site_pack = py3eval('site.USER_SITE')
-       let s:path = s:path . s:site_pack . '/**'
+t   " #3) forgot to add my pythonx files
+    let s:path .= ',' . stdpath('config') . '/python3'
 
-      " #2) use the system python's std library modules
-      " Oh don't forget the usr/lib one. Ugh. But android doesn't put that in
-      " the same place as other unix OSes.
-      if exists('$ANDROID_DATA')
-        let s:path = s:path . ',' . expand('$PREFIX/lib/python3.8')
-      else
-        let s:path = s:path . ',/usr/lib/python3.8'
-      endif
-
-      " #3) use the remote pythons std lib modules
-      let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h:h')
-      let s:path = s:path . ',' . s:root_dir
-
-    " then do it all over again for windows.
-    " sunovabitch conda doesn't lay out the python dirs in the same spot as Unix
-    else
-      let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h')
-=======
-  if exists('g:python3_host_prog')
-    " Note: Regardless of whether its unix or not, add dirs in reverse order
-    " as we're appending them to the set option
-    if has('unix')
-
-       " #1) use the remote python's site packages
-       " guess who figured something out today?
-       python3 import site, vim;
-       let s:site_pack = py3eval('site.USER_SITE')
-       let s:path = s:path . s:site_pack . '/**'
-
-      " #2) use the system python's std library modules
-      " Oh don't forget the usr/lib one. Ugh. But android doesn't put that in
-      " the same place as other unix OSes.
-      if exists('$ANDROID_DATA')
-        let s:path = s:path . ',' . expand('$PREFIX/lib/python3.8')
-      else
-        let s:path = s:path . ',/usr/lib/python3.8'
-      endif
-
-      " #3) use the remote pythons std lib modules
-      let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h')
-      let s:path = s:path . ',' . s:root_dir
-
-t     " #4 forgot to add my pythonx files
-      let s:path .= ',' . stdpath('config') . '/python3'
-
-    " then do it all over again for windows.
-    " sunovabitch conda doesn't lay out the python dirs in the same spot as Unix
-    else
-      let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h')
-
-  " #1) use the remote python's site packages
-  python3 import site, vim, sys
-  let s:site_pack = py3eval('site.USER_SITE')
-  let s:path = s:path . s:site_pack . '/**'
-
-  " Platform specific checks:
-  if has('unix')
-
-    " #2) use the system python's std library modules
+    " Platform specific: {{{
+    " #4) use the system python's std library modules
     " Oh don't forget the usr/lib one. Ugh. But android doesn't put that in
     " the same place as other unix OSes.
-    if exists('$ANDROID_DATA')
-      let s:path = s:path . ',' . expand('$PREFIX/lib/python3.8')
-    else
-      let s:path = s:path . ',/usr/lib/python3.8'
+    if has('unix')
+      if exists('$ANDROID_DATA')  " Termux
+        let s:path = s:path . ',' . expand('$PREFIX/lib/python3.8')
+      else   " unix not termux
+        let s:path = s:path . ',/usr/lib/python3.8'
+      endif
+    else  " windows
+      " sunovabitch conda doesn't lay out the python dirs in the same spot as Unix
+      let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h')
+      let s:site_pack = s:root_dir . '/lib/site-packages'
+      let s:path = s:path . s:site_pack
     endif
-
-    " #3) use the remote pythons std lib modules
-    let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h:h')
-    let s:path = s:path . ',' . s:root_dir
-
-  " then do it all over again for windows.
-  " sunovabitch conda doesn't lay out the python dirs in the same spot as Unix
-  else
-    let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h')
-
-    let s:site_pack = s:root_dir . '/lib/site-packages'
-    let s:path = s:path . s:site_pack
-
-    " This option requires that the '**' either is at the end of the path or
-    " ends with a '/'
-    " let s:path =  ',' . s:root_dir . '/lib/**1/' . s:path . ','
 
     " make this last. its the standard lib and we prepend it to the path so
     " it should be first in the option AKA last in the function
     " UGHHHHHHH VIM WHYYYYY. If you write this as s:root_dir . '/lib/*'
     " it only matches 1 letter and doesn't include the std lib as a result.
     " Shave off the glob to add more in. Yeah ikr?
+    " #2) use the remote pythons std lib modules
+    let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h')
     let s:path = s:root_dir . '/lib,' . s:path
-  endif
+  let &l:path = s:path
   return s:path
 
 endfunction  " }}}

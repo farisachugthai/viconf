@@ -125,8 +125,7 @@ if has('unix')
   let g:tagbar_iconchars = ['▷', '◢']
   let g:startify_change_to_dir = 1
 
-  call coc#config({"languaageserver": {"bash": {"args": [ "start" ], "command": "bash-language-server", "filetypes": ["sh", "bash"]}}})
-  call coc#config({"languageserver": {"clangd": { "args": [ "--background-index" ], "command": "clangd", "filetypes": [ "c", "cpp", "objc", "objcpp" ], "rootPatterns": [ "compile_flags.txt", "compile_commands.json", ".git/" ], "shell": true }}})
+  call coc#config("languageserver", {"clangd": { "args": [ "--background-index" ], "command": "clangd", "filetypes": [ "c", "cpp", "objc", "objcpp" ], "rootPatterns": [ "compile_flags.txt", "compile_commands.json", ".git/" ], "shell": "true" }})
 
   let g:coc_node_path = '/usr/sbin/node'
 else
@@ -202,7 +201,8 @@ else
 endif
 
 if !exists('$ANDROID_DATA')
-  call coc#config({ "bash": { "args": [ "start" ], "command": "bash-language-server", "filetypes": [ "sh", "bash" ] }})
+  call coc#config("languaageserver", {"bash": {"args": [ "start" ], "command": "bash-language-server", "filetypes": ["sh", "bash"]}})
+
 endif
 
 if has('nvim')

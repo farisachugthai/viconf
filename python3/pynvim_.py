@@ -103,7 +103,6 @@ def format_exc_skip(skip, limit=None):
 # Taken from SimpleNamespace in python 3
 class Version:
     """Helper class for version info."""
-
     def __init__(self, **kwargs):
         """Create the Version object."""
         self.__dict__.update(kwargs)
@@ -122,12 +121,14 @@ class Version:
 def get_client_info(kind, type_, method_spec):
     """Returns a tuple describing the client."""
     name = "python{}-{}".format(sys.version_info[0], kind)
-    attributes = {"license": "Apache v2", "website": "github.com/neovim/pynvim"}
+    attributes = {
+        "license": "Apache v2",
+        "website": "github.com/neovim/pynvim"
+    }
     return name, VERSION.__dict__, type_, method_spec, attributes
 
 
 VERSION = Version(major=0, minor=4, patch=1, prerelease="")
-
 
 # }}}
 
@@ -185,11 +186,14 @@ def plugin(cls):
     plugin_load method of the host.
     """
     cls._nvim_plugin = True
+
     # the _nvim_bind attribute is set to True by default, meaning that
     # decorated functions have a bound Nvim instance as first argument.
     # For methods in a plugin-decorated class this is not required, because
     # the class initializer will already receive the nvim object.
-    def predicate(fn): return hasattr(fn, "_nvim_bind")
+    def predicate(fn):
+        return hasattr(fn, "_nvim_bind")
+
     for _, fn in inspect.getmembers(cls, predicate):
         fn._nvim_bind = False
     return cls
@@ -197,7 +201,6 @@ def plugin(cls):
 
 def rpc_export(rpc_method_name, sync=False):
     """Export a function or plugin method as a msgpack-rpc request handler."""
-
     def dec(f):
         f._nvim_rpc_method_name = rpc_method_name
         f._nvim_rpc_sync = sync
@@ -221,7 +224,6 @@ def command(
     eval=None,
 ):
     """Tag a function or plugin method as a Nvim command handler."""
-
     def dec(f):
         f._nvim_rpc_method_name = "command:{}".format(name)
         f._nvim_rpc_sync = sync
@@ -268,7 +270,6 @@ def command(
 
 def autocmd(name, pattern="*", sync=False, allow_nested=False, eval=None):
     """Tag a function or plugin method as a Nvim autocommand handler."""
-
     def dec(f):
         f._nvim_rpc_method_name = "autocmd:{}:{}".format(name, pattern)
         f._nvim_rpc_sync = sync
@@ -298,7 +299,6 @@ def autocmd(name, pattern="*", sync=False, allow_nested=False, eval=None):
 
 def function(name, range=False, sync=False, allow_nested=False, eval=None):
     """Tag a function or plugin method as a Nvim function handler."""
-
     def dec(f):
         f._nvim_rpc_method_name = "function:{}".format(name)
         f._nvim_rpc_sync = sync
@@ -338,7 +338,6 @@ def shutdown_hook(f):
 
 def decode(mode=unicode_errors_default):
     """Configure automatic encoding/decoding of strings."""
-
     def dec(f):
         f._nvim_decode = mode
         return f
@@ -374,7 +373,6 @@ class Remote(object):
     the msgpack-rpc session. This implements equality which takes the remote
     object handle into consideration.
     """
-
     def __init__(self, session, code_data):
         """Initialize from session and code_data immutable object.
 
@@ -391,17 +389,20 @@ class Remote(object):
             self._api_prefix + "set_var",
             self._api_prefix + "del_var",
         )
-        self.options = RemoteMap(
-            self, self._api_prefix + "get_option", self._api_prefix + "set_option"
-        )
+        self.options = RemoteMap(self, self._api_prefix + "get_option",
+                                 self._api_prefix + "set_option")
 
     def __repr__(self):
         """Get text representation of the object."""
-        return "<%s(handle=%r)>" % (self.__class__.__name__, self.handle,)
+        return "<%s(handle=%r)>" % (
+            self.__class__.__name__,
+            self.handle,
+        )
 
     def __eq__(self, other):
         """Return True if `self` and `other` are the same object."""
-        return hasattr(other, "code_data") and other.code_data == self.code_data
+        return hasattr(other,
+                       "code_data") and other.code_data == self.code_data
 
     def __hash__(self):
         """Return hash based on remote object id."""
@@ -463,7 +464,6 @@ class Nvim(object):
     accessing state-dependent attributes. They should instead schedule another
     callback using nvim.async_call, which will not have this restriction.
     """
-
     @classmethod
     def from_session(cls, session):
         """Create a new Nvim instance for a Session instance.
@@ -497,7 +497,13 @@ class Nvim(object):
             nvim._err_cb,
         )
 
-    def __init__(self, session, channel_id, metadata, types, decode=False, err_cb=None):
+    def __init__(self,
+                 session,
+                 channel_id,
+                 metadata,
+                 types,
+                 decode=False,
+                 err_cb=None):
         """Initialize a new Nvim instance. This method is module-private."""
         self._session = session
         self.channel_id = channel_id
@@ -506,7 +512,8 @@ class Nvim(object):
         self.version = Version(**version)
         self.types = types
         self.api = RemoteApi(self, "nvim_")
-        self.vars = RemoteMap(self, "nvim_get_var", "nvim_set_var", "nvim_del_var")
+        self.vars = RemoteMap(self, "nvim_get_var", "nvim_set_var",
+                              "nvim_del_var")
         self.vvars = RemoteMap(self, "nvim_get_vvar", None, None)
         self.options = RemoteMap(self, "nvim_get_option", "nvim_set_option")
         self.buffers = Buffers(self)
@@ -564,17 +571,12 @@ class Nvim(object):
         present and True, a asynchronous notification is sent instead. This
         will never block, and the return value or error is ignored.
         """
-        if (
-            self._session._loop_thread is not None
-            and threading.current_thread() != self._session._loop_thread
-        ):
-            msg = (
-                "Request from non-main thread.\n"
-                "Requests from different threads should be wrapped "
-                "with nvim.async_call(cb, ...) \n{}\n".format(
-                    "\n".join(format_stack(None, 5)[:-1])
-                )
-            )
+        if (self._session._loop_thread is not None
+                and threading.current_thread() != self._session._loop_thread):
+            msg = ("Request from non-main thread.\n"
+                   "Requests from different threads should be wrapped "
+                   "with nvim.async_call(cb, ...) \n{}\n".format("\n".join(
+                       format_stack(None, 5)[:-1])))
 
             self.async_call(self._err_cb, msg)
             raise NvimError("request from non-main thread")
@@ -594,7 +596,11 @@ class Nvim(object):
         if msg:
             return walk(self._from_nvim, msg)
 
-    def run_loop(self, request_cb, notification_cb, setup_cb=None, err_cb=None):
+    def run_loop(self,
+                 request_cb,
+                 notification_cb,
+                 setup_cb=None,
+                 err_cb=None):
         """Run the event loop to receive requests and notifications from Nvim.
 
         This should not be called from a plugin running in the host, which
@@ -611,8 +617,7 @@ class Nvim(object):
                 result = request_cb(name, args)
             except Exception:
                 msg = "error caught in request handler '{} {}'\n{}\n\n".format(
-                    name, args, format_exc_skip(1)
-                )
+                    name, args, format_exc_skip(1))
                 self._err_cb(msg)
                 raise
             return walk(self._to_nvim, result)
@@ -624,8 +629,7 @@ class Nvim(object):
                 notification_cb(name, args)
             except Exception:
                 msg = "error caught in notification handler '{} {}'\n{}\n\n".format(
-                    name, args, format_exc_skip(1)
-                )
+                    name, args, format_exc_skip(1))
                 self._err_cb(msg)
                 raise
 
@@ -780,7 +784,11 @@ class Nvim(object):
         """
         return self.request("nvim_input", bytes)
 
-    def replace_termcodes(self, string, from_part=False, do_lt=True, special=True):
+    def replace_termcodes(self,
+                          string,
+                          from_part=False,
+                          do_lt=True,
+                          special=True):
         r"""Replace any terminal code strings by byte sequences.
 
         The returned sequences are Nvim's internal representation of keys,
@@ -793,7 +801,8 @@ class Nvim(object):
 
         The returned sequences can be used as input to `feedkeys`.
         """
-        return self.request("nvim_replace_termcodes", string, from_part, do_lt, special)
+        return self.request("nvim_replace_termcodes", string, from_part, do_lt,
+                            special)
 
     def out_write(self, msg, **kwargs):
         r"""Print `msg` as a normal message.
@@ -816,10 +825,8 @@ class Nvim(object):
         return self.request("nvim_err_write", msg, **kwargs)
 
     def _thread_invalid(self):
-        return (
-            self._session._loop_thread is not None
-            and threading.current_thread() != self._session._loop_thread
-        )
+        return (self._session._loop_thread is not None
+                and threading.current_thread() != self._session._loop_thread)
 
     def quit(self, quit_command="qa!"):
         """Send a quit command to Nvim.
@@ -855,12 +862,9 @@ class Nvim(object):
             try:
                 fn(*args, **kwargs)
             except Exception as err:
-                msg = (
-                    "error caught while executing async callback:\n"
-                    "{!r}\n{}\n \nthe call was requested at\n{}".format(
-                        err, format_exc_skip(1), call_point
-                    )
-                )
+                msg = ("error caught while executing async callback:\n"
+                       "{!r}\n{}\n \nthe call was requested at\n{}".format(
+                           err, format_exc_skip(1), call_point))
                 self._err_cb(msg)
                 raise
 
@@ -876,7 +880,6 @@ class Buffers(object):
 
     Conforms to *python-buffers*.
     """
-
     def __init__(self, nvim):
         """Initialize a Buffers object with Nvim object `nvim`."""
         self._fetch_buffers = nvim.api.list_bufs
@@ -903,14 +906,12 @@ class Buffers(object):
 
 class CompatibilitySession(object):
     """Helper class for API compatibility."""
-
     def __init__(self, nvim):
         self.threadsafe_call = nvim.async_call
 
 
 class Current(object):
     """Helper class for emulating vim.current from python-vim."""
-
     def __init__(self, session):
         self._session = session
         self.range = None
@@ -954,7 +955,6 @@ class Current(object):
 
 class Funcs(object):
     """Helper class for functional vimscript interface."""
-
     def __init__(self, nvim):
         self._nvim = nvim
 
@@ -964,7 +964,6 @@ class Funcs(object):
 
 class LuaFuncs(object):
     """Wrapper to allow lua functions to be called like python methods."""
-
     def __init__(self, nvim, name=""):
         self._nvim = nvim
         self.name = name
@@ -977,9 +976,8 @@ class LuaFuncs(object):
     def __call__(self, *args, **kwargs):
         # first new function after keyword rename, be a bit noisy
         if "async" in kwargs:
-            raise ValueError(
-                '"async" argument is not allowed. ' 'Use "async_" instead.'
-            )
+            raise ValueError('"async" argument is not allowed. '
+                             'Use "async_" instead.')
         async_ = kwargs.get("async_", False)
         pattern = "return {}(...)" if not async_ else "{}(...)"
         code = pattern.format(self.name)
@@ -990,10 +988,10 @@ class LuaFuncs(object):
 
 # plugin/scripthost: {{{
 
+
 @plugin
 class ScriptHost(object):
     """Provides an environment for running python plugins created for Vim."""
-
     def __init__(self, nvim):
         """Initialize the legacy python-vim environment."""
         self.setup(nvim)
@@ -1007,9 +1005,8 @@ class ScriptHost(object):
 
         # Handle DirChanged. #296
         nvim.command(
-            'au DirChanged * call rpcnotify({}, "python_chdir", v:event.cwd)'.format(
-                nvim.channel_id
-            ),
+            'au DirChanged * call rpcnotify({}, "python_chdir", v:event.cwd)'.
+            format(nvim.channel_id),
             async_=True,
         )
         # XXX: Avoid race condition.
@@ -1018,7 +1015,8 @@ class ScriptHost(object):
         # to make __init__ safe again, the following should work:
         # os.chdir(nvim.eval('getcwd()', async_=False))
         nvim.command(
-            'call rpcnotify({}, "python_chdir", getcwd())'.format(nvim.channel_id),
+            'call rpcnotify({}, "python_chdir", getcwd())'.format(
+                nvim.channel_id),
             async_=True,
         )
 
@@ -1084,7 +1082,10 @@ class ScriptHost(object):
         fname = "_vim_pydo"
 
         # define the function
-        function_def = "def %s(line, linenr):\n %s" % (fname, code,)
+        function_def = "def %s(line, linenr):\n %s" % (
+            fname,
+            code,
+        )
         exec(function_def, self.module.__dict__)
         # get the function
         function = self.module.__dict__[fname]
@@ -1106,17 +1107,17 @@ class ScriptHost(object):
                     # Update earlier lines, and skip to the next
                     if newlines:
                         end = sstart + len(newlines) - 1
-                        nvim.current.buffer.api.set_lines(sstart, end, True, newlines)
+                        nvim.current.buffer.api.set_lines(
+                            sstart, end, True, newlines)
                     sstart += len(newlines) + 1
                     newlines = []
                     pass
                 elif isinstance(result, basestring):
                     newlines.append(result)
                 else:
-                    exception = TypeError(
-                        "pydo should return a string "
-                        + "or None, found %s instead" % result.__class__.__name__
-                    )
+                    exception = TypeError("pydo should return a string " +
+                                          "or None, found %s instead" %
+                                          result.__class__.__name__)
                     break
                 linenr += 1
 
@@ -1184,7 +1185,7 @@ def path_hook(nvim):
             name = oldtail[:idx]
             tail = oldtail[idx + 1:]
             fmr = imp.find_module(name, path)
-            module = imp.find_module(fullname[: -len(oldtail)] + name, *fmr)
+            module = imp.find_module(fullname[:-len(oldtail)] + name, *fmr)
             return _find_module(fullname, tail, module.__path__)
         else:
             return imp.find_module(fullname, path)
@@ -1213,8 +1214,7 @@ def path_hook(nvim):
             """Method for Python 2.7 and 3.3."""
             try:
                 return VimModuleLoader(
-                    _find_module(fullname, fullname, path or _get_paths())
-                )
+                    _find_module(fullname, fullname, path or _get_paths()))
             except ImportError:
                 return None
 
@@ -1247,8 +1247,6 @@ def discover_runtime_directories(nvim):
 # }}}
 
 # API/buffer: {{{
-
-basestring = str
 
 
 def adjust_index(idx, default=None):
@@ -1330,8 +1328,11 @@ class Buffer(Remote):
         """
         return not self.__eq__(other)
 
+    def __iadd__(self, lines, index=-1):
+        return self.append(lines, index=index)
+
     def append(self, lines, index=-1):
-        """Append a string or list of lines to the buffer."""
+        """Append a string or list of lines to the buffer. Now an alias for `__iadd__`."""
         if isinstance(lines, (basestring, bytes)):
             lines = [lines]
         return self.request("nvim_buf_set_lines", index, index, True, lines)
@@ -1344,9 +1345,14 @@ class Buffer(Remote):
         """Return a `Range` object, which represents part of the Buffer."""
         return Range(self, start, end)
 
-    def add_highlight(
-        self, hl_group, line, col_start=0, col_end=-1, src_id=-1, async_=None, **kwargs
-    ):
+    def add_highlight(self,
+                      hl_group,
+                      line,
+                      col_start=0,
+                      col_end=-1,
+                      src_id=-1,
+                      async_=None,
+                      **kwargs):
         """Add a highlight to the buffer."""
         async_ = check_async(async_, kwargs, src_id != 0)
         return self.request(
@@ -1359,16 +1365,27 @@ class Buffer(Remote):
             async_=async_,
         )
 
-    def clear_highlight(self, src_id, line_start=0, line_end=-1, async_=None, **kwargs):
+    def clear_highlight(self,
+                        src_id,
+                        line_start=0,
+                        line_end=-1,
+                        async_=None,
+                        **kwargs):
         """Clear highlights from the buffer."""
         async_ = check_async(async_, kwargs, True)
-        self.request(
-            "nvim_buf_clear_highlight", src_id, line_start, line_end, async_=async_
-        )
+        self.request("nvim_buf_clear_highlight",
+                     src_id,
+                     line_start,
+                     line_end,
+                     async_=async_)
 
-    def update_highlights(
-        self, src_id, hls, clear_start=0, clear_end=-1, clear=False, async_=True
-    ):
+    def update_highlights(self,
+                          src_id,
+                          hls,
+                          clear_start=0,
+                          clear_end=-1,
+                          clear=False,
+                          async_=True):
         """Add or update highlights in batch to avoid unnecessary redraws.
 
         A `src_id` must have been allocated prior to use of this function. Use
@@ -1387,7 +1404,12 @@ class Buffer(Remote):
         if clear and clear_start is None:
             clear_start = 0
         lua = self._session._get_lua_private()
-        lua.update_highlights(self, src_id, hls, clear_start, clear_end, async_=async_)
+        lua.update_highlights(self,
+                              src_id,
+                              hls,
+                              clear_start,
+                              clear_end,
+                              async_=async_)
 
     @property
     def name(self):
@@ -1440,7 +1462,7 @@ class Range(object):
             start = self.start
         if end is None:
             end = self.end
-        self._buffer[start: end + 1] = lines
+        self._buffer[start:end + 1] = lines
 
     def __iter__(self):
         for i in range(self.start, self.end + 1):
@@ -1480,9 +1502,9 @@ def session(transport_type="stdio", *args, **kwargs):
     msgpack_stream = MsgpackStream(loop)
     async_session = AsyncSession(msgpack_stream)
     session = Session(async_session)
-    session.request(
-        b"nvim_set_client_info", *get_client_info("client", "remote", {}), async_=True
-    )
+    session.request(b"nvim_set_client_info",
+                    *get_client_info("client", "remote", {}),
+                    async_=True)
     return session
 
 
@@ -1513,7 +1535,6 @@ def child_session(argv):
 
 class RemoteApi(object):
     """Wrapper to allow api methods to be called like python methods."""
-
     def __init__(self, obj, api_prefix):
         """Initialize a RemoteApi with object and api prefix."""
         self._obj = obj
@@ -1607,7 +1628,6 @@ class RemoteSequence(object):
     sequence into a list and perform the necessary manipulation
     locally(iteration, indexing, counting, etc).
     """
-
     def __init__(self, session, method):
         """Initialize a RemoteSequence with session, method.
 
@@ -1625,7 +1645,7 @@ class RemoteSequence(object):
         """Return a sequence item by index."""
         if not isinstance(idx, slice):
             return self._fetch()[idx]
-        return self._fetch()[idx.start: idx.stop]
+        return self._fetch()[idx.start:idx.stop]
 
     def __iter__(self):
         """Return an iterator for the sequence."""
@@ -1656,7 +1676,8 @@ def walk(fn, obj, *args, **kwargs):
     if type(obj) in [list, tuple]:
         return list(walk(fn, o, *args) for o in obj)
     if type(obj) is dict:
-        return dict((walk(fn, k, *args), walk(fn, v, *args)) for k, v in obj.items())
+        return dict(
+            (walk(fn, k, *args), walk(fn, v, *args)) for k, v in obj.items())
     return fn(obj, *args, **kwargs)
 
 

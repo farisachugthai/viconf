@@ -90,7 +90,6 @@ def col2byte(line, col):
 
 class VimBuffer:
     """Wrapper around the current Vim buffer."""
-
     def __init__(self):
         self.vim = vim
         self._buffer = vim.current.buffer
@@ -121,7 +120,8 @@ class VimBuffer:
         return len(self._buffer)
 
     def __repr__(self):
-        return "{}    #{}    {}".format("Vim Buffer:", self.bufnr(), self.filetypes)
+        return "{}    #{}    {}".format("Vim Buffer:", self.bufnr(),
+                                        self.filetypes)
 
     def line_till_cursor(self):  # pylint:disable=no-self-use
         """Return the text before the cursor."""
@@ -250,7 +250,8 @@ def select(start, end):
             move_cmd += "%iG%i|" % virtual_position(end.line + 1, end.col)
         else:
             move_cmd += "%iG%i|" % virtual_position(end.line + 1, end.col + 1)
-        move_cmd += "o%iG%i|o\\<c-g>" % virtual_position(start.line + 1, start.col + 1)
+        move_cmd += "o%iG%i|o\\<c-g>" % virtual_position(
+            start.line + 1, start.col + 1)
     feedkeys(move_cmd)
 
 
@@ -290,6 +291,7 @@ def _is_pos_zero(pos):
 
 
 # Unrelated formatting code
+
 
 def pretty_xml(x):
     """Make xml string `x` nicely formatted."""
@@ -342,7 +344,6 @@ def pd(args=None):
 
 
 class _Vim(object):
-
     def __getattr__(self, attr):
         return getattr(vim, attr)
 
@@ -352,9 +353,7 @@ vim_obj = _Vim()
 
 def _patch_nvim(vim):
     """Patches to make handling both Vim and Nvim easier."""
-
     class Bindeval:
-
         def __init__(self, data):
             self.data = data
 
@@ -363,7 +362,6 @@ def _patch_nvim(vim):
 
     def function(name):
         """Kinda surpried this doesn't utilize functools.wraps."""
-
         def inner(*args, **kwargs):
             ret = vim.call(name, *args, **kwargs)
             return _bytes(ret)
@@ -377,7 +375,6 @@ def _patch_nvim(vim):
     vim_vars = vim.vars
 
     class vars_wrapper:
-
         def get(self, *args, **kwargs):
             item = vim_vars.get(*args, **kwargs)
             return _bytes(item)

@@ -3,7 +3,7 @@
 import logging
 import os
 from pathlib import Path
-import vim   # noqa
+import vim  # noqa
 
 logger = logging.getLogger(name=__name__)
 

@@ -57,11 +57,8 @@ def fix_spellfile(wordlist):
     for i, j in enumerate(wordlist):
         try:
             if i > 0:
-                if (
-                    wordlist[i]
-                    and wordlist[i] != wordlist[i + 1]
-                    and not wordlist[i].startswith("!")
-                ):
+                if (wordlist[i] and wordlist[i] != wordlist[i + 1]
+                        and not wordlist[i].startswith("!")):
                     new_wordlist.append(j)
         except IndexError:  # Goes until its 1 too high idk how to stop that
             break

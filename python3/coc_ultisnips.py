@@ -4,7 +4,7 @@ from collections import namedtuple  # , deque,
 import os
 from pathlib import Path
 import sys
-import vim   # noqa
+import vim  # noqa
 
 try:
     import pynvim
@@ -13,7 +13,7 @@ except ImportError:
 
 sys.path.append('.')
 
-from snippets_helper import *   # noqa
+from snippets_helper import *  # noqa
 
 NORMAL = 0x1
 DOXYGEN = 0x2
@@ -25,7 +25,8 @@ JEDI = 0x6
 SINGLE_QUOTES = "'"
 DOUBLE_QUOTES = '"'
 
-_Placeholder = namedtuple("_FrozenPlaceholder", ["current_text", "start", "end"])
+_Placeholder = namedtuple("_FrozenPlaceholder",
+                          ["current_text", "start", "end"])
 _VisualContent = namedtuple("_VisualContent", ["mode", "text"])
 _Position = namedtuple("_Position", ["line", "col"])
 
@@ -68,12 +69,10 @@ class _SnippetUtilCursor:
 
 class IndentUtil:
     """Utility class for dealing properly with indentation."""
-
     def __init__(self):
         """Gets the spacing properties from Vim."""
         self.shiftwidth = int(
-            vim.eval("exists('*shiftwidth') ? shiftwidth() : &shiftwidth")
-        )
+            vim.eval("exists('*shiftwidth') ? shiftwidth() : &shiftwidth"))
         self._expandtab = vim.eval("&expandtab") == "1"
         self._tabstop = int(vim.eval("&tabstop"))
 
@@ -104,7 +103,6 @@ class SnippetUtil:
 
     This is the 'snip' object in python code.
     """
-
     def __init__(self, _initial_indent, start, end, context):
         self._ind = IndentUtil()
         self._visual = _VisualContent(self.visualmode(), self.selected_text())
@@ -272,7 +270,7 @@ class ContextSnippet:
         self.line = vim.call("line", ".") - 1
         self.column = vim.call("col", ".") - 1
         line = vim.call("getline", ".")
-        self.after = line[self.column :]
+        self.after = line[self.column:]
         if "coc_selected_text" in vim.vars:
             self.visual_mode = vim.eval("visualmode()")
             self.visual_text = vim.vars["coc_selected_text"]
@@ -297,7 +295,7 @@ def x(snip):
 
 def compB(t, opts):
     if t:
-        opts = [m[len(t) :] for m in opts if m.startswith(t)]
+        opts = [m[len(t):] for m in opts if m.startswith(t)]
     if len(opts) == 1:
         return opts[0]
     return "(" + "|".join(opts) + ")"
@@ -323,5 +321,4 @@ def get_dot_vim():
         if os.path.isdir(my_vimrc):
             return my_vimrc
     raise RuntimeError(
-        f"Unable to find user configuration directory. I tried {my_vimrc}"
-    )
+        f"Unable to find user configuration directory. I tried {my_vimrc}")

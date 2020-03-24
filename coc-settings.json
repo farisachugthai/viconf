@@ -323,7 +323,7 @@
   "python.linting.flake8Path": "python -m flake8",
   "python.linting.pylintEnabled": false,
   "python.pipenvPath": "pipenv",
-  "python.pythonPath": "python",
+  "python.pythonPath": "python3",
   "python.terminal.executeInFileDir": true,
   "python.workspaceSymbols.exclusionPatterns": [
     "**/site-packages/**",
