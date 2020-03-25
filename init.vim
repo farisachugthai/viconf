@@ -5,6 +5,8 @@
   " Last Modified: Feb 12, 2020
 " ============================================================================
 
+" tmp:
+set debug=msg
 " Preliminary: {{{
 " These are the options that I consider the minimum requirements to running
 scriptencoding utf-8
@@ -21,18 +23,6 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h'))
 " Seriously how does this keep getting fucked up. omfg packpath is worse???
 setglobal runtimepath=$HOME/.config/nvim,$HOME/.local/share/nvim/site,$VIMRUNTIME
 setglobal packpath=~/.config/nvim/pack,~/.local/share/nvim/site/pack,$VIMRUNTIME
-
-" Uh this does not work.
-" if has('Win32')
-"   setglobal runtimepath+=C:\Neovim\share\nvim-qt\runtime
-"  let &shell='bash.exe'
-"  let &shellcmdflag = '-c'
-"  let &shellredir = '>%s 2>&1'
-"  set shellquote= shellxescape=
-"  " set noshelltemp
-"  set shellxquote=
-"  let &shellpipe='2>&1| tee'
-" endif
 
 " Source ginit. Why is this getting set even in the TUI?
 if exists('g:GuiLoaded') | exec 'source ' s:repo_root . '/ginit.vim' | endif
@@ -87,7 +77,7 @@ function! LoadMyPlugins() abort  " {{{
                   \ 'do': './install --all'
                   \ }
   Plug 'junegunn/fzf.vim'
-  Plug 'junegunn/goyo.vim'
+  Plug 'junegunn/goyo.vim', {'on': 'Goyo'}
   Plug 'junegunn/vim-peekaboo'
 
   " NerdTree: {{{
@@ -106,13 +96,13 @@ function! LoadMyPlugins() abort  " {{{
 
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
-  Plug 'tpope/vim-apathy'
-  Plug 'tpope/vim-scriptease'
+  " Plug 'tpope/vim-apathy'
+  Plug 'tpope/vim-scriptease', {'for': 'vim'}
   Plug 'tpope/vim-surround'
   " Plug 'tpope/vim-unimpaired'
   Plug 'tpope/vim-eunuch'
 
-  " Plug 'SirVer/ultisnips'
+  Plug 'SirVer/ultisnips'
   Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }
   nnoremap <Leader>a <Cmd>sil! ALEEnable<CR><bar>:sil! call plugins#AleMappings()<CR><bar>:sil! CocDisable<CR>:sil! redraw!<CR>:ALELint<CR>
   nnoremap <Leader>et <Cmd>ALEToggle<CR>:sil! call plugins#AleMappings()<CR>:sil! redraw!<CR>
@@ -155,10 +145,18 @@ function! LoadMyPlugins() abort  " {{{
   Plug 'ryanoasis/vim-devicons'           " Keep at end!
   call plug#end()
 endfunction
-
 call LoadMyPlugins()
 " I utilize this command so often I may as well save the characters
 command! -bar Plugins echo map(keys(g:plugs), '"\n" . v:val')
+
+" For some reason running syntax enable clears the syntax option
+let g:syntax_cmd = "enable"
+setl syntax=vim
+" in case i started things with -u NONE
+if &loadplugins is 0
+  set loadplugins
+endif
+exec 'py3f ' . s:repo_root . '/python3/_vim.py'
 " }}}
 
 " Vim: set fdm=marker foldlevelstart=0:

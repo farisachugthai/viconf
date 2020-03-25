@@ -71,3 +71,19 @@ function! msdos#pwsh_help(helppage) abort   " {{{1
   :r!pwsh -NoProfile -NoLogo -Command Get-Help a:helppage
   echomsg 'Note that shell was not restored'
 endfunction  " }}}
+
+function! msdos#set_bash() abort
+
+" Uh this does not work.
+if has('Win32')
+  setglobal runtimepath+=C:\Neovim\share\nvim-qt\runtime
+ let &shell='bash.exe'
+ let &shellcmdflag = '-c'
+ let &shellredir = '>%s 2>&1'
+ set shellquote= shellxescape=
+ " set noshelltemp
+ set shellxquote=
+ let &shellpipe='2>&1| tee'
+endif
+
+endfunction

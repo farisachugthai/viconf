@@ -136,6 +136,7 @@ command! -bang -bar FZScriptnames call vimscript#fzf_scriptnames(<bang>0)
 
 " fzf_for_todos
 command! -bang -bar -complete=var -nargs=* TodoFuzzy call find_files#RipgrepFzf('todo ' . <q-args>, <bang>0)
+" }}}
 
 " FZGrep: {{{
   " here's the call signature for fzf#vim#grep
@@ -255,7 +256,7 @@ command! -bar -bang -nargs=? -complete=dir FZReverse
 
 " Want a preview window?
 command! -bar -bang -nargs=? -complete=dir FZFilePreview
-    \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--info=inline', '--preview', 'bat {}']}, <bang>0)
+    \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--info=inline', '--preview', 'bat --color=always {}']}, <bang>0)
 
 command! -bar -bang -nargs=? -complete=dir Files
     \ call fzf#vim#files(<q-args>, {'source': 'fd -H -t f',
@@ -274,13 +275,13 @@ command! -bar -bang -complete=mapping CMaps call fzf#vim#maps("c", <bang>0)
 command! -bar -bang -complete=mapping TMaps call fzf#vim#maps("t", <bang>0)
 
 " Add completion to his Maps command but define ours the same way
-command! -bar -bang -nargs=? -complete=mapping Maps call fzf#vim#maps("n", <bang>0)
+command! -bar -bang -nargs=? -complete=mapping NMaps call fzf#vim#maps("n", <bang>0)
+command! -bar -bang -nargs=? -complete=mapping XMaps call fzf#vim#maps("x", <bang>0)
+command! -bar -bang -nargs=? -complete=mapping OMaps call fzf#vim#maps("o", <bang>0)
 
 command! -bar -bang -nargs=* -complete=color Colo
   \ call fzf#vim#colors({'left': '35%',
   \ 'options': '--reverse --margin 30%,0'}, <bang>0)
-" }}}
-
 " }}}
 
 " }}}

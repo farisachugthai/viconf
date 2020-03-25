@@ -1,5 +1,5 @@
 ##############################
-#       Python Snippets      #
+#	Python Snippets      #
 ##############################
 
 priority 70
@@ -9,12 +9,12 @@ extends rst
 # UltiSnips Imports:{{{
 global !p
 
-NORMAL  = 0x1
+NORMAL	= 0x1
 DOXYGEN = 0x2
-SPHINX  = 0x3
-GOOGLE  = 0x4
-NUMPY   = 0x5
-JEDI    = 0x6
+SPHINX	= 0x3
+GOOGLE	= 0x4
+NUMPY	= 0x5
+JEDI	= 0x6
 
 SINGLE_QUOTES = "'"
 DOUBLE_QUOTES = '"'
@@ -404,7 +404,7 @@ write_slots_args(args, snip)
 `
 
     def __init__(self$4):
-        `!p snip.rv = triple_quotes(snip)`${5:TODO: to be defined.}`!p
+	`!p snip.rv = triple_quotes(snip)`${5:TODO: to be defined.}`!p
 snip.rv = ""
 snip >> 2
 
@@ -417,7 +417,7 @@ if args:
 
 write_init_body(args, t[2], snip)
 `
-        $0
+	$0
 endsnippet
 # }}}
 
@@ -635,15 +635,14 @@ if t[2]:
 else:
     snip.rv = ""`
     def fget(self):
-        return self._$1$0
+	return self._$1$0
 
     def fset(self, value):
-        self._$1 = value
+	self._$1 = value
     return locals()
 
 $1 = property(**$1(), doc=$1.__doc__)
 endsnippet
-
 # }}}
 
 # Assertions & Tests:{{{1
@@ -682,17 +681,17 @@ class Test${1:Class}(${2:unittest.TestCase}):
 
     def ${1:setUp}(`!p
     if snip.indent:
-        snip.rv = 'self' + (", " if len(t[2]) else "")`${2:arg1}):
-        `!p snip.rv = triple_quotes(snip)`${4:TODO: Docstring for $1.}`!p
+	snip.rv = 'self' + (", " if len(t[2]) else "")`${2:arg1}):
+	`!p snip.rv = triple_quotes(snip)`${4:TODO: Docstring for $1.}`!p
     write_function_docstring(t, snip) `
-        ${5:${VISUAL:pass}}
-            ${4:pass}
+	${5:${VISUAL:pass}}
+	    ${4:pass}
     def tearDown(self):
-        ${5:pass}
+	${5:pass}
 
     def test_${6:name}(self):
-        `!p snip.rv = triple_quotes(snip)`${8:Test mod docstring.}`!p snip.rv = triple_quotes(snip)`
-        ${7:${VISUAL:pass}}
+	`!p snip.rv = triple_quotes(snip)`${8:Test mod docstring.}`!p snip.rv = triple_quotes(snip)`
+	${7:${VISUAL:pass}}
 endsnippet
 
 snippet testmain "Nested unittest snippet." b

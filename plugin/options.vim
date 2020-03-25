@@ -124,7 +124,6 @@ if has('unix')
   let g:startify_change_to_dir = 1
   let g:tagbar_iconchars = ['▷', '◢']
   let g:startify_change_to_dir = 1
-
 else
   setglobal sessionoptions+=unix,slash viewoptions+=unix,slash
 
@@ -153,7 +152,7 @@ else
 
 endif
 
-if exists('$ANDROID_DATA')
+if !empty($ANDROID_DATA)
   call find_files#termux_remote()
 
   let g:tagbar_compact = 1
@@ -163,7 +162,6 @@ elseif !has('unix')
   " when that got deleted
   call find_files#msdos_remote()
 else
-  let g:coc_node_path = '/usr/sbin/node'
   call find_files#ubuntu_remote()
 endif
 
@@ -191,6 +189,14 @@ if !isdirectory(expand(&g:backupdir))
 endif
 if !isdirectory(expand(&g:undodir))
   silent! call mkdir(expand(&g:undodir), 'p', 0700)
+endif
+
+if has('nvim')
+  let &path = '.,,**,' . expand('$VIMRUNTIME') . '/*/*.vim'  . ',' . stdpath('config')
+  let $FZF_DEFAULT_OPTS .= ' --border --margin=0,2'
+  let g:fzf_layout = { 'window': 'call plugins#FloatingFZF()' }
+else
+  let g:fzf_layout = { 'window': '-tabnew' }
 endif
 " }}}
 
@@ -501,10 +507,15 @@ function! s:Init_coc() abort
       let g:coc_node_path = 'C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\node.exe'
     endif
   endif
-  if !exists('$ANDROID_DATA')
+
+  if empty('$ANDROID_DATA')
     call coc#config("languageserver", {"bash": {"args": [ "start" ], "command": "bash-language-server", "filetypes": ["sh", "bash"]}})
     call coc#config('python.jediEnabled', v:false)
+    if has('unix')
+      let g:coc_node_path = '/usr/sbin/node'
+    endif
   endif
+
 
 endfunction
 
@@ -640,8 +651,5 @@ let g:voom_python_versions = [3,2]
 let g:voom_always_allow_move_left = 1
 " }}}
 
-" Fix the path + Last Call For Options: {{{
-let &path = '.,,**,' . expand('$VIMRUNTIME') . '/*/*.vim'  . ',' . stdpath('config')
-" }}}
 
 " Vim: set fdm=marker:

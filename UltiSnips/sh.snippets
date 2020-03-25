@@ -46,12 +46,12 @@ read ${1:${VISUAL}}
 endsnippet
 
 ###########
-#  Loops  #
+#  Loops	#
 ###########
 
 snippet if "if ... then (if)" b
 if ${3:[[ ${2:condition} ]]}; then
-  ${1:expression}
+	${1:expression}
 ${0:possibly good time to expand elif or else}
 fi
 endsnippet
@@ -67,7 +67,7 @@ else
 endsnippet
 
 ###########
-#  tests  #
+#  tests	#
 ###########
 
 snippet strempty "Test if a string is empty which in bash is equal to 0" b
@@ -75,7 +75,7 @@ snippet strempty "Test if a string is empty which in bash is equal to 0" b
 endsnippet
 
 ###############
-#  functions  #
+#  functions	#
 ###############
 
 snippet which "Check if which is on the system and fall back to command otherwise." b
@@ -89,4 +89,4 @@ snippet source "Source a file if it exists" b
 endsnippet
 
 
-# Vim: set ft=snippets.sh:et:sts=2:ts=2:sw=2:
+# Vim: set ft=snippets.sh et sts=2 ts=2 sw=2:

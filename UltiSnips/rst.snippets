@@ -488,13 +488,6 @@ snip.rv=complete(t[1], INCLUDABLE_DIRECTIVES)
 `:: ${2:${VISUAL:file}}`!p
 if content:
 	snip.rv +="		"+content`
-`!p
-# Tip of whether file is exist in comment type
-if not check_file_exist(path, t[2]):
-	snip.rv='.. FILE {0} does not exist'.format(t[2])
-else:
-	snip.rv=""
-`
 endsnippet
 
 snippet di "Directives" b
@@ -521,7 +514,7 @@ endsnippet
 
 # it will be trigger at start of line or after a word
 snippet ro "Text Roles" w
-\ :$1`!p snip.rv=complete(t[1],TEXT_ROLES+TEXT_ROLES_REGEX, path)`:\`$2\`\
+\:$1`!p snip.rv=complete(t[1],TEXT_ROLES+TEXT_ROLES_REGEX, path)`:\`$2\`\
 endsnippet
 
-# Vim: set noet ts=3 sts=3 sw=3:
+# Vim: set noet ts=3 sts=3 sw=3 ft=snippets.rst:

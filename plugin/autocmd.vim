@@ -5,7 +5,7 @@
   " Last Modified: February 17, 2020
 " ============================================================================
 
-
+let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 augroup UserHelpandPython " {{{
   au!
   autocmd FileType man,help setlocal number relativenumber
@@ -80,6 +80,8 @@ augroup END  " }}}
 
 augroup UserStl  " {{{
   autocmd!
+  autocmd CmdlineEnter /,\? :set hlsearch
+  autocmd CmdlineLeave /,\? :set nohlsearch
   au CmdwinEnter [/?]  startinsert
 augroup END  " }}}
 
@@ -112,5 +114,5 @@ augroup UserCompletions   " {{{
   autocmd BufEnter * if &omnifunc ==# '' | setlocal omnifunc=syntaxcomplete#Complete | endif
 
   autocmd BufEnter * if &completefunc ==# '' | setlocal completefunc=syntaxcomplete#Complete | endif
-augroup END  " }}}
+augroup END " }}}
 

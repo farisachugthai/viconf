@@ -146,7 +146,7 @@ However that's not hard to fix!::
    nnoremap ]g g]
    nnoremap ]g g]
 
-Then I began reviewing tagsrch.txt. And wow.::
+Then I began reviewing ``tagsrch.txt``. And wow.::
 
                                                            *g]*
    g]			Like CTRL-], but use ":tselect" instead of ":tag".
@@ -232,7 +232,7 @@ Searching
 
 Here's a helpful tidbit from the help pages.:
 
-   g*			Like "*", but don't put "\<" and "\>" around the word. 
+   g*			Like "*", but don't put "\<" and "\>" around the word.
                         This makes the search also find matches that are not a
 			whole word.
 
@@ -395,7 +395,7 @@ correctly.
 - `:Find` with no arg opens this file
 
 - `:Find!` does as well
-  
+
 - `:Find <TAB><TAB>` begins cycling files
 
 - `:Find README.md` opens the first README.md in the path
@@ -407,4 +407,3 @@ correctly.
 User defined find.::
 
    command! -nargs=* -range=% -addr=buffers -count -bang -bar -complete=file_in_path Find :<count><mods>find<bang> <args>
-
