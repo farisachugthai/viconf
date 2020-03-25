@@ -156,7 +156,7 @@ setl syntax=vim
 if &loadplugins is 0
   set loadplugins
 endif
-exec 'py3f ' . s:repo_root . '/python3/_vim.py'
+" exec 'py3f ' . s:repo_root . '/python3/_vim.py'
 " }}}
 
 " Vim: set fdm=marker foldlevelstart=0:

@@ -37,7 +37,7 @@ setlocal cinkeys-=0#
 
 setlocal nolisp		" Make sure lisp indenting doesn't supersede us
 setlocal autoindent	" indentexpr isn't much help otherwise
-
+source $VIMRUNTIME/indent/python.vim
 setlocal indentexpr=GetPythonIndent(v:lnum)
 
 " First one from $VIMRUNTIME/indent/python.vim 2nd from the ftplugin
@@ -54,7 +54,7 @@ setlocal includeexpr=substitute(v:fname,'\\.','/','g')
 setlocal colorcolumn=80,120
 setlocal foldmethod=indent
 
-setlocal suffixesadd+=.py,pyi,__init__.py
+setlocal suffixesadd=.py,pyi,__init__.py
 setlocal suffixes+=.pyc
 setlocal omnifunc=python3complete#Complete
 

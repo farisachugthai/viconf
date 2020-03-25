@@ -25,20 +25,6 @@ else:
 
 # Globals:
 
-basestring = str
-
-PYTHON_SUBDIR = "python3"
-num_types = (int, float)
-
-
-logger = logging.getLogger(name=__name__)
-logger.addFilter(logging.Filter(name=__name__))
-debug, info, warn = (
-    logger.debug,
-    logger.info,
-    logger.warn,
-)
-
 
 class App:
     """Instantiate an object and bind functions to it's ns as properties.
@@ -144,57 +130,6 @@ def setup_envvars():
 @plugin
 class ScriptHost:
     """Provides an environment for running python plugins created for Vim."""
-
-    def __init__(self, nvim):
-        """Initialize the legacy python-vim environment.
-
-        As far as I'm aware this throws on Windows semi frequently.
-
-        moved the self.nvim = nvim to the ``__init__`` so that :meth:`setup`
-        doesn't require parameters anymore.
-        """
-        self.nvim = nvim
-
-        self.setup()
-        # context where all code will run
-        self.module = imp.new_module("__main__")
-        nvim.script_context = self.module
-        # it seems some plugins assume 'sys' is already imported, so do it now
-        exec("import sys", self.module.__dict__)
-        self.legacy_vim = LegacyVim.from_nvim(nvim)
-        sys.modules["vim"] = self.legacy_vim
-
-        # Handle DirChanged. #296
-        nvim.command('au DirChanged *'
-                     'call rpcnotify({}, "python_chdir", v:event.cwd)'.format(
-                         nvim.channel_id), async_=True,)
-        # XXX: Avoid race condition.
-        # https://github.com/neovim/pynvim/pull/296#issuecomment-358970531
-        # TODO(bfredl): when host initialization has been refactored,
-        # to make __init__ safe again, the following should work:
-        # os.chdir(nvim.eval('getcwd()', async_=False))
-        nvim.command(
-            'call rpcnotify({}, "python_chdir", getcwd())'.format(
-                nvim.channel_id), async_=True)
-
-    def setup(self):
-        """Setup import hooks and global streams.
-
-        This will add import hooks for importing modules from runtime
-        directories and patch the sys module so 'print' calls will be
-        forwarded to Nvim.
-        """
-        info('install import hook/path')
-        self.hook = path_hook(nvim)
-        sys.path_hooks.append(self.hook)
-        nvim.VIM_SPECIAL_PATH = "_vim_path_"
-        sys.path.append(nvim.VIM_SPECIAL_PATH)
-        pass  # replaces next logging statement
-        # info('redirect sys.stdout and sys.stderr')
-        self.saved_stdout = sys.stdout
-        self.saved_stderr = sys.stderr
-        sys.stdout = RedirectStream(lambda data: nvim.out_write(data))
-        sys.stderr = RedirectStream(lambda data: nvim.err_write(data))
 
     def teardown(self):
         """Restore state modified from the `setup` call."""
@@ -394,7 +329,7 @@ class VimPathFinder:
     @staticmethod
     def _find_module(fullname, oldtail, path):
         """Method for Python 2.7 and 3.3."""
-            # return VimModuleLoader._find_module(fullname, fullname, path or _get_paths())
+        # return VimModuleLoader._find_module(fullname, fullname, path or _get_paths())
         idx = oldtail.find(".")
         if idx > 0:
             name = oldtail[:idx]

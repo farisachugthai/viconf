@@ -53,6 +53,7 @@ import inspect
 import io
 import logging
 import os
+import platform
 import sys
 import threading
 import warnings
@@ -97,6 +98,7 @@ NUM_TYPES = (int, long, float)
 
 # util: {{{
 
+
 def get_documentation(vim):
     """Search documentation and append to current buffer."""
     # is sys.stdout needed at all below?
@@ -104,6 +106,7 @@ def get_documentation(vim):
     help(vim.eval("a:word"))
     sys.stdout, out = _, sys.stdout.getvalue()
     vim.current.buffer.append(str(out).splitlines(), 0)
+
 
 # There is no 'long' type in Python3 just int
 
@@ -1011,12 +1014,18 @@ class LuaFuncs(object):
 
 
 @plugin
-class ScriptHost(object):
+class ScriptHost:
     """Provides an environment for running python plugins created for Vim."""
 
     def __init__(self, nvim):
-        """Initialize the legacy python-vim environment."""
-        self.setup(nvim)
+        """Initialize the legacy python-vim environment.
+
+        Moved the self.nvim = nvim to the ``__init__`` so that :meth:`setup`
+        doesn't require parameters anymore.
+        """
+        self.nvim = nvim
+
+        self.setup()
         # context where all code will run
         self.module = imp.new_module("__main__")
         nvim.script_context = self.module
@@ -1025,13 +1034,17 @@ class ScriptHost(object):
         self.legacy_vim = LegacyVim.from_nvim(nvim)
         sys.modules["vim"] = self.legacy_vim
 
+        if not platform.platform().startswith("Win"):
+            self.handle_dirchanged()
+
+    def handle_dirchange(self):
         # Handle DirChanged. #296
         nvim.command(
-            'au DirChanged * call rpcnotify({}, "python_chdir", v:event.cwd)'.format(
-                nvim.channel_id
-            ),
+            "au DirChanged *"
+            'call rpcnotify({}, "python_chdir", v:event.cwd)'.format(nvim.channel_id),
             async_=True,
         )
+
         # XXX: Avoid race condition.
         # https://github.com/neovim/pynvim/pull/296#issuecomment-358970531
         # TODO(bfredl): when host initialization has been refactored,
@@ -1042,22 +1055,18 @@ class ScriptHost(object):
             async_=True,
         )
 
-    def setup(self, nvim):
+    def setup(self):
         """Setup import hooks and global streams.
 
         This will add import hooks for importing modules from runtime
         directories and patch the sys module so 'print' calls will be
         forwarded to Nvim.
         """
-        self.nvim = nvim
-        pass  # replaces next logging statement
-        # info('install import hook/path')
+        info("install import hook/path")
         self.hook = path_hook(nvim)
         sys.path_hooks.append(self.hook)
         nvim.VIM_SPECIAL_PATH = "_vim_path_"
         sys.path.append(nvim.VIM_SPECIAL_PATH)
-        pass  # replaces next logging statement
-        # info('redirect sys.stdout and sys.stderr')
         self.saved_stdout = sys.stdout
         self.saved_stderr = sys.stderr
         sys.stdout = RedirectStream(lambda data: nvim.out_write(data))
@@ -1066,12 +1075,10 @@ class ScriptHost(object):
     def teardown(self):
         """Restore state modified from the `setup` call."""
         nvim = self.nvim
-        pass  # replaces next logging statement
-        # info('uninstall import hook/path')
+        info("uninstall import hook/path")
         sys.path.remove(nvim.VIM_SPECIAL_PATH)
         sys.path_hooks.remove(self.hook)
-        pass  # replaces next logging statement
-        # info('restore sys.stdout and sys.stderr')
+        info("restore sys.stdout and sys.stderr")
         sys.stdout = self.saved_stdout
         sys.stderr = self.saved_stderr
 
@@ -1539,7 +1546,7 @@ class RemoteApi(object):
     fine controlled access to everything. Bound to the Neovim class at `api` so definitely important.
     """
 
-    def __init__(self, obj, api_prefix='nvim_'):
+    def __init__(self, obj, api_prefix="nvim_"):
         """Initialize a RemoteApi with object and api prefix.
 
         Parameters

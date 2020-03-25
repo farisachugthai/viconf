@@ -61,8 +61,8 @@ setglobal autochdir autowrite autoread
 if &tabstop > 4 | setglobal tabstop=4 | endif
 if &shiftwidth > 4  | setglobal shiftwidth=4 | endif
 setglobal expandtab smarttab softtabstop=4
-set nohlsearch
-
+" It get kinda annoying movin around without _ as a word delimiter
+setglobal iskeyword-=.,_
 if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif
 setglobal cdpath+=$HOME,$VIMRUNTIME
 setglobal iskeyword=@,48-57,_,192-255   " Idk how but i managed to mess up the default isk

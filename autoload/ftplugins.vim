@@ -9,20 +9,14 @@ function! ftplugins#ALE_JSON_Conf() abort  " {{{
   " Standard fixers defined for JSON
   let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
 
-  if executable('prettier')
     let b:ale_fixers += ['prettier']
-  endif
 
-  " if executable('jq')
-  " actually i don't care add this no matter what
     let b:ale_fixers += ['jq']
     let b:ale_json_jq_options = '-SM'
     let b:ale_json_jq_filters = '.'
   " endif
 
-  if executable('fixjson')
     let b:ale_fixers += ['fixjson']
-  endif
 
     let b:ale_linters = ['jsonlint']
     let b:ale_linters_explicit = 1
@@ -32,9 +26,7 @@ function! ftplugins#ALE_CSS_Conf() abort  " {{{
 
   let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
 
-  if executable('prettier')
     let b:ale_fixers += ['prettier']
-  endif
 
 endfunction  " }}}
 
@@ -43,18 +35,16 @@ function! ftplugins#ALE_sh_conf() abort  " {{{
   " this is probably a waste of time when compiler shellcheck exists
   " if we're using powershell or cmd on windows set ALEs default shell to bash
   " TODO: set the path to shellcheck.
-  if has('unix')
     let shell_is_bash = match(expand('$SHELL'), 'bash')
     if !shell_is_bash
       let g:ale_sh_shell_default_shell = 1
     else
       let g:ale_sh_shell_default_shell = 0
     endif
-    let s:bash_location = exepath('bash')
-    if executable(s:bash_location)
-      let g:ale_sh_shell_default_shell = 1
-    endif
-  endif
+    " let s:bash_location = exepath('bash')
+    " if executable(s:bash_location)
+    "   let g:ale_sh_shell_default_shell = 1
+    " endif
 
   let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
 
@@ -89,7 +79,6 @@ function! ftplugins#ALE_Vim_Conf() abort  " {{{
   let b:ale_linters = ['ale_custom_linting_rules']
   let b:ale_linters_explicit = 1
 
-  if executable('vint')
     let b:ale_linters += ['vint']
-  endif
 endfunction  " }}}
+

@@ -105,7 +105,7 @@ def main():
         # besides you have to manually assign to sys.argv anyway.
         args = [Target().target_file]
 
-    logging.debug("Args: ", args)
+    logging.debug(f"Args: {args}")
     for i in args[0:]:
         spell_list = sortfile(i)
         # vim_api()

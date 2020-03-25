@@ -98,15 +98,6 @@ augroup UserAutomake  " {{{
                     \|   endif
                     \| endif
 
-autocmd BufReadCmd *.py if executable('pytest')
-                \| compiler pytest
-                \| setlocal makeprg=py.test\ --tb=short\ -q\ --color=no
-                \| echomsg 'Using pytest as a compiler!'
-                \| else
-                \| compiler pylint
-                \| echomsg 'Using pylint as a compiler!'
-                \| endif
-
 augroup END  " }}}
 
 augroup UserCompletions   " {{{

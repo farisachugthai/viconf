@@ -241,6 +241,9 @@ class SnippetUtil:
         self.rv += self.mkline(value)
         return self
 
+    def __iadd__(self, value):
+        return self.__add__(value)
+
     def __lshift__(self, other):
         """Same as unshift."""
         self.unshift(other)
@@ -272,7 +275,7 @@ class ContextSnippet:
         self.line = vim.call("line", ".") - 1
         self.column = vim.call("col", ".") - 1
         line = vim.call("getline", ".")
-        self.after = line[self.column :]
+        self.after = line[self.column:]
         if "coc_selected_text" in vim.vars:
             self.visual_mode = vim.eval("visualmode()")
             self.visual_text = vim.vars["coc_selected_text"]
@@ -286,21 +289,6 @@ class ContextSnippet:
             self.last_placeholder = _Placeholder(p["current_text"], start, end)
         else:
             self.last_placeholder = None
-
-
-def x(snip):
-    if snip.ft.startswith("x"):
-        snip.rv = "/"
-    else:
-        snip.rv = ""
-
-
-def compB(t, opts):
-    if t:
-        opts = [m[len(t) :] for m in opts if m.startswith(t)]
-    if len(opts) == 1:
-        return opts[0]
-    return "(" + "|".join(opts) + ")"
 
 
 def sec_title(snip, t):
@@ -322,6 +310,3 @@ def get_dot_vim():
         my_vimrc = os.path.dirname(os.path.expandvars(os.environ["MYVIMRC"]))
         if os.path.isdir(my_vimrc):
             return my_vimrc
-    raise RuntimeError(
-        f"Unable to find user configuration directory. I tried {my_vimrc}"
-    )

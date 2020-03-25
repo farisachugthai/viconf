@@ -12,7 +12,6 @@ class FileLink:
     def __init__(self, logger=None):
         """Initialize a file object."""
         # Damnit why isnt it recognizing this as a func? this is the missing link
-        self.path_obj = vim.eval("nvim_get_current_buf()")
         if logger is not None:
             self.logger = logger
 
@@ -21,7 +20,7 @@ class FileLink:
 
     def _path_file(self):
         """Pathify a file."""
-        return Path(self.path_obj)
+        return Path(vim.eval("nvim_get_current_buf()"))
 
     @property
     def is_symlink(self):

@@ -14,11 +14,17 @@ A useful combination with UltiSnips.
 import os
 import string
 import textwrap
-
-# import re
-# from collections import Counter
-
 import vim  # noqa
+
+NORMAL = 0x1
+DOXYGEN = 0x2
+SPHINX = 0x3
+GOOGLE = 0x4
+NUMPY = 0x5
+JEDI = 0x6
+
+SINGLE_QUOTES = "'"
+DOUBLE_QUOTES = '"'
 
 # http://docutils.sourceforge.net/docs/ref/rst/roles.html
 TEXT_ROLES = [
@@ -122,7 +128,7 @@ def complete(tab, opts):
     """
     msg = "({0})"
     if tab:
-        opts = [m[len(tab) :] for m in opts if m.startswith(tab)]
+        opts = [m[len(tab):] for m in opts if m.startswith(tab)]
     if len(opts) == 1:
         return opts[0]
 
@@ -217,17 +223,6 @@ def make_box(twidth, bwidth=None):
 def foldmarker():
     """Return a tuple of (open fold marker, close fold marker)."""
     return vim.eval("&foldmarker").split(",")
-
-
-NORMAL = 0x1
-DOXYGEN = 0x2
-SPHINX = 0x3
-GOOGLE = 0x4
-NUMPY = 0x5
-JEDI = 0x6
-
-SINGLE_QUOTES = "'"
-DOUBLE_QUOTES = '"'
 
 
 class Arg:
@@ -574,7 +569,7 @@ def x(snip):
 
 def compB(t, opts):
     if t:
-        opts = [m[len(t) :] for m in opts if m.startswith(t)]
+        opts = [m[len(t):] for m in opts if m.startswith(t)]
         if len(opts) == 1:
             return opts[0]
         return "(" + "|".join(opts) + ")"
