@@ -72,6 +72,7 @@ def _set_return_error(err=None):
 
 def vimcmd(fxn):
     """Decorator for functions that will be run from vim."""
+
     @functools.wraps(fxn)
     def wrapper(*args, **kwargs):
         try:
@@ -130,13 +131,14 @@ class VimError(Exception):
         self.executing = executing
 
     def __str__(self):
-        return "{}; created by {!r} (in {})".format(self.message,
-                                                    self.executing,
-                                                    self.throwpoint)
+        return "{}; created by {!r} (in {})".format(
+            self.message, self.executing, self.throwpoint
+        )
 
 
 class VimErr(VimError):
     """An error that's a bit gentler to handle."""
+
     def __init__(self, message=None):
         super().__init__(message)
         self.message = message
@@ -151,8 +153,11 @@ def _catch_exception(string, is_eval):
     Interface between vim and python calls back to it.
     Necessary, because the exact error message is not given by `vim.error`.
     """
-    result = vim.eval("g:py_err ({0}, {1})".format(
-        repr(PythonToVimStr(string, "UTF-8")), int(is_eval)))
+    result = vim.eval(
+        "g:py_err ({0}, {1})".format(
+            repr(PythonToVimStr(string, "UTF-8")), int(is_eval)
+        )
+    )
     if "exception" in result:
         raise VimError(result["exception"], result["throwpoint"], string)
     return result["result"]
@@ -179,6 +184,7 @@ def pykeywordprg():
 
 def timer(func):
     """Print the runtime of the decorated function"""
+
     @functools.wraps(func)
     def wrapper_timer(*args, **kwargs):
         start_time = time.perf_counter()
@@ -207,8 +213,7 @@ def _robust_black():
 
 def get_mode():
     return black.FileMode(
-        line_length=88,
-        is_pyi=vim.current.buffer.name.endswith(".pyi"),
+        line_length=88, is_pyi=vim.current.buffer.name.endswith(".pyi"),
     )
 
 
@@ -288,11 +293,7 @@ def catch_and_print_exceptions(func):
 def import_into_vim(*args):
     if jedi is not None:
         text = f"import {args}"
-        script = jedi.Script(text,
-                             1,
-                             len(text),
-                             "",
-                             environment=get_environment())
+        script = jedi.Script(text, 1, len(text), "", environment=get_environment())
 
         partial_completions = (c.complete() for c in script.completions())
 
@@ -307,18 +308,15 @@ def Black():
     mode = black.FileMode(
         line_length=int(vim.eval("g:black_linelength")),
         string_normalization=not bool(
-            int(vim.eval("g:black_skip_string_normalization"))),
+            int(vim.eval("g:black_skip_string_normalization"))
+        ),
         is_pyi=vim.current.buffer.name.endswith(".pyi"),
     )
     buffer_str = "\n".join(vim.current.buffer) + "\n"
     try:
-        new_buffer_str = black.format_file_contents(buffer_str,
-                                                    fast=fast,
-                                                    mode=mode)
+        new_buffer_str = black.format_file_contents(buffer_str, fast=fast, mode=mode)
     except black.NothingChanged:
-        print(
-            f"Already well formatted, good job. (took {time.time() - start:.4f}s)"
-        )
+        print(f"Already well formatted, good job. (took {time.time() - start:.4f}s)")
     except Exception as exc:
         print(exc)
     else:

@@ -5,12 +5,6 @@
   " Last Modified: February 17, 2020
 " ============================================================================
 
-" if exists('g:loaded_autocmd') || &compatible || v:version < 700
-"   finish
-" endif
-" let g:loaded_autocmd = 1
-
-let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
 augroup UserHelpandPython " {{{
   au!
@@ -19,6 +13,7 @@ augroup UserHelpandPython " {{{
         \| wincmd T
         \| endif
 
+  " let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
   " autocmd FileType python exec 'source ' . s:repo_root . '/ftplugin/python.vim'
   " autocmd FileType python,xonsh let &l:path = py#PythonPath()
   " autocmd FileType python,xonsh call py#ALE_Python_Conf()
@@ -54,9 +49,7 @@ augroup UserPlugins " {{{
   " todo: why did he add the exclamation mark and the nested?
   autocmd! User GoyoEnter nested call <SID>goyo_enter()
   autocmd! User GoyoLeave nested call <SID>goyo_leave()
-augroup END
-
-" }}}
+augroup END " }}}
 
 if !has('nvim') | finish | endif
 
@@ -83,16 +76,14 @@ augroup UserTerm " {{{
   "   \|setlocal winhighlight=StatusLine:StatusLineTerm,StatusLineNC:StatusLineTermNC
   "   \|else|setlocal winhighlight=|endif
 
-augroup END
+augroup END  " }}}
 
-augroup UserStl
+augroup UserStl  " {{{
   autocmd!
   au CmdwinEnter [/?]  startinsert
-augroup END
-" }}}
+augroup END  " }}}
 
-" {{{
-augroup UserAutomake
+augroup UserAutomake  " {{{
   au!
   autocmd FileType rst compiler rst
   autocmd FileType rst if executable('sphinx-build')
@@ -114,6 +105,12 @@ autocmd BufReadCmd *.py if executable('pytest')
                 \| echomsg 'Using pylint as a compiler!'
                 \| endif
 
-augroup END
-" }}}
+augroup END  " }}}
+
+augroup UserCompletions   " {{{
+  au!
+  autocmd BufEnter * if &omnifunc ==# '' | setlocal omnifunc=syntaxcomplete#Complete | endif
+
+  autocmd BufEnter * if &completefunc ==# '' | setlocal completefunc=syntaxcomplete#Complete | endif
+augroup END  " }}}
 

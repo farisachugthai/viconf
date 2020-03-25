@@ -45,10 +45,10 @@ function! s:_PythonPath() abort  " {{{
    " guess who figured something out today?
    python3 import site, vim;
    let s:site_pack = py3eval('site.USER_SITE')
-   let s:path = s:path . s:site_pack . '/**'
+   let s:path = s:path . s:site_pack . '/**,'
 
 t   " #3) forgot to add my pythonx files
-    let s:path .= ',' . stdpath('config') . '/python3'
+    let s:path .= ',' . stdpath('config') . '/python3,'
 
     " Platform specific: {{{
     " #4) use the system python's std library modules
@@ -63,18 +63,17 @@ t   " #3) forgot to add my pythonx files
     else  " windows
       " sunovabitch conda doesn't lay out the python dirs in the same spot as Unix
       let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h')
-      let s:site_pack = s:root_dir . '/lib/site-packages'
-      let s:path = s:path . s:site_pack
-    endif
+      let s:site_pack = s:root_dir . '/lib/site-packages,'
+      let s:path = s:path . ',' . s:site_pack
+    endif " }}}
 
-    " make this last. its the standard lib and we prepend it to the path so
-    " it should be first in the option AKA last in the function
-    " UGHHHHHHH VIM WHYYYYY. If you write this as s:root_dir . '/lib/*'
-    " it only matches 1 letter and doesn't include the std lib as a result.
-    " Shave off the glob to add more in. Yeah ikr?
-    " #2) use the remote pythons std lib modules
-    let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h')
-    let s:path = s:root_dir . '/lib,' . s:path
+  " make this last. its the standard lib and we prepend it to the path so " it should be first in the option AKA last in the function
+  " UGHHHHHHH VIM WHYYYYY. If you write this as s:root_dir . '/lib/*'
+  " it only matches 1 letter and doesn't include the std lib as a result.
+  " Shave off the glob to add more in. Yeah ikr?
+  " #2) use the remote pythons std lib modules
+  let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h')
+  let s:path = s:root_dir . '/lib,' . s:path
   let &l:path = s:path
   return s:path
 

@@ -43,19 +43,20 @@ command! -bang -bar CocExtensionStats py3 from pprint import pprint; pprint(vim.
 
 " Let's group these together by prefixing with Coc
 " Use `:Format` to format current buffer
-command! -bar -bang CocFormat call CocAction('format')
+command! -bar -bang CocFormat call CocActionAsync('format')
 
 " Show all diagnostics
-command! -bar -bang CocDiagnostic call CocAction('diagnosticInfo')
+command! -bar -bang CocDiagnostic call CocActionAsync('diagnosticInfo')
 
 " Use `:Fold` to fold current buffer
 command! -bang -nargs=? CocFold :setlocal fdm=manual | call CocActionAsync('fold', <f-args>)
 
 " use `:OR` for organize import of current buffer
-command! -bang -bar CocSort call CocAction('runCommand', 'editor.action.organizeImport')
+command! -bang -bar CocSort call CocActionAsync('runCommand', 'editor.action.organizeImport')
 
-" Just tried this and it worked! So keep checking :CocList commands and add
-" more as we go.
+" Just tried this and it worked! So keep checking :CocList commands and add more as we go.
+" BUG: Running :topleft call CocActionAsync('runCommand', 'python.startREPL')
+" does not place the buffer at the top
 command! -bang -bar CocPython call CocActionAsync('runCommand', 'python.startREPL')
 
 " Let's also get some information here.
@@ -68,18 +69,18 @@ command! -nargs=* -range CocFix call coc#rpc#notify('codeActionRange', [<line1>,
 
 " Nabbed these from his plugin/coc.vim file and changed the mappings to
 " commands
-command! -bar CocDefinition call CocAction('jumpDefinition')
-command! -bar CocDeclaration    call       CocAction('jumpDeclaration')
-command! -bar CocImplementation call       CocAction('jumpImplementation')
-command! -bar CocTypeDefinition call       CocAction('jumpTypeDefinition')
-command! -bar CocReferences     call       CocAction('jumpReferences')
-command! -bar CocOpenlink      call       CocActionAsync('openLink')
-command! -bar CocFixCurrent    call       CocActionAsync('doQuickfix')
-command! -bar CocFloatHide     call       coc#util#float_hide()
-command! -bar CocFloatJump     call       coc#util#float_jump()
-command! -bar CocCommandRepeat call       CocAction('repeatCommand')
+command! -bar CocDefinition     call       CocActionAsync('jumpDefinition')
+command! -bar CocDeclaration    call       CocActionAsync('jumpDeclaration')
+command! -bar CocImplementation call       CocActionAsync('jumpImplementation')
+command! -bar CocTypeDefinition call       CocActionAsync('jumpTypeDefinition')
+command! -bar CocReferences     call       CocActionAsync('jumpReferences')
+command! -bar CocOpenlink       call       CocActionAsync('openLink')
+command! -bar CocFixCurrent     call       CocActionAsync('doQuickfix')
+command! -bar CocFloatHide      call       coc#util#float_hide()
+command! -bar CocFloatJump      call       coc#util#float_jump()
+command! -bar CocCommandRepeat  call       CocActionAsync('repeatCommand')
 " How am I still going?
-command! -bar CocServices echo CocAction('services')
+command! -bar CocServices echo CocActionAsync('services')
 
 function! s:CocProviders(A, L, P) abort
 

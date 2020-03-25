@@ -58,12 +58,3 @@ alt_options = namedtuple(
         "line_range",
     ),
 )
-
-
-def get_documentation(vim):
-    """Search documentation and append to current buffer."""
-    # is sys.stdout needed at all below?
-    sys.stdout, _ = StringIO(), sys.stdout
-    help(vim.eval("a:word"))
-    sys.stdout, out = _, sys.stdout.getvalue()
-    vim.current.buffer.append(str(out).splitlines(), 0)

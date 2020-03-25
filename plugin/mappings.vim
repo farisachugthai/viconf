@@ -187,17 +187,20 @@ nnoremap <expr> , getcharsearch().forward ? ',' : ';'
 
 " These will make it so that going to the next one in a
 " search will center on the line it's found in.
-nnoremap n nzzzv
-nnoremap N Nzzzv
+" Also add a mark for housekeeping
+nnoremap n mjnzzzv
+nnoremap N mkNzzzv
 
 " If you highlight something in Visual mode, you should be able to use '#' and
 " '*' to search for it.
-xnoremap * y/<C-R>"<CR>
-xnoremap # y?<C-R>"<CR>
+xnoremap * mny/<C-R>"<CR>
+xnoremap # mpy?<C-R>"<CR>
 
 " here's a great idea from justinmk:
 " mark searches before you start
 nnoremap / ms/
+" Oh also do the backwards one too please!
+nnoremap ? mb?
 " let's extend justin's idea with ours!
 " get rid of the gv it's super confusing
 xnoremap / msy/<C-R>"<CR>

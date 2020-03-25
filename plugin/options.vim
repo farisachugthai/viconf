@@ -125,9 +125,6 @@ if has('unix')
   let g:tagbar_iconchars = ['▷', '◢']
   let g:startify_change_to_dir = 1
 
-  call coc#config("languageserver", {"clangd": { "args": [ "--background-index" ], "command": "clangd", "filetypes": [ "c", "cpp", "objc", "objcpp" ], "rootPatterns": [ "compile_flags.txt", "compile_commands.json", ".git/" ], "shell": "true" }})
-
-  let g:coc_node_path = '/usr/sbin/node'
 else
   setglobal sessionoptions+=unix,slash viewoptions+=unix,slash
 
@@ -154,11 +151,22 @@ else
   " Icon Chars
   let g:tagbar_iconchars = ['▶', '▼']
 
-  " Now find node:
-  if executable('C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\node.exe')
-    let g:coc_node_path = 'C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\node.exe'
-  endif
 endif
+
+if exists('$ANDROID_DATA')
+  call find_files#termux_remote()
+
+  let g:tagbar_compact = 1
+elseif !has('unix')
+  " Note: dude holy hell is it necessary to call the msdos#set_shell_cmd()
+  " func. you do so in ./plugin/unix.vim but jesus christ did it fuck stuff up
+  " when that got deleted
+  call find_files#msdos_remote()
+else
+  let g:coc_node_path = '/usr/sbin/node'
+  call find_files#ubuntu_remote()
+endif
+
 " }}}
 
 " Backups: {{{
@@ -183,33 +191,6 @@ if !isdirectory(expand(&g:backupdir))
 endif
 if !isdirectory(expand(&g:undodir))
   silent! call mkdir(expand(&g:undodir), 'p', 0700)
-endif
-" }}}
-
-" Remote Hosts: {{{
-if exists('$ANDROID_DATA')
-  call find_files#termux_remote()
-
-  let g:tagbar_compact = 1
-elseif !has('unix')
-  " Note: dude holy hell is it necessary to call the msdos#set_shell_cmd()
-  " func. you do so in ./plugin/unix.vim but jesus christ did it fuck stuff up
-  " when that got deleted
-  call find_files#msdos_remote()
-else
-  call find_files#ubuntu_remote()
-endif
-
-if !exists('$ANDROID_DATA')
-  call coc#config("languaageserver", {"bash": {"args": [ "start" ], "command": "bash-language-server", "filetypes": ["sh", "bash"]}})
-
-endif
-
-if has('nvim')
-  let $FZF_DEFAULT_OPTS .= ' --border --margin=0,2'
-  let g:fzf_layout = { 'window': 'call plugins#FloatingFZF()' }
-else
-  let g:fzf_layout = { 'window': '-tabnew' }
 endif
 " }}}
 
@@ -291,7 +272,7 @@ let g:NERDTreeCustomOpenArgs = {
 " When you open a buffer, how do we do it? Don't only silent edit, keep jumps too
 let g:NERDTreeCreatePrefix = 'silent keepalt keepjumps'
 let g:NERDTreeDirArrows = 1
-let g:NERDTreeWinPos = 'right'
+" let g:NERDTreeWinPos = 'right'
 let g:NERDTreeShowHidden = 1
 " This setting controls the method by which the list of user bookmarks is
 " sorted. When sorted, bookmarks will render in alphabetical order by name.
@@ -313,7 +294,7 @@ let g:NERDTreeQuitOnOpen = 3
 " Tagbar: {{{
 " I want the spacebar back
 let g:tagbar_map_showproto = '?'
-let g:tagbar_left = 2
+" let g:tagbar_left = 2
 let g:tagbar_width = 30
 let g:tagbar_sort = 0
 let g:tagbar_singleclick = 1
@@ -328,97 +309,6 @@ let g:tagbar_map_zoomwin = 'Z'
 if filereadable(expand('$HOME/.ctags.d/new_universal.ctags'))
   let g:tagbar_ctags_options = [expand('~/.ctags.d/new_universal.ctags')]
 endif
-" }}}
-
-" Tagbar Types: {{{
-let g:tagbar_type_ansible = {
-	\ 'ctagstype' : 'ansible',
-	\ 'kinds' : [
-	\ 't:tasks'],
-	\ 'sort' : 0 }
-
-let g:tagbar_type_css = {
-    \ 'ctagstype' : 'Css',
-    \ 'kinds'     : [
-    \ 'c:classes',
-    \ 's:selectors',
-    \ 'i:identities']}
-
-let g:tagbar_type_make = {'kinds':[
-            \ 'm:macros',
-            \ 't:targets'
-            \ ]}
-
-let g:tagbar_type_javascript = {
-      \ 'ctagstype': 'javascript',
-      \ 'kinds': [
-      \ 'A:arrays',
-      \ 'P:properties',
-      \ 'T:tags',
-      \ 'O:objects',
-      \ 'G:generator functions',
-      \ 'F:functions',
-      \ 'C:constructors/classes',
-      \ 'M:methods',
-      \ 'V:variables',
-      \ 'I:imports',
-      \ 'E:exports',
-      \ 'S:styled components',
-      \ ]}
-
-let g:tagbar_type_markdown = {
-    \ 'ctagstype' : 'markdown',
-    \ 'kinds' : [
-        \ 'h:Heading_L1',
-        \ 'i:Heading_L2',
-        \ 'k:Heading_L3'
-    \ ]
-\ }
-
-let g:tagbar_type_ps1 = {
-    \ 'ctagstype' : 'powershell',
-    \ 'kinds'     : [
-        \ 'f:function',
-        \ 'i:filter',
-        \ 'a:alias'
-    \ ]
-\ }
-
-let g:tagbar_type_rst = {
-    \ 'ctagstype': 'rst',
-    \ 'ctagsbin' : expand('$HOME/src/rst2ctags/rst2ctags.py'),
-    \ 'ctagsargs' : '-f - --sort=yes',
-    \ 'kinds' : [
-        \ 's:sections',
-        \ 'i:images'
-    \ ],
-    \ 'sro' : '|',
-    \ 'kind2scope' : {
-        \ 's' : 'section',
-    \ },
-    \ 'sort': 0,
-\ }
-
-let g:tagbar_type_typescript = {
-  \ 'ctagstype': 'typescript',
-  \ 'kinds': [
-  \ 'c:classes',
-  \ 'n:modules',
-  \ 'f:functions',
-  \ 'v:variables',
-  \ 'v:varlambdas',
-  \ 'm:members',
-  \ 'i:interfaces',
-  \ 'e:enums',
-  \ ]
-  \ }
-
-let g:tagbar_type_snippets = {
-      \ 'ctagstype' : 'snippets',
-      \ 'kinds' : [
-      \ 's:snippets',
-      \ ]
-      \ }
 " }}}
 
 " Gutentags: {{{
@@ -452,6 +342,7 @@ endif
 " }}}
 
 " UltiSnips: {{{
+function! UltiSnipsConf() abort
 let b:did_autoload_ultisnips = 1
 
 let g:UltiSnipsExpandTrigger="<Tab>"
@@ -471,6 +362,14 @@ let g:UltiSnipsSnippetDir = [stdpath('config') . '/UltiSnips']
 let g:UltiSnipsSnippetDirectories = [ stdpath('config') . '/UltiSnips' ]
 let g:UltiSnipsUsePythonVersion = 3
 let g:UltiSnipsListSnippets = '<C-/>'
+endfunction
+
+if exists('did_plugin_ultisnips')
+  if !exists('g:loaded_ultisnips_conf')
+    call UltiSnipsConf()
+    let g:loaded_ultisnips_conf = 1
+  endif
+endif
 " }}}
 
 " Supertab: {{{
@@ -590,6 +489,23 @@ function! s:Init_coc() abort
     " call coc#util#install_extension(l:ext)
   " endfor
 
+  if has('unix')
+    call coc#config("languageserver", {"clangd": { "args":
+                    \ ["--background-index" ], "command": "clangd", "filetypes": [ "c", "cpp",
+                    \ "objc", "objcpp" ], "rootPatterns": [ "compile_flags.txt",
+                    \ "compile_commands.json", ".git/" ], "shell": "true" }})
+  else
+
+  " Now find node:
+    if executable('C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\node.exe')
+      let g:coc_node_path = 'C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\node.exe'
+    endif
+  endif
+  if !exists('$ANDROID_DATA')
+    call coc#config("languageserver", {"bash": {"args": [ "start" ], "command": "bash-language-server", "filetypes": ["sh", "bash"]}})
+    call coc#config('python.jediEnabled', v:false)
+  endif
+
 endfunction
 
 if !exists('g:coc_init')
@@ -599,7 +515,6 @@ endif
 " }}}
 
 " FZF: {{{
-
 " Options: {{{
 let g:fzf_action = {
   \ 'ctrl-q': function('find_files#build_quickfix_list'),
@@ -609,15 +524,11 @@ let g:fzf_action = {
 
 " NOTE: Use of stdpath() requires nvim0.3>
 let g:fzf_history_dir = stdpath('data') . '/site/fzf-history'
-
 let g:fzf_ag_options = ' --smart-case -u -g " " --'
-
-" TODO: Might wanna consider turning this into a list
 let g:fzf_rg_options = ' --hidden --max-columns 300 --max-depth 8 '
       \. '--max-count 50 --color ansi --context 0 '
       \. ' --auto-hybrid-regex --max-columns-preview --smart-case '
       \. '--glob "!{.git,node_modules,*.txt,*.csv,*.json,*.html}" '
-
 let g:fzf_options = [
       \   '--ansi', '--multi', '--tiebreak=index', '--layout=reverse-list',
       \   '--inline-info', '--prompt', '> ', '--bind=ctrl-s:toggle-sort',
@@ -639,6 +550,12 @@ let g:fzf_buffers_jump = 1
 let g:fzf_tags_command = 'ctags -R'
 let g:fzf_commands_expect = 'alt-enter,ctrl-x'
 
+if has('nvim')
+  let $FZF_DEFAULT_OPTS .= ' --border --margin=0,2'
+  let g:fzf_layout = { 'window': 'call plugins#FloatingFZF()' }
+else
+  let g:fzf_layout = { 'window': '-tabnew' }
+endif
 " FOUND ONE
 " let g:fzf_files_options = g:fzf_options
 " found another one. What is this???
@@ -662,7 +579,6 @@ let g:fzf_colors =  {
       \  'header':  ['fg', '#83a598']
       \ }
 " }}}
-
 " }}}
 
 " Tmuxline: {{{
@@ -726,8 +642,6 @@ let g:voom_always_allow_move_left = 1
 
 " Fix the path + Last Call For Options: {{{
 let &path = '.,,**,' . expand('$VIMRUNTIME') . '/*/*.vim'  . ',' . stdpath('config')
-if &omnifunc ==# '' | setlocal omnifunc=syntaxcomplete#Complete | endif
-if &completefunc ==# '' | setlocal completefunc=syntaxcomplete#Complete | endif
 " }}}
 
 " Vim: set fdm=marker:

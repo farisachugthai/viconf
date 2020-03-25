@@ -10,15 +10,13 @@
 scriptencoding utf-8
 setglobal fileformats=unix,dos
 setglobal cpoptions-=c,e,_  " couple options that bugged me
-setglobal fileencodings=utf-8,latin1   " UGHHHHH
+setglobal fileencodings=utf-8,default,latin1   " UGHHHHH
 setglobal nobomb | lockvar nobomb
 setglobal hidden
 " }}}
 
 " Set paths correctly: {{{
 let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Evervim. Thanks!
-let s:wsl = !empty($WSL_DISTRO_NAME)
-" let s:ubuntu = has('unix') && !has('macunix') && empty(s:termux) && empty(s:wsl)
 let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h'))
 " Seriously how does this keep getting fucked up. omfg packpath is worse???
 setglobal runtimepath=$HOME/.config/nvim,$HOME/.local/share/nvim/site,$VIMRUNTIME
@@ -126,9 +124,9 @@ function! LoadMyPlugins() abort  " {{{
 
   Plug 'mhinz/vim-startify', {'on': 'Startify'}
   Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
-  noremap <silent> <F8> <Cmd>TagbarToggle<CR>
-  noremap! <silent> <F8> <Cmd>TagbarToggle<CR>
-  tnoremap <silent> <F8> <Cmd>TagbarToggle<CR>
+  noremap <F8> <Cmd>TagbarToggle<CR><bar>call plugins#TagbarTypes()<CR>
+  noremap! <F8> <Cmd>TagbarToggle<CR><bar>call plugins#TagbarTypes()<CR>
+  tnoremap <F8> <Cmd>TagbarToggle<CR><bar>call plugins#TagbarTypes()<CR>
 
   " yo this mapping is great
   nnoremap ,t <Cmd>CocCommand tags.generate<CR><Cmd>TagbarToggle<CR>
@@ -154,23 +152,13 @@ function! LoadMyPlugins() abort  " {{{
     Plug 'morhetz/gruvbox'
     Plug 'HerringtonDarkholme/yats.vim'
   endif " }}}
-
   Plug 'ryanoasis/vim-devicons'           " Keep at end!
-
   call plug#end()
-
 endfunction
 
 call LoadMyPlugins()
-" }}}
-
-" Commands: {{{
 " I utilize this command so often I may as well save the characters
 command! -bar Plugins echo map(keys(g:plugs), '"\n" . v:val')
-
-let g:syntax_cmd = "enable"
-" py3f ./python3/_vim.py
-
 " }}}
 
 " Vim: set fdm=marker foldlevelstart=0:

@@ -64,7 +64,7 @@ setlocal iskeyword-=.,_
 
 setlocal shiftround
 
-let &l:path = py#PythonPath()
+" let &l:path = py#PythonPath()
 
 " Dude the original ftplugin doesn't set up match words. why are the vim
 " ftplugins so fucking sparse?
