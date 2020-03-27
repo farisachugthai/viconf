@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Vim: set fdm=marker:
 """Code shared between the API classes.  # {{{
 
 The condensed pynvim API
@@ -47,6 +46,7 @@ times before then.
 Decorators used by python host plugin system.
 
 """
+import abc
 import functools
 import imp
 import inspect
@@ -92,7 +92,6 @@ debug, info, warn = (
 long = int
 unicode_errors_default = "surrogateescape"
 
-NUM_TYPES = (int, long, float)
 
 # }}}
 
@@ -141,7 +140,8 @@ class Version:
 def get_client_info(kind, type_, method_spec):
     """Returns a tuple describing the client."""
     name = "python{}-{}".format(sys.version_info[0], kind)
-    attributes = {"license": "Apache v2", "website": "github.com/neovim/pynvim"}
+    attributes = {"license": "Apache v2",
+                  "website": "github.com/neovim/pynvim"}
     return name, VERSION.__dict__, type_, method_spec, attributes
 
 
@@ -395,6 +395,10 @@ class Remote(object):
     Each type of object has it's own specialized class with API wrappers around
     the msgpack-rpc session. This implements equality which takes the remote
     object handle into consideration.
+
+    So unless I'm mistaken this looks like an abstract class as it doesn't
+    actually define the _api_prefix attribute it requires in it's init.
+    So maybe add `abc.abstract_property` to that?
     """
 
     def __init__(self, session, code_data):
@@ -406,6 +410,7 @@ class Remote(object):
         self._session = session
         self.code_data = code_data
         self.handle = unpackb(code_data[1])
+        # Wait where the hell did self._api_prefix come from??
         self.api = RemoteApi(self, self._api_prefix)
         self.vars = RemoteMap(
             self,
@@ -528,7 +533,8 @@ class Nvim(object):
         self.version = Version(**version)
         self.types = types
         self.api = RemoteApi(self, "nvim_")
-        self.vars = RemoteMap(self, "nvim_get_var", "nvim_set_var", "nvim_del_var")
+        self.vars = RemoteMap(self, "nvim_get_var",
+                              "nvim_set_var", "nvim_del_var")
         self.vvars = RemoteMap(self, "nvim_get_vvar", None, None)
         self.options = RemoteMap(self, "nvim_get_option", "nvim_set_option")
         self.buffers = Buffers(self)
@@ -1035,13 +1041,14 @@ class ScriptHost:
         sys.modules["vim"] = self.legacy_vim
 
         if not platform.platform().startswith("Win"):
-            self.handle_dirchanged()
+            self.handle_dirchanged(self.nvim)
 
-    def handle_dirchange(self):
+    def handle_dirchanged(self, nvim):
         # Handle DirChanged. #296
         nvim.command(
             "au DirChanged *"
-            'call rpcnotify({}, "python_chdir", v:event.cwd)'.format(nvim.channel_id),
+            'call rpcnotify({}, "python_chdir", v:event.cwd)'.format(
+                nvim.channel_id),
             async_=True,
         )
 
@@ -1051,11 +1058,12 @@ class ScriptHost:
         # to make __init__ safe again, the following should work:
         # os.chdir(nvim.eval('getcwd()', async_=False))
         nvim.command(
-            'call rpcnotify({}, "python_chdir", getcwd())'.format(nvim.channel_id),
+            'call rpcnotify({}, "python_chdir", getcwd())'.format(
+                nvim.channel_id),
             async_=True,
         )
 
-    def setup(self):
+    def setup(self, nvim):
         """Setup import hooks and global streams.
 
         This will add import hooks for importing modules from runtime
@@ -1084,7 +1092,13 @@ class ScriptHost:
 
     @rpc_export("python_execute", sync=True)
     def python_execute(self, script, range_start, range_stop):
-        """Handle the `python` ex command."""
+        """Handle the `python` ex command.
+
+        Might wanna consider adding their test suite in here as well.
+        I don't wanna introduce any regressions but if we could add a lot
+        more default values to everything it'd be so much easier to use this
+        API in addition to speed things up by making all of the lookups local.
+        """
         self._set_current_range(range_start, range_stop)
         try:
             exec(script, self.module.__dict__)
@@ -1133,7 +1147,8 @@ class ScriptHost:
                     # Update earlier lines, and skip to the next
                     if newlines:
                         end = sstart + len(newlines) - 1
-                        nvim.current.buffer.api.set_lines(sstart, end, True, newlines)
+                        nvim.current.buffer.api.set_lines(
+                            sstart, end, True, newlines)
                     sstart += len(newlines) + 1
                     newlines = []
                     pass
@@ -1182,10 +1197,8 @@ class RedirectStream(io.IOBase):
         self.redirect_handler("\n".join(seq))
 
 
-num_types = (int, float)
-
-
 def num_to_str(obj):
+    num_types = (int, long, float)
     if isinstance(obj, num_types):
         return str(obj)
     else:
@@ -1209,7 +1222,7 @@ def path_hook(nvim):
         idx = oldtail.find(".")
         if idx > 0:
             name = oldtail[:idx]
-            tail = oldtail[idx + 1 :]
+            tail = oldtail[idx + 1:]
             fmr = imp.find_module(name, path)
             module = imp.find_module(fullname[: -len(oldtail)] + name, *fmr)
             return _find_module(fullname, tail, module.__path__)
@@ -1269,7 +1282,6 @@ def discover_runtime_directories(nvim):
             if os.path.exists(path):
                 rv.append(path)
     return rv
-
 
 # }}}
 
@@ -1415,7 +1427,8 @@ class Buffer(Remote):
         if clear and clear_start is None:
             clear_start = 0
         lua = self._session._get_lua_private()
-        lua.update_highlights(self, src_id, hls, clear_start, clear_end, async_=async_)
+        lua.update_highlights(
+            self, src_id, hls, clear_start, clear_end, async_=async_)
 
     @property
     def name(self):
@@ -1468,7 +1481,7 @@ class Range(object):
             start = self.start
         if end is None:
             end = self.end
-        self._buffer[start : end + 1] = lines
+        self._buffer[start: end + 1] = lines
 
     def __iter__(self):
         for i in range(self.start, self.end + 1):
@@ -1670,7 +1683,7 @@ class RemoteSequence(object):
         """Return a sequence item by index."""
         if not isinstance(idx, slice):
             return self._fetch()[idx]
-        return self._fetch()[idx.start : idx.stop]
+        return self._fetch()[idx.start: idx.stop]
 
     def __iter__(self):
         """Return an iterator for the sequence."""
@@ -1706,3 +1719,4 @@ def walk(fn, obj, *args, **kwargs):
 
 
 # }}}
+# Vim: set fdm=marker fdls=0:

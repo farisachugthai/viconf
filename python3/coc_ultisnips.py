@@ -25,7 +25,8 @@ JEDI = 0x6
 SINGLE_QUOTES = "'"
 DOUBLE_QUOTES = '"'
 
-_Placeholder = namedtuple("_FrozenPlaceholder", ["current_text", "start", "end"])
+_Placeholder = namedtuple("_FrozenPlaceholder", [
+                          "current_text", "start", "end"])
 _VisualContent = namedtuple("_VisualContent", ["mode", "text"])
 _Position = namedtuple("_Position", ["line", "col"])
 

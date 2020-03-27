@@ -18,8 +18,10 @@ let g:vimsyn_maxlines = 500  " why is the default 60???
 let g:vimsyn_noerror = 1  " Turn off errors because 50% of them are wrong.
 let g:vimsyn_embed = 1
 
-syntax enable
-syntax sync fromstart
+" Override the textwidth before sourcing the runtime ftplugin. They do
+" if tw=0 | setlocal tw=78 | endif
+setlocal textwidth=100
+" Then we don't need to add it to our ftplugin_undo because it's in that func call
 source $VIMRUNTIME/ftplugin/vim.vim
 setlocal expandtab
 setlocal shiftwidth=2

@@ -211,7 +211,8 @@ def make_box(twidth, bwidth=None):
         :func:`get_comment_format`
     """
     b, m, e, i = (s.strip() for s in get_comment_format())
-    bwidth_inner = bwidth - 3 - max(len(b), len(i + e)) if bwidth else twidth + 2
+    bwidth_inner = bwidth - 3 - \
+        max(len(b), len(i + e)) if bwidth else twidth + 2
     sline = b + m + bwidth_inner * m[0] + 2 * m[0]
     nspaces = (bwidth_inner - twidth) // 2
     mlines = i + m + " " + " " * nspaces
@@ -497,7 +498,8 @@ def create_table(snip):
 
     # create anonymous snippet with expected content and number of tabstops
     anon_snippet_title = (
-        " | ".join(["$" + str(col) for col in range(1, columns_amount + 1)]) + "\n"
+        " | ".join(["$" + str(col)
+                    for col in range(1, columns_amount + 1)]) + "\n"
     )
     anon_snippet_delimiter = ":-|" * (columns_amount - 1) + ":-\n"
     anon_snippet_body = ""
@@ -511,7 +513,8 @@ def create_table(snip):
             )
             + "\n"
         )
-    anon_snippet_table = anon_snippet_title + anon_snippet_delimiter + anon_snippet_body
+    anon_snippet_table = anon_snippet_title + \
+        anon_snippet_delimiter + anon_snippet_body
 
     # expand anonymous snippet
     snip.expand_anon(anon_snippet_table)

@@ -60,39 +60,6 @@
   "javascript.referencesCodeLens.enable": true,
   "javascript.showUnused": true,
   "json.format.enable": true,
-  "languageserver": {
-    "vimlsp": {
-      "args": [
-        "--stdio"
-      ],
-      "command": "vim-language-server",
-      "filetypes": [
-        "vim"
-      ],
-      "initializationOptions": {
-        "diagnostic": {
-          "enable": true
-        },
-        "indexes": {
-          "count": 3,
-          "gap": 100,
-          "runtimepath": true,
-          "workDirPatterns": [
-            ".git",
-            "autoload",
-            "plugin"
-          ]
-        },
-        "iskeyword": "@,48-57,_,192-255,-#",
-        "runtimepath": false,
-        "suggest": {
-          "fromRuntimepath": false,
-          "fromVimruntime": true
-        },
-        "vimruntime": "$VIMRUNTIME"
-      }
-    }
-  },
   "list.autoResize": true,
   "list.extendedSearchMode": true,
   "list.indicator": "CocList: >>> $: ",
@@ -357,7 +324,6 @@
     "~/.config/nvim/UltiSnips"
   ],
   "snippets.ultisnips.pythonVersion": 3,
-  "suggest.acceptSuggestionOnCommitCharacter": false,
   "suggest.autoTrigger": "always",
   "suggest.completionItemKindLabels": {
     "class": "",

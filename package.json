@@ -9,10 +9,10 @@
     "url": "git+https://github.com/farisachugthai/viconf.git"
   },
   "scripts": {
-    "lint": "yarn run tslint -p .",
+    "lint": "yarn run tslint --fix **.ts",
     "fix": "yarn run prettier rplugin/node",
     "tagfunc": "./rplugin/node/coc_tag.js",
-    "watch": "yarn run tsc -w -p rplugin/node",
+    "watch": "yarn run tsc -w rplugin/node",
     "build": "yarn run rimraf ./out && yarn run webpack",
     "start": "yarn run vim-language-server --stdio"
   },
@@ -47,10 +47,13 @@
     "coc-python": "^1.2.7",
     "coc-snippets": ">=2.1.18",
     "coc-tsserver": ">=1.4.9",
-    "coc-vimlsp": ">=0.4.5",
-    "coc-yank": ">=1.1.3"
-  },
-  "dependencies": {
+    "coc-vimlsp": "^0.5.0",
+    "coc-yank": ">=1.1.3",
+    "tslint": "^6.1.0",
+    "vim-language-server": "^1.5.0",
     "yo": "^3.1.1"
+  },
+  "peerDependencies": {
+    "typescript": "^3.8.3"
   }
 }

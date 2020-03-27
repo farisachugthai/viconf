@@ -12,7 +12,7 @@ source $VIMRUNTIME/ftplugin/c.vim
 
 " Also account for my mods. Where all the meat is
 let s:root_dir = fnameescape(fnamemodify(expand('<sfile>'), ':p:h:h'))
-exec 'source ' . s:root_dir . '/after/ftplugin/c.vim'
+exec 'source ' . s:root_dir . '/ftplugin/c.vim'
 syntax sync fromstart
 setlocal syntax=c
 setlocal mps+==:;

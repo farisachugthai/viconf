@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Initialize pythonx in neovim."""
-from collections import namedtuple
-from importlib.machinery import PathFinder
-from io import StringIO
 import logging
 import os
 import sys
+from collections import namedtuple
+from importlib.machinery import PathFinder
+from io import StringIO
 
 try:
     import pynvim
@@ -24,25 +24,20 @@ __docformat__ = "reStructuredText"
 
 logger = logging.getLogger(__name__).addHandler(logging.StreamHandler())
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-
-if not hasattr(vim, "find_module"):
-    vim.find_module = PathFinder.find_module
+# file not defined? fuck
+# sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 
 class Options:
     aggressive = 1
     diff = False
     experimental = True
-    ignore = vim.eval("g:pymode_lint_ignore")
     in_place = True
     indent_size = int(vim.eval("&tabstop"))
     line_range = None
     hang_closing = False
-    max_line_length = int(vim.eval("g:pymode_options_max_line_length"))
     pep8_passes = 100
     recursive = False
-    select = vim.eval("g:pymode_lint_select")
     verbose = 0
 
 

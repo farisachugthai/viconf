@@ -41,6 +41,10 @@ setglobal complete=.,w,b,t,kspell,d,k
 setglobal completeopt=menu,menuone,noselect,noinsert,preview
 " both smartcase and infercase require ignorecase to be set:
 setglobal ignorecase
+
+setlocal indentkeys+=<:>,=elif,=except
+setlocal indentkeys-=0#
+
 setglobal smartcase infercase smartindent
 
 " Couple tag related things
@@ -125,6 +129,7 @@ if has('unix')
   let g:tagbar_iconchars = ['▷', '◢']
   let g:startify_change_to_dir = 1
 else
+  setglobal noshelltemp
   setglobal sessionoptions+=unix,slash viewoptions+=unix,slash
 
   " So this HAS to be a bad idea; however, all 3 DirChanged autocommands emit
@@ -505,6 +510,11 @@ function! s:Init_coc() abort
   " Now find node:
     if executable('C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\node.exe')
       let g:coc_node_path = 'C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\node.exe'
+
+      call coc#config("languageserver", { "vimlsp": {"args": ["--stdio"],"command": "vim-language-server","filetypes": ["vim" ],
+            \ "initializationOptions": {"diagnostic": { "enable": v:true }, "indexes": { "count": 3, "gap": 100, "runtimepath": v:true,
+            \ "workDirPatterns": [ ".git", "autoload", "plugin"]}, "iskeyword": "@,48-57,_,192-255,-#", "runtimepath": v:false,
+            \ "suggest": { "fromRuntimepath": v:false, "fromVimruntime": v:true }, "vimruntime": "$VIMRUNTIME" } } })
     endif
   endif
 
@@ -616,30 +626,6 @@ let g:tmuxline_powerline_separators = {
      \ 'right' : '«',
      \ 'right_alt' : '◀',
      \ 'space' : ' '}
-" }}}
-
-function! s:Goyo_enter() " Goyo: {{{
-  if executable('tmux') && strlen($TMUX)
-    silent !tmux set status off
-    silent !tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z
-  endif
-  set noshowmode
-  set noshowcmd
-  set scrolloff=999
-  " ... Limelight
-endfunction
-" }}}
-
-function! s:Goyo_leave()   " {{{
-  if executable('tmux') && strlen($TMUX)
-    silent !tmux set status on
-    silent !tmux list-panes -F '\#F' | grep -q Z && tmux resize-pane -Z
-  endif
-  set showmode
-  set showcmd
-  set scrolloff=5
-  " ... Limelight!
-endfunction
 " }}}
 
 " Voom: {{{

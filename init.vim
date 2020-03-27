@@ -23,6 +23,7 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h'))
 " Seriously how does this keep getting fucked up. omfg packpath is worse???
 setglobal runtimepath=$HOME/.config/nvim,$HOME/.local/share/nvim/site,$VIMRUNTIME
 setglobal packpath=~/.config/nvim/pack,~/.local/share/nvim/site/pack,$VIMRUNTIME
+if !has('unix') | source C:/Neovim/share/nvim-qt/runtime/plugin/nvim_gui_shim.vim | endif
 
 " Source ginit. Why is this getting set even in the TUI?
 if exists('g:GuiLoaded') | exec 'source ' s:repo_root . '/ginit.vim' | endif

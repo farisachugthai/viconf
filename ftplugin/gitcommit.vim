@@ -5,6 +5,10 @@
     " Last Modified: Nov 14, 2019
 " ============================================================================
 
+if exists('b:did_ftplugin') | finish | endif
+
+source $VIMRUNTIME/ftplugin/gitcommit.vim
+
 setlocal textwidth=72
 setlocal spell
 
@@ -15,5 +19,5 @@ setlocal linebreak
 setlocal formatoptions-=t formatoptions+=croql
 setlocal comments=:#,:; commentstring=;\ %s
 
-let b:undo_ftplugin = 'setlocal tw< sp< cc< fo< com< cms<'
+let b:undo_ftplugin .= '|setlocal tw< sp< cc< fo< com< cms<'
       \ . '|unlet! b:undo_ftplugin'

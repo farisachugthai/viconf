@@ -293,7 +293,8 @@ def catch_and_print_exceptions(func):
 def import_into_vim(*args):
     if jedi is not None:
         text = f"import {args}"
-        script = jedi.Script(text, 1, len(text), "", environment=get_environment())
+        script = jedi.Script(text, 1, len(text), "",
+                             environment=get_environment())
 
         partial_completions = (c.complete() for c in script.completions())
 
@@ -314,9 +315,11 @@ def Black():
     )
     buffer_str = "\n".join(vim.current.buffer) + "\n"
     try:
-        new_buffer_str = black.format_file_contents(buffer_str, fast=fast, mode=mode)
+        new_buffer_str = black.format_file_contents(
+            buffer_str, fast=fast, mode=mode)
     except black.NothingChanged:
-        print(f"Already well formatted, good job. (took {time.time() - start:.4f}s)")
+        print(
+            f"Already well formatted, good job. (took {time.time() - start:.4f}s)")
     except Exception as exc:
         print(exc)
     else:

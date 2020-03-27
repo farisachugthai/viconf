@@ -188,25 +188,24 @@ nnoremap <expr> , getcharsearch().forward ? ',' : ';'
 " These will make it so that going to the next one in a
 " search will center on the line it's found in.
 " Also add a mark for housekeeping
-nnoremap n mjnzzzv
-nnoremap N mkNzzzv
+nnoremap n mJnzzzv
+nnoremap N mKNzzzv
 
 " If you highlight something in Visual mode, you should be able to use '#' and
 " '*' to search for it.
-xnoremap * mny/<C-R>"<CR>
-xnoremap # mpy?<C-R>"<CR>
+xnoremap * mNy/<C-R>"<CR>
+xnoremap # mPy?<C-R>"<CR>
 
 " here's a great idea from justinmk:
 " mark searches before you start
-nnoremap / ms/
+nnoremap / mS/
 " Oh also do the backwards one too please!
-nnoremap ? mb?
+nnoremap ? mB?
 " let's extend justin's idea with ours!
 " get rid of the gv it's super confusing
-xnoremap / msy/<C-R>"<CR>
-
+xnoremap / mSy/<C-R>"<CR>
 " }}}
-"
+
 " UltiSnips: {{{
 
 noremap <F4> <Cmd>UltiSnipsEdit<CR>
@@ -501,7 +500,9 @@ function! Quickfix_Mappings() abort  " {{{
   " make it always occupy the full width:
   " use botright.
   nnoremap <Leader>lh <Cmd>botright lhistory<CR>
-  nnoremap <Leader>ll <Cmd>botright llist!<CR>
+  nnoremap <Leader>ll <Cmd>llist!<CR>
+  " Down for down
+  nnoremap <Leader>ld <Cmd>botright llist!<CR>
   nnoremap <Leader>lo <Cmd>lopen<CR>
   nnoremap <Leader>lw <Cmd>botright lwindow<CR>
 
@@ -524,13 +525,15 @@ function! Quickfix_Mappings() abort  " {{{
   nnoremap <Leader>qp <Plug>(qf_older)
   nnoremap <Leader>qn <Plug>(qf_newer)
   nnoremap <Leader>qc <Cmd>cclose<CR>
-  nnoremap <Leader>qf <Cmd>cwindow<CR>
 
   " Wanna note how long Ive been using Vim and still i onlyjust found out
   " about the chistory and lhistory commands like wth
   nnoremap <Leader>qh <Cmd>botright chistory<CR>
- nnoremap <Leader>ql <Cmd>botright clist!<CR>
+  nnoremap <Leader>ql <Cmd>clist!<CR>
+  " D for down
+  nnoremap <Leader>qd <Cmd>botright clist!<CR>
   nnoremap <leader>qo <Cmd>botright copen<CR>
+  " This one is kinda annoying. cwindow frequently only closes the window but doesn't open it
   nnoremap <Leader>qw <Cmd>botright cwindow<CR>
 
   nnoremap <Leader>C <Cmd>make %<CR>

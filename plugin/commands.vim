@@ -283,17 +283,14 @@ command! -bar -bang -nargs=* -complete=color Colo
   \ call fzf#vim#colors({'left': '35%',
   \ 'options': '--reverse --margin 30%,0'}, <bang>0)
 " }}}
-
 " }}}
 
 " Finding Files: {{{
-
 " Completes filenames from the directories specified in the 'path' option:
-" doesnt work lol
-command! -nargs=* -range=% -bang -bar -complete=customlist,unix#EditFileComplete -complete=file
-        \ EdPreview :<q-mods> <line1>,<line2> pedit<bang> <q-args>
+command! -nargs=* -bang -bar -complete=customlist,unix#EditFileComplete -complete=file
+        \ Pedit :pedit<bang> <q-args>
 
-command! -nargs=* -bang -complete=file -complete=file_in_path Goto pedit<bang> <args>
+command! -nargs=* -bang -complete=file -complete=file_in_path Goto :hide <q-mods> edit<bang> <args>
 " I admit feeling peer pressured to add this but
 " -range=N    A count (default N) which is specified in the line
 "             number position (like |:split|); allows for zero line
@@ -449,7 +446,7 @@ if !has('unix')
   command! -bar -nargs=? PwshHelp call msdos#pwsh_help(shellescape(<f-args>))
 endif
 " }}}
-"
+
 " Chmod: {{{
 
 " :S    Escape special characters for use with a shell command (see
