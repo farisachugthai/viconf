@@ -25,20 +25,25 @@ else
   setlocal keywordprg=pydoc
 endif
 source $VIMRUNTIME/ftplugin/python.vim
+
+setlocal nolisp		" Make sure lisp indenting doesn't supersede us
+" First one from $VIMRUNTIME/indent/python.vim 2nd from the ftplugin
+setlocal indentkeys+=<:>,=elif,=except
+setlocal indentkeys-=0#
+setlocal autoindent	" indentexpr isn't much help otherwise
+setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
+setlocal cinkeys-=0#
+" setlocal cindent
 " Idk why but their indentexpr wont stop raising
+" But lets set the other stuff first
 setlocal indentexpr=
 
 setlocal nolinebreak  " Dont set this on itll create syntaxerors
-setlocal textwidth=120
+setlocal textwidth=80
 setlocal tagcase=smart
 setlocal comments=b:#,fb:-
 setlocal commentstring=#\ %s
 setlocal tabstop=4 shiftwidth=4 expandtab softtabstop=4
-
-setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
-setlocal cinkeys-=0#
-
-setlocal nolisp		" Make sure lisp indenting doesn't supersede us
 setlocal include=^\\s*\\(from\\\|import\\)
 " this is in the help docs for `:he includeexpr` and states for java but i bet
 " itd work for python
@@ -49,6 +54,7 @@ setlocal includeexpr=substitute(v:fname,'\\.','/','g')
 setlocal colorcolumn=80,120
 setlocal foldmethod=indent
 
+setlocal tags=tags,**,$HOME/**
 setlocal suffixesadd=.py,pyi,__init__.py
 setlocal suffixes+=.pyc
 setlocal omnifunc=python3complete#Complete
@@ -59,7 +65,7 @@ setlocal iskeyword-=.,_
 
 setlocal shiftround
 
-" let &l:path = py#PythonPath()
+let &l:path = py#PythonPath()
 
 " Dude the original ftplugin doesn't set up match words. why are the vim
 " ftplugins so fucking sparse?
@@ -67,6 +73,7 @@ if exists("loaded_matchit")
   " Use case with matchit.
   let b:match_ignorecase = 0
 
+  " why dont more ftplugins utilize matchit?
   " oh it's because this is hard as fuck
   " You can use |zero-width| patterns such as |\@<=| and |\zs|.  (The latter has
   " not been thouroughly tested in matchit.vim.)  For example, if the keyword "if"
@@ -78,7 +85,11 @@ if exists("loaded_matchit")
   let b:match_words = '\(^\s*\)\@<=\<if\>:\<elif\>:\<else\>,' 
                   \ . '\(^\s*\)\@<=\<def\>:\<return\>,'
 
-                  " \ . '\<repeat\>:\<until\>,'
+  " let b:match_words = '\<if\>:\<elif\>:\<else\>,' 
+  "                 \ . '\<repeat\>:\<until\>'
+
+  " let b:match_words = '\<if\>:\<elif\>:\<else\>,' 
+
 endif
 " }}}
 
@@ -94,8 +105,7 @@ nnoremap K <Cmd>PydocShow<CR>
 nnoremap ,eb <Cmd>py3f %<CR>
 " }}}
 
-" Formatters: {{{
-
+" Commands And Cleanup: {{{
 if executable('yapf')
   command! -buffer -complete=buffer -nargs=0 YAPF call py#YAPF()
   command! -buffer -complete=buffer -nargs=0 YAPFI exec '!yapf -i %'
@@ -106,33 +116,29 @@ else
     command! -nargs=0 -complete=buffer -buffer Autopep8 cexpr! exec '!autopep8 -i ' . shellescape(<q-args>) . expand('%')
     command! -nargs=0 Autopep8 exec '!autopep8 -i %'
   endif
-endif  " }}}
+endif
 
-" Plugins: {{{
 call py#ALE_Python_Conf()
 
 " Just tried this and it worked! So keep checking :CocCommand output
 if !empty('g:did_coc_loaded')
   command! -nargs=* -bar CocPython call CocActionAsync('runCommand', 'python.startREPL', shellescape(<q-args>))
 endif
-" }}}
 
-" Atexit: {{{
-" For a reference go to $VIMRUNTIME/ftplugin/python.vim
-" We shouldve gotten it from ^ that file but just in case
-if !exists('b:undo_ftplugin')
-  let b:undo_ftplugin = ''
+if executable('pytest')
+  compiler pytest
+  setlocal makeprg=pytest\ -q\ %
 endif
 
 let b:undo_ftplugin .= '|setlocal lbr< tw< cms< et< sts< ts<'
       \ . '|setlocal su< sw< cc< fdm< kp<'
       \ . '|setlocal sr< sua< isf< ep< fp< path< cinw<'
-      \ . '|setlocal mp< efm<'
+      \ . '|setlocal mp< efm< isk< tags<'
       \ . '|setlocal comments<'
-      \ . '|setlocal include<'
-      \ . '|setlocal indentkeys<'
+      \ . '|setlocal include< inex<'
+      \ . '|setlocal indk< inde'
       \ . '|setlocal omnifunc<'
-      \ . '|setlocal cinkeys<'
+      \ . '|setlocal ai< cin< cink<'
       \ . '|silent! unmap <buffer> <F5>'
       \ . '|silent! unmap! <buffer> <F5>'
       \ . '|unlet! b:undo_ftplugin'

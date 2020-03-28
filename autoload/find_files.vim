@@ -21,16 +21,16 @@ function! find_files#plug_help_sink(line)  abort " {{{1
   " you have installed listed and upon pressing enter open the help
   " docs. That's not a great explanation but honestly easier to explain
   " with a picture.
-  let dir = g:plugs[a:line].dir
-  for pat in ['doc/*.txt', 'README.md']
-    let match = get(split(globpath(dir, pat), "\n"), 0, '')
-    if len(match)
-      execute 'tabedit' match
+  let l:dir = g:plugs[a:line].dir
+  for l:pat in ['doc/*.txt', 'README.md']
+    let l:match = get(split(globpath(l:dir, l:pat), "\n"), 0, '')
+    if len(l:match)
+      execute 'tabedit' l:match
       return
     endif
   endfor
   tabnew
-  execute 'Explore' dir
+  execute 'Explore' l:dir
 endfunction  " }}}
 
 function! find_files#buflist() abort  " {{{1
@@ -55,11 +55,11 @@ endfunction  " }}}
 
 function! find_files#FZFGit() abort  " {{{1
   " Remove trailing new line to make it work with tmux splits
-  let directory = substitute(system('git rev-parse --show-toplevel'), '\n$', '', '')
+  let l:directory = substitute(system('git rev-parse --show-toplevel'), '\n$', '', '')
   if !v:shell_error
     lcd `=directory`
-    call fzf#run(fzf#wrap({
-        \ 'dir'   : directory,
+    call fzf#run(fzf#wrap('gitfiles', {
+        \ 'dir'   : l:directory,
         \ 'source': 'git ls-files',
         \ 'sink'  : 'e',
         \ 'window': '50vnew'}))
@@ -181,11 +181,11 @@ function! find_files#RipgrepFzf(query, fullscreen)  abort   " {{{
   "   you type on fzf prompt is only used for restarting ripgrep process.
   " - Also note that we enabled previewer with `fzf#vim#with_preview`.
 
-  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
-  let initial_command = printf(command_fmt, shellescape(a:query))
-  let reload_command = printf(command_fmt, '{q}')
-  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
-  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+  let l:command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
+  let l:initial_command = printf(l:command_fmt, shellescape(a:query))
+  let l:reload_command = printf(l:command_fmt, '{q}')
+  let l:spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.l:reload_command]}
+  call fzf#vim#grep(l:initial_command, 1, fzf#vim#with_preview(l:spec), a:fullscreen)
 endfunction  " }}}
 
 function! find_files#RgSearch(txt) abort  " {{{
@@ -203,7 +203,7 @@ function! find_files#RgSearch(txt) abort  " {{{
   else
     cclose
     redraw!
-    echo "No match found for " . a:txt
+    echomsg 'No match found for ' . a:txt
   endif
 endfunction  " }}}
 

@@ -60,10 +60,12 @@ endsnippet
 # Yay! First successful use of a regex
 snippet "ft(plugin)?" "Ftplugin guard" br
 if exists('b:did_ftplugin') | finish | endif
-let b:did_ftplugin = 1
+source $VIMRUNTIME/ftplugin/`!p snip.ft `
 
-let b:undo_ftplugin = 'setlocal $1'
-      \ . '|unlet! b:undo_ftplugin'
+let b:undo_ftplugin = get(b:, 'undo_ftplugin', 'exe') .
+                      \ . '|setlocal $1'
+                      \ . '|unlet! b:undo_ftplugin'
+                      \ . '|unlet! b:did_ftplugin'
 endsnippet
 
 snippet syntax "Syntax file guard" b
@@ -287,4 +289,4 @@ snippet exe "execute(var)" b
 execute('${0:${VISUAL}}')
 endsnippet
 
-# Vim: set ts=4 sts=2 sw=2:
+# Vim: set ts=4 sts=2 sw=2 et ft=snippets.vim:

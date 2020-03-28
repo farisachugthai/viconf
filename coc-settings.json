@@ -366,6 +366,7 @@
   "tsserver.implicitProjectConfig.checkJs": true,
   "tsserver.implicitProjectConfig.experimentalDecorators": true,
   "tsserver.locale": "utf8",
+  "tsserver.log": "terse",
   "typescript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
   "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
   "typescript.referencesCodeLens.enable": true,

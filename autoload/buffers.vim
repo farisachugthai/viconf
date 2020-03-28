@@ -10,13 +10,14 @@ function! buffers#EchoRTP() abort " {{{
   " let's do a check that this function exists then and do it the non-nvim way
   " otherwise
   if exists('*nvim_list_runtime_paths')
-    for directory in nvim_list_runtime_paths()
-      echo directory
+    for l:directory in nvim_list_runtime_paths()
+      echo l:directory
     endfor
   else
-    for i in split(&runtimepath, ',') | echo i | endfor
+    for l:i in split(&runtimepath, ',') | echo l:i | endfor
   endif
-endfunction  " }}}
+endfunction
+" }}}
 
 function! buffers#PreviewWord() abort  " {{{
   " Open a tag for the word under the cursor in the preview window.
@@ -26,8 +27,8 @@ function! buffers#PreviewWord() abort  " {{{
   if &previewwindow     " don't do this in the preview window
     return
   endif
-  let w = expand('<cword>')   " get the word under cursor
-  if w =~? '\a'     " if the word contains a letter
+  let l:w = expand('<cword>')   " get the word under cursor
+  if l:w =~? '\a'     " if the word contains a letter
 
     " Delete any existing highlight before showing another tag
     silent! wincmd P      " jump to preview window
@@ -41,7 +42,7 @@ function! buffers#PreviewWord() abort  " {{{
     if &autowrite | write | endif
 
     try
-       execute 'ptag ' . w
+       execute 'ptag ' . l:w
     catch
       return
     endtry
@@ -52,15 +53,20 @@ function! buffers#PreviewWord() abort  " {{{
         silent! .foldopen    " don't want a closed fold
       endif
       call search('$', 'b')    " to end of previous line
-      let w = substitute(w, '\\', '\\\\', '')
-      call search('\<\V' . w . '\>')  " position cursor on match
+
+      let l:w = substitute(l:w, '\\', '\\\\', '')
+
+      call search('\<\V' . l:w . '\>')  " position cursor on match
+
       " Add a match highlight to the word at this position
       hi previewWord term=bold ctermbg=green guibg=green
+
       exe 'match previewWord "\%' . line('.') . 'l\%' . col('.') . 'c\k*"'
       wincmd p      " back to old window
     endif
   endif
-endfunction  " }}}
+endfunction
+" }}}
 
 function! buffers#terminals() abort  " {{{
   " If running a terminal in Vim, go into Normal mode with Esc
@@ -95,4 +101,5 @@ function! buffers#terminals() abort  " {{{
   " It's so annoying that buffers need confirmation to kill. Let's dedicate a
   " key but one that we know windows hasn't stolen yet.
   tnoremap <D-z> <Cmd>bd!<CR>
-endfunction  " }}}
+endfunction
+" }}}

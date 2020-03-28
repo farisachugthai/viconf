@@ -13,7 +13,7 @@ scriptencoding utf-8
 setglobal fileformats=unix,dos
 setglobal cpoptions-=c,e,_  " couple options that bugged me
 setglobal fileencodings=utf-8,default,latin1   " UGHHHHH
-setglobal nobomb | lockvar nobomb
+setglobal nobomb | lockvar g:nobomb
 setglobal hidden
 " }}}
 
@@ -113,7 +113,7 @@ function! LoadMyPlugins() abort  " {{{
     Plug 'edkolev/tmuxline.vim'
   endif
 
-  Plug 'mhinz/vim-startify', {'on': 'Startify'}
+  Plug 'mhinz/vim-startify'
   Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
   noremap <F8> <Cmd>TagbarToggle<CR><bar>call plugins#TagbarTypes()<CR>
   noremap! <F8> <Cmd>TagbarToggle<CR><bar>call plugins#TagbarTypes()<CR>
@@ -128,7 +128,7 @@ function! LoadMyPlugins() abort  " {{{
   Plug 'tomtom/tlib_vim'
   " Dont know how i didnt realize lazy loaded plugins arent added to rtp.
   Plug 'mitsuhiko/vim-jinja', {'for': 'jinja2'},
-
+  " Plug 'lepture/vim-jinja'
   Plug 'cespare/vim-toml', {'for': 'toml'}
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}

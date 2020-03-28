@@ -6,13 +6,12 @@
 " ============================================================================
 
 function! pydoc_help#open_files(files) abort  " {{{
-  let bufnrs = []
-    for file in a:files
-      let bufnr = bufadd(file)
-      call bufload(file)
-      call add(bufnrs, bufnr(file))
+  let l:bufnrs = []
+    for l:file in a:files
+      call bufload(l:file)
+      call add(l:bufnrs, bufnr(l:file))
     endfor
-  return bufnrs
+  return l:bufnrs
 endfunction  " }}}
 
 function! pydoc_help#scratch_buffer() abort   " {{{
@@ -24,10 +23,10 @@ function! pydoc_help#scratch_buffer() abort   " {{{
 endfunction   " }}}
 
 function! pydoc_help#scratch_listed_buffer(bang) range abort " {{{
-  let bufnum = nvim_create_buf(v:true, v:true)
+  let l:bufnum = nvim_create_buf(v:true, v:true)
   " Actually fuck trying to figure out how to switch to that buffer
   :Buffers
-  return bufnum
+  return l:bufnum
 endfunction  " }}}
 
 function! s:temp_buffer() abort  " {{{1
@@ -80,18 +79,14 @@ function s:handle_user_config() abort   " {{{1
   endif
 endfunction   " }}}
 
-function! pydoc_help#Pydoc(module) abort   " {{{1
-  call pydoc_help#scratch_buffer()
-  if has('python3')
-    if has('unix')
-      :python3 'import pydoc,' . a:module '; pydoc.help(' . a:module . ')'
-    else
-      exec 'r! python -m pydoc ' . a:module
-    endif
-  " not sure how to guarantee that python points to py2...
-  elseif has('python')
-    exec 'r! python -m pydoc ' . a:module
+function! pydoc_help#Pydoc(module, bang) abort range  " {{{1
+  if a:bang
+    tabe
+  else
+    call pydoc_help#scratch_buffer()
   endif
+
+  exec 'r! python -m pydoc ' . a:module
 
   call s:temp_buffer()
 endfunction   " }}}
@@ -108,7 +103,7 @@ function! pydoc_help#async_cfile_mods(mods, bang) abort  " {{{1
   if !has('nvim') | throw "Doesn't work on vim" | endif
   let s:temp_cfile = expand('<cfile>')
   exec a:mods . 'enew' . a:bang
-  call jobstart('pydoc ' . s:temp_cfile {'on_stdout':{j,d,e->append(line('.'),d)}})
+  call jobstart('pydoc ' . s:temp_cfile, {'on_stdout':{j,d,e->append(line('.'),d)}})
   call s:temp_buffer()
 endfunction   " }}}
 
@@ -122,15 +117,15 @@ function! pydoc_help#async_cfile() abort  " {{{1
   let s:temp_cfile = expand('<cfile>')
 
   " Empty buffer
-  let buf = nvim_create_buf(v:false, v:true)
+  let l:buf = nvim_create_buf(v:false, v:true)
 
-  let opts = {'relative': 'cursor', 'width': 100, 'height': 24, 'col': 0,
+  let l:opts = {'relative': 'cursor', 'width': 100, 'height': 24, 'col': 0,
       \ 'row': 0, 'anchor': 'NW', 'style': 'minimal'}
 
   " note we call v:true to enter the window
-  let win = nvim_open_win(buf, v:true, opts)
+  let win = nvim_open_win(l:buf, v:true, l:opts)
   " optional: change highlight, otherwise Pmenu is used
-  call nvim_win_set_option(win, 'winhl', 'Normal:MyHighlight')
+  call nvim_win_set_option(l:win, 'winhl', 'Normal:MyHighlight')
 
   " To close the float, |nvim_win_close()| can be used.
   " 0 for the current window, v:false is for don't force
@@ -145,7 +140,7 @@ function! pydoc_help#broken_scratch_buffer() abort  " {{{1
   " parsed by this API
 
   " From he api-floatwin. Only new versions of Nvim (maybe 0.4+ only?)
-  let buf = nvim_create_buf(v:false, v:true)
+  let l:buf = nvim_create_buf(v:false, v:true)
 
   " and the help for that function
   " nvim_create_buf({listed}, {scratch})                       *nvim_create_buf()*
@@ -158,19 +153,19 @@ function! pydoc_help#broken_scratch_buffer() abort  " {{{1
   " original: should fill with pydoc output
   " TODO: this is the "broken" line
   " call nvim_buf_set_lines(buf, 0, -1, v:true, ["test", "text"])
-  let opts = {'relative': 'cursor', 'width': 10, 'height': 2, 'col': 0,
+  let l:opts = {'relative': 'cursor', 'width': 10, 'height': 2, 'col': 0,
       \ 'row': 1, 'anchor': 'NW', 'style': 'minimal'}
 
-  let win = nvim_open_win(buf, 0, opts)
+  let l:win = nvim_open_win(l:buf, 0, l:opts)
   " optional: change highlight, otherwise Pmenu is used
-  call nvim_win_set_option(win, 'winhl', 'Normal:MyHighlight')
+  call nvim_win_set_option(l:win, 'winhl', 'Normal:MyHighlight')
 
   " To close the float, |nvim_win_close()| can be used.
   " 0 for the current window, v:false is for don't force
   nnoremap <buffer> q <Cmd>call nvim_win_close(0, v:false)<CR>
 endfunction  " }}}
 
-function! pydoc_help#the_curse_of_nvims_floating_wins() abort  " {{{1
+function! pydoc_help#the_curse_of_nvims_floating_wins() abort  " {{{
   " No seriously they're difficult to work with
 
   let s:opts = {
@@ -249,7 +244,7 @@ function! pydoc_help#show(...) abort  " {{{
   call s:temp_buffer()
   " Make it vertical
   wincmd L
-  normal gg
+  normal! gg
   keepjumps keepalt wincmd p
 endfunction " }}}
 
@@ -311,7 +306,7 @@ function! pydoc_help#PreviewShow() abort  " {{{
     echoerr "We're not in the preview window?"
     return
   endif
-  
+
   else
     return
   endif
@@ -338,4 +333,3 @@ function! pydoc_help#WholeLine(...) abort  " {{{
   py3 curline = vim.command('let cur_line = getline(line("."))')
   py3 vim.current.buffer.append(pydoc.help(cur_line))
 endfunction  " }}}
-

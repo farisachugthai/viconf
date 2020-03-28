@@ -6,7 +6,6 @@
 " ============================================================================
 "
 " Global Options: {{{
-
 " Setting global options in an ftplugin is odd
 let g:is_bash = 1
 let g:sh_fold_enabled= 4  "   (enable if/do/for folding)
@@ -14,25 +13,24 @@ let g:sh_fold_enabled= 3  "   (enables function and heredoc folding)
 
 " highlighting readline options
 let g:readline_has_bash = 1
-" }}}
+" }}]
 
-" Sh Bash Specific: {{{
-
-if &filetype !=# 'sh' || &filetype !=# 'bash'
-  " sh files get sourced in to highlight everything from vim src files to
-  " markdown to rst and a whole bunch of others. so first check that we're not
-  " just being sourced for the syntax groups
-  finish
+" Buffer Local: {{{
+if exists('b:did_ftplugin')
+  " actually dont do anything because the bash ftplugin might be sourcing this
 endif
 
+source $VIMRUNTIME/ftplugin/sh.vim
 setlocal commentstring=#\ %s
-setlocal shiftwidth=4 expandtab softtabstop=4
+setlocal shiftwidth=4 expandtab softtabstop=4 ts=4
+syntax enable
 syntax sync fromstart
 setlocal colorcolumn=120
 " todo: ensure it works
 setlocal include=^\s*\%(so\%[urce]\*\zs[^\|]*
 
-let b:undo_ftplugin = 'setlocal cms< sw< et< sts< cc< '
+" the original defines one too
+let b:undo_ftplugin .= '|setlocal sw< et< sts< cc< '
       \ . '|unlet! b:undo_ftplugin'
 " }}}
 
@@ -51,9 +49,10 @@ if executable('shellcheck') || executable('shellcheck.exe')
   noremap <buffer> <F5> <Cmd>make %<CR>
   noremap! <buffer> <F5> <Cmd>make %<CR>
 
-  let b:undo_ftplugin .= 'setlocal makeprg<'
-      \ . '|unmap <buffer> <F5>'
-      \ . '|unmap! <buffer> <F5>'
-endif  " }}}
+  let b:undo_ftplugin .= '|setlocal makeprg<'
+      \ . '|silent! unmap <buffer> <F5>'
+      \ . '|silent! unmap! <buffer> <F5>'
+endif
 
 call ftplugins#ALE_sh_conf()
+" }}}

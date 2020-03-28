@@ -7,21 +7,23 @@
 
 function! unix#tmux_send(content, dest) abort  " {{{ tmux send:
   " URL: https://gist.github.com/junegunn/2f271e4cab544e86a37e239f4be98e74
-  let dest = empty(a:dest) ? input('To which pane? ') : a:dest
-  let tempfile = tempname()
-  call writefile(split(a:content, "\n", 1), tempfile, 'b')
+  let l:dest = empty(a:dest) ? input('To which pane? ') : a:dest
+  let l:tempfile = tempname()
+  call writefile(split(a:content, "\n", 1), l:tempfile, 'b')
 
   call system(printf('tmux load-buffer -b vim-tmux %s \;'
         \ . ' paste-buffer -d -b vim-tmux -t %s',
-        \ shellescape(tempfile), shellescape(dest)))
+        \ shellescape(l:tempfile), shellescape(l:dest)))
 
-  call delete(tempfile)
-endfunction  " }}}
+  call delete(l:tempfile)
+endfunction
+" }}}
 
 function! unix#tmux_map(key, dest) abort " Tmux Map: {{{
   execute printf('nnoremap <silent> %s "tyy:call <SID>tmux_send(@t, "%s")<cr>', a:key, a:dest)
   execute printf('xnoremap <silent> %s "ty:call <SID>tmux_send(@t, "%s")<cr>gv', a:key, a:dest)
-endfunction   " }}}
+endfunction
+" }}}
 
 function! unix#UnixOptions() abort   " {{{
   " These conditions only ever exist on Unix. Only run them if that's what
@@ -38,7 +40,8 @@ function! unix#UnixOptions() abort   " {{{
     if isdirectory(expand('$_ROOT') . '/include/libcs50')
         let &path = &path .','. expand('$_ROOT') . '/include/libcs50'
     endif
-endfunction  " }}}
+endfunction
+" }}}
 
 function! unix#finger() abort  " {{{
   " Finger: {Command and Function}
@@ -52,17 +55,20 @@ function! unix#finger() abort  " {{{
       command! -complete=custom,unix#ListUsers -nargs=0 Finger !finger <args>
     endif
   endif
-endfunction   " }}}
+endfunction
+" }}}
 
 function! unix#ListUsers(A,L,P) abort  " {{{
   " From help docs
   return system('cut -d: -f1 /etc/passwd')
-endfunction  " }}}
+endfunction
+" }}}
 
 function! unix#EditFileComplete(A,L,P) abort  " {{{
   " Also from helpdocs
   return split(globpath(&path, a:A), '\n')
-endfunction   " }}}
+endfunction
+" }}}
 
 function! unix#SpecialEdit(files, mods) abort   " {{{
   " This example does not work for file names with spaces!
@@ -70,26 +76,29 @@ function! unix#SpecialEdit(files, mods) abort   " {{{
   for s:files in expand(a:files, 0, 1)
     exe a:mods . ' split ' . s:files
   endfor
-endfunction   " }}}
+endfunction
+" }}}
 
 function! unix#RmDir(path) abort " {{{
   " sanity check; make sure it's not empty, /, or $HOME
   if empty(a:path)
-          echoerr 'Attempted to delete empty path'
-          return 0
-  elseif a:path == '/' || a:path == $HOME
-          echoerr 'Attempted to delete protected path: ' . a:path
-          return 0
+    echoerr 'Attempted to delete empty path'
+    return 0
+  elseif a:path ==# '/' || a:path == $HOME
+    echoerr 'Attempted to delete protected path: ' . a:path
+    return 0
   endif
-  return system("rm -rf " . shellescape(a:path))
-endfunction   " }}}
+  return system('rm -rf ' . shellescape(a:path))
+endfunction
+" }}}
 
 function! unix#system(pwd, cmd)  abort  " {{{
   " Executes {cmd} with the cwd set to {pwd}, without changing Vim's cwd.
   " If {pwd} is the empty string then it doesn't change the cwd.
-  let cmd = a:cmd
+  let l:cmd = a:cmd
   if !empty(a:pwd)
-          let cmd = 'cd ' . shellescape(a:pwd) . ' && ' . cmd
+          let l:cmd = 'cd ' . shellescape(a:pwd) . ' && ' . l:cmd
   endif
-  return system(cmd)
-endfunction   " }}}
+  return system(l:cmd)
+endfunction
+" }}}

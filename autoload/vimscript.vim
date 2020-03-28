@@ -93,12 +93,12 @@ endfunction  " }}}
 
 function! vimscript#Scriptnames(re) abort  " {{{1
   " Command to filter :scriptnames output by a regex
-    redir => scriptnames
+    redir => l:scriptnames
     silent scriptnames
     redir END
 
-    let filtered = filter(split(scriptnames, "\n"), "v:val =~ '" . a:re . "'")
-    echo join(filtered, ' \n ')
+    let l:filtered = filter(split(l:scriptnames, "\n"), "v:val =~ '" . a:re . "'")
+    echo join(l:filtered, ' \n ')
 endfunction  " }}}
 
 function! vimscript#ScriptnamesDict() abort  " {{{1
@@ -112,15 +112,15 @@ function! vimscript#ScriptnamesDict() abort  " {{{1
 
   " Split the output into lines and parse each line.	Add an entry to the "scripts" dictionary.
   let s:scripts = {}
-  for s:line in split(scriptnames_output, "\n")
+  for s:line in split(s:scriptnames_output, "\n")
     " Only do non-blank lines.
-    if s:line =~ '\S'
+    if s:line =~? '\S'
       " Get the first number in the line.
       let s:nr = matchstr(s:line, '\d\+')
       " Get the file name, remove the script number " 123: ".
       let s:name = substitute(s:line, '.\+:\s*', '', '')
       " Add an item to the Dictionary
-      let l:scripts[s:nr] = s:name
+      let s:scripts[s:nr] = s:name
     endif
   endfor
 
@@ -129,7 +129,7 @@ function! vimscript#ScriptnamesDict() abort  " {{{1
 
   " We didn't scope the var so is the below line necessary?
   " unlet scriptnames_output
-  return l:scripts
+  return s:scripts
 endfunction  "  }}}
 
 function s:get_scriptnames() abort  " {{{1
@@ -150,4 +150,3 @@ function! vimscript#fzf_scriptnames(bang) abort  " {{{
 
 endfunction
 " }}}
-

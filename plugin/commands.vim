@@ -374,6 +374,8 @@ command! -range -bar -complete=expression -complete=function -nargs=? Pd <line1>
 
 command! -range -bar -complete=expression -complete=function -nargs=? P <line1>,<line2>python3 print(<args>)
 
+command! -range -bar -complete=expression -complete=function -nargs=? Pv <line1>,<line2>python3 print(vars(<args>))
+
 command! -bar -range -nargs=+ Pi <line1>,<line2>python3 import <args>
 
 command! -bang -bar PydocThis call pydoc_help#PydocCword(<bang>0, expand(<cword>))
@@ -382,7 +384,7 @@ command! -bang -bar PydocThis call pydoc_help#PydocCword(<bang>0, expand(<cword>
 " separate window like fzf does.
 " NOTE: See :he func-range to see how range can get passed automatically to
 " functions without being specified in the command definition
-command! -nargs=? -bar PydocSplit call pydoc_help#SplitPydocCword(<q-mods>)
+command! -range -bang -nargs=? -bar -complete=expression -complete=function Pydoc call pydoc_help#Pydoc(<q-mods>, <bang>0)
 
 " command! -bar -bang -range PydocSp
 "       \ exec '<mods>split<bang>:python3 import pydoc'.expand('<cWORD>').'; pydoc.help('.expand('<cWORD>').')'

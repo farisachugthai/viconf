@@ -33,43 +33,46 @@ endfunction   " }}}
 
 function! syncom#get_syn_id(...) abort  " {{{
   " Display syntax infomation on under the current cursor
-  let synid = synID(line('.'), col('.'), 1)
+  let l:synid = synID(line('.'), col('.'), 1)
   " Wait are arguments allowed to be optional
   if a:0 == 0
-    return synid
+    return l:synid
   else
-    return synIDtrans(synid)
+    return synIDtrans(l:synid)
   endif
 endfunction  " }}}
 
 function! syncom#get_syn_attr(synid) abort  " {{{
-  let name = synIDattr(a:synid, 'name')
-  let ctermfg = synIDattr(a:synid, 'fg', 'cterm')
-  let ctermbg = synIDattr(a:synid, 'bg', 'cterm')
-  let guifg = synIDattr(a:synid, 'fg', 'gui')
-  let guibg = synIDattr(a:synid, 'bg', 'gui')
+  let l:name = synIDattr(a:synid, 'name')
+  let l:ctermfg = synIDattr(a:synid, 'fg', 'cterm')
+  let l:ctermbg = synIDattr(a:synid, 'bg', 'cterm')
+  let l:guifg = synIDattr(a:synid, 'fg', 'gui')
+  let l:guibg = synIDattr(a:synid, 'bg', 'gui')
   return {
-        \ 'name': name,
-        \ 'ctermfg': ctermfg,
-        \ 'ctermbg': ctermbg,
-        \ 'guifg': guifg,
-        \ 'guibg': guibg}
-endfunction  " }}}
+        \ 'name':    l:name,
+        \ 'ctermfg': l:ctermfg,
+        \ 'ctermbg': l:ctermbg,
+        \ 'guifg':   l:guifg,
+        \ 'guibg':   l:guibg
+        \ }
+endfunction
+" }}}
 
 function! syncom#get_syn_info() abort  " {{{
-  let baseSyn = syncom#get_syn_attr(synID(line("."), col("."), 1))
-  echo 'name: ' . baseSyn.name .
-        \ ' CTERMFG: ' . baseSyn.ctermfg .
-        \ ' ctermbg: ' . baseSyn.ctermbg .
-        \ ' guifg: ' . baseSyn.guifg .
-        \ ' guibg: ' . baseSyn.guibg
-  let linkedSyn = g:get_syn_attr(g:get_syn_id(1))
+  let l:baseSyn = syncom#get_syn_attr(synID(line('.'), col('.'), 1))
+  echoms 'name: ' . l:baseSyn.name .
+        \ ' CTERMFG: ' . l:baseSyn.ctermfg .
+        \ ' ctermbg: ' . l:baseSyn.ctermbg .
+        \ ' guifg: '   . l:baseSyn.guifg .
+        \ ' guibg: '   . l:baseSyn.guibg
+  " ?
+  let l:linkedSyn = g:get_syn_attr(g:get_syn_id(1))
   echo 'link to'
-  echo 'name: ' . linkedSyn.name .
-        \ ' ctermfg: ' . linkedSyn.ctermfg .
-        \ ' ctermbg: ' . linkedSyn.ctermbg .
-        \ ' guifg: ' . linkedSyn.guifg .
-        \ ' guibg: ' . linkedSyn.guibg
+  echo 'name: ' . l:linkedSyn.name
+        \ . ' ctermfg: ' . l:linkedSyn.ctermfg
+        \ . ' ctermbg: ' . l:linkedSyn.ctermbg
+        \ .  ' guifg: '  . l:linkedSyn.guifg
+        \ . ' guibg: '   . l:linkedSyn.guibg
 endfunction  " }}}
 
 function! syncom#hitest() abort  " Hitest: An easier way of sourcing hitest {{{
@@ -80,7 +83,7 @@ function! syncom#hitest() abort  " Hitest: An easier way of sourcing hitest {{{
   return v:true
 endfunction  " }}}
 
-function! s:ag_setup() abort
+function! s:ag_setup() abort  " {{{
 
   if executable('ag')
     setglobal grepprg=ag\ -s\ --vimgrep
@@ -91,6 +94,8 @@ function! s:ag_setup() abort
   endif
   setglobal grepformat=%f:%l:%c:%m,%f:%l:%m,%f:%l%m,%f\ \ %l%m
 endfunction
+" }}}
+
 function! s:rg_setup() abort  " {{{
 
   if executable('rg')
@@ -132,7 +137,7 @@ function! s:fd_setup() abort  " {{{
   return v:true
 endfunction  " }}}
 
-function! syncom#grepprg(...) abort  " {{{
+function! syncom#grepprg() abort  " {{{
   " executable check was in ../plugin/syncom.vim but we haven't figured out
   " if we're using rg.exe or rg.exe
   "
@@ -182,20 +187,20 @@ function! syncom#rainbow_paren() abort  " {{{
   highlight! link RBP4 Blue
   let g:rainbow_levels = 4
   function! RainbowParens(cmdline)
-    let ret = []
-    let i = 0
-    let lvl = 0
-    while i < len(a:cmdline)
-      if a:cmdline[i] is# '('
-        call add(ret, [i, i + 1, 'RBP' . ((lvl % g:rainbow_levels) + 1)])
-        let lvl += 1
-      elseif a:cmdline[i] is# ')'
-        let lvl -= 1
-        call add(ret, [i, i + 1, 'RBP' . ((lvl % g:rainbow_levels) + 1)])
+    let l:ret = []
+    let l:i = 0
+    let l:lvl = 0
+    while l:i < len(a:cmdline)
+      if a:cmdline[l:i] is# '('
+        call add(l:ret, [l:i, l:i + 1, 'RBP' . ((l:lvl % g:rainbow_levels) + 1)])
+        let l:lvl += 1
+      elseif a:cmdline[l:i] is# ')'
+        let l:lvl -= 1
+        call add(l:ret, [l:i, l:i + 1, 'RBP' . ((l:lvl % g:rainbow_levels) + 1)])
       endif
-      let i += 1
+      let l:i += 1
     endwhile
-    return ret
+    return l:ret
   endfunction
   call input({'prompt':'>','highlight':'RainbowParens'})
 

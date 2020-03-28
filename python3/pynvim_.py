@@ -60,6 +60,9 @@ import warnings
 from imp import find_module as original_find_module
 from traceback import format_exception, format_stack
 
+if sys.version_info >= (3, 4):
+    from importlib.machinery import PathFinder
+
 try:
     import vim
 except ImportError:
@@ -68,17 +71,20 @@ except ImportError:
 from msgpack import unpackb, ExtType
 from pynvim.api import Window, Tabpage
 from pynvim.msgpack_rpc.async_session import AsyncSession
-from pynvim.msgpack_rpc.event_loop import EventLoop
 from pynvim.msgpack_rpc.msgpack_stream import MsgpackStream
 from pynvim.msgpack_rpc.session import ErrorResponse, Session
+
+try:
+    import pyuv
+except ImportError:
+    from pynvim.msgpack_rpc.event_loop import EventLoop
+else:
+    from pynvim.msgpack_rpc.event_loop.uv import UvEventLoop as EventLoop
 
 # }}}
 
 # Globals: {{{
 basestring = str
-
-if sys.version_info >= (3, 4):
-    from importlib.machinery import PathFinder
 
 PYTHON_SUBDIR = "python3"
 # So on the low I don't think that logger or debug are used anywhere.
@@ -133,12 +139,32 @@ class Version:
         return "{}({})".format(type(self).__name__, ", ".join(items))
 
     def __eq__(self, other):
-        """Check if version is same as other."""
+        """Check if version is same as other.
+
+        Might be worth noting this from the lang ref.
+
+        A class that overrides __eq__() and does not define __hash__() will have
+        its __hash__() implicitly set to None. When the __hash__() method of
+        a class is None, instances of the class will raise an appropriate
+        TypeError when a program attempts to retrieve their hash value.
+        """
         return self.__dict__ == other.__dict__
 
 
-def get_client_info(kind, type_, method_spec):
-    """Returns a tuple describing the client."""
+def get_client_info(type_, method_spec, kind=None):
+    """Returns a tuple describing the client.
+
+    But change kind to allow none because all we do is return it so whats the
+    point?
+
+    Where is this used? Im so confused by it.
+
+    Parameters
+    ----------
+    type :
+    method_spec :
+    kind :
+    """
     name = "python{}-{}".format(sys.version_info[0], kind)
     attributes = {"license": "Apache v2",
                   "website": "github.com/neovim/pynvim"}
@@ -155,8 +181,8 @@ VERSION = Version(major=0, minor=4, patch=1, prerelease="")
 def find_module(fullname, path):
     """Compatibility wrapper for imp.find_module.
 
-    Automatically decodes arguments of find_module, in Python3
-    they must be Unicode
+    Automatically decodes arguments of find_module, in Python3 they must be
+    Unicode
     """
     if isinstance(fullname, bytes):
         fullname = fullname.decode()
@@ -532,6 +558,8 @@ class Nvim(object):
         version = metadata.get("version", {"api_level": 0})
         self.version = Version(**version)
         self.types = types
+        # arguably all **FIFTEEN** of this instance attributes should probably
+        # be properties
         self.api = RemoteApi(self, "nvim_")
         self.vars = RemoteMap(self, "nvim_get_var",
                               "nvim_set_var", "nvim_del_var")
@@ -1303,9 +1331,21 @@ class Buffer(Remote):
 
     _api_prefix = "nvim_buf_"
 
+    def __init__(self, session, code_data, valid=None, **kwargs):
+        super().__init__(session, code_data)
+        # Valid should NOT be a property! its explicitly tied to the instance
+        # it doesnt seem like we have a 2 way channel for communication
+        # so define it here.
+        self.valid = valid if valid is not None else self.request("nvim_buf_is_valid")
+
     def __len__(self):
         """Return the number of lines contained in a Buffer."""
         return self.request("nvim_buf_line_count")
+
+    def __bool__(self):
+        """Adding a bool because its a waste of time to send a msgpack
+        request."""
+        return bool(self.valid)
 
     def __getitem__(self, idx):
         """Get a buffer line or slice by integer index.
@@ -1440,10 +1480,10 @@ class Buffer(Remote):
         """Set the buffer name. BufFilePre/BufFilePost are triggered."""
         return self.request("nvim_buf_set_name", value)
 
-    @property
-    def valid(self):
-        """Return True if the buffer still exists."""
-        return self.request("nvim_buf_is_valid")
+    # @property
+    # def valid(self):
+    #     """Return True if the buffer still exists."""
+    #     return self.request("nvim_buf_is_valid")
 
     @property
     def number(self):
@@ -1672,6 +1712,8 @@ class RemoteSequence(object):
         Parameters
         ----------
         session :
+            Something that has a request attr?
+        method
         """
         self._fetch = functools.partial(session.request, method)
 
@@ -1695,7 +1737,7 @@ class RemoteSequence(object):
         """Check if an item is present in the sequence."""
         return item in self._fetch()
 
-
+# why is this set up this way?
 def _identity(obj, session, method, kind):
     return obj
 

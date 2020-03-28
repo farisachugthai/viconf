@@ -120,6 +120,9 @@ setglobal showmatch matchpairs+=<:>
 setglobal matchtime=20  " Show the matching pair for 2 seconds
 " dude holy hell are we running faster on termux set termguicolors
 setglobal synmaxcol=1000
+
+" Todo:
+"g:fugitive_browse_handlers',
 " }}}
 
 " Platform Specific Options: {{{
@@ -489,8 +492,10 @@ let $NVIM_NODE_LOG_FILE = stdpath('data') . '/site/node.log'
 let $NVIM_NODE_LOG_LEVEL = 'WARN'
 let $NVIM_NODE_HOST_DEBUG = 1
 let g:coc_jump_locations = []
+let g:node_client_debug = 1
 
 function! s:Init_coc() abort
+
   if !exists('g:coc_global_extensions')
     let g:coc_global_extensions = ['coc-json', 'coc-tsserver', 'coc-python', 'coc-git', 'coc-lists', 'coc-snippets', 'coc-sh']
   endif
@@ -506,26 +511,26 @@ function! s:Init_coc() abort
                     \ "objc", "objcpp" ], "rootPatterns": [ "compile_flags.txt",
                     \ "compile_commands.json", ".git/" ], "shell": "true" }})
   else
-
-  " Now find node:
+    " Now find node:
     if executable('C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\node.exe')
       let g:coc_node_path = 'C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\node.exe'
-
-      call coc#config("languageserver", { "vimlsp": {"args": ["--stdio"],"command": "vim-language-server","filetypes": ["vim" ],
-            \ "initializationOptions": {"diagnostic": { "enable": v:true }, "indexes": { "count": 3, "gap": 100, "runtimepath": v:true,
-            \ "workDirPatterns": [ ".git", "autoload", "plugin"]}, "iskeyword": "@,48-57,_,192-255,-#", "runtimepath": v:false,
-            \ "suggest": { "fromRuntimepath": v:false, "fromVimruntime": v:true }, "vimruntime": "$VIMRUNTIME" } } })
     endif
   endif
 
   if empty('$ANDROID_DATA')
-    call coc#config("languageserver", {"bash": {"args": [ "start" ], "command": "bash-language-server", "filetypes": ["sh", "bash"]}})
     call coc#config('python.jediEnabled', v:false)
     if has('unix')
       let g:coc_node_path = '/usr/sbin/node'
     endif
+  else
+    let g:coc_node_path = expand("$PREFIX/bin/node")
   endif
 
+    call coc#config("languageserver", {"bash": {"args": [ "start" ], "command": "bash-language-server", "filetypes": ["sh", "bash"]}})
+      call coc#config("languageserver", { "vimlsp": {"args": ["--stdio"],"command": "vim-language-server","filetypes": ["vim" ],
+            \ "initializationOptions": {"diagnostic": { "enable": v:true }, "indexes": { "count": 3, "gap": 100, "runtimepath": v:true,
+            \ "workDirPatterns": [ ".git", "autoload", "plugin"]}, "iskeyword": "@,48-57,_,192-255,-#", "runtimepath": v:false,
+            \ "suggest": { "fromRuntimepath": v:false, "fromVimruntime": v:true }, "vimruntime": "$VIMRUNTIME" } } })
 
 endfunction
 

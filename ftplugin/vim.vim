@@ -35,7 +35,7 @@ setlocal isfname+=#  " Make 'gf' work
 " To allow tag lookup via CTRL-] for autoload functions, '#' must be a
 " keyword character.  E.g., for netrw#Nread().
 " Wanted - added so we could search for stuff like vim-surround as 1 word
-setlocal isk+=#,-
+setlocal iskeyword+=#,-
 setlocal wrap
 setlocal foldmethod=marker
 setlocal foldlevel=0
@@ -50,7 +50,7 @@ setlocal indentkeys+==end,=else,=cat,=fina,=END,0\\,0=\"\\\
 
 setlocal tags=~/.config/nvim/tags,$VIMRUNTIME/doc/tags,tags,**
 
-let b:undo_indent = "setlocal indentkeys< indentexpr<"
+let b:undo_indent = 'setlocal indentkeys< indentexpr<'
 
 let &l:commentstring='" %s'
 let &l:path = includes#VimPath()
@@ -58,9 +58,10 @@ let &l:path = includes#VimPath()
 call ftplugins#ALE_Vim_Conf()
 
 " the original ftplugin also sets b:undo_ftplugin = to call VimFtpluginUndo
-let b:undo_ftplugin = 'setlocal et< sw< ts< sts< lbr< sua< wrap< fdl< fdm< cms< path< isf< isk<'
-      \ . '|setlocal path< indentexpr< indentkeys<'
-      \ . '|unlet! b:undo_ftplugin'
-      \ . '|unlet! b:undo_indent'
-      \ . '|unlet! b:did_ftplugin'
-      \ . '|call VimFtpluginUndo()'
+" so we can append to theirs and not need to add rhe func call
+let b:undo_ftplugin .= '|setlocal et< sw< ts< sts< lbr< sua< wrap<'
+                \ . '|setlocal fdl< fdm< cms< path< isf< isk<'
+                \ . '|setlocal path< indentexpr< indentkeys<'
+                \ . '|unlet! b:undo_ftplugin'
+                \ . '|unlet! b:undo_indent'
+                \ . '|unlet! b:did_ftplugin'

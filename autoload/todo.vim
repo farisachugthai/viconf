@@ -6,17 +6,17 @@
 " ============================================================================
 
 function! s:shell_cmds(cmd) abort  " {{{
-  let entries = []
-  let lines = split(system(cmd), '\n')
-  if v:shell_error != 0 
+  let l:entries = []
+  let l:lines = split(system(a:cmd), '\n')
+  if v:shell_error != 0
     echoerr 'todo: s:shell_cmd shell_error: ' . v:shell_error
   endif
 
-  for line in lines
-    let [fname, lno, text] = matchlist(line, '^\([^:]*\):\([^:]*\):\(.*\)')[1:3]
-    call add(entries, { 'filename': fname, 'lnum': lno, 'text': text })
+  for l:line in l:lines
+    let [l:fname, l:lno, l:text] = matchlist(l:line, '^\([^:]*\):\([^:]*\):\(.*\)')[1:3]
+    call add(l:entries, { 'filename': l:fname, 'lnum': l:lno, 'text': l:text })
   endfor
-  return entries
+  return l:entries
 endfunction  " }}}
 
 function! todo#Todo(bang) abort  " {{{
@@ -26,22 +26,22 @@ function! todo#Todo(bang) abort  " {{{
 
   " if exists(':Ggrep')
   " else
-  for cmd in ['git grep -niI -e TODO -e todo -e FIXME -e XXX -e HACK 2> /dev/null',
+  for l:cmd in ['git grep -niI -e TODO -e todo -e FIXME -e XXX -e HACK 2> /dev/null',
               \ 'grep -rniI -e TODO -e todo -e FIXME -e XXX -e HACK * 2> /dev/null']
-  let output = s:shell_cmd(cmd)
+  let l:output = s:shell_cmds(l:cmd)
   endfor
-  if !empty(output)
+  if !empty(l:output)
     if a:bang
-      :tab %
+      :tabnew
     endif
-    call setqflist(output)
+    call setqflist(l:output)
     copen
   endif
 endfunction
 " }}}
 
 function! todo#fzf(bang) abort  " {{{
-  if !exists('b:git_dir') 
+  if !exists('b:git_dir')
     let b:git_dir = FugitiveGitDir()
   endif
 
@@ -60,10 +60,10 @@ function! todo#OpenRangerIn(path, edit_cmd)  " {{{
     if empty(glob(g:ranger_choice_file))
       let s:choice_file_path = g:ranger_choice_file
     else
-      echom "Message from *Ranger.vim* :"
-      echom "You've set the g:ranger_choice_file variable."
-      echom "Please use the path for a file that does not already exist."
-      echom "Using /tmp/chosenfile for now..."
+      echom 'Message from *Ranger.vim* :'
+      echom 'You have set the g:ranger_choice_file variable.'
+      echom 'Please use the path for a file that does not already exist.'
+      echom 'Using /tmp/chosenfile for now...'
     endif
   endif
 
@@ -77,30 +77,31 @@ function! todo#OpenRangerIn(path, edit_cmd)  " {{{
     let s:choice_file_path = '/tmp/chosenfile'
   endif
 
-  let currentPath = expand(a:path)
-  let rangerCallback = { 'name': 'ranger', 'edit_cmd': a:edit_cmd }
-  function! rangerCallback.on_exit(job_id, code, event)
+  let l:currentPath = expand(a:path)
+  let s:rangerCallback = { 'name': 'ranger', 'edit_cmd': a:edit_cmd }
+
+  function! s:rangerCallback.on_exit(code, ...)
     if a:code == 0
       silent! Bclose!
     endif
     try
       if filereadable(s:choice_file_path)
-	for f in readfile(s:choice_file_path)
-	  exec self.edit_cmd . f
+	for l:f in readfile(s:choice_file_path)
+	  exec l:self.edit_cmd . l:f
 	endfor
 	call delete(s:choice_file_path)
       endif
     endtry
   endfunction
     enew
-    if isdirectory(currentPath)
+    if isdirectory(l:currentPath)
       call termopen(s:ranger_command . ' --choosefiles='
-            \ . s:choice_file_path . ' "' . currentPath
-            \ . '"', rangerCallback)
+            \ . s:choice_file_path . ' "' . l:currentPath
+            \ . '"', s:rangerCallback)
     else
       call termopen(s:ranger_command . ' --choosefiles='
-            \ . s:choice_file_path . ' --selectfile="' . currentPath
-            \ . '"', rangerCallback)
+            \ . s:choice_file_path . ' --selectfile="' . l:currentPath
+            \ . '"', s:rangerCallback)
     endif
     startinsert
 endfunction  " }}}
@@ -113,6 +114,5 @@ function! todo#OpenRangerOnVimLoadDir(argv_path)  " {{{
   :bdelete!
 
   " Open Ranger
-  call todo#OpenRangerIn(path, 'edit')
+  call todo#OpenRangerIn(s:path, 'edit')
 endfunction  " }}}
-

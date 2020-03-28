@@ -24,6 +24,7 @@ endif
 " For more see ../python3/_vim
 command! -buffer -bar -range=% PrettyYaml :<line1>,<line2>python3 from _vim import pretty_it; pretty_it('yaml')
 
-let b:undo_ftplugin = 'setl com< cms< et< fo< sw< et< sts< ts<'
+let b:undo_ftplugin .= '|setl com< cms< et< fo< sw< et< sts< ts<'
             \ . '|unlet! b:undo_ftplugin'
             \ . '|unlet! b:did_ftplugin'
+            \ . '|silent! delcom PrettyYaml'
