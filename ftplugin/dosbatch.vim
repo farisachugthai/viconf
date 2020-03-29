@@ -11,8 +11,12 @@ source $VIMRUNTIME/ftplugin/dosbatch.vim
 
 setlocal commentstring=::\ %s
 setlocal suffixesadd=.cmd,.bat
+" This is useful so that
+" doskey /MACROFILE=file
+" can utilize `gf` on the filename and behave as expected
+setlocal isfname-==
 
-let b:undo_ftplugin = get(b:, 'undo_ftplugin', 'exe') .
-                \ . '|setlocal cms< sua<'
+let b:undo_ftplugin = get(b:, 'undo_ftplugin', 'exe')
+                \ . '|setlocal cms< sua< isf<'
                 \ . '|unlet! b:undo_ftplugin'
                 \ . '|unlet! b:did_ftplugin'

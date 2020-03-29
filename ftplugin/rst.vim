@@ -31,17 +31,18 @@ let g:rst_fold_enabled = 1
 
 " }}}
 
-" Now that globals are set check for ....
-if &filetype !=# 'rst' | finish | endif
 " The right file type: {{{
+" Now that globals are set check for ....
 if exists('b:did_ftplugin') | finish | endif
+
 source $VIMRUNTIME/ftplugin/rst.vim
 
+syntax enable
 syntax sync fromstart
 setlocal textwidth=80
 setlocal expandtab
 setlocal spell!
-setlocal colorcolumn=80
+setlocal colorcolumn=80,120
 setlocal linebreak
 setlocal foldlevel=1
 setlocal foldlevelstart=1
@@ -111,5 +112,5 @@ setlocal foldexpr=RstFold#GetRstFold()
 setlocal foldtext=RstFold#GetRstFoldText()
 " }}}
 
-let b:undo_ftplugin .= 'setlocal fdm< foldexpr< foldtext<'
+let b:undo_ftplugin .= '|setlocal fdm< foldexpr< foldtext<'
                   \ . '|unlet! b:RstFoldCache'

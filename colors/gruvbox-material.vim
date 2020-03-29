@@ -111,6 +111,14 @@ hi! link plugNotLoaded Folded
 
 " Filetype specific --------------------------------------------------- {{{
 
+" Snippets: {{{
+" Huh its weird to me that no snippets were done!
+hi! link snipSnippets Normal
+" Holy shit this was make my eyes so much happier
+hi! link snipLeadingSpaces Normal
+hi! link snipSnippet Keyword
+" }}}
+
 " Jinja: {{{
 
 hi! link jinjaOperator Operator
@@ -929,6 +937,7 @@ hi! link vimVar Identifier
 hi! link vimWarn        WarningMsg
 
 " }}}
+
 " Vim Errors: {{{
 hi! link vimBehaveError vimError
 hi! link vimBufnrWarn   vimWarn
@@ -1001,6 +1010,17 @@ hi! link vimPythonRegion Identifier
 
 " }}}
 
+" }}}
+
+" More: {{{
+" hi link vimSynMatchRegion 
+hi link vimSynMtchCchar String 
+" vimSynMtchGroup xxx cleared
+hi link vimSynPatMod vimSynOption
+hi link vimSyncMatch MatchWord
+hi link vimSyncLinebreak vimSynOption
+hi link vimSyncLinecont vimSynOption
+" vimSyncRegion  xxx cleared
 " }}}
 
 " }}}
@@ -1076,6 +1096,8 @@ hi! link cOperator Purple
 hi! link cStructure Orange
 hi! link cppOperator Purple
 " }}}
+"
+" Other: {{{
 hi! link docbkKeyword AquaBold
 hi! link dtdFunction Grey
 hi! link dtdParamEntityDPunct Grey
@@ -1104,7 +1126,8 @@ hi! link xmlEqual Blue
 hi! link xmlProcessingDelim Grey
 hi! link xmlTag AquaBold
 hi! link xmlTagName AquaBold
-
+" }}}
+" JavaScript: {{{
 hi! link javaScriptFunction Aqua
 hi! link javaScriptIdentifier Red
 hi! link javaScriptMember Blue
@@ -1185,7 +1208,9 @@ hi! link jsNull Purple
 hi! link jsUndefined Purple
 hi! link jsClassDefinition Yellow
 hi! link jsObjectKey GreenBold
-
+" }}}
+"
+" TypeScript: {{{
 hi! link typescriptReserved Aqua
 hi! link typescriptLabel Aqua
 hi! link typescriptFuncKeyword Aqua
@@ -1205,13 +1230,16 @@ hi! link typescriptInterpolationDelimiter Aqua
 hi! link typescriptDocSeeTag Comment
 hi! link typescriptDocParam Comment
 hi! link typescriptDocTags vimCommentTitle
-
+" }}}
+"
+" React; {{{
 hi! link jsxTagName Aqua
 hi! link jsxComponentName Green
 hi! link jsxCloseString LightGrey
 hi! link jsxAttrib Yellow
 hi! link jsxEqual Aqua
-
+" }}}
+"
 hi! link purescriptModuleKeyword Aqua
 hi! link purescriptModuleName Blue
 hi! link purescriptWhere Aqua

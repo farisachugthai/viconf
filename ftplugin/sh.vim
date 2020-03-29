@@ -13,7 +13,11 @@ let g:sh_fold_enabled= 3  "   (enables function and heredoc folding)
 
 " highlighting readline options
 let g:readline_has_bash = 1
-" }}]
+
+let b:is_bash = 1
+let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
+let b:ale_linters = ['language_server', 'shell']
+" }}}
 
 " Buffer Local: {{{
 if exists('b:did_ftplugin')
@@ -24,14 +28,16 @@ source $VIMRUNTIME/ftplugin/sh.vim
 setlocal commentstring=#\ %s
 setlocal shiftwidth=4 expandtab softtabstop=4 ts=4
 syntax enable
-syntax sync fromstart
+syntax sync fromstart linebreaks=2
+setl syntax=bash
 setlocal colorcolumn=120
 " todo: ensure it works
 setlocal include=^\s*\%(so\%[urce]\*\zs[^\|]*
 
 " the original defines one too
-let b:undo_ftplugin .= '|setlocal sw< et< sts< cc< '
+let b:undo_ftplugin .= '|setlocal sw< et< sts< cc< syntax< include< '
       \ . '|unlet! b:undo_ftplugin'
+      \ . '|unlet! b:did_ftplugin'
 " }}}
 
 " Compiler: {{{
@@ -56,3 +62,4 @@ endif
 
 call ftplugins#ALE_sh_conf()
 " }}}
+

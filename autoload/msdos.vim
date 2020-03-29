@@ -8,6 +8,8 @@
 function! msdos#set_shell_cmd() abort  " {{{1
   " All the defaults when running cmd as comspec on windows 10
   set shell=cmd.exe
+  " i've noticed ALE needing shelltemp set
+  setglobal shelltemp
   " set shellcmdflag=/s\ /c
   " TODO: Figure out if this wasn't a terrible idea. Maybe need to simply
   " modify our invocations of system commands.
@@ -20,8 +22,7 @@ function! msdos#set_shell_cmd() abort  " {{{1
   set shellxquote=(
   set shellxescape=^
   " What about setting shellquote to "" so that cmd gets the args quoted?
-  " echomsg 'Using cmd as the system shell.'
-  return
+  echomsg 'Using cmd as the system shell.'
 endfunction  " }}}
 
 function! msdos#invoke_cmd(command) abort  " {{{1

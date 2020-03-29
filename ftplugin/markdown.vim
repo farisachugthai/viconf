@@ -5,7 +5,21 @@
     " Last Modified: Aug 24, 2019
 " ============================================================================
 
+" Set global vars before checking filetype!
+let g:markdown_fenced_languages = [
+      \ 'ipython=python',
+      \ 'c++=cpp',
+      \ 'ini=dosini',
+      \ ]
+
+let g:markdown_minlines = 500
 if &filetype !=# 'markdown' | finish | endif
+
+source $VIMRUNTIME/ftplugin/markdown.vim
+" Wait. the nvim runtime ftplugin is written by tpope...
+" and he didn't `let b:did_ftplugin = 1` at the end of this file?
+" i guess we have to right?
+let b:did_ftplugin = 1
 
 setlocal comments=fb:*,fb:-,fb:+,n:> 
 " used to be
@@ -16,13 +30,6 @@ setlocal formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\|^[-*+]\\s\\+\\\|^\\[^\\ze[^\\]]\\
 setlocal omnifunc=htmlcomplete#CompleteTags
 
 call htmlcomplete#DetectOmniFlavor()
-
-" Fuck that this is way too complicated
-" syntax region markdownItalic contains=ALL
-
-syntax sync fromstart
-" this gets annoying quick. actually it was just that guys plugin. continue as
-" you were
 setlocal conceallevel=2
 
 let b:match_ignorecase = 1
@@ -31,7 +38,9 @@ let b:match_words = '<:>,' .
 \ '<\@<=dl\>[^>]*\%(>\|$\):<\@<=d[td]\>:<\@<=/dl>,' .
 \ '<\@<=\([^/][^ \t>]*\)[^>]*\%(>\|$\):<\@<=/\1>'
 
-let b:undo_ftplugin = "setl cms< com< fo< flp< ofu< "
+let b:undo_ftplugin .= "|setl cms< com< fo< flp< ofu< "
+      \ . '|unlet! b:undo_ftplugin'
+
 let b:undo_ftplugin .= 'setl spell< cc< tw< lbr< et< ts< sts< sw< fdl< fdls<'
       \ . '|unlet! b:undo_ftplugin'
       \ . '|unlet! b:did_ftplugin'
@@ -39,7 +48,7 @@ let b:undo_ftplugin .= 'setl spell< cc< tw< lbr< et< ts< sts< sw< fdl< fdls<'
 setlocal spell!
 
 " Automatically wrap at 80 characters after whitespace
-setlocal textwidth=80
+" setlocal textwidth=80
 setlocal colorcolumn=80
 " Then break lines if they're too long.
 setlocal linebreak
@@ -49,20 +58,10 @@ setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
 
 setlocal foldlevelstart=0
 
-" TPope's markdown plugin. Light enough footprint when settings vars to not
-" need a check
-let g:markdown_fenced_languages = [
-      \ 'ipython=python',
-      \ 'c++=cpp',
-      \ 'ini=dosini',
-      \ ]
-
-let g:markdown_minlines = 500
-
 setlocal foldexpr=format#MarkdownFoldText()
 setlocal foldmethod=expr
 
-let b:undo_ftplugin .= "| setlocal foldexpr< foldmethod<"
+let b:undo_ftplugin .= "|setlocal foldexpr< foldmethod<"
 
 nnoremap <buffer> <Leader>1 m`yypVr=``
 nnoremap <buffer> <Leader>2 m`yypVr-``
@@ -70,11 +69,11 @@ nnoremap <buffer> <Leader>3 m`^i### <esc>``4l
 nnoremap <buffer> <Leader>4 m`^i#### <esc>``5l
 nnoremap <buffer> <Leader>5 m`^i##### <esc>``6l
 
-let b:undo_ftplugin .= '| nunmap <buffer> <Leader>1'
-let b:undo_ftplugin .= '| nunmap <buffer> <Leader>2'
-let b:undo_ftplugin .= '| nunmap <buffer> <Leader>3'
-let b:undo_ftplugin .= '| nunmap <buffer> <Leader>4'
-let b:undo_ftplugin .= '| nunmap <buffer> <Leader>5'
+let b:undo_ftplugin .= '|nunmap <buffer> <Leader>1'
+      \ . '|nunmap <buffer> <Leader>2'
+      \ . '|nunmap <buffer> <Leader>3'
+      \ . '|nunmap <buffer> <Leader>4'
+      \ . '|nunmap <buffer> <Leader>5'
 
 " So Vim-markdown doesn't have a  plugin/* dir. So we don't have a
 " g:loaded_vim_markdown var to check. We have to assume vim-plug being used.

@@ -47,6 +47,7 @@ Decorators used by python host plugin system.
 
 """
 import abc
+import codecs
 import functools
 import imp
 import inspect
@@ -54,6 +55,7 @@ import io
 import logging
 import os
 import platform
+import shlex
 import sys
 import threading
 import warnings
@@ -116,12 +118,27 @@ def get_documentation(vim):
 # There is no 'long' type in Python3 just int
 
 
-def format_exc_skip(skip, limit=None):
-    """Like traceback.format_exc but allow skipping the first frames."""
-    etype, val, tb = sys.exc_info()
+def format_exc_skip(skip=1, limit=None, exception=None):
+    """Like traceback.format_exc but allow skipping the first frames.
+
+    Parameters
+    ----------
+    skip : int
+        Frames to skip
+    limit : int
+        Limit of formatted frames.
+    exception : tuple
+        Because why did we not allow THAT to be specified?
+
+    """
+    if exception is None:
+        etype, val, tb = sys.exc_info()
+    else:
+        etype, val, tb = exception
+
     for i in range(skip):
         tb = tb.tb_next
-    return ("".join(format_exception(etype, val, tb, limit))).rstrip()
+    return "".join(format_exception(etype, val, tb, limit)).rstrip()
 
 
 # Taken from SimpleNamespace in python 3
@@ -178,6 +195,28 @@ VERSION = Version(major=0, minor=4, patch=1, prerelease="")
 # compat: {{{
 
 
+def get_decoded_string(encoded):
+    """Decode encoded if it has the proper interface.
+
+    Notes
+    -----
+    Any uses of shlex.split should also use  this function as shlex.split crashes
+    when given bytes for input.
+
+    """
+    if hasattr(encoded, 'decode'):
+        # if this is a simple string then don't make this hard
+        return codecs.decode(encoded, 'utf-8')
+
+    # But if it's a list we gotta try a little
+    try:
+        iter(encoded)
+    except TypeError:
+        return
+    else:
+        return [codecs.decode(element, 'utf-8') for element in encoded if isinstance(element, bytes)]
+
+
 def find_module(fullname, path):
     """Compatibility wrapper for imp.find_module.
 
@@ -185,17 +224,9 @@ def find_module(fullname, path):
     Unicode
     """
     if isinstance(fullname, bytes):
-        fullname = fullname.decode()
+        fullname = get_decoded_string(fullname)
     if isinstance(path, bytes):
-        path = path.decode()
-    elif isinstance(path, list):
-        newpath = []
-        for element in path:
-            if isinstance(element, bytes):
-                newpath.append(element.decode())
-            else:
-                newpath.append(element)
-        path = newpath
+        path = get_decoded_string(path)
     return original_find_module(fullname, path)
 
 
@@ -707,7 +738,10 @@ class Nvim(object):
         self.close()
 
     def with_decode(self, decode=True):
-        """Initialize a new Nvim instance."""
+        """Initialize a new Nvim instance.
+
+        Uhhhh this was definitely intended to be a classmethod right?
+        """
         return Nvim(
             self._session,
             self.channel_id,
@@ -1739,15 +1773,6 @@ class RemoteSequence(object):
 
 # why is this set up this way?
 def _identity(obj, session, method, kind):
-    return obj
-
-
-def decode_if_bytes(obj, mode=True):
-    """Decode obj if it is bytes."""
-    if mode is True:
-        mode = unicode_errors_default
-    if isinstance(obj, bytes):
-        return obj.decode("utf-8", errors=mode)
     return obj
 
 

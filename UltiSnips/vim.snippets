@@ -58,7 +58,7 @@ snippet header "standard Vim script file header" b
 endsnippet
 
 # Yay! First successful use of a regex
-snippet "ft(plugin)?" "Ftplugin guard" br
+snippet ft "Ftplugin guard"
 if exists('b:did_ftplugin') | finish | endif
 source $VIMRUNTIME/ftplugin/`!p snip.ft `
 

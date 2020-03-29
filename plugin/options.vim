@@ -14,7 +14,7 @@ setglobal foldnestmax=10
 " Oddly needs to be set locally?
 set foldmethod=marker foldcolumn=2
 " Automatically close all folds from the beginning.
-setglobal foldlevelstart=0
+setglobal foldlevelstart=99
 " Everything is a fold even if it's one line
 setglobal foldminlines=0
 " And yes even if it's a comment
@@ -357,27 +357,32 @@ endif
 
 " UltiSnips: {{{
 function! UltiSnipsConf() abort
-let b:did_autoload_ultisnips = 1
+  let b:did_autoload_ultisnips = 1
 
-let g:UltiSnipsExpandTrigger="<Tab>"
-let g:UltiSnipsJumpForwardTrigger="<Tab>"
-let g:UltiSnipsJumpBackwardTrigger="<S-Tab>"
-let g:ultisnips_python_style = 'numpy'
-let g:ultisnips_python_quoting_style = 'double'
-let g:UltiSnipsEnableSnipMate = 0
-" context is an interesting option. it's a vert split unless textwidth <= 80
-let g:UltiSnipsEditSplit = 'context'
-let g:snips_author = 'Faris Chugthai'
-let g:snips_github = 'https://github.com/farisachugthai'
-let g:UltiSnipsSnippetDir = [stdpath('config') . '/UltiSnips']
-" Defining it and limiting it to 1 directory means that UltiSnips doesn't
-" iterate through every dir in &rtp which saves an immense amount of time
-" on startup.
-let g:UltiSnipsSnippetDirectories = [ stdpath('config') . '/UltiSnips' ]
-let g:UltiSnipsUsePythonVersion = 3
-let g:UltiSnipsListSnippets = '<C-/>'
+  let g:UltiSnipsExpandTrigger="<Tab>"
+  let g:UltiSnipsJumpForwardTrigger="<Tab>"
+  let g:UltiSnipsJumpBackwardTrigger="<S-Tab>"
+  let g:ultisnips_python_style = 'numpy'
+  let g:ultisnips_python_quoting_style = 'double'
+  let g:UltiSnipsEnableSnipMate = 0
+  " context is an interesting option. it's a vert split unless textwidth <= 80
+  let g:UltiSnipsEditSplit = 'context'
+  let g:snips_author = 'Faris Chugthai'
+  let g:snips_github = 'https://github.com/farisachugthai'
+  " Wait is this option still a thing??
+  let g:UltiSnipsSnippetDir = [stdpath('config') . '/UltiSnips']
+  " Defining it and limiting it to 1 directory means that UltiSnips doesn't
+  " iterate through every dir in &rtp which saves an immense amount of time
+  " on startup.
+  let g:UltiSnipsSnippetDirectories = [ expand('$HOME') . '/.config/nvim/UltiSnips' ]
+  let g:UltiSnipsUsePythonVersion = 3
+  let g:UltiSnipsListSnippets = '<C-/>'
 endfunction
 
+" In case you're wondering about this, ultisnips requires python from vim.
+" however neovim has it's python interation set up externally. so when i manage
+" to fuck it up, ultisnips breaks. so i need to be able to disable it and then
+" re-enable it when the python integration is fixed
 if exists('did_plugin_ultisnips')
   if !exists('g:loaded_ultisnips_conf')
     call UltiSnipsConf()
@@ -441,6 +446,19 @@ let g:startify_commands = [
       \ {'g': ['Git status!', 'Gstatus'],},
       \ {'h': ['Vim Reference', 'h ref'],},
     \ ]
+
+" Also utilize his skiplist
+let g:startify_skiplist = [
+      \ 'runtime/doc/.*\.txt',
+      \ 'bundle/.*/doc/.*\.txt',
+      \ 'plugged/.*/doc/.*\.txt',
+      \ '/.git/',
+      \ 'fugitiveblame$',
+      \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc/.*\.txt',
+      \ 'COMMIT_EDITMSG',
+      \ '^/tmp',
+      \ escape(fnamemodify($HOME, ':p'), '\') .'.ssh',
+      \ ]
 
 let g:startify_bookmarks = [
       \ { 'c': '~/.local/share/nvim/plugged/coc.nvim'},
@@ -517,7 +535,7 @@ function! s:Init_coc() abort
     endif
   endif
 
-  if empty('$ANDROID_DATA')
+  if empty($ANDROID_DATA)
     call coc#config('python.jediEnabled', v:false)
     if has('unix')
       let g:coc_node_path = '/usr/sbin/node'
@@ -641,6 +659,5 @@ let g:voom_python_versions = [3,2]
 " But that's kinda dumb.
 let g:voom_always_allow_move_left = 1
 " }}}
-
 
 " Vim: set fdm=marker:

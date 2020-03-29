@@ -5,9 +5,10 @@
     " Last Modified: Nov 06, 2019
 " ============================================================================
 
-" Guard: {{{1
+" Guard: {{{
 let s:cpo_save = &cpoptions
 set cpoptions&vim
+" }}}
 
 " Options: {{{1
 " GCC					*quickfix-gcc*	*compiler-gcc*
@@ -20,6 +21,7 @@ set cpoptions&vim
 				" positives.
 let g:compiler_gcc_ignore_unmatched_lines = 1
 
+syntax enable
 syn sync fromstart
 setlocal foldmethod=syntax
 setlocal suffixesadd=.c,.h,.cpp
@@ -41,21 +43,23 @@ if exists(':Man') == 2
 endif
 
 setlocal omnifunc=ccomplete#Complete
+" }}}
 
-" Path: {{{2
+" Path: {{{
 
 " TODO: setlocal include
 setlocal include=^\s*#\s*include
 " setlocal define
 " setlocal includexpr
 " setlocal cinwords cinkeys etc etc
-let &l:path=ftplugins#CPath()
+let &l:path=includes#CPath()
 
 let b:undo_ftplugin = 'setlocal sua< cin< mp< ofu< kp< include<'
       \ . '|unlet! &l:path'
       \ . '|unlet! b:undo_ftplugin'
+" }}}
 
-" Mappings: {{{1
+" Mappings: {{{
 nnoremap <buffer> <F5> :call ftplugins#ClangCheck()<CR><CR>
 
 let b:undo_ftplugin .= 'nunmap <buffer> <F5>'
@@ -63,7 +67,7 @@ let b:undo_ftplugin .= 'nunmap <buffer> <F5>'
 " Idk why <CR> is  there twice and idk if it was a typo on the part of the
 " Clang people but its in their official documentation..
 "
-" Cscope: {{{2
+" Cscope:
 if has('cscope') && executable('cscope')
   " Reasonably good inspiration for other ftplugins
 
@@ -124,10 +128,5 @@ if has('cscope') && executable('cscope')
         \ . '| nunmap <buffer> <C-LeftMouse'
 
 endif
+" }}}
 
-" Atexit: {{{1
-
-" Oh shit the unmaps for this are gonna be annoying
-
-let &cpoptions = s:cpo_save
-unlet s:cpo_save
