@@ -146,8 +146,8 @@ command! -bang -bar -complete=var -nargs=* TodoFuzzy call find_files#RipgrepFzf(
 command! -complete=file_in_path -nargs=? -bang -bar FZGrep call fzf#run(fzf#wrap('grep', {
       \ 'source': 'silent! grep! <q-args>',
       \ 'sink': 'edit',
-      \ 'options': ['--multi', '--ansi', '--border'],})
-      \  fzf#vim#with_preview('up:60%')
+      \ 'options': ['--multi', '--ansi', '--border'],},
+      \ <bang>0 ? fzf#vim#with_preview('up:60%') : 0))
 
 	" -addr=buffers		Range for buffers (also not loaded buffers)
 
@@ -222,14 +222,13 @@ command! -bang -complete=buffer -bar FZBuffers call fzf#run(fzf#wrap('buffers',
 
 " FZMru: {{{
 " I feel like this could work with complete=history right?
-command! -bang -bar FZMru call find_files#FZFMru()
+command! -bang -bar Mru call find_files#FZFMru(<bang>0)
 
 " FZGit:
   " Oct 15, 2019: Works!
   " TODO: The above command should use the fzf funcs
   " and also use this
-  " \   {'dir': systemlist('git rev-parse --show-toplevel')[0] }, <bang>0)
-command! -bar -complete=file FZGit call find_files#FZFGit()
+command! -bar -complete=file -bang FZGit call find_files#FZFGit(<bang>0)
 
 " Rg That Updates:
 command! -bar -complete=dir -nargs=* -bang FZRg call find_files#RipgrepFzf(<q-args>, <bang>0)
@@ -240,8 +239,7 @@ command! -bar -complete=dir -bang -nargs=* FzRgPrev
   \   'rg --column --line-number --no-heading --color=always --smart-case ' . <q-args>,
   \   1,
   \   <bang>0 ? fzf#vim#with_preview('up:60%')
-  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \   <bang>0)
+  \           : fzf#vim#with_preview('right:50%:hidden', '?'))
 
 command! -bar -bang -complete=dir -nargs=* FZLS
     \ call fzf#run(fzf#wrap('ls', {'source': 'ls', 'dir': <q-args>}, <bang>0))
@@ -258,7 +256,7 @@ command! -bar -bang -nargs=? -complete=dir FZReverse
 command! -bar -bang -nargs=? -complete=dir FZFilePreview
     \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--info=inline', '--preview', 'bat --color=always {}']}, <bang>0)
 
-command! -bar -bang -nargs=? -complete=dir Files
+command! -bar -bang -nargs=* -complete=dir Files
     \ call fzf#vim#files(<q-args>, {'source': 'fd -H -t f',
     \ 'options': [
     \ '--layout=reverse', '--info=inline', '--preview', '~/.vim/plugged/fzf.vim/bin/preview.sh {}'
@@ -355,12 +353,12 @@ command! -bang -nargs=0 NvimAPI
       \ 'v:val.name')
 
 " Easier mkdir and cross platform!
-command! -complete=dir -nargs=1 Mkdir call mkdir(<q-args>, 'p', '0700')
+command! -complete=dir -nargs=1 -bar -bang Mkdir call mkdir(<q-args>, 'p', '0700')
 
 " From `:he change`  line 352 tag g?g?
 " Adding range means that the command defaults to current line
 " Need to add a check that we're in visual mode and drop the '<,'> if not.
-command! -nargs=0 -bar -range TitleCase execute 'normal! ' . "'<,'>s/\v<(.)(\w*)/\u\1\L\2/g"
+command! -bar -range TitleCase execute 'normal! ' . "'<,'>s/\v<(.)(\w*)/\u\1\L\2/g"
 
 " }}}
 
@@ -409,10 +407,13 @@ command! -bar -complete=file -range BlackCurrent <line1>,<line2>call py#Black()
 
 command! -nargs=* -bar -complete=file -complete=file_in_path BlackThese call py#black_these(<f-args>)
 
+
 function! s:IPythonOptions(...) abort
-  let list = ['profile', 'history', 'kernel', 'locate']
+
+  let l:list = ['profile', 'history', 'kernel', 'locate']
   " Quote this with single quotes and it wont work correctly...WHAT THE FUCK
-  return join(list, "\n")
+  return join(l:list, "\n")
+
 endfunction
 
 " So far works
@@ -467,7 +468,7 @@ command! -bang -bar -nargs=+ -complete=file -complete=file_in_path EditFiles
 
 command!  -complete=file_in_path  -bang -bar -nargs=* -complete=file -complete=dir EditAny <mods>edit<bang> <q-args>
 
-command! -nargs=+ -complete=file Sedit call unix#SpecialEdit(<q-args>, <q-mods>)
+command! -bar -range -nargs=+ -complete=file Sedit call unix#SpecialEdit(<q-args>, <q-mods>)
 
 " There are more comfortable ways of doing the following in Vim.
 " I'm not going to convince you it's better. That it's cleaner.
@@ -536,7 +537,7 @@ endfunction
 
 command! -range=% -addr=buffers -bang -bar GRoot echo ProjectRoot()
 
-command! -range -addr=arguments -bang -bar -nargs=* Gclone exe fugitive#Command(<line1>, <count>, +"<range>", <bang>0, "<mods>", <q-args>) 
+command! -range -addr=arguments -bang -bar -nargs=* Gclone exe fugitive#Command(<line1>, <count>, +"<range>", <bang>0, "<mods>", <q-args>)
 " }}}
 
 " Syntax Highlighting: {{{
@@ -547,4 +548,3 @@ command! SyntaxInfo call syncom#get_syn_info()
 " Works:
 command! HiTest call syncom#hitest()
 " }}}
-

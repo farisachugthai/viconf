@@ -8,6 +8,7 @@
 if exists('b:did_ftplugin') | finish | endif
 
 source $VIMRUNTIME/ftplugin/javascript.vim
+source $VIMRUNTIME/indent/typescript.vim
 
 setlocal expandtab tabstop=4 softtabstop=2 shiftwidth=2
 setlocal include=^\\s*[^\/]\\+\\(from\\\|require(\\)\\s*['\"\.]
@@ -74,10 +75,10 @@ if !exists('b:did_typescript_setup')
 
   unlet! b:tsconfig_file
   " }}}
- 
+
   " Lint File On Write: {{{
   if executable('tslint')
-    let &l:errorformat = '%EERROR: %f:%l:%c - %m,' 
+    let &l:errorformat = '%EERROR: %f:%l:%c - %m,'
                        \.'%WWARNING: %f:%l:%c - %m,'
                        \.'%E%f:%l:%c - %m,'
                        \.'%-G%.%#'
@@ -123,10 +124,16 @@ if !exists("*s:GF")
   endfunction  " }}}
 endif
 
-let b:undo_ftplugin = 'setlocal isf< sua< syntax< et< sts< sw< ts< '
-      \ . '|unlet! b:undo_ftplugin'
-      \ . '|unlet! l:include_expression'
-      \ . '|unlet! b:match_words'
-      \ . '|unlet! b:did_ftplugin'
+" }}}
 
 " }}}
+
+" Theres actually an undo defined in js.vim
+let b:undo_ftplugin .= 'setlocal isf< sua< syntax< et< sts< sw< ts< '
+                \ . '|setlocal inex< def< inc< inde< '
+                \ . '|unlet! b:undo_ftplugin'
+                \ . '|unlet! l:include_expression'
+                \ . '|unlet! b:match_words'
+                \ . '|unlet! b:did_ftplugin'
+                \ . '|unlet! b:undo_indent'
+                \ . '|unlet! b:did_indent'

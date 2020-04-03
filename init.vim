@@ -115,9 +115,9 @@ function! LoadMyPlugins() abort  " {{{
 
   Plug 'mhinz/vim-startify'
   Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
-  noremap <F8> <Cmd>TagbarToggle<CR><bar>call plugins#TagbarTypes()<CR>
-  noremap! <F8> <Cmd>TagbarToggle<CR><bar>call plugins#TagbarTypes()<CR>
-  tnoremap <F8> <Cmd>TagbarToggle<CR><bar>call plugins#TagbarTypes()<CR>
+  noremap <F8> <Cmd>TagbarToggle<CR><bar>call plugins#TagbarTypes()<CR>call tagbar#types#uctags#init({})<CR>
+  noremap! <F8> <Cmd>TagbarToggle<CR><bar>call plugins#TagbarTypes()<CR>call tagbar#types#uctags#init({})<CR>
+  tnoremap <F8> <Cmd>TagbarToggle<CR><bar>call plugins#TagbarTypes()<CR>call tagbar#types#uctags#init({})<CR>
 
   " yo this mapping is great
   nnoremap ,t <Cmd>CocCommand tags.generate<CR><Cmd>TagbarToggle<CR>

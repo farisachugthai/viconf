@@ -61,7 +61,7 @@ call ftplugins#ALE_Vim_Conf()
 " so we can append to theirs and not need to add rhe func call
 let b:undo_ftplugin .= '|setlocal et< sw< ts< sts< lbr< sua< wrap<'
                 \ . '|setlocal fdl< fdm< cms< path< isf< isk<'
-                \ . '|setlocal path< indentexpr< indentkeys<'
+                \ . '|setlocal path< indentexpr< indentkeys< tags<'
                 \ . '|unlet! b:undo_ftplugin'
                 \ . '|unlet! b:undo_indent'
                 \ . '|unlet! b:did_ftplugin'

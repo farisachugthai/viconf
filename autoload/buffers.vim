@@ -11,10 +11,10 @@ function! buffers#EchoRTP() abort " {{{
   " otherwise
   if exists('*nvim_list_runtime_paths')
     for l:directory in nvim_list_runtime_paths()
-      echo l:directory
+      echomsg l:directory
     endfor
   else
-    for l:i in split(&runtimepath, ',') | echo l:i | endfor
+    for l:i in split(&runtimepath, ',') | echomsg l:i | endfor
   endif
 endfunction
 " }}}
@@ -101,5 +101,4 @@ function! buffers#terminals() abort  " {{{
   " It's so annoying that buffers need confirmation to kill. Let's dedicate a
   " key but one that we know windows hasn't stolen yet.
   tnoremap <D-z> <Cmd>bd!<CR>
-endfunction
-" }}}
+endfunction  " }}}

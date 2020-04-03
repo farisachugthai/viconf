@@ -27,6 +27,8 @@ endif
 source $VIMRUNTIME/ftplugin/python.vim
 " Idk why but their indentexpr wont stop raising
 " But lets set the other stuff first
+setlocal nocindent
+setlocal autoindent
 setlocal indentexpr=
 
 setlocal nolinebreak  " Dont set this on itll create syntaxerors
@@ -40,6 +42,10 @@ setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 setlocal cinkeys-=0#
 
 setlocal nolisp		" Make sure lisp indenting doesn't supersede us
+" First one from $VIMRUNTIME/indent/python.vim 2nd from the ftplugin
+setlocal indentkeys+=<:>,=elif,=except
+setlocal indentkeys-=0#
+
 setlocal include=^\\s*\\(from\\\|import\\)
 " this is in the help docs for `:he includeexpr` and states for java but i bet
 " itd work for python
@@ -95,6 +101,8 @@ endif
 " TODO: Add ranges so we can do py3do on lines
 noremap <buffer> <F5> <Cmd>py3f %<CR>
 noremap! <buffer> <F5> <Cmd>py3f %<CR>
+
+" TODO: should we do the xnoremap part too?
 nnoremap K <Cmd>PydocShow<CR>
 
 " Lol spacemacs had me do this a few times
@@ -136,6 +144,7 @@ let b:undo_ftplugin .= '|setlocal lbr< tw< cms< et< sts< ts<'
       \ . '|setlocal omnifunc<'
       \ . '|setlocal ai< cin< cink<'
       \ . '|silent! unmap <buffer> <F5>'
+      \ . '|silent! nunmap <buffer> K'
       \ . '|silent! unmap! <buffer> <F5>'
       \ . '|unlet! b:undo_ftplugin'
       \ . '|unlet! b:did_ftplugin'

@@ -39,8 +39,8 @@
   ],
   "version": "1.0.0",
   "devDependencies": {
-    "@types/vscode": "^1.41.0",
     "coc-dictionary": "^1.2.2",
+    "coc-highlight": "latest",
     "coc-html": ">=1.2.1",
     "coc-json": ">=1.2.4",
     "coc-lists": ">=1.3.7",
@@ -48,12 +48,6 @@
     "coc-snippets": ">=2.1.18",
     "coc-tsserver": ">=1.4.9",
     "coc-vimlsp": "^0.5.0",
-    "coc-yank": ">=1.1.3",
-    "tslint": "^6.1.0",
-    "vim-language-server": "^1.5.0",
-    "yo": "^3.1.1"
-  },
-  "peerDependencies": {
-    "typescript": "^3.8.3"
+    "coc-yank": ">=1.1.3"
   }
 }

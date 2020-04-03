@@ -79,9 +79,9 @@ nnoremap ,e :e **/*<C-z><S-Tab>
 nnoremap ,f :find **/*<C-z><S-Tab>
 
 " The nvim API is seriously fantastic.
-nnoremap <Leader>rt call buffers#EchoRTP()
+nnoremap <Leader>rt <Cmd>call buffers#EchoRTP()<CR>
 
-noremap <S-Insert> <MiddleMouse>
+noremap  <S-Insert> <MiddleMouse>
 noremap! <S-Insert> <MiddleMouse>
 tnoremap <S-Insert> <MiddleMouse>
 
@@ -90,14 +90,14 @@ inoremap <Up> <C-R>=pumvisible() ? "\<lt>C-P>" : "\<lt>Up>"<CR>
 " }}}
 
 " Marks: {{{
-nnoremap [1 :call signature#marker#Goto('prev', 1, v:count)
-nnoremap ]1 :call signature#marker#Goto('next', 1, v:count)
-nnoremap [2 :call signature#marker#Goto('prev', 2, v:count)
-nnoremap ]2 :call signature#marker#Goto('next', 2, v:count)
-nnoremap [3 :call signature#marker#Goto('prev', 3, v:count)
-nnoremap ]3 :call signature#marker#Goto('next', 3, v:count)
-nnoremap [4 :call signature#marker#Goto('prev', 4, v:count)
-nnoremap ]4 :call signature#marker#Goto('next', 4, v:count)
+nnoremap [1 <Cmd>signature#marker#Goto('prev', 1, v:count)<CR>
+nnoremap ]1 <Cmd>signature#marker#Goto('next', 1, v:count)<CR>
+nnoremap [2 <Cmd>signature#marker#Goto('prev', 2, v:count)<CR>
+nnoremap ]2 <Cmd>signature#marker#Goto('next', 2, v:count)<CR>
+nnoremap [3 <Cmd>signature#marker#Goto('prev', 3, v:count)<CR>
+nnoremap ]3 <Cmd>signature#marker#Goto('next', 3, v:count)<CR>
+nnoremap [4 <Cmd>signature#marker#Goto('prev', 4, v:count)<CR>
+nnoremap ]4 <Cmd>signature#marker#Goto('next', 4, v:count)<CR>
 " }}}
 
 " RSI: {{{
@@ -222,7 +222,10 @@ endif
 " Changed the mapping to Alt-= for snippets.
 inoremap <silent> <M-=> <C-R>=(plugins#ExpandPossibleShorterSnippet() == 0? '': UltiSnips#ExpandSnippet())<CR>
 
-inoremap <expr> <Tab> UltiSnips#ExpandSnippetOrJump()
+
+"  inoremap <expr> <Tab> UltiSnips#ExpandSnippetOrJump()
+" inoremap <expr> <Tab> SuperTabChain(UltiSnips#ExpandSnippetOrJump(), '&ofu', '&completefunc')
+
 " }}}
 
 " FZF: {{{
@@ -340,8 +343,9 @@ onoremap af <Plug>(coc-funcobj-a)
 onoremap if <Plug>(coc-funcobj-i)
 
 function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
+  let l:col = col('.') - 1
+  let l:ret = system('col') || getline('.')[l:col - 1]  =~# '\s'
+  return l:ret
 endfunction
 
 " So I got rid of supertab and ultisnips is finally set in a consistent way
@@ -366,7 +370,7 @@ inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
 nnoremap gK <Plug>(coc-definition)<CR>
 " The gu<text object> operation is too important
 nnoremap <expr><buffer> <Leader>u <Plug>(coc-usages)<CR>
-nnoremap g} <Plug>(coc-usages)<CR>
+nnoremap ,u <Plug>(coc-usages)<CR>
 " }}}
 
 " Bracket maps: {{{
@@ -388,7 +392,7 @@ xnoremap <F2> <Cmd>'<,'>CocCommand document.renameCurrentWord<CR>
 nnoremap ,l <Cmd>CocOpenLog<CR>
 " And let's add one in for CocInfo
 nnoremap ,i <Cmd>CocInfo<CR>
-	
+
 inoremap <M-w> <C-R>=coc#start({'source': 'word'})<CR>
 " }}}
 
@@ -450,12 +454,11 @@ nnoremap ,h <Plug>(coc-codelens-action)<CR>
 nnoremap gx <Plug>(coc-openlink)<CR>
 
 " Coc Usages
-nnoremap ,u <Plug>(coc-references)<CR>
+nnoremap ,n <Plug>(coc-references)<CR>
 
 nnoremap ,. <Plug>(coc-command-repeat)<CR>
 
 " Autofix problem of current line
-nnoremap ,f  <Plug>(coc-fix-current)<CR>
 nnoremap ,q  <Plug>(coc-fix-current)<CR>
 " }}}
 

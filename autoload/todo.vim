@@ -55,7 +55,7 @@ function! todo#fzf(bang) abort  " {{{
 endfunction
 " }}}
 
-function! todo#OpenRangerIn(path, edit_cmd)  " {{{
+function! todo#OpenRangerIn(path, edit_cmd)  abort " {{{
   if exists('g:ranger_choice_file')
     if empty(glob(g:ranger_choice_file))
       let s:choice_file_path = g:ranger_choice_file
@@ -106,7 +106,7 @@ function! todo#OpenRangerIn(path, edit_cmd)  " {{{
     startinsert
 endfunction  " }}}
 
-function! todo#OpenRangerOnVimLoadDir(argv_path)  " {{{
+function! todo#OpenRangerOnVimLoadDir(argv_path)  abort " {{{
   " Open Ranger in the directory passed by argument
   let s:path = expand(a:argv_path)
 

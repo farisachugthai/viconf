@@ -61,7 +61,7 @@ endif
 " }}}
 
 " Atexit: {{{
-let b:undo_ftplugin = 'setlocal kp< ep< fp< path< syntax< fdls< sua< include< '
+let b:undo_ftplugin .= 'setlocal kp< ep< fp< path< syntax< fdls< sua< include< '
                 \ . '|setlocal includeexpr< cms< fo< et< sw< sts< ts< sr< mp<'
                 \ . '|unlet! b:undo_ftplugin'
                 \ . '|unlet! b:did_ftplugin'

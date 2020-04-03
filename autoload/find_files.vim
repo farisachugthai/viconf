@@ -45,15 +45,17 @@ function! find_files#bufopen(e) abort  " {{{1
   return v:true
 endfunction  " }}}
 
-function! find_files#FZFMru() abort  " {{{1
+function! find_files#FZFMru(bang) abort  " {{{1
     call fzf#run(fzf#wrap('history', {
-        \ 'source'  :   v:oldfiles,
+        \ 'source'  :    v:oldfiles,
         \ 'sink'    :   'edit',
-        \ 'options' :  ['--multi', '--ansi'],
-        \ 'down'    :    '40%'}))
+        \ 'options' :   ['--multi', '--ansi'],
+        \ 'down'    :   '40%'},
+        \ a:bang))
+
 endfunction  " }}}
 
-function! find_files#FZFGit() abort  " {{{1
+function! find_files#FZFGit(bang) abort  " {{{1
   " Remove trailing new line to make it work with tmux splits
   let l:directory = substitute(system('git rev-parse --show-toplevel'), '\n$', '', '')
   if !v:shell_error
@@ -62,12 +64,11 @@ function! find_files#FZFGit() abort  " {{{1
         \ 'dir'   : l:directory,
         \ 'source': 'git ls-files',
         \ 'sink'  : 'e',
-        \ 'window': '50vnew'}))
+        \ 'window': '50vnew'},
+        \ a:bang))
   else
-      FZF
+      FZF.a:bang
   endif
-  " 'source': 'git ls-files',
-  " 'down'  : '40%'
 endfunction  " }}}
 
 function! find_files#termux_remote() abort  " {{{1

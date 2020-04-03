@@ -359,9 +359,9 @@ endif
 function! UltiSnipsConf() abort
   let b:did_autoload_ultisnips = 1
 
-  let g:UltiSnipsExpandTrigger="<Tab>"
-  let g:UltiSnipsJumpForwardTrigger="<Tab>"
-  let g:UltiSnipsJumpBackwardTrigger="<S-Tab>"
+  let g:UltiSnipsExpandTrigger = '<Tab>'
+  let g:UltiSnipsJumpForwardTrigger= '<Tab>'
+  let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
   let g:ultisnips_python_style = 'numpy'
   let g:ultisnips_python_quoting_style = 'double'
   let g:UltiSnipsEnableSnipMate = 0
@@ -399,7 +399,7 @@ let g:SuperTabContextDiscoverDiscovery =
 
 function! MyTagContext() abort
   if filereadable(expand('%:p:h') . '/tags')
-    return "\<c-x>\<c-]>"
+    return '\<c-x>\<c-]>'
   endif
   " no return will result in the evaluation of the next
   " configured context
@@ -409,12 +409,12 @@ function! MyDictContext() abort
   " TODO: Man i otta copy the pathogen slash func because this in't gonna work
   " on windows
   if filereadable('/usr/share/dict/words')
-    return "\<C-x>\<C-k>"
+    return '\<C-x>\<C-k>'
   endif
 
   let l:dict_context = fnamemodify(expand('<sfile>') . ':p:h:h')
   if filereadable(l:dict_context . '/spell/en.utf-8.add')
-    return "\<C-x>\<C-k>"
+    return '\<C-x>\<C-k>'
   else
     echo l:dict_context
   endif
@@ -476,15 +476,15 @@ let g:startify_lists = [
 
 
 function! StartifyEntryFormat() abort
-  let entry_format = "repeat(' ', (3 - strlen(index)))"
+  let l:entry_format = "repeat(' ', (3 - strlen(index)))"
 
   if exists('*WebDevIconsGetFileTypeSymbol')  " support for vim-devicons
-    let entry_format .= ". WebDevIconsGetFileTypeSymbol(entry_path) .' '.  entry_path"
+    let l:entry_format .= ". WebDevIconsGetFileTypeSymbol(entry_path) .' '.  entry_path"
     let s:path = WebDevIconsGetFileTypeSymbol(fnamemodify(expand('%'), ':p'))
-    return s:path . " " . entry_path
+    return s:path . ' ' . l:entry_format
   else
-    let entry_format .= '. entry_path'
-    return entry_format
+    let l:entry_format .= '. entry_path'
+    return l:entry_format
   endif
 endfunction
 
@@ -511,6 +511,7 @@ let $NVIM_NODE_LOG_LEVEL = 'WARN'
 let $NVIM_NODE_HOST_DEBUG = 1
 let g:coc_jump_locations = []
 let g:node_client_debug = 1
+let g:coc_cygqwin_path_prefixes = v:null
 
 function! s:Init_coc() abort
 
@@ -524,10 +525,10 @@ function! s:Init_coc() abort
   " endfor
 
   if has('unix')
-    call coc#config("languageserver", {"clangd": { "args":
-                    \ ["--background-index" ], "command": "clangd", "filetypes": [ "c", "cpp",
-                    \ "objc", "objcpp" ], "rootPatterns": [ "compile_flags.txt",
-                    \ "compile_commands.json", ".git/" ], "shell": "true" }})
+    call coc#config('languageserver', {'clangd': { 'args':
+                    \ ['--background-index' ], 'command': 'clangd', 'filetypes': [ 'c', 'cpp',
+                    \ 'objc', 'objcpp' ], 'rootPatterns': [ 'compile_flags.txt',
+                    \ 'compile_commands.json', '.git/' ], 'shell': 'true' }})
   else
     " Now find node:
     if executable('C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\node.exe')
@@ -541,14 +542,14 @@ function! s:Init_coc() abort
       let g:coc_node_path = '/usr/sbin/node'
     endif
   else
-    let g:coc_node_path = expand("$PREFIX/bin/node")
+    let g:coc_node_path = expand('$PREFIX/bin/node')
   endif
 
-    call coc#config("languageserver", {"bash": {"args": [ "start" ], "command": "bash-language-server", "filetypes": ["sh", "bash"]}})
-      call coc#config("languageserver", { "vimlsp": {"args": ["--stdio"],"command": "vim-language-server","filetypes": ["vim" ],
-            \ "initializationOptions": {"diagnostic": { "enable": v:true }, "indexes": { "count": 3, "gap": 100, "runtimepath": v:true,
-            \ "workDirPatterns": [ ".git", "autoload", "plugin"]}, "iskeyword": "@,48-57,_,192-255,-#", "runtimepath": v:false,
-            \ "suggest": { "fromRuntimepath": v:false, "fromVimruntime": v:true }, "vimruntime": "$VIMRUNTIME" } } })
+    call coc#config('languageserver', {'bash': {'args': [ 'start' ], 'command': 'bash-language-server', 'filetypes': ['sh', 'bash']}})
+      call coc#config('languageserver', { 'vimlsp': {'args': ['--stdio'],'command': 'vim-language-server','filetypes': ['vim' ],
+            \ 'initializationOptions': {'diagnostic': { 'enable': v:true }, 'indexes': { 'count': 3, 'gap': 100, 'runtimepath': v:true,
+            \ 'workDirPatterns': [ '.git', 'autoload', 'plugin']}, 'iskeyword': '@,48-57,_,192-255,-#', 'runtimepath': v:false,
+            \ 'suggest': { 'fromRuntimepath': v:false, 'fromVimruntime': v:true }, 'vimruntime': '$VIMRUNTIME' } } })
 
 endfunction
 

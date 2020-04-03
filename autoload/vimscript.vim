@@ -42,7 +42,7 @@ function! vimscript#after_ft() abort  " {{{
   return v:False
 endfunction  " }}}
 
-function! vimscript#BetterProfiler(fname) abort  " {{{1
+function! vimscript#BetterProfiler(fname) abort  " {{{
   " Because Vim's built in profiling capabilities are nonsensical like wtf?
 
   " Toggle debugging
@@ -91,7 +91,7 @@ function! vimscript#profile(...) abort  " {{{
   endif
 endfunction  " }}}
 
-function! vimscript#Scriptnames(re) abort  " {{{1
+function! vimscript#Scriptnames(re) abort  " {{{
   " Command to filter :scriptnames output by a regex
     redir => l:scriptnames
     silent scriptnames
@@ -101,7 +101,7 @@ function! vimscript#Scriptnames(re) abort  " {{{1
     echo join(l:filtered, ' \n ')
 endfunction  " }}}
 
-function! vimscript#ScriptnamesDict() abort  " {{{1
+function! vimscript#ScriptnamesDict() abort  " {{{
   " From 10,000 lines deep in :he eval
   " Get the output of ":scriptnames" in the scriptnames_output variable.
   " Call by entering `:echo g:ScriptNamesDict()` or the command below.
@@ -132,7 +132,7 @@ function! vimscript#ScriptnamesDict() abort  " {{{1
   return s:scripts
 endfunction  "  }}}
 
-function s:get_scriptnames() abort  " {{{1
+function s:get_scriptnames() abort  " {{{
   let s:scriptnames_output = ''
   redir => s:scriptnames_output
   silent scriptnames
@@ -142,11 +142,11 @@ endfunction  " }}}
 
 function! vimscript#fzf_scriptnames(bang) abort  " {{{
 
-  call fzf#run(fzf#wrap("scriptnames",
+  return fzf#run(fzf#wrap('scriptnames',
         \ {'source': ':scriptnames',
         \ 'sink': 'e',
         \ 'options': ['--header', 'Scriptnames']},
-        \ a:bang ))
+        \ a:bang))
 
 endfunction
 " }}}

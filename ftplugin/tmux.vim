@@ -12,10 +12,11 @@ source $VIMRUNTIME/ftplugin/tmux.vim
 setlocal iskeyword+=-
 setlocal iskeyword+=#
 syntax sync fromstart
+syntax enable
 
 " TODO: the official ftplugin never defined an undo ftplugin.
 " ...should probably do that.
-"
+
 let b:undo_ftplugin = 'setlocal isk< cms< '
       \ . '|unlet! b:did_ftplugin'
       \ . '|unlet! b:undo_ftplugin'

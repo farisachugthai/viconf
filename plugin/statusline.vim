@@ -5,7 +5,7 @@
   " Last Modified: March 06, 2020
 " ============================================================================
 
-function! s:fzf_statusline()  " {{{
+function! s:fzf_statusline()  abort " {{{
 
   " Override statusline as you like
   hi! fzf1 cterm=bold,underline,reverse gui=bold,underline,reverse guifg=#7daea3
@@ -18,11 +18,19 @@ endfunction   " }}}
 augroup FZFStatusline  " {{{
 " NOTE: This has to remain the name of the augroup it's what Junegunn calls
   au!
-  autocmd! User FzfStatusLine call <SID>fzf_statusline()
-  au BufEnter * let &statusline = Statusline(0)
+  autocmd User FzfStatusLine call s:fzf_statusline()
+augroup END
+
+augroup UserStl
+  au!
+  " i think this is fucking up tagbar.
+  au BufEnter * if &filetype != 'tagbar'
+                  \| let &statusline = Statusline(0)
+                  \| endif
+
   autocmd User CocStatusChange,CocDiagnosticChange
         \| if exists('*Statusline')
-        \| call Statusline_expr(0)
+        \| call Statusline(1)
         \| endif
 
 augroup END  " }}}
@@ -39,16 +47,16 @@ endfunction  " }}}
 function! s:StatusDiagnostic() abort  " {{{
   if !exists('g:loaded_coc') | return '' | endif
 
-  let info = get(b:, 'coc_diagnostic_info', {})
-  if empty(info) | return '' | endif
-  let msgs = []
-  if get(info, 'error', 0)
-    call add(msgs, 'E' . info['error'])
+  let l:info = get(b:, 'coc_diagnostic_info', {})
+  if empty(l:info) | return '' | endif
+  let l:msgs = []
+  if get(l:info, 'error', 0)
+    call add(l:msgs, 'E' . l:info['error'])
   endif
-  if get(info, 'warning', 0)
-    call add(msgs, 'W' . info['warning'])
+  if get(l:info, 'warning', 0)
+    call add(l:msgs, 'W' . l:info['warning'])
   endif
-  return join(msgs, ' ') . ' ' . get(g:, 'coc_status', '')
+  return join(l:msgs, ' ') . ' ' . get(g:, 'coc_status', '')
 endfunction  " }}}
 
 function! s:_Statusline(bang, ...) range abort  " {{{
@@ -76,12 +84,12 @@ function! s:_Statusline(bang, ...) range abort  " {{{
 
   " lines 2, 4, 6, 7
   let g:statusline = '[%n] '
-        \. s:VarExists('*WebDevIconsGetFileTypeSymbol', '%{WebDevIconsGetFileTypeSymbol()}')
-        \. '%< %m%r %y %w '
-        \. s:VarExists('g:loaded_fugitive', '%{FugitiveStatusline()}')
-        \. ' %{&ff} ' . s:tstmp
-        \. s:VarExists('g:did_coc_loaded', ' %{coc#status()} ')
-        \. s:VarExists('g:coc_git_status', ' %{coc_git_status} ')
+                  \. s:VarExists('*WebDevIconsGetFileTypeSymbol', '%{WebDevIconsGetFileTypeSymbol()}')
+                  \. '%< %m%r %y %w '
+                  \. s:VarExists('g:loaded_fugitive', '%{FugitiveStatusline()}')
+                  \. ' %{&ff} ' . s:tstmp
+                  \. s:VarExists('g:did_coc_loaded', ' %{coc#status()} ')
+                  \. s:VarExists('g:coc_git_status', ' %{coc_git_status} ')
         \. ' %f '
         \. s:sep
         \. s:StatusDiagnostic()
@@ -90,7 +98,6 @@ function! s:_Statusline(bang, ...) range abort  " {{{
         \. s:pos . '%*' . ' %P'
 
   if a:bang ==# 1
-    let &stl = g:statusline
     redrawstatus!
   endif
   return g:statusline
@@ -103,4 +110,3 @@ endfunction
 
 command! -bang -bar -nargs=* -range=% -addr=loaded_buffers -complete=expression -complete=var ReloadStatusline call Statusline(<bang>0, <q-args>)
 " }}}
-

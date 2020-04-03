@@ -79,7 +79,7 @@ function s:handle_user_config() abort   " {{{1
   endif
 endfunction   " }}}
 
-function! pydoc_help#Pydoc(module, bang) abort range  " {{{1
+function! pydoc_help#Pydoc(module, bang) abort range  " {{{
   if a:bang
     tabe
   else
@@ -91,7 +91,7 @@ function! pydoc_help#Pydoc(module, bang) abort range  " {{{1
   call s:temp_buffer()
 endfunction   " }}}
 
-function! pydoc_help#async_cursor() abort " Async Pydoc: {{{1
+function! pydoc_help#async_cursor() abort " Async Pydoc: {{{
   let s:temp_cword = expand('<cWORD>')
   enew
   call jobstart('pydoc ' . s:temp_cword, {'on_stdout':{j,d,e->append(line('.'),d)}})
@@ -99,7 +99,7 @@ function! pydoc_help#async_cursor() abort " Async Pydoc: {{{1
   call s:temp_buffer()
 endfunction   " }}}
 
-function! pydoc_help#async_cfile_mods(mods, bang) abort  " {{{1
+function! pydoc_help#async_cfile_mods(mods, bang) abort  " {{{
   if !has('nvim') | throw "Doesn't work on vim" | endif
   let s:temp_cfile = expand('<cfile>')
   exec a:mods . 'enew' . a:bang
@@ -107,7 +107,7 @@ function! pydoc_help#async_cfile_mods(mods, bang) abort  " {{{1
   call s:temp_buffer()
 endfunction   " }}}
 
-function! pydoc_help#async_cfile() abort  " {{{1
+function! pydoc_help#async_cfile() abort  " {{{
   " Dude this is it.
   " If we can floating window this, I may have my first vim plugin down.
 
@@ -123,7 +123,7 @@ function! pydoc_help#async_cfile() abort  " {{{1
       \ 'row': 0, 'anchor': 'NW', 'style': 'minimal'}
 
   " note we call v:true to enter the window
-  let win = nvim_open_win(l:buf, v:true, l:opts)
+  let l:win = nvim_open_win(l:buf, v:true, l:opts)
   " optional: change highlight, otherwise Pmenu is used
   call nvim_win_set_option(l:win, 'winhl', 'Normal:MyHighlight')
 
@@ -134,7 +134,7 @@ function! pydoc_help#async_cfile() abort  " {{{1
   call s:temp_buffer()
 endfunction   " }}}
 
-function! pydoc_help#broken_scratch_buffer() abort  " {{{1
+function! pydoc_help#broken_scratch_buffer() abort  " {{{
   " Not actually broken i just need to debug the commented out lines
   " basically how do i put the info i want into a list that can be properly
   " parsed by this API
@@ -180,38 +180,39 @@ function! pydoc_help#the_curse_of_nvims_floating_wins() abort  " {{{
         \ }
 
   let s:win_handle = nvim_open_win(bufnr('%'), 0, s:opts)
-  let floating_winnr  = nvim_win_get_number(s:win_handle)
+  let l:floating_winnr  = nvim_win_get_number(s:win_handle)
   " So now we finally have a winnr which we can work with in a more reasonable
   " fashion. Sweet!!
   call nvim_win_set_option(s:win_handle, 'winhl', 'Special')
+  return l:floating_winnr
+
 endfunction   " }}}
 
-function! s:ReplaceModuleAlias() abort " {{{1 Replace module aliases with their own name.
-    "
-    " For example:
-    "   import foo as bar
-    " if `bar` is in the ExpandModulePath's return value, it should be
-    " replaced with `foo`.
-    let l:cur_col = col('.')
-    let l:cur_line = line('.')
-    let l:module_path = s:ExpandModulePath()
-    let l:module_names = split(l:module_path, '\.')
-    let l:module_orig_name = l:module_names[0]
-    if search('import \+[0-9a-zA-Z_.]\+ \+as \+' . l:module_orig_name)
-        let l:line = getline('.')
-        let l:name = matchlist(l:line, 'import \+\([a-zA-Z0-9_.]\+\) \+as')[1]
-        if l:name != ''
-            let l:module_orig_name = l:name
-        endif
+function! s:ReplaceModuleAlias() abort " {{{ Replace module aliases with their own name.
+  " For example:
+  "   import foo as bar
+  " if `bar` is in the ExpandModulePath's return value, it should be
+  " replaced with `foo`.
+  let l:cur_col = col('.')
+  let l:cur_line = line('.')
+  let l:module_path = s:ExpandModulePath()
+  let l:module_names = split(l:module_path, '\.')
+  let l:module_orig_name = l:module_names[0]
+  if search('import \+[0-9a-zA-Z_.]\+ \+as \+' . l:module_orig_name)
+    let l:line = getline('.')
+    let l:name = matchlist(l:line, 'import \+\([a-zA-Z0-9_.]\+\) \+as')[1]
+    if l:name !=# ''
+        let l:module_orig_name = l:name
     endif
-    if l:module_names[0] != l:module_orig_name
-        let l:module_names[0] = l:module_orig_name
-    endif
-    call cursor(l:cur_line, l:cur_col)
-    return join(l:module_names, ".")
+  endif
+  if l:module_names[0] != l:module_orig_name
+      let l:module_names[0] = l:module_orig_name
+  endif
+  call cursor(l:cur_line, l:cur_col)
+  return join(l:module_names, '.')
 endfunction  " }}}
 
-function! s:ExpandModulePath() abort  " {{{1
+function! s:ExpandModulePath() abort  " {{{
     " Extract the 'word' at the cursor, expanding leftwards across identifiers
     " and the . operator, and rightwards across the identifier only.
     "
@@ -223,24 +224,24 @@ function! s:ExpandModulePath() abort  " {{{1
     let l:line = getline('.')
     let l:pre = l:line[:col('.') - 1]
     let l:suf = l:line[col('.'):]
-    return matchstr(pre, '[A-Za-z0-9_.]*$') . matchstr(suf, '^[A-Za-z0-9_]*')
+    return matchstr(l:pre, '[A-Za-z0-9_.]*$') . matchstr(l:suf, '^[A-Za-z0-9_]*')
 endfunction  " }}}
 
 function! pydoc_help#show(...) abort  " {{{
   " AHHHHH THIS WORKS!!!!
-  let word = s:ReplaceModuleAlias()
-  let buf = nvim_create_buf(v:false, v:true)
+  let l:word = s:ReplaceModuleAlias()
+  let l:buf = nvim_create_buf(v:false, v:true)
   if a:0 == 0
     " switch to our new buffer
-    exec 'b' . buf
+    exec 'b' . l:buf
   elseif a:0 == 1
       tabnew!
-      exec 'b' . buf
+      exec 'b' . l:buf
   else
     throw 'autoload:pydoc_help#show: wrong # of args'
   endif
 
-  call jobstart('pydoc ' . word, {'on_stdout' : {j, d, e->append(line('.'),d)} } )
+  call jobstart('pydoc ' . l:word, {'on_stdout' : {j, d, e->append(line('.'),d)} } )
   call s:temp_buffer()
   " Make it vertical
   wincmd L
@@ -259,9 +260,9 @@ endfunction  " }}}
 
 function! s:opened_preview_window() abort  " {{{
   " Sorry junegunn but its tpope.
-  for i in range(1, winnr('$'))
-    if getwinvar(i, '&previewwindow') == 1
-      return i
+  for l:i in range(1, winnr('$'))
+    if getwinvar(l:i, '&previewwindow') == 1
+      return l:i
     endif
   endfor
   return -1
@@ -276,11 +277,11 @@ function! pydoc_help#PreviewShow() abort  " {{{
   " mistake.
   " let orig_buffer = bufnr('%')
   "
-  let word = s:ExpandModulePath()
+  let l:word = s:ExpandModulePath()
 
   " dude look at this phenomenally helpful shit from the docs on
   " preview-window
-  if word =~ '\a'			" if the word contains a letter
+  if l:word =~? '\a'			" if the word contains a letter
 
   " Here's a smarter way of doing this courtesy of t pope
   let l:name = tempname()
@@ -298,7 +299,7 @@ function! pydoc_help#PreviewShow() abort  " {{{
   wincmd P
   if &previewwindow == 1		" if we really get there...
     match none			" delete existing highlight
-    call jobstart('pydoc ' . word, {'on_stdout' : {j, d, e->append(line('.'),d)} } )
+    call jobstart('pydoc ' . l:word, {'on_stdout' : {j, d, e->append(line('.'),d)} } )
     call s:temp_buffer()
   nnoremap <buffer> <silent> q :q<CR>
     " wincmd p			" back to old window
@@ -315,14 +316,14 @@ endfunction  " }}}
 function! pydoc_help#WholeLine(...) abort  " {{{
   " Also works. Dude I'm on a roll
 
-  let cur_line = getline(line('.'))
-  let buf = nvim_create_buf(v:false, v:true)
+  let l:cur_line = getline(line('.'))
+  let l:buf = nvim_create_buf(v:false, v:true)
   if a:0 == 0
     " switch to our new buffer
-    exec 'b' . buf
+    exec 'b' . l:buf
   elseif a:0 == 1
       tabnew!
-      exec 'b' . buf
+      exec 'b' . l:buf
   else
     throw 'autoload:pydoc_help#show: wrong # of args'
 

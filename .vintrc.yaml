@@ -22,8 +22,8 @@ env:
 policies:
     ProhibitImplicitScopeVariable:
         enabled: true
-    # ProhibitAbbreviationOption:
-    #     enabled: false
+    ProhibitAbbreviationOption:
+        enabled: true
     ProhibitSetNoCompatible:
         enabled: false
     # gonna set some newly discovered checks to true
@@ -34,6 +34,8 @@ policies:
     ProhibitNoAbortFunction:
         enabled: true
     ProhibitUnusedVariable:
+      enabled: false
+    ProhibitInvalidMapCall:
       enabled: true
 
 # fyi
@@ -54,6 +56,6 @@ policies:
 # vint DEBUG: disabled: ProhibitSetNoCompatible
 # vint DEBUG: enabled: ProhibitUnnecessaryDoubleQuote
 # vint DEBUG: disabled: ProhibitUnusedVariable
-# vint DEBUG: enabled: ProhibitUsingUndeclaredVariable       
+# vint DEBUG: enabled: ProhibitUsingUndeclaredVariable
 
 ...

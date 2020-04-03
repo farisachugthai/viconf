@@ -12,17 +12,18 @@ log() {
 setup_plug() {
 
     log "Installing vim-plug"
+    sleep 3
     if [[ -z "$HOME/.local/share/nvim/site/autoload/plug.vim" ]]; then
         curl -fLo "$HOME/.local/share/nvim/autoload/plug.vim" --create-dirs \
         "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
     fi
-    nvim -c"PlugInstall!" -c"PlugUpgrade!" -c "UpdateRemotePlugins" -c"qa" &
+    nvim -c"PlugInstall!" -c"PlugUpgrade" -c "UpdateRemotePlugins" -c"qa" &
 }
 
 update_pkgs() {
     local update
     if [[ -n $ANDROID_ROOT ]]; then
-        update="apt update"
+        update="pkg update"
     else
         update="sudo apt update"
     fi
@@ -33,7 +34,7 @@ update_pkgs() {
 install_nvim() {
     local install
     if [[ -n $ANDROID_ROOT ]]; then
-        install="apt install neovim"
+        install="pkg install neovim"
     else
         install="sudo apt install neovim nvim-qt"
     fi
@@ -66,6 +67,8 @@ update_pkgs
 install_nvim
 
 setup_plug
+
+sleep 30
 
 setup_pynvim
 
