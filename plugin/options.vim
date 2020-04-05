@@ -59,7 +59,11 @@ endif
 " Other: {{{
 packadd! matchit
 packadd! justify
-colorscheme gruvbox-material
+
+" managed to lose this along the way
+let g:grepprg = syncom#grepprg()
+
+call syncom#gruvbox_material()
 set termguicolors
 setglobal autochdir autowrite autoread
 if &tabstop > 4 | setglobal tabstop=4 | endif
@@ -101,9 +105,9 @@ if exists('&modelineexpr') | setglobal modelineexpr | endif
 
 setglobal whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 " TODO: closeoff needs to be added conditionally. how?
-setglobal browsedir="buffer"   " which directory is used for the file browser
+setglobal browsedir='buffer'   " which directory is used for the file browser
 
-let &g:listchars = "tab:\u21e5\u00b7,extends:\u21c9,precedes:\u21c7,nbsp:\u00b7"
+let &g:listchars = 'tab:\u21e5\u00b7,extends:\u21c9,precedes:\u21c7,nbsp:\u00b7'
 " trail:\u2423 doesn't work with hack as font
 let &g:fillchars = "stl:' ',stlnc:' ',vert:\u250b,fold:\u00b7,diff:'.'"
 " set fillchars=stl:^,stlnc:=,vert:│,fold:·,diff:-
@@ -132,7 +136,7 @@ if has('unix')
   let g:tagbar_iconchars = ['▷', '◢']
   let g:startify_change_to_dir = 1
 else
-  setglobal noshelltemp
+  set noshelltemp
   setglobal sessionoptions+=unix,slash viewoptions+=unix,slash
 
   " So this HAS to be a bad idea; however, all 3 DirChanged autocommands emit
@@ -265,12 +269,12 @@ endif
 if exists('g:ranger_replace_netrw') && g:ranger_replace_netrw
   augroup ReplaceNetrwByRangerVim
     autocmd VimEnter * silent! autocmd! FileExplorer
-    autocmd BufEnter * if isdirectory(expand("%")) | call OpenRangerOnVimLoadDir("%") | endif
+    autocmd BufEnter * if isdirectory(expand('%')) | call OpenRangerOnVimLoadDir('%') | endif
   augroup END
 endif
 
-if !exists('g:ranger_map_keys') || g:ranger_map_keys
-  map <leader>f :Ranger<CR>
+if !exists('g:ranger_map_keys') || g:ranger_map_keys  " spacemacs style
+  nnoremap <Leader>ar <Cmd>Ranger<CR>
 endif
 " }}}
 
@@ -303,6 +307,16 @@ let g:NERDTreeRespectWildIgnore = 1
 let g:NERDTreeAutoDeleteBuffer = 1
 let g:NERDTreeMapToggleZoom = 'Z'  " Z is for Zoom why the hell is the default A?
 let g:NERDTreeQuitOnOpen = 3
+
+let g:NERDTreeChdirMode = 1
+
+" Is there a way to do this and also make sure that p does the same thing?
+" I think we can do something like
+" nnoremap - <Cmd>call nerdtree#ui_glue#invokeKeyMap('p')<CR>
+" and that'll do exactly what i want; however that'll only work I think if nerdtree's already been
+" loaded
+let g:NERDTreeMapJumpParent = '-'
+
 " }}}
 
 " Tagbar: {{{
@@ -511,12 +525,19 @@ let $NVIM_NODE_LOG_LEVEL = 'WARN'
 let $NVIM_NODE_HOST_DEBUG = 1
 let g:coc_jump_locations = []
 let g:node_client_debug = 1
-let g:coc_cygqwin_path_prefixes = v:null
+if !has('unix')
+  let g:coc_cygqwin_path_prefixes = v:false
+else
+  if getenv($WSL_DISTRO_NAME)
+    let g:coc_cygqwin_path_prefixes = v:true
+  endif
+endif
 
 function! s:Init_coc() abort
 
   if !exists('g:coc_global_extensions')
-    let g:coc_global_extensions = ['coc-json', 'coc-tsserver', 'coc-python', 'coc-git', 'coc-lists', 'coc-snippets', 'coc-sh']
+    let g:coc_global_extensions = ['coc-json', 'coc-tsserver', 'coc-python',
+                    \'coc-git', 'coc-lists', 'coc-snippets', 'coc-sh']
   endif
   " for l:ext in g:coc_global_extensions
   "   echomsg l:ext
@@ -545,11 +566,12 @@ function! s:Init_coc() abort
     let g:coc_node_path = expand('$PREFIX/bin/node')
   endif
 
-    call coc#config('languageserver', {'bash': {'args': [ 'start' ], 'command': 'bash-language-server', 'filetypes': ['sh', 'bash']}})
-      call coc#config('languageserver', { 'vimlsp': {'args': ['--stdio'],'command': 'vim-language-server','filetypes': ['vim' ],
-            \ 'initializationOptions': {'diagnostic': { 'enable': v:true }, 'indexes': { 'count': 3, 'gap': 100, 'runtimepath': v:true,
-            \ 'workDirPatterns': [ '.git', 'autoload', 'plugin']}, 'iskeyword': '@,48-57,_,192-255,-#', 'runtimepath': v:false,
-            \ 'suggest': { 'fromRuntimepath': v:false, 'fromVimruntime': v:true }, 'vimruntime': '$VIMRUNTIME' } } })
+  call coc#config('languageserver', {'bash': {'args': [ 'start' ], 'command': 'bash-language-server', 'filetypes': ['sh', 'bash']}})
+
+  call coc#config('languageserver', { 'vimlsp': {'args': ['--stdio'],'command': 'vim-language-server','filetypes': ['vim' ],
+          \ 'initializationOptions': {'diagnostic': { 'enable': v:true }, 'indexes': { 'count': 3, 'gap': 100, 'runtimepath': v:true,
+          \ 'workDirPatterns': [ '.git', 'autoload', 'plugin']}, 'iskeyword': '@,48-57,_,192-255,-#', 'runtimepath': v:false,
+          \ 'suggest': { 'fromRuntimepath': v:false, 'fromVimruntime': v:true }, 'vimruntime': '$VIMRUNTIME' } } })
 
 endfunction
 

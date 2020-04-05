@@ -16,6 +16,12 @@ let g:pyindent_nested_paren = 'shiftwidth()'
 " Indent for a continuation line: >
 let g:pyindent_continue = 'shiftwidth() * 2'
 let g:pydoc_executable = 1
+
+
+" from the indent.vim
+let g:pyindent_disable_parentheses_indenting = 0
+
+let g:pyindent_searchpair_timeout = '250'
 " }}}
 
 " Filetype Specific Options: {{{
@@ -24,8 +30,15 @@ if has('win32') || has('win64')
 else
   setlocal keywordprg=pydoc
 endif
+
 source $VIMRUNTIME/ftplugin/python.vim
+if exists('b:did_indent') | unlet! b:did_indent | endif
+source $VIMRUNTIME/indent/python.vim
+
 " Idk why but their indentexpr wont stop raising
+" First one from $VIMRUNTIME/indent/python.vim 2nd from the ftplugin
+setlocal indentkeys+=<:>,=elif,=except
+setlocal indentkeys-=0#
 " But lets set the other stuff first
 setlocal nocindent
 setlocal autoindent
@@ -42,9 +55,6 @@ setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 setlocal cinkeys-=0#
 
 setlocal nolisp		" Make sure lisp indenting doesn't supersede us
-" First one from $VIMRUNTIME/indent/python.vim 2nd from the ftplugin
-setlocal indentkeys+=<:>,=elif,=except
-setlocal indentkeys-=0#
 
 setlocal include=^\\s*\\(from\\\|import\\)
 " this is in the help docs for `:he includeexpr` and states for java but i bet
@@ -87,10 +97,10 @@ if exists("loaded_matchit")
   let b:match_words = '\(^\s*\)\@<=\<if\>:\<elif\>:\<else\>,'
                   \ . '\(^\s*\)\@<=\<def\>:\<return\>,'
 
-  " let b:match_words = '\<if\>:\<elif\>:\<else\>,' 
+  " let b:match_words = '\<if\>:\<elif\>:\<else\>,'
   "                 \ . '\<repeat\>:\<until\>'
 
-  " let b:match_words = '\<if\>:\<elif\>:\<else\>,' 
+  " let b:match_words = '\<if\>:\<elif\>:\<else\>,'
 
 endif
 " }}}
@@ -103,10 +113,10 @@ noremap <buffer> <F5> <Cmd>py3f %<CR>
 noremap! <buffer> <F5> <Cmd>py3f %<CR>
 
 " TODO: should we do the xnoremap part too?
-nnoremap K <Cmd>PydocShow<CR>
+nnoremap <buffer> K <Cmd>PydocShow<CR>
 
 " Lol spacemacs had me do this a few times
-nnoremap ,eb <Cmd>py3f %<CR>
+nnoremap <buffer> ,eb <Cmd>py3f %<CR>
 " }}}
 
 " Commands And Cleanup: {{{
@@ -146,6 +156,8 @@ let b:undo_ftplugin .= '|setlocal lbr< tw< cms< et< sts< ts<'
       \ . '|silent! unmap <buffer> <F5>'
       \ . '|silent! nunmap <buffer> K'
       \ . '|silent! unmap! <buffer> <F5>'
+      \ . '|silent! nunmap <buffer> ,eb'
       \ . '|unlet! b:undo_ftplugin'
       \ . '|unlet! b:did_ftplugin'
 " }}}
+"

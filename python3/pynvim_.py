@@ -451,6 +451,8 @@ def encoding(encoding=True):
 
 
 class NvimError(Exception):
+    # TODO: This should probably be expanded on and initialize with some
+    # sort of message
     pass
 
 
@@ -489,10 +491,7 @@ class Remote(object):
 
     def __repr__(self):
         """Get text representation of the object."""
-        return "<%s(handle=%r)>" % (
-            self.__class__.__name__,
-            self.handle,
-        )
+        return "<%s(handle=%r)>" % (self.__class__.__name__, self.handle,)
 
     def __eq__(self, other):
         """Return True if `self` and `other` are the same object."""
@@ -503,7 +502,7 @@ class Remote(object):
         return self.code_data.__hash__()
 
     def request(self, name, *args, **kwargs):
-        """Wrapper for nvim.request."""
+        """Wrap nvim.request method from the Session object."""
         return self._session.request(name, self, *args, **kwargs)
 
 
@@ -659,8 +658,10 @@ class Nvim(object):
         present and True, a asynchronous notification is sent instead. This
         will never block, and the return value or error is ignored.
         """
-        if (self._session._loop_thread is not None
-                and threading.current_thread() != self._session._loop_thread):
+        if (
+            self._session._loop_thread is not None
+            and threading.current_thread() != self._session._loop_thread
+        ):
             msg = (
                 "Request from non-main thread.\n"
                 "Requests from different threads should be wrapped "
@@ -1079,8 +1080,7 @@ class LuaFuncs(object):
         # first new function after keyword rename, be a bit noisy
         if "async" in kwargs:
             raise ValueError(
-                '"async" argument is not allowed. '
-                'Use "async_" instead.'
+                '"async" argument is not allowed. ' 'Use "async_" instead.'
             )
         async_ = kwargs.get("async_", False)
         pattern = "return {}(...)" if not async_ else "{}(...)"
@@ -1197,10 +1197,7 @@ class ScriptHost:
         fname = "_vim_pydo"
 
         # define the function
-        function_def = "def %s(line, linenr):\n %s" % (
-            fname,
-            code,
-        )
+        function_def = "def %s(line, linenr):\n %s" % (fname, code,)
         exec(function_def, self.module.__dict__)
         # get the function
         function = self.module.__dict__[fname]
@@ -1230,8 +1227,8 @@ class ScriptHost:
                     newlines.append(result)
                 else:
                     exception = TypeError(
-                        "pydo should return a string " +
-                        "or None, found %s instead" % result.__class__.__name__
+                        "pydo should return a string "
+                        + "or None, found %s instead" % result.__class__.__name__
                     )
                     break
                 linenr += 1
@@ -1261,7 +1258,6 @@ class ScriptHost:
 
 
 class RedirectStream(io.IOBase):
-
     def __init__(self, redirect_handler):
         self.redirect_handler = redirect_handler
 
@@ -1290,7 +1286,6 @@ class LegacyVim(Nvim):
 
 # Copied/adapted from :help if_pyth.
 def path_hook(nvim):
-
     def _get_paths():
         if nvim._thread_invalid():
             return []
@@ -1300,15 +1295,14 @@ def path_hook(nvim):
         idx = oldtail.find(".")
         if idx > 0:
             name = oldtail[:idx]
-            tail = oldtail[idx + 1:]
+            tail = oldtail[idx + 1 :]
             fmr = imp.find_module(name, path)
-            module = imp.find_module(fullname[:-len(oldtail)] + name, *fmr)
+            module = imp.find_module(fullname[: -len(oldtail)] + name, *fmr)
             return _find_module(fullname, tail, module.__path__)
         else:
             return imp.find_module(fullname, path)
 
     class VimModuleLoader(object):
-
         def __init__(self, module):
             """
 
@@ -1327,7 +1321,6 @@ def path_hook(nvim):
             return imp.load_module(fullname, *self.module)
 
     class VimPathFinder(object):
-
         @staticmethod
         def find_module(fullname, path=None):
             """Method for Python 2.7 and 3.3."""
@@ -1477,14 +1470,7 @@ class Buffer(Remote):
         return Range(self, start, end)
 
     def add_highlight(
-        self,
-        hl_group,
-        line,
-        col_start=0,
-        col_end=-1,
-        src_id=-1,
-        async_=None,
-        **kwargs
+        self, hl_group, line, col_start=0, col_end=-1, src_id=-1, async_=None, **kwargs
     ):
         """Add a highlight to the buffer."""
         async_ = check_async(async_, kwargs, src_id != 0)
@@ -1550,7 +1536,6 @@ class Buffer(Remote):
 
 
 class Range(object):
-
     def __init__(self, buffer, start, end):
         self._buffer = buffer
         self.start = start - 1
@@ -1580,7 +1565,7 @@ class Range(object):
             start = self.start
         if end is None:
             end = self.end
-        self._buffer[start:end + 1] = lines
+        self._buffer[start : end + 1] = lines
 
     def __iter__(self):
         for i in range(self.start, self.end + 1):
@@ -1784,7 +1769,7 @@ class RemoteSequence(object):
         """Return a sequence item by index."""
         if not isinstance(idx, slice):
             return self._fetch()[idx]
-        return self._fetch()[idx.start:idx.stop]
+        return self._fetch()[idx.start : idx.stop]
 
     def __iter__(self):
         """Return an iterator for the sequence."""

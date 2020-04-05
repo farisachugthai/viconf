@@ -25,6 +25,7 @@ if exists('b:did_ftplugin')
 endif
 
 source $VIMRUNTIME/ftplugin/sh.vim
+source $VIMRUNTIME/indent/sh.vim
 setlocal commentstring=#\ %s
 setlocal shiftwidth=4 expandtab softtabstop=4 ts=4
 syntax enable

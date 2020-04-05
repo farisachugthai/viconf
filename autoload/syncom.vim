@@ -5,9 +5,17 @@
     " Last Modified: Nov 13, 2019
 " ============================================================================
 
+function s:Echo(msg) abort
+  echohl WarningMsg
+  redraw!
+  echomsg a:msg
+  echohl NONE
+endfunction
+
 function! syncom#HL() abort  " HL: Whats the highlighting group under my cursor? {{{
 
-  echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
+  redraw!
+  echomsg join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
 
 endfunction  " }}}
 
@@ -168,7 +176,6 @@ function! syncom#gruvbox() abort  " {{{ old colorscheme
 endfunction  " }}}
 
 function! syncom#gruvbox_material() abort  " {{{ new colorscheme
-  " TODO:
   if empty(globpath(&runtimepath, 'colors/gruvbox-material.vim'))
     return v:false
   else

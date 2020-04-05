@@ -35,27 +35,6 @@ nnoremap zt z<CR>
 nnoremap zL z-
 " }}}
 
-" Unimpaired Mappings: {{{
-" Map quickfix list, buffers, windows and tabs to *[ and *]
-" Note: A bunch more in ./tag_miscellany.vim
-nnoremap ]q <Cmd>cnext<CR>
-nnoremap [q <Cmd>cprev<CR>
-nnoremap ]Q <Cmd>clast<CR>
-nnoremap [Q <Cmd>cfirst<CR>
-nnoremap ]l <Cmd>lnext<CR>
-nnoremap [l <Cmd>lprev<CR>
-nnoremap ]L <Cmd>llast<CR>
-nnoremap [L <Cmd>lfirst<CR>
-
-" Unrelated but cmdline
-" It's annoying you lose a whole command from a typo
-cnoremap <Esc> <nop>
-" However I still need the functionality
-cnoremap <C-g> <Esc>
-" Avoid accidental hits of <F1> while aiming for <Esc>
-noremap! <F1> <Esc>
-" }}}
-
 " Misc: {{{
 if executable('htop')
   " Leader -- applications -- htop. Requires nvim for <Cmd> which tmk doesn't exist
@@ -128,6 +107,10 @@ function! MapRsi() abort
   noremap!        <M-p> <Up>
   noremap!        <M-BS> <C-W>
   noremap!        <M-C-h> <C-W>
+
+  " did you know alt-t is complete in emacs? let's steal this one from ultisnips
+  noremap! <M-t> <C-R>=(plugins#ExpandPossibleShorterSnippet() == 0? '': UltiSnips#ExpandSnippet())<CR>
+
 endfunction
 
 call MapRsi()
@@ -219,12 +202,7 @@ else
   noremap! <F6> <Cmd>UltiSnipsListSnippets<CR>
 endif
 
-" Changed the mapping to Alt-= for snippets.
-inoremap <silent> <M-=> <C-R>=(plugins#ExpandPossibleShorterSnippet() == 0? '': UltiSnips#ExpandSnippet())<CR>
-
-
-"  inoremap <expr> <Tab> UltiSnips#ExpandSnippetOrJump()
-" inoremap <expr> <Tab> SuperTabChain(UltiSnips#ExpandSnippetOrJump(), '&ofu', '&completefunc')
+" inoremap <expr> <Tab> UltiSnips#ExpandSnippetOrJump()
 
 " }}}
 
@@ -505,7 +483,7 @@ function! Quickfix_Mappings() abort  " {{{
   nnoremap <Leader>lh <Cmd>botright lhistory<CR>
   nnoremap <Leader>ll <Cmd>llist!<CR>
   " Down for down
-  nnoremap <Leader>ld <Cmd>botright llist!<CR>
+  nnorema <Leader>ld <Cmd>botright llist!<CR>
   nnoremap <Leader>lo <Cmd>lopen<CR>
   nnoremap <Leader>lw <Cmd>botright lwindow<CR>
 
@@ -541,6 +519,26 @@ function! Quickfix_Mappings() abort  " {{{
 
   nnoremap <Leader>C <Cmd>make %<CR>
 
+" Unimpaired Mappings: {{{
+" Map quickfix list, buffers, windows and tabs to *[ and *]
+" Note: A bunch more in ./tag_miscellany.vim
+nnoremap ]q <Cmd>cnext<CR>
+nnoremap [q <Cmd>cprev<CR>
+nnoremap ]Q <Cmd>clast<CR>
+nnoremap [Q <Cmd>cfirst<CR>
+nnoremap ]l <Cmd>lnext<CR>
+nnoremap [l <Cmd>lprev<CR>
+nnoremap ]L <Cmd>llast<CR>
+nnoremap [L <Cmd>lfirst<CR>
+
+" Unrelated but cmdline
+" It's annoying you lose a whole command from a typo
+cnoremap <Esc> <nop>
+" However I still need the functionality
+cnoremap <C-g> <Esc>
+" Avoid accidental hits of <F1> while aiming for <Esc>
+noremap! <F1> <Esc>
+" }}}
 endfunction  " }}}
 
 function! AltKeyNavigation() abort  " {{{

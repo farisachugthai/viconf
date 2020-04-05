@@ -8,7 +8,9 @@ if exists("b:current_syntax")
   finish
 endif
 
-if exists("xsh_highlight_all")
+let g:xsh_highlight_all = 1
+
+if exists("g:xsh_highlight_all")
   let xsh_highlight_numbers = 1
   let xsh_highlight_builtins = 1
   let xsh_highlight_exceptions = 1
@@ -18,8 +20,8 @@ endif
 " Include python files goddamn
 let g:python_highlight_all = 1
 let g:python_space_error_highlight = 1
-source $VIMRUNTIME/syntax/python.vim
-unlet! b:current_syntax
+" unlet! b:current_syntax
+" syntax include $VIMRUNTIME/syntax/python.vim
 
 syn keyword xshStatement    as assert break continue del except exec finally
 syn keyword xshStatement    global lambda pass print raise return try with
@@ -60,58 +62,50 @@ syn match xshEscape    "\(\\u\x\{4}\|\\U\x\{8}\)" contained
 
 syn match xshEscape    "\\$"
 
-" if exists("xsh_highlight_numbers")
-  syn match xshNumber    "\<0x\x\+[Ll]\=\>"
-  syn match xshNumber    "\<\d\+[LljJ]\=\>"
-  syn match xshNumber    "\.\d\+\([eE][+-]\=\d\+\)\=[jJ]\=\>"
-  syn match xshNumber    "\<\d\+\.\([eE][+-]\=\d\+\)\=[jJ]\=\>"
-  syn match xshNumber    "\<\d\+\.\d\+\([eE][+-]\=\d\+\)\=[jJ]\=\>"
-" endif
+syn match xshNumber    "\<0x\x\+[Ll]\=\>"
+syn match xshNumber    "\<\d\+[LljJ]\=\>"
+syn match xshNumber    "\.\d\+\([eE][+-]\=\d\+\)\=[jJ]\=\>"
+syn match xshNumber    "\<\d\+\.\([eE][+-]\=\d\+\)\=[jJ]\=\>"
+syn match xshNumber    "\<\d\+\.\d\+\([eE][+-]\=\d\+\)\=[jJ]\=\>"
 
 
-" if exists("xsh_highlight_builtins")
-  syn keyword xshBuiltin    Ellipsis False None NotImplemented True __debug__
-  syn keyword xshBuiltin    __import__ abs all any apply basestring bin bool
-  syn keyword xshBuiltin    buffer bytearray bytes callable chr classmethod
-  syn keyword xshBuiltin    cmp coerce compile complex copyright credits
-  syn keyword xshBuiltin    delattr dict dir divmod enumerate eval execfile
-  syn keyword xshBuiltin    exit file filter float format frozenset getattr
-  syn keyword xshBuiltin    globals hasattr hash help hex id input int intern
-  syn keyword xshBuiltin    isinstance issubclass iter len license list
-  syn keyword xshBuiltin    locals long map max memoryview min next object
-  syn keyword xshBuiltin    oct open ord pow print property quit range
-  syn keyword xshBuiltin    raw_input reduce reload repr reversed round set
-  syn keyword xshBuiltin    setattr slice sorted staticmethod str sum super
-  syn keyword xshBuiltin    tuple type unichr unicode vars xrange zip
-" endif
+syn keyword xshBuiltin    Ellipsis False None NotImplemented True __debug__
+syn keyword xshBuiltin    __import__ abs all any apply basestring bin bool
+syn keyword xshBuiltin    buffer bytearray bytes callable chr classmethod
+syn keyword xshBuiltin    cmp coerce compile complex copyright credits
+syn keyword xshBuiltin    delattr dict dir divmod enumerate eval execfile
+syn keyword xshBuiltin    exit file filter float format frozenset getattr
+syn keyword xshBuiltin    globals hasattr hash help hex id input int intern
+syn keyword xshBuiltin    isinstance issubclass iter len license list
+syn keyword xshBuiltin    locals long map max memoryview min next object
+syn keyword xshBuiltin    oct open ord pow print property quit range
+syn keyword xshBuiltin    raw_input reduce reload repr reversed round set
+syn keyword xshBuiltin    setattr slice sorted staticmethod str sum super
+syn keyword xshBuiltin    tuple type unichr unicode vars xrange zip
 
 
-" if exists("xsh_highlight_exceptions")
-  syn keyword xshException    ArithmeticError AssertionError AttributeError
-  syn keyword xshException    BaseException BufferError BytesWarning
-  syn keyword xshException    DeprecationWarning EOFError EnvironmentError
-  syn keyword xshException    Exception FloatingPointError FutureWarning
-  syn keyword xshException    GeneratorExit IOError ImportError ImportWarning
-  syn keyword xshException    IndentationError IndexError KeyError
-  syn keyword xshException    KeyboardInterrupt LookupError MemoryError
-  syn keyword xshException    NameError NotImplementedError OSError
-  syn keyword xshException    OverflowError PendingDeprecationWarning
-  syn keyword xshException    ReferenceError RuntimeError RuntimeWarning
-  syn keyword xshException    StandardError StopIteration SyntaxError
-  syn keyword xshException    SyntaxWarning SystemError SystemExit TabError
-  syn keyword xshException    TypeError UnboundLocalError UnicodeDecodeError
-  syn keyword xshException    UnicodeEncodeError UnicodeError
-  syn keyword xshException    UnicodeTranslateError UnicodeWarning
-  syn keyword xshException    UserWarning ValueError Warning
-  syn keyword xshException    ZeroDivisionError
-" endif
+syn keyword xshException    ArithmeticError AssertionError AttributeError
+syn keyword xshException    BaseException BufferError BytesWarning
+syn keyword xshException    DeprecationWarning EOFError EnvironmentError
+syn keyword xshException    Exception FloatingPointError FutureWarning
+syn keyword xshException    GeneratorExit IOError ImportError ImportWarning
+syn keyword xshException    IndentationError IndexError KeyError
+syn keyword xshException    KeyboardInterrupt LookupError MemoryError
+syn keyword xshException    ModuleNotFoundError
+syn keyword xshException    NameError NotImplementedError OSError
+syn keyword xshException    OverflowError PendingDeprecationWarning
+syn keyword xshException    ReferenceError RuntimeError RuntimeWarning
+syn keyword xshException    StandardError StopIteration SyntaxError
+syn keyword xshException    SyntaxWarning SystemError SystemExit TabError
+syn keyword xshException    TypeError UnboundLocalError UnicodeDecodeError
+syn keyword xshException    UnicodeEncodeError UnicodeError
+syn keyword xshException    UnicodeTranslateError UnicodeWarning
+syn keyword xshException    UserWarning ValueError Warning
+syn keyword xshException    ZeroDivisionError
 
-
-" if exists("xsh_highlight_space_errors")
-  syn match xshSpaceError    display excludenl "\S\s\+$"ms=s+1
-  syn match xshSpaceError    display " \+\t"
-  syn match xshSpaceError    display "\t\+ "
-" endif
+syn match xshSpaceError    display excludenl "\S\s\+$"ms=s+1
+syn match xshSpaceError    display " \+\t"
+syn match xshSpaceError    display "\t\+ "
 
 hi def link xshComment Comment
 hi def link xshConditional Conditional
@@ -124,30 +118,19 @@ hi def link xshStatement Statement
 hi def link xshString String
 hi def link xshTodo Todo
 
-  " if exists("xsh_highlight_numbers")
 hi def link xshNumber Number
-  " endif
 hi def link xshEnvironmentVariable Number
 
-  " if exists("xsh_highlight_builtins")
 hi def link xshBuiltin Function
-  " endif
-
-  " if exists("xsh_highlight_exceptions")
 hi def link xshException Exception
-  " endif
-
-  " if exists("xsh_highlight_space_errors")
 hi def link xshSpaceError Error
-  " endif
-
 
 " Uncomment the 'minlines' statement line and comment out the 'maxlines'
 " statement line; changes behaviour to look at least 2000 lines previously for
 " syntax matches instead of at most 200 lines
-" syn sync match xshSync grouphere NONE "):$"
+syn sync match xshSync grouphere NONE "):$"
 " syn sync maxlines=200
 "syn sync minlines=2000
 syn sync fromstart
 
-let b:current_syntax = "xsh"
+let b:current_syntax = "xonsh"

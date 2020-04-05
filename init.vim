@@ -1,4 +1,4 @@
-" ============================================================================
+" ============================================================================ 
   " File: init.vim
   " Author: Faris Chugthai
   " Description: Neovim configuration
@@ -68,6 +68,9 @@ function! LoadMyPlugins() abort  " {{{
 
   let g:plug_url = 'https://github.com/%s.git'
   if !exists('plug#load')  | unlet! g:loaded_plug | exec 'source ' . s:repo_root . '/vim-plug/plug.vim' | endif
+
+  if !exists('*stdpath') | echohl WarningMsg | echomsg 'stdpath func does not exist.' | echohl NONE | return | endif
+
   call plug#begin(stdpath('data'). '/plugged')
 
   Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lockfile'}
@@ -80,27 +83,11 @@ function! LoadMyPlugins() abort  " {{{
   Plug 'junegunn/fzf.vim'
   Plug 'junegunn/goyo.vim', {'on': 'Goyo'}
   Plug 'junegunn/vim-peekaboo'
-
-  " NerdTree: {{{
   Plug 'scrooloose/nerdTree', { 'on': ['NERDTreeToggleVCS', 'NERDTreeVCS', 'NERDTreeFind'] }
-  augroup UserNerdLoader
-    autocmd!
-    " Was raising an error according to verbosefile
-    " autocmd VimEnter * silent! autocmd! FileExplorer
-    autocmd BufEnter,BufNew *
-          \  if isdirectory(expand('<amatch>'))
-          \|   call plug#load('nerdTree')
-          \|   execute 'autocmd! UserNerdLoader'
-          \| endif
-
-  augroup END " }}}
-
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
-  " Plug 'tpope/vim-apathy'
   Plug 'tpope/vim-scriptease', {'for': 'vim'}
   Plug 'tpope/vim-surround'
-  " Plug 'tpope/vim-unimpaired'
   Plug 'tpope/vim-eunuch'
 
   Plug 'SirVer/ultisnips'
@@ -139,6 +126,9 @@ function! LoadMyPlugins() abort  " {{{
     Plug 'ludovicchabant/vim-gutentags'
     Plug 'godlygeek/tabular', {'on': 'Tabularize'}
     Plug 'mbbill/undotree', { 'on' : 'UndotreeToggle' }
+    nnoremap U <Cmd>UndoTreeToggle<CR>
+    Plug 'tpope/vim-apathy'
+    Plug 'tpope/vim-unimpaired'
     Plug 'kshenoy/vim-signature'
     Plug 'morhetz/gruvbox'
     Plug 'HerringtonDarkholme/yats.vim'
@@ -146,17 +136,17 @@ function! LoadMyPlugins() abort  " {{{
   Plug 'ryanoasis/vim-devicons'           " Keep at end!
   call plug#end()
 endfunction
+
 call LoadMyPlugins()
+
 " I utilize this command so often I may as well save the characters
 command! -bar Plugins echo map(keys(g:plugs), '"\n" . v:val')
 
 " For some reason running syntax enable clears the syntax option
-let g:syntax_cmd = "enable"
-setl syntax=vim
+let g:syntax_cmd = 'enable'
+
 " in case i started things with -u NONE
-if &loadplugins is 0
-  set loadplugins
-endif
+if &loadplugins is 0 | set loadplugins | endif
 " exec 'py3f ' . s:repo_root . '/python3/_vim.py'
 " }}}
 

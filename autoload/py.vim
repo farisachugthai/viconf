@@ -21,7 +21,7 @@ function! py#PythonPath() abort  " {{{1
   let s:path = '.,,**,'
   let s:user_site = py3eval('site.USER_SITE')
   let s:path .= s:user_site
-  for i in py3eval('sys.path') 
+  for i in py3eval('sys.path')
     let s:path .= i . ','
   endfor
   let &l:path = s:path
@@ -60,11 +60,10 @@ function! py#ALE_Python_Conf() abort  " {{{1
 endfunction  " }}}
 
 function! py#Black() abort  " {{{
-  " let s:0
-  " todo: doesnt work. cant find file sp we raise
+  " TODO: at some point or another should accept ranges as arguments
   let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
   let s:src = s:repo_root . '/python3/pybuffers.py'
-  call py3eval('s:src')
+  exec 'py3file ' . s:src
   py3 from pybuffers import blackened_vim;
   py3 blackened_vim()
 endfunction  " }}}
@@ -150,4 +149,3 @@ function! py#list_snippets() abort  " {{{
   " Doesnt return anything?
   py3 UltiSnips_Manager.list_snippets()
 endfunction  " }}}
-

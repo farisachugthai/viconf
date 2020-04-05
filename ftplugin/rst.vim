@@ -36,9 +36,10 @@ let g:rst_fold_enabled = 1
 if exists('b:did_ftplugin') | finish | endif
 
 source $VIMRUNTIME/ftplugin/rst.vim
+source $VIMRUNTIME/indent/rst.vim
 
-syntax enable
 syntax sync fromstart
+syntax enable
 setlocal textwidth=80
 setlocal expandtab
 setlocal spell!
@@ -73,7 +74,6 @@ setlocal cindent
 setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 setlocal cinkeys-=0#
 setlocal indentkeys-=0#
-setlocal include=^\\s*\\(from\\\|import\\)
 " This really fucks stuff up if you're indenting rst blocks as 3 spaces and
 " python as 4
 setlocal noshiftround
@@ -86,7 +86,7 @@ let &l:path = py#PythonPath()
 
 setlocal comments=fb:.. commentstring=..\ %s
 
-let b:undo_ftplugin = 'setlocal tw< cms< com< cc< lbr< fdl< fdls< '
+let b:undo_ftplugin .= '|setlocal tw< cms< com< cc< lbr< fdl< fdls< '
       \ . '|setlocal spell< wig< isk< kp< mp< efm< sua< sr< '
       \ . '|setlocal cin< cinw< path< '
       \ . '|setlocal include<'
@@ -104,13 +104,38 @@ let b:undo_ftplugin = 'setlocal tw< cms< com< cc< lbr< fdl< fdls< '
 
 if !exists('g:rst_style') || g:rst_style != 0
   setlocal expandtab shiftwidth=3 softtabstop=3 tabstop=8
-  let b:undo_ftplugin .= 'setlocal ts< sw< sts<'
+  let b:undo_ftplugin .= '|setlocal ts< sw< sts<'
 endif
 
 setlocal foldmethod=expr
 setlocal foldexpr=RstFold#GetRstFold()
 setlocal foldtext=RstFold#GetRstFoldText()
 " }}}
+"
+" Automake: {{{
+
+augroup UserAutomake  " {{{
+  au!
+  autocmd FileType rst compiler rst
+  autocmd FileType rst if executable('sphinx-build')
+                    \|   if filereadable('conf.py')
+                    \|     let &l:makeprg = 'sphinx-build -b html . ./build/html'
+                    \|     nnoremap <buffer> <F5> <Cmd>make!<CR>
+                    \|   elseif glob('../conf.py')
+                    \|     let &l:makeprg = 'sphinx-build -b html .. ../../build/html '
+                    \|     nnoremap <buffer> <F5> <Cmd>make!<CR>
+                    \|   else
+                    \|     let &l:makeprg = 'sphinx-build -b html'
+                    \|     nnoremap <buffer> <F5> <Cmd>make!<Space>
+                    \|   endif
+                    \| endif
+
+augroup END  " }}}
+
+" }}}
 
 let b:undo_ftplugin .= '|setlocal fdm< foldexpr< foldtext<'
-                  \ . '|unlet! b:RstFoldCache'
+                  \ .  '|unlet! b:RstFoldCache'
+                  \ .  '|silent! nunmap <buffer> <F5>'
+                  \ .  '|unlet! b:undo_indent'
+                  \ .  '|unlet! b:did_indent'

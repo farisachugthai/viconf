@@ -21,12 +21,13 @@ augroup FZFStatusline  " {{{
   autocmd User FzfStatusLine call s:fzf_statusline()
 augroup END
 
-augroup UserStl
+augroup UserStatusline
   au!
   " i think this is fucking up tagbar.
   au BufEnter * if &filetype != 'tagbar'
                   \| let &statusline = Statusline(0)
                   \| endif
+
 
   autocmd User CocStatusChange,CocDiagnosticChange
         \| if exists('*Statusline')
@@ -72,7 +73,7 @@ function! s:_Statusline(bang, ...) range abort  " {{{
     " Overtakes the whole screen when Termux zooms in
     " Worth noting that %< indicates where to truncate the &stl though
     if &columns > 80
-      let s:tstmp = ' %{strftime("%H:%M %m-%d-%Y", getftime(expand("%:p")))}  '
+      let s:tstmp = '| %{strftime("%H:%M %m-%d-%Y", getftime(expand("%:p")))} |'
       " last modified timestamp
     else
       let s:tstmp = ''
@@ -83,19 +84,20 @@ function! s:_Statusline(bang, ...) range abort  " {{{
   let s:gutentags = '%{exists("g:gutentags_enabled") ? gutentags#statusline() : ""}'
 
   " lines 2, 4, 6, 7
-  let g:statusline = '[%n] '
-                  \. s:VarExists('*WebDevIconsGetFileTypeSymbol', '%{WebDevIconsGetFileTypeSymbol()}')
-                  \. '%< %m%r %y %w '
-                  \. s:VarExists('g:loaded_fugitive', '%{FugitiveStatusline()}')
-                  \. ' %{&ff} ' . s:tstmp
-                  \. s:VarExists('g:did_coc_loaded', ' %{coc#status()} ')
-                  \. s:VarExists('g:coc_git_status', ' %{coc_git_status} ')
-        \. ' %f '
+                  \. ' %f '
+  let g:statusline = '« [%n]: '
+        \. s:VarExists('*WebDevIconsGetFileTypeSymbol', '%{WebDevIconsGetFileTypeSymbol()}')
+        \. '%< %m%r %y %w»'
+        \. s:VarExists('g:loaded_fugitive', '%{FugitiveStatusline()}')
+        \. ' %{&ff} ' . s:tstmp
+        \. s:VarExists('g:did_coc_loaded', ' %{coc#status()} ')
+        \. s:VarExists('g:coc_git_status', ' %{coc_git_status} ')
+        \. '◀ 😀 %f ▶'
         \. s:sep
         \. s:StatusDiagnostic()
-        \. s:VarExists('g:ale_enabled', '[ALE Lints]: %{getbufvar(bufnr(""), "ale_linted", 0)}')
+        \. s:VarExists('g:ale_enabled', '«[ALE Lints]»: # %{getbufvar(bufnr(""), "ale_linted", 0)} | ')
         \. s:gutentags
-        \. s:pos . '%*' . ' %P'
+        \. '«: '. s:pos . '%*' . ' %P »'
 
   if a:bang ==# 1
     redrawstatus!

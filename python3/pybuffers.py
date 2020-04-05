@@ -89,10 +89,8 @@ def vimcmd(fxn):
     return wrapper
 
 
-# Jedi:
-
-
 def py_import_completions():
+    """Initialize jedi.Script and `eval` it."""
     argl = vim.eval("a:argl")
     text = "import %s" % argl
     script = jedi.Script(text, 1, len(text), "", environment=get_environment())
@@ -124,7 +122,6 @@ class PythonToVimStr:
 
 
 class VimError(Exception):
-
     def __init__(self, message, throwpoint, executing):
         super(type(self), self).__init__(message)
         self.message = message
@@ -213,9 +210,9 @@ def _robust_black():
 
 
 def get_mode():
+    """The FileMode not the mode that Vim is in."""
     return black.FileMode(
-        line_length=88,
-        is_pyi=vim.current.buffer.name.endswith(".pyi"),
+        line_length=88, is_pyi=vim.current.buffer.name.endswith(".pyi"),
     )
 
 
@@ -237,6 +234,7 @@ def get_cursors():
 
 
 def blackened_vim():
+    """Currently the main entrypoint."""
     start = time.time()
     new_buffer_str = _robust_black()
     if new_buffer_str is None:
@@ -282,7 +280,6 @@ def get_environment(use_cache=True):
 
 
 def catch_and_print_exceptions(func):
-
     @functools.wraps
     def wrapper(*args, **kwargs):
         try:

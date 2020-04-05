@@ -12,14 +12,23 @@ let g:markdown_fenced_languages = [
       \ 'ini=dosini',
       \ ]
 
+" ensure to keep this around for the ftplugin
+let g:markdown_folding = 1
 let g:markdown_minlines = 500
+
 if &filetype !=# 'markdown' | finish | endif
 
+" other filetypes source this enough that we probably shouldn't do this
+" if exists('b:did_ftplugin') | finish | endif
+
+" I wish this was a reasonable way to source his function but not do the runtime! thing
 source $VIMRUNTIME/ftplugin/markdown.vim
+
 " Wait. the nvim runtime ftplugin is written by tpope...
 " and he didn't `let b:did_ftplugin = 1` at the end of this file?
 " i guess we have to right?
-let b:did_ftplugin = 1
+" OH WAIT! The runtime! html.vim does it for us
+if !exists('b:did_ftplugin') | let b:did_ftplugin = 1 | endif
 
 setlocal comments=fb:*,fb:-,fb:+,n:> 
 " used to be
@@ -30,6 +39,7 @@ setlocal formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\|^[-*+]\\s\\+\\\|^\\[^\\ze[^\\]]\\
 setlocal omnifunc=htmlcomplete#CompleteTags
 
 call htmlcomplete#DetectOmniFlavor()
+
 setlocal conceallevel=2
 
 let b:match_ignorecase = 1
@@ -39,11 +49,13 @@ let b:match_words = '<:>,' .
 \ '<\@<=\([^/][^ \t>]*\)[^>]*\%(>\|$\):<\@<=/\1>'
 
 let b:undo_ftplugin .= "|setl cms< com< fo< flp< ofu< "
-      \ . '|unlet! b:undo_ftplugin'
 
-let b:undo_ftplugin .= 'setl spell< cc< tw< lbr< et< ts< sts< sw< fdl< fdls<'
+let b:undo_ftplugin .= '|setl spell< cc< tw< lbr< et< ts< sts< sw< fdl< fdls<'
       \ . '|unlet! b:undo_ftplugin'
       \ . '|unlet! b:did_ftplugin'
+      \ . '|unlet! b:match_ignorecase'
+      \ . '|unlet! b:match_words'
+
 " Enable spellchecking.
 setlocal spell!
 
@@ -69,11 +81,18 @@ nnoremap <buffer> <Leader>3 m`^i### <esc>``4l
 nnoremap <buffer> <Leader>4 m`^i#### <esc>``5l
 nnoremap <buffer> <Leader>5 m`^i##### <esc>``6l
 
-let b:undo_ftplugin .= '|nunmap <buffer> <Leader>1'
+let b:undo_ftplugin .= '|nunmap <buffer> <Leader>1' 
       \ . '|nunmap <buffer> <Leader>2'
       \ . '|nunmap <buffer> <Leader>3'
       \ . '|nunmap <buffer> <Leader>4'
       \ . '|nunmap <buffer> <Leader>5'
+
+" Here's a few operator pending mappings from steve losh
+onoremap <buffer> ih :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rkvg_"<CR>
+onoremap <buffer> ah :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rg_vk0"<CR>
+
+let b:undo_ftplugin .= '|ounmap <buffer> ih'
+                   \.  '|ounmap <buffer> ah'
 
 " So Vim-markdown doesn't have a  plugin/* dir. So we don't have a
 " g:loaded_vim_markdown var to check. We have to assume vim-plug being used.

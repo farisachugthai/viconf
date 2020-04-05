@@ -11,11 +11,16 @@ if exists('b:did_ftplugin') | finish | endif
 let s:this_dir = fnameescape(fnamemodify(expand('<sfile>'), ':p:h'))
 
 exec 'source ' . s:this_dir . '/python.vim'
+
+" Remember that that sources this
+" source $VIMRUNTIME/ftplugin/python.vim
+" source $VIMRUNTIME/indent/python.vim
 " }}}
 
 " Options: {{{
 " fuck keywordprg all it says is 'trailing characters'
-" setlocal keywordprg=:PydocShow
+setlocal keywordprg=:PydocShow
+setlocal cindent autoindent
 nnoremap <buffer> K <Cmd>PydocShow<CR>
 noremap <buffer> <F5> <Cmd>py3f %<CR>
 noremap! <buffer> <F5> <Cmd>py3f %<CR>
@@ -40,10 +45,11 @@ setlocal foldlevelstart=0
 setlocal suffixesadd=.py,.xsh,.xonshrc,
 setlocal include=^\\s*\\(from\\\|import\\)
 setlocal includeexpr=substitute(v:fname,'\\.','/','g')
-setlocal cms=#\ %s
+setlocal commentstring=#\ %s
 setlocal formatoptions=jcroql
 setlocal expandtab shiftwidth=4 sts=4 ts=4
 setlocal shiftround
+setlocal iskeyword-=_
 " }}}
 
 " Compiler: {{{
@@ -61,9 +67,14 @@ endif
 " }}}
 
 " Atexit: {{{
-let b:undo_ftplugin .= 'setlocal kp< ep< fp< path< syntax< fdls< sua< include< '
+let b:undo_ftplugin .= '|setlocal kp< ep< fp< path< syntax< fdls< sua< include< '
                 \ . '|setlocal includeexpr< cms< fo< et< sw< sts< ts< sr< mp<'
+                \ . '|setlocal isk<'
                 \ . '|unlet! b:undo_ftplugin'
                 \ . '|unlet! b:did_ftplugin'
+                \ . '|unlet! b:current_compiler'
+                \ . '|silent! nunmap <buffer> <F5>'
+                \ . '|silent! unmap <buffer> <F5>'
+                \ . '|silent! nunmap <buffer> K'
 " }}}
 

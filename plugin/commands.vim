@@ -28,6 +28,11 @@ command! TB setl efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=
 
 " Coc Commands: {{{
 
+" FOUND WHERE IT IS IN HIS SOURCE!
+" ~/.local/share/nvim/plugged/coc.nvim/src/plugin.ts : cocAction
+" public async cocAction(...args: any[]): Promise<any> {
+" Like 200 lines of rpc calls. so that'll give you some solid inspiration
+
 command! -bar -bang CocWords execute 'CocList -I --normal --input=' . <bang>0 ? expand('<cWORD>') : expand('<cword>') . ' words'
 
 command! -bang -bar CocRepeat call CocAction('repeatCommand')

@@ -5,15 +5,9 @@
     " Last Modified: Oct 14, 2019
 " ============================================================================
 
-if exists('b:loaded_your_netrw')
-  finish
-endif
-let b:loaded_your_netrw = 1
-
-" Options: {{{1
 " Can be modified interactively using `:NetrwSettings` !!
 
-" UI: {{{2
+" UI: {{{
 " Hide that weird looking banner
 let g:netrw_banner = 0
 
@@ -53,8 +47,9 @@ let g:netrw_errorlvl          = 2
 
 " setlocal statusline=%f\ %{WebDevIconsGetFileTypeSymbol()}\ %h%w%m%r\ %=%(%l,%c%V\ %Y\ %=\ %P%)
 " Uh the official version is throwing too many errors so here it is.
+" }}}
 
-" NetrwStatusLine: {{{2
+" NetrwStatusLine: {{{
 fun! NetrwStatusLine()
 
 " vvv NetrwStatusLine() debugging vvv
@@ -84,13 +79,13 @@ fun! NetrwStatusLine()
   endif
 endfun
 
-
 let &l:stl = NetrwStatusLine()
 
 " From the help
 let g:netrw_bufsettings='noma nomod nobl nowrap ro rnu'
+" }}}
 
-" Window Settings: {{{2
+" Window Settings: {{{
 " WTH! Yes I want this.
   " *g:netrw_usetab*		if this variable exists and is non-zero, then
 				" the <tab> map supporting shrinking/expanding a
@@ -112,8 +107,9 @@ let g:netrw_winsize = 30
 
 " Long as hell but a bool indicating that theres special HL
 let g:netrw_special_syntax    = v:true
+" }}}
 
-" Mappings: {{{1
+" Mappings: {{{
 
 if &filetype !=# 'netrw'
   finish
@@ -154,3 +150,5 @@ augroup UserNetrw
   au!
   au FileExplorer User silent call NetrwUnmaps()
 augroup END
+" }}}
+

@@ -250,8 +250,7 @@ def select(start, end):
             move_cmd += "%iG%i|" % virtual_position(end.line + 1, end.col)
         else:
             move_cmd += "%iG%i|" % virtual_position(end.line + 1, end.col + 1)
-        move_cmd += "o%iG%i|o\\<c-g>" % virtual_position(
-            start.line + 1, start.col + 1)
+        move_cmd += "o%iG%i|o\\<c-g>" % virtual_position(start.line + 1, start.col + 1)
     feedkeys(move_cmd)
 
 

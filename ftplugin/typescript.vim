@@ -7,6 +7,8 @@
 
 if exists('b:did_ftplugin') | finish | endif
 
+" Simple Options: {{{
+
 source $VIMRUNTIME/ftplugin/javascript.vim
 source $VIMRUNTIME/indent/typescript.vim
 
@@ -27,6 +29,8 @@ setlocal includeexpr=includes#TypeScriptIncludeExpression(v:fname,0)
 setlocal suffixesadd+=.ts,.tsx,.d.ts
 setlocal isfname+=@-@
 
+" }}}
+
 " Original: {{{
 " https://gist.githubusercontent.com/romainl/a50b49408308c45cc2f9f877dfe4df0c/raw/1ab8eb733948c0c89d11553cc0e00f4ab251f31e/typescript.vim
 
@@ -35,12 +39,12 @@ if !exists('b:did_typescript_setup')
   let node_modules = finddir('node_modules', '.;', -1)
   if len(node_modules)
     let b:ts_node_modules = map(node_modules, { idx, val -> substitute(fnamemodify(val, ':p'), '/$', '', '')})
-    unlet node_modules
+    unlet! node_modules
   endif
 
   " $PATH: {{{
   if exists('b:ts_node_modules')
-    if $PATH !~ b:ts_node_modules[0]
+    if $PATH !~? b:ts_node_modules[0]
       let $PATH = b:ts_node_modules[0] . ':' . $PATH
     endif
   endif
@@ -52,23 +56,20 @@ if !exists('b:did_typescript_setup')
 
     " Yeah i think it's this one. reading in the file and it might not be utf-8
     try
-    let tsconfig_data = json_decode(join(readfile(b:tsconfig_file)))
-    " catch all Vim errors. thanks help docs
+      let tsconfig_data = json_decode(join(readfile(b:tsconfig_file)))
+      " catch all Vim errors. thanks help docs
     catch /^Vim\%((\a\+)\)\=:E/
     endtry
-
     " TODO: What do we do if this line raises an err
     " let paths = values(map(tsconfig_data.compilerOptions.paths, {key, val -> [
     "             \ glob2regpat(key),
     "             \ substitute(val[0], '\/\*$', '', '')]
     "             \ }))
-
     " for path in paths
     "   let path[1] = finddir(path[1], '.;')
     " endfor
 
     " let b:ts_config_paths = paths
-
     unlet! tsconfig_data
     " unlet paths
   endif
@@ -91,9 +92,14 @@ if !exists('b:did_typescript_setup')
       autocmd BufWritePost <buffer> silent make! <afile> | silent redraw!
     augroup END
   endif
-  " }}}
 
-  " Matchit: {{{
+endif
+" }}}
+
+" }}}
+
+" Matchit: {{{
+if exists('g:loaded_matchit')
   let b:match_words = '\<function\>:\<return\>,'
                   \ . '\<do\>:\<while\>,'
                   \ . '\<switch\>:\<case\>:\<default\>,'
@@ -123,17 +129,19 @@ if !exists("*s:GF")
     endif
   endfunction  " }}}
 endif
-
-" }}}
-
 " }}}
 
 " Theres actually an undo defined in js.vim
-let b:undo_ftplugin .= 'setlocal isf< sua< syntax< et< sts< sw< ts< '
-                \ . '|setlocal inex< def< inc< inde< '
-                \ . '|unlet! b:undo_ftplugin'
-                \ . '|unlet! l:include_expression'
-                \ . '|unlet! b:match_words'
-                \ . '|unlet! b:did_ftplugin'
-                \ . '|unlet! b:undo_indent'
-                \ . '|unlet! b:did_indent'
+let b:undo_ftplugin .='|setlocal isf< sua< syntax< et< sts< sw< ts< '
+                   \. '|setlocal inex< def< inc< inde< '
+                   \. '|unlet! b:undo_ftplugin'
+                   \. '|unlet! l:include_expression'
+                   \. '|unlet! b:match_words'
+                   \. '|unlet! b:did_ftplugin'
+                   \. '|unlet! b:undo_indent'
+                   \. '|unlet! b:did_indent'
+                   \. '|silent! nunmap <buffer> gf'
+                   \. '|silent! xunmap <buffer> gf'
+                   \. '|silent! nunmap <buffer> <C-w><C-f>'
+                   \. '|silent! xunmap <buffer> <C-w><C-f>'
+

@@ -6,6 +6,7 @@
 " ============================================================================
 
 let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
+
 augroup UserHelpandPython " {{{
   au!
   autocmd FileType man,help setlocal number relativenumber
@@ -13,24 +14,12 @@ augroup UserHelpandPython " {{{
         \| wincmd T
         \| endif
 
-  " let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
-  " autocmd FileType python exec 'source ' . s:repo_root . '/ftplugin/python.vim'
-  " autocmd FileType python,xonsh let &l:path = py#PythonPath()
-  " autocmd FileType python,xonsh call py#ALE_Python_Conf()
-
   " Not ready yet. BE CAREFUL and go read :he BufReadCmd and Cmd-events
   " inspired by $VIMRUNTIME/plugin/man.vim
   " autocmd BufReadCmd pydoc:// call pydoc_help#foo(matchstr(expand('<amatch>'), 'pydoc://\zs.*'))
 
-  if exists('*SuperTabChain')
-    autocmd FileType *
-      \ if &omnifunc != ''
-      \|  call SuperTabChain(&omnifunc, "<c-p>")
-      \| else
-      \|  call SuperTabChain(&completefunc, "<c-p>")
-      \| endif
-  endif
-
+  " Honestly idk why this isn't working any other way like wth
+  autocmd FileType python setlocal indentexpr=
   " Here's a solid group to test out on
   " Blocks the UI and jams shit
   " au! CursorHold .xonshrc ++nested exe "silent! psearch " . expand("<cword>")
@@ -109,25 +98,30 @@ augroup UserStl  " {{{
   au CmdwinEnter [/?]  startinsert
 augroup END  " }}}
 
-augroup UserAutomake  " {{{
-  au!
-  autocmd FileType rst compiler rst
-  autocmd FileType rst if executable('sphinx-build')
-                    \|   if filereadable('conf.py')
-                    \|     let &l:makeprg = 'sphinx-build -b html . ./build/html'
-                    \|   elseif glob('../conf.py')
-                    \|     let &l:makeprg = 'sphinx-build -b html .. ../../build/html '
-                    \|   else
-                    \|     let &l:makeprg = 'sphinx-build -b html'
-                    \|   endif
-                    \| endif
+augroup UserNerdLoader  " {{{
+  autocmd!
+  autocmd BufEnter,BufNew *
+        \  if isdirectory(expand('<amatch>'))
+        \|   call plug#load('nerdTree')
+        \|   execute 'autocmd! UserNerdLoader'
+        \| endif
 
-augroup END  " }}}
+augroup END " }}}
 
 augroup UserCompletions   " {{{
   au!
   autocmd BufEnter * if &omnifunc ==# '' | setlocal omnifunc=syntaxcomplete#Complete | endif
 
   autocmd BufEnter * if &completefunc ==# '' | setlocal completefunc=syntaxcomplete#Complete | endif
+
+  if exists('*SuperTabChain')
+    autocmd FileType *
+      \ if &omnifunc != ''
+      \|  call SuperTabChain(&omnifunc, "<c-p>")
+      \| else
+      \|  call SuperTabChain(&completefunc, "<c-p>")
+      \| endif
+  endif
+
 augroup END " }}}
 
