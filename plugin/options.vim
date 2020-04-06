@@ -127,31 +127,25 @@ setglobal synmaxcol=1000
 
 " Todo:
 "g:fugitive_browse_handlers',
+"
+" currently dont have enough tlib stuff to warrant a section
+let g:tlib_extend_keyagents_InputList_s = {
+    \ 10: 'tlib#agent#Down',
+    \ 11: 'tlib#agent#Up'
+    \ }
 " }}}
 
 " Platform Specific Options: {{{
+
 if has('unix')
   call unix#UnixOptions()
-  let g:startify_change_to_dir = 1
-  let g:tagbar_iconchars = ['▷', '◢']
-  let g:startify_change_to_dir = 1
+  if getenv($WSL_DISTRO_NAME)
+    let g:coc_cygqwin_path_prefixes = v:true
+  endif
 else
-  set noshelltemp
-  setglobal sessionoptions+=unix,slash viewoptions+=unix,slash
-
-  " So this HAS to be a bad idea; however, all 3 DirChanged autocommands emit
-  " errors and that's a little insane
-  " Oct 22, 2019: Somehow I've observed literally 0 problems with this and the
-  " error is still emitted when the dir changes soooo
-  setglobal eventignore=DirChanged
-  " XXX: might wanna change this:
-  " let $FZF_DEFAULT_COMMAND = 'rg --hidden -M 200 -m 200 --smart-case --passthru --files . '
-  " let $FZF_DEFAULT_COMMAND = 'fd --hidden --follow -d 6 -t f '
-  unlet! $FZF_DEFAULT_OPTS
-  unlet! $FZF_DEFAULT_COMMAND
-
   call msdos#set_shell_cmd()
 
+  let g:coc_cygqwin_path_prefixes = v:false
   " Find The Ctags Executable:
   if filereadable(expand('$HOME/src/ctags/ctags.exe'))
     let g:tagbar_ctags_bin = expand('$HOME/src/ctags/ctags.exe')
@@ -263,9 +257,7 @@ if !exists('g:black_skip_string_normalization')
   let g:black_skip_string_normalization = 0
 endif
 
-" }}}
-
-" To open ranger when vim load a directory: {{{
+" To open ranger when vim load a directory:
 if exists('g:ranger_replace_netrw') && g:ranger_replace_netrw
   augroup ReplaceNetrwByRangerVim
     autocmd VimEnter * silent! autocmd! FileExplorer
@@ -458,7 +450,7 @@ let g:startify_commands = [
       \ {'b': 'Buffers!'},
       \ {'f': ['FZF! ~', 'FZF! ~'],},
       \ {'g': ['Git status!', 'Gstatus'],},
-      \ {'h': ['Vim Reference', 'h ref'],},
+      \ {'h': ['Vim Reference', 'he index.txt'],},
     \ ]
 
 " Also utilize his skiplist
@@ -525,13 +517,6 @@ let $NVIM_NODE_LOG_LEVEL = 'WARN'
 let $NVIM_NODE_HOST_DEBUG = 1
 let g:coc_jump_locations = []
 let g:node_client_debug = 1
-if !has('unix')
-  let g:coc_cygqwin_path_prefixes = v:false
-else
-  if getenv($WSL_DISTRO_NAME)
-    let g:coc_cygqwin_path_prefixes = v:true
-  endif
-endif
 
 function! s:Init_coc() abort
 
@@ -545,17 +530,9 @@ function! s:Init_coc() abort
     " call coc#util#install_extension(l:ext)
   " endfor
 
-  if has('unix')
-    call coc#config('languageserver', {'clangd': { 'args':
-                    \ ['--background-index' ], 'command': 'clangd', 'filetypes': [ 'c', 'cpp',
-                    \ 'objc', 'objcpp' ], 'rootPatterns': [ 'compile_flags.txt',
-                    \ 'compile_commands.json', '.git/' ], 'shell': 'true' }})
-  else
-    " Now find node:
     if executable('C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\node.exe')
       let g:coc_node_path = 'C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\node.exe'
     endif
-  endif
 
   if empty($ANDROID_DATA)
     call coc#config('python.jediEnabled', v:false)
@@ -566,12 +543,26 @@ function! s:Init_coc() abort
     let g:coc_node_path = expand('$PREFIX/bin/node')
   endif
 
-  call coc#config('languageserver', {'bash': {'args': [ 'start' ], 'command': 'bash-language-server', 'filetypes': ['sh', 'bash']}})
+  call coc#config('languageserver',
+                  \ {'bash':
+                  \ {'args': [ 'start' ],
+                  \ 'command': 'bash-language-server',
+                  \ 'filetypes': ['sh', 'bash']}})
 
-  call coc#config('languageserver', { 'vimlsp': {'args': ['--stdio'],'command': 'vim-language-server','filetypes': ['vim' ],
-          \ 'initializationOptions': {'diagnostic': { 'enable': v:true }, 'indexes': { 'count': 3, 'gap': 100, 'runtimepath': v:true,
-          \ 'workDirPatterns': [ '.git', 'autoload', 'plugin']}, 'iskeyword': '@,48-57,_,192-255,-#', 'runtimepath': v:false,
-          \ 'suggest': { 'fromRuntimepath': v:false, 'fromVimruntime': v:true }, 'vimruntime': '$VIMRUNTIME' } } })
+  call coc#config('languageserver',
+                  \ { 'vimlsp':
+                  \ {'args': ['--stdio'],
+                  \ 'command': 'vim-language-server',
+                  \ 'filetypes': ['vim' ],
+                  \ 'initializationOptions':
+                  \ {'diagnostic': { 'enable': v:true },
+                  \ 'indexes': { 'count': 3, 'gap': 100, 'runtimepath': v:true,
+                  \ 'workDirPatterns':
+                  \ [ '.git', 'autoload', 'plugin']},
+                  \ 'iskeyword': '@,48-57,_,192-255,-#', 'runtimepath': v:false,
+                  \ 'suggest': { 'fromRuntimepath': v:false, 'fromVimruntime': v:true },
+                  \ 'vimruntime': '$VIMRUNTIME'}
+                  \ }})
 
 endfunction
 

@@ -33,6 +33,8 @@ command! TB setl efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=
 " public async cocAction(...args: any[]): Promise<any> {
 " Like 200 lines of rpc calls. so that'll give you some solid inspiration
 
+command! -bar CocQuickFixes echo CocAction('quickfixes')
+
 command! -bar -bang CocWords execute 'CocList -I --normal --input=' . <bang>0 ? expand('<cWORD>') : expand('<cword>') . ' words'
 
 command! -bang -bar CocRepeat call CocAction('repeatCommand')
@@ -43,8 +45,8 @@ command! -bang -bar CocReferences call CocAction('jumpReferences')
 " input=arg else expand(cword)
 command! -bar -bang CocGrep execute 'CocList -I --input=' . expand('<cword>') . ' grep'
 
-" Dec 05, 2019: Got a new one for ya!
-command! -bang -bar CocExtensionStats py3 from pprint import pprint; pprint(vim.eval('CocAction("extensionStats")'))
+" Dec 05, 2019: Got a new one for ya! Range doesnt do anything but py3 accepts it so
+command! -bang -bar -range CocExtensionStats <line1>,<line2>py3 from pprint import pprint; pprint(vim.eval('CocAction("extensionStats")'))
 
 " Let's group these together by prefixing with Coc
 " Use `:Format` to format current buffer
@@ -54,7 +56,7 @@ command! -bar -bang CocFormat call CocActionAsync('format')
 command! -bar -bang CocDiagnostic call CocActionAsync('diagnosticInfo')
 
 " Use `:Fold` to fold current buffer
-command! -bang -nargs=? CocFold :setlocal fdm=manual | call CocActionAsync('fold', <f-args>)
+command! -bang -nargs=? CocFold setlocal fdm=manual | call CocActionAsync('fold', <f-args>)
 
 " use `:OR` for organize import of current buffer
 command! -bang -bar CocSort call CocActionAsync('runCommand', 'editor.action.organizeImport')
@@ -387,7 +389,7 @@ command! -bang -bar PydocThis call pydoc_help#PydocCword(<bang>0, expand(<cword>
 " separate window like fzf does.
 " NOTE: See :he func-range to see how range can get passed automatically to
 " functions without being specified in the command definition
-command! -range -bang -nargs=? -bar -complete=expression -complete=function Pydoc call pydoc_help#Pydoc(<q-mods>, <bang>0)
+command! -range -bang -nargs=? -bar -complete=expression -complete=function Pydoc call pydoc_help#Pydoc(<f-args>, <bang>0)
 
 " command! -bar -bang -range PydocSp
 "       \ exec '<mods>split<bang>:python3 import pydoc'.expand('<cWORD>').'; pydoc.help('.expand('<cWORD>').')'

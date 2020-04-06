@@ -16,11 +16,6 @@ let g:markdown_fenced_languages = [
 let g:markdown_folding = 1
 let g:markdown_minlines = 500
 
-if &filetype !=# 'markdown' | finish | endif
-
-" other filetypes source this enough that we probably shouldn't do this
-" if exists('b:did_ftplugin') | finish | endif
-
 " I wish this was a reasonable way to source his function but not do the runtime! thing
 source $VIMRUNTIME/ftplugin/markdown.vim
 
@@ -30,7 +25,7 @@ source $VIMRUNTIME/ftplugin/markdown.vim
 " OH WAIT! The runtime! html.vim does it for us
 if !exists('b:did_ftplugin') | let b:did_ftplugin = 1 | endif
 
-setlocal comments=fb:*,fb:-,fb:+,n:> 
+setlocal comments=fb:*,fb:-,fb:+,n:>
 " used to be
 " commentstring=>\ %s
 setlocal commentstring=<!--%s-->
@@ -43,12 +38,14 @@ call htmlcomplete#DetectOmniFlavor()
 setlocal conceallevel=2
 
 let b:match_ignorecase = 1
-let b:match_words = '<:>,' .
-\ '<\@<=[ou]l\>[^>]*\%(>\|$\):<\@<=li\>:<\@<=/[ou]l>,' .
-\ '<\@<=dl\>[^>]*\%(>\|$\):<\@<=d[td]\>:<\@<=/dl>,' .
-\ '<\@<=\([^/][^ \t>]*\)[^>]*\%(>\|$\):<\@<=/\1>'
+if !exists('b:match_words') | let b:match_words = '' | endif
 
-let b:undo_ftplugin .= "|setl cms< com< fo< flp< ofu< "
+let b:match_words .= ',<:>,<.\{-}>:<[^>]*>,'
+      \. '<\@<=[ou]l\>[^>]*\%(>\|$\):<\@<=li\>:<\@<=/[ou]l>,'
+      \. '<\@<=dl\>[^>]*\%(>\|$\):<\@<=d[td]\>:<\@<=/dl>,'
+      \. '<\@<=\([^/][^ \t>]*\)[^>]*\%(>\|$\):<\@<=/\1>'
+
+let b:undo_ftplugin .= '|setl cms< com< fo< flp< ofu< '
 
 let b:undo_ftplugin .= '|setl spell< cc< tw< lbr< et< ts< sts< sw< fdl< fdls<'
       \ . '|unlet! b:undo_ftplugin'
@@ -73,7 +70,7 @@ setlocal foldlevelstart=0
 setlocal foldexpr=format#MarkdownFoldText()
 setlocal foldmethod=expr
 
-let b:undo_ftplugin .= "|setlocal foldexpr< foldmethod<"
+let b:undo_ftplugin .= '|setlocal foldexpr< foldmethod<'
 
 nnoremap <buffer> <Leader>1 m`yypVr=``
 nnoremap <buffer> <Leader>2 m`yypVr-``
@@ -81,25 +78,25 @@ nnoremap <buffer> <Leader>3 m`^i### <esc>``4l
 nnoremap <buffer> <Leader>4 m`^i#### <esc>``5l
 nnoremap <buffer> <Leader>5 m`^i##### <esc>``6l
 
-let b:undo_ftplugin .= '|nunmap <buffer> <Leader>1' 
-      \ . '|nunmap <buffer> <Leader>2'
-      \ . '|nunmap <buffer> <Leader>3'
-      \ . '|nunmap <buffer> <Leader>4'
-      \ . '|nunmap <buffer> <Leader>5'
+let b:undo_ftplugin .= '|silent! nunmap <buffer> <Leader>1'
+      \ . '|silent! nunmap <buffer> <Leader>2'
+      \ . '|silent! nunmap <buffer> <Leader>3'
+      \ . '|silent! nunmap <buffer> <Leader>4'
+      \ . '|silent! nunmap <buffer> <Leader>5'
 
 " Here's a few operator pending mappings from steve losh
 onoremap <buffer> ih :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rkvg_"<CR>
 onoremap <buffer> ah :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rg_vk0"<CR>
 
-let b:undo_ftplugin .= '|ounmap <buffer> ih'
-                   \.  '|ounmap <buffer> ah'
+let b:undo_ftplugin .= '|silent! ounmap <buffer> ih'
+                   \.  '|silent! ounmap <buffer> ah'
 
 " So Vim-markdown doesn't have a  plugin/* dir. So we don't have a
 " g:loaded_vim_markdown var to check. We have to assume vim-plug being used.
 " Don't freak out a bare nvim config though.
-if !exists('plugs') | finish | endif
+if !exists('g:plugs') | finish | endif
 
-if has_key(plugs, 'vim-markdown')
+if has_key(g:plugs, 'vim-markdown')
 
   " dude this makes shit so slow
   let g:vim_markdown_folding_style_pythonic = 0
@@ -118,4 +115,3 @@ if has_key(plugs, 'vim-markdown')
   endif
 
 endif
-

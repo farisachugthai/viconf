@@ -21,8 +21,10 @@ set cpoptions&vim
 				" positives.
 let g:compiler_gcc_ignore_unmatched_lines = 1
 
-syntax enable
+source $VIMRUNTIME/ftplugin/c.vim
+source $VIMRUNTIME/indent/c.vim
 syn sync fromstart
+syntax enable
 setlocal foldmethod=syntax
 setlocal suffixesadd=.c,.h,.cpp
 setlocal cindent
@@ -33,7 +35,7 @@ if filereadable('Makefile')
 elseif executable('gcc')  " Because of windows
   compiler gcc
   setlocal makeprg=gcc\ %<.o
-  echomsg 'after/ftplugin/c.vim: Using gcc as the compiler'
+  echomsg 'ftplugin/c.vim: Using gcc as the compiler'
 elseif executable('nmake')
   compiler msvc
 endif
@@ -42,7 +44,8 @@ if exists(':Man') == 2
   setlocal keywordprg=:Man
 endif
 
-setlocal omnifunc=ccomplete#Complete
+" now defined from ftplugin
+" setlocal omnifunc=ccomplete#Complete
 " }}}
 
 " Path: {{{
@@ -54,7 +57,7 @@ setlocal include=^\s*#\s*include
 " setlocal cinwords cinkeys etc etc
 let &l:path=includes#CPath()
 
-let b:undo_ftplugin = 'setlocal sua< cin< mp< ofu< kp< include<'
+let b:undo_ftplugin .= '|setlocal sua< cin< mp< ofu< kp< include<'
       \ . '|unlet! &l:path'
       \ . '|unlet! b:undo_ftplugin'
 " }}}
@@ -62,7 +65,10 @@ let b:undo_ftplugin = 'setlocal sua< cin< mp< ofu< kp< include<'
 " Mappings: {{{
 nnoremap <buffer> <F5> :call ftplugins#ClangCheck()<CR><CR>
 
-let b:undo_ftplugin .= 'nunmap <buffer> <F5>'
+nnoremap <buffer> <Leader>ef <Cmd>py3file expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
+
+let b:undo_ftplugin .= '|silent! nunmap <buffer> <F5>'
+      \. '|silent nunmap  <buffer> <Leader>ef'
 
 " Idk why <CR> is  there twice and idk if it was a typo on the part of the
 " Clang people but its in their official documentation..

@@ -150,3 +150,8 @@ function! vimscript#fzf_scriptnames(bang) abort  " {{{
 
 endfunction
 " }}}
+
+function vimscript#GetPID() abort  " {{{
+
+  return nvim_get_proc(getpid())
+endfunction  " }}}

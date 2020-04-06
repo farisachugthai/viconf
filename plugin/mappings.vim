@@ -122,6 +122,8 @@ function! AddVileBinding(key, handler)  " {{{
   exec 'inoremap ' . a:key a:handler
   " I think tnoremap makes more sense here.
   exec 'tnoremap ' . a:key a:handler
+  " wait why did i get rid of cnoremap
+  exec 'cnoremap ' . a:key a:handler
 
 endfunction
 
@@ -438,6 +440,14 @@ nnoremap ,. <Plug>(coc-command-repeat)<CR>
 
 " Autofix problem of current line
 nnoremap ,q  <Plug>(coc-fix-current)<CR>
+
+" doQuickFixes
+nnoremap ,p <Cmd>CocFixCurrent<CR>
+
+nnoremap ,z <Cmd>CocFloatHide<CR>
+
+nnoremap ,y <Cmd>CocFloatJump<CR>
+
 " }}}
 
 " }}}
@@ -519,26 +529,27 @@ function! Quickfix_Mappings() abort  " {{{
 
   nnoremap <Leader>C <Cmd>make %<CR>
 
-" Unimpaired Mappings: {{{
-" Map quickfix list, buffers, windows and tabs to *[ and *]
-" Note: A bunch more in ./tag_miscellany.vim
-nnoremap ]q <Cmd>cnext<CR>
-nnoremap [q <Cmd>cprev<CR>
-nnoremap ]Q <Cmd>clast<CR>
-nnoremap [Q <Cmd>cfirst<CR>
-nnoremap ]l <Cmd>lnext<CR>
-nnoremap [l <Cmd>lprev<CR>
-nnoremap ]L <Cmd>llast<CR>
-nnoremap [L <Cmd>lfirst<CR>
+  " Unimpaired Mappings: {{{
+  " Map quickfix list, buffers, windows and tabs to *[ and *]
+  " Note: A bunch more in ./tag_miscellany.vim
+  nnoremap ]q <Cmd>cnext<CR>
+  nnoremap [q <Cmd>cprev<CR>
+  nnoremap ]Q <Cmd>clast<CR>
+  nnoremap [Q <Cmd>cfirst<CR>
+  nnoremap ]l <Cmd>lnext<CR>
+  nnoremap [l <Cmd>lprev<CR>
+  nnoremap ]L <Cmd>llast<CR>
+  nnoremap [L <Cmd>lfirst<CR>
 
-" Unrelated but cmdline
-" It's annoying you lose a whole command from a typo
-cnoremap <Esc> <nop>
-" However I still need the functionality
-cnoremap <C-g> <Esc>
-" Avoid accidental hits of <F1> while aiming for <Esc>
-noremap! <F1> <Esc>
-" }}}
+  " Unrelated but cmdline
+  " It's annoying you lose a whole command from a typo
+  cnoremap <Esc> <nop>
+  " However I still need the functionality
+  cnoremap <C-g> <Esc>
+  " Avoid accidental hits of <F1> while aiming for <Esc>
+  noremap! <F1> <Esc>
+  " }}}
+
 endfunction  " }}}
 
 function! AltKeyNavigation() abort  " {{{
@@ -574,12 +585,15 @@ function! Buffer_Mappings() abort  " {{{
   " Also note I wrote a Buffers command that utilizes fzf.
   nnoremap <Leader>bb <Cmd>Buffers<CR>
   nnoremap <Leader>bd <Cmd>bdelete<CR>
+  nnoremap <Leader>ba <Cmd>ball<CR>
   " like quit
   nnoremap <Leader>bq <Cmd>bdelete!<CR>
   " like eXit
   nnoremap <Leader>bx <Cmd>bwipeout<CR>
+  nnoremap <Leader>bf <Cmd>bfirst<CR>
+  nnoremap <Leader>bl <Cmd>blast<CR>
   nnoremap <Leader>bu <Cmd>bunload<CR>
-  nnoremap <Leader>bm <Cmd>bm<CR>
+  nnoremap <Leader>bm <Cmd>bmodified<CR>
   nnoremap <Leader>bn <Cmd>bnext<CR>
   nnoremap <Leader>bp <Cmd>bprev<CR>
   nnoremap <Leader>b0 <Cmd>bfirst<CR>
@@ -587,7 +601,7 @@ function! Buffer_Mappings() abort  " {{{
   " aka yank the whole buffer
   nnoremap <Leader>by <Cmd>"+%y<CR>
   " and then paste it
-  nnoremap <Leader>bp <Cmd>"+gp<CR>
+  nnoremap <Leader>bP <Cmd>"+gp<CR>
   " Sunovabitch bonly isn't a command?? Why is
   " noremap <Leader>bo <Cmd>bonly<CR>
 

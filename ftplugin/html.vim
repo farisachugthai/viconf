@@ -24,7 +24,7 @@ setlocal softtabstop=2
 setlocal suffixesadd=.html
 
 " So this is from |ft-html-omni| I don't know if that call is necessary
-if &ofu ==# ''
+if &omnifunc ==# ''
   setlocal omnifunc=htmlcomplete#CompleteTags
 endif
 

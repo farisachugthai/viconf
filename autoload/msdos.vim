@@ -11,6 +11,18 @@ function! msdos#set_shell_cmd() abort  " {{{1
   " i've noticed ALE needing shelltemp set
   setglobal shelltemp
   " set shellcmdflag=/s\ /c
+  setglobal sessionoptions+=unix,slash viewoptions+=unix,slash
+
+  " So this HAS to be a bad idea; however, all 3 DirChanged autocommands emit
+  " errors and that's a little insane
+  " Oct 22, 2019: Somehow I've observed literally 0 problems with this and the
+  " error is still emitted when the dir changes soooo
+  setglobal eventignore=DirChanged
+  " XXX: might wanna change this:
+  " let $FZF_DEFAULT_COMMAND = 'rg --hidden -M 200 -m 200 --smart-case --passthru --files . '
+  " let $FZF_DEFAULT_COMMAND = 'fd --hidden --follow -d 6 -t f '
+  unlet! $FZF_DEFAULT_OPTS
+  unlet! $FZF_DEFAULT_COMMAND
   " TODO: Figure out if this wasn't a terrible idea. Maybe need to simply
   " modify our invocations of system commands.
 	" Dude don't fucking turn /U ON
@@ -73,7 +85,7 @@ function! msdos#pwsh_help(helppage) abort   " {{{1
   echomsg 'Note that shell was not restored'
 endfunction  " }}}
 
-function! msdos#set_bash() abort
+function! msdos#set_bash() abort  " {{{
 
 " Uh this does not work.
 if has('Win32')
@@ -87,4 +99,4 @@ if has('Win32')
  let &shellpipe='2>&1| tee'
 endif
 
-endfunction
+endfunction  " }}}

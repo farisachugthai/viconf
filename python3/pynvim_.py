@@ -19,23 +19,23 @@ afternoon and I don't feel like it.
 Extended Summary
 ----------------
 
-# ) Actually not in pynvim but a `get_documentation` function I always find useful.
+#) Actually not in pynvim but a `get_documentation` function I always find useful.
 
-# ) pynvim/util because that has no internal dependencies.
+#) pynvim/util because that has no internal dependencies.
 
-# ) then compat
+#) then compat
 
-# ) Then plugin/decorators.
+#) Then plugin/decorators.
 
-# ) api/nvim
+#) api/nvim
 
-# ) plugin/scripthost
+#) plugin/scripthost
 
-# ) api/buffers
+#) api/buffers
 
-# ) msgpack_rpc.__init__
+#) msgpack_rpc.__init__
 
-# ) api/common
+#) api/common
 
 Notes
 -----
@@ -51,20 +51,23 @@ from pynvim.msgpack_rpc.msgpack_stream import MsgpackStream
 from pynvim.msgpack_rpc.async_session import AsyncSession
 from pynvim.api import Window, Tabpage
 from msgpack import unpackb, ExtType
-import abc
+# import abc
+# from collections import namedtuple
 import codecs
 import functools
 import imp
+import importlib
 import inspect
 import io
 import logging
 import os
 import platform
-import shlex
+# import shlex
 import sys
 import threading
 import warnings
 from imp import find_module as original_find_module
+from io import StringIO
 from traceback import format_exception, format_stack
 
 if sys.version_info >= (3, 4):
@@ -73,7 +76,7 @@ if sys.version_info >= (3, 4):
 try:
     global vim
 
-    import pyuv
+    import pyuv  # noqa
 except ImportError:
     from pynvim.msgpack_rpc.event_loop import EventLoop
 else:
@@ -93,6 +96,7 @@ debug, info, warn = (
     logger.warning,
 )
 
+# There is no 'long' type in Python3 just int
 long = int
 unicode_errors_default = "surrogateescape"
 
@@ -117,10 +121,7 @@ def get_documentation(word):
         else:
             get_documentation(mod)
     sys.stdout, out = _, sys.stdout.getvalue()
-    sys.stdout, out = _, sys.stdout.getvalue()
-
-
-# There is no 'long' type in Python3 just int
+    print(out)
 
 
 def format_exc_skip(skip=1, limit=None, exception=None):
@@ -1295,7 +1296,7 @@ def path_hook(nvim):
         idx = oldtail.find(".")
         if idx > 0:
             name = oldtail[:idx]
-            tail = oldtail[idx + 1 :]
+            tail = oldtail[idx + 1:]
             fmr = imp.find_module(name, path)
             module = imp.find_module(fullname[: -len(oldtail)] + name, *fmr)
             return _find_module(fullname, tail, module.__path__)
@@ -1383,6 +1384,9 @@ class Buffer(Remote):
         # it doesnt seem like we have a 2 way channel for communication
         # so define it here.
         self.valid = valid if valid is not None else self.request("nvim_buf_is_valid")
+        self.session = session
+        self.code_data = code_data
+
 
     def __len__(self):
         """Return the number of lines contained in a Buffer."""
@@ -1565,7 +1569,7 @@ class Range(object):
             start = self.start
         if end is None:
             end = self.end
-        self._buffer[start : end + 1] = lines
+        self._buffer[start: end + 1] = lines
 
     def __iter__(self):
         for i in range(self.start, self.end + 1):
@@ -1665,12 +1669,15 @@ class RemoteApi(object):
 
 
 def transform_keyerror(exc):
+    # Im very confident that this is not how you do this
     if isinstance(exc, NvimError):
         if exc.args[0].startswith("Key not found:"):
-            return KeyError(exc.args[0])
+            raise AttributeError
+        #     return KeyError(exc.args[0])
         if exc.args[0].startswith("Invalid option name:"):
-            return KeyError(exc.args[0])
-    return exc
+            raise KeyError
+        #     return KeyError(exc.args[0])
+    # return exc
 
 
 class RemoteMap(object):
@@ -1760,6 +1767,8 @@ class RemoteSequence(object):
         method
         """
         self._fetch = functools.partial(session.request, method)
+        self.session = session
+        self.method = method
 
     def __len__(self):
         """Return the length of the remote sequence."""
@@ -1769,7 +1778,7 @@ class RemoteSequence(object):
         """Return a sequence item by index."""
         if not isinstance(idx, slice):
             return self._fetch()[idx]
-        return self._fetch()[idx.start : idx.stop]
+        return self._fetch()[idx.start: idx.stop]
 
     def __iter__(self):
         """Return an iterator for the sequence."""

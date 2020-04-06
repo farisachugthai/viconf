@@ -143,8 +143,7 @@ call LoadMyPlugins()
 command! -bar Plugins echo map(keys(g:plugs), '"\n" . v:val')
 
 " For some reason running syntax enable clears the syntax option
-let g:syntax_cmd = 'enable'
-
+let g:syntax_cmd = "enable"
 " in case i started things with -u NONE
 if &loadplugins is 0 | set loadplugins | endif
 " exec 'py3f ' . s:repo_root . '/python3/_vim.py'

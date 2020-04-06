@@ -78,7 +78,7 @@ endfunction  " }}}
 function! format#ClangCheck()  abort  " {{{
 
   let l:filename = expand('%')
-  if l:filename =~ '\.\(cpp\|cxx\|cc\|c\)$'
+  if l:filename =~# '\.\(cpp\|cxx\|cc\|c\)$'
     call format#ClangCheckImpl('clang-check ' . l:filename)
   elseif exists('g:clang_check_last_cmd')
     call format#ClangCheckImpl(g:clang_check_last_cmd)
@@ -95,7 +95,4 @@ function! format#FormatFile() abort  " {{{
   if filereadable('C:/tools/vs/2019/Community/VC/Tools/Llvm/bin/clang-format.exe')
     let g:clang_format_path = 'C:/tools/vs/2019/Community/VC/Tools/Llvm/bin/clang-format.exe'
   endif
-
-  nnoremap <Leader>ef <Cmd>py3file expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
-
 endfunction  " }}}

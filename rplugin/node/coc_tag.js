@@ -1,25 +1,25 @@
 // @ts-ignore
-const {sources, workspace} = require("coc.nvim");
+const { sources, workspace } = require("coc.nvim");
 const path = require("path");
 const fs = require("fs");
 const util = require("util");
 const readline = require("readline");
 
 const TAG_CACHE = {};
-const {nvim} = workspace;
+const { nvim } = workspace;
 
 async function getTagFiles() {
   let files = await nvim.call("tagfiles");
   if (!files || files.length == 0) return [];
   let cwd = await nvim.call("getcwd");
-  files = files.map(f => {
+  files = files.map((f) => {
     return path.isAbsolute(f) ? f : path.join(cwd, f);
   });
   let tagfiles = [];
   for (let file of files) {
     let stat = await util.promisify(fs.stat)(file);
     if (!stat || !stat.isFile()) continue;
-    tagfiles.push({file, mtime: stat.mtime});
+    tagfiles.push({ file, mtime: stat.mtime });
   }
   return tagfiles;
 }
@@ -28,10 +28,10 @@ function readFileByLine(fullpath, onLine, limit = 50000) {
   const rl = readline.createInterface({
     input: fs.createReadStream(fullpath),
     crlfDelay: Infinity,
-    terminal: false
+    terminal: false,
   });
   let n = 0;
-  rl.on("line", line => {
+  rl.on("line", (line) => {
     n = n + 1;
     if (n === limit) {
       rl.close();
@@ -51,7 +51,7 @@ async function loadTags(fullpath, mtime) {
   let item = TAG_CACHE[fullpath];
   if (item && item.mtime >= mtime) return item.words;
   let words = new Map();
-  await readFileByLine(fullpath, line => {
+  await readFileByLine(fullpath, (line) => {
     if (line[0] == "!") return;
     let ms = line.split(/\t\s*/);
     if (ms.length < 2) return;
@@ -60,23 +60,23 @@ async function loadTags(fullpath, mtime) {
     wordItem.push(path);
     words.set(word, wordItem);
   });
-  TAG_CACHE[fullpath] = {words, mtime};
+  TAG_CACHE[fullpath] = { words, mtime };
   return words;
 }
 
-exports.activate = context => {
+exports.activate = (context) => {
   context.subscriptions.push(
     sources.createSource({
       name: "tags",
       shortcut: "Coc-Tag",
       priority: 3,
       doComplete: async function (opt) {
-        let {input} = opt;
+        let { input } = opt;
         if (input.length == 0) return null;
         let tagfiles = await getTagFiles();
         if (!tagfiles || tagfiles.length == 0) return null;
         let list = await Promise.all(
-          tagfiles.map(o => loadTags(o.file, o.mtime))
+          tagfiles.map((o) => loadTags(o.file, o.mtime))
         );
         let items = [];
         for (let words of list) {
@@ -90,13 +90,13 @@ exports.activate = context => {
             }
             items.push({
               word,
-              info: infoList.join("\n")
+              info: infoList.join("\n"),
             });
           }
         }
 
-        return {items};
-      }
+        return { items };
+      },
     })
   );
 };

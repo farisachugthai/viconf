@@ -39,6 +39,7 @@ endif
 
 let &l:path = py#PythonPath()
 setlocal syntax=xonsh
+setlocal cindent autoindent
 syntax sync fromstart
 syntax enable
 setlocal foldlevelstart=0
@@ -65,6 +66,8 @@ else
   echomsg 'Using pylint as a compiler!'
 endif
 " }}}
+
+call py#ALE_Python_Conf()
 
 " Atexit: {{{
 let b:undo_ftplugin .= '|setlocal kp< ep< fp< path< syntax< fdls< sua< include< '

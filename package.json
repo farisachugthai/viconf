@@ -10,10 +10,10 @@
   },
   "scripts": {
     "lint": "yarn run tslint --fix **.ts",
-    "fix": "yarn run prettier rplugin/node",
+    "fix": "yarn run prettier --write rplugin/node",
     "tagfunc": "./rplugin/node/coc_tag.js",
     "watch": "yarn run tsc -w rplugin/node",
-    "build": "yarn run rimraf ./out && yarn run webpack",
+    "build": "yarn run webpack",
     "start": "yarn run vim-language-server --stdio"
   },
   "main": "rplugin/node/coc_tag.js",
@@ -39,6 +39,8 @@
   ],
   "version": "1.0.0",
   "devDependencies": {
+    "@types/node": "^13.11.0",
+    "@types/vscode": "^1.43.0",
     "coc-dictionary": "^1.2.2",
     "coc-highlight": "latest",
     "coc-html": ">=1.2.1",
@@ -48,6 +50,14 @@
     "coc-snippets": ">=2.1.18",
     "coc-tsserver": ">=1.4.9",
     "coc-vimlsp": "^0.5.0",
-    "coc-yank": ">=1.1.3"
+    "coc-yank": ">=1.1.3",
+    "prettier": "^2.0.4",
+    "tslint": "^6.1.1",
+    "typescript": "^3.8.3",
+    "vim-language-server": "^1.5.2",
+    "webpack-cli": "^3.3.11"
+  },
+  "peerDependencies": {
+    "webpack": "^4.42.1"
   }
 }

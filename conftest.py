@@ -10,7 +10,8 @@ import pynvim
 
 pynvim.setup_logging("test")
 
-# @pytest.fixture(scope="session", autouse=True)
+
+@pytest.fixture(scope="session", autouse=True)
 def env(listen_addr=None):
     # Context manager for env
     env = os.environ.copy()

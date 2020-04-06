@@ -5,7 +5,34 @@
   " Last Modified: Oct 27, 2019
 " ============================================================================
 
+scriptencoding utf8
+
+function! s:tmux_enabled()
+  " From fzf.vim
+  if has('gui_running') || !exists('$TMUX')
+    return 0
+  endif
+
+  if exists('s:tmux')
+    return s:tmux
+  endif
+
+  let s:tmux = 0
+  if !executable(s:fzf_tmux)
+    if executable('fzf-tmux')
+      let s:fzf_tmux = 'fzf-tmux'
+    else
+      return 0
+    endif
+  endif
+
+  let l:output = system('tmux -V')
+  let s:tmux = !v:shell_error && l:output >=? 'tmux 1.7'
+  return s:tmux
+endfunction
+
 function! unix#tmux_send(content, dest) abort  " {{{ tmux send:
+  if !s:tmux_enabled() | return | endif
   " URL: https://gist.github.com/junegunn/2f271e4cab544e86a37e239f4be98e74
   let l:dest = empty(a:dest) ? input('To which pane? ') : a:dest
   let l:tempfile = tempname()
@@ -20,8 +47,9 @@ endfunction
 " }}}
 
 function! unix#tmux_map(key, dest) abort " Tmux Map: {{{
-  execute printf('nnoremap <silent> %s "tyy:call <SID>tmux_send(@t, "%s")<cr>', a:key, a:dest)
-  execute printf('xnoremap <silent> %s "ty:call <SID>tmux_send(@t, "%s")<cr>gv', a:key, a:dest)
+  if !s:tmux_enabled() | return | endif
+  execute printf('nnoremap <silent> %s "tyy:call unix#tmux_send(@t, "%s")<cr>', a:key, a:dest)
+  execute printf('xnoremap <silent> %s "ty:call unix#tmux_send(@t, "%s")<cr>gv', a:key, a:dest)
 endfunction
 " }}}
 
@@ -30,16 +58,25 @@ function! unix#UnixOptions() abort   " {{{
   " we're using
 
     if filereadable('/usr/share/dict/words')
-      set dictionary+=/usr/share/dict/words
+      setglobal dictionary+=/usr/share/dict/words
     endif
 
     if isdirectory(expand('$_ROOT/local/include/'))
-        let &path = &path . ',' . expand('$_ROOT/local/include')
+        let &g:path = &path . ',' . expand('$_ROOT/local/include')
     endif
 
     if isdirectory(expand('$_ROOT') . '/include/libcs50')
-        let &path = &path .','. expand('$_ROOT') . '/include/libcs50'
+        let &g:path = &path .','. expand('$_ROOT') . '/include/libcs50'
     endif
+
+    call coc#config('languageserver', {'clangd': { 'args':
+                    \ ['--background-index' ], 'command': 'clangd', 'filetypes': [ 'c', 'cpp',
+                    \ 'objc', 'objcpp' ], 'rootPatterns': [ 'compile_flags.txt',
+                    \ 'compile_commands.json', '.git/' ], 'shell': 'true' }})
+
+  let g:startify_change_to_dir = 1
+  let g:tagbar_iconchars = ['▷', '◢']
+  let g:startify_change_to_dir = 1
 endfunction
 " }}}
 
