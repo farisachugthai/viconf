@@ -24,6 +24,25 @@ if exists(':CompilerSet') != 2
   command -nargs=* CompilerSet setlocal <args>
 endif
 
+augroup UserRstCompiler  " {{{
+  autocmd FileType rst if executable('sphinx-build')
+                    \|   if filereadable('conf.py')
+                    \|     let &l:makeprg = 'sphinx-build -b html . ./build/html'
+                    \|     nnoremap <buffer> <F5> <Cmd>make!<CR>
+                    \|   elseif glob('../conf.py')
+                    \|     let &l:makeprg = 'sphinx-build -b html .. ../../build/html '
+                    \|     nnoremap <buffer> <F5> <Cmd>make!<CR>
+                    \|   else
+                    \|     let &l:makeprg = 'sphinx-build -b html'
+                    \|     nnoremap <buffer> <F5> <Cmd>make!<Space>
+                    \|   endif
+                    \| endif
+
+
+augroup END  " }}}
+
+CompilerSet makeprg=sphinx-build
+
 CompilerSet errorformat=
       \%f\\:%l:\ %tEBUG:\ %m,
       \%f\\:%l:\ %tNFO:\ %m,

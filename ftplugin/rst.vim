@@ -69,21 +69,18 @@ setlocal include=^\\s*\\(from\\\|import\\)
 setlocal includeexpr=substitute(v:fname,'\\.','/','g')
 " }}}
 
-" Actually from the python ftplugin: {{{
+" Actually From The Python Ftplugin: {{{
 setlocal cindent
 setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
 setlocal cinkeys-=0#
 setlocal indentkeys-=0#
-" This really fucks stuff up if you're indenting rst blocks as 3 spaces and
-" python as 4
+" This fucks stuff up if you're indenting rst blocks as 3 spaces and python as 4
 setlocal noshiftround
 setlocal suffixesadd=.py,.rst,.rst.txt
-
 let &l:path = py#PythonPath()
 
 " Isn't a func anymore. todo: this and maybe formatprg?
 " command! -buffer Sphinx call pydoc_help#sphinx_build(<q-args>)
-
 setlocal comments=fb:.. commentstring=..\ %s
 
 let b:undo_ftplugin .= '|setlocal tw< cms< com< cc< lbr< fdl< fdls< '
@@ -110,27 +107,11 @@ endif
 setlocal foldmethod=expr
 setlocal foldexpr=RstFold#GetRstFold()
 setlocal foldtext=RstFold#GetRstFoldText()
-" }}}
-"
-" Automake: {{{
 
-augroup UserAutomake  " {{{
+augroup UserAutomake
   au!
   autocmd FileType rst compiler rst
-  autocmd FileType rst if executable('sphinx-build')
-                    \|   if filereadable('conf.py')
-                    \|     let &l:makeprg = 'sphinx-build -b html . ./build/html'
-                    \|     nnoremap <buffer> <F5> <Cmd>make!<CR>
-                    \|   elseif glob('../conf.py')
-                    \|     let &l:makeprg = 'sphinx-build -b html .. ../../build/html '
-                    \|     nnoremap <buffer> <F5> <Cmd>make!<CR>
-                    \|   else
-                    \|     let &l:makeprg = 'sphinx-build -b html'
-                    \|     nnoremap <buffer> <F5> <Cmd>make!<Space>
-                    \|   endif
-                    \| endif
-
-augroup END  " }}}
+augroup END
 
 " }}}
 

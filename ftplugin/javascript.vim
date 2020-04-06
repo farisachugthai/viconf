@@ -5,11 +5,12 @@
     " Last Modified: June 09, 2019
 " ============================================================================
 
-" Guard: {{{1
-let s:cpo_save = &cpoptions
-set cpoptions&vim
+if exists('b:did_ftplugin') | finish | endif
 
-" Options: {{{1
+" Options: {{{
+source $VIMRUNTIME/ftplugin/javascript.vim
+source $VIMRUNTIME/indent/javascript.vim
+
 setlocal expandtab
 setlocal shiftwidth=2
 setlocal softtabstop=2
@@ -36,12 +37,9 @@ if exists('g:loaded_ale') && &filetype==#'javascript'
   call ftplugins#ALE_JS_Conf()
 endif
 
-" Atexit: {{{1
-let b:undo_ftplugin = 'setlocal et< sw< sts< sua< com< cms< ofu< '
-      \ . '|setlocal define< '
-      \ . '|setlocal path< '
-      \ . '|setlocal include< '
-      \ . '|unlet! b:undo_ftplugin'
-
-let &cpoptions = s:cpo_save
-unlet s:cpo_save
+" Atexit: {{{
+let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
+                \ . '|setlocal et< sw< sts< sua< com< cms< ofu<'
+                \ . '|setlocal define< path< include< '
+                \ . '|unlet! b:undo_ftplugin'
+                \ . '|unlet! b:did_ftplugin'

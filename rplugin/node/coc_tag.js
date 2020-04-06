@@ -10,7 +10,9 @@ const { nvim } = workspace;
 
 async function getTagFiles() {
   let files = await nvim.call("tagfiles");
-  if (!files || files.length == 0) return [];
+  if (!files || files.length === 0) {
+    return [];
+  }
   let cwd = await nvim.call("getcwd");
   files = files.map((f) => {
     return path.isAbsolute(f) ? f : path.join(cwd, f);
@@ -18,7 +20,9 @@ async function getTagFiles() {
   let tagfiles = [];
   for (let file of files) {
     let stat = await util.promisify(fs.stat)(file);
-    if (!stat || !stat.isFile()) continue;
+    if (!stat || !stat.isFile()) {
+      continue;
+    }
     tagfiles.push({ file, mtime: stat.mtime });
   }
   return tagfiles;
@@ -49,12 +53,18 @@ function readFileByLine(fullpath, onLine, limit = 50000) {
 
 async function loadTags(fullpath, mtime) {
   let item = TAG_CACHE[fullpath];
-  if (item && item.mtime >= mtime) return item.words;
+  if (item && item.mtime >= mtime) {
+    return item.words;
+  }
   let words = new Map();
   await readFileByLine(fullpath, (line) => {
-    if (line[0] == "!") return;
+    if (line[0] === "!") {
+      return;
+    }
     let ms = line.split(/\t\s*/);
-    if (ms.length < 2) return;
+    if (ms.length < 2) {
+      return;
+    }
     let [word, path] = ms;
     let wordItem = words.get(word) || [];
     wordItem.push(path);
@@ -72,16 +82,22 @@ exports.activate = (context) => {
       priority: 3,
       doComplete: async function (opt) {
         let { input } = opt;
-        if (input.length == 0) return null;
+        if (input.length === 0) {
+          return null;
+        }
         let tagfiles = await getTagFiles();
-        if (!tagfiles || tagfiles.length == 0) return null;
+        if (!tagfiles || tagfiles.length === 0) {
+          return null;
+        }
         let list = await Promise.all(
           tagfiles.map((o) => loadTags(o.file, o.mtime))
         );
         let items = [];
         for (let words of list) {
           for (let [word, paths] of words.entries()) {
-            if (word[0] !== input[0]) continue;
+            if (word[0] !== input[0]) {
+              continue;
+            }
             let infoList = Array.from(new Set(paths));
             let len = infoList.length;
             if (len > 10) {
@@ -94,7 +110,6 @@ exports.activate = (context) => {
             });
           }
         }
-
         return { items };
       },
     })

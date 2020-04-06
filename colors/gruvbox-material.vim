@@ -53,14 +53,14 @@ hi! link VisualNC Visual
 if has('nvim')  " {{{
   " How does a nice light blue sound?
   hi! NvimInternalError guibg=NONE ctermfg=108 ctermbg=234 gui=reverse guifg=#8ec0e1 guisp=NONE
-  hi link nvimAutoEvent   vimAutoEvent
-  hi link nvimHLGroup     vimHLGroup
-  hi link NvimIdentifierKey IdentifierBold
-  hi link nvimInvalid Exception
-  hi link nvimMap vimMap
-  hi link nvimUnmap       vimUnmap
+  hi! link nvimAutoEvent   vimAutoEvent
+  hi! link nvimHLGroup     vimHLGroup
+  hi! link NvimIdentifierKey Identifier
+  hi! link nvimInvalid Exception
+  hi! link nvimMap vimMap
+  hi! link nvimUnmap       vimUnmap
 
-  hi link TermCursor Cursor
+  hi! link TermCursor Cursor
   hi TermCursorNC ctermfg=237 ctermbg=223 guifg=#3c3836 guibg=#ebdbb2 guisp=NONE cterm=NONE gui=NONE
 
   " *hl-NormalFloat* NormalFloat  Normal text in floating windows.
@@ -607,7 +607,7 @@ hi! link pythonRun Blue
 hi! link pythonSpaceError                Error
 hi! link pythonStatement         Statement
 hi! link pythonString            String
-hi! link pythonSync IdentifierBold
+hi! link pythonSync Identifier
 hi! link pythonTodo                      Todo
 hi! link pythonTripleQuotes              pythonQuotes
 " }}}
@@ -749,7 +749,7 @@ hi! link vimSynPatRange vimString
 hi! link vimSynReg      Type
 hi! link vimSynRegOpt   vimSynOption
 hi! link vimSynRegPat   vimString
-hi! link vimSynType     vimSpecial
+hi! link vimSynType     vimSynOption
 hi! link vimSyncC       Type
 hi! link vimSyncError   Error
 hi! link vimSyncGroup   vimGroupName

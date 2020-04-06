@@ -14,14 +14,9 @@ let current_compiler = 'pytest'
 if exists(':CompilerSet') != 2 " older Vim always used :setlocal
   command! -nargs=* CompilerSet setlocal <args>
 endif
-
-let s:cpo_save = &cpoptions
-set cpoptions-=C
-
 " }}}
 
-"  CompilerSet: {{{
-
+" CompilerSet: {{{
 CompilerSet makeprg=py.test\ --tb=short\ -q\ --color=no
 
 CompilerSet errorformat=
@@ -39,6 +34,3 @@ CompilerSet errorformat=
       \%C%.%#,
       \%-G%.%#\ seconds,
       \%-G%.%#,
-
-let &cpoptions = s:cpo_save
-unlet s:cpo_save
