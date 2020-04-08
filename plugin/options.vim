@@ -52,7 +52,7 @@ setglobal tags=tags,**/tags
 setglobal tagcase=smart
 setglobal showfulltag
 if exists('&tagfunc')
-  let &g:tagfunc = 'CocTagFunc'
+  let &g:tagfunc = coc#rpc#request('getTagList', [])
 endif
 " }}}
 
@@ -530,29 +530,41 @@ function! s:Init_coc() abort
     " call coc#util#install_extension(l:ext)
   " endfor
 
-    if executable('C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\node.exe')
-      let g:coc_node_path = 'C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\node.exe'
-    endif
-
   if empty($ANDROID_DATA)
     call coc#config('python.jediEnabled', v:false)
     if has('unix')
       let g:coc_node_path = '/usr/sbin/node'
+    else
+      let g:coc_node_path = 'C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\node.exe'
     endif
   else
     let g:coc_node_path = expand('$PREFIX/bin/node')
   endif
 
-  call coc#config('languageserver',
-                  \ {'bash':
-                  \ {'args': [ 'start' ],
-                  \ 'command': 'bash-language-server',
-                  \ 'filetypes': ['sh', 'bash']}})
+  if executable(expand('~/.config/coc/extensions/.bin/bash-language-server'))
+
+    call coc#config('languageserver',
+                    \ {'bash':
+                    \ {'args': [ 'start' ],
+                    \ 'command': expand('~/.config/coc/extensions/node_modules/.bin/bash-language-server'),
+                    \ 'filetypes': ['sh', 'bash']}})
+  else
+    call coc#config('languageserver',
+                    \ {'bash':
+                    \ {'args': [ 'start' ],
+                    \ 'command': 'bash-language-server',
+                    \ 'filetypes': ['sh', 'bash']}})
+  endif
+  if executable(expand('~/.config/coc/extensions/.bin/vim-language-server'))
+    let s:vimlsp = expand('~/.config/coc/extensions/.bin/vim-language-server')
+  else
+    let s:vimlsp = 'vim-language-server'
+  endif
 
   call coc#config('languageserver',
                   \ { 'vimlsp':
                   \ {'args': ['--stdio'],
-                  \ 'command': 'vim-language-server',
+                  \ 'command': s:vimlsp,
                   \ 'filetypes': ['vim' ],
                   \ 'initializationOptions':
                   \ {'diagnostic': { 'enable': v:true },

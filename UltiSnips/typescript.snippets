@@ -1,4 +1,12 @@
-priority -50
+# ============================================================================
+# File: typescript.snippets
+# Author: Faris Chugthai
+# Description: typescript
+# Last Modified: April 08, 2020
+# ============================================================================
+
+priority 50
+extends typescript, javascript-node, html
 
 snippet /// "import reference" b
 /// <reference path='${1: file}' />
@@ -91,3 +99,5 @@ declare module ${1:name} {
 	${VISUAL}$0
 }
 endsnippet
+
+# Vim: set ft=snippets.ts:

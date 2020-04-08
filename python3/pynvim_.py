@@ -46,15 +46,15 @@ times before then.
 Decorators used by python host plugin system.
 
 """
-from pynvim.msgpack_rpc.session import ErrorResponse, Session
-from pynvim.msgpack_rpc.msgpack_stream import MsgpackStream
-from pynvim.msgpack_rpc.async_session import AsyncSession
-from pynvim.api import Window, Tabpage
-from msgpack import unpackb, ExtType
 # import abc
-# from collections import namedtuple
+from msgpack import unpackb, ExtType
+from pynvim.api import Window, Tabpage
+from pynvim.msgpack_rpc.async_session import AsyncSession
+from pynvim.msgpack_rpc.msgpack_stream import MsgpackStream
+from pynvim.msgpack_rpc.session import ErrorResponse, Session
 import codecs
 import functools
+import gc
 import imp
 import importlib
 import inspect
@@ -62,31 +62,41 @@ import io
 import logging
 import os
 import platform
+import pydoc
+import reprlib
+
 # import shlex
+# import subprocess
 import sys
+import traceback
 import threading
 import warnings
+from collections import namedtuple, UserList, UserDict
 from imp import find_module as original_find_module
 from io import StringIO
+
+# from pathlib import Path
+from pydoc import safeimport
 from traceback import format_exception, format_stack
 
 if sys.version_info >= (3, 4):
     from importlib.machinery import PathFinder
+else:
+    PathFinder = None
+
+import pkg_resources
 
 try:
-    global vim
-
     import pyuv  # noqa
 except ImportError:
     from pynvim.msgpack_rpc.event_loop import EventLoop
 else:
     from pynvim.msgpack_rpc.event_loop.uv import UvEventLoop as EventLoop
-
 # }}}
 
 # Globals: {{{
+global vim
 basestring = str
-
 PYTHON_SUBDIR = "python3"
 # So on the low I don't think that logger or debug are used anywhere.
 logger = logging.getLogger(__name__)
@@ -95,10 +105,40 @@ debug, info, warn = (
     logger.info,
     logger.warning,
 )
-
 # There is no 'long' type in Python3 just int
 long = int
 unicode_errors_default = "surrogateescape"
+vers = namedtuple("vers", ("project", "release"))
+mod_cache = {}
+
+# so thats how you do this
+distribution = pkg_resources.get_distribution("pynvim")
+__version__ = distribution.version
+
+os_chdir = os.chdir
+
+lua_module = """
+local a = vim.api
+local function update_highlights(buf, src_id, hls, clear_first, clear_end)
+  if clear_first ~= nil then
+      a.nvim_buf_clear_highlight(buf, src_id, clear_first, clear_end)
+  end
+  for _,hl in pairs(hls) do
+    local group, line, col_start, col_end = unpack(hl)
+    if col_start == nil then
+      col_start = 0
+    end
+    if col_end == nil then
+      col_end = -1
+    end
+    a.nvim_buf_add_highlight(buf, src_id, group, line, col_start, col_end)
+  end
+end
+
+local chid = ...
+local mod = {update_highlights=update_highlights}
+_G["_pynvim_"..chid] = mod
+"""
 
 # }}}
 
@@ -110,12 +150,12 @@ def get_documentation(word):
     # is sys.stdout needed at all below?
     sys.stdout, _ = StringIO(), sys.stdout
     try:
-        help("word")
+        pydoc.help("word")
     except AttributeError:  # maybe
         raise
     except NameError:
-        try:
-            mod = importlib.import_module(word)
+        try:  # this is actually how pydoc does it
+            mod = safeimport(word, cache=mod_cache)
         except ImportError:
             return
         else:
@@ -274,6 +314,8 @@ def plugin(cls):
     # decorated functions have a bound Nvim instance as first argument.
     # For methods in a plugin-decorated class this is not required, because
     # the class initializer will already receive the nvim object.
+    # @functools.wraps
+    # adding wraps causes errors
     def predicate(fn):
         return hasattr(fn, "_nvim_bind")
 
@@ -286,6 +328,7 @@ def rpc_export(rpc_method_name, sync=False):
     """Export a function or plugin method as a msgpack-rpc request handler."""
 
     # should functools.wraps be going on top of all of these?
+    @functools.wraps
     def dec(f):
         f._nvim_rpc_method_name = rpc_method_name
         f._nvim_rpc_sync = sync
@@ -310,6 +353,7 @@ def command(
 ):
     """Tag a function or plugin method as a Nvim command handler."""
 
+    @functools.wraps
     def dec(f):
         f._nvim_rpc_method_name = "command:{}".format(name)
         f._nvim_rpc_sync = sync
@@ -357,6 +401,7 @@ def command(
 def autocmd(name, pattern="*", sync=False, allow_nested=False, eval=None):
     """Tag a function or plugin method as a Nvim autocommand handler."""
 
+    @functools.wraps
     def dec(f):
         f._nvim_rpc_method_name = "autocmd:{}:{}".format(name, pattern)
         f._nvim_rpc_sync = sync
@@ -387,6 +432,7 @@ def autocmd(name, pattern="*", sync=False, allow_nested=False, eval=None):
 def function(name, range=False, sync=False, allow_nested=False, eval=None):
     """Tag a function or plugin method as a Nvim function handler."""
 
+    @functools.wraps
     def dec(f):
         f._nvim_rpc_method_name = "function:{}".format(name)
         f._nvim_rpc_sync = sync
@@ -419,28 +465,20 @@ def function(name, range=False, sync=False, allow_nested=False, eval=None):
 
 def shutdown_hook(f):
     """Tag a function or method as a shutdown hook."""
-    f._nvim_shutdown_hook = True
-    f._nvim_bind = True
-    return f
+
+    @functools.wraps
+    def _():
+        f._nvim_shutdown_hook = True
+        f._nvim_bind = True
+        return f
 
 
 def decode(mode=unicode_errors_default):
     """Configure automatic encoding/decoding of strings."""
 
+    @functools.wraps
     def dec(f):
         f._nvim_decode = mode
-        return f
-
-    return dec
-
-
-def encoding(encoding=True):
-    """DEPRECATED: use pynvim.decode()."""
-    if isinstance(encoding, str):
-        encoding = True
-
-    def dec(f):
-        f._nvim_decode = encoding
         return f
 
     return dec
@@ -491,7 +529,7 @@ class Remote(object):
         )
 
     def __repr__(self):
-        """Get text representation of the object."""
+        """Get the text representation of the object."""
         return "<%s(handle=%r)>" % (self.__class__.__name__, self.handle,)
 
     def __eq__(self, other):
@@ -510,30 +548,6 @@ class Remote(object):
 # }}}
 
 # api/nvim: Needs to be above plugin/scripthost: {{{
-os_chdir = os.chdir
-
-lua_module = """
-local a = vim.api
-local function update_highlights(buf, src_id, hls, clear_first, clear_end)
-  if clear_first ~= nil then
-      a.nvim_buf_clear_highlight(buf, src_id, clear_first, clear_end)
-  end
-  for _,hl in pairs(hls) do
-    local group, line, col_start, col_end = unpack(hl)
-    if col_start == nil then
-      col_start = 0
-    end
-    if col_end == nil then
-      col_end = -1
-    end
-    a.nvim_buf_add_highlight(buf, src_id, group, line, col_start, col_end)
-  end
-end
-
-local chid = ...
-local mod = {update_highlights=update_highlights}
-_G["_pynvim_"..chid] = mod
-"""
 
 
 class Nvim(object):
@@ -558,6 +572,10 @@ class Nvim(object):
     accessing state-dependent attributes. They should instead schedule another
     callback using nvim.async_call, which will not have this restriction.
     """
+
+    # idk where the fuck this was implemented but im gonna define
+    # this explicitly
+    VIM_SPECIAL_PATH = "_vim_path"
 
     @classmethod
     def from_session(cls, session):
@@ -593,7 +611,18 @@ class Nvim(object):
         )
 
     def __init__(self, session, channel_id, metadata, types, decode=False, err_cb=None):
-        """Initialize a new Nvim instance. This method is module-private."""
+        """Initialize a new Nvim instance. This method is module-private.
+
+        Also worth pointing out that as insane as this __init__ is, we still
+        never defined the script context that any plugins would potentially
+        need.
+
+        Parameters
+        ----------
+        metadata :
+            Required to have a get attr.
+
+        """
         self._session = session
         self.channel_id = channel_id
         self.metadata = metadata
@@ -610,7 +639,6 @@ class Nvim(object):
         self.windows = RemoteSequence(self, "nvim_list_wins")
         self.tabpages = RemoteSequence(self, "nvim_list_tabpages")
         self.current = Current(self)
-        self.session = CompatibilitySession(self)
         self.funcs = Funcs(self)
         self.lua = LuaFuncs(self)
         self.error = NvimError
@@ -619,6 +647,11 @@ class Nvim(object):
 
         # only on python3.4+ we expose asyncio
         self.loop = self._session.loop._loop
+
+    @property
+    def session(self):
+        """The first of potentially many refactored properties."""
+        return CompatibilitySession(self)
 
     def _from_nvim(self, obj):
         if decode is None:
@@ -951,7 +984,7 @@ class Nvim(object):
         event handler, just before it returns, to defer execution
         that shouldn't block neovim.
         """
-        call_point = "".join(format_stack(None, 5)[:-1])
+        call_point = "".join(traceback.format_stack(None, 5)[:-1])
 
         def handler():
             try:
@@ -969,24 +1002,23 @@ class Nvim(object):
         self._session.threadsafe_call(handler)
 
 
-class Buffers(object):
-    """Remote NVim buffers.
-
-    Currently the interface for interacting with remote NVim buffers is the
-    `nvim_list_bufs` msgpack-rpc function. Most methods fetch the list of
-    buffers from NVim.
-
-    Conforms to *python-buffers*.
-    """
+class BufferBase(UserList):
+    """I really feel like the Buffers class should fully implement the
+    MutableSequence protocol."""
 
     def __init__(self, nvim):
         """Initialize a Buffers object with Nvim object `nvim`."""
         self._fetch_buffers = nvim.api.list_bufs
         self.nvim = nvim
+        super().__init__(self._fetch_buffers())
 
     def __len__(self):
         """Return the count of buffers."""
         return len(self._fetch_buffers())
+
+    def __iter__(self):
+        """Return an iterator over the list of buffers."""
+        return iter(self._fetch_buffers())
 
     def __getitem__(self, number):
         """Return the Buffer object matching buffer number `number`."""
@@ -999,16 +1031,38 @@ class Buffers(object):
         """Return whether Buffer `b` is a known valid buffer."""
         return isinstance(b, Buffer) and b.valid
 
-    def __iter__(self):
-        """Return an iterator over the list of buffers."""
-        return iter(self._fetch_buffers())
+
+class Buffers(BufferBase):
+    """Remote NVim buffers.
+
+    Currently the interface for interacting with remote NVim buffers is the
+    `nvim_list_bufs` msgpack-rpc function. Most methods fetch the list of
+    buffers from NVim.
+
+    Conforms to *python-buffers*.
+    """
+
+    def all(self):
+        return self._fetch_buffers()
+
+    def __repr__(self):
+        return reprlib.Repr().repr(self._fetch_buffers())
 
 
-class CompatibilitySession(object):
-    """Helper class for API compatibility."""
+class CompatibilitySession(Remote):
+    """Helper class for API compatibility. This should really subclass Remote
+    though."""
 
     def __init__(self, nvim):
         self.threadsafe_call = nvim.async_call
+
+    def __repr__(self):
+        """Get the text representation of the object."""
+        return "<%r: (%r)>" % (self.__class__.__name__, self.threadsafe_call)
+
+    def __call__(self, command):
+        return self.threadsafe_call(command)
+
 
 
 class Current(object):
@@ -1054,6 +1108,10 @@ class Current(object):
     def tabpage(self, tabpage):
         return self._session.request("nvim_set_current_tabpage", tabpage)
 
+    def __repr__(self):
+        """Get the text representation of the object."""
+        return "<%r: (%r)>" % (self.__class__.__name__, self.buffer)
+
 
 class Funcs(object):
     """Helper class for functional vimscript interface."""
@@ -1063,6 +1121,10 @@ class Funcs(object):
 
     def __getattr__(self, name):
         return functools.partial(self._nvim.call, name)
+
+    def __repr__(self):
+        """Get the text representation of the object."""
+        return "<%r>" % (self.__class__.__name__)
 
 
 class LuaFuncs(object):
@@ -1087,6 +1149,10 @@ class LuaFuncs(object):
         pattern = "return {}(...)" if not async_ else "{}(...)"
         code = pattern.format(self.name)
         return self._nvim.exec_lua(code, *args, **kwargs)
+
+    def __repr__(self):
+        """Get the text representation of the object."""
+        return "<%r>" % (self.__class__.__name__)
 
 
 # }}}
@@ -1146,8 +1212,13 @@ class ScriptHost:
         info("install import hook/path")
         self.hook = path_hook(nvim)
         sys.path_hooks.append(self.hook)
-        nvim.VIM_SPECIAL_PATH = "_vim_path_"
+        # seriously why accept nvim as a parameter then define things on
+        # it. were defining the class ourselves just fucking define
+        # it here!
+        # nvim.VIM_SPECIAL_PATH = "_vim_path_"
         sys.path.append(nvim.VIM_SPECIAL_PATH)
+        # also we're gonna need to do something about all this horrific
+        # sys.path hacking
         self.saved_stdout = sys.stdout
         self.saved_stderr = sys.stderr
         sys.stdout = RedirectStream(lambda data: nvim.out_write(data))
@@ -1268,6 +1339,15 @@ class RedirectStream(io.IOBase):
     def writelines(self, seq):
         self.redirect_handler("\n".join(seq))
 
+    def __enter__(self):
+        # TODO:
+        print("Did this work at all?")
+
+    def __exit__(self, *exc_info):
+        # dude can we please update v:shell_err or ANYTHING here??
+        pass
+        # let v:shell_err or some shit
+
 
 def num_to_str(obj):
     num_types = (int, long, float)
@@ -1287,10 +1367,7 @@ class LegacyVim(Nvim):
 
 # Copied/adapted from :help if_pyth.
 def path_hook(nvim):
-    def _get_paths():
-        if nvim._thread_invalid():
-            return []
-        return discover_runtime_directories(nvim)
+    # ughhh this is so poorly done holy fuck
 
     def _find_module(fullname, oldtail, path):
         idx = oldtail.find(".")
@@ -1303,47 +1380,26 @@ def path_hook(nvim):
         else:
             return imp.find_module(fullname, path)
 
-    class VimModuleLoader(object):
-        def __init__(self, module):
-            """
-
-            Parameters
-            ----------
-            module :
-            """
-            self.module = module
-
-        def load_module(self, fullname, path=None):
-            # Check sys.modules, required for reload (see PEP302).
-            try:
-                return sys.modules[fullname]
-            except KeyError:
-                pass
-            return imp.load_module(fullname, *self.module)
-
     class VimPathFinder(object):
         @staticmethod
-        def find_module(fullname, path=None):
+        def find_module(mod, package=None):
             """Method for Python 2.7 and 3.3."""
             try:
-                return VimModuleLoader(
-                    _find_module(fullname, fullname, path or _get_paths())
-                )
+                return importlib.import_module(mod, package)
             except ImportError:
                 return None
 
         @staticmethod
         def find_spec(fullname, target=None):
             """Method for Python 3.4+."""
-            return PathFinder.find_spec(fullname, _get_paths(), target)
+            if PathFinder is not None:
+                return PathFinder.find_spec(fullname, _get_paths(), target)
 
     def hook(path):
         if path == nvim.VIM_SPECIAL_PATH:
             return VimPathFinder
-        else:
-            raise ImportError
 
-    return hook
+    return hook(discover_runtime_directories(nvim))
 
 
 def discover_runtime_directories(nvim):
@@ -1386,7 +1442,6 @@ class Buffer(Remote):
         self.valid = valid if valid is not None else self.request("nvim_buf_is_valid")
         self.session = session
         self.code_data = code_data
-
 
     def __len__(self):
         """Return the number of lines contained in a Buffer."""
@@ -1596,15 +1651,15 @@ class Range(object):
 # }}}
 
 # msgpack.__init__: {{{
-"""Msgpack-rpc subpackage.
-
-This package implements a msgpack-rpc client. While it was designed for
-handling some Nvim particularities(server->client requests for example), the
-code here should work with other msgpack-rpc servers.
-"""
 
 
 def session(transport_type="stdio", *args, **kwargs):
+    """Msgpack-rpc subpackage.
+
+    This package implements a msgpack-rpc client. While it was designed for
+    handling some Nvim particularities(server->client requests for example), the
+    code here should work with other msgpack-rpc servers.
+    """
     loop = EventLoop(transport_type, *args, **kwargs)
     msgpack_stream = MsgpackStream(loop)
     async_session = AsyncSession(msgpack_stream)
@@ -1680,7 +1735,7 @@ def transform_keyerror(exc):
     # return exc
 
 
-class RemoteMap(object):
+class RemoteMap(UserDict):
     """Represents a string->object map stored in Nvim.
 
     This is the dict counterpart to the `RemoteSequence` class, but it is used
@@ -1702,6 +1757,8 @@ class RemoteMap(object):
             self._set = functools.partial(obj.request, set_method)
         if del_method:
             self._del = functools.partial(obj.request, del_method)
+        self.obj = obj
+        super().__init__(self.obj)
 
     def __getitem__(self, key):
         """Return a map value by key."""
@@ -1741,7 +1798,7 @@ class RemoteMap(object):
             return default
 
 
-class RemoteSequence(object):
+class RemoteSequence(UserList):
     """Represents a sequence of objects stored in Nvim.
 
     This class is used to wrap msgapck-rpc functions that work on Nvim
@@ -1769,6 +1826,7 @@ class RemoteSequence(object):
         self._fetch = functools.partial(session.request, method)
         self.session = session
         self.method = method
+        super().__init__()
 
     def __len__(self):
         """Return the length of the remote sequence."""
@@ -1804,6 +1862,8 @@ def walk(fn, obj, *args, **kwargs):
         return dict((walk(fn, k, *args), walk(fn, v, *args)) for k, v in obj.items())
     return fn(obj, *args, **kwargs)
 
+
+gc.collect()
 
 # }}}
 # Vim: set fdm=marker fdls=0:

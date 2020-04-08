@@ -50,9 +50,18 @@ endsnippet
 snippet s "Let's make this as easy as possible."
 snippet ${1:${VISUAL}} "$1" b
 $0
-e$2
+n$2
 endsnippet
 
-snippet e
+snippet n "Endsnippet" w
 ${0:endsnippet}
 endsnippet
+
+snippet priority "priority" b
+${0:${VISUAL:priority 50}}
+endsnippet
+
+snippet e "extends" b
+${0:${VISUAL:extends}}
+endsnippet
+

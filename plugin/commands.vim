@@ -412,7 +412,7 @@ command! -bar BlackVersion py3 BlackVersion()
 " TODO: Work on the range then the bang
 command! -bar -complete=file -range BlackCurrent <line1>,<line2>call py#Black()
 
-command! -nargs=* -bar -complete=file -complete=file_in_path BlackThese call py#black_these(<f-args>)
+command! -nargs=+ -bar -complete=buffer -range -addr=buffers -complete=file_in_path BlackThese call py#black_these(<f-args>)
 
 
 function! s:IPythonOptions(...) abort

@@ -7,7 +7,7 @@
 
 scriptencoding utf8
 
-function! s:tmux_enabled()
+function! s:tmux_enabled()  " {{{
   " From fzf.vim
   if has('gui_running') || !exists('$TMUX')
     return 0
@@ -29,7 +29,7 @@ function! s:tmux_enabled()
   let l:output = system('tmux -V')
   let s:tmux = !v:shell_error && l:output >=? 'tmux 1.7'
   return s:tmux
-endfunction
+endfunction  " }}}
 
 function! unix#tmux_send(content, dest) abort  " {{{ tmux send:
   if !s:tmux_enabled() | return | endif

@@ -64,38 +64,11 @@ augroup UserPlugins " {{{
   autocmd! User GoyoLeave nested call <SID>goyo_leave()
 augroup END " }}}
 
-if !has('nvim') | finish | endif
-
-augroup UserTerm " {{{
-  au!
-  autocmd TermOpen * setlocal statusline=%{b:term_title}
-
-  " `set nomodified` so Nvim stops prompting you when you
-  " try to close a buftype==terminal buffer. afterwards clean up the window
-  autocmd TermOpen * setlocal nomodified norelativenumber foldcolumn=0 signcolumn=
-
-  " April 14, 2019: To enter |Terminal-mode| automatically:
-  autocmd TermOpen * startinsert
-
-  " Jul 17, 2019: It's been like 3 months and I only recently realized
-  " that I didn't mention to leave insert mode when the terminal closes...
-  autocmd TermClose * stopinsert
-
-  " Set up mappings
-  autocmd TermOpen * call buffers#terminals()
-
-  " Dear god this i awful looking
-  " autocmd TermOpen,WinEnter * if &buftype=='terminal'
-  "   \|setlocal winhighlight=StatusLine:StatusLineTerm,StatusLineNC:StatusLineTermNC
-  "   \|else|setlocal winhighlight=|endif
-
-augroup END  " }}}
-
 augroup UserStl  " {{{
   autocmd!
   autocmd CmdlineEnter /,\? :set hlsearch
   autocmd CmdlineLeave /,\? :set nohlsearch
-  au CmdwinEnter [/?]  startinsert
+  autocmd CmdwinEnter [/?]  startinsert
 augroup END  " }}}
 
 augroup UserNerdLoader  " {{{
@@ -124,4 +97,36 @@ augroup UserCompletions   " {{{
   endif
 
 augroup END " }}}
+
+augroup UserFiletypes
+  au!
+  autocmd Filetype snippets call UltiSnipsConf()
+augroup END
+
+if !has('nvim') | finish | endif
+
+augroup UserTerm " {{{
+  au!
+  autocmd TermOpen * setlocal statusline=%{b:term_title}
+
+  " `set nomodified` so Nvim stops prompting you when you
+  " try to close a buftype==terminal buffer. afterwards clean up the window
+  autocmd TermOpen * setlocal nomodified norelativenumber foldcolumn=0 signcolumn=
+
+  " April 14, 2019: To enter |Terminal-mode| automatically:
+  autocmd TermOpen * startinsert
+
+  " Jul 17, 2019: It's been like 3 months and I only recently realized
+  " that I didn't mention to leave insert mode when the terminal closes...
+  autocmd TermClose * stopinsert
+
+  " Set up mappings
+  autocmd TermOpen * call buffers#terminals()
+
+  " Dear god this i awful looking
+  " autocmd TermOpen,WinEnter * if &buftype=='terminal'
+  "   \|setlocal winhighlight=StatusLine:StatusLineTerm,StatusLineNC:StatusLineTermNC
+  "   \|else|setlocal winhighlight=|endif
+
+augroup END  " }}}
 

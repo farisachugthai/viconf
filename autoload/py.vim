@@ -21,8 +21,8 @@ function! py#PythonPath() abort  " {{{1
   let s:path = '.,,**,'
   let s:user_site = py3eval('site.USER_SITE')
   let s:path .= s:user_site
-  for i in py3eval('sys.path')
-    let s:path .= i . ','
+  for l:i in py3eval('sys.path')
+    let s:path .= l:i . ','
   endfor
   let &l:path = s:path
   return s:path
@@ -68,12 +68,11 @@ function! py#Black() abort  " {{{
   py3 blackened_vim()
 endfunction  " }}}
 
-function! py#black_these(bufs) abort  " {{{
-
+function! py#black_these(bufs) abort range  " {{{
   " Can you do this with a range of buffers?
-  for buf in a:bufs
-    py3 from pybuffers import blackened_vim
-    py3 blackened_vim(buf)
+  for l:buf in a:bufs
+    <line1>,<line2>py3 from pybuffers import blackened_vim
+    call py3eval('blackened_vim(l:buf)')
   endfor
 endfunction   " }}}
 
@@ -82,10 +81,10 @@ function! py#black_version() abort  " {{{
 endfunction  " }}}
 
 function! s:timed(func) abort  " {{{
-  let start = reltime()
+  let l:start = reltime()
   call a:func()
-  let seconds = reltimefloat(reltime(start))
-  return seconds
+  let l:seconds = reltimefloat(reltime(l:start))
+  return l:seconds
 endfunction  " }}}
 
 function! py#timedblack() abort  " {{{
@@ -113,7 +112,7 @@ function! py#Cnxn(...) abort  " {{{
     call chansend(&channel, "import pynvim,os\n")
     call chansend(&channel, "n = pynvim.attach('socket', path=os.environ.get('NVIM_LISTEN_ADDRESS'))\n")
   else
-    setlocal ff=dos
+    setlocal fileformat=dos
     call chansend(&channel, "import pynvim,os\r\n")
     call chansend(&channel, "n = pynvim.attach('socket', path=os.environ.get('NVIM_LISTEN_ADDRESS'))\r\n")
   endif

@@ -102,9 +102,9 @@ function! LoadMyPlugins() abort  " {{{
 
   Plug 'mhinz/vim-startify'
   Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
-  noremap <F8> <Cmd>TagbarToggle<CR><bar>call plugins#TagbarTypes()<CR>call tagbar#types#uctags#init({})<CR>
-  noremap! <F8> <Cmd>TagbarToggle<CR><bar>call plugins#TagbarTypes()<CR>call tagbar#types#uctags#init({})<CR>
-  tnoremap <F8> <Cmd>TagbarToggle<CR><bar>call plugins#TagbarTypes()<CR>call tagbar#types#uctags#init({})<CR>
+  noremap <F8> <Cmd>TagbarToggle<CR><Cmd>call plugins#TagbarTypes()<CR><Cmd>call tagbar#types#uctags#init({})<CR>
+  noremap! <F8> <Cmd>TagbarToggle<CR><Cmd>call plugins#TagbarTypes()<CR><Cmd>call tagbar#types#uctags#init({})<CR>
+  tnoremap <F8> <Cmd>TagbarToggle<CR><Cmd>call plugins#TagbarTypes()<CR><Cmd>call tagbar#types#uctags#init({})<CR>
 
   " yo this mapping is great
   nnoremap ,t <Cmd>CocCommand tags.generate<CR><Cmd>TagbarToggle<CR>
@@ -120,7 +120,7 @@ function! LoadMyPlugins() abort  " {{{
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
   Plug 'omnisharp/omnisharp-vim', {'for': ['cs', 'ps1'] }
-  Plug 'itspriddle/vim-shellcheck', {'for': ['sh', 'bash'] }
+  " Plug 'itspriddle/vim-shellcheck', {'for': ['sh', 'bash'] }
 
   if empty(s:termux)  " {{{
     Plug 'ludovicchabant/vim-gutentags'

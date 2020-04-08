@@ -3,7 +3,7 @@
 priority 70
 
 snippet def "#define ..."
-#define ${VISUAL:${0}}
+#define ${0:${VISUAL}}
 endsnippet
 
 snippet # "#include" b
@@ -18,22 +18,22 @@ snippet ifndef "#ifndef ... #define ... #endif"
 endsnippet
 
 snippet if "#if #endif" b
-#if ${1:${0}}
-${VISUAL:${1}}
+#if ${1:${VISUAL}}
+${0}
 #endif
 endsnippet
 
 snippet mark "#pragma mark (mark)"
-#if $0
-${1:#pragma mark -
-}#pragma mark $2
+#if ${1:${VISUAL}}
+	${2:#pragma mark -}
+	#pragma mark $3
 #endif
 endsnippet
 
 snippet main "main() (main)" b
 int main(${1:int argc}, ${2:char *argv[]})
 {
-	${VISUAL}$0
+	${0:${VISUAL}}
 	return 0;
 }
 endsnippet
@@ -136,4 +136,4 @@ ${1}($2){
 }
 endsnippet
 
-# Vim: set foldmethod=marker foldlevelstart=0:
+# Vim: set foldmethod=marker foldlevelstart=0 ft=snippets.c:

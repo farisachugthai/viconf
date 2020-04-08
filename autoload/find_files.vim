@@ -72,9 +72,9 @@ function! find_files#FZFGit(bang) abort  " {{{1
 endfunction  " }}}
 
 function! find_files#termux_remote() abort  " {{{1
-  let g:python3_host_prog = exepath('python')
+  let g:python3_host_prog = expand('$PREFIX/bin/python')
   let g:loaded_python_provider = 1
-  let g:node_host_prog = '/data/data/com.termux/files/usr/bin/neovim-node-host'
+  let g:node_host_prog = '/data/data/com.termux/files/home/.local/share/yarn/global/node_modules/neovim/bin/cli.js'
   let g:ruby_host_prog = '/data/data/com.termux/files/home/.gem/bin/neovim-ruby-host'
 
   if exists('$TMUX')

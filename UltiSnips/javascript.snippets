@@ -5,7 +5,11 @@
 # Last Modified: August 24, 2019
 # ============================================================================
 
-# Functions: {{{1
+priority 40
+
+extends javascript-node, html
+
+# Functions: {{{
 
 snippet proto "prototype"
 ${1:class_name}.prototype.${2:method_name} = function(${3}) {
@@ -58,8 +62,9 @@ var ${1:function_name} = function (${2:argument}) {
 	};
 };
 endsnippet
+# }}}
 
-#  Flow Control: {{{1
+#  Flow Control: {{{
 
 snippet if "if (condition) { ... }"
 if (${1:true}) {
@@ -151,6 +156,7 @@ snippet fori "For in loop"
 	${0:$2[$1]}
 	}
 endsnippet
+# }}}
 
 #  Objects: {{{1
 
@@ -251,9 +257,9 @@ endsnippet
 snippet @ret
 @return {${1:type}} ${0:description}
 endsnippet
+# }}}
 
-
-# JSON: {{{1
+# JSON: {{{
 snippet jsonp "JSON.parse"
 JSON.parse(${0:jstr});
 endsnippet
@@ -261,8 +267,9 @@ endsnippet
 snippet jsons "JSON.stringify"
 JSON.stringify(${0:object});
 endsnippet
+# }}}
 
-# DOM Elements: {{{1
+# DOM Elements: {{{
 
 snippet get "Get elements"
 getElementsBy${1:TagName}('${0}')
@@ -363,8 +370,9 @@ endsnippet
 snippet ctable "console.table"
 console.table(${1:"${2:value}"});
 endsnippet
+# }}}
 
-#  Misc: {{{1
+#  Misc: {{{
 
 snippet use "use strict"
 ${0:use strict};
@@ -382,5 +390,6 @@ snippet emitter "emitter properties" b
 private readonly ${1} = new emitter<$2>()
 public readonly ${1/^_(.*)/$1/}: event<$2> = this.$1.event
 endsnippet
+# }}}
 
-# Vim: set fdls=0 ts=2 sts=2 sw=2:
+# Vim: set fdm=marker fdls=0 ft=snippets.javascript:
