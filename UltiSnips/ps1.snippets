@@ -1,5 +1,7 @@
 priority 30
 
+extends cs
+
 snippet class "Powershell Class definition" b
 class {
 	[string] ${1:${VISUAL}FirstName}
@@ -99,3 +101,5 @@ switch ( ${1:test} ){
 	${4:condition2} { ${5:action} }
 	default { ${6:action} }
 endsnippet
+
+# Vim: set ft=snippets.ps1:

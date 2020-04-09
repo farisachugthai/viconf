@@ -25,6 +25,28 @@ try:
 except (ImportError, ModuleNotFoundError):
     yaml = None
 
+try:
+    import UltiSnips
+except ImportError:
+    UltiSnips = None
+
+# here's a few more helpers
+
+
+def get_verbosity():
+    return int(vim.eval("&verbose"))
+
+
+def debug(msg):
+    if get_verbosity() >= 2:
+        print(msg)
+
+
+def error(msg):
+    vim.command("echohl ErrorMsg")
+    vim.command("echomsg '%s'" % msg.replace("'", "''"))
+    vim.command("echohl None")
+
 
 def vim_eval(text):
     """Wraps vim.eval."""
@@ -81,8 +103,7 @@ def _vim_enc(bytearray):
 
 
 def col2byte(line, col):
-    """Convert a valid column index into a byte index inside of vims
-    buffer."""
+    """Convert a valid column index into a byte index inside of vims buffer."""
     # We pad the line so that selecting the +1 st column still works.
     pre_chars = (vim.current.buffer[line - 1] + "  ")[:col]
     return len(_vim_enc(pre_chars))
@@ -91,7 +112,7 @@ def col2byte(line, col):
 class VimBuffer:
     """Wrapper around the current Vim buffer."""
 
-    def __init__(self):
+    def __init__(self, vim=None):
         self.vim = vim
         self._buffer = vim.current.buffer
         self._window = vim.current.window
@@ -128,6 +149,7 @@ class VimBuffer:
         _, col = self.cursor
         return (vim.current.line)[:col]
 
+    @property
     def bufnr(self):  # pylint:disable=no-self-use
         """Return the bufnr() of the current buffer."""
         return self._buffer.number
@@ -187,7 +209,7 @@ class VimBuffer:
         return self.name
 
 
-buf = VimBuffer()  # pylint:disable=invalid-name
+buf = VimBuffer(vim)  # pylint:disable=invalid-name
 
 
 @contextmanager

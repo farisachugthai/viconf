@@ -132,7 +132,7 @@ function! vimscript#ScriptnamesDict() abort  " {{{
   return s:scripts
 endfunction  "  }}}
 
-function s:get_scriptnames() abort  " {{{
+function! s:get_scriptnames() abort  " {{{
   let s:scriptnames_output = ''
   redir => s:scriptnames_output
   silent scriptnames
@@ -151,7 +151,7 @@ function! vimscript#fzf_scriptnames(bang) abort  " {{{
 endfunction
 " }}}
 
-function vimscript#GetPID() abort  " {{{
+function! vimscript#GetPID() abort  " {{{
 
   return nvim_get_proc(getpid())
 endfunction  " }}}

@@ -7,7 +7,7 @@
 
 scriptencoding utf8
 
-function! s:tmux_enabled()  " {{{
+function! s:tmux_enabled() abort   " {{{
   " From fzf.vim
   if has('gui_running') || !exists('$TMUX')
     return 0
@@ -57,17 +57,17 @@ function! unix#UnixOptions() abort   " {{{
   " These conditions only ever exist on Unix. Only run them if that's what
   " we're using
 
-    if filereadable('/usr/share/dict/words')
-      setglobal dictionary+=/usr/share/dict/words
-    endif
+  if filereadable('/usr/share/dict/words')
+    setglobal dictionary+=/usr/share/dict/words
+  endif
 
-    if isdirectory(expand('$_ROOT/local/include/'))
-        let &g:path = &path . ',' . expand('$_ROOT/local/include')
-    endif
+  if isdirectory(expand('$_ROOT/local/include/'))
+    let &g:path = &path . ',' . expand('$_ROOT/local/include')
+  endif
 
-    if isdirectory(expand('$_ROOT') . '/include/libcs50')
-        let &g:path = &path .','. expand('$_ROOT') . '/include/libcs50'
-    endif
+  if isdirectory(expand('$_ROOT') . '/include/libcs50')
+    let &g:path = &path .','. expand('$_ROOT') . '/include/libcs50'
+  endif
 
     call coc#config('languageserver', {'clangd': { 'args':
                     \ ['--background-index' ], 'command': 'clangd', 'filetypes': [ 'c', 'cpp',
@@ -77,6 +77,43 @@ function! unix#UnixOptions() abort   " {{{
   let g:startify_change_to_dir = 1
   let g:tagbar_iconchars = ['▷', '◢']
   let g:startify_change_to_dir = 1
+
+  if executable('ag')
+    imap <C-x><C-f> <Plug>(fzf-complete-file-ag)
+    imap <C-x><C-j> <Plug>(fzf-complete-file-ag)
+  else
+    imap <C-x><C-f> <Plug>(fzf-complete-file)
+    imap <C-x><C-j> <Plug>(fzf-complete-path)
+  endif
+
+  " A bunch of these are now unix only because there's something fucked with either the way i have
+  " external shell commands set to run or the way fzf does it.
+
+  imap <expr> <C-x><C-l> fzf#vim#complete(fzf#wrap({
+    \ 'prefix': '^.*$',
+    \ 'source': 'rg -n ^ --color always',
+    \ 'options': '--ansi --delimiter : --nth 3..',
+    \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '')}}))
+
+  " Uhhh C-b for buffer?
+  inoremap <expr> <C-x><C-b> fzf#vim#complete#buffer_line()
+
+  function! s:make_sentence(lines) abort
+    return substitute(join(a:lines), '^.', '\=toupper(submatch(0))', '').'.'
+  endfunction
+
+  imap <expr> <C-x><C-s>    fzf#vim#complete#word(
+      \ {'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
+      \ 'reducer': function('<sid>make_sentence'),
+      \ 'options': '--multi --reverse --margin 15%,0',
+      \ 'left':    40})
+  " And add a shorter version
+  inoremap <C-s>            <C-x><C-s>
+
+  imap <expr> <C-x><C-k>    fzf#vim#complete(
+              \ {'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
+              \ 'options': '-ansi --multi --cycle',
+              \ 'left': 30})
 endfunction
 " }}}
 
@@ -125,17 +162,19 @@ function! unix#RmDir(path) abort " {{{
     echoerr 'Attempted to delete protected path: ' . a:path
     return 0
   endif
-  return system('rm -rf ' . shellescape(a:path))
+  return unix#system('rm -rf ' . shellescape(a:path))
 endfunction
 " }}}
 
-function! unix#system(pwd, cmd)  abort  " {{{
+function! unix#system(cmd, ...)  abort  " {{{
   " Executes {cmd} with the cwd set to {pwd}, without changing Vim's cwd.
   " If {pwd} is the empty string then it doesn't change the cwd.
   let l:cmd = a:cmd
-  if !empty(a:pwd)
-          let l:cmd = 'cd ' . shellescape(a:pwd) . ' && ' . l:cmd
+  if !empty(a:000)
+    let l:pwd = a:1
+    let l:cmd = 'cd ' . shellescape(l:pwd) . ' && ' . l:cmd
   endif
   return system(l:cmd)
 endfunction
 " }}}
+

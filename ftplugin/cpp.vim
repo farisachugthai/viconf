@@ -13,6 +13,7 @@ exec 'source ' . s:root_dir . '/ftplugin/c.vim'
 
 " dont source $VIMRUNTIME/ftplugin/cpp.vim
 " fucking hate when all we do is runtime! ftplugin/c.vim
+source $VIMRUNTIME/indent/cpp.vim
 
 setlocal syntax=c
 setlocal matchpairs+==:;
@@ -21,8 +22,13 @@ setlocal matchpairs+==:;
 setlocal formatprg=ftplugins#FormatFile
 setlocal keywordprg=:Man
 
+let &l:define = '^\(#\s*define\|[a-z]*\s*const\s*[a-z]*\)'
+
 setlocal cindent
 let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
+
+let b:ale_fixers += [ 'clang-format' ]
+
 " From clang.:
 " With this integration you can press the bound key and clang-format will
 " format the current line in NORMAL and INSERT mode or the selected region in
@@ -38,7 +44,7 @@ let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_wh
 " or save any files. To revert a formatting, just undo.
 augroup UserFtpluginFormatter
   au!
-  autocmd BufWritePre *.h,*.cc,*.cpp call format#Formatonsave()
+  autocmd BufWritePre *.h,*.cc,*.cpp call format#ClangCheck()
 
 augroup END
 
@@ -50,4 +56,4 @@ nnoremap <buffer> <Leader>ef <Cmd>py3file $XDG_CONFIG_HOME . '/nvim/pythonx/clan
 let b:undo_ftplugin .= '|setlocal syntax< fp< mps< kp< cin<'
       \ . '|unlet! b:undo_ftplugin'
       \ . '|unlet! b:did_ftplugin'
-      \ . '|nunmap <Leader>ef'
+      \ . '|silent! <buffer> nunmap <Leader>ef'

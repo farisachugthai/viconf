@@ -125,6 +125,8 @@ setglobal matchtime=20  " Show the matching pair for 2 seconds
 " dude holy hell are we running faster on termux set termguicolors
 setglobal synmaxcol=1000
 
+setglobal regexpengine=2
+
 " Todo:
 "g:fugitive_browse_handlers',
 "
@@ -133,6 +135,7 @@ let g:tlib_extend_keyagents_InputList_s = {
     \ 10: 'tlib#agent#Down',
     \ 11: 'tlib#agent#Up'
     \ }
+
 " }}}
 
 " Platform Specific Options: {{{
@@ -140,7 +143,7 @@ let g:tlib_extend_keyagents_InputList_s = {
 if has('unix')
   call unix#UnixOptions()
   if getenv($WSL_DISTRO_NAME)
-    let g:coc_cygqwin_path_prefixes = v:true
+    let g:coc_cygqwin_path_prefixes = {'c:/Users/fac': '/root'}
   endif
 else
   call msdos#set_shell_cmd()
@@ -541,26 +544,23 @@ function! s:Init_coc() abort
     let g:coc_node_path = expand('$PREFIX/bin/node')
   endif
 
-  if executable(expand('~/.config/coc/extensions/.bin/bash-language-server'))
-
-    call coc#config('languageserver',
-                    \ {'bash':
-                    \ {'args': [ 'start' ],
-                    \ 'command': expand('~/.config/coc/extensions/node_modules/.bin/bash-language-server'),
-                    \ 'filetypes': ['sh', 'bash']}})
+  if executable(expand('~/.config/coc/extensions/node_modules/.bin/bash-language-server'))
+    let s:bashlsp = expand('~/.config/coc/extensions/node_modules/.bin/bash-language-server')
   else
-    call coc#config('languageserver',
-                    \ {'bash':
-                    \ {'args': [ 'start' ],
-                    \ 'command': 'bash-language-server',
-                    \ 'filetypes': ['sh', 'bash']}})
+    let s:bashlsp = 'bash-language-server'
   endif
-  if executable(expand('~/.config/coc/extensions/.bin/vim-language-server'))
-    let s:vimlsp = expand('~/.config/coc/extensions/.bin/vim-language-server')
+
+  call coc#config('languageserver',
+                  \ {'bash':
+                  \ {'args': [ 'start' ],
+                  \ 'command': s:bashlsp,
+                  \ 'filetypes': ['sh', 'bash']}})
+
+  if executable(expand('~/.config/coc/extensions/node_modules/.bin/vim-language-server'))
+    let s:vimlsp = expand('~/.config/coc/extensions/node_modules/.bin/vim-language-server')
   else
     let s:vimlsp = 'vim-language-server'
   endif
-
   call coc#config('languageserver',
                   \ { 'vimlsp':
                   \ {'args': ['--stdio'],
@@ -684,6 +684,44 @@ let g:voom_python_versions = [3,2]
 " You conditionally can't use << or <C-Left> unless your node is the furthest down the stack
 " But that's kinda dumb.
 let g:voom_always_allow_move_left = 1
+" }}}
+
+" Omnisharp: {{{
+
+let g:OmniSharp_want_snippet=1
+" Otherwise it goes in some random cache folder that I'll end up deleting
+let g:OmniSharp_server_install = stdpath('data') . '/site/omnisharp'
+
+let g:OmniSharp_server_stdio = 1
+" let g:OmniSharp_server_stdio = 1
+
+" Dude they wrote everything python that's dope
+let g:OmniSharp_loglevel = 'DEBUG'
+
+" It's faster when it's not in python though
+let g:OmniSharp_server_stdio = 1
+
+" Python logging path
+let g:OmniSharp_python_path = stdpath('data') . '/site/log'
+
+" " Defaults:
+" let g:OmniSharp_highlight_groups = {
+" \ 'csUserIdentifier': [
+" \   'constant name', 'enum member name', 'field name', 'identifier',
+" \   'local name', 'parameter name', 'property name', 'static symbol'],
+" \ 'csUserInterface': ['interface name'],
+" \ 'csUserMethod': ['extension method name', 'method name'],
+" \ 'csUserType': ['class name', 'enum name', 'namespace name', 'struct name']
+" \}
+
+let g:OmniSharp_timeout = 5
+
+" Update semantic highlighting after all text changes
+" let g:OmniSharp_highlight_types = 3
+" Update semantic highlighting on BufEnter and InsertLeave
+let g:OmniSharp_highlight_types = 2
+let g:OmniSharp_selector_ui = 'fzf'
+
 " }}}
 
 " Vim: set fdm=marker:

@@ -35,6 +35,14 @@ function! msdos#set_shell_cmd() abort  " {{{1
   set shellxescape=^
   " What about setting shellquote to "" so that cmd gets the args quoted?
   echomsg 'Using cmd as the system shell.'
+
+  " Here's a handful of pretty unrelated things but we get to consolidate platform specific settings
+  " in this way
+    imap <C-x><C-f>       <Plug>(fzf-complete-file)
+    imap <C-x><C-j>       <Plug>(fzf-complete-path)
+    inoremap <C-f>        <C-x><C-f>
+    inoremap <C-j>        <C-x><C-j>
+
 endfunction  " }}}
 
 function! msdos#invoke_cmd(command) abort  " {{{1

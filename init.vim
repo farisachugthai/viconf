@@ -123,6 +123,7 @@ function! LoadMyPlugins() abort  " {{{
   " Plug 'itspriddle/vim-shellcheck', {'for': ['sh', 'bash'] }
 
   if empty(s:termux)  " {{{
+
     Plug 'ludovicchabant/vim-gutentags'
     Plug 'godlygeek/tabular', {'on': 'Tabularize'}
     Plug 'mbbill/undotree', { 'on' : 'UndotreeToggle' }
@@ -132,6 +133,12 @@ function! LoadMyPlugins() abort  " {{{
     Plug 'kshenoy/vim-signature'
     Plug 'morhetz/gruvbox'
     Plug 'HerringtonDarkholme/yats.vim'
+
+    Plug 'prettier/vim-prettier', {
+      \ 'do': 'yarn install',
+      \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json',
+              \ 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
+    
   endif " }}}
   Plug 'ryanoasis/vim-devicons'           " Keep at end!
   call plug#end()

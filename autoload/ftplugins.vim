@@ -35,8 +35,8 @@ function! ftplugins#ALE_sh_conf() abort  " {{{
   " this is probably a waste of time when compiler shellcheck exists
   " if we're using powershell or cmd on windows set ALEs default shell to bash
   " TODO: set the path to shellcheck.
-    let shell_is_bash = match(expand('$SHELL'), 'bash')
-    if !shell_is_bash
+    let l:shell_is_bash = match(expand('$SHELL'), 'bash')
+    if !l:shell_is_bash
       let g:ale_sh_shell_default_shell = 1
     else
       let g:ale_sh_shell_default_shell = 0

@@ -308,7 +308,7 @@ command! -nargs=* -bang -bar -complete=file -complete=customlist,unix#EditFileCo
         \ Bsplit <q-mods>split<bang> <q-args>
 
 " Why not do the same for :Bd
-command! -nargs=* -range=% -addr=buffers -count -bang -bar -complete=buffer Bdelete :<count><mods>bd<bang> <args>
+command! -nargs=* -range=% -addr=buffers -count -bang -bar -complete=buffer Bdelete v:count:bd<bang><args>
 
 command! -nargs=* -range=% -addr=buffers -count -bang -bar -complete=file_in_path Find :<count><mods>find<bang> <args>
 
@@ -324,23 +324,31 @@ command! -nargs=* -bang -bar -complete=buffer -range=% -addr=buffers
 
 " Miscellaneous: {{{
 
-command!  -bang -complete=compiler -nargs=* Make
-      \ if <args>
-      \ for f in expand(<q-args>, 0, 1) |
-      \ exe '<mods> make<bang>' . f |
-      \ endfor
-      \ else
-      \ exe '<mods> make<bang>' . expand('%')
+" Well this isn't working soooo
+" command! -bar -bang -complete=compiler -nargs=* Make
+"       \| if <args>
+"       \| for f in expand(<q-args>, 0, 1)
+"       \| exe '<mods>make<bang>' . f
+"       \| endfor
+"       \| else
+"       \| exe 'make<bang>' . expand('%')
+
+" Fuck this really isn't gonna work either??
+" command! -bang -complete=compiler -nargs=? Make if <args> <bar> make<bang><args> <bar> else <bar> exec 'make' . <bang> . expand('%:S') <bar> endif
 
 command! -bang -complete=compiler -nargs=* -range=% -addr=buffers MakeBuffers
-      \ if <args>
-      \ for f in expand(<q-args>, 0, 1) |
-      \ exe '<mods> make<bang>' . f |
-      \ endfor
-      \ else
-      \ exe '<mods> make<bang>' . expand('%')
+      \| if <args>
+      \| for f in expand(<q-args>, 0, 1)
+      \| exe '<mods> make<bang>' . f
+      \| endfor
+      \| else
+      \| exe '<mods> make<bang>' . expand('%')
 
 command! -bar -nargs=1 -complete=history RerunLastX call histget(<args>, 1)
+
+" from the help
+" Define an Ex command ":H {num}" that supports re-execution of the {num}th entry from the output of |:history|. >
+command! -nargs=1 -bar -complete=history H execute histget("cmd", 0+<args>)
 
 " TODO: make bang handle either open in split or full window
 command! -bar Todo call todo#Todo()

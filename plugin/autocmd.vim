@@ -24,6 +24,8 @@ augroup UserHelpandPython " {{{
   " Blocks the UI and jams shit
   " au! CursorHold .xonshrc ++nested exe "silent! psearch " . expand("<cword>")
 
+  autocmd BufWinEnter * if &previewwindow | setlocal nonumber nornu | endif
+
 augroup END
 " }}}
 
@@ -62,6 +64,7 @@ augroup UserPlugins " {{{
   " todo: why did he add the exclamation mark and the nested?
   autocmd! User GoyoEnter nested call <SID>goyo_enter()
   autocmd! User GoyoLeave nested call <SID>goyo_leave()
+
 augroup END " }}}
 
 augroup UserStl  " {{{
@@ -70,6 +73,11 @@ augroup UserStl  " {{{
   autocmd CmdlineLeave /,\? :set nohlsearch
   autocmd CmdwinEnter [/?]  startinsert
 augroup END  " }}}
+
+augroup TagbarAutoCmds
+  au! CursorHold *
+  au! CursorHoldI *
+augroup END
 
 augroup UserNerdLoader  " {{{
   autocmd!
@@ -98,10 +106,14 @@ augroup UserCompletions   " {{{
 
 augroup END " }}}
 
-augroup UserFiletypes
+augroup UserFiletypes  " {{{
   au!
+
+  " Show type information automatically when the cursor stops moving
+  autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
+
   autocmd Filetype snippets call UltiSnipsConf()
-augroup END
+augroup END  " }}}
 
 if !has('nvim') | finish | endif
 

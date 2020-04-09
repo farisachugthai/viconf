@@ -80,7 +80,7 @@ function! todo#OpenRangerIn(path, edit_cmd)  abort " {{{
   let l:currentPath = expand(a:path)
   let s:rangerCallback = { 'name': 'ranger', 'edit_cmd': a:edit_cmd }
 
-  function! s:rangerCallback.on_exit(code, ...)
+  function! s:rangerCallback.on_exit(code, ...) abort
     if a:code == 0
       silent! Bclose!
     endif
@@ -93,6 +93,7 @@ function! todo#OpenRangerIn(path, edit_cmd)  abort " {{{
       endif
     endtry
   endfunction
+
     enew
     if isdirectory(l:currentPath)
       call termopen(s:ranger_command . ' --choosefiles='

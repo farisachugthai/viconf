@@ -209,7 +209,6 @@ endif
 " }}}
 
 " FZF: {{{
-
 noremap <F6>                <Cmd>Snippets<CR>
 noremap! <F6>               <Cmd>Snippets<CR>
 " I suppose for continuity
@@ -225,57 +224,11 @@ else
   nnoremap <C-x><C-f>                 :<C-u>find ~/**
 endif
 
-" Imaps: {{{
-if has('unix')
-  if executable('ag')
-    imap <C-x><C-f> <Plug>(fzf-complete-file-ag)
-    imap <C-x><C-j> <Plug>(fzf-complete-file-ag)
-  else
-    imap <C-x><C-f> <Plug>(fzf-complete-file)
-    imap <C-x><C-j> <Plug>(fzf-complete-path)
-  endif
-else
-    imap <C-x><C-f>       <Plug>(fzf-complete-file)
-    imap <C-x><C-j>       <Plug>(fzf-complete-path)
-    inoremap <C-f>        <C-x><C-f>
-    inoremap <C-j>        <C-x><C-j>
-endif
-
-imap <expr> <C-x><C-l> fzf#vim#complete(fzf#wrap({
-  \ 'prefix': '^.*$',
-  \ 'source': 'rg -n ^ --color always',
-  \ 'options': '--ansi --delimiter : --nth 3..',
-  \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '')}))
-
-inoremap <C-l> <C-x><C-l>
-
-" Uhhh C-b for buffer?
-inoremap <expr> <C-x><C-b> fzf#vim#complete#buffer_line()
-
-function! s:make_sentence(lines)
-  return substitute(join(a:lines), '^.', '\=toupper(submatch(0))', '').'.'
-endfunction
-
-imap <expr> <C-x><C-s>    fzf#vim#complete#word(
-    \ {'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
-    \ 'reducer': function('<sid>make_sentence'),
-    \ 'options': '--multi --reverse --margin 15%,0',
-    \ 'left':    40})
-" And add a shorter version
-inoremap <C-s>            <C-x><C-s>
-
-imap <expr> <C-x><C-k>    fzf#vim#complete(
-            \ {'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
-            \ 'options': '-ansi --multi --cycle',
-            \ 'left': 30})
-inoremap <C-k>            <C-x><C-k>
-
 " NOTE: The imap should probably only be invoked using \<tab>
 nmap \<tab>                 <Plug>(fzf-maps-n)
 omap \<tab>                 <Plug>(fzf-maps-o)
 xmap \<tab>                 <Plug>(fzf-maps-x)
 imap \<tab>                 <Plug>(fzf-maps-i)
-" }}}
 
 " Map Vim Defaults To FZF History Commands:{{{
 nnoremap q:        <Cmd>History:<CR>
@@ -289,15 +242,12 @@ nnoremap  <Leader>s         <Cmd>Ag <C-R><C-W><CR>
 nnoremap  <Leader>s         <Cmd>Ag <C-R><C-A><CR>
 xnoremap  <Leader>s         y<Cmd>Ag <C-R>"<CR>
 nnoremap  <Leader>`         <Cmd>Marks<CR>
-
 " FZF beat fugitive out on this one. Might take git log too.
 nnoremap <Leader>gg         <Cmd>GGrep<CR>
 nnoremap <Leader>gl         <Cmd>Commits<CR>
 nnoremap <Leader>g?         <Cmd>GFiles?<CR>
-
 nnoremap ,b                 <Cmd>Buffers<CR>
 nnoremap ,B                 <Cmd>Buffers<CR>
-
 " }}}
 
 " }}}
@@ -712,6 +662,3 @@ if !hasmapto('<Plug>(HL)')
 endif
 " }}}
 
-" Terminal: {{{
-" No dude go to buffers#terminal
-" }}}

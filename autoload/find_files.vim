@@ -5,18 +5,18 @@
   " Last Modified: August 02, 2019
 " ============================================================================
 
-function! find_files#build_quickfix_list(lines) abort  " {{{1
+function! find_files#build_quickfix_list(lines) abort  " {{{
   call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
   copen
   cc
 endfunction  " }}}
 
-function! s:make_sentence(lines) abort  " {{{1
+function! s:make_sentence(lines) abort  " {{{
   " *fzf-vim-reducer-example*
   return substitute(join(a:lines), '^.', '\=toupper(submatch(0))', '').'.'
 endfunction  " }}}
 
-function! find_files#plug_help_sink(line)  abort " {{{1
+function! find_files#plug_help_sink(line)  abort " {{{
   " Call :PlugHelp to use fzf to open a window with all of the plugins
   " you have installed listed and upon pressing enter open the help
   " docs. That's not a great explanation but honestly easier to explain
@@ -33,14 +33,14 @@ function! find_files#plug_help_sink(line)  abort " {{{1
   execute 'Explore' l:dir
 endfunction  " }}}
 
-function! find_files#buflist() abort  " {{{1
+function! find_files#buflist() abort  " {{{
   redir => s:ls
   silent! ls
   redir END
   return split(s:ls, '\n')
 endfunction  " }}}
 
-function! find_files#bufopen(e) abort  " {{{1
+function! find_files#bufopen(e) abort  " {{{
   execute 'buffer' matchstr(a:e, '^[ 0-9]*')
   return v:true
 endfunction  " }}}
@@ -55,7 +55,7 @@ function! find_files#FZFMru(bang) abort  " {{{1
 
 endfunction  " }}}
 
-function! find_files#FZFGit(bang) abort  " {{{1
+function! find_files#FZFGit(bang) abort  " {{{
   " Remove trailing new line to make it work with tmux splits
   let l:directory = substitute(system('git rev-parse --show-toplevel'), '\n$', '', '')
   if !v:shell_error
@@ -71,7 +71,7 @@ function! find_files#FZFGit(bang) abort  " {{{1
   endif
 endfunction  " }}}
 
-function! find_files#termux_remote() abort  " {{{1
+function! find_files#termux_remote() abort  " {{{
   let g:python3_host_prog = expand('$PREFIX/bin/python')
   let g:loaded_python_provider = 1
   let g:node_host_prog = '/data/data/com.termux/files/home/.local/share/yarn/global/node_modules/neovim/bin/cli.js'
@@ -144,8 +144,8 @@ endfunction  " }}}
 function! find_files#msdos_remote() abort  " {{{1
   " Don't set python paths dynamically it's such a headache
   " let g:python3_host_prog = 'C:\Python38\python.exe'
-  let g:python3_host_prog = 'C:\Users\fac\scoop\apps\miniconda3\current\python.exe'
-  let g:python_host_prog = 'C:\Python27\python.exe'
+  let g:python3_host_prog = 'C:/Users/fac/scoop/apps/winpython/current/python-3.8.1.amd64/python.exe'
+  let g:python_host_prog = 'C:/Python27/python.exe'
   let g:loaded_ruby_provider = 1
 
   " wow this one actually fucking worked

@@ -54,7 +54,7 @@ function! pydoc_help#read_page() abort  " {{{
   call s:temp_buffer()
 endfunction  " }}}
 
-function! pydoc_help#PydocCbword(bang, mods) abort  " {{{1
+function! pydoc_help#PydocCbword(bang, mods) abort  " {{{
   " Holy shit it works!!!
   let s:temp_cword = expand('<cWORD>')
   exec a:mods . 'enew' . a:bang
@@ -65,7 +65,7 @@ function! pydoc_help#PydocCbword(bang, mods) abort  " {{{1
   call s:temp_buffer()
 endfunction  " }}}
 
-function s:handle_user_config() abort   " {{{1
+function! s:handle_user_config() abort   " {{{
   " Look at me handling user configured arguments!
   if exists('g:pydoc_window')
     if type('g:pydoc_window') == v:t_string
@@ -334,3 +334,4 @@ function! pydoc_help#WholeLine(...) abort  " {{{
   py3 curline = vim.command('let cur_line = getline(line("."))')
   py3 vim.current.buffer.append(pydoc.help(cur_line))
 endfunction  " }}}
+

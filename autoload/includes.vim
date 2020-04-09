@@ -141,8 +141,8 @@ function! includes#TypeScriptIncludeExpression(fname, gf) abort  " {{{
       if !has_key(b:ts_packages, a:fname)
         let l:package = json_decode(join(readfile(l:package_json)))
         let b:ts_packages[a:fname] = {
-                    \ "pack": fnamemodify(l:package_json, ':p:h'),
-                    \ "entry": substitute(get(package, "typings", get(package, "main", "index.js")), '^\.\{1,2}\/', '', '')
+                    \ 'pack': fnamemodify(l:package_json, ':p:h'),
+                    \ 'entry': substitute(get(package, 'typings', get(package, 'main', 'index.js')), '^\.\{1,2}\/', '', '')
                     \ }
       endif
 
@@ -228,8 +228,8 @@ function! includes#CPath() abort  " {{{
       let s:path = s:path . 'C:/tools/miniconda3/envs/working/include,'
     endif
 
-    if isdirectory('C:/tools/vs/2019/Community/VC/Tools/MSVC/14.24.28314/include')
-      let s:path = s:path . 'C:/tools/vs/2019/Community/VC/Tools/MSVC/14.24.28314/include'
+    if isdirectory('C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/2019/Community/VC/Tools/MSVC')
+      let s:path = s:path . 'C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/2019/Community/VC/Tools/MSVC/**'
     endif
 
     if isdirectory('C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include')

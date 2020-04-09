@@ -5,12 +5,12 @@
     " Last Modified: Nov 13, 2019
 " ============================================================================
 
-function s:Echo(msg) abort
+function! s:Echo(msg) abort   " {{{
   echohl WarningMsg
   redraw!
   echomsg a:msg
   echohl NONE
-endfunction
+endfunction  " }}}
 
 function! syncom#HL() abort  " HL: Whats the highlighting group under my cursor? {{{
 
@@ -193,7 +193,8 @@ function! syncom#rainbow_paren() abort  " {{{
   highlight! link RBP3 Green
   highlight! link RBP4 Blue
   let g:rainbow_levels = 4
-  function! RainbowParens(cmdline)
+
+  function! RainbowParens(cmdline) abort
     let l:ret = []
     let l:i = 0
     let l:lvl = 0

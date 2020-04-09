@@ -5,12 +5,12 @@
     " Last Modified: Nov 06, 2019
 " ============================================================================
 
-" Guard: {{{
-let s:cpo_save = &cpoptions
-set cpoptions&vim
-" }}}
+" Only do this when not done yet for this buffer
 
-" Options: {{{1
+if exists('b:did_ftplugin') | finish | endif
+
+" Options: {{{
+
 " GCC					*quickfix-gcc*	*compiler-gcc*
 
 " There's one variable you can set for the GCC compiler:
@@ -43,14 +43,9 @@ endif
 if exists(':Man') == 2
   setlocal keywordprg=:Man
 endif
-
-" now defined from ftplugin
-" setlocal omnifunc=ccomplete#Complete
 " }}}
 
 " Path: {{{
-
-" TODO: setlocal include
 setlocal include=^\s*#\s*include
 " setlocal define
 " setlocal includexpr
@@ -58,8 +53,8 @@ setlocal include=^\s*#\s*include
 let &l:path=includes#CPath()
 
 let b:undo_ftplugin .= '|setlocal sua< cin< mp< ofu< kp< include<'
-      \ . '|unlet! &l:path'
-      \ . '|unlet! b:undo_ftplugin'
+      \. '|unlet! &l:path'
+      \. '|unlet! b:undo_ftplugin'
 " }}}
 
 " Mappings: {{{
@@ -68,7 +63,7 @@ nnoremap <buffer> <F5> :call ftplugins#ClangCheck()<CR><CR>
 nnoremap <buffer> <Leader>ef <Cmd>py3file expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
 
 let b:undo_ftplugin .= '|silent! nunmap <buffer> <F5>'
-      \. '|silent nunmap  <buffer> <Leader>ef'
+      \. '|silent! nunmap <buffer> <Leader>ef'
 
 " Idk why <CR> is  there twice and idk if it was a typo on the part of the
 " Clang people but its in their official documentation..
@@ -86,13 +81,13 @@ if has('cscope') && executable('cscope')
   nnoremap <buffer> <C-\>i :cs find i <C-R>=expand("<cfile>")<CR><CR>
   "nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
   " TODO:
-  let b:undo_ftplugin .= 'nunmap <buffer> <C-\>s'
-        \ . '| nunmap <buffer> <C-\>g'
-        \ . '| nunmap <buffer> <C-\>c'
-        \ . '| nunmap <buffer> <C-\>t'
-        \ . '| nunmap <buffer> <C-\>e'
-        \ . '| nunmap <buffer> <C-\>f'
-        \ . '| nunmap <buffer> <C-\>i'
+  let b:undo_ftplugin .= '|silent! nunmap <buffer> <C-\>s'
+        \. '|silent! nunmap <buffer> <C-\>g'
+        \. '|silent! nunmap <buffer> <C-\>c'
+        \. '|silent! nunmap <buffer> <C-\>t'
+        \. '|silent! nunmap <buffer> <C-\>e'
+        \. '|silent! nunmap <buffer> <C-\>f'
+        \. '|silent! nunmap <buffer> <C-\>i'
 
 
   " Using 'CTRL-spacebar', the result is displayed in new horizontal window.
@@ -117,21 +112,21 @@ if has('cscope') && executable('cscope')
   nnoremap <buffer> <2-LeftMouse> :cs find d <C-R>=expand("<cword>")<CR>:<C-R>=line('.')<CR>:%<CR>
   nnoremap <buffer> <C-LeftMouse> :cs find d <C-R>=expand("<cword>")<CR>:<C-R>=line('.')<CR>:%<CR>
 
-  let b:undo_ftplugin .= 'nunmap <buffer> <C-@>s'
-        \ . '| nunmap <buffer> <C-@>g'
-        \ . '| nunmap <buffer> <C-@>c'
-        \ . '| nunmap <buffer> <C-@>t'
-        \ . '| nunmap <buffer> <C-@>e'
-        \ . '| nunmap <buffer> <C-@>f'
-        \ . '| nunmap <buffer> <C-@>i'
-        \ . '| nunmap <buffer> <C-@><C-@>g'
-        \ . '| nunmap <buffer> <C-@><C-@>c'
-        \ . '| nunmap <buffer> <C-@><C-@>t'
-        \ . '| nunmap <buffer> <C-@><C-@>e'
-        \ . '| nunmap <buffer> <C-@><C-@>f'
-        \ . '| nunmap <buffer> <C-@><C-@>i'
-        \ . '| nunmap <buffer> <2-LeftMouse>'
-        \ . '| nunmap <buffer> <C-LeftMouse'
+  let b:undo_ftplugin .= '|silent! nunmap <buffer> <C-@>s'
+        \. '|silent! nunmap <buffer> <C-@>g'
+        \. '|silent! nunmap <buffer> <C-@>c'
+        \. '|silent! nunmap <buffer> <C-@>t'
+        \. '|silent! nunmap <buffer> <C-@>e'
+        \. '|silent! nunmap <buffer> <C-@>f'
+        \. '|silent! nunmap <buffer> <C-@>i'
+        \. '|silent! nunmap <buffer> <C-@><C-@>g'
+        \. '|silent! nunmap <buffer> <C-@><C-@>c'
+        \. '|silent! nunmap <buffer> <C-@><C-@>t'
+        \. '|silent! nunmap <buffer> <C-@><C-@>e'
+        \. '|silent! nunmap <buffer> <C-@><C-@>f'
+        \. '|silent! nunmap <buffer> <C-@><C-@>i'
+        \. '|silent! nunmap <buffer> <2-LeftMouse>'
+        \. '|silent! nunmap <buffer> <C-LeftMouse'
 
 endif
 " }}}
