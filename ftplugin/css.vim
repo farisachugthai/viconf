@@ -5,11 +5,11 @@
     " Last Modified: June 08, 2019
 " ============================================================================
 
-if exists("b:did_ftplugin") | finish | endif
+if exists('b:did_ftplugin') | finish | endif
 
-"the whole thing is here
+" the whole thing is here
 " source $VIMRUNTIME/ftplugin/css.vim
-source $VIMRUNTIME/indent/cs.vim
+source $VIMRUNTIME/indent/css.vim
 
 setlocal expandtab
 setlocal shiftwidth=2
@@ -25,11 +25,14 @@ setlocal comments=s1:/*,mb:*,ex:*/ commentstring&
 " setlocal comments=:// commentstring=//\ %s
 
 compiler csslint
-let &l:formatprg=postcss
+
+let &l:formatprg='!postcss'
+
 let &l:include = '^\s*@import\s\+\%(url(\)\='
+
 call ftplugins#ALE_CSS_Conf()
 
 let b:undo_ftplugin .= '|setlocal et< sw< sts< sua< ofu< mp< efm<'
-      \ . '|setlocal path< com< cms<'
+      \ . '|setlocal path< com< cms< fp< include<'
       \ . '|unlet! b:undo_ftplugin'
       \ . '|unlet! b:did_ftplugin'

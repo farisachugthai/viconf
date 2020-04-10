@@ -1,10 +1,14 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""Pynvim's longest test file."""
+import json
 import os
 import sys
 from pathlib import Path
 
 sys.path.insert(0, Path('../python3').resolve().__fspath__())
 
-from pynvim_ import NvimError
+from pynvim_ import NvimError, attach
 
 import pytest
 # from _pytest.mark

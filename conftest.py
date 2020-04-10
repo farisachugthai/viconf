@@ -6,9 +6,12 @@ import os
 import sys
 import tempfile
 
-sys.path.insert(0, 'python3')
+here = os.path.dirname(os.path.abspath(__file__))
 
-from pynvim_ import attach
+sys.path.insert(0, os.path.join(here, 'python3'))
+
+import pynvim_
+from pynvim_ import *
 
 import pytest
 # from _pytest.config import ConftestImportFailure
@@ -29,6 +32,7 @@ def env(listen_addr=None):
 
 @pytest.fixture
 def vim():
+    # now that i'm rereading it this is such a weird way of settings things up.
     child_argv = os.environ.get("NVIM_CHILD_ARGV")
     # so if we're on windows should we have shelltemp set or not?
     listen_address = os.environ.get("NVIM_LISTEN_ADDRESS")
@@ -42,4 +46,13 @@ def vim():
         assert listen_address is None or listen_address != ""
         editor = attach("socket", path=listen_address)
 
+    return editor
+
+@pytest.fixture
+def nvim():
+    inside_nvim = os.environ.get('NVIM_LISTEN_ADDRESS')
+    if inside_nvim:
+        editor = attach("socket", path=listen_address)
+    else:
+        editor = start_host()
     return editor

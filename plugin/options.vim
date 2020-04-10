@@ -92,6 +92,10 @@ setglobal suffixes=.bak,~,.o,.info,.swp,.aux,.bbl,.blg,.brf,.cb,.dvi,.idx,.ilg,.
 
 setglobal pastetoggle=<F9>   " fuck me this is what windows terminal uses for something
 setglobal signcolumn=auto:4  " this might be a nvim 4 thing
+" Don't put usetab before split in switchbuf. If you do then stuff like
+" `:helpgrep word` will open a new tab with results and leave the quickfix list in the previous tab.
+" because qf lists don't transfer from tab to tab, you won't be able to access the search results in
+" the window that your cursor just moved to!
 try | setglobal switchbuf=useopen,split | catch | endtry
 setglobal splitbelow splitright
 setglobal sidescroll=5 hidden
@@ -139,7 +143,7 @@ setglobal matchtime=20  " Show the matching pair for 2 seconds
 " looks very off
 set termguicolors
 setglobal synmaxcol=1000
-
+set nohlsearch
 setglobal regexpengine=2
 
 " Todo:
@@ -465,10 +469,12 @@ let g:startify_session_savevars = [
 " Commands and bookmarks officially use A B C D E F G H I!
 let g:startify_commands = [
       \ {'a': 'Ag!'},
-      \ {'b': 'Buffers!'},
-      \ {'f': ['FZF! ~', 'FZF! ~'],},
+      \ {'b': 'e $MYVIMRC'},
+      \ {'f': 'FZF! ~'},
       \ {'g': ['Git status!', 'Gstatus'],},
       \ {'h': ['Vim Reference', 'he index.txt'],},
+      \ {'m': 'Maps'},
+      \ {'o': ['Options', 'exec "e " . stdpath("config") . "/plugin/options"']},
     \ ]
 
 " Also utilize his skiplist
@@ -550,9 +556,10 @@ function! s:Init_coc() abort
 
   if empty($ANDROID_DATA)
     call coc#config('python.jediEnabled', v:false)
-    if has('unix')
-      let g:coc_node_path = '/usr/sbin/node'
-    else
+    " TODO: nvm is gonna make this more complicated
+    " if has('unix')
+    "   let g:coc_node_path = '/usr/sbin/node'
+    " else
       let g:coc_node_path = 'C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\node.exe'
     endif
   else

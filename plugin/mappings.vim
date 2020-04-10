@@ -53,9 +53,9 @@ nnoremap <Leader>sp <Cmd>setlocal spell!<CR>
 nnoremap <Leader>o o<Esc>
 nnoremap <Leader>O O<Esc>
 
-nnoremap ,e :e **/*<C-z><S-Tab>
+nnoremap <Leader>fe :e **/*<C-z><S-Tab>
 
-nnoremap ,f :find **/*<C-z><S-Tab>
+nnoremap <Leader>ff :find **/*<C-z><S-Tab>
 
 " The nvim API is seriously fantastic.
 nnoremap <Leader>rt <Cmd>call buffers#EchoRTP()<CR>
@@ -112,8 +112,6 @@ function! MapRsi() abort
   noremap! <M-t> <C-R>=(plugins#ExpandPossibleShorterSnippet() == 0? '': UltiSnips#ExpandSnippet())<CR>
 
 endfunction
-
-call MapRsi()
 " }}}
 
 function! AddVileBinding(key, handler)  " {{{
@@ -234,23 +232,23 @@ nnoremap q/        <Cmd>History/<CR>
 nnoremap q; q:
 
 " Get The Rest Of The FZF Vim Commands Involved:
-nnoremap  <Leader>l         <Cmd>Lines<CR>
-nnoremap  <Leader>s         <Cmd>Ag <C-R><C-W><CR>
-nnoremap  <Leader>s         <Cmd>Ag <C-R><C-A><CR>
-xnoremap  <Leader>s         y<Cmd>Ag <C-R>"<CR>
+nnoremap  <Leader>L         <Cmd>Lines<CR>
+nnoremap  <Leader>fs         <Cmd>Ag <C-R><C-W><CR>
+nnoremap  <Leader>fa         <Cmd>Ag <C-R><C-A><CR>
+xnoremap  <Leader>f         y<Cmd>Ag <C-R>"<CR>
 nnoremap  <Leader>`         <Cmd>Marks<CR>
 " FZF beat fugitive out on this one. Might take git log too.
-nnoremap <Leader>gg         <Cmd>GGrep<CR>
-nnoremap <Leader>gl         <Cmd>Commits<CR>
-nnoremap <Leader>g?         <Cmd>GFiles?<CR>
-nnoremap ,b                 <Cmd>Buffers<CR>
-nnoremap ,B                 <Cmd>Buffers<CR>
+nnoremap  <Leader>gg         <Cmd>GGrep<CR>
+nnoremap  <Leader>gl         <Cmd>Commits<CR>
+nnoremap  <Leader>g?         <Cmd>GFiles?<CR>
+nnoremap  <Leader>fb                 <Cmd>Buffers<CR>
+nnoremap  <Leader>fB                 <Cmd>Buffers<CR>
 " }}}
 
 " }}}
 
 " NERDTree Mapping: {{{
-nnoremap <expr> <Leader>n   (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
+nnoremap <expr> <Leader>N   (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
 nnoremap <Leader>nt <Cmd>NERDTreeToggleVCS<CR>zz
 nnoremap <Leader>nf <Cmd>NERDTreeFind<CR>
 
@@ -281,7 +279,7 @@ endfunction
 
 " Let's give Coc the tab key. If this doesn't work as expected we can also go
 " with something like <M-/>
-inoremap <expr> <M-/> pumvisible() ? coc#_select_confirm() :
+inoremap <expr> <M-=> pumvisible() ? coc#_select_confirm() :
   \ coc#expandableOrJumpable() ?
   \ "\<C-R>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
   \ "\<CR>"
@@ -292,7 +290,8 @@ inoremap <M-?> <C-R>=SuperTabAlternateCompletion("\<lt>c-p>")<CR>
 inoremap <expr> <C-Space> coc#refresh()
 
 " As a heads up theres also a coc#select#snippet
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
+" Also use imap so that we can map other things to <CR> as needed
+imap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
 
 nnoremap gK <Plug>(coc-definition)<CR>
 " The gu<text object> operation is too important
@@ -425,6 +424,7 @@ endfunction  " }}}
 
 function! Quickfix_Mappings() abort  " {{{
   " Jump to and from location/quickfix windows.
+  " Note: `:he Q_qf`  <--- C-]
 
   " TODO: These need to catch E776 no location list
   nnoremap <C-Down> <Cmd>llast<CR><bar><Cmd>clast<CR>
@@ -440,7 +440,7 @@ function! Quickfix_Mappings() abort  " {{{
   nnoremap <Leader>lh <Cmd>botright lhistory<CR>
   nnoremap <Leader>ll <Cmd>llist!<CR>
   " Down for down
-  nnorema <Leader>ld <Cmd>botright llist!<CR>
+  nnoremap <Leader>ld <Cmd>botright llist!<CR>
   nnoremap <Leader>lo <Cmd>lopen<CR>
   nnoremap <Leader>lw <Cmd>botright lwindow<CR>
 
@@ -449,7 +449,7 @@ function! Quickfix_Mappings() abort  " {{{
   " this is defined globally instead of only in the after/ftplugin/qf.vim
   " because it toggles the location list and so we want to have that mapping
   " defined everywhere.
-  nnoremap <Leader>l <Plug>(qf_loc_toggle)
+  nnoremap <Leader>L <Plug>(qf_loc_toggle)
   nnoremap <Leader>ln <Plug>(qf_loc_next)
   nnoremap <Leader>lp <Plug>(qf_loc_previous)
   nnoremap <Leader>lo <Plug>(qf_loc_toggle)
@@ -584,16 +584,6 @@ function! Tab_Mappings() abort  " {{{1
 endfunction
 " }}}
 
-" Call Functions: {{{
-if !exists('no_plugin_maps') && !exists('no_windows_vim_maps')
-  call Window_Mappings()
-  call AltKeyNavigation()
-  call Buffer_Mappings()
-  call Tab_Mappings()
-  call Quickfix_Mappings()
-endif
-" }}}
-
 " Fugitive: {{{
 function UserFugitiveMappings() abort
   nnoremap <Leader>gb   <Cmd>Git blame<CR>
@@ -624,13 +614,15 @@ function UserFugitiveMappings() abort
   nnoremap <Leader>gw   <Cmd>Gwrite<CR>
   nnoremap <Leader>gW   <Cmd>Gwrite!<CR>
 endfunction
-
-call UserFugitiveMappings()
 " }}}
 
 " Tags: {{{
-nnoremap <C-?> <Cmd>stjump!<CR>
-xnoremap <C-?> <Cmd>stjump!<CR>
+" I've always really liked that M-/ mapping from readline
+nnoremap <M-?> <Cmd>stjump!<CR>
+xnoremap <M-?> <Cmd>stjump!<CR>
+
+nnoremap <M-/> <Cmd>stselect!<CR>
+xnoremap <M-/> <Cmd>stselect!<CR>
 
 " Thank you index.txt!
 " From: 2.2 Window commands                                             *CTRL-W*
@@ -660,7 +652,20 @@ nnoremap <Plug>(HiQF) <Cmd>HiQF<CR>
 nnoremap <Plug>(SyntaxInfo) <Cmd>SyntaxInfo<CR>
 
 if !hasmapto('<Plug>(HL)')
-  nnoremap <Leader>h <Plug>(HL)
+  nnoremap <Leader>H <Plug>(HL)
 endif
 " }}}
 
+" Call Functions: {{{
+if !exists('no_plugin_maps') && !exists('no_windows_vim_maps')
+
+  call Window_Mappings()
+  call AltKeyNavigation()
+  call Buffer_Mappings()
+  call Tab_Mappings()
+  call Quickfix_Mappings()
+  call MapRsi()
+  call UserFugitiveMappings()
+
+endif
+" }}}

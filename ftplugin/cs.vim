@@ -1,7 +1,7 @@
 " Vim filetype plugin file
 " Language:	C#
 
-if exists("b:did_ftplugin") | finish | endif
+if exists('b:did_ftplugin') | finish | endif
 
 " Options: {{{
 source $VIMRUNTIME/ftplugin/cs.vim
@@ -79,4 +79,3 @@ let b:undo_ftplugin = 'setlocal fo< com< et< sts< sw< ts< mp<'
       \. '|unlet! b:undo_ftplugin'
       \. '|unlet! b:current_compiler'
       \. '|unlet! b:did_ftplugin'
-

@@ -43,7 +43,7 @@ inoremap <buffer> ' "<C-G>U<Left>
 
 setlocal matchpairs+=::,
 
-if exists("loaded_matchit")
+if exists('loaded_matchit')
   " Set up matchit:
   let b:match_ignorecase = 1
   let b:match_words = '<:>,{:},"",(:),[:]'
@@ -75,4 +75,3 @@ let b:undo_ftplugin .= '|setlocal fo< com< cms< et< sts< sw< ts< sua< fdm< fp< s
       \ . '|silent! iunmap <buffer> "'
       \ . "|silent! iunmap <buffer> '"
       \ . '|silent! delcom Pjson'
-

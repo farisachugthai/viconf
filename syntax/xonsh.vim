@@ -4,17 +4,17 @@
 " Previous Maintainer: Abhishek Mukherjee
 " Latest Revision: Nov 28, 2019
 
-if exists("b:current_syntax")
+if exists('b:current_syntax')
   finish
 endif
 
 let g:xsh_highlight_all = 1
 
-if exists("g:xsh_highlight_all")
-  let xsh_highlight_numbers = 1
-  let xsh_highlight_builtins = 1
-  let xsh_highlight_exceptions = 1
-  let xsh_highlight_space_errors = 1
+if exists('g:xsh_highlight_all')
+  let g:xsh_highlight_numbers = 1
+  let g:xsh_highlight_builtins = 1
+  let g:xsh_highlight_exceptions = 1
+  let g:xsh_highlight_space_errors = 1
 endif
 
 " Include python files goddamn
@@ -33,9 +33,9 @@ syn keyword xshOperator    and in is not or
 syn keyword xshPreCondit    import from
 syn keyword xshTodo    TODO FIXME XXX contained
 
-syn match xshComment    "#.*$" contains=xshTodo
-syn match xshFunction    "[a-zA-Z_][a-zA-Z0-9_]*" contained
-syn match xshEnvironmentVariable "\v\$[a-zA-Z0-9_]+"
+syn match xshComment    '#.*$' contains=xshTodo
+syn match xshFunction    '[a-zA-Z_][a-zA-Z0-9_]*' contained
+syn match xshEnvironmentVariable '\v\$[a-zA-Z0-9_]+'
 
 " Do not spell doctests inside strings.
 " Notice that the end of a string, either ''', or """, will end the contained
@@ -133,4 +133,4 @@ syn sync match xshSync grouphere NONE "):$"
 "syn sync minlines=2000
 syn sync fromstart
 
-let b:current_syntax = "xonsh"
+let b:current_syntax = 'xonsh'

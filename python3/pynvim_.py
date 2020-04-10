@@ -13,13 +13,12 @@ This runs almost entirely by itself. Run.::
 
     :py3f %
 
-On the Vim ex line to verify. Still currently depends on pynvim.msgpack_rpc because it's a saturday
-afternoon and I don't feel like it.
+To verify so.
 
 Extended Summary
 ----------------
 
-#) Actually not in pynvim but a `get_documentation` function I always find useful.
+#) Not in pynvim but a `get_documentation` function I always find useful.
 
 #) __init__ : Can't believe I forgot this one
 
@@ -55,9 +54,6 @@ Decorators used by python host plugin system.
 
 """
 # import abc
-import greenlet
-from msgpack import unpackb, ExtType, Packer, Unpacker
-import pkg_resources
 import asyncio
 import codecs
 import cgitb
@@ -88,11 +84,14 @@ from io import StringIO
 from pydoc import safeimport
 from traceback import format_exception, format_stack, format_exc
 
+import greenlet
+from msgpack import unpackb, ExtType, Packer, Unpacker
+import pkg_resources
+
 if sys.version_info >= (3, 4):
     from importlib.machinery import PathFinder
 else:
     PathFinder = None
-
 
 try:
     import pyuv  # noqa
@@ -100,6 +99,11 @@ except ImportError:
     from pynvim.msgpack_rpc.event_loop import EventLoop
 else:
     from pynvim.msgpack_rpc.event_loop.uv import UvEventLoop as EventLoop
+
+if sys.version_info <= (3, 7):
+
+    class ModuleNotFoundError(ImportError):
+        pass  # i have a better implementation somewhere...
 
 
 # }}}
@@ -133,7 +137,6 @@ mod_cache = {}
 distribution = pkg_resources.get_distribution("pynvim")
 __version__ = distribution.version
 
-os_chdir = os.chdir
 
 lua_module = """
 local a = vim.api
@@ -221,7 +224,8 @@ def start_host(session=None):
     nvim = Nvim.from_session(session)
 
     if nvim.version.api_level < 1:
-        sys.stderr.write("This version of pynvim " "requires nvim 0.1.6 or later")
+        sys.stderr.write(
+            "This version of pynvim " "requires nvim 0.1.6 or later")
         sys.exit(1)
 
     host = Host(nvim)
@@ -274,37 +278,61 @@ def attach(session_type, address=None, port=None, path=None, argv=None, decode=N
 
     return Nvim.from_session(session).with_decode(decode)
 
-
-def setup_logging(name):
-    """Setup logging according to environment variables."""
-    logger = logging.getLogger(__name__)
-    if "NVIM_PYTHON_LOG_FILE" in os.environ:
-        prefix = os.environ["NVIM_PYTHON_LOG_FILE"].strip()
-        major_version = sys.version_info[0]
-        logfile = "{}_py{}_{}".format(prefix, major_version, name)
-        handler = logging.FileHandler(logfile, "w", "utf-8")
-        handler.formatter = logging.Formatter(
-            "%(asctime)s [%(levelname)s @ "
-            "%(filename)s:%(funcName)s:%(lineno)s] %(process)s - %(message)s"
-        )
-        logging.root.addHandler(handler)
-        level = logging.INFO
-        env_log_level = os.environ.get("NVIM_PYTHON_LOG_LEVEL", None)
-        if env_log_level is not None:
-            lvl = getattr(logging, env_log_level.strip(), None)
-            if isinstance(lvl, int):
-                level = lvl
-            else:
-                logger.warning(
-                    "Invalid NVIM_PYTHON_LOG_LEVEL: %r, using INFO.", env_log_level
-                )
-        logger.setLevel(level)
-
-
 # Required for python 2.6
 class NullHandler(logging.Handler):
     def emit(self, record):
         pass
+
+
+def setup_logging(name=None, level=None):
+    """Setup logging according to environment variables.
+
+    So I just figured out why the nvim_python_log_file never sets.
+    This is set up so wrong.
+
+    Parameters
+    ----------
+    name : str, optional
+    level : int, optional
+        Now level can be specified at the time of function call, or used as
+        an environment variable and we won't arbitrarily overwrite it halfway
+        through the function.
+
+    Returns
+    -------
+    logger : :class:`logging.Logger`
+        Returns something now. Because for all that work we never returned the
+        logger!!!!
+
+    """
+    if name is None:
+        name = __name__
+    if level is None:
+        level = os.environ.get("NVIM_PYTHON_LOG_LEVEL", None)
+        if level is None:
+            level = logging.WARNING
+
+    logger = logging.getLogger(name=name)
+    logger.setLevel(level)
+
+    if not "NVIM_PYTHON_LOG_FILE" in os.environ:
+        return logger
+
+    prefix = os.environ["NVIM_PYTHON_LOG_FILE"].strip()
+    major_version = sys.version_info[0]
+    logfile = "{}_py{}_{}".format(prefix, major_version, name)
+    handler = logging.FileHandler(logfile, "w", "utf-8")
+    handler.setLevel(level)
+
+    formatter = logging.Formatter(
+        "%(asctime)s [%(levelname)s @ "
+        "%(filename)s:%(funcName)s:%(lineno)s] %(process)s - %(message)s"
+    )
+
+    handler.addFormatter(formatter)
+    logger.addHandler(handler)
+    logger.root.addHandler(handler)
+    return logger
 
 
 if not logging.root.handlers:
@@ -399,7 +427,8 @@ def get_client_info(type_, method_spec, kind=None):
     kind :
     """
     name = "python{}-{}".format(sys.version_info[0], kind)
-    attributes = {"license": "Apache v2", "website": "github.com/neovim/pynvim"}
+    attributes = {"license": "Apache v2",
+                  "website": "github.com/neovim/pynvim"}
     return name, VERSION.__dict__, type_, method_spec, attributes
 
 
@@ -434,19 +463,6 @@ def get_decoded_string(encoded):
             for element in encoded
             if isinstance(element, bytes)
         ]
-
-
-def find_module(fullname, path):
-    """Compatibility wrapper for imp.find_module.
-
-    Automatically decodes arguments of find_module, in Python3 they must be
-    Unicode
-    """
-    if isinstance(fullname, bytes):
-        fullname = get_decoded_string(fullname)
-    if isinstance(path, bytes):
-        path = get_decoded_string(path)
-    return original_find_module(fullname, path)
 
 
 def check_async(async_, kwargs, default):
@@ -717,6 +733,266 @@ class Remote(object):
 
 # }}}
 
+# msgpack_rpc.session: {{{
+
+
+class ErrorResponse(BaseException):
+    """Raise this in a request handler to respond with a given error message.
+
+    Unlike when other exceptions are caught, this gives full control off the
+    error response sent. When "ErrorResponse(msg)" is caught "msg" will be
+    sent verbatim as the error response.No traceback will be appended.
+    """
+
+    pass
+
+
+class NvimRuntimeError(NvimError):
+    """Created so we don't raise RuntimeErrors but still generate exceptions as
+    needed."""
+
+
+class Session(object):
+    """Msgpack-rpc session layer that uses coroutines for a synchronous API.
+
+    This class provides the public msgpack-rpc API required by this library.
+    It uses the greenlet module to handle requests and notifications coming
+    from Nvim with a synchronous API.
+
+    Ahhhh the Session object! Probably gonna end up subclassing this bitch
+    a LOT.
+    """
+
+    def __init__(self, async_session):
+        """Wrap `async_session` on a synchronous msgpack-rpc interface."""
+        self._async_session = async_session
+        self._request_cb = self._notification_cb = None
+        self._pending_messages = deque()
+        self._is_running = False
+        self._setup_exception = None
+        self.loop = async_session.loop
+        self._loop_thread = None
+
+    def threadsafe_call(self, fn, *args, **kwargs):
+        """Wrap :meth:`AsyncSession.threadsafe_call`."""
+
+        @functools.wraps
+        def handler():
+            try:
+                fn(*args, **kwargs)
+            except Exception:
+                warn("error caught while excecuting async callback\n%s\n", format_exc())
+
+        @functools.wraps
+        def greenlet_wrapper():
+            gr = greenlet.greenlet(handler)
+            gr.switch()
+
+        self._async_session.threadsafe_call(greenlet_wrapper)
+
+    def next_message(self):
+        """Block until a message(request or notification) is available.
+
+        If any messages were previously enqueued, return the first in queue.
+        If not, run the event loop until one is received.
+
+        Raises
+        ------
+        """
+        if self._is_running:
+            raise NvimError("Event loop already running")
+        if self._pending_messages:
+            return self._pending_messages.popleft()
+        self._async_session.run(
+            self._enqueue_request_and_stop, self._enqueue_notification_and_stop
+        )
+        if self._pending_messages:
+            return self._pending_messages.popleft()
+
+    def request(self, method, *args, **kwargs):
+        """Send a msgpack-rpc request and block until as response is received.
+
+        If the event loop is running, this method must have been called by a
+        request or notification handler running on a greenlet. In that case,
+        send the quest and yield to the parent greenlet until a response is
+        available.
+
+        When the event loop is not running, it will perform a blocking request
+        like this:
+        - Send the request
+        - Run the loop until the response is available
+        - Put requests/notifications received while waiting into a queue
+
+        If the `async_` flag is present and True, a asynchronous notification
+        is sent instead. This will never block, and the return value or error
+        is ignored.
+        """
+        async_ = check_async(kwargs.pop("async_", None), kwargs, False)
+        if async_:
+            self._async_session.notify(method, args)
+            return
+        # if kwargs:
+        #     raise ValueError("request got unsupported keyword argument(s): {}"
+        #                      .format(', '.join(kwargs.keys())))
+
+        if self._is_running:
+            v = self._yielding_request(method, args)
+        else:
+            v = self._blocking_request(method, args)
+        if not v:
+            return
+            # raise OSError("EOF")
+        err, rv = v
+        if err:
+            info("'Received error: %s", err)
+            if getattr(sys, 'last_traceback', None):
+                raise self.error_wrapper(*err, sys.last_traceback)
+        return rv
+
+    def run(self, request_cb, notification_cb, setup_cb=None):
+        """Run the event loop to receive requests and notifications from Nvim.
+
+        Like `AsyncSession.run()`, but `request_cb` and `notification_cb` are
+        inside greenlets.
+        """
+        self._request_cb = request_cb
+        self._notification_cb = notification_cb
+        self._is_running = True
+        self._setup_exception = None
+        self._loop_thread = threading.current_thread()
+
+        def on_setup():
+            try:
+                setup_cb()
+            except Exception as e:
+                self._setup_exception = e
+                self.stop()
+
+        if setup_cb:
+            # Create a new greenlet to handle the setup function
+            gr = greenlet.greenlet(on_setup)
+            gr.switch()
+
+        if self._setup_exception:
+            error("Setup error: {}".format(self._setup_exception))
+            raise self._setup_exception
+
+        # Process all pending requests and notifications
+        while self._pending_messages:
+            msg = self._pending_messages.popleft()
+            getattr(self, "_on_{}".format(msg[0]))(*msg[1:])
+        self._async_session.run(self._on_request, self._on_notification)
+        self._is_running = False
+        self._request_cb = None
+        self._notification_cb = None
+        self._loop_thread = None
+
+        if self._setup_exception:
+            raise self._setup_exception
+
+    def stop(self):
+        """Stop the event loop."""
+        self._async_session.stop()
+
+    def close(self):
+        """Close the event loop."""
+        self._async_session.close()
+
+    def _yielding_request(self, method, args):
+        gr = greenlet.getcurrent()
+        parent = gr.parent
+
+        def response_cb(err, rv):
+            debug("response is available for greenlet %s, switching back", gr)
+            gr.switch(err, rv)
+
+        self._async_session.request(method, args, response_cb)
+        debug("yielding from greenlet %s to wait for response", gr)
+        return parent.switch()
+
+    def _blocking_request(self, method, args):
+        result = []
+
+        def response_cb(err, rv):
+            result.extend([err, rv])
+            self.stop()
+
+        self._async_session.request(method, args, response_cb)
+        self._async_session.run(self._enqueue_request,
+                                self._enqueue_notification)
+        return result
+
+    def _enqueue_request_and_stop(self, name, args, response):
+        self._enqueue_request(name, args, response)
+        self.stop()
+
+    def _enqueue_notification_and_stop(self, name, args):
+        self._enqueue_notification(name, args)
+        self.stop()
+
+    def _enqueue_request(self, name, args, response):
+        self._pending_messages.append(("request", name, args, response,))
+
+    def _enqueue_notification(self, name, args):
+        self._pending_messages.append(("notification", name, args,))
+
+    def _on_request(self, name, args, response):
+        def handler():
+            try:
+                rv = self._request_cb(name, args)
+                debug(
+                    "greenlet %s finished executing, " + "sending %s as response",
+                    gr,
+                    rv,
+                )
+                response.send(rv)
+            except ErrorResponse as err:
+                warn(
+                    "error response from request '%s %s': %s", name, args, format_exc()
+                )
+                response.send(err.args[0], error=True)
+            except Exception as err:
+                warn(
+                    "error caught while processing request '%s %s': %s",
+                    name,
+                    args,
+                    format_exc(),
+                )
+                response.send(repr(err) + "\n" + format_exc(5), error=True)
+            debug("greenlet %s is now dying...", gr)
+
+        # Create a new greenlet to handle the request
+        gr = greenlet.greenlet(handler)
+        debug("received rpc request, greenlet %s will handle it", gr)
+        gr.switch()
+
+    def _on_notification(self, name, args):
+        def handler():
+            try:
+                self._notification_cb(name, args)
+                debug("greenlet %s finished executing", gr)
+            except Exception:
+                warn(
+                    "error caught while processing notification '%s %s': %s",
+                    name,
+                    args,
+                    format_exc(),
+                )
+
+            debug("greenlet %s is now dying...", gr)
+
+        gr = greenlet.greenlet(handler)
+        debug("received rpc notification, greenlet %s will handle it", gr)
+        gr.switch()
+
+    def __call__(self, fn, *arg, **kwargs):
+        return self.threadsafe_call(fn, *args, **kwargs)
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}"
+
+# }}}
+
 # api/nvim: Needs to be above plugin/scripthost: {{{
 
 
@@ -755,15 +1031,24 @@ class Nvim(object):
         queries Nvim metadata for type information and sets a SessionHook for
         creating specialized objects from Nvim remote handles.
         """
+        if not session:
+            session = stdio_session()
+
         # wth is this?
         # session.error_wrapper = lambda e: NvimError(decode_if_bytes(e[1]))
         session.error_wrapper = cgitb.Hook(format="text")
         # okay so apparently we send errors  to the error wrapper incorrectly
         # because doing this raises a handful of errors
-        channel_id, metadata = session.request(b"nvim_get_api_info")
+
+        try:
+            response = session.request(b"nvim_get_api_info")
+        except OSError:  # why is thi raising?
+            raise
+
+        channel_id, metadata = response
 
         if isinstance(metadata, bytes):
-            metadata = walk(codecs.decode(metadata, "utf-8"), metadata)
+            metadata = codecs.decode(metadata, "utf-8")
 
         types = {
             metadata["types"]["Buffer"]["id"]: Buffer,
@@ -810,7 +1095,8 @@ class Nvim(object):
         # arguably all **FIFTEEN** of this instance attributes should probably
         # be properties
         self.api = RemoteApi(self, "nvim_")
-        self.vars = RemoteMap(self, "nvim_get_var", "nvim_set_var", "nvim_del_var")
+        self.vars = RemoteMap(self, "nvim_get_var",
+                              "nvim_set_var", "nvim_del_var")
         self.vvars = RemoteMap(self, "nvim_get_vvar", None, None)
         self.options = RemoteMap(self, "nvim_get_option", "nvim_set_option")
         self.buffers = Buffers(self)
@@ -1063,7 +1349,7 @@ class Nvim(object):
 
     def chdir(self, dir_path):
         """Run os.chdir, then all appropriate vim stuff."""
-        os_chdir(dir_path)
+        os.chdir(dir_path)
         return self.request("nvim_set_current_dir", dir_path)
 
     def feedkeys(self, keys, options="", escape_csi=True):
@@ -1178,8 +1464,7 @@ class Nvim(object):
 
 
 class BufferBase(UserList):
-    """I really feel like the Buffers class should fully implement the
-    MutableSequence protocol."""
+    """The Buffers class should fully implement the MutableSequence protocol."""
 
     def __init__(self, nvim):
         """Initialize a Buffers object with Nvim object `nvim`."""
@@ -1205,6 +1490,36 @@ class BufferBase(UserList):
     def __contains__(self, b):
         """Return whether Buffer `b` is a known valid buffer."""
         return isinstance(b, Buffer) and b.valid
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}"
+
+
+class BufferNvimBase(Nvim):
+    """Subclass Nvim to create Buffers.
+
+    In order to avoid writing more classes that require the Nvim instance
+    to instantiate properly, let's utilize the tools of inheritence made
+    available to us.
+
+    Actually the nvim class has such a big constructor that its gonna
+    be easier to do this with the Remote class.
+
+    *sigh*
+    """
+
+    session: Session
+    channel_id : int
+
+    def __init__(self, session, channel_id, metadata, types, decode=False, err_cb=None, **kwargs):
+        self.session = session
+        self.channel_id = channel_id
+        self.metadata = metadata
+        self.types = types
+        self.decode = decode
+        self.err_cb = err_cb
+        super().from_session(session)
+        super().__init__(session, channel_id, metadata, types, decode=decode, err_cb=err_cb)
 
 
 class Buffers(BufferBase):
@@ -1362,7 +1677,8 @@ class ScriptHost:
         # Handle DirChanged. #296
         nvim.command(
             "au DirChanged *"
-            'call rpcnotify({}, "python_chdir", v:event.cwd)'.format(nvim.channel_id),
+            'call rpcnotify({}, "python_chdir", v:event.cwd)'.format(
+                nvim.channel_id),
             async_=True,
         )
 
@@ -1372,7 +1688,8 @@ class ScriptHost:
         # to make __init__ safe again, the following should work:
         # os.chdir(nvim.eval('getcwd()', async_=False))
         nvim.command(
-            'call rpcnotify({}, "python_chdir", getcwd())'.format(nvim.channel_id),
+            'call rpcnotify({}, "python_chdir", getcwd())'.format(
+                nvim.channel_id),
             async_=True,
         )
 
@@ -1465,7 +1782,8 @@ class ScriptHost:
                     # Update earlier lines, and skip to the next
                     if newlines:
                         end = sstart + len(newlines) - 1
-                        nvim.current.buffer.api.set_lines(sstart, end, True, newlines)
+                        nvim.current.buffer.api.set_lines(
+                            sstart, end, True, newlines)
                     sstart += len(newlines) + 1
                     newlines = []
                     pass
@@ -1504,7 +1822,19 @@ class ScriptHost:
 
 
 class RedirectStream(io.IOBase):
+    """The streams that our Nvim and Session objects are writing to.
+
+    .. versionchanged:: 0.4.mytakeover
+
+        Implements the context manager protocol.
+
+    """
+
     def __init__(self, redirect_handler):
+        """Initialize with a redirect handler. Must accept arbitrary data.
+
+        In addition must be able to write to python streams.
+        """
         self.redirect_handler = redirect_handler
 
     def write(self, data):
@@ -1541,6 +1871,7 @@ class LegacyVim(Nvim):
 
 
 def _find_module(fullname, oldtail, path):
+    warnings.warn(DeprecationWarning, "Use find_module")
     idx = oldtail.find(".")
     if idx > 0:
         name = oldtail[:idx]
@@ -1550,6 +1881,19 @@ def _find_module(fullname, oldtail, path):
         return _find_module(fullname, tail, module.__path__)
     else:
         return imp.find_module(fullname, path)
+
+
+def find_module(mod, package=None):
+    """A more sensible manner for finding a module."""
+    if isinstance(mod, bytes):
+        mod = get_decoded_string(mod)
+    if isinstance(package, bytes):
+        package = get_decoded_string(package)
+    try:
+        return importlib.util.mod_from_spec(importlib.util._find_spec(mod, package))
+    except ModuleNotFoundError:
+        # TODO: update v:shell_err
+        sys.stderr.write(str(mod) + " not found!")
 
 
 def find_spec(fullname, target=None):
@@ -1603,14 +1947,13 @@ class Buffer(Remote):
 
     _api_prefix = "nvim_buf_"
 
-    def __init__(self, session, code_data, valid=None, **kwargs):
+    def __init__(self, session, code_data, **kwargs):
         super().__init__(session, code_data, **kwargs)
-        # Valid should NOT be a property! its explicitly tied to the instance
-        # it doesnt seem like we have a 2 way channel for communication
-        # so define it here.
-        self.valid = valid if valid is not None else self.request("nvim_buf_is_valid")
         self.session = session
         self.code_data = code_data
+
+    def valid(self):
+        return self.request("nvim_buf_is_valid")
 
     def __len__(self):
         """Return the number of lines contained in a Buffer."""
@@ -1684,7 +2027,10 @@ class Buffer(Remote):
         return self.append(lines, index=index)
 
     def append(self, lines, index=-1):
-        """Append a string or list of lines to the buffer. Now an alias for `__iadd__`."""
+        """Append a string or list of lines to the buffer.
+
+        Now an alias for `__iadd__`.
+        """
         if isinstance(lines, (basestring, bytes)):
             lines = [lines]
         return self.request("nvim_buf_set_lines", index, index, True, lines)
@@ -1740,7 +2086,8 @@ class Buffer(Remote):
         if clear and clear_start is None:
             clear_start = 0
         lua = self._session._get_lua_private()
-        lua.update_highlights(self, src_id, hls, clear_start, clear_end, async_=async_)
+        lua.update_highlights(
+            self, src_id, hls, clear_start, clear_end, async_=async_)
 
     @property
     def name(self):
@@ -1752,10 +2099,10 @@ class Buffer(Remote):
         """Set the buffer name. BufFilePre/BufFilePost are triggered."""
         return self.request("nvim_buf_set_name", value)
 
-    # @property
-    # def valid(self):
-    #     """Return True if the buffer still exists."""
-    #     return self.request("nvim_buf_is_valid")
+    @property
+    def valid(self):
+        """Return True if the buffer still exists."""
+        return self.request("nvim_buf_is_valid")
 
     @property
     def number(self):
@@ -1992,7 +2339,9 @@ class RemoteSequence(UserList):
         ----------
         session :
             Something that has a request attr?
-        method
+        method :
+            Idk.
+
         """
         self._fetch = functools.partial(session.request, method)
         self.session = session
@@ -2036,268 +2385,17 @@ def walk(fn, obj, *args, **kwargs):
 
 # }}}
 
-# msgpack_rpc.session: {{{
-
-
-class ErrorResponse(BaseException):
-    """Raise this in a request handler to respond with a given error message.
-
-    Unlike when other exceptions are caught, this gives full control off the
-    error response sent. When "ErrorResponse(msg)" is caught "msg" will be
-    sent verbatim as the error response.No traceback will be appended.
-    """
-
-    pass
-
-
-class NvimRuntimeError(NvimError):
-    """Created so we don't raise RuntimeErrors but still generate exceptions as
-    needed."""
-
-
-class Session(object):
-    """Msgpack-rpc session layer that uses coroutines for a synchronous API.
-
-    This class provides the public msgpack-rpc API required by this library.
-    It uses the greenlet module to handle requests and notifications coming
-    from Nvim with a synchronous API.
-
-    Ahhhh the Session object! Probably gonna end up subclassing this bitch
-    a LOT.
-    """
-
-    def __init__(self, async_session):
-        """Wrap `async_session` on a synchronous msgpack-rpc interface."""
-        self._async_session = async_session
-        self._request_cb = self._notification_cb = None
-        self._pending_messages = deque()
-        self._is_running = False
-        self._setup_exception = None
-        self.loop = async_session.loop
-        self._loop_thread = None
-
-    def threadsafe_call(self, fn, *args, **kwargs):
-        """Wrap :meth:`AsyncSession.threadsafe_call`."""
-
-        @functools.wraps
-        def handler():
-            try:
-                fn(*args, **kwargs)
-            except Exception:
-                warn("error caught while excecuting async callback\n%s\n", format_exc())
-
-        @functools.wraps
-        def greenlet_wrapper():
-            gr = greenlet.greenlet(handler)
-            gr.switch()
-
-        self._async_session.threadsafe_call(greenlet_wrapper)
-
-    def next_message(self):
-        """Block until a message(request or notification) is available.
-
-        If any messages were previously enqueued, return the first in queue.
-        If not, run the event loop until one is received.
-
-        Raises
-        ------
-        """
-        if self._is_running:
-            raise NvimError("Event loop already running")
-        if self._pending_messages:
-            return self._pending_messages.popleft()
-        self._async_session.run(
-            self._enqueue_request_and_stop, self._enqueue_notification_and_stop
-        )
-        if self._pending_messages:
-            return self._pending_messages.popleft()
-
-    def request(self, method, *args, **kwargs):
-        """Send a msgpack-rpc request and block until as response is received.
-
-        If the event loop is running, this method must have been called by a
-        request or notification handler running on a greenlet. In that case,
-        send the quest and yield to the parent greenlet until a response is
-        available.
-
-        When the event loop is not running, it will perform a blocking request
-        like this:
-        - Send the request
-        - Run the loop until the response is available
-        - Put requests/notifications received while waiting into a queue
-
-        If the `async_` flag is present and True, a asynchronous notification
-        is sent instead. This will never block, and the return value or error
-        is ignored.
-        """
-        async_ = check_async(kwargs.pop("async_", None), kwargs, False)
-        if async_:
-            self._async_session.notify(method, args)
-            return
-        # if kwargs:
-        #     raise ValueError("request got unsupported keyword argument(s): {}"
-        #                      .format(', '.join(kwargs.keys())))
-
-        if self._is_running:
-            v = self._yielding_request(method, args)
-        else:
-            v = self._blocking_request(method, args)
-        if not v:
-            raise OSError("EOF")
-        err, rv = v
-        if err:
-            info("'Received error: %s", err)
-            raise self.error_wrapper(*err, sys.last_traceback)
-        return rv
-
-    def run(self, request_cb, notification_cb, setup_cb=None):
-        """Run the event loop to receive requests and notifications from Nvim.
-
-        Like `AsyncSession.run()`, but `request_cb` and `notification_cb` are
-        inside greenlets.
-        """
-        self._request_cb = request_cb
-        self._notification_cb = notification_cb
-        self._is_running = True
-        self._setup_exception = None
-        self._loop_thread = threading.current_thread()
-
-        def on_setup():
-            try:
-                setup_cb()
-            except Exception as e:
-                self._setup_exception = e
-                self.stop()
-
-        if setup_cb:
-            # Create a new greenlet to handle the setup function
-            gr = greenlet.greenlet(on_setup)
-            gr.switch()
-
-        if self._setup_exception:
-            error("Setup error: {}".format(self._setup_exception))
-            raise self._setup_exception
-
-        # Process all pending requests and notifications
-        while self._pending_messages:
-            msg = self._pending_messages.popleft()
-            getattr(self, "_on_{}".format(msg[0]))(*msg[1:])
-        self._async_session.run(self._on_request, self._on_notification)
-        self._is_running = False
-        self._request_cb = None
-        self._notification_cb = None
-        self._loop_thread = None
-
-        if self._setup_exception:
-            raise self._setup_exception
-
-    def stop(self):
-        """Stop the event loop."""
-        self._async_session.stop()
-
-    def close(self):
-        """Close the event loop."""
-        self._async_session.close()
-
-    def _yielding_request(self, method, args):
-        gr = greenlet.getcurrent()
-        parent = gr.parent
-
-        def response_cb(err, rv):
-            debug("response is available for greenlet %s, switching back", gr)
-            gr.switch(err, rv)
-
-        self._async_session.request(method, args, response_cb)
-        debug("yielding from greenlet %s to wait for response", gr)
-        return parent.switch()
-
-    def _blocking_request(self, method, args):
-        result = []
-
-        def response_cb(err, rv):
-            result.extend([err, rv])
-            self.stop()
-
-        self._async_session.request(method, args, response_cb)
-        self._async_session.run(self._enqueue_request, self._enqueue_notification)
-        return result
-
-    def _enqueue_request_and_stop(self, name, args, response):
-        self._enqueue_request(name, args, response)
-        self.stop()
-
-    def _enqueue_notification_and_stop(self, name, args):
-        self._enqueue_notification(name, args)
-        self.stop()
-
-    def _enqueue_request(self, name, args, response):
-        self._pending_messages.append(("request", name, args, response,))
-
-    def _enqueue_notification(self, name, args):
-        self._pending_messages.append(("notification", name, args,))
-
-    def _on_request(self, name, args, response):
-        def handler():
-            try:
-                rv = self._request_cb(name, args)
-                debug(
-                    "greenlet %s finished executing, " + "sending %s as response",
-                    gr,
-                    rv,
-                )
-                response.send(rv)
-            except ErrorResponse as err:
-                warn(
-                    "error response from request '%s %s': %s", name, args, format_exc()
-                )
-                response.send(err.args[0], error=True)
-            except Exception as err:
-                warn(
-                    "error caught while processing request '%s %s': %s",
-                    name,
-                    args,
-                    format_exc(),
-                )
-                response.send(repr(err) + "\n" + format_exc(5), error=True)
-            debug("greenlet %s is now dying...", gr)
-
-        # Create a new greenlet to handle the request
-        gr = greenlet.greenlet(handler)
-        debug("received rpc request, greenlet %s will handle it", gr)
-        gr.switch()
-
-    def _on_notification(self, name, args):
-        def handler():
-            try:
-                self._notification_cb(name, args)
-                debug("greenlet %s finished executing", gr)
-            except Exception:
-                warn(
-                    "error caught while processing notification '%s %s': %s",
-                    name,
-                    args,
-                    format_exc(),
-                )
-
-            debug("greenlet %s is now dying...", gr)
-
-        gr = greenlet.greenlet(handler)
-        debug("received rpc notification, greenlet %s will handle it", gr)
-        gr.switch()
-
-
-# }}}
-
 # msgpack_rpc.async_session: {{{
 
 
 class AsyncSession(object):
-
     """Asynchronous msgpack-rpc layer that wraps a msgpack stream.
 
     This wraps the msgpack stream interface for reading/writing msgpack
     documents and exposes an interface for sending and receiving msgpack-rpc
     requests and notifications.
+
+    Why doesn't this subclass Session?
     """
 
     def __init__(self, msgpack_stream):
@@ -2314,7 +2412,7 @@ class AsyncSession(object):
         self.loop = msgpack_stream.loop
 
     def threadsafe_call(self, fn):
-        """Wrapper around `MsgpackStream.threadsafe_call`."""
+        """Wrap around `MsgpackStream.threadsafe_call`."""
         self._msgpack_stream.threadsafe_call(fn)
 
     def request(self, method, args, response_cb):
@@ -2364,40 +2462,48 @@ class AsyncSession(object):
             self._handlers.get(msg[0], self._on_invalid_message)(msg)
         except Exception:
             err_str = format_exc(5)
-            pass  # replaces next logging statement
-            # warn(err_str)
+            warn(err_str)
             self._msgpack_stream.send([1, 0, err_str, None])
 
     def _on_request(self, msg):
-        # request
-        #   - msg[1]: id
-        #   - msg[2]: method name
-        #   - msg[3]: arguments
-        pass  # replaces next logging statement
-        # debug('received request: %s, %s', msg[2], msg[3])
-        self._request_cb(msg[2], msg[3], Response(self._msgpack_stream, msg[1]))
+        """"request
+
+        - msg[1]: id
+        - msg[2]: method name
+        - msg[3]: arguments
+        """
+        debug("received request: %s, %s", msg[2], msg[3])
+        self._request_cb(msg[2], msg[3], Response(
+            self._msgpack_stream, msg[1]))
 
     def _on_response(self, msg):
-        # response to a previous request:
-        #   - msg[1]: the id
-        #   - msg[2]: error(if any)
-        #   - msg[3]: result(if not errored)
-        pass  # replaces next logging statement
-        # debug('received response: %s, %s', msg[2], msg[3])
+        """Callback upon receiving a notification.
+
+        response to a previous request:
+
+          - msg[1]: the id
+          - msg[2]: error(if any)
+          - msg[3]: result(if not errored)
+
+        """
+        debug("received response: %s, %s", msg[2], msg[3])
         self._pending_requests.pop(msg[1])(msg[2], msg[3])
 
     def _on_notification(self, msg):
-        # notification/event
-        #   - msg[1]: event name
-        #   - msg[2]: arguments
-        pass  # replaces next logging statement
-        # debug('received notification: %s, %s', msg[1], msg[2])
+        """Callback upon receiving a notification.
+
+        notification/events follow the form.:
+
+            - msg[1]: event name
+            - msg[2]: arguments
+
+        """
+        debug("received notification: %s, %s", msg[1], msg[2])
         self._notification_cb(msg[1], msg[2])
 
     def _on_invalid_message(self, msg):
         error = "Received invalid message %s" % msg
-        pass  # replaces next logging statement
-        # warn(error)
+        warn(error)
         self._msgpack_stream.send([1, 0, error, None])
 
 
@@ -2423,10 +2529,11 @@ class Response(object):
             resp = [1, self._request_id, value, None]
         else:
             resp = [1, self._request_id, None, value]
-        pass  # replaces next logging statement
-        # debug('sending response to request %d: %s', self._request_id, resp)
+        debug("sending response to request %d: %s", self._request_id, resp)
         self._msgpack_stream.send(resp)
 
+    def __repr__(self):
+        return f"{self.__class__.__name__}"
 
 # }}}
 
@@ -2454,8 +2561,7 @@ class MsgpackStream(object):
 
     def send(self, msg):
         """Queue `msg` for sending to Nvim."""
-        pass  # replaces next logging statement
-        # debug('sent %s', msg)
+        debug("sent %s", msg)
         self.loop.send(self._packer.pack(msg))
 
     def run(self, message_cb):
@@ -2480,16 +2586,17 @@ class MsgpackStream(object):
         self._unpacker.feed(data)
         while True:
             try:
-                pass  # replaces next logging statement
-                # debug('waiting for message...')
+                debug("waiting for message...")
                 msg = next(self._unpacker)
-                pass  # replaces next logging statement
-                # debug('received message: %s', msg)
+                debug("received message: %s", msg)
                 self._message_cb(msg)
             except StopIteration:
                 pass  # replaces next logging statement
                 # debug('unpacker needs more data...')
                 break
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}"
 
 
 # }}}
@@ -2584,32 +2691,27 @@ class BaseEventLoop(object):
 
     def connect_tcp(self, address, port):
         """Connect to tcp/ip `address`:`port`. Delegated to `_connect_tcp`."""
-        pass  # replaces next logging statement
-        # info('Connecting to TCP address: %s:%d', address, port)
+        info("Connecting to TCP address: %s:%d", address, port)
         self._connect_tcp(address, port)
 
     def connect_socket(self, path):
         """Connect to socket at `path`. Delegated to `_connect_socket`."""
-        pass  # replaces next logging statement
-        # info('Connecting to %s', path)
+        info("Connecting to %s", path)
         self._connect_socket(path)
 
     def connect_stdio(self):
         """Connect using stdin/stdout. Delegated to `_connect_stdio`."""
-        pass  # replaces next logging statement
-        # info('Preparing stdin/stdout for streaming data')
+        info("Preparing stdin/stdout for streaming data")
         self._connect_stdio()
 
     def connect_child(self, argv):
         """Connect a new Nvim instance. Delegated to `_connect_child`."""
-        pass  # replaces next logging statement
-        # info('Spawning a new nvim instance')
+        info("Spawning a new nvim instance")
         self._connect_child(argv)
 
     def send(self, data):
         """Queue `data` for sending to Nvim."""
-        pass  # replaces next logging statement
-        # debug("Sending '%s'", data)
+        debug("Sending '%s'", data)
         self._send(data)
 
     def threadsafe_call(self, fn):
@@ -2634,11 +2736,9 @@ class BaseEventLoop(object):
         self._on_data = data_cb
         if threading.current_thread() == main_thread:
             self._setup_signals([signal.SIGINT, signal.SIGTERM])
-        pass  # replaces next logging statement
-        # debug('Entering event loop')
+        debug("Entering event loop")
         self._run()
-        pass  # replaces next logging statement
-        # debug('Exited event loop')
+        debug("Exited event loop")
         if threading.current_thread() == main_thread:
             self._teardown_signals()
             signal.signal(signal.SIGINT, default_int_handler)
@@ -2647,19 +2747,16 @@ class BaseEventLoop(object):
     def stop(self):
         """Stop the event loop."""
         self._stop()
-        pass  # replaces next logging statement
-        # debug('Stopped event loop')
+        debug("Stopped event loop")
 
     def close(self):
         """Stop the event loop."""
         self._close()
-        pass  # replaces next logging statement
-        # debug('Closed event loop')
+        debug("Closed event loop")
 
     def _on_signal(self, signum):
         msg = "Received {}".format(self._signames[signum])
-        pass  # replaces next logging statement
-        # debug(msg)
+        debug(msg)
         if signum == signal.SIGINT and self._transport_type == "stdio":
             # When the transport is stdio, we are probably running as a Nvim
             # child process. In that case, we don't want to be killed by
@@ -2672,13 +2769,15 @@ class BaseEventLoop(object):
         self.stop()
 
     def _on_error(self, error):
-        pass  # replaces next logging statement
-        # debug(error)
+        debug(error)
         self._error = OSError(error)
         self.stop()
 
     def _on_interrupt(self):
         self.stop()
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}"
 
 
 # }}}
@@ -2698,7 +2797,7 @@ class AsyncioEventLoop(BaseEventLoop, asyncio.Protocol, asyncio.SubprocessProtoc
             self._transport = transport.get_pipe_transport(0)
 
     def connection_lost(self, exc):
-        """Used to signal `asyncio.Protocol` of a lost connection."""
+        """Signals to `asyncio.Protocol` of a lost connection."""
         self._on_error(exc.args[0] if exc else "EOF")
 
     def data_received(self, data):
@@ -2809,6 +2908,9 @@ class AsyncioEventLoop(BaseEventLoop, asyncio.Protocol, asyncio.SubprocessProtoc
         for signum in self._signals:
             self._loop.remove_signal_handler(signum)
 
+    def __repr__(self):
+        return f"{self.__class__.__name__}"
+
 
 # }}}
 
@@ -2880,6 +2982,9 @@ class Window(Remote):
         """Get the window number."""
         return self.request("nvim_win_get_number")
 
+    def __repr__(self):
+        return f"{self.__class__.__name__}"
+
 
 # }}}
 
@@ -2912,6 +3017,9 @@ class Tabpage(Remote):
     def number(self):
         """Get the tabpage number."""
         return self.request("nvim_tabpage_get_number")
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}"
 
 
 # }}}

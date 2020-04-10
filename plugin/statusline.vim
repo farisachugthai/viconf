@@ -5,10 +5,11 @@
   " Last Modified: March 06, 2020
 " ============================================================================
 
-function! s:fzf_statusline()  abort " {{{
+scriptencoding utf8
 
-  " Override statusline as you like
-  hi! fzf1 cterm=bold,underline,reverse gui=bold,underline,reverse guifg=#7daea3
+function! s:fzf_statusline()  abort " {{{
+  " Curious if this'll work
+  hi! fzf1 cterm=bold,undercurl,reverse gui=bold,undercurl,reverse guifg=#7daea3 guibg=NONE ctermbg=NONE guisp=NONE font='Source Code Pro'
   hi! link fzf2 fzf1
   hi! link fzf3 fzf1
   setlocal statusline=%#fzf1#\ FZF:\ %#fzf2#fz%#fzf3#f
@@ -19,6 +20,7 @@ augroup FZFStatusline  " {{{
 " NOTE: This has to remain the name of the augroup it's what Junegunn calls
   au!
   autocmd User FzfStatusLine call s:fzf_statusline()
+  autocmd User FzfStatusline setlocal winblend=15 pumblend=10
 augroup END
 
 augroup UserStatusline

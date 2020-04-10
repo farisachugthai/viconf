@@ -1,7 +1,5 @@
 " Vim syntax file
 " Language:	JSON
-" Maintainer:	Eli Parra <eli@elzr.com>
-" Last Change:	2014 Aug 23
 " Version:      0.12
 
 " Had to copy paste because the only variable you're allowed to configure
@@ -10,12 +8,12 @@
 
 " Guard: {{{
 
-if !exists("main_syntax")
+if !exists('main_syntax')
   " quit when a syntax file was already loaded
-  if exists("b:current_syntax")
+  if exists('b:current_syntax')
     finish
   endif
-  let main_syntax = 'json'
+  let b:main_syntax = 'json'
 else
   finish
 endif
@@ -65,10 +63,8 @@ syn match   jsonNumber    "-\=\<\%(0\|[1-9]\d*\)\%(\.\d\+\)\=\%([eE][-+]\=\d\+\)
 
 " ERROR WARNINGS **********************************************
 
-if (!exists("g:vim_json_warnings") || g:vim_json_warnings==1)
+if (!exists('g:vim_json_warnings') || g:vim_json_warnings==1)
 
-  " Strings should always be enclosed with quotes.
-  " syn match   jsonNoQuotesError  "\<[[:alpha:]][[:alnum:]]*\>"
   syn match   jsonTripleQuotesError  /"""/
 
   " An integer part of 0 followed by other digits is not allowed.
@@ -77,17 +73,13 @@ if (!exists("g:vim_json_warnings") || g:vim_json_warnings==1)
   " Decimals smaller than one should begin with 0 (so .1 should be 0.1).
   syn match   jsonNumError  "\:\@<=[[:blank:]\r\n]*\zs\.\d\+"
 
-  " No comments in JSON, see http://stackoverflow.com/questions/244777/can-i-comment-a-json-file
-  " syn match   jsonCommentError  '//.*'
-  " syn match   jsonCommentError  '\(/\*\)\|\(\*/\)'
-
   " jsonc has comments and that's good enough for me.
   syn region  jsoncLineComment    start=+\/\/+ end=+$+ keepend
   syn region  jsoncLineComment    start=+^\s*\/\/+ skip=+\n\s*\/\/+ end=+$+ keepend fold
   syn region  jsoncComment        start="/\*"  end="\*/" fold
 
   " No semicolons in JSON
-  syn match   jsonSemicolonError  ";"
+  syn match   jsonSemicolonError  ';'
 
   " No trailing comma after the last element of arrays or objects
   syn match   jsonTrailingCommaError  ",\_s*[}\]]"
@@ -131,7 +123,7 @@ hi def link jsonNull            Function
 hi def link jsonBoolean         Boolean
 hi def link jsonKeyword         Label
 
-if (!exists("g:vim_json_warnings") || g:vim_json_warnings==1)
+if (!exists('g:vim_json_warnings') || g:vim_json_warnings==1)
   hi def link jsonNumError        Error
   " hi def link jsonCommentError    Error
   hi def link jsonSemicolonError  Error
@@ -144,5 +136,5 @@ endif
 hi def link jsonQuote           Quote
 hi def link jsonNoise           Noise
 
-let b:current_syntax = "json"
+let b:current_syntax = 'json'
 " vim: set ts=8 fdm=marker:

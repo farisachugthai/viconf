@@ -8,6 +8,7 @@
 if exists('b:did_ftplugin') | finish | endif
 source $VIMRUNTIME/ftplugin/help.vim
 
+
 setlocal iskeyword+=-
 setlocal relativenumber number
 setlocal foldcolumn=0 signcolumn=

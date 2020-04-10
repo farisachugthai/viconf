@@ -49,6 +49,7 @@ setlocal indentexpr=GetVimIndent()
 setlocal indentkeys+==end,=else,=cat,=fina,=END,0\\,0=\"\\\
 
 setlocal tags=~/.config/nvim/tags,$VIMRUNTIME/doc/tags,tags,**
+let &l:tags .= stdpath('data') . '/plugged'
 
 let b:undo_indent = 'setlocal indentkeys< indentexpr<'
 

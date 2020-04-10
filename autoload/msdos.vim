@@ -28,23 +28,26 @@ function! msdos#set_shell_cmd() abort  " {{{1
 	" Dude don't fucking turn /U ON
   " let &shellcmdflag = '/C /F:ON /E:ON '
   " Actually turning on of these on will really mess everything up. Huh
-  set shellpipe=>%s\ 2>&1
-  set shellredir=>%s\ 2>&1
+  setglobal shellpipe=>%s\ 2>&1
+  setglobal shellredir=>%s\ 2>&1
   " Is this necessary? Or should it be empty?
   " heres what this used to be set as. is this whats causing shell problems?
   " set shellxquote=(
-    let &shellcmdflag = has('nvim') ? '/s /c' : '/c'
-    let &shellxquote = has('nvim') ? '"' : '('
-  set shellxescape=^
+  let &shellcmdflag = has('nvim') ? '/s /c' : '/c'
+  let &shellxquote = has('nvim') ? '"' : '('
+  setglobal shellxescape=^
+
+  setglobal noshelltemp
+  setglobal shellquote="
   " What about setting shellquote to "" so that cmd gets the args quoted?
   echomsg 'Using cmd as the system shell.'
 
   " Here's a handful of pretty unrelated things but we get to consolidate platform specific settings
   " in this way
-    imap <C-x><C-f>       <Plug>(fzf-complete-file)
-    imap <C-x><C-j>       <Plug>(fzf-complete-path)
-    inoremap <C-f>        <C-x><C-f>
-    inoremap <C-j>        <C-x><C-j>
+  imap <C-x><C-f>       <Plug>(fzf-complete-file)
+  imap <C-x><C-j>       <Plug>(fzf-complete-path)
+  inoremap <C-f>        <C-x><C-f>
+  inoremap <C-j>        <C-x><C-j>
 
 endfunction  " }}}
 

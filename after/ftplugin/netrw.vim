@@ -69,13 +69,13 @@ fun! NetrwStatusLine()
 "  endif
 " ^^^ NetrwStatusLine() debugging ^^^
 
-  if !exists("w:netrw_explore_bufnr") || w:netrw_explore_bufnr != bufnr("%") || !exists("w:netrw_explore_line") || w:netrw_explore_line != line(".") || !exists("w:netrw_explore_list")
+  if !exists('w:netrw_explore_bufnr') || w:netrw_explore_bufnr != bufnr('%') || !exists('w:netrw_explore_line') || w:netrw_explore_line != line('.') || !exists('w:netrw_explore_list')
    " restore user's status line
-   if exists("w:netrw_explore_bufnr")|unlet w:netrw_explore_bufnr|endif
-   if exists("w:netrw_explore_line") |unlet w:netrw_explore_line |endif
-   return ""
+   if exists('w:netrw_explore_bufnr')|unlet w:netrw_explore_bufnr|endif
+   if exists('w:netrw_explore_line') |unlet w:netrw_explore_line |endif
+   return ''
   else
-   return "Match ".w:netrw_explore_mtchcnt." of ".w:netrw_explore_listlen
+   return 'Match '.w:netrw_explore_mtchcnt.' of '.w:netrw_explore_listlen
   endif
 endfun
 
@@ -151,4 +151,3 @@ augroup UserNetrw
   au FileExplorer User silent call NetrwUnmaps()
 augroup END
 " }}}
-

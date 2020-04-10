@@ -107,16 +107,16 @@ hi! link ALEInfo Macro
 " }}}
 
 " GitGutter: {{{
-hi! link GitGutterAdd GruvboxGreenSign
+hi! link GitGutterAdd Green
 hi! link GitGutterChange Macro
-hi! link GitGutterDelete GruvboxRedSign
+hi! link GitGutterDelete Red
 hi! link GitGutterChangeDelete Macro
 " }}}
 
 " GitCommit: "{{{
 " Do I have this plugin? Is this a fugitive thing?
-hi! link gitcommitSelectedFile GruvboxGreen
-hi! link gitcommitDiscardedFile GruvboxRed
+hi! link gitcommitSelectedFile Green
+hi! link gitcommitDiscardedFile Red
 " }}}
 
 " Tagbar: {{{

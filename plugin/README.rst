@@ -83,6 +83,18 @@ So there's actually no need anymore to define functions as::
 And it'd actually possibly be better to define it without the :kbd:`!`.
 We would want an error if that go re-sourced and re-defined.
 
+Recommendations for Options
+===========================
+
+Using ``&switchbuf``
+---------------------
+
+Don't put 'usetab' before 'split' in ``&switchbuf``.
+
+If you do, then stuff like ``:helpgrep word`` will open a new tab with 
+the results of your search, and leave the quickfix list in the
+previous tab. Because :abbr:`qf` lists don't transfer from tab to tab, you won't be able
+to access the search results in the window that your cursor just moved to!
 
 Writing Plugins on NT systems
 ==============================
@@ -166,7 +178,7 @@ Then I began reviewing ``tagsrch.txt``. And wow.::
                                                            *g_CTRL-]*
    g CTRL-]		Like CTRL-], but use ":tjump" instead of ":tag".
 
-So let's do better than g]!::
+So let's do better than :kbd:`g]` !::
 
    nnoremap ]g <Cmd>stjump!<CR>
    xnoremap ]g <Cmd>stjump!<CR>
@@ -180,7 +192,7 @@ So let's do better than g]!::
 Mappings
 =========
 
-Here's a few different ways to map a function to a key.
+Here's a few different ways to map a function to a key.::
 
    " TODO: Not really working. Kinda hard to get it to behave how I'd like.
    vnoremap <C-\> :<C-u>call UltiSnips#ListSnippets()<CR>
@@ -196,8 +208,14 @@ ALE --- Asynchronous Lint Engine
 
 A plugin that lints buffers as well as, as of late, supports the LSP protocol.
 
+
 quickfix vs. locationlist
 --------------------------
+
+.. abbreviation:: qf
+
+   The quickfix list.
+
 By default ale uses location lists.
 
 Location lists are tied to the window they were created for, not the

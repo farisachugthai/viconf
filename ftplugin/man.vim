@@ -38,36 +38,32 @@ setlocal keywordprg=:Man
 if getenv('$MANPATH')
   let &l:path .= expand('$MANPATH')
 endif
+setlocal wrap
 
 " Like guys we have to define this correctly and fix things!
 let b:undo_ftplugin  = 'setlocal buftype< bufhidden< ro< mod< nu< rnu< signcolumn< wrap<'
-                    \. '|setlocal swf< isk< kp<'
+                    \. '|setlocal swf< isk< kp< path<'
+                    \. '|setlocal ma< et< ts< sts< sw< wrap< breakindent< swf<'
                     \. '|unlet! b:undo_ftplugin'
                     \. '|unlet! b:did_ftplugin'
+" }}}
+
+" Filetype  Nvim Official Ftplugin: {{{
 
 if !exists('g:no_plugin_maps') && !exists('g:no_man_maps')
   nnoremap <buffer> q <Cmd>bd<CR>
   " Check the rplugin/python3/pydoc.py file
   nnoremap <buffer> P <Cmd>call pydoc_help#PydocThis<CR>
 
-  let b:undo_ftplugin .= '|silent! nunmap <buffer> q'
-	\ . '|silent! nunmap <buffer> P'
-endif
-" }}}
-
-" Filetype  Nvim Official Ftplugin: {{{
-if !exists('g:no_plugin_maps') && !exists('g:no_man_maps')
-  " I'm gonna use their check as well but only add to the undo_ftplugin
-  let b:undo_ftplugin .= 'nunmap <buffer> j'
-	\ . '|silent! nunmap <buffer> k'
-	\ . '|silent! nunmap <buffer> gO'
-	\ . '|silent! nunmap <buffer> <C-]>'
-	\ . '|silent! nunmap <buffer> K'
-	\ . '|silent! nunmap <buffer> <C-T>'
-  let b:undo_ftplugin .= '|setlocal isk<'
+  let b:undo_ftplugin .='|silent! nunmap <buffer> q'
+	             \. '|silent! nunmap <buffer> P'
+                     \. '|silent! nunmap <buffer> j'
+                     \. '|silent! nunmap <buffer> k'
+                     \. '|silent! nunmap <buffer> gO'
+                     \. '|silent! nunmap <buffer> <C-]>'
+                     \. '|silent! nunmap <buffer> K'
+                     \. '|silent! nunmap <buffer> <C-T>'
 endif
 
-
-let b:undo_ftplugin  .= '|setlocal ma< et< ts< sts< sw< wrap<'
-
 " }}}
+

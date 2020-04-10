@@ -40,9 +40,9 @@ source $VIMRUNTIME/indent/python.vim
 setlocal indentkeys+=<:>,=elif,=except
 setlocal indentkeys-=0#
 " But lets set the other stuff first
-setlocal nocindent
 setlocal autoindent
 setlocal indentexpr=
+setlocal nowrap
 
 setlocal nolinebreak  " Dont set this on itll create syntaxerors
 setlocal textwidth=80
@@ -81,7 +81,7 @@ let &l:path = py#PythonPath()
 
 " Dude the original ftplugin doesn't set up match words. why are the vim
 " ftplugins so fucking sparse?
-if exists("loaded_matchit")
+if exists('loaded_matchit')
   " Use case with matchit.
   let b:match_ignorecase = 0
 
