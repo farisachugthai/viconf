@@ -125,7 +125,7 @@ function! AddVileBinding(key, handler)  " {{{
   " wait why did i get rid of cnoremap
   exec 'cnoremap ' . a:key a:handler
 
-endfunction
+endfunction  " }}}
 
 " Vile Bindings: {{{
 
@@ -153,7 +153,6 @@ call AddVileBinding('<C-x>w', '<Cmd> set wrap!')
 
 " Swap the mark and point
 xnoremap <C-x><C-x> o
-" }}}
 
 call AddVileBinding('<C-x>b', '<Cmd>Brofiles<CR>')
 
@@ -203,9 +202,7 @@ else
   noremap <F6> <Cmd>UltiSnipsListSnippets<CR>
   noremap! <F6> <Cmd>UltiSnipsListSnippets<CR>
 endif
-
 " inoremap <expr> <Tab> UltiSnips#ExpandSnippetOrJump()
-
 " }}}
 
 " FZF: {{{
@@ -599,21 +596,26 @@ endif
 
 " Fugitive: {{{
 function UserFugitiveMappings() abort
-  nnoremap <Leader>gb   <Cmd>Gblame<CR>
-  nnoremap <Leader>gc   <Cmd>Gcommit<CR>
+  nnoremap <Leader>gb   <Cmd>Git blame<CR>
+  " remember there are now a lot of other mappings that commit too
+  nnoremap <Leader>gc   <Cmd>Git commit<CR>
+  nnoremap <Leader>gcd   <Cmd>Gcd<Space>
+  nnoremap <Leader>gcl   <Cmd>Gclog!<CR>
   nnoremap <Leader>gd   <Cmd>Gdiffsplit!<CR>
   cabbrev Gd Gdiffsplit!<Space>
   nnoremap <Leader>gds  <Cmd>Gdiffsplit --staged<CR>
+  nnoremap <Leader>gdt   <Cmd>Git difftool<CR>
   cabbrev gds2 Git diff --stat --staged
   nnoremap <Leader>gds2 <Cmd>Git difftool --stat --staged<CR>
   nnoremap <Leader>ge   <Cmd>Gedit<Space>
-  nnoremap <Leader>gf   <Cmd>Gfetch<CR>
+  nnoremap <Leader>gf   <Cmd>Git fetch<CR>
   cabbrev gL 0Glog --pretty=oneline --graph --decorate --abbrev --all --branches
+  nnoremap <Leader>gll   <Cmd>Gllog!<CR>
   nnoremap <Leader>gL   <Cmd>0Glog --pretty=format:lo --graph --decorate --abbrev --all --branches<CR>
   nnoremap <Leader>gm   <Cmd>Git mergetool<CR>
   " Make the mapping longer but clear as to whether gp would pull or push
   nnoremap <Leader>gp  <Cmd>Gpull<CR>
-  nnoremap <Leader>gP  <Cmd>Gpush<CR>
+  nnoremap <Leader>gP  <Cmd>Git push<CR>
   nnoremap <Leader>gq   <Cmd>Gwq<CR>
   nnoremap <Leader>gQ   <Cmd>Gwq!<CR>
   nnoremap <Leader>gR   <Cmd>Gread<Space>

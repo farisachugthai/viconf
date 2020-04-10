@@ -22,14 +22,14 @@ function! pydoc_help#scratch_buffer() abort   " {{{
   return nvim_create_buf(v:false, v:true)
 endfunction   " }}}
 
-function! pydoc_help#scratch_listed_buffer(bang) range abort " {{{
+function! s:scratch_listed_buffer(bang) range abort " {{{
   let l:bufnum = nvim_create_buf(v:true, v:true)
   " Actually fuck trying to figure out how to switch to that buffer
   :Buffers
   return l:bufnum
 endfunction  " }}}
 
-function! s:temp_buffer() abort  " {{{1
+function! s:temp_buffer() abort  " {{{
   " Use for setting a buffer that's been filled with text to something similar
   " to an 'rst' help page.
 
@@ -42,6 +42,7 @@ function! s:temp_buffer() abort  " {{{1
   setlocal filetype=rst
   setlocal syntax=rst
   syntax sync fromstart
+  syntax enable
   " Because i have it on in my rst filetype.
   setlocal nospell
   setlocal buftype=nofile bufhidden=delete noswapfile nowrap
@@ -50,18 +51,11 @@ function! s:temp_buffer() abort  " {{{1
 
 endfunction   " }}}
 
-function! pydoc_help#read_page() abort  " {{{
-  call s:temp_buffer()
-endfunction  " }}}
-
 function! pydoc_help#PydocCbword(bang, mods) abort  " {{{
   " Holy shit it works!!!
   let s:temp_cword = expand('<cWORD>')
   exec a:mods . 'enew' . a:bang
-  " enew<a:bang>
   exec ':r! pydoc ' . s:temp_cword
-  " If you wanna keep going we can change the status line. We can change how
-  " we invoke python
   call s:temp_buffer()
 endfunction  " }}}
 
@@ -79,17 +73,36 @@ function! s:handle_user_config() abort   " {{{
   endif
 endfunction   " }}}
 
-function! pydoc_help#Pydoc(module, bang) abort range  " {{{
+function! pydoc_help#Pydoc(module, bang) abort  " {{{
   if a:bang
     tabe
   else
-    call pydoc_help#scratch_buffer()
+    let s:buf = pydoc_help#scratch_buffer()
   endif
 
-  exec 'r! python -m pydoc ' . a:module
+  exe 'split ' . s:buf
+  exec 'r!python -m pydoc ' . a:module
 
   call s:temp_buffer()
 endfunction   " }}}
+
+function! pydoc_help#OpenTempBuffer(...) abort  " {{{
+  " it took a BUNCH of attempts but i think i finally figured out how to do this right
+  if !a:0
+    return
+  endif
+  let s:bang = a:1
+  let s:mods = a:2
+  if len(a:000) > 2
+    let s:bufname = a:3
+  else
+    let s:bufname = pydoc_help#scratch_buffer()
+  endif
+  exec s:mods . 'f' . s:bang . s:bufname
+  call s:temp_buffer()
+  return s:bufname
+
+endfunction  " }}}
 
 function! pydoc_help#async_cursor() abort " Async Pydoc: {{{
   let s:temp_cword = expand('<cWORD>')
@@ -249,7 +262,7 @@ function! pydoc_help#show(...) abort  " {{{
   keepjumps keepalt wincmd p
 endfunction " }}}
 
-function! s:is_preview_window_open()  " {{{
+function! s:is_preview_window_open() abort  " {{{
   " Source: vim-plug
   silent! wincmd P
   if &previewwindow

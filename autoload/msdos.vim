@@ -31,7 +31,10 @@ function! msdos#set_shell_cmd() abort  " {{{1
   set shellpipe=>%s\ 2>&1
   set shellredir=>%s\ 2>&1
   " Is this necessary? Or should it be empty?
-  set shellxquote=(
+  " heres what this used to be set as. is this whats causing shell problems?
+  " set shellxquote=(
+    let &shellcmdflag = has('nvim') ? '/s /c' : '/c'
+    let &shellxquote = has('nvim') ? '"' : '('
   set shellxescape=^
   " What about setting shellquote to "" so that cmd gets the args quoted?
   echomsg 'Using cmd as the system shell.'

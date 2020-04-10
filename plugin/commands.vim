@@ -159,7 +159,7 @@ command! -complete=file_in_path -nargs=? -bang -bar FZGrep call fzf#run(fzf#wrap
 	" -addr=buffers		Range for buffers (also not loaded buffers)
 
   " Gtfo it worked
-command! -bang -bar -complete=file  -range -addr=buffers -nargs=* FZGGrep
+command! -bang -bar -complete=file -nargs=* FZGGrep
   \   call fzf#vim#grep(
   \   'git grep --line-number --color=always ' . shellescape(<q-args>),
   \   0,
@@ -171,7 +171,7 @@ command! -bang -bar -complete=file  -range -addr=buffers -nargs=* FZGGrep
 " Ag FZF With A Preview Window: {{{
 
 "   :Ag! - Start fzf in fullscreen and display the preview window above
-command! -complete=dir -bang -bar -addr=buffers -nargs=* FZPreviewAg
+command! -complete=dir -bang -bar -nargs=* FZPreviewAg
   \ call fzf#vim#ag(<q-args>,
   \                 <bang>0 ? fzf#vim#with_preview('up:60%')
   \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
@@ -213,7 +213,10 @@ command! -nargs=* -bang -bar -complete=customlist,s:Plugins FZPlugins
 
 " FZBuf: {{{ Works better than FZBuffers
 command! -bar -bang -complete=buffer FZBuf call fzf#run(fzf#wrap('buffers',
-    \ {'source': map(range(1, bufnr('$')), 'bufname(v:val)')},
+    \ {'source': map(range(1, bufnr('$')), 'bufname(v:val)'),
+    \ 'sink': 'e',
+    \ 'options': g:fzf_options,
+    \ },
     \ <bang>0))
 " }}}
 
@@ -249,25 +252,41 @@ command! -bar -complete=dir -bang -nargs=* FzRgPrev
   \           : fzf#vim#with_preview('right:50%:hidden', '?'))
 
 command! -bar -bang -complete=dir -nargs=* FZLS
-    \ call fzf#run(fzf#wrap('ls', {'source': 'ls', 'dir': <q-args>}, <bang>0))
+    \ call fzf#run(fzf#wrap(
+    \ 'ls',
+    \ {'source': 'ls', 'dir': <q-args>},
+    \ <bang>0))
 
 " only search projects lmao
 command! -bar -bang FZProjectFiles call fzf#vim#files('~/projects', <bang>0)
 
 " Or, if you want to override the command with different fzf options, just pass
 " a custom spec to the function.
-command! -bar -bang -nargs=? -complete=dir FZReverse
-    \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--info=inline']}, <bang>0)
+command! -bar -bang -nargs=* -complete=file FZReverse
+    \ call fzf#vim#files(<q-args>,
+    \ {'options': [
+        \ '--layout=reverse', '--info=inline'
+    \ ]},
+    \ <bang>0)
 
 " Want a preview window?
-command! -bar -bang -nargs=? -complete=dir FZFilePreview
-    \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--info=inline', '--preview', 'bat --color=always {}']}, <bang>0)
+command! -bar -bang -nargs=* -complete=file FZFilePreview
+    \ call fzf#vim#files(<q-args>,
+    \ {'options':
+        \ ['--layout=reverse', '--info=inline',
+        \ '--preview', 'bat --color=always {}'
+    \ ]},
+    \   <bang>0 ? fzf#vim#with_preview('up:60%')
+    \           : fzf#vim#with_preview('right:50%:hidden', '?'))
 
-command! -bar -bang -nargs=* -complete=dir Files
-    \ call fzf#vim#files(<q-args>, {'source': 'fd -H -t f',
+command! -bar -bang -nargs=* -complete=file Files
+    \ call fzf#vim#files(<q-args>,
+    \ {'source': 'fd -H -t f',
+    \ 'sink': 'pedit',
     \ 'options': [
-    \ '--layout=reverse', '--info=inline', '--preview', '~/.vim/plugged/fzf.vim/bin/preview.sh {}'
-    \ ]}, <bang>0)
+        \ '--layout=reverse', '--info=inline', '--preview', '~/.vim/plugged/fzf.vim/bin/preview.sh {}'
+    \ ]},
+    \ <bang>0)
 
 " }}}
 "
@@ -397,7 +416,16 @@ command! -bang -bar PydocThis call pydoc_help#PydocCword(<bang>0, expand(<cword>
 " separate window like fzf does.
 " NOTE: See :he func-range to see how range can get passed automatically to
 " functions without being specified in the command definition
-command! -range -bang -nargs=? -bar -complete=expression -complete=function Pydoc call pydoc_help#Pydoc(<f-args>, <bang>0)
+
+function! s:PythonMods(A, L, P) abort
+  " this doesnt work? py3do can only return a  str or None which sucks since wed prefer a list.
+  " Also jesus why does this write the return value to the buffer?
+  py3do return str(sys.modules)
+endfunction
+
+" command! -range -bang -nargs=? -bar -complete=custom,s:PythonMods Pydoc call pydoc_help#Pydoc(<f-args>, <bang>0, <mods>)
+
+command! -bang -nargs=? -bar Pydoc call pydoc_help#Pydoc(<f-args>, <bang>0)
 
 " command! -bar -bang -range PydocSp
 "       \ exec '<mods>split<bang>:python3 import pydoc'.expand('<cWORD>').'; pydoc.help('.expand('<cWORD>').')'
@@ -436,7 +464,9 @@ command! -bar -bang -nargs=* -complete=dir -complete=custom,s:IPythonOptions IPy
 
 command! -bar -bang -complete=buffer ScratchBuffer call pydoc_help#scratch_listed_buffer(<bang>0)
 
-command! NvimCxn call py#Cxn()
+command! -nargs=* -bar -bang NvimREPL call py#Cnxn(<bang>0, <args>)
+
+command! -nargs=* -bar -bang NvimYourREPL call py#Yours(<bang>0, <args>)
 
 command! RangerCurrentFile call OpenRangerIn("%", s:default_edit_cmd)
 command! RangerCurrentDirectory call OpenRangerIn("%:p:h", s:default_edit_cmd)
@@ -553,6 +583,10 @@ endfunction
 command! -range=% -addr=buffers -bang -bar GRoot echo ProjectRoot()
 
 command! -range -addr=arguments -bang -bar -nargs=* Gclone exe fugitive#Command(<line1>, <count>, +"<range>", <bang>0, "<mods>", <q-args>)
+
+" no args no nothing. just a reminder you can fill a buffer with git output
+command! GHead Gread! show HEAD
+command! Gds2 :enew<bar>:Gread! diff --staged --stat HEAD -- .<bar>setlocal nomodified nobuflisted buftype=nofile
 " }}}
 
 " Syntax Highlighting: {{{

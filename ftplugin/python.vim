@@ -76,7 +76,7 @@ setlocal isfname+=.
 setlocal iskeyword-=.,_
 
 setlocal shiftround
-
+setlocal cindent
 let &l:path = py#PythonPath()
 
 " Dude the original ftplugin doesn't set up match words. why are the vim

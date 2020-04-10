@@ -142,7 +142,7 @@ function! includes#TypeScriptIncludeExpression(fname, gf) abort  " {{{
         let l:package = json_decode(join(readfile(l:package_json)))
         let b:ts_packages[a:fname] = {
                     \ 'pack': fnamemodify(l:package_json, ':p:h'),
-                    \ 'entry': substitute(get(package, 'typings', get(package, 'main', 'index.js')), '^\.\{1,2}\/', '', '')
+                    \ 'entry': substitute(get(l:package, 'typings', get(l:package, 'main', 'index.js')), '^\.\{1,2}\/', '', '')
                     \ }
       endif
 

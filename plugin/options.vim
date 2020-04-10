@@ -10,6 +10,7 @@ scriptencoding utf-8
 let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
 " Folds And Diffs: {{{
+set foldopen=insert,jump,block,hor,mark,percent,quickfix,search,tag,undo
 setglobal foldnestmax=10
 " Oddly needs to be set locally?
 set foldmethod=marker foldcolumn=2
@@ -31,7 +32,7 @@ endif
 " }}}
 
 " Completions: {{{
-setglobal wildignorecase
+setglobal wildignorecase fileignorecase
 setglobal wildmode=full:list:longest,full:list
 setglobal wildignore=*~,versions/*,cache/*,.tox/*,.pytest_cache/*,__pycache__/*
 setglobal wildcharm=<C-z>
@@ -47,6 +48,13 @@ setlocal indentkeys-=0#
 
 setglobal smartcase infercase smartindent
 
+setglobal regexpengine=2
+setglobal cscopetagorder=1  " why does this default to search cscope first?
+
+setglobal shada='100,<50,s10,:3000,%
+" default but specify it.
+let &g:shadafile = stdpath('data').'/site/shada/main.shada'
+
 " Couple tag related things
 setglobal tags=tags,**/tags
 setglobal tagcase=smart
@@ -54,17 +62,21 @@ setglobal showfulltag
 if exists('&tagfunc')
   let &g:tagfunc = coc#rpc#request('getTagList', [])
 endif
+setglobal showfulltag
 " }}}
 
 " Other: {{{
 packadd! matchit
 packadd! justify
 
+setglobal pyxversion=3
 " managed to lose this along the way
 let g:grepprg = syncom#grepprg()
 
 call syncom#gruvbox_material()
-set termguicolors
+" to enable transparency but force the current selected element to be fully opaque: >
+set pumblend=15
+hi PmenuSel blend=0
 setglobal autochdir autowrite autoread
 if &tabstop > 4 | setglobal tabstop=4 | endif
 if &shiftwidth > 4  | setglobal shiftwidth=4 | endif
@@ -80,7 +92,7 @@ setglobal suffixes=.bak,~,.o,.info,.swp,.aux,.bbl,.blg,.brf,.cb,.dvi,.idx,.ilg,.
 
 setglobal pastetoggle=<F9>   " fuck me this is what windows terminal uses for something
 setglobal signcolumn=auto:4  " this might be a nvim 4 thing
-try | setglobal switchbuf=useopen,usetab,split | catch | endtry
+try | setglobal switchbuf=useopen,split | catch | endtry
 setglobal splitbelow splitright
 setglobal sidescroll=5 hidden
 " dude these stopped setting when i set global them
@@ -99,6 +111,7 @@ let &g:path = &path . ',' . stdpath('data')
 setglobal path-=/usr/include
 setglobal sessionoptions-=buffers,winsize viewoptions-=options sessionoptions+=globals
 setglobal mouse=a
+setglobal selectmode=mouse  " start select mode instead of visual mode because why not
 setglobal nojoinspaces
 setglobal modeline
 if exists('&modelineexpr') | setglobal modelineexpr | endif
@@ -122,7 +135,9 @@ setglobal conceallevel=2 concealcursor=nc    " enable concealing
 setglobal spellsuggest=5
 setglobal showmatch matchpairs+=<:>
 setglobal matchtime=20  " Show the matching pair for 2 seconds
-" dude holy hell are we running faster on termux set termguicolors
+" dude holy hell are we running faster on termux without set termguicolors. sorry though it
+" looks very off
+set termguicolors
 setglobal synmaxcol=1000
 
 setglobal regexpengine=2

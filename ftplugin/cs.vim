@@ -5,6 +5,7 @@ if exists("b:did_ftplugin") | finish | endif
 
 " Options: {{{
 source $VIMRUNTIME/ftplugin/cs.vim
+source $VIMRUNTIME/indent/cs.vim
 
 setlocal expandtab shiftwidth=4 tabstop=4 softtabstop=4
 compiler cs

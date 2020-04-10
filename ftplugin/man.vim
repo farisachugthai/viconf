@@ -8,7 +8,7 @@
 " Set this globally: {{{
 " Also this is checked in the ftplugin so ensure it's above the source
 let g:ft_man_folding_enable = 1
-let g:ft_man_open_mode = "tab"
+let g:ft_man_open_mode = 'tab'
 
 if exists('b:did_ftplugin') | finish | endif
 " }}}
@@ -19,19 +19,31 @@ source $VIMRUNTIME/ftplugin/man.vim
 let b:undo_ftplugin = ''
 " WHY!
 
-" allow dot and dash in manual page name.
-setlocal iskeyword+=\.,-
-
 " Override the ftplugin
+" hate this mapping.
+silent! nunmap <buffer> q
 setlocal buftype=
 setlocal bufhidden=
 setlocal noreadonly
 setlocal modifiable
 setlocal number relativenumber
 setlocal signcolumn=auto:4
+setlocal wrap
+" allow dot and dash in manual page name.
+setlocal iskeyword+=\.,-
+
+" also literally how is this not defined in the ftplugin??? its notably defined
+" EVERYWHERE else.
+setlocal keywordprg=:Man
+if getenv('$MANPATH')
+  let &l:path .= expand('$MANPATH')
+endif
 
 " Like guys we have to define this correctly and fix things!
-let b:undo_ftplugin  = 'setlocal isk< buftype< swf< bufhidden< mod< ro< '
+let b:undo_ftplugin  = 'setlocal buftype< bufhidden< ro< mod< nu< rnu< signcolumn< wrap<'
+                    \. '|setlocal swf< isk< kp<'
+                    \. '|unlet! b:undo_ftplugin'
+                    \. '|unlet! b:did_ftplugin'
 
 if !exists('g:no_plugin_maps') && !exists('g:no_man_maps')
   nnoremap <buffer> q <Cmd>bd<CR>
@@ -43,7 +55,7 @@ if !exists('g:no_plugin_maps') && !exists('g:no_man_maps')
 endif
 " }}}
 
-"Filetype  Nvim Official Ftplugin: {{{1
+" Filetype  Nvim Official Ftplugin: {{{
 if !exists('g:no_plugin_maps') && !exists('g:no_man_maps')
   " I'm gonna use their check as well but only add to the undo_ftplugin
   let b:undo_ftplugin .= 'nunmap <buffer> j'
@@ -52,14 +64,10 @@ if !exists('g:no_plugin_maps') && !exists('g:no_man_maps')
 	\ . '|silent! nunmap <buffer> <C-]>'
 	\ . '|silent! nunmap <buffer> K'
 	\ . '|silent! nunmap <buffer> <C-T>'
-  " allow dot and dash in manual page name.
-  setlocal iskeyword+=\.,-
   let b:undo_ftplugin .= '|setlocal isk<'
 endif
 
 
-let b:undo_ftplugin  .= '|setlocal ma< et< ts< sts< sw< wrap< breakindent< '
-                    \ . '|unlet! b:undo_ftplugin'
-                    \ . '|unlet! b:did_ftplugin'
+let b:undo_ftplugin  .= '|setlocal ma< et< ts< sts< sw< wrap<'
 
 " }}}

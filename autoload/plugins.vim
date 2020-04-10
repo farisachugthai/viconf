@@ -7,24 +7,24 @@
 
 function! plugins#GetAllSnippets() abort  " {{{
   call UltiSnips#SnippetsInCurrentScope(1)
-  let list = []
-  for [key, info] in items(g:current_ulti_dict_info)
-    let parts = split(info.location, ':')
-    call add(list, {
-      \'key': key,
-      \'path': parts[0],
-      \'linenr': parts[1],
-      \'description': info.description,
+  let l:list = []
+  for [l:key, l:info] in items(g:current_ulti_dict_info)
+    let l:parts = split(l:info.location, ':')
+    call add(l:list, {
+      \'key': l:key,
+      \'path': l:parts[0],
+      \'linenr': l:parts[1],
+      \'description': l:info.description,
       \})
   endfor
-  return list
+  return l:list
 endfunction  " }}}
 
 function! plugins#ExpandPossibleShorterSnippet() abort  " {{{
   if len(UltiSnips#SnippetsInCurrentScope()) == 1 "only one candidate...
-    let curr_key = keys(UltiSnips#SnippetsInCurrentScope())[0]
-    normal diw
-    exe 'normal a' . curr_key
+    let l:curr_key = keys(UltiSnips#SnippetsInCurrentScope())[0]
+    normal! diw
+    exe 'normal a' . l:curr_key
     exe 'normal a '
     return 1
   endif
@@ -34,9 +34,9 @@ endfunction  " }}}
 function! plugins#ExpandSnippetOrCarriageReturn() abort  " {{{
   " Hopefully will expand snippets or CR. Or it'll destroy deoplete's
   " ability to close the pum. *shrugs*
-  let snippet = UltiSnips#ExpandSnippetOrJump()
+  let l:snippet = UltiSnips#ExpandSnippetOrJump()
     if g:ulti_expand_or_jump_res > 0
-      return snippet
+      return l:snippet
     else
       return "\<CR>"
     endif
@@ -58,19 +58,19 @@ function! plugins#list_commits() abort  " {{{
   " outputs 0 on windows and
   " echo isdirectory(glob('~/projects/viconf'))
   " outputs 1 so we have to glob it to get anything to show up in startify
-    let git = 'git -C ' . glob('~/projects/dynamic_ipython')
-    let commits = systemlist(git . ' log --oneline | head -n10')
+    let l:git = 'git -C ' . glob('~/projects/dynamic_ipython')
+    let l:commits = systemlist(l:git . ' log --oneline | head -n10')
 
     " mapping that lines up commits from this repo
-    let git = 'Git'
-    return map(commits, '{"line": matchstr(v:val, "\\s\\zs.*"), "cmd": "'. git .' show ". matchstr(v:val, "^\\x\\+") }')
+    let l:git = 'Git'
+    return map(l:commits, '{"line": matchstr(v:val, "\\s\\zs.*"), "cmd": "'. l:git .' show ". matchstr(v:val, "^\\x\\+") }')
 endfunction  " }}}
 
 function! plugins#filter_header(lines) abort  " {{{
-    let longest_line   = max(map(copy(a:lines), 'strwidth(v:val)'))
-    let centered_lines = map(copy(a:lines),
-        \ 'repeat(" ", (&columns / 2) - (longest_line / 2)) . v:val')
-    return centered_lines
+    let l:longest_line   = max(map(copy(a:lines), 'strwidth(v:val)'))
+    let l:centered_lines = map(copy(a:lines),
+        \ 'repeat(" ", (&columns / 2) - (l:longest_line / 2)) . v:val')
+    return l:centered_lines
 endfunction  " }}}
 
 function! plugins#startify_bookmarks() abort  " {{{
@@ -94,7 +94,7 @@ function! plugins#startify_bookmarks() abort  " {{{
 endfunction  " }}}
 
 function! plugins#GrepFromSelected(type) abort  " {{{
-  let saved_unnamed_register = @@
+  let l:saved_unnamed_register = @@
   if a:type ==# 'v'
     normal! `<v`>y
   elseif a:type ==# 'char'
@@ -102,25 +102,25 @@ function! plugins#GrepFromSelected(type) abort  " {{{
   else
     return
   endif
-  let word = substitute(@@, '\n$', '', 'g')
-  let word = escape(word, '| ')
-  let @@ = saved_unnamed_register
-  execute 'CocList grep ' . word
+  let l:word = substitute(@@, '\n$', '', 'g')
+  let l:word = escape(l:word, '| ')
+  let @@ = l:saved_unnamed_register
+  execute 'CocList grep ' . l:word
 endfunction  " }}}
 
 function! plugins#FloatingFZF() abort  " {{{
   " simply used to set window specific settings for FZF.
   " not intended for end users.
-  let width = float2nr(&columns * 0.9)
-  let height = float2nr(&lines * 0.6)
-  let opts = { 'relative': 'editor',
-              \ 'row': (&lines - height) / 2,
-              \ 'col': (&columns - width) / 2,
-              \ 'width': width,
-              \ 'height': height }
+  let l:width = float2nr(&columns * 0.9)
+  let l:height = float2nr(&lines * 0.6)
+  let l:opts = { 'relative': 'editor',
+              \ 'row': (&lines - l:height) / 2,
+              \ 'col': (&columns - l:width) / 2,
+              \ 'width': l:width,
+              \ 'height': l:height }
 
-  let win = nvim_open_win(nvim_create_buf(v:false, v:true), v:true, opts)
-  call setwinvar(win, '&winhighlight', 'NormalFloat:Normal')
+  let l:win = nvim_open_win(nvim_create_buf(v:false, v:true), v:true, l:opts)
+  call setwinvar(l:win, '&winhighlight', 'NormalFloat:Normal')
 endfunction  " }}}
 
 function! plugins#Voom() abort  " {{{
@@ -130,9 +130,8 @@ function! plugins#Voom() abort  " {{{
   let s:voom_file = s:voom_dir . '/voom_vim.py'
   let s:voom_rst_file = s:voom_dir . '/voom_mode_rst'
   try
-    let ret = py3file s:voom_file
+    py3file s:voom_file
     py3file s:voom_rst_file
-    return ret
   catch
     return v:false
   endtry
@@ -157,7 +156,7 @@ function! plugins#AleMappings() abort  " {{{
   " Dude why can't i get plug mappings right???
   nnoremap <A-i> <Cmd>ALEInfo<CR>
   " }}}
-  
+
   " Options: {{{
 
   let g:ale_virtualtext_cursor = 1
@@ -297,9 +296,7 @@ function! plugins#AleMappings() abort  " {{{
 
 endfunction  " }}}
 
-function! plugins#TagbarTypes() abort
-
-" Tagbar Types: {{{
+function! plugins#TagbarTypes() abort   " {{{
 let g:tagbar_type_ansible = {
 	\ 'ctagstype' : 'ansible',
 	\ 'kinds' : [
@@ -388,5 +385,5 @@ let g:tagbar_type_snippets = {
       \ 's:snippets',
       \ ]
       \ }
-" }}}
-endfunction
+
+endfunction  " }}}

@@ -36,10 +36,10 @@ setlocal isfname+=@-@
 
 if !exists('b:did_typescript_setup')
   " node_modules
-  let node_modules = finddir('node_modules', '.;', -1)
-  if len(node_modules)
-    let b:ts_node_modules = map(node_modules, { idx, val -> substitute(fnamemodify(val, ':p'), '/$', '', '')})
-    unlet! node_modules
+  let l:node_modules = finddir('node_modules', '.;', -1)
+  if len(l:node_modules)
+    let b:ts_node_modules = map(l:node_modules, { idx, val -> substitute(fnamemodify(val, ':p'), '/$', '', '')})
+    unlet! l:node_modules
   endif
 
   " $PATH: {{{
@@ -56,7 +56,7 @@ if !exists('b:did_typescript_setup')
 
     " Yeah i think it's this one. reading in the file and it might not be utf-8
     try
-      let tsconfig_data = json_decode(join(readfile(b:tsconfig_file)))
+      let b:tsconfig_data = json_decode(join(readfile(b:tsconfig_file)))
       " catch all Vim errors. thanks help docs
     catch /^Vim\%((\a\+)\)\=:E/
     endtry
@@ -70,7 +70,7 @@ if !exists('b:did_typescript_setup')
     " endfor
 
     " let b:ts_config_paths = paths
-    unlet! tsconfig_data
+    unlet! b:tsconfig_data
     " unlet paths
   endif
 
@@ -111,26 +111,27 @@ endif
 
 
 " more helpful gf
-nnoremap <silent> <buffer> gf         :call <SID>GF(expand('<cfile>'), 'find')<CR>
-xnoremap <silent> <buffer> gf         <Esc>:<C-u>call <SID>GF(visual#GetSelection(), 'find')<CR>
-nnoremap <silent> <buffer> <C-w><C-f> :call <SID>GF(expand('<cfile>'), 'sfind')<CR>
-xnoremap <silent> <buffer> <C-w><C-f> <Esc>:<C-u>call <SID>GF(visual#GetSelection(), 'sfind')<CR>
+nnoremap <silent> <buffer> gf         <Cmd>call <SID>GF(expand('<cfile>'), 'find')<CR>
+xnoremap <silent> <buffer> gf         <Cmd>call <SID>GF(visual#GetSelection(), 'find')<CR>
+nnoremap <silent> <buffer> <C-w><C-f> <Cmd>call <SID>GF(expand('<cfile>'), 'sfind')<CR>
+xnoremap <silent> <buffer> <C-w><C-f> <Cmd>call <SID>GF(visual#GetSelection(), 'sfind')<CR>
 
-if !exists("*s:GF")
-  function s:GF(text, cmd)  " {{{
+if !exists('*s:GF')
+  function! s:GF(text, cmd)  " {{{
     let l:include_expression = TypeScriptIncludeExpression(a:text, 1)
 
     if len(l:include_expression) > 1
-      execute a:cmd . " " . l:include_expression
+      execute a:cmd . ' ' . l:include_expression
     else
       echohl WarningMsg
-      echo "Can't find file " . a:text
+      echo 'Can not find file ' . a:text
       echohl None
     endif
   endfunction  " }}}
 endif
 " }}}
 
+" Undo FTPlugin: {{{
 " Theres actually an undo defined in js.vim
 let b:undo_ftplugin .='|setlocal isf< sua< syntax< et< sts< sw< ts< '
                    \. '|setlocal inex< def< inc< inde< '
@@ -144,4 +145,4 @@ let b:undo_ftplugin .='|setlocal isf< sua< syntax< et< sts< sw< ts< '
                    \. '|silent! xunmap <buffer> gf'
                    \. '|silent! nunmap <buffer> <C-w><C-f>'
                    \. '|silent! xunmap <buffer> <C-w><C-f>'
-
+" }}}

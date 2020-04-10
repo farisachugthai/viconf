@@ -16,6 +16,13 @@ let g:markdown_fenced_languages = [
 let g:markdown_folding = 1
 let g:markdown_minlines = 500
 
+if exists('b:did_ftplugin') | finish | endif
+source $VIMRUNTIME/ftplugin/
+
+let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
+                      \. '|setlocal '
+                      \. '|unlet! b:undo_ftplugin'
+                      \. '|unlet! b:did_ftplugin'
 " I wish this was a reasonable way to source his function but not do the runtime! thing
 source $VIMRUNTIME/ftplugin/markdown.vim
 
@@ -23,7 +30,6 @@ source $VIMRUNTIME/ftplugin/markdown.vim
 " and he didn't `let b:did_ftplugin = 1` at the end of this file?
 " i guess we have to right?
 " OH WAIT! The runtime! html.vim does it for us
-if !exists('b:did_ftplugin') | let b:did_ftplugin = 1 | endif
 
 setlocal comments=fb:*,fb:-,fb:+,n:>
 " used to be

@@ -1239,7 +1239,7 @@ class CompatibilitySession(Remote):
         return self.threadsafe_call(command)
 
 
-class Current(object):
+class Current(BufferBase):
     """Helper class for emulating vim.current from python-vim."""
 
     def __init__(self, session):

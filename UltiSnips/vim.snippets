@@ -59,7 +59,7 @@ endsnippet
 
 snippet ft "Ftplugin guard" b
 if exists('b:did_ftplugin') | finish | endif
-source $VIMRUNTIME/ftplugin/`!p rv=snip.base`
+source $VIMRUNTIME/ftplugin/`!p rv=snip.basename`
 
 let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
                       \. '|setlocal ${0:${VISUAL}}'
@@ -74,7 +74,7 @@ elseif exists(${1:'b:current_syntax'})
   finish
 endif
 
-let ${2:b:current_syntax} = 1
+let ${1:b:current_syntax} = 1
 endsnippet
 
 snippet func "Autocompletes function name based on filename" b
