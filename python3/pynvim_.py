@@ -44,9 +44,9 @@ Extended Summary
 
 #) msgpack_rpc.msgpack_stream
 
+
 Notes
 -----
-
 Remote got pushed way up out of API/common because it's invoked a handful of
 times before then.
 
@@ -57,29 +57,38 @@ Decorators used by python host plugin system.
 import asyncio
 import codecs
 import cgitb
+# import decimal
+import faulthandler
 import functools
 import gc
-import imp
+# import json  # literally how is this not in use
 import importlib
 import inspect
 import io
+# import itertools
+import locale
 import logging
+# import mimetypes
+import multiprocessing
+import operator
 import os
 import platform
 import pydoc
+import re
 import reprlib
+# import runpy
 import signal
-
 # import shlex
+# import hutil
 # import subprocess
 import sys
 import traceback
 import threading
+import types
 import warnings
 from collections import namedtuple, UserList, deque
-from imp import find_module as original_find_module
+from functools import partial
 from io import StringIO
-
 # from pathlib import Path
 from pydoc import safeimport
 from traceback import format_exception, format_stack, format_exc
@@ -96,23 +105,121 @@ else:
 try:
     import pyuv  # noqa
 except ImportError:
-    from pynvim.msgpack_rpc.event_loop import EventLoop
-else:
-    from pynvim.msgpack_rpc.event_loop.uv import UvEventLoop as EventLoop
+    warnings.warn("pyuv not installed!")
+    pyuv = None
 
 if sys.version_info <= (3, 7):
 
     class ModuleNotFoundError(ImportError):
         pass  # i have a better implementation somewhere...
+global vim
 
+try:
+    import vim
+except ImportError:
+    vim = None
 
 # }}}
 
+# Compat kinda: {{{
+# Not nvim's compat mod
+
+try:
+    from os import PathLike, fspath, fsencode, fsdecode
+except ImportError:
+
+    class PathLike(abc.ABC):
+        """Abstract base class for implementing the file system path protocol."""
+
+        @abc.abstractmethod
+        def __fspath__(self):
+            """Return the file system path representation of the object."""
+            raise NotImplementedError
+
+    PathLike.register(pathlib.Path)
+
+    def fspath(path):
+        """Return the string representation of the path.
+
+        If str or bytes is passed in, it is returned unchanged. If __fspath__()
+        returns something other than str or bytes then TypeError is raised. If
+        this function is given something that is not str, bytes, or os.PathLike
+        then TypeError is raised.
+        """
+        if isinstance(path, (str, bytes)):
+            return path
+
+        if isinstance(path, pathlib.Path):
+            return str(path)
+
+        # Work from the object's type to match method resolution of other magic
+        # methods.
+        path_type = type(path)
+        try:
+            path = path_type.__fspath__(path)
+        except AttributeError:
+            if hasattr(path_type, "__fspath__"):
+                raise
+        else:
+            if isinstance(path, (str, bytes)):
+                return path
+            else:
+                raise TypeError(
+                    "expected __fspath__() to return str or bytes, "
+                    "not " + type(path).__name__
+                )
+
+        raise TypeError(
+            "expected str, bytes or os.PathLike object, not " + path_type.__name__
+        )
+
+    def _fscodec():
+        encoding = sys.getfilesystemencoding()
+        if encoding == "mbcs":
+            errors = "strict"
+        else:
+            errors = "surrogateescape"
+
+        def fsencode(filename):
+            """Encode filename (an os.PathLike, bytes, or str) to the filesystem
+            encoding with 'surrogateescape' error handler, return bytes unchanged.
+            On Windows, use 'strict' error handler if the file system encoding is
+            'mbcs' (which is the default encoding).
+            """
+            filename = fspath(filename)  # Does type-checking of `filename`.
+            if isinstance(filename, str):
+                return filename.encode(encoding, errors)
+            else:
+                return filename
+
+        def fsdecode(filename):
+            """Decode filename (an os.PathLike, bytes, or str) from the filesystem
+            encoding with 'surrogateescape' error handler, return str unchanged. On
+            Windows, use 'strict' error handler if the file system encoding is
+            'mbcs' (which is the default encoding).
+            """
+            filename = fspath(filename)  # Does type-checking of `filename`.
+            if isinstance(filename, bytes):
+                return filename.decode(encoding, errors)
+            else:
+                return filename
+
+        return fsencode, fsdecode
+
+    fsencode, fsdecode = _fscodec()
+    del _fscodec
+
+    def open(file, *pargs, **kwargs):
+        if isinstance(file, PathLike):
+            file = fspath(file)
+        return io.open(file, *pargs, **kwargs)
+# }}}
+
 # Globals: {{{
-global vim
 basestring = str
 # So on the low I don't think that logger or debug are used anywhere.
-logger = logging.getLogger(__name__)
+logger = multiprocessing.get_logger()
+multiprocessing.log_to_stderr(logging.WARNING)
 debug, info, warn, error = (
     logger.debug,
     logger.info,
@@ -123,8 +230,17 @@ debug, info, warn, error = (
 logger.setLevel(logging.WARNING)
 handler = logging.StreamHandler()
 handler.setLevel(logging.WARNING)
+
+log_datefmt = "%Y-%m-%d %H:%M:%S"
+default_log_format = (
+    "[ %(name)s : %(relativeCreated)d :] %(levelname)s : %(module)s : --- %(message)s "
+)
+formatter = logging.Formatter(fmt=default_log_format, datefmt=log_datefmt)
+handler.setFormatter(formatter)
+
 filterer = logging.Filter(name=__name__)
 logger.addHandler(handler)
+logger.root.addHandler(handler)
 logger.addFilter(filterer)
 
 # There is no 'long' type in Python3 just int
@@ -136,7 +252,6 @@ mod_cache = {}
 # so thats how you do this
 distribution = pkg_resources.get_distribution("pynvim")
 __version__ = distribution.version
-
 
 lua_module = """
 local a = vim.api
@@ -171,27 +286,25 @@ if os.name == "nt":
     # NOTE: we override in the stdio case, because it doesn't work.
     loop_cls = asyncio.ProactorEventLoop
 
+# When signals are restored, the event loop library may reset SIGINT to SIG_DFL
+# which exits the program. To be able to restore the python interpreter to it's
+# default state, we keep a reference to the default handler
+default_int_handler = signal.getsignal(signal.SIGINT)
+main_thread = threading.current_thread()
+
+locale.setlocale(locale.LC_ALL, "")
+
+# try:
+#     faulthandler.enable()
+# except io.UnsupportedOperation:
+#     pass  # i have no idea why
 
 # }}}
 
 # Pynvim __init__: {{{
 
 
-def start_host(session=None):
-    """Promote the current process into python plugin host for Nvim.
-
-    Start msgpack-rpc event loop for `session`, listening for Nvim requests
-    and notifications. It registers Nvim commands for loading/unloading
-    python plugins.
-
-    The sys.stdout and sys.stderr streams are redirected to Nvim through
-    `session`. That means print statements probably won't work as expected
-    while this function doesn't return.
-
-    This function is normally called at program startup and could have been
-    defined as a separate executable. It is exposed as a library function for
-    testing purposes only.
-    """
+def _goofy_way_of_loading_plugins():
     plugins = []
     for arg in sys.argv:
         _, ext = os.path.splitext(arg)
@@ -216,8 +329,29 @@ def start_host(session=None):
         name = "script"
     else:
         name = "rplugin"
-
     setup_logging(name)
+    return plugins
+
+
+def start_host(session=None, load_plugins=True, plugins=None):
+    """Promote the current process into python plugin host for Nvim.
+
+    Start msgpack-rpc event loop for `session`, listening for Nvim requests
+    and notifications. It registers Nvim commands for loading/unloading
+    python plugins.
+
+    The sys.stdout and sys.stderr streams are redirected to Nvim through
+    `session`. That means print statements probably won't work as expected
+    while this function doesn't return.
+
+    This function is normally called at program startup and could have been
+    defined as a separate executable. It is exposed as a library function for
+    testing purposes only.
+
+    I never noticed until now but it also initializes a logger? Wth?
+    """
+    if load_plugins:
+        plugins = _goofy_way_of_loading_plugins()
 
     if not session:
         session = stdio_session()
@@ -229,7 +363,9 @@ def start_host(session=None):
         sys.exit(1)
 
     host = Host(nvim)
-    host.start(plugins)
+    if plugins is not None:
+        host.start(plugins)
+    return host
 
 
 def attach(session_type, address=None, port=None, path=None, argv=None, decode=None):
@@ -237,29 +373,36 @@ def attach(session_type, address=None, port=None, path=None, argv=None, decode=N
 
     Previous machinery to create python api sessions is still there. This only
     creates a facade function to make things easier for the most usual cases.
-    Thus, instead of:
+    Thus, instead of::
+
         from pynvim import socket_session, Nvim
         session = tcp_session(address=<address>, port=<port>)
         nvim = Nvim.from_session(session)
-    You can now do:
+
+    You can now do::
+
         from pynvim import attach
         nvim = attach('tcp', address=<address>, port=<port>)
-    And also:
+
+    And also::
+
         nvim = attach('socket', path=<path>)
         nvim = attach('child', argv=<argv>)
         nvim = attach('stdio')
 
     When the session is not needed anymore, it is recommended to explicitly
-    close it:
+    close it::
+
        nvim.close()
-    It is also possible to use the session as a context mangager:
+
+    It is also possible to use the session as a context mangager::
+
        with attach('socket', path=thepath) as nvim:
            print(nvim.funcs.getpid())
            print(nvim.current.line)
+
     This will automatically close the session when you're done with it, or
     when an error occured.
-
-
     """
     session = (
         tcp_session(address, port)
@@ -277,11 +420,6 @@ def attach(session_type, address=None, port=None, path=None, argv=None, decode=N
         raise Exception('Unknown session type "%s"' % session_type)
 
     return Nvim.from_session(session).with_decode(decode)
-
-# Required for python 2.6
-class NullHandler(logging.Handler):
-    def emit(self, record):
-        pass
 
 
 def setup_logging(name=None, level=None):
@@ -329,14 +467,10 @@ def setup_logging(name=None, level=None):
         "%(filename)s:%(funcName)s:%(lineno)s] %(process)s - %(message)s"
     )
 
-    handler.addFormatter(formatter)
+    handler.setFormatter(formatter)
     logger.addHandler(handler)
     logger.root.addHandler(handler)
     return logger
-
-
-if not logging.root.handlers:
-    logging.root.addHandler(NullHandler())
 
 # }}}
 
@@ -845,7 +979,7 @@ class Session(object):
         err, rv = v
         if err:
             info("'Received error: %s", err)
-            if getattr(sys, 'last_traceback', None):
+            if getattr(sys, "last_traceback", None):
                 raise self.error_wrapper(*err, sys.last_traceback)
         return rv
 
@@ -941,9 +1075,7 @@ class Session(object):
             try:
                 rv = self._request_cb(name, args)
                 debug(
-                    "greenlet %s finished executing, " + "sending %s as response",
-                    gr,
-                    rv,
+                    f"greenlet {gr} finished executing sending {rv} as response"
                 )
                 response.send(rv)
             except ErrorResponse as err:
@@ -952,12 +1084,11 @@ class Session(object):
                 )
                 response.send(err.args[0], error=True)
             except Exception as err:
-                warn(
-                    "error caught while processing request '%s %s': %s",
+                warn("error caught while processing request '%s %s': %s".format(
                     name,
                     args,
                     format_exc(),
-                )
+                ))
                 response.send(repr(err) + "\n" + format_exc(5), error=True)
             debug("greenlet %s is now dying...", gr)
 
@@ -985,11 +1116,12 @@ class Session(object):
         debug("received rpc notification, greenlet %s will handle it", gr)
         gr.switch()
 
-    def __call__(self, fn, *arg, **kwargs):
+    def __call__(self, fn, *args, **kwargs):
         return self.threadsafe_call(fn, *args, **kwargs)
 
     def __repr__(self):
         return f"{self.__class__.__name__}"
+
 
 # }}}
 
@@ -1031,7 +1163,7 @@ class Nvim(object):
         queries Nvim metadata for type information and sets a SessionHook for
         creating specialized objects from Nvim remote handles.
         """
-        if not session:
+        if session is None:
             session = stdio_session()
 
         # wth is this?
@@ -1509,9 +1641,11 @@ class BufferNvimBase(Nvim):
     """
 
     session: Session
-    channel_id : int
+    channel_id: int
 
-    def __init__(self, session, channel_id, metadata, types, decode=False, err_cb=None, **kwargs):
+    def __init__(
+        self, session, channel_id, metadata, types, decode=False, err_cb=None, **kwargs
+    ):
         self.session = session
         self.channel_id = channel_id
         self.metadata = metadata
@@ -1519,7 +1653,9 @@ class BufferNvimBase(Nvim):
         self.decode = decode
         self.err_cb = err_cb
         super().from_session(session)
-        super().__init__(session, channel_id, metadata, types, decode=decode, err_cb=err_cb)
+        super().__init__(
+            session, channel_id, metadata, types, decode=decode, err_cb=err_cb
+        )
 
 
 class Buffers(BufferBase):
@@ -1663,7 +1799,7 @@ class ScriptHost:
 
         self.setup()
         # context where all code will run
-        self.module = imp.new_module("__main__")
+        self.module = types.ModuleType("__main__")
         nvim.script_context = self.module
         # it seems some plugins assume 'sys' is already imported, so do it now
         exec("import sys", self.module.__dict__)
@@ -1821,21 +1957,26 @@ class ScriptHost:
         current.range = current.buffer.range(start, stop)
 
 
-class RedirectStream(io.IOBase):
+class RedirectStream(io.TextIOWrapper):
     """The streams that our Nvim and Session objects are writing to.
 
     .. versionchanged:: 0.4.mytakeover
 
         Implements the context manager protocol.
+        In addition no longer subclasses io.IOBase as that abstract class
+        requires the subclass to implement more than 2 methods.
+        Using io.TextIOWrapper as it's the standard IO interface one works
+        with in the REPL.
 
     """
 
-    def __init__(self, redirect_handler):
+    def __init__(self, redirect_handler, **kwargs):
         """Initialize with a redirect handler. Must accept arbitrary data.
 
         In addition must be able to write to python streams.
         """
         self.redirect_handler = redirect_handler
+        super().__init__(**kwargs)
 
     def write(self, data):
         self.redirect_handler(data)
@@ -1851,6 +1992,14 @@ class RedirectStream(io.IOBase):
         # dude can we please update v:shell_err or ANYTHING here??
         pass
         # let v:shell_err or some shit
+
+    # def fileno(self):
+        # TODO
+    def open(file, *pargs, **kwargs):
+        if isinstance(file, PathLike):
+            file = fspath(file)
+        return io.open(file, *pargs, **kwargs)
+
 
 
 def num_to_str(obj):
@@ -1874,40 +2023,46 @@ def _find_module(fullname, oldtail, path):
     warnings.warn(DeprecationWarning, "Use find_module")
     idx = oldtail.find(".")
     if idx > 0:
-        name = oldtail[:idx]
-        tail = oldtail[idx + 1:]
-        fmr = imp.find_module(name, path)
-        module = imp.find_module(fullname[: -len(oldtail)] + name, *fmr)
-        return _find_module(fullname, tail, module.__path__)
-    else:
-        return imp.find_module(fullname, path)
+        return _find_module(fullname, oldtail)
 
 
-def find_module(mod, package=None):
+def find_module(mod, path=None, target=None):
     """A more sensible manner for finding a module."""
     if isinstance(mod, bytes):
         mod = get_decoded_string(mod)
-    if isinstance(package, bytes):
-        package = get_decoded_string(package)
+    if isinstance(path, bytes):
+        path = get_decoded_string(path)
     try:
-        return importlib.util.mod_from_spec(importlib.util._find_spec(mod, package))
+        return importlib.util.mod_from_spec(find_spec(mod, path))
     except ModuleNotFoundError:
         # TODO: update v:shell_err
         sys.stderr.write(str(mod) + " not found!")
 
 
-def find_spec(fullname, target=None):
-    """Method for Python 3.4+."""
+def find_spec(fullname, path=None, target=None):
+    """Find the `ModuleSpec` for a given module.
+
+    Method for Python 3.4+.
+
+    .. versionchanged:: 0.4.2
+
+        Now accepts path keyword argument.
+
+    """
     if PathFinder is not None:
-        return PathFinder.find_spec(fullname, target)
+        return PathFinder.find_spec(fullname, path=path, target=target)
 
 
 def path_hook(nvim):
+    """Query the `VimPath` for additional directories."""
     return VimPath(nvim).hook(sys.path)
 
 
 class VimPath(Nvim):
+    """A class that fixes neovim's odd sys.path hacks."""
+
     def discover_runtime_directories(self):
+        """Find directories that Vim is aware of that python won't be."""
         # Alright so we should make a class that we can utilize to hack on Vim's
         # sys.path. This is definitely gonna be a method. It should probably
         # subclass Nvim
@@ -1952,16 +2107,13 @@ class Buffer(Remote):
         self.session = session
         self.code_data = code_data
 
-    def valid(self):
-        return self.request("nvim_buf_is_valid")
-
     def __len__(self):
         """Return the number of lines contained in a Buffer."""
         return self.request("nvim_buf_line_count")
 
     def __bool__(self):
         """Adding a bool because its a waste of time to send a msgpack request."""
-        return bool(self.valid)
+        return self.valid
 
     def __getitem__(self, idx):
         """Get a buffer line or slice by integer index.
@@ -2005,8 +2157,7 @@ class Buffer(Remote):
         minimizing the number of API calls by transfering all data needed to
         work.
         """
-        lines = self[:]
-        for line in lines:
+        for line in self:
             yield line
 
     def __delitem__(self, idx):
@@ -2024,13 +2175,10 @@ class Buffer(Remote):
         return not self.__eq__(other)
 
     def __iadd__(self, lines, index=-1):
-        return self.append(lines, index=index)
+        return operator.iadd(lines, index)
 
     def append(self, lines, index=-1):
-        """Append a string or list of lines to the buffer.
-
-        Now an alias for `__iadd__`.
-        """
+        """Append a string or list of lines to the buffer."""
         if isinstance(lines, (basestring, bytes)):
             lines = [lines]
         return self.request("nvim_buf_set_lines", index, index, True, lines)
@@ -2039,9 +2187,15 @@ class Buffer(Remote):
         """Return (row, col) tuple for a named mark."""
         return self.request("nvim_buf_get_mark", name)
 
-    def range(self, start, end):
+    # def range(self, start, end):
+    def range(self, start=None, end=None):
         """Return a `Range` object, which represents part of the Buffer."""
+        if start is None:
+            start = 0
+        if end is None:
+            end = len(self)
         return Range(self, start, end)
+        # return Range(self, start, end)
 
     def add_highlight(
         self, hl_group, line, col_start=0, col_end=-1, src_id=-1, async_=None, **kwargs
@@ -2111,10 +2265,21 @@ class Buffer(Remote):
 
 
 class Range(object):
-    def __init__(self, buffer, start, end):
-        self._buffer = buffer
+
+    def __init__(self, buffer=None, start=1, end=None):
+        """Give all required parameters default arguments to match Vims.
+
+        Parameters
+        ----------
+        start : int
+        end : int
+        """
+        self._buffer = buffer if buffer is not None else vim.current.buffer
         self.start = start - 1
-        self.end = end - 1
+        if end is not None:
+            self.end = end - 1
+        else:
+            self.end = len(self._buffer)
 
     def __len__(self):
         return self.end - self.start + 1
@@ -2196,9 +2361,9 @@ def socket_session(path):
     return session("socket", path)
 
 
-def stdio_session():
+def stdio_session(*args, **kwargs):
     """Create a msgpack-rpc session from stdin/stdout."""
-    return session("stdio")
+    return session("stdio", *args, **kwargs)
 
 
 def child_session(argv):
@@ -2376,6 +2541,8 @@ def _identity(obj, session, method, kind):
 
 def walk(fn, obj, *args, **kwargs):
     """Recursively walk an object graph applying `fn`/`args` to objects."""
+    # TODO: i found a doc somewhere that showed a better way of doing this.
+    #  I think you test for the presence of an __iter__ attr or something.
     if type(obj) in [list, tuple]:
         return list(walk(fn, o, *args) for o in obj)
     if type(obj) is dict:
@@ -2508,7 +2675,6 @@ class AsyncSession(object):
 
 
 class Response(object):
-
     """Response to a msgpack-rpc request that came from Nvim.
 
     When Nvim sends a msgpack-rpc request, an instance of this class is
@@ -2535,13 +2701,13 @@ class Response(object):
     def __repr__(self):
         return f"{self.__class__.__name__}"
 
+
 # }}}
 
 # msgpack_rpc.msgpack_stream: {{{
 
 
 class MsgpackStream(object):
-
     """Two-way msgpack stream that wraps a event loop byte stream.
 
     This wraps the event loop interface for reading/writing bytes and
@@ -2603,15 +2769,8 @@ class MsgpackStream(object):
 
 # msgpack_rpc.event_loop.base: {{{
 
-# When signals are restored, the event loop library may reset SIGINT to SIG_DFL
-# which exits the program. To be able to restore the python interpreter to it's
-# default state, we keep a reference to the default handler
-default_int_handler = signal.getsignal(signal.SIGINT)
-main_thread = threading.current_thread()
-
 
 class BaseEventLoop(object):
-
     """Abstract base class for all event loops.
 
     Event loops act as the bottom layer for Nvim sessions created by this
@@ -2784,9 +2943,8 @@ class BaseEventLoop(object):
 
 # mspack_rpc.event_loop.asyncio: {{{
 
-
+# Triple subclassed?
 class AsyncioEventLoop(BaseEventLoop, asyncio.Protocol, asyncio.SubprocessProtocol):
-
     """`BaseEventLoop` subclass that uses `asyncio` as a backend."""
 
     def connection_made(self, transport):
@@ -2848,8 +3006,7 @@ class AsyncioEventLoop(BaseEventLoop, asyncio.Protocol, asyncio.SubprocessProtoc
             pipe = sys.stdin
         coroutine = self._loop.connect_read_pipe(self._fact, pipe)
         self._loop.run_until_complete(coroutine)
-        pass  # replaces next logging statement
-        # debug("native stdin connection successful")
+        debug("native stdin connection successful")
 
         # Make sure subprocesses don't clobber stdout,
         # send the output to stderr instead.
@@ -2862,10 +3019,10 @@ class AsyncioEventLoop(BaseEventLoop, asyncio.Protocol, asyncio.SubprocessProtoc
             pipe = os.fdopen(rename_stdout, "wb")
         coroutine = self._loop.connect_write_pipe(self._fact, pipe)
         self._loop.run_until_complete(coroutine)
-        pass  # replaces next logging statement
-        # debug("native stdout connection successful")
+        debug("native stdout connection successful")
 
     def _connect_child(self, argv):
+        # TODO: is this still unsupported on NT?
         if os.name != "nt":
             self._child_watcher = asyncio.get_child_watcher()
             self._child_watcher.attach_loop(self._loop)
@@ -2911,6 +3068,8 @@ class AsyncioEventLoop(BaseEventLoop, asyncio.Protocol, asyncio.SubprocessProtoc
     def __repr__(self):
         return f"{self.__class__.__name__}"
 
+
+EventLoop = AsyncioEventLoop
 
 # }}}
 
@@ -3020,6 +3179,404 @@ class Tabpage(Remote):
 
     def __repr__(self):
         return f"{self.__class__.__name__}"
+
+
+# }}}
+
+# plugin/host: {{{
+host_method_spec = {"poll": {}, "specs": {"nargs": 1}, "shutdown": {}}
+
+
+class Host:
+    """Nvim host for python plugins.
+
+    Takes care of loading/unloading plugins and routing msgpack-rpc
+    requests/notifications to the appropriate handlers.
+    """
+
+    def __init__(self, nvim, **kwargs):
+        """Set handlers for plugin_load/plugin_unload."""
+        # bad idea or no?
+        #  self.nvim = nvim(**kwargs)
+        self.nvim = nvim
+        self._specs = {}
+        self._loaded = {}
+        self._load_errors = {}
+        self._notification_handlers = {
+            "nvim_error_event": self._on_error_event}
+        self._request_handlers = {
+            "poll": lambda: "ok",
+            "specs": self._on_specs_request,
+            "shutdown": self.shutdown,
+        }
+
+        # Decode per default for Python3
+        # self._decode_default = IS_PYTHON3
+
+    def _on_async_err(self, msg):
+        # uncaught python exception
+        self.nvim.err_write(msg, async_=True)
+
+    def _on_error_event(self, kind, msg):
+        """Error from nvim due to async request."""
+        # like nvim.command(..., async_=True)
+        errmsg = f"{self.name}: Async request caused an error:\n{msg}\n"
+        self.nvim.err_write(errmsg, async_=True)
+        return errmsg
+
+    def start(self, plugins):
+        """Start listening for msgpack-rpc requests and notifications."""
+        self.nvim.run_loop(
+            self._on_request,
+            self._on_notification,
+            lambda: self._load(plugins),
+            err_cb=self._on_async_err,
+        )
+
+    def shutdown(self):
+        """Shutdown the host."""
+        self._unload()
+        self.nvim.stop_loop()
+
+    def _wrap_delayed_function(
+        self, cls, delayed_handlers, name, sync, module_handlers, path, *args
+    ):
+        # delete the delayed handlers to be sure
+        for handler in delayed_handlers:
+            method_name = handler._nvim_registered_name
+            if handler._nvim_rpc_sync:
+                del self._request_handlers[method_name]
+            else:
+                del self._notification_handlers[method_name]
+        # create an instance of the plugin and pass the nvim object
+        plugin = cls(self._configure_nvim_for(cls))
+
+        # discover handlers in the plugin instance
+        self._discover_functions(plugin, module_handlers, path, False)
+
+        if sync:
+            self._request_handlers[name](*args)
+        else:
+            self._notification_handlers[name](*args)
+
+    def _wrap_function(self, fn, sync, name, *args, decode=None, nvim_bind=None):
+        # if decode:
+        #     args = walk(decode_if_bytes, args, decode)
+        if nvim_bind is not None:
+            args.insert(0, nvim_bind)
+        try:
+            return fn(*args)
+        except Exception:
+            if sync:
+                msg = "error caught in request handler '{} {}':\n{}".format(
+                    name, args, format_exc_skip(1)
+                )
+                raise ErrorResponse(msg)
+            else:
+                msg = "error caught in async handler '{} {}'\n{}\n".format(
+                    name, args, format_exc_skip(1)
+                )
+                self._on_async_err(msg + "\n")
+
+    def _on_request(self, name, args):
+        """Handle a msgpack-rpc request."""
+        # if IS_PYTHON3:
+        #     name = decode_if_bytes(name)
+        handler = self._request_handlers.get(name, None)
+        if not handler:
+            msg = self._missing_handler_error(name, "request")
+            error(msg)
+            raise ErrorResponse(msg)
+        debug('calling request handler for "%s", args: "%s"', name, args)
+        rv = handler(*args)
+        debug("request handler for '%s %s' returns: %s", name, args, rv)
+        return rv
+
+    def _on_notification(self, name, args):
+        """Handle a msgpack-rpc notification."""
+        # if IS_PYTHON3:
+        #     name = decode_if_bytes(name)
+        handler = self._notification_handlers.get(name, None)
+        if not handler:
+            msg = self._missing_handler_error(name, "notification")
+            error(msg)
+            self._on_async_err(msg + "\n")
+            return
+
+        debug('calling notification handler for "%s", args: "%s"', name, args)
+        handler(*args)
+
+    def _missing_handler_error(self, name, kind):
+        msg = 'no {} handler registered for "{}"'.format(kind, name)
+        pathmatch = re.match(r"(.+):[^:]+:[^:]+", name)
+        if pathmatch:
+            loader_error = self._load_errors.get(pathmatch.group(1))
+            if loader_error is not None:
+                msg = msg + "\n" + loader_error
+        return msg
+
+    def _load(self, plugins):
+        has_script = False
+        for path in plugins:
+            err = None
+            if path in self._loaded:
+                pass  # replaces next logging statement
+                # error('{} is already loaded'.format(path))
+                continue
+            try:
+                if path == "script_host.py":
+                    from pynvim.plugin import script_host
+                    module = script_host
+                    has_script = True
+                else:
+                    directory, name = os.path.split(os.path.splitext(path)[0])
+                    file, pathname, descr = find_module(name, [directory])
+                    module = importlib.import_module(
+                        name, file, pathname, descr)
+                handlers = []
+                self._discover_classes(module, handlers, path)
+                self._discover_functions(module, handlers, path, False)
+                if not handlers:
+                    pass  # replaces next logging statement
+                    # error('{} exports no handlers'.format(path))
+                    continue
+                self._loaded[path] = {"handlers": handlers, "module": module}
+            except Exception as e:
+                err = "Encountered {} loading plugin at {}: {}\n{}".format(
+                    type(e).__name__, path, e, format_exc(5)
+                )
+                pass  # replaces next logging statement
+                # error(err)
+                self._load_errors[path] = err
+
+        kind = "script-host" if len(
+            plugins) == 1 and has_script else "rplugin-host"
+        info = get_client_info(kind, "host", host_method_spec)
+        self.name = info[0]
+        self.nvim.api.set_client_info(*info, async_=True)
+
+    def _unload(self):
+        for path, plugin in self._loaded.items():
+            handlers = plugin["handlers"]
+            for handler in handlers:
+                method_name = handler._nvim_registered_name
+                if hasattr(handler, "_nvim_shutdown_hook"):
+                    handler()
+                elif handler._nvim_rpc_sync:
+                    del self._request_handlers[method_name]
+                else:
+                    del self._notification_handlers[method_name]
+        self._specs = {}
+        self._loaded = {}
+
+    def _discover_classes(self, module, handlers, plugin_path):
+        for _, cls in inspect.getmembers(module, inspect.isclass):
+            if getattr(cls, "_nvim_plugin", False):
+                # discover handlers in the plugin instance
+                self._discover_functions(cls, handlers, plugin_path, True)
+
+    def _discover_functions(self, obj, handlers, plugin_path, delay):
+        def predicate(o):
+            return hasattr(o, "_nvim_rpc_method_name")
+
+        cls_handlers = []
+        specs = []
+        objdecode = getattr(obj, "_nvim_decode", self._decode_default)
+        for _, fn in inspect.getmembers(obj, predicate):
+            method = fn._nvim_rpc_method_name
+            if fn._nvim_prefix_plugin_path:
+                method = "{}:{}".format(plugin_path, method)
+            sync = fn._nvim_rpc_sync
+            if delay:
+                fn_wrapped = partial(
+                    self._wrap_delayed_function,
+                    obj,
+                    cls_handlers,
+                    method,
+                    sync,
+                    handlers,
+                    plugin_path,
+                )
+            else:
+                decode = getattr(fn, "_nvim_decode", objdecode)
+                nvim_bind = None
+                if fn._nvim_bind:
+                    nvim_bind = self._configure_nvim_for(fn)
+
+                fn_wrapped = partial(
+                    self._wrap_function, fn, sync, decode, nvim_bind, method
+                )
+            self._copy_attributes(fn, fn_wrapped)
+            fn_wrapped._nvim_registered_name = method
+            # register in the rpc handler dict
+            if sync:
+                if method in self._request_handlers:
+                    raise Exception(
+                        ('Request handler for "{}" is ' + "already registered").format(
+                            method
+                        )
+                    )
+                self._request_handlers[method] = fn_wrapped
+            else:
+                if method in self._notification_handlers:
+                    raise Exception(
+                        f'Notification handler for "{method}" is already registered'
+                    )
+                self._notification_handlers[method] = fn_wrapped
+            if hasattr(fn, "_nvim_rpc_spec"):
+                specs.append(fn._nvim_rpc_spec)
+            handlers.append(fn_wrapped)
+            cls_handlers.append(fn_wrapped)
+        if specs:
+            self._specs[plugin_path] = specs
+
+    def _copy_attributes(self, fn, fn2):
+        # Copy _nvim_* attributes from the original function
+        for attr in dir(fn):
+            if attr.startswith("_nvim_"):
+                setattr(fn2, attr, getattr(fn, attr))
+
+    def _on_specs_request(self, path):
+        # if IS_PYTHON3:
+        #     path = decode_if_bytes(path)
+        if path in self._load_errors:
+            self.nvim.out_write(self._load_errors[path] + "\n")
+        return self._specs.get(path, 0)
+
+    def _configure_nvim_for(self, obj):
+        # Configure a nvim instance for obj (checks encoding configuration)
+        nvim = self.nvim
+        decode = getattr(obj, "_nvim_decode", self._decode_default)
+        if decode:
+            nvim = nvim.with_decode(decode)
+        return nvim
+
+
+# }}}
+
+# msgpack_rpc.event_loop.pyuv: {{{
+
+
+class UvEventLoop(BaseEventLoop):
+    """`BaseEventLoop` subclass that uses `pvuv` as a backend."""
+
+    def _init(self):
+        self._loop = pyuv.Loop()
+        self._async = pyuv.Async(self._loop, self._on_async)
+        self._connection_error = None
+        self._error_stream = None
+        self._callbacks = deque()
+
+    def _on_connect(self, stream, error):
+        self.stop()
+        if error:
+            msg = "Cannot connect to {}: {}".format(
+                self._connect_address, pyuv.errno.strerror(error)
+            )
+            self._connection_error = IOError(msg)
+            return
+        self._read_stream = self._write_stream = stream
+
+    def _on_read(self, handle, data, error):
+        if error or not data:
+            msg = pyuv.errno.strerror(error) if error else "EOF"
+            self._on_error(msg)
+            return
+        if handle == self._error_stream:
+            return
+        self._on_data(data)
+
+    def _on_write(self, handle, error):
+        if error:
+            msg = pyuv.errno.strerror(error)
+            self._on_error(msg)
+
+    def _on_exit(self, handle, exit_status, term_signal):
+        self._on_error("EOF")
+
+    def _disconnected(self, *args):
+        raise IOError("Not connected to Nvim")
+
+    def _connect_tcp(self, address, port):
+        stream = pyuv.TCP(self._loop)
+        self._connect_address = "{}:{}".format(address, port)
+        stream.connect((address, port), self._on_connect)
+
+    def _connect_socket(self, path):
+        stream = pyuv.Pipe(self._loop)
+        self._connect_address = path
+        stream.connect(path, self._on_connect)
+
+    def _connect_stdio(self):
+        self._read_stream = pyuv.Pipe(self._loop)
+        self._read_stream.open(sys.stdin.fileno())
+        self._write_stream = pyuv.Pipe(self._loop)
+        self._write_stream.open(sys.stdout.fileno())
+
+    def _connect_child(self, argv):
+        self._write_stream = pyuv.Pipe(self._loop)
+        self._read_stream = pyuv.Pipe(self._loop)
+        self._error_stream = pyuv.Pipe(self._loop)
+        stdin = pyuv.StdIO(
+            self._write_stream, flags=pyuv.UV_CREATE_PIPE + pyuv.UV_READABLE_PIPE
+        )
+        stdout = pyuv.StdIO(
+            self._read_stream, flags=pyuv.UV_CREATE_PIPE + pyuv.UV_WRITABLE_PIPE
+        )
+        stderr = pyuv.StdIO(
+            self._error_stream, flags=pyuv.UV_CREATE_PIPE + pyuv.UV_WRITABLE_PIPE
+        )
+        pyuv.Process.spawn(
+            self._loop,
+            args=argv,
+            exit_callback=self._on_exit,
+            flags=pyuv.UV_PROCESS_WINDOWS_HIDE,
+            stdio=(stdin, stdout, stderr,),
+        )
+        self._error_stream.start_read(self._on_read)
+
+    def _start_reading(self):
+        if self._transport_type in ["tcp", "socket"]:
+            self._loop.run()
+            if self._connection_error:
+                self.run = self.send = self._disconnected
+                raise self._connection_error
+        self._read_stream.start_read(self._on_read)
+
+    def _send(self, data):
+        self._write_stream.write(data, self._on_write)
+
+    def _run(self):
+        self._loop.run(pyuv.UV_RUN_DEFAULT)
+
+    def _stop(self):
+        self._loop.stop()
+
+    def _close(self):
+        pass
+
+    def _threadsafe_call(self, fn):
+        self._callbacks.append(fn)
+        self._async.send()
+
+    def _on_async(self, handle):
+        while self._callbacks:
+            self._callbacks.popleft()()
+
+    def _setup_signals(self, signals):
+        self._signal_handles = []
+
+        def handler(h, signum):
+            self._on_signal(signum)
+
+        for signum in signals:
+            handle = pyuv.Signal(self._loop)
+            handle.start(handler, signum)
+            self._signal_handles.append(handle)
+
+    def _teardown_signals(self):
+        for handle in self._signal_handles:
+            handle.stop()
 
 
 # }}}

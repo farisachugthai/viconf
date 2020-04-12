@@ -140,9 +140,12 @@ function! includes#TypeScriptIncludeExpression(fname, gf) abort  " {{{
       " grab data from the package.json
       if !has_key(b:ts_packages, a:fname)
         let l:package = json_decode(join(readfile(l:package_json)))
+
         let b:ts_packages[a:fname] = {
                     \ 'pack': fnamemodify(l:package_json, ':p:h'),
-                    \ 'entry': substitute(get(l:package, 'typings', get(l:package, 'main', 'index.js')), '^\.\{1,2}\/', '', '')
+                    \ 'entry': substitute(get(l:package, 'typings',
+                    \  get(l:package, 'main', 'index.js')),
+                    \  '^\.\{1,2}\/', '', '')
                     \ }
       endif
 
@@ -212,23 +215,19 @@ function! includes#CPath() abort  " {{{
     endif
 
   else
+    " Note: shellslash HAS to be set for this to work.
     let s:old_ss = &shellslash
     set shellslash
     " we did it.
     if exists('$INCLUDE')
       let s:path = s:path . expand('$INCLUDE')
+      " Don't forget to change it back though!
+      let &shellslash = s:old_ss
+      let &l:path = s:path
       return s:path
     endif
 
-    " TODO: i hate fuckin with the paths this much but honestly we should set
-    " up a few var to figure out condas base dir and use it for C includes as
-    " well as python
-    if isdirectory('C:/tools/miniconda3/envs/working/Library/include')
-      let s:path = s:path . 'C:/tools/miniconda3/envs/working/Library/include,'
-      let s:path = s:path . 'C:/tools/miniconda3/envs/working/include,'
-    endif
-
-    if isdirectory('C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/2019/Community/VC/Tools/MSVC')
+    if isdirectory('C:/Program\ Files/ (x86)/Microsoft\ Visual\ Studio/2019/Community/VC/Tools/MSVC')
       let s:path = s:path . 'C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/2019/Community/VC/Tools/MSVC/**'
     endif
 
@@ -237,8 +236,8 @@ function! includes#CPath() abort  " {{{
     endif
 
     " Yo honestly this is the one you're looking for
-    if isdirectory('C:/Program Files (x86)/Windows Kits/10/include/10.0.17763.0')
-      let s:path = s:path . 'C:/Program Files (x86)/Windows Kits/10/include/10.0.17763.0/**2'
+    if isdirectory('C:/Program Files (x86)/Windows Kits/10/include')
+      let s:path = s:path . 'C:/Program Files (x86)/Windows Kits/10/include/**3'
     endif
 
     if exists('$INCLUDEDIR')
@@ -251,3 +250,4 @@ function! includes#CPath() abort  " {{{
   let &l:path = s:path
   return s:path
 endfunction  " }}}
+

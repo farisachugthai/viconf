@@ -9,6 +9,7 @@ scripts that I use to run Neovim on Linux, Windows 10, and
 
 😎😎😎😎
 
+
 ## How it works
 
 As much of this [init.vim](.config/nvim/init.vim) is set up so that it
@@ -18,6 +19,7 @@ of features.
 This is achieved by [auto-loading](.config/nvim/autoload) as many functions as
 possible, and determining a few non-portable settings in a relatively quick
 and consistent manner.
+
 
 ### Set up
 
@@ -43,11 +45,13 @@ plug.vim file is there, and it will automatically download it if not.
 If that proves too much effort, I `git sub-tree add`ed vim-plug to this
 repo as well.
 
+
 ## Requirements
 
 By and large I do assume that anyone using this code is using a very new copy
 of Neovim. Generally I make as many checks as possible to ensure backwards
 compatibility...except for when I don't.
+
 
 ### Updating to a newer version
 
@@ -75,6 +79,7 @@ of platform or OS. It's a phenomenal function and greatly simplifies a huge
 number of complicated tasks; however, I frequently don't check if that
 function exists before use.
 
+
 ## Start up time
 
 The configuration for the plugins used by Neovim are currently being refactored
@@ -88,15 +93,20 @@ was not loaded, the configuration file runs `finish` immediately.
 This allows for extensive modification to the way that Neovim handles files and
 allows for startup time to remain the realm of 200 milliseconds.
 
+
 ## Features
 
 As a result of my modifications, this setup currently has:
 
+
 ### Remote Providers
 
 - 4 different remote providers that Neovim can communicate with via RPC.
+
   - node.js, ruby, and python hosts are communicated with to offload work.
+
   - In addition, a Tmux server is connected to and used as a clipboard!
+
 
 ### Man pages
 
@@ -110,7 +120,7 @@ As a result of my modifications, this setup currently has:
 
   I.E.:
 
-  ```vim
+```vim
 
 function! pydoc_help#show(...) abort  " {{{
   let word = s:ReplaceModuleAlias()
@@ -130,7 +140,8 @@ function! pydoc_help#show(...) abort  " {{{
   keepjumps keepalt wincmd p
 endfunction " }}}
 
-  ```
+```
+
 
 ### Colorscheme Improvements
 
@@ -142,14 +153,18 @@ endfunction " }}}
   This has been accomplished by falling back to Nvim's builtin functions for
   highlighting certain syntax groups.
 
+
 ### Tmux integration
 
 [Tmux](https://github.com/tmux/tmux/wiki) configuration files live at
 [tmuxline.vim](./.config/nvim/after/plugin/tmuxline.vim).
 
-  - Keybindings for both Nvim and tmux correspond so that jumping from a Nvim
-    window to a Tmux pane uses the same keys.
-  - The configuration for Tmux is displayed at [dotfiles](https://www.github.com/farisachugthai/dotfiles).
+- Keybindings for both Nvim and tmux correspond so that jumping from a Nvim
+  window to a Tmux pane uses the same keys.
+
+- The configuration for Tmux is displayed at [dotfiles](https://www.github.com/farisachugthai/dotfiles).
+
+
 ### Other
 
 - [Personally configured](./.config/nvim/after/ftplugin/) filetype plugins and
@@ -168,9 +183,12 @@ endfunction " }}}
   - An explanation of how to work with colorschemes is given at the
     [README](./.config/nvim/colors/README.rst)
 
+
 ## Usage
 
+
 ### Basics Keymappings
+
 
 Keycode                       | Mode     | [Command]Description
 :-                            | :-       | :-
@@ -186,38 +204,28 @@ Keycode                       | Mode     | [Command]Description
 <kbd>:</kbd><kbd>w</kbd>      | Cmd      | Save the current buffer
 <kbd>:</kbd><kbd>q</kbd>      | Cmd      | Close the buffer without saving
 
+
 ### Remappings
 
 Further explanations for how nvim is configured can be found in my personal
 [Neovim README](./.config/nvim/README.rst).
 
+
 ### Diffs
 
 Command | Keycode
-:-|:-
-Next change | <kbd>]c</kbd>
-Previous change |  <kbd>\[c</kbd>
+:-      |:-
+Next change                                          | <kbd>]c</kbd>
+Previous change                                      |  <kbd>\[c</kbd>
 Diff obtain {Grab differing lines from other buffer} | <kbd>do</kbd>
-Diff put {Put differing lines in other buffer} | <kbd>dp</kbd>
-Open fold directly under cursor | <kbd>zo</kbd>
-Close fold directly under cursor | <kbd>zc</kbd>
-Update diff and syntax highlighting in windows | `:diffupdate`
-Toggle diff under cursor | <kbd>za</kbd>
+Diff put {Put differing lines in other buffer}       | <kbd>dp</kbd>
+Open fold directly under cursor                      | <kbd>zo</kbd>
+Close fold directly under cursor                     | <kbd>zc</kbd>
+Update diff and syntax highlighting in windows       | `:diffupdate`
+Toggle diff under cursor                             | <kbd>za</kbd>
+
 
 ## Plugins Used
-
-Currently, lazily loaded modification files exist for:
-
-- [coc.nvim](./.config/nvim/after/plugin/coc.vim)
-- [airline.vim](./.config/nvim/after/plugin/airline.vim)
-- [deoplete.vim](./.config/nvim/after/plugin/deoplete.vim)
-- [fzf.vim](./.config/nvim/after/plugin/fzf.vim)
-- [lang_client.vim](./.config/nvim/after/plugin/lang_client.vim)
-- [lightline.vim](./.config/nvim/after/plugin/lightline.vim)
-- [nerdtree.vim](./.config/nvim/after/plugin/nerdtree.vim)
-- [riv.vim](./.config/nvim/after/plugin/riv.vim)
-- [startify.vim](./.config/nvim/after/plugin/startify.vim)
-- [ultisnips.vim](./.config/nvim/after/plugin/ultisnips.vim)
 
 In addition, configurations exist for:
 
@@ -233,7 +241,8 @@ In addition, configurations exist for:
 
   - Nvim's Python integration is utilized to expand some snippets.
 
-    - Over [20 functions](./.config/nvim/pythonx/snippets_helper.py) are imported and used throughout the varying snippet files.
+    - Over [20 functions](./.config/nvim/pythonx/snippets_helper.py) are
+      imported and used throughout the varying snippet files.
 
 - [Fugitive](https://www.github.com/tpope/vim-fugitive).
 
@@ -241,11 +250,13 @@ In addition, configurations exist for:
 
 - [NERDTree](https://www.github.com/scrooloose/nerdTree)
 
+
 ### NERDTree
 
 NERDTree is a file explorer plugin that provides "project drawer"
 functionality to your vim editing.  You can learn more about it with
 `:help NERDTree`.
+
 
 ### Coc
 
@@ -261,6 +272,7 @@ adds emoji support with packages like `coc-emoji`.
 
 🎺!
 
+
 ### Filetype Plugins
 
 This repository contains:
@@ -268,16 +280,17 @@ This repository contains:
 - Real time interactive displays for reStructured Text files.
 
   - The plugin [Riv.vim](https://www.github.com/gu-fan/riv.vim) allows one to
-  run `docutils` on a buffer and then preview it in a browser.
+    run `docutils` on a buffer and then preview it in a browser.
 
 - Asynchronous linters thanks to the Asynchronous Lint Engine or
   [ALE](https://www.github.com/w0rp/ale).
 
   - Support for specific filetype dependent linters including ReStructured Text
-  are configured in my
-  [dotfiles](https://www.github.com/farisachugthai/dotfiles) repo.
+    are configured in my
+    [dotfiles](https://www.github.com/farisachugthai/dotfiles) repo.
 
   - Specifically Flake8, pydocstyle, the python-language-server and others.
+
 
 #### Filetype Detection
 
@@ -292,7 +305,8 @@ au BufNewFile,BufRead Pipfile.lock		setf json
 
 ```
 
-TIL that Pipfiles are officially recognized by the filetype detector in Nvim!
+TIL that a `Pipfile` is officially recognized by the filetype detector in Nvim!
+
 
 #### Loading a personal filetype file
 
@@ -306,8 +320,6 @@ endif
 
 ```
 
-Would setting ``&myfiletypefile`` to the file at
-./.config/nvim/ftdetect/filetype.vim be redundant? 
 
 ### Sources for all plugins
 
@@ -336,10 +348,11 @@ on my personal customization.
 - [Riv.vim](https://www.github.com/gu-fan/riv.vim)
 - [Devicons](https://www.github.com/ryanoasis/vim-devicons)
 
+
 ### Removed Plugins
 
 Checking the remote hosts is blocking and doing it this early is murder
-to startuptime. Just went from 280ms to 800.
+to startup-time. Just went from 280ms to 800.
 
 ```vim
 if has('ruby')
@@ -349,6 +362,7 @@ endif
 ```
 
 Unfortunately, I haven't been using any ruby plugins recently as a result.
+
 
 ## Vim
 

@@ -3,9 +3,9 @@
 
 extends python
 
-#######################################################################
+#########################################################
 #							Personal Snippets						  #
-#######################################################################
+#########################################################
 
 global !p
 from snippets_helper import make_items, complete, TEXT_ROLES, TEXT_ROLES_REGEX, SPECIFIC_ADMONITIONS, DIRECTIVES, DIRECTIVES_WITHOUT_TITLE, DIRECTIVES_FOR_SUBSTITUTION, CHART_TYPES, INCLUDABLE_DIRECTIVES
@@ -425,7 +425,7 @@ snippet hi "Set a highlight directive to establish the base for code block direc
 	${0:${VISUAL:Optional content}}
 endsnippet
 
-snippet toctree "directive_toctree" b
+snippet toctree "directive_toctree" bs
 .. toctree::
 	:maxdepth: ${1:1}
 	${2::glob:}

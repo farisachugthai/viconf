@@ -1864,3 +1864,7 @@ ismodule
 qualname
 documentable
 PYTHONDOCS
+xsession
+dircolors
+xbindkeys
+hardcode

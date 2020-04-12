@@ -17,12 +17,6 @@ let g:markdown_folding = 1
 let g:markdown_minlines = 500
 
 if exists('b:did_ftplugin') | finish | endif
-source $VIMRUNTIME/ftplugin/
-
-let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
-                      \. '|setlocal '
-                      \. '|unlet! b:undo_ftplugin'
-                      \. '|unlet! b:did_ftplugin'
 " I wish this was a reasonable way to source his function but not do the runtime! thing
 source $VIMRUNTIME/ftplugin/markdown.vim
 

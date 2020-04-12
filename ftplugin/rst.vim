@@ -37,9 +37,6 @@ if exists('b:did_ftplugin') | finish | endif
 
 source $VIMRUNTIME/ftplugin/rst.vim
 source $VIMRUNTIME/indent/rst.vim
-
-syntax sync fromstart
-syntax enable
 setlocal textwidth=80
 setlocal expandtab
 setlocal spell!
@@ -77,11 +74,12 @@ setlocal indentkeys-=0#
 " This fucks stuff up if you're indenting rst blocks as 3 spaces and python as 4
 setlocal noshiftround
 setlocal suffixesadd=.py,.rst,.rst.txt
-let &l:path = py#PythonPath()
+" TODO: XXX
+" Well somethings very fucking wrong because this adds 200ms to vim's startuptime.
+" let &l:path = py#PythonPath()
 
 " Isn't a func anymore. todo: this and maybe formatprg?
 " command! -buffer Sphinx call pydoc_help#sphinx_build(<q-args>)
-setlocal comments=fb:.. commentstring=..\ %s
 
 let b:undo_ftplugin .= '|setlocal tw< cms< com< cc< lbr< fdl< fdls< '
       \ . '|setlocal spell< wig< isk< kp< mp< efm< sua< sr< '
@@ -97,17 +95,9 @@ let b:undo_ftplugin .= '|setlocal tw< cms< com< cc< lbr< fdl< fdls< '
 " directives (..) and ordered lists (1.), although it can cause problems for
 " many other cases.
 
-" More sophisticated indentation rules should be revisited in the future.
+  let b:undo_ftplugin .= '|setlocal et< ts< sw< sts<'
 
-if !exists('g:rst_style') || g:rst_style != 0
-  setlocal expandtab shiftwidth=3 softtabstop=3 tabstop=8
-  let b:undo_ftplugin .= '|setlocal ts< sw< sts<'
-endif
-
-setlocal foldmethod=expr
-setlocal foldexpr=RstFold#GetRstFold()
-setlocal foldtext=RstFold#GetRstFoldText()
-
+" This expression adds 50ms to vim startuptime alone wth
 augroup UserAutomake
   au!
   autocmd FileType rst compiler rst

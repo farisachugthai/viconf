@@ -31,7 +31,7 @@ def env(listen_addr=None):
 
 
 @pytest.fixture
-def vim():
+def old_vim():
     # now that i'm rereading it this is such a weird way of settings things up.
     child_argv = os.environ.get("NVIM_CHILD_ARGV")
     # so if we're on windows should we have shelltemp set or not?
@@ -48,8 +48,8 @@ def vim():
 
     return editor
 
-@pytest.fixture
-def nvim():
+@pytest.fixture(scope="session")
+def vim():
     inside_nvim = os.environ.get('NVIM_LISTEN_ADDRESS')
     if inside_nvim:
         editor = attach("socket", path=listen_address)

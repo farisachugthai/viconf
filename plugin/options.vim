@@ -474,7 +474,7 @@ let g:startify_commands = [
       \ {'g': ['Git status!', 'Gstatus'],},
       \ {'h': ['Vim Reference', 'he index.txt'],},
       \ {'m': 'Maps'},
-      \ {'o': ['Options', 'exec "e " . stdpath("config") . "/plugin/options"']},
+      \ {'o': ['Options', 'exec "e " . stdpath("config") . "/plugin/options.vim"']},
     \ ]
 
 " Also utilize his skiplist
@@ -557,11 +557,15 @@ function! s:Init_coc() abort
   if empty($ANDROID_DATA)
     call coc#config('python.jediEnabled', v:false)
     " TODO: nvm is gonna make this more complicated
+    " fuck why isn't this working??
     " if has('unix')
-    "   let g:coc_node_path = '/usr/sbin/node'
+    "   let s:nvm = system('nvm which current')
+    "   let g:coc_node_path = s:nvm
     " else
-      let g:coc_node_path = 'C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\node.exe'
+    if !has('unix')
+      let g:coc_node_path = 'C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\\node.exe'
     endif
+    " endif
   else
     let g:coc_node_path = expand('$PREFIX/bin/node')
   endif

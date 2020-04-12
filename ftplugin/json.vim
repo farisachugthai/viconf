@@ -26,7 +26,7 @@ setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
 
 " Let's add in a few more options though. Enforce 2 space tabs
 setlocal expandtab softtabstop=2 shiftwidth=2 tabstop=2
-setlocal suffixesadd=.json,.js,.jsx,.ts, tsx,.d.ts
+setlocal suffixesadd=.json,.js,.jsx,.ts,tsx
 setlocal foldmethod=syntax
 setlocal shiftround
 

@@ -56,7 +56,13 @@ endfunction
 augroup UserPlugins " {{{
   au!
   autocmd  User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-  autocmd  User CursorHold call CocActionAsync('showSignatureHelp')
+
+  au CursorHold * sil call CocActionAsync('highlight')
+
+  " let's see if this works better
+  autocmd CursorHoldI * sil call CocActionAsync('showSignatureHelp')
+  " autocmd  User CursorHold call CocActionAsync('showSignatureHelp')
+  "
   " Clear this so that p.u.m. doesn't open in the command window
   autocmd! User CmdlineEnter CompleteDone
 

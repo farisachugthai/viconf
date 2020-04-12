@@ -15,7 +15,7 @@
     "onLanguage:vim"
   ],
   "engines": {
-    "coc": ">= 0.0.73"
+    "coc": ">= 0.0.77"
   },
   "devDependencies": {
     "@types/node": "^13.11.0",
@@ -34,7 +34,7 @@
     "coc-python": ">=1.2.9",
     "coc-sh": ">=0.4.0",
     "coc-snippets": ">=2.1.23",
-    "coc-tslint-plugin": ">=1fork.1.1",
+    "coc-tslint-plugin": ">=1.1",
     "coc-tsserver": ">=1.4.12",
     "coc-vimlsp": ">=0.5.1",
     "coc-word": ">=1.2.2",
@@ -49,18 +49,17 @@
   },
   "main": "rplugin/node/coc_tag.js",
   "peerDependencies": {
-    "webpack": "^4.42.1",
-    "prettier": "^2.0.4",
     "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
+    "prettier": "^2.0.4",
     "tslint": "^6.1.1",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "webpack": "^4.42.1"
   },
-  "private": true,
   "readme": "README.rst",
   "repository": {
     "type": "git",
@@ -68,12 +67,17 @@
   },
   "scripts": {
     "build": "yarn run webpack -dw rplugin/node/coc_tag.js",
+    "clean": "yarn autoclean --force",
     "fix": "yarn run prettier --write rplugin/node",
     "lint": "yarn run tslint --fix **.ts",
+    "pretest": "echo 'Running tests'",
     "start": "yarn run vim-language-server --stdio",
     "tagfunc": "node ./rplugin/node/coc_tag.js",
     "tsserver": "node ./node_modules/coc-tsserver/bin/tsserverForkStart.js",
     "watch": "yarn run tsc -w rplugin/node"
   },
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "dependencies": {
+    "webpack": "^4.42.1"
+  }
 }

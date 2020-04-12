@@ -8,7 +8,8 @@
 function! py#taglist() abort  " {{{
   " Let's return the value from `vim.call` so that we can check it later if
   " need be
-  py3 from pprint import pprint; tagfiles = (vim.call('tagfiles'))
+  py3 from pprint import pprint
+  py3 tagfiles = (vim.call('tagfiles'))
   py3 pprint(tagfiles)
 endfunction  " }}}
 
