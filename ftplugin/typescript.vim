@@ -60,7 +60,7 @@ if !exists('b:did_typescript_setup')
                        \.'%-G%.%#'
 
     let &l:makeprg = 'tslint --format prose'
-    let b:undo_ftplugin .= '|setl efm< mp<'
+    let b:undo_ftplugin .= '|setlocal efm< mp<'
     echomsg 'ftplugin/typescript: Setting tslint as the compiler.'
     augroup TS
       autocmd!

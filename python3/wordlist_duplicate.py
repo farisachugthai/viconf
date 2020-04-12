@@ -5,13 +5,12 @@ import sys
 
 logging.basicConfig(level=logging.DEBUG)
 
-try:
-    import vim
-except ImportError:
-    vim = None
-    VimBuffer = object
-else:
-    from _vim import VimBuffer
+sys.path.insert(0, os.path.dirname(os.path.abspath(".")))
+from pynvim_ import LegacyVim, stdio_session
+session = stdio_session()
+vim = LegacyVim.from_session(session)
+
+from _vim import VimBuffer
 
 
 class Target(VimBuffer):

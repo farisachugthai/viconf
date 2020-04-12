@@ -394,6 +394,9 @@ command! -complete=dir -nargs=1 -bar -bang Mkdir call mkdir(<q-args>, 'p', '0700
 " Need to add a check that we're in visual mode and drop the '<,'> if not.
 command! -bar -range TitleCase execute 'normal! ' . "'<,'>s/\v<(.)(\w*)/\u\1\L\2/g"
 
+" Chalk this up to *Things that I couldnt believe werent already commands*
+command! -bar Ruler normal! g<C-g>
+
 " }}}
 
 " Pydoc: {{{

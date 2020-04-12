@@ -18,7 +18,9 @@ from pprint import pprint
 try:
     import vim  # noqa pylint:disable=import-error
 except ImportError:
-    vim = None
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from pynvim_ import LegacyVim
+    vim = LegacyVim()
 
 try:
     import yaml

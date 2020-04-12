@@ -91,7 +91,7 @@ Using ``&switchbuf``
 
 Don't put 'usetab' before 'split' in ``&switchbuf``.
 
-If you do, then stuff like ``:helpgrep word`` will open a new tab with 
+If you do, then stuff like ``:helpgrep word`` will open a new tab with
 the results of your search, and leave the quickfix list in the
 previous tab. Because :abbr:`qf` lists don't transfer from tab to tab, you won't be able
 to access the search results in the window that your cursor just moved to!
@@ -195,11 +195,11 @@ Mappings
 Here's a few different ways to map a function to a key.::
 
    " TODO: Not really working. Kinda hard to get it to behave how I'd like.
-   vnoremap <C-\> :<C-u>call UltiSnips#ListSnippets()<CR>
+   vnoremap <C-\\> :<C-u>call UltiSnips#ListSnippets()<CR>
    And another!
-   vnoremap <C-\> <Cmd>call UltiSnips#ListSnippets()<CR>
+   vnoremap <C-\\> <Cmd>call UltiSnips#ListSnippets()<CR>
    And another
-   vnoremap <expr> <C-\> UltiSnips#list_snippets()
+   vnoremap <expr> <C-\\> UltiSnips#list_snippets()
 
 
 

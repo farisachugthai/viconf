@@ -82,12 +82,12 @@ endif
 " Plugins: {{{
 " NERDTree: {{{
 
-hi link NERDTreeBookmarks Typedef
-hi link NERDTreeCWD Underlined
-hi link NERDTreeDir Directory
-hi link NERDTreeDirSlash Delimiter
-hi link NERDTreeNodeDelimeters Delimiter
-hi link hideBracketsInNERDTree Conceal
+hi! link NERDTreeBookmarks Typedef
+hi! link NERDTreeCWD Underlined
+hi! link NERDTreeDir Directory
+hi! link NERDTreeDirSlash Delimiter
+hi! link NERDTreeNodeDelimeters Delimiter
+hi! link hideBracketsInNERDTree Conceal
 hi! link NERDTreeFile Structure
 
 " }}}
@@ -98,12 +98,41 @@ hi! link NERDTreeFile Structure
 " call s:HL('ALEWarning', s:none, s:none, s:undercurl, s:yellow)
 " call s:HL('ALEInfo', s:none, s:none, s:undercurl, s:blue)
 
+    hi ALEError guifg=NONE guibg=NONE guisp=#ea6962 gui=undercurl ctermfg=NONE ctermbg=NONE cterm=undercurl
+    hi ALEWarning guifg=NONE guibg=NONE guisp=#e3a84e gui=undercurl ctermfg=NONE ctermbg=NONE cterm=undercurl
+    hi ALEInfo guifg=NONE guibg=NONE guisp=#7daea3 gui=undercurl ctermfg=NONE ctermbg=NONE cterm=undercurl
+hi ALEErrorSign guifg=#ea6962 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+hi ALEWarningSign guifg=#e3a84e guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+hi ALEInfoSign guifg=#7daea3 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
 hi! link ALEErrorSign Error
 hi! link ALEWarningSign QuickFixLine
 hi! link ALEInfoSign Directory
 hi! link ALEError Error
 hi! link ALEWarning QuickFixLine
 hi! link ALEInfo Macro
+
+hi! link SyntasticError ALEError
+hi! link SyntasticWarning ALEWarning
+hi! link SyntasticErrorSign ALEErrorSign
+hi! link SyntasticWarningSign ALEWarningSign
+
+hi! link ALEVirtualTextError Grey
+hi! link ALEVirtualTextWarning Grey
+hi! link ALEVirtualTextInfo Grey
+hi! link ALEVirtualTextStyleError ALEVirtualTextError
+hi! link ALEVirtualTextStyleWarning ALEVirtualTextWarning
+hi! link CocErrorSign ALEErrorSign
+hi! link CocWarningSign ALEWarningSign
+hi! link CocInfoSign ALEInfoSign
+hi! link CocErrorHighlight ALEError
+hi! link CocWarningHighlight ALEWarning
+hi! link CocInfoHighlight ALEInfo
+hi! link CocWarningVirtualText ALEVirtualTextWarning
+hi! link CocErrorVirtualText ALEVirtualTextError
+hi! link CocInfoVirtualText ALEVirtualTextInfo
+hi! link CocHintVirtualText ALEVirtualTextInfo
+hi! link CocCodeLens ALEVirtualTextInfo
+" }}}
 " }}}
 
 " GitGutter: {{{
@@ -518,13 +547,13 @@ hi! link htmlItalicUnderline         htmlUnderlineItalic
 hi! link htmlItalicBold              htmlBoldItalic
 hi! link htmlItalicBoldUnderline     htmlBoldUnderlineItalic
 hi! link htmlItalicUnderlineBold     htmlBoldUnderlineItalic
-hi! link htmlLink                    Underlined
+hi! link htmlLink                    OrangeBold
 hi! link htmlLeadingSpace            None
 
-if v:version > 800 || v:version == 800 && has("patch1038")
-  hi def htmlStrike              term=strikethrough cterm=strikethrough gui=strikethrough
+if v:version > 800 || v:version == 800 && has('patch1038')
+  hi! htmlStrike              term=strikethrough,undercurl,bold cterm=strikethrough,undercurl,bold gui=strikethrough,undercurl,bold
 else
-  hi def htmlStrike              term=underline cterm=underline gui=underline
+  hi! htmlStrike              term=underline cterm=underline gui=underline
 endif
 
 hi! link htmlPreStmt            PreProc
@@ -847,11 +876,11 @@ hi! link vimPythonRegion Identifier
 " }}}
 
 " More: {{{
-" hi link vimSynMatchRegion 
-hi! link vimSynMtchCchar String 
+" hi link vimSynMatchRegion
+hi! link vimSynMtchCchar String
 " vimSynMtchGroup xxx cleared
 hi! link vimSynPatMod vimSynOption
-hi! link vimSyncMatch MatchWord
+hi! link vimSyncMatch htmlBoldUnderline
 hi! link vimSyncLinebreak vimSynOption
 hi! link vimSyncLinecont vimSynOption
 " vimSyncRegion  xxx cleared
@@ -881,7 +910,7 @@ hi! link markdownH3 Title
 hi! link markdownH4 Title
 hi! link markdownH5 Yellow
 hi! link markdownH6 Yellow
-hi! link markdownHeadingDelimiter Delimiter
+hi! link markdownHeadingDelimiter markdownH1
 hi! link markdownHeadingRule Yellow
 hi! link markdownIdDeclaration markdownLinkText
 hi! link markdownLinkDelimiter Delimiter
@@ -903,7 +932,7 @@ hi! link mkdCodeStart     String
 hi! link mkdDelimiter     Delimiter
 hi! link mkdFootnote      TablineSel
 hi! link mkdFootnotes     Underlined
-hi! link mkdHeading       Tag
+hi! link mkdHeading       markdownH1
 hi! link mkdID            Identifier
 hi! link mkdInlineURL     Underlined
 hi! link mkdLineBreak     Whitespace
@@ -918,14 +947,6 @@ hi! link mkdSnippetVIM    Label
 hi! link mkdString        String
 hi! link mkdURL           Underlined
 hi! markdownItalic cterm=italic gui=italic
-
-hi! link mkdBold Grey
-hi! link mkdCodeDelimiter Aqua
-hi! link mkdDelimiter Grey
-hi! link mkdHeading Orange
-hi! link mkdId Yellow
-hi! link mkdLink Aqua
-hi! link mkdListItem Red
 " }}}
 
 " c: {{{
@@ -966,69 +987,96 @@ hi! link xmlTagName AquaBold
 " }}}
 
 " JavaScript: {{{
-hi! link javaScriptFunction Aqua
-hi! link javaScriptIdentifier Red
+
+
+
+hi! link javaScrParenError		javaScriptError
+hi! link javaScriptArrayMethod Blue
+hi! link javaScriptArrayStaticMethod Blue
+hi! link javaScriptArrowFunc Yellow
+hi! link javaScriptAsyncFunc Aqua
+hi! link javaScriptAsyncFuncKeyword Red
+hi! link javaScriptAwaitFuncKeyword Red
+hi! link javaScriptBOMLocationMethod Blue
+hi! link javaScriptBOMNavigatorProp Blue
+hi! link javaScriptBOMWindowMethod Blue
+hi! link javaScriptBOMWindowProp Blue
+hi! link javaScriptBoolean		Boolean
+hi! link javaScriptBraces		Function
+hi! link javaScriptBrackets Blue
+hi! link javaScriptBranch		Conditional
+hi! link javaScriptCacheMethod Blue
+hi! link javaScriptCharacter		Character
+hi! link javaScriptClassExtends Aqua
+hi! link javaScriptClassKeyword Aqua
+hi! link javaScriptClassName Yellow
+hi! link javaScriptClassStatic Orange
+hi! link javaScriptClassSuper Orange
+hi! link javaScriptClassSuperName Yellow
+hi! link javaScriptComment		Comment
+hi! link javaScriptCommentTodo		Todo
+hi! link javaScriptConditional		Conditional
+hi! link javaScriptConstant		Label
+hi! link javaScriptDOMDocMethod Blue
+hi! link javaScriptDOMDocProp Blue
+hi! link javaScriptDOMElemAttrs Blue
+hi! link javaScriptDOMEventMethod Blue
+hi! link javaScriptDOMNodeMethod Blue
+hi! link javaScriptDOMStorageMethod Blue
+hi! link javaScriptDateMethod Blue
+hi! link javaScriptDebug		Debug
+hi! link javaScriptDefault Aqua
+hi! link javaScriptDeprecated		Exception
+hi! link javaScriptDocNamedParamType LightGrey
+hi! link javaScriptDocNotation LightGrey
+hi! link javaScriptDocParamName LightGrey
+hi! link javaScriptDocParamType LightGrey
+hi! link javaScriptDocTags LightGrey
+hi! link javaScriptEmbed		Special
+hi! link javaScriptEndColons Blue
+hi! link javaScriptError		Error
+hi! link javaScriptException		Exception
+hi! link javaScriptExceptions Red
+hi! link javaScriptExport Aqua
+hi! link javaScriptForOperator Red
+hi! link javaScriptFuncArg Blue
+hi! link javaScriptFuncKeyword Aqua
+hi! link javaScriptFunction		Function
+hi! link javaScriptGlobal		Keyword
+hi! link javaScriptGlobalMethod Blue
+hi! link javaScriptHeadersMethod Blue
+hi! link javaScriptIdentifier		Identifier
+hi! link javaScriptImport Aqua
+hi! link javaScriptLabel		Label
+hi! link javaScriptLineComment		Comment
+hi! link javaScriptLogicSymbols Purple
+hi! link javaScriptMathStaticMethod Blue
+hi! link javaScriptMember		Keyword
 hi! link javaScriptMember Blue
-hi! link javaScriptNumber Purple
-hi! link javaScriptNull Purple
+hi! link javaScriptMessage		Keyword
+hi! link javaScriptNodeGlobal Blue
+hi! link javaScriptNull			Keyword
+hi! link javaScriptNumber		javaScriptValue
+hi! link javaScriptObjectLabel Blue
+hi! link javaScriptOperator		Operator
 hi! link javaScriptParens Blue
-hi! link javaScriptBraces Blue
-hi! link javascriptImport Aqua
-hi! link javascriptExport Aqua
-hi! link javascriptClassKeyword Aqua
-hi! link javascriptClassExtends Aqua
-hi! link javascriptDefault Aqua
-hi! link javascriptClassName Yellow
-hi! link javascriptClassSuperName Yellow
-hi! link javascriptGlobal Yellow
-hi! link javascriptEndColons Blue
-hi! link javascriptFuncArg Blue
-hi! link javascriptGlobalMethod Blue
-hi! link javascriptNodeGlobal Blue
-hi! link javascriptBOMWindowProp Blue
-hi! link javascriptArrayMethod Blue
-hi! link javascriptArrayStaticMethod Blue
-hi! link javascriptCacheMethod Blue
-hi! link javascriptDateMethod Blue
-hi! link javascriptMathStaticMethod Blue
-hi! link javascriptURLUtilsProp Blue
-hi! link javascriptBOMNavigatorProp Blue
-hi! link javascriptDOMDocMethod Blue
-hi! link javascriptDOMDocProp Blue
-hi! link javascriptBOMLocationMethod Blue
-hi! link javascriptBOMWindowMethod Blue
-hi! link javascriptStringMethod Blue
-hi! link javascriptVariable Orange
-hi! link javascriptIdentifier Orange
-hi! link javascriptClassSuper Orange
-hi! link javascriptFuncKeyword Aqua
-hi! link javascriptAsyncFunc Aqua
-hi! link javascriptClassStatic Orange
-hi! link javascriptOperator Red
-hi! link javascriptForOperator Red
-hi! link javascriptYield Red
-hi! link javascriptExceptions Red
-hi! link javascriptMessage Red
-hi! link javascriptTemplateSB Aqua
-hi! link javascriptTemplateSubstitution Blue
-hi! link javascriptLabel Blue
-hi! link javascriptObjectLabel Blue
-hi! link javascriptPropertyName Blue
-hi! link javascriptLogicSymbols Purple
-hi! link javascriptArrowFunc Yellow
-hi! link javascriptDocParamName LightGrey
-hi! link javascriptDocTags LightGrey
-hi! link javascriptDocNotation LightGrey
-hi! link javascriptDocParamType LightGrey
-hi! link javascriptDocNamedParamType LightGrey
-hi! link javascriptBrackets Blue
-hi! link javascriptDOMElemAttrs Blue
-hi! link javascriptDOMEventMethod Blue
-hi! link javascriptDOMNodeMethod Blue
-hi! link javascriptDOMStorageMethod Blue
-hi! link javascriptHeadersMethod Blue
-hi! link javascriptAsyncFuncKeyword Red
-hi! link javascriptAwaitFuncKeyword Red
+hi! link javaScriptPropertyName Blue
+hi! link javaScriptRegexpString		String
+hi! link javaScriptRepeat		Repeat
+hi! link javaScriptReserved		Keyword
+hi! link javaScriptSpecial		Special
+hi! link javaScriptSpecialCharacter	javaScriptSpecial
+hi! link javaScriptStatement		Statement
+hi! link javaScriptStringD		String
+hi! link javaScriptStringMethod Blue
+hi! link javaScriptStringS		String
+hi! link javaScriptStringT		String
+hi! link javaScriptTemplateSB Aqua
+hi! link javaScriptTemplateSubstitution Blue
+hi! link javaScriptType			Type
+hi! link javaScriptURLUtilsProp Blue
+hi! link javaScriptVariable Orange
+hi! link javaScriptYield Red
 hi! link jsPrototype Yellow
 hi! link jsOperator Orange
 hi! link jsOperatorKeyword Red
@@ -1312,16 +1360,21 @@ hi! link plugUpdate Blue
 hi! link plugDeleted Grey
 hi! link plugEdge Yellow
 hi! link plugSha Green
+
 hi! link EasyMotionTarget Search
 hi! link EasyMotionShade Comment
+
 hi! link Sneak Search
 hi! link SneakLabel Search
+
 hi! link gitcommitSelectedFile Green
 hi! link gitcommitDiscardedFile Red
+
 hi! link SignifySignAdd GitGutterAdd
 hi! link SignifySignChange GitGutterChange
 hi! link SignifySignDelete GitGutterDelete
 hi! link SignifySignChangeDelete GitGutterChangeDelete
+
 hi! link StartifyBracket Grey
 hi! link StartifyFile White
 hi! link StartifyNumber Red
@@ -1331,14 +1384,16 @@ hi! link StartifySection Blue
 hi! link StartifyHeader Orange
 hi! link StartifySpecial Grey
 hi! link StartifyFooter Grey
+
 hi! link BufTabLineCurrent TabLineSel
 hi! link BufTabLineActive TabLine
 hi! link BufTabLineHidden TabLineFill
 hi! link BufTabLineFill TabLineFill
+
 hi! link DirvishPathTail Aqua
 hi! link DirvishArg Yellow
 
-
+" nerdtree: {{{
 hi! link NERDTreeBookmarksLeader Conceal
 hi! link NERDTreeDir Green
 hi! link NERDTreeDirSlash Aqua
@@ -1354,6 +1409,8 @@ hi! link NERDTreeToggleOff Red
 hi! link NERDTreeFlags Orange
 hi! link NERDTreeLinkFile Grey
 hi! link NERDTreeLinkTarget Green
+" }}}
+
 hi! link TagbarFoldIcon Green
 hi! link TagbarSignature Green
 hi! link TagbarKind Red
@@ -1361,28 +1418,16 @@ hi! link TagbarScope Orange
 hi! link TagbarNestedKind Aqua
 hi! link TagbarVisibilityPrivate Red
 hi! link TagbarVisibilityPublic Blue
-hi! link SyntasticError ALEError
-hi! link SyntasticWarning ALEWarning
-hi! link SyntasticErrorSign ALEErrorSign
-hi! link SyntasticWarningSign ALEWarningSign
-hi! link ALEVirtualTextError Grey
-hi! link ALEVirtualTextWarning Grey
-hi! link ALEVirtualTextInfo Grey
-hi! link ALEVirtualTextStyleError ALEVirtualTextError
-hi! link ALEVirtualTextStyleWarning ALEVirtualTextWarning
+
+
 
 " Coc: {{{
-hi! link CocErrorSign ALEErrorSign
-hi! link CocWarningSign ALEWarningSign
-hi! link CocInfoSign ALEInfoSign
-hi! link CocErrorHighlight ALEError
-hi! link CocWarningHighlight ALEWarning
-hi! link CocInfoHighlight ALEInfo
-hi! link CocWarningVirtualText ALEVirtualTextWarning
-hi! link CocErrorVirtualText ALEVirtualTextError
-hi! link CocInfoVirtualText ALEVirtualTextInfo
-hi! link CocHintVirtualText ALEVirtualTextInfo
-hi! link CocCodeLens ALEVirtualTextInfo
+
+hi! link CocErrorLine Exception
+hi! link CocWarningLine WarningMsg
+hi! link CocInfoLine EndOfBuffer
+hi! link CocHintLine GreenSign
+hi! link CocSelectedLine Visual
 hi! link CocGitAddedSign GitGutterAdd
 hi! link CocGitChangeRemovedSign GitGutterChangeDelete
 hi! link CocGitChangedSign GitGutterChange
@@ -1480,6 +1525,7 @@ if &background ==# 'dark'
       hi BlueBold guifg=#7daea3 guibg=NONE guisp=NONE gui=NONE cterm=NONE
       hi PurpleBold guifg=#d3869b guibg=NONE guisp=NONE gui=NONE cterm=NONE
     endif
+      " {{{
         hi Normal guifg=#dfbf8e guibg=#1d2021 guisp=NONE gui=NONE cterm=NONE
         hi Terminal guifg=#dfbf8e guibg=#1d2021 guisp=NONE gui=NONE cterm=NONE
         hi DiffText guifg=NONE guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse
@@ -1492,7 +1538,6 @@ if &background ==# 'dark'
         hi CursorColumn guifg=NONE guibg=#282828 guisp=NONE gui=NONE cterm=NONE
         hi CursorLine guifg=NONE guibg=#282828 guisp=NONE gui=NONE cterm=NONE
         hi CursorLineNr guifg=#a89984 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-      " {{{
       " Got this from `:he 'pumblend'
       hi PmenuSel guifg=#282828 guibg=#a89984 guisp=NONE gui=NONE cterm=NONE
       " Yeah. Blend is 0
@@ -1512,7 +1557,8 @@ if &background ==# 'dark'
         hi SignColumn guifg=NONE guibg=#282828 guisp=NONE gui=NONE cterm=NONE
         hi StatusLineNC guifg=#a89984 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
         hi StatusLineTermNC guifg=#a89984 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-    endif  "  }}}
+    " endif
+    "  }}}
 
     hi Conceal guifg=#7daea3 guibg=NONE guisp=NONE gui=NONE cterm=NONE
     hi Cursor guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
@@ -1572,15 +1618,12 @@ if &background ==# 'dark'
     hi Number guifg=#d3869b guibg=NONE guisp=NONE gui=NONE cterm=NONE
     hi Float guifg=#d3869b guibg=NONE guisp=NONE gui=NONE cterm=NONE
     hi SpecialKey guifg=#7daea3 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    " hi Ignore guifg=#dfbf8e guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi link Ignore Bg1
-      hi SpellBad gui=undercurl cterm=undercurl
-      hi SpellCap gui=undercurl cterm=undercurl
-      hi SpellLocal gui=undercurl cterm=undercurl
-      hi SpellRare gui=undercurl cterm=undercurl
-      hi Todo gui=bold cterm=bold
-      hi Comment guifg=#928374 guibg=NONE guisp=NONE gui=italic cterm=italic
-      hi SpecialComment guifg=#928374 guibg=NONE guisp=NONE gui=italic cterm=italic
+  hi SpellBad gui=undercurl cterm=undercurl
+  hi SpellCap gui=undercurl cterm=undercurl
+  hi SpellLocal gui=undercurl cterm=undercurl
+  hi SpellRare gui=undercurl cterm=undercurl
+  hi Todo gui=bold cterm=bold
+  hi Comment guifg=#928374 guibg=NONE guisp=NONE gui=italic cterm=italic
     if get(g:, 'gruvbox_material_enable_bold', 0)
       hi Function guifg=#a9b665 guibg=NONE guisp=NONE gui=bold cterm=bold
     else
@@ -1636,22 +1679,6 @@ if &background ==# 'dark'
           \ '#282828', '#ea6962', '#a9b665', '#e78a4e',
           \ '#7daea3', '#d3869b', '#89b482', '#dfbf8e'
           \ ]
-    hi ALEError guifg=NONE guibg=NONE guisp=#ea6962 gui=undercurl ctermfg=NONE ctermbg=NONE cterm=undercurl
-    hi ALEWarning guifg=NONE guibg=NONE guisp=#e3a84e gui=undercurl ctermfg=NONE ctermbg=NONE cterm=undercurl
-    hi ALEInfo guifg=NONE guibg=NONE guisp=#7daea3 gui=undercurl ctermfg=NONE ctermbg=NONE cterm=undercurl
-    if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-      hi ALEErrorSign guifg=#ea6962 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-      hi ALEWarningSign guifg=#e3a84e guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-      hi ALEInfoSign guifg=#7daea3 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-      hi ALEErrorSign guifg=#ea6962 guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-      hi ALEWarningSign guifg=#e3a84e guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-      hi ALEInfoSign guifg=#7daea3 guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-      hi ALEErrorSign guifg=#ea6962 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-      hi ALEWarningSign guifg=#e3a84e guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-      hi ALEInfoSign guifg=#7daea3 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-    endif
     hi multiple_cursors_cursor guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
     hi multiple_cursors_visual guifg=NONE guibg=#504945 guisp=NONE gui=NONE cterm=NONE
     hi CocHighlightText guifg=NONE guibg=NONE guisp=NONE gui=bold ctermfg=NONE ctermbg=NONE cterm=bold
@@ -1664,9 +1691,8 @@ if &background ==# 'dark'
       hi CocHintSign guifg=#89b482 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
     endif
     hi MatchParenCur guifg=NONE guibg=NONE guisp=NONE gui=bold ctermfg=NONE ctermbg=NONE cterm=bold
-    hi MatchWord guifg=NONE guibg=NONE guisp=NONE gui=underline ctermfg=NONE ctermbg=NONE cterm=underline
-    hi MatchWordCur guifg=NONE guibg=NONE guisp=NONE gui=underline ctermfg=NONE ctermbg=NONE cterm=underline
     hi UndotreeSavedBig guifg=#d3869b guibg=NONE guisp=NONE gui=bold cterm=bold
+endif
 " }}}
 
 " }}}

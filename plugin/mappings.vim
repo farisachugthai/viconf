@@ -55,14 +55,18 @@ nnoremap <Leader>O O<Esc>
 
 nnoremap <Leader>fe :e **/*<C-z><S-Tab>
 
-nnoremap <Leader>ff :find **/*<C-z><S-Tab>
+nnoremap <Leader>ff :Find **/*<C-z><S-Tab>
 
 " The nvim API is seriously fantastic.
 nnoremap <Leader>rt <Cmd>call buffers#EchoRTP()<CR>
 
+" Lets make the clipboard more useful
 noremap  <S-Insert> <MiddleMouse>
 noremap! <S-Insert> <MiddleMouse>
 tnoremap <S-Insert> <MiddleMouse>
+" if you need C-v for something just use C-q
+cnoremap <C-S-v> <C-r>"
+cnoremap <C-v> <C-r>"
 
 inoremap <Down> <C-R>=pumvisible() ? "\<lt>C-N>" : "\<lt>Down>"<CR>
 inoremap <Up> <C-R>=pumvisible() ? "\<lt>C-P>" : "\<lt>Up>"<CR>
@@ -216,7 +220,7 @@ if exists('*fzf#wrap')
 else
   nnoremap <M-x>                      <Cmd>verbose command<CR>
   nnoremap <C-x><C-b>                 <Cmd>buffers<CR>
-  nnoremap <C-x><C-f>                 :<C-u>find ~/**
+  nnoremap <C-x><C-f>                 :<C-u>Find ~/**
 endif
 
 " NOTE: The imap should probably only be invoked using \<tab>

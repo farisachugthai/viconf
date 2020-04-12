@@ -5,6 +5,7 @@
     " Last Modified: June 09, 2019
 " ============================================================================
 
+let g:javaScript_fold = 1
 if exists('b:did_ftplugin') | finish | endif
 
 " Options: {{{
@@ -15,7 +16,7 @@ setlocal expandtab
 setlocal shiftwidth=2
 setlocal softtabstop=2
 setlocal suffixesadd+=.html,.css,.js
-
+setlocal foldmethod=syntax
 setlocal omnifunc=javascriptcomplete#CompleteJS
 
 " Set 'comments' to format dashed lists in comments.

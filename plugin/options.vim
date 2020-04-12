@@ -106,6 +106,7 @@ setglobal cmdheight=3
 let s:height = &lines / 4
 let &g:previewheight  = s:height
 let &g:helpheight = s:height
+setglobal scrolloff=2
 
 if filereadable(s:repo_root . '/spell/en.utf-8.add')
   let &g:spellfile = s:repo_root . '/spell/en.utf-8.add'
@@ -565,7 +566,6 @@ function! s:Init_coc() abort
     if !has('unix')
       let g:coc_node_path = 'C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\\node.exe'
     endif
-    " endif
   else
     let g:coc_node_path = expand('$PREFIX/bin/node')
   endif

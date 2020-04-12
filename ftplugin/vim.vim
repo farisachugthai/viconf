@@ -31,11 +31,10 @@ setlocal suffixesadd=.vim
 setlocal nolinebreak
 
 setlocal nowrap wrapmargin=1
-setlocal isfname+=#  " Make 'gf' work
 " To allow tag lookup via CTRL-] for autoload functions, '#' must be a
 " keyword character.  E.g., for netrw#Nread().
 " Wanted - added so we could search for stuff like vim-surround as 1 word
-setlocal iskeyword+=#,-
+setlocal iskeyword+=#,-  " Make 'gf' work
 setlocal wrap
 setlocal foldmethod=marker
 setlocal foldlevel=0

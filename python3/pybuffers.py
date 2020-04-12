@@ -100,7 +100,7 @@ def py_import_completions():
 
 
 class PythonToVimStr:
-    """ Vim has a different string implementation of single quotes """
+    """Vim has a different string implementation of single quotes """
 
     __slots__ = []
 

@@ -53,11 +53,12 @@ times before then.
 Decorators used by python host plugin system.
 
 """
-# import abc
+import abc
 import asyncio
 import codecs
 import cgitb
 # import decimal
+import enum
 import faulthandler
 import functools
 import gc
@@ -117,7 +118,7 @@ global vim
 try:
     import vim
 except ImportError:
-    vim = None
+    pass
 
 # }}}
 
@@ -519,6 +520,17 @@ def format_exc_skip(skip=1, limit=None, exception=None):
     return "".join(format_exception(etype, val, tb, limit)).rstrip()
 
 
+def catch_and_print_exceptions(func):
+    @functools.wraps
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except (Exception, vim.error):
+            traceback.print_exc()
+
+    return wrapper
+
+
 # Taken from SimpleNamespace in python 3
 class Version:
     """Helper class for version info."""
@@ -870,7 +882,7 @@ class Remote(object):
 # msgpack_rpc.session: {{{
 
 
-class ErrorResponse(BaseException):
+class ErrorResponse(Exception):
     """Raise this in a request handler to respond with a given error message.
 
     Unlike when other exceptions are caught, this gives full control off the
@@ -1240,6 +1252,9 @@ class Nvim(object):
 
         # only on python3.4+ we expose asyncio
         self.loop = self._session.loop._loop
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}"
 
     @property
     def session(self):
@@ -2053,13 +2068,26 @@ def find_spec(fullname, path=None, target=None):
         return PathFinder.find_spec(fullname, path=path, target=target)
 
 
-def path_hook(nvim):
+def path_hook(vim):
     """Query the `VimPath` for additional directories."""
-    return VimPath(nvim).hook(sys.path)
+    return VimPath.from_nvim(vim).hook(sys.path)
 
 
 class VimPath(Nvim):
     """A class that fixes neovim's odd sys.path hacks."""
+
+    def __init__(self):
+        # simply to make using our classes a lil easier like jesus christ are
+        # these painful to work with
+        super.from_nvim(vim)
+
+    def __repr__(self):
+        return reprlib.Repr().repr(self.list_runtime_paths())
+
+    def __iter__(self):
+        # Note that this isnt defined in the superclass either.
+        for i in self.list_runtime_paths():
+            return i
 
     def discover_runtime_directories(self):
         """Find directories that Vim is aware of that python won't be."""
@@ -2170,7 +2198,10 @@ class Buffer(Remote):
     def __ne__(self, other):
         """Test inequality of Buffers.
 
-        Necessary for Python 2 compatibility.
+        Necessary for Python 2 compatibility. We never defined eq?
+        If I define eq, I'll need to define hash. Otherwise hash returns
+        nothing. Oh shit we should add reduce so we can pickle these things.
+        Awh shit this is gonna get complicated.
         """
         return not self.__eq__(other)
 
@@ -2554,6 +2585,12 @@ def walk(fn, obj, *args, **kwargs):
 
 # msgpack_rpc.async_session: {{{
 
+class SessionHandlers(enum.Enum):
+
+    {0: '_on_request',
+    1: '_on_response',
+    2: '_on_notification'}
+
 
 class AsyncSession(object):
     """Asynchronous msgpack-rpc layer that wraps a msgpack stream.
@@ -2757,8 +2794,7 @@ class MsgpackStream(object):
                 debug("received message: %s", msg)
                 self._message_cb(msg)
             except StopIteration:
-                pass  # replaces next logging statement
-                # debug('unpacker needs more data...')
+                debug('unpacker needs more data...')
                 break
 
     def __repr__(self):
@@ -2770,7 +2806,7 @@ class MsgpackStream(object):
 # msgpack_rpc.event_loop.base: {{{
 
 
-class BaseEventLoop(object):
+class BaseEventLoop(abc.ABC):
     """Abstract base class for all event loops.
 
     Event loops act as the bottom layer for Nvim sessions created by this
@@ -2782,28 +2818,39 @@ class BaseEventLoop(object):
     methods, which subclasses are expected to implement:
 
     - `_init()`: Implementation-specific initialization
+
     - `_connect_tcp(address, port)`: connect to Nvim using tcp/ip
     - `_connect_socket(path)`: Same as tcp, but use a UNIX domain socket or
       named pipe.
+
     - `_connect_stdio()`: Use stdin/stdout as the connection to Nvim
     - `_connect_child(argv)`: Use the argument vector `argv` to spawn an
       embedded Nvim that has its stdin/stdout connected to the event loop.
+
     - `_start_reading()`: Called after any of _connect_* methods. Can be used
       to perform any post-connection setup or validation.
+
     - `_send(data)`: Send `data`(byte array) to Nvim. The data is only
     - `_run()`: Runs the event loop until stopped or the connection is closed.
       calling the following methods when some event happens:
       actually sent when the event loop is running.
-      - `_on_data(data)`: When Nvim sends some data.
-      - `_on_signal(signum)`: When a signal is received.
-      - `_on_error(message)`: When a non-recoverable error occurs(eg:
-        connection lost)
+
+    - `_on_data(data)`: When Nvim sends some data.
+    - `_on_signal(signum)`: When a signal is received.
+    - `_on_error(message)`: When a non-recoverable error occurs(eg:
+       connection lost)
+
     - `_stop()`: Stop the event loop
     - `_interrupt(data)`: Like `stop()`, but may be called from other threads
       this.
+
     - `_setup_signals(signals)`: Add implementation-specific listeners for
       for `signals`, which is a list of OS-specific signal numbers.
     - `_teardown_signals()`: Removes signal listeners set by `_setup_signals`
+
+
+    .. versionchanged:: Now officially subclasses abc.ABC.
+
     """
 
     def __init__(self, transport_type, *args):
@@ -2840,13 +2887,16 @@ class BaseEventLoop(object):
         )
         self._on_data = None
         self._error = None
-        self._init()
         try:
             getattr(self, "_connect_{}".format(transport_type))(*args)
         except Exception as e:
             self.close()
             raise e
         self._start_reading()
+
+    @abc.abstractmethod
+    def _init(self):
+        raise NotImplementedError
 
     def connect_tcp(self, address, port):
         """Connect to tcp/ip `address`:`port`. Delegated to `_connect_tcp`."""
@@ -3458,7 +3508,13 @@ class Host:
 
 
 class UvEventLoop(BaseEventLoop):
-    """`BaseEventLoop` subclass that uses `pvuv` as a backend."""
+    """`BaseEventLoop` subclass that uses `pvuv` as a backend.
+
+    Concrete implementation of the abstract EventLoop class.
+    Also wanted to note.nShould we make the connect_tcp,
+    connect_stdio, and connect_child methods classmethods?
+
+    """
 
     def _init(self):
         self._loop = pyuv.Loop()
@@ -3467,13 +3523,16 @@ class UvEventLoop(BaseEventLoop):
         self._error_stream = None
         self._callbacks = deque()
 
+    def __repr__(self):
+        return f"{self.__class__.__name__}"
+
     def _on_connect(self, stream, error):
         self.stop()
         if error:
             msg = "Cannot connect to {}: {}".format(
                 self._connect_address, pyuv.errno.strerror(error)
             )
-            self._connection_error = IOError(msg)
+            self._connection_error = OSError(msg)
             return
         self._read_stream = self._write_stream = stream
 
@@ -3495,7 +3554,7 @@ class UvEventLoop(BaseEventLoop):
         self._on_error("EOF")
 
     def _disconnected(self, *args):
-        raise IOError("Not connected to Nvim")
+        raise OSError("Not connected to Nvim")
 
     def _connect_tcp(self, address, port):
         stream = pyuv.TCP(self._loop)

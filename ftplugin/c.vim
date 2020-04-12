@@ -23,7 +23,7 @@ let g:compiler_gcc_ignore_unmatched_lines = 1
 
 source $VIMRUNTIME/ftplugin/c.vim
 source $VIMRUNTIME/indent/c.vim
-syn sync fromstart
+syntax sync fromstart
 syntax enable
 setlocal foldmethod=syntax
 setlocal suffixesadd=.c,.h,.cpp
@@ -51,6 +51,9 @@ setlocal include=^\s*#\s*include
 " setlocal includexpr
 " setlocal cinwords cinkeys etc etc
 let &l:path=includes#CPath()
+if getenv('$MANPATH')
+  let &l:path .= expand('$MANPATH')
+endif
 
 let b:undo_ftplugin .= '|setlocal sua< cin< mp< ofu< kp< include<'
       \. '|unlet! &l:path'
@@ -130,4 +133,3 @@ if has('cscope') && executable('cscope')
 
 endif
 " }}}
-

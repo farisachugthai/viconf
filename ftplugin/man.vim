@@ -34,7 +34,10 @@ setlocal iskeyword+=\.,-
 
 " also literally how is this not defined in the ftplugin??? its notably defined
 " EVERYWHERE else.
-setlocal keywordprg=:Man
+if exists(':Man') == 2
+  setlocal keywordprg=:Man
+endif
+
 if getenv('$MANPATH')
   let &l:path .= expand('$MANPATH')
 endif
@@ -66,4 +69,3 @@ if !exists('g:no_plugin_maps') && !exists('g:no_man_maps')
 endif
 
 " }}}
-

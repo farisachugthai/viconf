@@ -39,10 +39,8 @@ endif
 
 let &l:path = py#PythonPath()
 setlocal syntax=xonsh
-setlocal cindent autoindent
-syntax sync fromstart
-syntax enable
 setlocal foldlevelstart=0
+setlocal foldmethod=marker
 setlocal suffixesadd=.py,.xsh,.xonshrc,
 setlocal include=^\\s*\\(from\\\|import\\)
 setlocal includeexpr=substitute(v:fname,'\\.','/','g')
@@ -71,8 +69,8 @@ call py#ALE_Python_Conf()
 
 " Atexit: {{{
 let b:undo_ftplugin .= '|setlocal kp< ep< fp< path< syntax< fdls< sua< include< '
-                \ . '|setlocal includeexpr< cms< fo< et< sw< sts< ts< sr< mp<'
-                \ . '|setlocal isk<'
+                \ . '|setlocal includeexpr< cms< fo< et< sw< sts< ts<'
+                \ . '|setlocal sr< mp< fdm< isk<'
                 \ . '|unlet! b:undo_ftplugin'
                 \ . '|unlet! b:did_ftplugin'
                 \ . '|unlet! b:current_compiler'

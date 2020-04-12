@@ -21,7 +21,10 @@ setlocal isfname-==
 
 setlocal fileformat=dos
 
+" this isnt gonna set efm correctly but eh
+setlocal makeprg=call\ %
+
 let b:undo_ftplugin = get(b:, 'undo_ftplugin', 'exe')
-                \ . '|setlocal cms< sua< isf<'
+                \ . '|setlocal cms< sua< isf< ff< mp<'
                 \ . '|unlet! b:undo_ftplugin'
                 \ . '|unlet! b:did_ftplugin'
