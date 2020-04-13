@@ -1,7 +1,7 @@
 python ~/python
 startup ~/.ipython/profile_default/startup
 tutorials ~/Dropbox/python/tutorials
-
 xonsh /usr/lib/python3.8/site-packages/xonsh
 site-packages /usr/lib/python3.8/site-packages
+
 WindowsKits C:/Program Files (x86)/Windows Kits/10

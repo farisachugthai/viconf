@@ -35,8 +35,9 @@ let g:rst_fold_enabled = 1
 " Now that globals are set check for ....
 if exists('b:did_ftplugin') | finish | endif
 
-source $VIMRUNTIME/ftplugin/rst.vim
-source $VIMRUNTIME/indent/rst.vim
+" So these are a massive source of start up time delay. Plus they get sourced in anyway.
+" source $VIMRUNTIME/ftplugin/rst.vim
+" source $VIMRUNTIME/indent/rst.vim
 setlocal textwidth=80
 setlocal expandtab
 setlocal spell!
@@ -80,6 +81,8 @@ setlocal suffixesadd=.py,.rst,.rst.txt
 
 " Isn't a func anymore. todo: this and maybe formatprg?
 " command! -buffer Sphinx call pydoc_help#sphinx_build(<q-args>)
+
+if !exists('b:undo_ftplugin') | let b:undo_ftplugin = '' | endif
 
 let b:undo_ftplugin .= '|setlocal tw< cms< com< cc< lbr< fdl< fdls< '
       \ . '|setlocal spell< wig< isk< kp< mp< efm< sua< sr< '

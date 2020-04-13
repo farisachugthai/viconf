@@ -85,8 +85,6 @@ function! s:_Statusline(bang, ...) range abort  " {{{
   endif
   let s:gutentags = '%{exists("g:gutentags_enabled") ? gutentags#statusline() : ""}'
 
-  " lines 2, 4, 6, 7
-                  \. ' %f '
   let g:statusline = '« [%n]: '
         \. s:VarExists('*WebDevIconsGetFileTypeSymbol', '%{WebDevIconsGetFileTypeSymbol()}')
         \. '%< %m%r %y %w»'
@@ -94,7 +92,7 @@ function! s:_Statusline(bang, ...) range abort  " {{{
         \. ' %{&ff} ' . s:tstmp
         \. s:VarExists('g:did_coc_loaded', ' %{coc#status()} ')
         \. s:VarExists('g:coc_git_status', ' %{coc_git_status} ')
-        \. '◀ 😀 %f ▶'
+        \. '◀ 😀 %.30F ▶'
         \. s:sep
         \. s:StatusDiagnostic()
         \. s:VarExists('g:ale_enabled', '«[ALE Lints]»: # %{getbufvar(bufnr(""), "ale_linted", 0)} | ')

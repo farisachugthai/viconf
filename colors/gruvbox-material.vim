@@ -1,9 +1,7 @@
 " Name:         Gruvbox Material
 " Maintainer:   Faris Chugthai
-" NOTE: On line 1378 is a font bound to `Normal`. Change that before copy
-" pasting!
-" Last Author:  Sainnhepark <sainnhe@gmail.com>
-" Last Updated: Dec 10, 2019
+" Previous Maintainer:  Sainnhepark <sainnhe@gmail.com>
+" Last Updated: Apr 12, 2020
 
 scriptencoding utf8  " {{{
 if exists('g:loaded_gruvbox_material_vim') || &compatible || v:version < 700
@@ -36,10 +34,8 @@ match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 " These got cleared somehow.
 " Screen line that the cursor is
 hi! CursorLine ctermbg=237 guibg=#3c3836 guifg=NONE ctermfg=NONE cterm=NONE gui=NONE guisp=NONE
-
 " Line number of CursorLine
 hi! CursorLineNr guifg=#fabd2f guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE ctermbg=237
-
 " Screen column that the cursor is
 hi! link CursorColumn CursorLine
 " Additional Links
@@ -48,11 +44,18 @@ hi! link manHeaderFile Statement
 " hi link manHighlight
 " hi link NormalNC Ignore
 hi! link VisualNC Visual
+hi! link MsgArea WarningMsg
+hi! link NormalNC Comment
+
+hi! link Noise YellowBold
+
+" I saw this at `:he group-name` so idk man
+hi! link SpecialComment SpecialChar
 " }}}
 
 if has('nvim')  " {{{
   " How does a nice light blue sound?
-  hi! NvimInternalError guibg=NONE ctermfg=108 ctermbg=234 gui=reverse guifg=#8ec0e1 guisp=NONE
+  hi! NvimInternalError guibg=#1d2021 ctermfg=108 ctermbg=234 gui=reverse guifg=#8ec0e1 guisp=NONE
   hi! link nvimAutoEvent   vimAutoEvent
   hi! link nvimHLGroup     vimHLGroup
   hi! link NvimIdentifierKey Identifier
@@ -74,8 +77,6 @@ if has('nvim')  " {{{
   hi debugPC term=reverse ctermbg=darkblue guibg=darkblue
   hi debugBreakpoint term=reverse ctermbg=red guibg=red
 endif
-
-" }}}
 
 " }}}
 
@@ -133,7 +134,6 @@ hi! link CocInfoVirtualText ALEVirtualTextInfo
 hi! link CocHintVirtualText ALEVirtualTextInfo
 hi! link CocCodeLens ALEVirtualTextInfo
 " }}}
-" }}}
 
 " GitGutter: {{{
 hi! link GitGutterAdd Green
@@ -163,6 +163,12 @@ hi! fzf3 ctermfg=252 ctermbg=238 guifg=#D9D9D9 guibg=#565656 cterm=bold,underlin
 
 " Vim Plug: {{{
 hi! link plugNotLoaded Folded
+" }}}
+
+" Signature: {{{
+" hi! link SignatureMarkLine Normal
+hi! link SignatureMarkText WarningMsg
+hi! link SignatureMarkerText SignColumn
 " }}}
 " }}}
 
@@ -276,7 +282,8 @@ hi! link cssMediaType Special
 hi! link cssMobileTextProp cssProp
 hi! link cssMultiColumnAttr cssAttr
 hi! link cssMultiColumnProp cssProp
-hi! link cssNoise Noise
+" I have no idea what this is
+hi! link cssNoise cssAttr
 hi! link cssPaddingAttr cssAttr
 hi! link cssPaddingProp Aqua
 hi! link cssPaddingProp Directory
@@ -303,6 +310,7 @@ hi! link cssSelectorOp Blue
 hi! link cssSelectorOp Special
 hi! link cssSelectorOp2 Blue
 hi! link cssSelectorOp2 Special
+hi! link cssStyle cssImportant
 hi! link cssSpeechAttr cssAttr
 hi! link cssSpeechProp cssProp
 hi! link cssTableAttr cssAttr
@@ -363,7 +371,7 @@ hi! link manHighlight Yellow
 hi! link manHistory Yellow
 hi! link manHeaderFile Yellow
 hi! link manSectionHeading OrangeBold
-hi! link manSentence Fg2
+hi! link manSentence htmlItalic
 hi! link manSignal Purple
 hi! link manURL Green
 " }}}
@@ -397,7 +405,7 @@ hi! link netrwSizeDate Delimiter
 hi! link netrwSlash Delimiter
 hi! link netrwSortBy Title
 hi! link netrwSortSeq netrwList
-hi! link netrwSpecial netrwClassify
+hi! link netrwSpecial Special
 hi! link netrwSymLink Special
 hi! link netrwTime Delimiter
 hi! link netrwTimeSep Delimiter
@@ -434,6 +442,7 @@ hi! link netrwVersion Float
  hi! link netrwYacc     netrwPlain
  hi! link netrwPix      Special
 
+ hi! link netrwGray Grey
  hi! link netrwBak      netrwGray
  hi! link netrwCompress netrwGray
  hi! link netrwSpecFile netrwGray
@@ -513,7 +522,7 @@ hi! link diffIndexLine Aqua
 " }}}
 
 " Html: {{{
-hi! link htmlScriptTag Tag
+hi! link htmlScriptTag htmlTag
 
 " Default syntax
 hi! link htmlTag                     Function
@@ -524,13 +533,6 @@ hi! link htmlSpecialTagName          Exception
 hi! link htmlValue                     String
 hi! link htmlSpecialChar             Special
 
-hi htmlBold                cterm=bold gui=bold
-hi htmlBoldUnderline       cterm=bold,underline gui=bold,underline
-hi htmlBoldItalic          cterm=bold,italic gui=bold,italic
-hi htmlBoldUnderlineItalic  cterm=bold,italic,underline gui=bold,italic,underline
-hi htmlUnderline           cterm=underline gui=underline
-hi htmlUnderlineItalic     cterm=italic,underline gui=italic,underline
-hi htmlItalic              cterm=italic gui=italic
 hi! link htmlH1                      Title
 hi! link htmlH2                      htmlH1
 hi! link htmlH3                      htmlH2
@@ -547,7 +549,6 @@ hi! link htmlItalicUnderline         htmlUnderlineItalic
 hi! link htmlItalicBold              htmlBoldItalic
 hi! link htmlItalicBoldUnderline     htmlBoldUnderlineItalic
 hi! link htmlItalicUnderlineBold     htmlBoldUnderlineItalic
-hi! link htmlLink                    OrangeBold
 hi! link htmlLeadingSpace            None
 
 if v:version > 800 || v:version == 800 && has('patch1038')
@@ -588,18 +589,18 @@ hi! link xmlTagName Blue
 hi! link xmlEqual Blue
 hi! link docbkKeyword Keyword
 
-hi! link xmlDocTypeDecl Gray
+hi! link xmlDocTypeDecl Grey
 hi! link xmlDocTypeKeyword Keyword
-hi! link xmlCdataStart Gray
+hi! link xmlCdataStart Grey
 hi! link xmlCdataCdata Purple
-hi! link dtdFunction Gray
+hi! link dtdFunction Grey
 hi! link dtdTagName Purple
 
 hi! link xmlAttrib Directory
-hi! link xmlProcessingDelim Gray
-hi! link dtdParamEntityPunct Gray
-hi! link dtdParamEntityDPunct Gray
-hi! link xmlAttribPunct Gray
+hi! link xmlProcessingDelim Grey
+hi! link dtdParamEntityPunct Grey
+hi! link dtdParamEntityDPunct Grey
+hi! link xmlAttribPunct Grey
 
 hi! link xmlEntity Orange
 hi! link xmlEntityPunct Orange
@@ -642,20 +643,32 @@ hi! link pythonTripleQuotes              pythonQuotes
 " }}}
 
 " Vim: {{{
-" General: {{{
+hi! link vimAugroup     vimAugroupKey
+hi! link vimAuSyntax vimAugroup
+hi! link vimAugroupSyncA vimAugroup
+" Lmao the comma between BufEnter,BufReadPre
+hi! link vimAutoEventList vimAutoEvent
 hi! link vimAbb vimCommand
 hi! link vimAddress     vimMark
 hi! link vimAuHighlight vimHighlight
-hi! link vimAugroupError        Error
 hi! link vimAugroupKey  Keyword
 hi! link vimAutoCmd     vimCommand
 hi! link vimAutoCmdOpt  vimOption
+hi! link vimAutoCmdSpace vimAutoCmd
 hi! link vimAutoEvent   Type
 hi! link vimAutoSet     vimCommand
 hi! link vimBehave      vimCommand
 hi! link vimBehaveModel vimBehave
 hi! link vimBracket     Delimiter
 hi! link vimCmplxRepeat SpecialChar
+" Don't link to WildMenu it's the space in between the word cluster and the cluster group
+" hi link vimClusterName WildMenu
+hi! link vimClusterName Normal
+
+hi! link vimCmdSep vimCommand
+hi! link vimCommentTitleLeader  vimCommentTitle
+hi! link vimCollClass   StorageClass
+hi! link vimCollection PreCondit
 hi! link vimCommand     Statement
 hi! link vimComment     Comment
 hi! link vimCommentString       vimString
@@ -665,21 +678,24 @@ hi! link vimContinue    Special
 hi! link vimCtrlChar    SpecialChar
 hi! link vimEchoHL      vimCommand
 hi! link vimEchoHLNone  vimGroup
-hi! link vimElseIfErr   Error
 hi! link vimElseif      vimCondHL
 hi! link vimEnvvar      PreProc
-hi! link vimError       Error
+hi! link vimEcho        String
+" the spaces between words in an execute statement like wth
+hi! link vimExecute Label
 hi! link vimFBVar       vimVar
 hi! link vimFTCmd       vimCommand
 hi! link vimFTOption    vimSynType
 hi! link vimFgBgAttrib  vimHiAttrib
 hi! link vimFold        Folded
 hi! link vimFunc        Function
+hi! link vimFuncBody    Normal
 hi! link vimFuncKey     vimCommand
 hi! link vimFuncName    Function
 hi! link vimFuncSID     Special
 hi! link vimFuncVar     Identifier
 hi! link vimFunction Function
+hi! link vimGlobal      vimFuncSID
 hi! link vimGroup       Type
 hi! link vimGroupAdd    vimSynOption
 hi! link vimGroupName   vimGroup
@@ -697,6 +713,9 @@ hi! link vimHiGui       vimHiTerm
 hi! link vimHiGuiFgBg   vimHiTerm
 hi! link vimHiGuiFont   vimHiTerm
 hi! link vimHiGuiRgb    vimNumber
+hi! link vimHiGuiFontname vimHiGui
+hi! link vimHiLink vimHiBang
+hi! link vimHiTermCap vimHiCTerm
 hi! link vimHiNmbr      Number
 hi! link vimHiStartStop vimHiTerm
 hi! link vimHiTerm      Type
@@ -710,16 +729,20 @@ hi! link vimInsert      vimString
 "                    match /<Bar>\s*\a\+/  transparent contains=vimCommand,vimNotation
 " \h is any upper case letter. \w is any letter. wtf? that contains SO many false positives
 
-" hi link vimIsCommand       vimOption
+hi! link vimIsCommand       vimVar
 hi! link vimIskSep      Delimiter
+hi! link vimIskList      Delimiter
 hi! link vimKeyCode     vimSpecFile
 hi! link vimKeyword     Statement
 hi! link vimLet vimCommand
 hi! link vimLineComment vimComment
 hi! link vimMap vimCommand
 hi! link vimMapBang     vimCommand
+hi! link vimMapLhs      vimSyncMatch
 hi! link vimMapMod      vimBracket
-hi! link vimMapModKey   vimFuncSID
+hi! link vimMapModKey   Macro
+hi! link vimMapRhs vimNotation
+hi! link vimMapRhsExtend        vimNotation
 hi! link vimMark        Number
 hi! link vimMarkNumber  vimNumber
 hi! link vimMenuMod     vimMapMod
@@ -729,25 +752,31 @@ hi! link vimMtchComment vimComment
 hi! link vimNorm        vimCommand
 hi! link vimNotFunc     vimCommand
 hi! link vimNotPatSep   vimString
+
+" This ends up being the RHS for all mappings so choose carefully!
 hi! link vimNotation    Special
 hi! link vimNumber Red
 hi! link vimOper        Operator
-hi! link vimOperError   Error
-hi! link vimOption      PreProc
+hi! link vimOption      PreCondit
 hi! link vimParenSep    Delimiter
+hi! link vimPatRegion vimRegion
 hi! link vimPatSep      SpecialChar
-hi! link vimPatSepErr   vimError
 hi! link vimPatSepR     vimPatSep
 hi! link vimPatSepZ     vimPatSep
 hi! link vimPatSepZone  vimString
 hi! link vimPattern     Type
 hi! link vimPlainMark   vimMark
 hi! link vimPlainRegister       vimRegister
+hi! link vimRange vimSynPatRange
+hi! link vimRegion vimVar
 hi! link vimRegister    SpecialChar
 hi! link vimScriptDelim Comment
 hi! link vimSearch      vimString
 hi! link vimSearchDelim Statement
 hi! link vimSep Delimiter
+hi! link vimSet vimSetEqual
+" There's a highlighting group for the equals sign in a set option statement...
+hi! link vimSetEqual    Operator
 hi! link vimSetMod      vimOption
 hi! link vimSetSep      Statement
 hi! link vimSetString   vimString
@@ -761,11 +790,21 @@ hi! link vimStringCont  vimString
 hi! link vimStringEnd   vimString
 hi! link vimSubst       vimCommand
 hi! link vimSubst1      vimSubst
+hi! link vimSubst2      vimSubst
 hi! link vimSubstDelim  Delimiter
 hi! link vimSubstFlags  Special
+hi! link vimSubstPat      vimSubst
+hi! link vimSubstRange      vimSubst
+hi! link vimSubstRep      vimSubst
+hi! link vimSubstRep4      vimSubst
 hi! link vimSubstSubstr SpecialChar
 hi! link vimSubstTwoBS  vimString
 hi! link vimSynCase     Type
+hi! link vimSynMtchCchar String
+hi! link vimSynPatMod vimSynOption
+hi! link vimSyncMatch htmlBoldUnderline
+hi! link vimSyncLinebreak vimSynOption
+hi! link vimSyncLinecont vimSynOption
 hi! link vimSynContains vimSynOption
 hi! link vimSynKeyContainedin   vimSynContains
 hi! link vimSynKeyOpt   vimSynOption
@@ -779,8 +818,11 @@ hi! link vimSynReg      Type
 hi! link vimSynRegOpt   vimSynOption
 hi! link vimSynRegPat   vimString
 hi! link vimSynType     vimSynOption
+hi! link vimSynKeyRegion Keyword
+" This syntax group is literally whitespace...
+hi! link vimSynRegion Nontext
+hi! link vimSyncLines Number
 hi! link vimSyncC       Type
-hi! link vimSyncError   Error
 hi! link vimSyncGroup   vimGroupName
 hi! link vimSyncGroupName       vimGroupName
 hi! link vimSyncKey     Type
@@ -791,104 +833,264 @@ hi! link vimUnmap       vimMap
 hi! link vimUserAttrb   vimSpecial
 hi! link vimUserAttrbCmplt      vimSpecial
 hi! link vimUserAttrbCmpltFunc  Special
-hi! link vimUserAttrbError      Error
 hi! link vimUserAttrbKey        vimOption
 hi! link vimUserCmd vimUserCommand
-hi! link vimUserCmdError        Error
 hi! link vimUserCommand vimCommand
+" Here are a few more xxx cleared syn groups
+hi! link vimUserFunc Function
 hi! link vimVar Identifier
 hi! link vimWarn        WarningMsg
-
-" }}}
-
-" Vim Errors: {{{
+hi! link vimHiAttribList Underlined
+hi! link vimHiCtermColor Underlined
+hi! link vimHiFontname Underlined
+hi! link vimHiKeyList Keyword
+hi! link vimIskSep Keyword
+hi! link vimOnlyCommand vimCommand
+hi! link vimOnlyHLGroup VisualNOS
+hi! link vimOnlyOption Green
+hi! link vimPythonRegion Identifier
+" Errors:
+hi! link vimAugroupError        Error
 hi! link vimBehaveError vimError
 hi! link vimBufnrWarn   vimWarn
 hi! link vimCollClassErr        vimError
+hi! link vimElseIfErr   Error
 hi! link vimEmbedError  vimError
 hi! link vimErrSetting  vimError
+hi! link vimError       Error
+hi! link vimFunctionError vimError
 hi! link vimFTError     vimError
 hi! link vimHiAttribList        vimError
 hi! link vimHiCtermError        vimError
 hi! link vimHiKeyError  vimError
 hi! link vimKeyCodeError        vimError
 hi! link vimMapModErr   vimError
+hi! link vimOperError   Error
+hi! link vimPatSepErr   vimError
 hi! link vimSubstFlagErr        vimError
 hi! link vimSynCaseError        vimError
 hi! link vimSynError Exception
-hi! link vimNotation Orange
-hi! link vimBracket Orange
-hi! link vimMapModKey Purple
-hi! link vimMapMod Purple
-hi! link vimFuncSID LightGrey
-hi! link vimSetSep LightGrey
-hi! link vimSep LightGrey
-hi! link vimContinue LightGrey
-hi! link vimLet Orange
-hi! link vimAutoCmd Orange
+hi! link vimSyncError   Error
+hi! link vimUserAttrbError      Error
+hi! link vimUserCmdError        Error
 
-" Vim etc: {{{
-" Here's every highlighting group I've ran into and a note with what it represents
-" The last letter of an autocmd like wth
-hi! link vimAugroup     vimAugroupKey
-
-" Lmao the comma between BufEnter,BufReadPre
-hi! link vimAutoEventList vimAutoEvent
-" Don't link to WildMenu it's the space in between the word cluster and the
-" cluster group
-" hi link vimClusterName WildMenu
-hi! link vimClusterName NONE
-
-hi! link vimCmdSep vimCommand
-hi! link vimCommentTitleLeader  vimCommentTitle
-hi! link vimEcho        String
-" the spaces between words in an execute statement like wth
-hi! link vimExecute Label
-hi! link vimHiAttribList Underlined
-hi! link vimHiCtermColor Underlined
-hi! link vimHiFontname Underlined
-hi! link vimHiKeyList Keyword
-hi! link vimIskSep Keyword
-hi! link vimMapLhs vimNotation
-hi! link vimMapRhs vimNotation
-hi! link vimMapRhsExtend        vimNotation
-hi! link vimOnlyHLGroup VisualNOS
-hi! link vimOnlyCommand vimCommand
-hi! link vimOnlyOption Green
-hi! link vimSet vimSetEqual
-
-" There's a highlighting group for the equals sign in a set option statement...
-hi! link vimSetEqual    Operator
-hi! link vimSynKeyRegion Keyword
-hi! link vimHiAttribList vimHighlight
-
-" This syntax group is literally whitespace...
-hi! link vimSynRegion Nontext
-hi! link vimSyncLines Number
-
-" Here are a few more xxx cleared syn groups
-hi! link vimUserFunc Function
-
-hi! link vimPythonRegion Identifier
-
-" }}}
-
-" }}}
-
-" More: {{{
-" hi link vimSynMatchRegion
-hi! link vimSynMtchCchar String
-" vimSynMtchGroup xxx cleared
-hi! link vimSynPatMod vimSynOption
-hi! link vimSyncMatch htmlBoldUnderline
-hi! link vimSyncLinebreak vimSynOption
-hi! link vimSyncLinecont vimSynOption
-" vimSyncRegion  xxx cleared
-" }}}
 " }}}
 
 " JSON: {{{
 hi! link jsonCommentError Normal
+hi! link jsonFold Folded
+hi! link jsoncComment Comment
+hi! link jsoncLineComment Comment
+hi! link jsonKeywordMatch Tag
+hi! link jsonKeyword Identifier
+hi! link jsonQuote Statement
+hi! link jsonBraces Operator
+hi! link jsonString String
+hi! link jsonStringMatch MatchParen
+" }}}
+
+" Tex: {{{
+hi! link initexCharacter                     Character
+hi! link initexNumber                        Number
+hi! link initexIdentifier                    Identifier
+hi! link initexStatement                     Statement
+hi! link initexConditional                   Conditional
+hi! link initexPreProc                       PreProc
+hi! link initexMacro                         Macro
+hi! link initexType                          Type
+hi! link initexDebug                         Debug
+hi! link initexTodo                          Todo
+hi! link initexComment                       Comment
+hi! link initexDimension                     initexNumber
+" }}}
+
+" Bash: {{{
+hi! link bashAdminStatement	shStatement
+hi! link bashSpecialVariables	shShellVariables
+hi! link bashStatement		shStatement
+
+
+hi! link shAlias		Identifier
+hi! link shArithRegion	shShellVariables
+hi! link shArithmetic		Special
+hi! link shAstQuote	shDoubleQuote
+hi! link shAtExpr	shSetList
+hi! link shAtExpr	shSetList
+hi! link shBQComment	shComment
+hi! link shBeginHere	shRedir
+hi! link shBkslshDblQuote	shDOubleQuote
+hi! link shBkslshSnglQuote	shSingleQuote
+hi! link shCase             Question
+hi! link shCaseBar	shConditional
+hi! link shCaseCommandSub	shCommandSub
+hi! link shCaseDoubleQuote	shDoubleQuote
+hi! link shCaseError		Error
+hi! link shCaseEsac         Question
+hi! link shCaseEsacSync     Question
+hi! link shCaseExSingleQuote Question
+hi! link shCaseIn	shConditional
+hi! link shCaseLabel        Question
+hi! link shCaseRange        Question
+hi! link shCaseSingleQuote	shSingleQuote
+hi! link shCaseStart	shConditional
+hi! link shCharClass		Identifier
+hi! link shCmdParenRegion   Question
+hi! link shCmdSubRegion	shShellVariables
+hi! link shCmdSubRegion Green
+hi! link shColon	shComment
+hi! link shComma            Question
+hi! link shCommandSub		Special
+hi! link shCommandSubBQ		shCommandSub
+hi! link shComment		Comment
+hi! link shCondError		Error
+hi! link shConditional		Conditional
+hi! link shCtrlSeq		Special
+hi! link shCurlyError		Error
+hi! link shCurlyIn          Question
+hi! link shDblParen         Question
+hi! link shDeref	shShellVariables
+hi! link shDerefDelim	shOperator
+hi! link shDerefEscape      Question
+hi! link shDerefLen		shDerefOff
+hi! link shDerefOff		shDerefOp
+hi! link shDerefOp	shOperator
+hi! link shDerefOpError		Error
+hi! link shDerefPOL	shDerefOp
+hi! link shDerefPPS	shDerefOp
+hi! link shDerefPPSleft     Question
+hi! link shDerefPSR	shDerefOp
+hi! link shDerefPSRleft     Question
+hi! link shDerefPSRright    Question
+hi! link shDerefPattern     Question
+hi! link shDerefSimple	shDeref
+hi! link shDerefSpecial	shDeref
+hi! link shDerefString	shDoubleQuote
+hi! link shDerefVar	shDeref
+hi! link shDerefVarArray    Question
+hi! link shDerefWordError		Error
+hi! link shDo               Question
+hi! link shDoError		Error
+hi! link shDoSync           Question
+hi! link shDoubleQuote	shString
+hi! link shEcho	shString
+hi! link shEchoDelim	shOperator
+hi! link shEchoQuote	shString
+hi! link shEmbeddedEcho	shString
+hi! link shEsacError		Error
+hi! link shEscape	shCommandSub
+hi! link shExDoubleQuote	shDoubleQuote
+hi! link shExSingleQuote	shSingleQuote
+hi! link shExpr             Question
+hi! link shExprRegion		Delimiter
+hi! link shFor              Question
+hi! link shForPP	shLoop
+hi! link shForSync          Question
+hi! link shFunction	Function
+hi! link shFunctionFour     Question
+hi! link shFunctionKey		Keyword
+hi! link shFunctionName		Function
+hi! link shFunctionOne      Identifier
+hi! link shFunctionStart    Question
+hi! link shFunctionThree    Question
+hi! link shFunctionTwo      Question
+hi! link shHereDoc	shString
+hi! link shHereDoc01		shRedir
+hi! link shHereDoc02		shRedir
+hi! link shHereDoc03		shRedir
+hi! link shHereDoc04		shRedir
+hi! link shHereDoc05		shRedir
+hi! link shHereDoc06		shRedir
+hi! link shHereDoc07		shRedir
+hi! link shHereDoc08		shRedir
+hi! link shHereDoc09		shRedir
+hi! link shHereDoc10		shRedir
+hi! link shHereDoc11		shRedir
+hi! link shHereDoc12		shRedir
+hi! link shHereDoc13		shRedir
+hi! link shHereDoc14		shRedir
+hi! link shHereDoc15		shRedir
+hi! link shHereDoc16        Question
+hi! link shHerePayload	shHereDoc
+hi! link shHereString	shRedir
+hi! link shIf               Identifier
+hi! link shIfSync           Question
+hi! link shInError		Error
+hi! link shLoop	shStatement
+hi! link shNoQuote	shDoubleQuote
+hi! link shNumber		Number
+hi! link shOK               Question
+hi! link shOperator		Operator
+hi! link shOption	shCommandSub
+hi! link shOption Purple
+hi! link shParen	shArithmetic
+hi! link shParenError		Error
+hi! link shPattern	shString
+hi! link shPattern	shString
+hi! link shPosnParm	shShellVariables
+hi! link shQuickComment	shComment
+hi! link shQuote	shOperator
+hi! link shRange	shOperator
+hi! link shRedir	shOperator
+hi! link shRepeat		Repeat
+hi! link shSet		Statement
+hi! link shSetList		Identifier
+hi! link shSetListDelim	shOperator
+hi! link shSetOption	shOption
+hi! link shShellVariables		PreProc
+hi! link shSingleQuote	shString
+hi! link shSnglCase		Statement
+hi! link shSource	shOperator
+hi! link shSpecial		Special
+hi! link shSpecialDQ		Special
+hi! link shSpecialNoZS		shSpecial
+hi! link shSpecialNxt	shSpecial
+hi! link shSpecialSQ		Special
+hi! link shSpecialStart	shSpecial
+hi! link shSpecialVar       Question
+hi! link shStatement		Statement
+hi! link shString		String
+hi! link shStringSpecial	shSpecial
+hi! link shSubSh            Question
+hi! link shSubShRegion	shOperator
+hi! link shTest             Question
+hi! link shTestDoubleQuote	shString
+hi! link shTestError		Error
+hi! link shTestOpr	shConditional
+hi! link shTestOpr Purple
+hi! link shTestPattern	shString
+hi! link shTestSingleQuote	shString
+hi! link shTestSingleQuote	shString
+hi! link shTodo		Todo
+hi! link shTouch            Question
+hi! link shTouchCmd	shStatement
+hi! link shUntilSync        Question
+hi! link shVarAssign        Question
+hi! link shVariable	shSetList
+hi! link shWhileSync        Question
+hi! link shWrapLineOperator	shOperator
+
+" }}}
+" QF: {{{
+hi link qfFileName	Directory
+hi link qfLineNr	LineNr
+hi link qfError	Error
+" }}}
+
+" SQL: {{{
+hi! link Quote		Special
+hi! link sqlComment		Comment
+hi! link sqlFold Folded
+hi! link sqlFunction		Function
+hi! link sqlKeyword		sqlSpecial
+hi! link sqlNumber		Number
+hi! link sqlOperator		sqlStatement
+hi! link sqlSpecial		Special
+hi! link sqlStatement	Statement
+hi! link sqlString		String
+hi! link sqlType		Type
+hi! link sqlTodo		Todo
+" }}}
+
 " }}}
 
 " }}}
@@ -1014,6 +1216,7 @@ hi! link javaScriptClassStatic Orange
 hi! link javaScriptClassSuper Orange
 hi! link javaScriptClassSuperName Yellow
 hi! link javaScriptComment		Comment
+hi! link javaScriptCommentSkip Comment
 hi! link javaScriptCommentTodo		Todo
 hi! link javaScriptConditional		Conditional
 hi! link javaScriptConstant		Label
@@ -1056,7 +1259,7 @@ hi! link javaScriptMember Blue
 hi! link javaScriptMessage		Keyword
 hi! link javaScriptNodeGlobal Blue
 hi! link javaScriptNull			Keyword
-hi! link javaScriptNumber		javaScriptValue
+hi! link javaScriptNumber		Float
 hi! link javaScriptObjectLabel Blue
 hi! link javaScriptOperator		Operator
 hi! link javaScriptParens Blue
@@ -1076,6 +1279,7 @@ hi! link javaScriptTemplateSubstitution Blue
 hi! link javaScriptType			Type
 hi! link javaScriptURLUtilsProp Blue
 hi! link javaScriptVariable Orange
+hi! link javaScriptValue javaScriptVariable
 hi! link javaScriptYield Red
 hi! link jsPrototype Yellow
 hi! link jsOperator Orange
@@ -1151,12 +1355,12 @@ hi! link coffeeBracket Orange
 
 hi! link javaAnnotation Blue
 hi! link javaDocTags Aqua
-hi! link javaParen White
-hi! link javaParen1 White
-hi! link javaParen2 White
-hi! link javaParen3 White
-hi! link javaParen4 White
-hi! link javaParen5 White
+hi! link javaParen SpecialComment
+hi! link javaParen1 javaParen
+hi! link javaParen2 javaParen
+hi! link javaParen3 javaParen
+hi! link javaParen4 javaParen
+hi! link javaParen5 javaParen
 hi! link javaOperator Orange
 hi! link javaVarArg Green
 hi! link javaCommentTitle vimCommentTitle
@@ -1252,7 +1456,7 @@ hi! link haskellForeignKeywords Green
 hi! link haskellKeyword Red
 hi! link haskellFloat Aqua
 hi! link haskellInfix Purple
-hi! link haskellRecursiveDo Purlpe
+hi! link haskellRecursiveDo Purple
 hi! link haskellQuotedType Red
 hi! link haskellPreProc LightGrey
 hi! link haskellTypeForall Red
@@ -1276,11 +1480,6 @@ hi! link perlMethod Function
 hi! link podCommand StorageClass
 hi! link podCmdText Macro
 hi! link podVerbatimLine String
-
-hi! link jsonKeyword Green
-hi! link jsonQuote Green
-hi! link jsonBraces White
-hi! link jsonString White
 
 hi! link yamlKey Aqua
 hi! link yamlConstant Purple
@@ -1319,17 +1518,6 @@ hi! link csInterpolationFormat Aqua
 hi! link csInterpolationAlignDel AquaBold
 hi! link csInterpolationFormatDel AquaBold
 
-hi! link shRange White
-hi! link shTestOpr Purple
-hi! link shOption Purple
-hi! link bashStatement Orange
-hi! link shOperator Orange
-hi! link shQuote Green
-hi! link shSet Orange
-hi! link shSetList Blue
-hi! link shSnglCase Orange
-hi! link shVariable Blue
-hi! link shCmdSubRegion Green
 hi! link zshVariableDef Blue
 hi! link zshSubst Orange
 hi! link zshOptStart Orange
@@ -1419,14 +1607,12 @@ hi! link TagbarNestedKind Aqua
 hi! link TagbarVisibilityPrivate Red
 hi! link TagbarVisibilityPublic Blue
 
-
-
 " Coc: {{{
 
 hi! link CocErrorLine Exception
 hi! link CocWarningLine WarningMsg
 hi! link CocInfoLine EndOfBuffer
-hi! link CocHintLine GreenSign
+hi! link CocHintLine Green
 hi! link CocSelectedLine Visual
 hi! link CocGitAddedSign GitGutterAdd
 hi! link CocGitChangeRemovedSign GitGutterChangeDelete
@@ -1492,7 +1678,7 @@ if &background ==# 'dark'
       let g:terminal_color_14 = '#89b482'
       let g:terminal_color_15 = '#dfbf8e'
     endif
-    hi White guifg=#dfbf8e guibg=NONE guisp=NONE gui=NONE cterm=NONE
+    hi White guifg=#ffffff guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermbg=NONE
     hi LightGrey guifg=#a89984 guibg=NONE guisp=NONE gui=NONE cterm=NONE
     hi Grey guifg=#928374 guibg=NONE guisp=NONE gui=NONE cterm=NONE
     hi Red guifg=#ea6962 guibg=NONE guisp=NONE gui=NONE cterm=NONE
@@ -1502,63 +1688,46 @@ if &background ==# 'dark'
     hi Aqua guifg=#89b482 guibg=NONE guisp=NONE gui=NONE cterm=NONE
     hi Blue guifg=#7daea3 guibg=NONE guisp=NONE gui=NONE cterm=NONE
     hi Purple guifg=#d3869b guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    if get(g:, 'gruvbox_material_enable_bold', 0)
-      hi WhiteBold guifg=#dfbf8e guibg=NONE guisp=NONE gui=bold cterm=bold
-      hi LightGreyBold guifg=#a89984 guibg=NONE guisp=NONE gui=bold cterm=bold
-      hi GreyBold guifg=#928374 guibg=NONE guisp=NONE gui=bold cterm=bold
-      hi RedBold guifg=#ea6962 guibg=NONE guisp=NONE gui=bold cterm=bold
-      hi OrangeBold guifg=#e78a4e guibg=NONE guisp=NONE gui=bold cterm=bold
-      hi YellowBold guifg=#e3a84e guibg=NONE guisp=NONE gui=bold cterm=bold
-      hi GreenBold guifg=#a9b665 guibg=NONE guisp=NONE gui=bold cterm=bold
-      hi AquaBold guifg=#89b482 guibg=NONE guisp=NONE gui=bold cterm=bold
-      hi BlueBold guifg=#7daea3 guibg=NONE guisp=NONE gui=bold cterm=bold
-      hi PurpleBold guifg=#d3869b guibg=NONE guisp=NONE gui=bold cterm=bold
-    else
-      hi WhiteBold guifg=#dfbf8e guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi LightGreyBold guifg=#a89984 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi GreyBold guifg=#928374 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi RedBold guifg=#ea6962 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi OrangeBold guifg=#e78a4e guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi YellowBold guifg=#e3a84e guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi GreenBold guifg=#a9b665 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi AquaBold guifg=#89b482 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi BlueBold guifg=#7daea3 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-      hi PurpleBold guifg=#d3869b guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    endif
-      " {{{
-        hi Normal guifg=#dfbf8e guibg=#1d2021 guisp=NONE gui=NONE cterm=NONE
-        hi Terminal guifg=#dfbf8e guibg=#1d2021 guisp=NONE gui=NONE cterm=NONE
-        hi DiffText guifg=NONE guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse
-        hi EndOfBuffer guifg=#1d2021 guibg=#1d2021 guisp=NONE gui=NONE cterm=NONE
-        hi VertSplit guifg=#665c54 guibg=#1d2021 guisp=NONE gui=NONE cterm=NONE
-        hi QuickFixLine guifg=#e3a84e guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse
-        hi MatchParen guifg=NONE guibg=#32302f guisp=NONE gui=bold cterm=bold
-        hi FoldColumn guifg=#928374 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-        hi Folded guifg=#928374 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-        hi CursorColumn guifg=NONE guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-        hi CursorLine guifg=NONE guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-        hi CursorLineNr guifg=#a89984 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-      " Got this from `:he 'pumblend'
-      hi PmenuSel guifg=#282828 guibg=#a89984 guisp=NONE gui=NONE cterm=NONE
-      " Yeah. Blend is 0
-      " Yo tablinesel sets this way is pretty awful
-      " hi TabLineSel guifg=#282828 guibg=#a89984 guisp=NONE gui=bold cterm=bold
-      " Actually the lightbg one is pretty solid
-      hi TabLineSel guifg=#ebdbb2 guibg=#7c6f64 guisp=NONE gui=bold cterm=bold
-      hi WildMenu guifg=#282828 guibg=#a89984 guisp=NONE gui=NONE cterm=NONE
-        hi Pmenu guifg=#dfbf8e guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-        hi StatusLine guifg=#dfbf8e guibg=#504945 guisp=NONE gui=bold cterm=bold
-        " nah too noisy
-        " hi Statusline cterm=bold,underline,reverse ctermfg=161 ctermbg=238 gui=bold,underline,reverse guifg=#7daea3 guibg=#565656
-        hi StatusLineTerm guifg=#dfbf8e guibg=#504945 guisp=NONE gui=NONE cterm=NONE
-        hi TabLine guifg=#dfbf8e guibg=#504945 guisp=NONE gui=NONE cterm=NONE
-        hi TabLineFill guifg=#dfbf8e guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-        hi ColorColumn guifg=NONE guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-        hi SignColumn guifg=NONE guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-        hi StatusLineNC guifg=#a89984 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-        hi StatusLineTermNC guifg=#a89984 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-    " endif
-    "  }}}
+    hi WhiteBold guifg=#ffffff guibg=NONE guisp=NONE gui=bold cterm=bold
+    hi LightGreyBold guifg=#a89984 guibg=NONE guisp=NONE gui=bold cterm=bold
+    hi GreyBold guifg=#928374 guibg=NONE guisp=NONE gui=bold cterm=bold
+    hi RedBold guifg=#ea6962 guibg=NONE guisp=NONE gui=bold cterm=bold
+    hi OrangeBold guifg=#e78a4e guibg=NONE guisp=NONE gui=bold cterm=bold
+    hi YellowBold guifg=#e3a84e guibg=NONE guisp=NONE gui=bold cterm=bold
+    hi GreenBold guifg=#a9b665 guibg=NONE guisp=NONE gui=bold cterm=bold
+    hi AquaBold guifg=#89b482 guibg=NONE guisp=NONE gui=bold cterm=bold
+    hi BlueBold guifg=#7daea3 guibg=NONE guisp=NONE gui=bold cterm=bold
+    hi PurpleBold guifg=#d3869b guibg=NONE guisp=NONE gui=bold cterm=bold
+    hi Normal guifg=#dfbf8e guibg=#1d2021 guisp=NONE gui=NONE cterm=NONE ctermbg=234
+    hi DiffText guifg=NONE guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermbg=234
+    hi EndOfBuffer guifg=#282828 guibg=#1d2021 guisp=NONE gui=NONE cterm=NONE ctermbg=234
+    hi VertSplit guifg=#665c54 guibg=#1d2021 guisp=NONE gui=NONE cterm=NONE ctermbg=234
+    hi QuickFixLine guifg=#e3a84e guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermbg=234
+    hi MatchParen guifg=NONE guibg=#32302f guisp=NONE gui=bold,reverse cterm=bold,reverse
+    hi FoldColumn guifg=#928374 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+    hi Folded guifg=#928374 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+    hi CursorColumn guifg=NONE guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+    hi CursorLine guifg=NONE guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+    hi CursorLineNr guifg=#a89984 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+    " Got this from `:he 'pumblend'
+    hi PmenuSel guifg=#282828 guibg=#a89984 guisp=NONE gui=NONE cterm=NONE
+    " Yeah. Blend is 0
+    " Yo tablinesel sets this way is pretty awful
+    " hi TabLineSel guifg=#282828 guibg=#a89984 guisp=NONE gui=bold cterm=bold
+    " Actually the lightbg one is pretty solid
+    hi TabLineSel guifg=#ebdbb2 guibg=#7c6f64 guisp=NONE gui=bold cterm=bold ctermfg=223
+    hi WildMenu guifg=#282828 guibg=#a89984 guisp=NONE gui=NONE cterm=NONE
+    hi Pmenu guifg=#dfbf8e guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
+    hi StatusLine guifg=#dfbf8e guibg=#504945 guisp=NONE gui=bold cterm=bold
+    " nah too noisy
+    " hi Statusline cterm=bold,underline,reverse ctermfg=161 ctermbg=238 gui=bold,underline,reverse guifg=#7daea3 guibg=#565656
+    hi StatusLineTerm guifg=#dfbf8e guibg=#504945 guisp=NONE gui=NONE cterm=NONE
+    hi TabLine guifg=#dfbf8e guibg=#504945 guisp=NONE gui=NONE cterm=NONE
+    hi TabLineFill guifg=#dfbf8e guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+    hi ColorColumn guifg=NONE guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+    hi SignColumn guifg=NONE guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+    hi StatusLineNC guifg=#a89984 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+    hi StatusLineTermNC guifg=#a89984 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
 
     hi Conceal guifg=#7daea3 guibg=NONE guisp=NONE gui=NONE cterm=NONE
     hi Cursor guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
@@ -1585,7 +1754,7 @@ if &background ==# 'dark'
     hi CursorIM guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
     hi ToolbarLine guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE
     hi ToolbarButton guifg=#dfbf8e guibg=#665c54 guisp=NONE gui=bold cterm=bold
-    hi Debug guifg=#e78a4e guibg=NONE guisp=NONE gui=NONE cterm=NONE
+    hi Debug guifg=#e78a4e guibg=NONE guisp=NONE gui=undercurl cterm=undercurl
     hi Title guifg=#a9b665 guibg=NONE guisp=NONE gui=bold cterm=bold
     hi Conditional guifg=#ea6962 guibg=NONE guisp=NONE gui=NONE cterm=NONE
     hi Repeat guifg=#ea6962 guibg=NONE guisp=NONE gui=NONE cterm=NONE
@@ -1618,21 +1787,17 @@ if &background ==# 'dark'
     hi Number guifg=#d3869b guibg=NONE guisp=NONE gui=NONE cterm=NONE
     hi Float guifg=#d3869b guibg=NONE guisp=NONE gui=NONE cterm=NONE
     hi SpecialKey guifg=#7daea3 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  hi SpellBad gui=undercurl cterm=undercurl
-  hi SpellCap gui=undercurl cterm=undercurl
-  hi SpellLocal gui=undercurl cterm=undercurl
-  hi SpellRare gui=undercurl cterm=undercurl
-  hi Todo gui=bold cterm=bold
-  hi Comment guifg=#928374 guibg=NONE guisp=NONE gui=italic cterm=italic
-    if get(g:, 'gruvbox_material_enable_bold', 0)
-      hi Function guifg=#a9b665 guibg=NONE guisp=NONE gui=bold cterm=bold
-    else
-      hi Function guifg=#a9b665 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    endif
-      hi DiffAdd guifg=NONE guibg=#32361a guisp=NONE gui=NONE cterm=NONE
-      hi DiffChange guifg=NONE guibg=#0d3138 guisp=NONE gui=NONE cterm=NONE
-      hi DiffDelete guifg=NONE guibg=#3c1f1e guisp=NONE gui=NONE cterm=NONE
-      hi Error guifg=NONE guibg=#3c1f1e guisp=NONE gui=NONE cterm=NONE
+    hi SpellBad gui=undercurl cterm=undercurl
+    hi SpellCap gui=undercurl cterm=undercurl
+    hi SpellLocal gui=undercurl cterm=undercurl
+    hi SpellRare gui=undercurl cterm=undercurl
+    hi Todo gui=bold cterm=bold
+    hi Comment guifg=#928374 guibg=NONE guisp=NONE gui=italic cterm=italic
+    hi Function guifg=#a9b665 guibg=NONE guisp=NONE gui=bold cterm=bold
+    hi DiffAdd guifg=NONE guibg=#32361a guisp=NONE gui=NONE cterm=NONE
+    hi DiffChange guifg=NONE guibg=#0d3138 guisp=NONE gui=NONE cterm=NONE
+    hi DiffDelete guifg=NONE guibg=#3c1f1e guisp=NONE gui=NONE cterm=NONE
+    hi Error guifg=NONE guibg=#3c1f1e guisp=NONE gui=NONE cterm=NONE
     hi markdownH1 guifg=#a9b665 guibg=NONE guisp=NONE gui=bold cterm=bold
     hi markdownH2 guifg=#a9b665 guibg=NONE guisp=NONE gui=bold cterm=bold
     hi markdownH3 guifg=#e3a84e guibg=NONE guisp=NONE gui=bold cterm=bold
@@ -1657,22 +1822,10 @@ if &background ==# 'dark'
     hi helpNote guifg=#d3869b guibg=NONE guisp=NONE gui=bold cterm=bold
     hi plug1 guifg=#e78a4e guibg=NONE guisp=NONE gui=bold cterm=bold
     hi plugNumber guifg=#e3a84e guibg=NONE guisp=NONE gui=bold cterm=bold
-    if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-      hi GitGutterAdd guifg=#a9b665 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-      hi GitGutterChange guifg=#7daea3 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-      hi GitGutterDelete guifg=#ea6962 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-      hi GitGutterChangeDelete guifg=#d3869b guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-      hi GitGutterAdd guifg=#a9b665 guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-      hi GitGutterChange guifg=#7daea3 guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-      hi GitGutterDelete guifg=#ea6962 guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-      hi GitGutterChangeDelete guifg=#d3869b guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-      hi GitGutterAdd guifg=#a9b665 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-      hi GitGutterChange guifg=#7daea3 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-      hi GitGutterDelete guifg=#ea6962 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-      hi GitGutterChangeDelete guifg=#d3869b guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-    endif
+    hi GitGutterAdd guifg=#a9b665 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+    hi GitGutterChange guifg=#7daea3 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+    hi GitGutterDelete guifg=#ea6962 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+    hi GitGutterChangeDelete guifg=#d3869b guibg=#282828 guisp=NONE gui=NONE cterm=NONE
     let g:vimshell_escape_colors = [
           \ '#7c6f64', '#ea6962', '#a9b665', '#e3a84e',
           \ '#7daea3', '#d3869b', '#89b482', '#a89984',
@@ -1683,13 +1836,7 @@ if &background ==# 'dark'
     hi multiple_cursors_visual guifg=NONE guibg=#504945 guisp=NONE gui=NONE cterm=NONE
     hi CocHighlightText guifg=NONE guibg=NONE guisp=NONE gui=bold ctermfg=NONE ctermbg=NONE cterm=bold
     hi CocHoverRange guifg=NONE guibg=NONE guisp=NONE gui=bold,underline ctermfg=NONE ctermbg=NONE cterm=bold,underline
-    if get(g:, 'gruvbox_material_background', 'medium') ==# 'hard'
-      hi CocHintSign guifg=#89b482 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'medium'
-      hi CocHintSign guifg=#89b482 guibg=#32302f guisp=NONE gui=NONE cterm=NONE
-    elseif get(g:, 'gruvbox_material_background', 'medium') ==# 'soft'
-      hi CocHintSign guifg=#89b482 guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-    endif
+    hi CocHintSign guifg=#89b482 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
     hi MatchParenCur guifg=NONE guibg=NONE guisp=NONE gui=bold ctermfg=NONE ctermbg=NONE cterm=bold
     hi UndotreeSavedBig guifg=#d3869b guibg=NONE guisp=NONE gui=bold cterm=bold
 endif

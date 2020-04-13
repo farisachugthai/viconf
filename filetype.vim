@@ -27,7 +27,8 @@ endfunction  " }}}
 
 augroup Userftdetect  " {{{
   au!
-  au BufNewFile,BufRead *.json,*.jsonp,*.webmanifest,*.code-workspace,*.jupyterlab-settings,*.ipynb setfiletype json
+  au BufNewFile,BufRead *.json,*.jsonp,*.webmanifest,*.code-workspace setfiletype json
+  au BufNewFile,BufRead *.jupyterlab-settings,*.ipynb,*.code-snippets setfiletype json
   au BufNewFile,BufRead *.bash,*.bashrc,*.bash_profile setfiletype bash
   au BufNewFile,BufRead *.sh,*.profile                 setfiletype bash
   au BufNewFile,BufRead *.sip                          setfiletype cpp

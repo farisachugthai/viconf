@@ -8,8 +8,6 @@
 " Set global vars before checking filetype!
 let g:markdown_fenced_languages = [
       \ 'ipython=python',
-      \ 'c++=cpp',
-      \ 'ini=dosini',
       \ ]
 
 " ensure to keep this around for the ftplugin
