@@ -57,10 +57,10 @@ augroup UserPlugins " {{{
   au!
   autocmd  User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 
-  au CursorHold * sil call CocActionAsync('highlight')
+  autocmd CursorHold * sil if exists('*CocActionAsync') | call CocActionAsync('highlight') | endif
 
   " let's see if this works better
-  autocmd CursorHoldI * sil call CocActionAsync('showSignatureHelp')
+  autocmd CursorHoldI * sil if exists('*CocActionAsync') | call CocActionAsync('showSignatureHelp') | endif
   " autocmd  User CursorHold call CocActionAsync('showSignatureHelp')
   "
   " Clear this so that p.u.m. doesn't open in the command window
@@ -71,16 +71,21 @@ augroup UserPlugins " {{{
   autocmd! User GoyoEnter nested call <SID>goyo_enter()
   autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
+  autocmd! User vim-which-key call which_key#register('<Space>', 'g:which_key_map')
 augroup END " }}}
 
-augroup UserStl  " {{{
+augroup UserPotpourri  " {{{
   autocmd!
   autocmd CmdlineEnter /,\? :set hlsearch
   autocmd CmdlineLeave /,\? :set nohlsearch
   autocmd CmdwinEnter [/?]  startinsert
+  autocmd CmdwinLeave [/?]  stopinsert
+
+  autocmd Syntax * syntax sync fromstart
 augroup END  " }}}
 
 augroup TagbarAutoCmds
+  " Dude holy christ is this annoying
   au! CursorHold *
   au! CursorHoldI *
 augroup END
@@ -95,8 +100,13 @@ augroup UserNerdLoader  " {{{
 
 augroup END " }}}
 
-augroup UserCompletions   " {{{
+augroup UserFiletypesCompletions  " {{{
   au!
+  " Show type information automatically when the cursor stops moving
+  autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
+
+  autocmd Filetype snippets call UltiSnipsConf()
+
   autocmd BufEnter * if &omnifunc ==# '' | setlocal omnifunc=syntaxcomplete#Complete | endif
 
   autocmd BufEnter * if &completefunc ==# '' | setlocal completefunc=syntaxcomplete#Complete | endif
@@ -109,16 +119,6 @@ augroup UserCompletions   " {{{
       \|  call SuperTabChain(&completefunc, "<c-p>")
       \| endif
   endif
-
-augroup END " }}}
-
-augroup UserFiletypes  " {{{
-  au!
-
-  " Show type information automatically when the cursor stops moving
-  autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
-
-  autocmd Filetype snippets call UltiSnipsConf()
 augroup END  " }}}
 
 if !has('nvim') | finish | endif

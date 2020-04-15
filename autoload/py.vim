@@ -23,7 +23,9 @@ function! py#PythonPath() abort  " {{{1
   let s:user_site = py3eval('site.USER_SITE')
   let s:path .= s:user_site
   for l:i in py3eval('sys.path')
-    let s:path .= l:i . ','
+    let s:path .=   ',' . l:i
+    " Got this idea from tpope. thanks for the genius as always
+    let &l:tags .= ',' . l:i
   endfor
   let &l:path = s:path
   return s:path

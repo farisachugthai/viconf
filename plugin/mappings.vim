@@ -6,6 +6,8 @@
 " ============================================================================
 
 " Navigation: {{{
+nnoremap <silent> <leader>      :<c-u>WhichKey '<Space>'<CR>
+nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
 xnoremap < <gv
 xnoremap > >gv
 
@@ -247,7 +249,46 @@ nnoremap  <Leader>gl         <Cmd>Commits<CR>
 nnoremap  <Leader>g?         <Cmd>GFiles?<CR>
 nnoremap  <Leader>fb                 <Cmd>Buffers<CR>
 nnoremap  <Leader>fB                 <Cmd>Buffers<CR>
+
 " }}}
+
+" Where did all my imaps for this go??
+" Alright let's see how many we can churn out in a sitting Whoo works perfectly!
+inoremap <expr> <C-x><C-b> fzf#vim#complete#buffer_line()
+inoremap <expr> <C-x><C-f> fzf#vim#complete#path('fd -H -t f')
+inoremap <expr> <C-x><C-l> fzf#vim#complete#line()
+
+if filereadable(expand('$_ROOT/share/dict/words'))
+  " Note: This is dependant on /usr/share/dict/words existing because this
+  " function implicitly depends on it.
+  inoremap <expr> <C-x><C-k>         fzf#vim#complete#word({'left': '45%'})
+else
+" dictionary isn't set on windows
+  inoremap <C-x><C-k> <C-x><C-u>
+" Supertab should've made that mapping pretty sweet.
+endif               
+
+" Is file_ag not a function anymore????
+inoremap <expr> <C-x><C-j> fzf#vim#complete#file()
+
+" i'm not really sure what this is gonna do but let's find out!
+inoremap <M-c> <Plug>(-fzf-complete-trigger)
+
+
+" his help docs:
+" Advanced customization using Vim function
+inoremap <expr> <C-x><C-k> fzf#vim#complete#word({'left': '15%'})
+
+function! s:make_sentence(lines)
+  return substitute(join(a:lines), '^.', '\=toupper(submatch(0))', '').'.'
+endfunction
+
+" TODO: windows paths
+inoremap <expr> <C-x><C-s> fzf#vim#complete({
+  \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
+  \ 'reducer': function('<sid>make_sentence'),
+  \ 'options': '--ansi --cycle --multi --reverse --margin 15%,0',
+  \ 'left':    20})
 
 " }}}
 
@@ -284,23 +325,32 @@ endfunction
 " Let's give Coc the tab key. If this doesn't work as expected we can also go
 " with something like <M-/>
 inoremap <expr> <M-=> pumvisible() ? coc#_select_confirm() :
-  \ coc#expandableOrJumpable() ?
+    \ coc#expandableOrJumpable() ?
   \ "\<C-R>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-  \ "\<CR>"
-  " \ <SID>check_back_space() ? "\<TAB>" : coc#refresh()
+  \  <SID>check_back_space() ? "\<TAB>" : coc#refresh()
 
 " Refresh completions with C-Space
-inoremap <M-?> <C-R>=SuperTabAlternateCompletion("\<lt>c-p>")<CR>
+inoremap <M-/> <C-R>=SuperTabAlternateCompletion("\<lt>c-p>")<CR>
+
 inoremap <expr> <C-Space> coc#refresh()
+
+" Lets add this into the mix
+" yeah fuck digraphs this is totally gonna be a new prefix key for me.
+" no it actually doesn't work in insert mode :\
+" I just realized C-. isn't used!
+imap <C-.> <Plug>(ale_complete)
 
 " As a heads up theres also a coc#select#snippet
 " Also use imap so that we can map other things to <CR> as needed
 imap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
 
-nnoremap gK <Plug>(coc-definition)<CR>
+nnoremap <C-k>d <Plug>(coc-definition)<CR>
 " The gu<text object> operation is too important
 nnoremap <expr><buffer> <Leader>u <Plug>(coc-usages)<CR>
 nnoremap ,u <Plug>(coc-usages)<CR>
+
+nnoremap <expr><C-f> coc#util#has_float() ? coc#util#float_scroll(1) : "\<C-f>"
+nnoremap <expr><C-b> coc#util#has_float() ? coc#util#float_scroll(0) : "\<C-b>"
 " }}}
 
 " Bracket maps: {{{
@@ -461,7 +511,7 @@ function! Quickfix_Mappings() abort  " {{{
   nnoremap <Leader>lf <Cmd>lwindow<CR>
 
   " VSCode toggles maximized panel with this one so i guess lets match
-  nnoremap <C-\\> <Plug>(qf_qf_toggle)
+  nnoremap <M-\> <Plug>(qf_qf_toggle)
   nnoremap <Leader>q <Plug>(qf_qf_toggle)
 
   nnoremap <Leader>qp <Plug>(qf_older)
@@ -623,16 +673,16 @@ endfunction
 " Tags: {{{
 " I've always really liked that M-/ mapping from readline
 nnoremap <M-?> <Cmd>stjump!<CR>
-xnoremap <M-?> <Cmd>stjump!<CR>
+xnoremap <M-?> y<Cmd>stjump!<CR>
 
-nnoremap <M-/> <Cmd>stselect!<CR>
-xnoremap <M-/> <Cmd>stselect!<CR>
+nnoremap <C-k><C-\> <Cmd>stselect!<CR>
+xnoremap <C-k><C-\> y<Cmd>stselect!<CR>
 
 " Thank you index.txt!
 " From: 2.2 Window commands                                             *CTRL-W*
 " |CTRL-W_g_CTRL-]| CTRL-W g CTRL-]
 " split window and do |:tjump| to tag under cursor
-nnoremap <Leader>w] <C-w>g<C-]>
+nnoremap <C-k><C-]> <C-w>g<C-]>
 nnoremap ]w <C-w>g<C-]>
 
 nnoremap <Leader>wc <Cmd>wincmd c<CR>
@@ -643,7 +693,7 @@ nnoremap <Leader>wo <Cmd>wincmd o<CR>
 nnoremap <C-i> <C-w><C-i>
 
 " Mnemonic: goto like mosts other g commands and \ is the key we're left free
-nnoremap <g-\> [I:let nr = input("Choose an include: ")<Bar>exe "normal! " . nr ."[\t"<CR>
+nnoremap <C-k>g [I:let nr = input("Choose an include: ")<Bar>exe "normal! " . nr ."[\t"<CR>
 
 " nnoremap <2-LeftMouse> :exe "ptselect! ". expand("<cword>")<CR>
 

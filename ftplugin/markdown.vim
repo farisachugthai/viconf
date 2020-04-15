@@ -43,13 +43,13 @@ let b:match_words .= ',<:>,<.\{-}>:<[^>]*>,'
       \. '<\@<=dl\>[^>]*\%(>\|$\):<\@<=d[td]\>:<\@<=/dl>,'
       \. '<\@<=\([^/][^ \t>]*\)[^>]*\%(>\|$\):<\@<=/\1>'
 
-let b:undo_ftplugin .= '|setl cms< com< fo< flp< ofu< '
-
-let b:undo_ftplugin .= '|setl spell< cc< tw< lbr< et< ts< sts< sw< fdl< fdls<'
-      \ . '|unlet! b:undo_ftplugin'
-      \ . '|unlet! b:did_ftplugin'
-      \ . '|unlet! b:match_ignorecase'
-      \ . '|unlet! b:match_words'
+let b:undo_ftplugin = get(b:, 'undo_ftplugin', 'exe')
+      \. '|setl cms< com< fo< flp< ofu< '
+      \. '|setl spell< cc< tw< lbr< et< ts< sts< sw< fdl< fdls<'
+      \. '|unlet! b:undo_ftplugin'
+      \. '|unlet! b:did_ftplugin'
+      \. '|unlet! b:match_ignorecase'
+      \. '|unlet! b:match_words'
 
 " Enable spellchecking.
 setlocal spell!

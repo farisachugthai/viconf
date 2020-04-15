@@ -1703,7 +1703,7 @@ if &background ==# 'dark'
     hi EndOfBuffer guifg=#282828 guibg=#1d2021 guisp=NONE gui=NONE cterm=NONE ctermbg=234
     hi VertSplit guifg=#665c54 guibg=#1d2021 guisp=NONE gui=NONE cterm=NONE ctermbg=234
     hi QuickFixLine guifg=#e3a84e guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermbg=234
-    hi MatchParen guifg=NONE guibg=#32302f guisp=NONE gui=bold,reverse cterm=bold,reverse
+    hi MatchParen guifg=NONE guibg=#32302f guisp=NONE gui=bold cterm=bold
     hi FoldColumn guifg=#928374 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
     hi Folded guifg=#928374 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
     hi CursorColumn guifg=NONE guibg=#282828 guisp=NONE gui=NONE cterm=NONE
@@ -1837,7 +1837,7 @@ if &background ==# 'dark'
     hi CocHighlightText guifg=NONE guibg=NONE guisp=NONE gui=bold ctermfg=NONE ctermbg=NONE cterm=bold
     hi CocHoverRange guifg=NONE guibg=NONE guisp=NONE gui=bold,underline ctermfg=NONE ctermbg=NONE cterm=bold,underline
     hi CocHintSign guifg=#89b482 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-    hi MatchParenCur guifg=NONE guibg=NONE guisp=NONE gui=bold ctermfg=NONE ctermbg=NONE cterm=bold
+    hi MatchParenCur guifg=NONE guibg=NONE guisp=NONE gui=bold,reverse ctermfg=NONE ctermbg=NONE cterm=bold,reverse
     hi UndotreeSavedBig guifg=#d3869b guibg=NONE guisp=NONE gui=bold cterm=bold
 endif
 " }}}

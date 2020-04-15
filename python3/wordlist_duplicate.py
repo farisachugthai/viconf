@@ -7,6 +7,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(".")))
 from pynvim_ import LegacyVim, stdio_session
+
 session = stdio_session()
 vim = LegacyVim.from_session(session)
 

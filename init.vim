@@ -87,8 +87,6 @@ function! LoadMyPlugins() abort  " {{{
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-scriptease', {'for': 'vim'}
-  Plug 'tpope/vim-surround'
-  Plug 'tpope/vim-eunuch'
 
   Plug 'SirVer/ultisnips'
   Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }
@@ -120,40 +118,44 @@ function! LoadMyPlugins() abort  " {{{
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
   Plug 'omnisharp/omnisharp-vim', {'for': ['cs', 'ps1'] }
-  " Plug 'itspriddle/vim-shellcheck', {'for': ['sh', 'bash'] }
+  Plug 'itspriddle/vim-shellcheck', {'for': ['sh', 'bash'] }
+  " Plug 'neovim/nvim-lsp'
 
   if empty(s:termux)  " {{{
 
-    Plug 'ludovicchabant/vim-gutentags'
-    Plug 'godlygeek/tabular', {'on': 'Tabularize'}
-    Plug 'mbbill/undotree', { 'on' : 'UndotreeToggle' }
-    nnoremap U <Cmd>UndoTreeToggle<CR>
-    Plug 'tpope/vim-apathy'
-    Plug 'tpope/vim-unimpaired'
-    Plug 'kshenoy/vim-signature'
-    Plug 'morhetz/gruvbox'
-    Plug 'HerringtonDarkholme/yats.vim'
+  Plug 'ludovicchabant/vim-gutentags'
+  Plug 'godlygeek/tabular', {'on': 'Tabularize'}
+  Plug 'mbbill/undotree', { 'on' : 'UndotreeToggle' }
+  nnoremap U <Cmd>UndoTreeToggle<CR>
+  " Plug 'tpope/vim-apathy'
+  " Plug 'tpope/vim-unimpaired'
+  Plug 'tpope/vim-surround'
+  Plug 'tpope/vim-eunuch'
+  Plug 'kshenoy/vim-signature'
+  Plug 'morhetz/gruvbox'
+    " Plug 'HerringtonDarkholme/yats.vim'
 
-    Plug 'prettier/vim-prettier', {
-      \ 'do': 'yarn install',
-      \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json',
-              \ 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
-    
+    " Plug 'prettier/vim-prettier', {
+    "   \ 'do': 'yarn install',
+    "   \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json',
+    "           \ 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
   endif " }}}
-  Plug 'ryanoasis/vim-devicons'           " Keep at end!
+
+  Plug 'liuchengxu/vim-which-key', {'dir': expand(stdpath('data')) . '/site/pack/git-plugins/start/vim-which-key'}
+
+  Plug 'ryanoasis/vim-devicons'
   call plug#end()
 endfunction
 
 call LoadMyPlugins()
 
 " I utilize this command so often I may as well save the characters
-command! -bar Plugins echo map(keys(g:plugs), '"\n" . v:val')
+command! -bar Plugins echomsg map(keys(g:plugs), '"\n" . v:val')
 
 " For some reason running syntax enable clears the syntax option
 let g:syntax_cmd = "enable"
 " in case i started things with -u NONE
 if &loadplugins is 0 | set loadplugins | endif
-" exec 'py3f ' . s:repo_root . '/python3/_vim.py'
 " }}}
 
 " Vim: set fdm=marker foldlevelstart=0:

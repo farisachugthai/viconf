@@ -7,7 +7,6 @@ The condensed pynvim API
 
 Summary
 -------
-
 Combine the modules in the pynvim package into 1 file.
 This runs almost entirely by itself. Run.::
 
@@ -17,7 +16,6 @@ To verify so.
 
 Extended Summary
 ----------------
-
 #) Not in pynvim but a `get_documentation` function I always find useful.
 
 #) __init__ : Can't believe I forgot this one
@@ -51,27 +49,28 @@ Remote got pushed way up out of API/common because it's invoked a handful of
 times before then.
 
 Decorators used by python host plugin system.
+}}}
 
 """
+# Imports: {{{
+import reprlib
+import gc
+import locale
+import threading
 import abc
 import asyncio
 import codecs
 import cgitb
-
-# import decimal
 import enum
 
 # import faulthandler
 import functools
-import gc
 
 # import json  # literally how is this not in use
 import importlib
 import inspect
 import io
-
-# import itertools
-import locale
+import itertools
 import logging
 
 # import mimetypes
@@ -82,19 +81,19 @@ import pathlib
 import platform
 import pydoc
 import re
-import reprlib
 
 # import runpy
 import signal
 
 # import shlex
-# import hutil
+# import shutil
 # import subprocess
 import sys
 import traceback
-import threading
 import types
 import warnings
+
+from asyncio.events import get_event_loop_policy
 from collections import namedtuple, UserList, deque
 from functools import partial
 from importlib.util import module_from_spec
@@ -292,7 +291,6 @@ local mod = {update_highlights=update_highlights}
 _G["_pynvim_"..chid] = mod
 """
 
-loop_cls = asyncio.SelectorEventLoop
 if os.name == "nt":
     from asyncio.windows_utils import PipeHandle
     import msvcrt
@@ -301,11 +299,14 @@ if os.name == "nt":
     # more powerful IOCP facility
     # NOTE: we override in the stdio case, because it doesn't work.
     loop_cls = asyncio.ProactorEventLoop
+else:
+    loop_cls = asyncio.SelectorEventLoop
 
 # When signals are restored, the event loop library may reset SIGINT to SIG_DFL
 # which exits the program. To be able to restore the python interpreter to it's
 # default state, we keep a reference to the default handler
 default_int_handler = signal.getsignal(signal.SIGINT)
+
 main_thread = threading.current_thread()
 
 locale.setlocale(locale.LC_ALL, "")
@@ -2610,10 +2611,17 @@ class RemoteSequence(UserList):
         return item in self._fetch()
 
 
+def _walk(f, obj=None, *args, **kwargs):
+    # TODO: test
+    if obj is None:
+        return
+    if not hasattr(obj, "__iter__"):
+        raise TypeError
+    return f(itertools.chain.from_iterable(obj), *args, **kwargs)
+
+
 def walk(fn, obj, *args, **kwargs):
     """Recursively walk an object graph applying `fn`/`args` to objects."""
-    # TODO: i found a doc somewhere that showed a better way of doing this.
-    #  I think you test for the presence of an __iter__ attr or something.
     if type(obj) in [list, tuple]:
         return list(walk(fn, o, *args) for o in obj)
     if type(obj) is dict:
@@ -3078,9 +3086,14 @@ class AsyncioEventLoop(asyncio.Protocol, asyncio.SubprocessProtocol, BaseEventLo
     def __init__(self, transport_type, *args, **kwargs):
         """Used to signal `asyncio.Protocol` of a successful connection."""
         self._init()
+        self.loop_policy = get_event_loop_policy()
+        self._loop = self.loop_policy.get_event_loop()
         self._raw_transport = transport_type
         if isinstance(transport_type, asyncio.SubprocessTransport):
             self._transport = transport_type.get_pipe_transport(0)
+        elif isinstance(transport_type, str):
+            # So this really needs to stop happening
+            raise TypeError
         else:
             # TODO: this is wrong.
             self._transport = transport_type
@@ -3115,7 +3128,7 @@ class AsyncioEventLoop(asyncio.Protocol, asyncio.SubprocessProtocol, BaseEventLo
         self._on_error("EOF")
 
     def _init(self):
-        self._loop = loop_cls()
+        # self._loop = loop_cls()
         self._queued_data = deque()
         self._fact = lambda: self
         self._raw_transport = None

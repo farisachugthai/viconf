@@ -33,9 +33,12 @@ command! TB setl efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=
 " public async cocAction(...args: any[]): Promise<any> {
 " Like 200 lines of rpc calls. so that'll give you some solid inspiration
 
+" coc installs coc
+command! -bar Cic call coc#util#install()
+
 command! -bar CocQuickFixes echo CocAction('quickfixes')
 
-command! -bar -bang CocWords execute 'CocList -I --normal --input=' . <bang>0 ? expand('<cWORD>') : expand('<cword>') . ' words'
+command! -bar -complete=custom,coc#list#options -nargs=* CocWords execute 'CocList -I --normal --input=' . expand('<cword>') . ' words'
 
 command! -bang -bar CocRepeat call CocAction('repeatCommand')
 
@@ -43,7 +46,7 @@ command! -bang -bar CocReferences call CocAction('jumpReferences')
 
 " TODO: Figure out the ternary operator, change nargs to ? and if arg then
 " input=arg else expand(cword)
-command! -bar -bang CocGrep execute 'CocList -I --input=' . expand('<cword>') . ' grep'
+command! -bar -complete=custom,coc#list#options CocGrep execute 'CocList -I --input=' . expand('<cword>') . ' grep'
 
 " Dec 05, 2019: Got a new one for ya! Range doesnt do anything but py3 accepts it so
 command! -bang -bar -range CocExtensionStats <line1>,<line2>py3 from pprint import pprint; pprint(vim.eval('CocAction("extensionStats")'))
@@ -86,8 +89,10 @@ command! -bar CocFixCurrent     call       CocActionAsync('doQuickfix')
 command! -bar CocFloatHide      call       coc#util#float_hide()
 command! -bar CocFloatJump      call       coc#util#float_jump()
 command! -bar CocCommandRepeat  call       CocActionAsync('repeatCommand')
-" How am I still going?
-command! -bar CocServices echo CocActionAsync('services')
+" How am I still going? 
+"
+" Yo I found teh function that provides completion for coclist!!
+command! -bar -nargs=* -complete=custom,coc#list#options CocServices call coc#rpc#notify('openList', [<f-args>])
 
 function! s:CocProviders(A, L, P) abort
 
@@ -158,13 +163,12 @@ command! -complete=file_in_path -nargs=? -bang -bar FZGrep call fzf#run(fzf#wrap
 
 	" -addr=buffers		Range for buffers (also not loaded buffers)
 
-  " Gtfo it worked
-command! -bang -bar -complete=file -nargs=* FZGGrep
+" Let's just revert to the one in his help doc
+command! -bang -bar -complete=file -nargs=* GGrep
   \   call fzf#vim#grep(
   \   'git grep --line-number --color=always ' . shellescape(<q-args>),
-  \   0,
-  \   {'dir': systemlist('git rev-parse --show-toplevel')[0]},
-  \   <bang>0 ? fzf#vim#with_preview('up:60%') : fzf#vim#with_preview('right:50%:hidden', '?'))
+  \   1,
+  \   fzf#vim#with_preview({'dir': systemlist('git rev-parse --show-toplevel')[0]}), <bang>0)
 
 " }}}
 
@@ -251,18 +255,18 @@ command! -bar -complete=dir -bang -nargs=* FzRgPrev
   \   <bang>0 ? fzf#vim#with_preview('up:60%')
   \           : fzf#vim#with_preview('right:50%:hidden', '?'))
 
-command! -bar -bang -complete=dir -nargs=* FZLS
+command! -bar -bang -complete=dir -nargs=* LS
     \ call fzf#run(fzf#wrap(
     \ 'ls',
     \ {'source': 'ls', 'dir': <q-args>},
     \ <bang>0))
 
 " only search projects lmao
-command! -bar -bang FZProjectFiles call fzf#vim#files('~/projects', <bang>0)
+command! -bar -bang Projects call fzf#vim#files('~/projects', <bang>0)
 
 " Or, if you want to override the command with different fzf options, just pass
 " a custom spec to the function.
-command! -bar -bang -nargs=* -complete=file FZReverse
+command! -bar -bang -nargs=* -complete=file RFiles
     \ call fzf#vim#files(<q-args>,
     \ {'options': [
         \ '--layout=reverse', '--info=inline'
@@ -270,11 +274,13 @@ command! -bar -bang -nargs=* -complete=file FZReverse
     \ <bang>0)
 
 " Want a preview window?
-command! -bar -bang -nargs=* -complete=file FZFilePreview
+command! -bar -bang -nargs=* -complete=file Preview
     \ call fzf#vim#files(<q-args>,
-    \ {'options':
-        \ ['--layout=reverse', '--info=inline',
-        \ '--preview', 'bat --color=always {}'
+    \ { 'source': 'fd -H -t f',
+    \ 'sink': 'botright split',
+    \ 'options': [
+    \     '--layout=reverse', '--info=inline',
+    \     '--preview', 'bat --color=always {}'
     \ ]},
     \   <bang>0 ? fzf#vim#with_preview('up:60%')
     \           : fzf#vim#with_preview('right:50%:hidden', '?'))
@@ -284,7 +290,7 @@ command! -bar -bang -nargs=* -complete=file Files
     \ {'source': 'fd -H -t f',
     \ 'sink': 'pedit',
     \ 'options': [
-        \ '--layout=reverse', '--info=inline', '--preview', '~/.vim/plugged/fzf.vim/bin/preview.sh {}'
+    \     '--layout=reverse', '--info=inline', '--preview', expand('~/.vim/plugged/fzf.vim/bin/preview.sh') . '{}'
     \ ]},
     \ <bang>0)
 

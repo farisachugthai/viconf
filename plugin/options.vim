@@ -60,7 +60,7 @@ setglobal tags=tags,**/tags
 setglobal tagcase=smart
 setglobal showfulltag
 if exists('&tagfunc')
-  let &g:tagfunc = coc#rpc#request('getTagList', [])
+  let &g:tagfunc = 'CocTagFunc'
 endif
 setglobal showfulltag
 " }}}
@@ -98,7 +98,10 @@ setglobal signcolumn=auto:4  " this might be a nvim 4 thing
 " the window that your cursor just moved to!
 try | setglobal switchbuf=useopen,split | catch | endtry
 setglobal splitbelow splitright
-setglobal sidescroll=5 hidden
+" sidescroll needs to be set low
+setglobal sidescroll=0 sidescrolloff=5
+setglobal nostartofline
+setglobal hidden
 " dude these stopped setting when i set global them
 set number relativenumber
 setglobal cmdheight=3
@@ -542,12 +545,14 @@ let $NVIM_NODE_LOG_LEVEL = 'WARN'
 let $NVIM_NODE_HOST_DEBUG = 1
 let g:coc_jump_locations = []
 let g:node_client_debug = 1
+let g:coc_list_loading_status = "I love undocumented features!"
 
 function! s:Init_coc() abort
 
   if !exists('g:coc_global_extensions')
     let g:coc_global_extensions = ['coc-json', 'coc-tsserver', 'coc-python',
-                    \'coc-git', 'coc-lists', 'coc-snippets', 'coc-sh']
+          \'coc-git', 'coc-lists', 'coc-snippets', 'coc-sh',
+          \ 'coc-highlight', 'coc-tslint-plugin']
   endif
   " for l:ext in g:coc_global_extensions
   "   echomsg l:ext
@@ -556,7 +561,6 @@ function! s:Init_coc() abort
   " endfor
 
   if empty($ANDROID_DATA)
-    call coc#config('python.jediEnabled', v:false)
     " TODO: nvm is gonna make this more complicated
     " fuck why isn't this working??
     " if has('unix')
@@ -565,15 +569,38 @@ function! s:Init_coc() abort
     " else
     if !has('unix')
       let g:coc_node_path = 'C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\\node.exe'
+      if executable(expand('~/.config/coc/extensions/node_modules/.bin/bash-language-server'))
+        let s:bashlsp = expand('~/.config/coc/extensions/node_modules/.bin/bash-language-server.cmd')
+      endif
+
+      if executable(expand('~/.config/coc/extensions/node_modules/.bin/vim-language-server'))
+        let s:vimlsp = expand('~/.config/coc/extensions/node_modules/.bin/vim-language-server.cmd')
+      endif
+
+                  " \ 'command': 'yaml-language-server.cmd',
+                  " \ 'filetypes': ['yaml' ],
+        " \   'module': expand('~/.config/coc/extensions/node_modules/yaml-language-server/out/server/src/index.js')
+
+  " call coc#config('languageserver', {
+  "       \ 'yaml-language-server': {
+  "       \   'args': ['--stdio'], 
+  "       \   'initializationOptions': {
+  "       \     'yaml.format.enable': {
+  "       \       'enable'
+  "       \     }},
+  "       \   'command': 'yaml-language-server',
+  "       \ }})
+
+    else " honestly usually arch just figures this shit out on it's own
+
+      let s:bashlsp = 'bash-language-server'
+      let s:vimlsp = 'vim-language-server'
     endif
   else
+    call coc#config('python.jediEnabled', v:false)
     let g:coc_node_path = expand('$PREFIX/bin/node')
-  endif
-
-  if executable(expand('~/.config/coc/extensions/node_modules/.bin/bash-language-server'))
-    let s:bashlsp = expand('~/.config/coc/extensions/node_modules/.bin/bash-language-server')
-  else
     let s:bashlsp = 'bash-language-server'
+    let s:vimlsp = 'vim-language-server'
   endif
 
   call coc#config('languageserver',
@@ -582,36 +609,42 @@ function! s:Init_coc() abort
                   \ 'command': s:bashlsp,
                   \ 'filetypes': ['sh', 'bash']}})
 
-  if executable(expand('~/.config/coc/extensions/node_modules/.bin/vim-language-server'))
-    let s:vimlsp = expand('~/.config/coc/extensions/node_modules/.bin/vim-language-server')
-  else
-    let s:vimlsp = 'vim-language-server'
-  endif
-  call coc#config('languageserver',
-                  \ { 'vimlsp':
-                  \ {'args': ['--stdio'],
-                  \ 'command': s:vimlsp,
-                  \ 'filetypes': ['vim' ],
-                  \ 'initializationOptions':
-                  \ {'diagnostic': { 'enable': v:true },
-                  \ 'indexes': { 'count': 3, 'gap': 100, 'runtimepath': v:true,
-                  \ 'workDirPatterns':
-                  \ [ '.git', 'autoload', 'plugin']},
-                  \ 'iskeyword': '@,48-57,_,192-255,-#', 'runtimepath': v:false,
-                  \ 'suggest': { 'fromRuntimepath': v:false, 'fromVimruntime': v:true },
-                  \ 'vimruntime': '$VIMRUNTIME'}
-                  \ }})
+  call coc#config('languageserver', {
+                  \ 'vimlsp': {
+                  \   'command': s:vimlsp,
+                  \   'args': ['--stdio'],
+                  \   'initializationOptions': {
+                  \     'iskeyword': '@,48-57,_,192-255,-#',
+                  \     'vimruntime': '$VIMRUNTIME',
+                  \     'runtimepath': v:false,
+                  \     'diagnostic': {
+                  \       'enable': v:true
+                  \     },
+                  \   'indexes': {
+                  \     'count': 3,
+                  \     'gap': 100,
+                  \     'runtimepath': v:true,
+                  \   },
+                  \   'suggest': {
+                  \     'fromRuntimepath': v:false,
+                  \     'fromVimruntime': v:true,
+                  \   }},
+                  \ 'filetypes': ['vim']}})
 
 endfunction
 
-if !exists('g:coc_init')
+" if !exists('g:coc_init')
   call s:Init_coc()
-  let g:coc_init = 1
-endif
+  " let g:coc_init = 1
+" endif
 " }}}
 
 " FZF: {{{
+
 " Options: {{{
+
+let g:fzf_preview_window = 'right:60%'
+
 let g:fzf_action = {
   \ 'ctrl-q': function('find_files#build_quickfix_list'),
   \ 'ctrl-t': 'tab split',

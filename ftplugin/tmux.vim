@@ -11,8 +11,6 @@ source $VIMRUNTIME/ftplugin/tmux.vim
 " It feels quite dumb to make a whole file just for this but
 setlocal iskeyword+=-
 setlocal iskeyword+=#
-syntax sync fromstart
-syntax enable
 setlocal path+=$HOME/.tmux,$_ROOT/share/byobu
 setlocal include=^\s*\%(so\%[urce-file]\)\ *\zs*
 setlocal suffixesadd=.tmux,.conf

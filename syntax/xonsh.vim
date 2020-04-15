@@ -20,8 +20,9 @@ endif
 " Include python files goddamn
 let g:python_highlight_all = 1
 let g:python_space_error_highlight = 1
-" unlet! b:current_syntax
-" syntax include $VIMRUNTIME/syntax/python.vim
+
+unlet! b:current_syntax
+syntax include $VIMRUNTIME/syntax/python.vim
 
 syn keyword xshStatement    as assert break continue del except exec finally
 syn keyword xshStatement    global lambda pass print raise return try with
@@ -129,8 +130,9 @@ hi def link xshSpaceError Error
 " statement line; changes behaviour to look at least 2000 lines previously for
 " syntax matches instead of at most 200 lines
 syn sync match xshSync grouphere NONE "):$"
+
 " syn sync maxlines=200
-"syn sync minlines=2000
-syn sync fromstart
+syn sync 
+syn sync  minlines=2000 fromstart
 
 let b:current_syntax = 'xonsh'

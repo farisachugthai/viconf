@@ -16,8 +16,6 @@ let g:ft_html_autocomment = 1
 source $VIMRUNTIME/ftplugin/html.vim
 " I would mention that an htmldjango indent file exists but its 1 line
 " runtime! indent/html.vim
-" which is fucking pointless so
-source $VIMRUNTIME/indent/html.vim
 
 setlocal expandtab
 setlocal shiftwidth=2
@@ -39,7 +37,8 @@ let b:match_words.='<.\{-}>:<[^>]*>'
 call ftplugins#ALE_Html_Conf()
 
 " Official ftplugin doesn't put did_ftplugin in the undo wth
-let b:undo_ftplugin .= '|setlocal et< sw< sts< sua< ofu<'
-      \ . '|unlet! b:undo_ftplugin'
-      \ . '|unlet! b:match_ignorecase b:match_skip b:match_words b:browsefilter'
-      \ . '|unlet! b:did_ftplugin'
+let b:undo_ftplugin = get(b:, 'undo_ftplugin', 'exe')
+                  \. '|setlocal et< sw< sts< sua< ofu<'
+                  \. '|unlet! b:undo_ftplugin'
+                  \. '|unlet! b:match_ignorecase b:match_skip b:match_words b:browsefilter'
+                  \. '|unlet! b:did_ftplugin'

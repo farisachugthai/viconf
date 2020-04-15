@@ -15,9 +15,11 @@
   "coc.preferences.hoverTarget": "float",
   "coc.preferences.previewAutoClose": true,
   "coc.source.around.firstMatch": false,
+  "coc.source.around.priority": 90,
   "coc.source.around.shortcut": "Coc-Around:",
   "coc.source.buffer.firstMatch": false,
   "coc.source.buffer.ignoreGitignore": false,
+  "coc.source.buffer.priority": 70,
   "coc.source.buffer.shortcut": "Coc-Buffer:",
   "coc.source.dictionary.filetypes": [
     "rst",
@@ -44,11 +46,11 @@
     "help",
     "html"
   ],
+  "coc.source.tags.priority": 80,
   "coc.source.word.priority": 30,
   "coc.source.word.shortcut": "Coc-Word: ",
   "codeLens.enable": true,
   "diagnostic.checkCurrentLine": true,
-  "diagnostic.displayByAle": false,
   "diagnostic.enableMessage": "always",
   "diagnostic.filetypeMap": {
     "default": "bufferType"
@@ -57,6 +59,7 @@
   "diagnostic.level": "warning",
   "diagnostic.messageTarget": "float",
   "diagnostic.refreshOnInsertMode": true,
+  "diagnostic.refreshOnSave": true,
   "javascript.referencesCodeLens.enable": true,
   "javascript.showUnused": true,
   "json.format.enable": true,
@@ -122,7 +125,7 @@
     "**/*.pyc"
   ],
   "list.source.folders.defaultArgs": [
-    "newfile"
+    "edit"
   ],
   "list.source.folders.defaultOptions": [
     "--top",
@@ -212,6 +215,9 @@
     "--input",
     // "--auto-preview",
     "--normal"
+  ],
+  "list.source.outline.defaultArgs": [
+    "preview"
   ],
   "list.source.output.defaultOptions": [
     "--input",
@@ -382,7 +388,8 @@
     "markdown",
     "log",
     "txt",
-    "help"
+    "help",
+    "xonsh"
   ],
   "yank.enableCompletion": true,
   "yank.limit": 30,

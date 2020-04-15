@@ -28,48 +28,10 @@ setlocal isfname+=@-@
 " Original: {{{
 " https://gist.githubusercontent.com/romainl/a50b49408308c45cc2f9f877dfe4df0c/raw/1ab8eb733948c0c89d11553cc0e00f4ab251f31e/typescript.vim
 if !exists('b:did_typescript_setup')
-  " node_modules
-  let s:node_modules = finddir('node_modules', '.;', -1)
-  if len(s:node_modules)
-    let b:ts_node_modules = map(s:node_modules, { idx, val -> substitute(fnamemodify(val, ':p'), '/$', '', '')})
-    unlet! s:node_modules
-  endif
-  " $PATH: {{{
-  if exists('b:ts_node_modules')
-    if $PATH !~? b:ts_node_modules[0]
-      let $PATH = b:ts_node_modules[0] . ':' . $PATH
-    endif
-  endif
-  " aliases
-  let b:tsconfig_file = findfile('tsconfig.json', '.;')
-  if len(b:tsconfig_file)
-    try
-      let b:tsconfig_data = json_decode(join(readfile(b:tsconfig_file)))
-      " catch all Vim errors. thanks help docs
-    catch /^Vim\%((\a\+)\)\=:E/
-    endtry
-    unlet! b:tsconfig_data
-  endif
-  unlet! b:tsconfig_file
-  " }}}
-  " Lint File On Write: {{{
-  if executable('tslint')
-    let &l:errorformat = '%EERROR: %f:%l:%c - %m,'
-                       \.'%WWARNING: %f:%l:%c - %m,'
-                       \.'%E%f:%l:%c - %m,'
-                       \.'%-G%.%#'
 
-    let &l:makeprg = 'tslint --format prose'
-    let b:undo_ftplugin .= '|setlocal efm< mp<'
-    echomsg 'ftplugin/typescript: Setting tslint as the compiler.'
-    augroup TS
-      autocmd!
-      autocmd BufWritePost <buffer> silent make! <afile> | silent redraw!
-    augroup END
-  endif
+  call ftplugins#typescript_setup()
+  let b:did_typescript_setup = 1
 endif
-" }}}
-
 " }}}
 
 " Matchit: {{{
