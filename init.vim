@@ -88,7 +88,7 @@ function! LoadMyPlugins() abort  " {{{
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-scriptease', {'for': 'vim'}
 
-  Plug 'SirVer/ultisnips'
+  " Plug 'SirVer/ultisnips'
   Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }
   nnoremap <Leader>a <Cmd>sil! ALEEnable<CR><bar>:sil! call plugins#AleMappings()<CR><bar>:sil! CocDisable<CR>:sil! redraw!<CR>:ALELint<CR>
   nnoremap <Leader>et <Cmd>ALEToggle<CR>:sil! call plugins#AleMappings()<CR>:sil! redraw!<CR>
@@ -112,8 +112,7 @@ function! LoadMyPlugins() abort  " {{{
   Plug 'romainl/vim-qf'
   Plug 'tomtom/tlib_vim'
   " Dont know how i didnt realize lazy loaded plugins arent added to rtp.
-  Plug 'mitsuhiko/vim-jinja', {'for': 'jinja2'},
-  " Plug 'lepture/vim-jinja'
+  Plug 'lepture/vim-jinja'
   Plug 'cespare/vim-toml', {'for': 'toml'}
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
@@ -123,22 +122,16 @@ function! LoadMyPlugins() abort  " {{{
 
   if empty(s:termux)  " {{{
 
-  Plug 'ludovicchabant/vim-gutentags'
-  Plug 'godlygeek/tabular', {'on': 'Tabularize'}
-  Plug 'mbbill/undotree', { 'on' : 'UndotreeToggle' }
-  nnoremap U <Cmd>UndoTreeToggle<CR>
-  " Plug 'tpope/vim-apathy'
-  " Plug 'tpope/vim-unimpaired'
-  Plug 'tpope/vim-surround'
-  Plug 'tpope/vim-eunuch'
-  Plug 'kshenoy/vim-signature'
-  Plug 'morhetz/gruvbox'
-    " Plug 'HerringtonDarkholme/yats.vim'
-
-    " Plug 'prettier/vim-prettier', {
-    "   \ 'do': 'yarn install',
-    "   \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json',
-    "           \ 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
+    Plug 'ludovicchabant/vim-gutentags'
+    Plug 'godlygeek/tabular', {'on': 'Tabularize'}
+    Plug 'mbbill/undotree', { 'on' : 'UndotreeToggle' }
+    nnoremap U <Cmd>UndoTreeToggle<CR>
+    Plug 'tpope/vim-apathy'
+    Plug 'tpope/vim-unimpaired'
+    Plug 'tpope/vim-surround'
+    Plug 'tpope/vim-eunuch'
+    Plug 'kshenoy/vim-signature'
+    Plug 'morhetz/gruvbox'
   endif " }}}
 
   Plug 'liuchengxu/vim-which-key', {'dir': expand(stdpath('data')) . '/site/pack/git-plugins/start/vim-which-key'}

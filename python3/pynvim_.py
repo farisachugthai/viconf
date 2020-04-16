@@ -53,71 +53,41 @@ Decorators used by python host plugin system.
 
 """
 # Imports: {{{
-import reprlib
-import gc
-import locale
-import threading
 import abc
-import asyncio
 import codecs
-import cgitb
-import enum
-
-# import faulthandler
 import functools
 
 # import json  # literally how is this not in use
-import importlib
 import inspect
 import io
-import itertools
 import logging
 
 # import mimetypes
-import multiprocessing
-import operator
 import os
 import pathlib
-import platform
-import pydoc
 import re
-
-# import runpy
 import signal
-
-# import shlex
-# import shutil
-# import subprocess
 import sys
 import traceback
-import types
 import warnings
 
 from asyncio.events import get_event_loop_policy
+from asyncio.streams import StreamReader, StreamWriter
 from collections import namedtuple, UserList, deque
 from functools import partial
-from importlib.util import module_from_spec
 from io import StringIO
 
 # from pathlib import Path
-from pydoc import safeimport
 from traceback import format_exception, format_stack, format_exc
 from typing import Dict, Any, AnyStr
 
 import greenlet
 from msgpack import unpackb, ExtType, Packer, Unpacker
-import pkg_resources
 
 if sys.version_info >= (3, 4):
     from importlib.machinery import PathFinder
 else:
     PathFinder = None
-
-try:
-    import pyuv  # noqa
-except ImportError:
-    warnings.warn("pyuv not installed!")
-    pyuv = None
 
 if sys.version_info <= (3, 7):
 
@@ -222,10 +192,11 @@ except ImportError:
     fsencode, fsdecode = _fscodec()
     del _fscodec
 
-    def open(file, *pargs, **kwargs):
-        if isinstance(file, PathLike):
-            file = fspath(file)
-        return io.open(file, *pargs, **kwargs)
+    def open(file_on_disk, *pargs, **kwargs):
+        """Open a file. Both pathlib.Path and str objects are accepted."""
+        if isinstance(file_on_disk, PathLike):
+            file_on_disk = fspath(file_on_disk)
+        return io.open(file_on_disk, *pargs, **kwargs)
 
 
 # }}}
@@ -233,6 +204,8 @@ except ImportError:
 # Globals: {{{
 basestring = str
 # So on the low I don't think that logger or debug are used anywhere.
+
+import multiprocessing
 logger = multiprocessing.get_logger()
 multiprocessing.log_to_stderr(logging.WARNING)
 debug, info, warn, error = (
@@ -261,15 +234,13 @@ logger.addFilter(filterer)
 # There is no 'long' type in Python3 just int
 long = int
 unicode_errors_default = "surrogateescape"
+
+from collections import namedtuple
 vers = namedtuple("vers", ("project", "release"))
 mod_cache = {}
 
-# so thats how you do this
-distribution = pkg_resources.get_distribution("pynvim")
-__version__ = distribution.version
-
 lua_module = """
-local a = _vim.api
+local a = vim.api
 local function update_highlights(buf, src_id, hls, clear_first, clear_end)
   if clear_first ~= nil then
       a.nvim_buf_clear_highlight(buf, src_id, clear_first, clear_end)
@@ -291,6 +262,8 @@ local mod = {update_highlights=update_highlights}
 _G["_pynvim_"..chid] = mod
 """
 
+import asyncio
+
 if os.name == "nt":
     from asyncio.windows_utils import PipeHandle
     import msvcrt
@@ -307,8 +280,10 @@ else:
 # default state, we keep a reference to the default handler
 default_int_handler = signal.getsignal(signal.SIGINT)
 
+import threading
 main_thread = threading.current_thread()
 
+import locale
 locale.setlocale(locale.LC_ALL, "")
 
 
@@ -376,7 +351,8 @@ def start_host(session=None, load_plugins=True, plugins=None):
     nvim = Nvim.from_session(session)
 
     if nvim.version.api_level < 1:
-        sys.stderr.write("This version of pynvim " "requires nvim 0.1.6 or later")
+        sys.stderr.write(
+            "This version of pynvim " "requires nvim 0.1.6 or later")
         sys.exit(1)
 
     host = Host(nvim)
@@ -500,11 +476,13 @@ def get_documentation(word):
     # is sys.stdout needed at all below?
     sys.stdout, _ = StringIO(), sys.stdout
     try:
+        import pydoc
         pydoc.help("word")
     except AttributeError:  # maybe
         raise
     except NameError:
         try:  # this is actually how pydoc does it
+            from pydoc import safeimport
             mod = safeimport(word, cache=mod_cache)
         except ImportError:
             return
@@ -590,7 +568,8 @@ def get_client_info(type_, method_spec, kind=None):
     kind :
     """
     name = "python{}-{}".format(sys.version_info[0], kind)
-    attributes = {"license": "Apache v2", "website": "github.com/neovim/pynvim"}
+    attributes = {"license": "Apache v2",
+                  "website": "github.com/neovim/pynvim"}
     return name, VERSION.__dict__, type_, method_spec, attributes
 
 
@@ -1226,6 +1205,7 @@ class Nvim(object):
 
         # wth is this?
         # session.error_wrapper = lambda e: NvimError(decode_if_bytes(e[1]))
+        import cgitb
         session.error_wrapper = cgitb.Hook(format="text")
         # okay so apparently we send errors  to the error wrapper incorrectly
         # because doing this raises a handful of errors
@@ -1641,7 +1621,7 @@ class Nvim(object):
 
         def handler():
             try:
-                fn(*args, **kwargs)
+                return fn(*args, **kwargs)
             except Exception as err:
                 msg = (
                     "error caught while executing async callback:\n"
@@ -1652,7 +1632,7 @@ class Nvim(object):
                 self._err_cb(msg)
                 raise
 
-        self._session.threadsafe_call(handler)
+        self._session.threadsafe_call(handler())
 
 
 class BufferBase(UserList):
@@ -1728,11 +1708,13 @@ class Buffers(BufferBase):
     Conforms to *python-buffers*.
     """
 
+    from reprlib import Repr
+
     def all(self):
         return self._fetch_buffers()
 
     def __repr__(self):
-        return reprlib.Repr().repr(self._fetch_buffers())
+        return Repr().repr(self._fetch_buffers())
 
 
 class CompatibilitySession(Remote):
@@ -1809,17 +1791,28 @@ class Funcs(object):
     def __getattr__(self, name):
         return functools.partial(self._nvim.call, name)
 
+    def __call__(self, *args, **kwargs):
+        # first new function after keyword rename, be a bit noisy
+        if "async" in kwargs:
+            raise ValueError(
+                '"async" argument is not allowed. ' 'Use "async_" instead.'
+            )
+        async_ = kwargs.get("async_", false)
+        pattern = "return {}(...)" if not async_ else "{}(...)"
+        code = pattern.format(self.name)
+        return self._nvim.exec(code, *args, **kwargs)
+
     def __repr__(self):
         """Get the text representation of the object."""
         return "<%r>" % (self.__class__.__name__)
 
 
-class LuaFuncs(object):
+class LuaFuncs(Funcs):
     """Wrapper to allow lua functions to be called like python methods."""
 
     def __init__(self, nvim, name=""):
-        self._nvim = nvim
         self.name = name
+        super().__init__(nvim)
 
     def __getattr__(self, name):
         """Return wrapper to named api method."""
@@ -1827,19 +1820,8 @@ class LuaFuncs(object):
         return LuaFuncs(self._nvim, prefix + name)
 
     def __call__(self, *args, **kwargs):
-        # first new function after keyword rename, be a bit noisy
-        if "async" in kwargs:
-            raise ValueError(
-                '"async" argument is not allowed. ' 'Use "async_" instead.'
-            )
-        async_ = kwargs.get("async_", False)
-        pattern = "return {}(...)" if not async_ else "{}(...)"
-        code = pattern.format(self.name)
+        super().__call__(**kwargs)
         return self._nvim.exec_lua(code, *args, **kwargs)
-
-    def __repr__(self):
-        """Get the text representation of the object."""
-        return "<%r>" % (self.__class__.__name__)
 
 
 # }}}
@@ -1864,6 +1846,7 @@ class ScriptHost:
         self.saved_stdout = sys.stdout
         self.saved_stderr = sys.stderr
         # context where all code will run
+        import types
         self.module = types.ModuleType("__main__")
         nvim.script_context = self.module
         # it seems some plugins assume 'sys' is already imported, so do it now
@@ -1871,6 +1854,7 @@ class ScriptHost:
         self.legacy_vim = LegacyVim.from_nvim(nvim)
         sys.modules["_vim"] = self.legacy_vim
 
+        import platform
         if not platform.platform().startswith("Win"):
             self.handle_dirchanged(self.nvim)
 
@@ -2055,6 +2039,7 @@ class RedirectStream(io.TextIOWrapper):
     # def fileno(self):
     # TODO
     def open(file, *pargs, **kwargs):
+        
         if isinstance(file, PathLike):
             file = fspath(file)
         return io.open(file, *pargs, **kwargs)
@@ -2090,6 +2075,7 @@ def find_module(mod, path=None, target=None):
         mod = get_decoded_string(mod)
     if isinstance(path, bytes):
         path = get_decoded_string(path)
+    from importlib.util import module_from_spec
     try:
         return module_from_spec(find_spec(mod, path, target=target))
     except ModuleNotFoundError:
@@ -2118,6 +2104,8 @@ def path_hook(_vim):
 
 class VimPath(Nvim):
     """A class that fixes neovim's odd sys.path hacks."""
+
+    import reprlib
 
     def __init__(self):
         # simply to make using our classes a lil easier like jesus christ are
@@ -2167,6 +2155,8 @@ def adjust_index(idx, default=None):
     else:
         return idx
 
+
+import operator
 
 class Buffer(Remote):
     """A remote Nvim buffer."""
@@ -2403,53 +2393,6 @@ class Range(object):
 
 # }}}
 
-# msgpack.__init__: {{{
-
-
-def session(transport_type="stdio", *args, **kwargs) -> Session:
-    """Msgpack-rpc subpackage.
-
-    This package implements a msgpack-rpc client. While it was designed for
-    handling some Nvim particularities(server->client requests for example), the
-    code here should work with other msgpack-rpc servers.
-    """
-    loop = EventLoop(transport_type, *args, **kwargs)
-    msgpack_stream = MsgpackStream(loop)
-    async_session = AsyncSession(msgpack_stream)
-    _session = Session(async_session)
-    _session.request(
-        b"nvim_set_client_info", *get_client_info("client", "remote", {}), async_=True
-    )
-    return _session
-
-
-def tcp_session(address, port=7450):
-    """Create a msgpack-rpc session from a tcp address/port."""
-    return session("tcp", address, port)
-
-
-def socket_session(path=None):
-    """Create a msgpack-rpc session from a unix domain socket."""
-    if path is None:
-        try:
-            path = os.environ.get("NVIM_LISTEN_ADDRESS")
-        except OSError:
-            raise
-    return session("socket", path)
-
-
-def stdio_session(*args: list, **kwargs: dict) -> Session:
-    """Create a msgpack-rpc session from stdin/stdout."""
-    return session("stdio", *args, **kwargs)
-
-
-def child_session(argv=None):
-    """Create a msgpack-rpc session from a new Nvim instance."""
-    return session("child", argv)
-
-
-# }}}
-
 # {{{ API/common
 
 
@@ -2610,6 +2553,7 @@ class RemoteSequence(UserList):
         """Check if an item is present in the sequence."""
         return item in self._fetch()
 
+import itertools
 
 def _walk(f, obj=None, *args, **kwargs):
     # TODO: test
@@ -2618,6 +2562,11 @@ def _walk(f, obj=None, *args, **kwargs):
     if not hasattr(obj, "__iter__"):
         raise TypeError
     return f(itertools.chain.from_iterable(obj), *args, **kwargs)
+
+
+# why is this set up this way?
+def _identity(obj, session, method, kind):
+    return obj
 
 
 def walk(fn, obj, *args, **kwargs):
@@ -2633,6 +2582,8 @@ def walk(fn, obj, *args, **kwargs):
 
 # msgpack_rpc.async_session: {{{
 
+
+import enum
 
 class SessionHandlers(enum.Enum):
     _on_request = 1
@@ -2662,7 +2613,7 @@ class AsyncSession(object):
             2: self._on_notification,
         }
         # TODO: integrate this in correctly
-        self._enum_handlers = SessionHandlers()
+        # self._enum_handlers = SessionHandlers()
         self.loop = msgpack_stream.loop
 
     def threadsafe_call(self, fn):
@@ -2727,7 +2678,8 @@ class AsyncSession(object):
         - msg[3]: arguments
         """
         debug("received request: %s, %s", msg[2], msg[3])
-        self._request_cb(msg[2], msg[3], Response(self._msgpack_stream, msg[1]))
+        self._request_cb(msg[2], msg[3], Response(
+            self._msgpack_stream, msg[1]))
 
     def _on_response(self, msg):
         """Callback upon receiving a notification.
@@ -2855,7 +2807,7 @@ class MsgpackStream(object):
 # msgpack_rpc.event_loop.base: {{{
 
 
-class BaseEventLoop(abc.ABC):
+class BaseEventLoop(asyncio.base_events.BaseEventLoop):
     """Abstract base class for all event loops.
 
     Event loops act as the bottom layer for Nvim sessions created by this
@@ -2898,7 +2850,7 @@ class BaseEventLoop(abc.ABC):
     - `_teardown_signals()`: Removes signal listeners set by `_setup_signals`
 
 
-    .. versionchanged:: Now officially subclasses abc.ABC.
+    .. versionchanged:: Now officially subclasses asyncio.base_events.
 
     """
 
@@ -2930,12 +2882,14 @@ class BaseEventLoop(abc.ABC):
         `_init`, one of the `_connect_*` methods(based on `transport_type`)
         and `_start_reading()`
         """
+        super().__init__()
         self._transport_type = transport_type
         self._signames = dict(
             (k, v) for v, k in signal.__dict__.items() if v.startswith("SIG")
         )
         self._on_data = None
         self._error = None
+        self._closed = True
         try:
             getattr(self, "_connect_{}".format(transport_type))(*args)
         except Exception as e:
@@ -3080,24 +3034,51 @@ class BaseEventLoop(abc.ABC):
 # mspack_rpc.event_loop.asyncio: {{{
 
 # Triple subclassed?
-class AsyncioEventLoop(asyncio.Protocol, asyncio.SubprocessProtocol, BaseEventLoop):
-    """`BaseEventLoop` subclass that uses `asyncio` as a backend."""
 
-    def __init__(self, transport_type, *args, **kwargs):
+class AsyncioBaseEventLoop(asyncio.Protocol, BaseEventLoop):
+    pass
+
+
+class AsyncioEventLoop(asyncio.SubprocessProtocol, AsyncioBaseEventLoop):
+    """`BaseEventLoop` subclass that uses `asyncio` as a backend.
+
+    No longer subclasses asyncio.Protocol because.:
+
+        The user should implement this interface.  They can inherit from
+        this class but don't need to.  The implementations here do
+        nothing (they don't raise exceptions).
+
+    But if we inherit from StreamReader we get more functionality.
+    Also triple subclassing is a horrible idea so I broke it up a little.
+
+    """
+
+    def __init__(self, transport_type):
         """Used to signal `asyncio.Protocol` of a successful connection."""
         self._init()
         self.loop_policy = get_event_loop_policy()
+        self._local = self.loop_policy._local
+        self._watcher = self.loop_policy._watcher
         self._loop = self.loop_policy.get_event_loop()
         self._raw_transport = transport_type
         if isinstance(transport_type, asyncio.SubprocessTransport):
             self._transport = transport_type.get_pipe_transport(0)
-        elif isinstance(transport_type, str):
+        # elif isinstance(transport_type, str):
             # So this really needs to stop happening
-            raise TypeError
+            # raise TypeError
         else:
             # TODO: this is wrong.
             self._transport = transport_type
-        super().__init__(transport_type, *args, **kwargs)
+        self._closed = False
+        super().__init__(transport_type)
+
+    @property
+    def reader(self):
+        return StreamReader(loop=self._loop)
+
+    @property
+    def writer(self):
+        return StreamWriter  # todo
 
     def connection_lost(self, exc):
         """Signals to `asyncio.Protocol` of a lost connection."""
@@ -3217,7 +3198,58 @@ class AsyncioEventLoop(asyncio.Protocol, asyncio.SubprocessProtocol, BaseEventLo
         pass
 
 
+
+
+# }}}
+
+# msgpack.__init__: {{{
+
+# Keep below asyncio mod
+
 EventLoop = AsyncioEventLoop
+
+def session(transport_type="stdio", *args, **kwargs) -> Session:
+    """Msgpack-rpc subpackage.
+
+    This package implements a msgpack-rpc client. While it was designed for
+    handling some Nvim particularities(server->client requests for example), the
+    code here should work with other msgpack-rpc servers.
+    """
+    # loop = EventLoop(transport_type, *args, **kwargs)
+    loop_policy = get_event_loop_policy()
+    loop = loop_policy.get_event_loop()
+    msgpack_stream = MsgpackStream(loop)
+    async_session = AsyncSession(msgpack_stream)
+    _session = Session(async_session)
+    _session.request(
+        b"nvim_set_client_info", *get_client_info("client", "remote", {}), async_=True
+    )
+    return _session
+
+
+def tcp_session(address, port=7450):
+    """Create a msgpack-rpc session from a tcp address/port."""
+    return session("tcp", address, port)
+
+
+def socket_session(path=None):
+    """Create a msgpack-rpc session from a unix domain socket."""
+    if path is None:
+        try:
+            path = os.environ.get("NVIM_LISTEN_ADDRESS")
+        except OSError:
+            raise
+    return session("socket", path)
+
+
+def stdio_session(*args: list, **kwargs: dict) -> Session:
+    """Create a msgpack-rpc session from stdin/stdout."""
+    return session("stdio", *args, **kwargs)
+
+
+def child_session(argv=None):
+    """Create a msgpack-rpc session from a new Nvim instance."""
+    return session("child", argv)
 
 
 # }}}
@@ -3360,6 +3392,7 @@ class Host:
         Bunch more
         This'll take a while.
         """
+        import importlib
         # bad idea or no?
         #  self.nvim = nvim(**kwargs)
         self.nvim = nvim
@@ -3622,21 +3655,30 @@ class Host:
 # msgpack_rpc.event_loop.pyuv: {{{
 
 
+try:
+    import pyuv  # noqa
+except ImportError:
+    warnings.warn("pyuv not installed!")
+    pyuv = None
+
 class UvEventLoop(BaseEventLoop):
     """`BaseEventLoop` subclass that uses `pvuv` as a backend.
 
     Concrete implementation of the abstract EventLoop class.
-    Also wanted to note.nShould we make the connect_tcp,
+    Also wanted to note. Should we make the connect_tcp,
     connect_stdio, and connect_child methods classmethods?
 
     """
 
-    def _init(self):
+    def _init(self, *args):
         self._loop = pyuv.Loop()
         self._async = pyuv.Async(self._loop, self._on_async)
         self._connection_error = None
         self._error_stream = None
         self._callbacks = deque()
+        # kinda cant call this for the time being. whats the transport
+        # type to pass to super?
+        # super().__init__(*args)
 
     def __repr__(self):
         return f"{self.__class__.__name__}"
@@ -3710,6 +3752,7 @@ class UvEventLoop(BaseEventLoop):
         self._error_stream.start_read(self._on_read)
 
     def _start_reading(self):
+        # where else is transport  type defined in this class?
         if self._transport_type in ["tcp", "socket"]:
             self._loop.run()
             if self._connection_error:
@@ -3755,6 +3798,7 @@ class UvEventLoop(BaseEventLoop):
 
 # }}}
 
+import gc
 gc.collect()
 
 # Vim: set fdm=marker fdls=0:

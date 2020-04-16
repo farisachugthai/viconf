@@ -1,18 +1,23 @@
 {
-  "name": "coc-extensions",
-  "license": "MIT",
-  "private": true,
-  "keywords": [
-    "coc.nvim",
-    "nvim",
-    "coc"
+  "activationEvents": [
+    "*"
   ],
   "author": "Faris Chugthai",
   "bugs": {
     "url": "https://github.com/farisachugthai/viconf/issues"
   },
-  "engines": {
-    "coc": ">= 0.0.77"
+  "contributes": {
+    "commands": [
+      {
+        "command": "bar",
+        "title": "foo"
+      }
+    ],
+    "configuration": {
+      "properties": {},
+      "title": "coc-extensions",
+      "type": "object"
+    }
   },
   "devDependencies": {
     "coc-css": ">=1.2.2",
@@ -40,10 +45,21 @@
   "directories": {
     "lib": "rplugin/node"
   },
+  "engines": {
+    "coc": ">= 0.0.77"
+  },
+  "keywords": [
+    "coc.nvim",
+    "nvim",
+    "coc"
+  ],
+  "license": "MIT",
+  "name": "coc-extensions",
   "peerDependencies": {
     "typescript": "^3.8.3",
     "webpack": "^4.42.1"
   },
+  "private": true,
   "readme": "README.rst",
   "repository": {
     "type": "git",
@@ -51,8 +67,8 @@
   },
   "scripts": {
     "build": "yarn run webpack -dw rplugin/node/coc_tag.js",
-    "coc-tsserver": "node ./node_modules/coc-tsserver/bin/tsserverForkStart.js",
     "clean": "yarn autoclean --force",
+    "coc-tsserver": "node ./node_modules/coc-tsserver/bin/tsserverForkStart.js",
     "fix": "yarn run prettier --write rplugin/node",
     "lint": "yarn run tslint --fix **.ts",
     "pretest": "echo 'Running tests'",

@@ -82,6 +82,9 @@ augroup UserPotpourri  " {{{
   autocmd CmdwinLeave [/?]  stopinsert
 
   autocmd Syntax * syntax sync fromstart
+  " hopefully this will only call one time
+  " so far is working perfectly
+  autocmd VimEnter * call UltiSnipsConf()
 augroup END  " }}}
 
 augroup TagbarAutoCmds
@@ -104,8 +107,6 @@ augroup UserFiletypesCompletions  " {{{
   au!
   " Show type information automatically when the cursor stops moving
   autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
-
-  autocmd Filetype snippets call UltiSnipsConf()
 
   autocmd BufEnter * if &omnifunc ==# '' | setlocal omnifunc=syntaxcomplete#Complete | endif
 

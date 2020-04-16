@@ -39,15 +39,16 @@ if exists('b:did_ftplugin') | finish | endif
 " source $VIMRUNTIME/ftplugin/rst.vim
 " source $VIMRUNTIME/indent/rst.vim
 setlocal textwidth=80
-setlocal expandtab
-setlocal spell!
 setlocal colorcolumn=80,120
 setlocal linebreak
 setlocal foldlevel=1
 setlocal foldlevelstart=1
+setlocal spell!
 setlocal wildignore+=*.html,*.css
 setlocal iskeyword+=.
 setlocal iskeyword-=_
+setlocal keywordprg=:PydocShow
+setlocal wrap
 
 " Dude some of the options in fo-table are MADE for rst
 " n	When formatting text, recognize numbered lists.  This actually uses
@@ -77,19 +78,16 @@ setlocal noshiftround
 setlocal suffixesadd=.py,.rst,.rst.txt
 " TODO: XXX
 " Well somethings very fucking wrong because this adds 200ms to vim's startuptime.
-" let &l:path = py#PythonPath()
+let &l:path = py#PythonPath()
 
-" Isn't a func anymore. todo: this and maybe formatprg?
-" command! -buffer Sphinx call pydoc_help#sphinx_build(<q-args>)
 
 if !exists('b:undo_ftplugin') | let b:undo_ftplugin = '' | endif
 
-let b:undo_ftplugin .= '|setlocal tw< cms< com< cc< lbr< fdl< fdls< '
-      \ . '|setlocal spell< wig< isk< kp< mp< efm< sua< sr< '
-      \ . '|setlocal cin< cinw< path< '
+let b:undo_ftplugin .= '|setlocal tw< cc< lbr< fdl< fdls< '
+      \ . '|setlocal spell< wig< isk< kp< wrap< fo<'
       \ . '|setlocal include<'
       \ . '|setlocal indentkeys<'
-      \ . '|setlocal cinkeys<'
+      \ . '|setlocal cin< cinw< cink< indk< sua< sr< path< '
       \ . '|unlet! b:undo_ftplugin'
       \ . '|unlet! b:did_ftplugin'
 
@@ -98,7 +96,16 @@ let b:undo_ftplugin .= '|setlocal tw< cms< com< cc< lbr< fdl< fdls< '
 " directives (..) and ordered lists (1.), although it can cause problems for
 " many other cases.
 
-  let b:undo_ftplugin .= '|setlocal et< ts< sw< sts<'
+if !exists('g:rst_style') || g:rst_style != 0
+  setlocal expandtab shiftwidth=3 softtabstop=3 tabstop=8
+  let b:undo_ftplugin .= '|setlocal ts< sw< sts<'
+endif
+
+setlocal foldmethod=expr
+setlocal foldexpr=RstFold#GetRstFold()
+setlocal foldtext=RstFold#GetRstFoldText()
+setlocal comments=fb:.. commentstring=..\ %s expandtab
+
 
 " This expression adds 50ms to vim startuptime alone wth
 augroup UserAutomake
@@ -108,8 +115,9 @@ augroup END
 
 " }}}
 
-let b:undo_ftplugin .= '|setlocal fdm< foldexpr< foldtext<'
+let b:undo_ftplugin .= '|setlocal fdm< foldexpr< foldtext< cms< com< et< mp< efm< '
                   \ .  '|unlet! b:RstFoldCache'
                   \ .  '|silent! nunmap <buffer> <F5>'
                   \ .  '|unlet! b:undo_indent'
                   \ .  '|unlet! b:did_indent'
+

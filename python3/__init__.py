@@ -53,3 +53,10 @@ alt_options = namedtuple(
         "line_range",
     ),
 )
+
+# so thats how you do this
+# moved here because importing pkg_resources is expensive
+import pkg_resources
+distribution = pkg_resources.get_distribution("pynvim")
+__version__ = distribution.version
+

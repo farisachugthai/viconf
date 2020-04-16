@@ -22,6 +22,7 @@ ArchWiki
 Argparse
 ArgumentParser
 Arkema
+Armin
 AsciiDoc
 Asciidoc
 AssertionErrors
@@ -402,6 +403,7 @@ RegexObject
 Reitz
 RemoteSigned
 Rewatched
+Ronacher
 Rossant
 RubyGems
 RuntimeError
@@ -1348,6 +1350,8 @@ philly
 php3
 php4
 php5
+picklers.
+picklers./!
 pid
 pip2
 pip3
@@ -1724,6 +1728,7 @@ unittests
 unix
 unmap
 unordered
+unpickling
 unpushed
 unstage
 unstaged
@@ -1869,3 +1874,7 @@ zipfile
 zipimport
 zlib
 zsh
+PyBind11
+runtimes
+toolset
+IntelliSense

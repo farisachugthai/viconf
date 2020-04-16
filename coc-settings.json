@@ -312,7 +312,6 @@
   "signature.maxWindowHeight": 14,
   "signature.preferShownAbove": false,
   "signature.triggerSignatureWait": 300,
-  "snippets.editSnippetsCommand": "tabe",
   "snippets.extends": {
     "bash": [
       "sh",
@@ -322,15 +321,12 @@
       "rst"
     ]
   },
-  "snippets.priority": 90,
   "snippets.shortcut": "CocSnip",
   "snippets.snipmate.author": "Faris A. Chugthai",
   "snippets.snipmate.enable": false,
   "snippets.ultisnips.directories": [
     "~/.config/nvim/UltiSnips"
   ],
-  "snippets.ultisnips.pythonVersion": 3,
-  "suggest.autoTrigger": "always",
   "suggest.completionItemKindLabels": {
     "class": "",
     "color": "",

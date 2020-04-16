@@ -13,6 +13,51 @@ let b:loaded_filetype_vim = 1
 let g:requirements#detect_filename_pattern = 'Pipfile'
 let g:is_bash = 1
 
+
+fun! s:TryDetectJinja()
+  if exists("b:did_jinja_autodetect")
+    return
+  endif
+  let b:did_jinja_autodetect=1
+
+  let n = 1
+  while n < 50 && n < line("$")
+    let line = getline(n)
+    if line =~ '{%\s*\(extends\|block\|macro\|set\|if\|for\|include\|trans\)\>' || line =~ '{{\s*\S+[|(]'
+      setlocal filetype=htmljinja
+      return
+    endif
+    let n = n + 1
+  endwhile
+endfun
+
+fun! s:ConsiderSwitchingToJinja()
+  if exists("b:did_jinja_autodetect")
+    return
+  endif
+  let b:did_jinja_autodetect=1
+
+  let n = 1
+  while n < 50 && n < line("$")
+    let line = getline(n)
+    " Bail on django specific tags
+    if line =~ '{%\s*\(load\|autoescape \(on\|off\)\|cycle\|empty\)\>'
+      return
+    " Bail on django filter syntax
+    elseif line =~ '\({%\|{{\).*|[a-zA-Z0-9]\+:'
+      return
+    endif
+    let n = n + 1
+  endwhile
+  setlocal filetype=htmljinja
+endfun
+
+fun! s:ConsiderSwitchingToJinjaAgain()
+  unlet b:did_jinja_autodetect
+  call s:TryDetectJinja()
+endfun
+
+
 function! s:SelectHTML() abort  " {{{
   let l:n = 1
   while l:n < 50 && l:n <= line('$')
@@ -51,6 +96,11 @@ augroup Userftdetect  " {{{
 
   " Go dep and Rust use several TOML config files that are not named with .toml.
   au BufNewFile,BufRead *.toml,Gopkg.lock,Cargo.lock,*/.cargo/config,*/.cargo/credentials,Pipfile setfiletype toml
+
+  autocmd FileType htmldjango call s:ConsiderSwitchingToJinja()
+  autocmd FileType html call s:TryDetectJinja()
+
+  autocmd BufWritePost *.html,*.htm,*.shtml,*.stm call s:ConsiderSwitchingToJinjaAgain()
 augroup END
 " }}}
 

@@ -82,10 +82,12 @@ if &tabstop > 4 | setglobal tabstop=4 | endif
 if &shiftwidth > 4  | setglobal shiftwidth=4 | endif
 setglobal expandtab smarttab softtabstop=4
 " It get kinda annoying movin around without _ as a word delimiter
-setglobal iskeyword-=.,_
+" Dont use = as an identifier in gf it frequently isn't part of the fname
+setglobal isfname-==
 if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif
-setglobal cdpath+=$HOME,$VIMRUNTIME
+setglobal cdpath=$HOME,$VIMRUNTIME
 setglobal iskeyword=@,48-57,_,192-255   " Idk how but i managed to mess up the default isk
+setglobal iskeyword-=.,_
 set winblend=10
 
 setglobal suffixes=.bak,~,.o,.info,.swp,.aux,.bbl,.blg,.brf,.cb,.dvi,.idx,.ilg,.ind,.inx,.jpg,.log,.out,.png,.toc,.pyc,*.a,*.obj,*.dll,*.exe,*.lib,*.mui,*.swp,*.tmp,
@@ -415,12 +417,6 @@ endfunction
 " however neovim has it's python interation set up externally. so when i manage
 " to fuck it up, ultisnips breaks. so i need to be able to disable it and then
 " re-enable it when the python integration is fixed
-if exists('did_plugin_ultisnips')
-  if !exists('g:loaded_ultisnips_conf')
-    call UltiSnipsConf()
-    let g:loaded_ultisnips_conf = 1
-  endif
-endif
 " }}}
 
 " Supertab: {{{
