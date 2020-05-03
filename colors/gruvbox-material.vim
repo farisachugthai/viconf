@@ -193,9 +193,6 @@ let g:colors_name = 'gruvbox-material'
           \ ]
     hi multiple_cursors_cursor guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
     hi multiple_cursors_visual guifg=NONE guibg=#504945 guisp=NONE gui=NONE cterm=NONE
-    hi CocHighlightText guifg=NONE guibg=NONE guisp=NONE gui=bold ctermfg=NONE ctermbg=NONE cterm=bold
-    hi CocHoverRange guifg=NONE guibg=NONE guisp=NONE gui=bold,underline ctermfg=NONE ctermbg=NONE cterm=bold,underline
-    hi CocHintSign guifg=#89b482 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
     hi MatchParenCur guifg=NONE guibg=NONE guisp=NONE gui=bold,reverse ctermfg=NONE ctermbg=NONE cterm=bold,reverse
     hi UndotreeSavedBig guifg=#d3869b guibg=NONE guisp=NONE gui=bold cterm=bold
 " }}}
@@ -300,17 +297,6 @@ hi! link ALEVirtualTextWarning Grey
 hi! link ALEVirtualTextInfo Grey
 hi! link ALEVirtualTextStyleError ALEVirtualTextError
 hi! link ALEVirtualTextStyleWarning ALEVirtualTextWarning
-hi! link CocErrorSign ALEErrorSign
-hi! link CocWarningSign ALEWarningSign
-hi! link CocInfoSign ALEInfoSign
-hi! link CocErrorHighlight ALEError
-hi! link CocWarningHighlight ALEWarning
-hi! link CocInfoHighlight ALEInfo
-hi! link CocWarningVirtualText ALEVirtualTextWarning
-hi! link CocErrorVirtualText ALEVirtualTextError
-hi! link CocInfoVirtualText ALEVirtualTextInfo
-hi! link CocHintVirtualText ALEVirtualTextInfo
-hi! link CocCodeLens ALEVirtualTextInfo
 " }}}
 
 " GitGutter: {{{
@@ -1786,34 +1772,56 @@ hi! link TagbarVisibilityPrivate Red
 hi! link TagbarVisibilityPublic Blue
 
 " Coc: {{{
-
+hi CocHighlightText guifg=NONE guibg=NONE guisp=NONE gui=bold ctermfg=NONE ctermbg=NONE cterm=bold
+hi CocHintSign guifg=#89b482 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+hi CocHoverRange guifg=NONE guibg=NONE guisp=NONE gui=bold,underline ctermfg=NONE ctermbg=NONE cterm=bold,underline
+hi! link CocCodeLens ALEVirtualTextInfo
+hi! link CocCodeLens GruvboxGray
+hi! link CocDiagnosticsError Red
+hi! link CocDiagnosticsHint Blue
+hi! link CocDiagnosticsInfo Yellow
+hi! link CocDiagnosticsWarning Orange
+hi! link CocErrorFloat Red
+hi! link CocErrorHighlight ALEError
 hi! link CocErrorLine Exception
-hi! link CocWarningLine WarningMsg
-hi! link CocInfoLine EndOfBuffer
-hi! link CocHintLine Green
-hi! link CocSelectedLine Visual
+hi! link CocErrorSign ALEErrorSign
+hi! link CocErrorVirtualText ALEVirtualTextError
+hi! link CocExplorerBufferBufname Grey
+hi! link CocExplorerBufferBufnr Purple
+hi! link CocExplorerBufferExpandIcon Aqua
+hi! link CocExplorerBufferModified Red
+hi! link CocExplorerBufferRoot Orange
+hi! link CocExplorerFileDirectory Green
+hi! link CocExplorerFileExpandIcon Aqua
+hi! link CocExplorerFileFullpath Aqua
+hi! link CocExplorerFileGitStage Purple
+hi! link CocExplorerFileGitUnstage Yellow
+hi! link CocExplorerFileRoot Orange
+hi! link CocExplorerFileSize Blue
+hi! link CocExplorerTimeAccessed Aqua
+hi! link CocExplorerTimeCreated Aqua
+hi! link CocExplorerTimeModified Aqua
 hi! link CocGitAddedSign GitGutterAdd
 hi! link CocGitChangeRemovedSign GitGutterChangeDelete
 hi! link CocGitChangedSign GitGutterChange
 hi! link CocGitRemovedSign GitGutterDelete
 hi! link CocGitTopRemovedSign GitGutterDelete
-hi! link CocExplorerBufferRoot Orange
-hi! link CocExplorerBufferExpandIcon Aqua
-hi! link CocExplorerBufferBufnr Purple
-hi! link CocExplorerBufferModified Red
-hi! link CocExplorerBufferBufname Grey
-hi! link CocExplorerFileRoot Orange
-hi! link CocExplorerFileExpandIcon Aqua
-hi! link CocExplorerFileFullpath Aqua
-hi! link CocExplorerFileDirectory Green
-hi! link CocExplorerFileGitStage Purple
-hi! link CocExplorerFileGitUnstage Yellow
-hi! link CocExplorerFileSize Blue
-hi! link CocExplorerTimeAccessed Aqua
-hi! link CocExplorerTimeCreated Aqua
-hi! link CocExplorerTimeModified Aqua
-" Which element do you have selected. Nope it's every element.
+hi! link CocHintFloat Blue
+hi! link CocHintLine Green
+hi! link CocHintVirtualText ALEVirtualTextInfo
+hi! link CocInfoFloat Yellow
+hi! link CocInfoHighlight ALEInfo
+hi! link CocInfoLine EndOfBuffer
+hi! link CocInfoSign ALEInfoSign
+hi! link CocInfoVirtualText ALEVirtualTextInfo
 hi! link CocListsLine Blue
+hi! link CocSelectedLine Visual
+hi! link CocSelectedText GruvboxRed
+hi! link CocWarningFloat Orange
+hi! link CocWarningHighlight ALEWarning
+hi! link CocWarningLine WarningMsg
+hi! link CocWarningSign ALEWarningSign
+hi! link CocWarningVirtualText ALEVirtualTextWarning
 " }}}
 
 hi! link QuickmenuOption Green

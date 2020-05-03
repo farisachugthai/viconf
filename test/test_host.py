@@ -4,8 +4,8 @@ from pathlib import Path
 
 sys.path.insert(0, Path("../python3").resolve().__fspath__())
 
-from pynvim_ import Host, host_method_spec
-from pynvim_ import ScriptHost
+from pynvim import Host, host_method_spec
+from pynvim import ScriptHost
 
 import pytest
 

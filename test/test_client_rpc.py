@@ -5,7 +5,7 @@ from pathlib import Path
 
 sys.path.insert(0, Path("../python3").resolve().__fspath__())
 
-from pynvim_ import Nvim   # ?
+from pynvim import Nvim   # ?
 
 
 def test_call_and_reply(vim):

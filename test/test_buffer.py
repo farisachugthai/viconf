@@ -10,7 +10,7 @@ from pathlib import Path
 root = Path(__file__).parent.parent
 sys.path.insert(0, root.joinpath("python3").__fspath__())
 
-from pynvim_ import NvimError, attach
+from pynvim import NvimError, attach
 
 # from _pytest.mark
 # from _pytest.config import ExitCode

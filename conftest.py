@@ -10,8 +10,8 @@ here = os.path.dirname(os.path.abspath(__file__))
 
 sys.path.insert(0, os.path.join(here, 'python3'))
 
-import pynvim_
-from pynvim_ import *
+# import pynvim
+from pynvim import attach
 
 import pytest
 # from _pytest.config import ConftestImportFailure

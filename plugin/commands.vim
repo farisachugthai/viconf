@@ -441,7 +441,7 @@ endfunction
 
 " command! -range -bang -nargs=? -bar -complete=custom,s:PythonMods Pydoc call pydoc_help#Pydoc(<f-args>, <bang>0, <mods>)
 
-command! -bang -nargs=? -bar Pydoc call pydoc_help#Pydoc(<f-args>, <bang>0)
+command! -bang -nargs=? -bar Pydoc call pydoc_help#Pydoc(<q-args>, <bang>)
 
 " command! -bar -bang -range PydocSp
 "       \ exec '<mods>split<bang>:python3 import pydoc'.expand('<cWORD>').'; pydoc.help('.expand('<cWORD>').')'

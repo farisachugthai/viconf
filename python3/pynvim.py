@@ -137,7 +137,7 @@ except ImportError:
             raise NotImplementedError
 
         @classmethod
-        def register(cls, Path):
+        def register(self, Path):
             pass
 
     PathLike.register(pathlib.Path)
@@ -3121,6 +3121,7 @@ class BaseEventLoopABC(asyncio.base_events.BaseEventLoop, abc.ABC):
     def _send(self, data):
         pass
 
+    @classmethod
     def register(self, other):
         pass
 
@@ -3131,21 +3132,21 @@ class BaseEventLoopABC(asyncio.base_events.BaseEventLoop, abc.ABC):
 class AsyncioEventLoop(BaseEventLoopABC, asyncio.SubprocessProtocol, asyncio.Protocol):
     """`BaseEventLoopABC` subclass that uses `asyncio` as a backend.
 
-    No longer subclasses asyncio.Protocol because.:
-
-        The user should implement this interface.  They can inherit from
-        this class but don't need to.  The implementations here do
-        nothing (they don't raise exceptions).
-
-    But if we inherit from StreamReader we get more functionality.
-    Also triple subclassing is a horrible idea so I broke it up a little.
-
-    On windows use ProactorEventLoop which support pipes and is backed by the
+    On Windows use ProactorEventLoop which support pipes and is backed by the
     more powerful IOCP facility
 
-    NOTE: we override in the stdio case, because it doesn't work.
+    .. note::
+        We override in the stdio case, because it doesn't work.
+
+    Attributes
+    ----------
+    _fact : asyncio.Protocol factory.
+        Review the `asyncio.events.EventLoop.subprocess_exec`.
 
     """
+    _closed = False
+
+    _fact = None  # TODO
 
     if os.name == "nt":
         loop_cls = asyncio.ProactorEventLoop
@@ -3160,6 +3161,8 @@ class AsyncioEventLoop(BaseEventLoopABC, asyncio.SubprocessProtocol, asyncio.Pro
     if _local is None:
         _local = threading.local
     _raw_transport = None
+
+    # .. admonition:: don't set raw_transport yet.
 
     # _fact: Callable[EventLoop, [asyncio.protocols.Protocol]]
     #         if isinstance(transport_type, asyncio.SubprocessTransport):
@@ -3248,11 +3251,20 @@ class AsyncioEventLoop(BaseEventLoopABC, asyncio.SubprocessProtocol, asyncio.Pro
         os.dup2(sys.stderr.fileno(), sys.stdout.fileno())
 
     def _connect_child(self, argv):
+        """Connect to Nvim using the 'child' method of attach.
+
+        Internally, uses asyncio subprocesses. At this time, the default
+        Windows default EventLoop does **NOT** support shelling out.
+
+        :param argv: Args to pass to the loop's :meth:`subprocess_exec`.
+        """
         # TODO: is this still unsupported on NT?
         if os.name != "nt":
             self._child_watcher = asyncio.get_child_watcher()
             self._child_watcher.attach_loop(self._loop)
         coroutine = self._loop.subprocess_exec(self._fact, *argv)
+        # so lookin at this stack traces we should have DEFINITEly started
+        # using the await keyword. this function starts calling async def funcs
         self._loop.run_until_complete(coroutine)
 
     def _start_reading(self):
@@ -3891,7 +3903,6 @@ class UvEventLoop(BaseEventLoopABC):
         for handle in self._signal_handles:
             handle.stop()
 
-BaseEventLoopABC.register(AsyncioEventLoop)
 
 import gc
 gc.collect()

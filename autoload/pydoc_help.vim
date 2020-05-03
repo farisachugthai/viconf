@@ -73,11 +73,31 @@ function! s:handle_user_config() abort   " {{{
   endif
 endfunction   " }}}
 
-function! pydoc_help#Pydoc(module, bang) abort  " {{{
-  let s:ret_bufname = ''
-  call pydoc_help#OpenTempBuffer(a:bang, '', s:ret_bufname)
-  exe 'split ' . s:ret_bufname
-  exec 'r!python -m pydoc ' . a:module
+function! pydoc_help#Pydoc(bang, ...) abort  " {{{
+  " Step 1: Get the module to look for
+  if len(a:000) > 0
+    if a:1 is ''
+      if expand('<cfile>') is ''
+        return
+      else
+        let s:word = expand('<cfile>')
+      endif
+    else
+      let s:word = a:1
+    endif
+  else
+    return
+  endif
+
+  " Step 2: Create the buffer.
+  if &autowrite | :write | endif
+
+  " I think either of these 2 ways works.
+  " let s:buf = nvim_create_buf(v:false, v:true)
+  exe 'keepjumps keepalt enew' . a:bang
+
+  " Call pydoc. I don't like that we shell out to python when we have a remote host to query
+  exec 'r!python -m pydoc ' . s:word
   if &shell ==# 'cmd.exe'
     " Fuckin ^M all over the place
     :%s/\r$//
@@ -88,6 +108,8 @@ endfunction   " }}}
 
 function! pydoc_help#OpenTempBuffer(...) abort  " {{{
   " it took a BUNCH of attempts but i think i finally figured out how to do this right
+  " nah it doesn't move to the new buffer. err it does but it removes the buffer you
+  " were working on which is outstandingly horrible
   if !a:0
     return
   endif
@@ -105,7 +127,7 @@ function! pydoc_help#OpenTempBuffer(...) abort  " {{{
 endfunction  " }}}
 
 function! pydoc_help#async_cursor() abort " Async Pydoc: {{{
-  let s:temp_cword = expand('<cWORD>')
+  let s:temp_cword = expand('<cfile>')
   enew
   call jobstart('pydoc ' . s:temp_cword, {'on_stdout':{j,d,e->append(line('.'),d)}})
   call nvim_command('sleep 1')

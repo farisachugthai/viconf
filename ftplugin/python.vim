@@ -109,8 +109,9 @@ noremap <buffer> <F5> <Cmd>py3f %<CR>
 noremap! <buffer> <F5> <Cmd>py3f %<CR>
 
 " TODO: should we do the xnoremap part too?
-" nnoremap <buffer> K exe 'Pydoc ' . expand('<cWORD>')<CR>
-let &l:keywordprg = ':Pydoc'
+" can't do this because it requires args
+" let &l:keywordprg = ':Pydoc'
+nnoremap <buffer> K <Cmd>call pydoc_help#Pydoc('', expand('<cfile>'))<CR>
 
 " Lol spacemacs had me do this a few times
 nnoremap <buffer> ,eb <Cmd>py3f %<CR>
