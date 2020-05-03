@@ -32,7 +32,7 @@ call htmlcomplete#DetectOmniFlavor()
 " From the help docs on matchit. Not gonna check for existence since we
 " should've gotten theirs. Takeaway lesson. Use .\{-} as often as necessary.
 " .* will fuck you.
-let b:match_words.='<.\{-}>:<[^>]*>'
+let b:match_words+='<.\{-}>:<[^>]*>'
 
 call ftplugins#ALE_Html_Conf()
 

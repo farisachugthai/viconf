@@ -151,18 +151,6 @@ function! find_files#msdos_remote() abort  " {{{1
   " wow this one actually fucking worked
   let g:node_host_prog = 'C:\Users\fac\scoop\apps\winpython\current\n\node_modules\neovim\bin\cli.js'
 
-  let g:clipboard = {
-        \   'name': 'winClip',
-        \   'copy': {
-        \      '+': 'win32yank.exe -i --crlf',
-        \      '*': 'win32yank.exe -i --crlf',
-        \    },
-        \   'paste': {
-        \      '+': 'win32yank.exe -o --crlf',
-        \      '*': 'win32yank.exe -o --crlf',
-        \   },
-        \   'cache_enabled': 1,
-        \ }
 endfunction   " }}}
 
 function! find_files#RipgrepFzf(query, fullscreen)  abort   " {{{

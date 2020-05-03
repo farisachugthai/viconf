@@ -8,6 +8,8 @@ Dec 07, 2019: Double checked that this passes a cursory `:py3f %` test and it di
 
 """
 import json
+import os
+
 import xml.dom.minidom as md
 import sys
 

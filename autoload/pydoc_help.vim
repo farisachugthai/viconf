@@ -45,7 +45,7 @@ function! s:temp_buffer() abort  " {{{
   syntax enable
   " Because i have it on in my rst filetype.
   setlocal nospell
-  setlocal buftype=nofile bufhidden=delete noswapfile nowrap
+  " setlocal buftype=nofile bufhidden=delete noswapfile nowrap
   " don't do thi until we stop debugging
   " setlocal nomodified
 
@@ -74,14 +74,14 @@ function! s:handle_user_config() abort   " {{{
 endfunction   " }}}
 
 function! pydoc_help#Pydoc(module, bang) abort  " {{{
-  if a:bang
-    tabe
-  else
-    let s:buf = pydoc_help#scratch_buffer()
-  endif
-
-  exe 'split ' . s:buf
+  let s:ret_bufname = ''
+  call pydoc_help#OpenTempBuffer(a:bang, '', s:ret_bufname)
+  exe 'split ' . s:ret_bufname
   exec 'r!python -m pydoc ' . a:module
+  if &shell ==# 'cmd.exe'
+    " Fuckin ^M all over the place
+    :%s/\r$//
+  endif
 
   call s:temp_buffer()
 endfunction   " }}}

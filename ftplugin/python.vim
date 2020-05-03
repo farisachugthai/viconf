@@ -25,11 +25,6 @@ let g:pyindent_searchpair_timeout = '250'
 " }}}
 
 " Filetype Specific Options: {{{
-if has('win32') || has('win64')
-  setlocal keywordprg=python\ -m\ pydoc\
-else
-  setlocal keywordprg=pydoc
-endif
 
 source $VIMRUNTIME/ftplugin/python.vim
 if exists('b:did_indent') | unlet! b:did_indent | endif
@@ -45,7 +40,7 @@ setlocal indentexpr=
 setlocal nowrap
 
 setlocal nolinebreak  " Dont set this on itll create syntaxerors
-setlocal textwidth=80
+" setlocal textwidth=80
 setlocal tagcase=smart
 setlocal comments=b:#,fb:-
 setlocal commentstring=#\ %s
@@ -76,7 +71,8 @@ setlocal isfname+=.
 setlocal iskeyword-=.,_
 
 setlocal shiftround
-setlocal cindent
+setlocal nocindent
+" setlocal cindent
 let &l:path = py#PythonPath()
 
 " Dude the original ftplugin doesn't set up match words. why are the vim
@@ -113,7 +109,8 @@ noremap <buffer> <F5> <Cmd>py3f %<CR>
 noremap! <buffer> <F5> <Cmd>py3f %<CR>
 
 " TODO: should we do the xnoremap part too?
-nnoremap <buffer> K <Cmd>PydocShow<CR>
+" nnoremap <buffer> K exe 'Pydoc ' . expand('<cWORD>')<CR>
+let &l:keywordprg = ':Pydoc'
 
 " Lol spacemacs had me do this a few times
 nnoremap <buffer> ,eb <Cmd>py3f %<CR>

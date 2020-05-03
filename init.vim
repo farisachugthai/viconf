@@ -23,9 +23,11 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h'))
 " Seriously how does this keep getting fucked up. omfg packpath is worse???
 setglobal runtimepath=$HOME/.config/nvim,$HOME/.local/share/nvim/site,$VIMRUNTIME
 setglobal packpath=~/.config/nvim/pack,~/.local/share/nvim/site/pack,$VIMRUNTIME
-if !has('unix') | source C:/Neovim/share/nvim-qt/runtime/plugin/nvim_gui_shim.vim | endif
+if !has('unix')
+  " call it silly but keep source expressions on their own line. TPope set them up in &include
+  source C:/Neovim/share/nvim-qt/runtime/plugin/nvim_gui_shim.vim
+endif
 
-" Source ginit. Why is this getting set even in the TUI?
 if exists('g:GuiLoaded') | exec 'source ' s:repo_root . '/ginit.vim' | endif
 " TODO: clipboards fucking up on windows
 setglobal clipboard=unnamed,unnamedplus
@@ -88,7 +90,7 @@ function! LoadMyPlugins() abort  " {{{
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-scriptease', {'for': 'vim'}
 
-  " Plug 'SirVer/ultisnips'
+  Plug 'SirVer/ultisnips'
   Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }
   nnoremap <Leader>a <Cmd>sil! ALEEnable<CR><bar>:sil! call plugins#AleMappings()<CR><bar>:sil! CocDisable<CR>:sil! redraw!<CR>:ALELint<CR>
   nnoremap <Leader>et <Cmd>ALEToggle<CR>:sil! call plugins#AleMappings()<CR>:sil! redraw!<CR>
@@ -100,9 +102,9 @@ function! LoadMyPlugins() abort  " {{{
 
   Plug 'mhinz/vim-startify'
   Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
-  noremap <F8> <Cmd>TagbarToggle<CR><Cmd>call plugins#TagbarTypes()<CR><Cmd>call tagbar#types#uctags#init({})<CR>
-  noremap! <F8> <Cmd>TagbarToggle<CR><Cmd>call plugins#TagbarTypes()<CR><Cmd>call tagbar#types#uctags#init({})<CR>
-  tnoremap <F8> <Cmd>TagbarToggle<CR><Cmd>call plugins#TagbarTypes()<CR><Cmd>call tagbar#types#uctags#init({})<CR>
+  noremap <F8> <Cmd>TagbarToggle<CR><Cmd>call plugins#TagbarTypes()<CR><Cmd>call tagbar#types#uctags#init({})<CR><Cmd>source ~/projects/viconf/plugin/autocmd.vim<CR>
+  noremap! <F8> <Cmd>TagbarToggle<CR><Cmd>call plugins#TagbarTypes()<CR><Cmd>call tagbar#types#uctags#init({})<CR><Cmd>source ~/projects/viconf/plugin/autocmd.vim<CR>
+  tnoremap <F8> <Cmd>TagbarToggle<CR><Cmd>call plugins#TagbarTypes()<CR><Cmd>call tagbar#types#uctags#init({})<CR><Cmd>source ~/projects/viconf/plugin/autocmd.vim<CR>
 
   " yo this mapping is great
   nnoremap ,t <Cmd>CocCommand tags.generate<CR><Cmd>TagbarToggle<CR>
@@ -118,10 +120,9 @@ function! LoadMyPlugins() abort  " {{{
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
   Plug 'omnisharp/omnisharp-vim', {'for': ['cs', 'ps1'] }
   Plug 'itspriddle/vim-shellcheck', {'for': ['sh', 'bash'] }
-  " Plug 'neovim/nvim-lsp'
 
   if empty(s:termux)  " {{{
-
+    Plug 'honza/vim-snippets'
     Plug 'ludovicchabant/vim-gutentags'
     Plug 'godlygeek/tabular', {'on': 'Tabularize'}
     Plug 'mbbill/undotree', { 'on' : 'UndotreeToggle' }
@@ -134,8 +135,7 @@ function! LoadMyPlugins() abort  " {{{
     Plug 'morhetz/gruvbox'
   endif " }}}
 
-  Plug 'liuchengxu/vim-which-key', {'dir': expand(stdpath('data')) . '/site/pack/git-plugins/start/vim-which-key'}
-
+  Plug 'liuchengxu/vim-which-key'
   Plug 'ryanoasis/vim-devicons'
   call plug#end()
 endfunction
@@ -145,8 +145,12 @@ call LoadMyPlugins()
 " I utilize this command so often I may as well save the characters
 command! -bar Plugins echomsg map(keys(g:plugs), '"\n" . v:val')
 
+setglobal background=dark
+syntax on
 " For some reason running syntax enable clears the syntax option
-let g:syntax_cmd = "enable"
+" also setting background requires syntax on to reload
+let g:syntax_cmd = "on"
+
 " in case i started things with -u NONE
 if &loadplugins is 0 | set loadplugins | endif
 " }}}

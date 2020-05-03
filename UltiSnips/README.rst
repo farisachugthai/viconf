@@ -338,6 +338,55 @@ In a snippets file for reStructuredText.
 
 Lastly, I wanted to end on a note from from ``@SirVer`` himself.
 
+
+Repeating Prefixes
+------------------
+
+Apr 15, 2020:
+Here's an interesting feature I ran into today!
+
+In :file:`rst.snippets` I have 2 snippets with the prefix ``mod``.
+
+One was set with the :kbd:`b` option and the other with the :kbd:`w` option.
+
+If the word mod was written in the middle of a sentence but separated by
+whitespace, then the prefix with the w option would fire.
+
+If the word was at the beginning of the line, the prefix with the b option
+would fire, even if there were words after it and even if there was whitespace
+before it!
+
+For example.:
+
+   Most programs using other concurrency models are written linearly, and rely on
+   the underlying threading or process management of the language runtime or
+   operating system to change context as appropriate. An application based on
+   :mod:`asyncio` requires the application code to explicitly handle context changes, and
+   using the techniques for doing that correctly depends on understanding several
+   inter-related concepts.
+
+   The framework provided by :mod:`asyncio` is centered on an event loop, a first class
+   object responsible for efficiently handling I/O events, system events, and
+   application context changes. Several loop implementations are provided, to take
+   advantage of operating system capabilities efficiently. While a reasonable
+   default is usually selected automatically, it is also possible to pick a
+   particular event loop implementation from within the application. This is
+   useful under Windows, for example, where some loop classes add support for
+   external processes in a way that may trade some efficiencies in network I/O.
+
+I wanted to change the word asyncio to be \:mod\:\`asyncio\`.
+With my cursor on the ``a`` of the second asyncio, I pressed ``v`` ``e``
+:kbd:`Tab` ``m - o - d`` :kbd:`Tab` and to my surprise it expanded without
+confirmation.
+
+Then the 1st one expanded to something different. Even more to my surprise,
+I prefixed the 1st asyncio with a random letter, as I wanted the behavior
+of the inline expansion. I pressed :kbd:`c` :kbd:`e` and it prompted me for
+confirmation as to which one I wanted! With no letter before the snippet that
+took the b option, it expands without confirmation.
+
+This was all very unexpected and I simply wanted to make note of it.
+
 Standing On The Shoulders of Giants
 ===================================
 

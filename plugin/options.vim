@@ -43,6 +43,12 @@ setglobal completeopt=menu,menuone,noselect,noinsert,preview
 " both smartcase and infercase require ignorecase to be set:
 setglobal ignorecase
 
+" Path:
+let &g:path = '.,,**,' . expand('$VIMRUNTIME') . '/*/*.vim'  . ',' . stdpath('config')
+let &g:path = &path . ',' . stdpath('data')
+setglobal path-=/usr/include
+
+" Indentation:
 setlocal indentkeys+=<:>,=elif,=except
 setlocal indentkeys-=0#
 
@@ -55,7 +61,7 @@ setglobal shada='100,<50,s10,:3000,%
 " default but specify it.
 let &g:shadafile = stdpath('data').'/site/shada/main.shada'
 
-" Couple tag related things
+" Tags:
 setglobal tags=tags,**/tags
 setglobal tagcase=smart
 setglobal showfulltag
@@ -77,34 +83,38 @@ call syncom#gruvbox_material()
 " to enable transparency but force the current selected element to be fully opaque: >
 set pumblend=15
 hi PmenuSel blend=0
+
 setglobal autochdir autowrite autoread
+
+" Tabs:
 if &tabstop > 4 | setglobal tabstop=4 | endif
 if &shiftwidth > 4  | setglobal shiftwidth=4 | endif
+
 setglobal expandtab smarttab softtabstop=4
+
+if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif
+
+setglobal cdpath=$HOME,$VIMRUNTIME
+
+" Movement:
 " It get kinda annoying movin around without _ as a word delimiter
 " Dont use = as an identifier in gf it frequently isn't part of the fname
 setglobal isfname-==
-if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif
-setglobal cdpath=$HOME,$VIMRUNTIME
 setglobal iskeyword=@,48-57,_,192-255   " Idk how but i managed to mess up the default isk
 setglobal iskeyword-=.,_
+
 set winblend=10
 
 setglobal suffixes=.bak,~,.o,.info,.swp,.aux,.bbl,.blg,.brf,.cb,.dvi,.idx,.ilg,.ind,.inx,.jpg,.log,.out,.png,.toc,.pyc,*.a,*.obj,*.dll,*.exe,*.lib,*.mui,*.swp,*.tmp,
 
 setglobal pastetoggle=<F9>   " fuck me this is what windows terminal uses for something
 setglobal signcolumn=auto:4  " this might be a nvim 4 thing
-" Don't put usetab before split in switchbuf. If you do then stuff like
-" `:helpgrep word` will open a new tab with results and leave the quickfix list in the previous tab.
-" because qf lists don't transfer from tab to tab, you won't be able to access the search results in
-" the window that your cursor just moved to!
 try | setglobal switchbuf=useopen,split | catch | endtry
 setglobal splitbelow splitright
 " sidescroll needs to be set low
 setglobal sidescroll=0 sidescrolloff=5
 setglobal nostartofline
 setglobal hidden
-" dude these stopped setting when i set global them
 set number relativenumber
 setglobal cmdheight=3
 " why is 20? help windows can be really intrusive with it that high
@@ -117,8 +127,6 @@ if filereadable(s:repo_root . '/spell/en.utf-8.add')
   let &g:spellfile = s:repo_root . '/spell/en.utf-8.add'
 endif
 
-let &g:path = &path . ',' . stdpath('data')
-setglobal path-=/usr/include
 setglobal sessionoptions-=buffers,winsize viewoptions-=options sessionoptions+=globals
 setglobal mouse=a
 setglobal selectmode=mouse  " start select mode instead of visual mode because why not
@@ -127,16 +135,19 @@ setglobal modeline
 if exists('&modelineexpr') | setglobal modelineexpr | endif
 
 setglobal whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
+
 " TODO: closeoff needs to be added conditionally. how?
 setglobal browsedir='buffer'   " which directory is used for the file browser
 
+" Unicode Symbols:
 let &g:listchars = 'tab:\u21e5\u00b7,extends:\u21c9,precedes:\u21c7,nbsp:\u00b7'
 " trail:\u2423 doesn't work with hack as font
 let &g:fillchars = "stl:' ',stlnc:' ',vert:\u250b,fold:\u00b7,diff:'.'"
 " set fillchars=stl:^,stlnc:=,vert:│,fold:·,diff:-
+let &g:showbreak = '↳ '
 
+" Indent wrapped lines correctly
 setglobal breakindent breakindentopt=sbr
-let &g:showbreak = '↳ '                   " Indent wrapped lines correctly
 setglobal updatetime=400 lazyredraw
 setglobal inccommand=split
 setglobal terse shortmess=aoOsItTWcF
@@ -145,16 +156,13 @@ setglobal conceallevel=2 concealcursor=nc    " enable concealing
 setglobal spellsuggest=5
 setglobal showmatch matchpairs+=<:>
 setglobal matchtime=20  " Show the matching pair for 2 seconds
-" dude holy hell are we running faster on termux without set termguicolors. sorry though it
-" looks very off
 set termguicolors
 setglobal synmaxcol=1000
 set nohlsearch
-setglobal regexpengine=2
 
 " Todo:
-"g:fugitive_browse_handlers',
-"
+" g:fugitive_browse_handlers',
+
 " currently dont have enough tlib stuff to warrant a section
 let g:tlib_extend_keyagents_InputList_s = {
     \ 10: 'tlib#agent#Down',
@@ -195,6 +203,9 @@ elseif !has('unix')
   " func. you do so in ./plugin/unix.vim but jesus christ did it fuck stuff up
   " when that got deleted
   call find_files#msdos_remote()
+
+nnoremap <silent> <leader>      :<c-u>WhichKey '<Space>'<CR>
+nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
 else
   call find_files#ubuntu_remote()
 endif
@@ -226,12 +237,12 @@ if !isdirectory(expand(&g:undodir))
 endif
 
 if has('nvim')
-  let &path = '.,,**,' . expand('$VIMRUNTIME') . '/*/*.vim'  . ',' . stdpath('config')
   let $FZF_DEFAULT_OPTS .= ' --border --margin=0,2'
   let g:fzf_layout = { 'window': 'call plugins#FloatingFZF()' }
 else
   let g:fzf_layout = { 'window': '-tabnew' }
 endif
+
 " }}}
 
 " QF: {{{
@@ -391,8 +402,6 @@ endif
 
 " UltiSnips: {{{
 function! UltiSnipsConf() abort
-  let b:did_autoload_ultisnips = 1
-
   let g:UltiSnipsExpandTrigger = '<Tab>'
   let g:UltiSnipsJumpForwardTrigger= '<Tab>'
   let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
@@ -556,83 +565,61 @@ function! s:Init_coc() abort
     " call coc#util#install_extension(l:ext)
   " endfor
 
-  if empty($ANDROID_DATA)
-    " TODO: nvm is gonna make this more complicated
-    " fuck why isn't this working??
-    " if has('unix')
-    "   let s:nvm = system('nvm which current')
-    "   let g:coc_node_path = s:nvm
-    " else
-    if !has('unix')
+  if !has('unix')
+    " basically do nothing because it's emitting errors for now
       let g:coc_node_path = 'C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\\node.exe'
-      if executable(expand('~/.config/coc/extensions/node_modules/.bin/bash-language-server'))
-        let s:bashlsp = expand('~/.config/coc/extensions/node_modules/.bin/bash-language-server.cmd')
-      endif
-
-      if executable(expand('~/.config/coc/extensions/node_modules/.bin/vim-language-server'))
-        let s:vimlsp = expand('~/.config/coc/extensions/node_modules/.bin/vim-language-server.cmd')
-      endif
-
-                  " \ 'command': 'yaml-language-server.cmd',
-                  " \ 'filetypes': ['yaml' ],
-        " \   'module': expand('~/.config/coc/extensions/node_modules/yaml-language-server/out/server/src/index.js')
-
-  " call coc#config('languageserver', {
-  "       \ 'yaml-language-server': {
-  "       \   'args': ['--stdio'], 
-  "       \   'initializationOptions': {
-  "       \     'yaml.format.enable': {
-  "       \       'enable'
-  "       \     }},
-  "       \   'command': 'yaml-language-server',
-  "       \ }})
-
-    else " honestly usually arch just figures this shit out on it's own
-
+  else
+      " arch is working as is termux
+    if executable(expand('~/.config/coc/extensions/node_modules/.bin/bash-language-server'))
+      let s:bashlsp = expand('~/.config/coc/extensions/node_modules/.bin/bash-language-server.cmd')
+    else
       let s:bashlsp = 'bash-language-server'
+    endif
+
+    if executable(expand('~/.config/coc/extensions/node_modules/.bin/vim-language-server'))
+      let s:vimlsp = expand('~/.config/coc/extensions/node_modules/.bin/vim-language-server.cmd')
+    else
       let s:vimlsp = 'vim-language-server'
     endif
-  else
-    call coc#config('python.jediEnabled', v:false)
-    let g:coc_node_path = expand('$PREFIX/bin/node')
-    let s:bashlsp = 'bash-language-server'
-    let s:vimlsp = 'vim-language-server'
+
+    call coc#config('languageserver', {
+                    \ 'bash': {
+                    \   'args': [ 'start' ],
+                    \   'command': s:bashlsp,
+                    \   'filetypes': ['sh', 'bash']}})
+
+    call coc#config('languageserver', {
+                    \ 'vimlsp': {
+                    \   'command': s:vimlsp,
+                    \   'args': ['--stdio'],
+                    \   'initializationOptions': {
+                    \     'iskeyword': '@,48-57,_,192-255,-#',
+                    \     'vimruntime': '$VIMRUNTIME',
+                    \     'runtimepath': v:false,
+                    \     'diagnostic': {
+                    \       'enable': v:true
+                    \     },
+                    \   'indexes': {
+                    \     'count': 3,
+                    \     'gap': 100,
+                    \     'runtimepath': v:true,
+                    \   },
+                    \   'suggest': {
+                    \     'fromRuntimepath': v:false,
+                    \     'fromVimruntime': v:true,
+                    \   }},
+                    \ 'filetypes': ['vim']}})
+
+    if !empty($ANDROID_DATA)
+      call coc#config('python.jediEnabled', v:false)
+      let g:coc_node_path = expand('$PREFIX/bin/node')
+    endif
   endif
-
-  call coc#config('languageserver',
-                  \ {'bash':
-                  \ {'args': [ 'start' ],
-                  \ 'command': s:bashlsp,
-                  \ 'filetypes': ['sh', 'bash']}})
-
-  call coc#config('languageserver', {
-                  \ 'vimlsp': {
-                  \   'command': s:vimlsp,
-                  \   'args': ['--stdio'],
-                  \   'initializationOptions': {
-                  \     'iskeyword': '@,48-57,_,192-255,-#',
-                  \     'vimruntime': '$VIMRUNTIME',
-                  \     'runtimepath': v:false,
-                  \     'diagnostic': {
-                  \       'enable': v:true
-                  \     },
-                  \   'indexes': {
-                  \     'count': 3,
-                  \     'gap': 100,
-                  \     'runtimepath': v:true,
-                  \   },
-                  \   'suggest': {
-                  \     'fromRuntimepath': v:false,
-                  \     'fromVimruntime': v:true,
-                  \   }},
-                  \ 'filetypes': ['vim']}})
 
 endfunction
 
-" if !exists('g:coc_init')
-  call s:Init_coc()
-  " let g:coc_init = 1
-" endif
+call s:Init_coc()
+
 " }}}
 
 " FZF: {{{
@@ -730,6 +717,7 @@ let g:tmuxline_powerline_separators = {
      \ 'right' : '«',
      \ 'right_alt' : '◀',
      \ 'space' : ' '}
+
 " }}}
 
 " Voom: {{{
@@ -777,6 +765,50 @@ let g:OmniSharp_timeout = 5
 let g:OmniSharp_highlight_types = 2
 let g:OmniSharp_selector_ui = 'fzf'
 
+" }}}
+
+" Which Key: {{{
+
+let g:which_key_align_by_seperator = 1
+let g:which_key_use_floating_win = 1
+let g:which_key_run_map_on_popup = 1
+let g:which_key_fallback_to_native_key=1
+
+let g:which_key_map = {}
+let g:which_key_map['w'] = {
+      \ 'name' : '+windows' ,
+      \ 'w' : ['<C-W>w'     , 'other-window']          ,
+      \ 'd' : ['<C-W>c'     , 'delete-window']         ,
+      \ '-' : ['<C-W>s'     , 'split-window-below']    ,
+      \ '|' : ['<C-W>v'     , 'split-window-right']    ,
+      \ '2' : ['<C-W>v'     , 'layout-double-columns'] ,
+      \ 'h' : ['<C-W>h'     , 'window-left']           ,
+      \ 'j' : ['<C-W>j'     , 'window-below']          ,
+      \ 'l' : ['<C-W>l'     , 'window-right']          ,
+      \ 'k' : ['<C-W>k'     , 'window-up']             ,
+      \ 'H' : ['<C-W>5<'    , 'expand-window-left']    ,
+      \ 'J' : ['resize +5'  , 'expand-window-below']   ,
+      \ 'L' : ['<C-W>5>'    , 'expand-window-right']   ,
+      \ 'K' : ['resize -5'  , 'expand-window-up']      ,
+      \ '=' : ['<C-W>='     , 'balance-window']        ,
+      \ 's' : ['<C-W>s'     , 'split-window-below']    ,
+      \ 'v' : ['<C-W>v'     , 'split-window-below']    ,
+      \ '?' : ['Windows'    , 'fzf-window']            ,
+      \ }
+
+" Create new menus not based on existing mappings:
+  let g:which_key_map.b = {
+       \ 'name' : '+buffer' ,
+       \ '1' : ['b1'        , 'buffer 1']        ,
+       \ '2' : ['b2'        , 'buffer 2']        ,
+       \ 'd' : ['bd'        , 'delete-buffer']   ,
+       \ 'f' : ['bfirst'    , 'first-buffer']    ,
+       \ 'h' : ['Startify'  , 'home-buffer']     ,
+       \ 'l' : ['blast'     , 'last-buffer']     ,
+       \ 'n' : ['bnext'     , 'next-buffer']     ,
+       \ 'p' : ['bprevious' , 'previous-buffer'] ,
+       \ '?' : ['Buffers'   , 'fzf-buffer']      ,
+       \ }
 " }}}
 
 " Vim: set fdm=marker:

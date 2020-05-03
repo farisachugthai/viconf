@@ -222,6 +222,7 @@ IPython7
 ISE
 ISO9660
 Importlib
+IntelliSense
 InteractiveShell
 JQuery
 JetBrains
@@ -354,6 +355,7 @@ PowerShell
 Preprocesses
 ProTools
 PurePath
+PyBind11
 PyCharm
 PyCon
 PyData
@@ -1498,6 +1500,7 @@ ruby
 rufus
 runpy
 runtimepath
+runtimes
 rustup
 rvm
 rw
@@ -1673,6 +1676,7 @@ tnoremap
 toctree
 todo
 toolchain
+toolset
 toolstack
 torbirdy
 torbrowser
@@ -1870,11 +1874,21 @@ zcat
 zenburn
 zim
 zimwiki
+zipapp
 zipfile
+zipfiles
 zipimport
 zlib
 zsh
-PyBind11
-runtimes
-toolset
-IntelliSense
+zipapp
+zipfiles
+DeprecationWarning
+UNC
+Slicings
+pyreadline
+IronPython
+codepage
+picklable
+Implementors
+implementors
+execfile

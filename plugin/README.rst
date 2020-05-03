@@ -20,6 +20,52 @@ If you're not sure why you would want to begin breaking up your vimrc,
 I can't recommend `Tom Ryder's writing enough
 <https://vimways.org/2018/from-vimrc-to-vim>`_
 
+Working with Plugins
+=====================
+
+Vim-Plug is a highly recommended plugin manager, and the one that I myself use.
+
+Written by Junegunn Choi (also the author of FZF), vim-plug creates a
+simple way of interacting with plugins.
+
+Beyond the basic commands you can read about in his README, vim-plug has
+an API that exports the command ``plug``. This command utilizes vimscript to
+return a dictionary with all of your currently loaded plugins.
+
+This dict maintains the order that the plugins were loaded into the buffer and
+can be accessed with
+
+.. code-block:: vim
+
+   echo keys(plugs)
+
+This feature proves phenomenally useful in a handful of situations.
+
+For example, one may want to check whether a ftplugin was lazily loaded or
+loaded at all.
+
+Echoing the plugins that Vim-Plug has loaded at startup time can also be
+an easy way to diagnose performance issues with Vim.
+
+As a product of its utility, I wrote a command to quickly call the dictionary.::
+
+   command! Plugins -nargs=0 echo keys(plugs)
+
+In addition, one could be in the situation where they may have
+different configuration files on different devices, and would like to
+check whether a plugin was installed. It's also good for debugging and
+seeing in what order a plugin loads.
+
+Git Subtree
+-----------
+
+Updating vim-plug.
+
+.. code-block:: bash
+
+   git subtree pull --squash --prefix=vim-plug https://github.com/junegunn/vim-plug.git master
+
+
 Common Vim Naming Conventions
 =============================
 
@@ -95,6 +141,16 @@ If you do, then stuff like ``:helpgrep word`` will open a new tab with
 the results of your search, and leave the quickfix list in the
 previous tab. Because :abbr:`qf` lists don't transfer from tab to tab, you won't be able
 to access the search results in the window that your cursor just moved to!
+
+Possible bug in &number and &rnu
+---------------------------------
+
+The following doesn't seem to work.::
+
+   setglobal nu rnu
+
+However it works just fine when set locally.
+
 
 Writing Plugins on NT systems
 ==============================
@@ -425,3 +481,32 @@ correctly.
 User defined find.::
 
    command! -nargs=* -range=% -addr=buffers -count -bang -bar -complete=file_in_path Find :<count><mods>find<bang> <args>
+
+
+Jumps
+======
+
+Are something I never utilize frequently enough.:
+
+                                                        *CTRL-O*
+CTRL-O                  Go to [count] Older cursor position in jump list
+                        (not a motion command).
+
+<Tab>           or                                      *CTRL-I* *<Tab>*
+CTRL-I                  Go to [count] newer cursor position in jump list
+                        (not a motion command).
+
+
+That's legitimately wonderful to know!
+
+Now I just need to work that in, and make a few utility mappings for the
+quickfix window.
+
+Folds
+-----
+
+.. admonition::  foldclose=all  " close folds automatically when you move out of them
+
+Jesus Christ is this setting annoying. Don't set it!
+
+

@@ -67,7 +67,9 @@ command! -bang -bar CocSort call CocActionAsync('runCommand', 'editor.action.org
 " Just tried this and it worked! So keep checking :CocList commands and add more as we go.
 " BUG: Running :topleft call CocActionAsync('runCommand', 'python.startREPL')
 " does not place the buffer at the top
-command! -bang -bar CocPython call CocActionAsync('runCommand', 'python.startREPL')
+" command! -bang -bar CocPython call CocActionAsync('runCommand', 'python.startREPL')
+" Often enough that command doesn't work
+command! -bar -nargs=* -complete=dir CocPython call coc#terminal#start('python', <q-args>, '')
 
 " Let's also get some information here.
 " call CocAction('commands') is a lamer version of CocCommand
@@ -89,7 +91,7 @@ command! -bar CocFixCurrent     call       CocActionAsync('doQuickfix')
 command! -bar CocFloatHide      call       coc#util#float_hide()
 command! -bar CocFloatJump      call       coc#util#float_jump()
 command! -bar CocCommandRepeat  call       CocActionAsync('repeatCommand')
-" How am I still going? 
+" How am I still going?
 "
 " Yo I found teh function that provides completion for coclist!!
 command! -bar -nargs=* -complete=custom,coc#list#options CocServices call coc#rpc#notify('openList', [<f-args>])
@@ -413,6 +415,11 @@ command! -bar -complete=expression -complete=function -range -nargs=+ Pythonx <l
 " :Pd vim.vars
 command! -range -bar -complete=expression -complete=function -nargs=? Pd <line1>,<line2>python3 from pprint import pprint; pprint(dir(<args>))
 
+
+" Js the original implementation should ALSO complete files or dirs
+command! -range -bar -complete=file -complete=dir -nargs=* Py3f :<line1>,<line2>py3f <args>
+command! -range -bar -complete=file -complete=dir -nargs=* Pyf  :<line1>,<line2>pyf  <args>
+
 command! -range -bar -complete=expression -complete=function -nargs=? P <line1>,<line2>python3 print(<args>)
 
 command! -range -bar -complete=expression -complete=function -nargs=? Pv <line1>,<line2>python3 print(vars(<args>))
@@ -593,8 +600,10 @@ command! -range=% -addr=buffers -bang -bar GRoot echo ProjectRoot()
 
 command! -range -addr=arguments -bang -bar -nargs=* Gclone exe fugitive#Command(<line1>, <count>, +"<range>", <bang>0, "<mods>", <q-args>)
 
-" no args no nothing. just a reminder you can fill a buffer with git output
-command! GHead Gread! show HEAD
+" no args no nothing. just a reminder you can fill a buffer with git output. and then i forgot
+" that this was supposed to just be  a reminder. ready to overengineer TO THE EXTREME
+
+command! -bar GHead call  plugins#fugitive_head()
 command! Gds2 :enew<bar>:Gread! diff --staged --stat HEAD -- .<bar>setlocal nomodified nobuflisted buftype=nofile
 " }}}
 

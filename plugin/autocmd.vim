@@ -72,6 +72,22 @@ augroup UserPlugins " {{{
   autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
   autocmd! User vim-which-key call which_key#register('<Space>', 'g:which_key_map')
+
+  autocmd BufEnter,BufNew *
+        \  if isdirectory(expand('<amatch>'))
+        \|   call plug#load('nerdTree')
+        \|   execute 'autocmd! UserPlugins'
+        \| endif
+
+  if exists('*SuperTabChain')
+    autocmd FileType *
+      \ if &omnifunc != ''
+      \|  call SuperTabChain(&omnifunc, "<c-p>")
+      \| else
+      \|  call SuperTabChain(&completefunc, "<c-p>")
+      \| endif
+  endif
+
 augroup END " }}}
 
 augroup UserPotpourri  " {{{
@@ -91,35 +107,19 @@ augroup TagbarAutoCmds
   " Dude holy christ is this annoying
   au! CursorHold *
   au! CursorHoldI *
+
 augroup END
 
-augroup UserNerdLoader  " {{{
-  autocmd!
-  autocmd BufEnter,BufNew *
-        \  if isdirectory(expand('<amatch>'))
-        \|   call plug#load('nerdTree')
-        \|   execute 'autocmd! UserNerdLoader'
-        \| endif
-
-augroup END " }}}
 
 augroup UserFiletypesCompletions  " {{{
   au!
   " Show type information automatically when the cursor stops moving
   autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
 
-  autocmd BufEnter * if &omnifunc ==# '' | setlocal omnifunc=syntaxcomplete#Complete | endif
+  autocmd BufEnter * if &l:omnifunc ==# '' | setlocal omnifunc=syntaxcomplete#Complete | endif
 
-  autocmd BufEnter * if &completefunc ==# '' | setlocal completefunc=syntaxcomplete#Complete | endif
+  autocmd BufEnter * if &l:completefunc ==# '' | setlocal completefunc=syntaxcomplete#Complete | endif
 
-  if exists('*SuperTabChain')
-    autocmd FileType *
-      \ if &omnifunc != ''
-      \|  call SuperTabChain(&omnifunc, "<c-p>")
-      \| else
-      \|  call SuperTabChain(&completefunc, "<c-p>")
-      \| endif
-  endif
 augroup END  " }}}
 
 if !has('nvim') | finish | endif

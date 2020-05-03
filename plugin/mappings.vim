@@ -6,8 +6,9 @@
 " ============================================================================
 
 " Navigation: {{{
-nnoremap <silent> <leader>      :<c-u>WhichKey '<Space>'<CR>
-nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
+" ugh this is gonna be a hell of a lot of manual entries
+" nnoremap <Leader>      <Cmd>WhichKey'<Space>'<CR>
+" nnoremap <LocalLeader> <Cmd>WhichKey','<CR>
 xnoremap < <gv
 xnoremap > >gv
 
@@ -90,9 +91,9 @@ function! MapRsi() abort
 
   " Sorry tpope <3
   inoremap        <C-A> <C-O>^
-  inoremap   <C-X><C-A> <C-A>
+  inoremap        <C-X><C-A> <C-A>
   cnoremap        <C-A> <Home>
-  cnoremap   <C-X><C-A> <C-A>
+  cnoremap        <C-X><C-A> <C-A>
 
   inoremap <expr> <C-B> getline('.')=~'^\s*$'&&col('.')>strlen(getline('.'))?"0\<Lt>C-D>\<Lt>Esc>kJs":"\<Lt>Left>"
   cnoremap        <C-B> <Left>
@@ -340,11 +341,34 @@ inoremap <expr> <C-Space> coc#refresh()
 " I just realized C-. isn't used!
 imap <C-.> <Plug>(ale_complete)
 
+" This did not work at all
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+
+" fuckin raising
+" imap <expr> <S-TAB> pumvisible() ? '\<C-p>' : '\<C-h>'
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
+" position. Coc only does snippet and additional edit on confirm.
+" <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
+"
 " As a heads up theres also a coc#select#snippet
 " Also use imap so that we can map other things to <CR> as needed
-imap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
+" if exists('*complete_info')
+"   imap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+" else
+"   imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" endif
+
+" Use <TAB> for selections ranges.
+" NOTE: Requires 'textDocument/selectionRange' support from the language server.
+" coc-tsserver, coc-python are the examples of servers that support it.
+xmap <silent> <TAB> <Plug>(coc-range-select)
 
 nnoremap <C-k>d <Plug>(coc-definition)<CR>
+
 " The gu<text object> operation is too important
 nnoremap <expr><buffer> <Leader>u <Plug>(coc-usages)<CR>
 nnoremap ,u <Plug>(coc-usages)<CR>
@@ -639,7 +663,7 @@ endfunction
 " }}}
 
 " Fugitive: {{{
-function UserFugitiveMappings() abort
+function! UserFugitiveMappings() abort
   nnoremap <Leader>gb   <Cmd>Git blame<CR>
   " remember there are now a lot of other mappings that commit too
   nnoremap <Leader>gc   <Cmd>Git commit<CR>
@@ -711,7 +735,7 @@ endif
 " }}}
 
 " Call Functions: {{{
-if !exists('no_plugin_maps') && !exists('no_windows_vim_maps')
+if !exists('no_plugin_maps') && !exists('no_windows_vim_maps') && !exists('g:loaded_plugin_mappings')
 
   call Window_Mappings()
   call AltKeyNavigation()
@@ -720,6 +744,7 @@ if !exists('no_plugin_maps') && !exists('no_windows_vim_maps')
   call Quickfix_Mappings()
   call MapRsi()
   call UserFugitiveMappings()
+  let g:loaded_plugin_mappings = 1
 
 endif
 " }}}

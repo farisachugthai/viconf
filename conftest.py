@@ -52,7 +52,7 @@ def old_vim():
 def vim():
     inside_nvim = os.environ.get('NVIM_LISTEN_ADDRESS')
     if inside_nvim:
-        editor = attach("socket", path=listen_address)
+        editor = attach("socket", path=inside_nvim)
     else:
-        editor = start_host()
+        editor = start_host("stdio", load_plugins=False)
     return editor

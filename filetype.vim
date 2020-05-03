@@ -88,7 +88,8 @@ augroup Userftdetect  " {{{
   au BufNewFile,BufRead *.jinja2,*.j2,*.jinja,*.tera setfiletype htmljinja.htmldjango
   " idk if the filetypes are gonna work the way we want them to but whqtever
   au Filetype jinja                              setfiletype htmljinja.htmldjango
-  au BufNewFile,BufRead *.gitconfig              setfiletype gitconfig
+  " NOTE: No dot because the file gitconfig should also match
+  au BufNewFile,BufRead *gitconfig               setfiletype gitconfig
   au BufNewFile,BufRead *.css_t                  setfiletype css
   au BufNewFile,BufRead *.rktd                   setfiletype lisp
   " Is this correct or was this a typo?
