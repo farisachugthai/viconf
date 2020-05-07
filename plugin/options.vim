@@ -87,7 +87,7 @@ setglobal isfname-==
 if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif
 setglobal cdpath=$HOME,$VIMRUNTIME
 setglobal iskeyword=@,48-57,_,192-255   " Idk how but i managed to mess up the default isk
-setglobal iskeyword-=.,_
+setglobal iskeyword-=-_,,
 set winblend=10
 
 setglobal suffixes=.bak,~,.o,.info,.swp,.aux,.bbl,.blg,.brf,.cb,.dvi,.idx,.ilg,.ind,.inx,.jpg,.log,.out,.png,.toc,.pyc,*.a,*.obj,*.dll,*.exe,*.lib,*.mui,*.swp,*.tmp,
@@ -177,8 +177,8 @@ else
   " Find The Ctags Executable:
   if filereadable(expand('$HOME/src/ctags/ctags.exe'))
     let g:tagbar_ctags_bin = expand('$HOME/src/ctags/ctags.exe')
-  elseif executable(exepath('ctags'))
-    let g:tagbar_ctags_bin = exepath('ctags')
+  " elseif executable(exepath('ctags'))
+  "   let g:tagbar_ctags_bin = exepath('ctags')
   endif
 
   " Icon Chars
@@ -343,20 +343,21 @@ let g:NERDTreeMapJumpParent = '-'
 " I want the spacebar back
 let g:tagbar_map_showproto = '?'
 " let g:tagbar_left = 2
-let g:tagbar_width = 30
-let g:tagbar_sort = 0
+" let g:tagbar_width = 30
+" let g:tagbar_sort = 0
 let g:tagbar_singleclick = 1
-let g:tagbar_hide_nonpublic = 0
-let g:tagbar_autoshowtag = 1
-let g:tagbar_silent = 1
-let g:tagbar_autoclose = 0
-let g:tagbar_show_linenumbers = -1
-let g:tagbar_foldlevel = 0
-let g:tagbar_autopreview = 0
+" let g:tagbar_hide_nonpublic = 0
+" let g:tagbar_autoshowtag = 1
+" let g:tagbar_autoclose = 0
+" let g:tagbar_show_linenumbers = -1
+" let g:tagbar_foldlevel = 0
+" let g:tagbar_autopreview = 0
 let g:tagbar_map_zoomwin = 'Z'
 if filereadable(expand('$HOME/.ctags.d/new_universal.ctags'))
   let g:tagbar_ctags_options = [expand('~/.ctags.d/new_universal.ctags')]
 endif
+
+let g:tagbar_silent = 1
 " }}}
 
 " Gutentags: {{{
@@ -391,7 +392,7 @@ endif
 
 " UltiSnips: {{{
 function! UltiSnipsConf() abort
-  let b:did_autoload_ultisnips = 1
+  " let b:did_autoload_ultisnips = 1
 
   let g:UltiSnipsExpandTrigger = '<Tab>'
   let g:UltiSnipsJumpForwardTrigger= '<Tab>'
@@ -403,15 +404,20 @@ function! UltiSnipsConf() abort
   let g:UltiSnipsEditSplit = 'context'
   let g:snips_author = 'Faris Chugthai'
   let g:snips_github = 'https://github.com/farisachugthai'
-  " Wait is this option still a thing??
-  let g:UltiSnipsSnippetDir = [stdpath('config') . '/UltiSnips']
   " Defining it and limiting it to 1 directory means that UltiSnips doesn't
   " iterate through every dir in &rtp which saves an immense amount of time
   " on startup.
   let g:UltiSnipsSnippetDirectories = [ expand('$HOME') . '/.config/nvim/UltiSnips' ]
   let g:UltiSnipsUsePythonVersion = 3
   let g:UltiSnipsListSnippets = '<C-/>'
+  if !exists('*stdpath')
+    return
+  endif
+  " Wait is this option still a thing??
+  let g:UltiSnipsSnippetDir = [stdpath('config') . '/UltiSnips']
 endfunction
+
+call UltiSnipsConf()
 
 " In case you're wondering about this, ultisnips requires python from vim.
 " however neovim has it's python interation set up externally. so when i manage

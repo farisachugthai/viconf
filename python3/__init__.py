@@ -28,17 +28,17 @@ logger = logging.getLogger(__name__).addHandler(logging.StreamHandler())
 # sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 
-class Options:
-    aggressive = 1
-    diff = False
-    experimental = True
-    in_place = True
-    indent_size = int(vim.eval("&tabstop"))
-    line_range = None
-    hang_closing = False
-    pep8_passes = 100
-    recursive = False
-    verbose = 0
+# class Options:
+#     aggressive = 1
+#     diff = False
+#     experimental = True
+#     in_place = True
+#     indent_size = int(vim.eval("&tabstop"))
+#     line_range = None
+#     hang_closing = False
+#     pep8_passes = 100
+#     recursive = False
+#     verbose = 0
 
 
 alt_options = namedtuple(
@@ -56,7 +56,7 @@ alt_options = namedtuple(
 
 # so thats how you do this
 # moved here because importing pkg_resources is expensive
-import pkg_resources
-distribution = pkg_resources.get_distribution("pynvim")
-__version__ = distribution.version
+# import pkg_resources
+# distribution = pkg_resources.get_distribution("pynvim")
+# __version__ = distribution.version
 

@@ -46,7 +46,7 @@ map <Space> <Leader>
 if has('nvim-0.4')   " Fun new features!
   let &shadafile = stdpath('data') . '/site/shada/main.shada'
   " toggle transparency in the pum and windows. don't set higher than 10 it becomes hard to read higher than that
-  " setglobal pumblend=10 winblend=5
+  setglobal pumblend=10 winblend=5
   try | setglobal pyxversion=3 | catch /^Vim:E518:*/ | endtry
 endif
 
@@ -88,7 +88,7 @@ function! LoadMyPlugins() abort  " {{{
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-scriptease', {'for': 'vim'}
 
-  " Plug 'SirVer/ultisnips'
+  Plug 'SirVer/ultisnips'
   Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }
   nnoremap <Leader>a <Cmd>sil! ALEEnable<CR><bar>:sil! call plugins#AleMappings()<CR><bar>:sil! CocDisable<CR>:sil! redraw!<CR>:ALELint<CR>
   nnoremap <Leader>et <Cmd>ALEToggle<CR>:sil! call plugins#AleMappings()<CR>:sil! redraw!<CR>
@@ -111,7 +111,7 @@ function! LoadMyPlugins() abort  " {{{
   Plug 'vim-voom/voom', {'on': ['Voom', 'VoomToggle', 'VoomExec'] }
   Plug 'romainl/vim-qf'
   Plug 'tomtom/tlib_vim'
-  " Dont know how i didnt realize lazy loaded plugins arent added to rtp.
+  " Don't know how i didn't realize lazy loaded plugins aren't added to &runtimepath.
   Plug 'lepture/vim-jinja'
   Plug 'cespare/vim-toml', {'for': 'toml'}
   Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
@@ -120,10 +120,10 @@ function! LoadMyPlugins() abort  " {{{
   Plug 'itspriddle/vim-shellcheck', {'for': ['sh', 'bash'] }
   " Plug 'neovim/nvim-lsp'
 
+    Plug 'godlygeek/tabular', {'on': 'Tabularize'}
   if empty(s:termux)  " {{{
 
     Plug 'ludovicchabant/vim-gutentags'
-    Plug 'godlygeek/tabular', {'on': 'Tabularize'}
     Plug 'mbbill/undotree', { 'on' : 'UndotreeToggle' }
     nnoremap U <Cmd>UndoTreeToggle<CR>
     Plug 'tpope/vim-apathy'

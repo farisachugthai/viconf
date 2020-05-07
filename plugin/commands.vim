@@ -477,19 +477,19 @@ command! -nargs=* -bar -bang NvimREPL call py#Cnxn(<bang>0, <args>)
 
 command! -nargs=* -bar -bang NvimYourREPL call py#Yours(<bang>0, <args>)
 
-command! RangerCurrentFile call OpenRangerIn("%", s:default_edit_cmd)
-command! RangerCurrentDirectory call OpenRangerIn("%:p:h", s:default_edit_cmd)
-command! RangerWorkingDirectory call OpenRangerIn(".", s:default_edit_cmd)
-command! Ranger RangerCurrentFile
+" command! RangerCurrentFile call OpenRangerIn("%", s:default_edit_cmd)
+" command! RangerCurrentDirectory call OpenRangerIn("%:p:h", s:default_edit_cmd)
+" command! RangerWorkingDirectory call OpenRangerIn(".", s:default_edit_cmd)
+" command! Ranger RangerCurrentFile
 
-" To open the selected file in a new tab
-command! RangerCurrentFileNewTab call OpenRangerIn("%", 'tabedit ')
-command! RangerCurrentFileExistingOrNewTab call OpenRangerIn("%", 'tab drop ')
-command! RangerCurrentDirectoryNewTab call OpenRangerIn("%:p:h", 'tabedit ')
-command! RangerCurrentDirectoryExistingOrNewTab call OpenRangerIn("%:p:h", 'tab drop ')
-command! RangerWorkingDirectoryNewTab call OpenRangerIn(".", 'tabedit ')
-command! RangerWorkingDirectoryExistingOrNewTab call OpenRangerIn(".", 'tab drop ')
-command! RangerNewTab RangerCurrentDirectoryNewTab
+" " To open the selected file in a new tab
+" command! RangerCurrentFileNewTab call OpenRangerIn("%", 'tabedit ')
+" command! RangerCurrentFileExistingOrNewTab call OpenRangerIn("%", 'tab drop ')
+" command! RangerCurrentDirectoryNewTab call OpenRangerIn("%:p:h", 'tabedit ')
+" command! RangerCurrentDirectoryExistingOrNewTab call OpenRangerIn("%:p:h", 'tab drop ')
+" command! RangerWorkingDirectoryNewTab call OpenRangerIn(".", 'tabedit ')
+" command! RangerWorkingDirectoryExistingOrNewTab call OpenRangerIn(".", 'tab drop ')
+" command! RangerNewTab RangerCurrentDirectoryNewTab
 " }}}
 
 " Terminal Command: {{{
@@ -605,4 +605,14 @@ command! HiQF call syncom#HiQF()
 command! SyntaxInfo call syncom#get_syn_info()
 " Works:
 command! HiTest call syncom#hitest()
+
+function! s:CompleteSynInclude(A, L, P) abort
+
+  return globpath(&rtp, "syntax/**/*.vim", 0, 1)
+endfunction
+
+" Its annoying that syn include doesnt complete paths
+" Now it does!
+command! -nargs=1 -bar -complete=customlist,s:CompleteSynInclude SynInclude syntax include <args>
+
 " }}}

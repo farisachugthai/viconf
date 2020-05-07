@@ -21,8 +21,12 @@ function! py#PythonPath() abort  " {{{1
   py3 import site
   let s:path = '.,,**,'
   let s:user_site = py3eval('site.USER_SITE')
+  if s:user_site ==# 0
+    return s:path
+  endif
   let s:path .= s:user_site
-  for l:i in py3eval('sys.path')
+  let l:python_path = py3eval('sys.path')
+  for l:i in l:python_path
     let s:path .=   ',' . l:i
     " Got this idea from tpope. thanks for the genius as always
     let &l:tags .= ',' . l:i

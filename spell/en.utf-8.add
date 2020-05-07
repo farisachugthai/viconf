@@ -1878,3 +1878,13 @@ PyBind11
 runtimes
 toolset
 IntelliSense
+isinstance
+issubclass
+iter
+len
+hasattr
+bytearray
+memoryview
+fdm
+foldlevelstart
+meth
