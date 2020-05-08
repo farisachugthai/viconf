@@ -6,15 +6,13 @@ import os
 import sys
 import tempfile
 
-here = os.path.dirname(os.path.abspath(__file__))
-
-sys.path.insert(0, os.path.join(here, 'python3'))
-
-# import pynvim
-from pynvim import attach, start_host
-
 import pytest
+from py._path.local import LocalPath
 # from _pytest.config import ConftestImportFailure
+
+here = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(here, 'python3'))
+from pynvim import attach, start_host
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -48,11 +46,17 @@ def old_vim():
 
     return editor
 
+
+local_path = LocalPath("python3/pynvim_.py")
+pynvim  = local_path.pyimport()
+
 @pytest.fixture(scope="session")
 def vim():
     inside_nvim = os.environ.get('NVIM_LISTEN_ADDRESS')
     if inside_nvim:
         editor = attach("socket", path=inside_nvim)
+        editor = attach("socket", path=listen_address)
+        editor = pynvim.attach("socket", path=listen_address)
     else:
         editor = start_host("stdio", load_plugins=False)
     return editor

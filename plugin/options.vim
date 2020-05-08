@@ -44,22 +44,25 @@ setglobal completeopt=menu,menuone,noselect,noinsert,preview
 setglobal ignorecase
 
 " Path:
-let &g:path = '.,,**,' . expand('$VIMRUNTIME') . '/*/*.vim'  . ',' . stdpath('config')
-let &g:path = &path . ',' . stdpath('data')
+if exists('*stdpath')
+  let s:stddata = stdpath("data")
+else
+  let s:stddata = resolve(expand('~/.local/share/nvim'))
+endif
+
+let &g:path = &path . ',' . s:stddata
 setglobal path-=/usr/include
 
 " Indentation:
 setlocal indentkeys+=<:>,=elif,=except
 setlocal indentkeys-=0#
-
 setglobal smartcase infercase smartindent
-
 setglobal regexpengine=2
 setglobal cscopetagorder=1  " why does this default to search cscope first?
 
 setglobal shada='100,<50,s10,:3000,%
 " default but specify it.
-let &g:shadafile = stdpath('data').'/site/shada/main.shada'
+let &g:shadafile = s:stddata.'/site/shada/main.shada'
 
 " Tags:
 setglobal tags=tags,**/tags
@@ -77,9 +80,6 @@ packadd! justify
 
 setglobal pyxversion=3
 " managed to lose this along the way
-let g:grepprg = syncom#grepprg()
-
-call syncom#gruvbox_material()
 " to enable transparency but force the current selected element to be fully opaque: >
 set pumblend=15
 hi PmenuSel blend=0
@@ -87,11 +87,11 @@ hi PmenuSel blend=0
 setglobal autochdir autowrite autoread
 
 " Tabs:
+if &tabstop > 4 | setglobal tabstop=4 | endif
 if &shiftwidth > 4  | setglobal shiftwidth=4 | endif
 setglobal expandtab smarttab softtabstop=4
 
 if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif
-
 setglobal cdpath=$HOME,$VIMRUNTIME
 
 " Movement:
@@ -170,7 +170,7 @@ let g:tlib_extend_keyagents_InputList_s = {
 " }}}
 
 " Platform Specific Options: {{{
-
+" Fuck this section is slowing startup from 400ms to 1000ms
 " if has('unix')
 "   call unix#UnixOptions()
 "   if getenv($WSL_DISTRO_NAME)
@@ -183,31 +183,12 @@ let g:tlib_extend_keyagents_InputList_s = {
 "   " Find The Ctags Executable:
 "   if filereadable(expand('$HOME/src/ctags/ctags.exe'))
 "     let g:tagbar_ctags_bin = expand('$HOME/src/ctags/ctags.exe')
-"   elseif executable(exepath('ctags'))
-"     let g:tagbar_ctags_bin = exepath('ctags')
+"   " elseif executable(exepath('ctags'))
+"   "   let g:tagbar_ctags_bin = exepath('ctags')
 "   endif
 
-  " Icon Chars
-  " let g:tagbar_iconchars = ['▶', '▼']
-
-" endif
-
-" if !empty($ANDROID_DATA)
-"   call remotes#termux_remote()
-
-"   let g:tagbar_compact = 1
-" elseif !has('unix')
-"   " Note: dude holy hell is it necessary to call the msdos#set_shell_cmd()
-"   " func. you do so in ./plugin/unix.vim but jesus christ did it fuck stuff up
-"   " when that got deleted
-"   call remotes#msdos_remote()
-
-" nnoremap <silent> <leader>      :<c-u>WhichKey '<Space>'<CR>
-" nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
-" else
-"   call remotes#ubuntu_remote()
-" endif
-
+"   " Icon Chars
+"   let g:tagbar_iconchars = ['▶', '▼']
 " }}}
 
 " Backups: {{{
@@ -218,11 +199,11 @@ setglobal swapfile undofile backupext='.bak'
 " its slower but idc
 setglobal backupcopy=yes
 " patch required to honor double slash at end consolidate the writebackups -- they usually get deleted
-let &g:backupdir=stdpath('data') . '/site/undo//'
+let &g:backupdir= s:stddata . '/site/undo//'
 " Gotta be honest this part was stolen almost entirely from arch:
 
-let &g:directory= stdpath('data') . '/site/cache//'
-let &g:undodir = stdpath('data') . '/site/undo//'
+let &g:directory=  s:stddata . '/site/cache//'
+let &g:undodir =  s:stddata . '/site/undo//'
 " Create directories if they doesn't exist
 if !isdirectory(expand(&g:directory))
   silent! call mkdir(expand(&g:directory), 'p', 0700)
@@ -295,12 +276,12 @@ if !exists('g:black_skip_string_normalization')
 endif
 
 " To open ranger when vim load a directory:
-if exists('g:ranger_replace_netrw') && g:ranger_replace_netrw
-  augroup ReplaceNetrwByRangerVim
-    autocmd VimEnter * silent! autocmd! FileExplorer
-    autocmd BufEnter * if isdirectory(expand('%')) | call OpenRangerOnVimLoadDir('%') | endif
-  augroup END
-endif
+" if exists('g:ranger_replace_netrw') && g:ranger_replace_netrw
+"   augroup ReplaceNetrwByRangerVim
+"     autocmd VimEnter * silent! autocmd! FileExplorer
+"     autocmd BufEnter * if isdirectory(expand('%')) | call OpenRangerOnVimLoadDir('%') | endif
+"   augroup END
+" endif
 
 if !exists('g:ranger_map_keys') || g:ranger_map_keys  " spacemacs style
   nnoremap <Leader>ar <Cmd>Ranger<CR>
@@ -352,20 +333,13 @@ let g:NERDTreeMapJumpParent = '-'
 " I want the spacebar back
 let g:tagbar_map_showproto = '?'
 " let g:tagbar_left = 2
-let g:tagbar_width = 30
-let g:tagbar_sort = 0
 let g:tagbar_singleclick = 1
-let g:tagbar_hide_nonpublic = 0
-let g:tagbar_autoshowtag = 1
-let g:tagbar_silent = 1
-let g:tagbar_autoclose = 0
-let g:tagbar_show_linenumbers = -1
-let g:tagbar_foldlevel = 0
-let g:tagbar_autopreview = 0
 let g:tagbar_map_zoomwin = 'Z'
 if filereadable(expand('$HOME/.ctags.d/new_universal.ctags'))
   let g:tagbar_ctags_options = [expand('~/.ctags.d/new_universal.ctags')]
 endif
+
+let g:tagbar_silent = 1
 " }}}
 
 " Gutentags: {{{
@@ -410,15 +384,20 @@ function! UltiSnipsConf() abort
   let g:UltiSnipsEditSplit = 'context'
   let g:snips_author = 'Faris Chugthai'
   let g:snips_github = 'https://github.com/farisachugthai'
-  " Wait is this option still a thing??
-  let g:UltiSnipsSnippetDir = [stdpath('config') . '/UltiSnips']
   " Defining it and limiting it to 1 directory means that UltiSnips doesn't
   " iterate through every dir in &rtp which saves an immense amount of time
   " on startup.
   let g:UltiSnipsSnippetDirectories = [ expand('$HOME') . '/.config/nvim/UltiSnips' ]
   let g:UltiSnipsUsePythonVersion = 3
   let g:UltiSnipsListSnippets = '<C-/>'
+  if !exists('*stdpath')
+    return
+  endif
+  " Wait is this option still a thing??
+  let g:UltiSnipsSnippetDir = [stdpath('config') . '/UltiSnips']
 endfunction
+
+call UltiSnipsConf()
 
 " In case you're wondering about this, ultisnips requires python from vim.
 " however neovim has it's python interation set up externally. so when i manage
@@ -542,8 +521,8 @@ let g:coc_snippet_prev = '<S-Tab>'
 
 let g:coc_enable_locationlist = 1
 let $NVIM_COC_LOG_LEVEL = 'WARN'
-let $NVIM_COC_LOG_FILE = stdpath('data') . '/site/coc.log'
-let $NVIM_NODE_LOG_FILE = stdpath('data') . '/site/node.log'
+let $NVIM_COC_LOG_FILE =  s:stddata . '/site/coc.log'
+let $NVIM_NODE_LOG_FILE =  s:stddata . '/site/node.log'
 let $NVIM_NODE_LOG_LEVEL = 'WARN'
 let $NVIM_NODE_HOST_DEBUG = 1
 let g:coc_jump_locations = []
@@ -557,28 +536,28 @@ function! s:Init_coc() abort
           \'coc-git', 'coc-lists', 'coc-snippets', 'coc-sh',
           \ 'coc-highlight', 'coc-tslint-plugin']
   endif
-  " for l:ext in g:coc_global_extensions
-  "   echomsg l:ext
-    " Todo this doesn't work
-    " call coc#util#install_extension(l:ext)
-  " endfor
 
   if !has('unix')
-    " basically do nothing because it's emitting errors for now
       let g:coc_node_path = 'C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\\node.exe'
   else
-      " arch is working as is termux
-    if executable(expand('~/.config/coc/extensions/node_modules/.bin/bash-language-server'))
-      let s:bashlsp = expand('~/.config/coc/extensions/node_modules/.bin/bash-language-server.cmd')
-    else
-      let s:bashlsp = 'bash-language-server'
-    endif
+    if empty($ANDROID_DATA)
+        " arch is working as is termux
+      if executable(expand('~/.config/coc/extensions/node_modules/.bin/bash-language-server'))
+        let s:bashlsp = expand('~/.config/coc/extensions/node_modules/.bin/bash-language-server.cmd')
+      else
+        let s:bashlsp = 'bash-language-server'
+      endif
 
-    if executable(expand('~/.config/coc/extensions/node_modules/.bin/vim-language-server'))
-      let s:vimlsp = expand('~/.config/coc/extensions/node_modules/.bin/vim-language-server.cmd')
+      if executable(expand('~/.config/coc/extensions/node_modules/.bin/vim-language-server'))
+        let s:vimlsp = expand('~/.config/coc/extensions/node_modules/.bin/vim-language-server.cmd')
+      else " honestly usually arch just figures this shit out on it's own
+        let s:vimlsp = 'vim-language-server'
+      endif
     else
-      let s:vimlsp = 'vim-language-server'
+
+      call coc#config('python.jediEnabled', v:false)
     endif
+  endif
 
     call coc#config('languageserver', {
                     \ 'bash': {
@@ -608,11 +587,6 @@ function! s:Init_coc() abort
                     \   }},
                     \ 'filetypes': ['vim']}})
 
-    if !empty($ANDROID_DATA)
-      call coc#config('python.jediEnabled', v:false)
-      let g:coc_node_path = expand('$PREFIX/bin/node')
-    endif
-  endif
 
 endfunction
 
@@ -633,7 +607,7 @@ let g:fzf_action = {
   \ 'ctrl-v': 'vsplit' }
 
 " NOTE: Use of stdpath() requires nvim0.3>
-let g:fzf_history_dir = stdpath('data') . '/site/fzf-history'
+let g:fzf_history_dir =  s:stddata . '/site/fzf-history'
 let g:fzf_ag_options = ' --smart-case -u -g " " --'
 let g:fzf_rg_options = ' --hidden --max-columns 300 --max-depth 8 '
       \. '--max-count 50 --color ansi --context 0 '
@@ -702,7 +676,7 @@ let g:tmuxline_preset = {
 
 " After defining all of these groups and format blocks, let's
 " define the tmux line to match our vim statusline
-let s:tmuxline_themes = stdpath('data') . '/plugged/tmuxline.vim/autoload/themes'
+let s:tmuxline_themes =  s:stddata . '/plugged/tmuxline.vim/autoload/themes'
 
 if filereadable(s:tmuxline_themes . '/vim_statusline_3.vim')
   execute 'source ' . s:tmuxline_themes . '/vim_statusline_3.vim'
@@ -731,7 +705,7 @@ let g:voom_always_allow_move_left = 1
 
 let g:OmniSharp_want_snippet=1
 " Otherwise it goes in some random cache folder that I'll end up deleting
-let g:OmniSharp_server_install = stdpath('data') . '/site/omnisharp'
+let g:OmniSharp_server_install =  s:stddata . '/site/omnisharp'
 
 let g:OmniSharp_server_stdio = 1
 " let g:OmniSharp_server_stdio = 1
@@ -743,7 +717,7 @@ let g:OmniSharp_loglevel = 'DEBUG'
 let g:OmniSharp_server_stdio = 1
 
 " Python logging path
-let g:OmniSharp_python_path = stdpath('data') . '/site/log'
+let g:OmniSharp_python_path =  s:stddata . '/site/log'
 
 " " Defaults:
 " let g:OmniSharp_highlight_groups = {

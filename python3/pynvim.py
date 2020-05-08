@@ -37,21 +37,18 @@ import enum
 import functools
 import importlib
 import inspect
-import itertools
 import io
+import itertools
 import locale
 import logging
 import multiprocessing
 import operator
-import threading
-
-# import json  # literally how is this not in use
-# import mimetypes
 import os
 import pathlib
 import re
 import signal
 import sys
+import threading
 import traceback
 import warnings
 
@@ -1029,6 +1026,7 @@ class Session(object):
         """Close the event loop."""
         self._async_session.close()
 
+
     def _yielding_request(self, method, args):
         # import greenlet
         gr = greenlet.getcurrent()
@@ -1495,6 +1493,7 @@ class Nvim(object):
         Tab is counted as one cell.
         """
         return self.request("nvim_strwidth", string)
+
 
     def list_runtime_paths(self):
         """Return a list of paths contained in the 'runtimepath' option."""
@@ -3594,6 +3593,7 @@ class AsyncioEventLoop(AsyncioBaseEventLoop):
 # Keep below asyncio mod
 
 
+
 def session(transport_type="stdio", *args, **kwargs) -> Session:
     """Msgpack-rpc subpackage.
 
@@ -4184,7 +4184,7 @@ class UvEventLoop(BaseEventLoop):
 
 EventLoop = UvEventLoop
 
-import gc
+
 gc.collect()
 
 if __name__ == "__main__":

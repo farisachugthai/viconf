@@ -94,6 +94,9 @@ Returns a dict! Hats off to ``vim.eval`` for returning multiple types as
 
 Unexpected Errors
 =================
+
+Modules
+-------
 Seriously why does this not work?::
 
    py3 import os
@@ -156,4 +159,15 @@ So this line has an interesting error message.::
    E5555: API call: Wrong type for argument 1, expecting Tabpage.
 
 That's the python API. How the hell do I access a Tabpage from Vimscript?
+
+
+Python for command completion
+-----------------------------
+``:py3do`` can only return a ``str`` or None which sucks since we'd prefer a list.:
+
+Also Jesus why does this write the return value to the buffer?::
+
+   function! s:PythonMods(A, L, P) abort
+      py3do return str(sys.modules)
+   endfunction
 

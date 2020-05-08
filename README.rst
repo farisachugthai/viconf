@@ -181,6 +181,175 @@ So let's set it up!:
 
 .. _autocompletion:
 
+||||||| 4789a0b
+
+Working with Plugins
+=====================
+
+Vim-Plug is a highly recommended plugin manager, and the one that I myself use.
+
+Written by Junegunn Choi (also the author of FZF), vim-plug creates a
+simple way of interacting with plugins.
+
+Beyond the basic commands you can read about in his README, vim-plug has
+an API that exports the command ``plug``. This command utilizes vimscript to
+return a dictionary with all of your currently loaded plugins.
+
+This dict maintains the order that the plugins were loaded into the buffer and
+can be accessed with
+
+.. code-block:: vim
+
+   echo keys(plugs)
+
+This feature proves phenomenally useful in a handful of situations.
+
+For example, one may want to check whether a ftplugin was lazily loaded or
+loaded at all.
+
+Echoing the plugins that Vim-Plug has loaded at startup time can also be
+an easy way to diagnose performance issues with Vim.
+
+As a product of its utility, I wrote a command to quickly call the dictionary.::
+
+   command! Plugins -nargs=0 echo keys(plugs)
+
+In addition, one could be in the situation where they may have
+different configuration files on different devices, and would like to
+check whether a plugin was installed. It's also good for debugging and
+seeing in what order a plugin loads.
+
+Git Subtree
+-----------
+
+Updating vim-plug.
+
+.. code-block:: bash
+
+   git subtree pull --squash --prefix=vim-plug https://github.com/junegunn/vim-plug.git master
+
+
+Spell Files
+============
+
+From the help docs
+
+.. topic:: Spellfile Cleanup
+
+    SPELLFILE CLEANUP         *spellfile-cleanup*
+
+    The ``zw`` command turns existing entries in 'spellfile' into comment lines.
+    This avoids having to write a new file every time, but results in the file
+    only getting longer, never shorter.  To clean up the comment lines in all
+    ".add" spell files do this:
+
+    `:runtime spell/cleanadd.vim`
+
+    This deletes all comment lines, except the ones that start with "##".  Use
+    "##" lines to add comments that you want to keep.
+
+    You can invoke this script as often as you like.  A variable is
+    provided to skip updating files that have been changed recently.  Set
+    it to the number
+    of seconds that has passed since a file was changed before it will be
+    cleaned. For example, to clean only files that were not changed in the last
+    hour:
+
+    `let g:spell_clean_limit = 60 * 60`
+
+    The default is one second.
+
+
+Mappings
+=========
+
+Mappings initially sounds like a simple enough idea as it's generally commonplace
+in other editors.:
+
+    Map :kbd:`Ctrl` + :kbd:`Shift` + :kbd:`F1` to some arbitrary macro
+
+Is conventionally how this works. In Vim there are 7 different mapping modes
+that exist.
+
++--------------+-----------+---------+------------------------------------------+
+| Map Overview |           |         |                                          |
++--------------+-----------+---------+------------------------------------------+
+| Commands     | Modes     |         |                                          |
++--------------+-----------+---------+------------------------------------------+
+| :map         | :noremap  | :unmap  | Normal, Visual, Select, Operator-pending |
++--------------+-----------+---------+------------------------------------------+
+| :nmap        | :nnoremap | :nunmap | Normal                                   |
++--------------+-----------+---------+------------------------------------------+
+| :vmap        | :vnoremap | :vunmap | Visual and Select                        |
++--------------+-----------+---------+------------------------------------------+
+| :smap        | :snoremap | :sunmap | Select                                   |
++--------------+-----------+---------+------------------------------------------+
+| :xmap        | :xnoremap | :xunmap | Visual                                   |
++--------------+-----------+---------+------------------------------------------+
+| :omap        |           |         | Operating-pending                        |
++--------------+-----------+---------+------------------------------------------+
+| :map!        |           |         | Insert and Command-line                  |
++--------------+-----------+---------+------------------------------------------+
+| :imap        |           |         | Insert                                   |
++--------------+-----------+---------+------------------------------------------+
+| :lmap        |           |         | Insert, Command-line, Lang-Arg           |
++--------------+-----------+---------+------------------------------------------+
+| :cmap        |           |         | Command-line                             |
++--------------+-----------+---------+------------------------------------------+
+| :tmap        |           |         | Terminal                                 |
++--------------+-----------+---------+------------------------------------------+
+
+There are a few things to note about this. One being that the commands map and
+noremap do not apply to insert or command line mode. As a result, mappings that
+would typically conflict with inserted text can easily be used.
+
+My `mapleader` is currently set to :kbd:`Space`. If I were to map :kbd:`Space r e`
+in insert mode, then any time I typed a word like 'return', the mapping would fire.
+
+However, ``noremap`` doesn't touch insert mode.
+
+So how does one ensure that they have a mapping in every mode?
+
+Unfortunately, *to my knowledge* there's no way to do this in one command.
+In fact, **it currently takes 3.**
+
+.. code-block:: vim
+
+   map <F2> <Cmd>NERDTreeToggle
+   map! <F2> <Cmd>NERDTreeToggle
+   tmap <F2> <Cmd>NERDTreeToggle
+
+Nowhere near the most elegant solution; unfortunately, it seems to be the only
+one.
+
+However, using the ``<Cmd>`` keyword prevents us from having to prepend ``<C-o>``
+from all of our normal mode mappings and ``<C-u>`` for the visual and select mode
+mappings.
+
+It actually never fires a ``CmdlineEnter`` event which also preserves our
+command history.
+
+Ensure that mappings use the ``<Cmd>`` idiom in place of :kbd:`<C-o>` for insert
+mode or :kbd:`<C-u>` for visual mode.
+
+.. topic:: Map cmd
+
+    :map-cmd
+                            *<Cmd>* *:map-cmd*
+    The <Cmd> pseudokey may be used to define a 'command mapping', which executes
+    the command directly (without changing modes, etc.).  Where you might use
+    :...<CR>" in the {lhs} of a mapping, you can instead use '<Cmd>...<CR>'.
+
+    ...
+
+    Unlike <expr> mappings, there are no special restrictions on the <Cmd>
+    command: it is executed as if an (unrestricted) ``autocmd`` was invoked or an
+    async event event was processed.
+
+
+To date I haven't had any problems with replacing all instances of :kbd:`:`
+with ``<Cmd>``, and it makes Nvim behave in a slightly more manageable way.
+
 Autocompletion
 ---------------
 

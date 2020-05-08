@@ -35,11 +35,14 @@ set modeline modelines=5
 " }}}
 
 " Macros, Leader, and Nvim specific features: {{{
-let g:loaded_vimballPlugin = 1
-let g:loaded_getscriptPlugin = 1
 let g:loaded_2html_plugin = 1
+let g:loaded_getscriptPlugin = 1
 let g:loaded_logiPat = 1
+let g:loaded_matchparen = 1
 let g:loaded_netrwPlugin = 1
+let g:loaded_spellfile = 1
+let g:loaded_tutor_mode_plugin = 1
+let g:loaded_vimballPlugin = 1
 
 noremap <Space> <nop>
 let g:maplocalleader = '<Space>'
@@ -48,7 +51,7 @@ map <Space> <Leader>
 if has('nvim-0.4')   " Fun new features!
   let &shadafile = stdpath('data') . '/site/shada/main.shada'
   " toggle transparency in the pum and windows. don't set higher than 10 it becomes hard to read higher than that
-  " setglobal pumblend=10 winblend=5
+  setglobal pumblend=10 winblend=5
   try | setglobal pyxversion=3 | catch /^Vim:E518:*/ | endtry
 endif
 
@@ -83,14 +86,12 @@ function! LoadMyPlugins() abort  " {{{
                   \ 'do': './install --all'
                   \ }
   Plug 'junegunn/fzf.vim'
-  Plug 'junegunn/goyo.vim', {'on': 'Goyo'}
   Plug 'junegunn/vim-peekaboo'
   Plug 'scrooloose/nerdTree', { 'on': ['NERDTreeToggleVCS', 'NERDTreeVCS', 'NERDTreeFind'] }
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-scriptease', {'for': 'vim'}
-
-  " Plug 'SirVer/ultisnips'
+  Plug 'SirVer/ultisnips'
   Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }
   nnoremap <Leader>a <Cmd>sil! ALEEnable<CR><bar>:sil! call plugins#AleMappings()<CR><bar>:sil! CocDisable<CR>:sil! redraw!<CR>:ALELint<CR>
   nnoremap <Leader>et <Cmd>ALEToggle<CR>:sil! call plugins#AleMappings()<CR>:sil! redraw!<CR>
@@ -100,7 +101,6 @@ function! LoadMyPlugins() abort  " {{{
     Plug 'edkolev/tmuxline.vim'
   endif
 
-  Plug 'mhinz/vim-startify'
   Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
   noremap <F8> <Cmd>TagbarToggle<CR><Cmd>call plugins#TagbarTypes()<CR><Cmd>call tagbar#types#uctags#init({})<CR><Cmd>source ~/projects/viconf/plugin/autocmd.vim<CR>
   noremap! <F8> <Cmd>TagbarToggle<CR><Cmd>call plugins#TagbarTypes()<CR><Cmd>call tagbar#types#uctags#init({})<CR><Cmd>source ~/projects/viconf/plugin/autocmd.vim<CR>
@@ -113,28 +113,31 @@ function! LoadMyPlugins() abort  " {{{
   Plug 'vim-voom/voom', {'on': ['Voom', 'VoomToggle', 'VoomExec'] }
   Plug 'romainl/vim-qf'
   Plug 'tomtom/tlib_vim'
-  " Dont know how i didnt realize lazy loaded plugins arent added to rtp.
-  Plug 'lepture/vim-jinja'
-  Plug 'cespare/vim-toml', {'for': 'toml'}
-  Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
-  Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
-  Plug 'omnisharp/omnisharp-vim', {'for': ['cs', 'ps1'] }
-  Plug 'itspriddle/vim-shellcheck', {'for': ['sh', 'bash'] }
-
+  Plug 'godlygeek/tabular', {'on': 'Tabularize'}
   if empty(s:termux)  " {{{
     Plug 'honza/vim-snippets'
+    Plug 'junegunn/goyo.vim', {'on': 'Goyo'}
+    Plug 'lepture/vim-jinja'
+    Plug 'honza/vim-snippets'
+    " Don't know how i didn't realize lazy loaded plugins aren't added to &runtimepath.
+    Plug 'cespare/vim-toml', {'for': 'toml'}
+    Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
+    Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
+    Plug 'omnisharp/omnisharp-vim', {'for': ['cs', 'ps1'] }
+    Plug 'itspriddle/vim-shellcheck', {'for': ['sh', 'bash'] }
+    " Plug 'neovim/nvim-lsp'
+    Plug 'mhinz/vim-startify'
     Plug 'ludovicchabant/vim-gutentags'
-    Plug 'godlygeek/tabular', {'on': 'Tabularize'}
     Plug 'mbbill/undotree', { 'on' : 'UndotreeToggle' }
     nnoremap U <Cmd>UndoTreeToggle<CR>
     Plug 'tpope/vim-unimpaired'
     Plug 'tpope/vim-surround'
     Plug 'tpope/vim-eunuch'
-    Plug 'kshenoy/vim-signature'
     Plug 'morhetz/gruvbox'
+    Plug 'liuchengxu/vim-which-key'
   endif " }}}
 
-  Plug 'liuchengxu/vim-which-key'
+  Plug 'kshenoy/vim-signature'
   Plug 'ryanoasis/vim-devicons'
   call plug#end()
 endfunction

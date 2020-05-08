@@ -15,13 +15,6 @@ except ImportError:
 else:
     from pynvim import attach, LegacyVim, stdio_session
 
-
-# try:
-#     import vim  # noqa pylint:disable=import-error,unused-import
-# except ImportError:
-#     session = stdio_session()
-#     vim = LegacyVim.from_session(session)
-
 __docformat__ = "reStructuredText"
 
 logger = logging.getLogger(__name__).addHandler(logging.StreamHandler())

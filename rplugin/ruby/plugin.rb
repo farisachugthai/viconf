@@ -25,10 +25,10 @@ require "neovim/version"
 #
 # @example Connect over a UNIX domain socket
 # how do you do os.environ.get in ruby?
-Neovim.attach_unix("/tmp/nvim.sock") # => Neovim::Client
+# Neovim.attach_unix("/tmp/nvim.sock") # => Neovim::Client
 #
 # @example Spawn and connect to a child +nvim+ process
-#   Neovim.attach_child(["nvim", "--embed"]) # => Neovim::Client
+Neovim.attach_child(["nvim", "--embed"]) # => Neovim::Client
 #
 # @example Define a Ruby plugin
 #   # ~/.config/nvim/rplugin/ruby/plugin.rb

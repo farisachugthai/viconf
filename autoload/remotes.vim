@@ -1,10 +1,17 @@
 " header
 
 function! remotes#termux_remote() abort  " {{{
+
+  " From what i can tell, this line alone is as good as :UpdateRemotePlugins
+  source $VIMRUNTIME/autoload/remote/host.vim
   let g:python3_host_prog = expand('$PREFIX/bin/python')
+  source $VIMRUNTIME/autoload/provider/python3.vim
   let g:loaded_python_provider = 1
   let g:node_host_prog = '/data/data/com.termux/files/home/.local/share/yarn/global/node_modules/neovim/bin/cli.js'
+  source $VIMRUNTIME/autoload/provider/node.vim
   let g:ruby_host_prog = '/data/data/com.termux/files/home/.gem/bin/neovim-ruby-host'
+  source $VIMRUNTIME/autoload/provider/ruby.vim
+  rubyfile $VIMRUNTIME/autoload/provider/script_host.rb
 
   if exists('$TMUX')
     let g:clipboard = {
@@ -33,13 +40,15 @@ function! remotes#termux_remote() abort  " {{{
           \ }
 
   endif
+  source $VIMRUNTIME/autoload/provider/clipboard.vim
 endfunction   " }}}
 
 function! remotes#ubuntu_remote() abort  " {{{1
   let g:python3_host_prog = '/usr/sbin/python'
   let g:python_host_prog = '/usr/sbin/python2'
   " ?
-  let g:node_host_prog = 'nvm use default'
+  " let g:node_host_prog = 'nvm use default'
+  let g:node_host_prog = expand('~/.local/share/yarn/global/node_modules/neovim/bin/cli.js')
   let g:ruby_host_prog = expand('~/.gem/bin/neovim-ruby-host')
 
   if exists('$TMUX')
@@ -91,6 +100,19 @@ function! remotes#msdos_remote() abort  " {{{1
           \      '*': {-> get(g:, 'foo', [])},
           \   },
           \ }
+
+"  let g:clipboard = {
+"        \   'name': 'winClip',
+"        \   'copy': {
+"        \      '+': 'win32yank.exe -i --crlf',
+"        \      '*': 'win32yank.exe -i --crlf',
+"        \    },
+"        \   'paste': {
+"        \      '+': 'win32yank.exe -o --crlf',
+"        \      '*': 'win32yank.exe -o --crlf',
+"        \   },
+"        \   'cache_enabled': 1,
+"        \ }
 
   call remotes#HardReset()
 endfunction   " }}}

@@ -88,10 +88,13 @@ function! find_files#RipgrepFzf(query, fullscreen)  abort   " {{{
   "   you type on fzf prompt is only used for restarting ripgrep process.
   " - Also note that we enabled previewer with `fzf#vim#with_preview`.
 
-  let l:command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
+  let l:command_fmt = 'rg --column --line-number --no-heading'
+                  \. '--max-count=5 --color=always --smart-case'
+                  \. '--max-columns-preview --hidden --glob-case-insensitive --glob=!.git %s || true'
+
   let l:initial_command = printf(l:command_fmt, shellescape(a:query))
   let l:reload_command = printf(l:command_fmt, '{q}')
-  let l:spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.l:reload_command]}
+  let l:spec = {'options': ['--phony', '--ansi', '--query', a:query, '--bind', 'change:reload:'.l:reload_command]}
   call fzf#vim#grep(l:initial_command, 1, fzf#vim#with_preview(l:spec), a:fullscreen)
 endfunction  " }}}
 

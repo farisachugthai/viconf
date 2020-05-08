@@ -20,11 +20,18 @@ nnoremap <buffer><silent> <C-Down> <Cmd>llast<CR><bar><Cmd>clast<CR>
 
 nnoremap <buffer><silent> <C-Up> <Cmd>lfirst<CR><bar><Cmd>cfirst<CR>
 
-let b:undo_ftplugin = 'setlocal '
+let b:undo_ftplugin .= '|setlocal modifiable< modified< syntax<'
       \ . '|unlet! b:undo_ftplugin'
+      \ . '|silent! <buffer> nunmap <Tab>'
+      \ . '|silent! <buffer> nunmap <S-Tab>'
+      \ . '|silent! <buffer> nunmap <C-Down>'
+      \ . '|silent! <buffer> nunmap <Left>'
+      \ . '|silent! <buffer> nunmap <Right>'
+      \ . '|silent! <buffer> nunmap <C-Up>'
+      \ . '|au! * <buffer>'
+" remove buffer-local autocommands for current buffer
 
 if !exists('g:loaded_qf') | finish | endif
-
 nnoremap <buffer> { <Plug>(qf_previous_file)
 nnoremap <buffer> } <Plug>(qf_next_file)
 
@@ -35,3 +42,9 @@ nnoremap <buffer> <M-t> QfHistoryOlder
 " mapping but it works that way
 nnoremap <buffer> <M-p> <Plug>(qf_qf_previous)
 nnoremap <buffer> <M-n> <Plug>(qf_qf_next)
+
+let b:undo_ftplugin .= '|silent! <buffer> nunmap {'
+      \ . '|silent! <buffer> nunmap }'
+      \ . '|silent! <buffer> nunmap <M-t>'
+      \ . '|silent! <buffer> nunmap <M-p>'
+      \ . '|silent! <buffer> nunmap <M-n>'

@@ -1,3 +1,7 @@
+local vim = vim
+local vim.api = vim.api
+
+
 function add(a,b)
   return a+b
 end

@@ -5,24 +5,6 @@
   " Last Modified: March 08, 2020
 " ============================================================================
 
-" does he not define it as a ffplugin im so confused
-" heres a few autocmds
-  "autocmd FileType fugitive
-  "      \ if len(FugitiveGitDir()) |
-  "      \   call fugitive#MapCfile('fugitive#StatusCfile()') |
-  "      \ endif
-
-  "autocmd BufReadCmd    fugitive://*//*             exe fugitive#BufReadCmd() |
-  "      \ if &path =~# '^\.\%(,\|$\)' |
-  "      \   let &l:path = substitute(&path, '^\.,\=', '', '') |
-  "      \ endif
-  "autocmd BufWriteCmd   fugitive://*//[0-3]/*       exe fugitive#BufWriteCmd()
-  "autocmd FileReadCmd   fugitive://*//*             exe fugitive#FileReadCmd()
-  "autocmd FileWriteCmd  fugitive://*//[0-3]/*       exe fugitive#FileWriteCmd()
-  "if exists('##SourceCmd')
-  "  autocmd SourceCmd     fugitive://*//*    nested exe fugitive#SourceCmd()
-  "endif
-
   " otherwise this gets sourced every fucking time you're in a git repo
 if &filetype==# 'fugitive'
   finish
@@ -48,6 +30,6 @@ endif
 
 let b:undo_ftplugin = 'setlocal foldexpr< '
       \ . '|unlet! b:undo_ftplugin'
-      \ . '|silent! nunmap <buffer> p'
-      \ . '|silent! nunmap <buffer> +'
-      \ . '|silent! nunmap <buffer>` q'
+      \ . '|silent! <buffer> nunmap p'
+      \ . '|silent! <buffer> nunmap +'
+      \ . '|silent! <buffer> nunmap q'

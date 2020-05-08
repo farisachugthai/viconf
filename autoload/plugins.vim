@@ -404,3 +404,4 @@ function! plugins#fugitive_head() abort
   setlocal nomodified
   setlocal buftype=nofile
 endfunction
+

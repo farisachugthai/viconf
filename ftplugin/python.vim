@@ -118,17 +118,17 @@ nnoremap <buffer> ,eb <Cmd>py3f %<CR>
 " }}}
 
 " Commands And Cleanup: {{{
-if executable('yapf')
-  command! -buffer -complete=buffer -nargs=0 YAPF call py#YAPF()
-  command! -buffer -complete=buffer -nargs=0 YAPFI exec '!yapf -i %'
-  command! -buffer -complete=buffer -nargs=0 YAPFD cexpr! exec '!yapf -d %'
+" if executable('yapf')
+"   command! -buffer -complete=buffer -nargs=0 YAPF call py#YAPF()
+"   command! -buffer -complete=buffer -nargs=0 YAPFI exec '!yapf -i %'
+"   command! -buffer -complete=buffer -nargs=0 YAPFD cexpr! exec '!yapf -d %'
 
-else
-  if executable('autopep8')
-    command! -nargs=0 -complete=buffer -buffer Autopep8 cexpr! exec '!autopep8 -i ' . shellescape(<q-args>) . expand('%')
-    command! -nargs=0 Autopep8 exec '!autopep8 -i %'
-  endif
-endif
+" else
+"   if executable('autopep8')
+"     command! -nargs=0 -complete=buffer -buffer Autopep8 cexpr! exec '!autopep8 -i ' . shellescape(<q-args>) . expand('%')
+"     command! -nargs=0 Autopep8 exec '!autopep8 -i %'
+"   endif
+" endif
 
 call py#ALE_Python_Conf()
 

@@ -225,6 +225,8 @@ ISO9660
 Implementors
 Importlib
 IntelliSense
+IntelliSense
+IntelliSense
 InteractiveShell
 IronPython
 JQuery
@@ -358,6 +360,8 @@ PowerShell
 Preprocesses
 ProTools
 PurePath
+PyBind11
+PyBind11
 PyBind11
 PyCharm
 PyCon
@@ -667,6 +671,7 @@ bugfix
 buildpackage
 builtins
 byobu
+bytearray
 bytestream
 bz2
 bzip
@@ -844,6 +849,7 @@ faris
 farischugthai
 faulthandler
 fd
+fdm
 fdupes
 ffmpeg
 fgcolor
@@ -859,6 +865,7 @@ fishshell
 flake8
 fmt
 fnmatch
+foldlevelstart
 formatMessage
 formatargvalues
 fortran
@@ -942,6 +949,7 @@ h5
 h6
 haml
 hardcode
+hasattr
 hashable
 hashtables
 haskell
@@ -1008,13 +1016,16 @@ isabs
 isdir
 isfile
 isgenerator
+isinstance
 iskeyword
 islink
 islower
 ismodule
 isroutine
+issubclass
 isupper
 itemgetter
+iter
 iterable
 iterables
 iw
@@ -1117,6 +1128,7 @@ langmap
 langnoremap
 langremap
 launchctl
+len
 lex
 libcs50
 libexpat1
@@ -1189,6 +1201,7 @@ md5
 md5sum
 melpa
 memcache
+memoryview
 metacharacters
 metaclass
 metaclasses
@@ -1196,6 +1209,7 @@ metadata
 metakernel
 metapackage
 metavar
+meth
 microkernel
 microkernels
 microservices
@@ -1511,6 +1525,8 @@ rufus
 runpy
 runtimepath
 runtimes
+runtimes
+runtimes
 rustup
 rvm
 rw
@@ -1686,6 +1702,8 @@ tnoremap
 toctree
 todo
 toolchain
+toolset
+toolset
 toolset
 toolstack
 torbirdy

@@ -70,11 +70,6 @@ def feedkeys(keys, mode="n"):
         command(r'call feedkeys("%s", "%s")' % (keys, mode))
 
 
-data = vim_eval('stdpath("data")')
-if Path(data).exists():
-    sys.path.append(data)
-
-
 def _vim_dec(string):
     """Decode 'string' using &encoding. From UltiSnips.compatability."""
     # We don't have the luxury here of failing, everything
@@ -103,11 +98,20 @@ class VimBuffer:
 
     def __init__(self, vim=None):
         self.vim = vim
-        self._buffer = vim.current.buffer
         self._window = vim.current.window
         self._tabpage = vim.current.tabpage
         self._range = vim.current.range
         self._line = vim.current.line
+
+    @property
+    def _buffer(self):
+        self.vim.current.buffer
+
+    # todo: setters
+    @property
+    def _buffer(self):
+        self.vim.current.buffer
+
 
     def __getitem__(self, idx):
         if isinstance(idx, slice):  # Py3
@@ -196,7 +200,6 @@ class VimBuffer:
 
     def fname(self):
         return self.name
-
 
 
 @contextmanager
@@ -409,8 +412,8 @@ if __name__ == "__main__":
 
     vim_obj = _Vim()
 
-        vim = LegacyVim()
-        if hasattr(vim, "from_nvim"):
-            _patch_nvim(vim_obj)
+    vim = LegacyVim()
+    if hasattr(vim, "from_nvim"):
+        _patch_nvim(vim_obj)
 
-        buf = VimBuffer(vim)  # pylint:disable=invalid-name
+    buf = VimBuffer(vim)  # pylint:disable=invalid-name

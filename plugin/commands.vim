@@ -342,10 +342,7 @@ command! -nargs=* -range=% -addr=buffers -count -bang -bar -complete=file_in_pat
 " Well this is nice to know about. You can specify what a range refers to.
 " -addr=loaded_buffers
 command! -nargs=* -bang -bar -complete=buffer -range=% -addr=buffers
-      \ BuffEdit <q-mods>buffer<bang> <q-args>
-
-command! -nargs=* -bang -bar -complete=buffer -range=% -addr=buffers
-      \ BuffsEdit <q-mods>buffers<bang> <q-args>
+      \ BEdit <q-mods>buffer<bang> <q-args>
 
 " }}}
 
@@ -458,14 +455,14 @@ command! -bang -complete=expression -bar PydocShow call pydoc_help#show(<bang>0)
 
 " General Python Commands: {{{
 " If things slow down autoload these.
-command! -bar Black py3 Black()
-command! -bar BlackUpgrade py3 BlackUpgrade()
-command! -bar BlackVersion py3 BlackVersion()
+"
+command! -bar Black call py#Black()
+command! -bar BlackUpgrade call py#BlackUpgrade()
+command! -bar BlackVersion call py#black_version()
 " TODO: Work on the range then the bang
 command! -bar -complete=file -range BlackCurrent <line1>,<line2>call py#Black()
 
 command! -nargs=+ -bar -complete=buffer -range -addr=buffers -complete=file_in_path BlackThese call py#black_these(<f-args>)
-
 
 function! s:IPythonOptions(...) abort
 
@@ -477,29 +474,11 @@ endfunction
 
 " So far works
 command! -bar -bang -nargs=* -complete=dir -complete=custom,s:IPythonOptions IPy :<mods>term<bang> ipython <args>
-
 command! -bar -bang -complete=buffer ScratchBuffer call pydoc_help#scratch_listed_buffer(<bang>0)
-
 command! -nargs=* -bar -bang Pynvim call py#Cnxn(<bang>0, <args>)
-
-command! -nargs=* -bar -bang PyREPL call py#Yours(<bang>0, <args>)
-
+command! -nargs=* -bar -bang PyChannel call py#Yours(<bang>0, <args>)
 " Add a platform check in that file so we can have 1 entry point
 command! -bar RemoteReload call remotes#msdos_remote()
-
-" command! RangerCurrentFile call OpenRangerIn("%", s:default_edit_cmd)
-" command! RangerCurrentDirectory call OpenRangerIn("%:p:h", s:default_edit_cmd)
-" command! RangerWorkingDirectory call OpenRangerIn(".", s:default_edit_cmd)
-" command! Ranger RangerCurrentFile
-
-" " To open the selected file in a new tab
-" command! RangerCurrentFileNewTab call OpenRangerIn("%", 'tabedit ')
-" command! RangerCurrentFileExistingOrNewTab call OpenRangerIn("%", 'tab drop ')
-" command! RangerCurrentDirectoryNewTab call OpenRangerIn("%:p:h", 'tabedit ')
-" command! RangerCurrentDirectoryExistingOrNewTab call OpenRangerIn("%:p:h", 'tab drop ')
-" command! RangerWorkingDirectoryNewTab call OpenRangerIn(".", 'tabedit ')
-" command! RangerWorkingDirectoryExistingOrNewTab call OpenRangerIn(".", 'tab drop ')
-" command! RangerNewTab RangerCurrentDirectoryNewTab
 " }}}
 
 " Terminal Command: {{{
@@ -530,9 +509,7 @@ command! -bang -bar -nargs=+ -complete=file -complete=file_in_path EditFiles
     \ exe '<mods> split ' . f<bang> |
     \ endfor
 
-command!  -complete=file_in_path  -bang -bar -nargs=* -complete=file -complete=dir EditAny <mods>edit<bang> <q-args>
-
-command! -bar -range -nargs=+ -complete=file Sedit call unix#SpecialEdit(<q-args>, <q-mods>)
+command! -bar -range -nargs=* -complete=file Snew call unix#SpecialEdit(<q-args>, <q-mods>)
 
 " There are more comfortable ways of doing the following in Vim.
 " I'm not going to convince you it's better. That it's cleaner.
@@ -605,11 +582,8 @@ command! -range -addr=arguments -bang -bar -nargs=* Gclone exe fugitive#Command(
 
 " no args no nothing. just a reminder you can fill a buffer with git output. and then i forgot
 " that this was supposed to just be  a reminder. ready to overengineer TO THE EXTREME
-
 command! -bar GHead call  plugins#fugitive_head()
-
 command! -nargs=* -bar -complete=custom, Gds2 :enew<bar>:Gread! diff --staged --stat HEAD -- .<bar>set filetype=git
-
 " }}}
 
 " Syntax Highlighting: {{{
@@ -619,4 +593,14 @@ command! HiQF call syncom#HiQF()
 command! SyntaxInfo call syncom#get_syn_info()
 " Works:
 command! HiTest call syncom#hitest()
+
+function! s:CompleteSynInclude(A, L, P) abort
+
+  return globpath(&rtp, "syntax/**/*.vim", 0, 1)
+endfunction
+
+" Its annoying that syn include doesnt complete paths
+" Now it does!
+command! -nargs=1 -bar -complete=customlist,s:CompleteSynInclude SynInclude syntax include <args>
+
 " }}}

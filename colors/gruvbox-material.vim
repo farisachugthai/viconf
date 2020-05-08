@@ -17,30 +17,29 @@ if exists('syntax_on')
 endif
 
 let g:colors_name = 'gruvbox-material'
-
 " }}}
 
 " Meat and Potatoes The ColorScheme: {{{
     let g:terminal_ansi_colors = ['#665c54', '#ea6962', '#a9b665', '#e78a4e',
-          \ '#7daea3', '#d3869b', '#89b482', '#dfbf8e', '#928374', '#ea6962',
-          \ '#a9b665', '#e3a84e', '#7daea3', '#d3869b', '#89b482', '#dfbf8e']
+      \ '#7daea3', '#d3869b', '#89b482', '#dfbf8e', '#928374', '#ea6962',
+      \ '#a9b665', '#e3a84e', '#7daea3', '#d3869b', '#89b482', '#dfbf8e']
     if has('nvim')
-      let g:terminal_color_0 = '#665c54'
-      let g:terminal_color_1 = '#ea6962'
-      let g:terminal_color_2 = '#a9b665'
-      let g:terminal_color_3 = '#e78a4e'
-      let g:terminal_color_4 = '#7daea3'
-      let g:terminal_color_5 = '#d3869b'
-      let g:terminal_color_6 = '#89b482'
-      let g:terminal_color_7 = '#dfbf8e'
-      let g:terminal_color_8 = '#928374'
-      let g:terminal_color_9 = '#ea6962'
-      let g:terminal_color_10 = '#a9b665'
-      let g:terminal_color_11 = '#e3a84e'
-      let g:terminal_color_12 = '#7daea3'
-      let g:terminal_color_13 = '#d3869b'
-      let g:terminal_color_14 = '#89b482'
-      let g:terminal_color_15 = '#dfbf8e'
+  let g:terminal_color_0 = '#665c54'
+  let g:terminal_color_1 = '#ea6962'
+  let g:terminal_color_2 = '#a9b665'
+  let g:terminal_color_3 = '#e78a4e'
+  let g:terminal_color_4 = '#7daea3'
+  let g:terminal_color_5 = '#d3869b'
+  let g:terminal_color_6 = '#89b482'
+  let g:terminal_color_7 = '#dfbf8e'
+  let g:terminal_color_8 = '#928374'
+  let g:terminal_color_9 = '#ea6962'
+  let g:terminal_color_10 = '#a9b665'
+  let g:terminal_color_11 = '#e3a84e'
+  let g:terminal_color_12 = '#7daea3'
+  let g:terminal_color_13 = '#d3869b'
+  let g:terminal_color_14 = '#89b482'
+  let g:terminal_color_15 = '#dfbf8e'
     endif
     hi White guifg=#ffffff guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermbg=NONE
     hi LightGrey guifg=#a89984 guibg=NONE guisp=NONE gui=NONE cterm=NONE
@@ -1013,6 +1012,7 @@ hi! link vimOnlyCommand vimCommand
 hi! link vimOnlyHLGroup VisualNOS
 hi! link vimOnlyOption Green
 hi! link vimPythonRegion Identifier
+
 " Errors:
 hi! link vimAugroupError        Error
 hi! link vimBehaveError vimError
@@ -1232,8 +1232,8 @@ hi! link shVarAssign        Question
 hi! link shVariable	shSetList
 hi! link shWhileSync        Question
 hi! link shWrapLineOperator	shOperator
-
 " }}}
+
 " QF: {{{
 hi link qfFileName	Directory
 hi link qfLineNr	LineNr
@@ -1798,6 +1798,7 @@ hi! link CocExplorerFileGitStage Purple
 hi! link CocExplorerFileGitUnstage Yellow
 hi! link CocExplorerFileRoot Orange
 hi! link CocExplorerFileSize Blue
+
 hi! link CocExplorerTimeAccessed Aqua
 hi! link CocExplorerTimeCreated Aqua
 hi! link CocExplorerTimeModified Aqua

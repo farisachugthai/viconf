@@ -55,7 +55,6 @@ xnoremap <C-h> d
 nnoremap <Leader>sp <Cmd>setlocal spell!<CR>
 nnoremap <Leader>o o<Esc>
 nnoremap <Leader>O O<Esc>
-
 nnoremap <Leader>fe :e **/*<C-z><S-Tab>
 
 nnoremap <Leader>ff :Find **/*<C-z><S-Tab>
@@ -191,9 +190,6 @@ xnoremap # mPy?<C-R>"<CR>
 nnoremap / mS/
 " Oh also do the backwards one too please!
 nnoremap ? mB?
-" let's extend justin's idea with ours!
-" get rid of the gv it's super confusing
-" xnoremap / mSy/<C-R>"<CR>
 xnoremap / mS/
 
 " }}}
@@ -337,6 +333,7 @@ inoremap <expr> <M-=> pumvisible() ? coc#_select_confirm() :
 inoremap <M-/> <C-R>=SuperTabAlternateCompletion("\<lt>c-p>")<CR>
 inoremap <expr> <C-Space> coc#refresh()
 imap <C-.> <Plug>(ale_complete)
+
 nnoremap <C-k>d <Plug>(coc-definition)<CR>
 " The gu<text object> operation is too important
 nnoremap <expr><buffer> <Leader>u <Plug>(coc-usages)<CR>
@@ -403,12 +400,12 @@ nnoremap ,g <Cmd>exe 'CocList -I --input=' . expand('<cword>') . ' grep'<CR>
 
 " CocResume: {{{
 " Amazingly leader j k and p aren't taken. From the readme
-nnoremap <Leader>j  :<C-u>CocNext<CR>
-nnoremap ,j  :<C-u>CocNext<CR>
-nnoremap <Leader>k  :<C-u>CocPrev<CR>
-nnoremap ,k  :<C-u>CocPrev<CR>
-nnoremap <Leader>r  :<C-u>CocListResume<CR>
-nnoremap ,r  :<C-u>CocListResume<CR>
+nnoremap <Leader>j  <Cmd>CocNext<CR>
+nnoremap ,j         <Cmd>CocNext<CR>
+nnoremap <Leader>k  <Cmd>CocPrev<CR>
+nnoremap ,k         <Cmd>CocPrev<CR>
+nnoremap <Leader>r  <Cmd>CocListResume<CR>
+nnoremap ,r         <Cmd>CocListResume<CR>
 " }}}
 
 " Other Mappings: {{{
@@ -475,7 +472,7 @@ function! Window_Mappings() abort  " {{{
 
 
   " Resizing Windows:
-  nnoremap <C-w><C-Left>
+  " nnoremap <C-w><C-Left>
   nnoremap <C-w><C-Down> <C-w>-
   " nnoremap <C-w><C-Right>
   nnoremap <C-w><C-Up> <C-w>+
