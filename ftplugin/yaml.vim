@@ -5,7 +5,6 @@
   " Last Modified: March 05, 2020
 " ============================================================================
 
-
 let g:yaml_schema = 'pyyaml'
 let b:yaml_schema = 'pyyaml'
 
@@ -18,15 +17,22 @@ setlocal comments=:# commentstring=#\ %s expandtab
 setlocal formatoptions-=t formatoptions+=croql
 setlocal expandtab tabstop=4 shiftwidth=2 softtabstop=2
 
-syntax sync fromstart
-syntax enable
-
 if exists('*nvim_command')
   call nvim_command('UltiSnipsAddFiletypes ansible')
 endif
 
+function! Prettyyaml() range abort
+  let s:py3 = provider#python3#Prog()
+  if s:py3 ==# ''
+    return
+  endif
+  python3 from _vim import pretty_it; pretty_it('yaml')
+endfunction
 " For more see ../python3/_vim
-command! -buffer -bar -range=% PrettyYaml :<line1>,<line2>python3 from _vim import pretty_it; pretty_it('yaml')
+command! -buffer -bar -range=% PrettyYaml call Prettyyaml()
+
+setlocal formatexpr=Prettyyaml()
+" Idk if i would say this does what I want but it does something
 
 let b:undo_ftplugin .= '|setl com< cms< et< fo< sw< et< sts< ts<'
             \ . '|unlet! b:undo_ftplugin'

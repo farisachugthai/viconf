@@ -65,7 +65,6 @@ from functools import partial
 from traceback import format_exception, format_stack, format_exc
 from typing import Dict, Any, AnyStr, Union, List, Optional, Callable
 
-import greenlet
 import msgpack
 
 try:
@@ -82,13 +81,15 @@ else:
 if sys.version_info <= (3, 7):
 
     class ModuleNotFoundError(ImportError):
+        """New exception for Python3.7."""
+
         pass  # i have a better implementation somewhere...
 
 
 global vim
 
 try:
-    import vim
+    import vim  # noqa
 except ImportError:
     pass
 
@@ -108,6 +109,10 @@ except ImportError:
         def __fspath__(self):
             """Return the file system path representation of the object."""
             raise NotImplementedError
+
+        @classmethod
+        def register(self, Path):
+            pass
 
     PathLike.register(pathlib.Path)
 
@@ -146,14 +151,14 @@ except ImportError:
             "expected str, bytes or os.PathLike object, not " + path_type.__name__
         )
 
-    def _fscodec():
+    def _fscodec(filename):
         encoding = sys.getfilesystemencoding()
         if encoding == "mbcs":
             errors = "strict"
         else:
             errors = "surrogateescape"
 
-        def fsencode(filename):
+        def fsencode():
             """Encode filename (an os.PathLike, bytes, or str) to the filesystem
             encoding with 'surrogateescape' error handler, return bytes unchanged.
             On Windows, use 'strict' error handler if the file system encoding is
@@ -165,7 +170,7 @@ except ImportError:
             else:
                 return filename
 
-        def fsdecode(filename):
+        def fsdecode():
             """Decode filename (an os.PathLike, bytes, or str) from the filesystem
             encoding with 'surrogateescape' error handler, return str unchanged. On
             Windows, use 'strict' error handler if the file system encoding is
@@ -180,13 +185,7 @@ except ImportError:
         return fsencode, fsdecode
 
     fsencode, fsdecode = _fscodec()
-    del _fscodec
 
-    def open(file_on_disk, *pargs, **kwargs):
-        """Open a file. Both pathlib.Path and str objects are accepted."""
-        if isinstance(file_on_disk, PathLike):
-            file_on_disk = fspath(file_on_disk)
-        return io.open(file_on_disk, *pargs, **kwargs)
 
 
 # }}}
@@ -258,7 +257,6 @@ def start_host(session=None, load_plugins=True, plugins=None):
         plugins = _goofy_way_of_loading_plugins()
 
     if not session:
-        # session = AsyncioEventLoop(socket=os.environ.get("NVIM_LISTEN_ADDRESS"))
         session = stdio_session()
     nvim = Nvim.from_session(session)
 
@@ -334,7 +332,7 @@ def attach(session_type, address=None, port=None, path=None, argv=None, decode=N
     return Nvim.from_session(session).with_decode(decode)
 
 
-def setup_logging(name: AnyStr = None, level: int = None, disable_asyncio_logging=True):
+def setup_logging(name=None, level=None):
     """Setup logging according to environment variables.
 
     So I just figured out why the nvim_python_log_file never sets.
@@ -373,16 +371,20 @@ def setup_logging(name: AnyStr = None, level: int = None, disable_asyncio_loggin
     logfile = "{}_py{}_{}".format(prefix, major_version, name)
     handler = logging.FileHandler(logfile, "w", "utf-8")
     handler.setLevel(level)
-    log_datefmt = "%Y-%m-%d %H:%M:%S"
-    default_log_format = "[ %(name)s : %(relativeCreated)d :] %(levelname)s : %(module)s : --- %(message)s "
-    formatter = logging.Formatter(fmt=default_log_format, datefmt=log_datefmt)
-
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
-    logger.root.addHandler(handler)
     filterer = logging.Filter(name=__name__)
     logger.addFilter(filterer)
 
+    log_datefmt = "%Y-%m-%d %H:%M:%S"
+    default_log_format = "[ %(name)s : %(relativeCreated)d :] %(levelname)s : %(module)s : --- %(message)s "
+    formatter = logging.Formatter(fmt=default_log_format, datefmt=log_datefmt)
+    stream = logging.StreamHandler(sys.stderr)
+    stream.setLevel(logging.WARNING)
+
+
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    logger.addHandler(stream)
+    logger.root.addHandler(handler)
     if not disable_asyncio_logging:
         return logger
     if len(asyncio.log.logger.root.handlers) > 0:
@@ -410,7 +412,14 @@ debug, info, warn, error = (
 
 # }}}
 
-# util: {{{
+
+def multiprocess_setup_logging(level=30):
+    """Simply a convenience function."""
+    logger = setup_logging(name=multiprocessing.get_logger(), level=level)
+    return logger
+
+
+# util:
 
 
 def get_documentation(word):
@@ -590,8 +599,6 @@ def plugin(cls):
     # decorated functions have a bound Nvim instance as first argument.
     # For methods in a plugin-decorated class this is not required, because
     # the class initializer will already receive the nvim object.
-    # @functools.wraps
-    # adding wraps causes errors
     def predicate(fn):
         return hasattr(fn, "_nvim_bind")
 
@@ -603,8 +610,6 @@ def plugin(cls):
 def rpc_export(rpc_method_name, sync=False):
     """Export a function or plugin method as a msgpack-rpc request handler."""
 
-    # should functools.wraps be going on top of all of these?
-    @functools.wraps
     def dec(f):
         f._nvim_rpc_method_name = rpc_method_name
         f._nvim_rpc_sync = sync
@@ -617,9 +622,9 @@ def rpc_export(rpc_method_name, sync=False):
 
 def command(
     name,
-    nargs=0,
+    nargs=0,  # type Optional[Union[int, List]
     complete=None,
-    _range=None,
+    _range=False,
     count=None,
     bang=False,
     register=False,
@@ -627,9 +632,12 @@ def command(
     allow_nested=False,
     _eval=None,
 ):
-    """Tag a function or plugin method as a Nvim command handler."""
+    """Tag a function or plugin method as a Nvim command handler.
 
-    @functools.wraps
+    Set :param:`sync` to False and 'allow_nested' to True to allow async
+    funcs or plugins.
+    """
+
     def dec(f):
         f._nvim_rpc_method_name = "command:{}".format(name)
         f._nvim_rpc_sync = sync
@@ -677,7 +685,6 @@ def command(
 def autocmd(name, pattern="*", sync=False, allow_nested=False, eval=None):
     """Tag a function or plugin method as a Nvim autocommand handler."""
 
-    @functools.wraps
     def dec(f):
         f._nvim_rpc_method_name = "autocmd:{}:{}".format(name, pattern)
         f._nvim_rpc_sync = sync
@@ -708,7 +715,6 @@ def autocmd(name, pattern="*", sync=False, allow_nested=False, eval=None):
 def function(name, _range=False, sync=False, allow_nested=False, _eval=None):
     """Tag a function or plugin method as a Nvim function handler."""
 
-    @functools.wraps
     def dec(f):
         f._nvim_rpc_method_name = "function:{}".format(name)
         f._nvim_rpc_sync = sync
@@ -742,7 +748,6 @@ def function(name, _range=False, sync=False, allow_nested=False, _eval=None):
 def shutdown_hook(f):
     """Tag a function or method as a shutdown hook."""
 
-    @functools.wraps
     def _():
         f._nvim_shutdown_hook = True
         f._nvim_bind = True
@@ -752,7 +757,6 @@ def shutdown_hook(f):
 def decode(mode=unicode_errors_default):
     """Configure automatic encoding/decoding of strings."""
 
-    @functools.wraps
     def dec(f):
         f._nvim_decode = mode
         return f
@@ -991,6 +995,7 @@ class Session(object):
         Like `AsyncSession.run()`, but `request_cb` and `notification_cb` are
         inside greenlets.
         """
+        import greenlet
         self._request_cb = request_cb
         self._notification_cb = notification_cb
         self._is_running = True
@@ -1021,10 +1026,9 @@ class Session(object):
         """Close the event loop."""
         self._async_session.close()
 
-    def __del__(self):
-        self.close()
 
     def _yielding_request(self, method, args):
+        import greenlet
         gr = greenlet.getcurrent()
         parent = gr.parent
 
@@ -1232,9 +1236,6 @@ class Nvim(object):
         self.session = session
         if self.session is None:
             self.session = CompatibilitySession(self)
-        # if session is None:
-        #     session = stdio_session()
-
         self.channel_id = channel_id
         self.metadata = metadata
         version = metadata.get("version", {"api_level": 0})
@@ -1487,8 +1488,6 @@ class Nvim(object):
         """
         return self.request("nvim_strwidth", string)
 
-    #     def __len__(self):
-    #         return self.strwidth()
 
     def list_runtime_paths(self):
         """Return a list of paths contained in the 'runtimepath' option."""
@@ -1634,13 +1633,21 @@ class Nvim(object):
 
 
 class BufferBase(UserList):
-    """The Buffers class should fully implement the MutableSequence protocol."""
+    """The Buffers class should fully implement the MutableSequence protocol.
 
-    def __init__(self, nvim):
+    Actually this might be a better idea.
+
+    .. seealso::
+        `Python's Buffer Objects
+        <https://docs.python.org/3/c-api/buffer.html#bufferobjects>`_
+
+    """
+
+    def __init__(self, nvim, session=None):
         """Initialize a Buffers object with Nvim object `nvim`."""
+        self.nvim = Nvim.from_session(session) if nvim is None else nvim
         self._fetch_buffers = nvim.api.list_bufs
-        self.nvim = nvim
-        super().__init__()
+        # super().__init__()
 
     def __len__(self):
         """Return the count of buffers."""
@@ -1939,14 +1946,15 @@ class ScriptHost:
 
         Moved the self.nvim = nvim to the ``__init__`` so that :meth:`setup`
         doesn't require parameters anymore.
+        Set import hooks and global streams.
+
+        This will add import hooks for importing modules from runtime
+        directories and patch the sys module so 'print' calls will be
+        forwarded to Nvim.
         """
         self.nvim = nvim if nvim is not None else Nvim.from_session(self)
         info("install import hook/path")
         sys.path_hooks.append(self.hook)
-        # seriously why accept nvim as a parameter then define things on
-        # it. were defining the class ourselves just fucking define
-        # it here!
-        # nvim.VIM_SPECIAL_PATH = "_vim_path_"
         sys.path.append(nvim.VIM_SPECIAL_PATH)
         # also we're gonna need to do something about all this horrific
         # sys.path hacking
@@ -1965,11 +1973,9 @@ class ScriptHost:
         exec("import sys", self.module.__dict__)
         exec("import re", self.module.__dict__)
         self.legacy_vim = LegacyVim.from_nvim(nvim)
-        sys.modules["_vim"] = self.legacy_vim
-        exec("import _vim", self.module.__dict__)
-
+        sys.modules["vim"] = self.legacy_vim
+        exec("import vim", self.module.__dict__)
         import platform
-
         if not platform.platform().startswith("Win"):
             self.handle_dirchanged(self.nvim)
 
@@ -1991,13 +1997,6 @@ class ScriptHost:
             async_=True,
         )
 
-    def setup(self, nvim=None):
-        """Set import hooks and global streams.
-
-        This will add import hooks for importing modules from runtime
-        directories and patch the sys module so 'print' calls will be
-        forwarded to Nvim.
-        """
 
     def teardown(self):
         """Restore state modified from the `setup` call."""
@@ -3584,7 +3583,8 @@ class Host:
     requests/notifications to the appropriate handlers.
     """
 
-    _specs: Dict[Any, Any]
+    _specs: Optional[Dict[Any, Any]]
+    _loaded: Optional[Dict[Any, Any]]
 
     def __init__(self, nvim, **kwargs):
         """Set handlers for plugin_load/plugin_unload.
@@ -3609,6 +3609,7 @@ class Host:
             "specs": self._on_specs_request,
             "shutdown": self.shutdown,
         }
+        self.handler = self._notification_handlers.get(name, None)
 
         # Decode per default for Python3
         self._decode_default = True
@@ -3620,7 +3621,9 @@ class Host:
     def _on_error_event(self, kind, msg):
         """Error from nvim due to async request."""
         # like nvim.command(..., async_=True)
-        errmsg = f"{self.name}: Async request caused an error:\n{msg}\n"
+        errmsg = (
+            f"{self.name}: Async request caused an error:\nKind: {kind}\nMsg: {msg}\n"
+        )
         self.nvim.err_write(errmsg, async_=True)
         return errmsg
 
@@ -4008,8 +4011,13 @@ class UvEventLoop(BaseEventLoop):
 gc.collect()
 
 if __name__ == "__main__":
-    import doctest
-
-    doctest.testmod()
+    import pytest
+    # from _pytest.config import Config
+    # conf = Config('..')
+    # pytest.Session(conf)
+    old_cwd = Path.cwd()
+    os.chdir('..')
+    pytest.main()
+    os.chdir(old_cwd)
 
 # Vim: set fdm=marker fdls=0:

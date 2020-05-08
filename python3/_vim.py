@@ -8,8 +8,9 @@ Dec 07, 2019: Double checked that this passes a cursory `:py3f %` test and it di
 
 """
 import json
-import xml.dom.minidom as md
+import os
 import sys
+import xml.dom.minidom as md
 
 from contextlib import contextmanager
 from pathlib import Path
@@ -84,11 +85,6 @@ def feedkeys(keys, mode="n"):
         command(r'call feedkeys("%s", "%s")' % (keys, mode))
 
 
-data = vim_eval('stdpath("data")')
-if Path(data).exists():
-    sys.path.append(data)
-
-
 def _vim_dec(string):
     """Decode 'string' using &encoding. From UltiSnips.compatability."""
     # We don't have the luxury here of failing, everything
@@ -117,11 +113,20 @@ class VimBuffer:
 
     def __init__(self, vim=None):
         self.vim = vim
-        self._buffer = vim.current.buffer
         self._window = vim.current.window
         self._tabpage = vim.current.tabpage
         self._range = vim.current.range
         self._line = vim.current.line
+
+    @property
+    def _buffer(self):
+        self.vim.current.buffer
+
+    # todo: setters
+    @property
+    def _buffer(self):
+        self.vim.current.buffer
+
 
     def __getitem__(self, idx):
         if isinstance(idx, slice):  # Py3
@@ -212,7 +217,6 @@ class VimBuffer:
         return self.name
 
 
-buf = VimBuffer(vim)  # pylint:disable=invalid-name
 
 
 @contextmanager
@@ -334,13 +338,6 @@ def interpret_yaml(y):
         return json.dumps(yaml.safe_load(y), sort_keys=True, indent=4)
 
 
-prettiers = {
-    "xml": pretty_xml,
-    "json": pretty_json,
-    "yaml": interpret_yaml,
-}
-
-
 def pretty_it(datatype):
     r = vim.current.range
     content = "\n".join(r)
@@ -410,6 +407,20 @@ def _patch_nvim(vim):
     vim.List = list
     vim.Dictionary = dict
     vim.vars = vars_wrapper()
+
+
+
+data = vim_eval('stdpath("data")')
+if Path(data).exists():
+    sys.path.append(data)
+
+buf = VimBuffer(vim)  # pylint:disable=invalid-name
+
+prettiers = {
+    "xml": pretty_xml,
+    "json": pretty_json,
+    "yaml": interpret_yaml,
+}
 
 
 if hasattr(vim, "from_nvim"):

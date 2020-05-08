@@ -57,10 +57,10 @@ augroup UserPlugins " {{{
   au!
   autocmd  User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 
-  autocmd CursorHold * sil if exists('*CocActionAsync') | call CocActionAsync('highlight') | endif
+  " autocmd CursorHold * sil if exists('*CocActionAsync') | call CocActionAsync('highlight') | endif
 
-  " let's see if this works better
-  autocmd CursorHoldI * sil if exists('*CocActionAsync') | call CocActionAsync('showSignatureHelp') | endif
+  " " let's see if this works better
+  " autocmd CursorHoldI * sil if exists('*CocActionAsync') | call CocActionAsync('showSignatureHelp') | endif
   " autocmd  User CursorHold call CocActionAsync('showSignatureHelp')
   "
   " Clear this so that p.u.m. doesn't open in the command window
@@ -85,6 +85,8 @@ augroup UserPotpourri  " {{{
   " hopefully this will only call one time
   " so far is working perfectly
   autocmd VimEnter * call UltiSnipsConf()
+  autocmd VimEnter * call syncom#gruvbox_material()
+  autocmd VimEnter * call syncom#grepprg()
 augroup END  " }}}
 
 augroup TagbarAutoCmds

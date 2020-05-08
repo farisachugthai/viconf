@@ -387,3 +387,18 @@ let g:tagbar_type_snippets = {
       \ }
 
 endfunction  " }}}
+
+
+function! plugins#fugitive_head() abort
+  if !exists('g:loaded_fugitive')
+    return
+  endif
+
+  if &l:modifiable
+    :botright split | enew
+  endif
+
+  :Gread! show HEAD
+  setlocal nomodified
+  setlocal buftype=nofile
+endfunction

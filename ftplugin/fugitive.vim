@@ -36,10 +36,12 @@ nnoremap <buffer> + <Cmd>Git add --renormalize <cword><CR>
 " 1P is pedit. Can i have it just be p?
 nnoremap <buffer> p 1P
 
+" Fat fingers are scary
+nunmap <buffer> U
 
 let b:undo_ftplugin = 'setlocal foldexpr< '
       \ . '|unlet! b:undo_ftplugin'
-      \ . '|silent! nunmap p'
-      \ . '|silent! nunmap +'
-      \ . '|silent! nunmap q'
+      \ . '|silent! <buffer> nunmap p'
+      \ . '|silent! <buffer> nunmap +'
+      \ . '|silent! <buffer> nunmap q'
 

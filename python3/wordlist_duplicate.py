@@ -5,14 +5,6 @@ import sys
 
 logging.basicConfig(level=logging.DEBUG)
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(".")))
-from pynvim_ import LegacyVim, stdio_session
-
-session = stdio_session()
-vim = LegacyVim.from_session(session)
-
-from _vim import VimBuffer
-
 
 class Target(VimBuffer):
     """Create a class for our target buffer.
@@ -47,6 +39,7 @@ def fix_spellfile(wordlist):
     ----------
     wordlist : list
         List of correct words.
+
     Returns
     -------
     new_wordlist : list
@@ -89,6 +82,11 @@ def sortfile(spellfile):
     sorted_spellfile = sorted(spellobj)
     return sorted_spellfile
 
+def vim_sort(spellfile=None):
+    """If you want ann xmap or something."""
+    if spellfile is None:
+        spellfile = vim.current.buffer
+    vim.eval(":keepmarks '<,'>!sort")
 
 def main():
     """Execute the module.
@@ -115,4 +113,12 @@ def main():
 
 
 if __name__ == "__main__":
+    sys.path.insert(0, os.path.dirname(os.path.abspath(".")))
+    from pynvim_ import LegacyVim, stdio_session
+
+    session = stdio_session()
+    vim = LegacyVim.from_session(session)
+
+    from _vim import VimBuffer
+
     main()

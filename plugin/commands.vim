@@ -67,7 +67,9 @@ command! -bang -bar CocSort call CocActionAsync('runCommand', 'editor.action.org
 " Just tried this and it worked! So keep checking :CocList commands and add more as we go.
 " BUG: Running :topleft call CocActionAsync('runCommand', 'python.startREPL')
 " does not place the buffer at the top
-command! -bang -bar CocPython call CocActionAsync('runCommand', 'python.startREPL')
+" command! -bang -bar CocPython call CocActionAsync('runCommand', 'python.startREPL')
+" Often enough that command doesn't work
+command! -bar -nargs=* -complete=dir CocPython call coc#terminal#start('python', <q-args>, '')
 
 " Let's also get some information here.
 " call CocAction('commands') is a lamer version of CocCommand
@@ -340,10 +342,7 @@ command! -nargs=* -range=% -addr=buffers -count -bang -bar -complete=file_in_pat
 " Well this is nice to know about. You can specify what a range refers to.
 " -addr=loaded_buffers
 command! -nargs=* -bang -bar -complete=buffer -range=% -addr=buffers
-      \ BuffEdit <q-mods>buffer<bang> <q-args>
-
-command! -nargs=* -bang -bar -complete=buffer -range=% -addr=buffers
-      \ BuffsEdit <q-mods>buffers<bang> <q-args>
+      \ BEdit <q-mods>buffer<bang> <q-args>
 
 " }}}
 
@@ -413,6 +412,11 @@ command! -bar -complete=expression -complete=function -range -nargs=+ Pythonx <l
 " :Pd vim.vars
 command! -range -bar -complete=expression -complete=function -nargs=? Pd <line1>,<line2>python3 from pprint import pprint; pprint(dir(<args>))
 
+
+" Js the original implementation should ALSO complete files or dirs
+command! -range -bar -complete=file -complete=dir -nargs=* Py3f :<line1>,<line2>py3f <args>
+command! -range -bar -complete=file -complete=dir -nargs=* Pyf  :<line1>,<line2>pyf  <args>
+
 command! -range -bar -complete=expression -complete=function -nargs=? P <line1>,<line2>python3 print(<args>)
 
 command! -range -bar -complete=expression -complete=function -nargs=? Pv <line1>,<line2>python3 print(vars(<args>))
@@ -434,7 +438,7 @@ endfunction
 
 " command! -range -bang -nargs=? -bar -complete=custom,s:PythonMods Pydoc call pydoc_help#Pydoc(<f-args>, <bang>0, <mods>)
 
-command! -bang -nargs=? -bar Pydoc call pydoc_help#Pydoc(<f-args>, <bang>0)
+command! -bang -nargs=? -bar Pydoc call pydoc_help#Pydoc(<q-args>, <bang>)
 
 " command! -bar -bang -range PydocSp
 "       \ exec '<mods>split<bang>:python3 import pydoc'.expand('<cWORD>').'; pydoc.help('.expand('<cWORD>').')'
@@ -451,9 +455,10 @@ command! -bang -complete=expression -bar PydocShow call pydoc_help#show(<bang>0)
 
 " General Python Commands: {{{
 " If things slow down autoload these.
-command! -bar Black py3 Black()
-command! -bar BlackUpgrade py3 BlackUpgrade()
-command! -bar BlackVersion py3 BlackVersion()
+"
+command! -bar Black call py#Black()
+command! -bar BlackUpgrade call py#BlackUpgrade()
+command! -bar BlackVersion call py#black_version()
 " TODO: Work on the range then the bang
 command! -bar -complete=file -range BlackCurrent <line1>,<line2>call py#Black()
 
@@ -475,7 +480,7 @@ command! -bar -bang -complete=buffer ScratchBuffer call pydoc_help#scratch_liste
 
 command! -nargs=* -bar -bang NvimREPL call py#Cnxn(<bang>0, <args>)
 
-command! -nargs=* -bar -bang NvimYourREPL call py#Yours(<bang>0, <args>)
+command! -nargs=* -bar -bang Pychannel call py#Yours(<bang>0, <args>)
 
 " command! RangerCurrentFile call OpenRangerIn("%", s:default_edit_cmd)
 " command! RangerCurrentDirectory call OpenRangerIn("%:p:h", s:default_edit_cmd)
@@ -520,9 +525,7 @@ command! -bang -bar -nargs=+ -complete=file -complete=file_in_path EditFiles
     \ exe '<mods> split ' . f<bang> |
     \ endfor
 
-command!  -complete=file_in_path  -bang -bar -nargs=* -complete=file -complete=dir EditAny <mods>edit<bang> <q-args>
-
-command! -bar -range -nargs=+ -complete=file Sedit call unix#SpecialEdit(<q-args>, <q-mods>)
+command! -bar -range -nargs=* -complete=file Snew call unix#SpecialEdit(<q-args>, <q-mods>)
 
 " There are more comfortable ways of doing the following in Vim.
 " I'm not going to convince you it's better. That it's cleaner.
@@ -593,8 +596,10 @@ command! -range=% -addr=buffers -bang -bar GRoot echo ProjectRoot()
 
 command! -range -addr=arguments -bang -bar -nargs=* Gclone exe fugitive#Command(<line1>, <count>, +"<range>", <bang>0, "<mods>", <q-args>)
 
-" no args no nothing. just a reminder you can fill a buffer with git output
-command! GHead Gread! show HEAD
+" no args no nothing. just a reminder you can fill a buffer with git output. and then i forgot
+" that this was supposed to just be  a reminder. ready to overengineer TO THE EXTREME
+
+command! -bar GHead call  plugins#fugitive_head()
 command! Gds2 :enew<bar>:Gread! diff --staged --stat HEAD -- .<bar>setlocal nomodified nobuflisted buftype=nofile
 " }}}
 

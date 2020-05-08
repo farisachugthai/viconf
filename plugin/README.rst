@@ -13,16 +13,57 @@ stay in the `init.vim <../init.vim>`_.
 
 Below are just some notes on how to best work with these files.
 
+
 Motivation
 ==========
-
 If you're not sure why you would want to begin breaking up your vimrc,
 I can't recommend `Tom Ryder's writing enough
 <https://vimways.org/2018/from-vimrc-to-vim>`_
 
+
+Working with Plugins
+=====================
+Vim-Plug is a highly recommended plugin manager, and the one that I myself use.
+Written by Junegunn Choi (also the author of FZF), vim-plug creates a
+simple way of interacting with plugins.
+Beyond the basic commands you can read about in his README, vim-plug has
+an API that exports the command ``plug``. This command utilizes vimscript to
+return a dictionary with all of your currently loaded plugins.
+
+This dict maintains the order that the plugins were loaded into the buffer and
+can be accessed with
+
+.. code-block:: vim
+
+   echo keys(plugs)
+
+This feature proves phenomenally useful in a handful of situations.
+For example, one may want to check whether a ftplugin was lazily loaded or
+loaded at all.
+
+Echoing the plugins that Vim-Plug has loaded at startup time can also be
+an easy way to diagnose performance issues with Vim.
+
+As a product of its utility, I wrote a command to quickly call the dictionary.::
+
+   command! Plugins -nargs=0 echo keys(plugs)
+
+In addition, one could be in the situation where they may have
+different configuration files on different devices, and would like to
+check whether a plugin was installed. It's also good for debugging and
+seeing in what order a plugin loads.
+
+Git Subtree
+-----------
+Updating vim-plug.
+
+.. code-block:: bash
+
+   git subtree pull --squash --prefix=vim-plug https://github.com/junegunn/vim-plug.git master
+
+
 Common Vim Naming Conventions
 =============================
-
 Just making a short mental note that it's common convention to use
 ``let g:loaded_plugin_name`` when writing a guard for a plugin.
 
@@ -45,7 +86,6 @@ adding var names will probably pay dividends.
 
 Autocmd for Vim Commentary
 ===========================
-
 I found this in `after/plugin/vim-commentary.vim`_ but ... why? So I want
 to move it in here but I'm not actually sure where.
 
@@ -96,9 +136,16 @@ the results of your search, and leave the quickfix list in the
 previous tab. Because :abbr:`qf` lists don't transfer from tab to tab, you won't be able
 to access the search results in the window that your cursor just moved to!
 
+Possible bug in &number and &rnu
+---------------------------------
+The following doesn't seem to work.::
+
+   setglobal nu rnu
+
+However it works just fine when set locally.
+
 Writing Plugins on NT systems
 ==============================
-
 From ``:he source_crnl``
 
 .. code-block:: help
@@ -123,7 +170,6 @@ From ``:he source_crnl``
 
 Debugging FZF
 ==============
-
 Here are 2 commands I'm still actively working on.::
 
    " Doesn't work
@@ -146,7 +192,6 @@ Here are 2 commands I'm still actively working on.::
 
 Working with tags
 ==================
-
 In the opposite vein of unimpaired (as unimpaired uses keybindings of the
 flavor :kbd:`]` :kbd:`[a-z]`), I just found the keybinding :kbd:`g]`!
 
@@ -191,7 +236,6 @@ So let's do better than :kbd:`g]` !::
 
 Mappings
 =========
-
 Here's a few different ways to map a function to a key.::
 
    " TODO: Not really working. Kinda hard to get it to behave how I'd like.
@@ -202,12 +246,9 @@ Here's a few different ways to map a function to a key.::
    vnoremap <expr> <C-\\> UltiSnips#list_snippets()
 
 
-
 ALE --- Asynchronous Lint Engine
 ================================
-
 A plugin that lints buffers as well as, as of late, supports the LSP protocol.
-
 
 quickfix vs. locationlist
 --------------------------
@@ -232,7 +273,6 @@ simply to view a few linter errors.
 
 Node
 -----
-
 Shockingly, this simple if/else was the difference between :file:`ale.vim`
 loading in 0.4 msecs and ~15.::
 
@@ -246,16 +286,14 @@ loading in 0.4 msecs and ~15.::
 
 Searching
 =========
-
-
 Here's a helpful tidbit from the help pages.:
 
-   g*			Like "*", but don't put "\<" and "\>" around the word.
+   :kbd:`g*`		Like "*", but don't put "\<" and "\>" around the word.
                         This makes the search also find matches that are not a
 			whole word.
 
 							*g#*
-   g#			Like "#", but don't put "\<" and "\>" around the word.
+   :kbd:`g#`		Like "#", but don't put "\<" and "\>" around the word.
    			This makes the search also find matches that are not a
 			whole word.
 
@@ -267,12 +305,11 @@ Here's a helpful tidbit from the help pages.:
 
 Using ``*`` and ``#`` to search in Visual Mode
 ==============================================
-
 It's bugged me for a while that :kbd:`*` and :kbd:`#` don't search when
 you have text selected in visual mode.
 I found a little section in the help that inspired the perfect way to fix that.:
 
-   Note that the ":vmap" command can be used to specifically map keys in Visual
+   Note that the ``:vmap`` command can be used to specifically map keys in Visual
    mode.  For example, if you would like the "/" command not to extend the Visual
    area, but instead take the highlighted text and search for that::
 
@@ -303,7 +340,6 @@ re-centers the cursor!
 
 Using shells besides cmd or bash
 ================================
-
 In usr_41 it's mentioned that files formatted with dos formatting won't
 run vim scripts correctly so holy shit that might explain a hell of a lot
 Comment this out because we now define ``&ff`` as only unix in $MYVIMRC.::
@@ -315,69 +351,8 @@ Related to inter-op on Windows.:
    'slash' and 'unix' are useful on Windows when sharing view files
    with Unix.  The Unix version of Vim cannot source dos format scripts,
    but the Windows version of Vim can source unix format scripts.
-
-Supertab
-========
-
-Supertab is a great plugin to build on insert-mode completion.
-
-I realized none of this was necessary.
-
-From :file:`./supertab.vim`.
-
-.. code-block:: vim
-
-   if !exists('g:loaded_supertab') | finish | endif
-
-   " Culmination Of The Help Docs:
-
-   " Pretty much a copy paste of the last section of the help docs except
-   " I added the autocmd to it's own augroup.
-
-   " 40% of the way in he sets up the context for you.
-
-   " Might give this a try
-   let g:SuperTabDefaultCompletionType = '<C-x><C-u>'
-
-Stopped using this as the completefunc option wasn't set.
-Supertab appears to provide a litany of functions for use;
-however, so this might be revisited.
-
-For example, one could do.::
-
-   set completefunc=SuperTabCodeComplete
-
-Note: once the buffer has been initialized, changing the value of this setting
-will not change the default complete type used. If you want to change the
-default completion type for the current buffer after it has been set, perhaps
-in an ftplugin, you'll need to call *SuperTabSetDefaultCompletionType* like so,
-supplying the completion type you wish to switch to::
-
-   let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
-   let g:SuperTabContextDiscoverDiscovery =
-           \ ['&completefunc:<c-x><c-u>', '&omnifunc:<c-x><c-o>']
-
-
-This configuration will result in a completion flow like so::
-
-   "   if text before the cursor looks like a file path:
-   "     use file completion
-   "   elif text before the cursor looks like an attempt to access a member
-   "   (method, field, etc):
-   "     use user completion
-   "       where user completion is currently set to supertab's
-   "       completion chaining, resulting in:
-   "         if omni completion has results:
-   "           use omni completion
-   "         else:
-   "           use keyword completion
-   "   else:
-   "     use keyword completion
-
-
 Fugitive
 =========
-
 I put all of my mappings into a function. Now I'm trying to figure out how to
 call that functional in a conditional way. Function calls are expensive in Vim,
 *and honestly even defining enough is pretty bad* so we don't want it called
@@ -393,8 +368,7 @@ Oddly fugitive doesn't do that at all! Check the output of ``:augroup fugitive``
 
 There's a autocommand::
 
-   fugitive  BufNewFile
-       \*         call FugitiveDetect(expand('<amatch>:p'))
+   fugitive  BufNewFile         call FugitiveDetect(expand('<amatch>:p'))
 
 That does the same thing that I did in this function::
 
@@ -405,7 +379,6 @@ That does the same thing that I did in this function::
 
 User Defined Commands
 =======================
-
 Feb 25, 2020:
 Can be too difficult to write; however, they're pretty great when done
 correctly.
@@ -425,3 +398,23 @@ correctly.
 User defined find.::
 
    command! -nargs=* -range=% -addr=buffers -count -bang -bar -complete=file_in_path Find :<count><mods>find<bang> <args>
+
+
+Jumps
+======
+Are something I never utilize frequently enough.:
+
+                                                        *CTRL-O*
+CTRL-O                  Go to [count] Older cursor position in jump list
+                        (not a motion command).
+
+<Tab>           or                                      *CTRL-I* *<Tab>*
+CTRL-I                  Go to [count] newer cursor position in jump list
+                        (not a motion command).
+
+
+That's legitimately wonderful to know!
+
+Now I just need to work that in, and make a few utility mappings for the
+quickfix window.
+

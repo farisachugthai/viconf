@@ -72,10 +72,17 @@ function! find_files#FZFGit(bang) abort  " {{{
 endfunction  " }}}
 
 function! find_files#termux_remote() abort  " {{{
+
+  " From what i can tell, this line alone is as good as :UpdateRemotePlugins
+  source $VIMRUNTIME/autoload/remote/host.vim
   let g:python3_host_prog = expand('$PREFIX/bin/python')
+  source $VIMRUNTIME/autoload/provider/python3.vim
   let g:loaded_python_provider = 1
   let g:node_host_prog = '/data/data/com.termux/files/home/.local/share/yarn/global/node_modules/neovim/bin/cli.js'
+  source $VIMRUNTIME/autoload/provider/node.vim
   let g:ruby_host_prog = '/data/data/com.termux/files/home/.gem/bin/neovim-ruby-host'
+  source $VIMRUNTIME/autoload/provider/ruby.vim
+  rubyfile $VIMRUNTIME/autoload/provider/script_host.rb
 
   if exists('$TMUX')
     let g:clipboard = {
@@ -103,6 +110,7 @@ function! find_files#termux_remote() abort  " {{{
           \   },
           \ }
 
+  source $VIMRUNTIME/autoload/provider/clipboard.vim
   endif
 endfunction   " }}}
 
@@ -182,10 +190,13 @@ function! find_files#RipgrepFzf(query, fullscreen)  abort   " {{{
   "   you type on fzf prompt is only used for restarting ripgrep process.
   " - Also note that we enabled previewer with `fzf#vim#with_preview`.
 
-  let l:command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
+  let l:command_fmt = 'rg --column --line-number --no-heading'
+                  \. '--max-count=5 --color=always --smart-case'
+                  \. '--max-columns-preview --hidden --glob-case-insensitive --glob=!.git %s || true'
+
   let l:initial_command = printf(l:command_fmt, shellescape(a:query))
   let l:reload_command = printf(l:command_fmt, '{q}')
-  let l:spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.l:reload_command]}
+  let l:spec = {'options': ['--phony', '--ansi', '--query', a:query, '--bind', 'change:reload:'.l:reload_command]}
   call fzf#vim#grep(l:initial_command, 1, fzf#vim#with_preview(l:spec), a:fullscreen)
 endfunction  " }}}
 

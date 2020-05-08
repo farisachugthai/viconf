@@ -16,9 +16,12 @@ else:
     from pynvim import api, attach
 
 try:
-    import vim  # noqa pylint:disable=import-error,unused-import
+    import vim  # noqa pylint:disable=import-error
 except ImportError:
-    vim = None
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from pynvim_ import LegacyVim
+
+    vim = LegacyVim()
 
 __docformat__ = "reStructuredText"
 
@@ -28,17 +31,17 @@ logger = logging.getLogger(__name__).addHandler(logging.StreamHandler())
 # sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 
-# class Options:
-#     aggressive = 1
-#     diff = False
-#     experimental = True
-#     in_place = True
-#     indent_size = int(vim.eval("&tabstop"))
-#     line_range = None
-#     hang_closing = False
-#     pep8_passes = 100
-#     recursive = False
-#     verbose = 0
+class Options:
+    aggressive = 1
+    diff = False
+    experimental = True
+    in_place = True
+    # indent_size = int(vim.eval("&tabstop"))
+    line_range = None
+    hang_closing = False
+    pep8_passes = 100
+    recursive = False
+    verbose = 0
 
 
 alt_options = namedtuple(

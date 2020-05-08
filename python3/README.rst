@@ -19,6 +19,8 @@ Returns a dict! Good to vim.eval returning multiple types *as py3do doesn't.*::
 Unexpected Errors
 =================
 
+Modules
+-------
 Seriously why does this not work?::
 
    py3 import os
@@ -48,4 +50,15 @@ Literally what the hell does this mean?
    Error detected while processing function <SNR>48_ClosePreview:
    line   18:
    E108: No such variable: "b:supertab_close_preview"
+
+
+Python for command completion
+-----------------------------
+``:py3do`` can only return a ``str`` or None which sucks since we'd prefer a list.:
+
+Also Jesus why does this write the return value to the buffer?::
+
+   function! s:PythonMods(A, L, P) abort
+      py3do return str(sys.modules)
+   endfunction
 

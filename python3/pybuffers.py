@@ -290,6 +290,27 @@ def catch_and_print_exceptions(func):
     return wrapper
 
 
+@catch_and_print_exceptions
+def get_script(source=None, column=None):
+    jedi.settings.additional_dynamic_modules = [
+        b.name for b in vim.buffers if (
+            b.name is not None and
+            b.name.endswith('.py') and
+            b.options['buflisted'])]
+    if source is None:
+        source = '\n'.join(vim.current.buffer)
+    row = vim.current.window.cursor[0]
+    if column is None:
+        column = vim.current.window.cursor[1]
+    buf_path = vim.current.buffer.name
+
+    return jedi.Script(
+        source, row, column, buf_path,
+        encoding=vim_eval('&encoding') or 'latin1',
+        environment=get_environment(),
+    )
+
+
 def import_into_vim(*args):
     if jedi is not None:
         text = f"import {args}"

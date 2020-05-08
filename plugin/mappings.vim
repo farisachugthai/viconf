@@ -6,8 +6,9 @@
 " ============================================================================
 
 " Navigation: {{{
-nnoremap <silent> <leader>      :<c-u>WhichKey '<Space>'<CR>
-nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
+" ugh this is gonna be a hell of a lot of manual entries
+" nnoremap <Leader>      <Cmd>WhichKey'<Space>'<CR>
+" nnoremap <LocalLeader> <Cmd>WhichKey','<CR>
 xnoremap < <gv
 xnoremap > >gv
 
@@ -338,7 +339,6 @@ imap <C-.> <Plug>(ale_complete)
 
 " As a heads up theres also a coc#select#snippet
 " Also use imap so that we can map other things to <CR> as needed
-imap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
 
 nnoremap <C-k>d <Plug>(coc-definition)<CR>
 " The gu<text object> operation is too important
@@ -635,7 +635,7 @@ endfunction
 " }}}
 
 " Fugitive: {{{
-function UserFugitiveMappings() abort
+function! UserFugitiveMappings() abort
   nnoremap <Leader>gb   <Cmd>Git blame<CR>
   " remember there are now a lot of other mappings that commit too
   nnoremap <Leader>gc   <Cmd>Git commit<CR>
@@ -716,6 +716,7 @@ if !exists('no_plugin_maps') && !exists('no_windows_vim_maps')
   call Quickfix_Mappings()
   call MapRsi()
   call UserFugitiveMappings()
+  let g:loaded_plugin_mappings = 1
 
 endif
 " }}}
