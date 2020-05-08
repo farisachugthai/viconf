@@ -14,14 +14,20 @@ if exists('b:did_ftplugin') | finish | endif
 " }}}
 
 " Yours: {{{
+
+runtime autoload/man.vim
+runtime autoload/man.vim
+runtime autoload/man.vim
+
 source $VIMRUNTIME/ftplugin/man.vim
+
 " Speaking of which...here's the undo_ftplugin that the official ftplugin gives....
 let b:undo_ftplugin = ''
 " WHY!
 
 " Override the ftplugin
 " hate this mapping.
-silent! nunmap <buffer> q
+" silent! nunmap <buffer> q
 setlocal buftype=
 setlocal bufhidden=
 setlocal noreadonly

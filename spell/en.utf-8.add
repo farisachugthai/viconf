@@ -130,6 +130,7 @@ DataFrames
 DataSource
 Datatypes
 Datetimes
+DeprecationWarning
 Devicons
 Dicts
 Diffs
@@ -221,9 +222,11 @@ IPython's
 IPython7
 ISE
 ISO9660
+Implementors
 Importlib
 IntelliSense
 InteractiveShell
+IronPython
 JQuery
 JetBrains
 Jinja2
@@ -444,6 +447,7 @@ SimpleHTTPRequestHandler
 SimpleHTTPServer
 SirVer
 SkipTest
+Slicings
 SnipMate
 SoHo
 SocketServer
@@ -493,6 +497,7 @@ Torrenting
 Twilio
 UC
 UID
+UNC
 UPnP
 URIs
 USBs
@@ -702,6 +707,7 @@ cobol
 coc
 codeacademy
 codecs
+codepage
 coffeescript
 colorcolumn
 colorscheme
@@ -825,6 +831,7 @@ ethernet
 etree
 eval
 exe
+execfile
 exitcode
 expandtab
 expanduser
@@ -966,6 +973,7 @@ ifconfig
 iframe
 ignorecase
 img
+implementors
 import
 importlib
 indexeddb
@@ -1352,6 +1360,7 @@ philly
 php3
 php4
 php5
+picklable
 picklers.
 picklers./!
 pid
@@ -1420,6 +1429,7 @@ pypi
 pyplot
 pypy
 pyqt5
+pyreadline
 pyreadline
 pyrex
 pytest
@@ -1875,20 +1885,10 @@ zenburn
 zim
 zimwiki
 zipapp
+zipapp
 zipfile
+zipfiles
 zipfiles
 zipimport
 zlib
 zsh
-zipapp
-zipfiles
-DeprecationWarning
-UNC
-Slicings
-pyreadline
-IronPython
-codepage
-picklable
-Implementors
-implementors
-execfile

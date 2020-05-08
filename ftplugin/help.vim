@@ -25,7 +25,11 @@ setlocal wrap  " scrolling horizontally to read sucks
 " autoload/man.vim and ftplugin/man.vim have 1 function copy pasted
 
 " dont make this mapping silent tho
-nnoremap <buffer> gO :call <sid>show_toc()<cr>
+" nnoremap <buffer> gO :call <sid>show_toc()<cr>
+" You can't map something to a function prefixed with <SID>? Dude
+" script local namespaces are so poorly done.
+"
+"
 " Back on track. I mess up this binding too often
 nnoremap <buffer> go gO
 
@@ -39,8 +43,8 @@ let b:ale_fixers += ['align_help_tags']
 let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
                       \. '|setlocal fo< tw< cole< cocu< isk< rnu< nu<'
                       \. '|setlocal foldcolumn< signcolumn< wrap<'
-                      \. '|silent! nunmap <buffer> g0'
-                      \. '|silent! nunmap <buffer> go'
+                      " \. '|silent! nunmap <buffer> g0'
+                      " \. '|silent! nunmap <buffer> go'
                       \. '|unlet! b:ale_fixers'
                       \. '|unlet! b:undo_ftplugin'
                       \. '|unlet! b:did_ftplugin'

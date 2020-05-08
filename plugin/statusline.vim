@@ -7,6 +7,9 @@
 
 scriptencoding utf8
 
+" how the fuck was this not set.
+setglobal ruler
+
 function! s:fzf_statusline()  abort " {{{
   " Curious if this'll work
   hi! fzf1 cterm=bold,undercurl,reverse gui=bold,undercurl,reverse guifg=#7daea3 guibg=NONE ctermbg=NONE guisp=NONE font='Source Code Pro'

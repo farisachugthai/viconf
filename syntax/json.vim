@@ -17,8 +17,8 @@ if !exists('main_syntax')
 else
   finish
 endif
-" }}}
 
+" Syntax: Strings {{{
 syntax sync fromstart
 syntax case ignore
 
@@ -26,15 +26,12 @@ syntax match   jsonNoise           /\%(:\|,\)/
 syn keyword jsonTodo FIXME NOTE TODO XXX contained
 
 " NOTE that for the concealing to work your conceallevel should be set to 2
-
-" Syntax: Strings {{{
-
 " Separated into a match and region because a region by itself is always greedy
 syn match  jsonStringMatch /"\([^"]\|\\\"\)\+"\ze[[:blank:]\r\n]*[,}\]]/ contains=jsonString
 if has('conceal')
-	syn region  jsonString oneline matchgroup=jsonQuote start=/"/  skip=/\\\\\|\\"/  end=/"/ concealends contains=jsonEscape contained
+  syn region  jsonString oneline matchgroup=jsonQuote start=/"/  skip=/\\\\\|\\"/  end=/"/ concealends contains=jsonEscape contained
 else
-	syn region  jsonString oneline matchgroup=jsonQuote start=/"/  skip=/\\\\\|\\"/  end=/"/ contains=jsonEscape contained
+  syn region  jsonString oneline matchgroup=jsonQuote start=/"/  skip=/\\\\\|\\"/  end=/"/ contains=jsonEscape contained
 endif
 " }}}
 
@@ -89,6 +86,15 @@ if (!exists('g:vim_json_warnings') || g:vim_json_warnings==1)
   syn match   jsonMissingCommaError /\(\]\|\}\)\_s\+\ze"/ "arrays/objects as values
   syn match   jsonMissingCommaError /}\_s\+\ze{/ "objects as elements in an array
   syn match   jsonMissingCommaError /\(true\|false\)\_s\+\ze"/ "true/false as value
+
+  hi def link jsonNumError        Error
+  " hi def link jsonCommentError    Error
+  hi def link jsonSemicolonError  Error
+  hi def link jsonTrailingCommaError     Error
+  hi def link jsonMissingCommaError      Error
+  hi def link jsonStringSQError        	Error
+  " hi def link jsonNoQuotesError        	Error
+  hi def link jsonTripleQuotesError     	Error
 endif
 
 " ********************************************** END OF ERROR WARNINGS
@@ -122,19 +128,9 @@ hi def link jsonBraces          Delimiter
 hi def link jsonNull            Function
 hi def link jsonBoolean         Boolean
 hi def link jsonKeyword         Label
-
-if (!exists('g:vim_json_warnings') || g:vim_json_warnings==1)
-  hi def link jsonNumError        Error
-  " hi def link jsonCommentError    Error
-  hi def link jsonSemicolonError  Error
-  hi def link jsonTrailingCommaError     Error
-  hi def link jsonMissingCommaError      Error
-  hi def link jsonStringSQError        	Error
-  " hi def link jsonNoQuotesError        	Error
-  hi def link jsonTripleQuotesError     	Error
-endif
 hi def link jsonQuote           Quote
 hi def link jsonNoise           Noise
 
 let b:current_syntax = 'json'
+
 " vim: set ts=8 fdm=marker:

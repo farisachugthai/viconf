@@ -90,10 +90,17 @@ augroup UserPlugins " {{{
 
 augroup END " }}}
 
+function! StripTrailingWhitespace() abort
+  let l:current_line = line(".")
+  let l:column = col(".")
+  %s/\s\+$//e
+  call cursor(l:current_line, l:column)
+endfunction
+
 augroup UserPotpourri  " {{{
   autocmd!
-  autocmd CmdlineEnter /,\? :set hlsearch
-  autocmd CmdlineLeave /,\? :set nohlsearch
+  autocmd CmdlineEnter /,\? set hlsearch
+  autocmd CmdlineLeave /,\? set nohlsearch
   autocmd CmdwinEnter [/?]  startinsert
   autocmd CmdwinLeave [/?]  stopinsert
 
@@ -101,6 +108,7 @@ augroup UserPotpourri  " {{{
   " hopefully this will only call one time
   " so far is working perfectly
   autocmd VimEnter * call UltiSnipsConf()
+  autocmd BufWritePre * call StripTrailingWhitespace()
 augroup END  " }}}
 
 augroup TagbarAutoCmds

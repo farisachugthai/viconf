@@ -75,7 +75,7 @@ function! ftplugins#ALE_JS_Conf() abort  " {{{
 
 endfunction  " }}}
 
-function! ftplugins#ALE_Typescript() abort
+function! ftplugins#ALE_Typescript() abort  " {{{
   call ftplugin#ALE_JS_Conf()
 
   let b:ale_fixers += ['eslint']
@@ -83,7 +83,8 @@ function! ftplugins#ALE_Typescript() abort
 
   " if executable(expand('~/.config/coc/extensions/node_modules/tsserver'))
 
-endfunction
+endfunction  " }}}
+
 function! ftplugins#ALE_Vim_Conf() abort  " {{{
   let b:ale_linters = ['ale_custom_linting_rules']
   let b:ale_linters_explicit = 1
@@ -91,7 +92,7 @@ function! ftplugins#ALE_Vim_Conf() abort  " {{{
     let b:ale_linters += ['vint']
 endfunction  " }}}
 
-function! ftplugins#typescript_setup() abort
+function! ftplugins#typescript_setup() abort   " {{{
 
   " node_modules
   let s:node_modules = finddir('node_modules', '.;', -1)
@@ -134,6 +135,4 @@ function! ftplugins#typescript_setup() abort
   endif
 " }}}
 
-" }}}
-
-endfunction
+endfunction  " }}}

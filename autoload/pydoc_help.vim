@@ -5,6 +5,65 @@
   " Last Modified: Oct 20, 2019
 " ============================================================================
 
+" First 2 are stolen from $VIMRUNTIME/autoload/man.vim
+" Handler for s:system() function. {{{
+function! s:system_handler(jobid, data, event) dict abort
+  if a:event is# 'stdout' || a:event is# 'stderr'
+    let self[a:event] .= join(a:data, "\n")
+  else
+    let self.exit_code = a:data
+  endif
+endfunction  " }}}
+
+" Run a system command and timeout after 30 seconds. {{{
+function! s:system(cmd, ...) abort
+  let opts = {
+        \ 'stdout': '',
+        \ 'stderr': '',
+        \ 'exit_code': 0,
+        \ 'on_stdout': function('s:system_handler'),
+        \ 'on_stderr': function('s:system_handler'),
+        \ 'on_exit': function('s:system_handler'),
+        \ }
+  let jobid = jobstart(a:cmd, opts)
+
+  if jobid < 1
+    throw printf('command error %d: %s', jobid, join(a:cmd))
+  endif
+
+  let res = jobwait([jobid], 30000)
+  if res[0] == -1
+    try
+      call jobstop(jobid)
+      throw printf('command timed out: %s', join(a:cmd))
+    catch /^Vim(call):E900:/
+    endtry
+  elseif res[0] == -2
+    throw printf('command interrupted: %s', join(a:cmd))
+  endif
+  if opts.exit_code != 0
+    throw printf("command error (%d) %s: %s", jobid, join(a:cmd), substitute(opts.stderr, '\_s\+$', '', &gdefault ? '' : 'g'))
+  endif
+
+  return opts.stdout
+endfunction  " }}}
+
+function! s:ExampleofOpeningBufferAndAcceptingArgs(mods) abort
+  " also from man.vim
+  try
+    set eventignore+=BufReadCmd
+
+    if a:mods !~# 'tab'
+      " wait holy fuck does this not require a period ('.') to concatenate???
+      execute 'silent keepalt edit' fnameescape(bufname)
+    else
+      execute 'silent keepalt' a:mods 'split' fnameescape(bufname)
+    endif
+  finally
+    set eventignore-=BufReadCmd
+  endtry
+endfunction
+
 function! pydoc_help#open_files(files) abort  " {{{
   let l:bufnrs = []
     for l:file in a:files
@@ -75,22 +134,35 @@ endfunction   " }}}
 
 function! pydoc_help#Pydoc(bang, ...) abort  " {{{
   " Step 1: Get the module to look for
-  if len(a:000) > 0
-    if a:1 is ''
-      if expand('<cfile>') is ''
-        return
-      else
-        let s:word = expand('<cfile>')
-      endif
-    else
-      let s:word = a:1
-    endif
-  else
+  " Oh fuck dude check the help text at:
+  " c_CTRL-R_CTRL-F* *c_<C-R>_<C-F>*
+  " If you tap <C-r><C-f> on the cmdline it automatically inserts
+  " the text under your cursor like wtffffff
+  if !len(a:000) > 0
     return
   endif
 
-  " Step 2: Create the buffer.
-  if &autowrite | :write | endif
+  if a:1 is ''
+    if expand('<cfile>') is ''
+      return
+    else
+      let s:word = expand('<cfile>')
+    endif
+  else
+    let s:word = a:1
+  endif
+
+  " Step 2: Create the buffer. Let's do them a favor and save the buffer before we leave.
+  if &autowrite && &l:modified
+    " Oh right nothing comes easy in vim
+    if &l:readonly
+      if a:bang
+        :write!
+      else
+        throw 'pydoc_help#Pydoc: still only at step2'
+      endif
+    :write
+  endif
 
   " I think either of these 2 ways works.
   " let s:buf = nvim_create_buf(v:false, v:true)
@@ -369,4 +441,3 @@ function! pydoc_help#WholeLine(...) abort  " {{{
   py3 curline = vim.command('let cur_line = getline(line("."))')
   py3 vim.current.buffer.append(pydoc.help(cur_line))
 endfunction  " }}}
-

@@ -87,9 +87,7 @@ hi PmenuSel blend=0
 setglobal autochdir autowrite autoread
 
 " Tabs:
-if &tabstop > 4 | setglobal tabstop=4 | endif
 if &shiftwidth > 4  | setglobal shiftwidth=4 | endif
-
 setglobal expandtab smarttab softtabstop=4
 
 if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif
@@ -173,42 +171,42 @@ let g:tlib_extend_keyagents_InputList_s = {
 
 " Platform Specific Options: {{{
 
-if has('unix')
-  call unix#UnixOptions()
-  if getenv($WSL_DISTRO_NAME)
-    let g:coc_cygqwin_path_prefixes = {'c:/Users/fac': '/root'}
-  endif
-else
-  call msdos#set_shell_cmd()
+" if has('unix')
+"   call unix#UnixOptions()
+"   if getenv($WSL_DISTRO_NAME)
+"     let g:coc_cygqwin_path_prefixes = {'c:/Users/fac': '/root'}
+"   endif
+" else
+"   call msdos#set_shell_cmd()
 
-  let g:coc_cygqwin_path_prefixes = v:false
-  " Find The Ctags Executable:
-  if filereadable(expand('$HOME/src/ctags/ctags.exe'))
-    let g:tagbar_ctags_bin = expand('$HOME/src/ctags/ctags.exe')
-  elseif executable(exepath('ctags'))
-    let g:tagbar_ctags_bin = exepath('ctags')
-  endif
+"   let g:coc_cygqwin_path_prefixes = v:false
+"   " Find The Ctags Executable:
+"   if filereadable(expand('$HOME/src/ctags/ctags.exe'))
+"     let g:tagbar_ctags_bin = expand('$HOME/src/ctags/ctags.exe')
+"   elseif executable(exepath('ctags'))
+"     let g:tagbar_ctags_bin = exepath('ctags')
+"   endif
 
   " Icon Chars
-  let g:tagbar_iconchars = ['▶', '▼']
+  " let g:tagbar_iconchars = ['▶', '▼']
 
-endif
+" endif
 
-if !empty($ANDROID_DATA)
-  call find_files#termux_remote()
+" if !empty($ANDROID_DATA)
+"   call remotes#termux_remote()
 
-  let g:tagbar_compact = 1
-elseif !has('unix')
-  " Note: dude holy hell is it necessary to call the msdos#set_shell_cmd()
-  " func. you do so in ./plugin/unix.vim but jesus christ did it fuck stuff up
-  " when that got deleted
-  call find_files#msdos_remote()
+"   let g:tagbar_compact = 1
+" elseif !has('unix')
+"   " Note: dude holy hell is it necessary to call the msdos#set_shell_cmd()
+"   " func. you do so in ./plugin/unix.vim but jesus christ did it fuck stuff up
+"   " when that got deleted
+"   call remotes#msdos_remote()
 
-nnoremap <silent> <leader>      :<c-u>WhichKey '<Space>'<CR>
-nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
-else
-  call find_files#ubuntu_remote()
-endif
+" nnoremap <silent> <leader>      :<c-u>WhichKey '<Space>'<CR>
+" nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
+" else
+"   call remotes#ubuntu_remote()
+" endif
 
 " }}}
 

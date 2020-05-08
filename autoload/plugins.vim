@@ -390,15 +390,17 @@ endfunction  " }}}
 
 
 function! plugins#fugitive_head() abort
+  " Fill a buffer with `git show HEAD`
+  " Check that fugitive loaded.
   if !exists('g:loaded_fugitive')
     return
   endif
 
-  if &l:modifiable
-    :botright split | enew
-  endif
+  " Not immediately useful but here's a way to check if you're in a fugitive blob buffer
+  " if get(b:, 'fugitive_type', '') ==# 'blob'
+  botright split | enew
 
-  :Gread! show HEAD
+  Gread! show HEAD
   setlocal nomodified
   setlocal buftype=nofile
 endfunction

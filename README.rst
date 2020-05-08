@@ -126,8 +126,63 @@ why it does that.::
 These 2 actually echo the same location!
 *assuming that you put those 2 in your vimrc.*
 
+The rest of this document largely deals with setting up a comfortable
+editing environment for any type of plain text file regardless of platform.
+
+
+Better defaults for resizing Windows
+====================================
+
+I've been using Vim for 5 years. And at this point I've forgotten most of the
+bindings for resizing windows. They're all difficult to remember, arbitrarily
+chosen, and uncomfortable.
+
+For example.:
+
+   - :kbd:`CTRL-W <`	   decrease current window width N columns
+   - :kbd:`CTRL-W >`	   increase current window width N columns
+
+That seems sensible right? But imagine you have a buffer with 2 windows
+split right down the middle.
+Your cursor is on the right side. You want to make it larger.
+
+Doesn't it seem like :kbd:`CTRL-W <` should do the trick?
+
+**The default bindings make dumb assumptions like assuming your cursor is always
+in the top left.**
+
+But today I noticed something else.
+
+*They're really incomplete.*
+
+There is no default binding to resize your currently focused window to make it
+as small as possible. Put another way.:
+
+**Vim doesn't have a default binding to minimize a window.**
+
+Default bindings for this type of thing are so commonplace that I simply
+opted to steal the ones from `tmux <https://github.com/tmux/tmux>`_.:
+
+   C-Up, C-Down
+   C-Left, C-Right
+      Resize the current pane in steps of one cell.
+   M-Up, M-Down
+   M-Left, M-Right
+      Resize the current pane in steps of five cells.
+
+Instead of using :kbd:`C-a` or :kbd:`C-b` as a prefix like tmux does, let's
+use the native Vim window prefix :kbd:`C-w`.
+
+So let's set it up!:
+
+   XXX
+
+
+
+.. _autocompletion:
+
 Autocompletion
-===============
+---------------
 
 Whew! Just spent a whole lot of time setting up autocompletion from scratch.
 
@@ -204,7 +259,6 @@ That code can be found `here.`_
 
 Different Shells
 ================
-
 Inexplicably, nvim started a terminal buffer using *powershell* with no prompting!
 :envvar:`SHELL` was set to pwsh and it automatically set things up correctly!::
 
@@ -218,7 +272,6 @@ And seemingly nothing else. I think most of those are the bash defaults too!
 
 Includes and the Path
 ---------------------
-
 Setting the path the way that you want is hard; however, I seem to have found
 a method for doing so that works. Should be functional on both windows and linux,
 for any python installation and regardless of whether python was installed from
@@ -282,8 +335,9 @@ Asynchronous Buffers
 
 .. admonition:: Be careful when working with ``jobstart``.
 
-This function POURS output into the current buf so make sure you're
-switched to a scratch buffer.
+This function POURS output into the current buffer.
+Keep in mind that this happens asynchronously so button-mashing :kbd:`Ctrl-c`
+won't get you anywhere! Make sure you're switched to a scratch buffer.
 
 However... **THIS WORKS**::
 
@@ -299,7 +353,6 @@ However... **THIS WORKS**::
 
 Coc Nvim
 ========
-
 .. glossary::
 
    pum
@@ -312,15 +365,15 @@ A useful command on the ex line. Prefix with ``:py3``.:
    from pprint import pprint; pprint(vim.eval('coc#list#get_chars()'))
 
 Don't use the below mapping because CR auto-selects the first
-thing on the :abbr:`pum` which is terrible when you're just trying
+thing on the :abbr:`pum (popup-menu)` which is terrible when you're just trying
 to insert whitespace.::
 
    inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"))
 
 
-Fixing Coc auto-completion in the cmdwindow
--------------------------------------------
-The `pum` would open after using :kbd:`q;`. It would then raise an error on
+Fixing Coc auto-completion in the cmd-window
+--------------------------------------------
+The :abbr:`pum (popup-menu)` would open after using :kbd:`q;`. It would then raise an error on
 the ``CompleteDone`` event as it isn't allowed in the command window.::
 
    autocmd! User CmdlineEnter CompleteDone
@@ -417,8 +470,8 @@ My current ``&diffopt``.::
    set diffopt=filler,context:0,hiddenoff,foldcolumn:2,icase,indent-heuristic,horizontal
    if has('patch-8.1.0360') | set diffopt+=internal,algorithm:patience | endif
 
-.. todo:: Annotate the rest
-
+.. todo::
+   Annotate the rest
 
 
 Creating Backups
@@ -429,7 +482,7 @@ The defaults are generally pretty good::
    setglobal writebackup        " protect against crash-during-write
    setglobal nobackup           " but do not persist backup after successful write
 
-Change &backupext and &directory to things you want.
+Change ``&backupext`` and ``&directory`` to things you want.
 
 
 Environment Variables

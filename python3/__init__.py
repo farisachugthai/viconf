@@ -13,12 +13,14 @@ try:
 except ImportError:
     pass
 else:
-    from pynvim import api, attach
+    from pynvim import attach, LegacyVim, stdio_session
 
-try:
-    import vim  # noqa pylint:disable=import-error,unused-import
-except ImportError:
-    vim = None
+
+# try:
+#     import vim  # noqa pylint:disable=import-error,unused-import
+# except ImportError:
+#     session = stdio_session()
+#     vim = LegacyVim.from_session(session)
 
 __docformat__ = "reStructuredText"
 
@@ -33,7 +35,7 @@ class Options:
     diff = False
     experimental = True
     in_place = True
-    indent_size = int(vim.eval("&tabstop"))
+    # indent_size = int(vim.eval("&tabstop"))
     line_range = None
     hang_closing = False
     pep8_passes = 100
@@ -56,7 +58,7 @@ alt_options = namedtuple(
 
 # so thats how you do this
 # moved here because importing pkg_resources is expensive
-import pkg_resources
-distribution = pkg_resources.get_distribution("pynvim")
-__version__ = distribution.version
+# import pkg_resources
+# distribution = pkg_resources.get_distribution("pynvim")
+# __version__ = distribution.version
 

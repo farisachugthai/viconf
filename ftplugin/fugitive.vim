@@ -23,10 +23,15 @@
   "  autocmd SourceCmd     fugitive://*//*    nested exe fugitive#SourceCmd()
   "endif
 
+  " otherwise this gets sourced every fucking time you're in a git repo
+if &filetype==# 'fugitive'
+  finish
+endif
+
 " Noticed while reading source
 setlocal foldexpr=fugitive#Foldtext()
 
-nnoremap q <Cmd>bd!<CR>
+nnoremap <buffer> q <Cmd>bd!<CR>
 
 " Plus isn't stage stuff. Wtf
 " Uhh idk if i did this right but it might need <cexpr>
@@ -37,10 +42,12 @@ nnoremap <buffer> + <Cmd>Git add --renormalize <cword><CR>
 nnoremap <buffer> p 1P
 
 " Fat fingers are scary
-nunmap <buffer> U
+if maparg('U')
+  nunmap <buffer> U
+endif
 
 let b:undo_ftplugin = 'setlocal foldexpr< '
       \ . '|unlet! b:undo_ftplugin'
-      \ . '|silent! nunmap p'
-      \ . '|silent! nunmap +'
-      \ . '|silent! nunmap q'
+      \ . '|silent! nunmap <buffer> p'
+      \ . '|silent! nunmap <buffer> +'
+      \ . '|silent! nunmap <buffer>` q'

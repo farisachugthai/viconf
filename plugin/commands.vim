@@ -480,23 +480,26 @@ command! -bar -bang -nargs=* -complete=dir -complete=custom,s:IPythonOptions IPy
 
 command! -bar -bang -complete=buffer ScratchBuffer call pydoc_help#scratch_listed_buffer(<bang>0)
 
-command! -nargs=* -bar -bang NvimREPL call py#Cnxn(<bang>0, <args>)
+command! -nargs=* -bar -bang Pynvim call py#Cnxn(<bang>0, <args>)
 
-command! -nargs=* -bar -bang NvimYourREPL call py#Yours(<bang>0, <args>)
+command! -nargs=* -bar -bang PyREPL call py#Yours(<bang>0, <args>)
 
-command! RangerCurrentFile call OpenRangerIn("%", s:default_edit_cmd)
-command! RangerCurrentDirectory call OpenRangerIn("%:p:h", s:default_edit_cmd)
-command! RangerWorkingDirectory call OpenRangerIn(".", s:default_edit_cmd)
-command! Ranger RangerCurrentFile
+" Add a platform check in that file so we can have 1 entry point
+command! -bar RemoteReload call remotes#msdos_remote()
 
-" To open the selected file in a new tab
-command! RangerCurrentFileNewTab call OpenRangerIn("%", 'tabedit ')
-command! RangerCurrentFileExistingOrNewTab call OpenRangerIn("%", 'tab drop ')
-command! RangerCurrentDirectoryNewTab call OpenRangerIn("%:p:h", 'tabedit ')
-command! RangerCurrentDirectoryExistingOrNewTab call OpenRangerIn("%:p:h", 'tab drop ')
-command! RangerWorkingDirectoryNewTab call OpenRangerIn(".", 'tabedit ')
-command! RangerWorkingDirectoryExistingOrNewTab call OpenRangerIn(".", 'tab drop ')
-command! RangerNewTab RangerCurrentDirectoryNewTab
+" command! RangerCurrentFile call OpenRangerIn("%", s:default_edit_cmd)
+" command! RangerCurrentDirectory call OpenRangerIn("%:p:h", s:default_edit_cmd)
+" command! RangerWorkingDirectory call OpenRangerIn(".", s:default_edit_cmd)
+" command! Ranger RangerCurrentFile
+
+" " To open the selected file in a new tab
+" command! RangerCurrentFileNewTab call OpenRangerIn("%", 'tabedit ')
+" command! RangerCurrentFileExistingOrNewTab call OpenRangerIn("%", 'tab drop ')
+" command! RangerCurrentDirectoryNewTab call OpenRangerIn("%:p:h", 'tabedit ')
+" command! RangerCurrentDirectoryExistingOrNewTab call OpenRangerIn("%:p:h", 'tab drop ')
+" command! RangerWorkingDirectoryNewTab call OpenRangerIn(".", 'tabedit ')
+" command! RangerWorkingDirectoryExistingOrNewTab call OpenRangerIn(".", 'tab drop ')
+" command! RangerNewTab RangerCurrentDirectoryNewTab
 " }}}
 
 " Terminal Command: {{{
@@ -604,7 +607,9 @@ command! -range -addr=arguments -bang -bar -nargs=* Gclone exe fugitive#Command(
 " that this was supposed to just be  a reminder. ready to overengineer TO THE EXTREME
 
 command! -bar GHead call  plugins#fugitive_head()
-command! Gds2 :enew<bar>:Gread! diff --staged --stat HEAD -- .<bar>setlocal nomodified nobuflisted buftype=nofile
+
+command! -nargs=* -bar -complete=custom, Gds2 :enew<bar>:Gread! diff --staged --stat HEAD -- .<bar>set filetype=git
+
 " }}}
 
 " Syntax Highlighting: {{{

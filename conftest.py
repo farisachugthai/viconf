@@ -11,7 +11,7 @@ here = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(here, 'python3'))
 
 # import pynvim
-from pynvim import attach
+from pynvim import attach, start_host
 
 import pytest
 # from _pytest.config import ConftestImportFailure
@@ -27,7 +27,7 @@ def env(listen_addr=None):
                 listen_addr = tempfile.TemporaryDirectory()
             finally:
                 listen_addr._cleanup(listen_addr.name, '')
-        env.putenv("NVIM_LISTEN_ADDRESS", listen_addr.name)
+        os.putenv("NVIM_LISTEN_ADDRESS", listen_addr.name)
 
 
 @pytest.fixture

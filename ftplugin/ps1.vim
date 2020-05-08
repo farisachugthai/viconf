@@ -32,6 +32,8 @@ setlocal foldmethod=syntax
 " }}}
 
 " Plugins: {{{
+" Matchit isn't skipping comments
+let b:match_skip = 's:comment\|string'
 
 let b:ale_fixers = [ 'remove_trailing_lines', 'trim_whitespace']
 

@@ -14,6 +14,7 @@ A useful combination with UltiSnips.
 import os
 import string
 import textwrap
+
 import vim  # noqa
 
 NORMAL = 0x1
@@ -128,7 +129,7 @@ def complete(tab, opts):
     """
     msg = "({0})"
     if tab:
-        opts = [m[len(tab) :] for m in opts if m.startswith(tab)]
+        opts = [m[len(tab):] for m in opts if m.startswith(tab)]
     if len(opts) == 1:
         return opts[0]
 
@@ -449,6 +450,10 @@ def get_dir_and_file_name(snip):
     return os.getcwd().split(os.sep)[-1] + "." + snip.basename
 
 
+def get_full_path_to_buffer():
+    return vim.eval("fnamemodify(bufname(bufnr()), ':p')")
+
+
 class TextTag:
     """Represents a base text tag"""
 
@@ -540,7 +545,7 @@ def make_items(times, leading="+"):
         return ("%s Item\n" % leading) * times
 
 
-def split_line(text):
+def split_line(snip, text):
     """Where is this function called?
 
     We don't return anything and we probably are wasting time
@@ -569,7 +574,7 @@ def x(snip):
 
 def compB(t, opts):
     if t:
-        opts = [m[len(t) :] for m in opts if m.startswith(t)]
+        opts = [m[len(t):] for m in opts if m.startswith(t)]
         if len(opts) == 1:
             return opts[0]
         return "(" + "|".join(opts) + ")"

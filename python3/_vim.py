@@ -9,33 +9,17 @@ Dec 07, 2019: Double checked that this passes a cursory `:py3f %` test and it di
 """
 import json
 import os
-
-import xml.dom.minidom as md
 import sys
+import xml.dom.minidom as md
 
 from contextlib import contextmanager
 from pathlib import Path
 from pprint import pprint
 
 try:
-    import vim  # noqa pylint:disable=import-error
-except ImportError:
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from pynvim_ import LegacyVim
-
-    vim = LegacyVim()
-
-try:
     import yaml
 except (ImportError, ModuleNotFoundError):
     yaml = None
-
-try:
-    import UltiSnips
-except ImportError:
-    UltiSnips = None
-
-# here's a few more helpers
 
 
 def get_verbosity():
@@ -214,8 +198,6 @@ class VimBuffer:
         return self.name
 
 
-buf = VimBuffer(vim)  # pylint:disable=invalid-name
-
 
 @contextmanager
 def option_set_to(name, new_value):
@@ -336,13 +318,6 @@ def interpret_yaml(y):
         return json.dumps(yaml.safe_load(y), sort_keys=True, indent=4)
 
 
-prettiers = {
-    "xml": pretty_xml,
-    "json": pretty_json,
-    "yaml": interpret_yaml,
-}
-
-
 def pretty_it(datatype):
     r = vim.current.range
     content = "\n".join(r)
@@ -373,8 +348,6 @@ class _Vim(object):
     def __getattr__(self, attr):
         return getattr(vim, attr)
 
-
-vim_obj = _Vim()
 
 
 def _patch_nvim(vim):
@@ -414,5 +387,30 @@ def _patch_nvim(vim):
     vim.vars = vars_wrapper()
 
 
-if hasattr(vim, "from_nvim"):
-    _patch_nvim(vim_obj)
+if __name__ == "__main__":
+
+    try:
+        import vim  # noqa pylint:disable=import-error
+    except ImportError:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        from pynvim import LegacyVim
+
+    try:
+        import UltiSnips
+    except ImportError:
+        UltiSnips = None
+
+# here's a few more helpers
+    prettiers = {
+        "xml": pretty_xml,
+        "json": pretty_json,
+        "yaml": interpret_yaml,
+    }
+
+    vim_obj = _Vim()
+
+        vim = LegacyVim()
+        if hasattr(vim, "from_nvim"):
+            _patch_nvim(vim_obj)
+
+        buf = VimBuffer(vim)  # pylint:disable=invalid-name

@@ -18,9 +18,16 @@ function! py#nvim_taglist() abort  " {{{
 endfunction  " }}}
 
 function! py#PythonPath() abort  " {{{1
+  if !has('python3')
+    return
+  endif
   py3 import site
   let s:path = '.,,**,'
   let s:user_site = py3eval('site.USER_SITE')
+  if len(s:user_site) ==# 0
+    return s:path
+  endif
+
   let s:path .= s:user_site
   for l:i in py3eval('sys.path')
     let s:path .=   ',' . l:i
@@ -47,7 +54,7 @@ function! py#YAPF() abort  " {{{1
 endfunction  " }}}
 
 function! py#ALE_Python_Conf() abort  " {{{1
-  let b:ale_linters = ['flake8', 'pydocstyle', 'pyls']
+  let b:ale_linters = ['flake8', 'pylint', 'pyls']
   let b:ale_linters_explicit = 1
 
   let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
@@ -57,9 +64,9 @@ function! py#ALE_Python_Conf() abort  " {{{1
     let b:ale_fixers+=['black']
   endif
 
-  if executable('autopep8')
-    let b:ale_fixers += ['autopep8']
-  endif
+  let b:ale_fixers += ['autopep8']
+  let b:ale_fixers += ['isort']
+
 endfunction  " }}}
 
 function! py#Black() abort  " {{{
@@ -125,7 +132,7 @@ function! py#Cnxn(bang, ...) abort  " {{{
 
 endfunction  " }}}
 
-function! py#Yours(bang, ...)  abort
+function! py#Yours(bang, ...)  abort  " {{{
   call s:OpenIPython(a:000)
   if has('unix')
     call chansend(&channel, "import pynvim_,os\n")
@@ -135,7 +142,7 @@ function! py#Yours(bang, ...)  abort
     call chansend(&channel, "import pynvim_,os\r\n")
     call chansend(&channel, "n = pynvim_.attach('socket', path=os.environ.get('nvim_listen_address'))\r\n")
   endif
-endfunction
+endfunction  " }}}
 
 function! s:check_modified() abort  " {{{
   " TODO:

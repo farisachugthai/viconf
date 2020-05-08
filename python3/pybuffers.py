@@ -9,16 +9,18 @@ our :class:`jedi.Script()` object.
 """
 import functools
 import importlib
-from importlib.util import find_spec
 import json
 import logging
 import pydoc
 import site
 import sys
-from os.path import isdir
 import time
 import traceback
+
+from importlib.util import find_spec
+from os.path import isdir
 from pprint import pprint as print
+from types import TracebackType
 
 try:
     import vim  # noqa
@@ -37,14 +39,24 @@ except ImportError:
 else:
     from jedi.api import replstartup
 
+logging.basicConfig()
 logger = logging.getLogger(name=__name__)
 
 
 def log(logrecord, level=30):
     """Simple way to wrap pythons usual logging features."""
     # Wait wouldnt it be easier if python thought sys.stdout/stderr were something
-    # similar to this command?
+    # similar to this command? That's not a terrible idea.
+    # we could make a class with the same interface as sys.stdout so subclass
+    # io.TextIOWrapper and then sub it in.
     return vim.command("echomsg " + logger.log(logrecord, level))
+
+def err(err, level=30, traceback=None):
+    vim.command("echohl WarningMsg")
+    vim.command("echomsg " + logger.log(err, level))
+    vim.command("echohl None")
+    # if isinstance(traceback, TracebackType):
+
 
 
 def _set_return_error(err=None):
@@ -68,6 +80,22 @@ def _set_return_error(err=None):
         # Not the best way to serialize to vim types,
         # but it'll work for this specific case
         vim.command("let g:py_err_json = %s" % json.dumps(err_dict))
+
+
+def print_call_chain(*args):
+    """View individual frames in the stack."""
+    print(" ".join(map(str, args)))
+    f = sys._getframe(1)
+    while f:
+       name = f.f_code.co_name
+       s = f.f_locals.get('self', None)
+       if s:
+           c = getattr(s, "__class__", None)
+           if c:
+               name = "%s.%s" % (c.__name__, name)
+       print("Called from: %s %s" % (name, f.f_lineno))
+       f = f.f_back
+    print("-" * 70)
 
 
 def vimcmd(fxn):
@@ -170,8 +198,10 @@ def vim_eval(string):
 
 
 def pykeywordprg():
-    temp_cword = vim.eval('expand("<cWORD>")')
+    # wait does this work?
+    temp_cword = vim.eval('expand("<cfile>")')
     logger.debug(f"{temp_cword}")
+# If this doesn't display anythin
     try:
         helped_mod = importlib.import_module(temp_cword)
     except vim.error:
@@ -179,6 +209,10 @@ def pykeywordprg():
     else:
         pydoc.help(helped_mod)
 
+  py3 >> EOF
+for i in inspect.getsourcelines(inspect):
+    vim.current.buffer.append(i)
+EOF
 
 def timer(func):
     """Print the runtime of the decorated function"""

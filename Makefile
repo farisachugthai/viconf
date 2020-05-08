@@ -7,6 +7,14 @@ BUILD_VIRTUAL_ENV:=venv
 
 .PHONY: install check clean vint flake8
 
+help:
+	@echo "Please use one of the following targets.:"
+	@echo "venv"
+	@echo "vint"
+	@echo "flake8"
+	@echo "lint"
+	@echo "clean"
+
 $(dir $(BUILD_VIRTUAL_ENV)):
 	mkdir -p $@
 
@@ -33,5 +41,8 @@ run: $(BUILD_VIRTUAL_ENV)/bin/pynvim
 
 check: vint flake8
 
-clean:
-	rm -rf build
+lint:
+	vint after autoload ftplugin plugin syntax
+
+# clean:
+# 	rm -rf build

@@ -90,7 +90,7 @@ function! LoadMyPlugins() abort  " {{{
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-scriptease', {'for': 'vim'}
 
-  Plug 'SirVer/ultisnips'
+  " Plug 'SirVer/ultisnips'
   Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }
   nnoremap <Leader>a <Cmd>sil! ALEEnable<CR><bar>:sil! call plugins#AleMappings()<CR><bar>:sil! CocDisable<CR>:sil! redraw!<CR>:ALELint<CR>
   nnoremap <Leader>et <Cmd>ALEToggle<CR>:sil! call plugins#AleMappings()<CR>:sil! redraw!<CR>
@@ -127,7 +127,6 @@ function! LoadMyPlugins() abort  " {{{
     Plug 'godlygeek/tabular', {'on': 'Tabularize'}
     Plug 'mbbill/undotree', { 'on' : 'UndotreeToggle' }
     nnoremap U <Cmd>UndoTreeToggle<CR>
-    Plug 'tpope/vim-apathy'
     Plug 'tpope/vim-unimpaired'
     Plug 'tpope/vim-surround'
     Plug 'tpope/vim-eunuch'

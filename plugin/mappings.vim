@@ -119,9 +119,8 @@ function! MapRsi() abort
   noremap! <M-t> <C-R>=(plugins#ExpandPossibleShorterSnippet() == 0? '': UltiSnips#ExpandSnippet())<CR>
 
 endfunction
-" }}}
 
-function! AddVileBinding(key, handler)  " {{{
+function! AddVileBinding(key, handler)
   " Map a key 3 times for normal mode, insert and command.
   exec 'nnoremap ' . a:key a:handler
   exec 'inoremap ' . a:key a:handler
@@ -130,9 +129,7 @@ function! AddVileBinding(key, handler)  " {{{
   " wait why did i get rid of cnoremap
   exec 'cnoremap ' . a:key a:handler
 
-endfunction  " }}}
-
-" Vile Bindings: {{{
+endfunction
 
 " oh
 call AddVileBinding('<C-x>o', '<Cmd>wincmd W<CR>')
@@ -163,6 +160,10 @@ call AddVileBinding('<C-x>b', '<Cmd>Brofiles<CR>')
 
 " Make shift-insert work like in Xterm. From arch
 call AddVileBinding('<S-Insert>', '<MiddleMouse>')
+
+" So this binding can work in any mode so long as the previewwindow is open
+noremap <M-C-v>
+
 " }}}
 
 " Search Mappings: {{{
@@ -192,7 +193,9 @@ nnoremap / mS/
 nnoremap ? mB?
 " let's extend justin's idea with ours!
 " get rid of the gv it's super confusing
-xnoremap / mSy/<C-R>"<CR>
+" xnoremap / mSy/<C-R>"<CR>
+xnoremap / mS/
+
 " }}}
 
 " UltiSnips: {{{
@@ -267,7 +270,7 @@ else
 " dictionary isn't set on windows
   inoremap <C-x><C-k> <C-x><C-u>
 " Supertab should've made that mapping pretty sweet.
-endif               
+endif
 
 " Is file_ag not a function anymore????
 inoremap <expr> <C-x><C-j> fzf#vim#complete#file()
@@ -332,43 +335,9 @@ inoremap <expr> <M-=> pumvisible() ? coc#_select_confirm() :
 
 " Refresh completions with C-Space
 inoremap <M-/> <C-R>=SuperTabAlternateCompletion("\<lt>c-p>")<CR>
-
 inoremap <expr> <C-Space> coc#refresh()
-
-" Lets add this into the mix
-" yeah fuck digraphs this is totally gonna be a new prefix key for me.
-" no it actually doesn't work in insert mode :\
-" I just realized C-. isn't used!
 imap <C-.> <Plug>(ale_complete)
-
-" This did not work at all
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-
-" fuckin raising
-" imap <expr> <S-TAB> pumvisible() ? '\<C-p>' : '\<C-h>'
-
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
-" position. Coc only does snippet and additional edit on confirm.
-" <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
-"
-" As a heads up theres also a coc#select#snippet
-" Also use imap so that we can map other things to <CR> as needed
-" if exists('*complete_info')
-"   imap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-" else
-"   imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-" endif
-
-" Use <TAB> for selections ranges.
-" NOTE: Requires 'textDocument/selectionRange' support from the language server.
-" coc-tsserver, coc-python are the examples of servers that support it.
-xmap <silent> <TAB> <Plug>(coc-range-select)
-
 nnoremap <C-k>d <Plug>(coc-definition)<CR>
-
 " The gu<text object> operation is too important
 nnoremap <expr><buffer> <Leader>u <Plug>(coc-usages)<CR>
 nnoremap ,u <Plug>(coc-usages)<CR>
@@ -477,12 +446,17 @@ nnoremap ,y <Cmd>CocFloatJump<CR>
 " }}}
 
 function! Window_Mappings() abort  " {{{
+
+  " Not required but certainly useful
+  nnoremap <M-w> <C-w>
+
   " Navigate windows more easily
   nnoremap <C-h> <Cmd>wincmd h<CR>
   " This displays as <NL> when you run `:map` but it behaves like C-j. Oh well.
   nnoremap <C-j> <Cmd>wincmd j<CR>
   nnoremap <C-k> <Cmd>wincmd k<CR>
   nnoremap <C-l> <Cmd>wincmd l<CR>
+
   " Resize windows a little faster
   nnoremap <C-w>< 5<C-w><
   nnoremap <C-w>> 5<C-w>>
@@ -498,16 +472,21 @@ function! Window_Mappings() abort  " {{{
   nnoremap <Leader>ww <Cmd>wincmd w<CR>
   " Split and edit file under the cursor
   nnoremap <Leader>wf <Cmd>wincmd f<CR>
+
+
+  " Resizing Windows:
+  nnoremap <C-w><C-Left>
+  nnoremap <C-w><C-Down> <C-w>-
+  " nnoremap <C-w><C-Right>
+  nnoremap <C-w><C-Up> <C-w>+
+  " nnoremap <C-w><M-Left>
+  nnoremap <C-w><M-Down> 5<C-w>-
+  " nnoremap <C-w><M-Right>
+  nnoremap <C-w><M-Up> 5<C-w>+
 endfunction  " }}}
 
 function! Quickfix_Mappings() abort  " {{{
   " Jump to and from location/quickfix windows.
-  " Note: `:he Q_qf`  <--- C-]
-
-  " TODO: These need to catch E776 no location list
-  nnoremap <C-Down> <Cmd>llast<CR><bar><Cmd>clast<CR>
-  nnoremap <C-Up> <Cmd>lfirst<CR><bar><Cmd>cfirst<CR>
-
   nnoremap <Leader>lc <Cmd>lclose<CR>
   nnoremap <Leader>lf <Cmd>lwindow<CR>
 
