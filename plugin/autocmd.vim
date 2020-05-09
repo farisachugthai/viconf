@@ -84,16 +84,24 @@ augroup UserPotpourri  " {{{
   autocmd Syntax * syntax sync fromstart
   " hopefully this will only call one time
   " so far is working perfectly
-  autocmd VimEnter * call UltiSnipsConf()
-  autocmd VimEnter * call syncom#gruvbox_material()
-  autocmd VimEnter * call syncom#grepprg()
+  " autocmd VimEnter * call UltiSnipsConf()
+  " autocmd VimEnter * call syncom#gruvbox_material()
+  " autocmd VimEnter * call syncom#grepprg()
 augroup END  " }}}
 
-augroup TagbarAutoCmds
-  " Dude holy christ is this annoying
-  au! CursorHold *
-  au! CursorHoldI *
-augroup END
+exec 'source ' . s:repo_root . '/autoload/syncom.vim'
+
+call syncom#gruvbox_material()
+call syncom#grepprg()
+" augroup TagbarAutoCmds
+"   " Dude holy christ is this annoying
+"   au! CursorHold *
+"   au! CursorHoldI *
+" augroup END
+
+if exists('#TagbarAutoCmds')
+  au! TagbarAutoCmds *
+endif
 
 augroup UserNerdLoader  " {{{
   autocmd!
@@ -110,9 +118,9 @@ augroup UserFiletypesCompletions  " {{{
   " Show type information automatically when the cursor stops moving
   autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
 
-  autocmd BufEnter * if &omnifunc ==# '' | setlocal omnifunc=syntaxcomplete#Complete | endif
+  autocmd BufEnter * if &l:omnifunc ==# '' | setlocal omnifunc=syntaxcomplete#Complete | endif
 
-  autocmd BufEnter * if &completefunc ==# '' | setlocal completefunc=syntaxcomplete#Complete | endif
+  autocmd BufEnter * if &l:completefunc ==# '' | setlocal completefunc=syntaxcomplete#Complete | endif
 
   if exists('*SuperTabChain')
     autocmd FileType *

@@ -118,9 +118,8 @@ function! MapRsi() abort
   noremap! <M-t> <C-R>=(plugins#ExpandPossibleShorterSnippet() == 0? '': UltiSnips#ExpandSnippet())<CR>
 
 endfunction
-" }}}
 
-function! AddVileBinding(key, handler)  " {{{
+function! AddVileBinding(key, handler)
   " Map a key 3 times for normal mode, insert and command.
   exec 'nnoremap ' . a:key a:handler
   exec 'inoremap ' . a:key a:handler
@@ -129,9 +128,7 @@ function! AddVileBinding(key, handler)  " {{{
   " wait why did i get rid of cnoremap
   exec 'cnoremap ' . a:key a:handler
 
-endfunction  " }}}
-
-" Vile Bindings: {{{
+endfunction
 
 " oh
 call AddVileBinding('<C-x>o', '<Cmd>wincmd W<CR>')
@@ -189,6 +186,8 @@ xnoremap # mPy?<C-R>"<CR>
 nnoremap / mS/
 " Oh also do the backwards one too please!
 nnoremap ? mB?
+xnoremap / mS/
+
 " }}}
 
 " UltiSnips: {{{
@@ -331,14 +330,8 @@ inoremap <M-/> <C-R>=SuperTabAlternateCompletion("\<lt>c-p>")<CR>
 
 inoremap <expr> <C-Space> coc#refresh()
 
-" Lets add this into the mix
-" yeah fuck digraphs this is totally gonna be a new prefix key for me.
-" no it actually doesn't work in insert mode :\
 " I just realized C-. isn't used!
 imap <C-.> <Plug>(ale_complete)
-
-" As a heads up theres also a coc#select#snippet
-" Also use imap so that we can map other things to <CR> as needed
 
 nnoremap <C-k>d <Plug>(coc-definition)<CR>
 " The gu<text object> operation is too important
@@ -449,6 +442,10 @@ nnoremap ,y <Cmd>CocFloatJump<CR>
 " }}}
 
 function! Window_Mappings() abort  " {{{
+
+  " Not required but certainly useful
+  nnoremap <M-w> <C-w>
+
   " Navigate windows more easily
   nnoremap <C-h> <Cmd>wincmd h<CR>
   " This displays as <NL> when you run `:map` but it behaves like C-j. Oh well.
@@ -470,16 +467,21 @@ function! Window_Mappings() abort  " {{{
   nnoremap <Leader>ww <Cmd>wincmd w<CR>
   " Split and edit file under the cursor
   nnoremap <Leader>wf <Cmd>wincmd f<CR>
+
+
+  " Resizing Windows:
+  " nnoremap <C-w><C-Left>
+  nnoremap <C-w><C-Down> <C-w>-
+  " nnoremap <C-w><C-Right>
+  nnoremap <C-w><C-Up> <C-w>+
+  " nnoremap <C-w><M-Left>
+  nnoremap <C-w><M-Down> 5<C-w>-
+  " nnoremap <C-w><M-Right>
+  nnoremap <C-w><M-Up> 5<C-w>+
 endfunction  " }}}
 
 function! Quickfix_Mappings() abort  " {{{
   " Jump to and from location/quickfix windows.
-  " Note: `:he Q_qf`  <--- C-]
-
-  " TODO: These need to catch E776 no location list
-  nnoremap <C-Down> <Cmd>llast<CR><bar><Cmd>clast<CR>
-  nnoremap <C-Up> <Cmd>lfirst<CR><bar><Cmd>cfirst<CR>
-
   nnoremap <Leader>lc <Cmd>lclose<CR>
   nnoremap <Leader>lf <Cmd>lwindow<CR>
 
@@ -707,7 +709,7 @@ endif
 " }}}
 
 " Call Functions: {{{
-if !exists('no_plugin_maps') && !exists('no_windows_vim_maps')
+if !exists('no_plugin_maps') && !exists('no_windows_vim_maps') && !exists('g:loaded_plugin_mappings')
 
   call Window_Mappings()
   call AltKeyNavigation()
@@ -715,6 +717,9 @@ if !exists('no_plugin_maps') && !exists('no_windows_vim_maps')
   call Tab_Mappings()
   call Quickfix_Mappings()
   call MapRsi()
+  if !exists('g:autoloaded_fugitive')
+    source $HOME/.local/share/nvim/plugged/vim-fugitive/autoload/fugitive.vim
+  endif
   call UserFugitiveMappings()
   let g:loaded_plugin_mappings = 1
 

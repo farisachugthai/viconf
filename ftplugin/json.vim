@@ -10,7 +10,10 @@ let g:vim_json_warnings = 1
 " Always set the globals first
 
 if exists('b:did_ftplugin') | finish | endif
-source $VIMRUNTIME/ftplugin/json.vim
+let b:did_ftplugin = 1
+
+" dont use theirs its damn near empty
+" source $VIMRUNTIME/ftplugin/json.vim
 source $VIMRUNTIME/indent/json.vim
 
 syntax match jsonComment +\/\/.\+$+
@@ -24,11 +27,17 @@ setlocal formatoptions-=t
 let &commentstring='// %s'
 setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
 
+setlocal conceallevel=2
+setlocal concealcursor=nvc
+
 " Let's add in a few more options though. Enforce 2 space tabs
 setlocal expandtab softtabstop=2 shiftwidth=2 tabstop=2
 setlocal suffixesadd=.json,.js,.jsx,.ts,tsx
 setlocal foldmethod=syntax
 setlocal shiftround
+
+let b:undo_ftplugin = 'setlocal fo< com< cms< cocu< cole<'
+      \. '|setlocal matchpairs< et< sts< sw< ts< sua< fdm< sr< '
 
 " Set up ALE correctly
 call ftplugins#ALE_JSON_Conf()
@@ -38,17 +47,17 @@ inoremap <buffer> ( ()<C-G>U<Left>
 inoremap <buffer> [ []<C-G>U<Left>
 inoremap <buffer> { {}<C-G>U<Left>
 inoremap <buffer> " ""<C-G>U<Left>
-" Also can we auto fix single quotes?
+" Also can we auto fix single quotes? use C-r' if you need to use a literal single quote...
+" honestly that never happens though.
 inoremap <buffer> ' "<C-G>U<Left>
 
-setlocal matchpairs+=::,
+setlocal matchpairs+=::,"",
 
 if exists('loaded_matchit')
   " Set up matchit:
   let b:match_ignorecase = 1
   let b:match_words = '<:>,{:},"",(:),[:]'
 
-  " Also the undo_ftplugin is already defined
   let b:undo_ftplugin .= '|unlet! b:match_ignorecase'
         \ . '|unlet! b:match_words'
 
@@ -58,11 +67,8 @@ endif
 " For more see ../python3/_vim
 command! -buffer -bang -range Pjson :w<bang><bar><line1>,<line2>python3 import _vim; _vim.pretty_it('json')
 
-" TODO: Check that this worked
-setlocal formatprg=:Pjson
 
-let b:undo_ftplugin .= '|setlocal fo< com< cms< et< sts< sw< ts< sua< fdm< fp< sr< '
-      \ . '|unlet! b:undo_ftplugin'
+let b:undo_ftplugin .= '|unlet! b:undo_ftplugin'
       \ . '|unlet! b:did_ftplugin'
       \ . '|unlet! b:undo_indent'
       \ . '|unlet! b:did_indent'
@@ -75,3 +81,4 @@ let b:undo_ftplugin .= '|setlocal fo< com< cms< et< sts< sw< ts< sua< fdm< fp< s
       \ . '|silent! iunmap <buffer> "'
       \ . "|silent! iunmap <buffer> '"
       \ . '|silent! delcom Pjson'
+

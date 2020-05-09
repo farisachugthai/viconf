@@ -44,7 +44,6 @@ setglobal completeopt=menu,menuone,noselect,noinsert,preview
 setglobal ignorecase
 
 " Path:
-
 let &g:path = '.,,**,' . expand('$VIMRUNTIME') . '/*/*.vim'  . ',' . stdpath('config')
 if exists('*stdpath')
   let s:stddata = stdpath("data")
@@ -58,15 +57,13 @@ setglobal path-=/usr/include
 " Indentation:
 setlocal indentkeys+=<:>,=elif,=except
 setlocal indentkeys-=0#
-
 setglobal smartcase infercase smartindent
-
 setglobal regexpengine=2
 setglobal cscopetagorder=1  " why does this default to search cscope first?
-
 setglobal shada='100,<50,s10,:3000,%
 " default but specify it.
 let &g:shadafile = s:stddata.'/site/shada/main.shada'
+setglobal formatoptions=crq1j
 
 " Tags:
 setglobal tags=tags,**/tags
@@ -85,8 +82,10 @@ packadd! justify
 setglobal pyxversion=3
 " managed to lose this along the way
 " to enable transparency but force the current selected element to be fully opaque: >
-set pumblend=15
-hi PmenuSel blend=0
+if exists("&pumblend")
+  set pumblend=15
+  hi PmenuSel blend=0
+endif
 setglobal autochdir autowrite autoread
 
 " Tabs:
@@ -194,22 +193,6 @@ let g:tlib_extend_keyagents_InputList_s = {
 
 "   " Icon Chars
 "   let g:tagbar_iconchars = ['▶', '▼']
-
-" endif
-
-" if !empty($ANDROID_DATA)
-"   call find_files#termux_remote()
-
-"   let g:tagbar_compact = 1
-" elseif !has('unix')
-"   " Note: dude holy hell is it necessary to call the msdos#set_shell_cmd()
-"   " func. you do so in ./plugin/unix.vim but jesus christ did it fuck stuff up
-"   " when that got deleted
-"   call find_files#msdos_remote()
-" else
-"   call find_files#ubuntu_remote()
-" endif
-
 " }}}
 
 " Backups: {{{
@@ -550,34 +533,33 @@ let g:coc_jump_locations = []
 let g:node_client_debug = 1
 let g:coc_list_loading_status = "I love undocumented features!"
 
-function! s:Init_coc() abort
+function! s:InitCoc() abort
 
   if !exists('g:coc_global_extensions')
     let g:coc_global_extensions = ['coc-json', 'coc-tsserver', 'coc-python',
           \'coc-git', 'coc-lists', 'coc-snippets', 'coc-sh',
           \ 'coc-highlight', 'coc-tslint-plugin']
   endif
-  " for l:ext in g:coc_global_extensions
-  "   echomsg l:ext
-    " Todo this doesn't work
-    " call coc#util#install_extension(l:ext)
-  " endfor
 
+  " Windows setup
     if !has('unix')
       let g:coc_node_path = 'C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\\node.exe'
-    else
-      if executable(expand('~/.config/coc/extensions/node_modules/.bin/bash-language-server'))
-        let s:bashlsp = expand('~/.config/coc/extensions/node_modules/.bin/bash-language-server.cmd')
+      if executable(expand('../node_modules/.bin/bash-language-server'))
+        let s:bashlsp = expand('../node_modules/.bin/bash-language-server.cmd')
       else
-        let s:bashlsp = 'bash-language-server'
+        let s:bashlsp = 'bash-language-server.cmd'
       endif
 
-      if executable(expand('~/.config/coc/extensions/node_modules/.bin/vim-language-server'))
-        let s:vimlsp = expand('~/.config/coc/extensions/node_modules/.bin/vim-language-server.cmd')
+      if executable(expand('../node_modules/.bin/vim-language-server'))
+        let s:vimlsp = expand('../node_modules/.bin/vim-language-server.cmd')
       else " honestly usually arch just figures this shit out on it's own
-
-        let s:vimlsp = 'vim-language-server'
+        let s:vimlsp = 'vim-language-server.cmd'
       endif
+
+    " unix
+    else
+      let s:vimlsp = 'vim-language-server'
+      let s:bashlsp = 'bash-language-server'
     endif
 
   if !empty($ANDROID_DATA)
@@ -614,7 +596,7 @@ function! s:Init_coc() abort
 
 endfunction
 
-call s:Init_coc()
+call s:InitCoc()
 
 " }}}
 

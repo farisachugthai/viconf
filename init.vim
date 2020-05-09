@@ -5,8 +5,7 @@
   " Last Modified: Feb 12, 2020
 " ============================================================================
 
-" tmp:
-set debug=msg
+
 " Preliminary: {{{
 " These are the options that I consider the minimum requirements to running
 scriptencoding utf-8
@@ -28,6 +27,8 @@ if !has('unix')
   source C:/Neovim/share/nvim-qt/runtime/plugin/nvim_gui_shim.vim
 endif
 
+setglobal background=dark
+set debug=msg
 if exists('g:GuiLoaded') | exec 'source ' s:repo_root . '/ginit.vim' | endif
 " TODO: clipboards fucking up on windows
 setglobal clipboard=unnamed,unnamedplus
@@ -114,28 +115,26 @@ function! LoadMyPlugins() abort  " {{{
   Plug 'romainl/vim-qf'
   Plug 'tomtom/tlib_vim'
   Plug 'godlygeek/tabular', {'on': 'Tabularize'}
+  Plug 'tpope/vim-unimpaired'
+  Plug 'tpope/vim-surround'
+  Plug 'tpope/vim-eunuch'
+  Plug 'morhetz/gruvbox'
+
   if empty(s:termux)  " {{{
+    Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
     Plug 'junegunn/goyo.vim', {'on': 'Goyo'}
     Plug 'lepture/vim-jinja'
     Plug 'honza/vim-snippets'
-    " Don't know how i didn't realize lazy loaded plugins aren't added to &runtimepath.
     Plug 'cespare/vim-toml', {'for': 'toml'}
-    Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
     Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
     Plug 'omnisharp/omnisharp-vim', {'for': ['cs', 'ps1'] }
     Plug 'itspriddle/vim-shellcheck', {'for': ['sh', 'bash'] }
     " Plug 'neovim/nvim-lsp'
-
-
     Plug 'mhinz/vim-startify'
     Plug 'ludovicchabant/vim-gutentags'
     Plug 'mbbill/undotree', { 'on' : 'UndotreeToggle' }
     nnoremap U <Cmd>UndoTreeToggle<CR>
     Plug 'tpope/vim-apathy'
-    Plug 'tpope/vim-unimpaired'
-    Plug 'tpope/vim-surround'
-    Plug 'tpope/vim-eunuch'
-    Plug 'morhetz/gruvbox'
     Plug 'liuchengxu/vim-which-key'
   endif " }}}
   Plug 'kshenoy/vim-signature'
@@ -148,9 +147,6 @@ call LoadMyPlugins()
 
 " I utilize this command so often I may as well save the characters
 command! -bar Plugins echomsg map(keys(g:plugs), '"\n" . v:val')
-
-setglobal background=dark
-syntax on
 " For some reason running syntax enable clears the syntax option
 " also setting background requires syntax on to reload
 let g:syntax_cmd = "on"

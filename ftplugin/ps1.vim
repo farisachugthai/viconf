@@ -6,7 +6,6 @@
 " ============================================================================
 
 " Options: {{{
-
 setlocal expandtab
 setlocal shiftwidth=4
 setlocal softtabstop=4
@@ -15,6 +14,7 @@ setlocal textwidth=120
 setlocal foldignore=
 if exists('$PSMODULEPATH')
   let &l:path = expand('$PSMODULEPATH')
+  " ...omg is getenv broken?
 endif
 
 " Recognize powershell's goofy ass hyphenated commands

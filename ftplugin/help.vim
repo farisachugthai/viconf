@@ -12,7 +12,6 @@ source $VIMRUNTIME/ftplugin/help.vim
 setlocal iskeyword+=-
 setlocal relativenumber number
 setlocal foldcolumn=0 signcolumn=
-
 setlocal tabstop=8
 setlocal softtabstop=8
 setlocal shiftwidth=8
@@ -25,7 +24,7 @@ setlocal wrap  " scrolling horizontally to read sucks
 " autoload/man.vim and ftplugin/man.vim have 1 function copy pasted
 
 " dont make this mapping silent tho
-nnoremap <buffer> gO :call <sid>show_toc()<cr>
+" nnoremap <buffer> gO :call <sid>show_toc()<cr>
 " Back on track. I mess up this binding too often
 nnoremap <buffer> go gO
 

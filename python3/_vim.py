@@ -17,24 +17,11 @@ from pathlib import Path
 from pprint import pprint
 
 try:
-    import vim  # noqa pylint:disable=import-error
-except ImportError:
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from pynvim_ import LegacyVim
-
-    vim = LegacyVim()
-
-try:
     import yaml
 except (ImportError, ModuleNotFoundError):
     yaml = None
 
-try:
-    import UltiSnips
-except ImportError:
-    UltiSnips = None
-
-# here's a few more helpers
+global vim
 
 
 def get_verbosity():
@@ -409,19 +396,30 @@ def _patch_nvim(vim):
     vim.vars = vars_wrapper()
 
 
+if __name__ == "__main__":
+    try:
+        import vim  # noqa pylint:disable=import-error
+    except ImportError:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        from pynvim import LegacyVim
+        vim = LegacyVim()
 
-data = vim_eval('stdpath("data")')
-if Path(data).exists():
-    sys.path.append(data)
+    try:
+        import UltiSnips
+    except ImportError:
+        UltiSnips = None
 
-buf = VimBuffer(vim)  # pylint:disable=invalid-name
+    data = vim_eval('stdpath("data")')
+    if Path(data).exists():
+        sys.path.append(data)
 
-prettiers = {
-    "xml": pretty_xml,
-    "json": pretty_json,
-    "yaml": interpret_yaml,
-}
+    buf = VimBuffer(vim)  # pylint:disable=invalid-name
 
+    prettiers = {
+        "xml": pretty_xml,
+        "json": pretty_json,
+        "yaml": interpret_yaml,
+    }
 
-if hasattr(vim, "from_nvim"):
-    _patch_nvim(vim_obj)
+    if hasattr(vim, "from_nvim"):
+        _patch_nvim(vim_obj)

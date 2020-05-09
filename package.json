@@ -36,17 +36,13 @@
     "coc-vimlsp": ">=0.5.1",
     "coc-word": ">=1.2.2",
     "coc-yaml": ">=1.0.4",
-    "coc-yank": ">=1.1.4",
-    "vim-language-server": "^1.5.2",
-    "webpack": "^4.42.1",
-    "webpack-cli": "^3.3.11",
-    "yaml-language-server": "^0.6.1"
+    "coc-yank": ">=1.1.4"
   },
   "directories": {
     "lib": "rplugin/node"
   },
   "engines": {
-    "coc": ">= 0.0.77"
+    "coc.nvim": ">= 0.0.77"
   },
   "keywords": [
     "coc.nvim",
@@ -56,8 +52,7 @@
   "license": "MIT",
   "name": "coc-extensions",
   "peerDependencies": {
-    "typescript": "^3.8.3",
-    "webpack": "^4.42.1"
+    "coc.nvim": "^0.0.77"
   },
   "private": true,
   "readme": "README.rst",
@@ -74,6 +69,7 @@
     "pretest": "echo 'Running tests'",
     "tagfunc": "node ./rplugin/node/coc_tag.js",
     "tsserver": "node ./node_modules/typescript/bin/tsserver",
+    "vimlsp": "yarn run vim-language-server --stdio",
     "watch": "yarn run tsc -w rplugin/node"
   },
   "version": "1.0.0"

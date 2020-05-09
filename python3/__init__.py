@@ -8,20 +8,13 @@ from collections import namedtuple
 from importlib.machinery import PathFinder
 from io import StringIO
 
-try:
-    import pynvim
-except ImportError:
-    pass
-else:
-    from pynvim import api, attach
+# try:
+#     import vim  # noqa pylint:disable=import-error
+# except ImportError:
+#     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+#     from pynvim_ import LegacyVim
 
-try:
-    import vim  # noqa pylint:disable=import-error
-except ImportError:
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from pynvim_ import LegacyVim
-
-    vim = LegacyVim()
+#     vim = LegacyVim()
 
 __docformat__ = "reStructuredText"
 

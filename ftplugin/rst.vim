@@ -61,7 +61,7 @@ setlocal wrap
 " 		1. the first item
 " 		   wraps
 " 		2. the second item
-setlocal formatoptions+=n
+setlocal formatoptions=crq1jn
 
 " Only because I want to follow module names the same way as python
 setlocal include=^\\s*\\(from\\\|import\\)

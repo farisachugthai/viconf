@@ -47,7 +47,7 @@ def old_vim():
     return editor
 
 
-local_path = LocalPath("python3/pynvim_.py")
+local_path = LocalPath("python3/pynvim.py")
 pynvim  = local_path.pyimport()
 
 @pytest.fixture(scope="session")

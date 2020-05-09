@@ -139,9 +139,15 @@ if !empty('g:did_coc_loaded')
   command! -nargs=* -bar CocPython call CocActionAsync('runCommand', 'python.startREPL', shellescape(<q-args>))
 endif
 
-if executable('pytest')
-  compiler pytest
-  setlocal makeprg=pytest\ -q\ %
+" Use standard compiler settings unless user wants otherwise
+if !exists("current_compiler")
+  if executable('pytest')
+    compiler pytest
+    setlocal makeprg=pytest\ -q\ %
+  else
+    " note this compiler actually setting mp for us too!
+    compiler pylint
+  endif
 endif
 
 let b:undo_ftplugin .= '|setlocal lbr< tw< cms< et< sts< ts<'

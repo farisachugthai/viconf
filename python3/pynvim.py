@@ -30,16 +30,11 @@ __docformat__ = "reStructuredText"
 __authors__ = "Neovim"
 
 # Imports: {{{
-# import json  # literally how is this not in use
-# import mimetypes
-# import operator
-
 import abc
 import asyncio
 import contextlib
 import enum
 import functools
-import gc
 import inspect
 import io
 import itertools
@@ -58,10 +53,8 @@ import warnings
 from asyncio.events import get_event_loop_policy
 from asyncio.streams import StreamReader, StreamWriter
 from collections import UserList, deque
+from collections.abc import MutableMapping
 from functools import partial
-
-# from io import StringIO
-
 from traceback import format_exception, format_stack, format_exc
 from typing import Dict, Any, AnyStr, Union, List, Optional, Callable
 
@@ -92,8 +85,6 @@ try:
     import vim  # noqa
 except ImportError:
     pass
-
-# }}}
 
 # Compat kinda: {{{
 # Not nvim's compat mod
@@ -187,13 +178,11 @@ except ImportError:
     fsencode, fsdecode = _fscodec()
 
 
-
-# }}}
-
 # Globals: {{{
 # BUG: don't hardcode this its an actual function we can check
 unicode_errors_default = sys.getfilesystemencodeerrors()
 
+default_int_handler = signal.getsignal(signal.SIGINT)
 mp_logger = multiprocessing.get_logger()
 multiprocessing.log_to_stderr(logging.WARNING)
 
@@ -202,6 +191,8 @@ multiprocessing.log_to_stderr(logging.WARNING)
 # default state, we keep a reference to the default handler
 main_thread = threading.current_thread()
 locale.setlocale(locale.LC_ALL, "")
+host_method_spec = {"poll": {}, "specs": {"nargs": 1}, "shutdown": {}}
+
 # }}}
 
 # Pynvim __init__: {{{
@@ -258,7 +249,12 @@ def start_host(session=None, load_plugins=True, plugins=None):
 
     if not session:
         session = stdio_session()
+    else:
+        if isinstance(session, str):
+            session = _convert_str_to_session(session)
+
     nvim = Nvim.from_session(session)
+    # nvim = Nvim.from_session(session).with_decode(decode)
 
     if nvim.version.api_level < 1:
         sys.stderr.write("This version of pynvim requires nvim 0.1.6 or later")
@@ -268,6 +264,24 @@ def start_host(session=None, load_plugins=True, plugins=None):
     if plugins is not None:
         host.start(plugins)
     return host
+
+
+def _convert_str_to_session(session_type, address=None, port=None, path=None, argv=None, decode=None):
+
+    if session_type not in ["socket", "tcp", "stdio", "child"]:
+        raise NvimError(
+            '%s given. Must be one of "socket", "tcp", "stdio", "child"' % session_type
+        )
+    if session_type == "socket":
+        session = socket_session(path)
+    elif session_type == "tcp":
+        session = tcp_session(address, port)
+    elif session_type == "stdio":
+        session = stdio_session()
+    elif session_type == "child":
+        session = child_session(argv)
+    return session
+
 
 
 def attach(session_type, address=None, port=None, path=None, argv=None, decode=None):
@@ -316,23 +330,10 @@ def attach(session_type, address=None, port=None, path=None, argv=None, decode=N
         if session_type not in ["socket", "tcp", "stdio", "child"]
 
     """
-    if session_type not in ["socket", "tcp", "stdio", "child"]:
-        raise NvimError(
-            '%s given. Must be one of "socket", "tcp", "stdio", "child"' % session_type
-        )
-    if session_type == "socket":
-        session = socket_session(path)
-    elif session_type == "tcp":
-        session = tcp_session(address, port)
-    elif session_type == "stdio":
-        session = stdio_session()
-    elif session_type == "child":
-        session = child_session(argv)
-
-    return Nvim.from_session(session).with_decode(decode)
+    return Nvim.from_session(_convert_str_to_session(session_type)).with_decode(decode)
 
 
-def setup_logging(name=None, level=None):
+def setup_logging(name: AnyStr = None, level: int = None, disable_asyncio_logging=True):
     """Setup logging according to environment variables.
 
     So I just figured out why the nvim_python_log_file never sets.
@@ -379,8 +380,6 @@ def setup_logging(name=None, level=None):
     formatter = logging.Formatter(fmt=default_log_format, datefmt=log_datefmt)
     stream = logging.StreamHandler(sys.stderr)
     stream.setLevel(logging.WARNING)
-
-
     handler.setFormatter(formatter)
     logger.addHandler(handler)
     logger.addHandler(stream)
@@ -530,8 +529,6 @@ def get_client_info(type_, method_spec, kind=None):
 
 VERSION = Version(major=0, minor=4, patch=1, prerelease="")
 
-
-# }}}
 
 # compat: {{{
 
@@ -763,9 +760,6 @@ def decode(mode=unicode_errors_default):
 
     return dec
 
-
-# }}}
-
 # api/common:Remote: {{{
 
 
@@ -836,9 +830,8 @@ class Remote(object):
         return self._session.request(name, self, *args, **kwargs)
 
 
-# }}}
+# msgpack_rpc.session:
 
-# msgpack_rpc.session: {{{
 
 
 class ErrorResponse(NvimError):
@@ -865,7 +858,9 @@ class Session(object):
     from Nvim with a synchronous API.
 
     Ahhhh the Session object! Probably gonna end up subclassing this bitch
-    a LOT.
+    a LOT. Oddly not really yet. This class should probably subclass AsyncSession
+    though.
+
     """
 
     def __init__(self, async_session, cb=None, error_wrapper=None):
@@ -913,7 +908,6 @@ class Session(object):
     def threadsafe_call(self, fn, *args, **kwargs):
         """Wrap :meth:`AsyncSession.threadsafe_call`."""
 
-        @functools.wraps
         def handler():
             try:
                 return fn(*args, **kwargs)
@@ -1138,9 +1132,7 @@ class Session(object):
         pass
 
 
-# }}}
-
-# api/nvim: Needs to be above plugin/scripthost: {{{
+# api/nvim: Needs to be above plugin/scripthost:
 
 
 class Nvim(object):
@@ -1178,6 +1170,8 @@ class Nvim(object):
         queries Nvim metadata for type information and sets a SessionHook for
         creating specialized objects from Nvim remote handles.
         """
+        if isinstance(session, str):
+            session = _convert_str_to_session(session)
         try:
             response = session.request(b"nvim_get_api_info")
         except OSError:  # why is thi raising?
@@ -1273,6 +1267,8 @@ class Nvim(object):
     def _from_nvim(self, obj: msgpack.ExtType):
         from msgpack import ExtType
 
+    def _from_nvim(self, obj, decode=None):
+        warnings.warn(DeprecationWarning('decode is ignored'))
         if isinstance(obj, ExtType):
             cls = self.types[obj.code]
             return cls(self, (obj.code, obj.data))
@@ -2492,8 +2488,6 @@ class Range(object):
         return index
 
 
-# }}}
-
 # {{{ API/common
 
 
@@ -2691,12 +2685,100 @@ class MsgpackStream(object):
     exposes an interface for reading/writing msgpack documents.
     """
 
-    def __init__(self, event_loop=None, _message_cb=None, **kwargs):
-        """Wrap `event_loop` on a msgpack-aware interface."""
+    def __init__(self, event_loop=None, _message_cb=None, autoreset=True, **kwargs):
+        """Wrap `event_loop` on a msgpack-aware interface.
+
+        Parameters
+        ----------
+        :param callable default:
+            Convert user type to builtin type that Packer supports.
+            See also simplejson's document.
+
+        :param bool use_single_float:
+            Use single precision float type for float. (default: False)
+
+        :param bool autoreset:
+            Reset buffer after each pack and return its content as `bytes`. (default: True).
+            If set this to false, use `bytes()` to get content and `.reset()` to clear buffer.
+
+        :param bool use_bin_type:
+            Use bin type introduced in msgpack spec 2.0 for bytes.
+            It also enables str8 type for unicode. (default: True)
+
+        :param bool strict_types:
+            If set to true, types will be checked to be exact. Derived classes
+            from serializeable types will not be serialized and will be
+            treated as unsupported type and forwarded to default.
+            Additionally tuples will not be serialized as lists.
+            This is useful when trying to implement accurate serialization
+            for python types.
+
+        :param str unicode_errors:
+            The error handler for encoding unicode. (default: 'strict')
+            DO NOT USE THIS!!  This option is kept for very specific usage.
+
+        Unpacker's Parameters
+        ---------------------
+        :param file_like:
+            File-like object having `.read(n)` method.
+            If specified, unpacker reads serialized data from it and :meth:`feed()` is not usable.
+
+        :param int read_size:
+            Used as `file_like.read(read_size)`. (default: `min(1024**2, max_buffer_size)`)
+
+        :param bool use_list:
+            If true, unpack msgpack array to Python list.
+            Otherwise, unpack to Python tuple. (default: True)
+
+        :param bool raw:
+            If true, unpack msgpack raw to Python bytes.
+            Otherwise, unpack to Python str by decoding with UTF-8 encoding (default).
+
+        :param bool strict_map_key:
+            If true (default), only str or bytes are accepted for map (dict) keys.
+
+        :param callable object_hook:
+            When specified, it should be callable.
+            Unpacker calls it with a dict argument after unpacking msgpack map.
+            (See also simplejson)
+
+        :param callable object_pairs_hook:
+            When specified, it should be callable.
+            Unpacker calls it with a list of key-value pairs after unpacking msgpack map.
+            (See also simplejson)
+
+        :param int max_buffer_size:
+            Limits size of data waiting unpacked.  0 means system's INT_MAX.
+            The default value is 100*1024*1024 (100MiB).
+            Raises `BufferFull` exception when it is insufficient.
+            You should set this parameter when unpacking data from untrusted source.
+
+        :param int max_str_len:
+            Deprecated, use *max_buffer_size* instead.
+            Limits max length of str. (default: max_buffer_size)
+
+        :param int max_bin_len:
+            Deprecated, use *max_buffer_size* instead.
+            Limits max length of bin. (default: max_buffer_size)
+
+        :param int max_array_len:
+            Limits max length of array. (default: max_buffer_size)
+
+        :param int max_map_len:
+            Limits max length of map. (default: max_buffer_size//2)
+
+        :param int max_ext_len:
+            Deprecated, use *max_buffer_size* instead.
+            Limits max size of ext type. (default: max_buffer_size)
+
+        :param str unicode_errors:
+            Error handler used for decoding str type.  (default: `'strict'`)
+
+        """
         self._loop = (
             event_loop if event_loop is not None else asyncio.new_event_loop()
         )  # todo: args
-        self._packer = Packer(unicode_errors=unicode_errors_default)
+        self._packer = Packer(autoreset=autoreset)
         self._unpacker = Unpacker(**kwargs)
         self._message_cb = _message_cb
 
@@ -3190,11 +3272,25 @@ class BaseEventLoop(_PlatformSpecificLoop):
 # Triple subclassed?
 
 
-def loop_cls(*args, **kwargs):
-    try:
-        return asyncio.get_event_loop()
-    except RuntimeError:
-        pass
+class AsyncioEventLoop(BaseEventLoop, asyncio.SubprocessProtocol, asyncio.Protocol):
+    """`BaseEventLoopABC` subclass that uses `asyncio` as a backend.
+
+    On Windows use ProactorEventLoop which support pipes and is backed by the
+    more powerful IOCP facility
+
+    .. note::
+        We override in the stdio case, because it doesn't work.
+
+    Attributes
+    ----------
+    _fact : asyncio.Protocol factory.
+        Review the `asyncio.events.EventLoop.subprocess_exec`.
+
+    """
+    _closed = False
+
+    _fact = None  # TODO
+
     if os.name == "nt":
         # On windows use ProactorEventLoop which support pipes and is backed by the
         # more powerful IOCP facility
@@ -3405,7 +3501,7 @@ class AsyncioEventLoop(AsyncioBaseEventLoop):
 
 # Keep below asyncio mod
 
-EventLoop = AsyncioEventLoop
+# EventLoop = AsyncioEventLoop
 
 
 def session(transport_type="stdio", *args, **kwargs) -> Session:
@@ -3453,9 +3549,6 @@ def stdio_session(*args: list, **kwargs: dict) -> Session:
 def child_session(argv=None):
     """Create a msgpack-rpc session from a new Nvim instance."""
     return session("child", argv)
-
-
-# }}}
 
 # api.window: {{{
 
@@ -3534,8 +3627,6 @@ class Window(Remote):
         return f"{self.__class__.__name__}"
 
 
-# }}}
-
 # api.tabpage: {{{
 class Tabpage(Remote):
     """A remote Nvim tabpage."""
@@ -3569,8 +3660,6 @@ class Tabpage(Remote):
     def __repr__(self):
         return f"{self.__class__.__name__}"
 
-
-# }}}
 
 # plugin/host: {{{
 host_method_spec = {"poll": {}, "specs": {"nargs": 1}, "shutdown": {}}
@@ -3877,10 +3966,20 @@ class UvEventLoop(BaseEventLoop):
     Also wanted to note. Should we make the connect_tcp,
     connect_stdio, and connect_child methods classmethods?
 
+    Attributes
+    ----------
+    transport_type : str
+
     """
 
-    def _init(self, *args):
-        self._loop = pyuv.Loop()
+    _connection_error = None
+    _callbacks = deque()
+    _error_stream = None
+    _closed = False
+
+    def _init(self, transport_type=None, *args, **kwargs):
+        self._loop = pyuv.Loop.default_loop()
+        sys.excepthook = self._loop.eventhook
         self._async = pyuv.Async(self._loop, self._on_async)
         self._connection_error = None
         self._error_stream = None
@@ -4005,7 +4104,7 @@ class UvEventLoop(BaseEventLoop):
             handle.stop()
 
 
-# }}}
+EventLoop = UvEventLoop
 
 
 gc.collect()
