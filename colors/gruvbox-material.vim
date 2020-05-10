@@ -1546,17 +1546,19 @@ hi! link rustStringContinuation Aqua
 hi! link rustStructure Aqua
 hi! link rustCommentLineDoc Comment
 
-hi! link luaIfThen Green
-hi! link luaElseifThen Orange
-hi! link luaThenEnd Purple
+" Lua: {{{
 hi! link luaBlock Green
-hi! link luaLoopBlock Blue
-hi! link luaStatement Aqua
-hi! link luaParen Operator
-hi! link luaIn Red
+hi! link luaElseifThen Orange
 hi! link luaFunction Aqua
+hi! link luaIfThen Green
+hi! link luaIn Red
+hi! link luaLoopBlock Blue
+hi! link luaParen Operator
+hi! link luaStatement Aqua
 hi! link luaTable Orange
-
+hi! link luaTableBlock Tag
+hi! link luaThenEnd Purple
+" }}}
 hi! link moonSpecialOp White
 hi! link moonExtendedOp Orange
 hi! link moonFunction White

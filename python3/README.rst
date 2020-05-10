@@ -62,3 +62,4 @@ Also Jesus why does this write the return value to the buffer?::
       py3do return str(sys.modules)
    endfunction
 
+Connecting to the socket is the easiest way a programmer can test the API,

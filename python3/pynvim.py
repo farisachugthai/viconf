@@ -2225,6 +2225,34 @@ def find_module(mod, path=None, target=None):
         sys.stderr.write(str(mod) + " not found!")
 
 
+class VimPathFinder:
+    # TODO: We gotta define get_paths in this class but seriously every
+    # function either implicitly uses `nvim` or requires it as a positional
+    # parameter ughh
+
+    def __init__(self, fullname, path=None):
+        self.fullname = fullname
+        self.path = path if path is not None else''
+
+    @classmethod
+    def find_module(cls, fullname, oldtail, path):
+        try:
+            return find_module(fullname, oldtail, path)
+        except ImportError:
+            return None
+
+    def load_module(self):
+        """Check sys.modules, required for reload (see PEP302).
+
+        Uh no. How about we just implement the loader protocol?
+        """
+        try:
+            return sys.modules[fullname]
+        except KeyError:
+            pass
+        return imp.load_module(fullname, *self.module)
+
+
 def find_spec(fullname, path=None, target=None):
     """Find the `ModuleSpec` for a given module.
 
@@ -2237,7 +2265,7 @@ def find_spec(fullname, path=None, target=None):
     """
     if PathFinder is not None:
         return PathFinder.find_spec(fullname, path=path, target=target)
-
+    # else VimPathFinder().find_module()
 
 # }}}
 
@@ -2828,13 +2856,13 @@ class MsgpackStream(object):
         else:
             self.loop.run(self._on_data)
 
-    def stop(self):
-        """Stop the event loop."""
-        self.loop.stop()
+    # def stop(self):
+    #     """Stop the event loop."""
+    #     self.loop.stop()
 
-    def close(self):
-        """Close the event loop."""
-        self.loop.close()
+    # def close(self):
+    #     """Close the event loop."""
+    #     self.loop.close()
 
     def _on_data(self, data):
         self._unpacker.feed(data)
@@ -2875,7 +2903,12 @@ class AsyncSession(MsgpackStream):
 
     """
 
-    def __init__(self, event_loop=None, _message_cb=None, msgpack_stream=None):
+    # TODO: integrate this in correctly
+    # self.loop = loop if loop is not None else get_event_loop_policy().new_event_loop()
+    # also it should be a class attribute as every instance should
+    # probably be accessing the same loop.
+
+    def __init__(self, event_loop=None, _message_cb=None, **kwargs):
         """Wrap `msgpack_stream` on a msgpack-rpc interface."""
         # self._msgpack_stream = msgpack_stream
         warnings.warn(DeprecationWarning("msgpack_stream is deprecated"))
@@ -2887,10 +2920,8 @@ class AsyncSession(MsgpackStream):
             1: self._on_response,
             2: self._on_notification,
         }
-        # TODO: integrate this in correctly
         # self._enum_handlers = SessionHandlers()
-        # self.loop = msgpack_stream.loop
-        super().__init__(event_loop, _message_cb)
+        super().__init__(event_loop, _message_cb, **kwargs)
 
     @property
     def _msgpack_stream(self):
@@ -3298,7 +3329,6 @@ class AsyncioEventLoop(BaseEventLoop, asyncio.SubprocessProtocol, asyncio.Protoc
         loop_cls = asyncio.ProactorEventLoop
     else:
         loop_cls = asyncio.SelectorEventLoop
-    return loop_cls(*args, **kwargs)
 
 
 class AsyncioBaseEventLoop(BaseEventLoop, asyncio.Protocol):
@@ -3330,9 +3360,22 @@ class AsyncioEventLoop(AsyncioBaseEventLoop):
 
     """
 
-    _loop = loop_cls()
     _queued_data = deque()
     _raw_transport = None
+    if os.name == "nt":
+        # On windows use ProactorEventLoop which support pipes and is backed by the
+        # more powerful IOCP facility
+        # NOTE: we override in the stdio case, because it doesn't work.
+        loop_cls = asyncio.ProactorEventLoop
+    else:
+        loop_cls = asyncio.SelectorEventLoop
+
+    loop_policy = get_event_loop_policy()
+    _local = loop_policy._local
+    _watcher = loop_policy._watcher
+    # _loop = loop_policy.get_event_loop()
+    _closed = False
+
 
     def __init__(
         self, path=None, argv=None, stdio=False, transport_type=None, **kwargs
@@ -3352,10 +3395,6 @@ class AsyncioEventLoop(AsyncioBaseEventLoop):
         >>> loop = AsyncioEventLoop(stdio=True)
 
         """
-        self.loop_policy = get_event_loop_policy()
-        self._local = self.loop_policy._local
-        self._watcher = self.loop_policy._watcher
-        self._loop = self.loop_policy.get_event_loop()
         self._raw_transport = transport_type
         if isinstance(transport_type, asyncio.SubprocessTransport):
             self._transport = transport_type.get_pipe_transport(0)
@@ -3365,9 +3404,14 @@ class AsyncioEventLoop(AsyncioBaseEventLoop):
         else:
             # TODO: this is wrong.
             self._transport = transport_type
-        self._closed = False
-        self._fact = lambda: self
+
+        # have this initialized for teardown
+        self._signals = []  # type: List[signal.signal]
         super().__init__(transport_type)
+
+    @property
+    def _fact(self):
+        return self
 
     @property
     def reader(self):
@@ -3458,10 +3502,11 @@ class AsyncioEventLoop(AsyncioBaseEventLoop):
     def _send(self, data):
         self._transport.write(data)
 
-    def _run(self):
+    def _run(self, **kwargs):
         while self._queued_data:
             self._on_data(self._queued_data.popleft())
-        self._loop.run_forever()
+        # self._loop.run_forever()
+        super().run(**kwargs)
 
     def _stop(self):
         self._loop.stop()
@@ -4106,7 +4151,7 @@ class UvEventLoop(BaseEventLoop):
 
 EventLoop = UvEventLoop
 
-
+import gc
 gc.collect()
 
 if __name__ == "__main__":

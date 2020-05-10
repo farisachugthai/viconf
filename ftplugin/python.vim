@@ -16,12 +16,12 @@ let g:pyindent_nested_paren = 'shiftwidth()'
 " Indent for a continuation line: >
 let g:pyindent_continue = 'shiftwidth() * 2'
 let g:pydoc_executable = 1
-
-
 " from the indent.vim
 let g:pyindent_disable_parentheses_indenting = 0
-
 let g:pyindent_searchpair_timeout = '250'
+" ALE
+let g:python_pyls_auto_pipenv = 1
+
 " }}}
 
 " Filetype Specific Options: {{{
@@ -149,6 +149,106 @@ if !exists("current_compiler")
     compiler pylint
   endif
 endif
+
+if !exists('b:loaded_ale_python')
+
+  " Goddamn this is so long I might wanna autoload this no?
+  " Eh. Nah.
+  let g:ale_python_pyls_config = {
+        \   'pyls': {
+        \     'plugins': {
+        \       'flake8': {
+        \         'enabled': v:true
+        \       },
+        \ 'jedi_completion': {
+        \   'enabled': v:true
+        \ },
+        \ 'jedi_hover': {
+        \   'enabled': v:true
+        \ },
+        \ 'jedi_references': {
+        \   'enabled': v:true
+        \ },
+        \ 'jedi_signature_help': {
+        \   'enabled': v:true
+        \ },
+        \ 'jedi_symbols': {
+        \   'all_scopes': v:true,
+        \   'enabled': v:true
+        \ },
+        \ 'mccabe': {
+        \   'enabled': v:true,
+        \   'threshold': 15
+        \ },
+        \ 'preload': {
+        \   'enabled': v:true
+        \ },
+        \ 'pycodestyle': {
+        \   'enabled': v:false
+        \ },
+        \ 'pydocstyle': {
+        \   'enabled': v:true,
+        \   'match': '(?!test_).*\\.py',
+        \   'matchDir': '[^\\.].*'
+        \ },
+        \ 'pyflakes': {
+        \   'enabled': v:true
+        \ },
+        \ 'rope_completion': {
+        \   'enabled': v:true
+        \ },
+        \ 'yapf': {
+        \   'enabled': v:true
+        \       }
+        \     }
+        \   }
+        \ }
+
+  let g:ale_python_auto_pipenv = 1
+  let g:ale_python_black_auto_pipenv = 1
+  let g:ale_python_pydocstyle_auto_pipenv = 1
+  let g:ale_python_flake8_auto_pipenv = 1
+  let g:ale_python_pyls_auto_pipenv = 1
+
+  " Checkout ale/autoload/ale/python.vim this is the base definition
+  let g:ale_virtualenv_dir_names = [
+      \   '.env',
+      \   '.venv',
+      \   'env',
+      \   've-py3',
+      \   've',
+      \   'virtualenv',
+      \   'venv',
+      \ ]
+
+  if isdirectory(expand('~/.virtualenvs'))
+    let g:ale_virtualenv_dir_names += [expand('~/.virtualenvs')]
+  endif
+
+  if isdirectory(expand('~/scoop/apps/winpython/current'))
+    let g:ale_virtualenv_dir_names +=  [expand('~/scoop/apps/winpython/current')]
+  endif
+
+  if isdirectory(expand('~/.local/share/virtualenvs'))
+    let g:ale_virtualenv_dir_names += [ expand('~/.local/share/virtualenvs') ]
+  endif
+
+  let g:ale_cache_executable_check_failures = v:true
+  " let g:ale_linters_ignore = {'python': ['pylint']}
+
+  " Example from the help page
+  " Use just ESLint for linting and fixing files which end in '.js'
+  let g:ale_pattern_options = {
+              \   '\.js$': {
+              \       'ale_linters': ['eslint'],
+              \       'ale_fixers': ['eslint'],
+              \ },
+              \ }
+
+  let g:ale_lsp_show_message_severity = 'information'
+  let b:loaded_ale_python = 1
+endif
+
 
 let b:undo_ftplugin .= '|setlocal lbr< tw< cms< et< sts< ts<'
       \ . '|setlocal su< sw< cc< fdm< kp<'
