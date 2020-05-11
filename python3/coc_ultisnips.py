@@ -275,7 +275,7 @@ class ContextSnippet:
         self.line = vim.call("line", ".") - 1
         self.column = vim.call("col", ".") - 1
         line = vim.call("getline", ".")
-        self.after = line[self.column :]
+        self.after = line[self.column:]
         if "coc_selected_text" in vim.vars:
             self.visual_mode = vim.eval("visualmode()")
             self.visual_text = vim.vars["coc_selected_text"]

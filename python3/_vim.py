@@ -9,12 +9,12 @@ Dec 07, 2019: Double checked that this passes a cursory `:py3f %` test and it di
 """
 import json
 import os
+import pprint
 import sys
 import xml.dom.minidom as md
 
 from contextlib import contextmanager
 from pathlib import Path
-from pprint import pprint
 
 try:
     import yaml
@@ -114,7 +114,6 @@ class VimBuffer:
     def _buffer(self):
         self.vim.current.buffer
 
-
     def __getitem__(self, idx):
         if isinstance(idx, slice):  # Py3
             yield self.__getslice__(idx.start, idx.stop)
@@ -202,8 +201,6 @@ class VimBuffer:
 
     def fname(self):
         return self.name
-
-
 
 
 @contextmanager
@@ -409,9 +406,10 @@ if __name__ == "__main__":
     except ImportError:
         UltiSnips = None
 
-    data = vim_eval('stdpath("data")')
-    if Path(data).exists():
-        sys.path.append(data)
+    config = Path(vim_eval('stdpath("config")'))
+    for i in ["python3", "pythonx", "python"]:
+        if (config / i).exists():
+            sys.path.append(str(config / i))
 
     buf = VimBuffer(vim)  # pylint:disable=invalid-name
 

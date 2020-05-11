@@ -72,6 +72,14 @@ cnoremap <C-v> <C-r>"
 
 inoremap <Down> <C-R>=pumvisible() ? "\<lt>C-N>" : "\<lt>Down>"<CR>
 inoremap <Up> <C-R>=pumvisible() ? "\<lt>C-P>" : "\<lt>Up>"<CR>
+
+
+" When typing '#' as the first character in a new line, the indent for that line is removed, the '#'
+" is put in the first column.  The indent is restored for the next line.  If you don't want this,
+" use this mapping:
+inoremap # X^H#
+" where ^H is entered with CTRL-V CTRL-H. HOLY SHIT THANK YOU
+
 " }}}
 
 " Marks: {{{
@@ -717,11 +725,15 @@ if !exists('no_plugin_maps') && !exists('no_windows_vim_maps') && !exists('g:loa
   call Tab_Mappings()
   call Quickfix_Mappings()
   call MapRsi()
-  if !exists('g:autoloaded_fugitive')
-    source $HOME/.local/share/nvim/plugged/vim-fugitive/autoload/fugitive.vim
-  endif
+  " if exists('b:git_dir')  " before we reload this make sure were in a git dir
+  " actually dont. we have to source it regardless and we may as well do it earlier
+  " because &rtp is so long it takes longer for vim to figure than just telling it
+    if !exists('g:autoloaded_fugitive')
+      source $HOME/.local/share/nvim/plugged/vim-fugitive/autoload/fugitive.vim
+    endif
+  " endif
   call UserFugitiveMappings()
   let g:loaded_plugin_mappings = 1
 
-endif
-" }}}
+endif " }}}
+

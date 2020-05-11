@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# {{{
 """Code shared between the API classes.
 
 Neovim allows Python 3 plugins to be defined by placing python files
@@ -24,12 +23,13 @@ requests, i.e. passing async_=True.
 """
 # }}}
 
+import gc
 __package__ = "pynvim"
-__path__ = [__file__]
+# __path__ = [__file__]
 __docformat__ = "reStructuredText"
 __authors__ = "Neovim"
 
-# Imports: {{{
+# Imports:
 import abc
 import asyncio
 import contextlib
@@ -51,10 +51,12 @@ import traceback
 import warnings
 
 from asyncio.events import get_event_loop_policy
+from asyncio.futures import Future
 from asyncio.streams import StreamReader, StreamWriter
 from collections import UserList, deque
 from collections.abc import MutableMapping
 from functools import partial
+from pathlib import Path
 from traceback import format_exception, format_stack, format_exc
 from typing import Dict, Any, AnyStr, Union, List, Optional, Callable
 
@@ -65,14 +67,12 @@ try:
 except ImportError:
     from msgpack.fallback import Packer, unpackb, Unpacker
 
-
 if sys.version_info >= (3, 4):
     from importlib.machinery import PathFinder
 else:
     PathFinder = None
 
 if sys.version_info <= (3, 7):
-
     class ModuleNotFoundError(ImportError):
         """New exception for Python3.7."""
 
@@ -80,15 +80,12 @@ if sys.version_info <= (3, 7):
 
 
 global vim
-
 try:
     import vim  # noqa
 except ImportError:
     pass
 
-# Compat kinda: {{{
-# Not nvim's compat mod
-
+# Compat kinda:
 try:
     from os import PathLike, fspath, fsencode, fsdecode
 except ImportError:
@@ -177,8 +174,7 @@ except ImportError:
 
     fsencode, fsdecode = _fscodec()
 
-
-# Globals: {{{
+# Globals:
 # BUG: don't hardcode this its an actual function we can check
 unicode_errors_default = sys.getfilesystemencodeerrors()
 
@@ -193,9 +189,7 @@ main_thread = threading.current_thread()
 locale.setlocale(locale.LC_ALL, "")
 host_method_spec = {"poll": {}, "specs": {"nargs": 1}, "shutdown": {}}
 
-# }}}
-
-# Pynvim __init__: {{{
+# Pynvim __init__:
 
 
 def _goofy_way_of_loading_plugins():
@@ -267,7 +261,6 @@ def start_host(session=None, load_plugins=True, plugins=None):
 
 
 def _convert_str_to_session(session_type, address=None, port=None, path=None, argv=None, decode=None):
-
     if session_type not in ["socket", "tcp", "stdio", "child"]:
         raise NvimError(
             '%s given. Must be one of "socket", "tcp", "stdio", "child"' % session_type
@@ -281,7 +274,6 @@ def _convert_str_to_session(session_type, address=None, port=None, path=None, ar
     elif session_type == "child":
         session = child_session(argv)
     return session
-
 
 
 def attach(session_type, address=None, port=None, path=None, argv=None, decode=None):
@@ -330,7 +322,9 @@ def attach(session_type, address=None, port=None, path=None, argv=None, decode=N
         if session_type not in ["socket", "tcp", "stdio", "child"]
 
     """
-    return Nvim.from_session(_convert_str_to_session(session_type)).with_decode(decode)
+    return Nvim.from_session(_convert_str_to_session(
+        session_type,  address=None, port=None, path=None, argv=None, decode=None)
+        ).with_decode(decode)
 
 
 def setup_logging(name: AnyStr = None, level: int = None, disable_asyncio_logging=True):
@@ -408,8 +402,6 @@ debug, info, warn, error = (
     logger.warning,
     logger.error,
 )
-
-# }}}
 
 
 def multiprocess_setup_logging(level=30):
@@ -530,7 +522,7 @@ def get_client_info(type_, method_spec, kind=None):
 VERSION = Version(major=0, minor=4, patch=1, prerelease="")
 
 
-# compat: {{{
+# compat:
 
 
 def get_decoded_string(encoded):
@@ -579,9 +571,7 @@ def check_async(async_, kwargs, default):
         return default
 
 
-# }}}
-
-# plugin/decorators: {{{
+# plugin/decorators:
 
 
 def plugin(cls):
@@ -760,7 +750,7 @@ def decode(mode=unicode_errors_default):
 
     return dec
 
-# api/common:Remote: {{{
+# api/common:Remote:
 
 
 class NvimError(Exception):
@@ -831,8 +821,6 @@ class Remote(object):
 
 
 # msgpack_rpc.session:
-
-
 
 class ErrorResponse(NvimError):
     """Raise this in a request handler to respond with a given error message.
@@ -1019,7 +1007,6 @@ class Session(object):
     def close(self):
         """Close the event loop."""
         self._async_session.close()
-
 
     def _yielding_request(self, method, args):
         import greenlet
@@ -1484,7 +1471,6 @@ class Nvim(object):
         """
         return self.request("nvim_strwidth", string)
 
-
     def list_runtime_paths(self):
         """Return a list of paths contained in the 'runtimepath' option."""
         return self.request("nvim_list_runtime_paths")
@@ -1846,35 +1832,34 @@ class LuaModule:
     """Moved into a class so that users can override it if they want."""
 
     def __init__(self):
-        self.lua_module = """
-local a = vim.api
-local function update_highlights(buf, src_id, hls, clear_first, clear_end)
-  if clear_first ~= nil then
-      a.nvim_buf_clear_highlight(buf, src_id, clear_first, clear_end)
-  end
-  for _,hl in pairs(hls) do
-    local group, line, col_start, col_end = unpack(hl)
-    if col_start == nil then
-      col_start = 0
+        import textwrap
+        self.lua_module = textwrap.dedent("""
+    local a = vim.api
+    local function update_highlights(buf, src_id, hls, clear_first, clear_end)
+    if clear_first ~= nil then
+        a.nvim_buf_clear_highlight(buf, src_id, clear_first, clear_end)
     end
-    if col_end == nil then
-      col_end = -1
+    for _,hl in pairs(hls) do
+        local group, line, col_start, col_end = unpack(hl)
+        if col_start == nil then
+        col_start = 0
+        end
+        if col_end == nil then
+        col_end = -1
+        end
+        a.nvim_buf_add_highlight(buf, src_id, group, line, col_start, col_end)
     end
-    a.nvim_buf_add_highlight(buf, src_id, group, line, col_start, col_end)
-  end
-end
+    end
 
-local chid = ...
-local mod = {update_highlights=update_highlights}
-_G["_pynvim_"..chid] = mod
-"""
+    local chid = ...
+    local mod = {update_highlights=update_highlights}
+    _G["_pynvim_"..chid] = mod
+    """)
 
 
 lua_module = LuaModule().lua_module
 
-# }}}
-
-# plugin/scripthost: {{{
+# plugin/scripthost:
 
 
 def path_hook(_vim):
@@ -1992,7 +1977,6 @@ class ScriptHost:
             'call rpcnotify({}, "python_chdir", getcwd())'.format(nvim.channel_id),
             async_=True,
         )
-
 
     def teardown(self):
         """Restore state modified from the `setup` call."""
@@ -2241,17 +2225,6 @@ class VimPathFinder:
         except ImportError:
             return None
 
-    def load_module(self):
-        """Check sys.modules, required for reload (see PEP302).
-
-        Uh no. How about we just implement the loader protocol?
-        """
-        try:
-            return sys.modules[fullname]
-        except KeyError:
-            pass
-        return imp.load_module(fullname, *self.module)
-
 
 def find_spec(fullname, path=None, target=None):
     """Find the `ModuleSpec` for a given module.
@@ -2267,9 +2240,7 @@ def find_spec(fullname, path=None, target=None):
         return PathFinder.find_spec(fullname, path=path, target=target)
     # else VimPathFinder().find_module()
 
-# }}}
-
-# API/buffer: {{{
+# API/buffer:
 
 
 def adjust_index(idx, default=None):
@@ -2516,8 +2487,7 @@ class Range(object):
         return index
 
 
-# {{{ API/common
-
+# API/common:
 
 class RemoteApi(object):
     """Wrapper to allow api methods to be called like python methods.
@@ -2701,9 +2671,7 @@ def walk(fn, obj, *args, **kwargs):
     return fn(obj, *args, **kwargs)
 
 
-# }}}
-
-# msgpack_rpc.msgpack_stream: {{{
+# msgpack_rpc.msgpack_stream:
 
 
 class MsgpackStream(object):
@@ -2842,7 +2810,7 @@ class MsgpackStream(object):
         packed = self._packer.pack(msg)
         debug(packed)
 
-    def run(self, message_cb=None):
+    def run(self, fut):
         """Run the event loop to receive messages from Nvim.
 
         While the event loop is running, `message_cb` will be called whenever
@@ -2852,7 +2820,7 @@ class MsgpackStream(object):
         # self._message_cb = None
         if isinstance(self.loop, asyncio.BaseEventLoop):
             # gotta start awaiting
-            self.loop.run_until_complete(message_cb)
+            self.loop.run_until_complete(fut)
         else:
             self.loop.run(self._on_data)
 
@@ -2880,9 +2848,7 @@ class MsgpackStream(object):
         return f"{self.__class__.__name__}"
 
 
-# }}}
-
-# msgpack_rpc.async_session: {{{
+# msgpack_rpc.async_session:
 
 
 class SessionHandlers(enum.Enum):
@@ -3062,9 +3028,7 @@ class Response(object):
         return f"{self.__class__.__name__}"
 
 
-# }}}
-
-# msgpack_rpc.event_loop.base: {{{
+# msgpack_rpc.event_loop.base:
 
 if os.name.startswith("Win"):
 
@@ -3296,9 +3260,7 @@ class BaseEventLoop(_PlatformSpecificLoop):
         pass
 
 
-# }}}
-
-# mspack_rpc.event_loop.asyncio: {{{
+# mspack_rpc.event_loop.asyncio:
 
 # Triple subclassed?
 
@@ -3329,6 +3291,7 @@ class AsyncioEventLoop(BaseEventLoop, asyncio.SubprocessProtocol, asyncio.Protoc
         loop_cls = asyncio.ProactorEventLoop
     else:
         loop_cls = asyncio.SelectorEventLoop
+    _loop = loop_cls()
 
 
 class AsyncioBaseEventLoop(BaseEventLoop, asyncio.Protocol):
@@ -3376,7 +3339,6 @@ class AsyncioEventLoop(AsyncioBaseEventLoop):
     # _loop = loop_policy.get_event_loop()
     _closed = False
 
-
     def __init__(
         self, path=None, argv=None, stdio=False, transport_type=None, **kwargs
     ):
@@ -3395,6 +3357,13 @@ class AsyncioEventLoop(AsyncioBaseEventLoop):
         >>> loop = AsyncioEventLoop(stdio=True)
 
         """
+        self.loop_policy = get_event_loop_policy()
+        self._local = self.loop_policy._local
+        self._watcher = self.loop_policy._watcher
+        try:
+            self._loop = self.loop_policy.get_event_loop()
+        except RuntimeError:
+            self._loop = self.loop_policy.new_event_loop()
         self._raw_transport = transport_type
         if isinstance(transport_type, asyncio.SubprocessTransport):
             self._transport = transport_type.get_pipe_transport(0)
@@ -3540,13 +3509,8 @@ class AsyncioEventLoop(AsyncioBaseEventLoop):
         pass
 
 
-# }}}
-
-# msgpack.__init__: {{{
-
+# msgpack.__init__:
 # Keep below asyncio mod
-
-# EventLoop = AsyncioEventLoop
 
 
 def session(transport_type="stdio", *args, **kwargs) -> Session:
@@ -3595,7 +3559,7 @@ def child_session(argv=None):
     """Create a msgpack-rpc session from a new Nvim instance."""
     return session("child", argv)
 
-# api.window: {{{
+# api.window:
 
 
 class Window(Remote):
@@ -3672,7 +3636,7 @@ class Window(Remote):
         return f"{self.__class__.__name__}"
 
 
-# api.tabpage: {{{
+# api.tabpage:
 class Tabpage(Remote):
     """A remote Nvim tabpage."""
 
@@ -3706,8 +3670,7 @@ class Tabpage(Remote):
         return f"{self.__class__.__name__}"
 
 
-# plugin/host: {{{
-host_method_spec = {"poll": {}, "specs": {"nargs": 1}, "shutdown": {}}
+# plugin/host:
 
 
 class Host:
@@ -3992,9 +3955,7 @@ class Host:
         return nvim
 
 
-# }}}
-
-# msgpack_rpc.event_loop.pyuv: {{{
+# msgpack_rpc.event_loop.pyuv:
 
 
 try:
@@ -4151,17 +4112,21 @@ class UvEventLoop(BaseEventLoop):
 
 EventLoop = UvEventLoop
 
-import gc
 gc.collect()
 
 if __name__ == "__main__":
-    import pytest
-    # from _pytest.config import Config
-    # conf = Config('..')
-    # pytest.Session(conf)
-    old_cwd = Path.cwd()
-    os.chdir('..')
-    pytest.main()
-    os.chdir(old_cwd)
+    # import pytest
+    # # from _pytest.config import Config
+    # # conf = Config('..')
+    # # pytest.Session(conf)
+    # old_cwd = Path.cwd()
+    # os.chdir('..')
+    # pytest.main()
+    # os.chdir(old_cwd)
+    # from _pytest.python import Module
+    # mod = Module(os.path.abspath(os.
+    from py._path.local import LocalPath
+    f = LocalPath(os.path.abspath(__file__))
+    f.pyimport()
 
-# Vim: set fdm=marker fdls=0:
+# Vim: set fdm=indent fdls=0:

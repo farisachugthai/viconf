@@ -36,6 +36,7 @@ let &l:define = '^\s*\ze\k\+\s*=\s*function('
 " endif
 
 call ftplugins#ALE_JS_Conf()
+" }}}
 
 " Atexit: {{{
 let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
@@ -43,3 +44,5 @@ let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
                 \ . '|setlocal include< define< '
                 \ . '|unlet! b:undo_ftplugin'
                 \ . '|unlet! b:did_ftplugin'
+" }}}
+

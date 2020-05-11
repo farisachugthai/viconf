@@ -15,6 +15,13 @@ let g:sh_fold_enabled= 3  "   (enables function and heredoc folding)
 let g:readline_has_bash = 1
 
 let b:is_bash = 1
+let b:shell_is_bash = match(expand('$SHELL'), 'bash')
+if !b:shell_is_bash
+  let g:ale_sh_shell_default_shell = 1
+else
+  let g:ale_sh_shell_default_shell = 0
+endif
+
 let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
 let b:ale_linters = ['language_server', 'shell']
 " }}}
@@ -28,9 +35,6 @@ source $VIMRUNTIME/ftplugin/sh.vim
 source $VIMRUNTIME/indent/sh.vim
 setlocal commentstring=#\ %s
 setlocal shiftwidth=4 expandtab softtabstop=4 ts=4
-syntax enable
-syntax sync fromstart linebreaks=2
-setl syntax=bash
 setlocal colorcolumn=120
 " todo: ensure it works
 setlocal include=^\s*\%(so\%[urce]\*\zs[^\|]*
@@ -56,11 +60,10 @@ if executable('shellcheck') || executable('shellcheck.exe')
   noremap <buffer> <F5> <Cmd>make %<CR>
   noremap! <buffer> <F5> <Cmd>make %<CR>
 
-  let b:undo_ftplugin .= '|setlocal makeprg<'
+  let b:undo_ftplugin .= '|setlocal makeprg< efm<'
       \ . '|silent! unmap <buffer> <F5>'
       \ . '|silent! unmap! <buffer> <F5>'
 endif
 
-call ftplugins#ALE_sh_conf()
 " }}}
 

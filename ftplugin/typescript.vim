@@ -7,9 +7,12 @@
 
 if exists('b:did_ftplugin') | finish | endif
 
-" Simple Options: {{{
-source $VIMRUNTIME/ftplugin/javascript.vim
+let s:ftplugin_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h'))
+exec 'source ' . s:ftplugin_root . '/javascript.vim'
+unlet! b:did_indent
 source $VIMRUNTIME/indent/typescript.vim
+
+" Simple Options: {{{
 setlocal expandtab tabstop=4 softtabstop=2 shiftwidth=2
 setlocal include=^\\s*[^\/]\\+\\(from\\\|require(\\)\\s*['\"\.]
 let &l:define  = '^\s*\('

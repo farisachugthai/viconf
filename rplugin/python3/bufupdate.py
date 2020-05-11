@@ -1,5 +1,6 @@
 import pynvim
 
+
 @pynvim.plugin
 class WatchPlugin(object):
 
@@ -19,7 +20,6 @@ class WatchPlugin(object):
         if not more:
             self.on_update(bufnr, data, 0, -1)
 
-
     @pynvim.rpc_export("LiveUpdate")
     def liveupdate(self, bufnr, first, num, data):
         self.buffers[bufnr][first:first+num] = data
@@ -28,14 +28,15 @@ class WatchPlugin(object):
     @pynvim.rpc_export("LiveUpdateEnd")
     def liveupdateend(self, bufnr):
         del self.buffers[bufnr]
-        #TODO: event also here
+        # TODO: event also here
 
     def on_update(self, bufnr, data, first, num):
         pass
 
     @pynvim.function("WatchDebug", sync=True)
     def debug(self, args):
-        return {str(k):v for (k,v) in self.buffers.items()}
+        return {str(k): v for (k, v) in self.buffers.items()}
+
 
 def main():
     return WatchPlugin(pynvim.Nvim.from_nvim(pynvim.plugin.script_host.vim))

@@ -5,7 +5,9 @@
     " Last Modified: Nov 06, 2019
 " ============================================================================
 
-" Only do this when not done yet for this buffer
+if filereadable('C:/tools/vs/2019/Community/VC/Tools/Llvm/bin/clang-format.exe')
+  let g:clang_format_path = 'C:/tools/vs/2019/Community/VC/Tools/Llvm/bin/clang-format.exe'
+endif
 
 if exists('b:did_ftplugin') | finish | endif
 
@@ -23,11 +25,8 @@ let g:compiler_gcc_ignore_unmatched_lines = 1
 
 source $VIMRUNTIME/ftplugin/c.vim
 source $VIMRUNTIME/indent/c.vim
-syntax sync fromstart
-syntax enable
 setlocal foldmethod=syntax
 setlocal suffixesadd=.c,.h,.cpp
-setlocal cindent
 
 if filereadable('Makefile')
   setlocal makeprg=make\ %<.o
@@ -55,8 +54,13 @@ if getenv('$MANPATH')
   let &l:path .= expand('$MANPATH')
 endif
 
-let b:undo_ftplugin .= '|setlocal sua< cin< mp< ofu< kp< include<'
+let l:lines='all'
+let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
+let b:ale_fixers += [ 'clang-format' ]
+
+let b:undo_ftplugin .= '|setlocal fdm!< sua< mp< ofu< kp< include<'
       \. '|unlet! &l:path'
+      \. '|unlet! b:ale_fixers'
       \. '|unlet! b:undo_ftplugin'
 " }}}
 

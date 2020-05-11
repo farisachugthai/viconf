@@ -42,7 +42,7 @@
     "lib": "rplugin/node"
   },
   "engines": {
-    "coc.nvim": ">= 0.0.77"
+    "coc": ">= 0.0.77"
   },
   "keywords": [
     "coc.nvim",
@@ -72,5 +72,8 @@
     "vimlsp": "yarn run vim-language-server --stdio",
     "watch": "yarn run tsc -w rplugin/node"
   },
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "dependencies": {
+    "neovim": "^4.8.0"
+  }
 }

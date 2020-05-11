@@ -5,6 +5,8 @@
   " Last Modified: November 14, 2019
 " ============================================================================
 
+let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
+
 function! py#taglist() abort  " {{{
   " Let's return the value from `vim.call` so that we can check it later if
   " need be
@@ -36,7 +38,6 @@ function! py#PythonPath() abort  " {{{1
   return s:path
 endfunction  " }}}
 
-
 function! py#SecondTry() abort  " {{{
 
   let s:temp_python = exepath('python3')
@@ -66,10 +67,8 @@ function! py#SecondTry() abort  " {{{
         let s:path = s:root_dir . '/lib' . s:path
       endif
    endif
-
    return s:path
-
-endfunction
+endfunction  " }}}
 
 function! py#YAPF() abort  " {{{1
   if exists(':TBrowseOutput')
@@ -86,25 +85,8 @@ function! py#YAPF() abort  " {{{1
   endif
 endfunction  " }}}
 
-function! py#ALE_Python_Conf() abort  " {{{1
-  let b:ale_linters = ['flake8', 'pydocstyle', 'pyls']
-  let b:ale_linters_explicit = 1
-
-  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
-  let b:ale_fixers += [ 'reorder-python-imports' ]
-
-  if executable('black')
-    let b:ale_fixers+=['black']
-  endif
-
-  if executable('autopep8')
-    let b:ale_fixers += ['autopep8']
-  endif
-endfunction  " }}}
-
 function! py#Black() abort  " {{{
   " TODO: at some point or another should accept ranges as arguments
-  let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
   let s:src = s:repo_root . '/python3/pybuffers.py'
   exec 'py3file ' . s:src
   py3 from pybuffers import blackened_vim;
@@ -165,7 +147,7 @@ function! py#Cnxn(bang, ...) abort  " {{{
 
 endfunction  " }}}
 
-function! py#Yours(bang, ...)  abort
+function! py#Yours(bang, ...)  abort  " {{{
   call s:OpenIPython(a:000)
   if has('unix')
     call chansend(&channel, "import pynvim_,os\n")
@@ -175,7 +157,7 @@ function! py#Yours(bang, ...)  abort
     call chansend(&channel, "import pynvim_,os\r\n")
     call chansend(&channel, "n = pynvim_.attach('socket', path=os.environ.get('nvim_listen_address'))\r\n")
   endif
-endfunction
+endfunction " }}}
 
 function! s:check_modified() abort  " {{{
   " TODO:
@@ -256,3 +238,4 @@ function! py#ErrorFormat() abort  " {{{
   let &l:efm = s:efm
   return s:efm
 endfunction  " }}}
+

@@ -28,30 +28,6 @@ function! ftplugins#ALE_CSS_Conf() abort  " {{{
     let b:ale_fixers += ['prettier']
 endfunction  " }}}
 
-function! ftplugins#ALE_sh_conf() abort  " {{{
-  " this is probably a waste of time when compiler shellcheck exists
-  " if we're using powershell or cmd on windows set ALEs default shell to bash
-  " TODO: set the path to shellcheck.
-    let l:shell_is_bash = match(expand('$SHELL'), 'bash')
-    if !l:shell_is_bash
-      let g:ale_sh_shell_default_shell = 1
-    else
-      let g:ale_sh_shell_default_shell = 0
-    endif
-    " let s:bash_location = exepath('bash')
-    " if executable(s:bash_location)
-    "   let g:ale_sh_shell_default_shell = 1
-    " endif
-
-  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
-
-  let b:ale_linters = ['shell', 'shellcheck']
-
-  " if !has('unix')
-  "   let b:ale_sh_shellcheck_executable = 'C:/tools/miniconda3/envs/neovim/bin/shellcheck.exe'
-  " endif
-endfunction  " }}}
-
 function! ftplugins#ALE_Html_Conf() abort  " {{{
   let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
   " he checks for executability too let's say fuck it

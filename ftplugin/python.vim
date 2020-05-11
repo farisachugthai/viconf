@@ -36,35 +36,24 @@ if exists('b:did_indent') | unlet! b:did_indent | endif
 source $VIMRUNTIME/indent/python.vim
 
 " Idk why but their indentexpr wont stop raising
-" First one from $VIMRUNTIME/indent/python.vim 2nd from the ftplugin
-setlocal indentkeys+=<:>,=elif,=except
-setlocal indentkeys-=0#
 " But lets set the other stuff first
 setlocal autoindent
-setlocal indentexpr=
 setlocal nowrap
 
 setlocal nolinebreak  " Dont set this on itll create syntaxerors
-setlocal textwidth=80
+setlocal textwidth=88
 setlocal tagcase=smart
-setlocal comments=b:#,fb:-
-setlocal commentstring=#\ %s
-setlocal tabstop=4 shiftwidth=4 expandtab softtabstop=4
+setlocal tabstop=4 
 
 setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
-setlocal cinkeys-=0#
 
 setlocal nolisp		" Make sure lisp indenting doesn't supersede us
-
-setlocal include=^\\s*\\(from\\\|import\\)
-" this is in the help docs for `:he includeexpr` and states for java but i bet
-" itd work for python
-setlocal includeexpr=substitute(v:fname,'\\.','/','g')
 
 " also let's know where the line needs to end visually but not invoke the
 " linters to react.
 setlocal colorcolumn=80,120
 setlocal foldmethod=indent
+setlocal foldlevelstart=0 foldignore=
 
 setlocal tags=tags,**,$HOME/**
 setlocal suffixesadd=.py,pyi,__init__.py
@@ -132,8 +121,6 @@ nnoremap <buffer> ,eb <Cmd>py3f %<CR>
 "   endif
 " endif
 
-call py#ALE_Python_Conf()
-
 " Just tried this and it worked! So keep checking :CocCommand output
 if !empty('g:did_coc_loaded')
   command! -nargs=* -bar CocPython call CocActionAsync('runCommand', 'python.startREPL', shellescape(<q-args>))
@@ -149,11 +136,25 @@ if !exists("current_compiler")
     compiler pylint
   endif
 endif
+" }}}
 
-if !exists('b:loaded_ale_python')
+if !exists('b:loaded_ale_python') " {{{
 
   " Goddamn this is so long I might wanna autoload this no?
   " Eh. Nah.
+  let b:ale_linters = ['flake8', 'pydocstyle', 'pyls']
+  let b:ale_linters_explicit = 1
+
+  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
+  let b:ale_fixers += [ 'reorder-python-imports' ]
+
+  if executable('black')
+    let b:ale_fixers+=['black']
+  endif
+
+  if executable('autopep8')
+    let b:ale_fixers += ['autopep8']
+  endif
   let g:ale_python_pyls_config = {
         \   'pyls': {
         \     'plugins': {
@@ -248,22 +249,23 @@ if !exists('b:loaded_ale_python')
   let g:ale_lsp_show_message_severity = 'information'
   let b:loaded_ale_python = 1
 endif
+" }}}
 
-
-let b:undo_ftplugin .= '|setlocal lbr< tw< cms< et< sts< ts<'
-      \ . '|setlocal su< sw< cc< fdm< kp<'
-      \ . '|setlocal sr< sua< isf< ep< fp< path< cinw<'
-      \ . '|setlocal mp< efm< isk< tags<'
-      \ . '|setlocal comments<'
-      \ . '|setlocal include< inex<'
-      \ . '|setlocal indk< inde'
-      \ . '|setlocal omnifunc<'
-      \ . '|setlocal ai< cin< cink<'
+let b:undo_ftplugin .= '|setlocal lbr< tw< cms<'
+      \ . '|setlocal et< sts< ts< su< sw< cc< fdm<'
+      \ . '|setlocal fdls< fdi< kp< sr< sua< isf< ep<'
+      \ . '|setlocal fp< path< cinw< mp< efm<'
+      \ . '|setlocal isk< tags< com< inc< inex<'
+      \ . '|setlocal indk< inde ofu< ai< cin< cink<'
       \ . '|silent! unmap <buffer> <F5>'
       \ . '|silent! nunmap <buffer> K'
       \ . '|silent! unmap! <buffer> <F5>'
       \ . '|silent! nunmap <buffer> ,eb'
       \ . '|unlet! b:undo_ftplugin'
       \ . '|unlet! b:did_ftplugin'
+      \ . '|unlet! b:did_indent'
+      \ . '|unlet! b:ale_linters'
+      \ . '|unlet! b:ale_fixers'
+      \ . '|unlet! b:ale_linters_explicit'
 " }}}
 "

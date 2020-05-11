@@ -55,4 +55,3 @@ alt_options = namedtuple(
 # import pkg_resources
 # distribution = pkg_resources.get_distribution("pynvim")
 # __version__ = distribution.version
-

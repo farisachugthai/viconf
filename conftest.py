@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """The pynvim official conftest."""
+import pytest
+from py._path.local import LocalPath
 import json
 import os
 import sys
@@ -10,8 +12,6 @@ here = os.path.dirname(os.path.abspath(__file__))
 
 sys.path.insert(0, os.path.join(here, 'python3'))
 
-from py._path.local import LocalPath
-import pytest
 # from _pytest.config import ConftestImportFailure
 
 
@@ -47,8 +47,9 @@ def old_vim():
     return editor
 
 
-local_path = LocalPath("python3/pynvim.py")
-pynvim  = local_path.pyimport()
+local_path = LocalPath(os.path.abspath(".") + "/python3/pynvim.py")
+pynvim = local_path.pyimport()
+
 
 @pytest.fixture(scope="session")
 def vim():

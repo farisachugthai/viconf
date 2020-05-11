@@ -9,11 +9,11 @@
 #    Personal snippets  #
 #########################
 
-snippet path "Refer to a file in the same dir as the script."
+snippet :p "Refer to a file in the same dir as the script."
 ${1:let ${2:${VISUAL:s:local_vimrc}} = }}fnamemodify(resolve(expand('${3:<sfile>}')), '${4::p:h}')
 endsnippet
 
-snippet gvar "Global / configuration variable" b
+snippet g: "Global / configuration variable" b
 if !exists('g:${1:${VISUAL}}')
   let g:$1 = ${2:"${3:<tab>}"}
 endif
@@ -44,8 +44,9 @@ endsnippet
 
 snippet fun "function with simple tabstops" b
 function! ${1:function_name}($2) abort
-  ${3:'code'}
-endfunction$0
+  ${3:${VISUAL}}
+endfunction
+$0
 endsnippet
 
 snippet header "standard Vim script file header" b
@@ -53,8 +54,9 @@ snippet header "standard Vim script file header" b
   " File: ${1:`!v expand('%:t')`}
   " Author: ${2:`!v g:snips_author`}
   " Description: ${3:${VISUAL:A description of the file below}}
-  ${4:" Last Modified: `!v strftime("%B %d, %Y")`}$0
+  ${4:" Last Modified: `!v strftime("%B %d, %Y")`}
 " =======================================================================
+$0
 endsnippet
 
 snippet ft "Ftplugin guard" b
@@ -62,9 +64,10 @@ if exists('b:did_ftplugin') | finish | endif
 source $VIMRUNTIME/ftplugin/`!p rv=snip.basename`
 
 let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
-                      \. '|setlocal ${0:${VISUAL}}'
+                      \. '|setlocal ${1:${VISUAL}}'
                       \. '|unlet! b:undo_ftplugin'
                       \. '|unlet! b:did_ftplugin'
+$0
 endsnippet
 
 snippet syntax "Syntax file guard" b
@@ -75,6 +78,7 @@ elseif exists(${1:'b:current_syntax'})
 endif
 
 let ${1:b:current_syntax} = 1
+$0
 endsnippet
 
 snippet func "Autocompletes function name based on filename" b
@@ -87,8 +91,9 @@ snippet try "try ... catch statement. Defaults to catch everything" ib
 try
   ${1:${VISUAL}}
 catch ${2:/.*/}
-  $0
+  $3
 endtry
+$0
 endsnippet
 
 ###############

@@ -82,11 +82,13 @@ def sortfile(spellfile):
     sorted_spellfile = sorted(spellobj)
     return sorted_spellfile
 
+
 def vim_sort(spellfile=None):
     """If you want ann xmap or something."""
     if spellfile is None:
         spellfile = vim.current.buffer
     vim.eval(":keepmarks '<,'>!sort")
+
 
 def main():
     """Execute the module.

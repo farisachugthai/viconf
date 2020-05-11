@@ -18,13 +18,11 @@ augroup UserHelpandPython " {{{
   " inspired by $VIMRUNTIME/plugin/man.vim
   " autocmd BufReadCmd pydoc:// call pydoc_help#foo(matchstr(expand('<amatch>'), 'pydoc://\zs.*'))
 
-  " Honestly idk why this isn't working any other way like wth
-  autocmd FileType python setlocal indentexpr=
   " Here's a solid group to test out on
   " Blocks the UI and jams shit
   " au! CursorHold .xonshrc ++nested exe "silent! psearch " . expand("<cword>")
 
-  autocmd BufWinEnter * if &previewwindow | setlocal nonumber nornu | endif
+  autocmd BufWinEnter * if &previewwindow | setlocal nonumber nornu | else | setlocal number relativenumber |  endif
 
 augroup END
 " }}}
@@ -68,10 +66,14 @@ augroup UserPlugins " {{{
 
   " autocmd! User CursorHoldI
   " todo: why did he add the exclamation mark and the nested?
-  autocmd! User GoyoEnter nested call <SID>goyo_enter()
-  autocmd! User GoyoLeave nested call <SID>goyo_leave()
+  if exists('#GoyoEnter')
+    autocmd! User GoyoEnter nested call <SID>goyo_enter()
+    autocmd! User GoyoLeave nested call <SID>goyo_leave()
+  endif
 
-  autocmd! User vim-which-key call which_key#register('<Space>', 'g:which_key_map')
+  if exists('#vim-which-key')
+    autocmd! User vim-which-key call which_key#register('<Space>', 'g:which_key_map')
+  endif
 augroup END " }}}
 
 augroup UserPotpourri  " {{{
@@ -81,7 +83,7 @@ augroup UserPotpourri  " {{{
   autocmd CmdwinEnter [/?]  startinsert
   autocmd CmdwinLeave [/?]  stopinsert
 
-  autocmd Syntax * syntax sync fromstart
+  autocmd Syntax * syntax sync fromstart linebreaks=2
   " hopefully this will only call one time
   " so far is working perfectly
   " autocmd VimEnter * call UltiSnipsConf()
@@ -143,11 +145,14 @@ augroup UserTerm " {{{
   autocmd TermOpen * setlocal nomodified norelativenumber foldcolumn=0 signcolumn=
 
   " April 14, 2019: To enter |Terminal-mode| automatically:
-  autocmd TermOpen * startinsert
+  " Use TermEnter instead of TermOpen
+  autocmd TermEnter * startinsert
 
   " Jul 17, 2019: It's been like 3 months and I only recently realized
   " that I didn't mention to leave insert mode when the terminal closes...
-  autocmd TermClose * stopinsert
+  " Leave instead of close so if the term is still open but you switch buffers
+  " you go back to normal
+  autocmd TermLeave * stopinsert
 
   " Set up mappings
   autocmd TermOpen * call buffers#terminals()
@@ -157,5 +162,14 @@ augroup UserTerm " {{{
   "   \|setlocal winhighlight=StatusLine:StatusLineTerm,StatusLineNC:StatusLineTermNC
   "   \|else|setlocal winhighlight=|endif
 
+	" *TermResponse*
+" TermResponse			After the response to t_RV is received from
+	" 			the terminal.  The value of |v:termresponse|
+	" 			can be used to do things depending on the
+	" 			terminal version.  Note that this event may be
+	" 			triggered halfway through another event
+	" 			(especially if file I/O, a shell command, or
+	" 			anything else that takes time is involved).
+  au TermResponse * echomsg 'Term response was ' . v:termresponse
 augroup END  " }}}
 

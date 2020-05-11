@@ -1,6 +1,8 @@
 # Git Ignore
 # Maintainer: Faris Chugthai
 
+.venv
+
 # Sphinx build files: From pandas-website
 searchindex.js
 robots.txt

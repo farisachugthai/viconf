@@ -4,6 +4,8 @@
 PYTHON ?= python3
 
 BUILD_VIRTUAL_ENV:=.venv
+source    := $(shell source)
+activate=$(BUILD_VIRTUAL_ENV)/bin/activate
 
 .PHONY: install check clean vint flake8
 
@@ -16,8 +18,10 @@ help:
 	@echo "clean"
 
 venv:
-	@mkdir -p @$(BUILD_VIRTUAL_ENV)
-	@$(PYTHON) -m venv --prompt nvim @$(BUILD_VIRTUAL_ENV)
+	@echo "Making a venv\n"
+	@$(PYTHON) -m venv --prompt nvim $(BUILD_VIRTUAL_ENV)
+	@echo "Activating it\n"
+	$(source) $(activate)
 	$(PYTHON) -m pip install vim-vint 
 	$|/bin/python -m pip install -q flake8>=3.5.0
 

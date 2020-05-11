@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
+from pynvim import Nvim   # ?
 import time
 import sys
 from pathlib import Path
 
 sys.path.insert(0, Path("../python3").resolve().__fspath__())
-
-from pynvim import Nvim   # ?
 
 
 def test_call_and_reply(vim):
