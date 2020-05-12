@@ -139,17 +139,7 @@ function! pydoc_help#Pydoc(bang, ...) abort  " {{{
   " If you tap <C-r><C-f> on the cmdline it automatically inserts
   " the text under your cursor like wtffffff
   if !len(a:000) > 0
-    return
-  endif
-
-  if a:1 is ''
-    if expand('<cfile>') is ''
-      return
-    else
-      let s:word = expand('<cfile>')
-    endif
-  else
-    let s:word = a:1
+    let s:word = expand('<cfile>')
   endif
 
   " Step 2: Create the buffer. Let's do them a favor and save the buffer before we leave.

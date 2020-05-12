@@ -1,14 +1,12 @@
-" ============================================================================
+" ========================================================================
   " File: help.vim
   " Author: Faris Chugthai
   " Description: Help files basically don't have an ftplugin
   " Last Modified: September 10, 2019
-" ============================================================================
+" ========================================================================
 
 if exists('b:did_ftplugin') | finish | endif
 source $VIMRUNTIME/ftplugin/help.vim
-
-
 setlocal iskeyword+=-
 setlocal relativenumber number
 setlocal foldcolumn=0 signcolumn=
@@ -19,7 +17,6 @@ setlocal shiftwidth=8
 setlocal breakindent
 
 setlocal wrap  " scrolling horizontally to read sucks
-
 " Oh shit i found duplicated code.
 " NOTE: I mean code duplicated in the neovim source code.
 " autoload/man.vim and ftplugin/man.vim have 1 function copy pasted
@@ -28,8 +25,7 @@ setlocal wrap  " scrolling horizontally to read sucks
 " nnoremap <buffer> gO :call <sid>show_toc()<cr>
 " You can't map something to a function prefixed with <SID>? Dude
 " script local namespaces are so poorly done.
-"
-"
+
 " Back on track. I mess up this binding too often
 nnoremap <buffer> go gO
 

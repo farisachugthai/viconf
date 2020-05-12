@@ -6,6 +6,7 @@
 " ============================================================================
 
 if exists('b:did_ftplugin') | finish | endif
+let b:did_ftplugin = 1
 
 " don't source the config from runtime it only does this anyway
 setlocal formatoptions-=t formatoptions+=croql

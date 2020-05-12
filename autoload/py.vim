@@ -5,6 +5,8 @@
   " Last Modified: November 14, 2019
 " ============================================================================
 
+let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
+
 function! py#taglist() abort  " {{{
   " Let's return the value from `vim.call` so that we can check it later if
   " need be
@@ -18,18 +20,19 @@ function! py#nvim_taglist() abort  " {{{
 endfunction  " }}}
 
 function! py#PythonPath() abort  " {{{1
-  if !has('python3')
-    return
-  endif
   py3 import site
   let s:path = '.,,**,'
   let s:user_site = py3eval('site.USER_SITE')
-  if len(s:user_site) ==# 0
+  if s:user_site ==# 0
+    let s:path = py#SecondTry()
     return s:path
   endif
 
   let s:path .= s:user_site
   let l:python_path = py3eval('sys.path')
+  if l:python_path ==# 0
+    return
+  endif
   for l:i in l:python_path
     let s:path .=   ',' . l:i
     " Got this idea from tpope. thanks for the genius as always
@@ -37,6 +40,38 @@ function! py#PythonPath() abort  " {{{1
   endfor
   let &l:path = s:path
   return s:path
+endfunction  " }}}
+
+function! py#SecondTry() abort  " {{{
+
+  let s:temp_python = exepath('python3')
+  if s:temp_python !=# ''
+    let g:python3_host_prog = s:temp_python
+    if has('unix')
+      let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h:h')
+      let s:site_pack = s:root_dir . '/lib/python3.8/site-packages/**,'
+      let s:path = s:root_dir . '/lib/python3.8/*' . s:path . ','
+
+      let s:path = s:path . s:site_pack
+      let s:path =  s:root_dir . '/lib/python3.8/**/*' . ',' . s:path
+
+    " sunovabitch conda doesn't put stuff in the same spot. TODO: check the ret value of exepath
+    " for a match of "conda" instead of a unix check
+    else
+        let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h')
+
+        let s:site_pack = s:root_dir . '/lib/site-packages/**2/'
+        let s:path = s:path . s:site_pack
+
+        " This option requires that the **# either is at the end of the path or
+        " ends with a '/'
+        " let s:path =  ',' . s:root_dir . '/lib/**1/' . s:path . ','
+        " make this last. its the standard lib and we prepend it to the path so
+        " it should be first in the option AKA last in the function
+        let s:path = s:root_dir . '/lib' . s:path
+      endif
+   endif
+   return s:path
 endfunction  " }}}
 
 function! py#YAPF() abort  " {{{1
@@ -55,18 +90,6 @@ function! py#YAPF() abort  " {{{1
 endfunction  " }}}
 
 function! py#ALE_Python_Conf() abort  " {{{1
-  let b:ale_linters = ['flake8', 'pylint', 'pyls']
-  let b:ale_linters_explicit = 1
-
-  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
-  let b:ale_fixers += [ 'reorder-python-imports' ]
-
-  if executable('black')
-    let b:ale_fixers+=['black']
-  endif
-
-  let b:ale_fixers += ['autopep8']
-  let b:ale_fixers += ['isort']
 
 endfunction  " }}}
 

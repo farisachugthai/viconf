@@ -1,18 +1,28 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """The pynvim official conftest."""
+import inspect
 import json
 import os
 import sys
 import tempfile
+import warnings
 
 import pytest
 from py._path.local import LocalPath
 # from _pytest.config import ConftestImportFailure
+from py._path.local import LocalPath
 
-here = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.join(here, 'python3'))
-from pynvim import attach, start_host
+warnings.simplefilter('ignore', DeprecationWarning)
+filename = inspect.getframeinfo(inspect.currentframe()).filename
+path = os.path.dirname(os.path.abspath(filename))
+sys.path.insert(0, os.path.join(path, 'python3'))
+
+f = LocalPath(os.path.join(
+    path, "", "python3", "pynvim.py",
+    ))
+f.pyimport()
+
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -46,17 +56,13 @@ def old_vim():
 
     return editor
 
-
-local_path = LocalPath("python3/pynvim_.py")
-pynvim  = local_path.pyimport()
-
 @pytest.fixture(scope="session")
 def vim():
     inside_nvim = os.environ.get('NVIM_LISTEN_ADDRESS')
     if inside_nvim:
         editor = attach("socket", path=inside_nvim)
-        editor = attach("socket", path=listen_address)
-        editor = pynvim.attach("socket", path=listen_address)
     else:
-        editor = start_host("stdio", load_plugins=False)
+        # editor = start_host("stdio", load_plugins=False)
+        child_argv = '["nvim", "-u", "NONE", "--embed", "--headless"]'
+        editor = attach("child", argv=json.loads(child_argv))
     return editor

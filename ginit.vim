@@ -48,8 +48,9 @@ GuiLinespace 1
 
 " Glyphs and icons seem to work! --> oh well. good enough.
 GuiFont Droid\ Sans\ Mono
+
 " setglobal guifont=Droid\ Sans\ Mono
-set guifont=*
+" set guifont=*
 " }}}
 
 command! -bar GuiName echo GuiName()

@@ -1,27 +1,11 @@
-" " ============================================================================
+" ========================================================================
     " File: format.vim
     " Author: Faris Chugthai
     " Description: Autoloaded formatter from :he format-formatexpr
     " Last Modified: February 24, 2019
-" ============================================================================
+" ========================================================================
 
 function! format#Format() abort  " {{{
-  "                                                         *format-formatexpr*
-  " The 'formatexpr' option can be set to a Vim script function that performs
-  " reformatting of the buffer.  This should usually happen in an |ftplugin|,
-  " since formatting is highly dependent on the type of file.  It makes
-  " sense to use an |autoload| script, so the corresponding script is only loaded
-  " when actually needed and the script should be called <filetype>format.vim.
-
-  " For example, the XML filetype plugin distributed with Vim in the $VIMRUNTIME
-  " directory, sets the 'formatexpr' option to: >
-
-  "    setlocal formatexpr=xmlformat#Format()
-
-  " That means, you will find the corresponding script, defining the
-  " xmlformat#Format() function, in the directory:
-  " `$VIMRUNTIME/autoload/xmlformat.vim`
-
   " Here is an example script that removes trailing whitespace from the selected
   " text.  Put it in your autoload directory, e.g. ~/.vim/autoload/format.vim: >
   " only reformat on explicit gq command
@@ -87,12 +71,3 @@ function! format#ClangCheck()  abort  " {{{
   endif
 endfunction  " }}}
 
-function! format#FormatFile() abort  " {{{
-  let l:lines='all'
-  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
-  let b:ale_fixers += [ 'clang-format' ]
-
-  if filereadable('C:/tools/vs/2019/Community/VC/Tools/Llvm/bin/clang-format.exe')
-    let g:clang_format_path = 'C:/tools/vs/2019/Community/VC/Tools/Llvm/bin/clang-format.exe'
-  endif
-endfunction  " }}}

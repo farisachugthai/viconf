@@ -5,8 +5,6 @@
   " Last Modified: Feb 12, 2020
 " ============================================================================
 
-" tmp:
-set debug=msg
 " Preliminary: {{{
 " These are the options that I consider the minimum requirements to running
 scriptencoding utf-8
@@ -15,23 +13,31 @@ setglobal cpoptions-=c,e,_  " couple options that bugged me
 setglobal fileencodings=utf-8,default,latin1   " UGHHHHH
 setglobal nobomb | lockvar g:nobomb
 setglobal hidden
-" }}}
+setglobal background=dark
+let g:syntax_cmd = 'manual'
 
-" Set paths correctly: {{{
 let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Evervim. Thanks!
 let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h'))
+
 " Seriously how does this keep getting fucked up. omfg packpath is worse???
 setglobal runtimepath=$HOME/.config/nvim,$HOME/.local/share/nvim/site,$VIMRUNTIME
 setglobal packpath=~/.config/nvim/pack,~/.local/share/nvim/site/pack,$VIMRUNTIME
+
 if !has('unix')
   " call it silly but keep source expressions on their own line. TPope set them up in &include
   source C:/Neovim/share/nvim-qt/runtime/plugin/nvim_gui_shim.vim
 endif
 
-if exists('g:GuiLoaded') | exec 'source ' s:repo_root . '/ginit.vim' | endif
-" TODO: clipboards fucking up on windows
-setglobal clipboard=unnamed,unnamedplus
-set modeline modelines=5
+if exists('g:GuiLoaded')
+  exec 'source ' s:repo_root . '/ginit.vim'
+endif
+
+if exists('*stdpath')
+  let s:stddata = stdpath("data")
+else
+  let s:stddata = resolve(expand('~/.local/share/nvim'))
+endif
+let s:stdconfig = exists('*stdpath') ? stdpath('config') : resolve(expand('~/.config/nvim'))
 " }}}
 
 " Macros, Leader, and Nvim specific features: {{{
@@ -49,7 +55,7 @@ let g:maplocalleader = '<Space>'
 map <Space> <Leader>
 
 if has('nvim-0.4')   " Fun new features!
-  let &shadafile = stdpath('data') . '/site/shada/main.shada'
+  let &shadafile = s:stddata . '/site/shada/main.shada'
   " toggle transparency in the pum and windows. don't set higher than 10 it becomes hard to read higher than that
   setglobal pumblend=10 winblend=5
   try | setglobal pyxversion=3 | catch /^Vim:E518:*/ | endtry
@@ -74,12 +80,10 @@ function! LoadMyPlugins() abort  " {{{
   let g:plug_url = 'https://github.com/%s.git'
   if !exists('plug#load')  | unlet! g:loaded_plug | exec 'source ' . s:repo_root . '/vim-plug/plug.vim' | endif
 
-  if !exists('*stdpath') | echohl WarningMsg | echomsg 'stdpath func does not exist.' | echohl NONE | return | endif
-
-  call plug#begin(stdpath('data'). '/plugged')
+  call plug#begin(s:stddata . '/plugged')
 
   Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lockfile'}
-  let $NVIM_COC_LOG_FILE = stdpath('data')  . '/site/coc.log'
+  let $NVIM_COC_LOG_FILE = s:stddata . '/site/coc.log'
   let $NVIM_COC_LOG_LEVEL = 'ERROR'
   Plug 'junegunn/fzf', {
                   \ 'dir': expand('~/.fzf'),
@@ -147,11 +151,6 @@ call LoadMyPlugins()
 " I utilize this command so often I may as well save the characters
 command! -bar Plugins echomsg map(keys(g:plugs), '"\n" . v:val')
 
-setglobal background=dark
-syntax on
-" For some reason running syntax enable clears the syntax option
-" also setting background requires syntax on to reload
-let g:syntax_cmd = "on"
 
 " in case i started things with -u NONE
 if &loadplugins is 0 | set loadplugins | endif

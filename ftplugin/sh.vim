@@ -14,6 +14,13 @@ let g:sh_fold_enabled= 4  "   (enable if/do/for folding)
 let g:readline_has_bash = 1
 
 let b:is_bash = 1
+let b:shell_is_bash = match(expand('$SHELL'), 'bash')
+if !b:shell_is_bash
+  let g:ale_sh_shell_default_shell = 1
+else
+  let g:ale_sh_shell_default_shell = 0
+endif
+
 let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
 let b:ale_linters = ['language_server', 'shell']
 " }}}
@@ -35,9 +42,10 @@ setlocal include=^\s*\%(so\%[urce]\*\zs[^\|]*
 setlocal includeexpr=shellescape(v:fname)
 
 " the original defines one too
-let b:undo_ftplugin .= '|setlocal sw< et< sts< cc< syntax< include< '
-      \ . '|unlet! b:undo_ftplugin'
-      \ . '|unlet! b:did_ftplugin'
+let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
+      \. '|setlocal sw< et< sts< cc< syntax< include< '
+      \. '|unlet! b:undo_ftplugin'
+      \. '|unlet! b:did_ftplugin'
 " }}}
 
 " Compiler: {{{
@@ -62,6 +70,5 @@ if executable('shellcheck') || executable('shellcheck.exe')
   let b:ale_linters += ['shellcheck']
 endif
 
-call ftplugins#ALE_sh_conf()
 " }}}
 

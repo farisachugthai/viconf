@@ -114,8 +114,8 @@ syntax and produce surprising behavior.::
    " let s:this_dir = fnameescape(fnamemodify(resolve('$MYVIMRC'), ':p:h'))
    " echomsg s:this_dir
 
-That resolves to your current working directory. I couldn't begin to tell you
-why it does that.::
+That resolves to the directory of the buffer that Nvim opened on startup.
+I couldn't begin to tell you why it does that.::
 
    let s:this_dir = fnameescape(fnamemodify(expand('$MYVIMRC'), ':p:h'))
    echomsg s:this_dir
@@ -286,17 +286,17 @@ that exist.
 +--------------+-----------+---------+------------------------------------------+
 | :xmap        | :xnoremap | :xunmap | Visual                                   |
 +--------------+-----------+---------+------------------------------------------+
-| :omap        |           |         | Operating-pending                        |
+| :omap        | :onoremap | :ounmap | Operating-pending                        |
 +--------------+-----------+---------+------------------------------------------+
-| :map!        |           |         | Insert and Command-line                  |
+| :map!        | :noremap! | :unmap! | Insert and Command-line                  |
 +--------------+-----------+---------+------------------------------------------+
-| :imap        |           |         | Insert                                   |
+| :imap        | :inoremap | :iunmap | Insert                                   |
 +--------------+-----------+---------+------------------------------------------+
-| :lmap        |           |         | Insert, Command-line, Lang-Arg           |
+| :lmap        | :lnoremap | :lunmap | Insert, Command-line, Lang-Arg           |
 +--------------+-----------+---------+------------------------------------------+
-| :cmap        |           |         | Command-line                             |
+| :cmap        | :cnoremap | :cunmap | Command-line                             |
 +--------------+-----------+---------+------------------------------------------+
-| :tmap        |           |         | Terminal                                 |
+| :tmap        | :tnoremap | :tunmap | Terminal                                 |
 +--------------+-----------+---------+------------------------------------------+
 
 There are a few things to note about this. One being that the commands map and

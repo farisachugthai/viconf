@@ -11,6 +11,7 @@ import functools
 import importlib
 import json
 import logging
+import os
 import pydoc
 import site
 import sys
@@ -19,7 +20,9 @@ import traceback
 
 from importlib.util import find_spec
 from os.path import isdir
+from pathlib import Path
 from pprint import pprint as print
+from typing import Optional
 from types import TracebackType
 
 try:
@@ -209,10 +212,11 @@ def pykeywordprg():
     else:
         pydoc.help(helped_mod)
 
-  py3 >> EOF
-for i in inspect.getsourcelines(inspect):
-    vim.current.buffer.append(i)
-EOF
+
+def findsource(mod):
+    for i in inspect.findsource(mod):
+        vim.current.buffer.append(i)
+
 
 def timer(func):
     """Print the runtime of the decorated function"""
@@ -395,3 +399,81 @@ def Black():
 def BlackVersion():
     """Print the installed version of black."""
     print(f"Black, version {black.__version__} on Python {sys.version}.")
+
+
+def list_buf():
+    """Return the Vimscript function :func:`nvim_list_bufs()`.
+
+    Returns
+    --------
+    bufnrs : list of ints
+        Currently loaded buffers
+
+    Examples
+    --------
+    .. code-block:: vim
+
+        :ListBuf
+        " With one open buffer the output will be [1]
+        " Note that this could be any list of integers
+
+    """
+    bufnrs = vim.eval("call nvim_list_bufs()")
+    return bufnrs
+
+
+class FileLink:
+    def __init__(self, logger=None, buf=None):
+        """Initialize a file object."""
+        # Damnit why isnt it recognizing this as a func? this is the missing link
+        if logger is not None:
+            self.logger = logger
+        self.buf = buf if buf is not None else self_path_file()
+
+    def __repr__(self):
+        return "{!r} --- {!r}".format(self.__class__.__name__, self.buf)
+
+    def _path_file(self):
+        """Pathify a file."""
+        return Path(vim.eval("nvim_get_current_buf()"))
+
+    def is_symlink(self):
+        """Check if `path_obj` is a symlink."""
+        return self.is_symlink()
+
+    def _resolved_path(self):
+        return self._path_file().resolve()
+
+    def dirname(self):
+        """Get the buffers directory."""
+        real_file = self._resolved_path()
+        if real_file:
+            return real_file.parent
+
+    def true_file(self, path_obj):
+        """Implement a command that opens and resolves a symlink."""
+        if self._is_symlink:
+            real_file = self._resolved_path()
+            dirname = real_file.parent
+            vim.chdir(str(dirname))
+            vim.command("edit" + str(real_file))
+
+
+def main():
+    """Set everything up."""
+    cur_file = FileLink()
+
+    if cur_file.is_symlink:
+        cur_file.true_file()
+
+
+if __name__ == "__main__":
+    log_levels = {
+        "debug": logging.DEBUG,
+        "info": logging.INFO,
+        "warning": logging.WARNING,
+        "error": logging.ERROR,
+        "critical": logging.CRITICAL,
+    }
+    LOGGER = _setup_logging(log_levels["warning"])
+    main()

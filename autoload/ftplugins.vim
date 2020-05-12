@@ -30,66 +30,12 @@ function! ftplugins#ALE_CSS_Conf() abort  " {{{
 
 endfunction  " }}}
 
-function! ftplugins#ALE_sh_conf() abort  " {{{
-
-  " this is probably a waste of time when compiler shellcheck exists
-  " if we're using powershell or cmd on windows set ALEs default shell to bash
-  " TODO: set the path to shellcheck.
-    let l:shell_is_bash = match(expand('$SHELL'), 'bash')
-    if !l:shell_is_bash
-      let g:ale_sh_shell_default_shell = 1
-    else
-      let g:ale_sh_shell_default_shell = 0
-    endif
-    " let s:bash_location = exepath('bash')
-    " if executable(s:bash_location)
-    "   let g:ale_sh_shell_default_shell = 1
-    " endif
-
-  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
-
-  let b:ale_linters = ['shell', 'shellcheck']
-
-  " if !has('unix')
-  "   let b:ale_sh_shellcheck_executable = 'C:/tools/miniconda3/envs/neovim/bin/shellcheck.exe'
-  " endif
-
-endfunction  " }}}
-
 function! ftplugins#ALE_Html_Conf() abort  " {{{
 
   let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
   " he checks for executability too let's say fuck it
   let b:ale_fixers += ['prettier', 'stylelint', 'csslint']
 
-endfunction  " }}}
-
-function! ftplugins#ALE_JS_Conf() abort  " {{{
-
-  if !has('unix')
-    let g:ale_windows_node_executable_path = fnameescape('C:/Program Files/nodejs/node.exe')
-  endif
-
-  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
-  let b:ale_fixers += ['prettier']
-
-endfunction  " }}}
-
-function! ftplugins#ALE_Typescript() abort  " {{{
-  call ftplugin#ALE_JS_Conf()
-
-  let b:ale_fixers += ['eslint']
-  let b:ale_fixers += ['tslint']
-
-  " if executable(expand('~/.config/coc/extensions/node_modules/tsserver'))
-
-endfunction  " }}}
-
-function! ftplugins#ALE_Vim_Conf() abort  " {{{
-  let b:ale_linters = ['ale_custom_linting_rules']
-  let b:ale_linters_explicit = 1
-
-    let b:ale_linters += ['vint']
 endfunction  " }}}
 
 function! ftplugins#typescript_setup() abort   " {{{
@@ -136,3 +82,20 @@ function! ftplugins#typescript_setup() abort   " {{{
 " }}}
 
 endfunction  " }}}
+
+function! ftplugins#get_git_dir() abort  " {{{
+  if !exists('b:git_dir')
+    if expand('%:p') =~# '[\/]\.git[\/]modules[\/]'
+      " Stay out of the way
+    elseif expand('%:p') =~# '[\/]\.git[\/]worktrees'
+      let b:git_dir = matchstr(expand('%:p'),'.*\.git[\/]worktrees[\/][^\/]\+\>')
+    elseif expand('%:p') =~# '\.git\>'
+      let b:git_dir = matchstr(expand('%:p'),'.*\.git\>')
+    elseif $GIT_DIR != ''
+      let b:git_dir = $GIT_DIR
+    endif
+    if (has('win32') || has('win64')) && exists('b:git_dir')
+      let b:git_dir = substitute(b:git_dir,'\\','/','g')
+    endif
+  endif
+endfunction " }}}

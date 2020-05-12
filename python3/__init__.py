@@ -8,12 +8,10 @@ from collections import namedtuple
 from importlib.machinery import PathFinder
 from io import StringIO
 
-try:
-    import pynvim
-except ImportError:
-    pass
-else:
-    from pynvim import attach, LegacyVim, stdio_session
+# try:
+#     import pynvim
+# except ImportError:
+#     pass
 
 __docformat__ = "reStructuredText"
 
@@ -54,4 +52,3 @@ alt_options = namedtuple(
 # import pkg_resources
 # distribution = pkg_resources.get_distribution("pynvim")
 # __version__ = distribution.version
-

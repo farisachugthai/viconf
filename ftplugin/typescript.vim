@@ -1,15 +1,18 @@
 " ============================================================================
   " File: typescript.vim
   " Author: Faris Chugthai
-  " Description: Stole it from romainl and i ain't even ashamed
+  " Description: Typescript ftplugin
   " Last Modified: November 18, 2019
 " ============================================================================
 
 if exists('b:did_ftplugin') | finish | endif
 
-" Simple Options: {{{
-source $VIMRUNTIME/ftplugin/javascript.vim
+let s:ftplugin_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h'))
+exec 'source ' . s:ftplugin_root . '/javascript.vim'
+unlet! b:did_indent
 source $VIMRUNTIME/indent/typescript.vim
+
+" Simple Options: {{{
 setlocal expandtab tabstop=4 softtabstop=2 shiftwidth=2
 setlocal include=^\\s*[^\/]\\+\\(from\\\|require(\\)\\s*['\"\.]
 let &l:define  = '^\s*\('
@@ -23,6 +26,10 @@ let &l:define  = '^\s*\('
 setlocal includeexpr=includes#TypeScriptIncludeExpression(v:fname,0)
 setlocal suffixesadd+=.ts,.tsx,.d.ts
 setlocal isfname+=@-@
+
+let b:ale_fixers = get(g:, 'b:ale_fixers', [])
+let b:ale_fixers += ['eslint']
+let b:ale_fixers += ['tslint']
 " }}}
 
 " Original: {{{

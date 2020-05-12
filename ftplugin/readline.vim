@@ -1,22 +1,32 @@
 " Vim filetype plugin file
 " Language:             readline(3) configuration file
+" Maintainer:           Faris A. Chugthai
 " Previous Maintainer:  Nikolai Weibull <now@bitwi.se>
 " Latest Revision:      2008-07-09
 
-if exists("b:did_ftplugin")
+let g:readline_has_bash = 1
+
+if exists('b:did_ftplugin')
   finish
 endif
 let b:did_ftplugin = 1
 
-let s:cpo_save = &cpo
-set cpo&vim
-
-let b:undo_ftplugin = "setl com< cms< fo< inc<"
-
+setlocal comments=:# commentstring=#\ %s formatoptions-=t formatoptions+=croql
+" Recognize inputrcs can have $include fname in them
+" For a bash shell this would reasonably imply include either a file with no extension, a file named ~/.inputrc or one pointed to by $INPUTRC
+" point being, no includeexpr needed.
 setlocal include=^\s*#\s*\$include
 " So this addition makes matchit work!
+setlocal path=.,$HOME,**,
+" todo maybe set up a lil macro that determines the root a little better
+let s:root_permissions = getfperm(expand("$PREFIX/etc/inputrc"))
+if matchstr(s:root_permissions, '^rw')
+  setlocal path+=$PREFIX/etc
+endif
+
 setlocal iskeyword+=$
-setlocal comments=:# commentstring=#\ %s formatoptions-=t formatoptions+=croql
+
+let b:undo_ftplugin = "setl com< cms< fo< inc<"
 
 " yo just saying... the syntax highlighting for readline is damn impressive
 " Let's utilize it!
@@ -42,6 +52,3 @@ if exists('loaded_matchit')
 
   let b:undo_ftplugin .= "|unlet! b:match_words"
 endif
-
-let &cpo = s:cpo_save
-unlet s:cpo_save

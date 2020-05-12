@@ -10,15 +10,13 @@
 let g:ft_man_folding_enable = 1
 let g:ft_man_open_mode = 'tab'
 
+" Honestly they suck
+let g:no_man_maps = 1
+
 if exists('b:did_ftplugin') | finish | endif
 " }}}
 
 " Yours: {{{
-
-runtime autoload/man.vim
-runtime autoload/man.vim
-runtime autoload/man.vim
-
 source $VIMRUNTIME/ftplugin/man.vim
 
 " Speaking of which...here's the undo_ftplugin that the official ftplugin gives....
@@ -44,10 +42,14 @@ if exists(':Man') == 2
   setlocal keywordprg=:Man
 endif
 
-if getenv('$MANPATH')
-  let &l:path .= expand('$MANPATH')
+if exists('$MANPATH')
+  let &l:path = expand('$MANPATH')
+elseif exepath('manpath')
+  let &l:path = exepath('manpath')
 endif
-setlocal wrap
+
+nnoremap <silent> <buffer> <nowait> q :lclose<CR>:bd<CR>
+nnoremap <expr> <buffer> gO         man#show_toc()
 
 " Like guys we have to define this correctly and fix things!
 let b:undo_ftplugin  = 'setlocal buftype< bufhidden< ro< mod< nu< rnu< signcolumn< wrap<'

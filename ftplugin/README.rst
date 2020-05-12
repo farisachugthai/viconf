@@ -79,6 +79,19 @@ In my reStructured text ftplugin, I added :kbd:`.` to ``iskeyword`` in order
 to have dotted packages, *I.E. IPython.core.interactiveshell*, recognized
 as 1 word.
 
+.. ***todo***
+   keep writing because i still get confused on which is which ALL the time
+
+Evaluating 'truthiness'
+-----------------------
+Simply make sure that you evaluate lines one by one because things like this
+happen everywhere.::
+
+   echo get(g:, 'v:true', 'v:false')
+   " echoes v:false
+   echo get(g:, v:true, 'v:false')
+   " but why does this one do the same thing?
+
 
 Vim Filetype Plugin
 ====================

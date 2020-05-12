@@ -5,6 +5,8 @@
   " Last Modified: February 16, 2020
 " ============================================================================
 
+let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
+
 " Tags Command: {{{
 " You never added complete tags dude!
 command! -complete=tag -bar Tagstack echo gettagstack(expand('%'))
@@ -150,31 +152,21 @@ command! -bang -bar FZScriptnames call vimscript#fzf_scriptnames(<bang>0)
 
 " fzf_for_todos
 command! -bang -bar -complete=var -nargs=* TodoFuzzy call find_files#RipgrepFzf('todo ' . <q-args>, <bang>0)
-" }}}
 
-" FZGrep: {{{
-  " here's the call signature for fzf#vim#grep
-  " - fzf#vim#grep(command, with_column, [options], [fullscreen])
-  "   If you're interested it would be kinda neat to modify that `dir` line
-
+" here's the call signature for fzf#vim#grep
+" - fzf#vim#grep(command, with_column, [options], [fullscreen])
+"   If you're interested it would be kinda neat to modify that `dir` line
 command! -complete=file_in_path -nargs=? -bang -bar FZGrep call fzf#run(fzf#wrap('grep', {
       \ 'source': 'silent! grep! <q-args>',
       \ 'sink': 'edit',
       \ 'options': ['--multi', '--ansi', '--border'],},
       \ <bang>0 ? fzf#vim#with_preview('up:60%') : 0))
 
-	" -addr=buffers		Range for buffers (also not loaded buffers)
-
-" Let's just revert to the one in his help doc
 command! -bang -bar -complete=file -nargs=* GGrep
   \   call fzf#vim#grep(
   \   'git grep --line-number --color=always ' . shellescape(<q-args>),
   \   1,
   \   fzf#vim#with_preview({'dir': systemlist('git rev-parse --show-toplevel')[0]}), <bang>0)
-
-" }}}
-
-" Ag FZF With A Preview Window: {{{
 
 "   :Ag! - Start fzf in fullscreen and display the preview window above
 command! -complete=dir -bang -bar -nargs=* FZPreviewAg
@@ -192,16 +184,8 @@ command! -bar -complete=dir -bang -nargs=* FZMehRg
         \   'options': ['--ansi', '--multi', '--border', '--cycle', '--prompt', 'FZRG:',]
         \ }, <bang>0))
 
-" }}}
-
-" Files With Preview Window: {{{
-
 command! -bang -nargs=? -complete=dir -bar FZPreviewFiles
   \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
-
-" }}}
-
-" Plugins: {{{
 
 function! s:Plugins(...) abort
   return sort(keys(g:plugs))
@@ -215,7 +199,6 @@ command! -nargs=* -bang -bar -complete=customlist,s:Plugins FZPlugins
       \ 'sink'  : function('find_files#plug_help_sink'),
       \ 'options': g:fzf_options},
       \ <bang>0))
-" }}}
 
 " FZBuf: {{{ Works better than FZBuffers
 command! -bar -bang -complete=buffer FZBuf call fzf#run(fzf#wrap('buffers',
@@ -234,10 +217,8 @@ command! -bang -complete=buffer -bar FZBuffers call fzf#run(fzf#wrap('buffers',
         \ 'options': g:fzf_options,
         \ 'down':    len(find_files#buflist()) + 2
         \ }, <bang>0))
-" }}}
 
-" FZMru: {{{
-" I feel like this could work with complete=history right?
+" FZMru: {{{ I feel like this could work with complete=history right?
 command! -bang -bar Mru call find_files#FZFMru(<bang>0)
 
 " FZGit:
@@ -263,7 +244,6 @@ command! -bar -bang -complete=dir -nargs=* LS
     \ {'source': 'ls', 'dir': <q-args>},
     \ <bang>0))
 
-" only search projects lmao
 command! -bar -bang Projects call fzf#vim#files('~/projects', <bang>0)
 
 " Or, if you want to override the command with different fzf options, just pass
@@ -405,6 +385,12 @@ command! -bar Ruler normal! g<C-g>
 " }}}
 
 " Pydoc: {{{
+if !exists('g:python3_host_prog')
+  exec 'source ' . s:repo_root . '/autoload/remotes.vim'
+
+  call remotes#init()
+endif
+
 command! -bar -complete=expression -complete=function -range -nargs=+ Pythonx <line1>,<line2>python3 <args>
 " FUCK YEA! Dec 27, 2019: Behaves as expected!
 " You know whats nice? Both of these expressions work.
@@ -417,9 +403,9 @@ command! -range -bar -complete=expression -complete=function -nargs=? Pd <line1>
 command! -range -bar -complete=file -complete=dir -nargs=* Py3f :<line1>,<line2>py3f <args>
 command! -range -bar -complete=file -complete=dir -nargs=* Pyf  :<line1>,<line2>pyf  <args>
 
-command! -range -bar -complete=expression -complete=function -nargs=? P <line1>,<line2>python3 print(<args>)
+command! -range -bar -complete=expression -complete=function -nargs=? P <line1>,<line2>python3 import pprint; pprint.pprint(<args>)
 
-command! -range -bar -complete=expression -complete=function -nargs=? Pv <line1>,<line2>python3 print(vars(<args>))
+command! -range -bar -complete=expression -complete=function -nargs=? Pv <line1>,<line2>python3 import pprint; pprint.pprint(vars(<args>))
 
 command! -bar -range -nargs=+ Pi <line1>,<line2>python3 import <args>
 
@@ -490,19 +476,10 @@ if !has('unix')
   command! PowerShell call msdos#PowerShell()
 
   command! -bar -nargs=? PwshHelp call msdos#pwsh_help(shellescape(<f-args>))
-endif
-" }}}
+endif " }}}
 
 " Chmod: {{{
-
-" :S    Escape special characters for use with a shell command (see
-"  |shellescape()|). Must be the last one. Examples:
-
-" :!dir <cfile>:S
-" :call system('chmod +w -- ' . expand('%:S'))
-
 " From :he filename-modifiers in the cmdline page.
-
 " More From The Bottom Of Help Map:
 command! -bang -bar -nargs=+ -complete=file -complete=file_in_path EditFiles
     \ for f in expand(<q-args>, 0, 1) |
@@ -511,10 +488,6 @@ command! -bang -bar -nargs=+ -complete=file -complete=file_in_path EditFiles
 
 command! -bar -range -nargs=* -complete=file Snew call unix#SpecialEdit(<q-args>, <q-mods>)
 
-" There are more comfortable ways of doing the following in Vim.
-" I'm not going to convince you it's better. That it's cleaner.
-" Unfortunately, there are  few of *their* keybindings wired in.
-" May as well map them correctly.
 command! -complete=filetype -bar UltiSnipsListSnippets call UltiSnips#ListSnippets()
 " }}}
 
@@ -547,7 +520,6 @@ command! -bar -range -nargs=1 -complete=file Replace <line1>-pu_|<line1>,<line2>
 
 " Count the number of lines in the range. Wait how does this not need to
 " concatenate the int and the str?
-" DON'T PUT COMMENTS IN THE SAME LINE AS COMMANDS DINGUS
 command! -bar -range -nargs=* Lines echomsg <line2> - <line1> + 1 'lines'
 " }}}
 
@@ -583,7 +555,9 @@ command! -range -addr=arguments -bang -bar -nargs=* Gclone exe fugitive#Command(
 " no args no nothing. just a reminder you can fill a buffer with git output. and then i forgot
 " that this was supposed to just be  a reminder. ready to overengineer TO THE EXTREME
 command! -bar GHead call  plugins#fugitive_head()
-command! -nargs=* -bar -complete=custom, Gds2 :enew<bar>:Gread! diff --staged --stat HEAD -- .<bar>set filetype=git
+
+" TODO: completes for both of these
+command! -nargs=* -bar Gds2 :enew<bar>:Gread! diff --staged --stat HEAD -- .<bar>set filetype=git
 " }}}
 
 " Syntax Highlighting: {{{
@@ -602,5 +576,5 @@ endfunction
 " Its annoying that syn include doesnt complete paths
 " Now it does!
 command! -nargs=1 -bar -complete=customlist,s:CompleteSynInclude SynInclude syntax include <args>
-
 " }}}
+

@@ -4,17 +4,21 @@
 
 Really useful seemingly universal functions for working with Vim though.
 
-Dec 07, 2019: Double checked that this passes a cursory `:py3f %` test and it did.
+Dec 07, 2019: Double checked that this passes a cursory `:py3f %` test and it
+did.
 
 """
 import json
+import logging
 import os
+import pprint
 import sys
-import xml.dom.minidom as md
 
 from contextlib import contextmanager
-from pathlib import Path
-from pprint import pprint
+from xml.dom import minidom as md
+
+logging.basicConfig()
+logger = logging.getLogger(name=__name__)
 
 try:
     import yaml
@@ -29,6 +33,22 @@ def get_verbosity():
 def debug(msg):
     if get_verbosity() >= 2:
         print(msg)
+
+
+def find_running_nvim():
+    try:
+        logger.debug
+        return vim.vvars['servername']
+    except AttributeError:
+        # Vimscript:      :nvim_eval('serverlist()')
+        # or more simply  :call serverlist()
+        serverlist = vim.eval('serverlist()')
+        if serverlist:
+            if len(serverlist) == 1:
+                return serverlist[0]
+            else:
+                logger.error('python3:_vim: find_running_nvim: serverlist is >1?')
+                return serverlist
 
 
 def error(msg):
@@ -343,14 +363,13 @@ def fname():
 
 def pd(args=None):
     """Simple helper because I do this so often."""
-    pprint(dir(args))
+    pprint.pprint(dir(args))
     return dir(args)
 
 
 class _Vim(object):
     def __getattr__(self, attr):
         return getattr(vim, attr)
-
 
 
 def _patch_nvim(vim):
@@ -390,6 +409,12 @@ def _patch_nvim(vim):
     vim.vars = vars_wrapper()
 
 
+prettiers = {
+    "xml": pretty_xml,
+    "json": pretty_json,
+    "yaml": interpret_yaml,
+}
+
 if __name__ == "__main__":
 
     try:
@@ -397,6 +422,7 @@ if __name__ == "__main__":
     except ImportError:
         sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
         from pynvim import LegacyVim
+        vim = LegacyVim()
 
     try:
         import UltiSnips
@@ -404,16 +430,10 @@ if __name__ == "__main__":
         UltiSnips = None
 
 # here's a few more helpers
-    prettiers = {
-        "xml": pretty_xml,
-        "json": pretty_json,
-        "yaml": interpret_yaml,
-    }
 
     vim_obj = _Vim()
 
-    vim = LegacyVim()
     if hasattr(vim, "from_nvim"):
         _patch_nvim(vim_obj)
 
-    buf = VimBuffer(vim)  # pylint:disable=invalid-name
+        buf = VimBuffer(vim)  # pylint:disable=invalid-name

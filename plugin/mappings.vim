@@ -72,6 +72,16 @@ cnoremap <C-v> <C-r>"
 
 inoremap <Down> <C-R>=pumvisible() ? "\<lt>C-N>" : "\<lt>Down>"<CR>
 inoremap <Up> <C-R>=pumvisible() ? "\<lt>C-P>" : "\<lt>Up>"<CR>
+
+
+" When typing '#' as the first character in a new line, the indent for that line is removed, the '#'
+" is put in the first column.  The indent is restored for the next line.  If you don't want this,
+" use this mapping:
+" if match(&l:cms, '#')
+"   inoremap # X^H#
+" endif
+" where ^H is entered with CTRL-V CTRL-H. HOLY SHIT THANK YOU
+
 " }}}
 
 " Marks: {{{
@@ -117,6 +127,10 @@ function! MapRsi() abort
   " did you know alt-t is complete in emacs? let's steal this one from ultisnips
   noremap! <M-t> <C-R>=(plugins#ExpandPossibleShorterSnippet() == 0? '': UltiSnips#ExpandSnippet())<CR>
 
+  noremap! <C-x>2  <Cmd>new<CR>
+  noremap! <C-x>5  <Cmd>vnew<CR>
+  noremap! <C-x>0  <Cmd>wincmd c<CR>
+
 endfunction
 
 function! AddVileBinding(key, handler)
@@ -161,7 +175,7 @@ call AddVileBinding('<C-x>b', '<Cmd>Brofiles<CR>')
 call AddVileBinding('<S-Insert>', '<MiddleMouse>')
 
 " So this binding can work in any mode so long as the previewwindow is open
-noremap <M-C-v>
+" noremap <M-C-v>
 
 " }}}
 
@@ -191,6 +205,7 @@ nnoremap / mS/
 " Oh also do the backwards one too please!
 nnoremap ? mB?
 xnoremap / mS/
+xnoremap ? mB?
 
 " }}}
 
@@ -200,28 +215,27 @@ noremap <F4> <Cmd>UltiSnipsEdit<CR>
 noremap! <F4> <Cmd>UltiSnipsEdit<CR>
 
 if exists(':Snippets')
-  noremap <F6> <Cmd>Snippets<CR>
-  noremap! <F6> <Cmd>Snippets<CR>
+  noremap  <F6>               <Cmd>Snippets<CR>
+  noremap! <F6>               <Cmd>Snippets<CR>
+  tnoremap <F6>               <Cmd>Snippets<CR>
 else
-  noremap <F6> <Cmd>UltiSnipsListSnippets<CR>
-  noremap! <F6> <Cmd>UltiSnipsListSnippets<CR>
+  noremap  <F6>               <Cmd>UltiSnipsListSnippets<CR>
+  noremap! <F6>               <Cmd>UltiSnipsListSnippets<CR>
+  tnoremap <F6>               <Cmd>UltiSnipsListSnippets<CR>
 endif
 " inoremap <expr> <Tab> UltiSnips#ExpandSnippetOrJump()
 " }}}
 
 " FZF: {{{
-noremap <F6>                <Cmd>Snippets<CR>
-noremap! <F6>               <Cmd>Snippets<CR>
 " I suppose for continuity
-tnoremap <F6>               <Cmd>Snippets<CR>
 
 if exists('*fzf#wrap')
   nnoremap <M-x>                      <Cmd>Commands<CR>
-  nnoremap <C-x><C-b>                 <Cmd>Buffers<CR>
+  nnoremap <C-x>B                     <Cmd>Buffers<CR>
   nnoremap <C-x><C-f>                 <Cmd>Files ~/<CR>
 else
   nnoremap <M-x>                      <Cmd>verbose command<CR>
-  nnoremap <C-x><C-b>                 <Cmd>buffers<CR>
+  nnoremap <C-x>B                     <Cmd>buffers<CR>
   nnoremap <C-x><C-f>                 :<C-u>Find ~/**
 endif
 
@@ -261,7 +275,9 @@ inoremap <expr> <C-x><C-l> fzf#vim#complete#line()
 if filereadable(expand('$_ROOT/share/dict/words'))
   " Note: This is dependant on /usr/share/dict/words existing because this
   " function implicitly depends on it.
-  inoremap <expr> <C-x><C-k>         fzf#vim#complete#word({'left': '45%'})
+  " inoremap <expr> <C-x><C-k>         fzf#vim#complete#word({'left': '45%'})
+  " Word completion with custom spec with popup layout option
+  inoremap <expr> <C-x><C-k>          fzf#vim#complete#word({'window': { 'width': 0.2, 'height': 0.9, 'xoffset': 1 }})
 else
 " dictionary isn't set on windows
   inoremap <C-x><C-k> <C-x><C-u>
@@ -273,11 +289,9 @@ inoremap <expr> <C-x><C-j> fzf#vim#complete#file()
 
 " i'm not really sure what this is gonna do but let's find out!
 inoremap <M-c> <Plug>(-fzf-complete-trigger)
+inoremap <expr> <C-x><C-j> fzf#vim#complete#path('fd -H -t f')
+inoremap <expr> <C-x><C-w> fzf#vim#complete#path('rg --files')
 
-
-" his help docs:
-" Advanced customization using Vim function
-inoremap <expr> <C-x><C-k> fzf#vim#complete#word({'left': '15%'})
 
 function! s:make_sentence(lines)
   return substitute(join(a:lines), '^.', '\=toupper(submatch(0))', '').'.'
@@ -719,6 +733,13 @@ if !exists('no_plugin_maps') && !exists('no_windows_vim_maps') && !exists('g:loa
   call Tab_Mappings()
   call Quickfix_Mappings()
   call MapRsi()
+  " if exists('b:git_dir')  " before we reload this make sure were in a git dir
+  " actually dont. we have to source it regardless and we may as well do it earlier
+  " because &rtp is so long it takes longer for vim to figure than just telling it
+    if !exists('g:autoloaded_fugitive')
+      source $HOME/.local/share/nvim/plugged/vim-fugitive/autoload/fugitive.vim
+    endif
+  " endif
   call UserFugitiveMappings()
   let g:loaded_plugin_mappings = 1
 
