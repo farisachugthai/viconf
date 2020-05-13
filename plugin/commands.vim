@@ -5,6 +5,8 @@
   " Last Modified: February 16, 2020
 " ============================================================================
 
+let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
+
 " Tags Command: {{{
 " You never added complete tags dude!
 command! -complete=tag -bar Tagstack echo gettagstack(expand('%'))
@@ -91,7 +93,7 @@ command! -bar CocFixCurrent     call       CocActionAsync('doQuickfix')
 command! -bar CocFloatHide      call       coc#util#float_hide()
 command! -bar CocFloatJump      call       coc#util#float_jump()
 command! -bar CocCommandRepeat  call       CocActionAsync('repeatCommand')
-" How am I still going? 
+" How am I still going?
 "
 " Yo I found teh function that provides completion for coclist!!
 command! -bar -nargs=* -complete=custom,coc#list#options CocServices call coc#rpc#notify('openList', [<f-args>])
@@ -130,12 +132,19 @@ command! -bar -nargs=* -complete=custom,s:CocProviders CocProviders call s:Handl
 
 " A LOT Of FZF Commands: {{{
 
-" Brofiles: {{{ Note: you can add a complete with no nargs?
-command! -bang -bar -complete=arglist Brofiles
+" Brofiles: {{{
+
+function! s:CompleteBrofiles(A, L, P)
+  return v:oldfiles
+endfunction
+
+let s:fzf_options = get(g:, 'fzf_options', [])
+
+command! -bang -bar -nargs=* -complete=customlist,s:CompleteBrofiles Brofiles
       \ call fzf#run(fzf#wrap('oldfiles',
       \ {'source': v:oldfiles,
       \ 'sink': 'sp',
-      \ 'options': g:fzf_options}, <bang>0))
+      \ 'options': s:fzf_options}, <bang>0))
 
 " Apr 23, 2019: Didn't know complete help was a thing.
 " Oh holy shit that's awesome
@@ -150,31 +159,21 @@ command! -bang -bar FZScriptnames call vimscript#fzf_scriptnames(<bang>0)
 
 " fzf_for_todos
 command! -bang -bar -complete=var -nargs=* TodoFuzzy call find_files#RipgrepFzf('todo ' . <q-args>, <bang>0)
-" }}}
 
-" FZGrep: {{{
-  " here's the call signature for fzf#vim#grep
-  " - fzf#vim#grep(command, with_column, [options], [fullscreen])
-  "   If you're interested it would be kinda neat to modify that `dir` line
-
+" here's the call signature for fzf#vim#grep
+" - fzf#vim#grep(command, with_column, [options], [fullscreen])
+"   If you're interested it would be kinda neat to modify that `dir` line
 command! -complete=file_in_path -nargs=? -bang -bar FZGrep call fzf#run(fzf#wrap('grep', {
       \ 'source': 'silent! grep! <q-args>',
       \ 'sink': 'edit',
       \ 'options': ['--multi', '--ansi', '--border'],},
       \ <bang>0 ? fzf#vim#with_preview('up:60%') : 0))
 
-	" -addr=buffers		Range for buffers (also not loaded buffers)
-
-" Let's just revert to the one in his help doc
 command! -bang -bar -complete=file -nargs=* GGrep
   \   call fzf#vim#grep(
   \   'git grep --line-number --color=always ' . shellescape(<q-args>),
   \   1,
   \   fzf#vim#with_preview({'dir': systemlist('git rev-parse --show-toplevel')[0]}), <bang>0)
-
-" }}}
-
-" Ag FZF With A Preview Window: {{{
 
 "   :Ag! - Start fzf in fullscreen and display the preview window above
 command! -complete=dir -bang -bar -nargs=* FZPreviewAg
@@ -192,16 +191,8 @@ command! -bar -complete=dir -bang -nargs=* FZMehRg
         \   'options': ['--ansi', '--multi', '--border', '--cycle', '--prompt', 'FZRG:',]
         \ }, <bang>0))
 
-" }}}
-
-" Files With Preview Window: {{{
-
 command! -bang -nargs=? -complete=dir -bar FZPreviewFiles
   \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
-
-" }}}
-
-" Plugins: {{{
 
 function! s:Plugins(...) abort
   return sort(keys(g:plugs))
@@ -234,10 +225,8 @@ command! -bang -complete=buffer -bar FZBuffers call fzf#run(fzf#wrap('buffers',
         \ 'options': g:fzf_options,
         \ 'down':    len(find_files#buflist()) + 2
         \ }, <bang>0))
-" }}}
 
-" FZMru: {{{
-" I feel like this could work with complete=history right?
+" FZMru: {{{ I feel like this could work with complete=history right?
 command! -bang -bar Mru call find_files#FZFMru(<bang>0)
 
 " FZGit:
@@ -263,7 +252,6 @@ command! -bar -bang -complete=dir -nargs=* LS
     \ {'source': 'ls', 'dir': <q-args>},
     \ <bang>0))
 
-" only search projects lmao
 command! -bar -bang Projects call fzf#vim#files('~/projects', <bang>0)
 
 " Or, if you want to override the command with different fzf options, just pass
@@ -315,6 +303,8 @@ command! -bar -bang -nargs=* -complete=color Colo
   \ call fzf#vim#colors({'left': '35%',
   \ 'options': '--reverse --margin 30%,0'}, <bang>0)
 " }}}
+" }}}
+
 " }}}
 
 " Finding Files: {{{
@@ -404,7 +394,47 @@ command! -bar Ruler normal! g<C-g>
 
 " }}}
 
+" UltiSnips: {{{
+function! UltiSnipsConf() abort
+
+  let g:UltiSnipsExpandTrigger = '<Tab>'
+  let g:UltiSnipsJumpForwardTrigger= '<Tab>'
+  let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
+  let g:ultisnips_python_style = 'numpy'
+  let g:ultisnips_python_quoting_style = 'double'
+  let g:UltiSnipsEnableSnipMate = 0
+  " context is an interesting option. it's a vert split unless textwidth <= 80
+  let g:UltiSnipsEditSplit = 'context'
+  let g:snips_author = 'Faris Chugthai'
+  let g:snips_github = 'https://github.com/farisachugthai'
+  " Defining it and limiting it to 1 directory means that UltiSnips doesn't
+  " iterate through every dir in &rtp which saves an immense amount of time
+  " on startup.
+  let g:UltiSnipsSnippetDirectories = [ expand('$HOME') . '/.config/nvim/UltiSnips' ]
+  let g:UltiSnipsUsePythonVersion = 3
+  let g:UltiSnipsListSnippets = '<C-/>'
+  if !exists('*stdpath')
+    return
+  endif
+  " Wait is this option still a thing??
+  let g:UltiSnipsSnippetDir = [stdpath('config') . '/UltiSnips']
+endfunction
+
+call UltiSnipsConf()
+
+" In case you're wondering about this, ultisnips requires python from vim.
+" however neovim has it's python interation set up externally. so when i manage
+" to fuck it up, ultisnips breaks. so i need to be able to disable it and then
+" re-enable it when the python integration is fixed
+" }}}
+
 " Pydoc: {{{
+" if !exists('g:loaded_remote_plugins')
+"   exec 'source ' . s:repo_root . '/autoload/remotes.vim'
+
+"   call remotes#init()
+" endif
+
 command! -bar -complete=expression -complete=function -range -nargs=+ Pythonx <line1>,<line2>python3 <args>
 " FUCK YEA! Dec 27, 2019: Behaves as expected!
 " You know whats nice? Both of these expressions work.
@@ -492,17 +522,9 @@ if !has('unix')
   command! PowerShell call msdos#PowerShell()
 
   command! -bar -nargs=? PwshHelp call msdos#pwsh_help(shellescape(<f-args>))
-endif
-" }}}
+endif " }}}
 
 " Chmod: {{{
-
-" :S    Escape special characters for use with a shell command (see
-"  |shellescape()|). Must be the last one. Examples:
-
-" :!dir <cfile>:S
-" :call system('chmod +w -- ' . expand('%:S'))
-
 " From :he filename-modifiers in the cmdline page.
 
 " More From The Bottom Of Help Map:
@@ -513,10 +535,6 @@ command! -bang -bar -nargs=+ -complete=file -complete=file_in_path EditFiles
 
 command! -bar -range -nargs=* -complete=file Snew call unix#SpecialEdit(<q-args>, <q-mods>)
 
-" There are more comfortable ways of doing the following in Vim.
-" I'm not going to convince you it's better. That it's cleaner.
-" Unfortunately, there are  few of *their* keybindings wired in.
-" May as well map them correctly.
 command! -complete=filetype -bar UltiSnipsListSnippets call UltiSnips#ListSnippets()
 " }}}
 
@@ -549,7 +567,6 @@ command! -bar -range -nargs=1 -complete=file Replace <line1>-pu_|<line1>,<line2>
 
 " Count the number of lines in the range. Wait how does this not need to
 " concatenate the int and the str?
-" DON'T PUT COMMENTS IN THE SAME LINE AS COMMANDS DINGUS
 command! -bar -range -nargs=* Lines echomsg <line2> - <line1> + 1 'lines'
 " }}}
 
@@ -607,5 +624,5 @@ endfunction
 " Its annoying that syn include doesnt complete paths
 " Now it does!
 command! -nargs=1 -bar -complete=customlist,s:CompleteSynInclude SynInclude syntax include <args>
-
+" }}}
 " }}}

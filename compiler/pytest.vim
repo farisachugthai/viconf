@@ -17,7 +17,13 @@ endif
 " }}}
 
 " CompilerSet: {{{
-CompilerSet makeprg=py.test\ --tb=short\ -q\ --color=no
+if exists('g:pytest_makeprg_params')
+
+  execute 'CompilerSet makeprg=py.test\ ' . escape(g:cargo_makeprg_params, ' \|"') . '\ $*'
+
+else
+  CompilerSet makeprg=py.test\ --tb=short\ -q\ --color=no\ $*
+endif
 
 CompilerSet errorformat=
       \%-G=%#\ ERRORS\ =%#,

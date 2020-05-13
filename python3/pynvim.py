@@ -21,9 +21,17 @@ then not make synchronous Neovim requests, but it can make asynchronous
 requests, i.e. passing async_=True.
 
 """
-# }}}
-
-import gc
+from typing import Dict, Any, AnyStr, Union, List, Optional, Callable
+from traceback import format_exception, format_stack, format_exc
+from pathlib import Path
+from functools import partial
+from collections.abc import MutableMapping
+from collections import UserList, deque
+from asyncio.streams import StreamReader, StreamWriter
+from asyncio.events import get_event_loop_policy
+from asyncio.futures import Future
+from asyncio.events import get_event_loop_policy, new_event_loop
+import msgpack
 __package__ = "pynvim"
 # __path__ = [__file__]
 __docformat__ = "reStructuredText"
@@ -49,18 +57,6 @@ import sys
 import threading
 import traceback
 import warnings
-
-from asyncio.events import get_event_loop_policy
-from asyncio.futures import Future
-from asyncio.streams import StreamReader, StreamWriter
-from collections import UserList, deque
-from collections.abc import MutableMapping
-from functools import partial
-from pathlib import Path
-from traceback import format_exception, format_stack, format_exc
-from typing import Dict, Any, AnyStr, Union, List, Optional, Callable
-
-import msgpack
 
 try:
     from msgpack._cmsgpack import Packer, unpackb, Unpacker
@@ -242,7 +238,7 @@ def start_host(session=None, load_plugins=True, plugins=None):
         plugins = _goofy_way_of_loading_plugins()
 
     if not session:
-        session = stdio_session()
+        session = socket_session()
     else:
         if isinstance(session, str):
             session = _convert_str_to_session(session)
@@ -2772,7 +2768,7 @@ class MsgpackStream(object):
 
         """
         self._loop = (
-            event_loop if event_loop is not None else asyncio.new_event_loop()
+            event_loop if event_loop is not None else AsyncioEventLoop()
         )  # todo: args
         self._packer = Packer(autoreset=autoreset)
         self._unpacker = Unpacker(**kwargs)
@@ -4112,21 +4108,12 @@ class UvEventLoop(BaseEventLoop):
 
 EventLoop = UvEventLoop
 
+import gc
 gc.collect()
 
 if __name__ == "__main__":
-    # import pytest
-    # # from _pytest.config import Config
-    # # conf = Config('..')
-    # # pytest.Session(conf)
-    # old_cwd = Path.cwd()
-    # os.chdir('..')
-    # pytest.main()
-    # os.chdir(old_cwd)
-    # from _pytest.python import Module
-    # mod = Module(os.path.abspath(os.
     from py._path.local import LocalPath
     f = LocalPath(os.path.abspath(__file__))
     f.pyimport()
 
-# Vim: set fdm=indent fdls=0:
+# Vim: set fdm=marker fdls=0:

@@ -21,10 +21,12 @@ let g:colors_name = 'gruvbox-material'
 " }}}
 
 " Meat and Potatoes The ColorScheme: {{{
-    let g:terminal_ansi_colors = ['#665c54', '#ea6962', '#a9b665', '#e78a4e',
-      \ '#7daea3', '#d3869b', '#89b482', '#dfbf8e', '#928374', '#ea6962',
-      \ '#a9b665', '#e3a84e', '#7daea3', '#d3869b', '#89b482', '#dfbf8e']
-    if has('nvim')
+let g:terminal_ansi_colors = ['#665c54', '#ea6962', '#a9b665', '#e78a4e',
+                            \ '#7daea3', '#d3869b', '#89b482', '#dfbf8e',
+                            \ '#928374', '#ea6962', '#a9b665', '#e3a84e',
+                            \ '#7daea3', '#d3869b', '#89b482', '#dfbf8e']
+
+if has('nvim')
   let g:terminal_color_0 = '#665c54'
   let g:terminal_color_1 = '#ea6962'
   let g:terminal_color_2 = '#a9b665'
@@ -41,160 +43,155 @@ let g:colors_name = 'gruvbox-material'
   let g:terminal_color_13 = '#d3869b'
   let g:terminal_color_14 = '#89b482'
   let g:terminal_color_15 = '#dfbf8e'
-    endif
-    hi White guifg=#ffffff guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermbg=NONE
-    hi LightGrey guifg=#a89984 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Grey guifg=#928374 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Red guifg=#ea6962 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Orange guifg=#e78a4e guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Yellow guifg=#e3a84e guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Green guifg=#a9b665 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Aqua guifg=#89b482 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Blue guifg=#7daea3 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Purple guifg=#d3869b guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi WhiteBold guifg=#ffffff guibg=NONE guisp=NONE gui=bold cterm=bold
-    hi LightGreyBold guifg=#a89984 guibg=NONE guisp=NONE gui=bold cterm=bold
-    hi GreyBold guifg=#928374 guibg=NONE guisp=NONE gui=bold cterm=bold
-    hi RedBold guifg=#ea6962 guibg=NONE guisp=NONE gui=bold cterm=bold
-    hi OrangeBold guifg=#e78a4e guibg=NONE guisp=NONE gui=bold cterm=bold
-    hi YellowBold guifg=#e3a84e guibg=NONE guisp=NONE gui=bold cterm=bold
-    hi GreenBold guifg=#a9b665 guibg=NONE guisp=NONE gui=bold cterm=bold
-    hi AquaBold guifg=#89b482 guibg=NONE guisp=NONE gui=bold cterm=bold
-    hi BlueBold guifg=#7daea3 guibg=NONE guisp=NONE gui=bold cterm=bold
-    hi PurpleBold guifg=#d3869b guibg=NONE guisp=NONE gui=bold cterm=bold
-    hi Normal guifg=#dfbf8e guibg=#1d2021 guisp=NONE gui=NONE cterm=NONE ctermbg=234
-    hi DiffText guifg=NONE guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermbg=234
-    hi EndOfBuffer guifg=#282828 guibg=#1d2021 guisp=NONE gui=NONE cterm=NONE ctermbg=234
-    hi VertSplit guifg=#665c54 guibg=#1d2021 guisp=NONE gui=NONE cterm=NONE ctermbg=234
-    hi QuickFixLine guifg=#e3a84e guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermbg=234
-    hi MatchParen guifg=NONE guibg=#32302f guisp=NONE gui=bold cterm=bold
-    hi FoldColumn guifg=#928374 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-    hi Folded guifg=#928374 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-    hi CursorColumn guifg=NONE guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-    hi CursorLine guifg=NONE guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-    hi CursorLineNr guifg=#a89984 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-    " Got this from `:he 'pumblend'
-    hi PmenuSel guifg=#282828 guibg=#a89984 guisp=NONE gui=NONE cterm=NONE
-    " Yeah. Blend is 0
-    " Yo tablinesel sets this way is pretty awful
-    " hi TabLineSel guifg=#282828 guibg=#a89984 guisp=NONE gui=bold cterm=bold
-    " Actually the lightbg one is pretty solid
-    hi TabLineSel guifg=#ebdbb2 guibg=#7c6f64 guisp=NONE gui=bold cterm=bold ctermfg=223
-    hi WildMenu guifg=#282828 guibg=#a89984 guisp=NONE gui=NONE cterm=NONE
-    hi Pmenu guifg=#dfbf8e guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
-    hi StatusLine guifg=#dfbf8e guibg=#504945 guisp=NONE gui=bold cterm=bold
-    " nah too noisy
-    " hi Statusline cterm=bold,underline,reverse ctermfg=161 ctermbg=238 gui=bold,underline,reverse guifg=#7daea3 guibg=#565656
-    hi StatusLineTerm guifg=#dfbf8e guibg=#504945 guisp=NONE gui=NONE cterm=NONE
-    hi TabLine guifg=#dfbf8e guibg=#504945 guisp=NONE gui=NONE cterm=NONE
-    hi TabLineFill guifg=#dfbf8e guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-    hi ColorColumn guifg=NONE guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-    hi SignColumn guifg=NONE guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-    hi StatusLineNC guifg=#a89984 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-    hi StatusLineTermNC guifg=#a89984 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+endif
 
-    hi Conceal guifg=#7daea3 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Cursor guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
-    hi lCursor guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
-    hi LineNr guifg=#7c6f64 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Directory guifg=#a9b665 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi ErrorMsg guifg=#ea6962 guibg=NONE guisp=NONE gui=bold,underline cterm=bold,underline
-    hi WarningMsg guifg=#e3a84e guibg=NONE guisp=NONE gui=bold cterm=bold
-    hi ModeMsg guifg=#dfbf8e guibg=NONE guisp=NONE gui=bold cterm=bold
-    hi MoreMsg guifg=#e3a84e guibg=NONE guisp=NONE gui=bold cterm=bold
-    hi IncSearch guifg=NONE guibg=NONE guisp=NONE gui=bold,reverse ctermfg=NONE ctermbg=NONE cterm=bold,reverse
-    hi Search guifg=NONE guibg=NONE guisp=NONE gui=reverse,underline ctermfg=NONE ctermbg=NONE cterm=reverse,underline
-    hi NonText guifg=#928374 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi PmenuSbar guifg=NONE guibg=#504945 guisp=NONE gui=NONE cterm=NONE
-    hi PmenuThumb guifg=NONE guibg=#7c6f64 guisp=NONE gui=NONE cterm=NONE
-    hi Question guifg=#e78a4e guibg=NONE guisp=NONE gui=bold cterm=bold
-    hi SpellBad guifg=#ea6962 guibg=NONE guisp=#ea6962 gui=italic,undercurl cterm=italic,undercurl
-    hi SpellCap guifg=#7daea3 guibg=NONE guisp=#7daea3 gui=italic,undercurl cterm=italic,undercurl
-    hi SpellLocal guifg=#89b482 guibg=NONE guisp=#89b482 gui=italic,undercurl cterm=italic,undercurl
-    hi SpellRare guifg=#d3869b guibg=NONE guisp=#d3869b gui=italic,undercurl cterm=italic,undercurl
-    hi Visual guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
-    hi VisualNOS guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
-    hi Todo guifg=#928374 guibg=NONE guisp=NONE gui=bold,italic,underline cterm=bold,italic,underline
-    hi CursorIM guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
-    hi ToolbarLine guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE
-    hi ToolbarButton guifg=#dfbf8e guibg=#665c54 guisp=NONE gui=bold cterm=bold
-    hi Debug guifg=#e78a4e guibg=NONE guisp=NONE gui=undercurl cterm=undercurl
-    hi Title guifg=#a9b665 guibg=NONE guisp=NONE gui=bold cterm=bold
-    hi Conditional guifg=#ea6962 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Repeat guifg=#ea6962 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Label guifg=#ea6962 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Exception guifg=#ea6962 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Keyword guifg=#ea6962 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Statement guifg=#ea6962 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Typedef guifg=#e3a84e guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Type guifg=#e3a84e guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi StorageClass guifg=#e78a4e guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    " Nah this is impossible to notice
-    " hi Delimiter guifg=#dfbf8e guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi! link Delimiter BlueBold
-    hi Special guifg=#e78a4e guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Tag guifg=#e78a4e guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Operator guifg=#e78a4e guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi SpecialChar guifg=#e78a4e guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi String guifg=#a9b665 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi PreProc guifg=#89b482 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Macro guifg=#89b482 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Define guifg=#89b482 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Include guifg=#89b482 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi PreCondit guifg=#89b482 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Structure guifg=#89b482 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Identifier guifg=#7daea3 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Underlined guifg=#7daea3 guibg=NONE guisp=NONE gui=underline cterm=underline
-    hi Constant guifg=#d3869b guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Boolean guifg=#d3869b guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Character guifg=#d3869b guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Number guifg=#d3869b guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Float guifg=#d3869b guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi SpecialKey guifg=#7daea3 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-    hi Comment guifg=#928374 guibg=NONE guisp=NONE gui=italic cterm=italic
-    hi Function guifg=#a9b665 guibg=NONE guisp=NONE gui=bold cterm=bold
-    hi DiffAdd guifg=NONE guibg=#32361a guisp=NONE gui=NONE cterm=NONE
-    hi DiffChange guifg=NONE guibg=#0d3138 guisp=NONE gui=NONE cterm=NONE
-    hi DiffDelete guifg=NONE guibg=#3c1f1e guisp=NONE gui=NONE cterm=NONE
-    hi Error guisp=NONE term=NONE guibg=#4e4e4e cterm=bold ctermbg=239 gui=bold
-    hi markdownH1 guifg=#a9b665 guibg=NONE guisp=NONE gui=bold cterm=bold
-    hi markdownH2 guifg=#a9b665 guibg=NONE guisp=NONE gui=bold cterm=bold
-    hi markdownH3 guifg=#e3a84e guibg=NONE guisp=NONE gui=bold cterm=bold
-    hi markdownH4 guifg=#e3a84e guibg=NONE guisp=NONE gui=bold cterm=bold
-    hi markdownUrl guifg=#d3869b guibg=NONE guisp=NONE gui=underline cterm=underline
-    hi markdownItalic guifg=NONE guibg=NONE guisp=NONE gui=italic ctermfg=NONE ctermbg=NONE cterm=italic
-    hi markdownBold guifg=NONE guibg=NONE guisp=NONE gui=bold ctermfg=NONE ctermbg=NONE cterm=bold
-    hi markdownItalicDelimiter guifg=#928374 guibg=NONE guisp=NONE gui=italic cterm=italic
-    hi mkdURL guifg=#d3869b guibg=NONE guisp=NONE gui=underline cterm=underline
-    hi mkdInlineURL guifg=#d3869b guibg=NONE guisp=NONE gui=underline cterm=underline
-    hi mkdItalic guifg=#928374 guibg=NONE guisp=NONE gui=italic cterm=italic
-    hi htmlLink guifg=#a89984 guibg=NONE guisp=NONE gui=underline cterm=underline
-    hi htmlBold guifg=NONE guibg=NONE guisp=NONE gui=bold ctermfg=NONE ctermbg=NONE cterm=bold
-    hi htmlBoldUnderline guifg=NONE guibg=NONE guisp=NONE gui=bold,underline ctermfg=NONE ctermbg=NONE cterm=bold,underline
-    hi htmlBoldItalic guifg=NONE guibg=NONE guisp=NONE gui=bold,italic ctermfg=NONE ctermbg=NONE cterm=bold,italic
-    hi htmlBoldUnderlineItalic guifg=NONE guibg=NONE guisp=NONE gui=bold,italic,underline ctermfg=NONE ctermbg=NONE cterm=bold,italic,underline
-    hi htmlUnderline guifg=NONE guibg=NONE guisp=NONE gui=underline ctermfg=NONE ctermbg=NONE cterm=underline
-    hi htmlUnderlineItalic guifg=NONE guibg=NONE guisp=NONE gui=italic,underline ctermfg=NONE ctermbg=NONE cterm=italic,underline
-    hi htmlItalic guifg=NONE guibg=NONE guisp=NONE gui=italic ctermfg=NONE ctermbg=NONE cterm=italic
-    hi vimCommentTitle guifg=#a89984 guibg=NONE guisp=NONE gui=bold,italic cterm=bold,italic
-    hi helpURL guifg=#89b482 guibg=NONE guisp=NONE gui=underline cterm=underline
-    hi helpNote guifg=#d3869b guibg=NONE guisp=NONE gui=bold cterm=bold
-    hi plug1 guifg=#e78a4e guibg=NONE guisp=NONE gui=bold cterm=bold
-    hi plugNumber guifg=#e3a84e guibg=NONE guisp=NONE gui=bold cterm=bold
-    hi GitGutterAdd guifg=#a9b665 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-    hi GitGutterChange guifg=#7daea3 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-    hi GitGutterDelete guifg=#ea6962 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-    hi GitGutterChangeDelete guifg=#d3869b guibg=#282828 guisp=NONE gui=NONE cterm=NONE
-    let g:vimshell_escape_colors = [
-          \ '#7c6f64', '#ea6962', '#a9b665', '#e3a84e',
-          \ '#7daea3', '#d3869b', '#89b482', '#a89984',
-          \ '#282828', '#ea6962', '#a9b665', '#e78a4e',
-          \ '#7daea3', '#d3869b', '#89b482', '#dfbf8e'
-          \ ]
-    hi multiple_cursors_cursor guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
-    hi multiple_cursors_visual guifg=NONE guibg=#504945 guisp=NONE gui=NONE cterm=NONE
-    hi MatchParenCur guifg=NONE guibg=NONE guisp=NONE gui=bold,reverse ctermfg=NONE ctermbg=NONE cterm=bold,reverse
-    hi UndotreeSavedBig guifg=#d3869b guibg=NONE guisp=NONE gui=bold cterm=bold
+hi White guifg=#ffffff guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermbg=NONE
+hi LightGrey guifg=#a89984 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Grey guifg=#928374 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Red guifg=#ea6962 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Orange guifg=#e78a4e guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Yellow guifg=#e3a84e guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Green guifg=#a9b665 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Aqua guifg=#89b482 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Blue guifg=#7daea3 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Purple guifg=#d3869b guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi WhiteBold guifg=#ffffff guibg=NONE guisp=NONE gui=bold cterm=bold
+hi LightGreyBold guifg=#a89984 guibg=NONE guisp=NONE gui=bold cterm=bold
+hi GreyBold guifg=#928374 guibg=NONE guisp=NONE gui=bold cterm=bold
+hi RedBold guifg=#ea6962 guibg=NONE guisp=NONE gui=bold cterm=bold
+hi OrangeBold guifg=#e78a4e guibg=NONE guisp=NONE gui=bold cterm=bold
+hi YellowBold guifg=#e3a84e guibg=NONE guisp=NONE gui=bold cterm=bold
+hi GreenBold guifg=#a9b665 guibg=NONE guisp=NONE gui=bold cterm=bold
+hi AquaBold guifg=#89b482 guibg=NONE guisp=NONE gui=bold cterm=bold
+hi BlueBold guifg=#7daea3 guibg=NONE guisp=NONE gui=bold cterm=bold
+hi PurpleBold guifg=#d3869b guibg=NONE guisp=NONE gui=bold cterm=bold
+hi Normal guifg=#dfbf8e guibg=#1d2021 guisp=NONE gui=NONE cterm=NONE ctermbg=234
+hi DiffText guifg=NONE guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermbg=234
+hi EndOfBuffer guifg=#282828 guibg=#1d2021 guisp=NONE gui=NONE cterm=NONE ctermbg=234
+hi VertSplit guifg=#665c54 guibg=#1d2021 guisp=NONE gui=NONE cterm=NONE ctermbg=234
+hi QuickFixLine guifg=#e3a84e guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermbg=234
+hi MatchParen guifg=NONE guibg=#32302f guisp=NONE gui=bold cterm=bold
+hi FoldColumn guifg=#928374 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+hi Folded guifg=#928374 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+hi CursorColumn guifg=NONE guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+hi CursorLine guifg=NONE guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+hi CursorLineNr guifg=#a89984 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+" Got this from `:he 'pumblend'
+hi PmenuSel guifg=#282828 guibg=#a89984 guisp=NONE gui=NONE cterm=NONE
+" Yeah. Blend is 0
+" Yo tablinesel sets this way is pretty awful
+" hi TabLineSel guifg=#282828 guibg=#a89984 guisp=NONE gui=bold cterm=bold
+" Actually the lightbg one is pretty solid
+hi TabLineSel guifg=#ebdbb2 guibg=#7c6f64 guisp=NONE gui=bold cterm=bold ctermfg=223
+hi WildMenu guifg=#282828 guibg=#a89984 guisp=NONE gui=NONE cterm=NONE
+hi Pmenu guifg=#dfbf8e guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE
+hi StatusLine guifg=#dfbf8e guibg=#504945 guisp=NONE gui=bold cterm=bold
+" nah too noisy
+" hi Statusline cterm=bold,underline,reverse ctermfg=161 ctermbg=238 gui=bold,underline,reverse guifg=#7daea3 guibg=#565656
+hi StatusLineTerm guifg=#dfbf8e guibg=#504945 guisp=NONE gui=NONE cterm=NONE
+hi TabLine guifg=#dfbf8e guibg=#504945 guisp=NONE gui=NONE cterm=NONE
+hi TabLineFill guifg=#dfbf8e guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+hi ColorColumn guifg=NONE guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+hi SignColumn guifg=NONE guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+hi StatusLineNC guifg=#a89984 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+hi StatusLineTermNC guifg=#a89984 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+
+hi Conceal guifg=#7daea3 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Cursor guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
+hi lCursor guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
+hi LineNr guifg=#7c6f64 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Directory guifg=#a9b665 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi ErrorMsg guifg=#ea6962 guibg=NONE guisp=NONE gui=bold,underline cterm=bold,underline
+hi WarningMsg guifg=#e3a84e guibg=NONE guisp=NONE gui=bold cterm=bold
+hi ModeMsg guifg=#dfbf8e guibg=NONE guisp=NONE gui=bold cterm=bold
+hi MoreMsg guifg=#e3a84e guibg=NONE guisp=NONE gui=bold cterm=bold
+hi IncSearch guifg=NONE guibg=NONE guisp=NONE gui=bold,reverse ctermfg=NONE ctermbg=NONE cterm=bold,reverse
+hi Search guifg=NONE guibg=NONE guisp=NONE gui=reverse,underline ctermfg=NONE ctermbg=NONE cterm=reverse,underline
+hi NonText guifg=#928374 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi PmenuSbar guifg=NONE guibg=#504945 guisp=NONE gui=NONE cterm=NONE
+hi PmenuThumb guifg=NONE guibg=#7c6f64 guisp=NONE gui=NONE cterm=NONE
+hi Question guifg=#e78a4e guibg=NONE guisp=NONE gui=bold cterm=bold
+hi SpellBad guifg=#ea6962 guibg=NONE guisp=#ea6962 gui=italic,undercurl cterm=italic,undercurl
+hi SpellCap guifg=#7daea3 guibg=NONE guisp=#7daea3 gui=italic,undercurl cterm=italic,undercurl
+hi SpellLocal guifg=#89b482 guibg=NONE guisp=#89b482 gui=italic,undercurl cterm=italic,undercurl
+hi SpellRare guifg=#d3869b guibg=NONE guisp=#d3869b gui=italic,undercurl cterm=italic,undercurl
+hi Visual guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
+hi VisualNOS guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
+hi Todo guifg=#928374 guibg=NONE guisp=NONE gui=bold,italic,underline cterm=bold,italic,underline
+hi CursorIM guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
+hi ToolbarLine guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE
+hi ToolbarButton guifg=#dfbf8e guibg=#665c54 guisp=NONE gui=bold cterm=bold
+hi Debug guifg=#e78a4e guibg=NONE guisp=NONE gui=undercurl cterm=undercurl
+hi Title guifg=#a9b665 guibg=NONE guisp=NONE gui=bold cterm=bold
+hi Conditional guifg=#ea6962 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Repeat guifg=#ea6962 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Label guifg=#ea6962 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Exception guifg=#ea6962 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Keyword guifg=#ea6962 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Statement guifg=#ea6962 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Typedef guifg=#e3a84e guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Type guifg=#e3a84e guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi StorageClass guifg=#e78a4e guibg=NONE guisp=NONE gui=NONE cterm=NONE
+" Nah this is impossible to notice
+" hi Delimiter guifg=#dfbf8e guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi! link Delimiter BlueBold
+hi Special guifg=#e78a4e guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Tag guifg=#e78a4e guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Operator guifg=#e78a4e guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi SpecialChar guifg=#e78a4e guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi String guifg=#a9b665 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi PreProc guifg=#89b482 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Macro guifg=#89b482 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Define guifg=#89b482 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Include guifg=#89b482 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi PreCondit guifg=#89b482 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Structure guifg=#89b482 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Identifier guifg=#7daea3 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Underlined guifg=#7daea3 guibg=NONE guisp=NONE gui=underline cterm=underline
+hi Constant guifg=#d3869b guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Boolean guifg=#d3869b guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Character guifg=#d3869b guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Number guifg=#d3869b guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Float guifg=#d3869b guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi SpecialKey guifg=#7daea3 guibg=NONE guisp=NONE gui=NONE cterm=NONE
+hi Comment guifg=#928374 guibg=NONE guisp=NONE gui=italic cterm=italic
+hi Function guifg=#a9b665 guibg=NONE guisp=NONE gui=bold cterm=bold
+hi DiffAdd guifg=NONE guibg=#32361a guisp=NONE gui=NONE cterm=NONE
+hi DiffChange guifg=NONE guibg=#0d3138 guisp=NONE gui=NONE cterm=NONE
+hi DiffDelete guifg=NONE guibg=#3c1f1e guisp=NONE gui=NONE cterm=NONE
+hi Error guisp=NONE term=NONE guibg=#4e4e4e cterm=bold ctermbg=239 gui=bold
+hi markdownH1 guifg=#a9b665 guibg=NONE guisp=NONE gui=bold cterm=bold
+hi markdownH2 guifg=#a9b665 guibg=NONE guisp=NONE gui=bold cterm=bold
+hi markdownH3 guifg=#e3a84e guibg=NONE guisp=NONE gui=bold cterm=bold
+hi markdownH4 guifg=#e3a84e guibg=NONE guisp=NONE gui=bold cterm=bold
+hi markdownUrl guifg=#d3869b guibg=NONE guisp=NONE gui=underline cterm=underline
+hi markdownItalic guifg=NONE guibg=NONE guisp=NONE gui=italic ctermfg=NONE ctermbg=NONE cterm=italic
+hi markdownBold guifg=NONE guibg=NONE guisp=NONE gui=bold ctermfg=NONE ctermbg=NONE cterm=bold
+hi markdownItalicDelimiter guifg=#928374 guibg=NONE guisp=NONE gui=italic cterm=italic
+hi mkdURL guifg=#d3869b guibg=NONE guisp=NONE gui=underline cterm=underline
+hi mkdInlineURL guifg=#d3869b guibg=NONE guisp=NONE gui=underline cterm=underline
+hi mkdItalic guifg=#928374 guibg=NONE guisp=NONE gui=italic cterm=italic
+hi htmlLink guifg=#a89984 guibg=NONE guisp=NONE gui=underline cterm=underline
+hi htmlBold guifg=NONE guibg=NONE guisp=NONE gui=bold ctermfg=NONE ctermbg=NONE cterm=bold
+hi htmlBoldUnderline guifg=NONE guibg=NONE guisp=NONE gui=bold,underline ctermfg=NONE ctermbg=NONE cterm=bold,underline
+hi htmlBoldItalic guifg=NONE guibg=NONE guisp=NONE gui=bold,italic ctermfg=NONE ctermbg=NONE cterm=bold,italic
+hi htmlBoldUnderlineItalic guifg=NONE guibg=NONE guisp=NONE gui=bold,italic,underline ctermfg=NONE ctermbg=NONE cterm=bold,italic,underline
+hi htmlUnderline guifg=NONE guibg=NONE guisp=NONE gui=underline ctermfg=NONE ctermbg=NONE cterm=underline
+hi htmlUnderlineItalic guifg=NONE guibg=NONE guisp=NONE gui=italic,underline ctermfg=NONE ctermbg=NONE cterm=italic,underline
+hi htmlItalic guifg=NONE guibg=NONE guisp=NONE gui=italic ctermfg=NONE ctermbg=NONE cterm=italic
+hi vimCommentTitle guifg=#a89984 guibg=NONE guisp=NONE gui=bold,italic cterm=bold,italic
+hi helpURL guifg=#89b482 guibg=NONE guisp=NONE gui=underline cterm=underline
+hi helpNote guifg=#d3869b guibg=NONE guisp=NONE gui=bold cterm=bold
+hi plug1 guifg=#e78a4e guibg=NONE guisp=NONE gui=bold cterm=bold
+hi plugNumber guifg=#e3a84e guibg=NONE guisp=NONE gui=bold cterm=bold
+hi GitGutterAdd guifg=#a9b665 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+hi GitGutterChange guifg=#7daea3 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+hi GitGutterDelete guifg=#ea6962 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+hi GitGutterChangeDelete guifg=#d3869b guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+hi multiple_cursors_cursor guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
+hi multiple_cursors_visual guifg=NONE guibg=#504945 guisp=NONE gui=NONE cterm=NONE
+hi MatchParenCur guifg=NONE guibg=NONE guisp=NONE gui=bold,reverse ctermfg=NONE ctermbg=NONE cterm=bold,reverse
+hi UndotreeSavedBig guifg=#d3869b guibg=NONE guisp=NONE gui=bold cterm=bold
 " }}}
 
 " My Additions: {{{
@@ -289,16 +286,28 @@ hi! link ALEError Error
 hi! link ALEWarning QuickFixLine
 hi! link ALEInfo Macro
 
-hi! link SyntasticError ALEError
-hi! link SyntasticWarning ALEWarning
-hi! link SyntasticErrorSign ALEErrorSign
-hi! link SyntasticWarningSign ALEWarningSign
 
+hi def link aleFixerComment Comment
+hi def link aleFixerName String
+hi def link aleFixerHelp Statement
+
+hi def link alePreviewSelectionFilename String
+hi def link alePreviewNumber Number
+" ALESignColumnWithErrors xxx links to Error
+" ALESignColumnWithoutErrors xxx ctermfg=14 ctermbg=242 guibg=#282828
+" ALEErrorLine   xxx cleared
+" ALEWarningLine xxx cleared
+" ALEInfoLine    xxx cleared
 hi! link ALEVirtualTextError Grey
 hi! link ALEVirtualTextWarning Grey
 hi! link ALEVirtualTextInfo Grey
 hi! link ALEVirtualTextStyleError ALEVirtualTextError
 hi! link ALEVirtualTextStyleWarning ALEVirtualTextWarning
+
+hi! link SyntasticError ALEError
+hi! link SyntasticWarning ALEWarning
+hi! link SyntasticErrorSign ALEErrorSign
+hi! link SyntasticWarningSign ALEWarningSign
 " }}}
 
 " GitGutter: {{{
@@ -1489,7 +1498,7 @@ hi! link typescriptDocParam Comment
 hi! link typescriptDocTags vimCommentTitle
 " }}}
 
-" React; {{{
+" React: {{{
 hi! link jsxTagName Aqua
 hi! link jsxComponentName Green
 hi! link jsxCloseString LightGrey
@@ -1556,13 +1565,14 @@ hi! link luaLoopBlock Blue
 hi! link luaParen Operator
 hi! link luaStatement Aqua
 hi! link luaTable Orange
-hi! link luaTableBlock Tag
+hi! link luaTableBlock Delimiter
 hi! link luaThenEnd Purple
-" }}}
-hi! link moonSpecialOp White
+
 hi! link moonExtendedOp Orange
 hi! link moonFunction White
 hi! link moonObject Yellow
+hi! link moonSpecialOp White
+" }}}
 
 hi! link elixirDocString Comment
 hi! link elixirInterpolationDelimiter Aqua
@@ -1750,7 +1760,7 @@ hi! link BufTabLineFill TabLineFill
 hi! link DirvishPathTail Aqua
 hi! link DirvishArg Yellow
 
-" nerdtree: {{{
+" NERDTree: {{{
 hi! link NERDTreeBookmarksLeader Conceal
 hi! link NERDTreeDir Green
 hi! link NERDTreeDirSlash Aqua

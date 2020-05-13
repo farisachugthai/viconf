@@ -5,6 +5,14 @@
   " Last Modified: Dec 05, 2019
 " ============================================================================
 
+if exists('*stdpath')  " {{{
+  let s:stddata = stdpath("data")
+else
+  let s:stddata = resolve(expand('~/.local/share/nvim'))
+endif
+let s:stdconfig = exists('*stdpath') ? stdpath('config') : resolve(expand('~/.config/nvim'))
+" }}}
+
 function! plugins#GetAllSnippets() abort  " {{{
   call UltiSnips#SnippetsInCurrentScope(1)
   let l:list = []
@@ -47,7 +55,7 @@ function! plugins#InstallPlug() abort  " {{{
   if empty(executable('curl')) | return | endif
   try " Successfully executed on termux
     execute('!curl --progress-bar --create-dirs -Lo '
-            \ . stdpath('data') . '/site/autoload/plug.vim'
+            \ . s:stddata . '/site/autoload/plug.vim'
             \ . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
   catch | echoerr v:exception | endtry
 endfunction  " }}}
@@ -124,7 +132,6 @@ function! plugins#FloatingFZF() abort  " {{{
 endfunction  " }}}
 
 function! plugins#Voom() abort  " {{{
-  let s:stddata = stdpath('data')
   let s:plugin_dir = s:stddata . '/plugged/'
   let s:voom_dir = s:plugin_dir . 'voom/autoload/voom/voom_vimplugin2657'
   let s:voom_file = s:voom_dir . '/voom_vim.py'
@@ -159,6 +166,7 @@ function! plugins#AleMappings() abort  " {{{
 
   " Options: {{{
 
+  let g:ale_hover_to_preview = 1
   let g:ale_virtualtext_cursor = 1
   let g:ale_virtualtext_prefix =  'ALE: '
   let g:ale_virtualtext_delay = 200
@@ -297,14 +305,15 @@ endfunction  " }}}
 
 function! plugins#fugitive_head() abort
   if !exists('g:loaded_fugitive')
-    return
+    " return
+    exec 'source ' . s:stddata . '/plugged/vim-fugitive/plugin/fugitive.vim'
   endif
 
-  if &l:modifiable
-    :botright split | enew
-  endif
+  " Not immediately useful but here's a way to check if you're in a fugitive blob buffer
+  " if get(b:, 'fugitive_type', '') ==# 'blob'
+  botright split | enew
 
   :Gread! show HEAD
   setlocal nomodified
   setlocal buftype=nofile
-endfunction
+endfunction  " }}}

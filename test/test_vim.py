@@ -2,9 +2,14 @@
 import os
 import sys
 import tempfile
+from pathlib import Path
 
 import pytest
 
+root = Path().cwd().parent
+sys.path.insert(0, root.joinpath("python3").__fspath__())
+
+import pynvim
 
 def source(vim, code):
     fd, fname = tempfile.mkstemp()
@@ -239,3 +244,8 @@ def test_lua(vim):
     buf = vim.current.buffer
     lua_module.setbuf(buf, ["a", "b", "c", "d"], async_=True)
     assert lua_module.getbuf(buf) == 4
+
+
+
+if __name__ == "__main__":
+    pytest.main()

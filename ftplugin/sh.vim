@@ -9,7 +9,6 @@
 " Setting global options in an ftplugin is odd
 let g:is_bash = 1
 let g:sh_fold_enabled= 4  "   (enable if/do/for folding)
-let g:sh_fold_enabled= 3  "   (enables function and heredoc folding)
 
 " highlighting readline options
 let g:readline_has_bash = 1
@@ -39,10 +38,14 @@ setlocal colorcolumn=120
 " todo: ensure it works
 setlocal include=^\s*\%(so\%[urce]\*\zs[^\|]*
 
+" Uh?
+setlocal includeexpr=shellescape(v:fname)
+
 " the original defines one too
-let b:undo_ftplugin .= '|setlocal sw< et< sts< cc< syntax< include< '
-      \ . '|unlet! b:undo_ftplugin'
-      \ . '|unlet! b:did_ftplugin'
+let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
+      \. '|setlocal sw< et< sts< cc< syntax< include< '
+      \. '|unlet! b:undo_ftplugin'
+      \. '|unlet! b:did_ftplugin'
 " }}}
 
 " Compiler: {{{
@@ -60,9 +63,11 @@ if executable('shellcheck') || executable('shellcheck.exe')
   noremap <buffer> <F5> <Cmd>make %<CR>
   noremap! <buffer> <F5> <Cmd>make %<CR>
 
-  let b:undo_ftplugin .= '|setlocal makeprg< efm<'
+  let b:undo_ftplugin .= '|setlocal mp< efm<'
       \ . '|silent! unmap <buffer> <F5>'
       \ . '|silent! unmap! <buffer> <F5>'
+
+  let b:ale_linters += ['shellcheck']
 endif
 
 " }}}

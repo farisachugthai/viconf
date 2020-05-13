@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
-import pytest
-from pynvim import ScriptHost
-from pynvim import Host, host_method_spec
 import sys
 from pathlib import Path
 
 sys.path.insert(0, Path("../python3").resolve().__fspath__())
+
+from pynvim import Host, host_method_spec
+from pynvim import ScriptHost
+
+import pytest
 
 
 def host(vim):

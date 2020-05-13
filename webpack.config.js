@@ -19,11 +19,7 @@ module.exports = {
           compilerOptions: {
             "sourceMap": true,
           }
-        }
-      }]
-    }]
-  },
-
+        }}]
   output: {
     path: path.resolve(__dirname, 'build'),
     libraryTarget: "commonjs",

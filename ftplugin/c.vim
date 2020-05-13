@@ -1,14 +1,11 @@
-" ============================================================================
+" =========================================================================
     " File: c.vim
     " Author: Faris Chugthai
     " Description: The C Programming Language
     " Last Modified: Nov 06, 2019
-" ============================================================================
+" =========================================================================
 
-if filereadable('C:/tools/vs/2019/Community/VC/Tools/Llvm/bin/clang-format.exe')
-  let g:clang_format_path = 'C:/tools/vs/2019/Community/VC/Tools/Llvm/bin/clang-format.exe'
-endif
-
+" Only do this when not done yet for this buffer
 if exists('b:did_ftplugin') | finish | endif
 
 " Options: {{{
@@ -19,14 +16,15 @@ if exists('b:did_ftplugin') | finish | endif
 
 " 				Ignore lines that don't match any patterns
 " 				defined for GCC.  Useful if output from
-" 				commands run from make are generating false
-				" positives.
+" commands run from make are generating false positives.
 let g:compiler_gcc_ignore_unmatched_lines = 1
 
 source $VIMRUNTIME/ftplugin/c.vim
-source $VIMRUNTIME/indent/c.vim
+" source $VIMRUNTIME/indent/c.vim
 setlocal foldmethod=syntax
+
 setlocal suffixesadd=.c,.h,.cpp
+setlocal cindent
 
 if filereadable('Makefile')
   setlocal makeprg=make\ %<.o
@@ -42,9 +40,6 @@ endif
 if exists(':Man') == 2
   setlocal keywordprg=:Man
 endif
-" }}}
-
-" Path: {{{
 setlocal include=^\s*#\s*include
 " setlocal define
 " setlocal includexpr
@@ -54,28 +49,32 @@ if getenv('$MANPATH')
   let &l:path .= expand('$MANPATH')
 endif
 
+setlocal formatexpr=format#ClangCheck()
+
+" ALE:
 let l:lines='all'
 let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
 let b:ale_fixers += [ 'clang-format' ]
 
-let b:undo_ftplugin .= '|setlocal fdm!< sua< mp< ofu< kp< include<'
+if filereadable('C:/tools/vs/2019/Community/VC/Tools/Llvm/bin/clang-format.exe')
+  let g:clang_format_path = 'C:/tools/vs/2019/Community/VC/Tools/Llvm/bin/clang-format.exe'
+endif
+
+" Cleanup:
+let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
+      \. '|setlocal fdm< sua< cin< mp< efm< kp< include<'
       \. '|unlet! &l:path'
+      \. '|unlet! b:undo_ftplugin'
+      \. '|unlet! b:did_ftplugin'
       \. '|unlet! b:ale_fixers'
       \. '|unlet! b:undo_ftplugin'
-" }}}
-
-" Mappings: {{{
-nnoremap <buffer> <F5> :call ftplugins#ClangCheck()<CR><CR>
-
-nnoremap <buffer> <Leader>ef <Cmd>py3file expand('$XDG_CONFIG_HOME') . '/nvim/pythonx/clang-format.py'
-
-let b:undo_ftplugin .= '|silent! nunmap <buffer> <F5>'
+      \. '|silent! nunmap <buffer> <F5>'
       \. '|silent! nunmap <buffer> <Leader>ef'
 
-" Idk why <CR> is  there twice and idk if it was a typo on the part of the
-" Clang people but its in their official documentation..
-"
-" Cscope:
+nnoremap <buffer> <F5> <Cmd>call ftplugins#ClangCheck()<CR>
+" }}}
+
+" Cscope: {{{
 if has('cscope') && executable('cscope')
   " Reasonably good inspiration for other ftplugins
 

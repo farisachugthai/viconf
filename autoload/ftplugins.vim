@@ -28,34 +28,6 @@ function! ftplugins#ALE_CSS_Conf() abort  " {{{
     let b:ale_fixers += ['prettier']
 endfunction  " }}}
 
-function! ftplugins#ALE_Html_Conf() abort  " {{{
-  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
-  " he checks for executability too let's say fuck it
-  let b:ale_fixers += ['prettier', 'stylelint', 'csslint']
-endfunction  " }}}
-
-function! ftplugins#ALE_JS_Conf() abort  " {{{
-  if !has('unix')
-    let g:ale_windows_node_executable_path = fnameescape('C:/Program Files/nodejs/node.exe')
-  endif
-  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
-  let b:ale_fixers += ['prettier']
-endfunction  " }}}
-
-function! ftplugins#ALE_Typescript() abort
-  call ftplugin#ALE_JS_Conf()
-  let b:ale_fixers += ['eslint']
-  let b:ale_fixers += ['tslint']
-  " if executable(expand('~/.config/coc/extensions/node_modules/tsserver'))
-endfunction
-
-function! ftplugins#ALE_Vim_Conf() abort  " {{{
-  let b:ale_linters = ['ale_custom_linting_rules']
-  let b:ale_linters_explicit = 1
-
-    let b:ale_linters += ['vint']
-endfunction  " }}}
-
 function! ftplugins#typescript_setup() abort
   " node_modules
   let s:node_modules = finddir('node_modules', '.;', -1)

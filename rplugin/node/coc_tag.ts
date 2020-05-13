@@ -115,3 +115,4 @@ exports.activate = (context) => {
     })
   )
 }
+// Vim set ft=typescript:

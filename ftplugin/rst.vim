@@ -113,6 +113,8 @@ augroup UserAutomake
   autocmd FileType rst compiler rst
 augroup END
 
+nnoremap <buffer> <F5> exe 'sphinx-build -b html ' . filereadable('Makefile') ==# 1 ? '. build/html' : ''
+
 " }}}
 
 let b:undo_ftplugin .= '|setlocal fdm< foldexpr< foldtext< cms< com< et< mp< efm< '

@@ -1,27 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Initialize pythonx in neovim."""
+from . import pynvim
+__docformat__ = "reStructuredText"
+
 import logging
 import os
 import sys
 from collections import namedtuple
 from importlib.machinery import PathFinder
 from io import StringIO
-
-# try:
-#     import vim  # noqa pylint:disable=import-error
-# except ImportError:
-#     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-#     from pynvim_ import LegacyVim
-
-#     vim = LegacyVim()
-
-__docformat__ = "reStructuredText"
+from pathlib import Path
 
 logger = logging.getLogger(__name__).addHandler(logging.StreamHandler())
 
-# file not defined? fuck
-# sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+root = Path.cwd().parent
+sys.path.insert(0, root.joinpath("python3").__fspath__())
 
 
 class Options:

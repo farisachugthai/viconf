@@ -4,41 +4,6 @@ Ftplugins
 
 .. highlight:: vim
 
-Ftplugin files should be used to totally override the configuration
-neovim has built-in for a certain filetype.
-
-You either have to be **THAT** discontent with it, or willing to simply
-copy and paste the original and then add your own modifications in.
-
-The standard ftplugin files on a Linux system are found in the
-`runtime directory </usr/share/nvim/runtime>`_ in the
-`ftplugin section </usr/share/nvim/runtime/ftplugin/`_.
-
-
-Utilizing ``after/ftplugin`` in the ``&rtp``
-=============================================
-In lieu of doing all of that, `after/ftplugin`_ simply builds on the
-configuration that comes built in the with editor.
-
-.. note:: Guards
-    This is only true if you put ftplugin guards in your configs.
-    However, you absolutely should.
-
-As a result, we won't put the usual ftplugin guard in there. However, we
-should do something to ensure that buffers of a different filetype don't
-source everything in `after/ftplugin`_.
-
-For example, let's say we were in `after/ftplugin/gitcommit.vim`_.
-
-Something like this pseudo code would be perfect.:
-
-.. code-block:: vim
-
-    if ft != None && ft != gitcommit | finish | endif
-
-Then put that in everything in that dir.
-
-
 Vim's distributed readme
 ========================
 From ``$VIMRUNTIME/ftplugin/README.txt`` in Vim 8.1.
@@ -112,6 +77,19 @@ a completely necessary part of my workflow these days.
 In my reStructured text ftplugin, I added :kbd:`.` to ``iskeyword`` in order
 to have dotted packages, *I.E. IPython.core.interactiveshell*, recognized
 as 1 word.
+
+.. ***todo***
+   keep writing because i still get confused on which is which ALL the time
+
+Evaluating 'truthiness'
+-----------------------
+Simply make sure that you evaluate lines one by one because things like this
+happen everywhere.::
+
+   echo get(g:, 'v:true', 'v:false')
+   " echoes v:false
+   echo get(g:, v:true, 'v:false')
+   " but why does this one do the same thing?
 
 
 Vim Filetype Plugin
@@ -191,7 +169,7 @@ syntax works.::
 
    call extend(g:rst_syntax_code_list, {'javascript': ['js', 'javascript']})
 
-To add javascript highlighting to an rst doc.::
+to add javascript highlighting to an rst doc.::
 
    let g:rst_syntax_code_list = {
        \ 'python': ['python', 'python3', 'ipython'],

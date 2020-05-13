@@ -1,11 +1,114 @@
 " ============================================================================
   " File: autocmd.vim
   " Author: Faris Chugthai
-  " Description: Auto commands
+  " Description: Auto commands. Statusline as well.
   " Last Modified: February 17, 2020
 " ============================================================================
 
 let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
+
+scriptencoding utf8
+setglobal ruler
+
+function! s:fzf_statusline()  abort " {{{
+  " Curious if this'll work
+  hi! fzf1 cterm=bold,undercurl,reverse gui=bold,undercurl,reverse guifg=#7daea3 guibg=NONE ctermbg=NONE guisp=NONE font='Source Code Pro'
+  hi! link fzf2 fzf1
+  hi! link fzf3 fzf1
+  setlocal statusline=%#fzf1#\ FZF:\ %#fzf2#fz%#fzf3#f
+
+endfunction   " }}}
+
+function! s:VarExists(var, val) abort    " {{{
+
+  if exists(a:var)
+    return a:val
+  else
+    return ''
+  endif
+endfunction  " }}}
+
+function! s:StatusDiagnostic() abort  " {{{
+  if !exists('g:loaded_coc') | return '' | endif
+
+  let l:info = get(b:, 'coc_diagnostic_info', {})
+  if empty(l:info) | return '' | endif
+  let l:msgs = []
+  if get(l:info, 'error', 0)
+    call add(l:msgs, 'E' . l:info['error'])
+  endif
+  if get(l:info, 'warning', 0)
+    call add(l:msgs, 'W' . l:info['warning'])
+  endif
+  return join(l:msgs, ' ') . ' ' . get(g:, 'coc_status', '')
+endfunction  " }}}
+
+function! s:_Statusline(bang, ...) range abort  " {{{
+
+  " from he 'statusline'.
+  " Each status line item is of the form:
+  " %-0{minwid}.{maxwid}{item}
+
+  let s:sep = ' %= '
+  let s:pos = ' %-12(%l : %c%V%) '
+
+  if exists('*strftime')
+    " Overtakes the whole screen when Termux zooms in
+    " Worth noting that %< indicates where to truncate the &stl though
+    if &columns > 80
+      let s:tstmp = '| %{strftime("%H:%M %m-%d-%Y", getftime(expand("%:p")))} |'
+      " last modified timestamp
+    else
+      let s:tstmp = ''
+    endif
+  else
+    let s:tstmp = ''  " ternary expressions should get on the todo list
+  endif
+  let s:gutentags = '%{exists("g:gutentags_enabled") ? gutentags#statusline() : ""}'
+
+  let g:statusline = '« [%n]: '
+        \. s:VarExists('*WebDevIconsGetFileTypeSymbol', '%{WebDevIconsGetFileTypeSymbol()}')
+        \. '%< %m%r %y %w»'
+        \. s:VarExists('g:loaded_fugitive', '%{FugitiveStatusline()}')
+        \. ' %{&ff} ' . s:tstmp
+        \. s:VarExists('g:did_coc_loaded', ' %{coc#status()} ')
+        \. s:VarExists('g:coc_git_status', ' %{coc_git_status} ')
+        \. '◀ 😀 %.30F ▶'
+        \. s:sep
+        \. s:StatusDiagnostic()
+        \. s:VarExists('g:ale_enabled', '«[ALE Lints]»: # %{getbufvar(bufnr(""), "ale_linted", 0)} | ')
+        \. s:gutentags
+        \. '«: '. s:pos . '%*' . ' %P »'
+
+  if a:bang ==# 1
+    redrawstatus!
+  endif
+  let &statusline = g:statusline
+  return g:statusline
+
+endfunction " }}}
+
+function! Statusline(bang, ...) abort  " {{{ Lets give a nicer clean entry point.
+  return s:_Statusline(a:bang, a:000)
+endfunction  " }}}
+
+command! -bang -bar -nargs=* -range=% -addr=loaded_buffers -complete=expression -complete=var ReloadStatusline call Statusline(<bang>0, <q-args>)
+
+augroup FZFStatusline  " {{{
+" NOTE: This has to remain the name of the augroup it's what Junegunn calls
+  au!
+  autocmd User FzfStatusLine call s:fzf_statusline()
+  autocmd User FzfStatusline setlocal winblend=15 pumblend=10
+augroup END
+
+augroup UserStatusline
+  au!
+  autocmd User CocStatusChange,CocDiagnosticChange
+        \| if exists('*Statusline')
+        \| call Statusline(1)
+        \| endif
+
+augroup END  " }}}
 
 augroup UserHelpandPython " {{{
   au!
@@ -74,36 +177,38 @@ augroup UserPlugins " {{{
   if exists('#vim-which-key')
     autocmd! User vim-which-key call which_key#register('<Space>', 'g:which_key_map')
   endif
+
 augroup END " }}}
+
+function! StripTrailingWhitespace() abort  " {{{
+
+  let l:current_line = line(".")
+  let l:column = col(".")
+  %s/\s\+$//e
+  call cursor(l:current_line, l:column)
+endfunction  " }}}
 
 augroup UserPotpourri  " {{{
   autocmd!
-  autocmd CmdlineEnter /,\? :set hlsearch
-  autocmd CmdlineLeave /,\? :set nohlsearch
+  autocmd CmdlineEnter /,\? set hlsearch
+  autocmd CmdlineLeave /,\? set nohlsearch
   autocmd CmdwinEnter [/?]  startinsert
   autocmd CmdwinLeave [/?]  stopinsert
 
+  autocmd BufWrite * call StripTrailingWhitespace()
+
   autocmd Syntax * syntax sync fromstart linebreaks=2
-  " hopefully this will only call one time
-  " so far is working perfectly
-  " autocmd VimEnter * call UltiSnipsConf()
-  " autocmd VimEnter * call syncom#gruvbox_material()
-  " autocmd VimEnter * call syncom#grepprg()
-augroup END  " }}}
+augroup END
 
 exec 'source ' . s:repo_root . '/autoload/syncom.vim'
 
 call syncom#gruvbox_material()
 call syncom#grepprg()
-" augroup TagbarAutoCmds
-"   " Dude holy christ is this annoying
-"   au! CursorHold *
-"   au! CursorHoldI *
-" augroup END
 
 if exists('#TagbarAutoCmds')
   au! TagbarAutoCmds *
 endif
+" }}}
 
 augroup UserNerdLoader  " {{{
   autocmd!
@@ -172,4 +277,3 @@ augroup UserTerm " {{{
 	" 			anything else that takes time is involved).
   au TermResponse * echomsg 'Term response was ' . v:termresponse
 augroup END  " }}}
-

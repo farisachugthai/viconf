@@ -1,7 +1,7 @@
 " ============================================================================
   " File: typescript.vim
   " Author: Faris Chugthai
-  " Description: Stole it from romainl and i ain't even ashamed
+  " Description: Typescript ftplugin
   " Last Modified: November 18, 2019
 " ============================================================================
 
@@ -26,6 +26,13 @@ let &l:define  = '^\s*\('
 setlocal includeexpr=includes#TypeScriptIncludeExpression(v:fname,0)
 setlocal suffixesadd+=.ts,.tsx,.d.ts
 setlocal isfname+=@-@
+
+source $VIMRUNTIME/autoload/javascriptcomplete.vim
+setlocal omnifunc=javascriptcomplete#CompleteJS
+
+let b:ale_fixers = get(g:, 'b:ale_fixers', [])
+let b:ale_fixers += ['eslint']
+let b:ale_fixers += ['tslint']
 " }}}
 
 " Original: {{{
@@ -70,7 +77,7 @@ endif
 
 " Undo FTPlugin: {{{
 " Theres actually an undo defined in js.vim
-let b:undo_ftplugin .='|setlocal isf< sua< syntax< et< sts< sw< ts< '
+let b:undo_ftplugin .='|setlocal isf< ofu< sua< syntax< et< sts< sw< ts< '
                    \. '|setlocal inex< def< inc< inde< '
                    \. '|unlet! b:undo_ftplugin'
                    \. '|unlet! l:include_expression'

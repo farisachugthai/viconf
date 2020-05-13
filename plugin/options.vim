@@ -34,7 +34,7 @@ endif
 " Completions: {{{
 setglobal wildignorecase fileignorecase
 setglobal wildmode=full:list:longest,full:list
-setglobal wildignore=*~,versions/*,cache/*,.tox/*,.pytest_cache/*,__pycache__/*
+setglobal wildignore=*~,versions/*,.cache/*,.tox/*,.pytest_cache/*,__pycache__/*,build/*,dist/*,.*mypy**/**
 setglobal wildcharm=<C-z>
 " C-n and C-p now use the same input that every other C-x does combined!
 " Remove includes they're pretty slow
@@ -50,6 +50,7 @@ if exists('*stdpath')
 else
   let s:stddata = resolve(expand('~/.local/share/nvim'))
 endif
+let s:stdconfig = exists('*stdpath') ? stdpath('config') : resolve(expand('~/.config/nvim'))
 
 let &g:path = &path . ',' . s:stddata
 setglobal path-=/usr/include
@@ -88,6 +89,10 @@ if exists("&pumblend")
 endif
 setglobal autochdir autowrite autoread
 
+" TODO: clipboards fucking up on windows
+setglobal clipboard=unnamed,unnamedplus
+set modeline modelines=5
+
 " Tabs:
 if &tabstop > 4 | setglobal tabstop=4 | endif
 if &shiftwidth > 4  | setglobal shiftwidth=4 | endif
@@ -108,6 +113,7 @@ set winblend=10
 
 setglobal suffixes=.bak,~,.o,.info,.swp,.aux,.bbl,.blg,.brf,.cb,.dvi,.idx,.ilg,.ind,.inx,.jpg,.log,.out,.png,.toc,.pyc,*.a,*.obj,*.dll,*.exe,*.lib,*.mui,*.swp,*.tmp,
 
+" Buffers Windows:
 setglobal pastetoggle=<F9>   " fuck me this is what windows terminal uses for something
 setglobal signcolumn=auto:4  " this might be a nvim 4 thing
 try | setglobal switchbuf=useopen,split | catch | endtry
@@ -122,7 +128,7 @@ setglobal cmdheight=3
 let s:height = &lines / 4
 let &g:previewheight  = s:height
 let &g:helpheight = s:height
-setglobal scrolloff=2
+setglobal scrolloff=0
 
 if filereadable(s:repo_root . '/spell/en.utf-8.add')
   let &g:spellfile = s:repo_root . '/spell/en.utf-8.add'
@@ -258,39 +264,6 @@ let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['js'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['cs'] = ''
 " }}}
 
-" Black: {{{
-let g:load_black = 'py1.0'
-if !exists('g:black_virtualenv')
-  if has('nvim')
-    let g:black_virtualenv = '~/.local/share/nvim/black'
-  else
-    let g:black_virtualenv = '~/.vim/black'
-  endif
-endif
-if !exists('g:black_fast')
-  let g:black_fast = 0
-endif
-if !exists('g:black_linelength')
-  let g:black_linelength = 88
-endif
-
-if !exists('g:black_skip_string_normalization')
-  let g:black_skip_string_normalization = 0
-endif
-
-" To open ranger when vim load a directory:
-" if exists('g:ranger_replace_netrw') && g:ranger_replace_netrw
-"   augroup ReplaceNetrwByRangerVim
-"     autocmd VimEnter * silent! autocmd! FileExplorer
-"     autocmd BufEnter * if isdirectory(expand('%')) | call OpenRangerOnVimLoadDir('%') | endif
-"   augroup END
-" endif
-
-if !exists('g:ranger_map_keys') || g:ranger_map_keys  " spacemacs style
-  nnoremap <Leader>ar <Cmd>Ranger<CR>
-endif
-" }}}
-
 " NERDTree: {{{
 let g:NERDTreeCustomOpenArgs = {
       \ 'file': {
@@ -301,7 +274,7 @@ let g:NERDTreeCustomOpenArgs = {
       \ 'dir': {}}
 
 " When you open a buffer, how do we do it? Don't only silent edit, keep jumps too
-let g:NERDTreeCreatePrefix = 'silent keepalt keepjumps'
+let g:NERDTreeCreatePrefix = 'silent! keepalt keepjumps'
 let g:NERDTreeDirArrows = 1
 " let g:NERDTreeWinPos = 'right'
 let g:NERDTreeShowHidden = 1
@@ -310,6 +283,7 @@ let g:NERDTreeShowHidden = 1
 let g:NERDTreeBookmarksSort = 1  " case sensitive
 let g:NERDTreeShowBookmarks = 1
 let g:NERDTreeNaturalSort = 1
+" let g:NERDTreeChdirMode = 1
 " change cwd every time NerdTree root changes:
 " let g:NERDTreeChDirMode = 2
 let g:NERDTreeShowLineNumbers = 1
@@ -317,17 +291,15 @@ let g:NERDTreeShowLineNumbers = 1
 let g:NERDTreeMouseMode = 2
 let g:NERDTreeIgnore = [ '.pyc$', '.pyo$', '__pycache__$', '.git$', '.mypy']
 let g:NERDTreeRespectWildIgnore = 1
-let g:NERDTreeAutoDeleteBuffer = 1
-let g:NERDTreeMapToggleZoom = 'Z'  " Z is for Zoom why the hell is the default A?
-let g:NERDTreeQuitOnOpen = 3
-
-let g:NERDTreeChdirMode = 1
-
+" let g:NERDTreeAutoDeleteBuffer = 1
+" Z is for Zoom why the hell is the default A?
+let g:NERDTreeMapToggleZoom = 'Z'
+" let g:NERDTreeQuitOnOpen = 3
+"
 " Is there a way to do this and also make sure that p does the same thing?
 " I think we can do something like
 " nnoremap - <Cmd>call nerdtree#ui_glue#invokeKeyMap('p')<CR>
 " and that'll do exactly what i want; however that'll only work I think if nerdtree's already been
-" loaded
 let g:NERDTreeMapJumpParent = '-'
 
 " }}}
@@ -377,7 +349,6 @@ endif
 
 " UltiSnips: {{{
 function! UltiSnipsConf() abort
-
   let g:UltiSnipsExpandTrigger = '<Tab>'
   let g:UltiSnipsJumpForwardTrigger= '<Tab>'
   let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
@@ -394,11 +365,8 @@ function! UltiSnipsConf() abort
   let g:UltiSnipsSnippetDirectories = [ expand('$HOME') . '/.config/nvim/UltiSnips' ]
   let g:UltiSnipsUsePythonVersion = 3
   let g:UltiSnipsListSnippets = '<C-/>'
-  if !exists('*stdpath')
-    return
-  endif
   " Wait is this option still a thing??
-  let g:UltiSnipsSnippetDir = [stdpath('config') . '/UltiSnips']
+  let g:UltiSnipsSnippetDir = [s:stdconfig . '/UltiSnips']
 endfunction
 
 call UltiSnipsConf()
@@ -786,6 +754,123 @@ let g:which_key_map['w'] = {
        \ 'p' : ['bprevious' , 'previous-buffer'] ,
        \ '?' : ['Buffers'   , 'fzf-buffer']      ,
        \ }
+" }}}
+
+" ALE: {{{
+" Example from the help page
+" Use just ESLint for linting and fixing files which end in '.js'
+let g:ale_pattern_options = {
+            \   '\.js$': {
+            \       'ale_linters': ['eslint'],
+            \       'ale_fixers': ['eslint'],
+            \ },
+            \ }
+
+let g:ale_lsp_show_message_severity = 'information'
+
+  let g:ale_python_pyls_config = {
+        \   'pyls': {
+        \     'plugins': {
+        \       'flake8': {
+        \         'enabled': v:true
+        \       },
+        \ 'jedi_completion': {
+        \   'enabled': v:true
+        \ },
+        \ 'jedi_hover': {
+        \   'enabled': v:true
+        \ },
+        \ 'jedi_references': {
+        \   'enabled': v:true
+        \ },
+        \ 'jedi_signature_help': {
+        \   'enabled': v:true
+        \ },
+        \ 'jedi_symbols': {
+        \   'all_scopes': v:true,
+        \   'enabled': v:true
+        \ },
+        \ 'mccabe': {
+        \   'enabled': v:true,
+        \   'threshold': 15
+        \ },
+        \ 'preload': {
+        \   'enabled': v:true
+        \ },
+        \ 'pycodestyle': {
+        \   'enabled': v:false
+        \ },
+        \ 'pydocstyle': {
+        \   'enabled': v:true,
+        \   'match': '(?!test_).*\\.py',
+        \   'matchDir': '[^\\.].*'
+        \ },
+        \ 'pyflakes': {
+        \   'enabled': v:true
+        \ },
+        \ 'rope_completion': {
+        \   'enabled': v:true
+        \ },
+        \ 'yapf': {
+        \   'enabled': v:true
+        \       }
+        \     }
+        \   }
+        \ }
+
+  let g:ale_python_auto_pipenv = 1
+  let g:ale_python_black_auto_pipenv = 1
+  let g:ale_python_pydocstyle_auto_pipenv = 1
+  let g:ale_python_flake8_auto_pipenv = 1
+  let g:ale_python_pyls_auto_pipenv = 1
+
+  " Checkout ale/autoload/ale/python.vim this is the base definition
+  let g:ale_virtualenv_dir_names = [
+      \   '.env',
+      \   '.venv',
+      \   'env',
+      \   've-py3',
+      \   've',
+      \   'virtualenv',
+      \   'venv',
+      \ ]
+
+  if isdirectory(expand('~/.virtualenvs'))
+    let g:ale_virtualenv_dir_names += [expand('~/.virtualenvs')]
+  endif
+
+  if isdirectory(expand('~/scoop/apps/winpython/current'))
+    let g:ale_virtualenv_dir_names +=  [expand('~/scoop/apps/winpython/current')]
+  endif
+
+  if isdirectory(expand('~/.local/share/virtualenvs'))
+    let g:ale_virtualenv_dir_names += [ expand('~/.local/share/virtualenvs') ]
+  endif
+
+  let g:ale_cache_executable_check_failures = v:true
+  " let g:ale_linters_ignore = {'python': ['pylint']}
+
+
+" from the indent.vim
+" ***
+" BUG
+" ***
+" Uh setting this raises on windows...constantly
+" let g:pyindent_disable_parentheses_indenting = 0
+
+let g:pyindent_searchpair_timeout = '250'
+" ALE
+let g:python_pyls_auto_pipenv = 1
+" from the indent.vim
+" ***
+" BUG
+" ***
+" Uh setting this raises on windows...constantly
+" let g:pyindent_disable_parentheses_indenting = 0
+
+let g:pyindent_searchpair_timeout = '250'
+" ALE
+let g:python_pyls_auto_pipenv = 1
 " }}}
 
 " Vim: set fdm=marker:

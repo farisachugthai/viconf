@@ -2,7 +2,7 @@
     " File: python.vim
     " Author: Faris Chugthai
     " Description: python ftplugin
-    " Last Modified: Oct 18, 2019
+    " Last Modified: May 12, 2020
 " ============================================================================
 
 " Globals: {{{
@@ -16,11 +16,6 @@ let g:pyindent_nested_paren = 'shiftwidth()'
 " Indent for a continuation line: >
 let g:pyindent_continue = 'shiftwidth() * 2'
 let g:pydoc_executable = 1
-" from the indent.vim
-let g:pyindent_disable_parentheses_indenting = 0
-let g:pyindent_searchpair_timeout = '250'
-" ALE
-let g:python_pyls_auto_pipenv = 1
 
 " }}}
 
@@ -31,23 +26,21 @@ else
   setlocal keywordprg=pydoc
 endif
 
+setlocal omnifunc=python3complete#Complete
 source $VIMRUNTIME/ftplugin/python.vim
+
 if exists('b:did_indent') | unlet! b:did_indent | endif
 source $VIMRUNTIME/indent/python.vim
 
-" Idk why but their indentexpr wont stop raising
-" But lets set the other stuff first
-setlocal autoindent
-setlocal nowrap
+" setlocal nowrap
 
-setlocal nolinebreak  " Dont set this on itll create syntaxerors
-setlocal textwidth=88
+" setlocal nolinebreak  " Dont set this on itll create syntaxerors
+" setlocal textwidth=88
 setlocal tagcase=smart
-setlocal tabstop=4 
+setlocal tabstop=4
 
-setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
-
-setlocal nolisp		" Make sure lisp indenting doesn't supersede us
+" setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
+" setlocal nolisp		" Make sure lisp indenting doesn't supersede us
 
 " also let's know where the line needs to end visually but not invoke the
 " linters to react.
@@ -58,7 +51,6 @@ setlocal foldlevelstart=0 foldignore=
 setlocal tags=tags,**,$HOME/**
 setlocal suffixesadd=.py,pyi,__init__.py
 setlocal suffixes+=.pyc
-setlocal omnifunc=python3complete#Complete
 
 setlocal isfname+=.
 " It get kinda annoying movin around without _ as a word delimiter
@@ -102,7 +94,9 @@ noremap <buffer> <F5> <Cmd>py3f %<CR>
 noremap! <buffer> <F5> <Cmd>py3f %<CR>
 
 " TODO: should we do the xnoremap part too?
-nnoremap <buffer> K <Cmd>PydocShow<CR>
+nnoremap <buffer> g<C-]> <Cmd>call pydoc_help#Pydoc('', expand('<cfile>'))<CR>
+nnoremap <buffer> gK <Cmd>PydocShow<CR>
+
 
 " Lol spacemacs had me do this a few times
 nnoremap <buffer> ,eb <Cmd>py3f %<CR>
@@ -129,8 +123,8 @@ endif
 " Use standard compiler settings unless user wants otherwise
 if !exists("current_compiler")
   if executable('pytest')
-    compiler pytest
-    setlocal makeprg=pytest\ -q\ %
+  compiler pytest
+  setlocal makeprg=pytest\ -q\ %
   else
     " note this compiler actually setting mp for us too!
     compiler pylint
@@ -139,114 +133,12 @@ endif
 " }}}
 
 if !exists('b:loaded_ale_python') " {{{
-
-  " Goddamn this is so long I might wanna autoload this no?
-  " Eh. Nah.
   let b:ale_linters = ['flake8', 'pydocstyle', 'pyls']
   let b:ale_linters_explicit = 1
-
   let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
   let b:ale_fixers += [ 'reorder-python-imports' ]
-
-  if executable('black')
-    let b:ale_fixers+=['black']
-  endif
-
-  if executable('autopep8')
-    let b:ale_fixers += ['autopep8']
-  endif
-  let g:ale_python_pyls_config = {
-        \   'pyls': {
-        \     'plugins': {
-        \       'flake8': {
-        \         'enabled': v:true
-        \       },
-        \ 'jedi_completion': {
-        \   'enabled': v:true
-        \ },
-        \ 'jedi_hover': {
-        \   'enabled': v:true
-        \ },
-        \ 'jedi_references': {
-        \   'enabled': v:true
-        \ },
-        \ 'jedi_signature_help': {
-        \   'enabled': v:true
-        \ },
-        \ 'jedi_symbols': {
-        \   'all_scopes': v:true,
-        \   'enabled': v:true
-        \ },
-        \ 'mccabe': {
-        \   'enabled': v:true,
-        \   'threshold': 15
-        \ },
-        \ 'preload': {
-        \   'enabled': v:true
-        \ },
-        \ 'pycodestyle': {
-        \   'enabled': v:false
-        \ },
-        \ 'pydocstyle': {
-        \   'enabled': v:true,
-        \   'match': '(?!test_).*\\.py',
-        \   'matchDir': '[^\\.].*'
-        \ },
-        \ 'pyflakes': {
-        \   'enabled': v:true
-        \ },
-        \ 'rope_completion': {
-        \   'enabled': v:true
-        \ },
-        \ 'yapf': {
-        \   'enabled': v:true
-        \       }
-        \     }
-        \   }
-        \ }
-
-  let g:ale_python_auto_pipenv = 1
-  let g:ale_python_black_auto_pipenv = 1
-  let g:ale_python_pydocstyle_auto_pipenv = 1
-  let g:ale_python_flake8_auto_pipenv = 1
-  let g:ale_python_pyls_auto_pipenv = 1
-
-  " Checkout ale/autoload/ale/python.vim this is the base definition
-  let g:ale_virtualenv_dir_names = [
-      \   '.env',
-      \   '.venv',
-      \   'env',
-      \   've-py3',
-      \   've',
-      \   'virtualenv',
-      \   'venv',
-      \ ]
-
-  if isdirectory(expand('~/.virtualenvs'))
-    let g:ale_virtualenv_dir_names += [expand('~/.virtualenvs')]
-  endif
-
-  if isdirectory(expand('~/scoop/apps/winpython/current'))
-    let g:ale_virtualenv_dir_names +=  [expand('~/scoop/apps/winpython/current')]
-  endif
-
-  if isdirectory(expand('~/.local/share/virtualenvs'))
-    let g:ale_virtualenv_dir_names += [ expand('~/.local/share/virtualenvs') ]
-  endif
-
-  let g:ale_cache_executable_check_failures = v:true
-  " let g:ale_linters_ignore = {'python': ['pylint']}
-
-  " Example from the help page
-  " Use just ESLint for linting and fixing files which end in '.js'
-  let g:ale_pattern_options = {
-              \   '\.js$': {
-              \       'ale_linters': ['eslint'],
-              \       'ale_fixers': ['eslint'],
-              \ },
-              \ }
-
-  let g:ale_lsp_show_message_severity = 'information'
+  let b:ale_fixers += ['autopep8']
+  let b:ale_fixers += ['isort']
   let b:loaded_ale_python = 1
 endif
 " }}}

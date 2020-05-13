@@ -8,13 +8,15 @@
 if exists('b:did_ftplugin') | finish | endif
 let b:did_ftplugin = 1
 
-" source $VIMRUNTIME/ftplugin/gitcommit.vim
+let s:ftplugin_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h'))
+exec 'source ' . s:ftplugin_root . '/git.vim'
 setlocal textwidth=72
 setlocal spell
 
 " Keep the first line of a git commit 50 char long and everything after 72.
 setlocal colorcolumn=50,73
 setlocal linebreak
+setlocal cursorcolumn
 
 " setlocal formatoptions-=t formatoptions+=croql
 setlocal formatoptions=tqan1
@@ -25,13 +27,14 @@ setlocal autoindent
 
 setlocal formatexpr=format#Format()
 
-let b:undo_ftplugin = '|setlocal tw< sp< cc< lbr< fo< com< cms< ai< fex<'
-      \ . '|unlet! b:undo_ftplugin'
-      \ . '|unlet! b:did_ftplugin'
+let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
+      \. '|setlocal tw< sp< cc< lbr< fo< com< cms< ai< fex<'
+      \. '|unlet! b:undo_ftplugin'
+      \. '|unlet! b:did_ftplugin'
 
 command! -bang -bar -buffer -complete=custom,s:diffcomplete -nargs=* DiffGitCached :call s:gitdiffcached(<bang>0, b:git_dir, <f-args>)
 
-let b:undo_ftplugin = b:undo_ftplugin . '|delc DiffGitCached'
+let b:undo_ftplugin .= '|delc DiffGitCached'
 
 function! s:diffcomplete(A,L,P)  " {{{
   let s:args = ''
@@ -51,7 +54,7 @@ function! s:diffcomplete(A,L,P)  " {{{
   return s:args
 endfunction  " }}}
 
-function! s:gitdiffcached(bang, gitdir, ...)
+function! s:gitdiffcached(bang, gitdir, ...)  " {{{
   let b:tree = fnamemodify(a:gitdir,':h')
   let s:name = tempname()
   let s:git = 'git'
@@ -83,3 +86,4 @@ function! s:gitdiffcached(bang, gitdir, ...)
   nnoremap <buffer> <silent> q :q<CR>
   setlocal buftype=nowrite nobuflisted noswapfile nomodifiable filetype=git
 endfunction
+" }}}

@@ -1,20 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Pynvim's longest test file."""
-from pynvim import NvimError, attach
 import pytest
 import json
 import os
 import sys
 from pathlib import Path
 
-root = Path(__file__).parent.parent
+root = Path().cwd().parent
 sys.path.insert(0, root.joinpath("python3").__fspath__())
 
-
-# from _pytest.mark
-# from _pytest.config import ExitCode
-# from _pytest.config.exception import UsageError
+from pynvim import NvimError, attach
 
 
 @pytest.fixture(scope="module")

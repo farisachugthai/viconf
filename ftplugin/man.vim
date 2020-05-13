@@ -23,11 +23,11 @@ let b:undo_ftplugin = ''
 " hate this mapping.
 silent! nunmap <buffer> q
 setlocal buftype=
-setlocal bufhidden=
-setlocal noreadonly
+" setlocal bufhidden=
+" setlocal noreadonly
 setlocal modifiable
 setlocal number relativenumber
-setlocal signcolumn=auto:4
+" setlocal signcolumn=auto:4
 setlocal wrap
 " allow dot and dash in manual page name.
 setlocal iskeyword+=\.,-
@@ -38,10 +38,19 @@ if exists(':Man') == 2
   setlocal keywordprg=:Man
 endif
 
-if getenv('$MANPATH')
-  let &l:path .= expand('$MANPATH')
+" *******
+" BUG:
+" *******
+" MANPATH is set but getenv(anythibg) returns v:null
+" if getenv('$MANPATH')
+if exists('$MANPATH')
+  let &l:path = expand('$MANPATH')
+elseif exepath('manpath')
+  let &l:path = exepath('manpath')
 endif
-setlocal wrap
+
+nnoremap <silent> <buffer> <nowait> q :lclose<CR>:bd<CR>
+nnoremap <expr> <buffer> gO         man#show_toc()
 
 " Like guys we have to define this correctly and fix things!
 let b:undo_ftplugin  = 'setlocal buftype< bufhidden< ro< mod< nu< rnu< signcolumn< wrap<'

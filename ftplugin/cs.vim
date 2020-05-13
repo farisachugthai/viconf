@@ -1,5 +1,9 @@
-" Vim filetype plugin file
-" Language:	C#
+" =========================================================================
+    " File: cs.vim
+    " Author: Faris A. Chugthai
+    " Description:  Language:	C#
+    " Last Modified: May 12, 2020
+" =========================================================================
 
 if exists('b:did_ftplugin') | finish | endif
 
@@ -8,7 +12,9 @@ source $VIMRUNTIME/ftplugin/cs.vim
 source $VIMRUNTIME/indent/cs.vim
 
 setlocal expandtab shiftwidth=4 tabstop=4 softtabstop=4
-compiler cs
+if !exists('current_compiler')
+  compiler cs
+endif
 
 setlocal makeprg=csc\ %:S
 

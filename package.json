@@ -9,14 +9,39 @@
   "contributes": {
     "commands": [
       {
-        "command": "bar",
-        "title": "foo"
+        "command": "coc-ext.version",
+        "title": "Print extension version"
+      },
+      {
+        "command": "coc-ext.update",
+        "title": "Update coc-ext"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "global",
+        "path": "./UltiSnips/rst.snippets"
       }
     ],
     "configuration": {
-      "properties": {},
       "title": "coc-extensions",
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "coc-extensions.enable": {
+          "type": "boolean",
+          "defaul": true
+        },
+        "coc-extension.trace.server": {
+          "type": "string",
+          "default": "off",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "description": "Trace level of extensions."
+        }
+      }
     }
   },
   "devDependencies": {
@@ -37,6 +62,13 @@
     "coc-word": ">=1.2.2",
     "coc-yaml": ">=1.0.4",
     "coc-yank": ">=1.1.4"
+  },
+  "dependencies": {
+    "@msgpack/msgpack": "^1.9.3",
+    "lodash.defaults": "^4.2.0",
+    "lodash.omit": "^4.5.0",
+    "semver": "^7.1.1",
+    "winston": "3.2.1"
   },
   "directories": {
     "lib": "rplugin/node"
@@ -62,11 +94,13 @@
   },
   "scripts": {
     "build": "yarn run webpack -dw rplugin/node/coc_tag.js",
+    "build:watch": "tsc --watch -p tsconfig.json",
     "clean": "yarn autoclean --force",
     "coc-tsserver": "node ./node_modules/coc-tsserver/bin/tsserverForkStart.js",
     "fix": "yarn run prettier --write rplugin/node",
     "lint": "yarn run tslint --fix **.ts",
     "pretest": "echo 'Running tests'",
+    "start": "yarn run neovim-node-host",
     "tagfunc": "node ./rplugin/node/coc_tag.js",
     "tsserver": "node ./node_modules/typescript/bin/tsserver",
     "vimlsp": "yarn run vim-language-server --stdio",
