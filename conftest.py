@@ -88,10 +88,10 @@ def vim():
         editor = pynvim.attach("stdio", sys.argv)
     return editor
 
+
 if __name__ == "__main__":
     local_path = LocalPath("python3/pynvim.py")
     pynvim  = local_path.pyimport()
-
 
     import selectors
     selectors._fileobj_to_fd(open("python3/pynvim.py"))

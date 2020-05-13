@@ -21,17 +21,6 @@ then not make synchronous Neovim requests, but it can make asynchronous
 requests, i.e. passing async_=True.
 
 """
-from typing import Dict, Any, AnyStr, Union, List, Optional, Callable
-from traceback import format_exception, format_stack, format_exc
-from pathlib import Path
-from functools import partial
-from collections.abc import MutableMapping
-from collections import UserList, deque
-from asyncio.streams import StreamReader, StreamWriter
-from asyncio.events import get_event_loop_policy
-from asyncio.futures import Future
-from asyncio.events import get_event_loop_policy, new_event_loop
-import msgpack
 __package__ = "pynvim"
 # __path__ = [__file__]
 __docformat__ = "reStructuredText"
@@ -57,6 +46,18 @@ import sys
 import threading
 import traceback
 import warnings
+
+from asyncio.events import get_event_loop_policy
+from asyncio.futures import Future
+from asyncio.streams import StreamReader, StreamWriter
+from collections import UserList, deque
+from collections.abc import MutableMapping
+from functools import partial
+from pathlib import Path
+from traceback import format_exception, format_stack, format_exc
+from typing import Dict, Any, AnyStr, Union, List, Optional, Callable
+
+import msgpack
 
 try:
     from msgpack._cmsgpack import Packer, unpackb, Unpacker
@@ -347,32 +348,42 @@ def setup_logging(name: AnyStr = None, level: int = None, disable_asyncio_loggin
     if name is None:
         name = __name__
     if level is None:
-        level = os.environ.get("NVIM_PYTHON_LOG_LEVEL", None)
-        if level is None:
-            level = logging.WARNING
+        level = os.environ.get("NVIM_PYTHON_LOG_LEVEL", logging.WARNING)
+    if level in ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]:
+        level = "logging." + level
+
+    try:
+        level = int(level)
+    except ValueError:  # apparently this gets raised if you do int(logging.DEBUG)
+        pass
+    except TypeError:
+        raise
 
     logger = logging.getLogger(name=name)
     logger.setLevel(level)
 
+    stream = logging.StreamHandler(sys.stderr)
+    stream.setLevel(level)
+    logger.addHandler(stream)
+    filterer = logging.Filter(name=__name__)
+    logger.addFilter(filterer)
+
     if "NVIM_PYTHON_LOG_FILE" not in os.environ.copy():
         return logger
 
+    # Set up the logfile handler
     prefix = os.environ["NVIM_PYTHON_LOG_FILE"].strip()
     major_version = sys.version_info[0]
     logfile = "{}_py{}_{}".format(prefix, major_version, name)
     handler = logging.FileHandler(logfile, "w", "utf-8")
     handler.setLevel(level)
-    filterer = logging.Filter(name=__name__)
-    logger.addFilter(filterer)
 
+    # Set up the logfile formatter
     log_datefmt = "%Y-%m-%d %H:%M:%S"
     default_log_format = "[ %(name)s : %(relativeCreated)d :] %(levelname)s : %(module)s : --- %(message)s "
     formatter = logging.Formatter(fmt=default_log_format, datefmt=log_datefmt)
-    stream = logging.StreamHandler(sys.stderr)
-    stream.setLevel(logging.WARNING)
     handler.setFormatter(formatter)
     logger.addHandler(handler)
-    logger.addHandler(stream)
     logger.root.addHandler(handler)
     if not disable_asyncio_logging:
         return logger
@@ -391,7 +402,9 @@ def setup_logging(name: AnyStr = None, level: int = None, disable_asyncio_loggin
     return logger
 
 
-logger = setup_logging()
+logging.basicConfig(level=logging.WARNING, format=logging.BASIC_FORMAT)
+logger = logging.getLogger(name=__name__)
+# logger = setup_logging()
 debug, info, warn, error = (
     logger.debug,
     logger.info,
@@ -455,7 +468,6 @@ def format_exc_skip(skip=1, limit=None, exception=None):
 
 
 def catch_and_print_exceptions(func):
-    @functools.wraps
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
@@ -898,7 +910,6 @@ class Session(object):
             except Exception:
                 warn("error caught while excecuting async callback\n%s\n", format_exc())
 
-        @functools.wraps
         def greenlet_wrapper():
             gr = greenlet.greenlet(handler)
             gr.switch()
@@ -920,13 +931,13 @@ class Session(object):
         # its probably senseless to define that with no __iter__
         if self._is_running:
             raise NvimError("Event loop already running")
+        if self._pending_messages:
+            return self._pending_messages.popleft()
         self._async_session.run(
             self._enqueue_request_and_stop, self._enqueue_notification_and_stop
         )
         if self._pending_messages:
             return self._pending_messages.popleft()
-        # if self._pending_messages:
-        #     return self._pending_messages.popleft()
 
     def request(self, method, *args, **kwargs):
         """Send a msgpack-rpc request and block until as response is received.
@@ -1625,7 +1636,6 @@ class BufferBase(UserList):
         """Initialize a Buffers object with Nvim object `nvim`."""
         self.nvim = Nvim.from_session(session) if nvim is None else nvim
         self._fetch_buffers = nvim.api.list_bufs
-        # super().__init__()
 
     def __len__(self):
         """Return the count of buffers."""
@@ -1903,6 +1913,7 @@ class VimPath(Nvim):
 
 
 def out_stream(data, **kwargs):
+    """In an attempt to avoid ever using RedirectStream again."""
     with contextlib.redirect_stdout(sys.stdout):
         vim.request("nvim_out_write", data, **kwargs)
     return (data, kwargs)
@@ -1913,6 +1924,18 @@ def err_stream(data, **kwargs):
         vim.request("nvim_err_write", data, **kwargs)
     return (data, kwargs)
 
+
+@contextlib.contextmanager
+def hide_stdio():
+    """Swallow stdout and stderr. Don't use RedirectStream."""
+    ignored = IgnoredIO()
+    sys.stdout = ignored
+    sys.stderr = ignored
+    try:
+        yield
+    finally:
+        sys.stdout = sys.__stdout__
+        sys.stderr = sys.__stderr__
 
 @plugin
 class ScriptHost:
@@ -1936,20 +1959,15 @@ class ScriptHost:
         # also we're gonna need to do something about all this horrific
         # sys.path hacking
         self.hook = path_hook(nvim)
-        self.saved_stdout = sys.stdout
-        self.saved_stderr = sys.stderr
-        sys.stdout = RedirectStream(out_stream)
-        sys.stderr = RedirectStream(err_stream)
 
         # context where all code will run
         import types
 
-        self.module = types.ModuleType("__main__")
-        nvim.script_context = self.module
         # it seems some plugins assume 'sys' is already imported, so do it now
-        exec("import sys", self.module.__dict__)
-        exec("import re", self.module.__dict__)
+        exec("import sys", globals(), locals())
+        exec("import re", globals(), locals())
         self.legacy_vim = LegacyVim.from_nvim(nvim)
+        exec("import vim", globals(), locals())
         sys.modules["vim"] = self.legacy_vim
         exec("import vim", self.module.__dict__)
         import platform
@@ -1974,15 +1992,15 @@ class ScriptHost:
             async_=True,
         )
 
-    def teardown(self):
-        """Restore state modified from the `setup` call."""
-        nvim = self.nvim
-        info("uninstall import hook/path")
-        sys.path.remove(nvim.VIM_SPECIAL_PATH)
-        sys.path_hooks.remove(self.hook)
-        info("restore sys.stdout and sys.stderr")
-        sys.stdout = self.saved_stdout
-        sys.stderr = self.saved_stderr
+    # def teardown(self):
+    #     """Restore state modified from the `setup` call."""
+    #     nvim = self.nvim
+    #     info("uninstall import hook/path")
+    #     sys.path.remove(nvim.VIM_SPECIAL_PATH)
+    #     sys.path_hooks.remove(self.hook)
+    #     info("restore sys.stdout and sys.stderr")
+    #     sys.stdout = self.saved_stdout
+    #     sys.stderr = self.saved_stderr
 
     @rpc_export("python_execute", sync=True)
     def python_execute(self, script, range_start, range_stop):
@@ -1995,7 +2013,7 @@ class ScriptHost:
         """
         self._set_current_range(range_start, range_stop)
         try:
-            exec(script, self.module.__dict__)
+            exec(script, globals(), locals())
         except Exception:
             raise ErrorResponse(format_exc_skip(1))
 
@@ -2006,7 +2024,7 @@ class ScriptHost:
         with open(file_path) as f:
             script = compile(f.read(), file_path, "exec")
             try:
-                exec(script, self.module.__dict__)
+                exec(script, globals(), locals())
             except Exception:
                 raise ErrorResponse(format_exc_skip(1))
 
@@ -2020,9 +2038,9 @@ class ScriptHost:
 
         # define the func
         function_def = "def %s(line, linenr):\n %s" % (fname, code,)
-        exec(function_def, self.module.__dict__)
+        exec(script, globals(), locals())
         # get the func
-        func = self.module.__dict__[fname]
+        exec(function_def, self.module.__dict__)
         while start < stop:
             # Process batches of 5000 to avoid the overhead of making multiple
             # API calls for every line. Assuming an average line length of 100
@@ -2061,8 +2079,6 @@ class ScriptHost:
                 nvim.current.buffer.api.set_lines(sstart, end, True, newlines)
             if exception:
                 raise exception
-        # delete the func
-        del self.module.__dict__[fname]
 
     @rpc_export("python_eval", sync=True)
     def python_eval(self, expr):
@@ -2133,6 +2149,7 @@ class RedirectStream(io.TextIOWrapper):
 
         """
         self.redirect_handler = redirect_handler
+        raise DeprecationWarning
         super().__init__(**kwargs)
 
     @property
@@ -2525,7 +2542,7 @@ def transform_keyerror(exc):
     # return exc
 
 
-class RemoteMap:
+class RemoteMap(MutableMapping):
     """Represents a string->object map stored in Nvim.
 
     This is the dict counterpart to the `RemoteSequence` class, but it is used
@@ -2541,9 +2558,10 @@ class RemoteMap:
         >>> import pprint
         >>> pprint.pprint(vim.vars)
 
+    No because then it would require that the main Nvim class be iterable.
+    Which can happen later but not now.
     """
 
-    # these still need to be defined even if not given in the init
     _set = None
     _del = None
 
@@ -2620,7 +2638,16 @@ class RemoteSequence(UserList):
     """
 
     def __init__(self, session, method):
-        """Initialize a RemoteSequence with session, method."""
+        """Initialize a RemoteSequence with session, method.
+
+        Parameters
+        ----------
+        session :
+            Something that has a request attr?
+        method :
+            Idk.
+
+        """
         self._fetch = functools.partial(session.request, method)
 
     def __len__(self):
@@ -2770,6 +2797,14 @@ class MsgpackStream(object):
         self._loop = (
             event_loop if event_loop is not None else AsyncioEventLoop()
         )  # todo: args
+
+        # OR:
+        # try:
+        #     self.loop = get_running_loop() if event_loop is None else event_loop
+        # except RunTimeError:
+        #     loop_policy = get_event_loop_policy()
+        #     self.loop = loop_policy.get_event_loop()
+
         self._packer = Packer(autoreset=autoreset)
         self._unpacker = Unpacker(**kwargs)
         self._message_cb = _message_cb
@@ -2806,7 +2841,7 @@ class MsgpackStream(object):
         packed = self._packer.pack(msg)
         debug(packed)
 
-    def run(self, fut):
+    def run(self, coroutine=None):
         """Run the event loop to receive messages from Nvim.
 
         While the event loop is running, `message_cb` will be called whenever
@@ -2816,17 +2851,17 @@ class MsgpackStream(object):
         # self._message_cb = None
         if isinstance(self.loop, asyncio.BaseEventLoop):
             # gotta start awaiting
-            self.loop.run_until_complete(fut)
+            self.loop.run_until_complete(coroutine)
         else:
             self.loop.run(self._on_data)
 
-    # def stop(self):
-    #     """Stop the event loop."""
-    #     self.loop.stop()
+    def stop(self):
+        """Stop the event loop."""
+        self.loop.stop()
 
-    # def close(self):
-    #     """Close the event loop."""
-    #     self.loop.close()
+    def close(self):
+        """Close the event loop."""
+        self.loop.close()
 
     def _on_data(self, data):
         self._unpacker.feed(data)
@@ -2870,7 +2905,8 @@ class AsyncSession(MsgpackStream):
     # also it should be a class attribute as every instance should
     # probably be accessing the same loop.
 
-    def __init__(self, event_loop=None, _message_cb=None, **kwargs):
+
+    def __init__(self, event_loop=None, _message_cb=None, msgpack_stream=None):
         """Wrap `msgpack_stream` on a msgpack-rpc interface."""
         # self._msgpack_stream = msgpack_stream
         warnings.warn(DeprecationWarning("msgpack_stream is deprecated"))
@@ -2883,7 +2919,8 @@ class AsyncSession(MsgpackStream):
             2: self._on_notification,
         }
         # self._enum_handlers = SessionHandlers()
-        super().__init__(event_loop, _message_cb, **kwargs)
+        # self.loop = msgpack_stream.loop
+        super().__init__(event_loop, _message_cb)
 
     @property
     def _msgpack_stream(self):
@@ -2897,11 +2934,7 @@ class AsyncSession(MsgpackStream):
             # todo:
             self.loop = value
 
-    # def threadsafe_call(self, fn):
-    #     """Wrap around `MsgpackStream.threadsafe_call`."""
-    #     self._msgpack_stream.threadsafe_call(fn)
-
-    def request(self, method, args, response_cb):
+   def request(self, method, args, response_cb):
         """Send a msgpack-rpc request to Nvim.
 
         A msgpack-rpc with method `method` and argument `args` is sent to
@@ -2934,14 +2967,6 @@ class AsyncSession(MsgpackStream):
         self._msgpack_stream.run(self._on_message)
         self._request_cb = None
         self._notification_cb = None
-
-    # def stop(self):
-    #     """Stop the event loop."""
-    #     self._msgpack_stream.stop()
-
-    # def close(self):
-    #     """Close the event loop."""
-    #     self._msgpack_stream.close()
 
     def _on_message(self, msg):
         try:
@@ -3047,7 +3072,8 @@ class BaseEventLoop(_PlatformSpecificLoop):
 
     This class exposes public methods for interacting with the underlying
     event loop and delegates implementation-specific work to the following
-    methods, which subclasses are expected to implement:
+    methods, which subclasses are expected to implement. Note that there
+    is no mechanism to enforce this is suggestion; however.:
 
     - `_init()`: Implementation-specific initialization
 
@@ -3207,9 +3233,21 @@ class BaseEventLoop(_PlatformSpecificLoop):
         self._error = cls(msg)
         self.stop()
 
-    def _on_error(self, _error):
-        debug(_error)
-        self._error = OSError(_error)
+    def _on_error(self, *exc_info):
+        """Handle errors raised by the host Neovim process.
+
+        Notes
+        -----
+        Exception handlers are supposed to accept a tuple of 3 elements as per sys.exc_info.
+
+        Parameters
+        ----------
+        exc_info : tuple, optional
+            Exception info of the form (exception_type, exception_value, types.Traceback)
+
+        """
+        debug(*exc_info)
+        self._error = OSError(*exc_info)
         self.stop()
 
     def _on_interrupt(self):
@@ -3255,6 +3293,9 @@ class BaseEventLoop(_PlatformSpecificLoop):
     def _send(self, data):
         pass
 
+    @classmethod
+    def register(self, other):
+        pass
 
 # mspack_rpc.event_loop.asyncio:
 
@@ -3287,7 +3328,6 @@ class AsyncioEventLoop(BaseEventLoop, asyncio.SubprocessProtocol, asyncio.Protoc
         loop_cls = asyncio.ProactorEventLoop
     else:
         loop_cls = asyncio.SelectorEventLoop
-    _loop = loop_cls()
 
 
 class AsyncioBaseEventLoop(BaseEventLoop, asyncio.Protocol):
@@ -3321,18 +3361,7 @@ class AsyncioEventLoop(AsyncioBaseEventLoop):
 
     _queued_data = deque()
     _raw_transport = None
-    if os.name == "nt":
-        # On windows use ProactorEventLoop which support pipes and is backed by the
-        # more powerful IOCP facility
-        # NOTE: we override in the stdio case, because it doesn't work.
-        loop_cls = asyncio.ProactorEventLoop
-    else:
-        loop_cls = asyncio.SelectorEventLoop
-
-    loop_policy = get_event_loop_policy()
-    _local = loop_policy._local
-    _watcher = loop_policy._watcher
-    # _loop = loop_policy.get_event_loop()
+    _local = threading.local
     _closed = False
 
     def __init__(
@@ -3374,22 +3403,29 @@ class AsyncioEventLoop(AsyncioBaseEventLoop):
         self._signals = []  # type: List[signal.signal]
         super().__init__(transport_type)
 
-    @property
+    # @property
     def _fact(self):
         return self
 
-    @property
-    def reader(self):
-        return StreamReader(loop=self._loop)
+    # literally where in the code base did these get used?
+    # @property
+    # def reader(self):
+    #     return StreamReader(loop=self._loop)
 
-    @property
-    def writer(self):
-        return StreamWriter  # todo
+    # @property
+    # def writer(self):
+    #     return StreamWriter  # todo
 
-    def connection_lost(self, exc):
+    def connection_lost(self, exc, *args):
         """Signals to `asyncio.Protocol` of a lost connection."""
         self._on_error(exc.args[0] if exc else "EOF")
         super().connection_lost(exc)
+        try:
+            return sys._last_frame
+        except AttributeError:
+            pass
+
+    pipe_connection_lost = connection_lost
 
     def data_received(self, data):
         """Used to signal `asyncio.Protocol` of incoming data."""
@@ -3412,8 +3448,14 @@ class AsyncioEventLoop(AsyncioBaseEventLoop):
             self._queued_data.append(data)
 
     def process_exited(self):
-        """Used to signal `asyncio.SubprocessProtocol` when the child exits."""
+        """Used to signal `asyncio.SubprocessProtocol` when the child exits.
+
+        Typically represents an `EOFError`.
+        Analagous to the :meth:`asyncio.Transport.eof_received`
+        """
         self._on_error("EOF")
+
+    eof_received = process_exited
 
     def _init(self):
         pass
@@ -3441,7 +3483,8 @@ class AsyncioEventLoop(AsyncioBaseEventLoop):
         self._loop.run_until_complete(coroutine)
         debug("native stdin connection successful")
 
-        # Make sure subprocesses don't clobber stdout, send the output to stderr instead.
+        # Make sure subprocesses don't clobber stdout,
+        # send the output to stderr instead.
         rename_stdout = os.dup(sys.stdout.fileno())
         os.dup2(sys.stderr.fileno(), sys.stdout.fileno())
 
@@ -3454,11 +3497,20 @@ class AsyncioEventLoop(AsyncioBaseEventLoop):
         debug("native stdout connection successful")
 
     def _connect_child(self, argv):
+        """Connect to Nvim using the 'child' method of attach.
+
+        Internally, uses asyncio subprocesses. At this time, the default
+        Windows default EventLoop does **NOT** support shelling out.
+
+        :param argv: Args to pass to the loop's :meth:`subprocess_exec`.
+        """
         # TODO: is this still unsupported on NT?
         if os.name != "nt":
             self._child_watcher = asyncio.get_child_watcher()
             self._child_watcher.attach_loop(self._loop)
         coroutine = self._loop.subprocess_exec(self._fact, *argv)
+        # so lookin at this stack traces we should have DEFINITEly started
+        # using the await keyword. this function starts calling async def funcs
         self._loop.run_until_complete(coroutine)
 
     def _start_reading(self):
@@ -3467,11 +3519,10 @@ class AsyncioEventLoop(AsyncioBaseEventLoop):
     def _send(self, data):
         self._transport.write(data)
 
-    def _run(self, **kwargs):
+    def _run(self):
         while self._queued_data:
             self._on_data(self._queued_data.popleft())
-        # self._loop.run_forever()
-        super().run(**kwargs)
+        self._loop.run_forever()
 
     def _stop(self):
         self._loop.stop()
@@ -3516,7 +3567,6 @@ def session(transport_type="stdio", *args, **kwargs) -> Session:
     handling some Nvim particularities(server->client requests for example), the
     code here should work with other msgpack-rpc servers.
     """
-    # loop = EventLoop(transport_type, *args, **kwargs)
     try:
         loop = asyncio.get_event_loop()
     except RuntimeError:
@@ -3686,9 +3736,8 @@ class Host:
         ----------
         _specs: dict
             No idea what the dict should be.
-        Bunch more
-        This'll take a while.
-        """
+
+       """
         self.nvim = nvim
         if kwargs.pop("_specs"):
             self._specs = kwargs.pop("_specs")
@@ -3705,6 +3754,7 @@ class Host:
         self.handler = self._notification_handlers.get(name, None)
 
         # Decode per default for Python3
+        # self._decode_default = IS_PYTHON3
         self._decode_default = True
 
     def _on_async_err(self, msg):
@@ -3792,7 +3842,6 @@ class Host:
         """Handle a msgpack-rpc notification."""
         # if IS_PYTHON3:
         #     name = decode_if_bytes(name)
-        self.handler = self._notification_handlers.get(name, None)
         if not handler:
             msg = self._missing_handler_error(name, "notification")
             error(msg)
@@ -3954,13 +4003,6 @@ class Host:
 # msgpack_rpc.event_loop.pyuv:
 
 
-try:
-    import pyuv  # noqa
-except ImportError:
-    # warnings.warn("pyuv not installed!")
-    pyuv = None
-
-
 class UvEventLoop(BaseEventLoop):
     """`BaseEventLoop` subclass that uses `pvuv` as a backend.
 
@@ -3974,7 +4016,14 @@ class UvEventLoop(BaseEventLoop):
 
     """
 
-    _connection_error = None
+    try:
+        import pyuv  # noqa
+    except ImportError:
+        # warnings.warn("pyuv not installed!")
+        pyuv = None
+
+
+   _connection_error = None
     _callbacks = deque()
     _error_stream = None
     _closed = False
@@ -4108,6 +4157,7 @@ class UvEventLoop(BaseEventLoop):
 
 EventLoop = UvEventLoop
 
+
 import gc
 gc.collect()
 
@@ -4116,4 +4166,4 @@ if __name__ == "__main__":
     f = LocalPath(os.path.abspath(__file__))
     f.pyimport()
 
-# Vim: set fdm=marker fdls=0:
+# Vim: set fdm=indent fdls=0:
