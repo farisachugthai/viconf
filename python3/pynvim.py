@@ -1937,6 +1937,7 @@ def hide_stdio():
         sys.stdout = sys.__stdout__
         sys.stderr = sys.__stderr__
 
+
 @plugin
 class ScriptHost:
     """Provides an environment for running python plugins created for Vim."""
@@ -2905,7 +2906,6 @@ class AsyncSession(MsgpackStream):
     # also it should be a class attribute as every instance should
     # probably be accessing the same loop.
 
-
     def __init__(self, event_loop=None, _message_cb=None, msgpack_stream=None):
         """Wrap `msgpack_stream` on a msgpack-rpc interface."""
         # self._msgpack_stream = msgpack_stream
@@ -2934,7 +2934,7 @@ class AsyncSession(MsgpackStream):
             # todo:
             self.loop = value
 
-   def request(self, method, args, response_cb):
+    def request(self, method, args, response_cb):
         """Send a msgpack-rpc request to Nvim.
 
         A msgpack-rpc with method `method` and argument `args` is sent to
@@ -4022,8 +4022,7 @@ class UvEventLoop(BaseEventLoop):
         # warnings.warn("pyuv not installed!")
         pyuv = None
 
-
-   _connection_error = None
+    _connection_error = None
     _callbacks = deque()
     _error_stream = None
     _closed = False
@@ -4158,12 +4157,12 @@ class UvEventLoop(BaseEventLoop):
 EventLoop = UvEventLoop
 
 
-import gc
+import gc   # noqa
 gc.collect()
 
 if __name__ == "__main__":
     from py._path.local import LocalPath
-    f = LocalPath(os.path.abspath(__file__))
-    f.pyimport()
+    # f = LocalPath(os.path.abspath(__file__))
+    # f.pyimport()
 
 # Vim: set fdm=indent fdls=0:

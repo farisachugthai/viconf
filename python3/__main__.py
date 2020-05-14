@@ -93,4 +93,4 @@ async def main(host, port):
         client_connected, host, port)
     await srv.serve_forever()
 
-asyncio.run(main('127.0.0.1', 0))
+# asyncio.run(main('127.0.0.1', 0))

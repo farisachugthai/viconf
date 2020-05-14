@@ -65,8 +65,7 @@ function! remotes#_sources(ruby_host) abort  " {{{
   source $VIMRUNTIME/autoload/provider/clipboard.vim
 endfunction   " }}}
 
-function! remotes#termux() abort  " {{{
-
+function! remotes#termux() abort
   " From what i can tell, this line alone is as good as :UpdateRemotePlugins
   let g:python3_host_prog = s:repo_root . '/.venv/bin/python'
   let g:loaded_python_provider = 1
@@ -79,6 +78,7 @@ function! remotes#termux() abort  " {{{
     " syntax hl fucks up here
     au! UltiSnips_AutoTrigger *
   augroup END
+  unlet! g:loaded_python3_provider
 
   let g:node_host_prog = '/data/data/com.termux/files/home/.local/share/yarn/global/node_modules/neovim/bin/cli.js'
   let g:ruby_host_prog = '/data/data/com.termux/files/home/.gem/bin/neovim-ruby-host'
@@ -120,18 +120,18 @@ function! remotes#msdos_remote() abort  " {{{
           \   },
           \ }
 
-"  let g:clipboard = {
-"        \   'name': 'winClip',
-"        \   'copy': {
-"        \      '+': 'win32yank.exe -i --crlf',
-"        \      '*': 'win32yank.exe -i --crlf',
-"        \    },
-"        \   'paste': {
-"        \      '+': 'win32yank.exe -o --crlf',
-"        \      '*': 'win32yank.exe -o --crlf',
-"        \   },
-"        \   'cache_enabled': 1,
-"        \ }
+  "  let g:clipboard = {
+  "        \   'name': 'winClip',
+  "        \   'copy': {
+  "        \      '+': 'win32yank.exe -i --crlf',
+  "        \      '*': 'win32yank.exe -i --crlf',
+  "        \    },
+  "        \   'paste': {
+  "        \      '+': 'win32yank.exe -o --crlf',
+  "        \      '*': 'win32yank.exe -o --crlf',
+  "        \   },
+  "        \   'cache_enabled': 1,
+  "        \ }
 
   source $VIMRUNTIME/autoload/provider/clipboard.vim
   call remotes#HardReset()

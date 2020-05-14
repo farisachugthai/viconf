@@ -307,8 +307,6 @@ let g:NERDTreeMapJumpParent = '-'
 " Tagbar: {{{
 " I want the spacebar back
 let g:tagbar_map_showproto = '?'
-" let g:tagbar_left = 2
-let g:tagbar_singleclick = 1
 let g:tagbar_map_zoomwin = 'Z'
 if filereadable(expand('$HOME/.ctags.d/new_universal.ctags'))
   let g:tagbar_ctags_options = [expand('~/.ctags.d/new_universal.ctags')]
