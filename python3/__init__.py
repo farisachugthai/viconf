@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Initialize pythonx in neovim."""
-from . import pynvim
 __docformat__ = "reStructuredText"
 
 import logging
@@ -14,8 +13,8 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__).addHandler(logging.StreamHandler())
 
-root = Path.cwd().parent
-sys.path.insert(0, root.joinpath("python3").__fspath__())
+# root = Path.cwd().parent
+# sys.path.insert(0, root.joinpath("python3").__fspath__())
 
 
 class Options:

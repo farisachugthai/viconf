@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
-from pynvim import Nvim   # ?
 import time
 import sys
 from pathlib import Path
 
-sys.path.insert(0, Path("../python3").resolve().__fspath__())
+root = Path().cwd().parent
+sys.path.insert(0, root.joinpath("python3").__fspath__())
 
+from pynvim import Nvim
 
 def test_call_and_reply(vim):
-    cid = vim.channel_id
-
     def setup_cb():
+        cid = vim.channel_id
         cmd = 'let g:result = rpcrequest(%d, "client-call", 1, 2, 3)' % cid
         vim.command(cmd)
         assert vim.vars['result'] == [4, 5, 6]
@@ -30,6 +30,7 @@ def test_call_api_before_reply(vim):
     def setup_cb():
         cmd = 'let g:result = rpcrequest(%d, "client-call2", 1, 2, 3)' % cid
         vim.command(cmd)
+        # asyncio.run(main('127.0.0.1', 0))
         assert vim.vars['result'] == [7, 8, 9]
         vim.stop_loop()
 

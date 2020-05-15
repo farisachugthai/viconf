@@ -222,6 +222,7 @@ IPython7
 ISE
 ISO9660
 Importlib
+IntelliSense
 InteractiveShell
 JQuery
 JetBrains
@@ -354,6 +355,7 @@ PowerShell
 Preprocesses
 ProTools
 PurePath
+PyBind11
 PyCharm
 PyCon
 PyData
@@ -631,6 +633,7 @@ automodule
 autosets
 autossh
 autosummary
+awaitable
 backlinking
 backlinks
 bacopa
@@ -660,6 +663,7 @@ bugfix
 buildpackage
 builtins
 byobu
+bytearray
 bytestream
 bz2
 bzip
@@ -835,6 +839,7 @@ faris
 farischugthai
 faulthandler
 fd
+fdm
 fdupes
 ffmpeg
 fgcolor
@@ -850,6 +855,7 @@ fishshell
 flake8
 fmt
 fnmatch
+foldlevelstart
 formatMessage
 formatargvalues
 fortran
@@ -933,6 +939,7 @@ h5
 h6
 haml
 hardcode
+hasattr
 hashable
 hashtables
 haskell
@@ -998,13 +1005,16 @@ isabs
 isdir
 isfile
 isgenerator
+isinstance
 iskeyword
 islink
 islower
 ismodule
 isroutine
+issubclass
 isupper
 itemgetter
+iter
 iterable
 iterables
 iw
@@ -1107,6 +1117,7 @@ langmap
 langnoremap
 langremap
 launchctl
+len
 lex
 libcs50
 libexpat1
@@ -1179,6 +1190,7 @@ md5
 md5sum
 melpa
 memcache
+memoryview
 metacharacters
 metaclass
 metaclasses
@@ -1186,6 +1198,7 @@ metadata
 metakernel
 metapackage
 metavar
+meth
 microkernel
 microkernels
 microservices
@@ -1498,6 +1511,7 @@ ruby
 rufus
 runpy
 runtimepath
+runtimes
 rustup
 rvm
 rw
@@ -1673,6 +1687,7 @@ tnoremap
 toctree
 todo
 toolchain
+toolset
 toolstack
 torbirdy
 torbrowser
@@ -1874,17 +1889,3 @@ zipfile
 zipimport
 zlib
 zsh
-PyBind11
-runtimes
-toolset
-IntelliSense
-isinstance
-issubclass
-iter
-len
-hasattr
-bytearray
-memoryview
-fdm
-foldlevelstart
-meth

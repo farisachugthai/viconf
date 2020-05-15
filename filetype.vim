@@ -58,7 +58,7 @@ fun! s:ConsiderSwitchingToJinjaAgain()
 endfun
 
 
-function! s:SelectHTML() abort  " {{{
+function! s:SelectHTML() abort
   let l:n = 1
   while l:n < 50 && l:n <= line('$')
     " check for jinja
@@ -68,10 +68,10 @@ function! s:SelectHTML() abort  " {{{
     endif
     let l:n = l:n + 1
   endwhile
-endfunction  " }}}
+endfunction
 
-augroup Userftdetect  " {{{
 
+augroup Userftdetect
   au!
   au BufNewFile,BufRead *.json,*.jsonp,*.webmanifest,*.code-workspace setfiletype json
   au BufNewFile,BufRead *.jupyterlab-settings,*.ipynb,*.code-snippets setfiletype json
@@ -107,6 +107,5 @@ augroup Userftdetect  " {{{
   autocmd FileType html                                               call s:TryDetectJinja()
 
   autocmd BufWritePost *.html,*.htm,*.shtml,*.stm                     call s:ConsiderSwitchingToJinjaAgain()
-
+  autocmd BufNewFile,BufRead *.info.*                                 setfiletype info
 augroup END
-" }}}

@@ -1,5 +1,12 @@
-from threading import Timer
+import sys
 
+from threading import Timer
+from pathlib import Path
+
+root = Path().cwd().parent
+sys.path.insert(0, root.joinpath("python3").__fspath__())
+
+from pynvim import Nvim
 
 def test_interrupt_from_another_thread(vim):
     timer = Timer(0.5, lambda: vim.async_call(lambda: vim.stop_loop()))

@@ -165,7 +165,8 @@ let g:colors_name = 'gruvbox-material'
   hi DiffAdd guifg=NONE guibg=#32361a guisp=NONE gui=NONE cterm=NONE
   hi DiffChange guifg=NONE guibg=#0d3138 guisp=NONE gui=NONE cterm=NONE
   hi DiffDelete guifg=NONE guibg=#3c1f1e guisp=NONE gui=NONE cterm=NONE
-  hi Error guisp=NONE term=NONE guibg=#4e4e4e cterm=bold ctermbg=239 gui=bold
+  " hi Error guisp=NONE term=NONE guibg=#4e4e4e cterm=bold ctermbg=239 gui=bold
+  hi Error guifg=#ea6962 guibg=NONE guisp=NONE gui=bold,underline cterm=bold,underline
 
   hi markdownH1 guifg=#a9b665 guibg=NONE guisp=NONE gui=bold cterm=bold
   hi markdownH2 guifg=#a9b665 guibg=NONE guisp=NONE gui=bold cterm=bold

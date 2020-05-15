@@ -5,7 +5,7 @@
     " Last Modified: February 16, 2020
   " ============================================================================
 
-" Navigation: {{{
+" Navigation:
   " ugh this is gonna be a hell of a lot of manual entries
   " nnoremap <Leader>      <Cmd>WhichKey'<Space>'<CR>
   " nnoremap <LocalLeader> <Cmd>WhichKey','<CR>
@@ -19,6 +19,10 @@
   noremap <Down> gj
 
   " I mess this up constantly thinking that gI does what gi does
+  " *'^* *`^*
+  " '^  `^			To the position where the cursor was the last time
+  " when Insert mode was stopped.  This is used by the |gi| command.
+  " Not set when the |:keepjumps| command modifier was used.
   inoremap gI gi
 
   " Literally ` does the same thing as ' but ` remembers column.
@@ -315,7 +319,6 @@
   endif
 
 " Coc:
-
   " General Mappings:
     onoremap af <Plug>(coc-funcobj-a)
     onoremap if <Plug>(coc-funcobj-i)
@@ -629,7 +632,6 @@ function! Tab_Mappings() abort
   nnoremap [T <Cmd>tabfirst<CR>
 endfunction
 
-
 function! UserFugitiveMappings() abort
   nnoremap <Leader>gb   <Cmd>Git blame<CR>
   " remember there are now a lot of other mappings that commit too
@@ -659,7 +661,6 @@ function! UserFugitiveMappings() abort
   nnoremap <Leader>gw   <Cmd>Gwrite<CR>
   nnoremap <Leader>gW   <Cmd>Gwrite!<CR>
 endfunction
-
 
   " I've always really liked that M-/ mapping from readline
   nnoremap <M-?> <Cmd>stjump!<CR>
@@ -712,4 +713,4 @@ endfunction
     " endif
     call UserFugitiveMappings()
     let g:loaded_plugin_mappings = 1
-endif
+  endif

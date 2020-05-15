@@ -36,7 +36,7 @@ def as_cwd(new_dir, *args, **kwargs):
         os.chdir(old_cwd)
 
 
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture(scope="session")
 def env(listen_addr=None):
     # Context manager for env
     if not os.environ.get("NVIM_LISTEN_ADDRESS"):
