@@ -5,7 +5,7 @@
     " Last Modified: August 28, 2019
 " ============================================================================
 
-function! ftplugins#ALE_JSON_Conf() abort  " {{{
+function! ftplugins#ALE_JSON_Conf() abort
   " Standard fixers defined for JSON
   let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
 
@@ -20,13 +20,8 @@ function! ftplugins#ALE_JSON_Conf() abort  " {{{
 
     let b:ale_linters = ['jsonlint']
     let b:ale_linters_explicit = 1
-endfunction  " }}}
+endfunction
 
-function! ftplugins#ALE_CSS_Conf() abort  " {{{
-  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
-
-    let b:ale_fixers += ['prettier']
-endfunction  " }}}
 
 function! ftplugins#typescript_setup() abort
   " node_modules
@@ -35,12 +30,13 @@ function! ftplugins#typescript_setup() abort
     let b:ts_node_modules = map(s:node_modules, { idx, val -> substitute(fnamemodify(val, ':p'), '/$', '', '')})
     unlet! s:node_modules
   endif
-  " $PATH: {{{
+  " $PATH:
   if exists('b:ts_node_modules')
     if $PATH !~? b:ts_node_modules[0]
       let $PATH = b:ts_node_modules[0] . ':' . $PATH
     endif
   endif
+
   " aliases
   let b:tsconfig_file = findfile('tsconfig.json', '.;')
   if len(b:tsconfig_file)
@@ -51,9 +47,10 @@ function! ftplugins#typescript_setup() abort
     endtry
     unlet! b:tsconfig_data
   endif
+
   unlet! b:tsconfig_file
-  " }}}
-  " Lint File On Write: {{{
+
+  " Lint File On Write:
   if executable('tslint')
     let &l:errorformat = '%EERROR: %f:%l:%c - %m,'
                        \.'%WWARNING: %f:%l:%c - %m,'

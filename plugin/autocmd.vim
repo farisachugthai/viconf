@@ -5,30 +5,31 @@
   " Last Modified: February 17, 2020
 " ============================================================================
 
-let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
-
 scriptencoding utf8
 setglobal ruler
 
-function! s:fzf_statusline()  abort " {{{
+let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
+
+
+function! s:fzf_statusline()  abort
   " Curious if this'll work
   hi! fzf1 cterm=bold,undercurl,reverse gui=bold,undercurl,reverse guifg=#7daea3 guibg=NONE ctermbg=NONE guisp=NONE font='Source Code Pro'
   hi! link fzf2 fzf1
   hi! link fzf3 fzf1
   setlocal statusline=%#fzf1#\ FZF:\ %#fzf2#fz%#fzf3#f
+endfunction
 
-endfunction   " }}}
 
-function! s:VarExists(var, val) abort    " {{{
-
+function! s:VarExists(var, val) abort
   if exists(a:var)
     return a:val
   else
     return ''
   endif
-endfunction  " }}}
+endfunction
 
-function! s:StatusDiagnostic() abort  " {{{
+
+function! s:StatusDiagnostic() abort
   if !exists('g:loaded_coc') | return '' | endif
 
   let l:info = get(b:, 'coc_diagnostic_info', {})
@@ -41,10 +42,10 @@ function! s:StatusDiagnostic() abort  " {{{
     call add(l:msgs, 'W' . l:info['warning'])
   endif
   return join(l:msgs, ' ') . ' ' . get(g:, 'coc_status', '')
-endfunction  " }}}
+endfunction
 
-function! s:_Statusline(bang, ...) range abort  " {{{
 
+function! s:_Statusline(bang, ...) range abort
   " from he 'statusline'.
   " Each status line item is of the form:
   " %-0{minwid}.{maxwid}{item}
@@ -85,21 +86,24 @@ function! s:_Statusline(bang, ...) range abort  " {{{
   endif
   let &statusline = g:statusline
   return g:statusline
+endfunction
 
-endfunction " }}}
 
-function! Statusline(bang, ...) abort  " {{{ Lets give a nicer clean entry point.
+function! Statusline(bang, ...) abort
   return s:_Statusline(a:bang, a:000)
-endfunction  " }}}
+endfunction
+
 
 command! -bang -bar -nargs=* -range=% -addr=loaded_buffers -complete=expression -complete=var ReloadStatusline call Statusline(<bang>0, <q-args>)
 
-augroup FZFStatusline  " {{{
-" NOTE: This has to remain the name of the augroup it's what Junegunn calls
+
+augroup FZFStatusline
+  " NOTE: This has to remain the name of the augroup it's what Junegunn calls
   au!
-  autocmd User FzfStatusLine call s:fzf_statusline()
-  autocmd User FzfStatusline setlocal winblend=15 pumblend=10
+  autocmd User call s:fzf_statusline()
+  autocmd User setlocal winblend=15 pumblend=10
 augroup END
+
 
 augroup UserStatusline
   au!
@@ -108,9 +112,11 @@ augroup UserStatusline
         \| call Statusline(1)
         \| endif
 
-augroup END  " }}}
+  autocmd VimEnter * call Statusline(1)
+augroup END
 
-augroup UserHelpandPython " {{{
+
+augroup UserFtplugin
   au!
   autocmd FileType man,help setlocal number relativenumber
   autocmd FileType man,help  if winnr('$') > 1
@@ -125,12 +131,28 @@ augroup UserHelpandPython " {{{
   " Blocks the UI and jams shit
   " au! CursorHold .xonshrc ++nested exe "silent! psearch " . expand("<cword>")
 
-  autocmd BufWinEnter * if &previewwindow | setlocal nonumber nornu | else | setlocal number relativenumber |  endif
+  autocmd BufWritePre *.h,*.cc,*.cpp call format#ClangCheck()
+
+  " Show type information automatically when the cursor stops moving
+  autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
+
+  autocmd BufEnter * if &l:omnifunc ==# '' | setlocal omnifunc=syntaxcomplete#Complete | endif
+
+  autocmd BufEnter * if &l:completefunc ==# '' | setlocal completefunc=syntaxcomplete#Complete | endif
+
+  if exists('*SuperTabChain')
+    autocmd FileType *
+      \ if &omnifunc != ''
+      \|  call SuperTabChain(&omnifunc, "<c-p>")
+      \| else
+      \|  call SuperTabChain(&completefunc, "<c-p>")
+      \| endif
+  endif
 
 augroup END
-" }}}
 
-function! s:Goyo_enter() " Goyo: {{{
+
+function! s:Goyo_enter()
   if executable('tmux') && strlen($TMUX)
     silent !tmux set status off
     silent !tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z
@@ -140,9 +162,9 @@ function! s:Goyo_enter() " Goyo: {{{
   set scrolloff=999
   " ... Limelight
 endfunction
-" }}}
 
-function! s:Goyo_leave()   " {{{
+
+function! s:Goyo_leave()
   if executable('tmux') && strlen($TMUX)
     silent !tmux set status on
     silent !tmux list-panes -F '\#F' | grep -q Z && tmux resize-pane -Z
@@ -152,9 +174,9 @@ function! s:Goyo_leave()   " {{{
   set scrolloff=5
   " ... Limelight!
 endfunction
-" }}}
 
-augroup UserPlugins " {{{
+
+augroup UserPlugins
   au!
   autocmd  User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 
@@ -177,18 +199,18 @@ augroup UserPlugins " {{{
   if exists('#vim-which-key')
     autocmd! User vim-which-key call which_key#register('<Space>', 'g:which_key_map')
   endif
+augroup END
 
-augroup END " }}}
 
-function! StripTrailingWhitespace() abort  " {{{
-
+function! StripTrailingWhitespace() abort
   let l:current_line = line(".")
   let l:column = col(".")
   %s/\s\+$//e
   call cursor(l:current_line, l:column)
-endfunction  " }}}
+endfunction
 
-augroup UserPotpourri  " {{{
+
+augroup UserPotpourri
   autocmd!
   autocmd CmdlineEnter /,\? set hlsearch
   autocmd CmdlineLeave /,\? set nohlsearch
@@ -198,50 +220,36 @@ augroup UserPotpourri  " {{{
   autocmd BufWrite * call StripTrailingWhitespace()
 
   autocmd Syntax * syntax sync fromstart linebreaks=2
+
+  autocmd BufWinEnter * if &previewwindow | setlocal nonumber nornu | else | setlocal number relativenumber |  endif
 augroup END
+
 
 exec 'source ' . s:repo_root . '/autoload/syncom.vim'
 
 call syncom#gruvbox_material()
 call syncom#grepprg()
 
+
 if exists('#TagbarAutoCmds')
   au! TagbarAutoCmds *
 endif
-" }}}
 
-augroup UserNerdLoader  " {{{
+
+augroup UserNerdLoader
   autocmd!
   autocmd BufEnter,BufNew *
         \  if isdirectory(expand('<amatch>'))
         \|   call plug#load('nerdTree')
         \|   execute 'autocmd! UserNerdLoader'
         \| endif
+augroup END
 
-augroup END " }}}
-
-augroup UserFiletypesCompletions  " {{{
-  au!
-  " Show type information automatically when the cursor stops moving
-  autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
-
-  autocmd BufEnter * if &l:omnifunc ==# '' | setlocal omnifunc=syntaxcomplete#Complete | endif
-
-  autocmd BufEnter * if &l:completefunc ==# '' | setlocal completefunc=syntaxcomplete#Complete | endif
-
-  if exists('*SuperTabChain')
-    autocmd FileType *
-      \ if &omnifunc != ''
-      \|  call SuperTabChain(&omnifunc, "<c-p>")
-      \| else
-      \|  call SuperTabChain(&completefunc, "<c-p>")
-      \| endif
-  endif
-augroup END  " }}}
 
 if !has('nvim') | finish | endif
 
-augroup UserTerm " {{{
+
+augroup UserTerm
   au!
   autocmd TermOpen * setlocal statusline=%{b:term_title}
 
@@ -267,13 +275,10 @@ augroup UserTerm " {{{
   "   \|setlocal winhighlight=StatusLine:StatusLineTerm,StatusLineNC:StatusLineTermNC
   "   \|else|setlocal winhighlight=|endif
 
-	" *TermResponse*
-" TermResponse			After the response to t_RV is received from
-	" 			the terminal.  The value of |v:termresponse|
-	" 			can be used to do things depending on the
-	" 			terminal version.  Note that this event may be
-	" 			triggered halfway through another event
-	" 			(especially if file I/O, a shell command, or
-	" 			anything else that takes time is involved).
+  " *TermResponse*
+  " After the response to t_RV is received from the terminal.
+  " The value of |v:termresponse| can be used to do things depending on the terminal version.
+  " Note that this event may be triggered halfway through another event (especially if file I/O,
+  " a shell command, or anything else that takes time is involved).
   au TermResponse * echomsg 'Term response was ' . v:termresponse
-augroup END  " }}}
+augroup END

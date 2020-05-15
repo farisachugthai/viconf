@@ -13,7 +13,7 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 set foldopen=insert,jump,block,hor,mark,percent,quickfix,search,tag,undo
 setglobal foldnestmax=10
 " Oddly needs to be set locally?
-set foldmethod=marker foldcolumn=2
+" set foldmethod=marker foldcolumn=2
 " Automatically close all folds from the beginning.
 setglobal foldlevelstart=99
 " Everything is a fold even if it's one line
@@ -23,7 +23,7 @@ setglobal foldignore=
 " Automatically open and close folds as i move out and in them.
 " setglobal foldopen=all foldclose=all
 " nah this is really annoying
-setglobal diffopt=filler,context:0,iblank,iwhite,iwhiteeol,indent-heuristic,hiddenoff,foldcolumn:1
+setglobal diffopt=filler,context:0,iblank,iwhite,iwhiteeol,indent-heuristic,hiddenoff,foldcolumn:1,horizontal
 
 if has('patch-8.1.0360') || has('nvim')
   setglobal diffopt+=internal,algorithm:patience

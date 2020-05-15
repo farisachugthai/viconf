@@ -393,7 +393,7 @@ class FileLink:
         # Damnit why isnt it recognizing this as a func? this is the missing link
         if logger is not None:
             self.logger = logger
-        self.buf = buf if buf is not None else self_path_file()
+        self.buf = Path(buf.name) if buf is not None else self._path_file()
 
     def __repr__(self):
         return "{!r} --- {!r}".format(self.__class__.__name__, self.buf)
@@ -402,9 +402,10 @@ class FileLink:
         """Pathify a file."""
         return Path(vim.eval("nvim_get_current_buf()"))
 
+    @property
     def is_symlink(self):
         """Check if `path_obj` is a symlink."""
-        return self.is_symlink()
+        return self.buf.is_symlink()
 
     def _resolved_path(self):
         return self._path_file().resolve()
@@ -415,9 +416,9 @@ class FileLink:
         if real_file:
             return real_file.parent
 
-    def true_file(self, path_obj):
+    def open_true_file(self):
         """Implement a command that opens and resolves a symlink."""
-        if self._is_symlink:
+        if self.is_symlink:
             real_file = self._resolved_path()
             dirname = real_file.parent
             vim.chdir(str(dirname))
@@ -440,5 +441,5 @@ if __name__ == "__main__":
         "error": logging.ERROR,
         "critical": logging.CRITICAL,
     }
-    LOGGER = _setup_logging(log_levels["warning"])
-    main()
+    if vim is not None:
+        file_link = FileLink(logger, vim.current.buffer)

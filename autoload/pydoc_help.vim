@@ -6,16 +6,16 @@
 " ============================================================================
 
 " First 2 are stolen from $VIMRUNTIME/autoload/man.vim
-" Handler for s:system() function. {{{
+" Handler for s:system() function
 function! s:system_handler(jobid, data, event) dict abort
   if a:event is# 'stdout' || a:event is# 'stderr'
     let self[a:event] .= join(a:data, "\n")
   else
     let self.exit_code = a:data
   endif
-endfunction  " }}}
+endfunction
 
-" Run a system command and timeout after 30 seconds. {{{
+" Run a system command and timeout after 30 seconds.
 function! s:system(cmd, ...) abort
   let opts = {
         \ 'stdout': '',
@@ -46,7 +46,7 @@ function! s:system(cmd, ...) abort
   endif
 
   return opts.stdout
-endfunction  " }}}
+endfunction
 
 function! s:ExampleofOpeningBufferAndAcceptingArgs(mods) abort
   " also from man.vim
@@ -64,31 +64,31 @@ function! s:ExampleofOpeningBufferAndAcceptingArgs(mods) abort
   endtry
 endfunction
 
-function! pydoc_help#open_files(files) abort  " {{{
+function! pydoc_help#open_files(files) abort
   let l:bufnrs = []
     for l:file in a:files
       call bufload(l:file)
       call add(l:bufnrs, bufnr(l:file))
     endfor
   return l:bufnrs
-endfunction  " }}}
+endfunction
 
-function! pydoc_help#scratch_buffer() abort   " {{{
+function! pydoc_help#scratch_buffer() abort
   if !has('nvim') | throw "Doesn't work on vim" | endif
 
   "  First param is buflisted?
   " Second is scratch buffer?1
   return nvim_create_buf(v:false, v:true)
-endfunction   " }}}
+endfunction
 
-function! s:scratch_listed_buffer(bang) range abort " {{{
+function! s:scratch_listed_buffer(bang) range abort
   let l:bufnum = nvim_create_buf(v:true, v:true)
   " Actually fuck trying to figure out how to switch to that buffer
   :Buffers
   return l:bufnum
-endfunction  " }}}
+endfunction
 
-function! s:temp_buffer() abort  " {{{
+function! s:temp_buffer() abort
   " Use for setting a buffer that's been filled with text to something similar
   " to an 'rst' help page.
 
@@ -107,18 +107,17 @@ function! s:temp_buffer() abort  " {{{
   setlocal buftype=nofile bufhidden=delete noswapfile nowrap
   " don't do thi until we stop debugging
   " setlocal nomodified
+endfunction
 
-endfunction   " }}}
-
-function! pydoc_help#PydocCbword(bang, mods) abort  " {{{
+function! pydoc_help#PydocCbword(bang, mods) abort
   " Holy shit it works!!!
   let s:temp_cword = expand('<cWORD>')
   exec a:mods . 'enew' . a:bang
   exec ':r! pydoc ' . s:temp_cword
   call s:temp_buffer()
-endfunction  " }}}
+endfunction
 
-function! s:handle_user_config() abort   " {{{
+function! s:handle_user_config() abort
   " Look at me handling user configured arguments!
   if exists('g:pydoc_window')
     if type('g:pydoc_window') == v:t_string
@@ -130,9 +129,9 @@ function! s:handle_user_config() abort   " {{{
   else
     split
   endif
-endfunction   " }}}
+endfunction
 
-function! pydoc_help#Pydoc(module, bang) abort  " {{{
+function! pydoc_help#Pydoc(module, bang) abort
   "
   " Step 2: Create the buffer. Let's do them a favor and save the buffer before we leave.
   if &autowrite && &l:modified
@@ -144,6 +143,7 @@ function! pydoc_help#Pydoc(module, bang) abort  " {{{
         throw 'pydoc_help#Pydoc: still only at step2'
       endif
     :write
+  endif
   endif
 
   if a:bang
@@ -160,9 +160,9 @@ function! pydoc_help#Pydoc(module, bang) abort  " {{{
   exec 'r!python -m pydoc ' . a:module
 
   call s:temp_buffer()
-endfunction   " }}}
+endfunction
 
-function! pydoc_help#OpenTempBuffer(...) abort  " {{{
+function! pydoc_help#OpenTempBuffer(...) abort
   " it took a BUNCH of attempts but i think i finally figured out how to do this right
   if !a:0
     return
@@ -177,26 +177,25 @@ function! pydoc_help#OpenTempBuffer(...) abort  " {{{
   exec s:mods . 'f' . s:bang . s:bufname
   call s:temp_buffer()
   return s:bufname
+endfunction
 
-endfunction  " }}}
-
-function! pydoc_help#async_cursor() abort " Async Pydoc: {{{
+function! pydoc_help#async_cursor() abort
   let s:temp_cword = expand('<cWORD>')
   enew
   call jobstart('pydoc ' . s:temp_cword, {'on_stdout':{j,d,e->append(line('.'),d)}})
   call nvim_command('sleep 1')
   call s:temp_buffer()
-endfunction   " }}}
+endfunction
 
-function! pydoc_help#async_cfile_mods(mods, bang) abort  " {{{
+function! pydoc_help#async_cfile_mods(mods, bang) abort
   if !has('nvim') | throw "Doesn't work on vim" | endif
   let s:temp_cfile = expand('<cfile>')
   exec a:mods . 'enew' . a:bang
   call jobstart('pydoc ' . s:temp_cfile, {'on_stdout':{j,d,e->append(line('.'),d)}})
   call s:temp_buffer()
-endfunction   " }}}
+endfunction
 
-function! pydoc_help#async_cfile() abort  " {{{
+function! pydoc_help#async_cfile() abort
   " Dude this is it.
   " If we can floating window this, I may have my first vim plugin down.
 
@@ -221,9 +220,9 @@ function! pydoc_help#async_cfile() abort  " {{{
   nnoremap <buffer> q <Cmd>call nvim_win_close(0, v:true)<CR>
   call jobstart('pydoc ' . s:temp_cfile, {'on_stdout':{j,d,e->append(line('.'),d)}})
   call s:temp_buffer()
-endfunction   " }}}
+endfunction
 
-function! pydoc_help#broken_scratch_buffer() abort  " {{{
+function! pydoc_help#broken_scratch_buffer() abort
   " Not actually broken i just need to debug the commented out lines
   " basically how do i put the info i want into a list that can be properly
   " parsed by this API
@@ -252,9 +251,9 @@ function! pydoc_help#broken_scratch_buffer() abort  " {{{
   " To close the float, |nvim_win_close()| can be used.
   " 0 for the current window, v:false is for don't force
   nnoremap <buffer> q <Cmd>call nvim_win_close(0, v:false)<CR>
-endfunction  " }}}
+endfunction
 
-function! pydoc_help#the_curse_of_nvims_floating_wins() abort  " {{{
+function! pydoc_help#the_curse_of_nvims_floating_wins() abort
   " No seriously they're difficult to work with
 
   let s:opts = {
@@ -274,10 +273,9 @@ function! pydoc_help#the_curse_of_nvims_floating_wins() abort  " {{{
   " fashion. Sweet!!
   call nvim_win_set_option(s:win_handle, 'winhl', 'Special')
   return l:floating_winnr
+endfunction
 
-endfunction   " }}}
-
-function! s:ReplaceModuleAlias() abort " {{{ Replace module aliases with their own name.
+function! s:ReplaceModuleAlias() abort
   " For example:
   "   import foo as bar
   " if `bar` is in the ExpandModulePath's return value, it should be
@@ -299,9 +297,9 @@ function! s:ReplaceModuleAlias() abort " {{{ Replace module aliases with their o
   endif
   call cursor(l:cur_line, l:cur_col)
   return join(l:module_names, '.')
-endfunction  " }}}
+endfunction
 
-function! s:ExpandModulePath() abort  " {{{
+function! s:ExpandModulePath() abort
     " Extract the 'word' at the cursor, expanding leftwards across identifiers
     " and the . operator, and rightwards across the identifier only.
     "
@@ -314,9 +312,9 @@ function! s:ExpandModulePath() abort  " {{{
     let l:pre = l:line[:col('.') - 1]
     let l:suf = l:line[col('.'):]
     return matchstr(l:pre, '[A-Za-z0-9_.]*$') . matchstr(l:suf, '^[A-Za-z0-9_]*')
-endfunction  " }}}
+endfunction
 
-function! pydoc_help#show(...) abort  " {{{
+function! pydoc_help#show(...) abort
   " AHHHHH THIS WORKS!!!!
   let l:word = s:ReplaceModuleAlias()
   let l:buf = nvim_create_buf(v:false, v:true)
@@ -336,18 +334,18 @@ function! pydoc_help#show(...) abort  " {{{
   wincmd L
   normal! gg
   keepjumps keepalt wincmd p
-endfunction " }}}
+endfunction
 
-function! s:is_preview_window_open() abort  " {{{
+function! s:is_preview_window_open() abort
   " Source: vim-plug
   silent! wincmd P
   if &previewwindow
     wincmd p
     return 1
   endif
-endfunction  " }}}
+endfunction
 
-function! s:opened_preview_window() abort  " {{{
+function! s:opened_preview_window() abort
   " Sorry junegunn but its tpope.
   for l:i in range(1, winnr('$'))
     if getwinvar(l:i, '&previewwindow') == 1
@@ -355,9 +353,9 @@ function! s:opened_preview_window() abort  " {{{
     endif
   endfor
   return -1
-endfunction " }}}
+endfunction
 
-function! pydoc_help#PreviewShow() abort  " {{{
+function! pydoc_help#PreviewShow() abort
   " erghhhhh. still not there but it's close.
   " dude preview windows are weird and there's an odd amount of basic
   " functions fucking NEEDING to have specific types. like i didn't realize
@@ -400,9 +398,9 @@ function! pydoc_help#PreviewShow() abort  " {{{
   else
     return
   endif
-endfunction  " }}}
+endfunction
 
-function! pydoc_help#WholeLine(...) abort  " {{{
+function! pydoc_help#WholeLine(...) abort
   " Also works. Dude I'm on a roll
 
   let l:cur_line = getline(line('.'))
@@ -422,5 +420,5 @@ function! pydoc_help#WholeLine(...) abort  " {{{
   py3 import pydoc
   py3 curline = vim.command('let cur_line = getline(line("."))')
   py3 vim.current.buffer.append(pydoc.help(cur_line))
-endfunction  " }}}
+endfunction
 

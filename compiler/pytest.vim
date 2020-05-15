@@ -5,7 +5,7 @@
   " Last Modified: July 19, 2019
 " ============================================================================
 
-" Guards: {{{
+" Guards:
 if exists('current_compiler')
   finish
 endif
@@ -14,13 +14,10 @@ let current_compiler = 'pytest'
 if exists(':CompilerSet') != 2 " older Vim always used :setlocal
   command! -nargs=* CompilerSet setlocal <args>
 endif
-" }}}
 
-" CompilerSet: {{{
+" CompilerSet:
 if exists('g:pytest_makeprg_params')
-
-  execute 'CompilerSet makeprg=py.test\ ' . escape(g:cargo_makeprg_params, ' \|"') . '\ $*'
-
+  execute 'pytestCompilerSet makeprg=py.test\ ' . escape(g:pytest_makeprg_params, ' \|"') . '\ $*'
 else
   CompilerSet makeprg=py.test\ --tb=short\ -q\ --color=no\ $*
 endif

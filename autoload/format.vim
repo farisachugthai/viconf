@@ -5,7 +5,7 @@
     " Last Modified: February 24, 2019
 " ============================================================================
 
-function! format#Format() abort  " {{{
+function! format#Format() abort
   " fall back to Vims internal reformatting
   if mode() !=# 'n' | return 1 | endif
   let l:lines = getline(v:lnum, v:lnum + v:count - 1)
@@ -15,9 +15,9 @@ function! format#Format() abort  " {{{
   " do not run internal formatter!
   " but why not
   " return 0
-endfunction  " }}}
+endfunction
 
-function! format#MarkdownFoldText() abort " {{{ Credit to TPope
+function! format#MarkdownFoldText() abort
   let l:line = getline(v:lnum)
 
   " Regular headers
@@ -30,9 +30,9 @@ function! format#MarkdownFoldText() abort " {{{ Credit to TPope
   if (l:line =~? '^.\+$') && (l:nextline =~? '^-\+$') | return '>2' | endif
 
   return '='
-endfunction  " }}}
+endfunction
 
-function! format#ClangCheckimpl(cmd) abort  " {{{
+function! format#ClangCheckimpl(cmd) abort
   " This is honestly really useful if you simply swap out the filetype
   if &autowrite | wall | endif
   echomsg 'running ' . a:cmd . ' ...'
@@ -47,9 +47,9 @@ function! format#ClangCheckimpl(cmd) abort  " {{{
     echomsg 'shell error: ' . v:shell_error
   endif
   let g:clang_check_last_cmd = a:cmd
-endfunction  " }}}
+endfunction
 
-function! format#ClangCheck()  abort  " {{{
+function! format#ClangCheck()  abort
   let l:filename = expand('%')
   if l:filename =~# '\.\(cpp\|cxx\|cc\|c\)$'
     call format#ClangCheckImpl('clang-check ' . l:filename)
@@ -58,9 +58,6 @@ function! format#ClangCheck()  abort  " {{{
   else
     echomsg "Can't detect file's compilation arguments and no previous clang-check invocation!"
   endif
-endfunction  " }}}
-
-function! format#FormatFile() abort  " {{{
-endfunction  " }}}
+endfunction
 
 " Vim: set fdm=indent:

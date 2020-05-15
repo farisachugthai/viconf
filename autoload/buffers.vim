@@ -5,7 +5,7 @@
   " Last Modified: Feb 22, 2020
 " ============================================================================
 
-function! buffers#EchoRTP() abort " {{{
+function! buffers#EchoRTP() abort
   " Huh son of a bitch. I actually figured out an easier way to do this
   " let's do a check that this function exists then and do it the non-nvim way
   " otherwise
@@ -17,9 +17,8 @@ function! buffers#EchoRTP() abort " {{{
     for l:i in split(&runtimepath, ',') | echomsg l:i | endfor
   endif
 endfunction
-" }}}
 
-function! buffers#PreviewWord() abort  " {{{
+function! buffers#PreviewWord() abort
   " Open a tag for the word under the cursor in the preview window.
   " TODO: Could definitely do with a mapping
 
@@ -66,9 +65,8 @@ function! buffers#PreviewWord() abort  " {{{
     endif
   endif
 endfunction
-" }}}
 
-function! buffers#terminals() abort  " {{{
+function! buffers#terminals() abort
   " If running a terminal in Vim, go into Normal mode with Esc
   tnoremap <Esc> <C-\><C-n>
 
@@ -101,4 +99,4 @@ function! buffers#terminals() abort  " {{{
   " It's so annoying that buffers need confirmation to kill. Let's dedicate a
   " key but one that we know windows hasn't stolen yet.
   tnoremap <D-z> <Cmd>bd!<CR>
-endfunction  " }}}
+endfunction

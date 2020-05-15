@@ -103,12 +103,7 @@
   setlocal foldtext=RstFold#GetRstFoldText()
   setlocal comments=fb:.. commentstring=..\ %s expandtab
 
-
-  " This expression adds 50ms to vim startuptime alone wth
-  augroup UserAutomake
-    au!
-    autocmd FileType rst compiler rst
-  augroup END
+  compiler rst
 
   nnoremap <buffer> <F5> exe 'sphinx-build -b html ' . filereadable('Makefile') ==# 1 ? '. build/html' : ''
 

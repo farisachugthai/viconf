@@ -6,13 +6,13 @@ README
 
 This directory contains the snippets for `UltiSnips`_.
 
-.. _`UltiSnips`: https://github.com/sirver/ultisnips
 
 .. highlight:: vim
 
 :author: Faris Chugthai
 
 :date: |today|
+
 
 Notes on Ultisnips
 =======================
@@ -21,13 +21,13 @@ Changelog
 ---------
 Jan 29, 2019:
 
-Just added the :kbd:`m` option to a bunch of these to eliminate
-trailing whitespace. Also adding ``$0`` to a couple. I've noticed that if you
-press ``UltiSnipsNextTrigger`` on the last one that it deletes the word.
+Just added the :kbd:`m` option to a bunch of these to eliminate trailing
+whitespace. Also adding ``$0`` to a couple. I've noticed that if you press
+``UltiSnipsNextTrigger`` on the last one that it deletes the word.
 
-Adding a bare ``$0`` on the last line of the snippet ensures that we can tab all
-the way over and not delete anything. Then the :kbd:`m` option ensures we don't
-have trailing whitespace.
+Adding a bare ``$0`` on the last line of the snippet ensures that we can tab
+all the way over and not delete anything. Then the :kbd:`m` option ensures we
+don't have trailing whitespace.
 
 
 Configuration
@@ -86,8 +86,7 @@ of the built-in Ultisnips options *for now*.
 
 
 Snippets Options
-~~~~~~~~~~~~~~~~~~
-
+~~~~~~~~~~~~~~~~
 The following are options to modify the way that snippets behave. My most
 commonly used options are::
 
@@ -130,7 +129,6 @@ commented out header will not expand.
 
 Finding Your Snippets
 -----------------------
-
 Memorizing your snippet's names is awful. The vim-snippets repository has
 thousands of snippets in it, and the difference between expanding ``def`` and
 ``deff`` can produce huge differences in output.
@@ -220,25 +218,19 @@ have trailing whitespace.
 
 Programmatic Editing
 --------------------
-
-Vim's Search and Replace
-~~~~~~~~~~~~~~~~~~~~~~~~
-
 Frequently I ran into the problem of snippets having the 'b' option
 unnecessarily and sometimes to a detrimental effect.
 
 As a result, I determined that a relatively quick way to fix those options was
 to utilize Vim's built in "search and replace" functions.
 
-First, one must visually select the snippets of interest.
-Pressing
+First, one must visually select the snippets of interest.:
 
 .. code-block:: html
 
    <kbd>Shift</kbd><kbd>v</kbd>and then using <kbd>j</kbd><kbd>k</kbd>
 
-as necessary will suffice.
-
+As necessary will suffice.
 
 .. code:: vim
 
@@ -256,7 +248,7 @@ end of line character, find it and delete it.::
 
    /sw
 
-Replace the text with sw. You may choose any option you find useful.::
+Replace the text with ``sw``. You may choose any option you find useful.::
 
    /gc
 
@@ -294,7 +286,6 @@ more closely resemble the desired snippets.
 
 Roadmap
 -------
-
 In the file `python.snippets`_, the last snippet is a postfix, or a snippet
 that can be used after the user has finished typing most of the word.
 
@@ -321,7 +312,6 @@ And have them expand to ``if var is None`` or ``if var is not None``.
 
 Chaining Filetypes
 ------------------
-
 If you have multiple filetypes that you want to combine, then you can use
 a dotted syntax. Refer to the root of the directory at :envvar:`VIMRUNTIME`
 with the file named ``ftplugin.vim``.:
@@ -338,6 +328,54 @@ In a snippets file for reStructuredText.
 
 Lastly, I wanted to end on a note from from ``@SirVer`` himself.
 
+
+Repeating Prefixes
+------------------
+Apr 15, 2020:
+Here's an interesting feature I ran into today!
+
+In :file:`rst.snippets` I have 2 snippets with the prefix ``mod``.
+
+One was set with the :kbd:`b` option and the other with the :kbd:`w` option.
+
+If the word mod was written in the middle of a sentence but separated by
+whitespace, then the prefix with the w option would fire.
+
+If the word was at the beginning of the line, the prefix with the b option
+would fire, even if there were words after it and even if there was whitespace
+before it!
+
+For example.:
+
+   Most programs using other concurrency models are written linearly, and rely on
+   the underlying threading or process management of the language runtime or
+   operating system to change context as appropriate. An application based on
+   :mod:`asyncio` requires the application code to explicitly handle context changes, and
+   using the techniques for doing that correctly depends on understanding several
+   inter-related concepts.
+
+   The framework provided by :mod:`asyncio` is centered on an event loop, a first class
+   object responsible for efficiently handling I/O events, system events, and
+   application context changes. Several loop implementations are provided, to take
+   advantage of operating system capabilities efficiently. While a reasonable
+   default is usually selected automatically, it is also possible to pick a
+   particular event loop implementation from within the application. This is
+   useful under Windows, for example, where some loop classes add support for
+   external processes in a way that may trade some efficiencies in network I/O.
+
+I wanted to change the word asyncio to be \:mod\:\`asyncio\`.
+With my cursor on the ``a`` of the second asyncio, I pressed ``v`` ``e``
+:kbd:`Tab` ``m - o - d`` :kbd:`Tab` and to my surprise it expanded without
+confirmation.
+
+Then the 1st one expanded to something different. Even more to my surprise,
+I prefixed the 1st asyncio with a random letter, as I wanted the behavior
+of the inline expansion. I pressed :kbd:`c` :kbd:`e` and it prompted me for
+confirmation as to which one I wanted! With no letter before the snippet that
+took the b option, it expands without confirmation.
+
+This was all very unexpected and I simply wanted to make note of it.
+
 Standing On The Shoulders of Giants
 ===================================
 
@@ -351,5 +389,9 @@ two projects:
 UltiSnips has seen contributions by many individuals. Those contributions have
 been merged into this collection seamlessly and without further comments.
 
+
 .. _`https://www.github.com/junegunn/fzf.vim`: https://www.github.com/junegunn/fzf.vim
+
 .. _`python.snippets`: ./python.snippets
+
+.. _UltiSnips: https://github.com/sirver/ultisnips
