@@ -34,15 +34,14 @@ setlocal softtabstop=2
 setlocal suffixesadd=.vim
 setlocal nolinebreak
 
-setlocal nowrap wrapmargin=1
-
+setlocal wrapmargin=1
 " To allow tag lookup via CTRL-] for autoload functions, '#' must be a
 " keyword character.  E.g., for netrw#Nread().
 " Wanted - added so we could search for stuff like vim-surround as 1 word
 " Think tpope adds it in scriptease tho
 " setlocal iskeyword+=#,-  " Make 'gf' work
 setlocal wrap
-setlocal foldmethod=marker
+setlocal foldmethod=indent
 setlocal foldlevel=0
 
 let &l:path = includes#VimPath()
@@ -61,7 +60,10 @@ let b:undo_indent = 'setlocal indentkeys< indentexpr<'
 let b:ale_linters = ['ale_custom_linting_rules', 'vint', 'vimls']
 let b:ale_linters_explicit = 1
 
+let b:ale_linters = ['ale_custom_linting_rules']
+let b:ale_linters_explicit = 1
 
+let b:ale_linters += ['vint']
 " the original ftplugin also sets b:undo_ftplugin = to call VimFtpluginUndo
 " so we can append to theirs and not need to add rhe func call
 let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')

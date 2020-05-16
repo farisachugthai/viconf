@@ -24,14 +24,12 @@ let b:undo_ftplugin = ''
 " WHY!
 
 " Override the ftplugin
-" hate this mapping.
-" silent! nunmap <buffer> q
 setlocal buftype=
 setlocal bufhidden=
 setlocal noreadonly
 setlocal modifiable
 setlocal number relativenumber
-setlocal signcolumn=auto:4
+" setlocal signcolumn=auto:4
 setlocal wrap
 " allow dot and dash in manual page name.
 setlocal iskeyword+=\.,-
@@ -57,9 +55,8 @@ let b:undo_ftplugin  = 'setlocal buftype< bufhidden< ro< mod< nu< rnu< signcolum
                     \. '|setlocal ma< et< ts< sts< sw< wrap< breakindent< swf<'
                     \. '|unlet! b:undo_ftplugin'
                     \. '|unlet! b:did_ftplugin'
-" }}}
 
-" Filetype  Nvim Official Ftplugin: {{{
+" Filetype  Nvim Official Ftplugin:
 
 if !exists('g:no_plugin_maps') && !exists('g:no_man_maps')
   nnoremap <buffer> q <Cmd>bd<CR>
@@ -76,4 +73,3 @@ if !exists('g:no_plugin_maps') && !exists('g:no_man_maps')
                      \. '|silent! nunmap <buffer> <C-T>'
 endif
 
-" }}}

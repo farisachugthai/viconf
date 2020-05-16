@@ -1,24 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Initialize pythonx in neovim."""
+__docformat__ = "reStructuredText"
+
 import logging
 import os
 import sys
 from collections import namedtuple
 from importlib.machinery import PathFinder
 from io import StringIO
-
-# try:
-#     import pynvim
-# except ImportError:
-#     pass
-
-__docformat__ = "reStructuredText"
+from pathlib import Path
 
 logger = logging.getLogger(__name__).addHandler(logging.StreamHandler())
 
-# file not defined? fuck
-# sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 
 class Options:

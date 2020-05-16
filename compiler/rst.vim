@@ -5,26 +5,27 @@
 " Previous Maintainer:  Nikolai Weibull <now@bitwi.se>
 " Latest Revision:      Jun 29, 2019
 
+
+" Guards:
 if exists('current_compiler')
   finish
 endif
 let current_compiler = 'rst'
 
-" From he exists:
-
-" :cmdname	ex command: built-in command, user
-"     command or command modifier |:command|.
-"     returns:
-"     1  for match with start of a command
-"     2  full match with a command
-"     3  matches several user commands
-"     to check for a supported command
-"     always check the return value to be 2.
 if exists(':CompilerSet') != 2
   command -nargs=* CompilerSet setlocal <args>
 endif
 
-augroup UserRstCompiler  " {{{
+
+" CompilerSet:
+if exists('g:rst_makeprg_params')
+  execute 'CompilerSet makeprg=sphinx-build\ ' . escape(g:rst_makeprg_params, ' \|"') . '\ $*'
+else
+  CompilerSet makeprg=sphinx-build\ $*
+endif
+
+
+augroup UserAutomakeRst
   autocmd FileType rst if executable('sphinx-build')
                     \|   if filereadable('conf.py')
                     \|     let &l:makeprg = 'sphinx-build -b html . ./build/html'
@@ -37,11 +38,8 @@ augroup UserRstCompiler  " {{{
                     \|     nnoremap <buffer> <F5> <Cmd>make!<Space>
                     \|   endif
                     \| endif
+augroup END
 
-
-augroup END  " }}}
-
-CompilerSet makeprg=sphinx-build
 
 CompilerSet errorformat=
       \%f\\:%l:\ %tEBUG:\ %m,

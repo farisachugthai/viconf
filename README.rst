@@ -31,6 +31,8 @@ We can observe this with::
    set rtp   " or alternatively
    echo &rtp
 
+.. _rtp:
+
 Runtimepath
 -----------
 
@@ -58,41 +60,6 @@ Here's a quick summary of the folders in a standard runtimepath layout.
        style package management. The native packaging system does not
        require any third-party code.
 
-Ftplugin
-~~~~~~~~~~
-
-Ftplugin files should be used to totally override the configuration
-neovim has built-in for a certain filetype.
-
-You either have to be **THAT** discontent with it, or willing to simply
-copy and paste the original and then add your own modifications in.
-
-The standard ftplugin files on a Linux system are found in the
-`runtime directory </usr/share/nvim/runtime>`_ in the
-`ftplugin section </usr/share/nvim/runtime/ftplugin/`_.
-
-In lieu of doing all of that, `after/ftplugin`_ simply builds on the
-configuration that comes built in the with editor.
-
-.. note:: Guards
-
-    This is only true if you put ftplugin guards in your configs.
-    However, you absolutely should.
-
-As a result, we won't put the usual ftplugin guard in there. However, we
-should do something to ensure that buffers of a different filetype don't
-source everything in `after/ftplugin`_.
-
-For example, let's say we were in `after/ftplugin/gitcommit.vim`_.
-
-Something like this pseudo code would be perfect.:
-
-.. code-block:: vim
-
-    if ft != None && ft != gitcommit | finish | endif
-
-
-Then put that in everything in that dir.
 
 Syntax
 ~~~~~~~
@@ -103,6 +70,10 @@ number of files in `syntax`_
 
 .. _`syntax`: ./syntax/
 
+.. seealso::
+   :file:`ftplugin/README.rst`
+
+
 So where are my files?
 ----------------------
 
@@ -111,11 +82,11 @@ In order to find where files are, one can use a series of functions Vim
 provides for stating the OS. However a fair number of them have clunky
 syntax and produce surprising behavior.::
 
-   " let s:this_dir = fnameescape(fnamemodify(resolve('$MYVIMRC'), ':p:h'))
-   " echomsg s:this_dir
+   let s:this_dir = fnameescape(fnamemodify(resolve('$MYVIMRC'), ':p:h'))
+   echomsg s:this_dir
 
-That resolves to the directory of the buffer that Nvim opened on startup.
-I couldn't begin to tell you why it does that.::
+That resolves to your current working directory. I couldn't begin to tell you
+why it does that.::
 
    let s:this_dir = fnameescape(fnamemodify(expand('$MYVIMRC'), ':p:h'))
    echomsg s:this_dir
@@ -124,13 +95,13 @@ I couldn't begin to tell you why it does that.::
    echomsg s:something
 
 These 2 actually echo the same location!
-*assuming that you put those 2 in your vimrc.*
+*Assuming that you put those 2 in your vimrc.*
 
 The rest of this document largely deals with setting up a comfortable
 editing environment for any type of plain text file regardless of platform.
 
 
-Better defaults for resizing Windows
+Better defaults for resizing windows
 ====================================
 
 I've been using Vim for 5 years. And at this point I've forgotten most of the
@@ -178,11 +149,6 @@ So let's set it up!:
    XXX
 
 
-
-.. _autocompletion:
-
-||||||| 4789a0b
-
 Working with Plugins
 =====================
 
@@ -227,37 +193,6 @@ Updating vim-plug.
 .. code-block:: bash
 
    git subtree pull --squash --prefix=vim-plug https://github.com/junegunn/vim-plug.git master
-
-
-Spell Files
-============
-
-From the help docs
-
-.. topic:: Spellfile Cleanup
-
-    SPELLFILE CLEANUP         *spellfile-cleanup*
-
-    The ``zw`` command turns existing entries in 'spellfile' into comment lines.
-    This avoids having to write a new file every time, but results in the file
-    only getting longer, never shorter.  To clean up the comment lines in all
-    ".add" spell files do this:
-
-    `:runtime spell/cleanadd.vim`
-
-    This deletes all comment lines, except the ones that start with "##".  Use
-    "##" lines to add comments that you want to keep.
-
-    You can invoke this script as often as you like.  A variable is
-    provided to skip updating files that have been changed recently.  Set
-    it to the number
-    of seconds that has passed since a file was changed before it will be
-    cleaned. For example, to clean only files that were not changed in the last
-    hour:
-
-    `let g:spell_clean_limit = 60 * 60`
-
-    The default is one second.
 
 
 Mappings
@@ -306,7 +241,8 @@ would typically conflict with inserted text can easily be used.
 My `mapleader` is currently set to :kbd:`Space`. If I were to map :kbd:`Space r e`
 in insert mode, then any time I typed a word like 'return', the mapping would fire.
 
-However, ``noremap`` doesn't touch insert mode.
+However, even the *relatively* permissive ``:noremap`` command doesn't touch
+insert mode, command line mode or terminal mode!
 
 So how does one ensure that they have a mapping in every mode?
 
@@ -350,9 +286,11 @@ mode or :kbd:`<C-u>` for visual mode.
 To date I haven't had any problems with replacing all instances of :kbd:`:`
 with ``<Cmd>``, and it makes Nvim behave in a slightly more manageable way.
 
-Autocompletion
----------------
 
+.. _autocompletion:
+
+Autocompletion
+===============
 Whew! Just spent a whole lot of time setting up autocompletion from scratch.
 
 Let's first start with ex-mode completion.::
@@ -414,6 +352,8 @@ Completion can be done for:
 | 12. Spelling Suggestions                      | <C-x>s     |
 +-----------------------------------------------+------------+
 
+.. _fzf:
+
 FZF in Insert Mode
 ~~~~~~~~~~~~~~~~~~~
 
@@ -427,7 +367,7 @@ That code can be found `here.`_
 
 
 Different Shells
-================
+----------------
 Inexplicably, nvim started a terminal buffer using *powershell* with no prompting!
 :envvar:`SHELL` was set to pwsh and it automatically set things up correctly!::
 
@@ -439,74 +379,14 @@ Inexplicably, nvim started a terminal buffer using *powershell* with no promptin
 
 And seemingly nothing else. I think most of those are the bash defaults too!
 
-Includes and the Path
----------------------
-Setting the path the way that you want is hard; however, I seem to have found
-a method for doing so that works. Should be functional on both windows and linux,
-for any python installation and regardless of whether python was installed from
-a package manager or Anaconda.
-
-In addition, it still works quickly as recursive includes can get out of
-control very quickly.
-
-.. code-block:: vim
-
-   function py#PythonPath() abort  " {{{1
-
-   " Note: the path option is to find directories so it's usually unnecesssary
-   " to glob if you have the /usr/lib/python dir in hand.
-   " let s:orig_path = &path
-
-   " The current path and the buffer's dir. Also recursively search downwards
-   let s:path = '.,,**,'
-
-   if !empty('g:python3_host_prog')
-
-      if has('unix')
-         let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h:h')
-         " max out at 3 dir deep
-         " don't go 3 dir in includes start going REALLY slowly
-         let s:site_pack = s:root_dir . '/lib/python3.7/site-packages/**'
-
-         let s:path = s:path . s:site_pack
-         let s:path = ',' . s:root_dir . '/lib/python3.7/*' . s:path . ','
-         let s:path =  ',' . s:root_dir . '/lib/python3.7/**/*' . s:path . ','
-
-      " sunovabitch conda doesn't put stuff in the same spot
-      else
-         let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h')
-
-         let s:site_pack = s:root_dir . '/lib/site-packages/**2/'
-         let s:path = s:path . s:site_pack
-
-         " This option requires that the **# either is at the end of the path or
-         " ends with a '/'
-         " let s:path =  ',' . s:root_dir . '/lib/**1/' . s:path . ','
-         " make this last. its the standard lib and we prepend it to the path so
-         " it should be first in the option AKA last in the function
-         let s:path = s:root_dir . '/lib' . s:path
-      endif
-
-   " else
-      " Todo i guess. lol sigh
-      " return s:orig_path
-
-   endif
-
-   return s:path
-   " if this still doesn't work keep wailing at python_serves_python
-
-   endfunction
-
 
 Asynchronous Buffers
 ====================
 
 .. admonition:: Be careful when working with ``jobstart``.
 
-This function POURS output into the current buffer.
-Keep in mind that this happens asynchronously so button-mashing :kbd:`Ctrl-c`
-won't get you anywhere! Make sure you're switched to a scratch buffer.
+This function POURS output into the current buf so make sure you're
+switched to a scratch buffer.
 
 However... **THIS WORKS**::
 
@@ -540,8 +420,8 @@ to insert whitespace.::
    inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"))
 
 
-Fixing Coc auto-completion in the cmd-window
---------------------------------------------
+Fixing Coc auto-completion in the cmdwindow
+-------------------------------------------
 The :abbr:`pum (popup-menu)` would open after using :kbd:`q;`. It would then raise an error on
 the ``CompleteDone`` event as it isn't allowed in the command window.::
 
@@ -651,7 +531,7 @@ The defaults are generally pretty good::
    setglobal writebackup        " protect against crash-during-write
    setglobal nobackup           " but do not persist backup after successful write
 
-Change ``&backupext`` and ``&directory`` to things you want.
+Change &backupext and &directory to things you want.
 
 
 Environment Variables

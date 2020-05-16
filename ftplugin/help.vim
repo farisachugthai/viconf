@@ -12,8 +12,8 @@ setlocal relativenumber number
 setlocal foldcolumn=0 signcolumn=
 
 setlocal tabstop=8
-setlocal softtabstop=8
-setlocal shiftwidth=8
+setlocal softtabstop=2
+setlocal shiftwidth=2
 setlocal breakindent
 
 setlocal wrap  " scrolling horizontally to read sucks
@@ -39,8 +39,6 @@ let b:ale_fixers += ['align_help_tags']
 let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
                       \. '|setlocal fo< tw< cole< cocu< isk< rnu< nu<'
                       \. '|setlocal foldcolumn< signcolumn< wrap<'
-                      " \. '|silent! nunmap <buffer> g0'
-                      " \. '|silent! nunmap <buffer> go'
                       \. '|unlet! b:ale_fixers'
                       \. '|unlet! b:undo_ftplugin'
                       \. '|unlet! b:did_ftplugin'

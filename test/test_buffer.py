@@ -7,14 +7,10 @@ import os
 import sys
 from pathlib import Path
 
-root = Path(__file__).parent.parent
+root = Path.cwd().parent
 sys.path.insert(0, root.joinpath("python3").__fspath__())
 
 from pynvim import NvimError, attach
-
-# from _pytest.mark
-# from _pytest.config import ExitCode
-# from _pytest.config.exception import UsageError
 
 
 @pytest.fixture(scope="module")

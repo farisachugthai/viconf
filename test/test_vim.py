@@ -2,8 +2,12 @@
 import os
 import sys
 import tempfile
+from pathlib import Path
 
 import pytest
+
+root = Path('.').parent
+sys.path.insert(0, root.joinpath("python3").__fspath__())
 
 
 def source(vim, code):

@@ -5,7 +5,7 @@
     " Last Modified: August 28, 2019
 " ============================================================================
 
-function! ftplugins#ALE_JSON_Conf() abort  " {{{
+function! ftplugins#ALE_JSON_Conf() abort
   " Standard fixers defined for JSON
   let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
 
@@ -20,33 +20,17 @@ function! ftplugins#ALE_JSON_Conf() abort  " {{{
 
     let b:ale_linters = ['jsonlint']
     let b:ale_linters_explicit = 1
-endfunction  " }}}
+endfunction
 
-function! ftplugins#ALE_CSS_Conf() abort  " {{{
 
-  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
-
-    let b:ale_fixers += ['prettier']
-
-endfunction  " }}}
-
-function! ftplugins#ALE_Html_Conf() abort  " {{{
-
-  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
-  " he checks for executability too let's say fuck it
-  let b:ale_fixers += ['prettier', 'stylelint', 'csslint']
-
-endfunction  " }}}
-
-function! ftplugins#typescript_setup() abort   " {{{
-
+function! ftplugins#typescript_setup() abort
   " node_modules
   let s:node_modules = finddir('node_modules', '.;', -1)
   if len(s:node_modules)
     let b:ts_node_modules = map(s:node_modules, { idx, val -> substitute(fnamemodify(val, ':p'), '/$', '', '')})
     unlet! s:node_modules
   endif
-  " $PATH: {{{
+  " $PATH:
   if exists('b:ts_node_modules')
     if $PATH !~? b:ts_node_modules[0]
       let $PATH = b:ts_node_modules[0] . ':' . $PATH
@@ -63,8 +47,8 @@ function! ftplugins#typescript_setup() abort   " {{{
     unlet! b:tsconfig_data
   endif
   unlet! b:tsconfig_file
-  " }}}
-  " Lint File On Write: {{{
+
+  " Lint File On Write:
   if executable('tslint')
     let &l:errorformat = '%EERROR: %f:%l:%c - %m,'
                        \.'%WWARNING: %f:%l:%c - %m,'
@@ -79,11 +63,11 @@ function! ftplugins#typescript_setup() abort   " {{{
       autocmd BufWritePost <buffer> silent make! <afile> | silent redraw!
     augroup END
   endif
-" }}}
+endfunction
 
-endfunction  " }}}
+endfunction
 
-function! ftplugins#get_git_dir() abort  " {{{
+function! ftplugins#get_git_dir() abort
   if !exists('b:git_dir')
     if expand('%:p') =~# '[\/]\.git[\/]modules[\/]'
       " Stay out of the way
@@ -98,4 +82,6 @@ function! ftplugins#get_git_dir() abort  " {{{
       let b:git_dir = substitute(b:git_dir,'\\','/','g')
     endif
   endif
-endfunction " }}}
+endfunction
+
+" Vim: set fdm=indent fdls=0:

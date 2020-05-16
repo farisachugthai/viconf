@@ -58,7 +58,7 @@ fun! s:ConsiderSwitchingToJinjaAgain()
 endfun
 
 
-function! s:SelectHTML() abort  " {{{
+function! s:SelectHTML() abort
   let l:n = 1
   while l:n < 50 && l:n <= line('$')
     " check for jinja
@@ -68,14 +68,18 @@ function! s:SelectHTML() abort  " {{{
     endif
     let l:n = l:n + 1
   endwhile
-endfunction  " }}}
+endfunction
 
-augroup Userftdetect  " {{{
+
+augroup Userftdetect
   au!
   au BufNewFile,BufRead *.json,*.jsonp,*.webmanifest,*.code-workspace setfiletype json
   au BufNewFile,BufRead *.jupyterlab-settings,*.ipynb,*.code-snippets setfiletype json
-  au BufNewFile,BufRead *.bash,*.bashrc,*.bash_profile setfiletype bash
-  au BufNewFile,BufRead *.sh,*.profile                 setfiletype bash
+
+  au BufNewFile,BufRead .bashrc,bashrc,bash.bashrc,.bash[_-]profile,.bash[_-]logout,.bash[_-]aliases,bash-fc[-.],*.bash,*/{,.}bash[_-]completion{,.d,.sh}{,/*},*.ebuild,*.eclass,PKGBUILD call dist#ft#SetFileTypeSH("bash")
+  au BufNewFile,BufRead */etc/profile,.profile,*.sh,*.env             setfiletype bash
+  " call dist#ft#SetFileTypeSH(getline(1))
+
   au BufNewFile,BufRead *.sip                          setfiletype cpp
   au BufNewFile,BufRead setup.cfg                      setfiletype dosini
   au BufNewFile,BufRead *.xonshrc,*.xsh                setfiletype xonsh
@@ -97,11 +101,11 @@ augroup Userftdetect  " {{{
 
   " Go dep and Rust use several TOML config files that are not named with .toml.
   au BufNewFile,BufRead *.toml,Gopkg.lock,Cargo.lock,*/.cargo/config,*/.cargo/credentials,Pipfile setfiletype toml
+  au BufNewFile,BufRead requirements*.txt                             setfiletype config
 
   autocmd FileType htmldjango call s:ConsiderSwitchingToJinja()
   autocmd FileType html call s:TryDetectJinja()
 
   autocmd BufWritePost *.html,*.htm,*.shtml,*.stm call s:ConsiderSwitchingToJinjaAgain()
+  autocmd BufNewFile,BufRead *.info.*                                 setfiletype info
 augroup END
-" }}}
-

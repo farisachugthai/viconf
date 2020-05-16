@@ -30,9 +30,11 @@ let &l:formatprg='!postcss'
 
 let &l:include = '^\s*@import\s\+\%(url(\)\='
 
-call ftplugins#ALE_CSS_Conf()
+let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
+let b:ale_fixers += ['prettier']
 
-let b:undo_ftplugin .= '|setlocal et< sw< sts< sua< ofu< mp< efm<'
-      \ . '|setlocal path< com< cms< fp< include<'
-      \ . '|unlet! b:undo_ftplugin'
-      \ . '|unlet! b:did_ftplugin'
+let b:undo_ftplugin = '|setlocal et< sw< sts< sua< ofu< mp< efm<'
+      \. '|setlocal path< com< cms< fp< include<'
+      \. '|unlet! b:ale_fixers'
+      \. '|unlet! b:undo_ftplugin'
+      \. '|unlet! b:did_ftplugin'

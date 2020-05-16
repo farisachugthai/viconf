@@ -49,8 +49,7 @@ import threading
 import traceback
 import warnings
 
-import asyncio
-from asyncio.events import get_event_loop_policy, get_running_loop
+from asyncio.events import get_event_loop_policy
 from asyncio.futures import Future
 from asyncio.streams import StreamReader, StreamWriter
 from collections import namedtuple, UserList, deque
@@ -248,7 +247,7 @@ def start_host(session=None, load_plugins=True, plugins=None):
         plugins = _goofy_way_of_loading_plugins()
 
     if not session:
-        session = stdio_session()
+        session = socket_session()
     else:
         if isinstance(session, str):
             session = _convert_str_to_session(session)
@@ -1980,15 +1979,10 @@ class ScriptHost:
         # also we're gonna need to do something about all this horrific
         # sys.path hacking
         self.hook = path_hook(nvim)
-        # self.saved_stdout = sys.stdout
-        # self.saved_stderr = sys.stderr
-        # sys.stdout = RedirectStream(out_stream)
-        # sys.stderr = RedirectStream(err_stream)
 
         # context where all code will run
-        # import types
-        # self.module = types.ModuleType("__main__")
-        # nvim.script_context = self.module
+        import types
+
         # it seems some plugins assume 'sys' is already imported, so do it now
         exec("import sys", globals(), locals())
         exec("import re", globals(), locals())
@@ -2823,7 +2817,7 @@ class MsgpackStream(object):
 
         """
         self._loop = (
-            event_loop if event_loop is not None else asyncio.new_event_loop()
+            event_loop if event_loop is not None else AsyncioEventLoop()
         )  # todo: args
 
         # OR:
@@ -3046,7 +3040,7 @@ class AsyncSession(MsgpackStream):
         error = "Received invalid message %s" % msg
         warn(error)
         self._msgpack_stream.send([1, 0, error, None])
-        # self.send([1, 0, error, None])
+        self.send([1, 0, error, None])
 
 
 class Response(object):
@@ -4185,7 +4179,7 @@ class UvEventLoop(BaseEventLoop):
 EventLoop = UvEventLoop
 
 
-import gc
+import gc   # noqa
 gc.collect()
 
 if __name__ == "__main__":

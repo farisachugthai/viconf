@@ -13,7 +13,7 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 set foldopen=insert,jump,block,hor,mark,percent,quickfix,search,tag,undo
 setglobal foldnestmax=10
 " Oddly needs to be set locally?
-set foldmethod=marker foldcolumn=2
+" set foldmethod=marker foldcolumn=2
 " Automatically close all folds from the beginning.
 setglobal foldlevelstart=99
 " Everything is a fold even if it's one line
@@ -23,7 +23,7 @@ setglobal foldignore=
 " Automatically open and close folds as i move out and in them.
 " setglobal foldopen=all foldclose=all
 " nah this is really annoying
-setglobal diffopt=filler,context:0,iblank,iwhite,iwhiteeol,indent-heuristic,hiddenoff,foldcolumn:1
+setglobal diffopt=filler,context:0,iblank,iwhite,iwhiteeol,indent-heuristic,hiddenoff,foldcolumn:1,horizontal
 
 if has('patch-8.1.0360') || has('nvim')
   setglobal diffopt+=internal,algorithm:patience
@@ -61,7 +61,6 @@ setlocal indentkeys-=0#
 setglobal smartcase infercase smartindent
 setglobal regexpengine=2
 setglobal cscopetagorder=1  " why does this default to search cscope first?
-
 setglobal shada='100,<50,s10,:3000,%
 " default but specify it.
 let &g:shadafile = s:stddata.'/site/shada/main.shada'
@@ -100,6 +99,7 @@ if &shiftwidth > 4  | setglobal shiftwidth=4 | endif
 setglobal expandtab smarttab softtabstop=4
 
 if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif
+
 setglobal cdpath=$HOME,$VIMRUNTIME
 
 " Movement:
@@ -108,7 +108,9 @@ setglobal cdpath=$HOME,$VIMRUNTIME
 setglobal isfname-==
 setglobal iskeyword=@,48-57,_,192-255   " Idk how but i managed to mess up the default isk
 setglobal iskeyword-=.,_
+
 set winblend=10
+
 setglobal suffixes=.bak,~,.o,.info,.swp,.aux,.bbl,.blg,.brf,.cb,.dvi,.idx,.ilg,.ind,.inx,.jpg,.log,.out,.png,.toc,.pyc,*.a,*.obj,*.dll,*.exe,*.lib,*.mui,*.swp,*.tmp,
 
 " Buffers Windows:
@@ -138,8 +140,8 @@ setglobal selectmode=mouse  " start select mode instead of visual mode because w
 setglobal nojoinspaces
 setglobal modeline
 if exists('&modelineexpr') | setglobal modelineexpr | endif
-setglobal whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 
+setglobal whichwrap+=<,>,h,l,[,]              " Reasonable line wrapping
 " TODO: closeoff needs to be added conditionally. how?
 setglobal browsedir='buffer'   " which directory is used for the file browser
 
@@ -174,6 +176,7 @@ let g:tlib_extend_keyagents_InputList_s = {
     \ 10: 'tlib#agent#Down',
     \ 11: 'tlib#agent#Up'
     \ }
+
 " }}}
 
 " Platform Specific Options: {{{
@@ -296,15 +299,14 @@ let g:NERDTreeMapToggleZoom = 'Z'
 " Is there a way to do this and also make sure that p does the same thing?
 " I think we can do something like
 " nnoremap - <Cmd>call nerdtree#ui_glue#invokeKeyMap('p')<CR>
-" and that'll do exactly what i want; however that'll only work I think if nerdtree's already been loaded
+" and that'll do exactly what i want; however that'll only work I think if nerdtree's already been
 let g:NERDTreeMapJumpParent = '-'
+
 " }}}
 
 " Tagbar: {{{
 " I want the spacebar back
 let g:tagbar_map_showproto = '?'
-" let g:tagbar_left = 2
-let g:tagbar_singleclick = 1
 let g:tagbar_map_zoomwin = 'Z'
 if filereadable(expand('$HOME/.ctags.d/new_universal.ctags'))
   let g:tagbar_ctags_options = [expand('~/.ctags.d/new_universal.ctags')]
@@ -530,11 +532,11 @@ function! s:InitCoc() abort
     call coc#config('python.jediEnabled', v:false)
   endif
 
-  call coc#config('languageserver', {
-                  \ 'bash': {
-                  \   'args': [ 'start' ],
-                  \   'command': s:bashlsp,
-                  \   'filetypes': ['sh', 'bash']}})
+    call coc#config('languageserver', {
+                    \ 'bash': {
+                    \   'args': [ 'start' ],
+                  \ 'command': s:bashlsp,
+                  \ 'filetypes': ['sh', 'bash']}})
 
   call coc#config('languageserver', {
                   \ 'vimlsp': {
@@ -557,7 +559,6 @@ function! s:InitCoc() abort
                   \     'fromVimruntime': v:true,
                   \   }},
                   \ 'filetypes': ['vim']}})
-
 
 endfunction
 
@@ -660,7 +661,6 @@ let g:tmuxline_powerline_separators = {
      \ 'right' : '«',
      \ 'right_alt' : '◀',
      \ 'space' : ' '}
-
 " }}}
 
 " Voom: {{{

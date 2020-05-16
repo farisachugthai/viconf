@@ -227,10 +227,12 @@ function! includes#CPath() abort  " {{{
       return s:path
     endif
 
+    " 2015-2019 vcredist
     if isdirectory('C:/Program\ Files/ (x86)/Microsoft\ Visual\ Studio/2019/Community/VC/Tools/MSVC')
       let s:path = s:path . 'C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/2019/Community/VC/Tools/MSVC/**'
     endif
 
+    " 2010 redist
     if isdirectory('C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include')
       let s:path = s:path . 'C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include,'
     endif
@@ -242,6 +244,11 @@ function! includes#CPath() abort  " {{{
 
     if exists('$INCLUDEDIR')
       let s:path = s:path . expand('$INCLUDEDIR')
+    endif
+
+    " some good python ones
+    if isdirectory('C:/Users/fac/scoop/apps/winpython/current/python-3.8.1.amd64/include')
+      let s:path .= 'C:/Users/fac/scoop/apps/winpython/current/python-3.8.1.amd64/include'
     endif
 
     let &shellslash = s:old_ss

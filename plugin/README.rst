@@ -20,26 +20,24 @@ If you're not sure why you would want to begin breaking up your vimrc,
 I can't recommend `Tom Ryder's writing enough
 <https://vimways.org/2018/from-vimrc-to-vim>`_
 
+
 Working with Plugins
 =====================
 Vim-Plug is a highly recommended plugin manager, and the one that I myself use.
-
 Written by Junegunn Choi (also the author of FZF), vim-plug creates a
 simple way of interacting with plugins.
-
 Beyond the basic commands you can read about in his README, vim-plug has
 an API that exports the command ``plug``. This command utilizes vimscript to
 return a dictionary with all of your currently loaded plugins.
 
-This dict maintains the order that the plugins were loaded into the buffer and
-can be accessed with
+This dict maintains the order that the plugins were loaded into the
+buffer and can be accessed with
 
 .. code-block:: vim
 
    echo keys(plugs)
 
 This feature proves phenomenally useful in a handful of situations.
-
 For example, one may want to check whether a ftplugin was lazily loaded or
 loaded at all.
 
@@ -55,6 +53,7 @@ different configuration files on different devices, and would like to
 check whether a plugin was installed. It's also good for debugging and
 seeing in what order a plugin loads.
 
+
 Git Subtree
 -----------
 Updating vim-plug.
@@ -62,6 +61,7 @@ Updating vim-plug.
 .. code-block:: bash
 
    git subtree pull --squash --prefix=vim-plug https://github.com/junegunn/vim-plug.git master
+
 
 Common Vim Naming Conventions
 =============================
@@ -83,6 +83,7 @@ you regularly see more than one ftplugin in the output of `scriptnames`.
 In directories where it makes sense to load more than one file, like `syntax`_,
 adding var names will probably pay dividends.
 
+
 .. _syntax:
 
 Autocmd for Vim Commentary
@@ -103,6 +104,7 @@ to move it in here but I'm not actually sure where.
 
 Function Scoping
 =================
+
 If you set a guard at the beginning of a plugin file that reads something
 to the effect of::
 
@@ -123,17 +125,21 @@ So there's actually no need anymore to define functions as::
 And it'd actually possibly be better to define it without the :kbd:`!`.
 We would want an error if that go re-sourced and re-defined.
 
+
 Recommendations for Options
 ===========================
+Don't put 'usetab' before 'split' in ``&switchbuf``.
+
 
 Using ``&switchbuf``
 ---------------------
-Don't put 'usetab' before 'split' in ``&switchbuf``.
 
 If you do, then stuff like ``:helpgrep word`` will open a new tab with
 the results of your search, and leave the quickfix list in the
-previous tab. Because :abbr:`qf` lists don't transfer from tab to tab, you won't be able
-to access the search results in the window that your cursor just moved to!
+previous tab. Because :abbr:`qf` lists don't transfer from tab to tab,
+you won't be able to access the search results in the window that your cursor
+just moved to!
+
 
 Possible bug in &number and &rnu
 ---------------------------------
@@ -142,6 +148,8 @@ The following doesn't seem to work.::
    setglobal nu rnu
 
 However it works just fine when set locally.
+
+
 Writing Plugins on NT systems
 ==============================
 From ``:he source_crnl``
@@ -185,15 +193,42 @@ Here are 2 commands I'm still actively working on.::
          \ . shellescape(<q-args>), 1, <bang>0 ? fzf#vim#with_preview('up:60%')
          \ : fzf#vim#with_preview('right:50%:hidden', '?'),
          \ <bang>0)
-   " Grep: {{{2
 
 
 Working with tags
 ==================
 In the opposite vein of unimpaired (as unimpaired uses keybindings of the
-flavor :kbd:`]` :kbd:`[a-z]`), I just found the keybinding :kbd:`g]`! Thanks
-to inspiration from the varying commands in ``:he tagsrch`` I'd recommend
-trying out these mappings.::
+flavor :kbd:`]` :kbd:`[a-z]`), I just found the keybinding :kbd:`g]`!
+
+It's phenomenally useful but because of unimpaired I'm inclined to remember it
+as ]g instead of g].
+
+However that's not hard to fix!::
+
+   nnoremap ]g g]
+   nnoremap ]g g]
+
+Then I began reviewing ``tagsrch.txt``. And wow.::
+
+                                                           *g]*
+   g]			Like CTRL-], but use ":tselect" instead of ":tag".
+
+                                                           *v_g]*
+   {Visual}g]		Same as "g]", but use the highlighted text as the
+                           " identifier.
+
+                                                           *:tj* *:tjump*
+   :tj[ump][!] [name]	Like ":tselect", but jump to the tag directly when
+                           there is only one match.
+
+                                                           *:stj* *:stjump*
+   :stj[ump][!] [name]	Does ":tjump[!] [name]" and splits the window for the
+                           selected tag.
+
+                                                           *g_CTRL-]*
+   g CTRL-]		Like CTRL-], but use ":tjump" instead of ":tag".
+
+So let's do better than :kbd:`g]` !::
 
    nnoremap ]g <Cmd>stjump!<CR>
    xnoremap ]g <Cmd>stjump!<CR>
@@ -216,26 +251,23 @@ Here's a few different ways to map a function to a key.::
    vnoremap <expr> <C-\\> UltiSnips#list_snippets()
 
 
+
 ALE --- Asynchronous Lint Engine
 ================================
 A plugin that lints buffers as well as, as of late, supports the LSP protocol.
 
 quickfix vs. locationlist
 --------------------------
-
-.. abbreviation:: qf
-
-   The quickfix list.
-
-By default ale uses location lists.
+By default ALE uses location lists.
 
 Location lists are tied to the window they were created for, not the
 entire session as the quickfix list is. Because commands like ``:lwindow``
-and ``:lopen`` are window specific, you only see linting information for your
-current buffer to populate the list.
+and ``:lopen`` are window specific, you only see linting information
+for your current buffer to populate the list.
 
-If ALE were to use the quickfix, you would see linting information for
-every buffer you have open simultaneously, which would be a nightmare.
+If ALE were to use the :abbr:`qf (quickfix list)`, you would see
+linting information for every buffer you have open simultaneously, which
+would be a nightmare.
 
 More importantly, you don't want every buffer to wipe your quickfix list
 while you're in the middle of actually recompiling something
@@ -276,8 +308,8 @@ Here's a helpful tidbit from the help pages.:
 Using ``*`` and ``#`` to search in Visual Mode
 ==============================================
 It's bugged me for a while that :kbd:`*` and :kbd:`#` don't search when
-you have text selected in visual mode.
-I found a little section in the help that inspired the perfect way to fix that.:
+you have text selected in visual mode. I found a little section in the
+help that inspired the perfect way to fix that.:
 
    Note that the ``:vmap`` command can be used to specifically map keys in Visual
    mode.  For example, if you would like the "/" command not to extend the Visual
@@ -308,10 +340,11 @@ repeat the last search, *and oddly this mapping doesn't working without it.*
 ``gv`` reselects the last text you had highlighted in visual mode. And ``zz``
 re-centers the cursor!
 
+
 Using shells besides cmd or bash
 ================================
 In usr_41 it's mentioned that files formatted with dos formatting won't
-run vim scripts correctly so holy shit that might explain a hell of a lot
+run vim scripts correctly so holy shit that might explain a hell of a lot.
 Comment this out because we now define ``&ff`` as only unix in $MYVIMRC.::
 
    set fileformats=unix,dos
@@ -321,6 +354,8 @@ Related to inter-op on Windows.:
    'slash' and 'unix' are useful on Windows when sharing view files
    with Unix.  The Unix version of Vim cannot source dos format scripts,
    but the Windows version of Vim can source unix format scripts.
+
+
 Fugitive
 =========
 I put all of my mappings into a function. Now I'm trying to figure out how to
@@ -368,3 +403,23 @@ correctly.
 User defined find.::
 
    command! -nargs=* -range=% -addr=buffers -count -bang -bar -complete=file_in_path Find :<count><mods>find<bang> <args>
+
+
+Jumps
+======
+Are something I never utilize frequently enough.:
+
+                                                        *CTRL-O*
+CTRL-O                  Go to [count] Older cursor position in jump list
+                        (not a motion command).
+
+<Tab>           or                                      *CTRL-I* *<Tab>*
+CTRL-I                  Go to [count] newer cursor position in jump list
+                        (not a motion command).
+
+
+That's legitimately wonderful to know!
+
+Now I just need to work that in, and make a few utility mappings for the
+quickfix window.
+

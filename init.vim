@@ -28,6 +28,8 @@ if !has('unix')
   source C:/Neovim/share/nvim-qt/runtime/plugin/nvim_gui_shim.vim
 endif
 
+setglobal background=dark
+set debug=msg
 if exists('g:GuiLoaded')
   exec 'source ' s:repo_root . '/ginit.vim'
 endif
@@ -80,6 +82,9 @@ function! LoadMyPlugins() abort  " {{{
   let g:plug_url = 'https://github.com/%s.git'
   if !exists('plug#load')  | unlet! g:loaded_plug | exec 'source ' . s:repo_root . '/vim-plug/plug.vim' | endif
 
+
+  if !exists('*stdpath') | echohl WarningMsg | echomsg 'stdpath func does not exist.' | echohl NONE | return | endif
+
   call plug#begin(s:stddata . '/plugged')
 
   Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lockfile'}
@@ -118,14 +123,17 @@ function! LoadMyPlugins() abort  " {{{
   Plug 'romainl/vim-qf'
   Plug 'tomtom/tlib_vim'
   Plug 'godlygeek/tabular', {'on': 'Tabularize'}
+  Plug 'tpope/vim-unimpaired'
+  Plug 'tpope/vim-surround'
+  Plug 'tpope/vim-eunuch'
+  Plug 'morhetz/gruvbox'
+
   if empty(s:termux)  " {{{
-    Plug 'honza/vim-snippets'
+    Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
     Plug 'junegunn/goyo.vim', {'on': 'Goyo'}
     Plug 'lepture/vim-jinja'
     Plug 'honza/vim-snippets'
-    " Don't know how i didn't realize lazy loaded plugins aren't added to &runtimepath.
     Plug 'cespare/vim-toml', {'for': 'toml'}
-    Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
     Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
     Plug 'omnisharp/omnisharp-vim', {'for': ['cs', 'ps1'] }
     Plug 'itspriddle/vim-shellcheck', {'for': ['sh', 'bash'] }
@@ -134,15 +142,14 @@ function! LoadMyPlugins() abort  " {{{
     Plug 'ludovicchabant/vim-gutentags'
     Plug 'mbbill/undotree', { 'on' : 'UndotreeToggle' }
     nnoremap U <Cmd>UndoTreeToggle<CR>
-    Plug 'tpope/vim-unimpaired'
-    Plug 'tpope/vim-surround'
-    Plug 'tpope/vim-eunuch'
-    Plug 'morhetz/gruvbox'
+    Plug 'tpope/vim-apathy'
     Plug 'liuchengxu/vim-which-key'
-  endif " }}}
+    Plug 'liuchengxu/vista.vim'
+  endif
 
   Plug 'kshenoy/vim-signature'
   Plug 'ryanoasis/vim-devicons'
+
   call plug#end()
 endfunction
 

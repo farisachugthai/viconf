@@ -4,8 +4,7 @@
 
 Really useful seemingly universal functions for working with Vim though.
 
-Dec 07, 2019: Double checked that this passes a cursory `:py3f %` test and it
-did.
+Dec 07, 2019: Double checked that this passes a cursory `:py3f %` test and it did.
 
 """
 import json
@@ -15,6 +14,7 @@ import pprint
 import sys
 
 from contextlib import contextmanager
+from pathlib import Path
 from xml.dom import minidom as md
 
 logging.basicConfig()
@@ -24,6 +24,8 @@ try:
     import yaml
 except (ImportError, ModuleNotFoundError):
     yaml = None
+
+global vim
 
 
 def get_verbosity():
@@ -409,11 +411,6 @@ def _patch_nvim(vim):
     vim.vars = vars_wrapper()
 
 
-prettiers = {
-    "xml": pretty_xml,
-    "json": pretty_json,
-    "yaml": interpret_yaml,
-}
 
 if __name__ == "__main__":
 
@@ -429,11 +426,21 @@ if __name__ == "__main__":
     except ImportError:
         UltiSnips = None
 
-# here's a few more helpers
+    config = Path(vim_eval('stdpath("config")'))
+    for i in ["python3", "pythonx", "python"]:
+        if (config / i).exists():
+            sys.path.append(str(config / i))
+
+    buf = VimBuffer(vim)  # pylint:disable=invalid-name
 
     vim_obj = _Vim()
+
+    prettiers = {
+    "xml": pretty_xml,
+    "json": pretty_json,
+    "yaml": interpret_yaml,
+    }
 
     if hasattr(vim, "from_nvim"):
         _patch_nvim(vim_obj)
 
-        buf = VimBuffer(vim)  # pylint:disable=invalid-name

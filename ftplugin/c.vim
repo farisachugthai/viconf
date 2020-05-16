@@ -17,7 +17,7 @@ if exists('b:did_ftplugin') | finish | endif
 let g:compiler_gcc_ignore_unmatched_lines = 1
 
 source $VIMRUNTIME/ftplugin/c.vim
-source $VIMRUNTIME/indent/c.vim
+" source $VIMRUNTIME/indent/c.vim
 setlocal foldmethod=syntax
 setlocal suffixesadd=.c,.h,.cpp
 setlocal cindent
@@ -41,11 +41,10 @@ setlocal include=^\s*#\s*include
 " setlocal includexpr
 " setlocal cinwords cinkeys etc etc
 let &l:path=includes#CPath()
-if getenv('$MANPATH')
+if getenv('MANPATH')
   let &l:path .= expand('$MANPATH')
 endif
 
-setlocal formatexpr=format#ClangCheck()
 
 " ALE:
 let l:lines='all'
@@ -63,6 +62,7 @@ let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
       \. '|unlet! b:undo_ftplugin'
       \. '|unlet! b:did_ftplugin'
       \. '|unlet! b:ale_fixers'
+      \. '|unlet! b:undo_ftplugin'
       \. '|silent! nunmap <buffer> <F5>'
       \. '|silent! nunmap <buffer> <Leader>ef'
 
