@@ -5,15 +5,15 @@
   " Last Modified: Dec 05, 2019
 " ============================================================================
 
-if exists('*stdpath')  " {{{
+if exists('*stdpath')
   let s:stddata = stdpath("data")
 else
   let s:stddata = resolve(expand('~/.local/share/nvim'))
 endif
 let s:stdconfig = exists('*stdpath') ? stdpath('config') : resolve(expand('~/.config/nvim'))
-" }}}
 
-function! plugins#GetAllSnippets() abort  " {{{
+
+function! plugins#GetAllSnippets() abort
   call UltiSnips#SnippetsInCurrentScope(1)
   let l:list = []
   for [l:key, l:info] in items(g:current_ulti_dict_info)
@@ -26,9 +26,9 @@ function! plugins#GetAllSnippets() abort  " {{{
       \})
   endfor
   return l:list
-endfunction  " }}}
+endfunction
 
-function! plugins#ExpandPossibleShorterSnippet() abort  " {{{
+function! plugins#ExpandPossibleShorterSnippet() abort
   if len(UltiSnips#SnippetsInCurrentScope()) == 1 "only one candidate...
     let l:curr_key = keys(UltiSnips#SnippetsInCurrentScope())[0]
     normal! diw
@@ -37,9 +37,9 @@ function! plugins#ExpandPossibleShorterSnippet() abort  " {{{
     return 1
   endif
   return 0
-endfunction  " }}}
+endfunction
 
-function! plugins#ExpandSnippetOrCarriageReturn() abort  " {{{
+function! plugins#ExpandSnippetOrCarriageReturn() abort
   " Hopefully will expand snippets or CR. Or it'll destroy deoplete's
   " ability to close the pum. *shrugs*
   let l:snippet = UltiSnips#ExpandSnippetOrJump()
@@ -48,9 +48,9 @@ function! plugins#ExpandSnippetOrCarriageReturn() abort  " {{{
     else
       return "\<CR>"
     endif
-  endfunction  " }}}
+  endfunction
 
-function! plugins#InstallPlug() abort  " {{{
+function! plugins#InstallPlug() abort
   " Unsure of how to capture return code
   if empty(executable('curl')) | return | endif
   try " Successfully executed on termux
@@ -58,9 +58,9 @@ function! plugins#InstallPlug() abort  " {{{
             \ . s:stddata . '/site/autoload/plug.vim'
             \ . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
   catch | echoerr v:exception | endtry
-endfunction  " }}}
+endfunction
 
-function! plugins#list_commits() abort  " {{{
+function! plugins#list_commits() abort
   " note: Don't forget that
   " echo isdirectory('~/projects/viconf')
   " outputs 0 on windows and
@@ -72,16 +72,16 @@ function! plugins#list_commits() abort  " {{{
     " mapping that lines up commits from this repo
     let l:git = 'Git'
     return map(l:commits, '{"line": matchstr(v:val, "\\s\\zs.*"), "cmd": "'. l:git .' show ". matchstr(v:val, "^\\x\\+") }')
-endfunction  " }}}
+endfunction
 
-function! plugins#filter_header(lines) abort  " {{{
+function! plugins#filter_header(lines) abort
     let l:longest_line   = max(map(copy(a:lines), 'strwidth(v:val)'))
     let l:centered_lines = map(copy(a:lines),
         \ 'repeat(" ", (&columns / 2) - (l:longest_line / 2)) . v:val')
     return l:centered_lines
-endfunction  " }}}
+endfunction
 
-function! plugins#startify_bookmarks() abort  " {{{
+function! plugins#startify_bookmarks() abort
   let s:nerdbookmarks = readfile(expand($HOME) . '/.NERDTreeBookmarks')
   if !filereadable(s:nerdbookmarks) | return | endif
 
@@ -99,9 +99,9 @@ function! plugins#startify_bookmarks() abort  " {{{
       call extend(g:startify_bookmarks, [s:idx_dir])
     endif
   endfor
-endfunction  " }}}
+endfunction
 
-function! plugins#GrepFromSelected(type) abort  " {{{
+function! plugins#GrepFromSelected(type) abort
   let l:saved_unnamed_register = @@
   if a:type ==# 'v'
     normal! `<v`>y
@@ -114,9 +114,9 @@ function! plugins#GrepFromSelected(type) abort  " {{{
   let l:word = escape(l:word, '| ')
   let @@ = l:saved_unnamed_register
   execute 'CocList grep ' . l:word
-endfunction  " }}}
+endfunction
 
-function! plugins#FloatingFZF() abort  " {{{
+function! plugins#FloatingFZF() abort
   " simply used to set window specific settings for FZF.
   " not intended for end users.
   let l:width = float2nr(&columns * 0.9)
@@ -129,9 +129,9 @@ function! plugins#FloatingFZF() abort  " {{{
 
   let l:win = nvim_open_win(nvim_create_buf(v:false, v:true), v:true, l:opts)
   call setwinvar(l:win, '&winhighlight', 'NormalFloat:Normal')
-endfunction  " }}}
+endfunction
 
-function! plugins#Voom() abort  " {{{
+function! plugins#Voom() abort
   let s:plugin_dir = s:stddata . '/plugged/'
   let s:voom_dir = s:plugin_dir . 'voom/autoload/voom/voom_vimplugin2657'
   let s:voom_file = s:voom_dir . '/voom_vim.py'
@@ -142,11 +142,11 @@ function! plugins#Voom() abort  " {{{
   catch
     return v:false
   endtry
-endfunction  " }}}
+endfunction
 
-function! plugins#AleMappings() abort  " {{{
+function! plugins#AleMappings() abort
 
-  " Actual Mappings: {{{
+  " Actual Mappings:
   " Follow the lead of vim-unimpaired with a for ale
   nnoremap ]a <Cmd>ALENextWrap<CR>zz
   nnoremap [a <Cmd>ALEPreviousWrap<CR>zz
@@ -162,9 +162,9 @@ function! plugins#AleMappings() abort  " {{{
 
   " Dude why can't i get plug mappings right???
   nnoremap <A-i> <Cmd>ALEInfo<CR>
-  " }}}
 
-  " Options: {{{
+
+  " Options:
 
   let g:ale_hover_to_preview = 1
   let g:ale_virtualtext_cursor = 1
@@ -202,15 +202,10 @@ function! plugins#AleMappings() abort  " {{{
       \ 'cs': ['OmniSharp']
       \ }
   let g:ale_list_vertical = 1
-  " }}}
 
-  " Python specific globals: {{{
+endfunction
 
-  " }}}
-
-endfunction  " }}}
-
-function! plugins#TagbarTypes() abort   " {{{
+function! plugins#TagbarTypes() abort
 let g:tagbar_type_ansible = {
 	\ 'ctagstype' : 'ansible',
 	\ 'kinds' : [
@@ -300,7 +295,7 @@ let g:tagbar_type_snippets = {
       \ ]
       \ }
 
-endfunction  " }}}
+endfunction
 
 
 function! plugins#fugitive_head() abort

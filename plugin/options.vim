@@ -17,7 +17,7 @@ setglobal foldnestmax=10
 " Automatically close all folds from the beginning.
 setglobal foldlevelstart=99
 " Everything is a fold even if it's one line
-setglobal foldminlines=0
+set foldminlines=0
 " And yes even if it's a comment
 setglobal foldignore=
 " Automatically open and close folds as i move out and in them.

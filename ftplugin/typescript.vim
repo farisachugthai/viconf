@@ -12,56 +12,55 @@ exec 'source ' . s:ftplugin_root . '/javascript.vim'
 unlet! b:did_indent
 source $VIMRUNTIME/indent/typescript.vim
 
-" Simple Options: {{{
-setlocal expandtab tabstop=4 softtabstop=2 shiftwidth=2
-setlocal include=^\\s*[^\/]\\+\\(from\\\|require(\\)\\s*['\"\.]
-let &l:define  = '^\s*\('
-             \ . '\(export\s\)*\(default\s\)*\(var\|const\|let\|function\|class\|interface\)\s'
-             \ . '\|\(public\|private\|protected\|readonly\|static\)\s'
-             \ . '\|\(get\s\|set\s\)'
-             \ . '\|\(export\sdefault\s\|abstract\sclass\s\)'
-             \ . '\|\(async\s\)'
-             \ . '\|\(\ze\i\+([^)]*).*{$\)'
-             \ . '\)'
-setlocal includeexpr=includes#TypeScriptIncludeExpression(v:fname,0)
-setlocal suffixesadd+=.ts,.tsx,.d.ts
-setlocal isfname+=@-@
+" Simple Options:
 
-source $VIMRUNTIME/autoload/javascriptcomplete.vim
-setlocal omnifunc=javascriptcomplete#CompleteJS
+  setlocal expandtab tabstop=4 softtabstop=2 shiftwidth=2
+  setlocal include=^\\s*[^\/]\\+\\(from\\\|require(\\)\\s*['\"\.]
 
-let b:ale_fixers = get(g:, 'b:ale_fixers', [])
-let b:ale_fixers += ['eslint']
-let b:ale_fixers += ['tslint']
-" }}}
+  let &l:define  = '^\s*\('
+             \. '\(export\s\)*\(default\s\)*\(var\|const\|let\|function\|class\|interface\)\s'
+             \. '\|\(public\|private\|protected\|readonly\|static\)\s'
+             \. '\|\(get\s\|set\s\)'
+             \. '\|\(export\sdefault\s\|abstract\sclass\s\)'
+             \. '\|\(async\s\)'
+             \. '\|\(\ze\i\+([^)]*).*{$\)'
+             \. '\)'
 
-" Original: {{{
-" https://gist.githubusercontent.com/romainl/a50b49408308c45cc2f9f877dfe4df0c/raw/1ab8eb733948c0c89d11553cc0e00f4ab251f31e/typescript.vim
-if !exists('b:did_typescript_setup')
+  setlocal includeexpr=includes#TypeScriptIncludeExpression(v:fname,0)
+  setlocal suffixesadd+=.ts,.tsx,.d.ts
+  setlocal isfname+=@-@
 
-  call ftplugins#typescript_setup()
-  let b:did_typescript_setup = 1
-endif
-" }}}
+" Plugins:
+  let b:ale_fixers = get(g:, 'ale_fixers', [])
+  let b:ale_fixers += ['eslint']
+  let b:ale_fixers += ['tslint']
 
-" Matchit: {{{
-if exists('g:loaded_matchit')
+" Original:
+  " https://gist.githubusercontent.com/romainl/a50b49408308c45cc2f9f877dfe4df0c/raw/1ab8eb733948c0c89d11553cc0e00f4ab251f31e/typescript.vim
+  if !exists('b:did_typescript_setup')
+    call ftplugins#typescript_setup()
+    let b:did_typescript_setup = 1
+  endif
+
+" Matchit:
+  if exists('g:loaded_matchit')
   let b:match_words = '\<function\>:\<return\>,'
                   \ . '\<do\>:\<while\>,'
                   \ . '\<switch\>:\<case\>:\<default\>,'
                   \ . '\<if\>:\<else\>,'
                   \ . '\<try\>:\<catch\>:\<finally\>'
   let b:did_typescript_setup = 1
-endif  " }}}
+  endif
 
-" More Helpful GF: {{{
-nnoremap <silent> <buffer> gf         <Cmd>call <SID>GF(expand('<cfile>'), 'find')<CR>
-xnoremap <silent> <buffer> gf         <Cmd>call <SID>GF(visual#GetSelection(), 'find')<CR>
-nnoremap <silent> <buffer> <C-w><C-f> <Cmd>call <SID>GF(expand('<cfile>'), 'sfind')<CR>
-xnoremap <silent> <buffer> <C-w><C-f> <Cmd>call <SID>GF(visual#GetSelection(), 'sfind')<CR>
+" More Helpful GF:
 
-if !exists('*s:GF')
-  function! s:GF(text, cmd)  " {{{
+  nnoremap <silent> <buffer> gf         <Cmd>call <SID>GF(expand('<cfile>'), 'find')<CR>
+  xnoremap <silent> <buffer> gf         <Cmd>call <SID>GF(visual#GetSelection(), 'find')<CR>
+  nnoremap <silent> <buffer> <C-w><C-f> <Cmd>call <SID>GF(expand('<cfile>'), 'sfind')<CR>
+  xnoremap <silent> <buffer> <C-w><C-f> <Cmd>call <SID>GF(visual#GetSelection(), 'sfind')<CR>
+
+  if !exists('*s:GF')
+    function! s:GF(text, cmd)
     let l:include_expression = TypeScriptIncludeExpression(a:text, 1)
 
     if len(l:include_expression) > 1
@@ -71,13 +70,13 @@ if !exists('*s:GF')
       echo 'Can not find file ' . a:text
       echohl None
     endif
-  endfunction  " }}}
-endif
-" }}}
+    endfunction
+  endif
 
-" Undo FTPlugin: {{{
-" Theres actually an undo defined in js.vim
-let b:undo_ftplugin .='|setlocal isf< ofu< sua< syntax< et< sts< sw< ts< '
+" Undo FTPlugin:
+  " Theres actually an undo defined in js.vim
+  let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
+                   \. '|setlocal isf< sua< syntax< et< sts< sw< ts< '
                    \. '|setlocal inex< def< inc< inde< '
                    \. '|unlet! b:undo_ftplugin'
                    \. '|unlet! l:include_expression'
@@ -89,4 +88,3 @@ let b:undo_ftplugin .='|setlocal isf< ofu< sua< syntax< et< sts< sw< ts< '
                    \. '|silent! xunmap <buffer> gf'
                    \. '|silent! nunmap <buffer> <C-w><C-f>'
                    \. '|silent! xunmap <buffer> <C-w><C-f>'
-" }}}

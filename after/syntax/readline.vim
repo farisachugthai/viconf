@@ -1,38 +1,199 @@
+" The readline functions look outdated so let's help
+" Also. Can we PLEASE split this into emacs and vi?
+" It'd make my life so much easier
 
-syn keyword readlineFunction  self-insert digit-argument vi-append-eol yank-last-arg
-      \ accept-line vi-subst vi-subst vi-undo vi-undo vi-char-search
-      \ vi-char-search vi-char-search vi-char-search vi-char-search
-      \ yank-pop vi-column vi-complete vi-yank-to vi-yank-to vi-match
-      \ character-search vi-prev-word vi-prev-word vi-search-again
-      \ vi-search-again beginning-of-line backward-kill-line kill-line
-      \ tilde-expand kill-region menu-complete prefix-meta end-kbd-macro
-      \ set-mark vi-redo next-history yank vi-end-word vi-end-word
-      \ vi-replace dump-variables redraw-current-line undo upcase-word
-      \ vi-goto-mark complete backward-delete-char print-last-kbd-macro
-      \ menu-complete-backward vi-change-case kill-whole-line
-      \ unix-filename-rubout beginning-of-history yank-nth-arg
-      \ insert-comment start-kbd-macro exchange-point-and-mark
-      \ non-incremental-forward-search-history re-read-init-file
-      \ vi-append-mode vi-arg-digit dump-macros do-uppercase-version
-      \ skip-csi-sequence call-last-kbd-macro kill-word vi-editing-mode
-      \ quoted-insert vi-movement-mode forward-word backward-word
-      \ clear-screen downcase-word tab-insert
-      \ non-incremental-reverse-search-history copy-region-as-kill
-      \ unix-word-rubout delete-char overwrite-mode transpose-chars
-      \ copy-forward-word transpose-words history-search-forward
-      \ forward-char vi-put vi-put backward-char revert-line
-      \ backward-kill-word previous-history unix-line-discard vi-eof-maybe
-      \ vi-search character-search-backward vi-set-mark capitalize-word
-      \ end-of-history history-search-backward vi-insert-mode vi-delete-to
-      \ vi-delete-to vi-yank-arg vi-tilde-expand vi-next-word vi-next-word
-      \ vi-insert-beg delete-horizontal-space insert-completions
-      \ possible-completions emacs-editing-mode end-of-line vi-change-char
-      \ dump-functions vi-fetch-history vi-change-to vi-change-to
-      \ reverse-search-history vi-first-print delete-char-or-list
-      \ forward-backward-delete-char vi-delete universal-argument abort
-      \ copy-backward-word forward-search-history 
+if exists('b:after_syntax_readline') | finish | endif
+let b:after_syntax_readline = 1
 
 
+syn match readlineComment '#.*$'
+
+syn keyword readlineMovementFunction    contained
+                              \ beginning-of-line
+                              \ end-of-line
+                              \ forward-char
+                              \ backward-char
+                              \ forward-word
+                              \ backward-word
+                              \ clear-screen
+                              \ redraw-current-line
+
+syn keyword readlineHistoryFunction contained
+                              \ accept-line
+                              \ previous-history
+                              \ next-history
+                              \ beginning-of-history
+                              \ end-of-history
+                              \ reverse-search-history
+                              \ forward-search-history
+                              \ non-incremental-reverse-search-history
+                              \ non-incremental-forward-search-history
+                              \ history-search-forward
+                              \ history-search-backward
+                              \ yank-nth-arg
+                              \ yank-last-arg
+
+syn keyword readlineInsertionFunction contained
+                              \ quoted-insert
+                              \ tab-insert
+                              \ self-insert
+                              \ transpose-chars
+                              \ transpose-words
+                              \ upcase-word
+                              \ downcase-word
+                              \ capitalize-word
+                              \ overwrite-mode
+
+syn keyword readlineDeletionFunction contained
+                              \ delete-char
+                              \ backward-delete-char
+                              \ forward-backward-delete-char
+                              \ kill-line
+                              \ backward-kill-line
+                              \ unix-line-discard
+                              \ kill-whole-line
+                              \ kill-word
+                              \ backward-kill-word
+                              \ unix-word-rubout
+                              \ unix-filename-rubout
+                              \ delete-horizontal-space
+                              \ kill-region
+                              \ copy-region-as-kill
+
+syn keyword readlineMiscellaneousFunction contained
+                              \ copy-backward-word
+                              \ copy-forward-word
+                              \ yank
+                              \ yank-pop
+                              \ digit-argument
+                              \ universal-argument
+                              \ complete
+                              \ possible-completions
+                              \ insert-completions
+                              \ menu-complete
+                              \ menu-complete-backward
+                              \ delete-char-or-list
+                              \
+                              \ start-kbd-macro
+                              \ end-kbd-macro
+                              \ call-last-kbd-macro
+                              \ print-last-kbd-macro
+                              \
+                              \ re-read-init-file
+                              \ abort
+                              \ do-uppercase-version
+                              \ prefix-meta
+                              \ undo
+                              \ revert-line
+                              \ tilde-expand
+                              \ set-mark
+                              \ exchange-point-and-mark
+                              \ character-search
+                              \ character-search-backward
+                              \ skip-csi-sequence
+                              \ insert-comment
+                              \ dump-functions
+                              \ dump-variables
+                              \ dump-macros
+                              \ emacs-editing-mode
+                              \ vi-editing-mode
+
+syn keyword readlineViFunction contained
+                              \ vi-append-eol
+                              \ vi-append-mode
+                              \ vi-arg-digit
+                              \ vi-change-case
+                              \ vi-change-char
+                              \ vi-change-to
+                              \ vi-change-to
+                              \ vi-char-search
+                              " \ What the fuck happened here
+                              " \ vi-char-search
+                              " \ vi-char-search
+                              " \ vi-char-search
+                              " \ vi-char-search
+                              \ vi-column
+                              \ vi-complete
+                              \ vi-delete
+                              " \ vi-delete-to
+                              \ vi-delete-to
+                              " \ vi-end-word
+                              \ vi-end-word
+                              \ vi-eof-maybe
+                              \ vi-fetch-history
+                              \ vi-first-print
+                              \ vi-goto-mark
+                              \ vi-insert-beg
+                              \ vi-insert-mode
+                              \ vi-match
+                              \ vi-movement-mode
+                              " \ vi-next-word
+                              \ vi-next-word
+                              " \ vi-prev-word
+                              \ vi-prev-word
+                              \ vi-put
+                              " \ vi-put
+                              \ vi-redo
+                              \ vi-replace
+                              \ vi-search
+                              \ vi-search-again
+                              " \ vi-search-again
+                              \ vi-set-mark
+                              \ vi-subst
+                              \ vi-subst
+                              \ vi-tilde-expand
+                              \ vi-undo
+                              " \ vi-undo
+                              \ vi-yank-arg
+                              " \ vi-yank-to
+                              \ vi-yank-to
+
+syn keyword readlineBashFunction  contained
+                              \ alias-expand-line
+                              \ complete-command
+                              \ complete-filename
+                              \ complete-hostname
+                              \ complete-into-braces
+                              \ complete-username
+                              \ complete-variable
+                              \ dabbrev-expand
+                              \ delete-char-or-list
+                              \ display-shell-version
+                              \ dynamic-complete-history
+                              \ edit-and-execute-command
+                              \ forward-backward-delete-char
+                              \ glob-complete-word
+                              \ glob-expand-word
+                              \ glob-list-expansions
+                              \ history-and-alias-expand-line
+                              \ history-expand-line
+                              \ insert-last-argument
+                              \ magic-space
+                              \ operate-and-get-next
+                              \ possible-command-completions
+                              \ possible-filename-completions
+                              \ possible-hostname-completions
+                              \ possible-username-completions
+                              \ possible-variable-completions
+                              \ shell-backward-kill-word
+                              \ shell-backward-word
+                              \ shell-expand-line
+                              \ shell-forward-word
+                              \ shell-kill-word
+
+hi link readlineMovementFunction readlineFunction
+hi link readlineMiscellaneousFunction readlineFunction
+hi link readlineHistoryFunction readlineFunction
+hi link readlineInsertionFunction readlineFunction
+hi link readlineDeletionFunction readlineFunction
+hi link readlineViFunction readlineFunction
+hi link readlineBashFunction readlineFunction
+
+" Also because idk what this was defined to but
+hi! link readlineEq Delimiter
+
+
+" Add a new highlighting group for the groups added if g:readline_has_bash is set
 syn keyword readlineNewFunction edit-and-execute-command bracketed-paste-begin
       \ shell-expand-line magic-space glob-list-expansions  glob-expand-word
       \ glob-complete-word complete-variable complete-command complete-filename
@@ -42,4 +203,5 @@ syn keyword readlineNewFunction edit-and-execute-command bracketed-paste-begin
       \ possible-username-completions possible-variable-completions
       \ possible-command-completions
 
-hi link readlineNewFunction Function
+hi default link readlineNewFunction Function
+

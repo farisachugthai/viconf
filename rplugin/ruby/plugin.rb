@@ -57,74 +57,74 @@ Neovim.plugin do |plug|
 #
 # @see Client
 # @see Plugin::DSL
-#module Neovim
-#  # Connect to a running +nvim+ instance over TCP.
-#  #
-#  # @param host [String] The hostname or IP address
-#  # @param port [Integer] The port
-#  # @return [Client]
-#  # @see EventLoop.tcp
-#  def self.attach_tcp(host, port)
-#    attach(EventLoop.tcp(host, port))
-#  end
+module Neovim
+  # Connect to a running +nvim+ instance over TCP.
+  #
+  # @param host [String] The hostname or IP address
+  # @param port [Integer] The port
+  # @return [Client]
+  # @see EventLoop.tcp
+  def self.attach_tcp(host, port)
+    attach(EventLoop.tcp(host, port))
+  end
 
-#  # Connect to a running +nvim+ instance over a UNIX domain socket.
-#  #
-#  # @param socket_path [String] The socket path
-#  # @return [Client]
-#  # @see EventLoop.unix
-#  def self.attach_unix(socket_path)
-#    attach(EventLoop.unix(socket_path))
-#  end
+  # Connect to a running +nvim+ instance over a UNIX domain socket.
+  #
+  # @param socket_path [String] The socket path
+  # @return [Client]
+  # @see EventLoop.unix
+  def self.attach_unix(socket_path)
+    attach(EventLoop.unix(socket_path))
+  end
 
-#  # Spawn and connect to a child +nvim+ process.
-#  #
-#  # @param argv [Array] The arguments to pass to the spawned process
-#  # @return [Client]
-#  # @see EventLoop.child
-#  def self.attach_child(argv=[executable.path])
-#    attach(EventLoop.child(argv))
-#  end
+  # Spawn and connect to a child +nvim+ process.
+  #
+  # @param argv [Array] The arguments to pass to the spawned process
+  # @return [Client]
+  # @see EventLoop.child
+  def self.attach_child(argv=[executable.path])
+    attach(EventLoop.child(argv))
+  end
 
-#  # Placeholder method for exposing the remote plugin DSL. This gets
-#  # temporarily overwritten in +Host::Loader#load+.
-#  #
-#  # @see Host::Loader#load
-#  # @see Plugin::DSL
-#  def self.plugin
-#    raise "Can't call Neovim.plugin outside of a plugin host."
-#  end
+  # Placeholder method for exposing the remote plugin DSL. This gets
+  # temporarily overwritten in +Host::Loader#load+.
+  #
+  # @see Host::Loader#load
+  # @see Plugin::DSL
+  def self.plugin
+    raise "Can't call Neovim.plugin outside of a plugin host."
+  end
 
-#  # Return a +Neovim::Executable+ representing the active +nvim+ executable.
-#  #
-#  # @return [Executable]
-#  # @see Executable
-#  def self.executable
-#    @executable ||= Executable.from_env
-#  end
+  # Return a +Neovim::Executable+ representing the active +nvim+ executable.
+  #
+  # @return [Executable]
+  # @see Executable
+  def self.executable
+    @executable ||= Executable.from_env
+  end
 
-#  # Set the Neovim global logger.
-#  #
-#  # @param logger [Logger] The target logger
-#  # @return [Logger]
-#  # @see Logging
-#  def self.logger=(logger)
-#    Logging.logger = logger
-#  end
+  # Set the Neovim global logger.
+  #
+  # @param logger [Logger] The target logger
+  # @return [Logger]
+  # @see Logging
+  def self.logger=(logger)
+    Logging.logger = logger
+  end
 
-#  # The Neovim global logger.
-#  #
-#  # @return [Logger]
-#  # @see Logging
-#  def self.logger
-#    Logging.logger
-#  end
+  # The Neovim global logger.
+  #
+  # @return [Logger]
+  # @see Logging
+  def self.logger
+    Logging.logger
+  end
 
-#  # @api private
-#  def self.attach(event_loop)
-#    Client.from_event_loop(event_loop).tap do |client|
-#      client.session.notify(:nvim_set_client_info, *ClientInfo.for_client.to_args)
-#    end
-#  end
-#  private_class_method :attach
-#end
+  # @api private
+  def self.attach(event_loop)
+    Client.from_event_loop(event_loop).tap do |client|
+      client.session.notify(:nvim_set_client_info, *ClientInfo.for_client.to_args)
+    end
+  end
+  private_class_method :attach
+end
