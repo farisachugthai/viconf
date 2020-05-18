@@ -25,7 +25,9 @@ setlocal comments=s1:/*,mb:*,ex:*/ commentstring&
 " setlocal comments=:// commentstring=//\ %s
 
 compiler csslint
+
 let &l:formatprg='!postcss'
+
 let &l:include = '^\s*@import\s\+\%(url(\)\='
 
 let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])

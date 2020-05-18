@@ -23,8 +23,10 @@ let g:vimsyn_embed = 1
 " Override the textwidth before sourcing the runtime ftplugin. They do
 " if tw=0 | setlocal tw=78 | endif
 setlocal textwidth=100
+
 " Then we don't need to add it to our ftplugin_undo because it's in that func call
 source $VIMRUNTIME/ftplugin/vim.vim
+
 setlocal expandtab
 setlocal shiftwidth=2
 setlocal tabstop=8

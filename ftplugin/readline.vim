@@ -12,14 +12,12 @@ endif
 let b:did_ftplugin = 1
 
 setlocal comments=:# commentstring=#\ %s formatoptions-=t formatoptions+=croql
-
 " Recognize inputrcs can have $include fname in them
 " For a bash shell this would reasonably imply include either a file with no extension, a file named ~/.inputrc or one pointed to by $INPUTRC
 " point being, no includeexpr needed.
 setlocal include=^\s*#\s*\$include
 " So this addition makes matchit work!
 setlocal path=.,$HOME,**,
-
 " todo maybe set up a lil macro that determines the root a little better
 let s:root_permissions = getfperm(expand("$PREFIX/etc/inputrc"))
 if matchstr(s:root_permissions, '^rw')

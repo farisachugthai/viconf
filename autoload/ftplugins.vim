@@ -5,24 +5,6 @@
     " Last Modified: August 28, 2019
 " ============================================================================
 
-function! ftplugins#ALE_JSON_Conf() abort
-  " Standard fixers defined for JSON
-  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
-
-    let b:ale_fixers += ['prettier']
-
-    let b:ale_fixers += ['jq']
-    let b:ale_json_jq_options = '-SM'
-    let b:ale_json_jq_filters = '.'
-  " endif
-
-    let b:ale_fixers += ['fixjson']
-
-    let b:ale_linters = ['jsonlint']
-    let b:ale_linters_explicit = 1
-endfunction
-
-
 function! ftplugins#typescript_setup() abort
   " node_modules
   let s:node_modules = finddir('node_modules', '.;', -1)

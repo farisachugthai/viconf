@@ -1,19 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""The pynvim official conftest."""
 import codecs
 import contextlib
-# import importlib
 import json
 import os
 import subprocess
 import sys
 import tempfile
 from pathlib import Path
+from typing import Optional
 
 import pytest
-from py._path.local import LocalPath
-
 
 def get_git_root() -> Path:
     try:
@@ -27,7 +24,7 @@ def get_git_root() -> Path:
 
 
 @contextlib.contextmanager
-def as_cwd(new_dir, *args, **kwargs):
+def as_cwd(new_dir: os.PathLike, *args, **kwargs):
     old_cwd = Path.cwd()
     try:
         os.chdir(new_dir)
@@ -37,7 +34,7 @@ def as_cwd(new_dir, *args, **kwargs):
 
 
 @pytest.fixture(scope="session")
-def env(listen_addr=None):
+def env(listen_addr: Optional[os.PathLike] =None):
     # Context manager for env
     if not os.environ.get("NVIM_LISTEN_ADDRESS"):
         if listen_addr is None:
@@ -48,10 +45,6 @@ def env(listen_addr=None):
         os.environ.putenv("NVIM_LISTEN_ADDRESS", listen_addr.name)
 
 
-# this raises while inside of nvim
-with as_cwd(get_git_root()):
-    local_path = LocalPath(os.path.abspath(".") + "/python3/pynvim.py")
-    pynvim = local_path.pyimport()
 
 
 @pytest.fixture
@@ -90,8 +83,12 @@ def vim():
 
 
 if __name__ == "__main__":
-    local_path = LocalPath("python3/pynvim.py")
-    pynvim  = local_path.pyimport()
+    from py._path.local import LocalPath
+
+    # this raises while inside of nvim
+    with as_cwd(get_git_root()):
+        local_path = LocalPath(os.path.abspath(".") + "/python3/pynvim.py")
+        pynvim = local_path.pyimport()
 
     import selectors
     selectors._fileobj_to_fd(open("python3/pynvim.py"))

@@ -8,20 +8,30 @@ Dec 07, 2019: Double checked that this passes a cursory `:py3f %` test and it di
 
 """
 import json
+import logging
 import os
 import pprint
 import sys
-import xml.dom.minidom as md
 
 from contextlib import contextmanager
 from pathlib import Path
+from xml.dom import minidom as md
+
+logging.basicConfig()
+logger = logging.getLogger(name=__name__)
 
 try:
     import yaml
 except (ImportError, ModuleNotFoundError):
     yaml = None
 
-global vim
+try:
+    import vim  # noqa pylint:disable=import-error
+except ImportError:
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from pynvim import LegacyVim
+
+    vim = LegacyVim()
 
 
 def get_verbosity():
@@ -31,6 +41,23 @@ def get_verbosity():
 def debug(msg):
     if get_verbosity() >= 2:
         print(msg)
+
+
+def find_running_nvim():
+    try:
+        logger.debug
+        return vim.vvars["servername"]
+    except AttributeError:
+        # Vimscript:      :nvim_eval('serverlist()')
+        # or more simply  :call serverlist()
+        serverlist = vim.eval("serverlist()")
+        if serverlist:
+            if len(serverlist) == 1:
+                return serverlist[0]
+            else:
+                logger.error(
+                    "python3:_vim: find_running_nvim: serverlist is >1?")
+                return serverlist
 
 
 def error(msg):
@@ -98,7 +125,7 @@ def col2byte(line, col):
 class VimBuffer:
     """Wrapper around the current Vim buffer."""
 
-    def __init__(self, vim=None):
+    def __init__(self, vim):
         self.vim = vim
         self._window = vim.current.window
         self._tabpage = vim.current.tabpage
@@ -263,7 +290,8 @@ def select(start, end):
             move_cmd += "%iG%i|" % virtual_position(end.line + 1, end.col)
         else:
             move_cmd += "%iG%i|" % virtual_position(end.line + 1, end.col + 1)
-        move_cmd += "o%iG%i|o\\<c-g>" % virtual_position(start.line + 1, start.col + 1)
+        move_cmd += "o%iG%i|o\\<c-g>" % virtual_position(
+            start.line + 1, start.col + 1)
     feedkeys(move_cmd)
 
 
@@ -344,16 +372,13 @@ def fname():
 
 def pd(args=None):
     """Simple helper because I do this so often."""
-    pprint(dir(args))
+    pprint.pprint(dir(args))
     return dir(args)
 
 
 class _Vim(object):
     def __getattr__(self, attr):
         return getattr(vim, attr)
-
-
-vim_obj = _Vim()
 
 
 def _patch_nvim(vim):
@@ -394,12 +419,6 @@ def _patch_nvim(vim):
 
 
 if __name__ == "__main__":
-    try:
-        import vim  # noqa pylint:disable=import-error
-    except ImportError:
-        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-        from pynvim import LegacyVim
-        vim = LegacyVim()
 
     try:
         import UltiSnips
@@ -412,6 +431,8 @@ if __name__ == "__main__":
             sys.path.append(str(config / i))
 
     buf = VimBuffer(vim)  # pylint:disable=invalid-name
+
+    vim_obj = _Vim()
 
     prettiers = {
         "xml": pretty_xml,

@@ -14,18 +14,18 @@ let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Everv
 let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
 
-function! remotes#init() abort  " {{{
+function! remotes#init() abort
   " Dispatches the remainder here
   if !has('unix')
     call remotes#msdos()
   else
     if s:termux
-       call remotes#termux()
+      call remotes#termux()
     else
       call remotes#ubuntu()
     endif
   endif
-endfunction  " }}}
+endfunction
 
 function! remotes#unix_clipboard() abort
 
@@ -88,7 +88,6 @@ function! remotes#termux() abort
     " syntax hl fucks up here
     au! UltiSnips_AutoTrigger *
   augroup END
-  unlet! g:loaded_python3_provider
 
   let g:node_host_prog = '/data/data/com.termux/files/home/.local/share/yarn/global/node_modules/neovim/bin/cli.js'
   let g:ruby_host_prog = '/data/data/com.termux/files/home/.gem/bin/neovim-ruby-host'
@@ -113,38 +112,43 @@ function! remotes#msdos() abort
   " Don't set python paths dynamically it's such a headache
   let g:python3_host_prog = 'C:/Users/fac/scoop/apps/winpython/current/python-3.8.1.amd64/python.exe'
   let g:python_host_prog = 'C:/Python27/python.exe'
-  let g:loaded_ruby_provider = 1
   " wow this one actually fucking worked
   let g:node_host_prog = 'C:\Users\fac\scoop\apps\winpython\current\n\node_modules\neovim\bin\cli.js'
+  let g:ruby_host_prog = 'C:/Users/fac/scoop/apps/ruby/current/bin/ruby.exe'
 
-    let g:clipboard = {
+  let g:clipboard = {
         \   'name': 'winClip',
-          \   'copy': {
+        \   'copy': {
         \      '+': 'win32yank.exe -i --crlf',
         \      '*': 'win32yank.exe -i --crlf',
-          \    },
-          \   'paste': {
+        \    },
+        \   'paste': {
         \      '+': 'win32yank.exe -o --crlf',
         \      '*': 'win32yank.exe -o --crlf',
-          \   },
+        \   },
         \   'cache_enabled': 1,
-          \ }
+        \ }
 
   source $VIMRUNTIME/autoload/provider/clipboard.vim
 endfunction
 
-function! remotes#HardReset() abort   " {{{
+function! remotes#HardReset() abort
 
+  let g:failed_providers = {}
   for i in ['clipboard' , 'node', 'python', 'python3', 'pythonx', 'ruby']
     try
       " :unlet g:loaded_clipboard_provider
       exe 'silent! unlet! g:loaded_' . i . '_provider'
       " :runtime autoload/provider/clipboard.vim
       exe 'source $VIMRUNTIME/autoload/provider/' . i . '.vim'
-    catch /.*/
-      echoerr 'remotes#HardReset caught ' . v:exception
+    catch
+      " **DO NOT** echoerr. It'll jam the functoin and stop the rest of the for loop from continuing.
+      let g:failed_providers[i] = v:exception
     endtry
   endfor
 
+  rubyfile $VIMRUNTIME/autoload/provider/script_host.rb
   source $VIMRUNTIME/autoload/provider/clipboard.vim
+  return g:failed_providers
 endfunction
+

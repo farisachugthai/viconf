@@ -13,13 +13,15 @@ if exists('b:did_ftplugin') | finish | endif
 source $VIMRUNTIME/ftplugin/yaml.vim
 source $VIMRUNTIME/indent/yaml.vim
 
-setlocal comments=:# commentstring=#\ %s expandtab
-setlocal formatoptions-=t formatoptions+=croql
-setlocal expandtab tabstop=4 shiftwidth=2 softtabstop=2
+" Options:
 
-if exists('*nvim_command')
-  call nvim_command('UltiSnipsAddFiletypes ansible')
-endif
+  setlocal comments=:# commentstring=#\ %s expandtab
+  setlocal formatoptions-=t formatoptions+=croql
+  setlocal expandtab tabstop=4 shiftwidth=2 softtabstop=2
+
+  if exists('*nvim_command')
+    call nvim_command('UltiSnipsAddFiletypes ansible')
+  endif
 
 function! Prettyyaml() range abort
   let s:py3 = provider#python3#Prog()

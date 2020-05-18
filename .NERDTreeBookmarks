@@ -1,3 +1,4 @@
+python ~/python
 startup ~/.ipython/profile_default/startup
 tutorials ~/Dropbox/python/tutorials
 pynvim_test ~/projects/viconf/test

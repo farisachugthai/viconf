@@ -214,23 +214,23 @@ let g:colors_name = 'gruvbox-material'
 
 " Plugins:
   " NERDTree:
-    hi! link NERDTreeBookmarks Typedef
-    hi! link NERDTreeBookmarksLeader Conceal
-    hi! link NERDTreeCWD Underlined
+    hi! link NERDTreeBookmark Typedef
+    hi! link NERDTreeBookmarksLeader Keyword
+    hi! link NERDTreeCWD Special
     hi! link NERDTreeClosable Orange
     hi! link NERDTreeDir Directory
     hi! link NERDTreeDirSlash Delimiter
     hi! link NERDTreeExecFile Yellow
     hi! link NERDTreeFile Structure
     hi! link NERDTreeFlags Orange
-    hi! link NERDTreeHelp LightGrey
-    hi! link NERDTreeLinkFile Aqua
+    hi! link NERDTreeHelp Tag
+    " hi! link NERDTreeLinkFile Aqua
     hi! link NERDTreeLinkTarget Green
     hi! link NERDTreeNodeDelimeters Delimiter
     hi! link NERDTreeOpenable Orange
     hi! link NERDTreeToggleOff Red
     hi! link NERDTreeToggleOn Green
-    hi! link NERDTreeUp Grey
+    hi! link NERDTreeUp Comment
     hi! link hideBracketsInNERDTree Conceal
 
   " Asynchronous Lint Engine:
@@ -914,6 +914,25 @@ let g:colors_name = 'gruvbox-material'
     hi! link pythonTripleQuotes              pythonQuotes
 
   " Vim:
+    " hi! link vimTermOption
+    " vimExtCmd
+    " vimFilter
+    " vimFiletype
+    " vimOperParen
+    " vimSynLine
+    " vimFuncBlank
+    " vimEscapeBrace
+    " vimAutoCmdSfxList
+    " vimMenuBang
+    " vimMenuPriority
+    " vimMenuMap
+    " vimMenuRhs
+    " vimNormCmds
+    " vimGroupList
+    " vimSynMatchRegion xxx
+    " vimSynMtchGroup
+    " vimSyncRegion  xxx
+
     hi! link vimAugroup     vimAugroupKey
     hi! link vimAuSyntax vimAugroup
     hi! link vimAugroupSyncA vimAugroup

@@ -22,6 +22,7 @@ from os.path import isdir
 from pathlib import Path
 from pprint import pprint as print
 from typing import Optional
+from types import TracebackType
 
 try:
     import vim  # noqa
@@ -40,14 +41,24 @@ except ImportError:
 else:
     from jedi.api import replstartup
 
+logging.basicConfig()
 logger = logging.getLogger(name=__name__)
 
 
 def log(logrecord, level=30):
     """Simple way to wrap pythons usual logging features."""
     # Wait wouldnt it be easier if python thought sys.stdout/stderr were something
-    # similar to this command?
+    # similar to this command? That's not a terrible idea.
+    # we could make a class with the same interface as sys.stdout so subclass
+    # io.TextIOWrapper and then sub it in.
     return vim.command("echomsg " + logger.log(logrecord, level))
+
+
+def err(err, level=30, traceback=None):
+    vim.command("echohl WarningMsg")
+    vim.command("echomsg " + logger.log(err, level))
+    vim.command("echohl None")
+    # if isinstance(traceback, TracebackType):
 
 
 def _set_return_error(err=None):
@@ -71,6 +82,22 @@ def _set_return_error(err=None):
         # Not the best way to serialize to vim types,
         # but it'll work for this specific case
         vim.command("let g:py_err_json = %s" % json.dumps(err_dict))
+
+
+def print_call_chain(*args):
+    """View individual frames in the stack."""
+    print(" ".join(map(str, args)))
+    f = sys._getframe(1)
+    while f:
+        name = f.f_code.co_name
+        s = f.f_locals.get("self", None)
+        if s:
+            c = getattr(s, "__class__", None)
+            if c:
+                name = "%s.%s" % (c.__name__, name)
+        print("Called from: %s %s" % (name, f.f_lineno))
+        f = f.f_back
+    print("-" * 70)
 
 
 def vimcmd(fxn):
@@ -173,14 +200,21 @@ def vim_eval(string):
 
 
 def pykeywordprg():
-    temp_cword = vim.eval('expand("<cWORD>")')
+    # wait does this work?
+    temp_cword = vim.eval('expand("<cfile>")')
     logger.debug(f"{temp_cword}")
+    # If this doesn't display anythin
     try:
         helped_mod = importlib.import_module(temp_cword)
     except vim.error:
         vim.command("echoerr 'Error during import of %s'" % temp_cword)
     else:
         pydoc.help(helped_mod)
+
+
+def findsource(mod):
+    for i in inspect.findsource(mod):
+        vim.current.buffer.append(i)
 
 
 def timer(func):
@@ -296,20 +330,23 @@ def catch_and_print_exceptions(func):
 @catch_and_print_exceptions
 def get_script(source=None, column=None):
     jedi.settings.additional_dynamic_modules = [
-        b.name for b in vim.buffers if (
-            b.name is not None and
-            b.name.endswith('.py') and
-            b.options['buflisted'])]
+        b.name
+        for b in vim.buffers
+        if (b.name is not None and b.name.endswith(".py") and b.options["buflisted"])
+    ]
     if source is None:
-        source = '\n'.join(vim.current.buffer)
+        source = "\n".join(vim.current.buffer)
     row = vim.current.window.cursor[0]
     if column is None:
         column = vim.current.window.cursor[1]
     buf_path = vim.current.buffer.name
 
     return jedi.Script(
-        source, row, column, buf_path,
-        encoding=vim_eval('&encoding') or 'latin1',
+        source,
+        row,
+        column,
+        buf_path,
+        encoding=vim_eval("&encoding") or "latin1",
         environment=get_environment(),
     )
 

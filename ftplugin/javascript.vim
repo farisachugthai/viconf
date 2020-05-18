@@ -18,6 +18,7 @@ setlocal softtabstop=2
 setlocal suffixesadd+=.html,.css,.js
 " see $VIMRUNTIME/syntax/javascript.vim for more
 setlocal foldmethod=syntax
+
 source $VIMRUNTIME/autoload/javascriptcomplete.vim
 setlocal omnifunc=javascriptcomplete#CompleteJS
 
@@ -30,17 +31,16 @@ setlocal include=require(
 
 " So here's the example from :he 'define'
 let &l:define = '^\s*\ze\k\+\s*=\s*function('
-" }}}
 
-" ALE: {{{
-if !has('unix')
-  let g:ale_windows_node_executable_path = fnameescape('C:/Program Files/nodejs/node.exe')
-endif
+" ALE:
 
-let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
-let b:ale_fixers += ['prettier']
+  if !has('unix')
+    let g:ale_windows_node_executable_path = fnameescape('C:/Program Files/nodejs/node.exe')
+  endif
 
-" }}}
+  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
+  let b:ale_fixers += ['prettier']
+
 
 " Atexit: {{{
 let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
@@ -50,5 +50,4 @@ let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
                 \. '|unlet! b:did_ftplugin'
                 \. '|unlet! b:ale_fixers'
 
-" }}}
 

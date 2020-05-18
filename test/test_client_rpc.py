@@ -8,16 +8,17 @@ sys.path.insert(0, root.joinpath("python3").__fspath__())
 
 from pynvim import Nvim
 
+
 def test_call_and_reply(vim):
     def setup_cb():
         cid = vim.channel_id
         cmd = 'let g:result = rpcrequest(%d, "client-call", 1, 2, 3)' % cid
         vim.command(cmd)
-        assert vim.vars['result'] == [4, 5, 6]
+        assert vim.vars["result"] == [4, 5, 6]
         vim.stop_loop()
 
     def request_cb(name, args):
-        assert name == 'client-call'
+        assert name == "client-call"
         assert args == [1, 2, 3]
         return [4, 5, 6]
 
@@ -31,21 +32,20 @@ def test_call_api_before_reply(vim):
         cmd = 'let g:result = rpcrequest(%d, "client-call2", 1, 2, 3)' % cid
         vim.command(cmd)
         # asyncio.run(main('127.0.0.1', 0))
-        assert vim.vars['result'] == [7, 8, 9]
+        assert vim.vars["result"] == [7, 8, 9]
         vim.stop_loop()
 
     def request_cb(name, args):
-        vim.command('let g:result2 = [7, 8, 9]')
-        return vim.vars['result2']
+        vim.command("let g:result2 = [7, 8, 9]")
+        return vim.vars["result2"]
 
     vim.run_loop(request_cb, None, setup_cb)
 
 
 def test_async_call(vim):
-
     def request_cb(name, args):
         if name == "test-event":
-            vim.vars['result'] = 17
+            vim.vars["result"] = 17
         vim.stop_loop()
 
     # this would have dead-locked if not async
@@ -56,23 +56,23 @@ def test_async_call(vim):
     # "Entering event loop" otherwise  (asyncio's EpollSelector._epoll.poll).
     time.sleep(0.1)
 
-    assert vim.vars['result'] == 17
+    assert vim.vars["result"] == 17
 
 
 def test_recursion(vim):
     cid = vim.channel_id
 
     def setup_cb():
-        vim.vars['result1'] = 0
-        vim.vars['result2'] = 0
-        vim.vars['result3'] = 0
-        vim.vars['result4'] = 0
+        vim.vars["result1"] = 0
+        vim.vars["result2"] = 0
+        vim.vars["result3"] = 0
+        vim.vars["result4"] = 0
         cmd = 'let g:result1 = rpcrequest(%d, "call", %d)' % (cid, 2,)
         vim.command(cmd)
-        assert vim.vars['result1'] == 4
-        assert vim.vars['result2'] == 8
-        assert vim.vars['result3'] == 16
-        assert vim.vars['result4'] == 32
+        assert vim.vars["result1"] == 4
+        assert vim.vars["result2"] == 8
+        assert vim.vars["result3"] == 16
+        assert vim.vars["result4"] == 32
         vim.stop_loop()
 
     def request_cb(name, args):

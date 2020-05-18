@@ -3,7 +3,10 @@ import os
 from pathlib import Path
 import sys
 
+from _vim import VimBuffer
+
 logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(name=__name__)
 
 
 class Target(VimBuffer):
@@ -14,7 +17,13 @@ class Target(VimBuffer):
     """
 
     _target_file = Path("../spell/en.utf-8.add").resolve()
-    target_file = str(_target_file)
+
+    def __init__(self, vim):
+        super().__init__(vim)
+
+    @property
+    def target_file(self):
+        return str(self._target_file)
 
 
 def nvim_listen_address():
@@ -94,16 +103,24 @@ def main():
     """Execute the module.
 
     .. admonition::
-
         Don't use sys.argv[1:] when executing a file using py3file in neovim!
         Args 1 and 2 are already set to -c and 'script-host.py'
 
     """
     args = sys.argv[3:]
+    try:
+        import vim
+    except ImportError:  # we're not in vim
+        sys.path.insert(0, os.path.dirname(os.path.abspath(".")))
+
+        from pynvim import LegacyVim, stdio_session
+        session = stdio_session()
+        vim = LegacyVim.from_session(session)
+
     if len(args) < 1:
         # don't use sys.exit. Kills the channel between you and the remote host that powers everything.
         # besides you have to manually assign to sys.argv anyway.
-        args = [Target().target_file]
+        args = [Target(vim).target_file]
 
     logging.debug(f"Args: {args}")
     for i in args[0:]:
@@ -115,12 +132,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.path.insert(0, os.path.dirname(os.path.abspath(".")))
-    from pynvim_ import LegacyVim, stdio_session
-
-    session = stdio_session()
-    vim = LegacyVim.from_session(session)
-
-    from _vim import VimBuffer
-
     main()

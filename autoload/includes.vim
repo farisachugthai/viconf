@@ -7,7 +7,7 @@
 
 " See Also: ./py.vim and py#PythonPath
 
-function! includes#TypeScriptIncludeExpression(fname, gf) abort  " {{{
+function! includes#TypeScriptIncludeExpression(fname, gf) abort
     " BUILT-IN NODE MODULES
     " =====================
     " they aren't natively accessible but we can use @types/node if available
@@ -184,9 +184,8 @@ function! includes#TypeScriptIncludeExpression(fname, gf) abort  " {{{
 
   return a:fname . '.d.ts'
 endfunction
-" }}}
 
-function! includes#VimPath() abort  " {{{
+function! includes#VimPath() abort
   " I know you may be thinking, there are no include or defines in a vim file
   " what the hell do you need to muck with the path for.
   " autoloaded functions!
@@ -202,9 +201,9 @@ function! includes#VimPath() abort  " {{{
 
   let &l:path = s:path
   return s:path
-endfunction  " }}}
+endfunction
 
-function! includes#CPath() abort  " {{{
+function! includes#CPath() abort
   let s:path='.,**,,'
 
   if has('unix')
@@ -227,10 +226,12 @@ function! includes#CPath() abort  " {{{
       return s:path
     endif
 
+    " 2015-2019 vcredist
     if isdirectory('C:/Program\ Files/ (x86)/Microsoft\ Visual\ Studio/2019/Community/VC/Tools/MSVC')
       let s:path = s:path . 'C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/2019/Community/VC/Tools/MSVC/**'
     endif
 
+    " 2010 redist
     if isdirectory('C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include')
       let s:path = s:path . 'C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include,'
     endif
@@ -244,10 +245,15 @@ function! includes#CPath() abort  " {{{
       let s:path = s:path . expand('$INCLUDEDIR')
     endif
 
+    " some good python ones
+    if isdirectory('C:/Users/fac/scoop/apps/winpython/current/python-3.8.1.amd64/include')
+      let s:path .= 'C:/Users/fac/scoop/apps/winpython/current/python-3.8.1.amd64/include'
+    endif
+
     let &shellslash = s:old_ss
   endif
 
   let &l:path = s:path
   return s:path
-endfunction  " }}}
+endfunction
 

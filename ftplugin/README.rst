@@ -19,7 +19,7 @@ For example, these are all loaded for the `c` filetype:
 - ``c.vim``
 
 - ``c_extra.vim``
-  
+
 - ``c/settings.vim``
 
 Note that the ``_`` in ``c_extra.vim`` is required to separate the filetype name
@@ -184,7 +184,7 @@ This was a terrible mistake don't do this.
 
 Extending Matchit to use highlighting group under cursor
 ========================================================
-:: 
+::
 
    synIDattr(synID(line("."),col("."),1),"name") =~? "comment\\|string\\|vimSynReg\\|vimSet"
 

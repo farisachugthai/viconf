@@ -8,6 +8,7 @@ sys.path.insert(0, root.joinpath("python3").__fspath__())
 
 from pynvim import Nvim
 
+
 def test_interrupt_from_another_thread(vim):
     timer = Timer(0.5, lambda: vim.async_call(lambda: vim.stop_loop()))
     timer.start()
@@ -22,5 +23,5 @@ def test_exception_in_threadsafe_call(vim):
     timer.start()
     vim.run_loop(None, None, err_cb=msgs.append)
     assert len(msgs) == 1
-    msgs[0].index('NameError')
-    msgs[0].index('undefined_variable')
+    msgs[0].index("NameError")
+    msgs[0].index("undefined_variable")

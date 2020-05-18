@@ -8,6 +8,6 @@
 		"rootDir": "rplugin/node"
 	},
 	"include": [
-		"*"
+		"rplugin/node/coc_tag.ts"
 	]
 }

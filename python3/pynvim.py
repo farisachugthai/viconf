@@ -50,7 +50,7 @@ import warnings
 from asyncio.events import get_event_loop_policy
 from asyncio.futures import Future
 from asyncio.streams import StreamReader, StreamWriter
-from collections import UserList, deque
+from collections import namedtuple, UserList, deque
 from collections.abc import MutableMapping
 from functools import partial
 from pathlib import Path
@@ -70,6 +70,7 @@ else:
     PathFinder = None
 
 if sys.version_info <= (3, 7):
+
     class ModuleNotFoundError(ImportError):
         """New exception for Python3.7."""
 
@@ -82,7 +83,6 @@ try:
 except ImportError:
     pass
 
-# Compat kinda:
 try:
     from os import PathLike, fspath, fsencode, fsdecode
 except ImportError:
@@ -171,7 +171,9 @@ except ImportError:
 
     fsencode, fsdecode = _fscodec()
 
+
 # Globals:
+# ***
 # BUG: don't hardcode this its an actual function we can check
 unicode_errors_default = sys.getfilesystemencodeerrors()
 
@@ -257,7 +259,9 @@ def start_host(session=None, load_plugins=True, plugins=None):
     return host
 
 
-def _convert_str_to_session(session_type, address=None, port=None, path=None, argv=None, decode=None):
+def _convert_str_to_session(
+    session_type, address=None, port=None, path=None, argv=None, decode=None
+):
     if session_type not in ["socket", "tcp", "stdio", "child"]:
         raise NvimError(
             '%s given. Must be one of "socket", "tcp", "stdio", "child"' % session_type
@@ -319,9 +323,11 @@ def attach(session_type, address=None, port=None, path=None, argv=None, decode=N
         if session_type not in ["socket", "tcp", "stdio", "child"]
 
     """
-    return Nvim.from_session(_convert_str_to_session(
-        session_type,  address=None, port=None, path=None, argv=None, decode=None)
-        ).with_decode(decode)
+    return Nvim.from_session(
+        _convert_str_to_session(
+            session_type, address=None, port=None, path=None, argv=None, decode=None
+        )
+    ).with_decode(decode)
 
 
 def setup_logging(name: AnyStr = None, level: int = None, disable_asyncio_logging=True):
@@ -758,6 +764,7 @@ def decode(mode=unicode_errors_default):
 
     return dec
 
+
 # api/common:Remote:
 
 
@@ -829,6 +836,7 @@ class Remote(object):
 
 
 # msgpack_rpc.session:
+
 
 class ErrorResponse(NvimError):
     """Raise this in a request handler to respond with a given error message.
@@ -985,6 +993,7 @@ class Session(object):
         inside greenlets.
         """
         import greenlet
+
         self._request_cb = request_cb
         self._notification_cb = notification_cb
         self._is_running = True
@@ -1017,6 +1026,7 @@ class Session(object):
 
     def _yielding_request(self, method, args):
         import greenlet
+
         gr = greenlet.getcurrent()
         parent = gr.parent
 
@@ -1262,7 +1272,7 @@ class Nvim(object):
         from msgpack import ExtType
 
     def _from_nvim(self, obj, decode=None):
-        warnings.warn(DeprecationWarning('decode is ignored'))
+        warnings.warn(DeprecationWarning("decode is ignored"))
         if isinstance(obj, ExtType):
             cls = self.types[obj.code]
             return cls(self, (obj.code, obj.data))
@@ -1839,7 +1849,9 @@ class LuaModule:
 
     def __init__(self):
         import textwrap
-        self.lua_module = textwrap.dedent("""
+
+        self.lua_module = textwrap.dedent(
+            """
     local a = vim.api
     local function update_highlights(buf, src_id, hls, clear_first, clear_end)
     if clear_first ~= nil then
@@ -1860,7 +1872,8 @@ class LuaModule:
     local chid = ...
     local mod = {update_highlights=update_highlights}
     _G["_pynvim_"..chid] = mod
-    """)
+    """
+        )
 
 
 lua_module = LuaModule().lua_module
@@ -1972,6 +1985,7 @@ class ScriptHost:
         sys.modules["vim"] = self.legacy_vim
         exec("import vim", self.module.__dict__)
         import platform
+
         if not platform.platform().startswith("Win"):
             self.handle_dirchanged(self.nvim)
 
@@ -2230,7 +2244,7 @@ class VimPathFinder:
 
     def __init__(self, fullname, path=None):
         self.fullname = fullname
-        self.path = path if path is not None else''
+        self.path = path if path is not None else ""
 
     @classmethod
     def find_module(cls, fullname, oldtail, path):
@@ -2253,6 +2267,7 @@ def find_spec(fullname, path=None, target=None):
     if PathFinder is not None:
         return PathFinder.find_spec(fullname, path=path, target=target)
     # else VimPathFinder().find_module()
+
 
 # API/buffer:
 
@@ -2477,7 +2492,7 @@ class Range(object):
             start = self.start
         if end is None:
             end = self.end
-        self._buffer[start: end + 1] = lines
+        self._buffer[start : end + 1] = lines
 
     def __iter__(self):
         for i in range(self.start, self.end + 1):
@@ -2502,6 +2517,7 @@ class Range(object):
 
 
 # API/common:
+
 
 class RemoteApi(object):
     """Wrapper to allow api methods to be called like python methods.
@@ -2659,7 +2675,7 @@ class RemoteSequence(UserList):
         """Return a sequence item by index."""
         if not isinstance(idx, slice):
             return self._fetch()[idx]
-        return self._fetch()[idx.start: idx.stop]
+        return self._fetch()[idx.start : idx.stop]
 
     def __iter__(self):
         """Return an iterator for the sequence."""
@@ -3135,7 +3151,7 @@ class BaseEventLoop(_PlatformSpecificLoop):
         """
         # super().__init__()
         if transport_type is None:
-            transport_type = "stdio"
+            transport_type = "socket"
         self._transport_type = transport_type
         self._signames = dict(
             (k, v) for v, k in signal.__dict__.items() if v.startswith("SIG")
@@ -3297,6 +3313,7 @@ class BaseEventLoop(_PlatformSpecificLoop):
     def register(self, other):
         pass
 
+
 # mspack_rpc.event_loop.asyncio:
 
 # Triple subclassed?
@@ -3317,6 +3334,7 @@ class AsyncioEventLoop(BaseEventLoop, asyncio.SubprocessProtocol, asyncio.Protoc
         Review the `asyncio.events.EventLoop.subprocess_exec`.
 
     """
+
     _closed = False
 
     _fact = None  # TODO
@@ -3398,7 +3416,7 @@ class AsyncioEventLoop(AsyncioBaseEventLoop):
         else:
             # TODO: this is wrong.
             self._transport = transport_type
-
+        self._fact = lambda: self
         # have this initialized for teardown
         self._signals = []  # type: List[signal.signal]
         super().__init__(transport_type)
@@ -3605,6 +3623,7 @@ def child_session(argv=None):
     """Create a msgpack-rpc session from a new Nvim instance."""
     return session("child", argv)
 
+
 # api.window:
 
 
@@ -3737,7 +3756,7 @@ class Host:
         _specs: dict
             No idea what the dict should be.
 
-       """
+        """
         self.nvim = nvim
         if kwargs.pop("_specs"):
             self._specs = kwargs.pop("_specs")
@@ -4157,11 +4176,13 @@ class UvEventLoop(BaseEventLoop):
 EventLoop = UvEventLoop
 
 
-import gc   # noqa
+import gc  # noqa
+
 gc.collect()
 
 if __name__ == "__main__":
     from py._path.local import LocalPath
+
     # f = LocalPath(os.path.abspath(__file__))
     # f.pyimport()
 

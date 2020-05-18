@@ -37,19 +37,6 @@
     ".ts",
     ".js"
   ],
-  "coc.source.word.filetypes": [
-    "python",
-    "javascript",
-    "rst",
-    "md",
-    "txt",
-    "help",
-    "html"
-  ],
-  "coc.source.tags.priority": 80,
-  "coc.source.word.priority": 30,
-  "coc.source.word.shortcut": "Coc-Word: ",
-  "codeLens.enable": true,
   "diagnostic.checkCurrentLine": true,
   "diagnostic.enableMessage": "always",
   "diagnostic.filetypeMap": {
@@ -263,20 +250,7 @@
     "--normal",
     "--auto-preview"
   ],
-  "list.source.yank.defaultArgs": [
-    "preview"
-  ],
-  "list.source.yank.defaultOptions": [
-    "--top",
-    "--tab",
-    "--ignore-case",
-    "--regex",
-    "--normal",
-    "--auto-preview"
-  ],
-  "python.analysis.diagnosticEnabled": true,
   "python.analysis.downloadChannel": "daily",
-  "python.analysis.logLevel": "Information",
   "python.analysis.openFilesOnly": false,
   "python.analysis.symbolsHierarchyDepthLimit": 12,
   "python.autoComplete.addBrackets": true,
@@ -296,16 +270,11 @@
     ".venv"
   ],
   "refactor.openCommand": "vsplit",
-  "session.restartOnSessionLoad": true,
   "signature.hideOnTextChange": true,
   "signature.maxWindowHeight": 14,
   "signature.preferShownAbove": false,
   "signature.triggerSignatureWait": 300,
   "snippets.extends": {
-    "bash": [
-      "sh",
-      "shellscript"
-    ],
     "python": [
       "rst"
     ]
@@ -353,21 +322,5 @@
   "typescript.referencesCodeLens.enable": true,
   "typescript.showUnused": true,
   "typescript.suggest.autoImports": true,
-  "typescript.suggest.completeFunctionCalls": true,
-  "vimlsp.diagnostic.enable": true,
-  "vimlsp.indexes.count": 3,
-  "vimlsp.indexes.runtimepath": true,
-  "vimlsp.suggest.fromRuntimepath": true,
-  "vimlsp.suggest.fromVimruntime": true,
-  "workspace.ignoredFiletypes": [
-    "markdown",
-    "log",
-    "txt",
-    "help",
-    "xonsh"
-  ],
-  "yank.enableCompletion": true,
-  "yank.limit": 30,
-  "yank.list.maxsize": 300,
-  "yank.priority": 95
+  "typescript.suggest.completeFunctionCalls": true
 }

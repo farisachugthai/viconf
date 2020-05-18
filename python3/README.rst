@@ -11,8 +11,7 @@ Notes for the interface between python and Neovim.
 Creating a remote connection to a python interpreter
 =====================================================
 Requires a little digging in the source code if a simple
-``:UpdateRemotePlugins`` isn't working for you.
-::
+``:UpdateRemotePlugins`` isn't working for you.::
 
    if exists('g:loaded_python3_provider')
      finish
@@ -151,13 +150,6 @@ Examples of the Vimscript functions in $VIMRUNTIME/autoload.
 
    *Btw in case you were wondering, yes, pytest was the only one that worked.*
 
-Bug
-===
-
-Python 3 provider (optional)
-
-- WARNING: No Python executable found that can `import neovim`. Using the first available executable for diagnostics.
-
 
 Python API spilling into Vimscript
 ==================================
@@ -179,4 +171,3 @@ Also Jesus why does this write the return value to the buffer?::
       py3do return str(sys.modules)
    endfunction
 
-Connecting to the socket is the easiest way a programmer can test the API,

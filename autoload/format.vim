@@ -1,9 +1,9 @@
-" " ============================================================================
+" ========================================================================
     " File: format.vim
     " Author: Faris Chugthai
     " Description: Autoloaded formatter from :he format-formatexpr
     " Last Modified: February 24, 2019
-" ============================================================================
+" ========================================================================
 
 function! format#Format() abort
   " fall back to Vims internal reformatting
@@ -36,7 +36,6 @@ function! format#ClangCheckimpl(cmd) abort
   " This is honestly really useful if you simply swap out the filetype
   if &autowrite | wall | endif
   echomsg 'running ' . a:cmd . ' ...'
-
   let l:output = system(a:cmd)
   cexpr l:output
   cwindow

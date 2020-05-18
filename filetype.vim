@@ -107,5 +107,5 @@ augroup Userftdetect
   autocmd FileType html                                               call s:TryDetectJinja()
 
   autocmd BufWritePost *.html,*.htm,*.shtml,*.stm                     call s:ConsiderSwitchingToJinjaAgain()
-  autocmd BufNewFile,BufRead *.info.*                                 setfiletype info
+  autocmd BufNewFile,BufRead *.info,*.info.gz                         setfiletype info
 augroup END

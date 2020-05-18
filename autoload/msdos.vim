@@ -5,7 +5,7 @@
     " Last Modified: Aug 18, 2019
 " ============================================================================
 
-function! msdos#set_shell_cmd() abort  " {{{1
+function! msdos#set_shell_cmd() abort
   " All the defaults when running cmd as comspec on windows 10
   set shell=cmd.exe
   " i've noticed ALE needing shelltemp set
@@ -48,10 +48,9 @@ function! msdos#set_shell_cmd() abort  " {{{1
   imap <C-x><C-j>       <Plug>(fzf-complete-path)
   inoremap <C-f>        <C-x><C-f>
   inoremap <C-j>        <C-x><C-j>
+endfunction
 
-endfunction  " }}}
-
-function! msdos#invoke_cmd(command) abort  " {{{1
+function! msdos#invoke_cmd(command) abort
   if !empty(a:command)
     let s:ret = systemlist(a:command)
   else
@@ -63,18 +62,18 @@ function! msdos#invoke_cmd(command) abort  " {{{1
   else
     return s:ret
   endif
-endfunction  " }}}
+endfunction
 
-function! msdos#CmdTerm(...) abort  " {{{1
+function! msdos#CmdTerm(...) abort
   execute 'term cmd /U /F:ON /E:ON /K C:\Users\fac\init.cmd'
   if v:shell_error
     return v:shell_error
   else
     return s:ret
   endif
-endfunction  " }}}
+endfunction
 
-function! msdos#PowerShell() abort  " {{{1
+function! msdos#PowerShell() abort
   " 07/23/2019: Just found out that even when using powershell comspec is
   " supposed to be set to cmd. Explains a few things
   if !empty($SHELL) | unlet! $SHELL | endif
@@ -89,28 +88,35 @@ function! msdos#PowerShell() abort  " {{{1
 
   echomsg 'Using powershell as the system shell.'
   return
-endfunction  " }}}
+endfunction
 
-function! msdos#pwsh_help(helppage) abort   " {{{1
+function! msdos#pwsh_help(helppage) abort
   echomsg 'Setting the shell to powershell.'
   call msdos#PowerShell()
   " It might not be a bad idea
   :r!pwsh -NoProfile -NoLogo -Command Get-Help a:helppage
   echomsg 'Note that shell was not restored'
-endfunction  " }}}
+endfunction
 
-function! msdos#set_bash() abort  " {{{
+function! msdos#set_bash() abort
+  " Uh this does not work.
+  if has('Win32')
+    setglobal runtimepath+=C:\Neovim\share\nvim-qt\runtime
+   let &shell='bash.exe'
+   let &shellcmdflag = '-c'
+   let &shellredir = '>%s 2>&1'
+   set shellquote= shellxescape=
+   " set noshelltemp
+   set shellxquote=
+   let &shellpipe='2>&1| tee'
+  endif
+endfunction
 
-" Uh this does not work.
-if has('Win32')
-  setglobal runtimepath+=C:\Neovim\share\nvim-qt\runtime
- let &shell='bash.exe'
- let &shellcmdflag = '-c'
- let &shellredir = '>%s 2>&1'
- set shellquote= shellxescape=
- " set noshelltemp
- set shellxquote=
- let &shellpipe='2>&1| tee'
-endif
+function! msdos#SomethingWithShada() abort
+  " Quite honestly this functions pretty pointless but I thought it was a neat example of the API.
 
-endfunction  " }}}
+  let fname = expand('~/.local/share/nvim-data/site/shada/main.shada')
+  let mpack = readfile(fname, 'b')
+  let shada_objects = msgpackparse(mpack)
+  return shada#mpack_to_sd(shada_objects)
+endfunction

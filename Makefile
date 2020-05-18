@@ -17,12 +17,23 @@ help:
 	@echo "lint"
 	@echo "clean"
 
+$(dir $(BUILD_VIRTUAL_ENV)):
+	mkdir -p $@
+
+$(BUILD_VIRTUAL_ENV): | $(dir $(BUILD_VIRTUAL_ENV))
+	@$(PYTHON) -m venv $@
+
+$(BUILD_VIRTUAL_ENV)/bin/vint: | $(BUILD_VIRTUAL_ENV)
+	$|/bin/python -m pip install vim-vint
+
+$(BUILD_VIRTUAL_ENV)/bin/flake8: | $(BUILD_VIRTUAL_ENV)
+
 venv:
 	@echo "Making a venv\n"
 	@$(PYTHON) -m venv --prompt nvim $(BUILD_VIRTUAL_ENV)
 	@echo "Activating it\n"
 	$(source) $(activate)
-	$(PYTHON) -m pip install vim-vint 
+	$(PYTHON) -m pip install vim-vint
 	$|/bin/python -m pip install -q flake8>=3.5.0
 
 vint: $(BUILD_VIRTUAL_ENV)/bin/vint
@@ -36,5 +47,8 @@ run: $(BUILD_VIRTUAL_ENV)/bin/pynvim
 lint:
 	vint after autoload ftplugin plugin syntax
 
-# clean:
-# 	rm -rf build
+lint:
+	vint after autoload ftplugin plugin syntax
+
+clean:
+	rm -rf build

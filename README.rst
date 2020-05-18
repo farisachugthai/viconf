@@ -212,17 +212,17 @@ that exist.
 +--------------+-----------+---------+------------------------------------------+
 | :xmap        | :xnoremap | :xunmap | Visual                                   |
 +--------------+-----------+---------+------------------------------------------+
-| :omap        |           |         | Operating-pending                        |
+| :omap        | :onoremap | :ounmap | Operating-pending                        |
 +--------------+-----------+---------+------------------------------------------+
-| :map!        |           |         | Insert and Command-line                  |
+| :map!        | :noremap! | :unmap! | Insert and Command-line                  |
 +--------------+-----------+---------+------------------------------------------+
-| :imap        |           |         | Insert                                   |
+| :imap        | :inoremap | :iunmap | Insert                                   |
 +--------------+-----------+---------+------------------------------------------+
-| :lmap        |           |         | Insert, Command-line, Lang-Arg           |
+| :lmap        | :lnoremap | :lunmap | Insert, Command-line, Lang-Arg           |
 +--------------+-----------+---------+------------------------------------------+
-| :cmap        |           |         | Command-line                             |
+| :cmap        | :cnoremap | :cunmap | Command-line                             |
 +--------------+-----------+---------+------------------------------------------+
-| :tmap        |           |         | Terminal                                 |
+| :tmap        | :tnoremap | :tunmap | Terminal                                 |
 +--------------+-----------+---------+------------------------------------------+
 
 There are a few things to note about this. One being that the commands map and
@@ -401,7 +401,7 @@ A useful command on the ex line. Prefix with ``:py3``.:
    from pprint import pprint; pprint(vim.eval('coc#list#get_chars()'))
 
 Don't use the below mapping because CR auto-selects the first
-thing on the :abbr:`pum` which is terrible when you're just trying
+thing on the :abbr:`pum (popup-menu)` which is terrible when you're just trying
 to insert whitespace.::
 
    inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"))

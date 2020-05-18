@@ -6,128 +6,131 @@ from pathlib import Path
 
 import pytest
 
-root = Path('.').parent
+root = Path(".").parent
 sys.path.insert(0, root.joinpath("python3").__fspath__())
 
 
 def source(vim, code):
     fd, fname = tempfile.mkstemp()
-    with os.fdopen(fd, 'w') as f:
+    with os.fdopen(fd, "w") as f:
         f.write(code)
-    vim.command('source ' + fname)
+    vim.command("source " + fname)
     os.unlink(fname)
 
 
 def test_clientinfo(vim):
-    assert 'remote' == vim.api.get_chan_info(vim.channel_id)['client']['type']
+    assert "remote" == vim.api.get_chan_info(vim.channel_id)["client"]["type"]
 
 
 def test_command(vim):
     fname = tempfile.mkstemp()[1]
-    vim.command('new')
-    vim.command('edit {}'.format(fname))
+    vim.command("new")
+    vim.command("edit {}".format(fname))
     # skip the "press return" state, which does not handle deferred calls
-    vim.input('\r')
-    vim.command('normal itesting\npython\napi')
-    vim.command('w')
+    vim.input("\r")
+    vim.command("normal itesting\npython\napi")
+    vim.command("w")
     assert os.path.isfile(fname)
     with open(fname) as f:
-        assert f.read() == 'testing\npython\napi\n'
+        assert f.read() == "testing\npython\napi\n"
     os.unlink(fname)
 
 
 def test_command_output(vim):
-    assert vim.command_output('echo "test"') == 'test'
+    assert vim.command_output('echo "test"') == "test"
 
 
 def test_command_error(vim):
     with pytest.raises(vim.error) as excinfo:
         vim.current.window.cursor = -1, -1
-    assert excinfo.value.args == ('Cursor position outside buffer',)
+    assert excinfo.value.args == ("Cursor position outside buffer",)
 
 
 def test_eval(vim):
     vim.command('let g:v1 = "a"')
     vim.command('let g:v2 = [1, 2, {"v3": 3}]')
-    g = vim.eval('g:')
-    assert g['v1'] == 'a'
-    assert g['v2'] == [1, 2, {'v3': 3}]
+    g = vim.eval("g:")
+    assert g["v1"] == "a"
+    assert g["v2"] == [1, 2, {"v3": 3}]
 
 
 def test_call(vim):
-    assert vim.funcs.join(['first', 'last'], ', ') == 'first, last'
-    source(vim, """
+    assert vim.funcs.join(["first", "last"], ", ") == "first, last"
+    source(
+        vim,
+        """
         function! Testfun(a,b)
             return string(a:a).":".a:b
         endfunction
-    """)
-    assert vim.funcs.Testfun(3, 'alpha') == '3:alpha'
+    """,
+    )
+    assert vim.funcs.Testfun(3, "alpha") == "3:alpha"
 
 
 def test_api(vim):
-    vim.api.command('let g:var = 3')
-    assert vim.api.eval('g:var') == 3
+    vim.api.command("let g:var = 3")
+    assert vim.api.eval("g:var") == 3
 
 
 def test_strwidth(vim):
-    assert vim.strwidth('abc') == 3
+    assert vim.strwidth("abc") == 3
     # 6 + (neovim)
     # 19 * 2 (each japanese character occupies two cells)
-    assert vim.strwidth('neovimのデザインかなりまともなのになってる。') == 44
+    assert vim.strwidth("neovimのデザインかなりまともなのになってる。") == 44
 
 
 def test_chdir(vim):
-    pwd = vim.eval('getcwd()')
+    pwd = vim.eval("getcwd()")
     root = os.path.abspath(os.sep)
     # We can chdir to '/' on Windows, but then the pwd will be the root drive
-    vim.chdir('/')
-    assert vim.eval('getcwd()') == root
+    vim.chdir("/")
+    assert vim.eval("getcwd()") == root
     vim.chdir(pwd)
-    assert vim.eval('getcwd()') == pwd
+    assert vim.eval("getcwd()") == pwd
 
 
 def test_current_line(vim):
-    assert vim.current.line == ''
-    vim.current.line = 'abc'
-    assert vim.current.line == 'abc'
+    assert vim.current.line == ""
+    vim.current.line = "abc"
+    assert vim.current.line == "abc"
 
 
 def test_current_line_delete(vim):
-    vim.current.buffer[:] = ['one', 'two']
+    vim.current.buffer[:] = ["one", "two"]
     assert len(vim.current.buffer[:]) == 2
     del vim.current.line
-    assert len(vim.current.buffer[:]) == 1 and vim.current.buffer[0] == 'two'
+    assert len(vim.current.buffer[:]) == 1 and vim.current.buffer[0] == "two"
     del vim.current.line
     assert len(vim.current.buffer[:]) == 1 and not vim.current.buffer[0]
 
 
 def test_vars(vim):
-    vim.vars['python'] = [1, 2, {'3': 1}]
-    assert vim.vars['python'], [1, 2 == {'3': 1}]
-    assert vim.eval('g:python'), [1, 2 == {'3': 1}]
-    assert vim.vars.get('python') == [1, 2, {'3': 1}]
+    vim.vars["python"] = [1, 2, {"3": 1}]
+    assert vim.vars["python"], [1, 2 == {"3": 1}]
+    assert vim.eval("g:python"), [1, 2 == {"3": 1}]
+    assert vim.vars.get("python") == [1, 2, {"3": 1}]
 
-    del vim.vars['python']
+    del vim.vars["python"]
     with pytest.raises(KeyError):
-        vim.vars['python']
+        vim.vars["python"]
     assert vim.eval('exists("g:python")') == 0
 
     with pytest.raises(KeyError):
-        del vim.vars['python']
+        del vim.vars["python"]
 
-    assert vim.vars.get('python', 'default') == 'default'
+    assert vim.vars.get("python", "default") == "default"
 
 
 def test_options(vim):
-    assert vim.options['background'] == 'dark'
-    vim.options['background'] = 'light'
-    assert vim.options['background'] == 'light'
+    assert vim.options["background"] == "dark"
+    vim.options["background"] = "light"
+    assert vim.options["background"] == "light"
 
 
 def test_local_options(vim):
-    assert vim.windows[0].options['foldmethod'] == 'manual'
-    vim.windows[0].options['foldmethod'] = 'syntax'
-    assert vim.windows[0].options['foldmethod'] == 'syntax'
+    assert vim.windows[0].options["foldmethod"] == "manual"
+    vim.windows[0].options["foldmethod"] = "syntax"
+    assert vim.windows[0].options["foldmethod"] == "syntax"
 
 
 def test_buffers(vim):
@@ -140,7 +143,7 @@ def test_buffers(vim):
     assert vim.buffers[vim.current.buffer.number] == vim.current.buffer
 
     buffers.append(vim.current.buffer)
-    vim.command('new')
+    vim.command("new")
     assert len(vim.buffers) == 2
     buffers.append(vim.current.buffer)
     assert vim.buffers[vim.current.buffer.number] == vim.current.buffer
@@ -159,8 +162,8 @@ def test_buffers(vim):
 def test_windows(vim):
     assert len(vim.windows) == 1
     assert vim.windows[0] == vim.current.window
-    vim.command('vsplit')
-    vim.command('split')
+    vim.command("vsplit")
+    vim.command("split")
     assert len(vim.windows) == 3
     assert vim.windows[0] == vim.current.window
     vim.current.window = vim.windows[1]
@@ -170,7 +173,7 @@ def test_windows(vim):
 def test_tabpages(vim):
     assert len(vim.tabpages) == 1
     assert vim.tabpages[0] == vim.current.tabpage
-    vim.command('tabnew')
+    vim.command("tabnew")
     assert len(vim.tabpages) == 2
     assert len(vim.windows) == 2
     assert vim.windows[1] == vim.current.window
@@ -189,27 +192,27 @@ def test_tabpages(vim):
 def test_hash(vim):
     d = {}
     d[vim.current.buffer] = "alpha"
-    assert d[vim.current.buffer] == 'alpha'
-    vim.command('new')
+    assert d[vim.current.buffer] == "alpha"
+    vim.command("new")
     d[vim.current.buffer] = "beta"
-    assert d[vim.current.buffer] == 'beta'
-    vim.command('winc w')
-    assert d[vim.current.buffer] == 'alpha'
-    vim.command('winc w')
-    assert d[vim.current.buffer] == 'beta'
+    assert d[vim.current.buffer] == "beta"
+    vim.command("winc w")
+    assert d[vim.current.buffer] == "alpha"
+    vim.command("winc w")
+    assert d[vim.current.buffer] == "beta"
 
 
 def test_cwd(vim, tmpdir):
-    pycmd = 'python'
+    pycmd = "python"
     if sys.version_info >= (3, 0):
-        pycmd = 'python3'
+        pycmd = "python3"
 
-    vim.command('{} import os'.format(pycmd))
-    cwd_before = vim.command_output('{} print(os.getcwd())'.format(pycmd))
+    vim.command("{} import os".format(pycmd))
+    cwd_before = vim.command_output("{} print(os.getcwd())".format(pycmd))
 
-    vim.command('cd {}'.format(tmpdir.strpath))
-    cwd_vim = vim.command_output('pwd')
-    cwd_python = vim.command_output('{} print(os.getcwd())'.format(pycmd))
+    vim.command("cd {}".format(tmpdir.strpath))
+    cwd_vim = vim.command_output("pwd")
+    cwd_python = vim.command_output("{} print(os.getcwd())".format(pycmd))
     assert cwd_python == cwd_vim
     assert cwd_python != cwd_before
 
