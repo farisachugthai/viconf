@@ -2,7 +2,7 @@ const path = require("path");
 const cp = require("child_process");
 const webpack = require("./node_modules/webpack");
 
-let res = cp.execSync("git rev-parse HEAD", { encoding: "utf8" });
+let res = cp.execSync("git rev-parse HEAD", {encoding: "utf8"});
 let revision = res.slice(0, 10);
 
 module.exports = {

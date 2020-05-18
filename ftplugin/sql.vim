@@ -24,11 +24,11 @@
   " Note, you cannot use \?, since these patterns can be used to search
   " backwards, you must use \{,1}
   if !exists('g:ftplugin_sql_objects')
-      let g:ftplugin_sql_objects = 'function,procedure,event,' .
-                  \ '\(existing\\|global\s\+temporary\s\+\)\{,1}' .
-                  \ 'table,trigger' .
-                  \ ',schema,service,publication,database,datatype,domain' .
-                  \ ',index,subscription,synchronization,view,variable'
+    let g:ftplugin_sql_objects = 'function,procedure,event,' .
+                \ '\(existing\\|global\s\+temporary\s\+\)\{,1}' .
+                \ 'table,trigger' .
+                \ ',schema,service,publication,database,datatype,domain' .
+                \ ',index,subscription,synchronization,view,variable'
   endif
 
   if exists('b:did_ftplugin') | finish | endif

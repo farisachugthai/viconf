@@ -13,7 +13,6 @@ unlet! b:did_indent
 source $VIMRUNTIME/indent/typescript.vim
 
 " Simple Options:
-
   setlocal expandtab tabstop=4 softtabstop=2 shiftwidth=2
   setlocal include=^\\s*[^\/]\\+\\(from\\\|require(\\)\\s*['\"\.]
 
@@ -31,14 +30,20 @@ source $VIMRUNTIME/indent/typescript.vim
   setlocal isfname+=@-@
 
 " Plugins:
-  let b:ale_fixers = get(g:, 'ale_fixers', [])
+  if !has('unix')
+    let g:ale_windows_node_executable_path = fnameescape('C:/Program Files/nodejs/node.exe')
+  endif
+
+  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
+  let b:ale_fixers += ['prettier']
   let b:ale_fixers += ['eslint']
   let b:ale_fixers += ['tslint']
+  let b:ale_linters = get(g:, 'ale_linters["*"]', ['tsserver', 'eslint', 'prettier',])
+
 
 " Original:
   " https://gist.githubusercontent.com/romainl/a50b49408308c45cc2f9f877dfe4df0c/raw/1ab8eb733948c0c89d11553cc0e00f4ab251f31e/typescript.vim
   if !exists('b:did_typescript_setup')
-
     call ftplugins#typescript_setup()
     let b:did_typescript_setup = 1
   endif
@@ -62,20 +67,20 @@ source $VIMRUNTIME/indent/typescript.vim
 
   if !exists('*s:GF')
     function! s:GF(text, cmd)
-      let l:include_expression = TypeScriptIncludeExpression(a:text, 1)
+    let l:include_expression = TypeScriptIncludeExpression(a:text, 1)
 
-      if len(l:include_expression) > 1
-        execute a:cmd . ' ' . l:include_expression
-      else
-        echohl WarningMsg
-        echo 'Can not find file ' . a:text
-        echohl None
-      endif
+    if len(l:include_expression) > 1
+      execute a:cmd . ' ' . l:include_expression
+    else
+      echohl WarningMsg
+      echo 'Can not find file ' . a:text
+      echohl None
+    endif
     endfunction
   endif
 
 " Undo FTPlugin:
-
+  " Theres actually an undo defined in js.vim
   let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
                    \. '|setlocal isf< sua< syntax< et< sts< sw< ts< '
                    \. '|setlocal inex< def< inc< inde< '
@@ -89,4 +94,3 @@ source $VIMRUNTIME/indent/typescript.vim
                    \. '|silent! xunmap <buffer> gf'
                    \. '|silent! nunmap <buffer> <C-w><C-f>'
                    \. '|silent! xunmap <buffer> <C-w><C-f>'
-

@@ -27,6 +27,7 @@ if &omnifunc ==# ''
   setlocal omnifunc=htmlcomplete#CompleteTags
 endif
 
+source $VIMRUNTIME/autoload/htmlcomplete.vim
 call htmlcomplete#DetectOmniFlavor()
 
 " From the help docs on matchit. Not gonna check for existence since we

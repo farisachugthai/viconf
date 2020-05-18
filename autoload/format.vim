@@ -6,7 +6,7 @@
 " ========================================================================
 
 function! format#Format() abort
-      " fall back to Vims internal reformatting
+  " fall back to Vims internal reformatting
   if mode() !=# 'n' | return 1 | endif
   let l:lines = getline(v:lnum, v:lnum + v:count - 1)
   call map(l:lines, {key, val -> substitute(val, '\s\+$', '', 'g')})

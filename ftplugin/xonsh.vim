@@ -29,12 +29,12 @@
 
 " Compiler:
   if executable('pytest')
-    compiler pytest
-    setlocal makeprg=py.test\ --tb=short\ -q\ --color=no
-    echomsg 'Using pytest as a compiler!'
+  compiler pytest
+  setlocal makeprg=py.test\ --tb=short\ -q\ --color=no
+  echomsg 'Using pytest as a compiler!'
   else
     compiler pylint
-    echomsg 'Using pylint as a compiler!'
+  echomsg 'Using pylint as a compiler!'
   endif
 
 " Mappings:
@@ -43,13 +43,14 @@
   noremap! <buffer> <F5> <Cmd>py3f %<CR>
 
 " Atexit:
-  let b:undo_ftplugin .= '|setlocal kp< ep< fp< path< syntax< fdls< sua< include< '
-                  \ . '|setlocal includeexpr< cms< fo< et< sw< sts< ts<'
-                  \ . '|setlocal sr< mp< fdm< isk<'
-                  \ . '|unlet! b:undo_ftplugin'
-                  \ . '|unlet! b:did_ftplugin'
-                  \ . '|unlet! b:current_compiler'
-                  \ . '|silent! nunmap <buffer> <F5>'
-                  \ . '|silent! unmap <buffer> <F5>'
-                  \ . '|silent! nunmap <buffer> K'
+  let b:undo_ftplugin .= get(b:, 'undo_ftplugin', '')
+                  \. '|setlocal kp< ep< fp< path< syntax< fdls< sua< include< '
+                  \. '|setlocal includeexpr< cms< fo< et< sw< sts< ts<'
+                  \. '|setlocal sr< mp< fdm< isk<'
+                  \. '|unlet! b:undo_ftplugin'
+                  \. '|unlet! b:did_ftplugin'
+                  \. '|unlet! b:current_compiler'
+                  \. '|silent! nunmap <buffer> <F5>'
+                  \. '|silent! unmap <buffer> <F5>'
+                  \. '|silent! nunmap <buffer> K'
 

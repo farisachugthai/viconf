@@ -5,7 +5,7 @@
   " Last Modified: July 13, 2019
 " ============================================================================
 
-function! vimscript#after_ft() abort  " {{{
+function! vimscript#after_ft() abort
   let s:debug = 1
   let s:cur_ft = &filetype
   let s:after_ftplugin_dir = fnamemodify(resolve(expand('<sfile>')), ':p:h') . '/after/ftplugin/'
@@ -40,9 +40,9 @@ function! vimscript#after_ft() abort  " {{{
 
   " This seems like a reasonable return after a fail.
   return v:False
-endfunction  " }}}
+endfunction
 
-function! vimscript#BetterProfiler(fname) abort  " {{{
+function! vimscript#BetterProfiler(fname) abort
   " Because Vim's built in profiling capabilities are nonsensical like wtf?
 
   " Toggle debugging
@@ -71,9 +71,9 @@ function! vimscript#BetterProfiler(fname) abort  " {{{
   profile dump
 
   exec 'e ' a:fname
-endfunction  " }}}
+endfunction
 
-function! vimscript#profile(...) abort  " {{{
+function! vimscript#profile(...) abort
   " let s:Debug = 1
   " let b:fname = '~/projects/viconf/.config/nvim/colors/gruvbox8.vim'
   " call g:BetterProfiler(b:fname)
@@ -89,9 +89,9 @@ function! vimscript#profile(...) abort  " {{{
     profile func *
     profile file *
   endif
-endfunction  " }}}
+endfunction
 
-function! vimscript#Scriptnames(re) abort  " {{{
+function! vimscript#Scriptnames(re) abort
   " Command to filter :scriptnames output by a regex
     redir => l:scriptnames
     silent scriptnames
@@ -99,9 +99,9 @@ function! vimscript#Scriptnames(re) abort  " {{{
 
     let l:filtered = filter(split(l:scriptnames, "\n"), "v:val =~ '" . a:re . "'")
     echo join(l:filtered, ' \n ')
-endfunction  " }}}
+endfunction
 
-function! vimscript#ScriptnamesDict() abort  " {{{
+function! vimscript#ScriptnamesDict() abort
   " From 10,000 lines deep in :he eval
   " Get the output of ":scriptnames" in the scriptnames_output variable.
   " Call by entering `:echo g:ScriptNamesDict()` or the command below.
@@ -130,28 +130,24 @@ function! vimscript#ScriptnamesDict() abort  " {{{
   " We didn't scope the var so is the below line necessary?
   " unlet scriptnames_output
   return s:scripts
-endfunction  "  }}}
+endfunction
 
-function! s:get_scriptnames() abort  " {{{
+function! s:get_scriptnames() abort
   let s:scriptnames_output = ''
   redir => s:scriptnames_output
   silent scriptnames
   redir END
   return s:scriptnames_output
-endfunction  " }}}
+endfunction
 
-function! vimscript#fzf_scriptnames(bang) abort  " {{{
-
+function! vimscript#fzf_scriptnames(bang) abort
   return fzf#run(fzf#wrap('scriptnames',
         \ {'source': ':scriptnames',
         \ 'sink': 'e',
         \ 'options': ['--header', 'Scriptnames']},
         \ a:bang))
-
 endfunction
-" }}}
 
-function! vimscript#GetPID() abort  " {{{
-
+function! vimscript#GetPID() abort
   return nvim_get_proc(getpid())
-endfunction  " }}}
+endfunction

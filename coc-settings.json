@@ -37,36 +37,17 @@
     ".ts",
     ".js"
   ],
-  "coc.source.word.filetypes": [
-    "python",
-    "javascript",
-    "rst",
-    "md",
-    "txt",
-    "help",
-    "html"
-  ],
-  "coc.source.word.priority": 30,
-  "coc.source.word.shortcut": "Coc-Word: ",
-  "codeLens.enable": true,
   "diagnostic.checkCurrentLine": true,
   "diagnostic.enableMessage": "always",
   "diagnostic.filetypeMap": {
     "default": "bufferType"
   },
-  "diagnostic.level": "warning",
-  "diagnostic.messageTarget": "float",
-  "diagnostic.refreshOnInsertMode": true,
   "javascript.referencesCodeLens.enable": true,
   "javascript.showUnused": true,
   "json.format.enable": true,
   "list.autoResize": true,
   "list.extendedSearchMode": true,
   "list.indicator": "CocList: >>> $: ",
-  "list.interactiveDebounceTime": 200,
-  "list.limitLines": 500,
-  "list.maxHeight": 20,
-  "list.maxPreviewHeight": 25,
   "list.nextKeymap": "<C-n>",
   "list.previewHighlightGroup": "IdentifierBold",
   "list.previousKeymap": "<C-p>",
@@ -210,7 +191,6 @@
   "list.source.outline.defaultOptions": [
     "--top",
     "--input",
-    // "--auto-preview",
     "--normal"
   ],
   "list.source.outline.defaultArgs": [
@@ -270,10 +250,7 @@
     "--normal",
     "--auto-preview"
   ],
-  "python.analysis.diagnosticEnabled": true,
-  "python.analysis.diagnosticPublishDelay": 300,
   "python.analysis.downloadChannel": "daily",
-  "python.analysis.logLevel": "Information",
   "python.analysis.openFilesOnly": false,
   "python.analysis.symbolsHierarchyDepthLimit": 12,
   "python.autoComplete.addBrackets": true,
@@ -293,16 +270,11 @@
     ".venv"
   ],
   "refactor.openCommand": "vsplit",
-  "session.restartOnSessionLoad": true,
   "signature.hideOnTextChange": true,
   "signature.maxWindowHeight": 14,
   "signature.preferShownAbove": false,
   "signature.triggerSignatureWait": 300,
   "snippets.extends": {
-    "bash": [
-      "sh",
-      "shellscript"
-    ],
     "python": [
       "rst"
     ]
@@ -340,19 +312,16 @@
     "value": "",
     "variable": ""
   },
+  "suggest.enablePreview": true,
   "suggest.fixInsertedWord": true,
   "suggest.floatEnable": true,
   "suggest.keepCompleteopt": true,
   "suggest.maxCompleteItemCount": 100,
   "suggest.noselect": true,
   "suggest.removeDuplicateItems": true,
-  "typescript.referencesCodeLens.enable": true,
+  "tslint.packageManager": "yarn",
+  "tsserver.npm": "yarn",
   "typescript.showUnused": true,
   "typescript.suggest.autoImports": true,
-  "typescript.suggest.completeFunctionCalls": true,
-  "vimlsp.diagnostic.enable": true,
-  "vimlsp.indexes.count": 3,
-  "vimlsp.indexes.runtimepath": true,
-  "vimlsp.suggest.fromRuntimepath": true,
-  "vimlsp.suggest.fromVimruntime": true
+  "typescript.suggest.completeFunctionCalls": true
 }

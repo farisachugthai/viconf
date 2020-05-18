@@ -64,6 +64,7 @@
   inoremap <Down> <C-R>=pumvisible() ? "\<lt>C-N>" : "\<lt>Down>"<CR>
   inoremap <Up> <C-R>=pumvisible() ? "\<lt>C-P>" : "\<lt>Up>"<CR>
 
+
   " When typing '#' as the first character in a new line, the indent for that line is removed, the '#'
   " is put in the first column.  The indent is restored for the next line.  If you don't want this,
   " use this mapping:
@@ -95,6 +96,7 @@
 
 " RSI:
   function! MapRsi() abort
+
     " Sorry tpope <3
     inoremap        <C-A> <C-O>^
     inoremap        <C-X><C-A> <C-A>
@@ -127,6 +129,7 @@
     noremap! <C-x>2  <Cmd>new<CR>
     noremap! <C-x>5  <Cmd>vnew<CR>
     noremap! <C-x>0  <Cmd>wincmd c<CR>
+
   endfunction
 
   function! AddVileBinding(key, handler)
@@ -137,6 +140,7 @@
     exec 'tnoremap ' . a:key a:handler
     " wait why did i get rid of cnoremap
     exec 'cnoremap ' . a:key a:handler
+
   endfunction
 
   " oh

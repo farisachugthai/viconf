@@ -1,21 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""The pynvim official conftest."""
 import codecs
 import contextlib
-# import importlib
 import json
 import os
 import subprocess
 import sys
 import tempfile
 from pathlib import Path
-
-import pynvim
+from typing import Optional
 
 import pytest
-from py._path.local import LocalPath
-
 
 def get_git_root() -> Path:
     try:
@@ -29,7 +24,7 @@ def get_git_root() -> Path:
 
 
 @contextlib.contextmanager
-def as_cwd(new_dir, *args, **kwargs):
+def as_cwd(new_dir: os.PathLike, *args, **kwargs):
     old_cwd = Path.cwd()
     try:
         os.chdir(new_dir)
@@ -39,7 +34,7 @@ def as_cwd(new_dir, *args, **kwargs):
 
 
 @pytest.fixture(scope="session")
-def env(listen_addr=None):
+def env(listen_addr: Optional[os.PathLike] =None):
     # Context manager for env
     if not os.environ.get("NVIM_LISTEN_ADDRESS"):
         if listen_addr is None:
@@ -48,6 +43,8 @@ def env(listen_addr=None):
             finally:
                 listen_addr._cleanup(listen_addr.name, '')
         os.environ.putenv("NVIM_LISTEN_ADDRESS", listen_addr.name)
+
+
 
 
 @pytest.fixture
@@ -68,6 +65,7 @@ def old_vim():
 
     return editor
 
+
 @pytest.fixture(scope="session")
 def vim():
     inside_nvim = os.environ.get("NVIM_LISTEN_ADDRESS")
@@ -75,7 +73,7 @@ def vim():
         # If we aren't running inside a `:terminal`, just exec nvim.
         if sys.argv[:1] == "script_host.py":
             sys.argv.pop()
-        # os.execvp('nvim', sys.argv)
+        os.execvp('nvim', sys.argv)
 
     if inside_nvim:
         editor = pynvim.attach("socket", path=inside_nvim)
@@ -85,6 +83,9 @@ def vim():
 
 
 if __name__ == "__main__":
+    from py._path.local import LocalPath
+
+    # this raises while inside of nvim
     with as_cwd(get_git_root()):
         local_path = LocalPath(os.path.abspath(".") + "/python3/pynvim.py")
         pynvim = local_path.pyimport()

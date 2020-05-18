@@ -1,3 +1,6 @@
+========
+README
+========
 
 Imagine you're a Vim user. You're well above the simple beginner
 stages. You've finished Vim Tutor a handful of times. You're read a
@@ -280,7 +283,6 @@ with ``<Cmd>``, and it makes Nvim behave in a slightly more manageable way.
 Autocompletion
 ===============
 Whew! Just spent a whole lot of time setting up autocompletion from scratch.
-
 Let's first start with ex-mode completion.::
 
    set wildmode=full:list:longest,full:list

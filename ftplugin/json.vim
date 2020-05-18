@@ -40,16 +40,29 @@ let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
                 \. '|setlocal fo< com< cms< cocu< cole<'
                 \. '|setlocal matchpairs< et< sts< sw< ts< sua< fdm< sr< '
 
-" Set up ALE correctly
-call ftplugins#ALE_JSON_Conf()
+  " Standard fixers defined for JSON
+  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
 
-" These mappings are particularly nice in JSON files.:
-inoremap <buffer> ( ()<C-G>U<Left>
-inoremap <buffer> [ []<C-G>U<Left>
-inoremap <buffer> { {}<C-G>U<Left>
-inoremap <buffer> " ""<C-G>U<Left>
-" Also can we auto fix single quotes?
-inoremap <buffer> ' "<C-G>U<Left>
+  let b:ale_fixers += ['prettier']
+
+  let b:ale_fixers += ['jq']
+  let b:ale_json_jq_options = '-SM'
+  let b:ale_json_jq_filters = '.'
+  " endif
+
+  let b:ale_fixers += ['fixjson']
+
+  let b:ale_linters = ['jsonlint']
+  let b:ale_linters_explicit = 1
+
+" Mappings:
+  " These mappings are particularly nice in JSON files.:
+  inoremap <buffer> ( ()<C-G>U<Left>
+  inoremap <buffer> [ []<C-G>U<Left>
+  inoremap <buffer> { {}<C-G>U<Left>
+  inoremap <buffer> " ""<C-G>U<Left>
+  " Also can we auto fix single quotes?
+  inoremap <buffer> ' "<C-G>U<Left>
 
 setlocal matchpairs+=::,"",
 
@@ -74,23 +87,23 @@ function! Prettyjson(bang) range
 
   :py3 import _vim
 
-                " *:func-range* *a:firstline* *a:lastline*
-" When the [range] argument is added, the function is
-" expected to take care of a range itself.  The range is
-" passed as "a:firstline" and "a:lastline".  If [range]
-" is excluded, ":{range}call" will call the function for
-" each line in the range, with the cursor on the start
-" of each line.  See |function-range-example|.
-" The cursor is still moved to the first line of the
-" range, as is the case with all Ex commands.
-"
-" *function-range-example*  >
-" Example of a function that handles the range itself: >
+                  " *:func-range* *a:firstline* *a:lastline*
+  " When the [range] argument is added, the function is
+  " expected to take care of a range itself.  The range is
+  " passed as "a:firstline" and "a:lastline".  If [range]
+  " is excluded, ":{range}call" will call the function for
+  " each line in the range, with the cursor on the start
+  " of each line.  See |function-range-example|.
+  " The cursor is still moved to the first line of the
+  " range, as is the case with all Ex commands.
+  "
+  " *function-range-example*  >
+  " Example of a function that handles the range itself: >
 
-" :function Cont() range
-" :  execute (a:firstline + 1) . "," . a:lastline . 's/^/\t\\ '
-" :endfunction
-" :4,8call Cont()
+  " :function Cont() range
+  " :  execute (a:firstline + 1) . "," . a:lastline . 's/^/\t\\ '
+  " :endfunction
+  " :4,8call Cont()
   exec a:firstline,a:lastline . "py3 _vim.pretty_it('json')"
 endfunction
 

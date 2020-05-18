@@ -13,7 +13,7 @@ if exists('b:did_ftplugin') | finish | endif
 
   setlocal expandtab shiftwidth=4 tabstop=4 softtabstop=4
   if !exists('current_compiler')
-    compiler cs
+  compiler cs
   endif
 
   setlocal makeprg=csc\ %:S

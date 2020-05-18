@@ -5,6 +5,7 @@
   " Last Modified: Feb 12, 2020
 " ============================================================================
 
+
 " Preliminary: {{{
 " These are the options that I consider the minimum requirements to running
 scriptencoding utf-8
@@ -18,11 +19,9 @@ let g:syntax_cmd = 'manual'
 
 let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Evervim. Thanks!
 let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h'))
-
 " Seriously how does this keep getting fucked up. omfg packpath is worse???
 setglobal runtimepath=$HOME/.config/nvim,$HOME/.local/share/nvim/site,$VIMRUNTIME
 setglobal packpath=~/.config/nvim/pack,~/.local/share/nvim/site/pack,$VIMRUNTIME
-
 if !has('unix')
   " call it silly but keep source expressions on their own line. TPope set them up in &include
   source C:/Neovim/share/nvim-qt/runtime/plugin/nvim_gui_shim.vim
@@ -81,7 +80,6 @@ function! LoadMyPlugins() abort  " {{{
 
   let g:plug_url = 'https://github.com/%s.git'
   if !exists('plug#load')  | unlet! g:loaded_plug | exec 'source ' . s:repo_root . '/vim-plug/plug.vim' | endif
-
 
   if !exists('*stdpath') | echohl WarningMsg | echomsg 'stdpath func does not exist.' | echohl NONE | return | endif
 
@@ -148,8 +146,8 @@ function! LoadMyPlugins() abort  " {{{
   endif
 
   Plug 'kshenoy/vim-signature'
-  Plug 'ryanoasis/vim-devicons'
 
+  Plug 'ryanoasis/vim-devicons'
   call plug#end()
 endfunction
 

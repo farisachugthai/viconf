@@ -2,7 +2,7 @@
 " Language:             readline(3) configuration file
 " Maintainer:           Faris A. Chugthai
 " Previous Maintainer:  Nikolai Weibull <now@bitwi.se>
-" Latest Revision:      2008-07-09
+" Latest Revision:      ddaate
 
 let g:readline_has_bash = 1
 
@@ -26,7 +26,8 @@ endif
 
 setlocal iskeyword+=$
 
-let b:undo_ftplugin = "setl com< cms< fo< inc<"
+
+let b:undo_ftplugin = 'setl com< cms< fo< inc< isk<'
 
 " yo just saying... the syntax highlighting for readline is damn impressive
 " Let's utilize it!
@@ -46,9 +47,10 @@ endif
 " From ftplugin/cmake.vim
 " *if you're wondering how i knew it was there, i didn't.*
 " :grep match_words $VIMRUNTIME/ftplugin
-if exists('loaded_matchit')
+if exists('g:loaded_matchit') && !exists('b:match_words')
+" No default matchit definition
   let b:match_words = '\<\$if\>:\<\$elseif\>\|\<\$else\>:\<\$endif\>'
   let b:match_ignorecase = 1
 
-  let b:undo_ftplugin .= "|unlet! b:match_words"
+  let b:undo_ftplugin .= '| unlet! b:match_words b:match_ignorecase'
 endif

@@ -5,7 +5,7 @@
     " Last Modified: Aug 24, 2019
 " ============================================================================
 
-function! s:shell_cmds(cmd) abort  " {{{
+function! s:shell_cmds(cmd) abort
   let l:entries = []
   let l:lines = split(system(a:cmd), '\n')
   if v:shell_error != 0
@@ -17,12 +17,12 @@ function! s:shell_cmds(cmd) abort  " {{{
     call add(l:entries, { 'filename': l:fname, 'lnum': l:lno, 'text': l:text })
   endfor
   return l:entries
-endfunction  " }}}
+endfunction
 
-function! todo#Todo(bang) abort  " {{{
-" Grep for todos in the current repo and populate the quickfix list with them.
-" You could run an if then to check you're in a git repo.
-" Also could use ag/rg/fd and fzf instead of grep to supercharge this.
+function! todo#Todo(bang) abort
+  " Grep for todos in the current repo and populate the quickfix list with them.
+  " You could run an if then to check you're in a git repo.
+  " Also could use ag/rg/fd and fzf instead of grep to supercharge this.
 
   " if exists(':Ggrep')
   " else
@@ -38,9 +38,8 @@ function! todo#Todo(bang) abort  " {{{
     copen
   endif
 endfunction
-" }}}
 
-function! todo#fzf(bang) abort  " {{{
+function! todo#fzf(bang) abort
   if !exists('b:git_dir')
     let b:git_dir = FugitiveGitDir()
   endif
@@ -53,9 +52,8 @@ function! todo#fzf(bang) abort  " {{{
         \ 'options': ['--ansi', '--multi', '--border', '--prompt', 'FZF Git Grep:', '--reverse']},
         \ a:bang ? fzf#vim#with_preview('up:60%') : fzf#vim#with_preview('right:50%:hidden')))
 endfunction
-" }}}
 
-function! todo#OpenRangerIn(path, edit_cmd)  abort " {{{
+function! todo#OpenRangerIn(path, edit_cmd)  abort
   if exists('g:ranger_choice_file')
     if empty(glob(g:ranger_choice_file))
       let s:choice_file_path = g:ranger_choice_file
@@ -105,9 +103,9 @@ function! todo#OpenRangerIn(path, edit_cmd)  abort " {{{
             \ . '"', s:rangerCallback)
     endif
     startinsert
-endfunction  " }}}
+endfunction
 
-function! todo#OpenRangerOnVimLoadDir(argv_path)  abort " {{{
+function! todo#OpenRangerOnVimLoadDir(argv_path)  abort
   " Open Ranger in the directory passed by argument
   let s:path = expand(a:argv_path)
 
@@ -116,4 +114,4 @@ function! todo#OpenRangerOnVimLoadDir(argv_path)  abort " {{{
 
   " Open Ranger
   call todo#OpenRangerIn(s:path, 'edit')
-endfunction  " }}}
+endfunction

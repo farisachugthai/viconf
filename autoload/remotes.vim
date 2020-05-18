@@ -27,7 +27,7 @@ function! remotes#init() abort
   endif
 endfunction
 
-function! remotes#unix_clipboard() abort " {{{
+function! remotes#unix_clipboard() abort
 
   if exists('$TMUX')
     let g:clipboard = {
@@ -76,8 +76,6 @@ function! remotes#_sources(ruby_host) abort
 endfunction
 
 function! remotes#termux() abort
-  let g:python3_host_prog = expand('$PREFIX/bin/python')
-  let g:loaded_python_provider = 1
   " From what i can tell, this line alone is as good as :UpdateRemotePlugins
   let g:python3_host_prog = s:repo_root . '/.venv/bin/python'
   let g:loaded_python_provider = 1
@@ -96,7 +94,7 @@ function! remotes#termux() abort
 
   call remotes#unix_clipboard()
   call remotes#_sources(v:true)
-endfunction   " }}}
+endfunction
 
 function! remotes#ubuntu() abort
   let g:python3_host_prog = '/usr/sbin/python'
@@ -108,7 +106,7 @@ function! remotes#ubuntu() abort
 
   call remotes#unix_clipboard()
   call remotes#_sources(v:true)
-endfunction  " }}}
+endfunction
 
 function! remotes#msdos() abort
   " Don't set python paths dynamically it's such a headache
@@ -132,8 +130,6 @@ function! remotes#msdos() abort
         \ }
 
   source $VIMRUNTIME/autoload/provider/clipboard.vim
-  " return remotes#HardReset()
-
 endfunction
 
 function! remotes#HardReset() abort
