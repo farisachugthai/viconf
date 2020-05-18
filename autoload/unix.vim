@@ -7,7 +7,7 @@
 
 scriptencoding utf8
 
-function! s:tmux_enabled() abort   " {{{
+function! s:tmux_enabled() abort
   " From fzf.vim
   if has('gui_running') || !exists('$TMUX')
     return 0
@@ -29,9 +29,9 @@ function! s:tmux_enabled() abort   " {{{
   let l:output = system('tmux -V')
   let s:tmux = !v:shell_error && l:output >=? 'tmux 1.7'
   return s:tmux
-endfunction  " }}}
+endfunction
 
-function! unix#tmux_send(content, dest) abort  " {{{ tmux send:
+function! unix#tmux_send(content, dest) abort
   if !s:tmux_enabled() | return | endif
   " URL: https://gist.github.com/junegunn/2f271e4cab544e86a37e239f4be98e74
   let l:dest = empty(a:dest) ? input('To which pane? ') : a:dest
@@ -44,16 +44,14 @@ function! unix#tmux_send(content, dest) abort  " {{{ tmux send:
 
   call delete(l:tempfile)
 endfunction
-" }}}
 
-function! unix#tmux_map(key, dest) abort " Tmux Map: {{{
+function! unix#tmux_map(key, dest) abort
   if !s:tmux_enabled() | return | endif
   execute printf('nnoremap <silent> %s "tyy:call unix#tmux_send(@t, "%s")<cr>', a:key, a:dest)
   execute printf('xnoremap <silent> %s "ty:call unix#tmux_send(@t, "%s")<cr>gv', a:key, a:dest)
 endfunction
-" }}}
 
-function! unix#UnixOptions() abort   " {{{
+function! unix#UnixOptions() abort
   " These conditions only ever exist on Unix. Only run them if that's what
   " we're using
 
@@ -115,9 +113,8 @@ function! unix#UnixOptions() abort   " {{{
               \ 'options': '-ansi --multi --cycle',
               \ 'left': 30})
 endfunction
-" }}}
 
-function! unix#finger() abort  " {{{
+function! unix#finger() abort
   " Finger: {Command and Function}
   " Example from :he command-complete
   " The following example lists user names to a Finger command
@@ -130,30 +127,26 @@ function! unix#finger() abort  " {{{
     endif
   endif
 endfunction
-" }}}
 
-function! unix#ListUsers(A,L,P) abort  " {{{
+function! unix#ListUsers(A,L,P) abort
   " From help docs
   return system('cut -d: -f1 /etc/passwd')
 endfunction
-" }}}
 
-function! unix#EditFileComplete(A,L,P) abort  " {{{
+function! unix#EditFileComplete(A,L,P) abort
   " Also from helpdocs
   return split(globpath(&path, a:A), '\n')
 endfunction
-" }}}
 
-function! unix#SpecialEdit(files, mods) abort   " {{{
+function! unix#SpecialEdit(files, mods) abort
   " This example does not work for file names with spaces!
   " so wait if that's true can't we just use shellescape...?
   for s:files in expand(a:files, 0, 1)
     exe a:mods . ' split ' . s:files
   endfor
 endfunction
-" }}}
 
-function! unix#RmDir(path) abort " {{{
+function! unix#RmDir(path) abort
   " sanity check; make sure it's not empty, /, or $HOME
   if empty(a:path)
     echoerr 'Attempted to delete empty path'
@@ -164,9 +157,8 @@ function! unix#RmDir(path) abort " {{{
   endif
   return unix#system('rm -rf ' . shellescape(a:path))
 endfunction
-" }}}
 
-function! unix#system(cmd, ...)  abort  " {{{
+function! unix#system(cmd, ...)  abort
   " Executes {cmd} with the cwd set to {pwd}, without changing Vim's cwd.
   " If {pwd} is the empty string then it doesn't change the cwd.
   let l:cmd = a:cmd
@@ -176,5 +168,4 @@ function! unix#system(cmd, ...)  abort  " {{{
   endif
   return system(l:cmd)
 endfunction
-" }}}
 

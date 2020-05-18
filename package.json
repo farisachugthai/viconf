@@ -19,8 +19,12 @@
     ],
     "snippets": [
       {
-        "language": "global",
-        "path": "./UltiSnips/rst.snippets"
+        "language": "python",
+        "path": "~/.config/coc/ultisnips/python.json"
+      },
+      {
+        "language": "typescript",
+        "path": "~/.config/coc/ultisnips/typescript.json"
       }
     ],
     "configuration": {
@@ -45,20 +49,20 @@
     }
   },
   "devDependencies": {
-    "coc-css": ">=1.2.2",
+    "@types/node": "^14.0.1",
+    "coc-css": ">=1.2.3",
     "coc-dictionary": "^1.2.2",
     "coc-eslint": ">=1.2.6",
     "coc-git": ">=1.7.13",
-    "coc-highlight": ">=1.2.5",
     "coc-html": ">=1.2.4",
     "coc-json": ">=1.2.6",
     "coc-lists": ">=1.3.8",
     "coc-python": ">=1.2.12",
-    "coc-sh": ">=0.4.0",
     "coc-snippets": ">=2.1.26",
     "coc-tslint-plugin": ">=1.1.1",
     "coc-tsserver": ">=1.5.1",
-    "coc-vimlsp": ">=0.5.1",
+    "coc-vimlsp": "^0.8.0",
+    "eslint": "^7.0.0",
     "ts-loader": "^7.0.4",
     "typescript": "^3.9.2",
     "webpack": "^4.43.0",
@@ -87,7 +91,7 @@
     "url": "git+https://github.com/farisachugthai/viconf.git"
   },
   "scripts": {
-    "build": "yarn run webpack -dw rplugin/node/coc_tag.js",
+    "build": "yarn run webpack -dw rplugin/node/coc_tag.ts",
     "build:watch": "tsc --watch -p tsconfig.json",
     "clean": "yarn autoclean --force",
     "coc-tsserver": "node ./node_modules/coc-tsserver/bin/tsserverForkStart.js",
@@ -95,7 +99,7 @@
     "lint": "yarn run tslint --fix **.ts",
     "pretest": "echo 'Running tests'",
     "start": "yarn run neovim-node-host",
-    "tagfunc": "node ./rplugin/node/coc_tag.js",
+    "tagfunc": "node ./rplugin/node/coc_tag.ts",
     "tsserver": "node ./node_modules/typescript/bin/tsserver",
     "vimlsp": "yarn run vim-language-server --stdio",
     "watch": "yarn run tsc -w rplugin/node"

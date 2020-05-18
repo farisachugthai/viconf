@@ -357,6 +357,13 @@ def pretty_it(datatype):
     r[:] = str(content).split("\n")
 
 
+prettiers = {
+    "xml": pretty_xml,
+    "json": pretty_json,
+    "yaml": interpret_yaml,
+}
+
+
 def my_plugins():
     """This was way too hard to do in Vimscript and took me 10 seconds to write in python."""
     res = {idx: j for idx, j in enumerate(vim.eval("g:plugs").keys())}
@@ -433,12 +440,6 @@ if __name__ == "__main__":
     buf = VimBuffer(vim)  # pylint:disable=invalid-name
 
     vim_obj = _Vim()
-
-    prettiers = {
-        "xml": pretty_xml,
-        "json": pretty_json,
-        "yaml": interpret_yaml,
-    }
 
     if hasattr(vim, "from_nvim"):
         _patch_nvim(vim_obj)

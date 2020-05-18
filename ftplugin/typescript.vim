@@ -13,7 +13,6 @@ unlet! b:did_indent
 source $VIMRUNTIME/indent/typescript.vim
 
 " Simple Options:
-
   setlocal expandtab tabstop=4 softtabstop=2 shiftwidth=2
   setlocal include=^\\s*[^\/]\\+\\(from\\\|require(\\)\\s*['\"\.]
 
@@ -31,9 +30,16 @@ source $VIMRUNTIME/indent/typescript.vim
   setlocal isfname+=@-@
 
 " Plugins:
-  let b:ale_fixers = get(g:, 'ale_fixers', [])
+  if !has('unix')
+    let g:ale_windows_node_executable_path = fnameescape('C:/Program Files/nodejs/node.exe')
+  endif
+
+  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
+  let b:ale_fixers += ['prettier']
   let b:ale_fixers += ['eslint']
   let b:ale_fixers += ['tslint']
+  let b:ale_linters = get(g:, 'ale_linters["*"]', ['tsserver', 'eslint', 'prettier',])
+
 
 " Original:
   " https://gist.githubusercontent.com/romainl/a50b49408308c45cc2f9f877dfe4df0c/raw/1ab8eb733948c0c89d11553cc0e00f4ab251f31e/typescript.vim

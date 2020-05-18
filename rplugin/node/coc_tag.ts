@@ -1,12 +1,17 @@
+#!/usr/bin/env node
 // @ts-ignore
 const { sources, workspace } = require("coc.nvim");
 const path = require("path");
 const fs = require("fs");
 const util = require("util");
 const readline = require("readline");
+const colors = import * from 'colors' as 'colors';
+
 
 const TAG_CACHE = {};
 const { nvim } = workspace;
+
+console.log('hello'.green); // outputs green text
 
 async function getTagFiles() {
   let files = await nvim.call("tagfiles");
@@ -115,4 +120,3 @@ exports.activate = context => {
     })
   );
 };
-// Vim set ft=typescript:

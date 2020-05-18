@@ -9,7 +9,7 @@
 scriptencoding utf-8
 let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
-" Folds And Diffs: {{{
+" Folds And Diffs:
 set foldopen=insert,jump,block,hor,mark,percent,quickfix,search,tag,undo
 setglobal foldnestmax=10
 " Oddly needs to be set locally?
@@ -29,9 +29,8 @@ if has('patch-8.1.0360') || has('nvim')
   setglobal diffopt+=internal,algorithm:patience
 endif
 " todo: closeoff
-" }}}
 
-" Completions: {{{
+" Completions:
 setglobal wildignorecase fileignorecase
 setglobal wildmode=full:list:longest,full:list
 setglobal wildignore=*~,versions/*,.cache/*,.tox/*,.pytest_cache/*,__pycache__/*,build/*,dist/*,.*mypy**/**
@@ -502,9 +501,10 @@ let g:coc_list_loading_status = "I love undocumented features!"
 function! s:InitCoc() abort
 
   if !exists('g:coc_global_extensions')
-    let g:coc_global_extensions = ['coc-json', 'coc-tsserver', 'coc-python',
-          \'coc-git', 'coc-lists', 'coc-snippets', 'coc-sh',
-          \ 'coc-highlight', 'coc-tslint-plugin']
+    let g:coc_global_extensions = [ 'coc-css',
+          \ 'coc-dictionary', 'coc-eslint', 'coc-git', 'coc-html',
+          \ 'coc-json', 'coc-lists', 'coc-python', 'coc-snippets',
+          \ 'coc-tsserver', 'coc-vimlsp',]
   endif
 
   " Windows setup

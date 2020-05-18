@@ -319,7 +319,8 @@
   "suggest.maxCompleteItemCount": 100,
   "suggest.noselect": true,
   "suggest.removeDuplicateItems": true,
-  "typescript.referencesCodeLens.enable": true,
+  "tslint.packageManager": "yarn",
+  "tsserver.npm": "yarn",
   "typescript.showUnused": true,
   "typescript.suggest.autoImports": true,
   "typescript.suggest.completeFunctionCalls": true

@@ -5,18 +5,18 @@
   " Last Modified: August 02, 2019
 " ============================================================================
 
-function! find_files#build_quickfix_list(lines) abort  " {{{
+function! find_files#build_quickfix_list(lines) abort
   call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
   copen
   cc
-endfunction  " }}}
+endfunction
 
-function! s:make_sentence(lines) abort  " {{{
+function! s:make_sentence(lines) abort
   " *fzf-vim-reducer-example*
   return substitute(join(a:lines), '^.', '\=toupper(submatch(0))', '').'.'
-endfunction  " }}}
+endfunction
 
-function! find_files#plug_help_sink(line)  abort " {{{
+function! find_files#plug_help_sink(line)  abort
   " Call :PlugHelp to use fzf to open a window with all of the plugins
   " you have installed listed and upon pressing enter open the help
   " docs. That's not a great explanation but honestly easier to explain
@@ -31,21 +31,21 @@ function! find_files#plug_help_sink(line)  abort " {{{
   endfor
   tabnew
   execute 'Explore' l:dir
-endfunction  " }}}
+endfunction
 
-function! find_files#buflist() abort  " {{{
+function! find_files#buflist() abort
   redir => s:ls
   silent! ls
   redir END
   return split(s:ls, '\n')
-endfunction  " }}}
+endfunction
 
-function! find_files#bufopen(e) abort  " {{{
+function! find_files#bufopen(e) abort
   execute 'buffer' matchstr(a:e, '^[ 0-9]*')
   return v:true
-endfunction  " }}}
+endfunction
 
-function! find_files#FZFMru(bang) abort  " {{{1
+function! find_files#FZFMru(bang) abort
     call fzf#run(fzf#wrap('history', {
         \ 'source'  :    v:oldfiles,
         \ 'sink'    :   'edit',
@@ -53,9 +53,9 @@ function! find_files#FZFMru(bang) abort  " {{{1
         \ 'down'    :   '40%'},
         \ a:bang))
 
-endfunction  " }}}
+endfunction
 
-function! find_files#FZFGit(bang) abort  " {{{
+function! find_files#FZFGit(bang) abort
   " Remove trailing new line to make it work with tmux splits
   let l:directory = substitute(system('git rev-parse --show-toplevel'), '\n$', '', '')
   if !v:shell_error
@@ -69,9 +69,9 @@ function! find_files#FZFGit(bang) abort  " {{{
   else
       FZF.a:bang
   endif
-endfunction  " }}}
+endfunction
 
-function! find_files#RipgrepFzf(query, fullscreen)  abort   " {{{
+function! find_files#RipgrepFzf(query, fullscreen)  abort
 
   " In the default implementation of `Rg`, ripgrep process starts only once with
   " the initial query (e.g. `:Rg foo`) and fzf filters the output of the process.
@@ -96,9 +96,9 @@ function! find_files#RipgrepFzf(query, fullscreen)  abort   " {{{
   let l:reload_command = printf(l:command_fmt, '{q}')
   let l:spec = {'options': ['--phony', '--ansi', '--query', a:query, '--bind', 'change:reload:'.l:reload_command]}
   call fzf#vim#grep(l:initial_command, 1, fzf#vim#with_preview(l:spec), a:fullscreen)
-endfunction  " }}}
+endfunction
 
-function! find_files#RgSearch(txt) abort  " {{{
+function! find_files#RgSearch(txt) abort
   let l:rgopts = ' '
   if &ignorecase == 1
     let l:rgopts = l:rgopts . '-i '
@@ -115,6 +115,5 @@ function! find_files#RgSearch(txt) abort  " {{{
     redraw!
     echomsg 'No match found for ' . a:txt
   endif
-endfunction  " }}}
+endfunction
 
-" Vim: set fdm=marker:

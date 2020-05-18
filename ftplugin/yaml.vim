@@ -14,7 +14,6 @@ source $VIMRUNTIME/ftplugin/yaml.vim
 source $VIMRUNTIME/indent/yaml.vim
 
 " Options:
-
   setlocal comments=:# commentstring=#\ %s expandtab
   setlocal formatoptions-=t formatoptions+=croql
   setlocal expandtab tabstop=4 shiftwidth=2 softtabstop=2

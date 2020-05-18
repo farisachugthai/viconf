@@ -1,6 +1,9 @@
 # Git Ignore
 # Maintainer: Faris Chugthai
 
+# TS:
+.*tsbuildinfo
+
 .venv
 
 # Sphinx build files: From pandas-website
