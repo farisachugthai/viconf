@@ -11,12 +11,15 @@ import time
 
 import pynvim
 
+
 def get_listed_buffers(nvim_):
     """Get a list of buffers that haven't been deleted. `nvim.buffers` includes
     buffers that have had `:bdelete` called on them and aren't in the buffer
     list, so we have to filter those out.
     """
-    return set(buf.number for buf in nvim_.buffers if nvim_.eval('buflisted(%d)' % buf.number))
+    return set(
+        buf.number for buf in nvim_.buffers if nvim_.eval("buflisted(%d)" % buf.number)
+    )
 
 
 def start():
@@ -25,30 +28,31 @@ def start():
     # needs right now.
     filenames = [
         re.sub(" ", r"\ ", os.path.abspath(arg))
-        for arg in sys.argv[1:] if not arg[0] in ["-", "+"]
+        for arg in sys.argv[1:]
+        if not arg[0] in ["-", "+"]
     ]
 
     nvim_socket = os.environ.get("NVIM_LISTEN_ADDRESS")
     if nvim_socket is None:
         # If we aren't running inside a `:terminal`, just exec nvim.
-        os.execvp('nvim', sys.argv[:])
+        os.execvp("nvim", sys.argv[:])
 
-    nvim = pynvim.attach('socket', path=nvim_socket)
+    nvim = pynvim.attach("socket", path=nvim_socket)
 
     existing_buffers = get_listed_buffers(nvim)
 
-    nvim.command('split')
-    nvim.command('args %s' % ' '.join(filenames))
+    nvim.command("split")
+    nvim.command("args %s" % " ".join(filenames))
 
     new_buffers = get_listed_buffers(nvim).difference(existing_buffers)
 
     for arg in sys.argv:
-        if arg[0] == '+':
+        if arg[0] == "+":
             nvim.command(arg[1:])
 
     # The '-f' flag is a signal that we're in a situation like a `git commit`
     # invocation where we need to block until the user is done with the file(s).
-    if '-f' in sys.argv and len(new_buffers) > 0:
+    if "-f" in sys.argv and len(new_buffers) > 0:
         # The rule here is that the user is 'done' with the opened files when none
         # of them are visible onscreen. This allows for use cases like hitting `:q`
         # on a `git commit` tempfile. However, we can't just poll to see if they're
@@ -59,10 +63,13 @@ def start():
         # hides one of the buffers.
         channel_id = nvim.channel_id
         for buffer in new_buffers:
-            nvim.command((
-                'autocmd BufDelete,BufHidden <buffer=%d> ' +
-                'call rpcnotify(%d, "check_buffers")'
-            ) % (buffer, channel_id))
+            nvim.command(
+                (
+                    "autocmd BufDelete,BufHidden <buffer=%d> "
+                    + 'call rpcnotify(%d, "check_buffers")'
+                )
+                % (buffer, channel_id)
+            )
 
         stay_open = True
         while stay_open:
@@ -78,10 +85,10 @@ def start():
         #  * Clear the autocmds we added, since `bdelete` just hides the buffer and
         #    the autocmds will still be active if the user reopens the file(s).
         #  * Delete each of the buffers we created.
-        nvim.command('argdel *')
+        nvim.command("argdel *")
         for buffer in new_buffers:
-            nvim.command('autocmd! BufDelete,BufHidden <buffer=%d>' % buffer)
-            nvim.command('bdelete! %d' % buffer)
+            nvim.command("autocmd! BufDelete,BufHidden <buffer=%d>" % buffer)
+            nvim.command("bdelete! %d" % buffer)
 
 
 async def client_connected(reader, writer):
@@ -89,10 +96,11 @@ async def client_connected(reader, writer):
     # reader/writer streams.  For example:
     await reader.readline()
 
+
 async def main(host, port):
-    srv = await asyncio.start_server(
-        client_connected, host, port)
+    srv = await asyncio.start_server(client_connected, host, port)
     await srv.serve_forever()
+
 
 if __name__ == "__main__":
     start()

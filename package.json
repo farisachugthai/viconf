@@ -45,6 +45,7 @@
     }
   },
   "devDependencies": {
+    "@types/node": "^14.0.1",
     "coc-css": ">=1.2.2",
     "coc-dictionary": "^1.2.2",
     "coc-eslint": ">=1.2.6",
@@ -61,14 +62,14 @@
     "coc-vimlsp": ">=0.5.1",
     "coc-word": ">=1.2.2",
     "coc-yaml": ">=1.0.4",
-    "coc-yank": ">=1.1.4"
+    "coc-yank": ">=1.1.4",
+    "ts-loader": "^7.0.4",
+    "webpack-cli": "^3.3.11"
   },
   "dependencies": {
-    "@msgpack/msgpack": "^1.9.3",
-    "lodash.defaults": "^4.2.0",
-    "lodash.omit": "^4.5.0",
-    "semver": "^7.1.1",
-    "winston": "3.2.1"
+    "neovim": "^4.8.0",
+    "typescript": "^3.9.2",
+    "webpack": "^4.43.0"
   },
   "directories": {
     "lib": "rplugin/node"
@@ -106,8 +107,5 @@
     "vimlsp": "yarn run vim-language-server --stdio",
     "watch": "yarn run tsc -w rplugin/node"
   },
-  "version": "1.0.0",
-  "dependencies": {
-    "neovim": "^4.8.0"
-  }
+  "version": "1.0.0"
 }

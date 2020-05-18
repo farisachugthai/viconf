@@ -65,8 +65,6 @@ function! ftplugins#typescript_setup() abort
   endif
 endfunction
 
-endfunction
-
 function! ftplugins#get_git_dir() abort
   if !exists('b:git_dir')
     if expand('%:p') =~# '[\/]\.git[\/]modules[\/]'

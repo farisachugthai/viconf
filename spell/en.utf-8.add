@@ -1,4 +1,3 @@
-AICHE
 ALE's
 ALLUSERSPROFILE
 AMD64
@@ -225,8 +224,6 @@ ISO9660
 Implementors
 Importlib
 IntelliSense
-IntelliSense
-IntelliSense
 InteractiveShell
 IronPython
 JQuery
@@ -360,8 +357,6 @@ PowerShell
 Preprocesses
 ProTools
 PurePath
-PyBind11
-PyBind11
 PyBind11
 PyCharm
 PyCon
@@ -1444,7 +1439,6 @@ pyplot
 pypy
 pyqt5
 pyreadline
-pyreadline
 pyrex
 pytest
 python2
@@ -1524,8 +1518,6 @@ ruby
 rufus
 runpy
 runtimepath
-runtimes
-runtimes
 runtimes
 rustup
 rvm
@@ -1702,8 +1694,6 @@ tnoremap
 toctree
 todo
 toolchain
-toolset
-toolset
 toolset
 toolstack
 torbirdy
@@ -1903,10 +1893,7 @@ zenburn
 zim
 zimwiki
 zipapp
-zipapp
 zipfile
-zipfiles
 zipfiles
 zipimport
 zlib
-zsh

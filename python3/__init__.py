@@ -13,6 +13,8 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__).addHandler(logging.StreamHandler())
 
+# root = Path.cwd().parent
+# sys.path.insert(0, root.joinpath("python3").__fspath__())
 
 
 class Options:

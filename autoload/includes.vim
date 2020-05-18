@@ -7,7 +7,7 @@
 
 " See Also: ./py.vim and py#PythonPath
 
-function! includes#TypeScriptIncludeExpression(fname, gf) abort  " {{{
+function! includes#TypeScriptIncludeExpression(fname, gf) abort
     " BUILT-IN NODE MODULES
     " =====================
     " they aren't natively accessible but we can use @types/node if available
@@ -184,9 +184,8 @@ function! includes#TypeScriptIncludeExpression(fname, gf) abort  " {{{
 
   return a:fname . '.d.ts'
 endfunction
-" }}}
 
-function! includes#VimPath() abort  " {{{
+function! includes#VimPath() abort
   " I know you may be thinking, there are no include or defines in a vim file
   " what the hell do you need to muck with the path for.
   " autoloaded functions!
@@ -202,9 +201,9 @@ function! includes#VimPath() abort  " {{{
 
   let &l:path = s:path
   return s:path
-endfunction  " }}}
+endfunction
 
-function! includes#CPath() abort  " {{{
+function! includes#CPath() abort
   let s:path='.,**,,'
 
   if has('unix')
@@ -256,5 +255,5 @@ function! includes#CPath() abort  " {{{
 
   let &l:path = s:path
   return s:path
-endfunction  " }}}
+endfunction
 

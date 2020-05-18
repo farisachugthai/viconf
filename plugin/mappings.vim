@@ -18,19 +18,7 @@
   noremap <Up> gk
   noremap <Down> gj
 
-  " I mess this up constantly thinking that gI does what gi does
-  " *'^* *`^*
-  " '^  `^			To the position where the cursor was the last time
-  " when Insert mode was stopped.  This is used by the |gi| command.
-  " Not set when the |:keepjumps| command modifier was used.
-  inoremap gI gi
-
-  " Literally ` does the same thing as ' but ` remembers column.
-  nnoremap ' `
-
-  " }}}
-
-  " Z Mappings: {{{
+" Z Mappings:
   nnoremap zE <nop>
   nnoremap zH zt
   " Huh so zt is like z<CR> but we stay in the same column
@@ -40,9 +28,8 @@
   " remember i guess
   " nnoremap zM
   nnoremap zL z-
-  " }}}
 
-  " Misc: {{{
+" Misc:
   if executable('htop')
     " Leader -- applications -- htop. Requires nvim for <Cmd> which tmk doesn't exist
     " even in vim8.0+. Also requires htop which more than likely rules out Win32.
@@ -77,18 +64,16 @@
   inoremap <Down> <C-R>=pumvisible() ? "\<lt>C-N>" : "\<lt>Down>"<CR>
   inoremap <Up> <C-R>=pumvisible() ? "\<lt>C-P>" : "\<lt>Up>"<CR>
 
-
   " When typing '#' as the first character in a new line, the indent for that line is removed, the '#'
   " is put in the first column.  The indent is restored for the next line.  If you don't want this,
   " use this mapping:
   " if match(&l:cms, '#')
   "   inoremap # X^H#
   " endif
-  " where ^H is entered with CTRL-V CTRL-H. HOLY SHIT THANK YOU
+  " where ^H is entered with CTRL-H. HOLY SHIT THANK YOU
+  " Doesn't work. Even if &cms isn't #
 
-  " }}}
-
-  " Marks: {{{
+" Marks:
   nnoremap [1 <Cmd>signature#marker#Goto('prev', 1, v:count)<CR>
   nnoremap ]1 <Cmd>signature#marker#Goto('next', 1, v:count)<CR>
   nnoremap [2 <Cmd>signature#marker#Goto('prev', 2, v:count)<CR>
@@ -97,11 +82,19 @@
   nnoremap ]3 <Cmd>signature#marker#Goto('next', 3, v:count)<CR>
   nnoremap [4 <Cmd>signature#marker#Goto('prev', 4, v:count)<CR>
   nnoremap ]4 <Cmd>signature#marker#Goto('next', 4, v:count)<CR>
-  " }}}
 
-  " RSI: {{{
+  " I mess this up constantly thinking that gI does what gi does
+  " '^  `^
+  " To the position where the cursor was the last time
+  " when Insert mode was stopped.  This is used by the |gi| command.
+  " Not set when the |:keepjumps| command modifier was used.
+  inoremap gI gi
+
+  " Literally ` does the same thing as ' but ` remembers column.
+  nnoremap ' `
+
+" RSI:
   function! MapRsi() abort
-
     " Sorry tpope <3
     inoremap        <C-A> <C-O>^
     inoremap        <C-X><C-A> <C-A>
@@ -134,7 +127,6 @@
     noremap! <C-x>2  <Cmd>new<CR>
     noremap! <C-x>5  <Cmd>vnew<CR>
     noremap! <C-x>0  <Cmd>wincmd c<CR>
-
   endfunction
 
   function! AddVileBinding(key, handler)
@@ -145,7 +137,6 @@
     exec 'tnoremap ' . a:key a:handler
     " wait why did i get rid of cnoremap
     exec 'cnoremap ' . a:key a:handler
-
   endfunction
 
   " oh
@@ -181,10 +172,15 @@
   " So this binding can work in any mode so long as the previewwindow is open
   " noremap <M-C-v>
 
-  " }}}
+  function s:GoToLine() abort
+    " Holy shit this works!
+    let s:line = input('Enter line #: ')
+    exec 'normal! ' . s:line . 'G'
+  endfunction
 
-  " Search Mappings: {{{
+  inoremap <M-g> <Cmd>call <SID>GoToLine()<CR>
 
+" Search Mappings:
   " Toggle hlsearch with the same key that `less` does
   nnoremap <M-u> <Cmd>set hlsearch!<CR>
 

@@ -23,5 +23,5 @@ def test_exception_in_threadsafe_call(vim):
     timer.start()
     vim.run_loop(None, None, err_cb=msgs.append)
     assert len(msgs) == 1
-    msgs[0].index('NameError')
-    msgs[0].index('undefined_variable')
+    msgs[0].index("NameError")
+    msgs[0].index("undefined_variable")

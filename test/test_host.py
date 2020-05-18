@@ -13,6 +13,7 @@ import pytest
 def host(vim):
     return ScriptHost(vim)
 
+
 def test_host_imports(vim):
     h = ScriptHost(vim)
     assert h.module.__dict__["vim"]

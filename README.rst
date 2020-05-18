@@ -1,6 +1,3 @@
-========
-README
-========
 
 Imagine you're a Vim user. You're well above the simple beginner
 stages. You've finished Vim Tutor a handful of times. You're read a
@@ -15,7 +12,6 @@ monolithic vimrc file is a phenomenal idea, as the folders in a user's
 
 Directory Layout and Runtimepath
 =================================
-
 How are the folders in a neovim directory tree supposed to be
 laid out?
 
@@ -35,7 +31,6 @@ We can observe this with::
 
 Runtimepath
 -----------
-
 Here's a quick summary of the folders in a standard runtimepath layout.
 
 .. glossary::
@@ -63,7 +58,6 @@ Here's a quick summary of the folders in a standard runtimepath layout.
 
 Syntax
 ~~~~~~~
-
 A similar way of organizing Vim's configuration files exists with the directory
 that dictates syntax highlighting: `after/syntax`_. We also have a fair
 number of files in `syntax`_
@@ -76,7 +70,6 @@ number of files in `syntax`_
 
 So where are my files?
 ----------------------
-
 This produces the weirdest behavior.
 In order to find where files are, one can use a series of functions Vim
 provides for stating the OS. However a fair number of them have clunky
@@ -103,7 +96,6 @@ editing environment for any type of plain text file regardless of platform.
 
 Better defaults for resizing windows
 ====================================
-
 I've been using Vim for 5 years. And at this point I've forgotten most of the
 bindings for resizing windows. They're all difficult to remember, arbitrarily
 chosen, and uncomfortable.
@@ -151,9 +143,7 @@ So let's set it up!:
 
 Working with Plugins
 =====================
-
 Vim-Plug is a highly recommended plugin manager, and the one that I myself use.
-
 Written by Junegunn Choi (also the author of FZF), vim-plug creates a
 simple way of interacting with plugins.
 
@@ -187,7 +177,6 @@ seeing in what order a plugin loads.
 
 Git Subtree
 -----------
-
 Updating vim-plug.
 
 .. code-block:: bash
@@ -197,7 +186,6 @@ Updating vim-plug.
 
 Mappings
 =========
-
 Mappings initially sounds like a simple enough idea as it's generally commonplace
 in other editors.:
 
@@ -312,7 +300,6 @@ tab twice in a row, I want you to start auto-populating the command line
 
 Insert Mode Completion
 ----------------------
-
 Because I can never remember these.
 
 7. Insert mode completion                               *ins-completion*
@@ -356,7 +343,6 @@ Completion can be done for:
 
 FZF in Insert Mode
 ~~~~~~~~~~~~~~~~~~~
-
 For a good portion of these, I've written mappings that correspond to
 their respective FZF functions. In addition I've added shorter variations
 by dropping the redundant :kbd:`C-x`.
@@ -382,7 +368,6 @@ And seemingly nothing else. I think most of those are the bash defaults too!
 
 Asynchronous Buffers
 ====================
-
 .. admonition:: Be careful when working with ``jobstart``.
 
 This function POURS output into the current buf so make sure you're
@@ -457,16 +442,15 @@ Fixed things up perfectly.
 
 Beginners Intro
 ===============
-
 To say Vim has a lot of options, associated files and directories is an
 understatement. But these can be broken down piece by piece to be more
 easily digestible.
 
 First I'll go over setting basic options.
 
+
 Options
 =========
-
 The first and most obvious file is the :file:`init.vim`. We can setup
 the base options like so:
 
@@ -482,9 +466,9 @@ the base options like so:
 | Continuation of settings |                |
 +--------------------------+----------------+
 
+
 let vs. set
 ------------
-
 How do we utilize ``let`` for a built-in vim variables?
 
 .. code-block:: vim
@@ -496,9 +480,9 @@ a variable it recognizes and not defining our own. The single quotes are
 still required; however I find this more manageable than adding a `\\``
 before every single space.
 
+
 ``&virtualedit``
 ------------------
-
 .. code-block:: vim
 
    set virtualedit=all
@@ -509,9 +493,9 @@ spaces are required to the left of the inserted characters to keep
 them in place. Virtual edit mode makes it simple to edit tabular data.
 Turn it off with ``:set virtualedit=.``
 
+
 Diffopts
 ---------
-
 My current ``&diffopt``.::
 
    " Filler lines to keep text synced, 0 lines of context on diffs,
@@ -525,7 +509,6 @@ My current ``&diffopt``.::
 
 Creating Backups
 ================
-
 The defaults are generally pretty good::
 
    setglobal writebackup        " protect against crash-during-write
@@ -536,7 +519,6 @@ Change &backupext and &directory to things you want.
 
 Environment Variables
 =====================
-
 Do not ever redefine :envvar:`$VIMRUNTIME`! This variable is used by both Neovim and
 Vim; however, both define the var differently.
 
@@ -548,9 +530,9 @@ comparison to Vim's /usr/share/vim/runtime/ definition. Therefore, defining `$VI
 as /usr/share/vim/runtime/ in a startup file will cause unexpected behavior
 in Neovim's startup.
 
+
 Extraneous Environment Variables
 --------------------------------
-
 The below is an env var set as a convenient bridge between Ubuntu and Termux
 As a result it messes things up if not set, but there's no reason to halt
 everything. Feel free to discard if you copy/paste my vimrc.
@@ -565,6 +547,7 @@ Added: 05/18/19: Just found out Windows has an envvar ``%SystemRoot%``::
      " Or should I use ALLUSERSPROFILE
      let $_ROOT = expand('$SystemRoot')
    endif
+
 
 .. _`here.`: after/plugin/fzf.vim
 .. _`after/ftplugin/gitcommit.vim`: ./after/ftplugin/gitcommit.vim

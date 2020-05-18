@@ -46,7 +46,6 @@
     "help",
     "html"
   ],
-  "coc.source.tags.priority": 80,
   "coc.source.word.priority": 30,
   "coc.source.word.shortcut": "Coc-Word: ",
   "codeLens.enable": true,
@@ -55,11 +54,9 @@
   "diagnostic.filetypeMap": {
     "default": "bufferType"
   },
-  "diagnostic.joinMessageLines": true,
   "diagnostic.level": "warning",
   "diagnostic.messageTarget": "float",
   "diagnostic.refreshOnInsertMode": true,
-  "diagnostic.refreshOnSave": true,
   "javascript.referencesCodeLens.enable": true,
   "javascript.showUnused": true,
   "json.format.enable": true,
@@ -273,17 +270,6 @@
     "--normal",
     "--auto-preview"
   ],
-  "list.source.yank.defaultArgs": [
-    "preview"
-  ],
-  "list.source.yank.defaultOptions": [
-    "--top",
-    "--tab",
-    "--ignore-case",
-    "--regex",
-    "--normal",
-    "--auto-preview"
-  ],
   "python.analysis.diagnosticEnabled": true,
   "python.analysis.diagnosticPublishDelay": 300,
   "python.analysis.downloadChannel": "daily",
@@ -368,16 +354,5 @@
   "vimlsp.indexes.count": 3,
   "vimlsp.indexes.runtimepath": true,
   "vimlsp.suggest.fromRuntimepath": true,
-  "vimlsp.suggest.fromVimruntime": true,
-  "workspace.ignoredFiletypes": [
-    "markdown",
-    "log",
-    "txt",
-    "help",
-    "xonsh"
-  ],
-  "yank.enableCompletion": true,
-  "yank.limit": 30,
-  "yank.list.maxsize": 300,
-  "yank.priority": 95
+  "vimlsp.suggest.fromVimruntime": true
 }

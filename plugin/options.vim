@@ -17,13 +17,13 @@ setglobal foldnestmax=10
 " Automatically close all folds from the beginning.
 setglobal foldlevelstart=99
 " Everything is a fold even if it's one line
-setglobal foldminlines=0
+set foldminlines=0
 " And yes even if it's a comment
 setglobal foldignore=
 " Automatically open and close folds as i move out and in them.
 " setglobal foldopen=all foldclose=all
 " nah this is really annoying
-setglobal diffopt=filler,context:0,iblank,iwhite,iwhiteeol,indent-heuristic,hiddenoff,foldcolumn:1,horizontal
+setglobal diffopt=filler,context:0,indent-heuristic,hiddenoff,foldcolumn:1,horizontal
 
 if has('patch-8.1.0360') || has('nvim')
   setglobal diffopt+=internal,algorithm:patience

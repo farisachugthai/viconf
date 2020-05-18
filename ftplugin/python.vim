@@ -5,159 +5,111 @@
     " Last Modified: May 12, 2020
 " ============================================================================
 
-" Globals: {{{
+" Globals:
 let g:python_highlight_all = 1
 let g:python_space_error_highlight = 1
 
+" TODO: setting these 100% causes bugs
 " Indent after an open paren: >
-let g:pyindent_open_paren = 'shiftwidth() * 2'
+" let g:pyindent_open_paren = 'shiftwidth() * 2'
 " Indent after a nested paren: >
-let g:pyindent_nested_paren = 'shiftwidth()'
+" let g:pyindent_nested_paren = 'shiftwidth()'
 " Indent for a continuation line: >
-let g:pyindent_continue = 'shiftwidth() * 2'
+" let g:pyindent_continue = 'shiftwidth() * 2'
 let g:pydoc_executable = 1
 
-" }}}
-
-" Filetype Specific Options: {{{
-if has('win32') || has('win64')
-  setlocal keywordprg=python\ -m\ pydoc\
-else
-  setlocal keywordprg=pydoc
-endif
-
-setlocal omnifunc=python3complete#Complete
-source $VIMRUNTIME/ftplugin/python.vim
-
-if exists('b:did_indent') | unlet! b:did_indent | endif
-source $VIMRUNTIME/indent/python.vim
-
-" setlocal nowrap
-
-" setlocal nolinebreak  " Dont set this on itll create syntaxerors
-" setlocal textwidth=88
-setlocal tagcase=smart
-setlocal tabstop=4
-
-" setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class
-" setlocal nolisp		" Make sure lisp indenting doesn't supersede us
-
-" also let's know where the line needs to end visually but not invoke the
-" linters to react.
-setlocal colorcolumn=80,120
-setlocal foldmethod=indent
-setlocal foldlevelstart=0 foldignore=
-
-setlocal tags=tags,**,$HOME/**
-setlocal suffixesadd=.py,pyi,__init__.py
-setlocal suffixes+=.pyc
-
-setlocal isfname+=.
-" It get kinda annoying movin around without _ as a word delimiter
-setlocal iskeyword-=.,_
-
-setlocal shiftround
-setlocal cindent
-let &l:path = py#PythonPath()
-
-" Dude the original ftplugin doesn't set up match words. why are the vim
-" ftplugins so fucking sparse?
-if exists('loaded_matchit')
-  " Use case with matchit.
-  let b:match_ignorecase = 0
-
-  " why dont more ftplugins utilize matchit?
-  " oh it's because this is hard as fuck
-  " You can use |zero-width| patterns such as |\@<=| and |\zs|.  (The latter has
-  " not been thouroughly tested in matchit.vim.)  For example, if the keyword "if"
-  " must occur at the start of the line, with optional white space, you might use
-  " the pattern "\(^\s*\)\@<=if" so that the cursor will end on the "i" instead of
-  " at the start of the line.
-  "
-  " UGH FUCK THIS DOESNT WORK
-  let b:match_words = '\(^\s*\)\@<=\<if\>:\<elif\>:\<else\>,'
-                  \ . '\(^\s*\)\@<=\<def\>:\<return\>,'
-
-  " let b:match_words = '\<if\>:\<elif\>:\<else\>,'
-  "                 \ . '\<repeat\>:\<until\>'
-
-  " let b:match_words = '\<if\>:\<elif\>:\<else\>,'
-
-endif
-" }}}
-
-" Mappings: {{{
-
-" Don't know how I haven't done this yet.
-" TODO: Add ranges so we can do py3do on lines
-noremap <buffer> <F5> <Cmd>py3f %<CR>
-noremap! <buffer> <F5> <Cmd>py3f %<CR>
-
-" TODO: should we do the xnoremap part too?
-nnoremap <buffer> g<C-]> <Cmd>call pydoc_help#Pydoc('', expand('<cfile>'))<CR>
-nnoremap <buffer> gK <Cmd>PydocShow<CR>
-
-
-" Lol spacemacs had me do this a few times
-nnoremap <buffer> ,eb <Cmd>py3f %<CR>
-" }}}
-
-" Commands And Cleanup: {{{
-" if executable('yapf')
-"   command! -buffer -complete=buffer -nargs=0 YAPF call py#YAPF()
-"   command! -buffer -complete=buffer -nargs=0 YAPFI exec '!yapf -i %'
-"   command! -buffer -complete=buffer -nargs=0 YAPFD cexpr! exec '!yapf -d %'
-
-" else
-"   if executable('autopep8')
-"     command! -nargs=0 -complete=buffer -buffer Autopep8 cexpr! exec '!autopep8 -i ' . shellescape(<q-args>) . expand('%')
-"     command! -nargs=0 Autopep8 exec '!autopep8 -i %'
-"   endif
-" endif
-
-" Just tried this and it worked! So keep checking :CocCommand output
-if !empty('g:did_coc_loaded')
-  command! -nargs=* -bar CocPython call CocActionAsync('runCommand', 'python.startREPL', shellescape(<q-args>))
-endif
-
-" Use standard compiler settings unless user wants otherwise
-if !exists("current_compiler")
-  if executable('pytest')
-  compiler pytest
-  setlocal makeprg=pytest\ -q\ %
+" Filetype Specific Options:
+  if has('win32') || has('win64')
+    setlocal keywordprg=python\ -m\ pydoc\
   else
-    " note this compiler actually setting mp for us too!
-    compiler pylint
+    setlocal keywordprg=pydoc
   endif
-endif
-" }}}
 
-if !exists('b:loaded_ale_python') " {{{
-  let b:ale_linters = ['flake8', 'pydocstyle', 'pyls']
-  let b:ale_linters_explicit = 1
-  let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
-  let b:ale_fixers += [ 'reorder-python-imports' ]
-  let b:ale_fixers += ['autopep8']
-  let b:ale_fixers += ['isort']
-  let b:loaded_ale_python = 1
-endif
-" }}}
+  setlocal omnifunc=python3complete#Complete
+  source $VIMRUNTIME/ftplugin/python.vim
+  if exists('b:did_indent')
+    silent unlet! b:did_indent
+  endif
+  source $VIMRUNTIME/indent/python.vim
 
-let b:undo_ftplugin .= '|setlocal lbr< tw< cms<'
-      \ . '|setlocal et< sts< ts< su< sw< cc< fdm<'
-      \ . '|setlocal fdls< fdi< kp< sr< sua< isf< ep<'
-      \ . '|setlocal fp< path< cinw< mp< efm<'
-      \ . '|setlocal isk< tags< com< inc< inex<'
-      \ . '|setlocal indk< inde ofu< ai< cin< cink<'
-      \ . '|silent! unmap <buffer> <F5>'
-      \ . '|silent! nunmap <buffer> K'
-      \ . '|silent! unmap! <buffer> <F5>'
-      \ . '|silent! nunmap <buffer> ,eb'
-      \ . '|unlet! b:undo_ftplugin'
-      \ . '|unlet! b:did_ftplugin'
-      \ . '|unlet! b:did_indent'
-      \ . '|unlet! b:ale_linters'
-      \ . '|unlet! b:ale_fixers'
-      \ . '|unlet! b:ale_linters_explicit'
-" }}}
-"
+  setlocal tagcase=smart
+  setlocal tabstop=4
+  setlocal colorcolumn=80,120
+  setlocal foldmethod=indent
+  setlocal foldlevelstart=0 foldignore=
+
+  setlocal tags=tags,**,$HOME/**
+  setlocal suffixesadd=.py,pyi,__init__.py
+  setlocal suffixes+=.pyc
+
+  setlocal isfname+=.
+  setlocal iskeyword-=.,_
+  setlocal shiftround
+  setlocal cindent
+  let &l:path = py#PythonPath()
+
+  if exists('loaded_matchit')
+    " Use case with matchit.
+    let b:match_ignorecase = 0
+
+    let b:match_words = '\(^\s*\)\@<=\<if\>:\<elif\>:\<else\>,'
+                    \ . '\(^\s*\)\@<=\<def\>:\<return\>,'
+
+  endif
+
+" Mappings:
+  noremap <buffer> <F5> <Cmd>py3f %<CR>
+  noremap! <buffer> <F5> <Cmd>py3f %<CR>
+
+  " TODO: should we do the xnoremap part too?
+  nnoremap <buffer> g<C-]> <Cmd>call pydoc_help#Pydoc('', expand('<cfile>'))<CR>
+  nnoremap <buffer> gK <Cmd>PydocShow<CR>
+
+  " Lol spacemacs had me do this a few times
+  nnoremap <buffer> ,eb <Cmd>py3f %<CR>
+
+" Commands And Cleanup:
+  if !empty('g:did_coc_loaded')
+    command! -nargs=* -bar CocPython call CocActionAsync('runCommand', 'python.startREPL', shellescape(<q-args>))
+  endif
+
+  " Use standard compiler settings unless user wants otherwise
+  if !exists("current_compiler")
+    if executable('pytest')
+    compiler pytest
+    setlocal makeprg=pytest\ -q\ %
+    else
+      " note this compiler actually setting mp for us too!
+      compiler pylint
+    endif
+  endif
+
+  if !exists('b:loaded_ale_python')
+    let b:ale_linters = ['flake8', 'pydocstyle', 'pyls']
+    let b:ale_linters_explicit = 1
+    let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
+    let b:ale_fixers += [ 'reorder-python-imports' ]
+    let b:ale_fixers += ['autopep8']
+    let b:ale_fixers += ['isort']
+    let b:loaded_ale_python = 1
+  endif
+
+let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
+      \. '|setlocal lbr< tw< cms<'
+      \. '|setlocal et< sts< ts< su< sw< cc< fdm<'
+      \. '|setlocal fdls< fdi< kp< sr< sua< isf< ep<'
+      \. '|setlocal fp< path< cinw< mp< efm<'
+      \. '|setlocal isk< tags< com< inc< inex<'
+      \. '|setlocal indk< inde ofu< ai< cin< cink<'
+      \. '|silent! unmap <buffer> <F5>'
+      \. '|silent! nunmap <buffer> K'
+      \. '|silent! unmap! <buffer> <F5>'
+      \. '|silent! nunmap <buffer> ,eb'
+      \. '|unlet! b:undo_ftplugin'
+      \. '|unlet! b:did_ftplugin'
+      \. '|unlet! b:did_indent'
+      \. '|unlet! b:ale_linters'
+      \. '|unlet! b:ale_fixers'
+      \. '|unlet! b:ale_linters_explicit'
+      \. '|unlet! b:loaded_ale_python'
+

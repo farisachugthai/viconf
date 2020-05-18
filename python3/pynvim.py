@@ -21,8 +21,6 @@ then not make synchronous Neovim requests, but it can make asynchronous
 requests, i.e. passing async_=True.
 
 """
-
-
 __package__ = "pynvim"
 # __path__ = [__file__]
 __docformat__ = "reStructuredText"
@@ -66,7 +64,6 @@ try:
 except ImportError:
     from msgpack.fallback import Packer, unpackb, Unpacker
 
-
 if sys.version_info >= (3, 4):
     from importlib.machinery import PathFinder
 else:
@@ -81,7 +78,6 @@ if sys.version_info <= (3, 7):
 
 
 global vim
-
 try:
     import vim  # noqa
 except ImportError:
@@ -179,20 +175,18 @@ except ImportError:
 # Globals:
 # ***
 # BUG: don't hardcode this its an actual function we can check
-# ***
 unicode_errors_default = sys.getfilesystemencodeerrors()
 
 default_int_handler = signal.getsignal(signal.SIGINT)
 mp_logger = multiprocessing.get_logger()
 multiprocessing.log_to_stderr(logging.WARNING)
+
 # When signals are restored, the event loop library may reset SIGINT to SIG_DFL
 # which exits the program. To be able to restore the python interpreter to it's
 # default state, we keep a reference to the default handler
 main_thread = threading.current_thread()
 locale.setlocale(locale.LC_ALL, "")
 host_method_spec = {"poll": {}, "specs": {"nargs": 1}, "shutdown": {}}
-
-
 
 # Pynvim __init__:
 
@@ -265,8 +259,9 @@ def start_host(session=None, load_plugins=True, plugins=None):
     return host
 
 
-def _convert_str_to_session(session_type, address=None, port=None, path=None, argv=None, decode=None):
-
+def _convert_str_to_session(
+    session_type, address=None, port=None, path=None, argv=None, decode=None
+):
     if session_type not in ["socket", "tcp", "stdio", "child"]:
         raise NvimError(
             '%s given. Must be one of "socket", "tcp", "stdio", "child"' % session_type
@@ -280,7 +275,6 @@ def _convert_str_to_session(session_type, address=None, port=None, path=None, ar
     elif session_type == "child":
         session = child_session(argv)
     return session
-
 
 
 def attach(session_type, address=None, port=None, path=None, argv=None, decode=None):
@@ -329,9 +323,11 @@ def attach(session_type, address=None, port=None, path=None, argv=None, decode=N
         if session_type not in ["socket", "tcp", "stdio", "child"]
 
     """
-    return Nvim.from_session(_convert_str_to_session(
-        session_type,  address=None, port=None, path=None, argv=None, decode=None)
-        ).with_decode(decode)
+    return Nvim.from_session(
+        _convert_str_to_session(
+            session_type, address=None, port=None, path=None, argv=None, decode=None
+        )
+    ).with_decode(decode)
 
 
 def setup_logging(name: AnyStr = None, level: int = None, disable_asyncio_logging=True):
@@ -393,10 +389,8 @@ def setup_logging(name: AnyStr = None, level: int = None, disable_asyncio_loggin
     default_log_format = "[ %(name)s : %(relativeCreated)d :] %(levelname)s : %(module)s : --- %(message)s "
     formatter = logging.Formatter(fmt=default_log_format, datefmt=log_datefmt)
     handler.setFormatter(formatter)
-
     logger.addHandler(handler)
     logger.root.addHandler(handler)
-
     if not disable_asyncio_logging:
         return logger
     if len(asyncio.log.logger.root.handlers) > 0:
@@ -432,6 +426,7 @@ def multiprocess_setup_logging(level=30):
 
 
 # util:
+
 
 def get_documentation(word):
     """Search documentation and append to current buffer."""
@@ -588,8 +583,6 @@ def check_async(async_, kwargs, default):
         return kwargs.pop("async")
     else:
         return default
-
-
 
 
 # plugin/decorators:
@@ -771,6 +764,7 @@ def decode(mode=unicode_errors_default):
 
     return dec
 
+
 # api/common:Remote:
 
 
@@ -842,7 +836,6 @@ class Remote(object):
 
 
 # msgpack_rpc.session:
-
 
 
 class ErrorResponse(NvimError):
@@ -1000,6 +993,7 @@ class Session(object):
         inside greenlets.
         """
         import greenlet
+
         self._request_cb = request_cb
         self._notification_cb = notification_cb
         self._is_running = True
@@ -1030,9 +1024,9 @@ class Session(object):
         """Close the event loop."""
         self._async_session.close()
 
-
     def _yielding_request(self, method, args):
         import greenlet
+
         gr = greenlet.getcurrent()
         parent = gr.parent
 
@@ -1278,7 +1272,7 @@ class Nvim(object):
         from msgpack import ExtType
 
     def _from_nvim(self, obj, decode=None):
-        warnings.warn(DeprecationWarning('decode is ignored'))
+        warnings.warn(DeprecationWarning("decode is ignored"))
         if isinstance(obj, ExtType):
             cls = self.types[obj.code]
             return cls(self, (obj.code, obj.data))
@@ -1493,7 +1487,6 @@ class Nvim(object):
 
         """
         return self.request("nvim_strwidth", string)
-
 
     def list_runtime_paths(self):
         """Return a list of paths contained in the 'runtimepath' option."""
@@ -1714,7 +1707,7 @@ class BufferNvimBase(Nvim):
             super().from_session(session, **kwargs)
         else:
             super().__init__(
-                    channel_id, metadata, types, decode=decode, err_cb=err_cb, **kwargs
+                channel_id, metadata, types, decode=decode, err_cb=err_cb, **kwargs
             )
 
 
@@ -1856,33 +1849,34 @@ class LuaModule:
 
     def __init__(self):
         import textwrap
-        self.lua_module = textwrap.dedent("""
+
+        self.lua_module = textwrap.dedent(
+            """
     local a = vim.api
     local function update_highlights(buf, src_id, hls, clear_first, clear_end)
-  if clear_first ~= nil then
-      a.nvim_buf_clear_highlight(buf, src_id, clear_first, clear_end)
-  end
-  for _,hl in pairs(hls) do
-    local group, line, col_start, col_end = unpack(hl)
-    if col_start == nil then
-      col_start = 0
+    if clear_first ~= nil then
+        a.nvim_buf_clear_highlight(buf, src_id, clear_first, clear_end)
     end
-    if col_end == nil then
-      col_end = -1
+    for _,hl in pairs(hls) do
+        local group, line, col_start, col_end = unpack(hl)
+        if col_start == nil then
+        col_start = 0
+        end
+        if col_end == nil then
+        col_end = -1
+        end
+        a.nvim_buf_add_highlight(buf, src_id, group, line, col_start, col_end)
     end
-    a.nvim_buf_add_highlight(buf, src_id, group, line, col_start, col_end)
-  end
     end
 
     local chid = ...
     local mod = {update_highlights=update_highlights}
     _G["_pynvim_"..chid] = mod
-    """)
+    """
+        )
 
 
 lua_module = LuaModule().lua_module
-
-
 
 # plugin/scripthost:
 
@@ -1956,6 +1950,7 @@ def hide_stdio():
         sys.stdout = sys.__stdout__
         sys.stderr = sys.__stderr__
 
+
 @plugin
 class ScriptHost:
     """Provides an environment for running python plugins created for Vim."""
@@ -1965,7 +1960,6 @@ class ScriptHost:
 
         Moved the self.nvim = nvim to the ``__init__`` so that :meth:`setup`
         doesn't require parameters anymore.
-
         Set import hooks and global streams.
 
         This will add import hooks for importing modules from runtime
@@ -1989,8 +1983,9 @@ class ScriptHost:
         self.legacy_vim = LegacyVim.from_nvim(nvim)
         exec("import vim", globals(), locals())
         sys.modules["vim"] = self.legacy_vim
-
+        exec("import vim", self.module.__dict__)
         import platform
+
         if not platform.platform().startswith("Win"):
             self.handle_dirchanged(self.nvim)
 
@@ -2194,7 +2189,6 @@ class RedirectStream(io.TextIOWrapper):
     # def fileno(self):
     # TODO
     def open(file, *pargs, **kwargs):
-
         if isinstance(file, PathLike):
             file = fspath(file)
         return io.open(file, *pargs, **kwargs)
@@ -2250,7 +2244,7 @@ class VimPathFinder:
 
     def __init__(self, fullname, path=None):
         self.fullname = fullname
-        self.path = path if path is not None else''
+        self.path = path if path is not None else ""
 
     @classmethod
     def find_module(cls, fullname, oldtail, path):
@@ -2273,6 +2267,7 @@ def find_spec(fullname, path=None, target=None):
     if PathFinder is not None:
         return PathFinder.find_spec(fullname, path=path, target=target)
     # else VimPathFinder().find_module()
+
 
 # API/buffer:
 
@@ -2497,7 +2492,7 @@ class Range(object):
             start = self.start
         if end is None:
             end = self.end
-        self._buffer[start: end + 1] = lines
+        self._buffer[start : end + 1] = lines
 
     def __iter__(self):
         for i in range(self.start, self.end + 1):
@@ -2680,7 +2675,7 @@ class RemoteSequence(UserList):
         """Return a sequence item by index."""
         if not isinstance(idx, slice):
             return self._fetch()[idx]
-        return self._fetch()[idx.start: idx.stop]
+        return self._fetch()[idx.start : idx.stop]
 
     def __iter__(self):
         """Return an iterator for the sequence."""
@@ -2921,11 +2916,11 @@ class AsyncSession(MsgpackStream):
     requests and notifications.
 
     """
+
     # TODO: integrate this in correctly
     # self.loop = loop if loop is not None else get_event_loop_policy().new_event_loop()
     # also it should be a class attribute as every instance should
     # probably be accessing the same loop.
-
 
     def __init__(self, event_loop=None, _message_cb=None, msgpack_stream=None):
         """Wrap `msgpack_stream` on a msgpack-rpc interface."""
@@ -2939,7 +2934,6 @@ class AsyncSession(MsgpackStream):
             1: self._on_response,
             2: self._on_notification,
         }
-        # TODO: integrate this in correctly
         # self._enum_handlers = SessionHandlers()
         # self.loop = msgpack_stream.loop
         super().__init__(event_loop, _message_cb)
@@ -3319,7 +3313,9 @@ class BaseEventLoop(_PlatformSpecificLoop):
     def register(self, other):
         pass
 
+
 # mspack_rpc.event_loop.asyncio:
+
 # Triple subclassed?
 
 
@@ -3338,6 +3334,7 @@ class AsyncioEventLoop(BaseEventLoop, asyncio.SubprocessProtocol, asyncio.Protoc
         Review the `asyncio.events.EventLoop.subprocess_exec`.
 
     """
+
     _closed = False
 
     _fact = None  # TODO
@@ -3580,6 +3577,7 @@ class AsyncioEventLoop(AsyncioBaseEventLoop):
 # msgpack.__init__:
 # Keep below asyncio mod
 
+
 def session(transport_type="stdio", *args, **kwargs) -> Session:
     """Msgpack-rpc subpackage.
 
@@ -3624,6 +3622,7 @@ def stdio_session(*args: list, **kwargs: dict) -> Session:
 def child_session(argv=None):
     """Create a msgpack-rpc session from a new Nvim instance."""
     return session("child", argv)
+
 
 # api.window:
 
@@ -3737,6 +3736,7 @@ class Tabpage(Remote):
 
 
 # plugin/host:
+
 
 class Host:
     """Nvim host for python plugins.
@@ -3897,7 +3897,6 @@ class Host:
         handlers = []
         self._discover_classes(module, handlers, path)
         self._discover_functions(module, handlers, path, False)
-
         if not handlers:
             error("{} exports no handlers".format(path))
         self._loaded[path] = {"handlers": handlers, "module": module}
@@ -4019,6 +4018,7 @@ class Host:
             nvim = nvim.with_decode(decode)
         return nvim
 
+
 # msgpack_rpc.event_loop.pyuv:
 
 
@@ -4041,7 +4041,6 @@ class UvEventLoop(BaseEventLoop):
         # warnings.warn("pyuv not installed!")
         pyuv = None
 
-
     _connection_error = None
     _callbacks = deque()
     _error_stream = None
@@ -4051,14 +4050,12 @@ class UvEventLoop(BaseEventLoop):
         self._loop = pyuv.Loop.default_loop()
         sys.excepthook = self._loop.eventhook
         self._async = pyuv.Async(self._loop, self._on_async)
-
         self._connection_error = None
         self._error_stream = None
         self._callbacks = deque()
-        self.transport_type = transport_type if transport_type is not None else "socket"
         # kinda cant call this for the time being. whats the transport
         # type to pass to super?
-        super().__init__(transport_type)
+        # super().__init__(*args)
 
     def __repr__(self):
         return f"{self.__class__.__name__}"
@@ -4179,12 +4176,14 @@ class UvEventLoop(BaseEventLoop):
 EventLoop = UvEventLoop
 
 
-import gc   # noqa
+import gc  # noqa
+
 gc.collect()
 
 if __name__ == "__main__":
     from py._path.local import LocalPath
-    f = LocalPath(os.path.abspath(__file__))
-    f.pyimport()
+
+    # f = LocalPath(os.path.abspath(__file__))
+    # f.pyimport()
 
 # Vim: set fdm=indent fdls=0:

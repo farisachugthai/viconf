@@ -32,9 +32,11 @@ call htmlcomplete#DetectOmniFlavor()
 " From the help docs on matchit. Not gonna check for existence since we
 " should've gotten theirs. Takeaway lesson. Use .\{-} as often as necessary.
 " .* will fuck you.
-let b:match_words+='<.\{-}>:<[^>]*>'
+let b:match_words.='<.\{-}>:<[^>]*>'
 
-call ftplugins#ALE_Html_Conf()
+let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
+" he checks for executability too let's say fuck it
+let b:ale_fixers += ['prettier', 'stylelint', 'csslint']
 
 " Official ftplugin doesn't put did_ftplugin in the undo wth
 let b:undo_ftplugin = get(b:, 'undo_ftplugin', 'exe')

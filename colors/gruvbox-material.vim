@@ -16,39 +16,37 @@ if exists('syntax_on')
   syntax reset
   syntax on
 endif
-
 let g:colors_name = 'gruvbox-material'
 
 " Meat and Potatoes: The ColorScheme:
 
   let g:terminal_ansi_colors = [
                   \ '#665c54', '#ea6962', '#a9b665', '#e78a4e',
-                            \ '#7daea3', '#d3869b', '#89b482', '#dfbf8e',
-                            \ '#928374', '#ea6962', '#a9b665', '#e3a84e',
+                  \ '#7daea3', '#d3869b', '#89b482', '#dfbf8e',
+                  \ '#928374', '#ea6962', '#a9b665', '#e3a84e',
                   \ '#7daea3', '#d3869b', '#89b482', '#dfbf8e',
                   \ ]
 
   if has('nvim')
-  let g:terminal_color_0 = '#665c54'
-  let g:terminal_color_1 = '#ea6962'
-  let g:terminal_color_2 = '#a9b665'
-  let g:terminal_color_3 = '#e78a4e'
-  let g:terminal_color_4 = '#7daea3'
-  let g:terminal_color_5 = '#d3869b'
-  let g:terminal_color_6 = '#89b482'
-  let g:terminal_color_7 = '#dfbf8e'
-  let g:terminal_color_8 = '#928374'
-  let g:terminal_color_9 = '#ea6962'
-  let g:terminal_color_10 = '#a9b665'
-  let g:terminal_color_11 = '#e3a84e'
-  let g:terminal_color_12 = '#7daea3'
-  let g:terminal_color_13 = '#d3869b'
-  let g:terminal_color_14 = '#89b482'
-  let g:terminal_color_15 = '#dfbf8e'
+    let g:terminal_color_0 = '#665c54'
+    let g:terminal_color_1 = '#ea6962'
+    let g:terminal_color_2 = '#a9b665'
+    let g:terminal_color_3 = '#e78a4e'
+    let g:terminal_color_4 = '#7daea3'
+    let g:terminal_color_5 = '#d3869b'
+    let g:terminal_color_6 = '#89b482'
+    let g:terminal_color_7 = '#dfbf8e'
+    let g:terminal_color_8 = '#928374'
+    let g:terminal_color_9 = '#ea6962'
+    let g:terminal_color_10 = '#a9b665'
+    let g:terminal_color_11 = '#e3a84e'
+    let g:terminal_color_12 = '#7daea3'
+    let g:terminal_color_13 = '#d3869b'
+    let g:terminal_color_14 = '#89b482'
+    let g:terminal_color_15 = '#dfbf8e'
   endif
 
 " Base Colors:
-
   hi White guifg=#ffffff guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermbg=NONE
   hi LightGrey guifg=#a89984 guibg=NONE guisp=NONE gui=NONE cterm=NONE
   hi Grey guifg=#928374 guibg=NONE guisp=NONE gui=NONE cterm=NONE
@@ -71,7 +69,6 @@ let g:colors_name = 'gruvbox-material'
   hi PurpleBold guifg=#d3869b guibg=NONE guisp=NONE gui=bold cterm=bold
 
 " Base HL Groups:
-
   hi Normal guifg=#dfbf8e guibg=#1d2021 guisp=NONE gui=NONE cterm=NONE ctermbg=234
   hi DiffText guifg=NONE guibg=#1d2021 guisp=NONE gui=reverse cterm=reverse ctermbg=234
   hi EndOfBuffer guifg=#282828 guibg=#1d2021 guisp=NONE gui=NONE cterm=NONE ctermbg=234
@@ -95,6 +92,7 @@ let g:colors_name = 'gruvbox-material'
   hi SignColumn guifg=NONE guibg=#282828 guisp=NONE gui=NONE cterm=NONE ctermbg=242
   hi StatusLineNC guifg=#a89984 guibg=#282828 guisp=NONE gui=NONE cterm=NONE ctermbg=242
   hi StatusLineTermNC guifg=#a89984 guibg=#282828 guisp=NONE gui=NONE cterm=NONE ctermbg=242
+
   hi Conceal guifg=#7daea3 guibg=NONE guisp=NONE gui=NONE cterm=NONE
   hi Cursor guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
   hi lCursor guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
@@ -187,15 +185,17 @@ let g:colors_name = 'gruvbox-material'
   " I saw this at `:he group-name` so idk man
   hi! link SpecialComment SpecialChar
 
-  if has('nvim')  " {{{
+  if has('nvim')
     " How does a nice light blue sound?
     hi! NvimInternalError guibg=#1d2021 ctermfg=108 ctermbg=234 gui=reverse guifg=#8ec0e1 guisp=NONE
     hi! link nvimAutoEvent   vimAutoEvent
     hi! link nvimHLGroup     vimHLGroup
     hi! link NvimIdentifierKey Identifier
-    hi! link nvimInvalid Exception
-    hi! link nvimMap vimMap
+    hi! link nvimInvalid     Exception
+    hi! link nvimMap         vimMap
     hi! link nvimUnmap       vimUnmap
+    hi! link NvimIdentifier  Identifier
+    hi! link NvimString      BlueBold
 
     hi! link TermCursor Cursor
     hi TermCursorNC ctermfg=237 ctermbg=223 guifg=#3c3836 guibg=#ebdbb2 guisp=NONE cterm=NONE gui=NONE
@@ -213,9 +213,7 @@ let g:colors_name = 'gruvbox-material'
   endif
 
 " Plugins:
-
   " NERDTree:
-
     hi! link NERDTreeBookmarks Typedef
     hi! link NERDTreeBookmarksLeader Conceal
     hi! link NERDTreeCWD Underlined
@@ -602,13 +600,12 @@ let g:colors_name = 'gruvbox-material'
     hi! link cssVendor Comment
     hi! link cssVendor White
 
-  " Man.vim:
+  " Man:
     highlight! link manTitle          Title
     highlight! link manSectionHeading Statement
     highlight! link manOptionDesc     Constant
     highlight! link manReference      PreProc
     highlight! link manSubHeading     Function
-
     highlight! link manUnderline Underlined
     highlight! link manBold YellowBold
     highlight! link manItalic htmlItalic
@@ -650,28 +647,46 @@ let g:colors_name = 'gruvbox-material'
       hi! link netrwCopyTgt StorageClass
     endif
 
-    hi! link netrwDateSep Delimiter
-    hi! link netrwDir Directory
-    hi! link netrwExe Macro
-    hi! link netrwGray Folded
+   " !syntax highlighting (see :he g:netrw_special_syntax)
+    hi! link netrwBak      netrwGray
+    hi! link netrwCmdSep   Delimiter
+    hi! link netrwComma    netrwComment
+    hi! link netrwCompress netrwGray
+    hi! link netrwCoreDump WarningMsg
+    hi! link netrwData     DiffChange
+    hi! link netrwDateSep  Delimiter
+    hi! link netrwDir      Directory
+    hi! link netrwExe      PreProc
+    hi! link netrwGray     Folded
+    hi! link netrwHdr      netrwPlain
     hi! link netrwHelpCmd Delimiter
-    hi! link netrwHide Conceal
+    hi! link netrwHide     netrwComment
     hi! link netrwHidePat Folded
-    hi! link netrwLib Directory
-    hi! link netrwLink Underlined
-    hi! link netrwList PreCondit
-    hi! link netrwPlain String
-    hi! link netrwQHTopic Number
+    hi! link netrwHideSep  netrwComment
+    hi! link netrwLex      netrwPlain
+    hi! link netrwLib      DiffChange
+    hi! link netrwLink     Special
+    hi! link netrwList     PreCondit
+    hi! link netrwMakefile DiffChange
+    hi! link netrwMarkFile TabLineSel
+    hi! link netrwObj      netrwGray
+    hi! link netrwPix      Special
+    hi! link netrwPlain    String
+    hi! link netrwQHTopic  Number
     hi! link netrwQuickHelp netrwHelpCmd
     hi! link netrwSizeDate Delimiter
-    hi! link netrwSlash Delimiter
-    hi! link netrwSortBy Title
-    hi! link netrwSortSeq netrwList
-    hi! link netrwSpecial Special
-    hi! link netrwSymLink Special
-    hi! link netrwTime Delimiter
-    hi! link netrwTimeSep Delimiter
-    hi! link netrwTreeBar Special
+    hi! link netrwSlash    Delimiter
+    hi! link netrwSortBy   Title
+    hi! link netrwSortSeq  netrwList
+    hi! link netrwSpecFile netrwGray
+    hi! link netrwSpecial  Special
+    hi! link netrwSymLink  Special
+    hi! link netrwTags     netrwGray
+    hi! link netrwTilde    netrwGray
+    hi! link netrwTime     Delimiter
+    hi! link netrwTimeSep  Delimiter
+    hi! link netrwTmp      netrwGray
+    hi! link netrwTreeBar  Special
     hi! link netrwTreeBarSpace Special
     hi! link netrwVersion Float
 
@@ -682,7 +697,7 @@ let g:colors_name = 'gruvbox-material'
      hi! link netrwHidePat  Statement
      hi! link netrwHideSep  netrwComment
      hi! link netrwList     Statement
-     hi! link netrwVersion  Identifier
+    hi! link netrwVersion  Identifier
      hi! link netrwSymLink  Question
      hi! link netrwExe      PreProc
      hi! link netrwDateSep  Delimiter
@@ -701,7 +716,7 @@ let g:colors_name = 'gruvbox-material'
      hi! link netrwLex      netrwPlain
      hi! link netrwLib      DiffChange
      hi! link netrwMakefile DiffChange
-     hi! link netrwYacc     netrwPlain
+    hi! link netrwYacc     netrwPlain
      hi! link netrwPix      Special
 
      hi! link netrwGray Grey
@@ -713,7 +728,7 @@ let g:colors_name = 'gruvbox-material'
      hi! link netrwTilde    netrwGray
      hi! link netrwTmp      netrwGray
 
-    " Rst:
+  " Rst:
     hi! link rstCitation                     String
     hi! link rstCitationReference            Identifier
     hi! link rstCodeBlock                    String
@@ -789,6 +804,7 @@ let g:colors_name = 'gruvbox-material'
     hi htmlUnderlineItalic guifg=NONE guibg=NONE guisp=NONE gui=italic,underline ctermfg=NONE ctermbg=NONE cterm=italic,underline
     hi htmlItalic guifg=NONE guibg=NONE guisp=NONE gui=italic ctermfg=NONE ctermbg=NONE cterm=italic
     hi! link htmlScriptTag htmlTag
+
     hi! link htmlTag                     Function
     hi! link htmlEndTag                  Identifier
     hi! link htmlArg                     Type
@@ -838,6 +854,7 @@ let g:colors_name = 'gruvbox-material'
     hi! link htmlTagError           htmlError
     hi! link htmlEvent              javaScript
     hi! link htmlError              Error
+
     hi! link htmlCssStyleComment    Comment
     hi! link htmlCssDefinition      Special
 
@@ -847,20 +864,17 @@ let g:colors_name = 'gruvbox-material'
     hi! link xmlTagName Blue
     hi! link xmlEqual Blue
     hi! link docbkKeyword Keyword
-
     hi! link xmlDocTypeDecl Grey
     hi! link xmlDocTypeKeyword Keyword
     hi! link xmlCdataStart Grey
     hi! link xmlCdataCdata Purple
     hi! link dtdFunction Grey
     hi! link dtdTagName Purple
-
     hi! link xmlAttrib Directory
     hi! link xmlProcessingDelim Grey
     hi! link dtdParamEntityPunct Grey
     hi! link dtdParamEntityDPunct Grey
     hi! link xmlAttribPunct Grey
-
     hi! link xmlEntity Orange
     hi! link xmlEntityPunct Orange
 
@@ -940,7 +954,6 @@ let g:colors_name = 'gruvbox-material'
     " Don't link to WildMenu it's the space in between the word cluster and the cluster group
     " hi link vimClusterName WildMenu
     hi! link vimClusterName Normal
-
     hi! link vimCmdSep vimCommand
     hi vimCommentTitle guifg=#a89984 guibg=NONE guisp=NONE gui=bold,italic cterm=bold,italic
     hi! link vimCommentTitleLeader  vimCommentTitle
@@ -1183,6 +1196,7 @@ let g:colors_name = 'gruvbox-material'
     hi! link bashSpecialVariables	shShellVariables
     hi! link bashStatement		shStatement
 
+
     hi! link shAlias		Identifier
     hi! link shArithRegion	shShellVariables
     hi! link shArithmetic		Special
@@ -1231,7 +1245,6 @@ let g:colors_name = 'gruvbox-material'
     hi! link shDerefPOL	shDerefOp
     hi! link shDerefPPS	shDerefOp
     hi! link shDerefPPSleft     Question
-    hi! link shDerefPPSright      Function
     hi! link shDerefPSR	shDerefOp
     hi! link shDerefPSRleft     Question
     hi! link shDerefPSRright    Question
@@ -1340,40 +1353,39 @@ let g:colors_name = 'gruvbox-material'
     hi! link shUntilSync        Question
     hi! link shVar                Character
     hi! link shVarAssign        Question
-        hi! link shVariable	shSetList
-        hi! link shWhileSync        Question
-        hi! link shWrapLineOperator	shOperator
+    hi! link shVariable	shSetList
+    hi! link shWhileSync        Question
+    hi! link shWrapLineOperator	shOperator
 
-    " QF:
-        hi link qfFileName	Directory
-        hi link qfLineNr	LineNr
-        hi link qfError	Error
+  " QF:
+    hi link qfFileName	Directory
+    hi link qfLineNr	LineNr
+    hi link qfError	Error
 
-    " SQL:
-        hi! link Quote		Special
-        hi! link sqlComment		Comment
-        hi! link sqlFold Folded
-        hi! link sqlFunction		Function
-        hi! link sqlKeyword		sqlSpecial
-        hi! link sqlNumber		Number
-        hi! link sqlOperator		sqlStatement
-        hi! link sqlSpecial		Special
-        hi! link sqlStatement	Statement
-        hi! link sqlString		String
-        hi! link sqlType		Type
-        hi! link sqlTodo		Todo
+  " SQL:
+    hi! link Quote		Special
+    hi! link sqlComment		Comment
+    hi! link sqlFold Folded
+    hi! link sqlFunction		Function
+    hi! link sqlKeyword		sqlSpecial
+    hi! link sqlNumber		Number
+    hi! link sqlOperator		sqlStatement
+    hi! link sqlSpecial		Special
+    hi! link sqlStatement	Statement
+    hi! link sqlString		String
+    hi! link sqlType		Type
+    hi! link sqlTodo		Todo
 
   " M4:
     hi link m4Command  PreCondit
     hi link m4Paren Delimiter
 
   " Markdown:
-
-      hi! link markdownBlockquote Include
-      hi! link markdownBoldDelimiter Delimiter
-      hi! link markdownCode Include
-      hi! link markdownCodeBlock Directory
-      hi! link markdownCodeDelimiter Delimiter
+    hi! link markdownBlockquote Include
+    hi! link markdownBoldDelimiter Delimiter
+    hi! link markdownCode Include
+    hi! link markdownCodeBlock Directory
+    hi! link markdownCodeDelimiter Delimiter
     hi! link markdownError markdownText
     hi markdownH1 guifg=#a9b665 guibg=NONE guisp=NONE gui=bold cterm=bold
     hi markdownH2 guifg=#a9b665 guibg=NONE guisp=NONE gui=bold cterm=bold

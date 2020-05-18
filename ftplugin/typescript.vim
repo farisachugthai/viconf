@@ -45,12 +45,12 @@ source $VIMRUNTIME/indent/typescript.vim
 
 " Matchit:
   if exists('g:loaded_matchit')
-    let b:match_words = '\<function\>:\<return\>,'
-                    \ . '\<do\>:\<while\>,'
-                    \ . '\<switch\>:\<case\>:\<default\>,'
-                    \ . '\<if\>:\<else\>,'
-                    \ . '\<try\>:\<catch\>:\<finally\>'
-    let b:did_typescript_setup = 1
+  let b:match_words = '\<function\>:\<return\>,'
+                  \ . '\<do\>:\<while\>,'
+                  \ . '\<switch\>:\<case\>:\<default\>,'
+                  \ . '\<if\>:\<else\>,'
+                  \ . '\<try\>:\<catch\>:\<finally\>'
+  let b:did_typescript_setup = 1
   endif
 
 " More Helpful GF:

@@ -6,7 +6,6 @@ Ftplugins
 
 Vim's distributed readme
 ========================
-
 From ``$VIMRUNTIME/ftplugin/README.txt`` in Vim 8.1.
 
 The ftplugin directory is for Vim plugin scripts that are only used for a
@@ -17,9 +16,11 @@ by Vim when it detects the filetype that matches the name of the file or
 subdirectory.
 For example, these are all loaded for the `c` filetype:
 
-	``c.vim``
-	``c_extra.vim``
-	``c/settings.vim``
+- ``c.vim``
+
+- ``c_extra.vim``
+
+- ``c/settings.vim``
 
 Note that the ``_`` in ``c_extra.vim`` is required to separate the filetype name
 from the following arbitrary name.
@@ -34,9 +35,9 @@ want to use.  They do not contain personal preferences, like the value of
 If you want to do additional settings, or overrule the default filetype
 plugin, you can create your own plugin file.  See `:help ftplugin` in Vim.
 
-Guards
--------
 
+Guards
+========
 I don't know what I'm doing wrong but when I prepend the files in this directory
 with the standard::
 
@@ -62,9 +63,7 @@ after the ones in ``$VIMRUNTIME``? Why?
 
 Difference between ``&isfname`` and ``&iskeyword``
 ==================================================
-
 This just happened to me so I suppose it'd be a good idea to jot it down.
-
 What's the difference between these 2 options?
 
 ``iskeyword`` is used for movements like :kbd:`w`, :kbd:`e` and many other
@@ -95,14 +94,12 @@ happen everywhere.::
 
 Vim Filetype Plugin
 ====================
-
 Some folding is now supported with :envvar:`VIMRUNTIME`\/syntax/vim.vim::
 
    " g:vimsyn_folding == 0 or doesn't exist: no syntax-based folding
    " g:vimsyn_folding =~ 'a' : augroups
    " g:vimsyn_folding =~ 'f' : fold functions
-   " g:vimsyn_folding =~ 'P' : fold python   script
-
+   " g:vimsyn_folding =~ 'P' : fold python script
    let g:vimsyn_folding = 'afP'
 
 Worked really well however caused a noticeable slowdown on startup.
@@ -113,7 +110,6 @@ Worked really well however caused a noticeable slowdown on startup.
    startuptime is spent on syntax highlighting and folding rather than the
    40+ plugins being loaded at any time.
    As a result syntax based highlighting got disabled.
-
 
 Allows users to specify the type of embedded script highlighting they want
 (perl/python/ruby/tcl support)::
@@ -130,7 +126,6 @@ Allows users to specify the type of embedded script highlighting they want
 
 Disabling Autocommands
 ======================
-
 Oct 16, 2019:
 The number of autocommands in the plugin vim-markdown is crazy.
 
@@ -165,7 +160,6 @@ is the syntax used here.
 
 Syntax Highlighting in rst files
 ================================
-
 May 13, 2019: Updated. Grabbed this directly from $VIMRUNTIME/syntax/rst.vim
 
 Use fewer code lists it ends up accounting for 50% of startup-time when
@@ -187,4 +181,10 @@ Then later I added rst.::
     \ 'rst': ['rst'],
 
 This was a terrible mistake don't do this.
+
+Extending Matchit to use highlighting group under cursor
+========================================================
+::
+
+   synIDattr(synID(line("."),col("."),1),"name") =~? "comment\\|string\\|vimSynReg\\|vimSet"
 

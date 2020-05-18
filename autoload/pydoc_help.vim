@@ -104,7 +104,7 @@ function! s:temp_buffer() abort
   syntax enable
   " Because i have it on in my rst filetype.
   setlocal nospell
-  " setlocal buftype=nofile bufhidden=delete noswapfile nowrap
+  setlocal buftype=nofile bufhidden=delete noswapfile nowrap
   " don't do thi until we stop debugging
   " setlocal nomodified
 endfunction
@@ -132,8 +132,8 @@ function! s:handle_user_config() abort
 endfunction
 
 function! pydoc_help#Pydoc(module, bang) abort
-  " Step 1: Create the buffer.
-  " Let's do them a favor and save the buffer before we leave.
+  "
+  " Step 2: Create the buffer. Let's do them a favor and save the buffer before we leave.
   if &autowrite && &l:modified
     " Oh right nothing comes easy in vim
     if &l:readonly
@@ -144,27 +144,26 @@ function! pydoc_help#Pydoc(module, bang) abort
       endif
     :write
   endif
+  endif
+
+  if a:bang
+    tabe
+  else
+    let s:buf = pydoc_help#scratch_buffer()
+  endif
 
   " I think either of these 2 ways works.
   " let s:buf = nvim_create_buf(v:false, v:true)
   exe 'keepjumps keepalt enew' . a:bang
 
-  " Call pydoc. I don't like that we shell out to python when we have a remote host to query
-  " TODO: tpope has a great example of how to createa buffer with mods
-  " somewhere in the autoload file of fugitive
-  exec 'r!python -m pydoc ' . s:word
-  if &shell ==# 'cmd.exe'
-    " Fuckin ^M all over the place
-    :%s/\r$//
-  endif
+  exe 'split ' . s:buf
+  exec 'r!python -m pydoc ' . a:module
 
   call s:temp_buffer()
 endfunction
 
 function! pydoc_help#OpenTempBuffer(...) abort
   " it took a BUNCH of attempts but i think i finally figured out how to do this right
-  " nah it doesn't move to the new buffer. err it does but it removes the buffer you
-  " were working on which is outstandingly horrible
   if !a:0
     return
   endif
@@ -274,6 +273,7 @@ function! pydoc_help#the_curse_of_nvims_floating_wins() abort
   " fashion. Sweet!!
   call nvim_win_set_option(s:win_handle, 'winhl', 'Special')
   return l:floating_winnr
+endfunction
 
 function! s:ReplaceModuleAlias() abort
   " For example:

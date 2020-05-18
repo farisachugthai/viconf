@@ -17,7 +17,6 @@ import site
 import sys
 import time
 import traceback
-
 from importlib.util import find_spec
 from os.path import isdir
 from pathlib import Path
@@ -54,12 +53,12 @@ def log(logrecord, level=30):
     # io.TextIOWrapper and then sub it in.
     return vim.command("echomsg " + logger.log(logrecord, level))
 
+
 def err(err, level=30, traceback=None):
     vim.command("echohl WarningMsg")
     vim.command("echomsg " + logger.log(err, level))
     vim.command("echohl None")
     # if isinstance(traceback, TracebackType):
-
 
 
 def _set_return_error(err=None):
@@ -90,14 +89,14 @@ def print_call_chain(*args):
     print(" ".join(map(str, args)))
     f = sys._getframe(1)
     while f:
-       name = f.f_code.co_name
-       s = f.f_locals.get('self', None)
-       if s:
-           c = getattr(s, "__class__", None)
-           if c:
-               name = "%s.%s" % (c.__name__, name)
-       print("Called from: %s %s" % (name, f.f_lineno))
-       f = f.f_back
+        name = f.f_code.co_name
+        s = f.f_locals.get("self", None)
+        if s:
+            c = getattr(s, "__class__", None)
+            if c:
+                name = "%s.%s" % (c.__name__, name)
+        print("Called from: %s %s" % (name, f.f_lineno))
+        f = f.f_back
     print("-" * 70)
 
 
@@ -204,7 +203,7 @@ def pykeywordprg():
     # wait does this work?
     temp_cword = vim.eval('expand("<cfile>")')
     logger.debug(f"{temp_cword}")
-# If this doesn't display anythin
+    # If this doesn't display anythin
     try:
         helped_mod = importlib.import_module(temp_cword)
     except vim.error:
@@ -331,20 +330,23 @@ def catch_and_print_exceptions(func):
 @catch_and_print_exceptions
 def get_script(source=None, column=None):
     jedi.settings.additional_dynamic_modules = [
-        b.name for b in vim.buffers if (
-            b.name is not None and
-            b.name.endswith('.py') and
-            b.options['buflisted'])]
+        b.name
+        for b in vim.buffers
+        if (b.name is not None and b.name.endswith(".py") and b.options["buflisted"])
+    ]
     if source is None:
-        source = '\n'.join(vim.current.buffer)
+        source = "\n".join(vim.current.buffer)
     row = vim.current.window.cursor[0]
     if column is None:
         column = vim.current.window.cursor[1]
     buf_path = vim.current.buffer.name
 
     return jedi.Script(
-        source, row, column, buf_path,
-        encoding=vim_eval('&encoding') or 'latin1',
+        source,
+        row,
+        column,
+        buf_path,
+        encoding=vim_eval("&encoding") or "latin1",
         environment=get_environment(),
     )
 
@@ -428,7 +430,7 @@ class FileLink:
         # Damnit why isnt it recognizing this as a func? this is the missing link
         if logger is not None:
             self.logger = logger
-        self.buf = buf if buf is not None else self_path_file()
+        self.buf = Path(buf.name) if buf is not None else self._path_file()
 
     def __repr__(self):
         return "{!r} --- {!r}".format(self.__class__.__name__, self.buf)
@@ -437,9 +439,10 @@ class FileLink:
         """Pathify a file."""
         return Path(vim.eval("nvim_get_current_buf()"))
 
+    @property
     def is_symlink(self):
         """Check if `path_obj` is a symlink."""
-        return self.is_symlink()
+        return self.buf.is_symlink()
 
     def _resolved_path(self):
         return self._path_file().resolve()
@@ -450,9 +453,9 @@ class FileLink:
         if real_file:
             return real_file.parent
 
-    def true_file(self, path_obj):
+    def open_true_file(self):
         """Implement a command that opens and resolves a symlink."""
-        if self._is_symlink:
+        if self.is_symlink:
             real_file = self._resolved_path()
             dirname = real_file.parent
             vim.chdir(str(dirname))
@@ -475,5 +478,5 @@ if __name__ == "__main__":
         "error": logging.ERROR,
         "critical": logging.CRITICAL,
     }
-    LOGGER = _setup_logging(log_levels["warning"])
-    main()
+    if vim is not None:
+        file_link = FileLink(logger, vim.current.buffer)

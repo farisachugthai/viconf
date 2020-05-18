@@ -7,7 +7,7 @@ import os
 import sys
 from pathlib import Path
 
-root = Path.cwd().parent
+root = Path().cwd().parent
 sys.path.insert(0, root.joinpath("python3").__fspath__())
 
 from pynvim import NvimError, attach

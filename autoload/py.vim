@@ -7,19 +7,19 @@
 
 let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
-function! py#taglist() abort  " {{{
+function! py#taglist() abort
   " Let's return the value from `vim.call` so that we can check it later if
   " need be
   py3 from pprint import pprint
   py3 tagfiles = (vim.call('tagfiles'))
   py3 pprint(tagfiles)
-endfunction  " }}}
+endfunction
 
-function! py#nvim_taglist() abort  " {{{
+function! py#nvim_taglist() abort
   return nvim_call_function('tagfiles')
-endfunction  " }}}
+endfunction
 
-function! py#PythonPath() abort  " {{{1
+function! py#PythonPath() abort
   py3 import site
   let s:path = '.,,**,'
   let s:user_site = py3eval('site.USER_SITE')
@@ -27,7 +27,6 @@ function! py#PythonPath() abort  " {{{1
     let s:path = py#SecondTry()
     return s:path
   endif
-
   let s:path .= s:user_site
   let l:python_path = py3eval('sys.path')
   if l:python_path ==# 0
@@ -40,10 +39,9 @@ function! py#PythonPath() abort  " {{{1
   endfor
   let &l:path = s:path
   return s:path
-endfunction  " }}}
+endfunction
 
-function! py#SecondTry() abort  " {{{
-
+function! py#SecondTry() abort
   let s:temp_python = exepath('python3')
   if s:temp_python !=# ''
     let g:python3_host_prog = s:temp_python
@@ -72,9 +70,9 @@ function! py#SecondTry() abort  " {{{
       endif
    endif
    return s:path
-endfunction  " }}}
+endfunction
 
-function! py#YAPF() abort  " {{{1
+function! py#YAPF() abort
   if exists(':TBrowseOutput')
     " Realistically should accept func args
     :TBrowseOutput !yapf %
@@ -87,50 +85,46 @@ function! py#YAPF() abort  " {{{1
     " TODO: check this
     call nvim_buf_set_lines('%', 0, '$', 0, '!yapf -i s:old_buffer')
   endif
-endfunction  " }}}
+endfunction
 
-function! py#ALE_Python_Conf() abort  " {{{1
-
-endfunction  " }}}
-
-function! py#Black() abort  " {{{
+function! py#Black() abort
   " TODO: at some point or another should accept ranges as arguments
   let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
   let s:src = s:repo_root . '/python3/pybuffers.py'
   exec 'py3file ' . s:src
   py3 from pybuffers import blackened_vim;
   py3 blackened_vim()
-endfunction  " }}}
+endfunction
 
-function! py#black_these(bufs) abort range  " {{{
+function! py#black_these(bufs) abort range
   " Can you do this with a range of buffers?
   for l:buf in a:bufs
     <line1>,<line2>py3 from pybuffers import blackened_vim
     call py3eval('blackened_vim(l:buf)')
   endfor
-endfunction   " }}}
+endfunction
 
-function! py#black_version() abort  " {{{
+function! py#black_version() abort
   py3 from py import black_version; black_version()
-endfunction  " }}}
+endfunction
 
-function! s:timed(func) abort  " {{{
+function! s:timed(func) abort
   let l:start = reltime()
   call a:func()
   let l:seconds = reltimefloat(reltime(l:start))
   return l:seconds
-endfunction  " }}}
+endfunction
 
-function! py#timedblack() abort  " {{{
+function! py#timedblack() abort
   return s:timed(py#Black())
-endfunction  " }}}
+endfunction
 
-function! py#py_import(...) abort   " {{{
+function! py#py_import(...) abort
   " Call the func with a list of desired args
   python3 py.import_into_vim(a:000)
-endfunction  " }}}
+endfunction
 
-function! s:OpenIPython(...) abort  " {{{
+function! s:OpenIPython(...) abort
   call s:check_modified()
   " terminal ipython
   " if len(a:000) is 0
@@ -140,10 +134,9 @@ function! s:OpenIPython(...) abort  " {{{
   "   needs to be a dict that can be passed to jobstart()
   "   let l:pyjob = termopen('ipython', a:000)
   " endif
-endfunction  " }}}
+endfunction
 
-function! py#Cnxn(bang, ...) abort  " {{{
-
+function! py#Cnxn(bang, ...) abort
   call s:OpenIPython(a:000)
   if has('unix')
     call chansend(&channel, "import pynvim,os\n")
@@ -153,10 +146,9 @@ function! py#Cnxn(bang, ...) abort  " {{{
     call chansend(&channel, "import pynvim,os\r\n")
     call chansend(&channel, "n = pynvim.attach('socket', path=os.environ.get('nvim_listen_address'))\r\n")
   endif
+endfunction
 
-endfunction  " }}}
-
-function! py#Yours(bang, ...)  abort  " {{{
+function! py#Yours(bang, ...)  abort
   call s:OpenIPython(a:000)
   if has('unix')
     call chansend(&channel, "import pynvim_,os\n")
@@ -166,41 +158,40 @@ function! py#Yours(bang, ...)  abort  " {{{
     call chansend(&channel, "import pynvim_,os\r\n")
     call chansend(&channel, "n = pynvim_.attach('socket', path=os.environ.get('nvim_listen_address'))\r\n")
   endif
-endfunction  " }}}
+endfunction
 
-function! s:check_modified() abort  " {{{
+function! s:check_modified() abort
   " TODO:
   if &modified is 1 && &autowrite is 1
     write
   " we're probably gonna need a handful of fucking if elses for this to do
   " what i want.
   endif
+endfunction
 
-endfunction  " }}}
-
-function! py#RefreshSnippets() abort  " {{{
+function! py#RefreshSnippets() abort
   py3 UltiSnips_Manager._refresh_snippets()
-endfunction  " }}}
+endfunction
 
-function! py#list_snippets() abort  " {{{
+function! py#list_snippets() abort
   " Utilizing the python API and ultisnispzzz
   " Doesnt return anything?
   py3 UltiSnips_Manager.list_snippets()
-endfunction  " }}}
+endfunction
 
-function! s:error(msg) abort  " {{{
+function! s:error(msg) abort
   echohl ErrorMsg
   echom a:msg
   echohl None
-endfunction   " }}}
+endfunction
 
-function! s:warn(msg)  abort " {{{
+function! s:warn(msg)  abort
   echohl WarningMsg
   echom a:msg
   echohl None
-endfunction  " }}}
+endfunction
 
-function! py#ErrorFormat() abort  " {{{
+function! py#ErrorFormat() abort
   " The following lines set Vim's errorformat variable, to allow the
   " quickfix window to show Python tracebacks properly. It is much
   " easier to use let than set, because set requires many more
@@ -246,4 +237,4 @@ function! py#ErrorFormat() abort  " {{{
 
   let &l:efm = s:efm
   return s:efm
-endfunction  " }}}
+endfunction

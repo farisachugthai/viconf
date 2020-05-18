@@ -5,41 +5,37 @@
     " Last Modified: Nov 13, 2019
 " ============================================================================
 
-function! s:Echo(msg) abort   " {{{
+function! s:Echo(msg) abort
   echohl WarningMsg
   redraw!
   echomsg a:msg
   echohl NONE
-endfunction  " }}}
+endfunction
 
-function! syncom#HL() abort  " HL: Whats the highlighting group under my cursor? {{{
-
+function! syncom#HL() abort
   redraw!
   echomsg join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
+endfunction
 
-endfunction  " }}}
-
-function! syncom#HiC() abort  " HiC: Show hl group and fg color {{{
+function! syncom#HiC() abort
   " This function could be expanded by expanding the hl groups
   echomsg 'Highlighting group: ' . synIDattr(synID(line('.'), col('.'), 1), 'name')
   echomsg 'Foreground color: ' . synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'fg')
-endfunction   " }}}
+endfunction
 
-function! syncom#HiD() abort  " HiDebug: {{{
-
+function! syncom#HiD() abort
   " TODO: Debug. The parenthesis got fucked up at some point so figure that out
   echo join(map(synstack(line('.'), col('.')), synIDattr(synIDtrans(synID(line('.'), col('.'), 1)))), 'fg')
+endfunction
 
-endfunction  " }}}
-
-function! syncom#HiQF() abort  " HiAll: Now utilize quickfix {{{
+function! syncom#HiQF() abort
   " synstack returns a list. takes lnum and col.
   " map is crazy specific in its argument requirements. map(list, string)
   " cexpr evals a command and adds it to the quickfist list
   cexpr! map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-endfunction   " }}}
+endfunction
 
-function! syncom#get_syn_id(...) abort  " {{{
+function! syncom#get_syn_id(...) abort
   " Display syntax infomation on under the current cursor
   let l:synid = synID(line('.'), col('.'), 1)
   " Wait are arguments allowed to be optional
@@ -48,9 +44,9 @@ function! syncom#get_syn_id(...) abort  " {{{
   else
     return synIDtrans(l:synid)
   endif
-endfunction  " }}}
+endfunction
 
-function! syncom#get_syn_attr(synid) abort  " {{{
+function! syncom#get_syn_attr(synid) abort
   let l:name = synIDattr(a:synid, 'name')
   let l:ctermfg = synIDattr(a:synid, 'fg', 'cterm')
   let l:ctermbg = synIDattr(a:synid, 'bg', 'cterm')
@@ -64,9 +60,8 @@ function! syncom#get_syn_attr(synid) abort  " {{{
         \ 'guibg':   l:guibg
         \ }
 endfunction
-" }}}
 
-function! syncom#get_syn_info() abort  " {{{
+function! syncom#get_syn_info() abort
   let l:baseSyn = syncom#get_syn_attr(synID(line('.'), col('.'), 1))
   echoms 'name: ' . l:baseSyn.name .
         \ ' CTERMFG: ' . l:baseSyn.ctermfg .
@@ -81,18 +76,17 @@ function! syncom#get_syn_info() abort  " {{{
         \ . ' ctermbg: ' . l:linkedSyn.ctermbg
         \ .  ' guifg: '  . l:linkedSyn.guifg
         \ . ' guibg: '   . l:linkedSyn.guibg
-endfunction  " }}}
+endfunction
 
-function! syncom#hitest() abort  " Hitest: An easier way of sourcing hitest {{{
+function! syncom#hitest() abort
   try
     source $VIMRUNTIME/syntax/hitest.vim
   catch E403
   endtry
   return v:true
-endfunction  " }}}
+endfunction
 
-function! s:ag_setup() abort  " {{{
-
+function! s:ag_setup() abort
   if executable('ag')
     setglobal grepprg=ag\ -s\ --vimgrep
   elseif executable('grep')
@@ -102,10 +96,8 @@ function! s:ag_setup() abort  " {{{
   endif
   setglobal grepformat=%f:%l:%c:%m,%f:%l:%m,%f:%l%m,%f\ \ %l%m
 endfunction
-" }}}
 
-function! s:rg_setup() abort  " {{{
-
+function! s:rg_setup() abort
   if executable('rg')
     let s:cmd = 'rg'
   elseif executable('rg.exe')
@@ -113,12 +105,12 @@ function! s:rg_setup() abort  " {{{
   else
     return v:false
   endif
-" -M, --max-columns <NUM>                 Don't print lines longer than this limit.
-" --max-columns-preview               Print a preview for lines exceeding the limit.
-" -m, --max-count <NUM>                   Limit the number of matches.
-" --max-depth <NUM>                   Descend at most NUM directories.
-" --max-filesize <NUM+SUFFIX?>        Ignore files larger than NUM in size.
-" Dude I thought vimgrep implies colors never wtf
+  " -M, --max-columns <NUM>                 Don't print lines longer than this limit.
+  " --max-columns-preview               Print a preview for lines exceeding the limit.
+  " -m, --max-count <NUM>                   Limit the number of matches.
+  " --max-depth <NUM>                   Descend at most NUM directories.
+  " --max-filesize <NUM+SUFFIX?>        Ignore files larger than NUM in size.
+  " Dude I thought vimgrep implies colors never wtf
   let s:options = ' --vimgrep --smart-case --hidden --color never'
         \ . ' --max-columns 300 --max-count 5 --max-columns-preview --max-depth 10 --max-filesize 5000'
         \ . ' --ignore-file-case-insensitive --glob-case-insensitive'
@@ -130,11 +122,9 @@ function! s:rg_setup() abort  " {{{
   let s:grep = s:cmd . s:options
   let &g:grepprg = s:grep
   return s:grep
+endfunction
 
-endfunction  " }}}
-
-function! s:fd_setup() abort  " {{{
-
+function! s:fd_setup() abort
   if executable('fd')
     setglobal grepprg=fd\ -H\ $*
   elseif executable('fd.exe')
@@ -143,9 +133,9 @@ function! s:fd_setup() abort  " {{{
     return v:false
   endif
   return v:true
-endfunction  " }}}
+endfunction
 
-function! syncom#grepprg() abort  " {{{
+function! syncom#grepprg() abort
   " executable check was in ../plugin/syncom.vim but we haven't figured out
   " if we're using rg.exe or rg.exe
   "
@@ -160,9 +150,9 @@ function! syncom#grepprg() abort  " {{{
     let s:ret = s:ag_setup()
   endif
   return s:ret
-endfunction  " }}}
+endfunction
 
-function! syncom#gruvbox() abort  " {{{ old colorscheme
+function! syncom#gruvbox() abort
   if empty(globpath(&runtimepath, 'colors/gruvbox.vim'))
     return v:false
   else
@@ -173,9 +163,9 @@ function! syncom#gruvbox() abort  " {{{ old colorscheme
     colorscheme gruvbox
     return v:true
   endif
-endfunction  " }}}
+endfunction
 
-function! syncom#gruvbox_material() abort  " {{{ new colorscheme
+function! syncom#gruvbox_material() abort
   if empty(globpath(&runtimepath, 'colors/gruvbox-material.vim'))
     return v:false
   else
@@ -185,9 +175,9 @@ function! syncom#gruvbox_material() abort  " {{{ new colorscheme
     colo gruvbox-material
     return v:true
   endif
-endfunction  " }}}
+endfunction
 
-function! syncom#rainbow_paren() abort  " {{{
+function! syncom#rainbow_paren() abort
   highlight! link RBP1 Red
   highlight! link RBP2 Yellow
   highlight! link RBP3 Green
@@ -213,4 +203,4 @@ function! syncom#rainbow_paren() abort  " {{{
   call input({'prompt':'>','highlight':'RainbowParens'})
 
   " From he input
-endfunction  " }}}
+endfunction

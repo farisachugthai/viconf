@@ -25,7 +25,13 @@ try:
 except (ImportError, ModuleNotFoundError):
     yaml = None
 
-global vim
+try:
+    import vim  # noqa pylint:disable=import-error
+except ImportError:
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from pynvim import LegacyVim
+
+    vim = LegacyVim()
 
 
 def get_verbosity():
@@ -40,16 +46,17 @@ def debug(msg):
 def find_running_nvim():
     try:
         logger.debug
-        return vim.vvars['servername']
+        return vim.vvars["servername"]
     except AttributeError:
         # Vimscript:      :nvim_eval('serverlist()')
         # or more simply  :call serverlist()
-        serverlist = vim.eval('serverlist()')
+        serverlist = vim.eval("serverlist()")
         if serverlist:
             if len(serverlist) == 1:
                 return serverlist[0]
             else:
-                logger.error('python3:_vim: find_running_nvim: serverlist is >1?')
+                logger.error(
+                    "python3:_vim: find_running_nvim: serverlist is >1?")
                 return serverlist
 
 
@@ -118,7 +125,7 @@ def col2byte(line, col):
 class VimBuffer:
     """Wrapper around the current Vim buffer."""
 
-    def __init__(self, vim=None):
+    def __init__(self, vim):
         self.vim = vim
         self._window = vim.current.window
         self._tabpage = vim.current.tabpage
@@ -133,7 +140,6 @@ class VimBuffer:
     @property
     def _buffer(self):
         self.vim.current.buffer
-
 
     def __getitem__(self, idx):
         if isinstance(idx, slice):  # Py3
@@ -284,7 +290,8 @@ def select(start, end):
             move_cmd += "%iG%i|" % virtual_position(end.line + 1, end.col)
         else:
             move_cmd += "%iG%i|" % virtual_position(end.line + 1, end.col + 1)
-        move_cmd += "o%iG%i|o\\<c-g>" % virtual_position(start.line + 1, start.col + 1)
+        move_cmd += "o%iG%i|o\\<c-g>" % virtual_position(
+            start.line + 1, start.col + 1)
     feedkeys(move_cmd)
 
 
@@ -411,15 +418,7 @@ def _patch_nvim(vim):
     vim.vars = vars_wrapper()
 
 
-
 if __name__ == "__main__":
-
-    try:
-        import vim  # noqa pylint:disable=import-error
-    except ImportError:
-        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-        from pynvim import LegacyVim
-        vim = LegacyVim()
 
     try:
         import UltiSnips
@@ -436,11 +435,10 @@ if __name__ == "__main__":
     vim_obj = _Vim()
 
     prettiers = {
-    "xml": pretty_xml,
-    "json": pretty_json,
-    "yaml": interpret_yaml,
+        "xml": pretty_xml,
+        "json": pretty_json,
+        "yaml": interpret_yaml,
     }
 
     if hasattr(vim, "from_nvim"):
         _patch_nvim(vim_obj)
-

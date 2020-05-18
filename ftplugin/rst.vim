@@ -17,9 +17,9 @@
   " call extend(g:rst_syntax_code_list, {'javascript': ['js', 'javascript']})
   " to add javascript highlighting to an rst doc
   let g:rst_syntax_code_list = {
-    \ 'python': ['python', 'python3', 'ipython'],
-    \ 'sh': ['sh', 'bash'],
-    \ }
+      \ 'python': ['python', 'python3', 'ipython'],
+      \ 'sh': ['sh', 'bash'],
+      \ }
 
   " just added rst
   " I kinda hope this does nothing
@@ -81,12 +81,12 @@
   if !exists('b:undo_ftplugin') | let b:undo_ftplugin = '' | endif
 
   let b:undo_ftplugin .= '|setlocal tw< cc< lbr< fdl< fdls< '
-      \ . '|setlocal spell< wig< isk< kp< wrap< fo<'
-      \ . '|setlocal include<'
-      \ . '|setlocal indentkeys<'
-      \ . '|setlocal cin< cinw< cink< indk< sua< sr< path< '
-      \ . '|unlet! b:undo_ftplugin'
-      \ . '|unlet! b:did_ftplugin'
+        \ . '|setlocal spell< wig< isk< kp< wrap< fo<'
+        \ . '|setlocal include<'
+        \ . '|setlocal indentkeys<'
+        \ . '|setlocal cin< cinw< cink< indk< sua< sr< path< '
+        \ . '|unlet! b:undo_ftplugin'
+        \ . '|unlet! b:did_ftplugin'
 
   " reStructuredText standard recommends that tabs be expanded to 8 spaces
   " The choice of 3-space indentation is to provide slightly better support for
@@ -94,8 +94,8 @@
   " many other cases.
 
   if !exists('g:rst_style') || g:rst_style != 0
-  setlocal expandtab shiftwidth=3 softtabstop=3 tabstop=8
-  let b:undo_ftplugin .= '|setlocal ts< sw< sts<'
+    setlocal expandtab shiftwidth=3 softtabstop=3 tabstop=8
+    let b:undo_ftplugin .= '|setlocal ts< sw< sts<'
   endif
 
   setlocal foldmethod=expr
@@ -108,8 +108,8 @@
   nnoremap <buffer> <F5> exe 'sphinx-build -b html ' . filereadable('Makefile') ==# 1 ? '. build/html' : ''
 
   let b:undo_ftplugin .= '|setlocal fdm< foldexpr< foldtext< cms< com< et< mp< efm< '
-                  \ .  '|unlet! b:RstFoldCache'
-                  \ .  '|silent! nunmap <buffer> <F5>'
-                  \ .  '|unlet! b:undo_indent'
-                  \ .  '|unlet! b:did_indent'
+                    \ .  '|unlet! b:RstFoldCache'
+                    \ .  '|silent! nunmap <buffer> <F5>'
+                    \ .  '|unlet! b:undo_indent'
+                    \ .  '|unlet! b:did_indent'
 
