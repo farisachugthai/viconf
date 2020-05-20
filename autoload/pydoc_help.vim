@@ -131,9 +131,9 @@ function! s:handle_user_config() abort
   endif
 endfunction
 
-function! pydoc_help#Pydoc(module, bang) abort
+function! pydoc_help#Pydoc(bang, module) abort
   "
-  " Step 2: Create the buffer. Let's do them a favor and save the buffer before we leave.
+  " Step 1: Create the buffer. Let's do them a favor and save the buffer before we leave.
   if &autowrite && &l:modified
     " Oh right nothing comes easy in vim
     if &l:readonly
@@ -144,12 +144,6 @@ function! pydoc_help#Pydoc(module, bang) abort
       endif
     :write
   endif
-  endif
-
-  if a:bang
-    tabe
-  else
-    let s:buf = pydoc_help#scratch_buffer()
   endif
 
   " I think either of these 2 ways works.

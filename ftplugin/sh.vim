@@ -23,12 +23,14 @@
 
 
 " Buffer Local:
-  if exists('b:did_ftplugin')
+  " if exists('b:did_ftplugin')
     " actually dont do anything because the bash ftplugin might be sourcing this
-  endif
+  " endif
 
-  source $VIMRUNTIME/ftplugin/sh.vim
-  source $VIMRUNTIME/indent/sh.vim
+  if &filetype ==# 'sh'
+    source $VIMRUNTIME/ftplugin/sh.vim
+    source $VIMRUNTIME/indent/sh.vim
+  endif
   setlocal commentstring=#\ %s
   setlocal shiftwidth=4 expandtab softtabstop=4 ts=4
   setlocal colorcolumn=120
@@ -37,15 +39,20 @@
 
   " Uh?
   setlocal includeexpr=shellescape(v:fname)
+  setlocal foldignore=
+  setlocal foldmethod=syntax " we set up syntax folding at the top
 
   let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
   let b:ale_linters = ['language_server', 'shell']
 
   " the original defines one too
   let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
-        \. '|setlocal sw< et< sts< cc< syntax< include< '
+        \. '|setlocal cms< sw< et< sts< ts< cc< include< '
+        \. '|setlocal includeexpr< foldignore< foldmethod<'
         \. '|unlet! b:undo_ftplugin'
         \. '|unlet! b:did_ftplugin'
+        \. '|unlet! b:ale_fixers'
+        \. '|unlet! b:ale_linters'
 
 " Compiler:
 
@@ -63,8 +70,9 @@
     noremap! <buffer> <F5> <Cmd>make %<CR>
 
     let b:undo_ftplugin .= '|setlocal mp< efm<'
-        \ . '|silent! unmap <buffer> <F5>'
-        \ . '|silent! unmap! <buffer> <F5>'
+        \. '|silent! unmap <buffer> <F5>'
+        \. '|silent! unmap! <buffer> <F5>'
+        \. '|unlet! b:ale_linters'
 
     let b:ale_linters += ['shellcheck']
   endif

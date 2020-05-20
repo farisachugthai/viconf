@@ -227,7 +227,7 @@
   " inoremap <expr> <Tab> UltiSnips#ExpandSnippetOrJump()
   " }}}
 
-  " FZF: {{{
+" FZF:
   " I suppose for continuity
 
   if exists('*fzf#wrap')
@@ -441,16 +441,16 @@
     nnoremap ,z <Cmd>CocFloatHide<CR>
     nnoremap ,y <Cmd>CocFloatJump<CR>
 
-function! Window_Mappings() abort
-  " Not required but certainly useful
-  nnoremap <M-w> <C-w>
+if !exists('Window_Mappings')
 
+function! Window_Mappings() abort
   " Navigate windows more easily
-  nnoremap <C-h> <Cmd>wincmd h<CR>
+  " nnoremap <C-h> <Cmd>wincmd h<CR>
   " This displays as <NL> when you run `:map` but it behaves like C-j. Oh well.
-  nnoremap <C-j> <Cmd>wincmd j<CR>
-  nnoremap <C-k> <Cmd>wincmd k<CR>
-  nnoremap <C-l> <Cmd>wincmd l<CR>
+  " nnoremap <C-j> <Cmd>wincmd j<CR>
+  " nnoremap <C-k> <Cmd>wincmd k<CR>
+  " nnoremap <C-l> <Cmd>wincmd l<CR>
+  nnoremap <C-l> <Cmd>redraw!<CR><Cmd>redrawstatus!<CR><Cmd>redrawtabline<CR>
 
   " Resize windows a little faster
   nnoremap <C-w>< 5<C-w><
@@ -468,6 +468,10 @@ function! Window_Mappings() abort
   " Split and edit file under the cursor
   nnoremap <Leader>wf <Cmd>wincmd f<CR>
 
+  nnoremap <Leader>wh <Cmd>topleft vnew<CR>
+  nnoremap <leader>wl <Cmd>botright vnew<CR>
+  nnoremap <leader>wj <Cmd>botright new<CR>
+  nnoremap <leader>wk <Cmd>topleft new<CR>
 
   " Resizing Windows:
   " nnoremap <C-w><C-Left>
@@ -478,12 +482,12 @@ function! Window_Mappings() abort
   nnoremap <C-w><M-Down> 5<C-w>-
   " nnoremap <C-w><M-Right>
   nnoremap <C-w><M-Up> 5<C-w>+
-endfunction  " }}}
+endfunction
 
 function! Quickfix_Mappings() abort
   " Jump to and from location/quickfix windows.
   nnoremap <Leader>lc <Cmd>lclose<CR>
-  nnoremap <Leader>lf <Cmd>lwindow<CR>
+  nnoremap <Leader>lw <Cmd>botright lwindow<CR>
 
   " Normally the quickfix window is at the bottom of the screen.  If there are
   " vertical splits, it's at the bottom of the rightmost column of windows.  To
@@ -494,18 +498,16 @@ function! Quickfix_Mappings() abort
   " Down for down
   nnoremap <Leader>ld <Cmd>botright llist!<CR>
   nnoremap <Leader>lo <Cmd>lopen<CR>
-  nnoremap <Leader>lw <Cmd>botright lwindow<CR>
 
   " So this is contingent on having the qf plugin. need to add a check for
   " that later.
   " this is defined globally instead of only in the after/ftplugin/qf.vim
   " because it toggles the location list and so we want to have that mapping
   " defined everywhere.
-  nnoremap <Leader>L <Plug>(qf_loc_toggle)
+  nnoremap <Leader>l <Plug>(qf_loc_toggle)
   nnoremap <Leader>ln <Plug>(qf_loc_next)
   nnoremap <Leader>lp <Plug>(qf_loc_previous)
   nnoremap <Leader>lo <Plug>(qf_loc_toggle)
-  nnoremap <Leader>lc <Cmd>lclose<CR>
   nnoremap <Leader>lf <Cmd>lwindow<CR>
 
   " VSCode toggles maximized panel with this one so i guess lets match
@@ -516,7 +518,7 @@ function! Quickfix_Mappings() abort
   nnoremap <Leader>qn <Plug>(qf_newer)
   nnoremap <Leader>qc <Cmd>cclose<CR>
 
-  " Wanna note how long Ive been using Vim and still i onlyjust found out
+  " Wanna note how long Ive been using Vim and still i only just found out
   " about the chistory and lhistory commands like wth
   nnoremap <Leader>qh <Cmd>botright chistory<CR>
   nnoremap <Leader>ql <Cmd>clist!<CR>
@@ -551,6 +553,20 @@ function! Quickfix_Mappings() abort
 endfunction
 
 function! AltKeyNavigation() abort
+  " Not required but certainly useful
+  nmap <M-w> <C-w>
+
+  noremap  <M-h> <C-\><C-N><C-w>h
+  noremap  <M-j> <C-\><C-N><C-w>j
+  noremap  <M-k> <C-\><C-N><C-w>k
+  noremap  <M-l> <C-\><C-N><C-w>l
+  noremap! <M-h> <C-\><C-N><C-w>h
+  noremap! <M-j> <C-\><C-N><C-w>j
+  noremap! <M-k> <C-\><C-N><C-w>k
+  noremap! <M-l> <C-\><C-N><C-w>l
+
+  " Cant do this anymore. C-k is a prefix key now
+  " and insert mode C-j does stuff, C-l is clear screen and C-h is BS
   " Originally this inspired primarily for terminal use but why not put it everywhere?
   noremap  <A-h> <C-w>h
   noremap  <A-j> <C-w>j
@@ -695,6 +711,7 @@ endfunction
   if !hasmapto('<Plug>(HL)')
     nnoremap <Leader>H <Plug>(HL)
   endif
+endif
 
 " Call Functions:
   if !exists('no_plugin_maps') && !exists('no_windows_vim_maps') && !exists('g:loaded_plugin_mappings')

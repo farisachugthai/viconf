@@ -27,18 +27,18 @@ function! buffers#PreviewWord() abort
     return
   endif
   let l:w = expand('<cword>')   " get the word under cursor
-  if l:w =~? '\a'     " if the word contains a letter
+  if l:w =~? '\a'               " if the word contains a letter
 
     " Delete any existing highlight before showing another tag
-    silent! wincmd P      " jump to preview window
-    if &previewwindow     " if we really get there...
-      match none          " delete existing highlight
-      wincmd p            " back to old window
+    silent! wincmd P            " jump to preview window
+    if &previewwindow           " if we really get there...
+      match none                " delete existing highlight
+      wincmd p                  " back to old window
     endif
 
     " Try displaying a matching tag for the word under the cursor
     " lets add a write operation so that that doesnt end up raising
-    if &autowrite | write | endif
+    if &autowrite && &modified | write | endif
 
     try
        execute 'ptag ' . l:w
@@ -72,23 +72,19 @@ function! buffers#terminals() abort
 
   " From he term. Alt-R is better because this causes us to lose C-r in every
   " command we run from nvim
-  tnoremap <expr> <A-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
+  tnoremap <expr> <A-r> '<C-\><C-N>"'.nr2char(getchar()).'pi'
 
   " From :he terminal
-  tnoremap <A-h> <C-\><C-N><C-w>h
-  tnoremap <A-j> <C-\><C-N><C-w>j
-  tnoremap <A-k> <C-\><C-N><C-w>k
-  tnoremap <A-l> <C-\><C-N><C-w>l
-  inoremap <A-h> <C-\><C-N><C-w>h
-  inoremap <A-j> <C-\><C-N><C-w>j
-  inoremap <A-k> <C-\><C-N><C-w>k
-  inoremap <A-l> <C-\><C-N><C-w>l
+  tnoremap <M-h> <C-\><C-N><C-w>h
+  tnoremap <M-j> <C-\><C-N><C-w>j
+  tnoremap <M-k> <C-\><C-N><C-w>k
+  tnoremap <M-l> <C-\><C-N><C-w>l
 
   " Move around the line
-  tnoremap <A-A> <Esc>A
-  tnoremap <A-b> <Esc>b
-  tnoremap <A-d> <Esc>d
-  tnoremap <A-f> <Esc>f
+  tnoremap <M-A> <Esc>A
+  tnoremap <M-b> <Esc>b
+  tnoremap <M-d> <Esc>d
+  tnoremap <M-f> <Esc>f
 
   " Other window
   tnoremap <C-w>w <C-\><C-N><C-w>w

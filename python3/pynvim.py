@@ -77,7 +77,6 @@ if sys.version_info <= (3, 7):
         pass  # i have a better implementation somewhere...
 
 
-global vim
 try:
     import vim  # noqa
 except ImportError:
@@ -2721,7 +2720,7 @@ class MsgpackStream(object):
     exposes an interface for reading/writing msgpack documents.
     """
 
-    def __init__(self, event_loop=None, _message_cb=None, autoreset=True, **kwargs):
+    def __init__(self, transport_type, _message_cb=None, autoreset=True, **kwargs):
         """Wrap `event_loop` on a msgpack-aware interface.
 
         Parameters
@@ -2811,17 +2810,12 @@ class MsgpackStream(object):
             Error handler used for decoding str type.  (default: `'strict'`)
 
         """
-        self._loop = (
-            event_loop if event_loop is not None else AsyncioEventLoop()
-        )  # todo: args
-
-        # OR:
-        # try:
-        #     self.loop = get_running_loop() if event_loop is None else event_loop
-        # except RunTimeError:
-        #     loop_policy = get_event_loop_policy()
-        #     self.loop = loop_policy.get_event_loop()
-
+        self.transport_type = transport_type
+        # loop = asyncio.new_event_loop()
+        loop = AsyncioEventLoop(transport_type)
+        asyncio.set_event_loop(loop)
+        loop.set_debug(True)
+        self._loop = loop
         self._packer = Packer(autoreset=autoreset)
         self._unpacker = Unpacker(**kwargs)
         self._message_cb = _message_cb
@@ -2830,7 +2824,7 @@ class MsgpackStream(object):
     def loop(self):
         if isinstance(self._loop, asyncio.BaseEventLoop):
             try:
-                asyncio.get_event_loop()
+                return asyncio.get_event_loop()
             except RuntimeError:  # not running
                 ml_logger.warn("Event loop isn't running.")
         # else:
@@ -2858,7 +2852,11 @@ class MsgpackStream(object):
         packed = self._packer.pack(msg)
         debug(packed)
 
-    def run(self, coroutine=None):
+    def create_future(self):
+        return self.loop.create_future()
+
+
+    async def run(self, coroutine=None):
         """Run the event loop to receive messages from Nvim.
 
         While the event loop is running, `message_cb` will be called whenever
@@ -2868,9 +2866,9 @@ class MsgpackStream(object):
         # self._message_cb = None
         if isinstance(self.loop, asyncio.BaseEventLoop):
             # gotta start awaiting
-            self.loop.run_until_complete(coroutine)
+            await self.loop.run_until_complete(coroutine)
         else:
-            self.loop.run(self._on_data)
+            await self.loop.run(self._on_data)
 
     def stop(self):
         """Stop the event loop."""
@@ -2918,17 +2916,21 @@ class AsyncSession(MsgpackStream):
     """
 
     # TODO: integrate this in correctly
-    # self.loop = loop if loop is not None else get_event_loop_policy().new_event_loop()
+    loop = get_event_loop_policy().new_event_loop()
     # also it should be a class attribute as every instance should
     # probably be accessing the same loop.
+    # loop = AsyncioEventLoop(transport_type)
+    asyncio.set_event_loop(loop)
+    loop.set_debug(True)
 
-    def __init__(self, event_loop=None, _message_cb=None, msgpack_stream=None):
+
+    def __init__(self, _message_cb=None, *args, **kwargs):
         """Wrap `msgpack_stream` on a msgpack-rpc interface."""
         # self._msgpack_stream = msgpack_stream
-        warnings.warn(DeprecationWarning("msgpack_stream is deprecated"))
+        # warnings.warn(DeprecationWarning("msgpack_stream is deprecated"))
         self._next_request_id = 1
         self._pending_requests = {}
-        self._request_cb = self._notification_cb = None
+        self._request_cb = self._message_cb = _message_cb
         self._handlers = {
             0: self._on_request,
             1: self._on_response,
@@ -2936,19 +2938,8 @@ class AsyncSession(MsgpackStream):
         }
         # self._enum_handlers = SessionHandlers()
         # self.loop = msgpack_stream.loop
-        super().__init__(event_loop, _message_cb)
+        super().__init__(_message_cb, *args, **kwargs)
 
-    @property
-    def _msgpack_stream(self):
-        return self.loop
-
-    @_msgpack_stream.setter
-    def _set_msgpack_stream(self, value):
-        if isinstance(self.loop, asyncio.BaseEventLoop):
-            asyncio.set_event_loop(value)
-        else:
-            # todo:
-            self.loop = value
 
     def request(self, method, args, response_cb):
         """Send a msgpack-rpc request to Nvim.
@@ -2958,7 +2949,7 @@ class AsyncSession(MsgpackStream):
         is available.
         """
         request_id = self._next_request_id
-        self._msgpack_stream.send([0, request_id, method, args])
+        super().send([0, request_id, method, args])
         self._pending_requests[request_id] = response_cb
         self._next_request_id += 1
 
@@ -2969,20 +2960,7 @@ class AsyncSession(MsgpackStream):
         Nvim. This will have the same effect as a request, but no response
         will be recieved
         """
-        self._msgpack_stream.send([2, method, args])
-
-    def run(self, request_cb, notification_cb):
-        """Run the event loop to receive requests and notifications from Nvim.
-
-        While the event loop is running, `request_cb` and `notification_cb`
-        will be called whenever requests or notifications are respectively
-        available.
-        """
-        self._request_cb = request_cb
-        self._notification_cb = notification_cb
-        self._msgpack_stream.run(self._on_message)
-        self._request_cb = None
-        self._notification_cb = None
+        super().send([2, method, args])
 
     def _on_message(self, msg):
         try:
@@ -3033,8 +3011,8 @@ class AsyncSession(MsgpackStream):
     def _on_invalid_message(self, msg):
         error = "Received invalid message %s" % msg
         warn(error)
-        self._msgpack_stream.send([1, 0, error, None])
-        self.send([1, 0, error, None])
+        super().send([1, 0, error, None])
+        super().send([1, 0, error, None])
 
 
 class Response(object):
@@ -3127,7 +3105,7 @@ class BaseEventLoop(_PlatformSpecificLoop):
 
     """
 
-    def __init__(self, transport_type, *args):
+    def __init__(self, transport_type, *args, **kwargs):
         """Initialize and connect the event loop instance.
 
         The only arguments are the transport type and transport-specific
@@ -3149,9 +3127,6 @@ class BaseEventLoop(_PlatformSpecificLoop):
         `_init`, one of the `_connect_*` methods(based on `transport_type`)
         and `_start_reading()`
         """
-        # super().__init__()
-        if transport_type is None:
-            transport_type = "socket"
         self._transport_type = transport_type
         self._signames = dict(
             (k, v) for v, k in signal.__dict__.items() if v.startswith("SIG")
@@ -3160,10 +3135,12 @@ class BaseEventLoop(_PlatformSpecificLoop):
         self._error = None
         self._closed = True
         try:
-            getattr(self, "_connect_{}".format(transport_type))(*args)
+            self.connect = getattr(self, f'connect_{transport_type}', None)
+            self.connect(*args)
         except Exception as e:
             self.close()
             raise e
+        super().__init__(**kwargs)
         self._start_reading()
 
     @abc.abstractmethod
@@ -3383,7 +3360,7 @@ class AsyncioEventLoop(AsyncioBaseEventLoop):
     _closed = False
 
     def __init__(
-        self, path=None, argv=None, stdio=False, transport_type=None, **kwargs
+        self, transport_type, path=None, argv=None, stdio=False, *args, **kwargs
     ):
         """Used to signal `asyncio.Protocol` of a successful connection.
 
@@ -3407,6 +3384,7 @@ class AsyncioEventLoop(AsyncioBaseEventLoop):
             self._loop = self.loop_policy.get_event_loop()
         except RuntimeError:
             self._loop = self.loop_policy.new_event_loop()
+
         self._raw_transport = transport_type
         if isinstance(transport_type, asyncio.SubprocessTransport):
             self._transport = transport_type.get_pipe_transport(0)
@@ -3497,6 +3475,8 @@ class AsyncioEventLoop(AsyncioBaseEventLoop):
             pipe = PipeHandle(msvcrt.get_osfhandle(sys.stdin.fileno()))
         else:
             pipe = sys.stdin
+
+        # TODO: ergh both of these need to be awaited
         coroutine = self._loop.connect_read_pipe(self._fact, pipe)
         self._loop.run_until_complete(coroutine)
         debug("native stdin connection successful")
@@ -3585,13 +3565,8 @@ def session(transport_type="stdio", *args, **kwargs) -> Session:
     handling some Nvim particularities(server->client requests for example), the
     code here should work with other msgpack-rpc servers.
     """
-    try:
-        loop = asyncio.get_event_loop()
-    except RuntimeError:
-        loop_policy = get_event_loop_policy()
-        loop = loop_policy.get_event_loop()
-    msgpack_stream = MsgpackStream(loop, *args, **kwargs)
-    async_session = AsyncSession(msgpack_stream)
+    # msgpack_stream = MsgpackStream()
+    async_session = AsyncSession(transport_type, *args, **kwargs)
     _session = Session(async_session)
     _session.request(
         b"nvim_set_client_info", *get_client_info("client", "remote", {}), async_=True

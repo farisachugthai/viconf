@@ -28,7 +28,6 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
   command! TB setl efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m | clist
 
 " Coc Commands:
-
   " FOUND WHERE IT IS IN HIS SOURCE!
   " ~/.local/share/nvim/plugged/coc.nvim/src/plugin.ts : cocAction
   " public async cocAction(...args: any[]): Promise<any> {
@@ -42,11 +41,7 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
   command! -bang -bar CocRepeat call CocAction('repeatCommand')
   command! -bang -bar CocReferences call CocAction('jumpReferences')
 
-  " TODO: Figure out the ternary operator, change nargs to ? and if arg then
-  " input=arg else expand(cword)
-  " Here's Junegunns implementation for GitFiles.
-  " call fzf#vim#gitfiles(<q-args>, <q-args> == "?" ? {} : s:p(<bang>0), <bang>0)
-  command! -bar -complete=custom,coc#list#options CocGrep execute 'CocList -I --input=' . expand('<cword>') . ' grep'
+  command! -bar -nargs=* -bang -complete=custom,coc#list#options CocGrep execute 'CocList -I --input=' len(<q-args>) == 0 ? expand('<cword>') : '' . ' grep'
 
   " Dec 05, 2019: Got a new one for ya! Range doesnt do anything but py3 accepts it so
   command! -bang -bar -range CocExtensionStats <line1>,<line2>py3 from pprint import pprint; pprint(vim.eval('CocAction("extensionStats")'))
@@ -67,9 +62,11 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
   " Just tried this and it worked! So keep checking :CocList commands and add more as we go.
   " BUG: Running :topleft call CocActionAsync('runCommand', 'python.startREPL')
   " does not place the buffer at the top
+  "
+  " Does changing the command to `exec '<q-mods> ' . `  fix it?
   " command! -bang -bar CocPython call CocActionAsync('runCommand', 'python.startREPL')
   " Often enough that command doesn't work
-  command! -bar -nargs=* -complete=dir CocPython call coc#terminal#start('python', <q-args>, '')
+  command! -bar -nargs=* -complete=dir -range -count -bang CocPython :exec "<q-mods> call coc#terminal#start('python', <q-args>, '')"
 
   " Let's also get some information here.
   " call CocAction('commands') is a lamer version of CocCommand
@@ -128,7 +125,6 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
   command! -bar -nargs=* -complete=custom,s:CocProviders CocProviders call s:HandleCocProviders(<q-args>)
 
 " A LOT Of FZF Commands:
-
   " Brofiles:
 
     function! s:CompleteBrofiles(A, L, P)
@@ -201,14 +197,14 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
           \ 'help',
           \ {'source': sort(keys(g:plugs)),
           \ 'sink'  : function('find_files#plug_help_sink'),
-          \ 'options': g:fzf_options},
+          \ 'options': s:fzf_options},
           \ <bang>0))
 
     " FZBuf: {{{ Works better than FZBuffers
     command! -bar -bang -complete=buffer FZBuf call fzf#run(fzf#wrap('buffers',
         \ {'source': map(range(1, bufnr('$')), 'bufname(v:val)'),
         \ 'sink': 'e',
-        \ 'options': g:fzf_options,
+        \ 'options': s:fzf_options,
         \ },
         \ <bang>0))
 
@@ -217,12 +213,13 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
     command! -bang -complete=buffer -bar FZBuffers call fzf#run(fzf#wrap('buffers',
             \ {'source':  reverse(find_files#buflist()),
             \ 'sink':    function('find_files#bufopen'),
-            \ 'options': g:fzf_options,
+            \ 'options': s:fzf_options,
             \ 'down':    len(find_files#buflist()) + 2
             \ }, <bang>0))
 
-    " FZMru: {{{ I feel like this could work with complete=history right?
-    command! -bang -bar Mru call find_files#FZFMru(<bang>0)
+    " FZMru:
+    " I feel like this could work with complete=history right?
+    command! -bang -bar -nargs=* -complete=customlist,s:CompleteBrofiles Mru call find_files#FZFMru(<bang>0)
 
     " FZGit:
       " Oct 15, 2019: Works!
@@ -280,7 +277,15 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
         \ <bang>0)
 
   " Override His Commands To Add Completion:
-    command! -bar -bang -nargs=? -complete=file GFiles call fzf#vim#gitfiles(<q-args>, <bang>0)
+    function! s:p(bang, ...)
+      let preview_window = get(g:, 'fzf_preview_window', a:bang && &columns >= 80 || &columns >= 120 ? 'right': '')
+      if len(preview_window)
+        return call('fzf#vim#with_preview', add(copy(a:000), preview_window))
+      endif
+      return {}
+    endfunction
+
+    command! -bar -bang -nargs=? -complete=file GFiles call fzf#vim#gitfiles(<q-args>, <q-args> == "?" ? {} : s:p(<bang>0), <bang>0)
 
     " Me just copy pasting his plugin
     command! -bar -bang -complete=mapping IMaps call fzf#vim#maps("i", <bang>0)
@@ -296,116 +301,114 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
       \ call fzf#vim#colors({'left': '35%',
       \ 'options': '--reverse --margin 30%,0'}, <bang>0)
 
-  " Finding Files: {{{
-    " Completes filenames from the directories specified in the 'path' option:
-    command! -nargs=* -bang -bar -complete=customlist,unix#EditFileComplete -complete=file
-            \ Pedit :pedit<bang> <q-args>
+" Finding Files:
+  " Completes filenames from the directories specified in the 'path' option:
+  command! -nargs=* -bang -bar -complete=customlist,unix#EditFileComplete -complete=file
+          \ Pedit :pedit<bang> <q-args>
 
-    command! -nargs=* -bang -complete=file -complete=file_in_path Goto :hide <q-mods> edit<bang> <args>
-    " I admit feeling peer pressured to add this but
-    " -range=N    A count (default N) which is specified in the line
-    "             number position (like |:split|); allows for zero line
-    "             number.
-    command! -nargs=* -bang -bar -complete=file -complete=customlist,unix#EditFileComplete
-            \ Split <q-mods>split<bang> <q-args>
+  command! -nargs=* -bang -complete=file -complete=file_in_path Goto :hide <q-mods> edit<bang> <args>
+  " I admit feeling peer pressured to add this but
+  " -range=N    A count (default N) which is specified in the line
+  "             number position (like |:split|); allows for zero line
+  "             number.
+  command! -nargs=* -bang -bar -complete=file -complete=customlist,unix#EditFileComplete
+          \ Split <q-mods>split<bang> <q-args>
 
-    " See if we cant catch me constantly mistyping :sb as :bs
-    command! -nargs=* -bang -bar -complete=file -complete=customlist,unix#EditFileComplete -range=0
-            \ Bsplit <q-mods>split<bang> <q-args>
+  " See if we cant catch me constantly mistyping :sb as :bs
+  command! -nargs=* -bang -bar -complete=file -complete=customlist,unix#EditFileComplete -range=0
+          \ Bsplit <q-mods>split<bang> <q-args>
 
-    " Why not do the same for :Bd
-    command! -nargs=* -range=% -addr=buffers -count -bang -bar -complete=buffer Bdelete v:count:bd<bang><args>
+  " Why not do the same for :Bd
+  command! -nargs=* -range=% -addr=buffers -count -bang -bar -complete=buffer Bdelete v:count:bd<bang><args>
 
-    command! -nargs=* -range=% -addr=buffers -count -bang -bar -complete=file_in_path Find :<count><mods>find<bang> <args>
+  command! -nargs=* -range=% -addr=buffers -count -bang -bar -complete=file_in_path Find :<count><mods>find<bang> <args>
 
-    " Well this is nice to know about. You can specify what a range refers to.
-    " -addr=loaded_buffers
-    command! -nargs=* -bang -bar -complete=buffer -range=% -addr=buffers
-          \ BEdit <q-mods>buffer<bang> <q-args>
+  " Well this is nice to know about. You can specify what a range refers to.
+  " -addr=loaded_buffers
+  command! -nargs=* -bang -bar -complete=buffer -range=% -addr=buffers
+        \ BEdit <q-mods>buffer<bang> <q-args>
 
-  " Miscellaneous:
+" Miscellaneous:
+  command! -bang -complete=compiler -nargs=* -range=% -addr=buffers MakeBuffers
+        \| if <args>
+        \| for f in expand(<q-args>, 0, 1)
+        \| exe '<mods> make<bang>' . f
+        \| endfor
+        \| else
+        \| exe '<mods> make<bang>' . expand('%')
 
-    command! -bang -complete=compiler -nargs=* -range=% -addr=buffers MakeBuffers
-          \| if <args>
-          \| for f in expand(<q-args>, 0, 1)
-          \| exe '<mods> make<bang>' . f
-          \| endfor
-          \| else
-          \| exe '<mods> make<bang>' . expand('%')
+  command! -bar -nargs=1 -complete=history RerunLastX call histget(<args>, 1)
 
-    command! -bar -nargs=1 -complete=history RerunLastX call histget(<args>, 1)
+  " from the help
+  " Define an Ex command ":H {num}" that supports re-execution of the {num}th entry from the output of |:history|. >
+  command! -nargs=1 -bar -complete=history H execute histget("cmd", 0+<args>)
 
-    " from the help
-    " Define an Ex command ":H {num}" that supports re-execution of the {num}th entry from the output of |:history|. >
-    command! -nargs=1 -bar -complete=history H execute histget("cmd", 0+<args>)
+  " TODO: make bang handle either open in split or full window
+  command! -bar Todo call todo#Todo()
 
-    " TODO: make bang handle either open in split or full window
-    command! -bar Todo call todo#Todo()
+  " :he map line 1454. How have i never noticed this isn't a feature???
+  command! -nargs=? -bang -complete=buffer Rename file <q-args>|w<bang>za
 
-    " :he map line 1454. How have i never noticed this isn't a feature???
-    command! -nargs=? -bang -complete=buffer Rename file <q-args>|w<bang>za
+  " These 2 commands are for parsing the output of scriptnames though a command
+  " like :TBrowseScriptnames would probably be easier to work with:
+  command! -nargs=? -bar SNames call vimscript#Scriptnames(<f-args>)
+  command! -nargs=0 -bar SNamesDict echo vimscript#ScriptnamesDict()
 
-    " These 2 commands are for parsing the output of scriptnames though a command
-    " like :TBrowseScriptnames would probably be easier to work with:
-    command! -nargs=? -bar SNames call vimscript#Scriptnames(<f-args>)
-    command! -nargs=0 -bar SNamesDict echo vimscript#ScriptnamesDict()
+  " Useful if you wanna see all available funcs provided by nvim
+  command! -bang -nargs=0 NvimAPI
+        \ new<bang> | put =map(filter(api_info().functions,
+        \ '!has_key(v:val,''deprecated_since'')'),
+        \ 'v:val.name')
 
-    " Useful if you wanna see all available funcs provided by nvim
-    command! -bang -nargs=0 NvimAPI
-          \ new<bang> | put =map(filter(api_info().functions,
-          \ '!has_key(v:val,''deprecated_since'')'),
-          \ 'v:val.name')
+  " Easier mkdir and cross platform!
+  command! -complete=dir -nargs=1 -bar -bang Mkdir call mkdir(<q-args>, 'p', '0700')
 
-    " Easier mkdir and cross platform!
-    command! -complete=dir -nargs=1 -bar -bang Mkdir call mkdir(<q-args>, 'p', '0700')
+  " From `:he change`  line 352 tag g?g?
+  " Adding range means that the command defaults to current line
+  " Need to add a check that we're in visual mode and drop the '<,'> if not.
+  command! -bar -range TitleCase execute 'normal! ' . "'<,'>s/\v<(.)(\w*)/\u\1\L\2/g"
 
-    " From `:he change`  line 352 tag g?g?
-    " Adding range means that the command defaults to current line
-    " Need to add a check that we're in visual mode and drop the '<,'> if not.
-    command! -bar -range TitleCase execute 'normal! ' . "'<,'>s/\v<(.)(\w*)/\u\1\L\2/g"
-
-    " Chalk this up to *Things that I couldnt believe werent already commands*
-    command! -bar Ruler normal! g<C-g>
+  " Chalk this up to *Things that I couldnt believe werent already commands*
+  command! -bar Ruler normal! g<C-g>
 
 " UltiSnips:
+  function! UltiSnipsConf() abort
 
-    function! UltiSnipsConf() abort
+    let g:UltiSnipsExpandTrigger = '<Tab>'
+    let g:UltiSnipsJumpForwardTrigger= '<Tab>'
+    let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
+    let g:ultisnips_python_style = 'numpy'
+    let g:ultisnips_python_quoting_style = 'double'
+    let g:UltiSnipsEnableSnipMate = 0
+    " context is an interesting option. it's a vert split unless textwidth <= 80
+    let g:UltiSnipsEditSplit = 'context'
+    let g:snips_author = 'Faris Chugthai'
+    let g:snips_github = 'https://github.com/farisachugthai'
+    " Defining it and limiting it to 1 directory means that UltiSnips doesn't
+    " iterate through every dir in &rtp which saves an immense amount of time
+    " on startup.
+    let g:UltiSnipsSnippetDirectories = [ expand('$HOME') . '/.config/nvim/UltiSnips' ]
+    let g:UltiSnipsUsePythonVersion = 3
+    let g:UltiSnipsListSnippets = '<C-/>'
+    if !exists('*stdpath')
+      return
+    endif
+    " Wait is this option still a thing??
+    let g:UltiSnipsSnippetDir = [stdpath('config') . '/UltiSnips']
+  endfunction
 
-      let g:UltiSnipsExpandTrigger = '<Tab>'
-      let g:UltiSnipsJumpForwardTrigger= '<Tab>'
-      let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
-      let g:ultisnips_python_style = 'numpy'
-      let g:ultisnips_python_quoting_style = 'double'
-      let g:UltiSnipsEnableSnipMate = 0
-      " context is an interesting option. it's a vert split unless textwidth <= 80
-      let g:UltiSnipsEditSplit = 'context'
-      let g:snips_author = 'Faris Chugthai'
-      let g:snips_github = 'https://github.com/farisachugthai'
-      " Defining it and limiting it to 1 directory means that UltiSnips doesn't
-      " iterate through every dir in &rtp which saves an immense amount of time
-      " on startup.
-      let g:UltiSnipsSnippetDirectories = [ expand('$HOME') . '/.config/nvim/UltiSnips' ]
-      let g:UltiSnipsUsePythonVersion = 3
-      let g:UltiSnipsListSnippets = '<C-/>'
-      if !exists('*stdpath')
-        return
-      endif
-      " Wait is this option still a thing??
-      let g:UltiSnipsSnippetDir = [stdpath('config') . '/UltiSnips']
-    endfunction
-
-    call UltiSnipsConf()
+  call UltiSnipsConf()
 
   " In case you're wondering about this, ultisnips requires python from vim.
   " however neovim has it's python interation set up externally. so when i manage
   " to fuck it up, ultisnips breaks. so i need to be able to disable it and then
   " re-enable it when the python integration is fixed
 
-" Pydoc: {{{
-    " if !exists('g:loaded_remote_plugins')
-    "   exec 'source ' . s:repo_root . '/autoload/remotes.vim'
+" Python:
+  " Pydoc:
+    exec 'source ' . s:repo_root . '/autoload/remotes.vim'
 
-    "   call remotes#init()
+    call remotes#init()
     " endif
 
     command! -bar -complete=expression -complete=function -range -nargs=+ Pythonx <line1>,<line2>python3 <args>
@@ -436,12 +439,14 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
     function! s:PythonMods(A, L, P) abort
       " this doesnt work? py3do can only return a  str or None which sucks since wed prefer a list.
       " Also jesus why does this write the return value to the buffer?
-      py3do return str(sys.modules)
+      let s:ret = py3eval(sys.modules)
+      return s:ret
     endfunction
 
     " command! -range -bang -nargs=? -bar -complete=custom,s:PythonMods Pydoc call pydoc_help#Pydoc(<f-args>, <bang>0, <mods>)
 
-    command! -bang -nargs=? -bar Pydoc call pydoc_help#Pydoc(<q-args>, <bang>)
+    " Doesnt work AGAIN
+    command! -bang -nargs=* -bar Pydoc call pydoc_help#Pydoc(<bang>, <f-args> ==# '' : expand('<cfile>') ? <f-args>)
 
     " command! -bar -bang -range PydocSp
     "       \ exec '<mods>split<bang>:python3 import pydoc'.expand('<cWORD>').'; pydoc.help('.expand('<cWORD>').')'
@@ -454,15 +459,16 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
     " todo: adding a bang expression didny work
     command! -bang -complete=expression -bar PydocShow call pydoc_help#show(<bang>0)
-    " }}}
 
   " General Python Commands:
     " If things slow down autoload these.
     command! -bar Black call py#Black()
     command! -bar BlackUpgrade call py#BlackUpgrade()
-    command! -bar BlackVersion call py#black_version()
+    command! -bar BlackVersion echo py#black_version()
+
     " TODO: Work on the range then the bang
     command! -bar -complete=file -range BlackCurrent <line1>,<line2>call py#Black()
+
     command! -nargs=+ -bar -complete=buffer -range -addr=buffers -complete=file_in_path BlackThese call py#black_these(<f-args>)
 
     function! s:IPythonOptions(...) abort
@@ -475,6 +481,7 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
     command! -bar -bang -nargs=* -complete=dir -complete=custom,s:IPythonOptions IPy :<mods>term<bang> ipython <args>
 
     command! -bar -bang -complete=buffer ScratchBuffer call pydoc_help#scratch_listed_buffer(<bang>0)
+
     command! -nargs=* -bar -bang Pynvim call py#Cnxn(<bang>0, <args>)
     command! -nargs=* -bar -bang PyChannel call py#Yours(<bang>0, <args>)
     " Add a platform check in that file so we can have 1 entry point
@@ -489,15 +496,14 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
     command! -bar -nargs=? PwshHelp call msdos#pwsh_help(shellescape(<f-args>))
   endif
 
-  " Chmod:
-  " From :he filename-modifiers in the cmdline page.
-
   " More From The Bottom Of Help Map:
   command! -bang -bar -nargs=+ -complete=file -complete=file_in_path EditFiles
       \ for f in expand(<q-args>, 0, 1) |
       \ exe '<mods> split ' . f<bang> |
       \ endfor
+
   command! -bar -range -nargs=* -complete=file Snew call unix#SpecialEdit(<q-args>, <q-mods>)
+
   command! -complete=filetype -bar UltiSnipsListSnippets call UltiSnips#ListSnippets()
 
   " echos either 1 or 0
@@ -544,7 +550,17 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
   endif
 
 " Fugitive Functions:
+  function! s:get_git_root()
+    let root = split(system('git rev-parse --show-toplevel'), '\n')[0]
+    return v:shell_error ? '' : root
+  endfunction
+
     function s:ProjectGitDir() abort
+
+      let root = s:get_git_root()
+  if empty(root)
+    return s:warn('Not in git repo')
+  endif
       " Like how would this not be really useful all the time?
       return FugitiveExtractGitDir(fnamemodify(expand('%'), ':p:h'))
     endfunction
@@ -565,19 +581,19 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
     " TODO: completes for both of these
     command! -nargs=* -bar Gds2 :enew<bar>:Gread! diff --staged --stat HEAD -- .<bar>set filetype=git
 
-  " Syntax Highlighting:
-    command! HL call syncom#HL()
-    command! HiC call syncom#HiC()
-    command! HiQF call syncom#HiQF()
-    command! SyntaxInfo call syncom#get_syn_info()
-    " Works:
-    command! HiTest call syncom#hitest()
+" Syntax Highlighting:
+  command! HL call syncom#HL()
+  command! HiC call syncom#HiC()
+  command! HiQF call syncom#HiQF()
+  command! SyntaxInfo call syncom#get_syn_info()
+  " Works:
+  command! HiTest call syncom#hitest()
 
-    function! s:CompleteSynInclude(A, L, P) abort
+  function! s:CompleteSynInclude(A, L, P) abort
 
-      return globpath(&rtp, "syntax/**/*.vim", 0, 1)
-    endfunction
+    return globpath(&rtp, "syntax/**/*.vim", 0, 1)
+  endfunction
 
-    " Its annoying that syn include doesnt complete paths
-    " Now it does!
-    command! -nargs=1 -bar -complete=customlist,s:CompleteSynInclude SynInclude syntax include <args>
+  " Its annoying that syn include doesnt complete paths
+  " Now it does!
+  command! -nargs=1 -bar -complete=syntax -complete=customlist,s:CompleteSynInclude SyntaxInclude syntax include <args>

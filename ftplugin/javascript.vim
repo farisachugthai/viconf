@@ -10,7 +10,11 @@ if exists('b:did_ftplugin') | finish | endif
 
 " Options:
   source $VIMRUNTIME/ftplugin/javascript.vim
-  source $VIMRUNTIME/indent/javascript.vim
+  if &filetype ==# 'javascript'  " typescript
+    source $VIMRUNTIME/indent/javascript.vim
+    source $VIMRUNTIME/autoload/javascriptcomplete.vim
+    setlocal omnifunc=javascriptcomplete#CompleteJS
+  endif
 
   setlocal expandtab
   setlocal shiftwidth=2
@@ -18,9 +22,6 @@ if exists('b:did_ftplugin') | finish | endif
   setlocal suffixesadd+=.html,.css,.js
   " see $VIMRUNTIME/syntax/javascript.vim for more
   setlocal foldmethod=syntax
-
-  source $VIMRUNTIME/autoload/javascriptcomplete.vim
-  setlocal omnifunc=javascriptcomplete#CompleteJS
 
   " Set 'comments' to format dashed lists in comments.
   setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://

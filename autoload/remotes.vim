@@ -9,26 +9,12 @@
 " apart how neovim's remote hosts work well enough that I pretty much have the user facing portion
 " of the code laid out here. So if something fucks up, tinker here and make note of it.
 
-
+let g:autoloaded_remotes = 1  " just to let me know that this got sourced
 let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Evervim. Thanks!
 let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
 
-function! remotes#init() abort
-  " Dispatches the remainder here
-  if !has('unix')
-    call remotes#msdos()
-  else
-    if s:termux
-      call remotes#termux()
-    else
-      call remotes#ubuntu()
-    endif
-  endif
-endfunction
-
 function! remotes#unix_clipboard() abort
-
   if exists('$TMUX')
     let g:clipboard = {
           \   'name': 'myclipboard',
@@ -58,42 +44,47 @@ function! remotes#unix_clipboard() abort
   endif
 endfunction
 
-function! remotes#_sources(ruby_host) abort
-  source $VIMRUNTIME/autoload/remote/host.vim
-  source $VIMRUNTIME/autoload/provider/python3.vim
-  source $VIMRUNTIME/autoload/provider/pythonx.vim
-  source $VIMRUNTIME/autoload/provider/python.vim
-" Note that this line will raise if script_host ia already registered.
-  " unlet! g:loaded_python3_provider | source $VIMRUNTIME/autoload/provider/python3.vim
-  source $VIMRUNTIME/autoload/provider/node.vim
-  source $VIMRUNTIME/autoload/provider/ruby.vim
-
-  if a:ruby_host is v:true
-    rubyfile $VIMRUNTIME/autoload/provider/script_host.rb
-  endif
-
-  source $VIMRUNTIME/autoload/provider/clipboard.vim
-endfunction
-
 function! remotes#termux() abort
   " From what i can tell, this line alone is as good as :UpdateRemotePlugins
   let g:python3_host_prog = s:repo_root . '/.venv/bin/python'
   let g:loaded_python_provider = 1
 
-  augroup FuckingRemotes
-    au!
-    " *****
-    " Bug:
-    " *****
-    " syntax hl fucks up here
-    au! UltiSnips_AutoTrigger *
-  augroup END
-
   let g:node_host_prog = '/data/data/com.termux/files/home/.local/share/yarn/global/node_modules/neovim/bin/cli.js'
   let g:ruby_host_prog = '/data/data/com.termux/files/home/.gem/bin/neovim-ruby-host'
 
+  let g:loaded_remote_plugins = '/data/data/com.termux/files/home/.local/share/nvim/rplugin.vim'
+
+  " $VIMRUNTIME/autoload/remote/host.vim
+  " call remote#host#Register('python', '*',
+  "       \ function('provider#pythonx#Require'))
+  " call remote#host#Register('python3', '*',
+  "       \ function('provider#pythonx#Require'))
+  " $VIMRUNTIME/autoload/provider/python.vim
+  " The Python provider plugin will run in a separate instance of the Python
+  " host.
+  " call remote#host#RegisterClone('legacy-python-provider', 'python')
+  " call remote#host#RegisterPlugin('legacy-python-provider', 'script_host.py', [])
+
+  " $VIMRUNTIME/autoload/provider/python3.vim
+  " The Python3 provider plugin will run in a separate instance of the Python3
+  " host.
+  " call remote#host#RegisterClone('legacy-python3-provider', 'python3')
+  " call remote#host#RegisterPlugin('legacy-python3-provider', 'script_host.py', [])
+
+  " And for all of this, $VIMRUNTIME/autoload/provider/pythonx.vim,
+  " is still the file i want to entirely rewrite. no values are returned from the functions, the
+  " vars are referenced globally but are s: scoped like its literally fucking impossible to work
+  " with.
+  "
+  " So this line need to be under the registerplugin call. Btw wouldnt it make more sense to have
+  " registerplugin before clone? Whatever.
+  " Because we set this $VIMRUNTIME/plugin/rplugin.vim isnt gomna load
+  " from $VIMRUNTIME/autoload/provider/python3.vim
+  " provider#python3#Call
+    " Ensure that we can load the Python host before bootstrapping
+    " i want the object first also i wanna make sure that this is getting called
+  " let g:python3host = remote#host#Require('legacy-python3-provider')
   call remotes#unix_clipboard()
-  call remotes#_sources(v:true)
 endfunction
 
 function! remotes#ubuntu() abort
@@ -105,7 +96,6 @@ function! remotes#ubuntu() abort
   let g:ruby_host_prog = expand('~/.gem/bin/neovim-ruby-host')
 
   call remotes#unix_clipboard()
-  call remotes#_sources(v:true)
 endfunction
 
 function! remotes#msdos() abort
@@ -132,23 +122,48 @@ function! remotes#msdos() abort
   source $VIMRUNTIME/autoload/provider/clipboard.vim
 endfunction
 
-function! remotes#HardReset() abort
-
+function! remotes#HardReset(ruby_host) abort
   let g:failed_providers = {}
+  source $VIMRUNTIME/autoload/remote/host.vim
   for i in ['clipboard' , 'node', 'python', 'python3', 'pythonx', 'ruby']
     try
       " :unlet g:loaded_clipboard_provider
       exe 'silent! unlet! g:loaded_' . i . '_provider'
       " :runtime autoload/provider/clipboard.vim
       exe 'source $VIMRUNTIME/autoload/provider/' . i . '.vim'
+      try
+        call remote#host#PluginsForHost(i)
+      catch /.*/
+        let g:failed_providers[i + "_host"] = v:exception
+      endtry
     catch
       " **DO NOT** echoerr. It'll jam the functoin and stop the rest of the for loop from continuing.
       let g:failed_providers[i] = v:exception
     endtry
+
   endfor
 
-  rubyfile $VIMRUNTIME/autoload/provider/script_host.rb
+  " Note that this line will raise if script_host ia already registered.
+  " unlet! g:loaded_python3_provider | source $VIMRUNTIME/autoload/provider/python3.vim
+
+  if a:ruby_host is v:true
+    rubyfile $VIMRUNTIME/autoload/provider/script_host.rb
+  endif
+
   source $VIMRUNTIME/autoload/provider/clipboard.vim
   return g:failed_providers
 endfunction
 
+function! remotes#init() abort
+  " Dispatches the remainder here
+  if !has('unix')
+    call remotes#msdos()
+  else
+    if s:termux
+      call remotes#termux()
+    else
+      call remotes#ubuntu()
+    endif
+  endif
+  echo remotes#HardReset(v:true)
+endfunction

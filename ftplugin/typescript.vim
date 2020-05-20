@@ -9,7 +9,7 @@ if exists('b:did_ftplugin') | finish | endif
 
 let s:ftplugin_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h'))
 exec 'source ' . s:ftplugin_root . '/javascript.vim'
-unlet! b:did_indent
+silent unlet! b:did_indent
 source $VIMRUNTIME/indent/typescript.vim
 
 " Simple Options:
@@ -31,7 +31,7 @@ source $VIMRUNTIME/indent/typescript.vim
 
 " Plugins:
   if !has('unix')
-    let g:ale_windows_node_executable_path = fnameescape('C:/Program Files/nodejs/node.exe')
+    let g:ale_windows_node_executable_path = g:node_host_prog
   endif
 
   let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
@@ -39,7 +39,6 @@ source $VIMRUNTIME/indent/typescript.vim
   let b:ale_fixers += ['eslint']
   let b:ale_fixers += ['tslint']
   let b:ale_linters = get(g:, 'ale_linters["*"]', ['tsserver', 'eslint', 'prettier',])
-
 
 " Original:
   " https://gist.githubusercontent.com/romainl/a50b49408308c45cc2f9f877dfe4df0c/raw/1ab8eb733948c0c89d11553cc0e00f4ab251f31e/typescript.vim
@@ -50,12 +49,11 @@ source $VIMRUNTIME/indent/typescript.vim
 
 " Matchit:
   if exists('g:loaded_matchit')
-  let b:match_words = '\<function\>:\<return\>,'
-                  \ . '\<do\>:\<while\>,'
-                  \ . '\<switch\>:\<case\>:\<default\>,'
-                  \ . '\<if\>:\<else\>,'
-                  \ . '\<try\>:\<catch\>:\<finally\>'
-  let b:did_typescript_setup = 1
+    let b:match_words = '\<function\>:\<return\>,'
+                    \ . '\<do\>:\<while\>,'
+                    \ . '\<switch\>:\<case\>:\<default\>,'
+                    \ . '\<if\>:\<else\>,'
+                    \ . '\<try\>:\<catch\>:\<finally\>'
   endif
 
 " More Helpful GF:
@@ -67,7 +65,7 @@ source $VIMRUNTIME/indent/typescript.vim
 
   if !exists('*s:GF')
     function! s:GF(text, cmd)
-    let l:include_expression = TypeScriptIncludeExpression(a:text, 1)
+    let l:include_expression = includes#TypeScriptIncludeExpression(a:text, 1)
 
     if len(l:include_expression) > 1
       execute a:cmd . ' ' . l:include_expression

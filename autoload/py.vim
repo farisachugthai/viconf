@@ -20,6 +20,10 @@ function! py#nvim_taglist() abort
 endfunction
 
 function! py#PythonPath() abort
+  " Defer if g:python3_host_prog isnt set
+  if empty('g:python3_host_prog')
+    call remotes#init()
+  endif
   py3 import site
   let s:path = '.,,**,'
   let s:user_site = py3eval('site.USER_SITE')
@@ -53,23 +57,23 @@ function! py#SecondTry() abort
       let s:path = s:path . s:site_pack
       let s:path =  s:root_dir . '/lib/python3.8/**/*' . ',' . s:path
 
-    " sunovabitch conda doesn't put stuff in the same spot. TODO: check the ret value of exepath
-    " for a match of "conda" instead of a unix check
-    else
-        let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h')
+  " sunovabitch conda doesn't put stuff in the same spot. TODO: check the ret value of exepath
+  " for a match of "conda" instead of a unix check
+  else
+    let s:root_dir = fnamemodify(g:python3_host_prog, ':p:h')
 
-        let s:site_pack = s:root_dir . '/lib/site-packages/**2/'
-        let s:path = s:path . s:site_pack
+    let s:site_pack = s:root_dir . '/lib/site-packages/**2/'
+    let s:path = s:path . s:site_pack
 
-        " This option requires that the **# either is at the end of the path or
-        " ends with a '/'
-        " let s:path =  ',' . s:root_dir . '/lib/**1/' . s:path . ','
-        " make this last. its the standard lib and we prepend it to the path so
-        " it should be first in the option AKA last in the function
-        let s:path = s:root_dir . '/lib' . s:path
-      endif
-   endif
-   return s:path
+    " This option requires that the **# either is at the end of the path or
+    " ends with a '/'
+    " let s:path =  ',' . s:root_dir . '/lib/**1/' . s:path . ','
+    " make this last. its the standard lib and we prepend it to the path so
+    " it should be first in the option AKA last in the function
+    let s:path = s:root_dir . '/lib' . s:path
+  endif
+  endif
+  return s:path
 endfunction
 
 function! py#YAPF() abort
