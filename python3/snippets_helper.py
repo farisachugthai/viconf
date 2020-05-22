@@ -12,10 +12,21 @@ A useful combination with UltiSnips.
 
 """
 import os
+import pprint
 import string
+import sys
 import textwrap
 
+from collections import UserString
+
 import vim  # noqa
+
+try:
+    import pynvim
+except ImportError:
+    pynvim = None
+
+sys.path.append(".")
 
 NORMAL = 0x1
 DOXYGEN = 0x2
@@ -129,7 +140,7 @@ def complete(tab, opts):
     """
     msg = "({0})"
     if tab:
-        opts = [m[len(tab) :] for m in opts if m.startswith(tab)]
+        opts = [m[len(tab):] for m in opts if m.startswith(tab)]
     if len(opts) == 1:
         return opts[0]
 
@@ -236,8 +247,7 @@ class Arg:
     def __str__(self):
         return self.name
 
-    def __unicode__(self):
-        return self.name
+    __repr__ = __str__
 
     def is_kwarg(self):
         return "=" in self.arg
@@ -454,7 +464,7 @@ def get_full_path_to_buffer():
     return vim.eval("fnamemodify(bufname(bufnr()), ':p')")
 
 
-class TextTag:
+class TextTag(UserString):
     """Represents a base text tag"""
 
     def __init__(self, text):
@@ -574,7 +584,9 @@ def x(snip):
 
 def compB(t, opts):
     if t:
-        opts = [m[len(t) :] for m in opts if m.startswith(t)]
+        opts = [m[len(t):] for m in opts if m.startswith(t)]
         if len(opts) == 1:
             return opts[0]
         return "(" + "|".join(opts) + ")"
+
+

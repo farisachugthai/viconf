@@ -9,8 +9,6 @@ if exists('b:did_ftplugin') | finish | endif
 
 let s:ftplugin_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h'))
 exec 'source ' . s:ftplugin_root . '/javascript.vim'
-silent unlet! b:did_indent
-source $VIMRUNTIME/indent/typescript.vim
 
 " Simple Options:
   setlocal expandtab tabstop=4 softtabstop=2 shiftwidth=2
@@ -57,7 +55,6 @@ source $VIMRUNTIME/indent/typescript.vim
   endif
 
 " More Helpful GF:
-
   nnoremap <silent> <buffer> gf         <Cmd>call <SID>GF(expand('<cfile>'), 'find')<CR>
   xnoremap <silent> <buffer> gf         <Cmd>call <SID>GF(visual#GetSelection(), 'find')<CR>
   nnoremap <silent> <buffer> <C-w><C-f> <Cmd>call <SID>GF(expand('<cfile>'), 'sfind')<CR>

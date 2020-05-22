@@ -442,8 +442,7 @@
     nnoremap ,y <Cmd>CocFloatJump<CR>
 
 if !exists('Window_Mappings')
-
-function! Window_Mappings() abort
+function Window_Mappings() abort
   " Navigate windows more easily
   " nnoremap <C-h> <Cmd>wincmd h<CR>
   " This displays as <NL> when you run `:map` but it behaves like C-j. Oh well.
@@ -483,7 +482,7 @@ function! Window_Mappings() abort
   " nnoremap <C-w><M-Right>
   nnoremap <C-w><M-Up> 5<C-w>+
 endfunction
-
+endif
 function! Quickfix_Mappings() abort
   " Jump to and from location/quickfix windows.
   nnoremap <Leader>lc <Cmd>lclose<CR>
@@ -711,7 +710,6 @@ endfunction
   if !hasmapto('<Plug>(HL)')
     nnoremap <Leader>H <Plug>(HL)
   endif
-endif
 
 " Call Functions:
   if !exists('no_plugin_maps') && !exists('no_windows_vim_maps') && !exists('g:loaded_plugin_mappings')
@@ -724,9 +722,6 @@ endif
     " if exists('b:git_dir')  " before we reload this make sure were in a git dir
     " actually dont. we have to source it regardless and we may as well do it earlier
     " because &rtp is so long it takes longer for vim to figure than just telling it
-      if !exists('g:autoloaded_fugitive')
-        source $HOME/.local/share/nvim/plugged/vim-fugitive/autoload/fugitive.vim
-      endif
     " endif
     call UserFugitiveMappings()
     let g:loaded_plugin_mappings = 1

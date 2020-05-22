@@ -14,8 +14,6 @@ setglobal cpoptions-=c,e,_  " couple options that bugged me
 setglobal fileencodings=utf-8,default,latin1   " UGHHHHH
 setglobal nobomb | lockvar g:nobomb
 setglobal hidden
-setglobal background=dark
-let g:syntax_cmd = 'manual'
 
 let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Evervim. Thanks!
 let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h'))
@@ -27,7 +25,6 @@ if !has('unix')
   source C:/Neovim/share/nvim-qt/runtime/plugin/nvim_gui_shim.vim
 endif
 
-setglobal background=dark
 set debug=msg
 if exists('g:GuiLoaded')
   exec 'source ' s:repo_root . '/ginit.vim'
@@ -56,7 +53,6 @@ let g:maplocalleader = '<Space>'
 map <Space> <Leader>
 
 if has('nvim-0.4')   " Fun new features!
-  let &shadafile = s:stddata . '/site/shada/main.shada'
   " toggle transparency in the pum and windows. don't set higher than 10 it becomes hard to read higher than that
   setglobal pumblend=10 winblend=5
   try | setglobal pyxversion=3 | catch /^Vim:E518:*/ | endtry
@@ -121,30 +117,30 @@ function! LoadMyPlugins() abort  " {{{
   Plug 'romainl/vim-qf'
   Plug 'tomtom/tlib_vim'
   Plug 'godlygeek/tabular', {'on': 'Tabularize'}
-  Plug 'tpope/vim-unimpaired'
-  Plug 'tpope/vim-surround'
-  Plug 'tpope/vim-eunuch'
   Plug 'morhetz/gruvbox'
 
   if empty(s:termux)  " {{{
-    Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
-    Plug 'junegunn/goyo.vim', {'on': 'Goyo'}
     Plug 'lepture/vim-jinja'
     Plug 'honza/vim-snippets'
-    Plug 'cespare/vim-toml', {'for': 'toml'}
-    Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
-    Plug 'omnisharp/omnisharp-vim', {'for': ['cs', 'ps1'] }
-    Plug 'itspriddle/vim-shellcheck', {'for': ['sh', 'bash'] }
     " Plug 'neovim/nvim-lsp'
-    Plug 'mhinz/vim-startify'
     Plug 'ludovicchabant/vim-gutentags'
     Plug 'mbbill/undotree', { 'on' : 'UndotreeToggle' }
     nnoremap U <Cmd>UndoTreeToggle<CR>
-    Plug 'tpope/vim-apathy'
+    Plug 'tpope/vim-unimpaired'
+    Plug 'tpope/vim-surround'
+    Plug 'tpope/vim-eunuch'
     Plug 'liuchengxu/vim-which-key'
     Plug 'liuchengxu/vista.vim'
   endif
 
+  Plug 'cespare/vim-toml', {'for': 'toml'}
+  Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
+  Plug 'omnisharp/omnisharp-vim', {'for': ['cs', 'ps1'] }
+  Plug 'PProvost/vim-ps1', { 'for': ['ps1', 'ps1xml', 'xml'] }
+  Plug 'junegunn/goyo.vim', {'on': 'Goyo'}
+  Plug 'itspriddle/vim-shellcheck', {'for': ['sh', 'bash'] }
+
+  Plug 'mhinz/vim-startify'
   Plug 'kshenoy/vim-signature'
 
   Plug 'ryanoasis/vim-devicons'

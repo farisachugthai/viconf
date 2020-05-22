@@ -19,12 +19,9 @@
     setlocal keywordprg=pydoc
   endif
 
+  source $VIMRUNTIME/autoload/python3complete.vim
   setlocal omnifunc=python3complete#Complete
   source $VIMRUNTIME/ftplugin/python.vim
-  if exists('b:did_indent')
-    silent unlet! b:did_indent
-  endif
-  source $VIMRUNTIME/indent/python.vim
 
   setlocal tagcase=smart
   setlocal tabstop=4

@@ -206,8 +206,14 @@ endfunction
 function! includes#CPath() abort
   let s:path='.,**,,'
 
+  if exists('$PREFIX')
+    let s:root  = expand('$PREFIX')
+  else
+    let s:root  = '/usr'
+  endif
+
   if has('unix')
-    let s:path = s:path . '/usr/include,/usr/local/include,'
+    let s:path = s:path . s:root. '/include,' . s:root . '/local/include,'
 
     if isdirectory(expand('$HOME/.local/include'))
       let s:path = s:path . ',' .  expand('$HOME') . '/.local/include'

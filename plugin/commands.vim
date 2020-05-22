@@ -285,7 +285,10 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
       return {}
     endfunction
 
-    command! -bar -bang -nargs=? -complete=file GFiles call fzf#vim#gitfiles(<q-args>, <q-args> == "?" ? {} : s:p(<bang>0), <bang>0)
+    " Add fugitives completion to make this command way better
+    " FUCK YES THIS WORKS PERFECTLY HOLY FUCK
+    command! -bar -bang -nargs=? -complete=customlist,fugitive#PathComplete GFiles call fzf#vim#gitfiles(<q-args>, <q-args> == "?" ? {} : s:p(<bang>0), <bang>0)
+    command! -bar -bang -nargs=? -complete=customlist,fugitive#PathComplete GitFiles call fzf#vim#gitfiles(<q-args>, <q-args> == "?" ? {} : s:p(<bang>0), <bang>0)
 
     " Me just copy pasting his plugin
     command! -bar -bang -complete=mapping IMaps call fzf#vim#maps("i", <bang>0)
@@ -406,9 +409,6 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
 " Python:
   " Pydoc:
-    exec 'source ' . s:repo_root . '/autoload/remotes.vim'
-
-    call remotes#init()
     " endif
 
     command! -bar -complete=expression -complete=function -range -nargs=+ Pythonx <line1>,<line2>python3 <args>
@@ -550,36 +550,40 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
   endif
 
 " Fugitive Functions:
+  " If it hasnt been, source fugitive.
+  if !exists('g:autoloaded_fugitive')
+    source $HOME/.local/share/nvim/plugged/vim-fugitive/autoload/fugitive.vim
+  endif
+
   function! s:get_git_root()
     let root = split(system('git rev-parse --show-toplevel'), '\n')[0]
     return v:shell_error ? '' : root
   endfunction
 
-    function s:ProjectGitDir() abort
+  function s:ProjectGitDir() abort
+    let root = s:get_git_root()
+    if empty(root)
+      return s:warn('Not in git repo')
+    endif
+    " Like how would this not be really useful all the time?
+    return FugitiveExtractGitDir(fnamemodify(expand('%'), ':p:h'))
+  endfunction
 
-      let root = s:get_git_root()
-  if empty(root)
-    return s:warn('Not in git repo')
-  endif
-      " Like how would this not be really useful all the time?
-      return FugitiveExtractGitDir(fnamemodify(expand('%'), ':p:h'))
-    endfunction
+  function ProjectRoot() abort
+    return fnamemodify(fnameescape(s:ProjectGitDir()), ':p:h')
+  endfunction
 
-    function ProjectRoot() abort
-      return fnamemodify(fnameescape(s:ProjectGitDir()), ':p:h')
-    endfunction
+  command! -range=% -addr=buffers -bang -bar GRoot echo ProjectRoot()
 
-    command! -range=% -addr=buffers -bang -bar GRoot echo ProjectRoot()
+  " XXX: might not be the right complete
+  command! -complete=customlist,fugitive#ReadComplete -range -addr=arguments -bang -bar -nargs=* Gclone exe fugitive#Command(<line1>, <count>, +"<range>", <bang>0, "<mods>", <q-args>)
 
-    command! -range -addr=arguments -bang -bar -nargs=* Gclone exe fugitive#Command(<line1>, <count>, +"<range>", <bang>0, "<mods>", <q-args>)
+  " no args no nothing. just a reminder you can fill a buffer with git output. and then i forgot
+  " that this was supposed to just be  a reminder. ready to overengineer TO THE EXTREME
+  command! -bar GHead call plugins#fugitive_head()
 
-    " no args no nothing. just a reminder you can fill a buffer with git output. and then i forgot
-    " that this was supposed to just be  a reminder. ready to overengineer TO THE EXTREME
-
-    command! -bar GHead call  plugins#fugitive_head()
-
-    " TODO: completes for both of these
-    command! -nargs=* -bar Gds2 :enew<bar>:Gread! diff --staged --stat HEAD -- .<bar>set filetype=git
+  " TODO: completes for both of these
+  command! -complete=customlist,fugitive#ReadComplete -range -addr=arguments -bang -nargs=* Gds2 :enew<bang><bar>:Gread! diff --staged --stat HEAD -- .<bar>set filetype=git
 
 " Syntax Highlighting:
   command! HL call syncom#HL()
@@ -590,10 +594,12 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
   command! HiTest call syncom#hitest()
 
   function! s:CompleteSynInclude(A, L, P) abort
-
     return globpath(&rtp, "syntax/**/*.vim", 0, 1)
   endfunction
 
   " Its annoying that syn include doesnt complete paths
   " Now it does!
-  command! -nargs=1 -bar -complete=syntax -complete=customlist,s:CompleteSynInclude SyntaxInclude syntax include <args>
+  command! -nargs=1 -bar -complete=customlist,s:CompleteSynInclude SyntaxIncludeMyComplete syntax include <args>
+
+  " note that this doesnt work.
+  " command! -nargs=1 -bar -complete=syntax SyntaxIncludeBuiltin syntax include <args>

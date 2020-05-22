@@ -457,13 +457,6 @@
 
   function! s:InitCoc() abort
 
-    if !exists('g:coc_global_extensions')
-      let g:coc_global_extensions = [ 'coc-css',
-            \ 'coc-dictionary', 'coc-eslint', 'coc-git', 'coc-html',
-            \ 'coc-json', 'coc-lists', 'coc-python', 'coc-snippets',
-            \ 'coc-tsserver', 'coc-vimlsp',]
-    endif
-
     " Windows setup
       if !has('unix')
         let g:coc_node_path = 'C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\\node.exe'

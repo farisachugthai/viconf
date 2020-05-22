@@ -45,8 +45,6 @@ def env(listen_addr: Optional[os.PathLike] =None):
         os.environ.putenv("NVIM_LISTEN_ADDRESS", listen_addr.name)
 
 
-
-
 @pytest.fixture
 def old_vim():
     # now that i'm rereading it this is such a weird way of settings things up.

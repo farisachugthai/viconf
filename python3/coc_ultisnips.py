@@ -6,24 +6,8 @@ from pathlib import Path
 import sys
 import vim  # noqa
 
-try:
-    import pynvim
-except ImportError:
-    pynvim = None
+# from snippets_helper import *  # noqa
 
-sys.path.append(".")
-
-from snippets_helper import *  # noqa
-
-NORMAL = 0x1
-DOXYGEN = 0x2
-SPHINX = 0x3
-GOOGLE = 0x4
-NUMPY = 0x5
-JEDI = 0x6
-
-SINGLE_QUOTES = "'"
-DOUBLE_QUOTES = '"'
 
 _Placeholder = namedtuple("_FrozenPlaceholder", ["current_text", "start", "end"])
 _VisualContent = namedtuple("_VisualContent", ["mode", "text"])
@@ -275,7 +259,7 @@ class ContextSnippet:
         self.line = vim.call("line", ".") - 1
         self.column = vim.call("col", ".") - 1
         line = vim.call("getline", ".")
-        self.after = line[self.column :]
+        self.after = line[self.column:]
         if "coc_selected_text" in vim.vars:
             self.visual_mode = vim.eval("visualmode()")
             self.visual_text = vim.vars["coc_selected_text"]

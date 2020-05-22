@@ -9,7 +9,6 @@
 " apart how neovim's remote hosts work well enough that I pretty much have the user facing portion
 " of the code laid out here. So if something fucks up, tinker here and make note of it.
 
-let g:autoloaded_remotes = 1  " just to let me know that this got sourced
 let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Evervim. Thanks!
 let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
@@ -119,18 +118,26 @@ function! remotes#msdos() abort
         \   'cache_enabled': 1,
         \ }
 
-  source $VIMRUNTIME/autoload/provider/clipboard.vim
 endfunction
 
 function! remotes#HardReset(ruby_host) abort
   let g:failed_providers = {}
+
+  if exists('g:autoloaded_remotes')
+    finish
+  endif
+  let g:autoloaded_remotes = 1  " just to let me know that this got sourced
+
   source $VIMRUNTIME/autoload/remote/host.vim
-  for i in ['clipboard' , 'node', 'python', 'python3', 'pythonx', 'ruby']
+  source $VIMRUNTIME/autoload/remote/define.vim
+
+  " Dont load python because for some reason thats the only one that takes 200ms
+  for i in ['node', 'python3', 'pythonx', 'ruby']
     try
       " :unlet g:loaded_clipboard_provider
       exe 'silent! unlet! g:loaded_' . i . '_provider'
       " :runtime autoload/provider/clipboard.vim
-      exe 'source $VIMRUNTIME/autoload/provider/' . i . '.vim'
+      " exe 'source $VIMRUNTIME/autoload/provider/' . i . '.vim'
       try
         call remote#host#PluginsForHost(i)
       catch /.*/
@@ -150,7 +157,6 @@ function! remotes#HardReset(ruby_host) abort
     rubyfile $VIMRUNTIME/autoload/provider/script_host.rb
   endif
 
-  source $VIMRUNTIME/autoload/provider/clipboard.vim
   return g:failed_providers
 endfunction
 
@@ -166,4 +172,6 @@ function! remotes#init() abort
     endif
   endif
   echo remotes#HardReset(v:true)
+  " So i dont think this responds to PluginsForHost
+  " source $VIMRUNTIME/autoload/provider/clipboard.vim
 endfunction

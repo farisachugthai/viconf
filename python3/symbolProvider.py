@@ -6,8 +6,9 @@ import json
 import sys
 
 
-class Visitor(ast.NodeVisitor):
+class Visitor(ast.NodeTransformer):
     def __init__(self):
+        # Note: This doesnt have a missed call to super(). Neither superclass defines one!
         self.symbols = {"classes": [], "methods": [], "functions": []}
 
     def visit_Module(self, node):
@@ -71,13 +72,7 @@ def provide_symbols(source):
     sys.stdout.flush()
 
 
-if __name__ == "__main__":
-    if len(sys.argv) == 3:
-        contents = sys.argv[2]
-    else:
-        with open(sys.argv[1], "r") as source:
-            contents = source.read()
-
+def re_encode(contents):
     try:
         default_encoding = sys.getdefaultencoding()
         encoded_contents = contents.encode(default_encoding, "surrogateescape")
@@ -86,4 +81,14 @@ if __name__ == "__main__":
         pass
     if isinstance(contents, bytes):
         contents = contents.decode("utf8")
-    provide_symbols(contents)
+
+
+if __name__ == "__main__":
+    if len(sys.argv) == 3:
+        contents = sys.argv[2]
+    else:
+        with open(sys.argv[1], "r") as source:
+            contents = source.read()
+
+    text = re_encode(contents)
+    provide_symbols(text)

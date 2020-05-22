@@ -10,7 +10,6 @@ setglobal ruler
 
 let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
-
 function! s:fzf_statusline()  abort
   " Curious if this'll work
   hi! fzf1 cterm=bold,undercurl,reverse gui=bold,undercurl,reverse guifg=#7daea3 guibg=NONE ctermbg=NONE guisp=NONE font='Source Code Pro'
@@ -19,7 +18,6 @@ function! s:fzf_statusline()  abort
   setlocal statusline=%#fzf1#\ FZF:\ %#fzf2#fz%#fzf3#f
 endfunction
 
-
 function! s:VarExists(var, val) abort
   if exists(a:var)
     return a:val
@@ -27,7 +25,6 @@ function! s:VarExists(var, val) abort
     return ''
   endif
 endfunction
-
 
 function! s:StatusDiagnostic() abort
   if !exists('g:loaded_coc') | return '' | endif
@@ -43,7 +40,6 @@ function! s:StatusDiagnostic() abort
   endif
   return join(l:msgs, ' ') . ' ' . get(g:, 'coc_status', '')
 endfunction
-
 
 function! s:_Statusline(bang, ...) range abort
   " from he 'statusline'.
@@ -88,14 +84,11 @@ function! s:_Statusline(bang, ...) range abort
   return g:statusline
 endfunction
 
-
 function! Statusline(bang, ...) abort
   return s:_Statusline(a:bang, a:000)
 endfunction
 
-
 command! -bang -bar -nargs=* -range=% -addr=loaded_buffers -complete=expression -complete=var ReloadStatusline call Statusline(<bang>0, <q-args>)
-
 
 augroup FZFStatusline
   " NOTE: This has to remain the name of the augroup it's what Junegunn calls
@@ -103,7 +96,6 @@ augroup FZFStatusline
   autocmd User call s:fzf_statusline()
   autocmd User setlocal winblend=15 pumblend=10
 augroup END
-
 
 augroup UserStatusline
   au!
@@ -114,7 +106,6 @@ augroup UserStatusline
 
   autocmd VimEnter * call Statusline(1)
 augroup END
-
 
 augroup UserFtplugin
   au!
@@ -148,9 +139,7 @@ augroup UserFtplugin
       \|  call SuperTabChain(&completefunc, "<c-p>")
       \| endif
   endif
-
 augroup END
-
 
 function! s:Goyo_enter()
   if executable('tmux') && strlen($TMUX)
@@ -163,7 +152,6 @@ function! s:Goyo_enter()
   " ... Limelight
 endfunction
 
-
 function! s:Goyo_leave()
   if executable('tmux') && strlen($TMUX)
     silent !tmux set status on
@@ -174,7 +162,6 @@ function! s:Goyo_leave()
   set scrolloff=5
   " ... Limelight!
 endfunction
-
 
 augroup UserPlugins
   au!
@@ -201,14 +188,12 @@ augroup UserPlugins
   endif
 augroup END
 
-
 function! StripTrailingWhitespace() abort
   let l:current_line = line(".")
   let l:column = col(".")
   %s/\s\+$//e
   call cursor(l:current_line, l:column)
 endfunction
-
 
 augroup UserPotpourri
   autocmd!
@@ -224,17 +209,14 @@ augroup UserPotpourri
   autocmd BufWinEnter * if &previewwindow | setlocal nonumber nornu | else | setlocal number relativenumber |  endif
 augroup END
 
-
 exec 'source ' . s:repo_root . '/autoload/syncom.vim'
 
 call syncom#gruvbox_material()
 call syncom#grepprg()
 
-
 if exists('#TagbarAutoCmds')
   au! TagbarAutoCmds *
 endif
-
 
 augroup UserNerdLoader
   autocmd!
@@ -245,9 +227,7 @@ augroup UserNerdLoader
         \| endif
 augroup END
 
-
 if !has('nvim') | finish | endif
-
 
 augroup UserTerm
   au!

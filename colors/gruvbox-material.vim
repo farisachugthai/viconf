@@ -18,8 +18,7 @@ if exists('syntax_on')
 endif
 let g:colors_name = 'gruvbox-material'
 
-" Meat and Potatoes: The ColorScheme:
-
+" Meat And Potatoes: The ColorScheme:
   let g:terminal_ansi_colors = [
                   \ '#665c54', '#ea6962', '#a9b665', '#e78a4e',
                   \ '#7daea3', '#d3869b', '#89b482', '#dfbf8e',
@@ -47,7 +46,6 @@ let g:colors_name = 'gruvbox-material'
   endif
 
 " Base Colors:
-  hi White guifg=#ffffff guibg=NONE guisp=NONE gui=NONE cterm=NONE ctermbg=NONE
   hi LightGrey guifg=#a89984 guibg=NONE guisp=NONE gui=NONE cterm=NONE
   hi Grey guifg=#928374 guibg=NONE guisp=NONE gui=NONE cterm=NONE
   hi Red guifg=#ea6962 guibg=NONE guisp=NONE gui=NONE cterm=NONE
@@ -116,49 +114,48 @@ let g:colors_name = 'gruvbox-material'
   hi VisualNOS guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
   hi Todo guifg=#928374 guibg=NONE guisp=NONE gui=bold,italic,underline cterm=bold,italic,underline
   hi CursorIM guifg=NONE guibg=NONE guisp=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
-  hi ToolbarLine guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE
+  hi ToolbarLine guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE guibg=#282828 ctermbg=242
   hi ToolbarButton guifg=#dfbf8e guibg=#665c54 guisp=NONE gui=bold cterm=bold
-  hi Debug guifg=#e78a4e guibg=NONE guisp=NONE gui=undercurl cterm=undercurl
-  hi Title guifg=#a9b665 guibg=NONE guisp=NONE gui=bold cterm=bold
-  hi Conditional guifg=#ea6962 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  hi Repeat guifg=#ea6962 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  hi Label guifg=#ea6962 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  hi Exception guifg=#ea6962 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  hi Keyword guifg=#ea6962 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  hi Statement guifg=#ea6962 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  hi Typedef guifg=#e3a84e guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  hi Type guifg=#e3a84e guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  hi StorageClass guifg=#e78a4e guibg=NONE guisp=NONE gui=NONE cterm=NONE
+  hi Debug guifg=#e78a4e guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=undercurl cterm=undercurl
+  hi Title guifg=#a9b665 guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=bold cterm=bold
+  hi Conditional guifg=#ea6962 guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=NONE cterm=NONE
+  hi Repeat guifg=#ea6962 guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=NONE cterm=NONE
+  hi Label guifg=#ea6962 guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=NONE cterm=NONE
+  hi Exception guifg=#ea6962 guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=NONE cterm=NONE
+  hi Keyword guifg=#ea6962 guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=NONE cterm=NONE
+  hi Statement guifg=#ea6962 guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=NONE cterm=NONE
+  hi Typedef guifg=#e3a84e guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=NONE cterm=NONE
+  hi Type guifg=#e3a84e guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=NONE cterm=NONE
+  hi StorageClass guifg=#e78a4e guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=NONE cterm=NONE
   hi! link Delimiter BlueBold
-  hi Special guifg=#e78a4e guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  hi Tag guifg=#e78a4e guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  hi Operator guifg=#e78a4e guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  hi SpecialChar guifg=#e78a4e guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  hi String guifg=#a9b665 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  hi PreProc guifg=#89b482 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  hi Macro guifg=#89b482 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  hi Define guifg=#89b482 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  hi Include guifg=#89b482 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  hi PreCondit guifg=#89b482 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  hi Structure guifg=#89b482 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  hi Identifier guifg=#7daea3 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  hi Underlined guifg=#7daea3 guibg=NONE guisp=NONE gui=underline cterm=underline
-  hi Constant guifg=#d3869b guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  hi Boolean guifg=#d3869b guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  hi Character guifg=#d3869b guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  hi Number guifg=#d3869b guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  hi Float guifg=#d3869b guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  hi SpecialKey guifg=#7daea3 guibg=NONE guisp=NONE gui=NONE cterm=NONE
-  hi Comment guifg=#928374 guibg=NONE guisp=NONE gui=italic cterm=italic
-  hi Function guifg=#a9b665 guibg=NONE guisp=NONE gui=bold cterm=bold
+  hi Special guifg=#e78a4e guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=NONE cterm=NONE
+  hi Tag guifg=#e78a4e guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=NONE cterm=NONE
+  hi Operator guifg=#e78a4e guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=NONE cterm=NONE
+  hi SpecialChar guifg=#e78a4e guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=NONE cterm=NONE
+  hi String guifg=#a9b665 guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=NONE cterm=NONE
+  hi PreProc guifg=#89b482 guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=NONE cterm=NONE
+  hi Macro guifg=#89b482 guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=NONE cterm=NONE
+  hi Define guifg=#89b482 guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=NONE cterm=NONE
+  hi Include guifg=#89b482 guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=NONE cterm=NONE
+  hi PreCondit guifg=#89b482 guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=NONE cterm=NONE
+  hi Structure guifg=#89b482 guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=NONE cterm=NONE
+  hi Identifier guifg=#7daea3 guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=NONE cterm=NONE
+  hi Underlined guifg=#7daea3 guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=underline cterm=underline
+  hi Constant guifg=#d3869b guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=NONE cterm=NONE
+  hi Boolean guifg=#d3869b guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=NONE cterm=NONE
+  hi Character guifg=#d3869b guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=NONE cterm=NONE
+  hi Number guifg=#d3869b guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=NONE cterm=NONE
+  hi Float guifg=#d3869b guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=NONE cterm=NONE
+  hi SpecialKey guifg=#7daea3 guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=NONE cterm=NONE
+  hi Comment guifg=#928374 guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=italic cterm=italic
+  hi Function guifg=#a9b665 guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=bold cterm=bold
   hi DiffAdd guifg=NONE guibg=#32361a guisp=NONE gui=NONE cterm=NONE
   hi DiffChange guifg=NONE guibg=#0d3138 guisp=NONE gui=NONE cterm=NONE
   hi DiffDelete guifg=NONE guibg=#3c1f1e guisp=NONE gui=NONE cterm=NONE
   " hi Error guisp=NONE term=NONE guibg=#4e4e4e cterm=bold ctermbg=239 gui=bold
-  hi Error guifg=#ea6962 guibg=NONE guisp=NONE gui=bold,underline cterm=bold,underline
+  hi Error guifg=#ea6962 guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=bold,underline cterm=bold,underline
 
-" Standard Highlights: {{{
-
+" Standard Highlights:
   let g:gruvbox_material_transparent_background = 0
   let g:gruvbox_material_enable_bold = 1
   let g:gruvbox_material_background = 'hard'
@@ -172,9 +169,6 @@ let g:colors_name = 'gruvbox-material'
   " Screen column that the cursor is
   hi! link CursorColumn CursorLine
   " Additional Links
-  hi! link manEmail Directory
-  hi! link manHeaderFile Statement
-  " hi link manHighlight
   hi! link VisualNC Visual
   " This is an exciting way to live life but jesus does it hurt your eyes
   " hi! link MsgArea WarningMsg
@@ -266,10 +260,6 @@ let g:colors_name = 'gruvbox-material'
     hi! link SyntasticWarningSign ALEWarningSign
 
   " GitGutter:
-    hi! link GitGutterAdd Green
-    hi! link GitGutterChange Macro
-    hi! link GitGutterDelete Red
-    hi! link GitGutterChangeDelete Macro
     hi GitGutterAdd guifg=#a9b665 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
     hi GitGutterChange guifg=#7daea3 guibg=#282828 guisp=NONE gui=NONE cterm=NONE ctermbg=242
     hi GitGutterDelete guifg=#ea6962 guibg=#282828 guisp=NONE gui=NONE cterm=NONE ctermbg=242
@@ -292,18 +282,15 @@ let g:colors_name = 'gruvbox-material'
     hi! link TagbarVisibilityPublic Blue
 
   " Coc:
-    hi CocHighlightText guifg=NONE guibg=NONE guisp=NONE gui=bold ctermfg=NONE ctermbg=NONE cterm=bold
     hi CocHintSign guifg=#89b482 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
     hi CocHoverRange guifg=NONE guibg=NONE guisp=NONE gui=bold,underline ctermfg=NONE ctermbg=NONE cterm=bold,underline
     hi! link CocCodeLens ALEVirtualTextInfo
-    hi! link CocCodeLens GruvboxGray
     hi! link CocDiagnosticsError Red
     hi! link CocDiagnosticsHint Blue
     hi! link CocDiagnosticsInfo Yellow
     hi! link CocDiagnosticsWarning Orange
     hi! link CocErrorFloat Red
     hi! link CocErrorHighlight ALEError
-    hi! link CocErrorLine Exception
     hi! link CocErrorSign ALEErrorSign
     hi! link CocErrorVirtualText ALEVirtualTextError
     hi! link CocExplorerBufferBufname Grey
@@ -327,20 +314,17 @@ let g:colors_name = 'gruvbox-material'
     hi! link CocGitChangedSign GitGutterChange
     hi! link CocGitRemovedSign GitGutterDelete
     hi! link CocGitTopRemovedSign GitGutterDelete
+    hi! link CocHighlightText LightGreyBold
     hi! link CocHintFloat Blue
-    hi! link CocHintLine Green
     hi! link CocHintVirtualText ALEVirtualTextInfo
     hi! link CocInfoFloat Yellow
     hi! link CocInfoHighlight ALEInfo
-    hi! link CocInfoLine EndOfBuffer
     hi! link CocInfoSign ALEInfoSign
     hi! link CocInfoVirtualText ALEVirtualTextInfo
     hi! link CocListsLine Blue
-    hi! link CocSelectedLine Visual
-    hi! link CocSelectedText GruvboxRed
+    hi! link CocSelectedText OrangeBold
     hi! link CocWarningFloat Orange
     hi! link CocWarningHighlight ALEWarning
-    hi! link CocWarningLine WarningMsg
     hi! link CocWarningSign ALEWarningSign
     hi! link CocWarningVirtualText ALEVirtualTextWarning
 
@@ -413,7 +397,7 @@ let g:colors_name = 'gruvbox-material'
     hi! link SignifySignChangeDelete GitGutterChangeDelete
 
     hi! link StartifyBracket Grey
-    hi! link StartifyFile White
+    hi! link StartifyFile Structure
     hi! link StartifyNumber Red
     hi! link StartifyPath Green
     hi! link StartifySlash Aqua
@@ -435,8 +419,7 @@ let g:colors_name = 'gruvbox-material'
 
     hi MatchParenCur guifg=NONE guibg=NONE guisp=NONE gui=bold,reverse ctermfg=NONE ctermbg=NONE cterm=bold,reverse
 
-" Filetype specific --------------------------------------------------- {{{
-
+" Filetype Specific: ---------------------------------------------------
   " Snippets:
     hi! link snipSnippets Normal
     " Holy shit this was make my eyes so much happier
@@ -475,18 +458,14 @@ let g:colors_name = 'gruvbox-material'
     hi! link cssBorderOutlineProp Directory
     hi! link cssBorderProp cssProp
     hi! link cssBoxAttr cssAttr
-    hi! link cssBoxProp Aqua
     hi! link cssBoxProp cssProp
     hi! link cssBraceError Error
     hi! link cssBraces Function
     hi! link cssCascadeAttr cssAttr
     hi! link cssCascadeProp cssProp
     hi! link cssClassName Function
-    hi! link cssClassName Green
     hi! link cssClassNameDot Function
-    hi! link cssColor Blue
     hi! link cssColor Constant
-    hi! link cssColorProp Aqua
     hi! link cssColorProp cssProp
     hi! link cssComment Comment
     hi! link cssCommonAttr cssAttr
@@ -598,32 +577,32 @@ let g:colors_name = 'gruvbox-material'
     hi! link cssValueNumber Number
     hi! link cssValueTime Number
     hi! link cssVendor Comment
-    hi! link cssVendor White
+    hi! link cssVendor WhiteBold
 
   " Man:
-    highlight! link manTitle          Title
-    highlight! link manSectionHeading Statement
-    highlight! link manOptionDesc     Constant
-    highlight! link manReference      PreProc
-    highlight! link manSubHeading     Function
-    highlight! link manUnderline Underlined
-    highlight! link manBold YellowBold
-    highlight! link manItalic htmlItalic
-    hi! link manCError Error
-    hi! link manEmail Directory
-    hi! link manEnvVar Identifier
-    hi! link manEnvVarFile Identifier
-    hi! link manEnvVarFile Identifier
-    hi! link manFile Yellow
+    hi! link manBold           htmlBold
+    hi! link manCError         Exception
+    hi! link manEmail          Directory
+    hi! link manEnvVar         Identifier
+    hi! link manEnvVarFile     Identifier
+    hi! link manErrors         Errors
+    " hi! link manExample
+    hi! link manFile           Yellow
     hi! link manFiles Yellow
     hi! link manFooter Purple
+    hi! link manHeaderFile Statement
     hi! link manHighlight Yellow
     hi! link manHistory Yellow
-    hi! link manHeaderFile Yellow
+    hi! link manItalic         htmlItalic
+    hi! link manOptionDesc     Constant
+    hi! link manReference      PreProc
     hi! link manSectionHeading OrangeBold
     hi! link manSentence htmlItalic
     hi! link manSignal Purple
-    hi! link manURL Green
+    hi! link manSubHeading     Function
+    hi! link manTitle          Title
+    hi! link manURL            Include
+    hi! link manUnderline Underlined
 
   " Help:
     hi helpURL guifg=#89b482 guibg=NONE guisp=NONE gui=underline cterm=underline
@@ -636,6 +615,7 @@ let g:colors_name = 'gruvbox-material'
     hi! link helpHyperTextJump Blue
     hi! link helpSectionDelim Grey
     hi! link helpSpecial Yellow
+    hi! link helpWarning Error
 
   " Netrw:
     hi! link netrwCmdNote Directory
@@ -659,7 +639,7 @@ let g:colors_name = 'gruvbox-material'
     hi! link netrwExe      PreProc
     hi! link netrwGray     Folded
     hi! link netrwHdr      netrwPlain
-    hi! link netrwHelpCmd Delimiter
+    hi! link netrwHelpCmd  Delimiter
     hi! link netrwHide     netrwComment
     hi! link netrwHidePat Folded
     hi! link netrwHideSep  netrwComment
@@ -690,43 +670,43 @@ let g:colors_name = 'gruvbox-material'
     hi! link netrwTreeBarSpace Special
     hi! link netrwVersion Float
 
-     hi! link netrwCmdSep   Delimiter
-     hi! link netrwDir      Directory
-     hi! link netrwHelpCmd  Function
-     hi! link netrwQHTopic  Number
-     hi! link netrwHidePat  Statement
-     hi! link netrwHideSep  netrwComment
-     hi! link netrwList     Statement
+    hi! link netrwCmdSep   Delimiter
+    hi! link netrwDir      Directory
+    hi! link netrwHelpCmd  Function
+    hi! link netrwQHTopic  Number
+    hi! link netrwHidePat  Statement
+    hi! link netrwHideSep  netrwComment
+    hi! link netrwList     Statement
     hi! link netrwVersion  Identifier
-     hi! link netrwSymLink  Question
-     hi! link netrwExe      PreProc
-     hi! link netrwDateSep  Delimiter
+    hi! link netrwSymLink  Question
+    hi! link netrwExe      PreProc
+    hi! link netrwDateSep  Delimiter
 
-     hi! link netrwTreeBar  Special
-     hi! link netrwTimeSep  netrwDateSep
-     hi! link netrwComma    netrwComment
-     hi! link netrwHide     netrwComment
-     hi! link netrwMarkFile TabLineSel
-     hi! link netrwLink     Special
+    hi! link netrwTreeBar  Special
+    hi! link netrwTimeSep  netrwDateSep
+    hi! link netrwComma    netrwComment
+    hi! link netrwHide     netrwComment
+    hi! link netrwMarkFile TabLineSel
+    hi! link netrwLink     Special
 
-     " !syntax highlighting (see :he g:netrw_special_syntax)
-     hi! link netrwCoreDump WarningMsg
-     hi! link netrwData     DiffChange
-     hi! link netrwHdr      netrwPlain
-     hi! link netrwLex      netrwPlain
-     hi! link netrwLib      DiffChange
-     hi! link netrwMakefile DiffChange
+    " !syntax highlighting (see :he g:netrw_special_syntax)
+    hi! link netrwCoreDump WarningMsg
+    hi! link netrwData     DiffChange
+    hi! link netrwHdr      netrwPlain
+    hi! link netrwLex      netrwPlain
+    hi! link netrwLib      DiffChange
+    hi! link netrwMakefile DiffChange
     hi! link netrwYacc     netrwPlain
-     hi! link netrwPix      Special
+    hi! link netrwPix      Special
 
-     hi! link netrwGray Grey
-     hi! link netrwBak      netrwGray
-     hi! link netrwCompress netrwGray
-     hi! link netrwSpecFile netrwGray
-     hi! link netrwObj      netrwGray
-     hi! link netrwTags     netrwGray
-     hi! link netrwTilde    netrwGray
-     hi! link netrwTmp      netrwGray
+    hi! link netrwGray Grey
+    hi! link netrwBak      netrwGray
+    hi! link netrwCompress netrwGray
+    hi! link netrwSpecFile netrwGray
+    hi! link netrwObj      netrwGray
+    hi! link netrwTags     netrwGray
+    hi! link netrwTilde    netrwGray
+    hi! link netrwTmp      netrwGray
 
   " Rst:
     hi! link rstCitation                     String
@@ -795,6 +775,12 @@ let g:colors_name = 'gruvbox-material'
     hi! link diffIndexLine Aqua
 
   " Html:
+    if v:version > 800 || v:version == 800 && has('patch1038')
+      hi! htmlStrike              term=strikethrough,undercurl,bold cterm=strikethrough,undercurl,bold gui=strikethrough,undercurl,bold
+    else
+      hi! htmlStrike              term=underline cterm=underline gui=underline
+    endif
+
     hi htmlLink guifg=#a89984 guibg=NONE guisp=NONE gui=underline cterm=underline
     hi htmlBold guifg=NONE guibg=NONE guisp=NONE gui=bold ctermfg=NONE ctermbg=NONE cterm=bold
     hi htmlBoldUnderline guifg=NONE guibg=NONE guisp=NONE gui=bold,underline ctermfg=NONE ctermbg=NONE cterm=bold,underline
@@ -803,16 +789,18 @@ let g:colors_name = 'gruvbox-material'
     hi htmlUnderline guifg=NONE guibg=NONE guisp=NONE gui=underline ctermfg=NONE ctermbg=NONE cterm=underline
     hi htmlUnderlineItalic guifg=NONE guibg=NONE guisp=NONE gui=italic,underline ctermfg=NONE ctermbg=NONE cterm=italic,underline
     hi htmlItalic guifg=NONE guibg=NONE guisp=NONE gui=italic ctermfg=NONE ctermbg=NONE cterm=italic
-    hi! link htmlScriptTag htmlTag
 
-    hi! link htmlTag                     Function
-    hi! link htmlEndTag                  Identifier
+
     hi! link htmlArg                     Type
-    hi! link htmlTagName                 htmlStatement
-    hi! link htmlSpecialTagName          Exception
-    hi! link htmlValue                     String
-    hi! link htmlSpecialChar             Special
-
+    hi! link htmlBoldItalicUnderline     htmlBoldUnderlineItalic
+    hi! link htmlComment            Comment
+    hi! link htmlCommentError       htmlError
+    hi! link htmlCommentPart        Comment
+    hi! link htmlCssDefinition      Special
+    hi! link htmlCssStyleComment    Comment
+    hi! link htmlEndTag                  Identifier
+    hi! link htmlError              Error
+    hi! link htmlEvent              javaScript
     hi! link htmlH1                      Title
     hi! link htmlH2                      htmlH1
     hi! link htmlH3                      htmlH2
@@ -820,63 +808,56 @@ let g:colors_name = 'gruvbox-material'
     hi! link htmlH5                      htmlH4
     hi! link htmlH6                      htmlH5
     hi! link htmlHead                    PreProc
-    hi! link htmlTitle                   Title
-    hi! link htmlBoldItalicUnderline     htmlBoldUnderlineItalic
-    hi! link htmlUnderlineBold           htmlBoldUnderline
-    hi! link htmlUnderlineItalicBold     htmlBoldUnderlineItalic
-    hi! link htmlUnderlineBoldItalic     htmlBoldUnderlineItalic
-    hi! link htmlItalicUnderline         htmlUnderlineItalic
     hi! link htmlItalicBold              htmlBoldItalic
     hi! link htmlItalicBoldUnderline     htmlBoldUnderlineItalic
+    hi! link htmlItalicUnderline         htmlUnderlineItalic
     hi! link htmlItalicUnderlineBold     htmlBoldUnderlineItalic
     hi! link htmlLeadingSpace            None
-
-    if v:version > 800 || v:version == 800 && has('patch1038')
-      hi! htmlStrike              term=strikethrough,undercurl,bold cterm=strikethrough,undercurl,bold gui=strikethrough,undercurl,bold
-    else
-      hi! htmlStrike              term=underline cterm=underline gui=underline
-    endif
-
-    hi! link htmlPreStmt            PreProc
+    hi! link htmlPreAttr            String
     hi! link htmlPreError           Error
     hi! link htmlPreProc            PreProc
-    hi! link htmlPreAttr            String
-    hi! link htmlPreProcAttrName    PreProc
     hi! link htmlPreProcAttrError   Error
+    hi! link htmlPreProcAttrName    PreProc
+    hi! link htmlPreStmt            PreProc
+    hi! link htmlScriptTag Purple
+    hi! link htmlScriptTag htmlTag
     hi! link htmlSpecial            Special
     hi! link htmlSpecialChar        Special
-    hi! link htmlString             String
+    hi! link htmlSpecialTagName          Exception
     hi! link htmlStatement          Statement
-    hi! link htmlComment            Comment
-    hi! link htmlCommentPart        Comment
-    hi! link htmlValue              String
-    hi! link htmlCommentError       htmlError
+    hi! link htmlString             String
+    hi! link htmlTag                Tag
     hi! link htmlTagError           htmlError
-    hi! link htmlEvent              javaScript
-    hi! link htmlError              Error
+    hi! link htmlTagN               Tag
+    hi! link htmlTagName                 htmlStatement
+    hi! link htmlTitle                   Title
+    hi! link htmlUnderlineBold           htmlBoldUnderline
+    hi! link htmlUnderlineBoldItalic     htmlBoldUnderlineItalic
+    hi! link htmlUnderlineItalicBold     htmlBoldUnderlineItalic
+    hi! link htmlValue                     String
+    hi! link htmlValue              String
 
-    hi! link htmlCssStyleComment    Comment
-    hi! link htmlCssDefinition      Special
 
   " Xml:
-    hi! link xmlTag Blue
-    hi! link xmlEndTag Blue
-    hi! link xmlTagName Blue
-    hi! link xmlEqual Blue
     hi! link docbkKeyword Keyword
-    hi! link xmlDocTypeDecl Grey
-    hi! link xmlDocTypeKeyword Keyword
-    hi! link xmlCdataStart Grey
-    hi! link xmlCdataCdata Purple
-    hi! link dtdFunction Grey
+    hi! link dtdFunction Function
+    hi! link dtdParamEntityDPunct Delimeter
+    hi! link dtdParamEntityPunct  Delimeter
+    hi! link dtdTagName Purple
     hi! link dtdTagName Purple
     hi! link xmlAttrib Directory
-    hi! link xmlProcessingDelim Grey
-    hi! link dtdParamEntityPunct Grey
-    hi! link dtdParamEntityDPunct Grey
     hi! link xmlAttribPunct Grey
+    hi! link xmlCdataCdata Purple
+    hi! link xmlCdataStart Grey
+    hi! link xmlDocTypeDecl Grey
+    hi! link xmlDocTypeKeyword Keyword
+    hi! link xmlEndTag Tag
     hi! link xmlEntity Orange
     hi! link xmlEntityPunct Orange
+    hi! link xmlEqual Blue
+    hi! link xmlProcessingDelim Grey
+    hi! link xmlTag   Tag
+    hi! link xmlTagName Tag
 
   " Python:
     hi! link pythonAsync                     Statement
@@ -1450,34 +1431,6 @@ let g:colors_name = 'gruvbox-material'
 
   " Other:
     hi! link docbkKeyword AquaBold
-    hi! link dtdFunction Grey
-    hi! link dtdParamEntityDPunct Grey
-    hi! link dtdParamEntityPunct Grey
-    hi! link dtdTagName Purple
-    hi! link htmlArg Orange
-    hi! link htmlEndTag AquaBold
-    hi! link htmlScriptTag Purple
-    hi! link htmlSpecialChar Red
-    hi! link htmlSpecialTagName Blue
-    hi! link htmlTag AquaBold
-    hi! link htmlTagN White
-    hi! link htmlTagName Blue
-    hi! link objcDirective Blue
-    hi! link objcTypeModifier Red
-    hi! link xmlAttrib Orange
-    hi! link xmlAttribPunct Grey
-    hi! link xmlCdataCdata Purple
-    hi! link xmlCdataStart Grey
-    hi! link xmlDocTypeDecl Grey
-    hi! link xmlDocTypeKeyword Purple
-    hi! link xmlEndTag AquaBold
-    hi! link xmlEntity Red
-    hi! link xmlEntityPunct Red
-    hi! link xmlEqual Blue
-    hi! link xmlProcessingDelim Grey
-    hi! link xmlTag AquaBold
-    hi! link xmlTagName AquaBold
-
   " JavaScript:
     hi! link javaScript             Special
     hi! link javaScriptExpression   javaScript
@@ -1619,24 +1572,24 @@ let g:colors_name = 'gruvbox-material'
     hi! link purescriptModuleKeyword Aqua
     hi! link purescriptModuleName Blue
     hi! link purescriptWhere Aqua
-    hi! link purescriptDelimiter White
-    hi! link purescriptType White
+    hi! link purescriptDelimiter WhiteBold
+    hi! link purescriptType WhiteBold
     hi! link purescriptImportKeyword Aqua
     hi! link purescriptHidingKeyword Aqua
     hi! link purescriptAsKeyword Aqua
     hi! link purescriptStructure Aqua
     hi! link purescriptOperator Orange
-    hi! link purescriptTypeVar White
-    hi! link purescriptConstructor White
-    hi! link purescriptFunction White
+    hi! link purescriptTypeVar WhiteBold
+    hi! link purescriptConstructor WhiteBold
+    hi! link purescriptFunction WhiteBold
     hi! link purescriptConditional Orange
     hi! link purescriptBacktick Orange
 
     hi! link coffeeExtendedOp Orange
-    hi! link coffeeSpecialOp White
+    hi! link coffeeSpecialOp WhiteBold
     hi! link coffeeDotAccess Grey
     hi! link coffeeCurly Orange
-    hi! link coffeeParen White
+    hi! link coffeeParen WhiteBold
     hi! link coffeeBracket Orange
 
     hi! link javaAnnotation Blue
@@ -1679,9 +1632,9 @@ let g:colors_name = 'gruvbox-material'
     hi! link luaThenEnd Purple
 
     hi! link moonExtendedOp Orange
-    hi! link moonFunction White
+    hi! link moonFunction WhiteBold
     hi! link moonObject Yellow
-    hi! link moonSpecialOp White
+    hi! link moonSpecialOp WhiteBold
 
   " Other:
     hi! link elixirDocString Comment
@@ -1699,7 +1652,7 @@ let g:colors_name = 'gruvbox-material'
     hi! link clojureKeyword Blue
     hi! link clojureMacro Orange
     hi! link clojureMeta Yellow
-    hi! link clojureParen White
+    hi! link clojureParen WhiteBold
     hi! link clojureQuote Yellow
     hi! link clojureRegexp Aqua
     hi! link clojureRegexpCharClass GreyBold
@@ -1712,23 +1665,23 @@ let g:colors_name = 'gruvbox-material'
     hi! link clojureUnquote Yellow
     hi! link clojureVariable Blue
 
-    hi! link scalaNameDefinition White
-    hi! link scalaCaseFollowing White
-    hi! link scalaCapitalWord White
-    hi! link scalaTypeExtension White
+    hi! link scalaNameDefinition WhiteBold
+    hi! link scalaCaseFollowing WhiteBold
+    hi! link scalaCapitalWord WhiteBold
+    hi! link scalaTypeExtension WhiteBold
     hi! link scalaKeyword Red
     hi! link scalaKeywordModifier Red
     hi! link scalaSpecial Aqua
     hi! link scalaOperator Orange
     hi! link scalaTypeDeclaration Yellow
     hi! link scalaTypeTypePostDeclaration Yellow
-    hi! link scalaInstanceDeclaration White
+    hi! link scalaInstanceDeclaration WhiteBold
     hi! link scalaInterpolation Aqua
 
     hi! link haskellType Blue
     hi! link haskellIdentifier Aqua
     hi! link haskellSeparator LightGrey
-    hi! link haskellDelimiter White
+    hi! link haskellDelimiter WhiteBold
     hi! link haskellOperators Green
     hi! link haskellBacktick Orange
     hi! link haskellStatement Purple
@@ -1775,7 +1728,7 @@ let g:colors_name = 'gruvbox-material'
 
     hi! link tomlTable Orange
     hi! link tomlTableArray Orange
-    hi! link tomlKey White
+    hi! link tomlKey WhiteBold
 
     hi! link mailHeader Blue
     hi! link mailHeaderKey Blue
@@ -1793,14 +1746,14 @@ let g:colors_name = 'gruvbox-material'
     hi! link mailQuotedExp4 Green
     hi! link mailQuotedExp5 Red
     hi! link mailQuotedExp6 Orange
-    hi! link mailSignature White
+    hi! link mailSignature WhiteBold
     hi! link mailURL Orange
     hi! link mailEmail Orange
 
-    hi! link csBraces White
-    hi! link csEndColon White
+    hi! link csBraces WhiteBold
+    hi! link csEndColon WhiteBold
     hi! link csLogicSymbols Purple
-    hi! link csParens White
+    hi! link csParens WhiteBold
     hi! link csOpSymbols Orange
     hi! link csInterpolationDelimiter Aqua
     hi! link csInterpolationFormat Aqua
@@ -1812,5 +1765,8 @@ let g:colors_name = 'gruvbox-material'
     hi! link zshOptStart Orange
     hi! link zshOption Aqua
     hi! link zshFunction Green
+
+    hi! link objcDirective Blue
+    hi! link objcTypeModifier Red
 
 " Vim: set fdls=0 fdm=indent:

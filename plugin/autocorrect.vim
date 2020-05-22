@@ -5,15 +5,24 @@
     " Last Modified: Nov 02, 2019
 " ============================================================================
 
-" Dont load if you spell checking isnt on. Also dont load if you dont know
-" what spell checking is.
-if has('spell')
-  if &spell == v:false
+
+" Unrelated:
+  if !exists('g:loaded_custom_remotes')
+    let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
+    call remotes#init()
+    let g:loaded_custom_remotes = 1
+  endif
+
+" Guard:
+  " Dont load if you spell checking isnt on. Also dont load if you dont know
+  " what spell checking is.
+  if has('spell')
+    if &spell == v:false
+      finish
+    endif
+  else
     finish
   endif
-else
-  finish
-endif
 
 " Wordlist: {{{
 inoreab Acn Can

@@ -8,10 +8,9 @@
 " Only do this when not done yet for this buffer
 if exists('b:did_ftplugin') | finish | endif
 
+
 " Options:
-
   " GCC					*quickfix-gcc*	*compiler-gcc*
-
   " There's one variable you can set for the GCC compiler:
 
   " 				Ignore lines that don't match any patterns
@@ -20,8 +19,11 @@ if exists('b:did_ftplugin') | finish | endif
   let g:compiler_gcc_ignore_unmatched_lines = 1
 
   source $VIMRUNTIME/ftplugin/c.vim
+  source $VIMRUNTIME/autoload/ccomplete.vim
+
+  setlocal completefunc=ccomplete#Complete
   " source $VIMRUNTIME/indent/c.vim
-  setlocal foldmethod=syntax
+  setlocal foldmethod=syntax foldlevelstart=0 foldignore= foldminlines=0
 
   setlocal suffixesadd=.c,.h,.cpp
   setlocal cindent
@@ -49,9 +51,7 @@ if exists('b:did_ftplugin') | finish | endif
     let &l:path .= expand('$MANPATH')
   endif
 
-
 " ALE:
-  let l:lines='all'
   let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
   let b:ale_fixers += [ 'clang-format' ]
 
@@ -61,12 +61,12 @@ if exists('b:did_ftplugin') | finish | endif
 
 " Cleanup:
   let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
-        \. '|setlocal fdm< sua< cin< mp< efm< kp< include<'
-        \. '|unlet! &l:path'
+        \. '|setlocal completefunc< ofu<'
+        \. '|setlocal fdm< fdls< foldignore< foldminlines<'
+        \. '|setlocal sua< cin< mp< efm< kp< include< path<'
         \. '|unlet! b:undo_ftplugin'
         \. '|unlet! b:did_ftplugin'
         \. '|unlet! b:ale_fixers'
-        \. '|unlet! b:undo_ftplugin'
         \. '|silent! nunmap <buffer> <F5>'
         \. '|silent! nunmap <buffer> <Leader>ef'
 

@@ -63,6 +63,10 @@ snippet ft "Ftplugin guard" b
 if exists('b:did_ftplugin') | finish | endif
 source $VIMRUNTIME/ftplugin/`!p rv=snip.basename`
 
+undo$0
+endsnippet
+
+snippet undo "Undo ftplugin" b
 let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
                       \. '|setlocal ${1:${VISUAL}}'
                       \. '|unlet! b:undo_ftplugin'
