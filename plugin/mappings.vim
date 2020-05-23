@@ -225,11 +225,8 @@
     tnoremap <F6>               <Cmd>UltiSnipsListSnippets<CR>
   endif
   " inoremap <expr> <Tab> UltiSnips#ExpandSnippetOrJump()
-  " }}}
 
 " FZF:
-  " I suppose for continuity
-
   if exists('*fzf#wrap')
     nnoremap <M-x>                      <Cmd>Commands<CR>
     nnoremap <C-x>B                     <Cmd>Buffers<CR>
@@ -246,7 +243,7 @@
   xmap \<tab>                 <Plug>(fzf-maps-x)
   imap \<tab>                 <Plug>(fzf-maps-i)
 
-  " Map Vim Defaults To FZF History Commands:{{{
+  " Map Vim Defaults To FZF History Commands:
   nnoremap q:        <Cmd>History:<CR>
   nnoremap q/        <Cmd>History/<CR>
   " But id still want to use q: when i can
@@ -265,13 +262,19 @@
   nnoremap  <Leader>fb                 <Cmd>Buffers<CR>
   nnoremap  <Leader>fB                 <Cmd>Buffers<CR>
 
-  " }}}
-
   " Where did all my imaps for this go??
   " Alright let's see how many we can churn out in a sitting Whoo works perfectly!
   inoremap <expr> <C-x><C-b> fzf#vim#complete#buffer_line()
-  inoremap <expr> <C-x><C-f> fzf#vim#complete#path('fd -H -t f')
   inoremap <expr> <C-x><C-l> fzf#vim#complete#line()
+  if has('unix')
+    " unfortunately really doesn't work on windows
+    inoremap <expr> <C-x><C-f> fzf#vim#complete#path('fd -H -t f')
+  else
+    " I don't know why i had an else here but i'm gonna throw in something ramdom
+    " i realized i missed
+    call msdos#set_shell_cmd()
+  endif
+
 
   if filereadable(expand('$_ROOT/share/dict/words'))
     " Note: This is dependant on /usr/share/dict/words existing because this
@@ -382,8 +385,8 @@
     " Yo why dont we use onoremap though?
     " Q: How to grep by motion?
     " A: Create custom keymappings like:
-    xnoremap ,cs :<C-u>call plugins#GrepFromSelected(visualmode())<CR>
-    nnoremap ,cs :<C-u>set operatorfunc=plugins#GrepFromSelected<CR>g@
+    xnoremap ag :<C-u>call plugins#GrepFromSelected(visualmode())<CR>
+    nnoremap ag :<C-u>set operatorfunc=plugins#GrepFromSelected<CR>g@
 
     " Maps For CocList X:
     nnoremap <C-g> <Cmd>CocList<CR>
@@ -623,6 +626,19 @@ function! Buffer_Mappings() abort
   nnoremap [b <Cmd>bprev<CR>
   nnoremap ]B <Cmd>blast<CR>
   nnoremap [B <Cmd>bfirst<CR>
+
+  " May 20, 2020: For all of these mappings, it's still annoying moving around
+  " buffers. And <C-^> kinda helps but not enough
+  nnoremap <M-1> 1<C-^>
+  nnoremap <M-2> 2<C-^>
+  nnoremap <M-3> 3<C-^>
+  nnoremap <M-4> 4<C-^>
+  nnoremap <M-5> 5<C-^>
+  nnoremap <M-6> 6<C-^>
+  nnoremap <M-7> 7<C-^>
+  nnoremap <M-8> 8<C-^>
+  nnoremap <M-9> 9<C-^>
+  nnoremap <M-0> 10<C-^>
 endfunction
 
 function! Tab_Mappings() abort
@@ -657,7 +673,7 @@ function! UserFugitiveMappings() abort
   cabbrev Gd Gdiffsplit!<Space>
   nnoremap <Leader>gds  <Cmd>Gdiffsplit --staged<CR>
   nnoremap <Leader>gdt   <Cmd>Git difftool<CR>
-  cabbrev gds2 Git diff --stat --staged
+  cabbrev gds2 Git diff --stat --staged<Space>
   nnoremap <Leader>gds2 <Cmd>Git difftool --stat --staged<CR>
   nnoremap <Leader>ge   <Cmd>Gedit<Space>
   nnoremap <Leader>gf   <Cmd>Git fetch<CR>
@@ -666,7 +682,7 @@ function! UserFugitiveMappings() abort
   nnoremap <Leader>gL   <Cmd>0Glog --pretty=format:lo --graph --decorate --abbrev --all --branches<CR>
   nnoremap <Leader>gm   <Cmd>Git mergetool<CR>
   " Make the mapping longer but clear as to whether gp would pull or push
-  nnoremap <Leader>gp  <Cmd>Gpull<CR>
+  nnoremap <Leader>gp  <Cmd>Gpull --tags -r<CR>
   nnoremap <Leader>gP  <Cmd>Git push<CR>
   nnoremap <Leader>gq   <Cmd>Gwq<CR>
   nnoremap <Leader>gQ   <Cmd>Gwq!<CR>

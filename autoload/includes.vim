@@ -233,8 +233,8 @@ function! includes#CPath() abort
     endif
 
     " 2015-2019 vcredist
-    if isdirectory('C:/Program\ Files/ (x86)/Microsoft\ Visual\ Studio/2019/Community/VC/Tools/MSVC')
-      let s:path = s:path . 'C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/2019/Community/VC/Tools/MSVC/**'
+    if isdirectory('C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC')
+      let s:path = s:path . 'C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/**,'
     endif
 
     " 2010 redist
@@ -244,16 +244,16 @@ function! includes#CPath() abort
 
     " Yo honestly this is the one you're looking for
     if isdirectory('C:/Program Files (x86)/Windows Kits/10/include')
-      let s:path = s:path . 'C:/Program Files (x86)/Windows Kits/10/include/**3'
+      let s:path = s:path . 'C:/Program Files (x86)/Windows Kits/10/include/**3,'
     endif
 
     if exists('$INCLUDEDIR')
-      let s:path = s:path . expand('$INCLUDEDIR')
+      let s:path = s:path . ',' . expand('$INCLUDEDIR') . ','
     endif
 
     " some good python ones
     if isdirectory('C:/Users/fac/scoop/apps/winpython/current/python-3.8.1.amd64/include')
-      let s:path .= 'C:/Users/fac/scoop/apps/winpython/current/python-3.8.1.amd64/include'
+      let s:path .= 'C:/Users/fac/scoop/apps/winpython/current/python-3.8.1.amd64/include,'
     endif
 
     let &shellslash = s:old_ss

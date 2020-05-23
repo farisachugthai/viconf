@@ -1,3 +1,4 @@
+
 " =========================================================================
     " File: c.vim
     " Author: Faris Chugthai
@@ -7,7 +8,6 @@
 
 " Only do this when not done yet for this buffer
 if exists('b:did_ftplugin') | finish | endif
-
 
 " Options:
   " GCC					*quickfix-gcc*	*compiler-gcc*

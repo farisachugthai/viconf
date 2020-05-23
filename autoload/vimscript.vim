@@ -151,3 +151,7 @@ endfunction
 function! vimscript#GetPID() abort
   return nvim_get_proc(getpid())
 endfunction
+
+function! vimscript#GetCursor() abort
+  return nvim_win_get_cursor(win_getid())
+endfunction

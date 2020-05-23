@@ -129,6 +129,7 @@ function! LoadMyPlugins() abort  " {{{
     Plug 'tpope/vim-unimpaired'
     Plug 'tpope/vim-surround'
     Plug 'tpope/vim-eunuch'
+    Plug 'tpope/vim-apathy'
     Plug 'liuchengxu/vim-which-key'
     Plug 'liuchengxu/vista.vim'
   endif

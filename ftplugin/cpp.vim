@@ -13,7 +13,11 @@
 
   " dont source $VIMRUNTIME/ftplugin/cpp.vim
   " fucking hate when all we do is runtime! ftplugin/c.vim
-  source $VIMRUNTIME/indent/cpp.vim
+  " This entire file only does
+  " source $VIMRUNTIME/indent/cpp.vim
+  setlocal cindent
+  " So why don't we
+  let b:did_indent = 1
 
 
 " Options:
@@ -25,14 +29,14 @@
   setlocal keywordprg=:Man
 
   let &l:define = '^\(#\s*define\|[a-z]*\s*const\s*[a-z]*\)'
-
-  setlocal cindent
   let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
 
   let b:ale_fixers += [ 'clang-format' ]
 
 
 let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
-                \. '|setlocal syntax< formatexpr< mps< kp< cin<'
+                \. '|setlocal cin< syntax< mps< formatexpr< kp< def<'
                 \. '|unlet! b:undo_ftplugin'
+                \. '|unlet! b:undo_indent'
+                \. '|unlet! b:ale_fixers'
                 \. '|unlet! b:did_ftplugin'

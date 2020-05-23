@@ -11,7 +11,8 @@ searchindex.js
 robots.txt
 _build
 *.html
-!docs/_templates/*.html
+!doc/_templates/*.html
+doc/build
 objects.inv
 .buildinfo
 /docs/_build/*

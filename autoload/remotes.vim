@@ -12,6 +12,12 @@
 let s:termux = isdirectory('/data/data/com.termux')    " Termux check from Evervim. Thanks!
 let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
+" TIL: finish can't be used inside of a function as it doesn't count as 'sourced'
+if exists('g:autoloaded_remotes')
+  finish
+endif
+let g:autoloaded_remotes = 1  " just to let me know that this got sourced
+
 
 function! remotes#unix_clipboard() abort
   if exists('$TMUX')
@@ -47,6 +53,7 @@ function! remotes#termux() abort
   " From what i can tell, this line alone is as good as :UpdateRemotePlugins
   let g:python3_host_prog = s:repo_root . '/.venv/bin/python'
   let g:loaded_python_provider = 1
+
 
   let g:node_host_prog = '/data/data/com.termux/files/home/.local/share/yarn/global/node_modules/neovim/bin/cli.js'
   let g:ruby_host_prog = '/data/data/com.termux/files/home/.gem/bin/neovim-ruby-host'
@@ -99,11 +106,11 @@ endfunction
 
 function! remotes#msdos() abort
   " Don't set python paths dynamically it's such a headache
-  let g:python3_host_prog = 'C:/Users/fac/scoop/apps/winpython/current/python-3.8.1.amd64/python.exe'
-  let g:python_host_prog = 'C:/Python27/python.exe'
+  let g:python3_host_prog = 'C:\Users\fac\scoop\apps\winpython\current\python-3.8.1.amd64\python.exe'
+  let g:python_host_prog = 'C:\Users\fac\.windows-build-tools\python27\python.exe'
   " wow this one actually fucking worked
   let g:node_host_prog = 'C:\Users\fac\scoop\apps\winpython\current\n\node_modules\neovim\bin\cli.js'
-  let g:ruby_host_prog = 'C:/Users/fac/scoop/apps/ruby/current/bin/ruby.exe'
+  let g:ruby_host_prog = 'C:\Users\fac\scoop\apps\ruby\current\bin\ruby.exe'
 
   let g:clipboard = {
         \   'name': 'winClip',
@@ -117,16 +124,10 @@ function! remotes#msdos() abort
         \   },
         \   'cache_enabled': 1,
         \ }
-
 endfunction
 
 function! remotes#HardReset(ruby_host) abort
   let g:failed_providers = {}
-
-  if exists('g:autoloaded_remotes')
-    finish
-  endif
-  let g:autoloaded_remotes = 1  " just to let me know that this got sourced
 
   source $VIMRUNTIME/autoload/remote/host.vim
   source $VIMRUNTIME/autoload/remote/define.vim
@@ -143,6 +144,8 @@ function! remotes#HardReset(ruby_host) abort
       catch /.*/
         let g:failed_providers[i + "_host"] = v:exception
       endtry
+      " Note that this line will raise if script_host ia already registered.
+      " unlet! g:loaded_python3_provider | source $VIMRUNTIME/autoload/provider/python3.vim
     catch
       " **DO NOT** echoerr. It'll jam the functoin and stop the rest of the for loop from continuing.
       let g:failed_providers[i] = v:exception
@@ -157,11 +160,20 @@ function! remotes#HardReset(ruby_host) abort
     rubyfile $VIMRUNTIME/autoload/provider/script_host.rb
   endif
 
+  source $VIMRUNTIME/autoload/provider/clipboard.vim
   return g:failed_providers
 endfunction
 
 function! remotes#init() abort
-  " Dispatches the remainder here
+  if exists('g:autoloaded_remotes')
+    echo 'remotes#init: Something is sourcing this twice.'
+    return
+  endif
+
+  " just to let me know that this got sourced
+  let g:autoloaded_remotes = 1
+
+  " Dispatches the module as needed here
   if !has('unix')
     call remotes#msdos()
   else
@@ -171,7 +183,7 @@ function! remotes#init() abort
       call remotes#ubuntu()
     endif
   endif
-  echo remotes#HardReset(v:true)
   " So i dont think this responds to PluginsForHost
   " source $VIMRUNTIME/autoload/provider/clipboard.vim
+  echo remotes#HardReset(v:true)
 endfunction

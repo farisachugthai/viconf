@@ -5,12 +5,6 @@
 
 scriptencoding utf8
 
-" If we're re-sourcing we probably meant to do ya know.
-" if exists('g:loaded_gruvbox_material_vim')
-  " finish
-" endif
-"llet g:loaded_gruvbox_material_vim = 1
-
 if exists('syntax_on')
   silent! unlet! g:colors_name
   syntax reset
@@ -156,6 +150,7 @@ let g:colors_name = 'gruvbox-material'
   hi Error guifg=#ea6962 guibg=#1d2021 ctermbg=234 term=NONE guisp=NONE gui=bold,underline cterm=bold,underline
 
 " Standard Highlights:
+  hi Error guifg=#ea6962 guibg=NONE guisp=NONE gui=bold,underline cterm=bold,underline
   let g:gruvbox_material_transparent_background = 0
   let g:gruvbox_material_enable_bold = 1
   let g:gruvbox_material_background = 'hard'
@@ -168,7 +163,6 @@ let g:colors_name = 'gruvbox-material'
   hi! CursorLineNr guifg=#fabd2f guibg=#3c3836 guisp=NONE gui=NONE cterm=NONE ctermbg=237
   " Screen column that the cursor is
   hi! link CursorColumn CursorLine
-  " Additional Links
   hi! link VisualNC Visual
   " This is an exciting way to live life but jesus does it hurt your eyes
   " hi! link MsgArea WarningMsg
@@ -283,16 +277,19 @@ let g:colors_name = 'gruvbox-material'
 
   " Coc:
     hi CocHintSign guifg=#89b482 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
+    hi CocHighlightText guifg=NONE guibg=NONE guisp=NONE gui=bold ctermfg=NONE ctermbg=NONE cterm=bold
+    hi CocHintSign guifg=#89b482 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
     hi CocHoverRange guifg=NONE guibg=NONE guisp=NONE gui=bold,underline ctermfg=NONE ctermbg=NONE cterm=bold,underline
     hi! link CocCodeLens ALEVirtualTextInfo
     hi! link CocDiagnosticsError Red
     hi! link CocDiagnosticsHint Blue
     hi! link CocDiagnosticsInfo Yellow
     hi! link CocDiagnosticsWarning Orange
-    hi! link CocErrorFloat Red
+    " hi! link CocErrorFloat Red
     hi! link CocErrorHighlight ALEError
+    " hi! link CocErrorLine Exception
     hi! link CocErrorSign ALEErrorSign
-    hi! link CocErrorVirtualText ALEVirtualTextError
+    " hi! link CocErrorVirtualText ALEVirtualTextError
     hi! link CocExplorerBufferBufname Grey
     hi! link CocExplorerBufferBufnr Purple
     hi! link CocExplorerBufferExpandIcon Aqua
@@ -305,7 +302,6 @@ let g:colors_name = 'gruvbox-material'
     hi! link CocExplorerFileGitUnstage Yellow
     hi! link CocExplorerFileRoot Orange
     hi! link CocExplorerFileSize Blue
-
     hi! link CocExplorerTimeAccessed Aqua
     hi! link CocExplorerTimeCreated Aqua
     hi! link CocExplorerTimeModified Aqua
@@ -316,13 +312,20 @@ let g:colors_name = 'gruvbox-material'
     hi! link CocGitTopRemovedSign GitGutterDelete
     hi! link CocHighlightText LightGreyBold
     hi! link CocHintFloat Blue
+    " hi! link CocHintLine Green
     hi! link CocHintVirtualText ALEVirtualTextInfo
     hi! link CocInfoFloat Yellow
     hi! link CocInfoHighlight ALEInfo
+    " Makes everything impossible to read don't do this
+    " hi! link CocInfoLine EndOfBuffer
+    " Possibly do this but then you lose the original highlighting
+    " hi! link CocInfoLine Normal
     hi! link CocInfoSign ALEInfoSign
     hi! link CocInfoVirtualText ALEVirtualTextInfo
     hi! link CocListsLine Blue
     hi! link CocSelectedText OrangeBold
+    " hi! link CocSelectedLine Visual
+    " hi! link CocListsLine Blue
     hi! link CocWarningFloat Orange
     hi! link CocWarningHighlight ALEWarning
     hi! link CocWarningSign ALEWarningSign
@@ -715,6 +718,8 @@ let g:colors_name = 'gruvbox-material'
     hi! link rstComment                      Comment
     hi! link rstDelimiter                    Delimiter
     hi! link rstDirective                    Keyword
+    hi! link rstDirectivesh                  Question
+    hi! link rstDirectivepython              Question
     hi! link rstDoctestBlock                 PreProc
 
     " Python code blocks with func(*args) break highlighting fkr the whole file.
@@ -725,27 +730,25 @@ let g:colors_name = 'gruvbox-material'
     hi! link rstExplicitMarkup               rstDirective
     hi! link rstFileLink                     rstHyperlinkReference
     hi! link rstFootnote                     String
-    hi! link rstFootnoteReference            Identifier
+    hi! link rstFootnoteReference            Define
     hi! link rstHyperLinkReference           Identifier
     hi! link rstHyperlinkTarget              String
     hi! link rstInlineInternalTargets        Identifier
-    hi! link rstInlineLiteral                String
-    hi! link rstInterpretedTextOrHyperlinkReference  Identifier
+    hi! link rstInlineLiteral                Macro
+    hi! link rstInterpretedTextOrHyperlinkReference  Include
     hi! link rstLiteralBlock                 String
+    hi! link rstNumber                       Float
     hi! link rstQuotedLiteralBlock           String
     hi! link rstSections                     Title
-    hi! link rstSimpleTable                 Orange
-    hi! link rstSimpleTableLines            OrangeBold
+    hi! link rstSimpleTable                  Orange
+    hi! link rstSimpleTableLines             OrangeBold
     hi! link rstStandaloneHyperlink          Identifier
     hi! link rstSubstitutionDefinition       rstDirective
     hi! link rstSubstitutionReference        PreProc
-    hi! link rstTable                       Orange
+    hi! link rstTable                        Orange
     hi! link rstTableLines                   Orange
     hi! link rstTodo                         Todo
     hi! link rstTransition                   rstSections
-    hi! link rstDirectivesh     Question
-    hi! link rstDirectivepython Question
-    hi! link rstInlineLiteral   Identifier
 
   " Tmux:
     hi! link tmuxFormatString      Identifier
@@ -761,7 +764,7 @@ let g:colors_name = 'gruvbox-material'
     hi! link tmuxTodo              Todo
     hi! link tmuxVariable          Identifier
     hi! link tmuxVariableExpansion Identifier
-    hi! link tmuxColor SpecialKey
+    hi! link tmuxColor             SpecialKey
 
   " Diff:
     hi! link diffAdded Green
@@ -836,28 +839,28 @@ let g:colors_name = 'gruvbox-material'
     hi! link htmlUnderlineItalicBold     htmlBoldUnderlineItalic
     hi! link htmlValue                     String
     hi! link htmlValue              String
-
+    hi! link htmlEvent              javaScript
 
   " Xml:
-    hi! link docbkKeyword Keyword
-    hi! link dtdFunction Function
-    hi! link dtdParamEntityDPunct Delimeter
-    hi! link dtdParamEntityPunct  Delimeter
+    hi! link docbkKeyword AquaBold
+    hi! link dtdFunction Grey
+    hi! link dtdParamEntityDPunct Grey
+    hi! link dtdParamEntityPunct Grey
     hi! link dtdTagName Purple
-    hi! link dtdTagName Purple
-    hi! link xmlAttrib Directory
+    hi! link xmlAttrib Orange
     hi! link xmlAttribPunct Grey
     hi! link xmlCdataCdata Purple
     hi! link xmlCdataStart Grey
     hi! link xmlDocTypeDecl Grey
-    hi! link xmlDocTypeKeyword Keyword
-    hi! link xmlEndTag Tag
-    hi! link xmlEntity Orange
-    hi! link xmlEntityPunct Orange
+    hi! link xmlDocTypeKeyword Purple
+    hi! link xmlEndTag Blue
+    hi! link xmlEntity Red
+    hi! link xmlEntityPunct Red
     hi! link xmlEqual Blue
     hi! link xmlProcessingDelim Grey
-    hi! link xmlTag   Tag
-    hi! link xmlTagName Tag
+    hi! link xmlTag BlueBold
+    hi! link xmlTagName Identifier
+
 
   " Python:
     hi! link pythonAsync                     Statement
@@ -1122,29 +1125,29 @@ let g:colors_name = 'gruvbox-material'
     hi! link vimPythonRegion Identifier
 
     " Errors:
-    hi! link vimAugroupError        Error
-    hi! link vimBehaveError vimError
-    hi! link vimBufnrWarn   vimWarn
-    hi! link vimCollClassErr        vimError
-    hi! link vimElseIfErr   Error
-    hi! link vimEmbedError  vimError
-    hi! link vimErrSetting  vimError
-    hi! link vimError       Error
-    hi! link vimFunctionError vimError
-    hi! link vimFTError     vimError
-    hi! link vimHiAttribList        vimError
-    hi! link vimHiCtermError        vimError
-    hi! link vimHiKeyError  vimError
-    hi! link vimKeyCodeError        vimError
-    hi! link vimMapModErr   vimError
-    hi! link vimOperError   Error
-    hi! link vimPatSepErr   vimError
-    hi! link vimSubstFlagErr        vimError
-    hi! link vimSynCaseError        vimError
-    hi! link vimSynError Exception
-    hi! link vimSyncError   Error
-    hi! link vimUserAttrbError      Error
-    hi! link vimUserCmdError        Error
+      hi! link vimAugroupError        Error
+      hi! link vimBehaveError vimError
+      hi! link vimBufnrWarn   vimWarn
+      hi! link vimCollClassErr        vimError
+      hi! link vimElseIfErr   Error
+      hi! link vimEmbedError  vimError
+      hi! link vimErrSetting  vimError
+      hi! link vimError       Error
+      hi! link vimFunctionError vimError
+      hi! link vimFTError     vimError
+      hi! link vimHiAttribList        vimError
+      hi! link vimHiCtermError        vimError
+      hi! link vimHiKeyError  vimError
+      hi! link vimKeyCodeError        vimError
+      hi! link vimMapModErr   vimError
+      hi! link vimOperError   Error
+      hi! link vimPatSepErr   vimError
+      hi! link vimSubstFlagErr        vimError
+      hi! link vimSynCaseError        vimError
+      hi! link vimSynError Exception
+      hi! link vimSyncError   Error
+      hi! link vimUserAttrbError      Error
+      hi! link vimUserCmdError        Error
 
   " JSON:
     hi! link jsonCommentError Normal
@@ -1424,10 +1427,63 @@ let g:colors_name = 'gruvbox-material'
     hi! link mkdURL           Underlined
     hi! markdownItalic cterm=italic gui=italic
 
-  " C:
+  " C Cpp:
+
     hi! link cOperator Purple
     hi! link cStructure Orange
     hi! link cppOperator Purple
+    hi! link cBadContinuation	Error
+    hi! link cCharacter		Character
+    hi! link cComment		Comment
+    hi! link cComment2String	cString
+    hi! link cCommentError	cError
+    hi! link cCommentL		cComment
+    hi! link cCommentSkip	cComment
+    hi! link cCommentStart	cComment
+    hi! link cCommentStartError	cError
+    hi! link cCommentString	cString
+    hi! link cConditional	Conditional
+    hi! link cConstant		Constant
+    hi! link cCppInElse2		cCppOutIf2
+    hi! link cCppInWrapper	cCppOutWrapper
+    hi! link cCppOut		Comment
+    hi! link cCppOutIf2		cCppOut
+    hi! link cCppOutSkip		cCppOutIf2
+    hi! link cCppOutWrapper	cPreCondit
+    hi! link cCppString		cString
+    hi! link cCurlyError		cError
+    hi! link cDefine		Macro
+    hi! link cErrInBracket	cError
+    hi! link cErrInParen		cError
+    hi! link cError		Error
+    hi! link cFloat		Float
+    hi! link cFormat		cSpecial
+    hi! link cInclude		Include
+    hi! link cIncluded		cString
+    hi! link cLabel		Label
+    hi! link cNumber		Number
+    hi! link cOctal		Number
+    hi! link cOctalError		cError
+    " link this to Error if you want
+    hi! link cOctalZero		PreProc
+    hi! link cOperator		Operator
+    hi! link cParenError		cError
+    hi! link cPreCondit		PreCondit
+    hi! link cPreConditMatch	cPreCondit
+    hi! link cPreProc		PreProc
+    hi! link cRepeat		Repeat
+    hi! link cSpaceError		cError
+    hi! link cSpecial		SpecialChar
+    hi! link cSpecialCharacter	cSpecial
+    hi! link cSpecialError	cError
+    hi! link cStatement		Statement
+    hi! link cStorageClass	StorageClass
+    hi! link cString		String
+    hi! link cStructure		Structure
+    hi! link cTodo		Todo
+    hi! link cType		Type
+    hi! link cUserLabel		Label
+    hi! link cWrongComTail	cError
 
   " Other:
     hi! link docbkKeyword AquaBold
@@ -1562,7 +1618,7 @@ let g:colors_name = 'gruvbox-material'
     hi! link typescriptDocParam Comment
     hi! link typescriptDocTags vimCommentTitle
 
-  " React:
+  " Misc JS:
     hi! link jsxTagName Aqua
     hi! link jsxComponentName Green
     hi! link jsxCloseString LightGrey

@@ -69,9 +69,6 @@
   setglobal tags=tags,**/tags
   setglobal tagcase=smart
   setglobal showfulltag
-  if exists('&tagfunc')
-    let &g:tagfunc = 'CocTagFunc'
-  endif
   setglobal showfulltag
 
 " Other:
@@ -87,7 +84,7 @@
   endif
   setglobal autochdir autowrite autoread
 
-    " TODO: clipboards fucking up on windows
+  " TODO: clipboards fucking up on windows
   setglobal clipboard=unnamed,unnamedplus
   set modeline modelines=5
 
@@ -95,9 +92,7 @@
   if &tabstop > 4 | setglobal tabstop=4 | endif
   if &shiftwidth > 4  | setglobal shiftwidth=4 | endif
   setglobal expandtab smarttab softtabstop=4
-
   if &textwidth!=0 | setl colorcolumn=+1 | else | setl colorcolumn=80 | endif
-
   setglobal cdpath=$HOME,$VIMRUNTIME
 
 " Movement:
@@ -106,9 +101,7 @@
   setglobal isfname-==
   setglobal iskeyword=@,48-57,_,192-255   " Idk how but i managed to mess up the default isk
   setglobal iskeyword-=.,_
-
   set winblend=10
-
   setglobal suffixes=.bak,~,.o,.info,.swp,.aux,.bbl,.blg,.brf,.cb,.dvi,.idx,.ilg,.ind,.inx,.jpg,.log,.out,.png,.toc,.pyc,*.a,*.obj,*.dll,*.exe,*.lib,*.mui,*.swp,*.tmp,
 
 " Buffers Windows:
@@ -157,7 +150,7 @@
   setglobal inccommand=split
   setglobal terse shortmess=aoOsItTWcF
   setglobal title titlestring=%<%F%=%l/%L-%P   " leaves a cool title for tmux
-  setglobal conceallevel=2 concealcursor=nc    " enable concealing
+  setglobal conceallevel=2 concealcursor=ncv    " enable concealing
   setglobal spellsuggest=5
   setglobal showmatch matchpairs+=<:>
   setglobal matchtime=20  " Show the matching pair for 2 seconds
@@ -165,6 +158,7 @@
   setglobal synmaxcol=1000
   set nohlsearch
   setglobal regexpengine=2
+  " TODO: g:fugitive_browse_handlers',
 
 " Todo:
   " g:fugitive_browse_handlers',
@@ -260,7 +254,6 @@
   "
   " Is there a way to do this and also make sure that p does the same thing?
   " I think we can do something like
-  " nnoremap - <Cmd>call nerdtree#ui_glue#invokeKeyMap('p')<CR>
   " and that'll do exactly what i want; however that'll only work I think if nerdtree's already been
   let g:NERDTreeMapJumpParent = '-'
 
@@ -442,9 +435,8 @@
         \ ]
 
   let g:coc_quickfix_open_command = 'cwindow'
-  let g:coc_snippet_next = '<Tab>'
-  let g:coc_snippet_prev = '<S-Tab>'
-
+  let g:coc_snippet_next = '<C-j>'
+  let g:coc_snippet_prev = '<C-k>'
   let g:coc_enable_locationlist = 1
   let $NVIM_COC_LOG_LEVEL = 'WARN'
   let $NVIM_COC_LOG_FILE =  s:stddata . '/site/coc.log'

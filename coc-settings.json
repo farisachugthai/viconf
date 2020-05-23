@@ -53,6 +53,7 @@
   "list.previousKeymap": "<C-p>",
   "list.selectedSignText": "****",
   "list.signOffset": 20,
+  "list.interactiveDebounceTime": 400,
   "list.source.actions.defaultArgs": [
     "quickfix"
   ],
@@ -258,8 +259,7 @@
   "python.autoUpdateLanguageServer": true,
   "python.linting.flake8Path": "python -m flake8",
   "python.linting.pylintEnabled": false,
-  "python.pipenvPath": "pipenv",
-  "python.pythonPath": "python3",
+  "python.pythonPath": "python",
   "python.terminal.executeInFileDir": true,
   "python.workspaceSymbols.exclusionPatterns": [
     "**/site-packages/**",

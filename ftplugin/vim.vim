@@ -5,65 +5,69 @@
     " Last Modified: Nov 14, 2019
 " ============================================================================
 
+" Globals:
+  " Just found this guy. Make indents the same regardless of my indentation or
+  " the default 8 space tabstop.
+  if &l:shiftwidth ==# 2
+    let g:vim_indent_cont = shiftwidth() * 8
+  elseif &l:shiftwidth ==# 8
+    let g:vim_indent_cont = shiftwidth() * 2
+  endif
+
+  let g:vimsyn_minlines = 300
+  let g:vimsyn_maxlines = 500  " why is the default 60???
+  let g:vimsyn_noerror = 1  " Turn off errors because 50% of them are wrong.
+  let g:vimsyn_embed = 1
+
 if exists('b:did_ftplugin') | finish | endif
 
-" Just found this guy. Make indents the same regardless of my indentation or
-" the default 8 space tabstop.
-if &l:shiftwidth ==# 2
-  let g:vim_indent_cont = shiftwidth() * 8
-elseif &l:shiftwidth ==# 8
-  let g:vim_indent_cont = shiftwidth() * 2
-endif
+" Filetype Specific Options:
+  " Override the textwidth before sourcing the runtime ftplugin. They do
+  " if tw=0 | setlocal tw=78 | endif
+  setlocal textwidth=100
 
-let g:vimsyn_minlines = 300
-let g:vimsyn_maxlines = 500  " why is the default 60???
-let g:vimsyn_noerror = 1  " Turn off errors because 50% of them are wrong.
-let g:vimsyn_embed = 1
+  " Also let's check that this is the right filetype because this is expensive
+  " Then we don't need to add it to our ftplugin_undo because it's in that func call
+  if &filetype ==# 'vim'
+    source $VIMRUNTIME/ftplugin/vim.vim
+  endif
 
-" Override the textwidth before sourcing the runtime ftplugin. They do
-" if tw=0 | setlocal tw=78 | endif
-setlocal textwidth=100
+  setlocal expandtab
+  setlocal shiftwidth=2
+  setlocal tabstop=8
+  setlocal softtabstop=2
+  setlocal suffixesadd=.vim
+  setlocal nolinebreak
 
-" Then we don't need to add it to our ftplugin_undo because it's in that func call
-source $VIMRUNTIME/ftplugin/vim.vim
+  setlocal wrapmargin=1
+  " To allow tag lookup via CTRL-] for autoload functions, '#' must be a
+  " keyword character.  E.g., for netrw#Nread().
+  " Wanted - added so we could search for stuff like vim-surround as 1 word
+  " Think tpope adds it in scriptease tho
+  " setlocal iskeyword+=#,-  " Make 'gf' work
+  setlocal wrap
+  setlocal foldmethod=indent
+  setlocal foldlevel=0
 
-setlocal expandtab
-setlocal shiftwidth=2
-setlocal tabstop=8
-setlocal softtabstop=2
-setlocal suffixesadd=.vim
-setlocal nolinebreak
+  let &l:path = includes#VimPath()
 
-setlocal wrapmargin=1
-" To allow tag lookup via CTRL-] for autoload functions, '#' must be a
-" keyword character.  E.g., for netrw#Nread().
-" Wanted - added so we could search for stuff like vim-surround as 1 word
-" Think tpope adds it in scriptease tho
-" setlocal iskeyword+=#,-  " Make 'gf' work
-setlocal wrap
-setlocal foldmethod=indent
-setlocal foldlevel=0
+  setlocal tags+=~/.config/nvim/tags,$VIMRUNTIME/doc/tags,tags,**
 
-let &l:path = includes#VimPath()
+" ALE And Cleanup:
+  if !exists('s:stddata')
+    if exists('*stdpath')
+      let s:stddata = stdpath("data")
+    else
+      let s:stddata = resolve(expand('~/.local/share/nvim'))
+    endif
+  endif
 
-setlocal tags+=~/.config/nvim/tags,$VIMRUNTIME/doc/tags,tags,**
+  let &l:tags .= s:stddata . '/plugged'
+  let b:undo_indent = 'setlocal indentkeys< indentexpr<'
 
-if exists('*stdpath')
-  let s:stddata = stdpath("data")
-else
-  let s:stddata = resolve(expand('~/.local/share/nvim'))
-endif
+  let b:ale_linters = ['ale_custom_linting_rules', 'vint', 'vimls']
+  let b:ale_linters_explicit = 1
 
-let &l:tags .= s:stddata . '/plugged'
-let b:undo_indent = 'setlocal indentkeys< indentexpr<'
-
-let b:ale_linters = ['ale_custom_linting_rules', 'vint', 'vimls']
-let b:ale_linters_explicit = 1
-
-let b:ale_linters = ['ale_custom_linting_rules']
-let b:ale_linters_explicit = 1
-
-let b:ale_linters += ['vint']
 " the original ftplugin also sets b:undo_ftplugin = to call VimFtpluginUndo
 " so we can append to theirs and not need to add rhe func call
 let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')

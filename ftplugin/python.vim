@@ -6,11 +6,19 @@
 " ============================================================================
 
 " Globals:
+  " Set up for the ftplugin
   let g:python_highlight_all = 1
   let g:python_space_error_highlight = 1
   let g:pydoc_executable = 1
+
+  " Set up for the indent
+  let g:pyindent_continue = 1
+  " NOTE: You can't set like 90% of the vars in that file or it'll throw
+  " let g:pyindent_disable_parentheses_indenting = 1
+
   if exists('b:did_ftplugin') | finish | endif
 
+  let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
 " Filetype Specific Options:
   if has('win32') || has('win64')
@@ -37,22 +45,24 @@
   setlocal iskeyword-=.,_
   setlocal shiftround
   setlocal cindent
+  exec 'source ' . s:repo_root . '/autoload/py.vim'
   let &l:path = py#PythonPath()
 
   if exists('loaded_matchit')
     " Use case with matchit.
     let b:match_ignorecase = 0
 
-    " You can use |zero-width| patterns such as |\@<=| and |\zs|.  (The latter has
-    " not been thouroughly tested in matchit.vim.)  For example, if the keyword "if"
-    " must occur at the start of the line, with optional white space, you might use
-    " the pattern "\(^\s*\)\@<=if" so that the cursor will end on the "i" instead of
-    " at the start of the line.
-    let b:match_words = '\(^\s*\)\@<=\<if\>:\<elif\>:\<else\>,'
-                    \ . '\(^\s*\)\@<=\<def\>:\<return\>,'
+    " Grabbed the if elseif endif from $VIMRUNTIME/ftplugin/vim.vim and modified it
+    " for python. amazingly i don't thin kthe try catch even needs changing.
+    let b:match_words =  '\<class\>:\<def\>:\<return\>,'
+                      \. '\<if\>:\<el\%[if]\>,'
+                      \. '\<try\>:\<cat\%[ch]\>:\<fina\%[lly]\>:\<endt\%[ry]\>,'
+
+    " nabbed it from  the same place
+    let b:match_skip = 'synIDattr(synID(line("."),col("."),1),"name")
+          \ =~? "comment\\|string\\|pythonComment\\|pythonString\\|pythonRawString\\|pythonEscape"'
 
   endif
-
 
 " Mappings:
   noremap <buffer> <F5> <Cmd>py3f %<CR>
@@ -69,8 +79,7 @@
   nnoremap <buffer> ,eb <Cmd>py3f %<CR>
 
   " Dude i forgot how awesome this function is
-  nnoremap <expr><buffer> <C-p> pydoc_help#async_cfile()
-
+  nnoremap <expr><buffer> <C-x><C-p> pydoc_help#async_cfile()
 
 " Commands And Cleanup:
   if !empty('g:did_coc_loaded')
@@ -89,7 +98,7 @@
   endif
 
   if !exists('b:loaded_ale_python')
-    let b:ale_linters = ['flake8', 'pydocstyle', 'pyls']
+    let b:ale_linters = ['flake8', 'pydocstyle', 'pyls', 'mypy', 'pylint']
     let b:ale_linters_explicit = 1
     let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
     let b:ale_fixers += [ 'reorder-python-imports' ]

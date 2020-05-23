@@ -5,11 +5,14 @@
   " Last Modified: September 09, 2019
 " ============================================================================
 
+" Guard: {{{
+
 " Same way it's implemented in nvim_gui_shim. OH but don't forget.
 " ONLY LOAD if g:GuiLoaded exists. Probably not being reread
 if !has('nvim') || !exists('g:GuiLoaded')
   finish
 endif
+" }}}
 
 runtime plugin/nvim_gui_shim.vim
 
@@ -46,7 +49,7 @@ GuiLinespace 1
 " Doesn't work even though we can set the windows terminal font to this DX
 " GuiFont Sauce\ Code\ Pro\ Nerd\ Font\ Complete\ Windows\ Compatible
 
-" Glyphs and icons seem to work! --> oh well. good enough.
+" Glyphs and icons seem to work! Fires that bad metrics thing but honestly not even bad
 GuiFont Droid\ Sans\ Mono
 " }}}
 
@@ -55,3 +58,5 @@ command! -complete=buffer -range=% -addr=loaded_buffers -bar -nargs=*  GuiDrop c
 
 " We need to map something to GuiTreeviewToggle!
 nnoremap <Leader>ag <Cmd>GuiTreeviewToggle<CR>redraw!<CR>echomsg 'Opening up Nvim_Explorer.exe'<CR>
+
+" Vim: set fdm=marker:

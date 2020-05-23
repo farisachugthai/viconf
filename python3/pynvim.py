@@ -359,7 +359,8 @@ def setup_logging(name: AnyStr = None, level: int = None, disable_asyncio_loggin
 
     try:
         level = int(level)
-    except ValueError:  # apparently this gets raised if you do int(logging.DEBUG)
+    # apparently this gets raised if you do int(logging.DEBUG)
+    except ValueError:
         pass
     except TypeError:
         raise
@@ -528,7 +529,8 @@ def get_client_info(type_, method_spec, kind=None):
     dict
     """
     name = "python{}-{}".format(sys.version_info[0], kind)
-    attributes = {"license": "Apache v2", "website": "github.com/neovim/pynvim"}
+    attributes = {"license": "Apache v2",
+                  "website": "github.com/neovim/pynvim"}
     return name, VERSION.__dict__, type_, method_spec, attributes
 
 
@@ -795,7 +797,8 @@ class Remote(object):
         self.code_data = code_data
         self.handle = unpackb(code_data[1])
         if not hasattr(self, "_api_prefix"):
-            raise AttributeError("All subclasses must implement attribute _api_prefix.")
+            raise AttributeError(
+                "All subclasses must implement attribute _api_prefix.")
         self.__api_prefix = "nvim_"
         # Wait where the hell did self._api_prefix come from??
         self.api = RemoteApi(self, self._api_prefix)
@@ -1045,7 +1048,8 @@ class Session(object):
             self.stop()
 
         self._async_session.request(method, args, response_cb)
-        self._async_session.run(self._enqueue_request, self._enqueue_notification)
+        self._async_session.run(self._enqueue_request,
+                                self._enqueue_notification)
         return result
 
     def _non_blocking_request(self, method, args):
@@ -1084,7 +1088,8 @@ class Session(object):
         def handler():
             try:
                 rv = self._request_cb(name, args)
-                debug(f"greenlet {gr} finished executing sending {rv} as response")
+                debug(
+                    f"greenlet {gr} finished executing sending {rv} as response")
                 response.send(rv)
             except ErrorResponse as err:
                 warn(
@@ -1242,7 +1247,8 @@ class Nvim(object):
         # arguably all **FIFTEEN** of this instance attributes should probably
         # be properties
         self.api = RemoteApi(self, "nvim_")
-        self.vars = RemoteMap(self, "nvim_get_var", "nvim_set_var", "nvim_del_var")
+        self.vars = RemoteMap(self, "nvim_get_var",
+                              "nvim_set_var", "nvim_del_var")
         self.vvars = RemoteMap(self, "nvim_get_vvar", None, None)
         self.options = RemoteMap(self, "nvim_get_option", "nvim_set_option")
         self.buffers = Buffers(self)
@@ -1992,7 +1998,8 @@ class ScriptHost:
         # Handle DirChanged. #296
         nvim.command(
             "au DirChanged *"
-            'call rpcnotify({}, "python_chdir", v:event.cwd)'.format(nvim.channel_id),
+            'call rpcnotify({}, "python_chdir", v:event.cwd)'.format(
+                nvim.channel_id),
             async_=True,
         )
 
@@ -2002,7 +2009,8 @@ class ScriptHost:
         # to make __init__ safe again, the following should work:
         # os.chdir(nvim._eval('getcwd()', async_=False))
         nvim.command(
-            'call rpcnotify({}, "python_chdir", getcwd())'.format(nvim.channel_id),
+            'call rpcnotify({}, "python_chdir", getcwd())'.format(
+                nvim.channel_id),
             async_=True,
         )
 
@@ -2073,7 +2081,8 @@ class ScriptHost:
                     # Update earlier lines, and skip to the next
                     if newlines:
                         end = sstart + len(newlines) - 1
-                        nvim.current.buffer.api.set_lines(sstart, end, True, newlines)
+                        nvim.current.buffer.api.set_lines(
+                            sstart, end, True, newlines)
                     sstart += len(newlines) + 1
                     newlines = []
                     pass
@@ -2428,7 +2437,8 @@ class Buffer(Remote):
         if clear and clear_start is None:
             clear_start = 0
         lua = self._session._get_lua_private()
-        lua.update_highlights(self, src_id, hls, clear_start, clear_end, async_=async_)
+        lua.update_highlights(
+            self, src_id, hls, clear_start, clear_end, async_=async_)
 
     @property
     def name(self):
@@ -2491,7 +2501,7 @@ class Range(object):
             start = self.start
         if end is None:
             end = self.end
-        self._buffer[start : end + 1] = lines
+        self._buffer[start: end + 1] = lines
 
     def __iter__(self):
         for i in range(self.start, self.end + 1):
@@ -2674,7 +2684,7 @@ class RemoteSequence(UserList):
         """Return a sequence item by index."""
         if not isinstance(idx, slice):
             return self._fetch()[idx]
-        return self._fetch()[idx.start : idx.stop]
+        return self._fetch()[idx.start: idx.stop]
 
     def __iter__(self):
         """Return an iterator for the sequence."""
@@ -2855,7 +2865,6 @@ class MsgpackStream(object):
     def create_future(self):
         return self.loop.create_future()
 
-
     async def run(self, coroutine=None):
         """Run the event loop to receive messages from Nvim.
 
@@ -2923,7 +2932,6 @@ class AsyncSession(MsgpackStream):
     asyncio.set_event_loop(loop)
     loop.set_debug(True)
 
-
     def __init__(self, _message_cb=None, *args, **kwargs):
         """Wrap `msgpack_stream` on a msgpack-rpc interface."""
         # self._msgpack_stream = msgpack_stream
@@ -2939,7 +2947,6 @@ class AsyncSession(MsgpackStream):
         # self._enum_handlers = SessionHandlers()
         # self.loop = msgpack_stream.loop
         super().__init__(_message_cb, *args, **kwargs)
-
 
     def request(self, method, args, response_cb):
         """Send a msgpack-rpc request to Nvim.
@@ -3739,7 +3746,8 @@ class Host:
             self._specs = {}
         self._loaded = {}
         self._load_errors = {}
-        self._notification_handlers = {"nvim_error_event": self._on_error_event}
+        self._notification_handlers = {
+            "nvim_error_event": self._on_error_event}
         self._request_handlers = {
             "poll": lambda: "ok",
             "specs": self._on_specs_request,
@@ -3892,7 +3900,8 @@ class Host:
                 error(err)
                 self._load_errors[path] = err
 
-        kind = "script-host" if len(plugins) == 1 and has_script else "rplugin-host"
+        kind = "script-host" if len(
+            plugins) == 1 and has_script else "rplugin-host"
         info = get_client_info(kind, "host", host_method_spec)
         self.name = info[0]
         self.nvim.api.set_client_info(*info, async_=True)

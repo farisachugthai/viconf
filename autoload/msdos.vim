@@ -8,6 +8,11 @@
 function! msdos#set_shell_cmd() abort
   " All the defaults when running cmd as comspec on windows 10
   set shell=cmd.exe
+  " yo this could be horrible but this might be amazing
+  " Because this'll A) stop the horrific Terminate batch command? prompt
+  " automatically along with a few other things
+  " set shell=clink.cmd
+
   " i've noticed ALE needing shelltemp set
   setglobal shelltemp
   " set shellcmdflag=/s\ /c
