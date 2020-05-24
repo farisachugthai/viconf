@@ -9,6 +9,9 @@
   scriptencoding utf-8
   let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
+let s:stddata = exists('*stdpath') ? stdpath('data') : resolve(expand('~/.local/share/nvim'))
+let s:stdconfig = exists('*stdpath') ? stdpath('config') : resolve(expand('~/.config/nvim'))
+
 " Folds And Diffs:
   set foldopen=insert,jump,block,hor,mark,percent,quickfix,search,tag,undo
   setglobal foldnestmax=10
@@ -43,13 +46,7 @@
   setglobal ignorecase
 
 " Path:
-  let &g:path = '.,,**,' . expand('$VIMRUNTIME') . '/*/*.vim'  . ',' . stdpath('config')
-  if exists('*stdpath')
-    let s:stddata = stdpath("data")
-  else
-    let s:stddata = resolve(expand('~/.local/share/nvim'))
-  endif
-  let s:stdconfig = exists('*stdpath') ? stdpath('config') : resolve(expand('~/.config/nvim'))
+  let &g:path = '.,,**,' . expand('$VIMRUNTIME') . '/*/*.vim'  . ',' . s:stdconfig
 
   let &g:path = &path . ',' . s:stddata
   setglobal path-=/usr/include
@@ -60,10 +57,17 @@
   setglobal smartcase infercase smartindent
   setglobal regexpengine=2
   setglobal cscopetagorder=1  " why does this default to search cscope first?
-  setglobal shada='100,<50,s10,:3000,%
-  " default but specify it.
-  let &g:shadafile = s:stddata.'/site/shada/main.shada'
-  setglobal formatoptions=crq1j
+
+" Nvim Vim Compat:
+  if has('nvim')
+    setglobal shada=%,'100,<50,s10,:3000,c,h
+    " default but specify it.
+    let &g:shadafile = s:stddata.'/shada/main.shada'
+    set winblend=10
+    setglobal inccommand=split
+  else
+    setglobal viminfo=%,'100,<50,s10,:3000,c,h
+  endif
 
 " Tags:
   setglobal tags=tags,**/tags
@@ -75,6 +79,7 @@
   packadd! matchit
   packadd! justify
 
+  setglobal formatoptions=crq1j
   setglobal pyxversion=3
   " managed to lose this along the way
   " to enable transparency but force the current selected element to be fully opaque: >
@@ -101,7 +106,6 @@
   setglobal isfname-==
   setglobal iskeyword=@,48-57,_,192-255   " Idk how but i managed to mess up the default isk
   setglobal iskeyword-=.,_
-  set winblend=10
   setglobal suffixes=.bak,~,.o,.info,.swp,.aux,.bbl,.blg,.brf,.cb,.dvi,.idx,.ilg,.ind,.inx,.jpg,.log,.out,.png,.toc,.pyc,*.a,*.obj,*.dll,*.exe,*.lib,*.mui,*.swp,*.tmp,
 
 " Buffers Windows:
@@ -147,7 +151,6 @@
   setglobal breakindent breakindentopt=sbr
   let &g:showbreak = '↳ '                   " Indent wrapped lines correctly
   setglobal updatetime=400 lazyredraw
-  setglobal inccommand=split
   setglobal terse shortmess=aoOsItTWcF
   setglobal title titlestring=%<%F%=%l/%L-%P   " leaves a cool title for tmux
   setglobal conceallevel=2 concealcursor=ncv    " enable concealing
@@ -312,7 +315,7 @@
     " Defining it and limiting it to 1 directory means that UltiSnips doesn't
     " iterate through every dir in &rtp which saves an immense amount of time
     " on startup.
-    let g:UltiSnipsSnippetDirectories = [ expand('$HOME') . '/.config/nvim/UltiSnips' ]
+    let g:UltiSnipsSnippetDirectories = [ s:stdconfig . '/UltiSnips' ]
     let g:UltiSnipsUsePythonVersion = 3
     let g:UltiSnipsListSnippets = '<C-/>'
     " Wait is this option still a thing??
@@ -380,7 +383,7 @@
         \ {'g': ['Git status!', 'Gstatus'],},
         \ {'h': ['Vim Reference', 'he index.txt'],},
         \ {'m': 'Maps'},
-        \ {'o': ['Options', 'exec "e " . stdpath("config") . "/plugin/options.vim"']},
+        \ {'o': ['Options', 'exec "e " . s:stdconfig . "/plugin/options.vim"']},
       \ ]
 
   " Also utilize his skiplist
@@ -397,7 +400,7 @@
         \ ]
 
   let g:startify_bookmarks = [
-        \ { 'c': '~/.local/share/nvim/plugged/coc.nvim'},
+        \ { 'c': s:stddata . '/plugged/coc.nvim'},
         \ { 'd': '~/projects/dynamic_ipython/README.rst'},
         \ { 'i': '~/projects/viconf/init.vim' },
         \ ]
@@ -428,7 +431,7 @@
 
 " Coc:
   let g:WorkspaceFolders = [
-        \ stdpath('config'),
+        \ s:stdconfig,
         \ expand('$HOME/projects/dynamic_ipython'),
         \ expand('$HOME/projects/viconf'),
         \ expand('$HOME/python/tutorials'),
@@ -524,7 +527,6 @@
     \ 'ctrl-s': 'split',
     \ 'ctrl-v': 'vsplit' }
 
-  " NOTE: Use of stdpath() requires nvim0.3>
   let g:fzf_history_dir =  s:stddata . '/site/fzf-history'
   let g:fzf_ag_options = ' --smart-case -u -g " " --'
   let g:fzf_rg_options = ' --hidden --max-columns 300 --max-depth 8 '

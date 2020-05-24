@@ -242,3 +242,32 @@ function! py#ErrorFormat() abort
   let &l:efm = s:efm
   return s:efm
 endfunction
+
+function! py#Loaded() abort
+
+  " Dude look at this note from if_pyth.txt
+
+  " Note however, that when Python 2 and 3 are both available and loaded
+  " dynamically, these has() calls will try to load them.  If only one can be
+  " loaded at a time, just checking if Python 2 or 3 are available will prevent
+  " the other one from being available.
+
+  " To avoid loading the dynamic library, only check if Vim was compiled with
+  " python support: >
+  if has('python_compiled')
+    echo 'compiled with Python 2.x support'
+    if has('python_dynamic')
+      echo 'Python 2.x dynamically loaded'
+    endif
+  endif
+  if has('python3_compiled')
+    echo 'compiled with Python 3.x support'
+    if has('python3_dynamic')
+      echo 'Python 3.x dynamically loaded'
+    endif
+  endif
+
+  " This also tells you whether Python is dynamically loaded, which will fail if
+  " the runtime library cannot be found.
+
+endfunction

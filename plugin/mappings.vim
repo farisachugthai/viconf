@@ -639,6 +639,10 @@ function! Buffer_Mappings() abort
   nnoremap <M-8> 8<C-^>
   nnoremap <M-9> 9<C-^>
   nnoremap <M-0> 10<C-^>
+
+  " How have i never thought of this one!
+  nnoremap <C-n> <Cmd>bn<CR>
+  nnoremap <C-p> <Cmd>bp<CR>
 endfunction
 
 function! Tab_Mappings() abort

@@ -5,12 +5,12 @@
     " Last Modified: Nov 02, 2019
 " ============================================================================
 
-
 " Unrelated:
   if !exists('g:loaded_custom_remotes')
-    let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
     call remotes#init()
     let g:loaded_custom_remotes = 1
+  else
+    finish
   endif
 
 " Guard:

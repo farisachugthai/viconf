@@ -1,10 +1,9 @@
-" ============================================================================
+" ======================================================
   " File: init.vim
   " Author: Faris Chugthai
   " Description: Neovim configuration
   " Last Modified: Feb 12, 2020
-" ============================================================================
-
+" ======================================================
 
 " Preliminary: {{{
 " These are the options that I consider the minimum requirements to running
@@ -30,20 +29,17 @@ if exists('g:GuiLoaded')
   exec 'source ' s:repo_root . '/ginit.vim'
 endif
 
-if exists('*stdpath')
-  let s:stddata = stdpath("data")
-else
-  let s:stddata = resolve(expand('~/.local/share/nvim'))
-endif
+let s:stddata = exists('*stdpath') ? stdpath('data') : resolve(expand('~/.local/share/nvim'))
 let s:stdconfig = exists('*stdpath') ? stdpath('config') : resolve(expand('~/.config/nvim'))
 " }}}
 
 " Macros, Leader, and Nvim specific features: {{{
 let g:loaded_2html_plugin = 1
 let g:loaded_getscriptPlugin = 1
-let g:loaded_logiPat = 1
+let g:loaded_logiPat = "v4"
 let g:loaded_matchparen = 1
 let g:loaded_netrwPlugin = 1
+let g:loaded_rrhelper = 1
 let g:loaded_spellfile = 1
 let g:loaded_tutor_mode_plugin = 1
 let g:loaded_vimballPlugin = 1
@@ -76,8 +72,6 @@ function! LoadMyPlugins() abort  " {{{
 
   let g:plug_url = 'https://github.com/%s.git'
   if !exists('plug#load')  | unlet! g:loaded_plug | exec 'source ' . s:repo_root . '/vim-plug/plug.vim' | endif
-
-  if !exists('*stdpath') | echohl WarningMsg | echomsg 'stdpath func does not exist.' | echohl NONE | return | endif
 
   call plug#begin(s:stddata . '/plugged')
 
@@ -132,7 +126,7 @@ function! LoadMyPlugins() abort  " {{{
     Plug 'tpope/vim-apathy'
     Plug 'liuchengxu/vim-which-key'
     Plug 'liuchengxu/vista.vim'
-  endif
+  endif " }}}
 
   Plug 'cespare/vim-toml', {'for': 'toml'}
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
