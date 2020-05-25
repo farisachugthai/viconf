@@ -123,11 +123,10 @@ function! LoadMyPlugins() abort  " {{{
     Plug 'tpope/vim-unimpaired'
     Plug 'tpope/vim-surround'
     Plug 'tpope/vim-eunuch'
-    Plug 'tpope/vim-apathy'
     Plug 'liuchengxu/vim-which-key'
-    Plug 'liuchengxu/vista.vim'
   endif " }}}
 
+  Plug 'liuchengxu/vista.vim'
   Plug 'cespare/vim-toml', {'for': 'toml'}
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
   Plug 'omnisharp/omnisharp-vim', {'for': ['cs', 'ps1'] }

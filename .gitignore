@@ -10,12 +10,8 @@
 searchindex.js
 robots.txt
 _build
-*.html
-!doc/_templates/*.html
-doc/build
 objects.inv
 .buildinfo
-/docs/_build/*
 
 # Local files
 ###############

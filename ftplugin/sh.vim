@@ -40,7 +40,6 @@
   " Uh?
   setlocal includeexpr=shellescape(v:fname)
   setlocal foldignore=
-  setlocal foldmethod=syntax " we set up syntax folding at the top
 
   let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
   let b:ale_linters = ['language_server', 'shell']

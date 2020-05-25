@@ -10,6 +10,9 @@ setglobal ruler
 
 let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
+colo gruvbox-material
+call syncom#grepprg()
+
 function! s:fzf_statusline()  abort
   " Curious if this'll work
   hi! fzf1 cterm=bold,undercurl,reverse gui=bold,undercurl,reverse guifg=#7daea3 guibg=NONE ctermbg=NONE guisp=NONE font='Source Code Pro'
@@ -172,9 +175,6 @@ augroup UserPlugins
   " " let's see if this works better
   " autocmd CursorHoldI * sil if exists('*CocActionAsync') | call CocActionAsync('showSignatureHelp') | endif
   " autocmd  User CursorHold call CocActionAsync('showSignatureHelp')
-  "
-  " Clear this so that p.u.m. doesn't open in the command window
-  autocmd! User CmdlineEnter CompleteDone
 
   " autocmd! User CursorHoldI
   " todo: why did he add the exclamation mark and the nested?
@@ -185,6 +185,10 @@ augroup UserPlugins
 
   if exists('#vim-which-key')
     autocmd! User vim-which-key call which_key#register('<Space>', 'g:which_key_map')
+  endif
+
+  if exists('g:loaded_vista')
+    autocmd FileType vista,vista_kind nnoremap <buffer> <silent> \
   endif
 augroup END
 
@@ -207,12 +211,11 @@ augroup UserPotpourri
   autocmd Syntax * syntax sync fromstart linebreaks=2
 
   autocmd BufWinEnter * if &previewwindow | setlocal nonumber nornu | else | setlocal number relativenumber |  endif
+  "
+  " Clear this so that p.u.m. doesn't open in the command window
+  autocmd! User CmdlineEnter CompleteDone
+
 augroup END
-
-exec 'source ' . s:repo_root . '/autoload/syncom.vim'
-
-call syncom#gruvbox_material()
-call syncom#grepprg()
 
 if exists('#TagbarAutoCmds')
   au! TagbarAutoCmds *

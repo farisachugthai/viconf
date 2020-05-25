@@ -18,18 +18,25 @@ function! format#Format() abort
 endfunction
 
 function! format#MarkdownFoldText() abort
-  let l:line = getline(v:lnum)
+  let line = getline(v:lnum)
 
   " Regular headers
-  let l:depth = match(l:line, '\(^#\+\)\@<=\( .*$\)\@=')
-  if l:depth > 0 | return '>' . l:depth | endif
+  let depth = match(line, '\(^#\+\)\@<=\( .*$\)\@=')
+  if depth > 0
+    return ">" . depth
+  endif
 
   " Setext style headings
-  let l:nextline = getline(v:lnum + 1)
-  if (l:line =~? '^.\+$') && (l:nextline =~? '^=\+$') | return '>1' | endif
-  if (l:line =~? '^.\+$') && (l:nextline =~? '^-\+$') | return '>2' | endif
+  let nextline = getline(v:lnum + 1)
+  if (line =~ '^.\+$') && (nextline =~ '^=\+$')
+    return ">1"
+  endif
 
-  return '='
+  if (line =~ '^.\+$') && (nextline =~ '^-\+$')
+    return ">2"
+  endif
+
+  return "="
 endfunction
 
 function! format#ClangCheckimpl(cmd) abort

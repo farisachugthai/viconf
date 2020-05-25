@@ -60,6 +60,7 @@
     "coc-snippets": ">=2.1.26",
     "coc-tsserver": ">=1.5.1",
     "coc-vimlsp": "^0.8.0",
+    "markdownlint": "^0.20.3",
     "typescript": "^3.9.2",
     "vim-language-server": "^1.9.0"
   },
@@ -95,6 +96,8 @@
     "lint-fix": "yarn --silent lint --fix; exit 0",
     "lint-styles": "stylelint --ignore-path .eslintignore '**/*.*(css|scss)' --syntax scss",
     "lint-styles-fix": "yarn --silent lint-styles --fix; exit 0",
+    "markdown-it": "yarn run markdown-it",
+    "markdown-docs": "yarn run markdown-it -l -t --trace -o doc/autoload_readme.html autoload/README.md",
     "pretest": "echo 'Running tests'",
     "publish": "npx vsce package . ",
     "reinstall": "yarn install && yarn audit fix",

@@ -18,7 +18,6 @@ if exists('g:autoloaded_remotes')
 endif
 let g:autoloaded_remotes = 1  " just to let me know that this got sourced
 
-
 function! remotes#unix_clipboard() abort
   if exists('$TMUX')
     let g:clipboard = {
@@ -165,13 +164,13 @@ function! remotes#HardReset(ruby_host) abort
 endfunction
 
 function! remotes#init() abort
-  if exists('g:autoloaded_remotes')
+  if exists('g:autoloaded_remotes_init')
     echo 'remotes#init: Something is sourcing this twice.'
     return
   endif
 
   " just to let me know that this got sourced
-  let g:autoloaded_remotes = 1
+  let g:autoloaded_remotes_init = 1
 
   " Dispatches the module as needed here
   if !has('unix')
@@ -185,5 +184,5 @@ function! remotes#init() abort
   endif
   " So i dont think this responds to PluginsForHost
   " source $VIMRUNTIME/autoload/provider/clipboard.vim
-  echo remotes#HardReset(v:true)
+  call remotes#HardReset(v:true)
 endfunction

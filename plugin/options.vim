@@ -809,3 +809,9 @@ let s:stdconfig = exists('*stdpath') ? stdpath('config') : resolve(expand('~/.co
   " ALE
   let g:python_pyls_auto_pipenv = 1
 
+" Vista:
+let g:vista_fzf_preview = ['right:50%']
+
+let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
+let g:vista#renderer#enable_icon = 1
+let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
