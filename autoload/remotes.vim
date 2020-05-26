@@ -59,6 +59,7 @@ function! remotes#termux() abort
 
   let g:loaded_remote_plugins = '/data/data/com.termux/files/home/.local/share/nvim/rplugin.vim'
 
+call remote#host#RegisterPlugin('node', '/data/data/com.termux/files/home/projects/viconf/rplugin/node/coc_tag.js', [])
   " $VIMRUNTIME/autoload/remote/host.vim
   " call remote#host#Register('python', '*',
   "       \ function('provider#pythonx#Require'))
@@ -126,6 +127,37 @@ function! remotes#msdos() abort
 endfunction
 
 function! remotes#HardReset(ruby_host) abort
+  " Note that this line will raise if script_host ia already registered.
+  " unlet! g:loaded_python3_provider | source $VIMRUNTIME/autoload/provider/python3.vim
+
+  " This right here was 70% of the previous startuptime
+  if a:ruby_host is v:true
+    rubyfile $VIMRUNTIME/autoload/provider/script_host.rb
+  endif
+endfunction
+
+function! remotes#init() abort
+  if exists('g:autoloaded_remotes_init')
+    echo 'remotes#init: Something is sourcing this twice.'
+    return
+  endif
+
+  " just to let me know that this got sourced
+  let g:autoloaded_remotes_init = 1
+
+  " Dispatches the module as needed here
+  if !has('unix')
+    call remotes#msdos()
+  else
+    if s:termux
+      call remotes#termux()
+    else
+      call remotes#ubuntu()
+    endif
+  endif
+  " So i dont think this responds to PluginsForHost
+  " source $VIMRUNTIME/autoload/provider/clipboard.vim
+
   let g:failed_providers = {}
 
   source $VIMRUNTIME/autoload/remote/host.vim
@@ -151,38 +183,6 @@ function! remotes#HardReset(ruby_host) abort
     endtry
 
   endfor
-
-  " Note that this line will raise if script_host ia already registered.
-  " unlet! g:loaded_python3_provider | source $VIMRUNTIME/autoload/provider/python3.vim
-
-  if a:ruby_host is v:true
-    rubyfile $VIMRUNTIME/autoload/provider/script_host.rb
-  endif
-
   source $VIMRUNTIME/autoload/provider/clipboard.vim
   return g:failed_providers
-endfunction
-
-function! remotes#init() abort
-  if exists('g:autoloaded_remotes_init')
-    echo 'remotes#init: Something is sourcing this twice.'
-    return
-  endif
-
-  " just to let me know that this got sourced
-  let g:autoloaded_remotes_init = 1
-
-  " Dispatches the module as needed here
-  if !has('unix')
-    call remotes#msdos()
-  else
-    if s:termux
-      call remotes#termux()
-    else
-      call remotes#ubuntu()
-    endif
-  endif
-  " So i dont think this responds to PluginsForHost
-  " source $VIMRUNTIME/autoload/provider/clipboard.vim
-  call remotes#HardReset(v:true)
 endfunction

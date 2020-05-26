@@ -99,6 +99,9 @@
     "markdown-it": "yarn run markdown-it",
     "markdown-docs": "yarn run markdown-it -l -t --trace -o doc/autoload_readme.html autoload/README.md",
     "pretest": "echo 'Running tests'",
+    "preversion": "npm test",
+    "version": "npm run build && git add -A dist",
+    "postversion": "git push && git push --tags && rm -rf build/temp",
     "publish": "npx vsce package . ",
     "reinstall": "yarn install && yarn audit fix",
     "start": "yarn run neovim-node-host",
@@ -111,6 +114,6 @@
   },
   "version": "1.0.0",
   "dependencies": {
-    "neovim": "^4.8.0"
+    "neovim": "^4.9.0"
   }
 }

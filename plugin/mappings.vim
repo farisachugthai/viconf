@@ -18,6 +18,32 @@
   noremap <Up> gk
   noremap <Down> gj
 
+" Tags:
+  " I've always really liked that M-/ mapping from readline
+  nnoremap <M-?> <Cmd>stjump!<CR>
+  xnoremap <M-?> y<Cmd>stjump!<CR>
+
+  nnoremap <C-k><C-\> <Cmd>stselect!<CR>
+  xnoremap <C-k><C-\> y<Cmd>stselect!<CR>
+
+  " Thank you index.txt!
+  " From: 2.2 Window commands                                             *CTRL-W*
+  " |CTRL-W_g_CTRL-]| CTRL-W g CTRL-]
+  " split window and do |:tjump| to tag under cursor
+  nnoremap <C-k><C-]> <C-w>g<C-]>
+  nnoremap ]w <C-w>g<C-]>
+
+  nnoremap <Leader>wc <Cmd>wincmd c<CR>
+  nnoremap <Leader>wo <Cmd>wincmd o<CR>
+
+  " No tabnext takes this one
+  " nnoremap ]t <Cmd>PreviewTag<CR>
+  nnoremap <C-i> <C-w><C-i>
+
+  " Mnemonic: goto like mosts other g commands and \ is the key we're left free
+  nnoremap <C-k>g [I:let nr = input("Choose an include: ")<Bar>exe "normal! " . nr ."[\t"<CR>
+
+
 " Z Mappings:
   nnoremap zE <nop>
   nnoremap zH zt
@@ -697,29 +723,36 @@ function! UserFugitiveMappings() abort
   nnoremap <Leader>gW   <Cmd>Gwrite!<CR>
 endfunction
 
-  " I've always really liked that M-/ mapping from readline
-  nnoremap <M-?> <Cmd>stjump!<CR>
-  xnoremap <M-?> y<Cmd>stjump!<CR>
+function! Terminals() abort
+  " If running a terminal in Vim, go into Normal mode with Esc
+  tnoremap <Esc> <C-\><C-n>
 
-  nnoremap <C-k><C-\> <Cmd>stselect!<CR>
-  xnoremap <C-k><C-\> y<Cmd>stselect!<CR>
+  " From he term. Alt-R is better because this causes us to lose C-r in every
+  " command we run from nvim
+  tnoremap <expr> <A-r> '<C-\><C-N>"'.nr2char(getchar()).'pi'
 
-  " Thank you index.txt!
-  " From: 2.2 Window commands                                             *CTRL-W*
-  " |CTRL-W_g_CTRL-]| CTRL-W g CTRL-]
-  " split window and do |:tjump| to tag under cursor
-  nnoremap <C-k><C-]> <C-w>g<C-]>
-  nnoremap ]w <C-w>g<C-]>
+  " From :he terminal
+  tnoremap <M-h> <C-\><C-N><C-w>h
+  tnoremap <M-j> <C-\><C-N><C-w>j
+  tnoremap <M-k> <C-\><C-N><C-w>k
+  tnoremap <M-l> <C-\><C-N><C-w>l
 
-  nnoremap <Leader>wc <Cmd>wincmd c<CR>
-  nnoremap <Leader>wo <Cmd>wincmd o<CR>
+  " Move around the line
+  tnoremap <M-A> <Esc>A
+  tnoremap <M-b> <Esc>b
+  tnoremap <M-d> <Esc>d
+  tnoremap <M-f> <Esc>f
 
-  " No tabnext takes this one
-  " nnoremap ]t <Cmd>PreviewTag<CR>
-  nnoremap <C-i> <C-w><C-i>
+  " Other window
+  tnoremap <C-w>w <C-\><C-N><C-w>w
 
-  " Mnemonic: goto like mosts other g commands and \ is the key we're left free
-  nnoremap <C-k>g [I:let nr = input("Choose an include: ")<Bar>exe "normal! " . nr ."[\t"<CR>
+  tnoremap <F4> <Cmd>Snippets<CR>
+  tnoremap <F6> <Cmd>UltiSnipsEdit<CR>
+
+  " It's so annoying that buffers need confirmation to kill. Let's dedicate a
+  " key but one that we know windows hasn't stolen yet.
+  tnoremap <D-z> <Cmd>bd!<CR>
+endfunction
 
 " Syntax Plug Mappings:
   nnoremap <Plug>(HL) <Cmd>call syncom#HL()<CR>
@@ -744,5 +777,6 @@ endfunction
     " because &rtp is so long it takes longer for vim to figure than just telling it
     " endif
     call UserFugitiveMappings()
+    call Terminals()
     let g:loaded_plugin_mappings = 1
   endif

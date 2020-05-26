@@ -41,7 +41,7 @@ exec 'source ' . s:ftplugin_root . '/javascript.vim'
 " Original:
   " https://gist.githubusercontent.com/romainl/a50b49408308c45cc2f9f877dfe4df0c/raw/1ab8eb733948c0c89d11553cc0e00f4ab251f31e/typescript.vim
   if !exists('b:did_typescript_setup')
-    call ftplugins#typescript_setup()
+    call includes#typescript_setup()
     let b:did_typescript_setup = 1
   endif
 
