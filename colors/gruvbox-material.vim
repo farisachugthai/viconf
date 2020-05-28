@@ -1157,7 +1157,7 @@ let g:colors_name = 'gruvbox-material'
     hi! link jsoncLineComment Comment
     hi! link jsonKeywordMatch Tag
     hi! link jsonKeyword Identifier
-    hi! link jsonQuote Statement
+    hi! link jsonQuote Aqua
     hi! link jsonBraces Operator
     hi! link jsonString String
     hi! link jsonStringMatch MatchParen

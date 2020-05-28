@@ -6,8 +6,29 @@
 Welcome to viconf's documentation!
 ==================================
 
+:date: |today|
 
-.. include:: ../fugitive_help.rst.txt
+.. highlight:: vim
+
+.. moduleauthor:: Faris Chugthai
+
+
+Fugitive
+--------
+.. include:: ../../README.rst
+
+
+Table of Contents
+------------------
+.. toctree::
+   :maxdepth: 3
+
+   fugitive_help.rst
+   plugin.rst
+   ftplugin.rst
+   colors.rst
+   python.rst
+
 
 
 Indices and tables

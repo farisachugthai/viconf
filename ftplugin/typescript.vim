@@ -24,7 +24,7 @@ exec 'source ' . s:ftplugin_root . '/javascript.vim'
              \. '\)'
 
   setlocal includeexpr=includes#TypeScriptIncludeExpression(v:fname,0)
-  setlocal suffixesadd+=.ts,.tsx,.d.ts
+  setlocal suffixesadd+=.ts,.tsx,.d.ts,.js,.jsx
   setlocal isfname+=@-@
 
 " Plugins:

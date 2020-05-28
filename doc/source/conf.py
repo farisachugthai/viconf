@@ -14,6 +14,17 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
+from pygments.lexers.markup import MarkdownLexer, RstLexer
+from pygments.lexers.shell import BashLexer
+from pygments.lexers.textedit import VimLexer
+from pygments.lexers.python import (
+    NumPyLexer,
+    PythonConsoleLexer,
+    PythonLexer,
+    PythonTracebackLexer,
+)
+
+
 
 # -- Project information -----------------------------------------------------
 
@@ -28,6 +39,30 @@ author = 'Faris A Chugthai'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    "sphinx.config",
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autodoc.typehints",
+    "sphinx.ext.autosectionlabel",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.coverage",
+    "sphinx.ext.doctest",
+    "sphinx.ext.duration",
+    "sphinx.ext.extlinks",
+    "sphinx.ext.githubpages",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.todo",
+    "sphinx.ext.viewcode",
+    "sphinx.domains.c",
+    "sphinx.domains.changeset",
+    "sphinx.domains.citation",
+    "sphinx.domains.cpp",
+    "sphinx.domains.index",
+    "sphinx.domains.javascript",
+    "sphinx.domains.math",
+    "sphinx.domains.python",
+    "sphinx.domains.rst",
+    "sphinx.domains.std",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -58,4 +93,45 @@ html_theme = 'alabaster'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
+html_sidebars = {
+    "**": [
+        "about.html",
+        "relations.html",
+        "localtoc.html",
+        "globaltoc.html",
+        "searchbox.html",
+        "sourcelink.html",
+    ]
+}
 
+# If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
+html_show_sphinx = False
+
+html_show_copyright = False
+
+# If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
+# using the given strftime format.
+html_last_updated_fmt = "%b %d, %Y"
+
+def setup(app):  # {{{
+    """Add custom css styling.
+
+    .. admonition::
+        Don't use :func:`os.path.abspath()` if you need to extend this.
+
+    See Also
+    --------
+    /usr/lib/python3/site-packages/sphinx/config.py : mod
+        Source code where this is implemented
+    https://www.sphinx-doc.org/en/master/extdev/appapi.html : URL
+        help docs
+
+    """
+    app.add_lexer("py3tb", PythonTracebackLexer)
+    app.add_lexer("bash", BashLexer)
+    app.add_lexer("python3", PythonLexer)
+    app.add_lexer("python", PythonLexer)
+    app.add_lexer("pycon", PythonConsoleLexer)
+    app.add_lexer("markdown", MarkdownLexer)
+    app.add_lexer("rst", RstLexer)
+    app.add_lexer("vim", VimLexer)
