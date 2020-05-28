@@ -8,173 +8,172 @@
 " See Also: ./py.vim and py#PythonPath
 
 function! includes#TypeScriptIncludeExpression(fname, gf) abort
-    " BUILT-IN NODE MODULES
-    " =====================
-    " they aren't natively accessible but we can use @types/node if available
-    if index([ 'assert', 'async_hooks',
-             \ 'base', 'buffer',
-             \ 'child_process', 'cluster', 'console', 'constants', 'crypto',
-             \ 'dgram', 'dns', 'domain',
-             \ 'events',
-             \ 'fs',
-             \ 'globals',
-             \ 'http', 'http2', 'https',
-             \ 'inspector',
-             \ 'net',
-             \ 'os',
-             \ 'path', 'perf_hooks', 'process', 'punycode',
-             \ 'querystring',
-             \ 'readline', 'repl',
-             \ 'stream', 'string_decoder',
-             \ 'timers', 'tls', 'trace_events', 'tty',
-             \ 'url', 'util',
-             \ 'v8', 'vm',
-             \ 'worker_threads',
-             \ 'zlib' ], a:fname) != -1
+  " BUILT-IN NODE MODULES
+  " =====================
+  " they aren't natively accessible but we can use @types/node if available
+  if index([ 'assert', 'async_hooks',
+           \ 'base', 'buffer',
+           \ 'child_process', 'cluster', 'console', 'constants', 'crypto',
+           \ 'dgram', 'dns', 'domain',
+           \ 'events',
+           \ 'fs',
+           \ 'globals',
+           \ 'http', 'http2', 'https',
+           \ 'inspector',
+           \ 'net',
+           \ 'os',
+           \ 'path', 'perf_hooks', 'process', 'punycode',
+           \ 'querystring',
+           \ 'readline', 'repl',
+           \ 'stream', 'string_decoder',
+           \ 'timers', 'tls', 'trace_events', 'tty',
+           \ 'url', 'util',
+           \ 'v8', 'vm',
+           \ 'worker_threads',
+           \ 'zlib' ], a:fname) != -1
 
-      let l:found_definition = b:ts_node_modules[0] . '/@types/node/' . a:fname . '.d.ts'
+    let l:found_definition = b:ts_node_modules[0] . '/@types/node/' . a:fname . '.d.ts'
 
-      if filereadable(l:found_definition)
-          return l:found_definition
-      endif
-
-      return 0
+    if filereadable(l:found_definition)
+        return l:found_definition
     endif
 
-    " LOCAL IMPORTS
-    " =============
-    " they are everywhere so we must get them right
-    if a:fname =~? '^\.'
-      " ./
-      if a:fname =~? '^\./$'
-        return './index.ts'
-      endif
+    return 0
+  endif
 
-      " ../
-      if a:fname =~? '\.\./$'
-        return a:fname . 'index.ts'
-      endif
-
-      " ./foo
-      " ./foo/bar
-      " ../foo
-      " ../foo/bar
-      " simplify module name to find it more easily
-      return substitute(a:fname, '^\W*', '', '')
+  " LOCAL IMPORTS
+  " =============
+  " they are everywhere so we must get them right
+  if a:fname =~? '^\.'
+    " ./
+    if a:fname =~? '^\./$'
+      return './index.ts'
     endif
 
-    " ALIASED IMPORTS
-    " ===============
-    " https://code.visualstudio.com/docs/languages/jsconfig
-    " https://webpack.js.org/configuration/resolve/#resolve-alias
-    if !empty(get(b:, 'ts_config_paths', []))
-      for l:path in b:ts_config_paths
-        if a:fname =~? l:path[0]
-          let l:base_name = substitute(a:fname, l:path[0], l:path[1] . '/', '')
-
-          if isdirectory(l:base_name)
-            return l:base_name . '/index'
-          endif
-
-          return l:base_name
-        endif
-      endfor
+    " ../
+    if a:fname =~? '\.\./$'
+      return a:fname . 'index.ts'
     endif
 
-    " this is where we stop for include-search/definition-search
-    if !a:gf
-      if filereadable(a:fname)
-        return a:fname
-      endif
+    " ./foo
+    " ./foo/bar
+    " ../foo
+    " ../foo/bar
+    " simplify module name to find it more easily
+    return substitute(a:fname, '^\W*', '', '')
+  endif
 
-      return 0
-    endif
+  " ALIASED IMPORTS
+  " ===============
+  " https://code.visualstudio.com/docs/languages/jsconfig
+  " https://webpack.js.org/configuration/resolve/#resolve-alias
+  if !empty(get(b:, 'ts_config_paths', []))
+    for l:path in b:ts_config_paths
+      if a:fname =~? l:path[0]
+        let l:base_name = substitute(a:fname, l:path[0], l:path[1] . '/', '')
 
-    " NODE IMPORTS
-    " ============
-    " give up if there's no node_modules
-    if empty(get(b:, 'ts_node_modules', []))
-        if filereadable(a:fname)
-            return a:fname
+        if isdirectory(l:base_name)
+          return l:base_name . '/index'
         endif
 
-        return 0
-    endif
-
-    " split the filename in meaningful parts:
-    " - a package name, used to search for the package in node_modules/
-    " - a subpath if applicable, used to reach the right module
-    "
-    " example:
-    " import bar from 'coolcat/foo/bar';
-    " - package_name = coolcat
-    " - sub_path     = foo/bar
-    "
-    " special case:
-    " import something from '@scope/something/else';
-    " - package_name = @scope/something
-    " - sub_path     = else
-    let l:parts = split(a:fname, '/')
-
-    if l:parts[0] =~? '^@'
-      let l:package_name = join(l:parts[0:1], '/')
-      let l:sub_path = join(l:parts[2:-1], '/')
-    else
-      let l:package_name = l:parts[0]
-      let l:sub_path = join(l:parts[1:-1], '/')
-    endif
-
-    " find the package.json for that package
-    let l:package_json = b:ts_node_modules[-1] . '/' . l:package_name . '/package.json'
-
-    " give up if there's no package.json
-    if !filereadable(l:package_json)
-      if filereadable(a:fname)
-        return a:fname
+        return l:base_name
       endif
+    endfor
+  endif
 
-      return 0
-    endif
-
-    if len(l:sub_path) == 0
-      " grab data from the package.json
-      if !has_key(b:ts_packages, a:fname)
-        let l:package = json_decode(join(readfile(l:package_json)))
-
-        let b:ts_packages[a:fname] = {
-                    \ 'pack': fnamemodify(l:package_json, ':p:h'),
-                    \ 'entry': substitute(get(l:package, 'typings',
-                    \  get(l:package, 'main', 'index.js')),
-                    \  '^\.\{1,2}\/', '', '')
-                    \ }
-      endif
-
-      " build path from 'typings' key
-      " fall back to 'main' key
-      " fall back to 'index.js'
-      return b:ts_packages[a:fname].pack . '/' . b:ts_packages[a:fname].entry
-    else
-      " build the path to the module
-      let l:common_path = fnamemodify(l:package_json, ':p:h') . '/' . l:sub_path
-
-      " first, try with .ts and .js
-      let l:found_ext = glob(l:common_path . '.[jt]s', 1)
-      if len(l:found_ext)
-        return l:found_ext
-      endif
-
-      " second, try with /index.ts and /index.js
-      let l:found_index = glob(l:common_path . '/index.[jt]s', 1)
-      if len(l:found_index)
-        return l:found_index
-      endif
-
-    " give up
+  " this is where we stop for include-search/definition-search
+  if !a:gf
     if filereadable(a:fname)
       return a:fname
     endif
 
     return 0
+  endif
+
+  " NODE IMPORTS
+  " ============
+  " give up if there's no node_modules
+  if empty(get(b:, 'ts_node_modules', []))
+      if filereadable(a:fname)
+          return a:fname
+      endif
+
+      return 0
+  endif
+
+  " split the filename in meaningful parts:
+  " - a package name, used to search for the package in node_modules/
+  " - a subpath if applicable, used to reach the right module
+  "
+  " example:
+  " import bar from 'coolcat/foo/bar';
+  " - package_name = coolcat
+  " - sub_path     = foo/bar
+  "
+  " special case:
+  " import something from '@scope/something/else';
+  " - package_name = @scope/something
+  " - sub_path     = else
+  let l:parts = split(a:fname, '/')
+
+  if l:parts[0] =~? '^@'
+    let l:package_name = join(l:parts[0:1], '/')
+    let l:sub_path = join(l:parts[2:-1], '/')
+  else
+    let l:package_name = l:parts[0]
+    let l:sub_path = join(l:parts[1:-1], '/')
+  endif
+
+  " find the package.json for that package
+  let l:package_json = b:ts_node_modules[-1] . '/' . l:package_name . '/package.json'
+
+  " give up if there's no package.json
+  if !filereadable(l:package_json)
+    if filereadable(a:fname)
+      return a:fname
+    endif
+
+    return 0
+  endif
+  if len(l:sub_path) == 0
+    " grab data from the package.json
+    if !has_key(b:ts_packages, a:fname)
+      let l:package = json_decode(join(readfile(l:package_json)))
+
+      let b:ts_packages[a:fname] = {
+                  \ 'pack': fnamemodify(l:package_json, ':p:h'),
+                  \ 'entry': substitute(get(l:package, 'typings',
+                  \  get(l:package, 'main', 'index.js')),
+                  \  '^\.\{1,2}\/', '', '')
+                  \ }
+    endif
+
+    " build path from 'typings' key
+    " fall back to 'main' key
+    " fall back to 'index.js'
+    return b:ts_packages[a:fname].pack . '/' . b:ts_packages[a:fname].entry
+  else
+    " build the path to the module
+    let l:common_path = fnamemodify(l:package_json, ':p:h') . '/' . l:sub_path
+
+    " first, try with .ts and .js
+    let l:found_ext = glob(l:common_path . '.[jt]s', 1)
+    if len(l:found_ext)
+      return l:found_ext
+    endif
+
+    " second, try with /index.ts and /index.js
+    let l:found_index = glob(l:common_path . '/index.[jt]s', 1)
+    if len(l:found_index)
+      return l:found_index
+    endif
+
+  " give up
+  if filereadable(a:fname)
+    return a:fname
+  endif
+
+  return 0
   endif
 
   " give up

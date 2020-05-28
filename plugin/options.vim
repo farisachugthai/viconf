@@ -9,8 +9,8 @@
   scriptencoding utf-8
   let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
-let s:stddata = exists('*stdpath') ? stdpath('data') : resolve(expand('~/.local/share/nvim'))
-let s:stdconfig = exists('*stdpath') ? stdpath('config') : resolve(expand('~/.config/nvim'))
+  let s:stddata = exists('*stdpath') ? stdpath('data') : resolve(expand('~/.local/share/nvim'))
+  let s:stdconfig = exists('*stdpath') ? stdpath('config') : resolve(expand('~/.config/nvim'))
 
 " Folds And Diffs:
   set foldopen=insert,jump,block,hor,mark,percent,quickfix,search,tag,undo

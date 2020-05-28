@@ -22,7 +22,8 @@ endfunction
 function! py#PythonPath() abort
   " Defer if g:python3_host_prog isnt set
   if empty('g:python3_host_prog')
-    call remotes#init()
+    " call remotes#init()
+    let g:python3_host_prog = exepath("python")
   endif
   py3 import site
   let s:path = '.,,**,'
@@ -31,7 +32,7 @@ function! py#PythonPath() abort
     let s:path = py#SecondTry()
     return s:path
   endif
-  let s:path .= s:user_site
+  let s:path = s:path . s:user_site
   let l:python_path = py3eval('sys.path')
   if l:python_path ==# 0
     return
@@ -39,7 +40,6 @@ function! py#PythonPath() abort
   for l:i in l:python_path
     let s:path .=   ',' . l:i
     " Got this idea from tpope. thanks for the genius as always
-    let &l:tags .= ',' . l:i
   endfor
   let &l:path = s:path
   return s:path
@@ -74,6 +74,22 @@ function! py#SecondTry() abort
   endif
   endif
   return s:path
+endfunction
+
+function! py#SetTags() abort
+  " Dont scope this, path might not be set locally
+  if match(&path, $VIMRUNTIME)
+    " Its not in the python path
+    return
+  endif
+
+  " Default when remote isnt set
+  if &l:path ==# '.,,**,'
+    for l:i in &l:path
+      " Got this idea from tpope. thanks for the genius as always
+      let &l:tags .= ',' . l:i
+    endfor
+  endif
 endfunction
 
 function! py#YAPF() abort

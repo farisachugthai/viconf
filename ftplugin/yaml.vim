@@ -23,14 +23,17 @@ source $VIMRUNTIME/indent/yaml.vim
   endif
 
 function! Prettyyaml() range abort
+  if !exists('provider#python3#Prog')
+    return a:firstline
+  endif
   let s:py3 = provider#python3#Prog()
   if s:py3 ==# ''
-    return
+    return a:firstline
   endif
-  python3 from _vim import pretty_it; pretty_it('yaml')
+  return py3eval("from _vim import pretty_it; pretty_it('yaml')")
 endfunction
 " For more see ../python3/_vim
-command! -buffer -bar -range=% PrettyYaml call Prettyyaml()
+command! -buffer -bar -range PrettyYaml call Prettyyaml()
 
 setlocal formatexpr=Prettyyaml()
 " Idk if i would say this does what I want but it does something

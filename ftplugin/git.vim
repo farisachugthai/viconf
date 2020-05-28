@@ -40,32 +40,3 @@ let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
       \. '|unlet! b:did_ftplugin'
       \. '|silent! <buffer> nunmap q'
 
-if &filetype !=# 'git'  " we got sourced from somewhere else
-  finish
-endif
-
-nnoremap <buffer> q <Cmd>bd!<CR>
-silent! setlocal nomodified  noswapfile nomodifiable readonly
-
-" Noticed while reading source
-setlocal foldexpr=fugitive#Foldtext()
-
-nnoremap <buffer> q <Cmd>bd!<CR>
-
-" Plus isn't stage stuff. Wtf
-" Uhh idk if i did this right but it might need <cexpr>
-nnoremap <buffer> + <Cmd>Git add --renormalize <cword><CR>
-
-" gO is something
-" 1P is pedit. Can i have it just be p?
-nnoremap <buffer> p 1P
-
-" Fat fingers are scary
-if maparg('U')
-  nunmap <buffer> U
-endif
-
-let b:undo_ftplugin .= '|setlocal ma< swf< mod< ro< foldexpr<'
-      \. '|silent! <buffer> nunmap p'
-      \. '|silent! <buffer> nunmap +'
-      \. '|silent! <buffer> nunmap q'

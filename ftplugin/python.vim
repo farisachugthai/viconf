@@ -36,24 +36,29 @@
   setlocal colorcolumn=80,120
   setlocal foldmethod=indent
   setlocal foldlevelstart=0 foldignore=
-
-  setlocal tags=tags,**,$HOME/**
   setlocal suffixesadd=.py,pyi,__init__.py
   setlocal suffixes+=.pyc
-
   setlocal isfname+=.
-  setlocal iskeyword-=.,_
+  setlocal iskeyword-=,_
+  setlocal iskeyword+=.
   setlocal shiftround
   setlocal cindent
+
+  " Path and Includes:
   exec 'source ' . s:repo_root . '/autoload/py.vim'
   let &l:path = py#PythonPath()
+  let &l:define = '\s*def function('
+
+  " This is written in a flexible enough way it can be used anywhere path is
+  " set correctly
+  let &l:tags = py#SetTags()
 
   if exists('loaded_matchit')
     " Use case with matchit.
     let b:match_ignorecase = 0
 
     " Grabbed the if elseif endif from $VIMRUNTIME/ftplugin/vim.vim and modified it
-    " for python. amazingly i don't thin kthe try catch even needs changing.
+    " for python. amazingly i don't think the try catch even needs changing.
     let b:match_words =  '\<class\>:\<def\>:\<return\>,'
                       \. '\<if\>:\<el\%[if]\>,'
                       \. '\<try\>:\<cat\%[ch]\>:\<fina\%[lly]\>:\<endt\%[ry]\>,'

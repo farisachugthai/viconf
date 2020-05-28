@@ -44,9 +44,6 @@
   },
   "javascript.referencesCodeLens.enable": true,
   "javascript.showUnused": true,
-  "json.format.enable": true,
-  "list.autoResize": true,
-  "list.extendedSearchMode": true,
   "list.indicator": "CocList: >>> $: ",
   "list.nextKeymap": "<C-n>",
   "list.previewHighlightGroup": "IdentifierBold",
@@ -56,14 +53,6 @@
   "list.interactiveDebounceTime": 400,
   "list.source.actions.defaultArgs": [
     "quickfix"
-  ],
-  "list.source.actions.defaultOptions": [
-    "--normal",
-    "--top"
-  ],
-  "list.source.cmdhistory.defaultOptions": [
-    "--top",
-    "--normal"
   ],
   "list.source.commands.defaultOptions": [
     "--top",
@@ -76,10 +65,6 @@
   "list.source.diagnostics.defaultOptions": [
     "--auto-preview",
     "--no-sort"
-  ],
-  "list.source.extensions.defaultOptions": [
-    "--top",
-    "--normal"
   ],
   "list.source.files.args": [
     "--hidden",
@@ -152,22 +137,6 @@
     "--normal",
     "--auto-preview"
   ],
-  "list.source.links.defaultOptions": [
-    "--top",
-    "--normal"
-  ],
-  "list.source.lists.defaultOptions": [
-    "--tab",
-    "--top"
-  ],
-  "list.source.location.defaultOptions": [
-    "--top",
-    "--normal"
-  ],
-  "list.source.locationlist.defaultOptions": [
-    "--top",
-    "--normal"
-  ],
   "list.source.mru.defaultOptions": [
     "--auto-preview",
     "--top",
@@ -203,22 +172,10 @@
     "--no-sort",
     "--top"
   ],
-  "list.source.quickfix.defaultOptions": [
-    "--top",
-    "--normal"
-  ],
   "list.source.searchhistory.defaultOptions": [
     "--top",
     "--tab",
     "--regex"
-  ],
-  "list.source.services.defaultOptions": [
-    "--top",
-    "--normal"
-  ],
-  "list.source.sessions.defaultOptions": [
-    "--top",
-    "--normal"
   ],
   "list.source.snippets.defaultOptions": [
     "--auto-preview",
@@ -228,19 +185,11 @@
   "list.source.sources.defaultArgs": [
     "-refresh"
   ],
-  "list.source.sources.defaultOptions": [
-    "--top",
-    "--normal"
-  ],
   "list.source.symbols.defaultOptions": [
     "--top",
     "--normal",
     "--interactive",
     "--number-select"
-  ],
-  "list.source.tags.defaultOptions": [
-    "--top",
-    "--normal"
   ],
   "list.source.words.defaultArgs": [
     "-word"
@@ -260,6 +209,7 @@
   "python.linting.flake8Path": "python -m flake8",
   "python.linting.pylintEnabled": false,
   "python.pythonPath": "python",
+  "python.venvFolders": ["envs", ".pyenv", ".env", ".venv", "~/.local/share/virtualenvs/*", ".direnv"],
   "python.terminal.executeInFileDir": true,
   "python.workspaceSymbols.exclusionPatterns": [
     "**/site-packages/**",
