@@ -14,9 +14,6 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
   command! -complete=tag -bar -bang FZTags call fzf#run(fzf#wrap('tags', {'source': 'gettagstack(expand("%"))', 'sink': 'e', 'options': g:fzf_options}, <bang>0))
 
-  " Open a tag for the word under the cursor in the preview window.
-  command! -complete=tag PreviewTag call buffers#PreviewWord()
-
   command! EchoRTP echo buffers#EchoRTP()
 
   " From `:he quickfix`
@@ -33,9 +30,6 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
   " public async cocAction(...args: any[]): Promise<any> {
   " Like 200 lines of rpc calls. so that'll give you some solid inspiration
 
-  " coc installs coc
-  " command! -bar Cic call coc#util#install()
-
   command! -bar CocQuickFixes echo CocAction('quickfixes')
   command! -bar -complete=custom,coc#list#options -nargs=* CocWords execute 'CocList -I --normal --input=' . expand('<cword>') . ' words'
   command! -bang -bar CocRepeat call CocAction('repeatCommand')
@@ -48,10 +42,10 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
   " Let's group these together by prefixing with Coc
   " Use `:Format` to format current buffer
-  command! -bar -bang CocFormat call CocActionAsync('format')
+  command! -bar -bang -nargs=* CocFormat call CocActionAsync('format', <f-args>)
 
   " Show all diagnostics
-  command! -bar -bang CocDiagnostic call CocActionAsync('diagnosticInfo')
+  command! -bar -bang -nargs=* CocDiagnostic call CocActionAsync('diagnosticInfo', <f-args>)
 
   " Use `:Fold` to fold current buffer
   command! -bang -nargs=? CocFold setlocal fdm=manual | call CocActionAsync('fold', <f-args>)
@@ -74,7 +68,7 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
   " actually ive overriding his coc fix  giving it the quickfix arg fucks
   " something up
 
-  command! -nargs=* -range CocFix call coc#rpc#notify('codeActionRange', [<line1>, <line2>, <q-args>])
+  command! -bar -addr=lines -count -nargs=* -range CocFix call coc#rpc#notify('codeActionRange', [<line1>, <line2>, <q-args>])
 
   " Nabbed these from his plugin/coc.vim file and changed the mappings to
   " commands
@@ -139,15 +133,7 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
           \ 'sink': 'sp',
           \ 'options': s:fzf_options}, <bang>0))
 
-    " Apr 23, 2019: Didn't know complete help was a thing.
-    " Oh holy shit that's awesome
-    " Ah fzf is too good jesus christ. He provided all the arguments for you so
-    " all you have to do is ask "bang or not?"
-    " Unfortunately the ternary expression <bang> ? 1 : 0 doesn't work; however,
-    " junegunn's <bang>0 does!
     command! -bar -bang -nargs=* -complete=help Help call fzf#vim#helptags(<bang>0)
-
-    " scriptnames:
     command! -bang -bar FZScriptnames call vimscript#fzf_scriptnames(<bang>0)
 
     " fzf_for_todos
@@ -446,7 +432,8 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
     " command! -range -bang -nargs=? -bar -complete=custom,s:PythonMods Pydoc call pydoc_help#Pydoc(<f-args>, <bang>0, <mods>)
 
     " Doesnt work AGAIN
-    command! -bang -nargs=* -bar Pydoc call pydoc_help#Pydoc(<bang>, <f-args> ==# '' : expand('<cfile>') ? <f-args>)
+    " command! -bang -nargs=* -bar Pydoc call pydoc_help#Pydoc(<bang>, expand('<cfile>'))
+    command! Pydoc call pydoc_help#async_cursor()
 
     " command! -bar -bang -range PydocSp
     "       \ exec '<mods>split<bang>:python3 import pydoc'.expand('<cWORD>').'; pydoc.help('.expand('<cWORD>').')'
@@ -506,45 +493,29 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
   command! -complete=filetype -bar UltiSnipsListSnippets call UltiSnips#ListSnippets()
 
-  " echos either 1 or 0
-  command! -bang Bang0 echo <bang>0
-  " echos nothing or '!' which is fucking pointless. Well unless you're giving
-  " it to an ex command. bang0 is definitely preferable for functions.
-  command! -bang Bang echo <bang>
-
 " Learn Complete:
-    " Note that you haven't to provide nargs or typing a letter with stop the completion
-    command! -bar -bang -complete=compiler -nargs=1 Compiler compiler<bang> <args>
-    " '<,'>s/compiler/event/g
-    " You may find that ---^ does you good
-    command! -bar -complete=event Event event<args>
+  " Note that you haven't to provide nargs or typing a letter with stop the completion
+  command! -bar -bang -complete=compiler -nargs=1 Compiler compiler<bang> <args>
+  " '<,'>s/compiler/event/g
+  " You may find that ---^ does you good
+  command! -bar -complete=event Event event<args>
 
-    command! -bar -bang -complete=var -nargs=+ Var set<bang> <args>
+  command! -bar -bang -complete=var -nargs=+ Var set<bang> <args>
 
-    " well check out how cool this is. shouldnt be so surprised that this works
-    command! -complete=environment -bar -nargs=+ Env let $<args>
+  " Well check out how cool this is. shouldnt be so surprised that this works
+  command! -complete=environment -bar -nargs=+ Env let $<args>
 
-    command! -bar Redo call histget('cmd', -1)
+  command! -bar Redo call histget('cmd', -1)
 
-    " Commands from the help pages. map.txt:
-    " Replace a range with the contents of a file
-    " (Enter this all as one line)
-    command! -bar -range -nargs=1 -complete=file Replace <line1>-pu_|<line1>,<line2>d|r <args>|<line1>d
+  " Commands from the help pages. map.txt:
+  " Replace a range with the contents of a file
+  command! -bar -range -nargs=1 -complete=file Replace <line1>-pu_|<line1>,<line2>d|r <args>|<line1>d
 
-    " Count the number of lines in the range. Wait how does this not need to
-    " concatenate the int and the str?
-    command! -bar -range -nargs=* Lines echomsg <line2> - <line1> + 1 'lines'
+  " Count the number of lines in the range.
+  command! -bar -range -nargs=* Lines echomsg <line2> - <line1> + 1 'lines'
 
 " Platform Specific Settings:
-  " dude omfg. exists($ANDROID_DATA) returns 0 on android.
-  " so does getenv($ANDROID_DATA) *specifically returns v:null*
-  " on windows i had a few expr return 1. like fuck you im trying to
-  " distinguish what computer im on this isnt the hard part
   if !empty($ANDROID_DATA)
-    " May 26, 2019: Just ran into my first problem from a filename with a space in the name *sigh*
-    " admonition: dont use -bar here because we need to use bar as well
-    " jeez this was frustrating... had to futz with where to add whitespace
-    " and <CR> seeing as how  that fundammentally changes the command.
     command! -bang TermuxSend :silent! keepalt w<bang> <bar>exec '!termux-share -a send ' . expand('%:S')
     nnoremap <Leader>ts <Cmd>TermuxSend<CR>
   endif
@@ -583,7 +554,7 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
   command! -bar GHead call plugins#fugitive_head()
 
   " TODO: completes for both of these
-  command! -complete=customlist,fugitive#ReadComplete -range -addr=arguments -bang -nargs=* Gds2 :enew<bang><bar>:Gread! diff --staged --stat HEAD -- .<bar>set filetype=git
+  command! -complete=customlist,fugitive#ReadComplete -range -addr=arguments -bang -nargs=* Gds2 :enew<bang><bar>exe ':Gread! diff --staged --stat HEAD -- .'<bar>set filetype=git
 
 " Syntax Highlighting:
   command! HL call syncom#HL()

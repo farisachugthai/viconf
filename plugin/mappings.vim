@@ -1,9 +1,9 @@
-  " ============================================================================
-    " File: mappings.vim
-    " Author: Faris Chugthai
-    " Description: Mappings
-    " Last Modified: February 16, 2020
-  " ============================================================================
+" ============================================================================
+  " File: mappings.vim
+  " Author: Faris Chugthai
+  " Description: Mappings
+  " Last Modified: February 16, 2020
+" ============================================================================
 
 " Navigation:
   " ugh this is gonna be a hell of a lot of manual entries
@@ -38,11 +38,11 @@
 
   " No tabnext takes this one
   " nnoremap ]t <Cmd>PreviewTag<CR>
-  nnoremap <C-i> <C-w><C-i>
+  " nah i want the jumps
+  " nnoremap <C-i> <C-w><C-i>
 
   " Mnemonic: goto like mosts other g commands and \ is the key we're left free
   nnoremap <C-k>g [I:let nr = input("Choose an include: ")<Bar>exe "normal! " . nr ."[\t"<CR>
-
 
 " Z Mappings:
   nnoremap zE <nop>
@@ -83,22 +83,13 @@
   noremap  <S-Insert> <MiddleMouse>
   noremap! <S-Insert> <MiddleMouse>
   tnoremap <S-Insert> <MiddleMouse>
-  " if you need C-v for something just use C-q
+
+  " if you need C-v for something just use C-q but i want to paste.
   cnoremap <C-S-v> <C-r>"
   cnoremap <C-v> <C-r>"
 
-  inoremap <Down> <C-R>=pumvisible() ? "\<lt>C-N>" : "\<lt>Down>"<CR>
-  inoremap <Up> <C-R>=pumvisible() ? "\<lt>C-P>" : "\<lt>Up>"<CR>
-
-
-  " When typing '#' as the first character in a new line, the indent for that line is removed, the '#'
-  " is put in the first column.  The indent is restored for the next line.  If you don't want this,
-  " use this mapping:
-  " if match(&l:cms, '#')
-  "   inoremap # X^H#
-  " endif
-  " where ^H is entered with CTRL-H. HOLY SHIT THANK YOU
-  " Doesn't work. Even if &cms isn't #
+  inoremap <silent> <Down> <C-R>=pumvisible() ? "\<lt>C-N>" : "\<lt>Down>"<CR>
+  inoremap <silent> <Up> <C-R>=pumvisible() ? "\<lt>C-P>" : "\<lt>Up>"<CR>
 
 " Marks:
   nnoremap [1 <Cmd>signature#marker#Goto('prev', 1, v:count)<CR>
@@ -110,8 +101,8 @@
   nnoremap [4 <Cmd>signature#marker#Goto('prev', 4, v:count)<CR>
   nnoremap ]4 <Cmd>signature#marker#Goto('next', 4, v:count)<CR>
 
-  " I mess this up constantly thinking that gI does what gi does
   " '^  `^
+  " I mess this up constantly thinking that gI does what gi does
   " To the position where the cursor was the last time
   " when Insert mode was stopped.  This is used by the |gi| command.
   " Not set when the |:keepjumps| command modifier was used.
@@ -271,7 +262,8 @@
 
   " Map Vim Defaults To FZF History Commands:
   nnoremap q:        <Cmd>History:<CR>
-  nnoremap q/        <Cmd>History/<CR>
+  " nnoremap q/        <Cmd>History/<CR>
+  nnoremap q/ <plug>(-fzf-/) /
   " But id still want to use q: when i can
   nnoremap q; q:
 
@@ -318,10 +310,9 @@
   inoremap <expr> <C-x><C-j> fzf#vim#complete#file()
 
   " i'm not really sure what this is gonna do but let's find out!
-  inoremap <M-c> <Plug>(-fzf-complete-trigger)
+  inoremap <expr> <M-c> <Plug>(-fzf-complete-trigger)
   inoremap <expr> <C-x><C-j> fzf#vim#complete#path('fd -H -t f')
   inoremap <expr> <C-x><C-w> fzf#vim#complete#path('rg --files')
-
 
   function! s:make_sentence(lines)
     return substitute(join(a:lines), '^.', '\=toupper(submatch(0))', '').'.'
@@ -372,7 +363,6 @@
     " Refresh completions with C-Space
     inoremap <M-/> <C-R>=SuperTabAlternateCompletion("\<lt>c-p>")<CR>
     inoremap <expr> <C-Space> coc#refresh()
-    imap <C-.> <Plug>(ale_complete)
 
     nnoremap <C-k>d <Plug>(coc-definition)<CR>
     " The gu<text object> operation is too important
@@ -469,6 +459,25 @@
     nnoremap ,p <Cmd>CocFixCurrent<CR>
     nnoremap ,z <Cmd>CocFloatHide<CR>
     nnoremap ,y <Cmd>CocFloatJump<CR>
+
+" ALE:
+  " Follow the lead of vim-unimpaired with a for ale
+  nnoremap ]a <Cmd>ALENextWrap<CR>zz
+  nnoremap [a <Cmd>ALEPreviousWrap<CR>zz
+
+  " `:ALEInfoToFile` will write the ALE runtime information to a given filename.
+  " The filename works just like |:w|.
+
+  " <Meta-a> now gives detailed messages about what the linters have sent to ALE
+  nnoremap <A-a> <Cmd>ALEDetail<CR><bar>:normal! zz<CR>
+
+  " I'm gonna make all my ALE mappings start with Alt so it's easier to distinguish
+  nnoremap <A-r> <Cmd>ALEFindReference<CR>
+
+  " Dude why can't i get plug mappings right???
+  nnoremap <A-i> <Cmd>ALEInfo<CR>
+  inoremap <C-.> <Plug>(ale_complete)
+
 
 if !exists('Window_Mappings')
 function Window_Mappings() abort

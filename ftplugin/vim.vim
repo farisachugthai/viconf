@@ -6,14 +6,6 @@
 " ============================================================================
 
 " Globals:
-  " Just found this guy. Make indents the same regardless of my indentation or
-  " the default 8 space tabstop.
-  if &l:shiftwidth ==# 2
-    let g:vim_indent_cont = shiftwidth() * 8
-  elseif &l:shiftwidth ==# 8
-    let g:vim_indent_cont = shiftwidth() * 2
-  endif
-
   let g:vimsyn_minlines = 300
   let g:vimsyn_maxlines = 500  " why is the default 60???
   let g:vimsyn_noerror = 1  " Turn off errors because 50% of them are wrong.

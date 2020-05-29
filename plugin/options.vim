@@ -111,7 +111,8 @@
 " Buffers Windows:
   setglobal pastetoggle=<F9>   " fuck me this is what windows terminal uses for something
   setglobal signcolumn=auto:4  " this might be a nvim 4 thing
-  try | setglobal switchbuf=useopen,split | catch | endtry
+
+  try | setglobal switchbuf=useopen,split,usetab | catch | endtry
   setglobal splitbelow splitright
   " sidescroll needs to be set low
   setglobal sidescroll=0 sidescrolloff=5
@@ -269,28 +270,116 @@
   endif
 
   let g:tagbar_silent = 1
+  let g:tagbar_type_ansible = {
+          \ 'ctagstype' : 'ansible',
+          \ 'kinds' : [
+          \ 't:tasks'],
+          \ 'sort' : 0 }
 
-" Gutentags:
-  let g:gutentags_ctags_exclude = [
-        \ '.pyc',
-        \ '.eggs',
-        \ '.egg-info',
-        \ '_static',
-        \ '__pycache__',
-        \ 'elpy',
-        \ 'elpa',
-        \ '.ipynb_checkpoints',
-        \ '.idea',
-        \ 'node_modules',
-        \ '_build',
-        \ 'build',
-        \ '.git',
-        \ 'log',
-        \ 'tmp',
-        \ 'dist',
-        \ '.tox',
-        \ '.venv',
+  let g:tagbar_type_css = {
+      \ 'ctagstype' : 'Css',
+      \ 'kinds'     : [
+      \ 'c:classes',
+      \ 's:selectors',
+      \ 'i:identities']}
+
+  let g:tagbar_type_make = {'kinds':[
+              \ 'm:macros',
+              \ 't:targets'
+              \ ]}
+
+  let g:tagbar_type_javascript = {
+        \ 'ctagstype': 'javascript',
+        \ 'kinds': [
+        \ 'A:arrays',
+        \ 'P:properties',
+        \ 'T:tags',
+        \ 'O:objects',
+        \ 'G:generator functions',
+        \ 'F:functions',
+        \ 'C:constructors/classes',
+        \ 'M:methods',
+        \ 'V:variables',
+        \ 'I:imports',
+        \ 'E:exports',
+        \ 'S:styled components',
+        \ ]}
+
+  let g:tagbar_type_markdown = {
+      \ 'ctagstype' : 'markdown',
+      \ 'kinds' : [
+          \ 'h:Heading_L1',
+          \ 'i:Heading_L2',
+          \ 'k:Heading_L3'
+      \ ]
+  \ }
+
+  let g:tagbar_type_ps1 = {
+      \ 'ctagstype' : 'powershell',
+      \ 'kinds'     : [
+          \ 'f:function',
+          \ 'i:filter',
+          \ 'a:alias'
+      \ ]
+  \ }
+
+  let g:tagbar_type_rst = {
+      \ 'ctagstype': 'rst',
+      \ 'ctagsbin' : expand('$HOME/src/rst2ctags/rst2ctags.py'),
+      \ 'ctagsargs' : '-f - --sort=yes',
+      \ 'kinds' : [
+          \ 's:sections',
+          \ 'i:images'
+      \ ],
+      \ 'sro' : '|',
+      \ 'kind2scope' : {
+          \ 's' : 'section',
+      \ },
+      \ 'sort': 0,
+  \ }
+
+  let g:tagbar_type_typescript = {
+    \ 'ctagstype': 'typescript',
+    \ 'kinds': [
+    \ 'c:classes',
+    \ 'n:modules',
+    \ 'f:functions',
+    \ 'v:variables',
+    \ 'v:varlambdas',
+    \ 'm:members',
+    \ 'i:interfaces',
+    \ 'e:enums',
+    \ ]
+    \ }
+
+  let g:tagbar_type_snippets = {
+        \ 'ctagstype' : 'snippets',
+        \ 'kinds' : [
+        \ 's:snippets',
         \ ]
+        \ }
+
+  " Gutentags:
+    let g:gutentags_ctags_exclude = [
+          \ '.pyc',
+          \ '.eggs',
+          \ '.egg-info',
+          \ '_static',
+          \ '__pycache__',
+          \ 'elpy',
+          \ 'elpa',
+          \ '.ipynb_checkpoints',
+          \ '.idea',
+          \ 'node_modules',
+          \ '_build',
+          \ 'build',
+          \ '.git',
+          \ 'log',
+          \ 'tmp',
+          \ 'dist',
+          \ '.tox',
+          \ '.venv',
+          \ ]
 
   let g:gutentags_resolve_symlinks = 1
   let g:gutentags_file_list_command = 'fd -H -t f --follow .'
@@ -696,12 +785,6 @@
 " ALE:
   " Example from the help page
   " Use just ESLint for linting and fixing files which end in '.js'
-  let g:ale_pattern_options = {
-              \   '\.js$': {
-              \       'ale_linters': ['eslint'],
-              \       'ale_fixers': ['eslint'],
-              \ },
-              \ }
 
   let g:ale_lsp_show_message_severity = 'information'
 
@@ -808,10 +891,54 @@
   let g:pyindent_searchpair_timeout = '250'
   " ALE
   let g:python_pyls_auto_pipenv = 1
+  let g:ale_hover_to_preview = 1
+  let g:ale_virtualtext_cursor = 1
+  let g:ale_virtualtext_prefix =  'ALE: '
+  let g:ale_virtualtext_delay = 200
+  let g:ale_close_preview_on_insert = 1
+  let g:ale_echo_cursor = 1
+  let g:ale_completion_enabled = 1
+  let g:ale_set_signs = 1
+  " let g:ale_sign_column_always = 1
+  let g:ale_change_sign_column_color = 0
+  let g:ale_sign_warning = 'W'
+  let g:ale_sign_info = 'I'
+  let g:ale_sign_error = 'E'
+  let g:ale_sign_highlight_linenrs = 1
+  let g:ale_sign_style_warning = 'E'
+  let g:ale_pattern_options_enabled = 1
+  let g:ale_pattern_options = {'\.min.js$': {'ale_enabled': 0}}
+  " For buffer specific options, see ../ftplugin/*.vim
+  let g:ale_fixers = { '*': [ 'remove_trailing_lines', 'trim_whitespace' ] }
+  let g:ale_fix_on_save = 1
+
+  " When ALE is linting bash files recognize it as sh
+  let g:ale_linter_aliases = {
+      \ 'ps1': ['powershell', 'cs'],
+      \ 'htmljinja': ['html', 'handlebars'],
+      \ 'jinja': ['html', 'handlebars'],
+      \ 'htmldjango': 'html',
+      \ 'bash': 'sh',
+      \ 'xonsh': 'python',
+      \ }
+
+  " When ale is linting C# only use OmniSharp
+  let g:ale_linters = {
+      \ 'cs': ['OmniSharp']
+      \ }
+  let g:ale_list_vertical = 1
 
 " Vista:
 let g:vista_fzf_preview = ['right:50%']
 
 let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
 let g:vista#renderer#enable_icon = 1
-let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
+let g:vista_default_executive = 'coc'
+let g:vista_highlight_whole_line=1
+let g:vista_echo_cursor_strategy="floating_win"
+
+  let g:vista_executive_for = {
+      \ 'vimwiki': 'markdown',
+      \ 'pandoc': 'markdown',
+      \ 'markdown': 'toc',
+      \ }

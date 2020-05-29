@@ -36,7 +36,7 @@ exec 'source ' . s:ftplugin_root . '/javascript.vim'
   let b:ale_fixers += ['prettier']
   let b:ale_fixers += ['eslint']
   let b:ale_fixers += ['tslint']
-  let b:ale_linters = get(g:, 'ale_linters["*"]', ['tsserver', 'eslint', 'prettier',])
+  let b:ale_fixers += ['tsserver']
 
 " Original:
   " https://gist.githubusercontent.com/romainl/a50b49408308c45cc2f9f877dfe4df0c/raw/1ab8eb733948c0c89d11553cc0e00f4ab251f31e/typescript.vim
@@ -80,11 +80,13 @@ exec 'source ' . s:ftplugin_root . '/javascript.vim'
                    \. '|setlocal isf< sua< syntax< et< sts< sw< ts< '
                    \. '|setlocal inex< def< inc< inde< '
                    \. '|unlet! b:undo_ftplugin'
-                   \. '|unlet! l:include_expression'
-                   \. '|unlet! b:match_words'
                    \. '|unlet! b:did_ftplugin'
                    \. '|unlet! b:undo_indent'
                    \. '|unlet! b:did_indent'
+                   \. '|unlet! b:ale_fixers'
+                   \. '|unlet! l:include_expression'
+                   \. '|unlet! b:match_words'
+                   \. '|unlet! b:did_typescript_setup'
                    \. '|silent! nunmap <buffer> gf'
                    \. '|silent! xunmap <buffer> gf'
                    \. '|silent! nunmap <buffer> <C-w><C-f>'

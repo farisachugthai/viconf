@@ -250,9 +250,6 @@ augroup UserTerm
   " you go back to normal
   autocmd TermLeave * stopinsert
 
-  " Set up mappings
-  autocmd TermOpen * call buffers#terminals()
-
   " Dear god this i awful looking
   " autocmd TermOpen,WinEnter * if &buftype=='terminal'
   "   \|setlocal winhighlight=StatusLine:StatusLineTerm,StatusLineNC:StatusLineTermNC

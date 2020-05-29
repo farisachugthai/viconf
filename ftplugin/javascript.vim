@@ -28,10 +28,14 @@ if exists('b:did_ftplugin') | finish | endif
   let &l:commentstring='// %s'
 
   " From /r/vim
-  setlocal include=require(
+  " setlocal include=require(
+  let &l:include = '\<require(\(["'']\)\zs[^\1]\+\ze\1'
 
   " So here's the example from :he 'define'
   let &l:define = '^\s*\ze\k\+\s*=\s*function('
+
+  setlocal tagcase=smart
+  setlocal isfname+=@-@
 
 " ALE:
   if !has('unix')
@@ -41,7 +45,7 @@ if exists('b:did_ftplugin') | finish | endif
   let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
   let b:ale_fixers += ['prettier']
   let b:ale_fixers += ['eslint']
-  let b:ale_linters = get(g:, 'ale_linters["*"]', ['tsserver', 'eslint', 'prettier',])
+  let b:ale_fixers += ['tsserver']
 
 " Atexit:
 let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')

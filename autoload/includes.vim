@@ -7,50 +7,49 @@
 
 " See Also: ./py.vim and py#PythonPath
 
+let s:CORE_MODULES = ["_debugger", "_http_agent", "_http_client",
+	\ "_http_common", "_http_incoming", "_http_outgoing", "_http_server",
+	\ "_linklist", "_stream_duplex", "_stream_passthrough", "_stream_readable",
+	\ "_stream_transform", "_stream_writable", "_tls_legacy", "_tls_wrap",
+	\ "assert", "buffer", "child_process", "cluster", "console", "constants",
+	\ "crypto", "dgram", "dns", "domain", "events", "freelist", "fs", "http",
+	\ "https", "module", "net", "node", "os", "path", "punycode", "querystring",
+	\ "readline", "repl", "smalloc", "stream", "string_decoder", "sys",
+	\ "timers", "tls", "tty", "url", "util", "vm", "zlib"]
+
 function! includes#TypeScriptIncludeExpression(fname, gf) abort
+  let b:ts_node_modules = s:ts_node_modules()
+
   " BUILT-IN NODE MODULES
   " =====================
   " they aren't natively accessible but we can use @types/node if available
   if index([ 'assert', 'async_hooks',
-           \ 'base', 'buffer',
-           \ 'child_process', 'cluster', 'console', 'constants', 'crypto',
-           \ 'dgram', 'dns', 'domain',
-           \ 'events',
-           \ 'fs',
-           \ 'globals',
-           \ 'http', 'http2', 'https',
-           \ 'inspector',
-           \ 'net',
-           \ 'os',
-           \ 'path', 'perf_hooks', 'process', 'punycode',
-           \ 'querystring',
-           \ 'readline', 'repl',
-           \ 'stream', 'string_decoder',
-           \ 'timers', 'tls', 'trace_events', 'tty',
-           \ 'url', 'util',
-           \ 'v8', 'vm',
-           \ 'worker_threads',
-           \ 'zlib' ], a:fname) != -1
+           \ 'base', 'buffer', 'child_process', 'cluster', 'console', 'constants',
+           \ 'crypto', 'dgram', 'dns', 'domain', 'events', 'fs', 'globals',
+           \ 'http', 'http2', 'https', 'inspector', 'net', 'os', 'path',
+           \ 'perf_hooks','process', 'punycode',
+           \ 'querystring', 'readline', 'repl', 'stream', 'string_decoder',
+           \ 'timers', 'tls', 'trace_events', 'tty', 'url', 'util', 'v8', 'vm',
+           \ 'worker_threads', 'zlib' ],
+           \ a:fname) != -1
 
     let l:found_definition = b:ts_node_modules[0] . '/@types/node/' . a:fname . '.d.ts'
 
     if filereadable(l:found_definition)
-        return l:found_definition
+      return l:found_definition
     endif
 
-    return 0
+    return a:fname
   endif
 
   " LOCAL IMPORTS
   " =============
-  " they are everywhere so we must get them right
+  " they are everywhere so we must get them right. check ./ then ../
   if a:fname =~? '^\.'
-    " ./
     if a:fname =~? '^\./$'
       return './index.ts'
     endif
 
-    " ../
     if a:fname =~? '\.\./$'
       return a:fname . 'index.ts'
     endif
@@ -82,6 +81,7 @@ function! includes#TypeScriptIncludeExpression(fname, gf) abort
   endif
 
   " this is where we stop for include-search/definition-search
+  " give up if there's no node_modules
   if !a:gf
     if filereadable(a:fname)
       return a:fname
@@ -90,16 +90,12 @@ function! includes#TypeScriptIncludeExpression(fname, gf) abort
     return 0
   endif
 
+  return includes#NodeImports(a:fname)
+endfunction
+
+function! includes#NodeImports(fname) abort
   " NODE IMPORTS
   " ============
-  " give up if there's no node_modules
-  if empty(get(b:, 'ts_node_modules', []))
-      if filereadable(a:fname)
-          return a:fname
-      endif
-
-      return 0
-  endif
 
   " split the filename in meaningful parts:
   " - a package name, used to search for the package in node_modules/
@@ -135,6 +131,7 @@ function! includes#TypeScriptIncludeExpression(fname, gf) abort
 
     return 0
   endif
+
   if len(l:sub_path) == 0
     " grab data from the package.json
     if !has_key(b:ts_packages, a:fname)
@@ -153,35 +150,26 @@ function! includes#TypeScriptIncludeExpression(fname, gf) abort
     " fall back to 'index.js'
     return b:ts_packages[a:fname].pack . '/' . b:ts_packages[a:fname].entry
   else
-    " build the path to the module
-    let l:common_path = fnamemodify(l:package_json, ':p:h') . '/' . l:sub_path
+      " build the path to the module
+      let l:common_path = fnamemodify(l:package_json, ':p:h') . '/' . l:sub_path
 
-    " first, try with .ts and .js
-    let l:found_ext = glob(l:common_path . '.[jt]s', 1)
-    if len(l:found_ext)
-      return l:found_ext
+      " first, try with .ts and .js
+      let l:found_ext = glob(l:common_path . '.[jt]s', 1)
+      if len(l:found_ext)
+        return l:found_ext
+      endif
+
+      " second, try with /index.ts and /index.js
+      let l:found_index = glob(l:common_path . '/index.[jt]s', 1)
+      if len(l:found_index)
+        return l:found_index
+      endif
+    " give up
+    if filereadable(a:fname)
+      return a:fname
     endif
-
-    " second, try with /index.ts and /index.js
-    let l:found_index = glob(l:common_path . '/index.[jt]s', 1)
-    if len(l:found_index)
-      return l:found_index
-    endif
-
-  " give up
-  if filereadable(a:fname)
-    return a:fname
-  endif
-
   return 0
   endif
-
-  " give up
-  if filereadable(a:fname)
-    return a:fname
-  endif
-
-  return a:fname . '.d.ts'
 endfunction
 
 function! includes#VimPath() abort
@@ -262,13 +250,16 @@ function! includes#CPath() abort
   return s:path
 endfunction
 
-function! includes#typescript_setup() abort
+function! s:ts_node_modules() abort
   " node_modules
   let s:node_modules = finddir('node_modules', '.;', -1)
   if len(s:node_modules)
     let b:ts_node_modules = map(s:node_modules, { idx, val -> substitute(fnamemodify(val, ':p'), '/$', '', '')})
     unlet! s:node_modules
   endif
+endfunction
+
+function! includes#typescript_setup() abort
   " $PATH:
   if exists('b:ts_node_modules')
     if $PATH !~? b:ts_node_modules[0]
