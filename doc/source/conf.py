@@ -25,7 +25,6 @@ from pygments.lexers.python import (
 )
 
 
-
 # -- Project information -----------------------------------------------------
 
 project = 'viconf'
@@ -39,10 +38,8 @@ author = 'Faris A Chugthai'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "sphinx.config",
     "sphinx.ext.autodoc",
     "sphinx.ext.autodoc.typehints",
-    "sphinx.ext.autosectionlabel",
     "sphinx.ext.autosummary",
     "sphinx.ext.coverage",
     "sphinx.ext.doctest",
@@ -54,12 +51,9 @@ extensions = [
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
     "sphinx.domains.c",
-    "sphinx.domains.changeset",
-    "sphinx.domains.citation",
     "sphinx.domains.cpp",
     "sphinx.domains.index",
     "sphinx.domains.javascript",
-    "sphinx.domains.math",
     "sphinx.domains.python",
     "sphinx.domains.rst",
     "sphinx.domains.std",
@@ -112,6 +106,7 @@ html_show_copyright = False
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
 html_last_updated_fmt = "%b %d, %Y"
+
 
 def setup(app):  # {{{
     """Add custom css styling.

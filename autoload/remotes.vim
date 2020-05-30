@@ -59,7 +59,7 @@ function! remotes#termux() abort
 
   let g:loaded_remote_plugins = '/data/data/com.termux/files/home/.local/share/nvim/rplugin.vim'
 
-call remote#host#RegisterPlugin('node', '/data/data/com.termux/files/home/projects/viconf/rplugin/node/coc_tag.js', [])
+  call remote#host#RegisterPlugin('node', '/data/data/com.termux/files/home/projects/viconf/rplugin/node/coc_tag.js', [])
   " $VIMRUNTIME/autoload/remote/host.vim
   " call remote#host#Register('python', '*',
   "       \ function('provider#pythonx#Require'))
@@ -124,7 +124,17 @@ function! remotes#msdos() abort
         \   },
         \   'cache_enabled': 1,
         \ }
+  try
+    call remote#host#RegisterPlugin('node', 'C:/Users/fac/.config/nvim/rplugin/node/coc_tag.js', [])
+  catch
+  endtry
 endfunction
+
+function! remotes#ResetPython() abort
+    " I don't know why
+  unlet! g:python3_host_prog
+  let g:python3_host_prog = exepath('python')
+endfunc
 
 function! remotes#HardReset(ruby_host) abort
   " Note that this line will raise if script_host ia already registered.
@@ -169,7 +179,7 @@ function! remotes#init() abort
       " :unlet g:loaded_clipboard_provider
       exe 'silent! unlet! g:loaded_' . i . '_provider'
       " :runtime autoload/provider/clipboard.vim
-      " exe 'source $VIMRUNTIME/autoload/provider/' . i . '.vim'
+      exe 'source $VIMRUNTIME/autoload/provider/' . i . '.vim'
       try
         call remote#host#PluginsForHost(i)
       catch /.*/

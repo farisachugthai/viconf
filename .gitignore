@@ -3,6 +3,7 @@
 
 # TS:
 .*tsbuildinfo
+*.map
 
 .venv
 

@@ -211,7 +211,7 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
       " Oct 15, 2019: Works!
       " TODO: The above command should use the fzf funcs
       " and also use this
-    command! -bar -complete=file -bang FZGit call find_files#FZFGit(<bang>0)
+    command! -bar -complete=file -bang GLsFiles call find_files#FZFGit(<bang>0)
 
     " Rg That Updates:
     command! -bar -complete=dir -nargs=* -bang FZRg call find_files#RipgrepFzf(<q-args>, <bang>0)
@@ -292,15 +292,12 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
 " Finding Files:
   " Completes filenames from the directories specified in the 'path' option:
-  command! -nargs=* -bang -bar -complete=customlist,unix#EditFileComplete -complete=file
+  command! -nargs=* -bang -bar -complete=customlist,unix#EditFileComplete -complete=file -range=% -addr=buffers
           \ Pedit :pedit<bang> <q-args>
 
-  command! -nargs=* -bang -complete=file -complete=file_in_path Goto :hide <q-mods> edit<bang> <args>
-  " I admit feeling peer pressured to add this but
-  " -range=N    A count (default N) which is specified in the line
-  "             number position (like |:split|); allows for zero line
-  "             number.
-  command! -nargs=* -bang -bar -complete=file -complete=customlist,unix#EditFileComplete
+  command! -nargs=* -bang -complete=file -complete=file_in_path Hide :hide <q-mods> edit<bang> <args>
+
+  command! -nargs=* -bang -bar -complete=file -complete=customlist,unix#EditFileComplete -range=% -addr=buffers
           \ Split <q-mods>split<bang> <q-args>
 
   " See if we cant catch me constantly mistyping :sb as :bs
@@ -308,12 +305,11 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
           \ Bsplit <q-mods>split<bang> <q-args>
 
   " Why not do the same for :Bd
-  command! -nargs=* -range=% -addr=buffers -count -bang -bar -complete=buffer Bdelete v:count:bd<bang><args>
+  command! -nargs=* -count -bang -bar -complete=buffer -range=% -addr=buffers
+        \ Bdelete v:count:bd<bang><args>
 
   command! -nargs=* -range=% -addr=buffers -count -bang -bar -complete=file_in_path Find :<count><mods>find<bang> <args>
 
-  " Well this is nice to know about. You can specify what a range refers to.
-  " -addr=loaded_buffers
   command! -nargs=* -bang -bar -complete=buffer -range=% -addr=buffers
         \ BEdit <q-mods>buffer<bang> <q-args>
 
@@ -406,7 +402,9 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
 
     " Js the original implementation should ALSO complete files or dirs
-    command! -range -bar -complete=file -complete=dir -nargs=* Py3f :<line1>,<line2>py3f <args>
+    command! -range=% -bar -bang -complete=dir -complete=buffer -addr=loaded_buffers -nargs=* Py3f :<line1>,<line2>py3f <args>
+    command! -range=% -bar -bang -complete=dir -complete=buffer -addr=loaded_buffers -nargs=* Py3 :<line1>,<line2>py3 <args>
+
     command! -range -bar -complete=file -complete=dir -nargs=* Pyf  :<line1>,<line2>pyf  <args>
 
     command! -range -bar -complete=expression -complete=function -nargs=? P <line1>,<line2>python3 print(<args>)
@@ -429,11 +427,12 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
       return s:ret
     endfunction
 
+    " TODO: get this complete
     " command! -range -bang -nargs=? -bar -complete=custom,s:PythonMods Pydoc call pydoc_help#Pydoc(<f-args>, <bang>0, <mods>)
 
     " Doesnt work AGAIN
     " command! -bang -nargs=* -bar Pydoc call pydoc_help#Pydoc(<bang>, expand('<cfile>'))
-    command! Pydoc call pydoc_help#async_cursor()
+    command! -bar -bang Pydoc call pydoc_help#async_cursor()
 
     " command! -bar -bang -range PydocSp
     "       \ exec '<mods>split<bang>:python3 import pydoc'.expand('<cWORD>').'; pydoc.help('.expand('<cWORD>').')'
@@ -474,14 +473,6 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
     " Add a platform check in that file so we can have 1 entry point
     command! -bar RemoteReload call remotes#msdos_remote()
 
-" Terminal Command:
-  if !has('unix')
-    command! SetCmd call msdos#set_shell_cmd()
-    command! -bar -nargs=? CmdInvoke call msdos#invoke_cmd(<f-args>)
-    command! -bar -nargs=? -complete=shellcmd Cmd call msdos#CmdTerm(<f-args>)
-    command! PowerShell call msdos#PowerShell()
-    command! -bar -nargs=? PwshHelp call msdos#pwsh_help(shellescape(<f-args>))
-  endif
 
   " More From The Bottom Of Help Map:
   command! -bang -bar -nargs=+ -complete=file -complete=file_in_path EditFiles
@@ -514,10 +505,17 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
   " Count the number of lines in the range.
   command! -bar -range -nargs=* Lines echomsg <line2> - <line1> + 1 'lines'
 
-" Platform Specific Settings:
   if !empty($ANDROID_DATA)
     command! -bang TermuxSend :silent! keepalt w<bang> <bar>exec '!termux-share -a send ' . expand('%:S')
     nnoremap <Leader>ts <Cmd>TermuxSend<CR>
+  endif
+
+  if !has('unix')
+    command! SetCmd call msdos#set_shell_cmd()
+    command! -bar -nargs=? CmdInvoke call msdos#invoke_cmd(<f-args>)
+    command! -bar -nargs=? -complete=shellcmd Cmd call msdos#CmdTerm(<f-args>)
+    command! PowerShell call msdos#PowerShell()
+    command! -bar -nargs=? PwshHelp call msdos#pwsh_help(shellescape(<f-args>))
   endif
 
 " Fugitive Functions:
@@ -549,12 +547,17 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
   " XXX: might not be the right complete
   command! -complete=customlist,fugitive#ReadComplete -range -addr=arguments -bang -bar -nargs=* Gclone exe fugitive#Command(<line1>, <count>, +"<range>", <bang>0, "<mods>", <q-args>)
 
-  " no args no nothing. just a reminder you can fill a buffer with git output. and then i forgot
-  " that this was supposed to just be  a reminder. ready to overengineer TO THE EXTREME
   command! -bar GHead call plugins#fugitive_head()
 
-  " TODO: completes for both of these
-  command! -complete=customlist,fugitive#ReadComplete -range -addr=arguments -bang -nargs=* Gds2 :enew<bang><bar>exe ':Gread! diff --staged --stat HEAD -- .'<bar>set filetype=git
+  command! -complete=customlist,fugitive#ReadComplete -range -addr=arguments -bang -nargs=* Gds2 :enew<bang><bar>exec 'Gread! ' . <q-args> ==# '' ? 'diff --staged --stat HEAD' : <q-args> . ' -- .'<bar>set filetype=git
+
+  if !has('unix')
+    " TODO: how to add --renormalize as an arg every write command
+    " only getting this problem on windows from line endings
+    exe 'command! -bar -bang -nargs=* -complete=customlist,fugitive#EditComplete Gw     exe fugitive#WriteCommand(<line1>, <count>, +"<range>", <bang>0, "<mods>", <q-args>, [<f-args>])'
+    exe 'command! -bar -bang -nargs=* -complete=customlist,fugitive#EditComplete Gwrite exe fugitive#WriteCommand(<line1>, <count>, +"<range>", <bang>0, "<mods>", <q-args>, [<f-args>])'
+    exe 'command! -bar -bang -nargs=* -complete=customlist,fugitive#EditComplete Gwq    exe fugitive#WqCommand(   <line1>, <count>, +"<range>", <bang>0, "<mods>", <q-args>, [<f-args>])'
+  endif
 
 " Syntax Highlighting:
   command! HL call syncom#HL()

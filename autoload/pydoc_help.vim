@@ -173,11 +173,16 @@ function! pydoc_help#OpenTempBuffer(...) abort
   return s:bufname
 endfunction
 
-function! pydoc_help#async_cursor() abort
+function! pydoc_help#async_cursor(bang) abort
   let s:temp_cword = expand('<cWORD>')
-  enew
+  if a:bang
+    keepjumps keepalt enew!
+  else
+    keepjumps keepalt new
+  endif
+
   call jobstart('pydoc ' . s:temp_cword, {'on_stdout':{j,d,e->append(line('.'),d)}})
-  call nvim_command('sleep 1')
+  call nvim_command('sleep 2')
   call s:temp_buffer()
 endfunction
 

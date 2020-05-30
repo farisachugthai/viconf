@@ -64,7 +64,9 @@ let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
   " Also can we auto fix single quotes?
   inoremap <buffer> ' "<C-G>U<Left>
 
-setlocal matchpairs+=::,"",
+" Only character pairs are allowed that are different, thus you cannot
+" jump between two double quotes. LAME
+let &l:matchpairs .= ':\,'
 
 if exists('loaded_matchit')
   " Set up matchit:

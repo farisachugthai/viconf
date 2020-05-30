@@ -19,29 +19,36 @@ function! py#nvim_taglist() abort
   return nvim_call_function('tagfiles')
 endfunction
 
+function! s:AddSiteDir()  abort
+  " Honestly i don't remember why it was so important to set this up
+  py3 import site
+  let s:user_site = py3eval('site.USER_SITE')
+  if s:user_site ==# 0
+    return
+  endif
+  let &l:path = &l:path . ',' .  s:user_site
+  return s:user_site
+endfunction
+
 function! py#PythonPath() abort
   " Defer if g:python3_host_prog isnt set
   if empty('g:python3_host_prog')
     " call remotes#init()
-    let g:python3_host_prog = exepath("python")
+    return py#SecondTry()
   endif
-  py3 import site
   let s:path = '.,,**,'
-  let s:user_site = py3eval('site.USER_SITE')
-  if s:user_site ==# 0
-    let s:path = py#SecondTry()
+  let l:python_path = py3eval('sys.path')
+  if type(l:python_path) !=# v:t_list
     return s:path
   endif
-  let s:path = s:path . s:user_site
-  let l:python_path = py3eval('sys.path')
-  if l:python_path ==# 0
-    return
-  endif
   for l:i in l:python_path
+    let &l:path = s:path
     let s:path .=   ',' . l:i
     " Got this idea from tpope. thanks for the genius as always
   endfor
-  let &l:path = s:path
+
+  let s:site_path = s:AddSiteDir()
+  let s:path = s:path . ',' . s:site_path
   return s:path
 endfunction
 

@@ -282,6 +282,7 @@ let g:colors_name = 'gruvbox-material'
     hi CocHintSign guifg=#89b482 guibg=#282828 guisp=NONE gui=NONE cterm=NONE
     hi CocHoverRange guifg=NONE guibg=NONE guisp=NONE gui=bold,underline ctermfg=NONE ctermbg=NONE cterm=bold,underline
     hi! link CocCodeLens ALEVirtualTextInfo
+    hi! link CocCommandsTitle Title
     hi! link CocDiagnosticsError Red
     hi! link CocDiagnosticsHint Blue
     hi! link CocDiagnosticsInfo Yellow
@@ -900,27 +901,20 @@ let g:colors_name = 'gruvbox-material'
 
   " Vim:
     " hi! link vimTermOption
-    " vimExtCmd
-    " vimFilter
-    " vimFiletype
-    " vimOperParen
-    " vimSynLine
-    " vimFuncBlank
-    " vimEscapeBrace
-    " vimAutoCmdSfxList
-    " vimMenuBang
-    " vimMenuPriority
-    " vimMenuMap
-    " vimMenuRhs
-    " vimNormCmds
-    " vimGroupList
-    " vimSynMatchRegion xxx
-    " vimSynMtchGroup
-    " vimSyncRegion  xxx
+    " vimTermOption  xxx cleared
+    " vimExtCmd      xxx cleared
+    " vimOperParen   xxx cleared
+    " vimSynLine     xxx cleared
+    " vimFuncBlank   xxx cleared
+    " vimEscapeBrace xxx cleared
+    " vimAutoCmdSfxList xxx cleared
+    " vimMenuRhs     xxx cleared
+    " vimGroupList   xxx cleared
 
     hi! link vimAugroup     vimAugroupKey
     hi! link vimAuSyntax vimAugroup
     hi! link vimAugroupSyncA vimAugroup
+
     " Lmao the comma between BufEnter,BufReadPre
     hi! link vimAutoEventList vimAutoEvent
     hi! link vimAbb vimCommand
@@ -936,14 +930,18 @@ let g:colors_name = 'gruvbox-material'
     hi! link vimBehaveModel vimBehave
     hi! link vimBracket     Delimiter
     hi! link vimCmplxRepeat SpecialChar
+
     " Don't link to WildMenu it's the space in between the word cluster and the cluster group
     " hi link vimClusterName WildMenu
     hi! link vimClusterName Normal
-    hi! link vimCmdSep vimCommand
+
+    hi! link vimCmdSep      vimCommand
+
     hi vimCommentTitle guifg=#a89984 guibg=NONE guisp=NONE gui=bold,italic cterm=bold,italic
+
     hi! link vimCommentTitleLeader  vimCommentTitle
     hi! link vimCollClass   StorageClass
-    hi! link vimCollection PreCondit
+    hi! link vimCollection  PreCondit
     hi! link vimCommand     Statement
     hi! link vimComment     Comment
     hi! link vimCommentString       vimString
@@ -962,14 +960,20 @@ let g:colors_name = 'gruvbox-material'
     hi! link vimFTCmd       vimCommand
     hi! link vimFTOption    vimSynType
     hi! link vimFgBgAttrib  vimHiAttrib
+    hi! link vimFiletype    vimOption
+    hi! link vimFilter      vimCmdSep
     hi! link vimFold        Folded
     hi! link vimFunc        Function
+
+    " syn match	vimFuncBlank contained	"\s\+"
+    " leave this cleared
+    " hi! link vimFuncBlank
     hi! link vimFuncBody    Normal
     hi! link vimFuncKey     vimCommand
     hi! link vimFuncName    Function
     hi! link vimFuncSID     Special
     hi! link vimFuncVar     Identifier
-    hi! link vimFunction Function
+    hi! link vimFunction    Function
     hi! link vimGlobal      vimFuncSID
     hi! link vimGroup       Type
     hi! link vimGroupAdd    vimSynOption
@@ -995,7 +999,12 @@ let g:colors_name = 'gruvbox-material'
     hi! link vimHiStartStop vimHiTerm
     hi! link vimHiTerm      Type
     hi! link vimHighlight   Operator
+    hi! link vimHiAttribList Underlined
+    hi! link vimHiCtermColor Underlined
+    hi! link vimHiFontname Underlined
+    hi! link vimHiKeyList Keyword
     hi! link vimInsert      vimString
+    hi! link vimIskSep Keyword
 
     " vimIsCommand is a terrible regex honestly don't match it with anything
     " Output of `syn list vimIsCommand
@@ -1020,19 +1029,28 @@ let g:colors_name = 'gruvbox-material'
     hi! link vimMapRhsExtend        vimNotation
     hi! link vimMark        Number
     hi! link vimMarkNumber  vimNumber
+    hi! link vimMenuBang    Operator
     hi! link vimMenuMod     vimMapMod
     hi! link vimMenuName    PreProc
     hi! link vimMenuNameMore        vimMenuName
+    hi! link vimMenuPriority  Float
+    hi! link vimMenuMap     vimMapMod
+    " vimMenuRhs
     hi! link vimMtchComment vimComment
     hi! link vimNorm        vimCommand
+    hi! link vimNormCmds    vimCommand
     hi! link vimNotFunc     vimCommand
     hi! link vimNotPatSep   vimString
 
     " This ends up being the RHS for all mappings so choose carefully!
     hi! link vimNotation    Special
     hi! link vimNumber Red
+    hi! link vimOnlyCommand vimCommand
+    hi! link vimOnlyHLGroup VisualNOS
+    hi! link vimOnlyOption Green
     hi! link vimOper        Operator
     hi! link vimOption      PreCondit
+    hi! link vimPythonRegion Identifier
     hi! link vimParenSep    Delimiter
     hi! link vimPatRegion vimRegion
     hi! link vimPatSep      SpecialChar
@@ -1083,6 +1101,10 @@ let g:colors_name = 'gruvbox-material'
     hi! link vimSynContains vimSynOption
     hi! link vimSynKeyContainedin   vimSynContains
     hi! link vimSynKeyOpt   vimSynOption
+
+    " vimSynLine
+    hi! link vimSynMatchRegion vimSynOption
+    hi! link vimSynMtchGroup  vimSynOption
     hi! link vimSynMtchGrp  vimSynOption
     hi! link vimSynMtchOpt  vimSynOption
     hi! link vimSynNextgroup        vimSynOption
@@ -1096,12 +1118,13 @@ let g:colors_name = 'gruvbox-material'
     hi! link vimSynKeyRegion Keyword
     " This syntax group is literally whitespace...
     hi! link vimSynRegion Nontext
-    hi! link vimSyncLines Number
     hi! link vimSyncC       Type
     hi! link vimSyncGroup   vimGroupName
     hi! link vimSyncGroupName       vimGroupName
     hi! link vimSyncKey     Type
+    hi! link vimSyncLines Number
     hi! link vimSyncNone    Type
+    hi! link vimSyncRegion  vimSynOption
     hi! link vimSyntax      vimCommand
     hi! link vimTodo        Todo
     hi! link vimUnmap       vimMap
@@ -1111,19 +1134,9 @@ let g:colors_name = 'gruvbox-material'
     hi! link vimUserAttrbKey        vimOption
     hi! link vimUserCmd vimUserCommand
     hi! link vimUserCommand vimCommand
-    " Here are a few more xxx cleared syn groups
     hi! link vimUserFunc Function
     hi! link vimVar Identifier
     hi! link vimWarn        WarningMsg
-    hi! link vimHiAttribList Underlined
-    hi! link vimHiCtermColor Underlined
-    hi! link vimHiFontname Underlined
-    hi! link vimHiKeyList Keyword
-    hi! link vimIskSep Keyword
-    hi! link vimOnlyCommand vimCommand
-    hi! link vimOnlyHLGroup VisualNOS
-    hi! link vimOnlyOption Green
-    hi! link vimPythonRegion Identifier
 
     " Errors:
       hi! link vimAugroupError        Error

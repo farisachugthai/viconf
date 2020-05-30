@@ -96,16 +96,23 @@ endfunction
 function! includes#NodeImports(fname) abort
   " NODE IMPORTS
   " ============
+  " give up if there's no node_modules
+  if empty(get(b:, 'ts_node_modules', []))
+    if filereadable(a:fname)
+      return a:fname
+    endif
+    return 0
+  endif
 
   " split the filename in meaningful parts:
   " - a package name, used to search for the package in node_modules/
   " - a subpath if applicable, used to reach the right module
-  "
+
   " example:
   " import bar from 'coolcat/foo/bar';
   " - package_name = coolcat
   " - sub_path     = foo/bar
-  "
+
   " special case:
   " import something from '@scope/something/else';
   " - package_name = @scope/something
@@ -150,26 +157,35 @@ function! includes#NodeImports(fname) abort
     " fall back to 'index.js'
     return b:ts_packages[a:fname].pack . '/' . b:ts_packages[a:fname].entry
   else
-      " build the path to the module
-      let l:common_path = fnamemodify(l:package_json, ':p:h') . '/' . l:sub_path
+    " build the path to the module
+    let l:common_path = fnamemodify(l:package_json, ':p:h') . '/' . l:sub_path
 
-      " first, try with .ts and .js
-      let l:found_ext = glob(l:common_path . '.[jt]s', 1)
-      if len(l:found_ext)
-        return l:found_ext
-      endif
+    " first, try with .ts and .js
+    let l:found_ext = glob(l:common_path . '.[jt]s', 1)
+    if len(l:found_ext)
+      return l:found_ext
+    endif
 
-      " second, try with /index.ts and /index.js
-      let l:found_index = glob(l:common_path . '/index.[jt]s', 1)
-      if len(l:found_index)
-        return l:found_index
-      endif
+    " second, try with /index.ts and /index.js
+    let l:found_index = glob(l:common_path . '/index.[jt]s', 1)
+    if len(l:found_index)
+      return l:found_index
+    endif
+
     " give up
     if filereadable(a:fname)
       return a:fname
     endif
-  return 0
+    return 0
   endif
+
+  " Did he have this go through a merge conflict because this section is in here twice
+  if filereadable(a:fname)
+    return a:fname
+  endif
+
+  echo 'Does this section ever get called?'
+  return a:fname . '.d.ts'
 endfunction
 
 function! includes#VimPath() abort
@@ -193,11 +209,7 @@ endfunction
 function! includes#CPath() abort
   let s:path='.,**,,'
 
-  if exists('$PREFIX')
-    let s:root  = expand('$PREFIX')
-  else
-    let s:root  = '/usr'
-  endif
+  let s:root  = exists('$PREFIX') ? expand('$PREFIX') : '/usr'
 
   if has('unix')
     let s:path = s:path . s:root. '/include,' . s:root . '/local/include,'
@@ -295,6 +307,8 @@ function! includes#typescript_setup() abort
       autocmd BufWritePost <buffer> silent make! <afile> | silent redraw!
     augroup END
   endif
+
+  let b:did_typescript_setup = 1
 endfunction
 
 

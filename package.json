@@ -78,6 +78,8 @@
   ],
   "license": "MIT",
   "name": "coc-extensions",
+  "type": "module",
+  "types": "rplugin/node/index.d.ts",
   "peerDependencies": {
     "coc.nvim": "^0.0.77"
   },
@@ -96,7 +98,6 @@
     "lint-fix": "yarn --silent lint --fix; exit 0",
     "lint-styles": "stylelint --ignore-path .eslintignore '**/*.*(css|scss)' --syntax scss",
     "lint-styles-fix": "yarn --silent lint-styles --fix; exit 0",
-    "markdown-it": "yarn run markdown-it",
     "markdown-docs": "yarn run markdown-it -l -t --trace -o doc/autoload_readme.html autoload/README.md",
     "pretest": "echo 'Running tests'",
     "preversion": "npm test",
@@ -110,7 +111,7 @@
     "ts": "tsc",
     "tsserver": "node ./node_modules/typescript/bin/tsserver",
     "vimlsp": "yarn run vim-language-server --stdio",
-    "watch": "yarn run tsc -watch -p ./tsconfig.json -w"
+    "watch": "yarn run tsc -w --strict --sourcemap -p ./tsconfig.json"
   },
   "version": "1.0.0",
   "dependencies": {

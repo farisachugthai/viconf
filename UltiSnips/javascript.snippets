@@ -7,7 +7,7 @@
 
 priority 40
 
-extends javascript-node, html
+extends html
 
 # Functions: {{{
 
@@ -392,4 +392,115 @@ public readonly ${1/^_(.*)/$1/}: event<$2> = this.$1.event
 endsnippet
 # }}}
 
-# Vim: set fdm=marker fdls=0 ft=snippets.javascript:
+snippet /* "A JSDoc comment" b
+/**
+ * ${1:${VISUAL}}$0
+ */
+endsnippet
+
+snippet @au "@author email (First Last)"
+@author ${1:`!v g:snips_author`} [${2:`!v g:snips_author_email`}]
+endsnippet
+
+snippet @li "@license Description"
+@license ${1:MIT}$0
+endsnippet
+
+snippet @ver "@version Semantic version"
+@version ${1:0.1.0}$0
+endsnippet
+
+snippet @fileo "@fileoverview Description" b
+/**
+ * @fileoverview ${1:${VISUAL:A description of the file}}$0
+ */
+endsnippet
+
+snippet @constr "@constructor"
+@constructor
+endsnippet
+
+snippet @p "@param {Type} varname Description"
+@param {${1:Type}} ${2:varname} ${3:Description}
+endsnippet
+
+snippet @ret "@return {Type} Description"
+@return {${1:Type}} ${2:Description}
+endsnippet
+
+snippet @pri "@private"
+@private
+endsnippet
+
+snippet @over "@override"
+@override
+endsnippet
+
+snippet @pro "@protected"
+@protected
+endsnippet
+
+snippet #! "#!/usr/bin/env node" b
+#!/usr/bin/env node
+endsnippet
+
+snippet vreq "assign a CommonJS-style module to a var"
+var ${0:${1/(.+\/)*(\w+)(-|\b|$)(\..+$)?/\u$2/g}} = require('$1');
+endsnippet
+
+snippet ex "module.exports"
+module.exports = $1;
+endsnippet
+
+snippet hcs "http.createServer"
+http.createServer($1).listen($2);
+endsnippet
+
+snippet ncs "net.createServer"
+net.createServer(function(${1:socket}){
+	$1.on('data', function(${3:data}){
+		$4
+	});
+	$1.on('end', function(){
+		$5
+	});
+}).listen(${6:8124});
+endsnippet
+
+snippet pipe "pipe"
+pipe(${1:stream})$2
+endsnippet
+
+# Express snippets
+
+snippet eget "express GET"
+${1:app}.get('$2', $3);
+endsnippet
+
+snippet epost "express POST"
+${1:app}.post('$2', $3);
+endsnippet
+
+snippet eput "express PUT"
+${1:app}.put('$2', $3);
+endsnippet
+
+snippet edelete "express DELETE"
+${1:app}.delete('$2', $3);
+endsnippet
+
+# process snippets
+
+snippet stdout "stdout"
+process.stdout
+endsnippet
+
+snippet stdin "stdin"
+process.stdin
+endsnippet
+
+snippet stderr "stderr"
+process.stderr
+endsnippet
+
+# Vim: set fdm=marker ft=snippets.javascript:

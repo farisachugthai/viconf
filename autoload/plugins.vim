@@ -5,13 +5,8 @@
   " Last Modified: Dec 05, 2019
 " ============================================================================
 
-if exists('*stdpath')
-  let s:stddata = stdpath("data")
-else
-  let s:stddata = resolve(expand('~/.local/share/nvim'))
-endif
+  let s:stddata = exists('*stdpath') ? stdpath("data") : resolve(expand('~/.local/share/nvim'))
 let s:stdconfig = exists('*stdpath') ? stdpath('config') : resolve(expand('~/.config/nvim'))
-
 
 function! plugins#GetAllSnippets() abort
   call UltiSnips#SnippetsInCurrentScope(1)
@@ -157,4 +152,4 @@ function! plugins#fugitive_head() abort
   :Gread! show HEAD
   setlocal nomodified
   setlocal buftype=nofile
-endfunction  " }}}
+endfunction

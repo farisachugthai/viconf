@@ -8,6 +8,9 @@ class WatchPlugin(object):
         self.nvim = nvim
         self.buffers = {}
 
+    def __repr__(self):
+        return f"{self.__class__.__name__}"
+
     @pynvim.command("WatchBuf")
     def startsub(self):
         self.nvim.current.buffer.api.live_updates(True)

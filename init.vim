@@ -88,10 +88,13 @@ function! LoadMyPlugins() abort  " {{{
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-scriptease', {'for': 'vim'}
-  Plug 'SirVer/ultisnips'
+  if has('python3')
+    Plug 'SirVer/ultisnips'
+  endif
+
   Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }
-  nnoremap <Leader>a <Cmd>sil! ALEEnable<CR><bar>:sil! call plugins#AleMappings()<CR><bar>:sil! CocDisable<CR>:sil! redraw!<CR>:ALELint<CR>
-  nnoremap <Leader>et <Cmd>ALEToggle<CR>:sil! call plugins#AleMappings()<CR>:sil! redraw!<CR>
+  nnoremap <Leader>a <Cmd>sil! ALEEnable<CR><bar><bar>:sil! CocDisable<CR>:sil! redraw!<CR>:ALELint<CR>
+  nnoremap <Leader>et <Cmd>ALEToggle<CR>:sil! redraw!<CR>
 
   if exists('$TMUX')
     Plug 'christoomey/vim-tmux-navigator'

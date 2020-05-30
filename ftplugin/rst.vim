@@ -4,7 +4,7 @@
     " Description: ReStructured Text ftplugin
     " Last Modified: Oct 27, 2019
 " ============================================================================
-
+-
 " Global Options:
   let g:rst_style = 1
 
@@ -32,6 +32,7 @@
 " The Right Filetype:
   " Now that globals are set check for ....
   if exists('b:did_ftplugin') | finish | endif
+  let b:did_ftplugin = 1
 
   " So these are a massive source of start up time delay. Plus they get sourced in anyway.
   " source $VIMRUNTIME/ftplugin/rst.vim

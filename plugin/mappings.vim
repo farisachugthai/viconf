@@ -1,9 +1,9 @@
-" ============================================================================
+" ==================================================================
   " File: mappings.vim
   " Author: Faris Chugthai
   " Description: Mappings
   " Last Modified: February 16, 2020
-" ============================================================================
+" ==================================================================
 
 " Navigation:
   " ugh this is gonna be a hell of a lot of manual entries
@@ -113,7 +113,6 @@
 
 " RSI:
   function! MapRsi() abort
-
     " Sorry tpope <3
     inoremap        <C-A> <C-O>^
     inoremap        <C-X><C-A> <C-A>
@@ -147,6 +146,7 @@
     noremap! <C-x>5  <Cmd>vnew<CR>
     noremap! <C-x>0  <Cmd>wincmd c<CR>
 
+    " TODO: C-] for search would be amazing
   endfunction
 
   function! AddVileBinding(key, handler)
@@ -157,29 +157,21 @@
     exec 'tnoremap ' . a:key a:handler
     " wait why did i get rid of cnoremap
     exec 'cnoremap ' . a:key a:handler
-
   endfunction
 
   " oh
   call AddVileBinding('<C-x>o', '<Cmd>wincmd W<CR>')
   " zero
   call AddVileBinding('<C-x>0', '<Cmd>wincmd c<CR>')
-
   call AddVileBinding('<C-x>1', '<Cmd>wincmd o<CR>')
 
-  " Both Tmux and Readline utilize C-a. It's a useful keybinding and
-  " my preferred manner of going to col-0 in insert mode. Cue vim-rsi
-  " a la Tim Pope. Cool. It'd be kinda cool to have that in normal mode.
   nnoremap C-a ^
-  " But now I can't increment stuff.
-  " I just realized today {Oct 01, 2019} that the + key in normal mode does
-  " nothing different than <CR>. Wtf???
   nnoremap + C-a
 
   " As a nod to the inspiration I also want it in insert-mode
   call AddVileBinding('<C-x><C-r>', '<Cmd>source $MYVIMRC<CR>echomsg "Reread $MYVIMRC"<CR>')
 
-  " info so possibly not cannonical
+  " This is an info binding not an emacs so possibly not cannonical
   call AddVileBinding('<C-x>w', '<Cmd> set wrap!')
 
   " Swap the mark and point
@@ -284,6 +276,7 @@
   " Alright let's see how many we can churn out in a sitting Whoo works perfectly!
   inoremap <expr> <C-x><C-b> fzf#vim#complete#buffer_line()
   inoremap <expr> <C-x><C-l> fzf#vim#complete#line()
+
   if has('unix')
     " unfortunately really doesn't work on windows
     inoremap <expr> <C-x><C-f> fzf#vim#complete#path('fd -H -t f')
@@ -339,15 +332,21 @@
   endif
 
 " Coc:
+  function! s:check_back_space() abort
+    let l:col = col('.') - 1
+    let l:ret = system('col') || getline('.')[l:col - 1]  =~# '\s'
+    return l:ret
+  endfunction
+
+  function! CocMappings() abort
+    if !exists('g:did_coc_loaded')
+      echo 'Coc was never loaded'
+      return
+    endif
+
   " General Mappings:
     onoremap af <Plug>(coc-funcobj-a)
     onoremap if <Plug>(coc-funcobj-i)
-
-    function! s:check_back_space() abort
-      let l:col = col('.') - 1
-      let l:ret = system('col') || getline('.')[l:col - 1]  =~# '\s'
-      return l:ret
-    endfunction
 
     " So I got rid of supertab and ultisnips is finally set in a consistent way
     " with inoremaps and FZF and doesn't overlap with too much of the C-x C-f
@@ -355,8 +354,9 @@
 
     " Let's give Coc the tab key. If this doesn't work as expected we can also go
     " with something like <M-/>
+
     inoremap <expr> <M-=> pumvisible() ? coc#_select_confirm() :
-        \ coc#expandableOrJumpable() ?
+      \ coc#expandableOrJumpable() ?
       \ "\<C-R>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
       \  <SID>check_back_space() ? "\<TAB>" : coc#refresh()
 
@@ -372,12 +372,12 @@
     nnoremap <expr><C-f> coc#util#has_float() ? coc#util#float_scroll(1) : "\<C-f>"
     nnoremap <expr><C-b> coc#util#has_float() ? coc#util#float_scroll(0) : "\<C-b>"
 
-    " Bracket Maps:
+  " Bracket Maps:
     " Shit none of these work oh also these are builtin mappings
     nnoremap [g <Plug>(coc-diagnostic-prev)<CR>
     nnoremap ]g <Plug>(coc-diagnostic-next)<CR>
 
-    " Note: Tried adding <expr> and didn't work
+  " Git: Note: Tried adding <expr> and didn't work
     " nnoremap [c  <Plug>(coc-git-prevchunk)<CR>
     " nnoremap ]c  <Plug>(coc-git-nextchunk)<CR>
 
@@ -394,9 +394,7 @@
 
     inoremap <M-w> <C-R>=coc#start({'source': 'word'})<CR>
 
-
-    " Grep By Motion: Mnemonic CocSelect
-
+  " Grep By Motion: Mnemonic CocSelect
     " Don't use vmap I don't want this in select mode!
     " Yo why dont we use onoremap though?
     " Q: How to grep by motion?
@@ -404,11 +402,10 @@
     xnoremap ag :<C-u>call plugins#GrepFromSelected(visualmode())<CR>
     nnoremap ag :<C-u>set operatorfunc=plugins#GrepFromSelected<CR>g@
 
-    " Maps For CocList X:
+  " Maps For CocList X:
     nnoremap <C-g> <Cmd>CocList<CR>
     nnoremap ,d  <Cmd>CocList diagnostics<CR>
     " nnoremap ,d <Plug>(coc-diagnostic-info)<CR>
-
     " Manage extensions
     nnoremap ,e  <Cmd>CocList extensions<CR>
     " Show commands
@@ -418,7 +415,7 @@
     " Search workspace symbols
     nnoremap ,s  <Cmd>CocList -I symbols<CR>
 
-    " Easier Grep Using CocList Words:
+  " Easier Grep Using CocList Words:
     nnoremap ,w <Cmd>execute 'CocList -I --normal --input=' . expand('<cword>') . ' words'<CR>
 
     " Keymapping for grep word under cursor with interactive mode
@@ -459,6 +456,7 @@
     nnoremap ,p <Cmd>CocFixCurrent<CR>
     nnoremap ,z <Cmd>CocFloatHide<CR>
     nnoremap ,y <Cmd>CocFloatJump<CR>
+  endfunction
 
 " ALE:
   " Follow the lead of vim-unimpaired with a for ale

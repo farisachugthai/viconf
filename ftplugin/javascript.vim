@@ -6,6 +6,11 @@
 " ======================================================================
 
 let g:javaScript_fold = 1
+
+if !has('unix')
+  let g:ale_windows_node_executable_path = fnameescape('C:/Program Files/nodejs/node.exe')
+endif
+
 if exists('b:did_ftplugin') | finish | endif
 
 " Options:
@@ -38,20 +43,21 @@ if exists('b:did_ftplugin') | finish | endif
   setlocal isfname+=@-@
 
 " ALE:
-  if !has('unix')
-    let g:ale_windows_node_executable_path = fnameescape('C:/Program Files/nodejs/node.exe')
-  endif
 
   let b:ale_fixers = get(g:, 'ale_fixers["*"]', ['remove_trailing_lines', 'trim_whitespace'])
   let b:ale_fixers += ['prettier']
   let b:ale_fixers += ['eslint']
   let b:ale_fixers += ['tsserver']
+  let b:ale_linters = get(g:, 'ale_linters["*"]', ['tsserver', 'eslint', 'prettier',])
+  let b:ale_linters_explicit = 1
 
 " Atexit:
 let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
                 \. '|setlocal et< sw< sts< sua< fdm< ofu< com< cms<'
-                \. '|setlocal include< define< '
+                \. '|setlocal include< define< tagcase< isf<'
                 \. '|unlet! b:undo_ftplugin'
                 \. '|unlet! b:did_ftplugin'
                 \. '|unlet! b:ale_fixers'
+                \. '|unlet! b:ale_linters'
+                \. '|unlet! b:ale_linters_explicit'
 

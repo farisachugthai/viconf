@@ -27,6 +27,8 @@ source $VIMRUNTIME/ftplugin/help.vim
 " nnoremap <buffer> gO :call <sid>show_toc()<cr>
 " You can't map something to a function prefixed with <SID>? Dude
 " script local namespaces are so poorly done.
+  setlocal tags=~/.config/nvim/tags,$VIMRUNTIME/doc/tags,tags,**
+  let &l:path = includes#VimPath()
 
   setlocal tags=~/.config/nvim/tags,$VIMRUNTIME/doc/tags,tags,**
 
@@ -41,11 +43,13 @@ source $VIMRUNTIME/ftplugin/help.vim
   " Align help tags to the right margin
   let b:ale_fixers += ['align_help_tags']
 
-
+" Undo:
 let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
                       \. '|setlocal fo< tw< cole< cocu< isk< rnu< nu<'
                       \. '|setlocal foldcolumn< signcolumn< wrap<'
                       \. '|silent! nunmap <buffer> go'
-                      \. '|unlet! b:ale_fixers'
+                      \. '|setlocal tags< path<'
                       \. '|unlet! b:undo_ftplugin'
                       \. '|unlet! b:did_ftplugin'
+                      \. '|silent! nunmap <buffer> go'
+                      \. '|unlet! b:ale_fixers'

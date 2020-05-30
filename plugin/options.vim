@@ -79,7 +79,7 @@
   packadd! matchit
   packadd! justify
 
-  setglobal formatoptions=crq1j
+  setglobal formatoptions=croq1j
   setglobal pyxversion=3
   " managed to lose this along the way
   " to enable transparency but force the current selected element to be fully opaque: >
@@ -270,6 +270,29 @@
   endif
 
   let g:tagbar_silent = 1
+
+" Gutentags:
+  let g:gutentags_ctags_exclude = [
+        \ '.pyc',
+        \ '.eggs',
+        \ '.egg-info',
+        \ '_static',
+        \ '__pycache__',
+        \ 'elpy',
+        \ 'elpa',
+        \ '.ipynb_checkpoints',
+        \ '.idea',
+        \ 'node_modules',
+        \ '_build',
+        \ 'build',
+        \ '.git',
+        \ 'log',
+        \ 'tmp',
+        \ 'dist',
+        \ '.tox',
+        \ '.venv',
+        \ ]
+
   let g:tagbar_type_ansible = {
           \ 'ctagstype' : 'ansible',
           \ 'kinds' : [
@@ -359,8 +382,8 @@
         \ ]
         \ }
 
-  " Gutentags:
-    let g:gutentags_ctags_exclude = [
+" Gutentags:
+  let g:gutentags_ctags_exclude = [
           \ '.pyc',
           \ '.eggs',
           \ '.egg-info',
@@ -388,12 +411,11 @@
     let g:gutentags_ctags_tagfile = '.vscode/tags'
   endif
 
-
   " UltiSnips:
   function! UltiSnipsConf() abort
     let g:UltiSnipsExpandTrigger = '<Tab>'
-    let g:UltiSnipsJumpForwardTrigger= '<C-j>'
-    let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
+    let g:UltiSnipsJumpForwardTrigger= '<Tab>'
+    let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
     let g:ultisnips_python_style = 'numpy'
     let g:ultisnips_python_quoting_style = 'double'
     let g:UltiSnipsEnableSnipMate = 0
@@ -785,7 +807,49 @@
 " ALE:
   " Example from the help page
   " Use just ESLint for linting and fixing files which end in '.js'
+  let g:ale_pattern_options = {
+              \   '\.js$': {
+              \       'ale_linters': ['eslint'],
+              \       'ale_fixers': ['eslint'],
+              \ },
+              \ }
+  let g:ale_hover_to_preview = 1
+  let g:ale_virtualtext_cursor = 1
+  let g:ale_virtualtext_prefix =  'ALE: '
+  let g:ale_virtualtext_delay = 200
+  let g:ale_close_preview_on_insert = 1
+  let g:ale_echo_cursor = 1
+  let g:ale_completion_enabled = 1
+  let g:ale_set_signs = 1
+  " let g:ale_sign_column_always = 1
+  let g:ale_change_sign_column_color = 0
+  let g:ale_sign_warning = 'W'
+  let g:ale_sign_info = 'I'
+  let g:ale_sign_error = 'E'
+  let g:ale_sign_highlight_linenrs = 1
+  let g:ale_sign_style_warning = 'E'
+  let g:ale_pattern_options_enabled = 1
+  let g:ale_pattern_options = {'\.min.js$': {'ale_enabled': 0}}
+  " For buffer specific options, see ../ftplugin/*.vim
+  let g:ale_fixers = { '*': [ 'remove_trailing_lines', 'trim_whitespace' ] }
+  let g:ale_fix_on_save = 1
 
+  " When ALE is linting bash files recognize it as sh
+  let g:ale_linter_aliases = {
+      \ 'ps1': ['powershell', 'cs'],
+      \ 'htmljinja': ['html', 'handlebars'],
+      \ 'jinja': ['html', 'handlebars'],
+      \ 'htmldjango': 'html',
+      \ 'bash': 'sh',
+      \ 'xonsh': 'python',
+      \ }
+
+  " When ale is linting C# only use OmniSharp
+  let g:ale_linters = {
+      \ 'cs': ['OmniSharp']
+      \ }
+
+  let g:ale_list_vertical = 1
   let g:ale_lsp_show_message_severity = 'information'
 
   let g:ale_python_pyls_config = {
@@ -869,64 +933,7 @@
 
   let g:ale_cache_executable_check_failures = v:true
   " let g:ale_linters_ignore = {'python': ['pylint']}
-
-
-  " from the indent.vim
-  " ***
-  " BUG
-  " ***
-  " Uh setting this raises on windows...constantly
-  " let g:pyindent_disable_parentheses_indenting = 0
-
-  let g:pyindent_searchpair_timeout = '250'
-  " ALE
   let g:python_pyls_auto_pipenv = 1
-  " from the indent.vim
-  " ***
-  " BUG
-  " ***
-  " Uh setting this raises on windows...constantly
-  " let g:pyindent_disable_parentheses_indenting = 0
-
-  let g:pyindent_searchpair_timeout = '250'
-  " ALE
-  let g:python_pyls_auto_pipenv = 1
-  let g:ale_hover_to_preview = 1
-  let g:ale_virtualtext_cursor = 1
-  let g:ale_virtualtext_prefix =  'ALE: '
-  let g:ale_virtualtext_delay = 200
-  let g:ale_close_preview_on_insert = 1
-  let g:ale_echo_cursor = 1
-  let g:ale_completion_enabled = 1
-  let g:ale_set_signs = 1
-  " let g:ale_sign_column_always = 1
-  let g:ale_change_sign_column_color = 0
-  let g:ale_sign_warning = 'W'
-  let g:ale_sign_info = 'I'
-  let g:ale_sign_error = 'E'
-  let g:ale_sign_highlight_linenrs = 1
-  let g:ale_sign_style_warning = 'E'
-  let g:ale_pattern_options_enabled = 1
-  let g:ale_pattern_options = {'\.min.js$': {'ale_enabled': 0}}
-  " For buffer specific options, see ../ftplugin/*.vim
-  let g:ale_fixers = { '*': [ 'remove_trailing_lines', 'trim_whitespace' ] }
-  let g:ale_fix_on_save = 1
-
-  " When ALE is linting bash files recognize it as sh
-  let g:ale_linter_aliases = {
-      \ 'ps1': ['powershell', 'cs'],
-      \ 'htmljinja': ['html', 'handlebars'],
-      \ 'jinja': ['html', 'handlebars'],
-      \ 'htmldjango': 'html',
-      \ 'bash': 'sh',
-      \ 'xonsh': 'python',
-      \ }
-
-  " When ale is linting C# only use OmniSharp
-  let g:ale_linters = {
-      \ 'cs': ['OmniSharp']
-      \ }
-  let g:ale_list_vertical = 1
 
 " Vista:
 let g:vista_fzf_preview = ['right:50%']

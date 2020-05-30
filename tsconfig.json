@@ -4,6 +4,8 @@
 		"module": "es6",
 		"sourceMap": false,
 		"lib": [ "es2015" ],
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
 		"incremental": true,
 		"rootDir": "rplugin/node"
 	},

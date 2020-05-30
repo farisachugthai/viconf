@@ -3212,3 +3212,5 @@ zipfile
 zipfiles
 zipimport
 zlib
+recurses
+appveyor

@@ -41,9 +41,11 @@ if exists('b:did_ftplugin') | finish | endif
   setlocal foldmethod=indent
   setlocal foldlevel=0
 
-  let &l:path = includes#VimPath()
+  if !exists('g:loaded_scriptease')
+    let &l:path = includes#VimPath()
+  endif
 
-  setlocal tags+=~/.config/nvim/tags,$VIMRUNTIME/doc/tags,tags,**
+  setlocal tags=~/.config/nvim/tags,$VIMRUNTIME/doc/tags,tags,**
 
 " ALE And Cleanup:
   if !exists('s:stddata')
@@ -70,4 +72,4 @@ let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
                 \. '|unlet! b:undo_indent'
                 \. '|unlet! b:did_ftplugin'
                 \. '|unlet! b:ale_linters'
-                \. '|unlet! b:ale_explicit'
+                \. '|unlet! b:ale_linters_explicit'

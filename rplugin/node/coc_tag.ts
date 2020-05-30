@@ -1,13 +1,36 @@
 #!/usr/bin/env node
 // @ts-ignore
-const { sources, workspace } = require("coc.nvim");
-const path = require("path");
-const fs = require("fs");
-const util = require("util");
-const readline = require("readline");
+import * as path from 'path';
+import * as fs from 'fs';
+import * as util from 'util';
+import * as cp from 'child_process';
+import * as readline from 'readline';
 
+const { sources, workspace } = require("coc.nvim");
 const TAG_CACHE = {};
 const { nvim } = workspace;
+
+type AutoDetect = 'on' | 'off';
+
+
+function exists(file: string): Promise<boolean> {
+	return new Promise<boolean>((resolve, _reject) => {
+		fs.exists(file, (value) => {
+			resolve(value);
+		});
+	});
+}
+
+function exec(command: string, options: cp.ExecOptions): Promise<{ stdout: string; stderr: string }> {
+	return new Promise<{ stdout: string; stderr: string }>((resolve, reject) => {
+		cp.exec(command, options, (error, stdout, stderr) => {
+			if (error) {
+				reject({ error, stdout, stderr });
+			}
+			resolve({ stdout, stderr });
+		});
+    });
+}
 
 
 async function getTagFiles() {

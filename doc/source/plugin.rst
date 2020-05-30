@@ -80,26 +80,8 @@ The variable is buffer-local so it's implied what the
 In spite of that I'm going to keep naming the guards this way as
 you regularly see more than one ftplugin in the output of `scriptnames`.
 
-In directories where it makes sense to load more than one file, like `syntax`_,
+In directories where it makes sense to load more than one file, like ``syntax``,
 adding var names will probably pay dividends.
-
-
-.. _syntax:
-
-Autocmd for Vim Commentary
-===========================
-I found this in `after/plugin/vim-commentary.vim`_ but ... why? So I want
-to move it in here but I'm not actually sure where.
-
-.. code-block:: vim
-
-   " Should I make it only 1 keybinding? Would make interface easier
-   augroup commentary
-       autocmd!
-       autocmd Filetype python noremap <Leader># ^<Plug>CommentaryLine
-       autocmd Filetype javascript noremap <Leader>// ^<Plug>CommentaryLine
-       autocmd Filetype vim noremap <Leader>" ^<Plug>CommentaryLine
-   augroup END
 
 
 Function Scoping
@@ -195,50 +177,6 @@ Here are 2 commands I'm still actively working on.::
          \ <bang>0)
 
 
-Working with tags
-==================
-In the opposite vein of unimpaired (as unimpaired uses keybindings of the
-flavor :kbd:`]` :kbd:`[a-z]`), I just found the keybinding :kbd:`g]`!
-
-It's phenomenally useful but because of unimpaired I'm inclined to remember it
-as ]g instead of g].
-
-However that's not hard to fix!::
-
-   nnoremap ]g g]
-   nnoremap ]g g]
-
-Then I began reviewing ``tagsrch.txt``. And wow.::
-
-                                                           *g]*
-   g]			Like CTRL-], but use ":tselect" instead of ":tag".
-
-                                                           *v_g]*
-   {Visual}g]		Same as "g]", but use the highlighted text as the
-                           " identifier.
-
-                                                           *:tj* *:tjump*
-   :tj[ump][!] [name]	Like ":tselect", but jump to the tag directly when
-                           there is only one match.
-
-                                                           *:stj* *:stjump*
-   :stj[ump][!] [name]	Does ":tjump[!] [name]" and splits the window for the
-                           selected tag.
-
-                                                           *g_CTRL-]*
-   g CTRL-]		Like CTRL-], but use ":tjump" instead of ":tag".
-
-So let's do better than :kbd:`g]` !::
-
-   nnoremap ]g <Cmd>stjump!<CR>
-   xnoremap ]g <Cmd>stjump!<CR>
-   " Don't forget
-   ptag!
-
-.. note::
-   The <Cmd> pseudo-mapping is only available on Neovim.
-
-
 Mappings
 =========
 Here's a few different ways to map a function to a key.::
@@ -251,6 +189,20 @@ Here's a few different ways to map a function to a key.::
    vnoremap <expr> <C-\\> UltiSnips#list_snippets()
 
 
+RSI
+-----
+
+Both Tmux and Readline utilize :kbd:`C-a`.
+It's a useful keybinding and my preferred manner of going to col-0 in insert mode.
+Cue vim-rsi a la Tim Pope. It'd be kinda cool to have that in normal mode.::
+
+   nnoremap C-a ^
+
+But now I can't increment stuff.::
+
+   nnoremap + C-a
+
+.. _ale:
 
 ALE --- Asynchronous Lint Engine
 ================================
@@ -403,23 +355,4 @@ correctly.
 User defined find.::
 
    command! -nargs=* -range=% -addr=buffers -count -bang -bar -complete=file_in_path Find :<count><mods>find<bang> <args>
-
-
-Jumps
-======
-Are something I never utilize frequently enough.:
-
-                                                        *CTRL-O*
-CTRL-O                  Go to [count] Older cursor position in jump list
-                        (not a motion command).
-
-<Tab>           or                                      *CTRL-I* *<Tab>*
-CTRL-I                  Go to [count] newer cursor position in jump list
-                        (not a motion command).
-
-
-That's legitimately wonderful to know!
-
-Now I just need to work that in, and make a few utility mappings for the
-quickfix window.
 
