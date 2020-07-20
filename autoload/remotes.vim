@@ -50,11 +50,12 @@ endfunction
 
 function! remotes#termux() abort
   " From what i can tell, this line alone is as good as :UpdateRemotePlugins
-  let g:python3_host_prog = s:repo_root . '/.venv/bin/python'
+  " let g:python3_host_prog = s:repo_root . '/.venv/bin/python'
   let g:loaded_python_provider = 1
+  let g:python3_host_prog = expand("$PREFIX/bin/python")
 
-
-  let g:node_host_prog = '/data/data/com.termux/files/home/.local/share/yarn/global/node_modules/neovim/bin/cli.js'
+  " let g:node_host_prog = '/data/data/com.termux/files/home/.local/share/yarn/global/node_modules/neovim/bin/cli.js'
+  let g:node_host_prog = '/data/data/com.termux/files/usr/bin/neovim-node-host'
   let g:ruby_host_prog = '/data/data/com.termux/files/home/.gem/bin/neovim-ruby-host'
 
   let g:loaded_remote_plugins = '/data/data/com.termux/files/home/.local/share/nvim/rplugin.vim'

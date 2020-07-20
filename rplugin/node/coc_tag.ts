@@ -6,7 +6,8 @@ import * as util from 'util';
 import * as cp from 'child_process';
 import * as readline from 'readline';
 
-const { sources, workspace } = require("coc.nvim");
+import { sources, workspace } from 'coc.nvim';
+
 const TAG_CACHE = {};
 const { nvim } = workspace;
 

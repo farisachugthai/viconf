@@ -52,7 +52,6 @@ function! find_files#FZFMru(bang) abort
         \ 'options' :   ['--multi', '--ansi'],
         \ 'down'    :   '40%'},
         \ a:bang))
-
 endfunction
 
 function! find_files#FZFGit(bang) abort
@@ -72,7 +71,6 @@ function! find_files#FZFGit(bang) abort
 endfunction
 
 function! find_files#RipgrepFzf(query, fullscreen)  abort
-
   " In the default implementation of `Rg`, ripgrep process starts only once with
   " the initial query (e.g. `:Rg foo`) and fzf filters the output of the process.
 

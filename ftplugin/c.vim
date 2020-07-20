@@ -33,7 +33,7 @@ if exists('b:did_ftplugin') | finish | endif
 
   elseif executable('gcc')  " Because of windows
     compiler gcc
-    setlocal makeprg=gcc\ %<.o
+    setlocal makeprg=gcc\ -o\ %<.o\ %
     echomsg 'ftplugin/c.vim: Using gcc as the compiler'
   elseif executable('nmake')
     compiler msvc

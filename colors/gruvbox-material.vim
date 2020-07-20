@@ -1796,9 +1796,10 @@ let g:colors_name = 'gruvbox-material'
     hi! link yamlKey Aqua
     hi! link yamlConstant Purple
 
+    hi! link tomlArray Red
+    hi! link tomlKey Blue
     hi! link tomlTable Orange
     hi! link tomlTableArray Orange
-    hi! link tomlKey WhiteBold
 
     hi! link mailHeader Blue
     hi! link mailHeaderKey Blue

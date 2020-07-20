@@ -1,4 +1,7 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import pynvim
+from pynvim.plugin import script_host
 
 
 @pynvim.plugin
@@ -42,4 +45,4 @@ class WatchPlugin(object):
 
 
 def main():
-    return WatchPlugin(pynvim.Nvim.from_nvim(pynvim.plugin.script_host.vim))
+    return WatchPlugin(pynvim.Nvim.from_nvim(script_host.vim))

@@ -112,7 +112,8 @@
   nnoremap ' `
 
 " RSI:
-  function! MapRsi() abort
+if !exists('*MapRsi')
+  function MapRsi() abort
     " Sorry tpope <3
     inoremap        <C-A> <C-O>^
     inoremap        <C-X><C-A> <C-A>
@@ -148,8 +149,10 @@
 
     " TODO: C-] for search would be amazing
   endfunction
+endif
 
-  function! AddVileBinding(key, handler)
+if !exists('*AddVileBinding')
+  function AddVileBinding(key, handler)
     " Map a key 3 times for normal mode, insert and command.
     exec 'nnoremap ' . a:key a:handler
     exec 'inoremap ' . a:key a:handler
@@ -192,6 +195,7 @@
   endfunction
 
   inoremap <M-g> <Cmd>call <SID>GoToLine()<CR>
+endif
 
 " Search Mappings:
   " Toggle hlsearch with the same key that `less` does
@@ -236,6 +240,8 @@
   " inoremap <expr> <Tab> UltiSnips#ExpandSnippetOrJump()
 
 " FZF:
+if !exists('*FZFBinding')
+  function FZFBinding()
   if exists('*fzf#wrap')
     nnoremap <M-x>                      <Cmd>Commands<CR>
     nnoremap <C-x>B                     <Cmd>Buffers<CR>
@@ -255,9 +261,9 @@
   " Map Vim Defaults To FZF History Commands:
   nnoremap q:        <Cmd>History:<CR>
   " nnoremap q/        <Cmd>History/<CR>
-  nnoremap q/ <plug>(-fzf-/) /
+  nnoremap q/        <Plug>(-fzf-/) /
   " But id still want to use q: when i can
-  nnoremap q; q:
+  nnoremap q;        q:
 
   " Get The Rest Of The FZF Vim Commands Involved:
   nnoremap  <Leader>L         <Cmd>Lines<CR>
@@ -285,7 +291,6 @@
     " i realized i missed
     call msdos#set_shell_cmd()
   endif
-
 
   if filereadable(expand('$_ROOT/share/dict/words'))
     " Note: This is dependant on /usr/share/dict/words existing because this
@@ -318,6 +323,14 @@
     \ 'options': '--ansi --cycle --multi --reverse --margin 15%,0',
     \ 'left':    20})
 
+  " Reminder: Leader<tab>
+  nnoremap <Leader>m   <Cmd>Maps<CR>
+
+  nnoremap <Leader>fg  <Cmd>Files ~/ <CR>
+  endfunction
+endif
+
+
 " NERDTree Mapping:
   nnoremap <expr> <Leader>N   (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
   nnoremap <Leader>nt <Cmd>NERDTreeToggleVCS<CR>zz
@@ -332,17 +345,19 @@
   endif
 
 " Coc:
+if !exists('*CocMappings')
   function! s:check_back_space() abort
     let l:col = col('.') - 1
     let l:ret = system('col') || getline('.')[l:col - 1]  =~# '\s'
     return l:ret
   endfunction
 
-  function! CocMappings() abort
-    if !exists('g:did_coc_loaded')
-      echo 'Coc was never loaded'
-      return
-    endif
+  function CocMappings() abort
+    " This executes before coc is loaded
+    " if !exists('g:did_coc_loaded')
+    "   echo 'Coc was never loaded'
+    "   return
+    " endif
 
   " General Mappings:
     onoremap af <Plug>(coc-funcobj-a)
@@ -457,6 +472,7 @@
     nnoremap ,z <Cmd>CocFloatHide<CR>
     nnoremap ,y <Cmd>CocFloatJump<CR>
   endfunction
+endif
 
 " ALE:
   " Follow the lead of vim-unimpaired with a for ale
@@ -476,8 +492,7 @@
   nnoremap <A-i> <Cmd>ALEInfo<CR>
   inoremap <C-.> <Plug>(ale_complete)
 
-
-if !exists('Window_Mappings')
+if !exists('*Window_Mappings')
 function Window_Mappings() abort
   " Navigate windows more easily
   " nnoremap <C-h> <Cmd>wincmd h<CR>
@@ -519,6 +534,7 @@ function Window_Mappings() abort
   nnoremap <C-w><M-Up> 5<C-w>+
 endfunction
 endif
+
 function! Quickfix_Mappings() abort
   " Jump to and from location/quickfix windows.
   nnoremap <Leader>lc <Cmd>lclose<CR>
@@ -785,5 +801,7 @@ endfunction
     " endif
     call UserFugitiveMappings()
     call Terminals()
+    call FZFBinding()
+    call CocMappings()
     let g:loaded_plugin_mappings = 1
   endif

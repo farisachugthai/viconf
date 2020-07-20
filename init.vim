@@ -139,7 +139,6 @@ function! LoadMyPlugins() abort  " {{{
 
   Plug 'mhinz/vim-startify'
   Plug 'kshenoy/vim-signature'
-  Plug 'gu-fan/riv.vim', {'for': 'rst'}
   Plug 'chrisbra/csv.vim'
 
   Plug 'ryanoasis/vim-devicons'

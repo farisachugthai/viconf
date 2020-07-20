@@ -276,7 +276,7 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
     command! -bar -bang -nargs=? -complete=customlist,fugitive#PathComplete GFiles call fzf#vim#gitfiles(<q-args>, <q-args> == "?" ? {} : s:p(<bang>0), <bang>0)
     command! -bar -bang -nargs=? -complete=customlist,fugitive#PathComplete GitFiles call fzf#vim#gitfiles(<q-args>, <q-args> == "?" ? {} : s:p(<bang>0), <bang>0)
 
-    " Me just copy pasting his plugin
+    " Me just copy pasting his plugin with added completion
     command! -bar -bang -complete=mapping IMaps call fzf#vim#maps("i", <bang>0)
     command! -bar -bang -complete=mapping CMaps call fzf#vim#maps("c", <bang>0)
     command! -bar -bang -complete=mapping TMaps call fzf#vim#maps("t", <bang>0)
@@ -314,8 +314,9 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
         \ BEdit <q-mods>buffer<bang> <q-args>
 
 " Miscellaneous:
+" Fuck this doesnt work
   command! -bang -complete=compiler -nargs=* -range=% -addr=buffers MakeBuffers
-        \| if <args>
+        \| if <args> !=# ''
         \| for f in expand(<q-args>, 0, 1)
         \| exe '<mods> make<bang>' . f
         \| endfor
@@ -573,7 +574,7 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
   " Its annoying that syn include doesnt complete paths
   " Now it does!
-  command! -nargs=1 -bar -complete=customlist,s:CompleteSynInclude SyntaxIncludeMyComplete syntax include <args>
+  command! -nargs=? -bar -complete=customlist,s:CompleteSynInclude SyntaxInclude syntax include <args>
 
   " note that this doesnt work.
   " command! -nargs=1 -bar -complete=syntax SyntaxIncludeBuiltin syntax include <args>

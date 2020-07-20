@@ -7,7 +7,7 @@ let res = cp.execSync("git rev-parse HEAD", {encoding: "utf8"});
 let revision = res.slice(0, 10);
 
 module.exports = {
-  entry: "./rplugin/node/coc_tag",
+  entry: "./rplugin/node/coc_tag.ts",
   target: "node",
   mode: "development",
   module: {
