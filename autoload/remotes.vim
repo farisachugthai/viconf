@@ -156,6 +156,10 @@ function! remotes#init() abort
   " just to let me know that this got sourced
   let g:autoloaded_remotes_init = 1
 
+  if !has('nvim')
+    return
+  endif
+
   " Dispatches the module as needed here
   if !has('unix')
     call remotes#msdos()
@@ -172,6 +176,7 @@ function! remotes#init() abort
   let g:failed_providers = {}
 
   source $VIMRUNTIME/autoload/remote/host.vim
+
   source $VIMRUNTIME/autoload/remote/define.vim
 
   " Dont load python because for some reason thats the only one that takes 200ms

@@ -91,6 +91,8 @@
   inoremap <silent> <Down> <C-R>=pumvisible() ? "\<lt>C-N>" : "\<lt>Down>"<CR>
   inoremap <silent> <Up> <C-R>=pumvisible() ? "\<lt>C-P>" : "\<lt>Up>"<CR>
 
+  nnoremap <Leader>v <Cmd>Vista!!<CR>
+
 " Marks:
   nnoremap [1 <Cmd>signature#marker#Goto('prev', 1, v:count)<CR>
   nnoremap ]1 <Cmd>signature#marker#Goto('next', 1, v:count)<CR>
@@ -512,16 +514,19 @@ function Window_Mappings() abort
   nnoremap <C-w>. 5<C-w>>
 
   " Navigate Windows More Easily:
+  " Split and edit file under the cursor
+  nnoremap <Leader>wf <Cmd>wincmd f<CR>
+  nnoremap <Leader>wh <Cmd>topleft vnew<CR>
+  nnoremap <leader>wj <Cmd>botright new<CR>
+  nnoremap <leader>wk <Cmd>topleft new<CR>
+  nnoremap <leader>wl <Cmd>botright vnew<CR>
+
   nnoremap <Leader>ws <Cmd>wincmd s<CR>
   nnoremap <Leader>wv <Cmd>wincmd v<CR>
   nnoremap <Leader>ww <Cmd>wincmd w<CR>
-  " Split and edit file under the cursor
-  nnoremap <Leader>wf <Cmd>wincmd f<CR>
-
-  nnoremap <Leader>wh <Cmd>topleft vnew<CR>
-  nnoremap <leader>wl <Cmd>botright vnew<CR>
-  nnoremap <leader>wj <Cmd>botright new<CR>
-  nnoremap <leader>wk <Cmd>topleft new<CR>
+  nnoremap <Leader>w- <Cmd>wincmd s<CR>
+  nnoremap <Leader>w\| <Cmd>wincmd v<CR>
+  nnoremap <Leader>w2 <Cmd>wincmd v<CR>
 
   " Resizing Windows:
   " nnoremap <C-w><C-Left>
@@ -532,34 +537,61 @@ function Window_Mappings() abort
   nnoremap <C-w><M-Down> 5<C-w>-
   " nnoremap <C-w><M-Right>
   nnoremap <C-w><M-Up> 5<C-w>+
+
+  " TODO: fix the plethora of these that are wrong
+  let g:which_key_map['w'] = {
+      \ 'name' : '+windows' ,
+      \ 'w' : ['<C-W>w'     , 'other-window']          ,
+      \ 'd' : ['<C-W>c'     , 'delete-window']         ,
+      \ '-' : ['<C-W>s'     , 'split-window-below']    ,
+      \ '|' : ['<C-W>v'     , 'split-window-right']    ,
+      \ '2' : ['<C-W>v'     , 'layout-double-columns'] ,
+      \ 'h' : ['<C-W>h'     , 'window-left']           ,
+      \ 'j' : ['<C-W>j'     , 'window-below']          ,
+      \ 'l' : ['<C-W>l'     , 'window-right']          ,
+      \ 'k' : ['<C-W>k'     , 'window-up']             ,
+      \ 'H' : ['<C-W>5<'    , 'expand-window-left']    ,
+      \ 'J' : ['resize +5'  , 'expand-window-below']   ,
+      \ 'L' : ['<C-W>5>'    , 'expand-window-right']   ,
+      \ 'K' : ['resize -5'  , 'expand-window-up']      ,
+      \ '=' : ['<C-W>='     , 'balance-window']        ,
+      \ 's' : ['<C-W>s'     , 'split-window-below']    ,
+      \ 'v' : ['<C-W>v'     , 'split-window-below']    ,
+      \ '?' : ['Windows'    , 'fzf-window']            ,
+      \ }
 endfunction
 endif
 
 function! Quickfix_Mappings() abort
+  nnoremap <Leader>l <Plug>(qf_loc_toggle)
   " Jump to and from location/quickfix windows.
   nnoremap <Leader>lc <Cmd>lclose<CR>
-  nnoremap <Leader>lw <Cmd>botright lwindow<CR>
+  " Down for down
+  nnoremap <Leader>ld <Cmd>botright llist!<CR>
 
+  nnoremap <Leader>lf <Cmd>lwindow<CR>
   " Normally the quickfix window is at the bottom of the screen.  If there are
   " vertical splits, it's at the bottom of the rightmost column of windows.  To
   " make it always occupy the full width:
   " use botright.
   nnoremap <Leader>lh <Cmd>botright lhistory<CR>
   nnoremap <Leader>ll <Cmd>llist!<CR>
-  " Down for down
-  nnoremap <Leader>ld <Cmd>botright llist!<CR>
-  nnoremap <Leader>lo <Cmd>lopen<CR>
 
   " So this is contingent on having the qf plugin. need to add a check for
   " that later.
   " this is defined globally instead of only in the after/ftplugin/qf.vim
   " because it toggles the location list and so we want to have that mapping
   " defined everywhere.
-  nnoremap <Leader>l <Plug>(qf_loc_toggle)
   nnoremap <Leader>ln <Plug>(qf_loc_next)
-  nnoremap <Leader>lp <Plug>(qf_loc_previous)
+  " nnoremap <Leader>lo <Cmd>lopen<CR>
   nnoremap <Leader>lo <Plug>(qf_loc_toggle)
-  nnoremap <Leader>lf <Cmd>lwindow<CR>
+  nnoremap <Leader>lp <Plug>(qf_loc_previous)
+  nnoremap <Leader>lw <Cmd>botright lwindow<CR>
+
+  let g:which_key_map['l'] = {
+      \ 'name' : '+location list' ,
+      \ 'w' : ['lwindow'     , 'botright lwindow']          ,
+      \ }
 
   " VSCode toggles maximized panel with this one so i guess lets match
   nnoremap <M-\> <Plug>(qf_qf_toggle)
@@ -647,19 +679,19 @@ endfunction
 function! Buffer_Mappings() abort
   " Navigate Buffers More Easily:
   " Also note I wrote a Buffers command that utilizes fzf.
+  nnoremap <Leader>ba <Cmd>ball<CR>
   nnoremap <Leader>bb <Cmd>Buffers<CR>
   nnoremap <Leader>bd <Cmd>bdelete<CR>
-  nnoremap <Leader>ba <Cmd>ball<CR>
-  " like quit
-  nnoremap <Leader>bq <Cmd>bdelete!<CR>
-  " like eXit
-  nnoremap <Leader>bx <Cmd>bwipeout<CR>
   nnoremap <Leader>bf <Cmd>bfirst<CR>
   nnoremap <Leader>bl <Cmd>blast<CR>
-  nnoremap <Leader>bu <Cmd>bunload<CR>
   nnoremap <Leader>bm <Cmd>bmodified<CR>
   nnoremap <Leader>bn <Cmd>bnext<CR>
   nnoremap <Leader>bp <Cmd>bprev<CR>
+  " like quit
+  nnoremap <Leader>bq <Cmd>bdelete!<CR>
+  nnoremap <Leader>bu <Cmd>bunload<CR>
+  " like eXit
+  nnoremap <Leader>bx <Cmd>bwipeout<CR>
   nnoremap <Leader>b0 <Cmd>bfirst<CR>
   nnoremap <Leader>b$ <Cmd>blast<CR>
   " aka yank the whole buffer
@@ -692,6 +724,25 @@ function! Buffer_Mappings() abort
   " How have i never thought of this one!
   nnoremap <C-n> <Cmd>bn<CR>
   nnoremap <C-p> <Cmd>bp<CR>
+
+  " Create new menus not based on existing mappings:
+  let g:which_key_map.b = {
+       \ 'name' : '+buffer' ,
+       \ '1' : ['b1'        , 'buffer 1']        ,
+       \ '2' : ['b2'        , 'buffer 2']        ,
+       \ 'a' : ['ball'      , 'ball']            ,
+       \ 'b' : ['Buffers'   , 'fzf-buffer']      ,
+       \ 'd' : ['bd'        , 'delete-buffer']   ,
+       \ 'f' : ['bfirst'    , 'first-buffer']    ,
+       \ 'l' : ['blast'     , 'last-buffer']     ,
+       \ 'm' : ['bmodified' , 'modified']     ,
+       \ 'n' : ['bnext'     , 'next-buffer']     ,
+       \ 'p' : ['bprevious' , 'previous-buffer'] ,
+       \ 'q' : ['bdelete!'  , 'quit buffer'] ,
+       \ 'u' : ['bunload'   , 'bunload'] ,
+       \ 'x' : ['bwipeout'  , 'bwipeout'] ,
+       \ '?' : ['Buffers'   , 'fzf-buffer']      ,
+       \ }
 endfunction
 
 function! Tab_Mappings() abort
@@ -717,6 +768,8 @@ function! Tab_Mappings() abort
 endfunction
 
 function! UserFugitiveMappings() abort
+  nnoremap <Leader>ga   <Cmd>Git add %<CR>
+  nnoremap <Leader>gA   <Cmd>Git add .<CR>
   nnoremap <Leader>gb   <Cmd>Git blame<CR>
   " remember there are now a lot of other mappings that commit too
   nnoremap <Leader>gc   <Cmd>Git commit<CR>
@@ -789,6 +842,7 @@ endfunction
 
 " Call Functions:
   if !exists('no_plugin_maps') && !exists('no_windows_vim_maps') && !exists('g:loaded_plugin_mappings')
+    let g:which_key_map = {}
     call Window_Mappings()
     call AltKeyNavigation()
     call Buffer_Mappings()

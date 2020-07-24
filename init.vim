@@ -126,8 +126,11 @@ function! LoadMyPlugins() abort  " {{{
     Plug 'tpope/vim-unimpaired'
     Plug 'tpope/vim-surround'
     Plug 'tpope/vim-eunuch'
-    Plug 'liuchengxu/vim-which-key'
   endif " }}}
+
+  Plug 'liuchengxu/vim-which-key'
+  nnoremap <silent> <leader> :<C-U>WhichKey! g:which_key_map<CR>
+  vnoremap <silent> <leader> :silent <c-u> :silent WhichKeyVisual '<Space>'<CR>
 
   Plug 'liuchengxu/vista.vim'
   Plug 'cespare/vim-toml', {'for': 'toml'}

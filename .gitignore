@@ -1,9 +1,12 @@
 # Git Ignore
 # Maintainer: Faris Chugthai
 
+sessions
+
 # TS:
 .*tsbuildinfo
 *.map
+rplugin/node/*.js
 
 .venv
 
