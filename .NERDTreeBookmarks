@@ -1,9 +1,0 @@
-
-python ~\python
-startup ~\.ipython\profile_default\startup
-tutorials ~\Dropbox\python\tutorials
-pynvim_test ~\projects\viconf\test
-plugged ~\.local\share\nvim\plugged
-WindowsKits C:\Program Files (x86)\Windows Kits\10
-rootpy $_ROOT/lib/python3.8
-profiles.json ~\AppData\Local\Microsoft\Windows Terminal\profiles.json
