@@ -1,9 +1,5 @@
-import { listManager, ExtensionContext, workspace } from 'coc.nvim';
-// import Marketplace from './coc_tag';
+// TODO: figure out how exports work
+// import { getTagFiles } from "./coc_tag";
+import { activate } from "./coc_tag"
 
-export async function activate(context: ExtensionContext): Promise<void> {
-  const { subscriptions } = context;
-  const { nvim } = workspace;
-
-  // subscriptions.push(listManager.registerList(new Marketplace(nvim)));
-}
+exports.activate = activate

@@ -18,7 +18,7 @@
   " Oddly needs to be set locally?
   " set foldmethod=marker foldcolumn=2
   " Automatically close all folds from the beginning.
-  setglobal foldlevelstart=99
+  setglobal foldlevelstart=0
   " Everything is a fold even if it's one line
   set foldminlines=0
   " And yes even if it's a comment
@@ -543,9 +543,8 @@
 " Coc:
   let g:WorkspaceFolders = [
         \ s:stdconfig,
-        \ expand('$HOME/projects/dynamic_ipython'),
+        \ expand('$HOME/projects'),
         \ expand('$HOME/projects/viconf'),
-        \ expand('$HOME/python/tutorials'),
         \ ]
 
   let g:coc_quickfix_open_command = 'cwindow'
@@ -562,28 +561,35 @@
   let g:coc_list_loading_status = "I love undocumented features!"
 
   function! s:InitCoc() abort
-
     " Windows setup
       if !has('unix')
-        let g:coc_node_path = 'C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\\node.exe'
-        if executable(expand('../node_modules/.bin/bash-language-server'))
-          let s:bashlsp = expand('../node_modules/.bin/bash-language-server.cmd')
+        " let g:coc_node_path = 'C:\\Users\\fac\\scoop\\apps\\winpython\\current\\n\\node.exe'
+        if executable(expand(s:repo_root . '/node_modules/.bin/bash-language-server'))
+          let s:bashlsp = expand(s:repo_root . '/node_modules/.bin/bash-language-server.cmd')
         else
           let s:bashlsp = 'bash-language-server.cmd'
         endif
 
-        if executable(expand('../node_modules/.bin/vim-language-server'))
-          let s:vimlsp = expand('../node_modules/.bin/vim-language-server.cmd')
-        else " honestly usually arch just figures this shit out on it's own
+        if executable(expand(s:repo_root . '/node_modules/.bin/vim-language-server'))
+          let s:vimlsp = expand(s:repo_root . '/node_modules/.bin/vim-language-server.cmd')
+        else
           let s:vimlsp = 'vim-language-server.cmd'
         endif
 
       " unix
       else
-        let s:vimlsp = 'vim-language-server'
-        let s:bashlsp = 'bash-language-server'
-      endif
+        if executable(expand(s:repo_root . '/node_modules/.bin/bash-language-server'))
+          let s:bashlsp = expand(s:repo_root . '/node_modules/.bin/bash-language-server')
+        else
+          let s:bashlsp = 'bash-language-server'
+        endif
 
+        if executable(expand(s:repo_root . '/node_modules/.bin/vim-language-server'))
+          let s:vimlsp = expand(s:repo_root . '/node_modules/.bin/vim-language-server')
+        else " honestly usually arch just figures this shit out on it's own
+          let s:vimlsp = 'vim-language-server'
+        endif
+      endif
     if !empty($ANDROID_DATA)
       call coc#config('python.jediEnabled', v:false)
     endif
@@ -615,14 +621,12 @@
                     \     'fromVimruntime': v:true,
                     \   }},
                     \ 'filetypes': ['vim']}})
-
   endfunction
 
   call s:InitCoc()
 
 " FZF:
   " Options:
-
   if has('nvim')
     let $FZF_DEFAULT_OPTS .= ' --border --margin=0,2'
     let g:fzf_layout = { 'window': 'call plugins#FloatingFZF()' }

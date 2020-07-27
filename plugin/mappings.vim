@@ -495,186 +495,211 @@ endif
   inoremap <C-.> <Plug>(ale_complete)
 
 if !exists('*Window_Mappings')
-function Window_Mappings() abort
-  " Navigate windows more easily
-  " nnoremap <C-h> <Cmd>wincmd h<CR>
-  " This displays as <NL> when you run `:map` but it behaves like C-j. Oh well.
-  " nnoremap <C-j> <Cmd>wincmd j<CR>
-  " nnoremap <C-k> <Cmd>wincmd k<CR>
-  " nnoremap <C-l> <Cmd>wincmd l<CR>
-  nnoremap <C-l> <Cmd>redraw!<CR><Cmd>redrawstatus!<CR><Cmd>redrawtabline<CR>
+  function Window_Mappings() abort
+    " Navigate windows more easily
+    " nnoremap <C-h> <Cmd>wincmd h<CR>
+    " This displays as <NL> when you run `:map` but it behaves like C-j. Oh well.
+    " nnoremap <C-j> <Cmd>wincmd j<CR>
+    " nnoremap <C-k> <Cmd>wincmd k<CR>
+    " nnoremap <C-l> <Cmd>wincmd l<CR>
+    nnoremap <C-l> <Cmd>redraw!<CR><Cmd>redrawstatus!<CR><Cmd>redrawtabline<CR>
 
-  " Resize windows a little faster
-  nnoremap <C-w>< 5<C-w><
-  nnoremap <C-w>> 5<C-w>>
-  nnoremap <C-w>+ 5<C-w>+
-  nnoremap <C-w>- 5<C-w>-
-  " Also don't make me hit the shift key
-  nnoremap <C-w>, 5<C-w><
-  nnoremap <C-w>. 5<C-w>>
+    " Resize windows a little faster
+    nnoremap <C-w>< 5<C-w><
+    nnoremap <C-w>> 5<C-w>>
+    nnoremap <C-w>+ 5<C-w>+
+    nnoremap <C-w>- 5<C-w>-
+    " Also don't make me hit the shift key
+    nnoremap <C-w>, 5<C-w><
+    nnoremap <C-w>. 5<C-w>>
 
-  " Navigate Windows More Easily:
-  " Split and edit file under the cursor
-  nnoremap <Leader>wf <Cmd>wincmd f<CR>
-  nnoremap <Leader>wh <Cmd>topleft vnew<CR>
-  nnoremap <leader>wj <Cmd>botright new<CR>
-  nnoremap <leader>wk <Cmd>topleft new<CR>
-  nnoremap <leader>wl <Cmd>botright vnew<CR>
+    " Navigate Windows More Easily:
+    " Split and edit file under the cursor
+    nnoremap <Leader>wf <Cmd>wincmd f<CR>
+    nnoremap <Leader>wh <Cmd>topleft vnew<CR>
+    nnoremap <leader>wj <Cmd>botright new<CR>
+    nnoremap <leader>wk <Cmd>topleft new<CR>
+    nnoremap <leader>wl <Cmd>botright vnew<CR>
 
-  nnoremap <Leader>ws <Cmd>wincmd s<CR>
-  nnoremap <Leader>wv <Cmd>wincmd v<CR>
-  nnoremap <Leader>ww <Cmd>wincmd w<CR>
-  nnoremap <Leader>w- <Cmd>wincmd s<CR>
-  nnoremap <Leader>w\| <Cmd>wincmd v<CR>
-  nnoremap <Leader>w2 <Cmd>wincmd v<CR>
+    nnoremap <Leader>ws <Cmd>wincmd s<CR>
+    nnoremap <Leader>wv <Cmd>wincmd v<CR>
+    nnoremap <Leader>ww <Cmd>wincmd w<CR>
+    nnoremap <Leader>w- <Cmd>wincmd s<CR>
+    nnoremap <Leader>w\| <Cmd>wincmd v<CR>
+    nnoremap <Leader>w2 <Cmd>wincmd v<CR>
 
-  " Resizing Windows:
-  " nnoremap <C-w><C-Left>
-  nnoremap <C-w><C-Down> <C-w>-
-  " nnoremap <C-w><C-Right>
-  nnoremap <C-w><C-Up> <C-w>+
-  " nnoremap <C-w><M-Left>
-  nnoremap <C-w><M-Down> 5<C-w>-
-  " nnoremap <C-w><M-Right>
-  nnoremap <C-w><M-Up> 5<C-w>+
+    " Resizing Windows:
+    " nnoremap <C-w><C-Left>
+    nnoremap <C-w><C-Down> <C-w>-
+    " nnoremap <C-w><C-Right>
+    nnoremap <C-w><C-Up> <C-w>+
+    " nnoremap <C-w><M-Left>
+    nnoremap <C-w><M-Down> 5<C-w>-
+    " nnoremap <C-w><M-Right>
+    nnoremap <C-w><M-Up> 5<C-w>+
 
-  " TODO: fix the plethora of these that are wrong
-  let g:which_key_map['w'] = {
-      \ 'name' : '+windows' ,
-      \ 'w' : ['<C-W>w'     , 'other-window']          ,
-      \ 'd' : ['<C-W>c'     , 'delete-window']         ,
-      \ '-' : ['<C-W>s'     , 'split-window-below']    ,
-      \ '|' : ['<C-W>v'     , 'split-window-right']    ,
-      \ '2' : ['<C-W>v'     , 'layout-double-columns'] ,
-      \ 'h' : ['<C-W>h'     , 'window-left']           ,
-      \ 'j' : ['<C-W>j'     , 'window-below']          ,
-      \ 'l' : ['<C-W>l'     , 'window-right']          ,
-      \ 'k' : ['<C-W>k'     , 'window-up']             ,
-      \ 'H' : ['<C-W>5<'    , 'expand-window-left']    ,
-      \ 'J' : ['resize +5'  , 'expand-window-below']   ,
-      \ 'L' : ['<C-W>5>'    , 'expand-window-right']   ,
-      \ 'K' : ['resize -5'  , 'expand-window-up']      ,
-      \ '=' : ['<C-W>='     , 'balance-window']        ,
-      \ 's' : ['<C-W>s'     , 'split-window-below']    ,
-      \ 'v' : ['<C-W>v'     , 'split-window-below']    ,
-      \ '?' : ['Windows'    , 'fzf-window']            ,
-      \ }
-endfunction
+    " TODO: fix the plethora of these that are wrong
+    let g:which_key_map['w'] = {
+        \ 'name' : '+windows' ,
+        \ 'w' : ['<C-W>w'     , 'other-window']          ,
+        \ 'd' : ['<C-W>c'     , 'delete-window']         ,
+        \ '-' : ['<C-W>s'     , 'split-window-below']    ,
+        \ '|' : ['<C-W>v'     , 'split-window-right']    ,
+        \ '2' : ['<C-W>v'     , 'layout-double-columns'] ,
+        \ 'h' : ['<C-W>h'     , 'window-left']           ,
+        \ 'j' : ['<C-W>j'     , 'window-below']          ,
+        \ 'l' : ['<C-W>l'     , 'window-right']          ,
+        \ 'k' : ['<C-W>k'     , 'window-up']             ,
+        \ 'H' : ['<C-W>5<'    , 'expand-window-left']    ,
+        \ 'J' : ['resize +5'  , 'expand-window-below']   ,
+        \ 'L' : ['<C-W>5>'    , 'expand-window-right']   ,
+        \ 'K' : ['resize -5'  , 'expand-window-up']      ,
+        \ '=' : ['<C-W>='     , 'balance-window']        ,
+        \ 's' : ['<C-W>s'     , 'split-window-below']    ,
+        \ 'v' : ['<C-W>v'     , 'split-window-below']    ,
+        \ '?' : ['Windows'    , 'fzf-window']            ,
+        \ }
+  endfunction
 endif
 
-function! Quickfix_Mappings() abort
-  nnoremap <Leader>l <Plug>(qf_loc_toggle)
-  " Jump to and from location/quickfix windows.
-  nnoremap <Leader>lc <Cmd>lclose<CR>
-  " Down for down
-  nnoremap <Leader>ld <Cmd>botright llist!<CR>
+if !exists('*Quickfix_Mappings')
+  function Quickfix_Mappings() abort
+    nnoremap <Leader>l <Plug>(qf_loc_toggle)
+    " Jump to and from location/quickfix windows.
+    nnoremap <Leader>lc <Cmd>lclose<CR>
+    " Down for down
+    nnoremap <Leader>ld <Cmd>botright llist!<CR>
 
-  nnoremap <Leader>lf <Cmd>lwindow<CR>
-  " Normally the quickfix window is at the bottom of the screen.  If there are
-  " vertical splits, it's at the bottom of the rightmost column of windows.  To
-  " make it always occupy the full width:
-  " use botright.
-  nnoremap <Leader>lh <Cmd>botright lhistory<CR>
-  nnoremap <Leader>ll <Cmd>llist!<CR>
+    nnoremap <Leader>lf <Cmd>lwindow<CR>
+    " Normally the quickfix window is at the bottom of the screen.  If there are
+    " vertical splits, it's at the bottom of the rightmost column of windows.  To
+    " make it always occupy the full width:
+    " use botright.
+    nnoremap <Leader>lh <Cmd>botright lhistory<CR>
+    nnoremap <Leader>ll <Cmd>llist!<CR>
 
-  " So this is contingent on having the qf plugin. need to add a check for
-  " that later.
-  " this is defined globally instead of only in the after/ftplugin/qf.vim
-  " because it toggles the location list and so we want to have that mapping
-  " defined everywhere.
-  nnoremap <Leader>ln <Plug>(qf_loc_next)
-  " nnoremap <Leader>lo <Cmd>lopen<CR>
-  nnoremap <Leader>lo <Plug>(qf_loc_toggle)
-  nnoremap <Leader>lp <Plug>(qf_loc_previous)
-  nnoremap <Leader>lw <Cmd>botright lwindow<CR>
+    " So this is contingent on having the qf plugin. need to add a check for
+    " that later.
+    " this is defined globally instead of only in the after/ftplugin/qf.vim
+    " because it toggles the location list and so we want to have that mapping
+    " defined everywhere.
+    nnoremap <Leader>ln <Plug>(qf_loc_next)
+    " nnoremap <Leader>lo <Cmd>lopen<CR>
+    nnoremap <Leader>lo <Plug>(qf_loc_toggle)
+    nnoremap <Leader>lp <Plug>(qf_loc_previous)
+    nnoremap <Leader>lw <Cmd>botright lwindow<CR>
 
-  let g:which_key_map['l'] = {
-      \ 'name' : '+location list' ,
-      \ 'w' : ['lwindow'     , 'botright lwindow']          ,
-      \ }
+    let g:which_key_map['l'] = {
+        \ 'name' : '+location list' ,
+        \ 'c' : ['lclose'     , 'lclose']          ,
+        \ 'd' : ['botright llist!'     , 'botright llist!']          ,
+        \ 'f' : ['lwindow'     , 'lwindow']          ,
+        \ 'h' : ['lhistory'     , 'botright lhistory']          ,
+        \ 'l' : ['llist!'     , 'llist!']          ,
+        \ 'n' : ['qf_loc_next'     , 'qf_loc_next']          ,
+        \ 'o' : ['qf_loc_toggle'     , 'qf_loc_toggle']          ,
+        \ 'p' : ['qf_loc_previous'     , 'qf_loc_previous']          ,
+        \ 'w' : ['lwindow'     , 'botright lwindow']          ,
+        \ }
 
-  " VSCode toggles maximized panel with this one so i guess lets match
-  nnoremap <M-\> <Plug>(qf_qf_toggle)
-  nnoremap <Leader>q <Plug>(qf_qf_toggle)
+    " VSCode toggles maximized panel with this one so i guess lets match
+    nnoremap <M-\> <Plug>(qf_qf_toggle)
+    nnoremap <Leader>q <Plug>(qf_qf_toggle)
 
-  nnoremap <Leader>qp <Plug>(qf_older)
-  nnoremap <Leader>qn <Plug>(qf_newer)
-  nnoremap <Leader>qc <Cmd>cclose<CR>
+    nnoremap <Leader>qc <Cmd>cclose<CR>
+    " D for down
+    nnoremap <Leader>qd <Cmd>botright clist!<CR>
+    nnoremap <Leader>qf <Cmd>cwindow<CR>
+    " Wanna note how long Ive been using Vim and still i only just found out
+    " about the chistory and lhistory commands like wth
+    nnoremap <Leader>qh <Cmd>botright chistory<CR>
+    nnoremap <Leader>ql <Cmd>clist!<CR>
+    nnoremap <Leader>qn <Plug>(qf_newer)
+    nnoremap <leader>qo <Cmd>botright copen<CR>
+    nnoremap <Leader>qp <Plug>(qf_older)
+    " This one is kinda annoying. cwindow frequently only closes the window but doesn't open it
+    nnoremap <Leader>qw <Cmd>botright cwindow<CR>
 
-  " Wanna note how long Ive been using Vim and still i only just found out
-  " about the chistory and lhistory commands like wth
-  nnoremap <Leader>qh <Cmd>botright chistory<CR>
-  nnoremap <Leader>ql <Cmd>clist!<CR>
-  " D for down
-  nnoremap <Leader>qd <Cmd>botright clist!<CR>
-  nnoremap <leader>qo <Cmd>botright copen<CR>
-  " This one is kinda annoying. cwindow frequently only closes the window but doesn't open it
-  nnoremap <Leader>qw <Cmd>botright cwindow<CR>
+    nnoremap <Leader>C <Cmd>make %<CR>
 
-  nnoremap <Leader>C <Cmd>make %<CR>
+    let g:which_key_map['q'] = {
+        \ 'name' : '+quickfix list' ,
+        \ 'c' : ['cclose'              , 'cclose']            ,
+        \ 'd' : ['botright clist!'     , 'botright clist!']   ,
+        \ 'f' : ['lwindow'             , 'lwindow']           ,
+        \ 'h' : ['chistory'            , 'botright chistory'] ,
+        \ 'l' : ['clist!'              , 'clist!']            ,
+        \ 'n' : ['qf_newer'            , 'qf_newer']          ,
+        \ 'o' : ['qf_loc_toggle'       , 'qf_loc_toggle']     ,
+        \ 'p' : ['qf_older'            , 'qf_older']          ,
+        \ 'w' : ['cwindow'             , 'botright cwindow']  ,
+        \ }
 
-  " Unimpaired Mappings: {{{
-  " Map quickfix list, buffers, windows and tabs to *[ and *]
-  " Note: A bunch more in ./tag_miscellany.vim
-  nnoremap ]q <Cmd>cnext<CR>
-  nnoremap [q <Cmd>cprev<CR>
-  nnoremap ]Q <Cmd>clast<CR>
-  nnoremap [Q <Cmd>cfirst<CR>
-  nnoremap ]l <Cmd>lnext<CR>
-  nnoremap [l <Cmd>lprev<CR>
-  nnoremap ]L <Cmd>llast<CR>
-  nnoremap [L <Cmd>lfirst<CR>
+    " Unimpaired Mappings: {{{
+    " Map quickfix list, buffers, windows and tabs to *[ and *]
+    " Note: A bunch more in ./tag_miscellany.vim
+    nnoremap ]q <Cmd>cnext<CR>
+    nnoremap [q <Cmd>cprev<CR>
+    nnoremap ]Q <Cmd>clast<CR>
+    nnoremap [Q <Cmd>cfirst<CR>
+    nnoremap ]l <Cmd>lnext<CR>
+    nnoremap [l <Cmd>lprev<CR>
+    nnoremap ]L <Cmd>llast<CR>
+    nnoremap [L <Cmd>lfirst<CR>
 
-  " Unrelated but cmdline
-  " It's annoying you lose a whole command from a typo
-  cnoremap <Esc> <nop>
-  " However I still need the functionality
-  cnoremap <C-g> <Esc>
-  " Avoid accidental hits of <F1> while aiming for <Esc>
-  noremap! <F1> <Esc>
-  " }}}
-endfunction
+    " Unrelated but cmdline
+    " It's annoying you lose a whole command from a typo
+    cnoremap <Esc> <nop>
+    " However I still need the functionality
+    cnoremap <C-g> <Esc>
+    " Avoid accidental hits of <F1> while aiming for <Esc>
+    noremap! <F1> <Esc>
+    " }}}
+  endfunction
+endif
 
-function! AltKeyNavigation() abort
-  " Not required but certainly useful
-  nmap <M-w> <C-w>
+if !exists('*AltKeyNavigation')
+  function AltKeyNavigation() abort
+    " Not required but certainly useful
+    nmap <M-w> <C-w>
 
-  noremap  <M-h> <C-\><C-N><C-w>h
-  noremap  <M-j> <C-\><C-N><C-w>j
-  noremap  <M-k> <C-\><C-N><C-w>k
-  noremap  <M-l> <C-\><C-N><C-w>l
-  noremap! <M-h> <C-\><C-N><C-w>h
-  noremap! <M-j> <C-\><C-N><C-w>j
-  noremap! <M-k> <C-\><C-N><C-w>k
-  noremap! <M-l> <C-\><C-N><C-w>l
+    noremap  <M-h> <C-\><C-N><C-w>h
+    noremap  <M-j> <C-\><C-N><C-w>j
+    noremap  <M-k> <C-\><C-N><C-w>k
+    noremap  <M-l> <C-\><C-N><C-w>l
+    noremap! <M-h> <C-\><C-N><C-w>h
+    noremap! <M-j> <C-\><C-N><C-w>j
+    noremap! <M-k> <C-\><C-N><C-w>k
+    noremap! <M-l> <C-\><C-N><C-w>l
 
-  " Cant do this anymore. C-k is a prefix key now
-  " and insert mode C-j does stuff, C-l is clear screen and C-h is BS
-  " Originally this inspired primarily for terminal use but why not put it everywhere?
-  noremap  <A-h> <C-w>h
-  noremap  <A-j> <C-w>j
-  noremap  <A-k> <C-w>k
-  noremap  <A-l> <C-w>l
-  noremap! <A-h> <C-w>h
-  noremap! <A-j> <C-w>j
-  noremap! <A-k> <C-w>k
-  noremap! <A-l> <C-w>l
-  " we might be in vim
-  if !exists('*nvim_list_tabpages') | return | endif
+    " Cant do this anymore. C-k is a prefix key now
+    " and insert mode C-j does stuff, C-l is clear screen and C-h is BS
+    " Originally this inspired primarily for terminal use but why not put it everywhere?
+    noremap  <A-h> <C-w>h
+    noremap  <A-j> <C-w>j
+    noremap  <A-k> <C-w>k
+    noremap  <A-l> <C-w>l
+    noremap! <A-h> <C-w>h
+    noremap! <A-j> <C-w>j
+    noremap! <A-k> <C-w>k
+    noremap! <A-l> <C-w>l
+    " we might be in vim
+    if !exists('*nvim_list_tabpages') | return | endif
 
-  " First check we have more than 1 tab.
-  if len(nvim_list_tabpages()) > 1
-    noremap  <A-Right>  <Cmd>tabnext<CR>
-    noremap  <A-Left>   <Cmd>tabprev<CR>
-    noremap! <A-Right>  <Cmd>tabnext<CR>
-    noremap! <A-Left>   <Cmd>tabprev<CR>
-  elseif len(nvim_list_wins()) > 1
-    noremap  <A-Right>  <Cmd>wincmd l<CR>
-    noremap  <A-Left>   <Cmd>wincmd h<CR>
-    noremap! <A-Right>  <Cmd>wincmd l<CR>
-    noremap! <A-Left>   <Cmd>wincmd h<CR>
-  endif
-endfunction
+    " First check we have more than 1 tab.
+    if len(nvim_list_tabpages()) > 1
+      noremap  <A-Right>  <Cmd>tabnext<CR>
+      noremap  <A-Left>   <Cmd>tabprev<CR>
+      noremap! <A-Right>  <Cmd>tabnext<CR>
+      noremap! <A-Left>   <Cmd>tabprev<CR>
+    elseif len(nvim_list_wins()) > 1
+      noremap  <A-Right>  <Cmd>wincmd l<CR>
+      noremap  <A-Left>   <Cmd>wincmd h<CR>
+      noremap! <A-Right>  <Cmd>wincmd l<CR>
+      noremap! <A-Left>   <Cmd>wincmd h<CR>
+    endif
+  endfunction
+endif
 
 function! Buffer_Mappings() abort
   " Navigate Buffers More Easily:
@@ -689,6 +714,8 @@ function! Buffer_Mappings() abort
   nnoremap <Leader>bp <Cmd>bprev<CR>
   " like quit
   nnoremap <Leader>bq <Cmd>bdelete!<CR>
+  nnoremap <Leader>bs <Cmd>sbuffer<CR>
+  nnoremap <Leader>bv <Cmd>vs<CR>
   nnoremap <Leader>bu <Cmd>bunload<CR>
   " like eXit
   nnoremap <Leader>bx <Cmd>bwipeout<CR>
@@ -701,8 +728,6 @@ function! Buffer_Mappings() abort
   " Sunovabitch bonly isn't a command?? Why is
   " noremap <Leader>bo <Cmd>bonly<CR>
 
-  nnoremap <Leader>bs <Cmd>sbuffer<CR>
-  nnoremap <Leader>bv <Cmd>vs<CR>
   nnoremap ]b <Cmd>bnext<CR>
   nnoremap [b <Cmd>bprev<CR>
   nnoremap ]B <Cmd>blast<CR>
@@ -739,33 +764,51 @@ function! Buffer_Mappings() abort
        \ 'n' : ['bnext'     , 'next-buffer']     ,
        \ 'p' : ['bprevious' , 'previous-buffer'] ,
        \ 'q' : ['bdelete!'  , 'quit buffer'] ,
+       \ 's' : ['sbuffer'   , 'sbuffer'] ,
        \ 'u' : ['bunload'   , 'bunload'] ,
+       \ 'v' : ['vs'        , 'vs'] ,
        \ 'x' : ['bwipeout'  , 'bwipeout'] ,
        \ '?' : ['Buffers'   , 'fzf-buffer']      ,
        \ }
 endfunction
 
-function! Tab_Mappings() abort
-  nnoremap <Leader>tn <Cmd>tabnext<CR>
-  nnoremap <Leader>tp <Cmd>tabprev<CR>
-  nnoremap <Leader>tq <Cmd>tabclose<CR>
-  nnoremap <Leader>tc <Cmd>tabclose<CR>
-  nnoremap <Leader>T  <Cmd>tabs<CR>
-  nnoremap <Leader>te <Cmd>tabedit<CR>
-  " ngl pretty surprised that that cword didn't need an expand()
-  nnoremap <Leader>t# <Cmd>tabedit <cword><CR>
-  " Need to decide between many options
-  " nnoremap <Leader>tg <Cmd>tabedit
-  " poop can't do this
-  " nnoremap <Leader>tn <Cmd>tabnew<CR>
-  nnoremap <Leader>tf <Cmd>tabfirst<CR>
-  nnoremap <Leader>tl <Cmd>tablast<CR>
+if !exists('*Tab_Mappings')
+  function Tab_Mappings() abort
+    nnoremap <Leader>T  <Cmd>tabs<CR>
+    nnoremap <Leader>tc <Cmd>tabclose<CR>
+    nnoremap <Leader>te <Cmd>tabedit<CR>
+    nnoremap <Leader>tf <Cmd>tabfirst<CR>
+    nnoremap <Leader>tl <Cmd>tablast<CR>
+    nnoremap <Leader>tn <Cmd>tabnext<CR>
+    nnoremap <Leader>to <Cmd>tabonly<CR>
+    nnoremap <Leader>tp <Cmd>tabprev<CR>
+    nnoremap <Leader>tq <Cmd>tabclose<CR>
+    " ngl pretty surprised that that cword didn't need an expand()
+    nnoremap <Leader>t# <Cmd>tabedit <cword><CR>
+    " Need to decide between many options
+    " nnoremap <Leader>tg <Cmd>tabedit
+    " poop can't do this
+    " nnoremap <Leader>tn <Cmd>tabnew<CR>
 
-  nnoremap ]t <Cmd>tabn<CR>
-  nnoremap [t <Cmd>tabp<CR>
-  nnoremap ]T <Cmd>tablast<CR>
-  nnoremap [T <Cmd>tabfirst<CR>
-endfunction
+      let g:which_key_map['t'] = {
+          \ 'name' : '+tabs' ,
+          \ 'c' : ['tabclose'            , 'tabclose']          ,
+          \ 'e' : ['tabedit'             , 'tabedit']           ,
+          \ 'f' : ['tabfirst'            , 'tabfirst']          ,
+          \ 'l' : ['tablast'             , 'tablast']           ,
+          \ 'n' : ['tabnext '            , 'tabnext']           ,
+          \ 'o' : ['tabonly'             , 'tabonly']           ,
+          \ 'p' : ['tabprev'             , 'tabprev']           ,
+          \ 'q' : ['tabclose'            , 'tabclose']          ,
+          \ '#' : ['tabedit <cword>'     , 'tabedit <cword>']   ,
+          \ }
+
+    nnoremap ]t <Cmd>tabn<CR>
+    nnoremap [t <Cmd>tabp<CR>
+    nnoremap ]T <Cmd>tablast<CR>
+    nnoremap [T <Cmd>tabfirst<CR>
+  endfunction
+endif
 
 function! UserFugitiveMappings() abort
   nnoremap <Leader>ga   <Cmd>Git add %<CR>
@@ -797,6 +840,13 @@ function! UserFugitiveMappings() abort
   nnoremap <Leader>gst  <Cmd>Git diffsplit! --stat<CR>
   nnoremap <Leader>gw   <Cmd>Gwrite<CR>
   nnoremap <Leader>gW   <Cmd>Gwrite!<CR>
+
+  let g:which_key_map.g = {
+       \ 'name' : '+git' ,
+       \ 'a' : ['Git add %'      , 'Git add %']            ,
+       \ 'A' : ['Git add .'   , 'Git add .']      ,
+       \ 'b' : ['Git blame'   , 'Git blame']      ,
+       \ }
 endfunction
 
 function! Terminals() abort

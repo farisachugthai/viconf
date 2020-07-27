@@ -12,8 +12,8 @@
   let g:pydoc_executable = 1
 
   " Set up for the indent
-  let g:pyindent_continue = 1
   " NOTE: You can't set like 90% of the vars in that file or it'll throw
+  " let g:pyindent_continue = 1
   " let g:pyindent_disable_parentheses_indenting = 1
 
   if exists('b:did_ftplugin') | finish | endif
@@ -42,7 +42,7 @@
   setlocal iskeyword-=,_
   setlocal iskeyword+=.
   setlocal shiftround
-  setlocal cindent
+  " setlocal cindent
 
   " Path and Includes:
   exec 'source ' . s:repo_root . '/autoload/py.vim'

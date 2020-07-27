@@ -19,10 +19,13 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h'))
 " Seriously how does this keep getting fucked up. omfg packpath is worse???
 setglobal runtimepath=$HOME/.config/nvim,$HOME/.local/share/nvim/site,$VIMRUNTIME
 setglobal packpath=~/.config/nvim/pack,~/.local/share/nvim/site/pack,$VIMRUNTIME
-if !has('unix')
+" if !has('unix')
   " call it silly but keep source expressions on their own line. TPope set them up in &include
-  source C:/Neovim/share/nvim-qt/runtime/plugin/nvim_gui_shim.vim
-endif
+  " So I just built nvim so now the runtime dir is in
+  " ~/source/repos/neovim/out/install/nvim/runtime or something crazy like
+  " that and I don't feel like finding it
+  " source C:/Neovim/share/nvim-qt/runtime/plugin/nvim_gui_shim.vim
+" endif
 
 set debug=msg
 if exists('g:GuiLoaded')

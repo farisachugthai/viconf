@@ -468,3 +468,6 @@ ASALocalRun/
 /luarocks
 /lua_modules
 /.luarocks
+tsconfig.tsbuildinfo
+rplugin/node/index.js
+rplugin/node/*.js

@@ -8,14 +8,14 @@ import * as readline from 'readline';
 
 import pkg from 'coc.nvim';
 const { sources, workspace } = pkg;
+import { ExtensionContext } from 'coc.nvim';
 
 const TAG_CACHE = {};
 const { nvim } = workspace;
 
 type AutoDetect = 'on' | 'off';
 
-
-function exists(file: string): Promise<boolean> {
+export function exists(file: string): Promise<boolean> {
 	return new Promise<boolean>((resolve, _reject) => {
 		fs.exists(file, (value) => {
 			resolve(value);
@@ -23,7 +23,7 @@ function exists(file: string): Promise<boolean> {
 	});
 }
 
-function exec(command: string, options: cp.ExecOptions): Promise<{ stdout: string; stderr: string }> {
+export function exec(command: string, options: cp.ExecOptions): Promise<{ stdout: string; stderr: string }> {
 	return new Promise<{ stdout: string; stderr: string }>((resolve, reject) => {
 		cp.exec(command, options, (error, stdout, stderr) => {
 			if (error) {
@@ -34,8 +34,7 @@ function exec(command: string, options: cp.ExecOptions): Promise<{ stdout: strin
     });
 }
 
-
-async function getTagFiles() {
+export async function getTagFiles() {
   let files = await nvim.call("tagfiles");
   if (!files || files.length === 0) {
     return [];
@@ -55,7 +54,7 @@ async function getTagFiles() {
   return tagfiles;
 }
 
-function readFileByLine(fullpath, onLine, limit = 50000) {
+export function readFileByLine(fullpath, onLine, limit = 50000) {
   const rl = readline.createInterface({
     input: fs.createReadStream(fullpath),
     crlfDelay: Infinity,
@@ -78,7 +77,7 @@ function readFileByLine(fullpath, onLine, limit = 50000) {
   });
 }
 
-async function loadTags(fullpath, mtime) {
+export async function loadTags(fullpath, mtime) {
   const item = TAG_CACHE[fullpath];
   if (item && item.mtime >= mtime) {
     return item.words;
@@ -101,7 +100,9 @@ async function loadTags(fullpath, mtime) {
   return words;
 }
 
-exports.activate = context => {
+// old way of doing this. unsure if this is async tho
+// exports.activate = context => {
+export async function activate(context: ExtensionContext): Promise<void> {
   context.subscriptions.push(
     sources.createSource({
       name: "tags",

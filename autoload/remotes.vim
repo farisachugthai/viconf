@@ -95,8 +95,8 @@ function! remotes#termux() abort
 endfunction
 
 function! remotes#ubuntu() abort
-  let g:python3_host_prog = '/usr/sbin/python'
-  let g:python_host_prog = '/usr/sbin/python2'
+  let g:python3_host_prog = '/usr/bin/python'
+  let g:python_host_prog = '/usr/bin/python2'
   " ?
   " let g:node_host_prog = 'nvm use default'
   let g:node_host_prog = expand('~/.local/share/yarn/global/node_modules/neovim/bin/cli.js')
@@ -107,11 +107,11 @@ endfunction
 
 function! remotes#msdos() abort
   " Don't set python paths dynamically it's such a headache
-  let g:python3_host_prog = 'C:\Users\fac\scoop\apps\winpython\current\python-3.8.1.amd64\python.exe'
-  let g:python_host_prog = 'C:\Users\fac\.windows-build-tools\python27\python.exe'
+  let g:python3_host_prog = 'C:\Users\Casey\scoop\apps\miniconda3\current\envs\pyqt\python.exe'
+  " let g:python_host_prog = 'C:\Users\Casey\.windows-build-tools\python27\python.exe'
   " wow this one actually fucking worked
-  let g:node_host_prog = 'C:\Users\fac\scoop\apps\winpython\current\n\node_modules\neovim\bin\cli.js'
-  let g:ruby_host_prog = 'C:\Users\fac\scoop\apps\ruby\current\bin\ruby.exe'
+  let g:node_host_prog = 'C:\Users\Casey\scoop\persist\nodejs-lts\bin\node_modules\neovim\bin\cli.js'
+  " let g:ruby_host_prog = 'C:\Users\Casey\scoop\apps\ruby\current\bin\ruby.exe'
 
   let g:clipboard = {
         \   'name': 'winClip',
@@ -126,7 +126,7 @@ function! remotes#msdos() abort
         \   'cache_enabled': 1,
         \ }
   try
-    call remote#host#RegisterPlugin('node', 'C:/Users/fac/.config/nvim/rplugin/node/coc_tag.js', [])
+    call remote#host#RegisterPlugin('node', 'C:/Users/Casey/.config/nvim/rplugin/node/coc_tag.js', [])
   catch
   endtry
 endfunction

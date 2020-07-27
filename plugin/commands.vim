@@ -88,7 +88,6 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
   command! -bar -nargs=* -complete=custom,coc#list#options CocServices call coc#rpc#notify('openList', [<f-args>])
 
   function! s:CocProviders(A, L, P) abort
-
     let s:list = ['rename', 'onTypeEdit', 'documentLink', 'documentColor', 'foldingRange',
           \ 'format', 'codeAction', 'workspaceSymbols', 'formatRange', 'hover',
           \ 'signature', 'documentSymbol', 'documentHighlight', 'definition',
@@ -99,7 +98,6 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
   endfunction
 
   function! s:HandleCocProviders(...) abort
-
     if len(a:000) is 0
       return
     endif
@@ -110,7 +108,6 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
       echomsg 'That provider *DOES NOT* exist for your current document.'
     endif
     return s:resp
-
   endfunction
 
   " This gets way more complicated if you try to handle more than 1 arg
@@ -522,7 +519,7 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 " Fugitive Functions:
   " If it hasnt been, source fugitive.
   if !exists('g:autoloaded_fugitive')
-    source $HOME/.local/share/nvim/plugged/vim-fugitive/autoload/fugitive.vim
+    exec 'source ' . g:plug_home . '/vim-fugitive/autoload/fugitive.vim'
   endif
 
   function! s:get_git_root()

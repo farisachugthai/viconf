@@ -3,16 +3,18 @@
 		"target": "es5",
 		"module": "es6",
 		"sourceMap": false,
-		"lib": [ "es2015" ],
+		"lib": [ "es2018" ],
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
 		"incremental": true,
-    // comments are permitted fucking sweet
-    // "watch": true
 		"rootDir": "rplugin/node",
-    "moduleResolution":"node"
+    "moduleResolution": "node",
+		// note comments are allowed!
+		// "watch": true
+		"plugins": []
 	},
 	"include": [
-		"rplugin/node/coc_tag.ts"
-	]
+		"rplugin/node"
+	],
+	"exclude": []
 }

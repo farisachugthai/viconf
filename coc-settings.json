@@ -208,7 +208,6 @@
   "python.autoUpdateLanguageServer": true,
   "python.linting.flake8Path": "python -m flake8",
   "python.linting.pylintEnabled": false,
-  "python.pythonPath": "python",
   "python.venvFolders": ["envs", ".pyenv", ".env", ".venv", "~/.local/share/virtualenvs/*", ".direnv"],
   "python.terminal.executeInFileDir": true,
   "python.workspaceSymbols.exclusionPatterns": [
