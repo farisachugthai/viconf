@@ -241,98 +241,6 @@ endif
   endif
   " inoremap <expr> <Tab> UltiSnips#ExpandSnippetOrJump()
 
-" FZF:
-if !exists('*FZFBinding')
-  function FZFBinding()
-  if exists('*fzf#wrap')
-    nnoremap <M-x>                      <Cmd>Commands<CR>
-    nnoremap <C-x>B                     <Cmd>Buffers<CR>
-    nnoremap <C-x><C-f>                 <Cmd>Files ~/<CR>
-  else
-    nnoremap <M-x>                      <Cmd>verbose command<CR>
-    nnoremap <C-x>B                     <Cmd>buffers<CR>
-    nnoremap <C-x><C-f>                 :<C-u>Find ~/**
-  endif
-
-  " NOTE: The imap should probably only be invoked using \<tab>
-  nmap \<tab>                 <Plug>(fzf-maps-n)
-  omap \<tab>                 <Plug>(fzf-maps-o)
-  xmap \<tab>                 <Plug>(fzf-maps-x)
-  imap \<tab>                 <Plug>(fzf-maps-i)
-
-  " Map Vim Defaults To FZF History Commands:
-  nnoremap q:        <Cmd>History:<CR>
-  " nnoremap q/        <Cmd>History/<CR>
-  nnoremap q/        <Plug>(-fzf-/) /
-  " But id still want to use q: when i can
-  nnoremap q;        q:
-
-  " Get The Rest Of The FZF Vim Commands Involved:
-  nnoremap  <Leader>L         <Cmd>Lines<CR>
-  nnoremap  <Leader>fs         <Cmd>Ag <C-R><C-W><CR>
-  nnoremap  <Leader>fa         <Cmd>Ag <C-R><C-A><CR>
-  xnoremap  <Leader>f         y<Cmd>Ag <C-R>"<CR>
-  nnoremap  <Leader>`         <Cmd>Marks<CR>
-  " FZF beat fugitive out on this one. Might take git log too.
-  nnoremap  <Leader>gg         <Cmd>GGrep<CR>
-  nnoremap  <Leader>gl         <Cmd>Commits<CR>
-  nnoremap  <Leader>g?         <Cmd>GFiles?<CR>
-  nnoremap  <Leader>fb                 <Cmd>Buffers<CR>
-  nnoremap  <Leader>fB                 <Cmd>Buffers<CR>
-
-  " Where did all my imaps for this go??
-  " Alright let's see how many we can churn out in a sitting Whoo works perfectly!
-  inoremap <expr> <C-x><C-b> fzf#vim#complete#buffer_line()
-  inoremap <expr> <C-x><C-l> fzf#vim#complete#line()
-
-  if has('unix')
-    " unfortunately really doesn't work on windows
-    inoremap <expr> <C-x><C-f> fzf#vim#complete#path('fd -H -t f')
-  else
-    " I don't know why i had an else here but i'm gonna throw in something ramdom
-    " i realized i missed
-    call msdos#set_shell_cmd()
-  endif
-
-  if filereadable(expand('$_ROOT/share/dict/words'))
-    " Note: This is dependant on /usr/share/dict/words existing because this
-    " function implicitly depends on it.
-    " inoremap <expr> <C-x><C-k>         fzf#vim#complete#word({'left': '45%'})
-    " Word completion with custom spec with popup layout option
-    inoremap <expr> <C-x><C-k>          fzf#vim#complete#word({'window': { 'width': 0.2, 'height': 0.9, 'xoffset': 1 }})
-  else
-  " dictionary isn't set on windows
-    inoremap <C-x><C-k> <C-x><C-u>
-  " Supertab should've made that mapping pretty sweet.
-  endif
-
-  " Is file_ag not a function anymore????
-  inoremap <expr> <C-x><C-j> fzf#vim#complete#file()
-
-  " i'm not really sure what this is gonna do but let's find out!
-  inoremap <expr> <M-c> <Plug>(-fzf-complete-trigger)
-  inoremap <expr> <C-x><C-j> fzf#vim#complete#path('fd -H -t f')
-  inoremap <expr> <C-x><C-w> fzf#vim#complete#path('rg --files')
-
-  function! s:make_sentence(lines)
-    return substitute(join(a:lines), '^.', '\=toupper(submatch(0))', '').'.'
-  endfunction
-
-  " TODO: windows paths
-  inoremap <expr> <C-x><C-s> fzf#vim#complete({
-    \ 'source': 'cat ~/.config/nvim/spell/en.utf-8.add $_ROOT/share/dict/words 2>/dev/null',
-    \ 'reducer': function('<sid>make_sentence'),
-    \ 'options': '--ansi --cycle --multi --reverse --margin 15%,0',
-    \ 'left':    20})
-
-  " Reminder: Leader<tab>
-  nnoremap <Leader>m   <Cmd>Maps<CR>
-
-  nnoremap <Leader>fg  <Cmd>Files ~/ <CR>
-  endfunction
-endif
-
-
 " NERDTree Mapping:
   nnoremap <expr> <Leader>N   (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
   nnoremap <Leader>nt <Cmd>NERDTreeToggleVCS<CR>zz
@@ -905,7 +813,6 @@ endfunction
     " endif
     call UserFugitiveMappings()
     call Terminals()
-    call FZFBinding()
     call CocMappings()
     let g:loaded_plugin_mappings = 1
   endif

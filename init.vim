@@ -148,6 +148,7 @@ function! LoadMyPlugins() abort  " {{{
   Plug 'chrisbra/csv.vim'
 
   Plug 'ryanoasis/vim-devicons'
+  Plug 'farisachugthai/fzf-addons'
   call plug#end()
 endfunction
 
