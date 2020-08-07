@@ -425,8 +425,8 @@
     let g:snips_github = 'https://github.com/farisachugthai'
     " Defining it and limiting it to 1 directory means that UltiSnips doesn't
     " iterate through every dir in &rtp which saves an immense amount of time
-    " on startup.
-    let g:UltiSnipsSnippetDirectories = [ s:stdconfig . '/UltiSnips' ]
+    " on startup. Can we try loading 2 absolute directories though
+    let g:UltiSnipsSnippetDirectories = [ s:stdconfig . '/UltiSnips', s:stddata . '/plugged/vim-snippets/UltiSnips' ]
     let g:UltiSnipsUsePythonVersion = 3
     let g:UltiSnipsListSnippets = '<C-/>'
     " Wait is this option still a thing??

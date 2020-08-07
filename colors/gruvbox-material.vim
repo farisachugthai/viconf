@@ -325,6 +325,10 @@ let g:colors_name = 'gruvbox-material'
     hi! link CocInfoSign ALEInfoSign
     hi! link CocInfoVirtualText ALEVirtualTextInfo
     hi! link CocListsLine Blue
+    " Was originally Comment which is hard to read
+    hi! link CocOutlineKind ALEVirtualTextInfo
+    hi! link CocOutlineName BlueBold
+    " hi! link CocOutlineLine ALEVirtualTextInfo
     hi! link CocSelectedText OrangeBold
     " hi! link CocSelectedLine Visual
     " hi! link CocListsLine Blue
@@ -1610,25 +1614,35 @@ let g:colors_name = 'gruvbox-material'
     hi! link jsObjectKey GreenBold
 
   " TypeScript:
-    hi! link typescriptReserved Aqua
-    hi! link typescriptLabel Aqua
-    hi! link typescriptFuncKeyword Aqua
-    hi! link typescriptIdentifier Orange
-    hi! link typescriptBraces Blue
-    hi! link typescriptEndColons Blue
-    hi! link typescriptDOMObjects Blue
     hi! link typescriptAjaxMethods Blue
-    hi! link typescriptGlobalObjects Blue
-    hi! link typescriptParens Blue
-    hi! link typescriptOpSymbols Green
-    hi! link typescriptLogicSymbols Purple
-    hi! link typescriptInterpolation Aqua
-    hi! link typescriptHtmlElemProperties Blue
-    hi! link typescriptNull Purple
-    hi! link typescriptInterpolationDelimiter Aqua
-    hi! link typescriptDocSeeTag Comment
+    hi! link typescriptArrowFuncDef BlueBold
+    hi! link typescriptBraces Blue
+    hi! link typescriptBlock Blue
+    hi! link typescriptDOMObjects Blue
     hi! link typescriptDocParam Comment
+    hi! link typescriptDocSeeTag Comment
     hi! link typescriptDocTags vimCommentTitle
+    hi! link typescriptDotNotation Grey
+    hi! link typescriptEndColons Blue
+    hi! link typescriptFuncKeyword Aqua
+    hi! link typescriptGlobalObjects Blue
+    hi! link typescriptHtmlElemProperties Blue
+    hi! link typescriptIdentifier Orange
+    hi! link typescriptIdentifierName OrangeBold
+    hi! link typescriptInterpolation Aqua
+    hi! link typescriptInterpolationDelimiter Aqua
+    hi! link typescriptLabel Aqua
+    hi! link typescriptLogicSymbols Purple
+    hi! link typescriptNull Purple
+    hi! link typescriptOpSymbols Green
+    hi! link typescriptObjectLiteral Purple
+    hi! link typescriptObjectColon Grey
+    hi! link typescriptParens Blue
+    hi! link typescriptTypeAnnotation Grey
+    hi! link typescriptReserved Aqua
+    hi! link typescriptVariableDeclaration Red
+    " Wth
+    hi! link typeScript Aqua
 
   " Misc JS:
     hi! link jsxTagName Aqua

@@ -95,7 +95,7 @@ function! remotes#termux() abort
 endfunction
 
 function! remotes#ubuntu() abort
-  let g:python3_host_prog = '/usr/bin/python'
+  let g:python3_host_prog = '/usr/bin/python3.8'
   let g:python_host_prog = '/usr/bin/python2'
   " ?
   " let g:node_host_prog = 'nvm use default'

@@ -13,6 +13,8 @@
 
   " Set up for the indent
   " NOTE: You can't set like 90% of the vars in that file or it'll throw
+  " hopefully we avoid it this way?
+  let g:disable_parentheses_indenting = 1
   " let g:pyindent_continue = 1
   " let g:pyindent_disable_parentheses_indenting = 1
 
@@ -43,8 +45,13 @@
   setlocal iskeyword+=.
   setlocal shiftround
   " setlocal cindent
+  setlocal indentkeys+=<:>,=elif,=except
+  setlocal nolisp		" Make sure lisp indenting doesn't supersede us
+  setlocal autoindent	" indentexpr isn't much help otherwise
+  " And now let's not set indentexpr because holy fuck does it throw often
+  setlocal indentexpr=
 
-  " Path and Includes:
+  " Path And Includes:
   exec 'source ' . s:repo_root . '/autoload/py.vim'
   let &l:path = py#PythonPath()
   let &l:define = '\s*def function('

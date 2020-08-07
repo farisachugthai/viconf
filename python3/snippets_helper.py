@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Move all python functions into a dedicated file and import them.
 
@@ -16,8 +16,11 @@ import pprint
 import string
 import sys
 import textwrap
-
-from collections import UserString
+try:
+    from collections import UserString  # python2
+except ImportError:
+    class UserString(str):
+        pass
 
 import vim  # noqa
 
@@ -588,5 +591,3 @@ def compB(t, opts):
         if len(opts) == 1:
             return opts[0]
         return "(" + "|".join(opts) + ")"
-
-

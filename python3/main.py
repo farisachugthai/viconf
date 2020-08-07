@@ -1,7 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """From outside Neovim, the script just delegates to the real nvim command:
 
-Setting EDITOR='nvim-client -f' allows usage with git and pry:
+I wanted to utilize this to create a practical application of asyncio; however,
+the functions that delegate to a neovim subprocess are still unfortunately
+synchronous.
+
 """
 import asyncio
 import os
@@ -99,9 +103,10 @@ async def client_connected(reader, writer):
 
 async def main(host, port):
     srv = await asyncio.start_server(client_connected, host, port)
+    start()
     await srv.serve_forever()
 
 
 if __name__ == "__main__":
-    start()
-# asyncio.run(main('127.0.0.1', 0))
+    # start()
+    asyncio.run(main('127.0.0.1', 0))
