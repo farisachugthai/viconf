@@ -10,7 +10,12 @@ setglobal ruler
 
 let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
 
-colo gruvbox-material
+if !exists("$MSYSTEM")
+  colo gruvbox-material
+else
+  colo gruvbox
+endif
+
 call syncom#grepprg()
 
 function! s:fzf_statusline()  abort

@@ -271,5 +271,6 @@
   "tsserver.npm": "yarn",
   "typescript.showUnused": true,
   "typescript.suggest.autoImports": true,
-  "typescript.suggest.completeFunctionCalls": true
+  "typescript.suggest.completeFunctionCalls": true,
+  "python.formatting.provider": "black"
 }

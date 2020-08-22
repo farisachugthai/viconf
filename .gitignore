@@ -2,6 +2,7 @@
 # Maintainer: Faris Chugthai
 
 sessions
+plugged/
 
 # TS:
 .*tsbuildinfo

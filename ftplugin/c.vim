@@ -31,12 +31,19 @@ if exists('b:did_ftplugin') | finish | endif
   if filereadable('Makefile')
     setlocal makeprg=make\ %<.o
 
+  elseif executable('clang')
+    compiler gcc
+    setlocal makeprg=clang\ -o\ %<.o\ %
+    echo 'ftplugin/c.vim: Using clang as the compiler'
+
   elseif executable('gcc')  " Because of windows
     compiler gcc
     setlocal makeprg=gcc\ -o\ %<.o\ %
-    echomsg 'ftplugin/c.vim: Using gcc as the compiler'
+    echo 'ftplugin/c.vim: Using gcc as the compiler'
+
   elseif executable('nmake')
     compiler msvc
+    echo 'ftplugin/c.vim: Using nmake as the compiler'
   endif
 
   if exists(':Man') == 2

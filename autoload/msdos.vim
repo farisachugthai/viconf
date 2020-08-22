@@ -32,8 +32,12 @@ function! msdos#set_shell_cmd() abort
   " modify our invocations of system commands.
 	" Dude don't fucking turn /U ON
   " let &shellcmdflag = '/C /F:ON /E:ON '
+						" *'shellpipe'* *'sp'*
+	" For Windows the default is ">".  The output is directly saved in a file
+	" and not echoed to the screen.
+        " Let's double check that this shouldn't be set
   " Actually turning on of these on will really mess everything up. Huh
-  setglobal shellpipe=>%s\ 2>&1
+  " setglobal shellpipe=>%s\ 2>&1
   setglobal shellredir=>%s\ 2>&1
   " Is this necessary? Or should it be empty?
   " heres what this used to be set as. is this whats causing shell problems?

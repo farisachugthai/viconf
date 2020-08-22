@@ -134,8 +134,6 @@ function! LoadMyPlugins() abort  " {{{
   Plug 'liuchengxu/vim-which-key'
   nnoremap <silent> <leader> :<C-U>WhichKey! g:which_key_map<CR>
   vnoremap <silent> <leader> :silent <c-u> :silent WhichKeyVisual '<Space>'<CR>
-
-  Plug 'liuchengxu/vista.vim'
   Plug 'cespare/vim-toml', {'for': 'toml'}
   Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
   Plug 'omnisharp/omnisharp-vim', {'for': ['cs', 'ps1'] }

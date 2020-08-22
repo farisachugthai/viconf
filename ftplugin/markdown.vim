@@ -29,7 +29,9 @@
   " used to be
   " commentstring=>\ %s
   setlocal commentstring=<!--%s-->
-  setlocal formatoptions=tcqln
+
+  " So this doesn't behave as expected but we're working
+  setlocal formatoptions=tcqanl1
   setlocal formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\|^[-*+]\\s\\+\\\|^\\[^\\ze[^\\]]\\+\\]:
 
   source $VIMRUNTIME/autoload/htmlcomplete.vim

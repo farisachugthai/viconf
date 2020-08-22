@@ -158,7 +158,10 @@
   setglobal spellsuggest=5
   setglobal showmatch matchpairs+=<:>
   setglobal matchtime=20  " Show the matching pair for 2 seconds
-  set termguicolors
+
+  if !exists("$MSYSTEM")
+    set termguicolors
+  endif
   setglobal synmaxcol=1000
   set nohlsearch
   setglobal regexpengine=2
@@ -590,13 +593,14 @@
           let s:vimlsp = 'vim-language-server'
         endif
       endif
+
     if !empty($ANDROID_DATA)
       call coc#config('python.jediEnabled', v:false)
     endif
 
-      call coc#config('languageserver', {
-                      \ 'bash': {
-                      \   'args': [ 'start' ],
+    call coc#config('languageserver', {
+                    \ 'bash': {
+                    \   'args': [ 'start' ],
                     \ 'command': s:bashlsp,
                     \ 'filetypes': ['sh', 'bash']}})
 

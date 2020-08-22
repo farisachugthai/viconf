@@ -92,6 +92,8 @@
   inoremap <silent> <Up> <C-R>=pumvisible() ? "\<lt>C-P>" : "\<lt>Up>"<CR>
 
   nnoremap <Leader>v <Cmd>Vista!!<CR>
+  " Fun bugs in Vim. Why do cw and ce do the same thing when dw and de don't?
+  nnoremap cw cw<DEL>
 
 " Marks:
   nnoremap [1 <Cmd>signature#marker#Goto('prev', 1, v:count)<CR>
@@ -614,8 +616,14 @@ function! Buffer_Mappings() abort
   " Also note I wrote a Buffers command that utilizes fzf.
   nnoremap <Leader>ba <Cmd>ball<CR>
   nnoremap <Leader>bb <Cmd>Buffers<CR>
+  if exists(':Buffers') ==# 2  " It exists
+    nnoremap <Leader>bb <Cmd>Buffers<CR>
+  else
+    nnoremap <Leader>bb <Cmd>buffers!<CR>
+  endif
   nnoremap <Leader>bd <Cmd>bdelete<CR>
   nnoremap <Leader>bf <Cmd>bfirst<CR>
+  " I just realized that i dont have \b hjkl
   nnoremap <Leader>bl <Cmd>blast<CR>
   nnoremap <Leader>bm <Cmd>bmodified<CR>
   nnoremap <Leader>bn <Cmd>bnext<CR>

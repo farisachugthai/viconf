@@ -665,7 +665,7 @@ snippet ann "Assert is not None" b
 self.assertIsNotNone(${1:${VISUAL:expression}})
 endsnippet
 
-snippet test "pyunit testcase" b
+snippet test "unittest testcase" b
 class Test${1:Class}(${2:unittest.TestCase}):
     `!p snip.rv = triple_quotes(snip)`${3:Test case docstring.}`!p snip.rv = triple_quotes(snip)`
 
