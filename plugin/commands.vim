@@ -82,6 +82,8 @@ let s:repo_root = fnameescape(fnamemodify(resolve(expand('<sfile>')), ':p:h:h'))
   command! -bar CocFloatHide      call       coc#util#float_hide()
   command! -bar CocFloatJump      call       coc#util#float_jump()
   command! -bar CocCommandRepeat  call       CocActionAsync('repeatCommand')
+
+  command! CocOutput :CocCommand workspace.showOutput
   " How am I still going?
   "
   " Yo I found teh function that provides completion for coclist!!

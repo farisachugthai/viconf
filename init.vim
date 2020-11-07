@@ -93,6 +93,7 @@ function! LoadMyPlugins() abort  " {{{
   Plug 'tpope/vim-scriptease', {'for': 'vim'}
   if has('python3')
     Plug 'SirVer/ultisnips'
+    Plug 'honza/vim-snippets'
   endif
 
   Plug 'dense-analysis/ale', { 'on': ['ALEEnable', 'ALEToggle'] }
@@ -121,7 +122,6 @@ function! LoadMyPlugins() abort  " {{{
 
   if empty(s:termux)  " {{{
     Plug 'lepture/vim-jinja'
-    Plug 'honza/vim-snippets'
     " Plug 'neovim/nvim-lsp'
     Plug 'ludovicchabant/vim-gutentags'
     Plug 'mbbill/undotree', { 'on' : 'UndotreeToggle' }
@@ -143,7 +143,7 @@ function! LoadMyPlugins() abort  " {{{
 
   Plug 'mhinz/vim-startify'
   Plug 'kshenoy/vim-signature'
-  Plug 'chrisbra/csv.vim'
+  " Plug 'chrisbra/csv.vim'
 
   Plug 'ryanoasis/vim-devicons'
   Plug 'farisachugthai/fzf-addons'

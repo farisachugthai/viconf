@@ -88,8 +88,8 @@ function! remotes#termux() abort
   " Because we set this $VIMRUNTIME/plugin/rplugin.vim isnt gomna load
   " from $VIMRUNTIME/autoload/provider/python3.vim
   " provider#python3#Call
-    " Ensure that we can load the Python host before bootstrapping
-    " i want the object first also i wanna make sure that this is getting called
+  " Ensure that we can load the Python host before bootstrapping
+  " i want the object first also i wanna make sure that this is getting called
   " let g:python3host = remote#host#Require('legacy-python3-provider')
   call remotes#unix_clipboard()
 endfunction

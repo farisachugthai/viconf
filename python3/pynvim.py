@@ -35,6 +35,7 @@ import functools
 import inspect
 import io
 import itertools
+import json
 import locale
 import logging
 import multiprocessing
@@ -48,9 +49,9 @@ import traceback
 import warnings
 
 from asyncio.events import get_event_loop_policy
-from asyncio.futures import Future
-from asyncio.streams import StreamReader, StreamWriter
-from collections import namedtuple, UserList, deque
+# from asyncio.futures import Future
+# from asyncio.streams import StreamReader, StreamWriter
+from collections import UserList, deque  # namedtuple,
 from collections.abc import MutableMapping
 from functools import partial
 from pathlib import Path
@@ -259,12 +260,8 @@ def start_host(session=None, load_plugins=True, plugins=None):
 
 
 def _convert_str_to_session(
-    session_type, address=None, port=None, path=None, argv=None, decode=None
+    session_type, address=None, port=None, path=None, argv=None
 ):
-    if session_type not in ["socket", "tcp", "stdio", "child"]:
-        raise NvimError(
-            '%s given. Must be one of "socket", "tcp", "stdio", "child"' % session_type
-        )
     if session_type == "socket":
         session = socket_session(path)
     elif session_type == "tcp":
@@ -273,6 +270,10 @@ def _convert_str_to_session(
         session = stdio_session()
     elif session_type == "child":
         session = child_session(argv)
+    else:
+        raise NvimError(
+            '%s given. Must be one of "socket", "tcp", "stdio", "child"' % session_type
+        )
     return session
 
 
@@ -324,12 +325,12 @@ def attach(session_type, address=None, port=None, path=None, argv=None, decode=N
     """
     return Nvim.from_session(
         _convert_str_to_session(
-            session_type, address=None, port=None, path=None, argv=None, decode=None
+            session_type, address=address, port=port, path=path, argv=argv,
         )
     ).with_decode(decode)
 
 
-def setup_logging(name: AnyStr = None, level: int = None, disable_asyncio_logging=True):
+def setup_logging(name: AnyStr = None, level: int = None, disable_asyncio_logging: bool=True):
     """Setup logging according to environment variables.
 
     So I just figured out why the nvim_python_log_file never sets.
@@ -1168,7 +1169,7 @@ class Nvim(object):
 
     # idk where the fuck this was implemented but im gonna define
     # this explicitly
-    VIM_SPECIAL_PATH = "_vim_path"
+    VIM_SPECIAL_PATH: str = "_vim_path"
 
     @classmethod
     def from_session(cls, session: Session):
@@ -1216,9 +1217,9 @@ class Nvim(object):
         self,
         session: Session,
         channel_id: int,
-        metadata,
-        types,
-        decode: Optional[bool] = False,
+        metadata: Dict[Any, Any],
+        types: Dict[int, Any] = None,
+        decode: Optional[bool] = True,
         err_cb=None,
     ):
         """Initialize a new Nvim instance. This method is module-private.
@@ -1229,8 +1230,11 @@ class Nvim(object):
 
         Parameters
         ----------
-        metadata :
-            Required to have a get attr.
+        metadata : dict
+            Required to have a get attr. The items on this object are insane.
+            Don't reproduce it.
+        types : dict
+            Idk why this is a parameter.
 
         """
         self.error = NvimError
@@ -1242,6 +1246,8 @@ class Nvim(object):
         self.metadata = metadata
         version = metadata.get("version", {"api_level": 0})
         self.version = Version(**version)
+        # could do if Buffer, Tabpage and Window were defined
+        # self.types = types if types is not None else {0: Buffer, 1: Window, 2: Tabpage}
         self.types = types
         self._decode = decode
         # arguably all **FIFTEEN** of this instance attributes should probably
@@ -1358,7 +1364,7 @@ class Nvim(object):
         This should not be called from a plugin running in the host, which
         already runs the loop and dispatches events to plugins.
         """
-        self._session.run(filter_request_cb, filter_notification_cb, setup_cb)
+        self._session.run(request_cb, notification_cb, setup_cb)
 
     def stop_loop(self):
         """Stop the event loop being started with `run_loop`."""
@@ -1376,6 +1382,22 @@ class Nvim(object):
         """Exit nvim session as a context manager.
 
         Closes the event loop.
+
+        Just gonna note though that closing with the entire event loop could
+        potentially dangerous.
+        Like how are you gonna do this with the normal main process Nvim?
+        You kinda need to instantiate a new one.
+
+        .. warning::
+            Maybe dont do this?
+
+        Because doing this raises a warning and probably will throw a lot.
+
+        .. code-block:: python
+
+            >>> with vim:
+            >>>     print('hi?')
+
         """
         self.close()
 
@@ -1994,6 +2016,7 @@ class ScriptHost:
         if not platform.platform().startswith("Win"):
             self.handle_dirchanged(self.nvim)
 
+    @staticmethod
     def handle_dirchanged(self, nvim):
         # Handle DirChanged. #296
         nvim.command(
@@ -2591,7 +2614,7 @@ class RemoteMap(MutableMapping):
     _set = None
     _del = None
 
-    def __init__(self, obj: AnyStr, get_method, set_method=None, del_method=None):
+    def __init__(self, obj: Any, get_method, set_method=None, del_method=None):
         """Initialize a RemoteMap with session, getter/setter."""
         self._get = functools.partial(obj.request, get_method)
         if set_method:
@@ -2836,7 +2859,7 @@ class MsgpackStream(object):
             try:
                 return asyncio.get_event_loop()
             except RuntimeError:  # not running
-                ml_logger.warn("Event loop isn't running.")
+                logging.warn("Event loop isn't running.")
         # else:
         #     raise NotImplementedError
         return self._loop
@@ -2925,12 +2948,12 @@ class AsyncSession(MsgpackStream):
     """
 
     # TODO: integrate this in correctly
-    loop = get_event_loop_policy().new_event_loop()
+    # loop = get_event_loop_policy().new_event_loop()
     # also it should be a class attribute as every instance should
     # probably be accessing the same loop.
     # loop = AsyncioEventLoop(transport_type)
-    asyncio.set_event_loop(loop)
-    loop.set_debug(True)
+    # asyncio.set_event_loop(loop)
+    # loop.set_debug(True)
 
     def __init__(self, _message_cb=None, *args, **kwargs):
         """Wrap `msgpack_stream` on a msgpack-rpc interface."""
@@ -2946,7 +2969,7 @@ class AsyncSession(MsgpackStream):
         }
         # self._enum_handlers = SessionHandlers()
         # self.loop = msgpack_stream.loop
-        super().__init__(_message_cb, *args, **kwargs)
+        super().__init__(_message_cb=_message_cb, *args, **kwargs)
 
     def request(self, method, args, response_cb):
         """Send a msgpack-rpc request to Nvim.
@@ -3303,7 +3326,7 @@ class BaseEventLoop(_PlatformSpecificLoop):
 # Triple subclassed?
 
 
-class AsyncioEventLoop(BaseEventLoop, asyncio.SubprocessProtocol, asyncio.Protocol):
+class AsyncioBaseEventLoop(BaseEventLoop, asyncio.SubprocessProtocol, asyncio.Protocol):
     """`BaseEventLoopABC` subclass that uses `asyncio` as a backend.
 
     On Windows use ProactorEventLoop which support pipes and is backed by the
@@ -3330,10 +3353,6 @@ class AsyncioEventLoop(BaseEventLoop, asyncio.SubprocessProtocol, asyncio.Protoc
         loop_cls = asyncio.ProactorEventLoop
     else:
         loop_cls = asyncio.SelectorEventLoop
-
-
-class AsyncioBaseEventLoop(BaseEventLoop, asyncio.Protocol):
-    pass
 
 
 class AsyncioEventLoop(AsyncioBaseEventLoop):
@@ -3581,7 +3600,7 @@ def session(transport_type="stdio", *args, **kwargs) -> Session:
     return _session
 
 
-def tcp_session(address, port=7450):
+def tcp_session(address, port: int =7450):
     """Create a msgpack-rpc session from a tcp address/port."""
     return session("tcp", address, port)
 
@@ -4159,15 +4178,24 @@ class UvEventLoop(BaseEventLoop):
 
 EventLoop = UvEventLoop
 
+def start():
+    """Easily start nvim. From the conftest."""
+    child_argv = os.environ.get('NVIM_CHILD_ARGV')
+    listen_address = os.environ.get('NVIM_LISTEN_ADDRESS')
+    if child_argv is None and listen_address is None:
+        child_argv = '["nvim", "-u", "NONE", "--embed", "--headless"]'
+
+    if child_argv is not None:
+        editor = attach('child', argv=json.loads(child_argv))
+    else:
+        assert listen_address is None or listen_address != ''
+        editor = attach('socket', path=listen_address)
+
+    return editor
+
 
 import gc  # noqa
 
 gc.collect()
-
-if __name__ == "__main__":
-    from py._path.local import LocalPath
-
-    # f = LocalPath(os.path.abspath(__file__))
-    # f.pyimport()
 
 # Vim: set fdm=indent fdls=0:

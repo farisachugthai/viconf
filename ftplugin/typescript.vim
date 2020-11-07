@@ -27,6 +27,13 @@ exec 'source ' . s:ftplugin_root . '/javascript.vim'
   setlocal suffixesadd+=.ts,.tsx,.d.ts,.js,.jsx
   setlocal isfname+=@-@
 
+  if executable("tsc")
+    let g:typescript_compiler_binary = "tsc"
+  else
+    let g:typescript_compiler_binary = "yarn run tsc"
+  endif
+  compiler typescript
+
 " Plugins:
   if !has('unix')
     let g:ale_windows_node_executable_path = g:node_host_prog
@@ -78,7 +85,7 @@ exec 'source ' . s:ftplugin_root . '/javascript.vim'
   " Theres actually an undo defined in js.vim
   let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
                    \. '|setlocal isf< sua< syntax< et< sts< sw< ts< '
-                   \. '|setlocal inex< def< inc< inde< '
+                   \. '|setlocal inex< def< inc< inde< mp< efm<'
                    \. '|unlet! b:undo_ftplugin'
                    \. '|unlet! b:did_ftplugin'
                    \. '|unlet! b:undo_indent'

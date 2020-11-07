@@ -6,7 +6,11 @@
 # ============================================================================
 
 priority 50
-extends typescript, javascript-node, html
+extends javscript, html
+
+snippet #! "Shebang" b
+#!/usr/bin/env tsc
+endsnippet
 
 snippet /// "import reference" b
 /// <reference path='${1: file}' />
@@ -22,7 +26,7 @@ endsnippet
 snippet cls "class .." b
 class ${1:ClassName}${2: extends ${3:ParentClass}} {
 	${4: constructor(${5:args}) {
-    ${6://code...}
+	${6://code...}
   }}
 }
 endsnippet
@@ -33,31 +37,29 @@ interface ${1:InterfaceName}${2: extends ${3:Parent}} {
 }
 endsnippet
 
-snippet import "imports a module" b
-import $1 = require('$2')
+snippet require "imports a module" b
+let $1 = require('${0:${VISUAL}}');
 endsnippet
 
-snippet for "for (...) {...} (counting up)" b
-for (var ${1:i} = 0, ${2:len} = ${3:Things.length}; $1 < $2; $1++) {
-	${VISUAL}$0
-}
+snippet import "imports a module" b
+import ${1:'*'} as ${0:${VISUAL}} from '${0:${VISUAL}}';
 endsnippet
 
 snippet fun "function (fun)"
 function ${1:function_name}(${2:argument}) {
-	${VISUAL}$0
+  ${0:${VISUAL}}
 }
 endsnippet
 
 snippet fn "function literal (fn)"
 function (${1:argument}) {
-	${VISUAL}$0
+  ${0:${VISUAL}}
 }
 endsnippet
 
 snippet af "arrow function (af)"
 (${1:argument}) => {
-	${VISUAL}$0
+  ${0:${VISUAL}}
 }
 endsnippet
 
@@ -76,18 +78,30 @@ endsnippet
 
 snippet meth "class/object method" b
 ${2:methodName}(${3:args}): ${4:void} {
-		${0://code}
+  ${0://code}
 }
 endsnippet
 
-snippet fi "for prop in obj using hasOwnProperty" b
+snippet foro "for of" b
+for (const ${1:i} of ${VISUAL:${2}}){
+  $0	// iterate over the list of values on the object being iterated
+}
+endsnippet
+
+snippet forih "for prop in obj using hasOwnProperty" b
 for (${1:prop} in ${2:obj}){
-	if ($2.hasOwnProperty($1)) {
-		${VISUAL}$0
-	}
+  if ($2.hasOwnProperty($1)) {
+	${VISUAL:${0}}
+  }
 }
 endsnippet
 
+snippet fori "for in statement" b
+for (const i in list) {
+  // iterate over the list of keys on the object being iterated
+  console.log(i); // 0, 1, 2
+}
+endsnippet
 snippet timeout "setTimeout function"
 setTimeout(function() {
 	${VISUAL}$0
@@ -100,4 +114,11 @@ declare module ${1:name} {
 }
 endsnippet
 
-# Vim: set ft=snippets.ts:
+snippet def "Try to mold a func the closest to python" b
+const ${VISUAL:{$1}} = (${2:param1}, ${3:param2}) => {
+	// todo
+	$0
+};
+endsnippet
+
+# Vim: set ft=snippets.ts et sts=2 ts=4 sw=2:

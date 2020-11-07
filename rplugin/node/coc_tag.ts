@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 // @ts-ignore
-import * as path from 'path';
-import * as fs from 'fs';
-import * as util from 'util';
 import * as cp from 'child_process';
+// import * as date from 'date';
+import * as fs from 'fs';
+import * as path from 'path';
 import * as readline from 'readline';
+import * as util from 'util';
 
 import pkg from 'coc.nvim';
 const { sources, workspace } = pkg;
@@ -13,7 +14,7 @@ import { ExtensionContext } from 'coc.nvim';
 const TAG_CACHE = {};
 const { nvim } = workspace;
 
-type AutoDetect = 'on' | 'off';
+// type AutoDetect = 'on' | 'off';
 
 export function exists(file: string): Promise<boolean> {
 	return new Promise<boolean>((resolve, _reject) => {
@@ -43,7 +44,7 @@ export async function getTagFiles() {
   files = files.map(f => {
     return path.isAbsolute(f) ? f : path.join(cwd, f);
   });
-  const tagfiles = [];
+  const tagfiles: any = [];
   for (const file of files) {
     const stat = await util.promisify(fs.stat)(file);
     if (!stat || !stat.isFile()) {
@@ -54,7 +55,7 @@ export async function getTagFiles() {
   return tagfiles;
 }
 
-export function readFileByLine(fullpath, onLine, limit = 50000) {
+export function readFileByLine(fullpath: string, onLine, limit = 50000) {
   const rl = readline.createInterface({
     input: fs.createReadStream(fullpath),
     crlfDelay: Infinity,
@@ -77,7 +78,8 @@ export function readFileByLine(fullpath, onLine, limit = 50000) {
   });
 }
 
-export async function loadTags(fullpath, mtime) {
+// export async function loadTags(fullpath: string, mtime: date.Date) {
+export async function loadTags(fullpath: string, mtime) {
   const item = TAG_CACHE[fullpath];
   if (item && item.mtime >= mtime) {
     return item.words;

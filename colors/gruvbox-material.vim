@@ -1616,14 +1616,17 @@ let g:colors_name = 'gruvbox-material'
   " TypeScript:
     hi! link typescriptAjaxMethods Blue
     hi! link typescriptArrowFuncDef BlueBold
+    hi! link typescriptBinaryOp    Comment
     hi! link typescriptBraces Blue
     hi! link typescriptBlock Blue
+    hi! link typescriptClassBlock Operator
     hi! link typescriptDOMObjects Blue
     hi! link typescriptDocParam Comment
     hi! link typescriptDocSeeTag Comment
     hi! link typescriptDocTags vimCommentTitle
     hi! link typescriptDotNotation Grey
     hi! link typescriptEndColons Blue
+    hi! link typescriptFuncCallArg Orange
     hi! link typescriptFuncKeyword Aqua
     hi! link typescriptGlobalObjects Blue
     hi! link typescriptHtmlElemProperties Blue
@@ -1638,7 +1641,10 @@ let g:colors_name = 'gruvbox-material'
     hi! link typescriptObjectLiteral Purple
     hi! link typescriptObjectColon Grey
     hi! link typescriptParens Blue
-    hi! link typescriptTypeAnnotation Grey
+    hi! link typescriptTupleType Operator
+    hi! link typescriptTypeAnnotation Operator
+    hi! link typescriptTypeBracket Operator
+    hi! link typescriptTypeBrackets Operator
     hi! link typescriptReserved Aqua
     hi! link typescriptVariableDeclaration Red
     " Wth

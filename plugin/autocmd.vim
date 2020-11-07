@@ -147,6 +147,9 @@ augroup UserFtplugin
       \|  call SuperTabChain(&completefunc, "<c-p>")
       \| endif
   endif
+
+  " Todo: Wtf
+  autocmd FileType python setlocal indentexpr=
 augroup END
 
 function! s:Goyo_enter()

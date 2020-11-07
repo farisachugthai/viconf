@@ -14,7 +14,7 @@
   " Set up for the indent
   " NOTE: You can't set like 90% of the vars in that file or it'll throw
   " hopefully we avoid it this way?
-  let g:disable_parentheses_indenting = 1
+  " let g:disable_parentheses_indenting = 1
   " let g:pyindent_continue = 1
   " let g:pyindent_disable_parentheses_indenting = 1
 

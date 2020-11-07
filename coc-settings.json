@@ -28,8 +28,6 @@
     "help",
     "html"
   ],
-  "coc.source.dictionary.priority": 40,
-  "coc.source.dictionary.shortcut": "Coc-Dict:",
   "coc.source.file.ignoreHidden": false,
   "coc.source.file.priority": 20,
   "coc.source.file.shortcut": "Coc-Files: ",
@@ -272,5 +270,5 @@
   "typescript.showUnused": true,
   "typescript.suggest.autoImports": true,
   "typescript.suggest.completeFunctionCalls": true,
-  "python.formatting.provider": "black"
+  "git.enableGutters": true
 }
