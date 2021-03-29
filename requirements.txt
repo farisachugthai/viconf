@@ -21,7 +21,7 @@ py==1.8.1
 pycodestyle==2.5.0
 pydocstyle==5.0.2
 pyflakes==2.1.1
-Pygments==2.6.1
+Pygments==2.7.4
 pylint==2.5.2
 pynvim==0.4.1
 pyparsing==2.4.7
