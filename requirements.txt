@@ -44,7 +44,7 @@ sphinxcontrib-qthelp==1.0.3
 sphinxcontrib-serializinghtml==1.1.4
 toml==0.10.0
 ujson==1.35
-urllib3==1.25.9
+urllib3==1.26.5
 wcwidth==0.1.9
 wheel==0.34.2
 wrapt==1.12.1
