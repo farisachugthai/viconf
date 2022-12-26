@@ -46,6 +46,6 @@ toml==0.10.0
 ujson==1.35
 urllib3==1.25.9
 wcwidth==0.1.9
-wheel==0.34.2
+wheel==0.38.1
 wrapt==1.12.1
 yapf==0.30.0
